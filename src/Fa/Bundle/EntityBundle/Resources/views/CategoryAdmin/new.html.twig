@@ -1,0 +1,141 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            <div class="row">
+                <div class="large-9 columns">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        {{ form_row(form.name) }}
+                        {{ form_row(form.slug) }}
+                        {{ form_row(form.display_on_footer) }}
+                        {{ form_row(form.status) }}
+                        {{ form_row(form.synonyms_keywords) }}
+                        {{ form_row(form.is_nimber_enabled) }}
+                        <div id="nimber_size_div" style="display:none;">
+                            {{ form_row(form.nimber_size) }}
+                        </div>
+                        {{ form_row(form.is_finance_enabled) }}
+                        <div id="finance_div" style="display:none;">
+                            {{ form_row(form.finance_title) }}
+                            {{ form_row(form.finance_url) }}
+                        </div>
+                        {{ form_row(form.is_paa_disabled) }}
+                        {{ form_row(form.is_oneclickenq_enabled) }}
+                        <div>
+                            {{ form_row(form.has_recommended_slot) }}
+                            <div style="display:none;" id="recommended_slot_fields_main_div">
+                                {% for i in 1..3 %}
+                                    <h4>{{ 'Recommended Slot'~' '~(loop.index)|trans }}</h4>
+                                    <hr class="hr_margin" />
+                                    <div class="row">
+                                        <div class="large-2 columns">
+                                            {{ form_label(form['recommended_slot_title_'~i]) }}
+                                        </div>
+                                        <div class="large-10 columns">
+                                            {{ form_widget(form['recommended_slot_title_'~i]) }}
+                                            {{ form_errors(form['recommended_slot_title_'~i]) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="large-2 columns">
+                                            {{ form_label(form['recommended_slot_sub_title_'~i]) }}
+                                        </div>
+                                        <div class="large-10 columns">
+                                            {{ form_widget(form['recommended_slot_sub_title_'~i]) }}
+                                            {{ form_errors(form['recommended_slot_sub_title_'~i]) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="large-2 columns">
+                                            {{ form_label(form['recommended_slot_user_id_'~i]) }}
+                                        </div>
+                                        <div class="large-10 columns">
+                                            {{ form_widget(form['recommended_slot_user_id_'~i]) }}
+                                            {{ form_errors(form['recommended_slot_user_id_'~i]) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="large-2 columns">
+                                            {{ form_label(form['recommended_slot_url_'~i]) }}
+                                        </div>
+                                        <div class="large-10 columns">
+                                            {{ form_widget(form['recommended_slot_url_'~i]) }}
+                                            {{ form_errors(form['recommended_slot_url_'~i]) }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'category_admin', 'isSaveAndNew': false}) }}
+                        {{ form_end(form) }}
+                </div>
+                <div class="large-3 columns">
+                    <b>{{ 'Indexable Dimensions'|trans }}</b>
+                    <div style="overflow: auto; height: 500px;">
+                        {{ staticCall('Fa\\Bundle\\EntityBundle\\Repository\\CategoryDimensionRepository', 'getIndexableDimesionsArray')|join('<br />')|raw }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script>
+    $(document).ready(function(){
+        hideShowNimberSize();
+        $("#fa_entity_category_admin_is_nimber_enabled").change(function(){
+            hideShowNimberSize();
+        });
+
+        hideShowFinance();
+        $("#fa_entity_category_admin_is_finance_enabled").change(function(){
+          hideShowFinance();
+        });
+
+        hideShowRecommendedSlotFields();
+        $("#fa_entity_category_admin_has_recommended_slot").click(function(){
+            hideShowRecommendedSlotFields();
+        });
+    });
+    
+    function hideShowNimberSize()
+    {
+        if ($('#fa_entity_category_admin_is_nimber_enabled').is(':checked')) {
+            $('#nimber_size_div').show();
+        } else {
+            $('#fa_entity_category_admin_nimber_size').val('');
+            $('#nimber_size_div').hide();
+        }
+    }
+
+    function hideShowFinance()
+    {
+        if ($('#fa_entity_category_admin_is_finance_enabled').is(':checked')) {
+            $('#finance_div').show();
+        } else {
+            $('#fa_entity_category_admin_finance_title').val('');
+            $('#fa_entity_category_admin_finance_url').val('');
+            $('#finance_div').hide();
+        }
+    }
+
+    function hideShowRecommendedSlotFields()
+    {
+        var recommendedSlotFlag = $('#fa_entity_category_admin_has_recommended_slot').is(':checked');
+        if (recommendedSlotFlag) {
+            $('#recommended_slot_fields_main_div').show();
+        } else {
+            $('#recommended_slot_fields_main_div').hide();
+        }
+    }
+    </script>
+{% endblock %}

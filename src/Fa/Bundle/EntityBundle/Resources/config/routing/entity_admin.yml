@@ -1,0 +1,25 @@
+entity:
+    path:     /
+    defaults: { _controller: "FaEntityBundle:EntityAdmin:index" }
+
+entity_new:
+    path:     /new
+    defaults: { _controller: "FaEntityBundle:EntityAdmin:new" }
+
+entity_create:
+    path:     /create
+    defaults: { _controller: "FaEntityBundle:EntityAdmin:create" }
+    requirements: { methods: post }
+
+entity_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "FaEntityBundle:EntityAdmin:edit" }
+
+entity_update:
+    path:     /{id}/update
+    defaults: { _controller: "FaEntityBundle:EntityAdmin:update" }
+    requirements: { methods: post|put }
+
+entity_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "FaEntityBundle:EntityAdmin:delete" }

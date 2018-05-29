@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="cdf11c35236cd0e519f2175239e3a837d1b72c3a" resname="Are you sure you want to cancel your upgraded profile package?">
+        <jms:reference-file line="73">views/MyAccount/myAccountProfile.html.twig</jms:reference-file>
+        <source>Are you sure you want to cancel your upgraded profile package?</source>
+        <target state="new">Are you sure you want to cancel your upgraded profile package?</target>
+      </trans-unit>
+      <trans-unit id="4f3a063f6237b324ef6dbb8421ddeb624484a89b" resname="Business category">
+        <jms:reference-file line="85">UserBundle/Form/UserAccountProfileType.php</jms:reference-file>
+        <source>Business category</source>
+        <target state="new">Business category</target>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="79">views/MyAccount/myAccountProfile.html.twig</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="6d7f058cd1f99c995a4abcfe95675dbae4a10815" resname="Cancel subscription">
+        <jms:reference-file line="61">views/MyAccount/myAccountProfile.html.twig</jms:reference-file>
+        <source>Cancel subscription</source>
+        <target state="new">Cancel subscription</target>
+      </trans-unit>
+      <trans-unit id="b1b85d6dca11395b051beaeb4bd63890d920d8b7" resname="Cancel subscription?">
+        <jms:reference-file line="68">views/MyAccount/myAccountProfile.html.twig</jms:reference-file>
+        <source>Cancel subscription?</source>
+        <target state="new">Cancel subscription?</target>
+      </trans-unit>
+      <trans-unit id="f5e44933b572cfa9cac06c2d25c1089230870e3e" resname="Monthly cost">
+        <jms:reference-file line="21">views/MyAccount/myAccountProfile.html.twig</jms:reference-file>
+        <source>Monthly cost</source>
+        <target state="new">Monthly cost</target>
+      </trans-unit>
+      <trans-unit id="bb9ab6c5f5ed489bc8c8c97fefb89978e5d62669" resname="Next payment due">
+        <jms:reference-file line="23">views/MyAccount/myAccountProfile.html.twig</jms:reference-file>
+        <source>Next payment due</source>
+        <target state="new">Next payment due</target>
+      </trans-unit>
+      <trans-unit id="b0a98216a32426b9e66a4ac1eb6df2e96e1b495c" resname="Ok">
+        <jms:reference-file line="82">views/MyAccount/myAccountProfile.html.twig</jms:reference-file>
+        <source>Ok</source>
+        <target state="new">Ok</target>
+      </trans-unit>
+      <trans-unit id="31c56e2bbdeac6c3c1518fb85c6cee52d1478190" resname="Payment source">
+        <jms:reference-file line="28">views/MyAccount/myAccountProfile.html.twig</jms:reference-file>
+        <source>Payment source</source>
+        <target state="new">Payment source</target>
+      </trans-unit>
+      <trans-unit id="058c8a37563a0a8009b1790d462878c99d44507f" resname="Please select category">
+        <jms:reference-file line="86">UserBundle/Form/UserAccountProfileType.php</jms:reference-file>
+        <source>Please select category</source>
+        <target state="new">Please select category</target>
+      </trans-unit>
+      <trans-unit id="59443672cc3655dc6edee0bea06a7f09e0304109" resname="Profile level">
+        <jms:reference-file line="20">views/MyAccount/myAccountProfile.html.twig</jms:reference-file>
+        <source>Profile level</source>
+        <target state="new">Profile level</target>
+      </trans-unit>
+      <trans-unit id="179359b39edbd0bf0cdf3bb6b7dfb4223f663af2" resname="Save changes">
+        <jms:reference-file line="116">UserBundle/Form/UserAccountProfileType.php</jms:reference-file>
+        <source>Save changes</source>
+        <target state="new">Save changes</target>
+      </trans-unit>
+      <trans-unit id="0bea7a8f3d1919ce89c30a821ec02926facb728e" resname="User type">
+        <jms:reference-file line="99">UserBundle/Form/UserAccountProfileType.php</jms:reference-file>
+        <source>User type</source>
+        <target state="new">User type</target>
+      </trans-unit>
+      <trans-unit id="f53a40482f44d48af172f7a00c5408f84e789b00" resname="You can not cancel basic package subscription.">
+        <jms:reference-file line="417">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>You can not cancel basic package subscription.</source>
+        <target state="new">You can not cancel basic package subscription.</target>
+      </trans-unit>
+      <trans-unit id="e97db92240678b3800d90a22d94212b28aee9eef" resname="You have cancelled your upgraded profile package and will be converted to a basic profile at the end of the current subscription period on %expires-at%.">
+        <jms:reference-file line="25">views/MyAccount/myAccountProfile.html.twig</jms:reference-file>
+        <source>You have cancelled your upgraded profile package and will be converted to a basic profile at the end of the current subscription period on %expires-at%.</source>
+        <target state="new">You have cancelled your upgraded profile package and will be converted to a basic profile at the end of the current subscription period on %expires-at%.</target>
+      </trans-unit>
+      <trans-unit id="16a29505d7740cc34fd887bd32278f7a30975a2f" resname="Your current upgraded profile package has been cancelled successfully.">
+        <jms:reference-file line="415">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>Your current upgraded profile package has been cancelled successfully.</source>
+        <target state="new">Your current upgraded profile package has been cancelled successfully.</target>
+      </trans-unit>
+      <trans-unit id="c1c9cbe6993c406237b2c5ad48ec2dc4455aaab9" resname="Your profile">
+        <jms:reference-file line="6">views/MyAccount/myAccountProfile.html.twig</jms:reference-file>
+        <source>Your profile</source>
+        <target state="new">Your profile</target>
+      </trans-unit>
+      <trans-unit id="422c75905873ff0121ccebd2091c58f3371cebc5" resname="Your profile detail updated successfully.">
+        <jms:reference-file line="195">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>Your profile detail updated successfully.</source>
+        <target state="new">Your profile detail updated successfully.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,24 @@
+user_review_list:
+    path:     /{type}
+    defaults: { _controller: FaUserBundle:Review:index, 'type':default }
+    requirements:
+        type: "^(from_buyers|from_sellers|default)$"
+
+user_review_left_for_others:
+    path:     /left_for_others
+    defaults: { _controller: FaUserBundle:Review:leftForOthers }
+
+
+user_review_add_modal_ajax:
+    path:     /add
+    defaults: { _controller: FaUserBundle:Review:add }
+
+user_review_response_add_ajax:
+    path:     /add_response
+    defaults: { _controller: FaUserBundle:Review:addResponse }
+
+user_review_show:
+    path:     /show/{id}
+    defaults: { _controller: FaUserBundle:Review:show }
+    requirements:
+        id: \d+

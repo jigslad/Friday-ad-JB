@@ -1,0 +1,38 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set packageRepository = fetch_repository('FaPromotionBundle:Package') %}
+{% set packageDiscountCodeRepository = fetch_repository('FaPromotionBundle:PackageDiscountCode') %}
+{% set roleRepository = fetch_repository('FaUserBundle:Role') %}
+{% set packageTypeArray = packageRepository.getPackageTypeArray() %}
+{% set packageDiscountCodeTypeArray = packageDiscountCodeRepository.getPackageDiscountTypeArray() %}
+{% set roleIdArray = roleRepository.getUserTypes() %}
+{% set containerInstance = fetch_container_instance() %}
+
+{% set packageDiscountCodeEditGrant = false %}
+{% set packageDiscountCodeDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('package_discount_code_edit_admin') %}
+  {% set packageDiscountCodeEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('package_discount_code_delete_admin') %}
+  {% set packageDiscountCodeDeleteGrant = true %}
+{% endif %}
+
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'package_discount_code_new_admin'}) }}
+
+    {% use "FaPromotionBundle:PackageDiscountCodeAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaPromotionBundle:PackageDiscountCodeAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

@@ -1,0 +1,47 @@
+<div id="eighteenPlusWarnningModel" class="reveal-modal adult-modal" data-reveal>
+    <h3><span>{{'WARNING'|trans({}, 'frontend-adult-warnning')|raw}} <b>-</b></span> {{'Adult Content Ahead!'|trans({}, 'frontend-adult-warnning')|raw}}</h3>
+    <div class="modal-content">
+        <h2>{{'To browse this category you must accept the following terms:'|trans({}, 'frontend-adult-warnning')}}</h2>
+        <ul>
+            <li><b>1.</b> {{'I am 18 years old or over.'|trans({}, 'frontend-adult-warnning')}}</li>
+            <li><b>2.</b> {{'I understand there will be explicit content in this "Adult" category.'|trans({}, 'frontend-adult-warnning')}}</li>
+            <li><b>3.</b> {{'The content will not offend me.'|trans({}, 'frontend-adult-warnning')}}</li>
+            <li><b>4.</b> {{'I will not use any images on the site outside of permissions.'|trans({}, 'frontend-adult-warnning')}}</li>
+            <li><b>5.</b> {{'I will not permit any minor, or other person for who it is illegal, to access or view material that exists within this website.'|trans({}, 'frontend-adult-warnning')}}</li>
+            <li><b>6.</b> {{'I am accessing this website from a country or state where it is legal to enter adult websites or view sexually explicit or pornographic material'|trans({}, 'frontend-adult-warnning')}}</li>
+            <li class="proceed-ins"><p>{{'By clicking on "Proceed" below, I discharge all internet providers, owners and founders of Friday-Ad of any responsibility regarding the content and the usage of the content in this "Adult" category.'|trans({}, 'frontend-adult-warnning')}}</p></li>
+        </ul>
+        <div class="proceed-buttons">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="primary-btn-3 button expand" onclick="takeMeBack();">{{'Take me back!'|trans({}, 'frontend-adult-warnning')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="primary-btn-2 button expand" onclick="proceed18Plus();"><span>{{'Proceed'|trans({}, 'frontend-adult-warnning')}} <b>-</b></span> {{'I am over 18'|trans({}, 'frontend-adult-warnning')|raw}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+function proceed18Plus()
+{
+	blockPage();
+	$.ajax({
+        type: "POST",
+        url: "{{path('proceed_18_plus_ajax')}}",
+    })
+    .done(function(response) {
+        $('body').removeClass('transbox');
+        unblockPage();
+        closeRevealModel('#eighteenPlusWarnningModel');
+    });
+}
+function takeMeBack()
+{
+	location.href = "{{ path('fa_frontend_homepage') }}";
+}
+//]]>
+</script>

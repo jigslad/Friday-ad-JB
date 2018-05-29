@@ -1,0 +1,52 @@
+{% set userGuid = '' %}
+{% if halfAccountUser is defined and halfAccountUser.guid %}
+    {% set userGuid = halfAccountUser.guid %}
+{% endif %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title save-search-title">{{'Alert set up'|trans({}, 'frontend-create-alert')}}</h5>
+<div class="modal-content">
+    {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
+        <div data-alert class="alert-box success radius">
+            <span class="alert-icon">&nbsp;</span>
+            {{'You have successfully logged in.'|trans({}, 'frontend')}}
+            <a href="javascript:void(0)" class="close">&times;</a>
+        </div>
+        {{ fetch_repository('FaUserBundle:User').removeUserCookies() }}
+    {% endif %}
+    <h5 id="saved_search_header">{{'Your search has been set up!'|trans({}, 'frontend-create-alert')}}</h5>
+    <p>{{'Manage your <a href="%search_agent_link%">alerts.</a>'|trans({'%search_agent_link%': path('list_search_agent', {'guid': (userGuid)})}, 'frontend-create-alert')|raw}}</p>
+    <button class="secondary-btn-1 button expand" onclick="return $('#createAlertModal').foundation('reveal', 'close');">{{'Done'|trans({}, 'frontend-create-alert')}}</button>
+</div>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        bindCustomRadioEvent();
+        bindCustomCheckboxEvent();
+    });
+
+    $('#emailAlert').on('change', function() {
+        sendGaForOnOffAlert();
+    });
+
+    function updateSearchAgent()
+    {
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url : '{{ path('update_search_agent', {'userSearchAgentId': userSearchAgent.getId(), 'guid': (userGuid)}) }}',
+            data : {'emailAlert': $('#emailAlert').is(":checked") ? 1 : 0},
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#saved_search_header');
+            } else {
+                $('#createAlertModal').foundation('reveal', 'close');
+            }
+        });
+    }
+//]]>
+</script>

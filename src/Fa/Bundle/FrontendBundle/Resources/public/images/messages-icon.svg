@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.1 (12005) - http://www.bohemiancoding.com/sketch -->
+    <title>icon messages</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="18" cy="18" r="18"></circle>
+    </defs>
+    <g id="Dashboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Dashboard-Home-Copy" sketch:type="MSArtboardGroup" transform="translate(-458.000000, -525.000000)">
+            <g id="dashboard-elements" sketch:type="MSLayerGroup" transform="translate(447.000000, 518.000000)">
+                <g id="My-messages" transform="translate(10.000000, 0.000000)">
+                    <g id="my-messages">
+                        <g id="icon-messages" transform="translate(3.000000, 9.000000)">
+                            <circle id="Oval-795-Copy-3" stroke="#313133" stroke-width="2" fill="#313133" sketch:type="MSShapeGroup" cx="18" cy="18" r="18"></circle>
+                            <g id="Avatar-Copy-2">
+                                <mask id="mask-2" sketch:name="Mask" fill="white">
+                                    <use xlink:href="#path-1"></use>
+                                </mask>
+                                <use id="Mask" stroke="#313133" stroke-width="2" fill="#313133" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+                                <g id="Oval-795-+-Triangle-6" mask="url(#mask-2)" fill="#A8DC28" sketch:type="MSShapeGroup">
+                                    <g transform="translate(9.900000, 5.400000)">
+                                        <ellipse id="Oval-795" cx="11.7" cy="10.1729789" rx="11.7" ry="10.1729789"></ellipse>
+                                        <polygon id="Triangle-6" points="17.2714286 14.9917584 24.5142857 20.3459578 10.0285714 20.3459578 "></polygon>
+                                    </g>
+                                </g>
+                                <g id="Oval-795-+-Triangle-6-Copy" mask="url(#mask-2)" stroke="#313133" stroke-width="2" fill="#A8DC28" sketch:type="MSShapeGroup">
+                                    <g transform="translate(12.150000, 20.250000) scale(-1, 1) translate(-12.150000, -20.250000) translate(1.800000, 9.900000)" id="Oval-795">
+                                        <path d="M13.6097453,17.5429303 C12.5848567,17.8383999 11.488911,17.9983473 10.35,17.9983473 C4.63385284,17.9983473 0,13.96928 0,8.99917366 C0,4.02906728 4.63385284,0 10.35,0 C16.0661472,0 20.7,4.02906728 20.7,8.99917366 C20.7,11.5633483 19.4665939,13.8770439 17.4874952,15.5162007 L20.489343,20.0468991 L13.6097453,17.5429303 Z"></path>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,11 @@
+entity_ajax_find_by_term:
+    path:     /ajax/find/{term}
+    defaults: { _controller: "FaEntityBundle:Entity:entityAjax" }
+    options:
+        expose: true
+
+entity_ajax_get_options_by_partent_json:
+    path:     /ajax/get/options_by_partent_json
+    defaults: { _controller: "FaEntityBundle:Entity:ajaxGetOptionsByParent" }
+    options:
+        expose: true

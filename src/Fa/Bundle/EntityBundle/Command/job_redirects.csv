@@ -1,0 +1,84 @@
+old_level;old;new_level;new
+2;Accounting;2;Accountancy and Finance Jobs
+3;Accountants, Assistants and Bookkeeping;2;Accountancy and Finance Jobs
+3;Banking, Insurance and Investment;3;Banking Jobs
+2;Marketing, Media and PR;2;Marketing, Media and PR Jobs
+3;Account Management;3;Marketing Jobs
+3;Business Development;3;Marketing Jobs
+3;Design and Creative;3;Design and Creative Jobs
+3;Editorial and Content;3;Writing Jobs
+3;Film, TV and Production;3;Design and Creative Jobs
+3;General Marketing;3;Marketing Jobs
+3;PR and Communications;3;PR Jobs
+3;SEO and PPC;3;Digital Marketing, SEO and PPC Jobs
+3;Social Media;3;Digital Marketing, SEO and PPC Jobs
+2;Babysitting and Nannies;3;Babysitting Jobs
+2;Banking, Settlements and Insurance;3;Banking Jobs
+2;Caretaking and Handymen;3;Handyman Jobs
+2;Charity and Volunteering;3;Other Charity, Non-Profit, and Volunteering Jobs
+2;"Chefs, Cooks and Kitchen ";4;Chef Jobs
+2;Web Development and IT;2;Computing and IT Jobs
+3;Project Management and Business Analysis;3;Business Analyst Jobs
+3;Web Design and Usability;3;Web Design Jobs
+3;Web Development, Programming and Testing;3;Web Developer Jobs
+3;Web Support, Database and Systems Admin;3;IT Support Jobs
+2;"Construction and Engineering ";2;Construction, Tradesmen and Property Jobs
+3;Architecture and Engineering;3;Architecture Jobs
+3;Carpenter and Joiner;3;Carpentary and Joinery Jobs
+3;Building Services and Maintenance;3;Building Service and Maintenance Jobs
+3;Tradesmen and Labour;3;Labourer Jobs
+2;"Data Entry and Junior Admin ";3;Data Entry
+2;"Dentist and Dental Hygiene ";3;Dental Jobs
+2;"Driving and Warehouse ";3;Driver Jobs
+3;Drivers and Couriers;4;Delivery Driver Jobs
+3;Warehouse Jobs;3;Warehouse Jobs
+2;Equestrian Jobs;3;Equine Jobs
+2;Farming Jobs;3;Farming Jobs
+2;Flyering;3;Flyering Jobs
+2;Garden and Landscape;3;Gardening and Landscaping Jobs
+2;"Graphic Design and Fashion ";3;Design and Creative Jobs
+2;Health and Beauty;2;Health, Beauty and Fitness Jobs
+3;Beauty and Nails;3;Spa and Beauty Jobs
+3;Diet and Fitness;3;Gym and Fitness Jobs
+3;Hairdressing and Styling;3;Hairdressing and Styling Jobs
+2;Healthcare;2;Healthcare and Medicine Jobs
+3;Biotechnology and Pharmaceutical;3;Pharmaceutical Jobs
+3;Medical and Nursing;3;Medical Jobs
+3;Occupational Therapy;3;Occupational Therapy Jobs
+3;Physiotherapy;3;Physiotherapy Jobs
+2;Host Families;3;Host Families
+2;Hotel Jobs;3;Hotel Management and Admin Jobs
+2;"Housekeeping and Cleaning ";3;Housekeeping and Cleaning Jobs
+2;"Legal and Paralegal ";2;Law Jobs
+3;Conveyancing and Paralegal;3;Licenced Conveyancing Jobs
+3;Legal Secretarial and Admin;3;Legal Secretary Jobs
+3;Qualified Solicitor;3;Solicitor Jobs
+2;"Marine Jobs ";3;Manufacturing Jobs
+2;"Mechanics and Automotive ";4;Mechanic Jobs
+2;"Modelling and Promotions ";3;Modelling Jobs
+2;"Music Jobs ";3;Music Jobs
+2;Reception and Customer Service;2;Office, Admin and PA Jobs
+2;"Recruitment, HR and Training ";2;Recruitment and HR Jobs
+2;Retail Jobs;3;Retail Jobs
+2;"Sales Jobs ";3;Sales Jobs
+2;"Secretarial, PAs and Admin ";2;Office, Admin and PA Jobs
+2;Security Jobs;3;Security Jobs
+2;Social Care and Home Help;2;Home and Social Care Jobs
+2;"Seasonal and Overseas Jobs ";3;Summer Season Jobs
+3;Domiciliary Care;3;Domiciliary Care Jobs
+3;Live-In Care;3;Care Assistant Jobs
+3;Social Work;3;Social Work Jobs
+2;Sports and Healthclub;3;Sports and Healthclub Jobs
+2;Student and Graduate;2;Graduate Jobs and Apprenticeships
+2;"Teaching, Teacher and Nursery ";2;Education Jobs
+3;Fitness Teachers;3;Gym and Fitness Jobs
+3;Languages;3;Language Teaching Jobs
+3;Managerial;3;"Other Education Jobs "
+3;Primary and Nursery;3;Primary Teaching Jobs
+3;Private Tutoring;3;Tutoring Jobs
+3;Secondary and Higher Education;3;Secondary Teaching Jobs
+3;"Special Education ";3;Special Educational Needs Jobs
+3;Teaching Assistants;3;Teaching Assistant Jobs
+2;Telesales;3;Telesales Jobs
+2;Veterinary and Animal Care;3;Veterinary Jobs
+2;Waiting and Restaurant;4;Waiting Staff Jobs

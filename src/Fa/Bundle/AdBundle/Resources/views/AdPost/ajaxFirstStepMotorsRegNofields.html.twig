@@ -1,0 +1,139 @@
+{% if form.has_reg_no is defined %}
+    {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+    
+    {% set regNoDetailsOrderedFields = {13 : 'colour_id_autocomplete', 0 : 'colour_id', 1 : 'body_type_id', 2 : 'reg_year', 3 : 'fuel_type_id', 4 : 'transmission_id', 5 : 'engine_size', 6 : 'no_of_doors', 7 : 'no_of_seats', 8: 'fuel_economy', 9 : '062mph', 10 : 'top_speed', 11 : 'ncap_rating', 12 : 'co2_emissions', '14': 'colour_id_dimension_id'} %}
+    {% set regNoDetailsHiddenFields = {0: 'fuel_economy', 1 : '062mph', 2 : 'top_speed', 3 : 'ncap_rating', 4 : 'co2_emissions', 5: 'colour_id_dimension_id', 6: 'first_step_ordered_fields'} %}
+    
+    <div id="reg_no_fields" class="paa-bdr-box">
+        <h3 class="text-center">{{ attribute(form, 'has_reg_no').vars.label }}</h3>
+        <div class="text-center label-inline reg-yes-no">
+            {{ form_widget(attribute(form, 'has_reg_no')) }}
+            {{ form_errors(attribute(form, 'has_reg_no')) }}
+        </div>
+        <div id="reg_no_field">
+            {% if attribute(form, 'reg_no') is defined %}
+                <div class="small-wrapper">
+                    <label for="fa_paa_category_select_reg_no">{{ 'Enter it here'|trans({}, 'frontend-paa-second-step')}}:</label>
+                    {{ form_widget(attribute(form, 'reg_no')) }}
+                    {{ form_errors(attribute(form, 'reg_no')) }}
+                    <span class="error" id="reg_no_error_msg"></span>
+                    <button class="secondary-btn-1 expand mt10" id="lookup_vehicle" type="button">{{ 'Lookup Vehicle'|trans({}, 'frontend-paa-second-step')}}</button>
+                </div>
+            {% endif %}
+        </div>
+        <div id="reg_no_details_fields">
+            {% if regNoDetailsOrderedFields|length %}
+                {% if attribute(form, 'has_reg_no').vars.data == 1 %}
+                    {% if attribute(form, 'reg_no').vars.data is not null and attribute(form, 'reg_no').vars.errors|length < 1 %}
+                        <h5 class="text-center" id="add_vehicle_msg">{{ 'Confirm your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                    {% else %}
+                        <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                    {% endif %}
+                {% else %}
+                    <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                {% endif %}
+                <div id="reg_no_category_div"></div>
+                <div class="small-wrapper">
+                {% for field in regNoDetailsOrderedFields %}
+                    {% if attribute(form, field) is defined %}
+                        {% if field in regNoDetailsHiddenFields %}
+                            {{ form_widget(attribute(form, field), {'attr': {'style':'display:none'}}) }}
+                        {% elseif 'engine_size' in field %}
+                            <label for="fa_paa_category_select_engine_size">{{ attribute(form, field).vars.label }}{{fetch_repository('FaAdBundle:AdMotors').getUnitByField('engine_size', true)}}</label>
+                            {{ form_widget(attribute(form, field)) }}
+                            {{ form_errors(attribute(form, field)) }}
+                        {% else %}
+                            {{ form_row(attribute(form, field)) }}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {{ form_widget(attribute(form, 'first_step_ordered_fields')) }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function(){
+            bindFormErrorEvents();
+            bindCustomRadioEvent();
+            bindCustomCheckboxEvent();
+            $('.fa-select').selectmenu(
+            {
+                change: function(event, ui) {
+                    $('#'+$(this).attr('id')).trigger('change');
+                    $(this).nextAll('small.error').first().remove();
+                    $(this).parent().nextAll('small.error').first().remove();
+                    $('#'+$(this).attr('id')+'-button').removeClass('error-bdr');
+                },
+                open: function(event, ui) {
+                    //for fast click
+                    $('.ui-menu li').addClass('needsclick');
+                },
+                create: function(event, ui) {
+                    //for fast click
+                    if ($('#'+$(this).attr('id')).hasClass('error-bdr')) {
+                        $('#'+$(this).attr('id')+'-button').addClass('error-bdr');
+                    }
+                }
+            });
+        });
+        
+    //]]>
+    </script>
+    
+    {{ include('FaAdBundle:AdPost:firstStepRegNoJs.html.twig', {}) }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function(){
+            showHideRegNoFieldsOnLoad($("input[name='fa_paa_category_select[has_reg_no]']:checked").val());
+            $("input[name='fa_paa_category_select[has_reg_no]']").change(function(){
+                showHideRegNoFields($(this).val());
+            });
+            
+            $('#lookup_vehicle').click(function(){
+                var regNo = $.trim($('#fa_paa_category_select_reg_no').val());
+                var isSuccess = loadRegNoFieldDetailsByRegNo(regNo);
+
+                //GA Analytics code start
+                
+                var categoryPath = getCategoryPath(lastLevel);
+                if (isSuccess) {
+                  regLookupResult = ' - Lookup successful';
+                } else {
+                  regLookupResult = ' - Lookup unsuccessful || '+regNo;
+                }
+                var eventLabel = categoryPath + regLookupResult;
+                ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
+                //GA Analytics code end
+
+                if (isSuccess && isCategorySet) {
+                  setTimeout(function(){
+                      $('#fa_paa_category_select_save').trigger('click');
+                  }, 1500);
+                }
+            });
+            
+            $('#fa_paa_category_select_reg_no').on('focus', function(){
+                $('#reg_error').remove();
+                $('#fa_paa_category_select_reg_no').removeClass('error');
+                $('#reg_no_error_msg').html('');
+                $('#reg_no_error_msg').hide();
+            });
+            
+            $('#fa_paa_category_select_reg_no').keydown(function(e) {
+                if (e.which === 13) {
+                     e.preventDefault();
+                     $('#lookup_vehicle').click();
+                     return false;
+                }
+            });
+        });
+    
+    //]]>
+    </script>
+    
+    {% if (form.colour_id_autocomplete) is defined %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_category_select_colour_id', 'placeHolder': ((attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'colour_id_autocomplete').vars.attr.placeholder : 'Please type the colour'|trans({}, 'frontend-paa-second-step')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_category_select_colour_id_dimension_id'}) }}
+    {% endif %}
+{% endif %}

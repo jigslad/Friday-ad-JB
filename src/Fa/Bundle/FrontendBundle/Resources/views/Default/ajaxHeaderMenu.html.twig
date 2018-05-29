@@ -1,0 +1,4 @@
+{% extends 'FaFrontendBundle::simpleLayout.html.twig' %}
+{% block body %}
+<div data-interchange="[{{ path('category_render_header_categories') }}, (only screen and (min-width: 320px) and (max-width: 640px))], [{{ path('category_render_header_categories') }}, (only screen and (min-width: 641px) and (max-width: 1151px))], [{{ path('category_render_header_categories') }}, (only screen and (min-width: 1152px))]"></div>
+{% endblock %}

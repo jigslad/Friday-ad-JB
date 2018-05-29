@@ -1,0 +1,64 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set adId = objAd.getId() %}
+{% set senderId = objSender.getId() %}
+{% set receiverId = objReceiver.getId() %}
+{% set adUser = objAd.getUser() ? objAd.getUser() : null %}
+
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'frmMessageUser'}}) }}
+    <div>
+        <a class="close-reveal-modal">&#215;</a>
+        {% set receiverName = objReceiver ? objReceiver.getProfileName() : null %}
+        <h5 class="modal-title">
+            {{'Ask %user_name% a question..'|trans({'%user_name%': receiverName}, 'frontend-contact-seller')}}
+        </h5>
+        <div class="modal-content">
+            {% if app.user and app.request.cookies.has('contact_seller_flag') and app.request.cookies.has('contact_seller_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.cookies.get('contact_seller_flag') %}
+                <div data-alert class="alert-box success radius">
+                    <span class="alert-icon">&nbsp;</span>
+                    {{'You have successfully logged in.'|trans({}, 'frontend')}}
+                    <a href="javascript:void(0)" class="close">&times;</a>
+                </div>
+                {{ fetch_repository('FaUserBundle:User').removeUserCookies() }}
+            {% endif %}
+            {{ form_row(form.text_message) }}
+            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand'}}) }}
+        </div>
+    </div>
+{{ form_end(form) }}
+
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+        bindCustomRadioEvent();
+        bindCustomCheckboxEvent();
+    });
+    $("#frmMessageUser").submit(function(event) {
+        blockElement('#messageUserModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        searchAgent = false;
+
+        var route = Routing.generate('contact_user', { 'adId': '{{adId}}', 'senderId': '{{senderId}}', 'receiverId': '{{receiverId}}', 'whoToWhome': '{{whoToWhome}}' });
+        $.ajax({
+            type: "POST",
+            url: route,
+            data: new FormData(this),
+            contentType: false,
+            processData:false,
+        })
+        .always(function(response) {
+            unblockElement('#messageUserModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#messageUserModal').html(response.htmlContent);
+            } else {
+                $('#messageUserModal').foundation('reveal', 'close');
+                ga('send', 'event', 'CTA', 'Send email', {{ objAd.getId() }});
+                location.reload();
+            }
+        });
+    });
+//]]>
+</script>

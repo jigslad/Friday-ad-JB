@@ -1,0 +1,43 @@
+1) Go to project root directory. 
+cd PATH_TO_YOUR_PROJECT/friday-ad-new
+
+2) update your code
+git pull origin master
+
+3) run, composer update
+When you run above command it may ask you for database connection, define appropriate connection.
+
+4) chown -R nginx:nginx PATH_TO_YOUR_PROJECT/friday-ad-new
+perform this step each time when you update your project using root user.
+
+5) sudo -u nginx php app/console doctrine:database:drop --force
+
+6) sudo -u nginx php app/console doctrine:database:create
+
+7) Load migration data.
+
+    [Take database from test server]
+    wget --http-user=fridayad --http-password=fr1day http://test.friday-ad.fiare.com/fridayad.sql.bz2
+
+8) Extract database,
+    sudo -u nginx  bzip2 -d fridayad.sql.bz2
+
+9) Import database
+    mysql -h<host> -u <username> -p<password> <databasename> < fridayad.sql
+
+10) sudo -u nginx php app/console assets:install web --symlink
+
+11) sudo -u nginx php app/console assetic:dump
+
+12) sudo -u nginx php app/console cache:clear --env=dev
+
+13) sudo -u nginx php app/console cache:clear --env=prod
+
+14) For solr setup and solr index follow the instruction given in file solr_setup.txt in the same directory.
+
+15) sudo -u nginx php app/console fa:update:user-ad-statistics all
+
+16) In case of any issue first try by clearing cache.
+
+
+

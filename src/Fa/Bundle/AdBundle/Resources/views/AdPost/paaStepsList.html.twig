@@ -1,0 +1,99 @@
+{% set container = fetch_container_instance() %}
+{% set totalSteps = 4 %}
+{% if container.get('session').has('paa_skip_login_step') %}
+    {% set totalSteps = 3 %}
+{% endif %}
+{% set rootCategoryId = '' %}
+{% set rootCategoryName = '' %}
+{% set forSaleCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+{% if container.get('session').has('paa_first_step_data') %}
+    {% set first_step_data = array_unserialize(container.get('session').get('paa_first_step_data')) %}
+    {% set categoryId = attribute(first_step_data, 'category_id') %}
+    {% set rootCategoryId = fetch_repository('FaEntityBundle:Category').getRootCategoryId(categoryId, container) %}
+    {% set rootCategoryName = fetch_repository('FaEntityBundle:Category').getRootCategoryName(categoryId, container) %}
+{% endif %}
+
+{% if container.has('security.authorization_checker') and container.get('security.authorization_checker').isGranted("IS_AUTHENTICATED_REMEMBERED")%}
+    {% set user = container.get('security.token_storage').getToken().getUser() %}
+    {% if (rootCategoryName == 'adult' or rootCategoryName == 'services') and (user.businessName is null or container.get('session').has('paa_show_business_step')) %}
+        {% set totalSteps = 4 %}
+    {% endif %}
+{% endif %}
+
+{% if currentRoute == 'ad_post_fourth_step' %}
+    {{ include('FaAdBundle:AdPost:dragDropMessage.html.twig') }}
+{% endif %}
+<div id="left-column" class="large-6 columns" data-equalizer-watch>
+    <div class="step-instruction hide-for-small-only">
+        <div class="f-ad-sign">F-ad</div>
+        <h3 id="paa_steps_title">
+        {% if rootCategoryId == forSaleCategoryId %}
+            {{ 'Sell your items on Friday-Ad'|trans({}, 'frontend-paa') }}
+        {% else %}
+            {{ 'Advertise on Friday-Ad'|trans({}, 'frontend-paa') }}
+        {% endif %}
+        </h3>
+        <div class="step-to-complete"><span>{{ '%step_count% steps to complete your ad'|trans({'%step_count%' : (totalSteps - step + 1)}, 'frontend-paa') }}</span></div>
+    </div>
+    <ul class="step-nav">
+        {% set step1Class = 'step-off' %}
+        {% set step2Class = 'step-off' %}
+        {% set step3Class = 'step-off' %}
+        {% set step4Class = 'step-off' %}
+        
+        {% if step is defined%}
+            {% if step == 1 %}
+                {% set step1Class = 'step-on' %}
+            {% elseif step == 2 %}
+                {% set step1Class = 'step-complete' %}
+                {% set step2Class = 'step-on' %}
+            {% elseif step == 3 %}
+                {% set step1Class = 'step-complete' %}
+                {% set step2Class = 'step-complete' %}
+                {% set step3Class = 'step-on' %}
+            {% elseif step == 4 %}
+                {% set step1Class = 'step-complete' %}
+                {% set step2Class = 'step-complete' %}
+                {% set step3Class = 'step-complete' %}
+                {% set step4Class = 'step-on' %}
+            {% endif %}
+        {% endif %}
+
+        <li class="clearfix {{ step1Class }}">
+            <div class="step-num step-1">1</div>
+            <div class="step-text">{{ 'What are you selling?'|trans({}, 'frontend-paa') }}</div>
+        </li>
+
+        <li class="clearfix {{ step2Class }}">
+            <div class="step-num step-2">2</div>
+            <div class="step-text">{{ 'Describe your item'|trans({}, 'frontend-paa') }}</div>
+        </li>
+
+        {% if totalSteps == 3 %}
+            <li class="clearfix {{ step4Class }}">
+                <div class="step-num step-3">3</div>
+                <div class="step-text">{{ 'Add more details'|trans({}, 'frontend-paa') }}</div>
+            </li>
+        {% else %}
+            <li class="clearfix {{ step3Class }}">
+                <div class="step-num step-3">3</div>
+                <div class="step-text">{{ 'Add your details'|trans({}, 'frontend-paa') }}</div>
+            </li>
+    
+            <li class="clearfix {{ step4Class }}">
+                <div class="step-num step-4">4</div>
+                <div class="step-text">{{ 'Add more details'|trans({}, 'frontend-paa') }}</div>
+            </li>
+        {% endif %}
+    </ul>
+    {% if step == 1 and app.user and app.user.getRole() and app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+        <div class="paaLeftContainer">
+            <div class="dpaa-section text-center hide-for-small-only" id="paaLeftPrintItem">
+                <span class="self-service-img">&nbsp;</span>
+                <span class="magazines-img">&nbsp;</span>
+                <b>{{ 'Create and upload</b><br />your own branded advert<br /><b>for print'|trans({}, 'frontend-paa')|raw }}</b>
+                <a href="https://www.fmgadvertising.com/display-item/post/choose-style" target="_blank" class="button primary-btn-2 expand">{{ 'Give it a go!'|trans({}, 'frontend-paa') }}</a>
+            </div>
+        </div>
+    {% endif %}
+</div>

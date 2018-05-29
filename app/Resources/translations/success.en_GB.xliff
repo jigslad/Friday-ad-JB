@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="cd21261b4218f07ea3478f14122aebd3ce972956" resname="%displayWord% was successfully added.">
+        <jms:reference-file line="130">ContentBundle/Controller/HeaderImageAdminController.php</jms:reference-file>
+        <source>%displayWord% was successfully added.</source>
+        <target state="new">%displayWord% was successfully added.</target>
+      </trans-unit>
+      <trans-unit id="539ac1b2756f4ae5ce430b7157a744e7705ccc1f" resname="%displayWord% was successfully deleted.">
+        <jms:reference-file line="229">ContentBundle/Controller/HeaderImageAdminController.php</jms:reference-file>
+        <source>%displayWord% was successfully deleted.</source>
+        <target state="new">%displayWord% was successfully deleted.</target>
+      </trans-unit>
+      <trans-unit id="382566b36f6e635a6fa37f1412c8c517ea698c36" resname="%displayword% was successfully updated.">
+        <jms:reference-file line="171">ContentBundle/Controller/HeaderImageAdminController.php</jms:reference-file>
+        <source>%displayword% was successfully updated.</source>
+        <target state="new">%displayword% was successfully updated.</target>
+      </trans-unit>
+      <trans-unit id="252dc32e395a7c006c89f263caf0efd0efa9c529" resname="Email template was successfully added.">
+        <jms:reference-file line="112">EmailBundle/Controller/EmailTemplateAdminController.php</jms:reference-file>
+        <source>Email template was successfully added.</source>
+        <target state="new">Email template was successfully added.</target>
+      </trans-unit>
+      <trans-unit id="8ce92b9f0dbb33bbed5d7b4d663603d0c7e24977" resname="Email template was successfully updated.">
+        <jms:reference-file line="234">EmailBundle/Controller/EmailTemplateAdminController.php</jms:reference-file>
+        <source>Email template was successfully updated.</source>
+        <target state="new">Email template was successfully updated.</target>
+      </trans-unit>
+      <trans-unit id="c201ea50d02b3de9f642715745ad17dab7f0586f" resname="Entity was successfully added.">
+        <jms:reference-file line="107">EntityBundle/Controller/EntityAdminController.php</jms:reference-file>
+        <source>Entity was successfully added.</source>
+        <target state="new">Entity was successfully added.</target>
+      </trans-unit>
+      <trans-unit id="0d824d6e744c54f7d80f2ee2e0185f92ba3cb353" resname="Entity was successfully deleted.">
+        <jms:reference-file line="281">EntityBundle/Controller/EntityAdminController.php</jms:reference-file>
+        <source>Entity was successfully deleted.</source>
+        <target state="new">Entity was successfully deleted.</target>
+      </trans-unit>
+      <trans-unit id="15fab2e9a64926b03f239b83fb0ba46626656896" resname="Entity was successfully updated.">
+        <jms:reference-file line="235">EntityBundle/Controller/EntityAdminController.php</jms:reference-file>
+        <source>Entity was successfully updated.</source>
+        <target state="new">Entity was successfully updated.</target>
+      </trans-unit>
+      <trans-unit id="5c4a94460213fddc3a9770dce8a2ec296840683c" resname="Filter has been sent for export in dotmailer please check the status after some time.">
+        <jms:reference-file line="144">DotMailerBundle/Controller/DotmailerFilterAdminController.php</jms:reference-file>
+        <source>Filter has been sent for export in dotmailer please check the status after some time.</source>
+        <target state="new">Filter has been sent for export in dotmailer please check the status after some time.</target>
+      </trans-unit>
+      <trans-unit id="739a1cfea5450e221a538ed065c86d54d47197de" resname="It will take time to generate csv, Please check download generated cvs list after 5 mins or as per search result count.">
+        <jms:reference-file line="228">ReportBundle/Controller/UserReportAdminController.php</jms:reference-file>
+        <source>It will take time to generate csv, Please check download generated cvs list after 5 mins or as per search result count.</source>
+        <target state="new">It will take time to generate csv, Please check download generated cvs list after 5 mins or as per search result count.</target>
+      </trans-unit>
+      <trans-unit id="f4ad3f4eb5011ef0d0dbf47dd607ad65bd61056a" resname="Package was successfully added.">
+        <jms:reference-file line="126">PromotionBundle/Controller/PackageAdminController.php</jms:reference-file>
+        <source>Package was successfully added.</source>
+        <target state="new">Package was successfully added.</target>
+      </trans-unit>
+      <trans-unit id="92e035700091659b407ccb952c3aa5f524162683" resname="Package was successfully deleted.">
+        <jms:reference-file line="283">PromotionBundle/Controller/PackageAdminController.php</jms:reference-file>
+        <source>Package was successfully deleted.</source>
+        <target state="new">Package was successfully deleted.</target>
+      </trans-unit>
+      <trans-unit id="18df6aec867ddd5457a03a871eb1ab218b13ed8f" resname="Package was successfully updated.">
+        <jms:reference-file line="244">PromotionBundle/Controller/PackageAdminController.php</jms:reference-file>
+        <source>Package was successfully updated.</source>
+        <target state="new">Package was successfully updated.</target>
+      </trans-unit>
+      <trans-unit id="c2fd6379e52d6c57659b7655ccf54816a62376e4" resname="Record has been added successfully.">
+        <jms:reference-file line="185">AdminBundle/Controller/CrudController.php</jms:reference-file>
+        <jms:reference-file line="211">ContentBundle/Controller/LandingPageAdminController.php</jms:reference-file>
+        <jms:reference-file line="130">PromotionBundle/Controller/ProfileUpsellAdminController.php</jms:reference-file>
+        <jms:reference-file line="187">AdBundle/Controller/AdPostAdminController.php</jms:reference-file>
+        <jms:reference-file line="193">AdBundle/Controller/AdPostAdminController.php</jms:reference-file>
+        <jms:reference-file line="109">UserBundle/Controller/UserConfigRuleAdminController.php</jms:reference-file>
+        <source>Record has been added successfully.</source>
+        <target state="new">Record has been added successfully.</target>
+      </trans-unit>
+      <trans-unit id="94b7d8a362a28125ceb6d44445409131cb170bd3" resname="Record has been deleted successfully.">
+        <jms:reference-file line="315">AdminBundle/Controller/CrudController.php</jms:reference-file>
+        <jms:reference-file line="387">ContentBundle/Controller/LandingPageAdminController.php</jms:reference-file>
+        <jms:reference-file line="174">AdBundle/Controller/PaaFieldRuleAdminController.php</jms:reference-file>
+        <jms:reference-file line="304">AdBundle/Controller/AdAdminController.php</jms:reference-file>
+        <jms:reference-file line="197">UserBundle/Controller/UserConfigRuleAdminController.php</jms:reference-file>
+        <source>Record has been deleted successfully.</source>
+        <target state="new">Record has been deleted successfully.</target>
+      </trans-unit>
+      <trans-unit id="db6f53051e2d3a7b4288d0231265159643817655" resname="Record has been updated successfully.">
+        <jms:reference-file line="272">AdminBundle/Controller/CrudController.php</jms:reference-file>
+        <jms:reference-file line="315">ContentBundle/Controller/LandingPageAdminController.php</jms:reference-file>
+        <jms:reference-file line="214">PromotionBundle/Controller/ProfileUpsellAdminController.php</jms:reference-file>
+        <jms:reference-file line="279">AdBundle/Controller/AdPostAdminController.php</jms:reference-file>
+        <jms:reference-file line="285">AdBundle/Controller/AdPostAdminController.php</jms:reference-file>
+        <jms:reference-file line="155">UserBundle/Controller/UserConfigRuleAdminController.php</jms:reference-file>
+        <source>Record has been updated successfully.</source>
+        <target state="new">Record has been updated successfully.</target>
+      </trans-unit>
+      <trans-unit id="f3aaa9812632d7425dbf25fba645b7e187158ee9" resname="Subscription was successfully added.">
+        <jms:reference-file line="116">PromotionBundle/Controller/ShopPackageAdminController.php</jms:reference-file>
+        <source>Subscription was successfully added.</source>
+        <target state="new">Subscription was successfully added.</target>
+      </trans-unit>
+      <trans-unit id="a49b6cce52e5de85f428befc0a8662d553ca87c8" resname="Subscription was successfully deleted.">
+        <jms:reference-file line="265">PromotionBundle/Controller/ShopPackageAdminController.php</jms:reference-file>
+        <source>Subscription was successfully deleted.</source>
+        <target state="new">Subscription was successfully deleted.</target>
+      </trans-unit>
+      <trans-unit id="6fdf26db440f4d5808c886dc9baf6a0ea6ff0778" resname="Subscription was successfully updated.">
+        <jms:reference-file line="228">PromotionBundle/Controller/ShopPackageAdminController.php</jms:reference-file>
+        <source>Subscription was successfully updated.</source>
+        <target state="new">Subscription was successfully updated.</target>
+      </trans-unit>
+      <trans-unit id="bc73f81aa6efcddaa7b981e11f21c343d2564b76" resname="Your advert %advert_title% has been updated.">
+        <jms:reference-file line="77">AdBundle/Controller/AdEditController.php</jms:reference-file>
+        <jms:reference-file line="81">AdBundle/Controller/AdEditController.php</jms:reference-file>
+        <jms:reference-file line="84">AdBundle/Controller/AdEditController.php</jms:reference-file>
+        <source>Your advert %advert_title% has been updated.</source>
+        <target state="new">Your advert %advert_title% has been updated.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

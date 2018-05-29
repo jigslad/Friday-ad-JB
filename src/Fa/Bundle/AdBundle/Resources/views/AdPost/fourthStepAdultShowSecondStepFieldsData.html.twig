@@ -1,0 +1,36 @@
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|join('<span class="seperator"></span>')|raw }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_first_step', {'is_edit' : 1}) }}');" title="{{ 'Change category'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Ad title'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ ad.title }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change ad title'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+
+<div class="change-category clearfix">
+    <div class="clearfix">
+        <div class="desc-col-1">
+            <div class="clearfix">
+                <span class="cat-caption left">{{ 'Description'|trans({}, 'frontend-paa-fourth-step') }}:</span>
+                <div class="paa-desc">
+                    <div id="paa_desc">{{ ad.description|raw }}</div>
+                    <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend') }}</a>
+                    <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend') }}</a>
+               </div>
+            </div>
+        </div>
+        <div class="desc-col-2">
+            <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change description'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+        </div>
+    </div>
+</div>
+
+{{ include('FaAdBundle:AdPost:paaBusinessDetails.html.twig') }}

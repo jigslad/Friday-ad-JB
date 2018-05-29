@@ -1,0 +1,36 @@
+<div class="own-item" id="saved_search_{{ searchAgent.id }}">
+    <h4 id="saved_search_title_{{searchAgent.id}}_mobile" class="show-for-small-only">{{ searchAgent.name }}</h4>
+    <div class="row">
+        <div class="large-18 columns">
+            <h4 id="saved_search_title_{{searchAgent.id}}_desktop" class="hide-for-small-only">{{ searchAgent.name }}</h4>
+            <div class="list-dimensions">
+                {% set searchParams = {} %}
+                {% set searchAgentCriteria = array_unserialize(searchAgent.criteria) %}
+                {% if searchAgentCriteria['search'] is defined %}
+                    {% set searchParams = searchParams|merge(searchAgentCriteria['search']) %}
+                {% endif %}
+                {% if searchAgentCriteria['sorter'] is defined %}
+                    {% set searchParams = searchParams|merge(searchAgentCriteria['sorter']) %}
+                {% endif %}
+
+                {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams) %}
+                {% set displayCriteriaArray = userSearchAgentRepository.getSearchAgentDisplayCriteriaArray(searchParams, container) %}
+
+                {% for displayCriteria in displayCriteriaArray %}
+                    <span>{{ displayCriteria }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="large-6 columns">
+            {% if guid is not defined %}
+                <a class="xs-btn-2 button" href="javascript:void(0)" onclick="renameSavedSearchConfirmation('{{searchAgent.id}}');"><span class="edit-icon"></span>{{'Rename'|trans({}, 'frontend-my-saved-searches')}}</a>
+                <a class="xs-btn-2 button remove-link" href="javascript:void(0);" onclick="removeSavedSearchConfirmation('{{searchAgent.id}}');"><span class="delete-icon"></span> {{'Remove'|trans({}, 'frontend-my-saved-searches')}}</a>
+            {% endif %}
+
+            <a href="{{ searchResultUrl }}" class="xs-btn-1 button expand">{{'Search now'|trans({}, 'frontend-my-saved-searches')}}</a>
+            <span class="custom-checkbox {% if searchAgent.is_email_alerts %}checked{% endif %}"><input type="checkbox" name="emailAlert_{{ searchAgent.id }}" id="emailAlert_{{ searchAgent.id }}" onclick="return updateSavedSearchAgent({{ searchAgent.id }});" value="1" {% if searchAgent.is_email_alerts %} checked="checked" {% endif %} /></span>
+            <label for="emailAlert_{{ searchAgent.id }}" class="inline-b mb0 mt10">{{'Send me email alerts'|trans({}, 'frontend-my-saved-searches')}}</label>
+
+        </div>
+    </div>
+</div>

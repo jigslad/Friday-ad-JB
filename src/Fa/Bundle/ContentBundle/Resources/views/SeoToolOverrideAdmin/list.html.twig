@@ -1,0 +1,49 @@
+{% set seoToolOverrideRepository = fetch_repository('FaContentBundle:SeoToolOverride') %}
+
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+             <table class="table table-striped table-bordered table-hover">
+                 <thead class="mb0">
+                     <tr>
+                         <th width="30%">{{ 'Page Title'|trans({}, 'messages') }}</th>
+                         <th width="25%">{{ 'Page Url'|trans({}, 'messages') }}</th>
+                         <th width="25%">{{ 'H1 Tag'|trans({}, 'messages') }}</th>
+                         <th width="10%">{{ 'Status'|trans({}, 'messages') }}</th>
+                         <th width="10%"><i class="fa fa-gear"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for seoToolOverride in pagination.getCurrentPageResults() %}
+                          <tr class="gradeX">
+                              <td>{{ seoToolOverride.page_title }}</td>
+                              <td>{{ seoToolOverride.page_url }}</td>
+                              <td>{{ seoToolOverride.h1_tag }}</td>
+                              <td>{{ statusArray[seoToolOverride.status] }}</td>
+                              <td>
+                                  <button href="#" data-dropdown="drop{{ seoToolOverride.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                  <br />
+                                  <ul id="drop{{ seoToolOverride.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+	                                  {% if seoToolOverrideEditGrant %}
+	                                      <li><a href="{{ path('seo_tool_override_edit_admin', {'id': seoToolOverride.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+	                                  {% endif %}
+
+	                                  {% if seoToolOverrideDeleteGrant %}
+	                                      <li><a href="{{ path('seo_tool_override_delete_admin', {'id': seoToolOverride.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this record?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+	                                  {% endif %}
+                                  </ul>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="odd gradeX">
+                              <td colspan="4" align="center">{{ 'No record found'|trans({}, 'messages') }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+        </div>
+    </div>
+</div>

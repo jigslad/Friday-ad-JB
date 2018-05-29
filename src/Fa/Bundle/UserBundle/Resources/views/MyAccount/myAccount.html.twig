@@ -1,0 +1,64 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme userDetailForm 'FaFrontendBundle:Form:fields.html.twig' %}
+{% form_theme userAccountProfileForm 'FaFrontendBundle:Form:fields.html.twig' %}
+{% form_theme userNewsletterPrefForm 'FaFrontendBundle:Form:fields.html.twig' %}
+{% form_theme userCardForm 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
+{% set paymentCyberSourceRepository = fetch_repository('FaPaymentBundle:PaymentCyberSource') %}
+
+{% set container = fetch_container_instance() %}
+
+{% block title %}
+    {{'My account'|trans({}, 'frontend-my-account')}}
+{% endblock %}
+
+{% block body -%}
+    <div class="posting-bg" id="my_account">
+        {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+        <div class="row d-board-main">
+            <div class="off-canvas-wrap" data-offcanvas>
+                <div class="inner-wrap">
+                    {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                    <div id="db-right-part" class="large-18 columns">
+                        {% if not userDetailForm.vars.valid or not userAccountProfileForm.vars.valid or not userNewsletterPrefForm.vars.valid or not userCardForm.vars.valid %}
+                            <div data-alert class="alert-box alert radius mt10">
+                                <span class="alert-icon">&nbsp;</span>
+                                {{ 'Please correct errors and resubmit form.'|trans({}, 'frontend-my-account') }}
+                                <a href="javascript:void(0)" class="close">&times;</a>
+                            </div>
+                        {% endif %}
+                        <div class="db-content">
+                            <h1 class="db-title">{{'Your account'|trans({}, 'frontend-my-account')}}</h1>
+                            <h2 class="db-sub-title hide-for-small-only">{{'From here you can update your account settings, update payment details and maintain your address book.'|trans({}, 'frontend-my-account')}}</h2>
+                            <div class="db-section">
+                                <dl class="accordion" data-accordion>
+                                    {{ include('FaUserBundle:MyAccount:myAccountDetail.html.twig') }}
+                                    
+                                    {{ include('FaUserBundle:MyAccount:mySavedPaymentSources.html.twig') }}
+                                    
+                                    {{ include('FaUserBundle:MyAccount:myPaypalAccount.html.twig') }}
+                                    
+                                    {{ include('FaUserBundle:MyAccount:myAccountProfile.html.twig') }}
+                                    
+                                    {{ include('FaUserBundle:MyAccount:myNewsletterPref.html.twig') }}
+                                    
+                                    {{ include('FaUserBundle:MyAccount:myAddresses.html.twig') }}
+                                    
+                                    {{ include('FaUserBundle:MyAccount:myInvoices.html.twig') }}
+                                    
+                                    {{ include('FaUserBundle:MyAccount:deactivateAccount.html.twig') }}
+                                    
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+{{ include('FaUserBundle:MyAccount:myAccountJs.html.twig') }}
+{% endblock %}

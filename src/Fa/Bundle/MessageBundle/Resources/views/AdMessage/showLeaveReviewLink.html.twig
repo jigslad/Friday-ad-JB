@@ -1,0 +1,13 @@
+{% set reviewDetails = {} %}
+{% if fullConversation[0] is defined %}
+    {% set objLoggedInUser = app.user %}
+    {% if objLoggedInUser.getId() == fullConversation[0]['sender_user_id'] and fullConversation[0]['message_status'] == constant('Fa\\Bundle\\MessageBundle\\Repository\\MessageRepository::MODERATION_QUEUE_STATUS_OKAY') %}
+        {% set reviewDetails = {'ad_id':fullConversation[0]['ad_id'], 'title':fullConversation[0]['ad_title'], 'user_id':fullConversation[0]['receiver_user_id'], 'first_name':fullConversation[0]['receiver_first_name'], 'last_name':fullConversation[0]['receiver_last_name'], 'user_status_id':fullConversation[0]['user_status_id'] } %}
+    {% elseif fullConversation[0]['message_status'] == constant('Fa\\Bundle\\MessageBundle\\Repository\\MessageRepository::MODERATION_QUEUE_STATUS_OKAY') %}
+        {% set reviewDetails = {'ad_id':fullConversation[0]['ad_id'], 'title':fullConversation[0]['ad_title'], 'user_id':fullConversation[0]['sender_user_id'], 'first_name':fullConversation[0]['sender_first_name'], 'last_name':fullConversation[0]['sender_last_name'], 'user_status_id':fullConversation[0]['user_status_id'] } %}
+    {% endif %}
+{% endif %}
+
+{% if reviewDetails|length %}
+    {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : reviewDetails, 'to_whom' : 'buyer', 'class' : 'button xs-btn-1 mt5 mb0 mymsg-review-btn', 'from_where': 'message'}) }}
+{% endif %}

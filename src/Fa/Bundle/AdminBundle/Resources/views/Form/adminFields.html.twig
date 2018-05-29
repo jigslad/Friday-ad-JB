@@ -1,0 +1,76 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block form_row %}
+    <div class="row">
+        <div class="large-12 columns{% if errors|length > 0 %} error{% endif %} mb10">
+            {{ form_label(form) }} {% if required %} <span class="required">*</span> {% endif %}
+            {% if form.vars.block_prefixes.1 == 'checkbox' %}
+                {{ form_widget(form, {'attr': {'autofocus': 'autofocus'}}) }}
+            {% else %}
+                {{ form_widget(form, {'attr': {'autofocus': 'autofocus'}}) }}
+            {% endif %}
+            {% set attr = form.vars.attr %}
+            {{ form_errors(form) }}
+            {% if attr['field-help'] is defined %}
+                <span class="help-block">({{ attr['field-help'] }})</span>
+            {% endif %} 
+       </div>
+     </div>
+{% endblock form_row %}
+
+{% block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif %}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default(''))|trim}) %}
+        {%- endif %}
+        {% if label is empty -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+    {%- endif %}
+{%- endblock form_label %}
+
+{% block form_errors -%}
+    {% if errors|length > 0 -%}
+    <small class="error">
+        {%- for error in errors -%}
+            {{ error.message }}<br />
+        {%- endfor -%}
+    </small>
+    {%- endif %}
+{%- endblock form_errors %}
+
+{% block choice_widget_expanded -%}
+    {% if attr['ul-class'] is defined %}
+        <div {{ block('widget_container_attributes') }} class="clearfix">
+            <ul class="{{ attr['ul-class'] }}">
+                {%- for child in form %}
+                   <li>
+                    {{- form_widget(child) -}}
+                    {{- form_label(child) -}}
+                   </li>
+                {% endfor -%}
+            </ul>
+        </div>
+    {% else %}
+        <div {{ block('widget_container_attributes') }}>
+    {%- for child in form %}
+        {{- form_widget(child) -}}
+        {{- form_label(child) -}}
+    {% endfor -%}
+    </div>
+    {% endif %}
+{% endblock choice_widget_expanded %}
+
+{%- block number_widget -%}
+    {%- set type = type|default('number') -%}
+    {{ block('form_widget_simple') }}
+{%- endblock number_widget -%}
+
+{%- block tel_widget -%}
+    {%- set type = type|default('tel') -%}
+    {{ block('form_widget_simple') }}
+{%- endblock tel_widget -%}

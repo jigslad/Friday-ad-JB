@@ -1,0 +1,87 @@
+ad_post_first_step:
+    path:     /first_step
+    defaults: { _controller: "FaAdBundle:AdPost:firstStep" }
+
+ad_post_second_step:
+    path:     /second_step
+    defaults: { _controller: "FaAdBundle:AdPost:secondStep" }
+    
+ad_post_third_step:
+    path:     /third_step
+    defaults: { _controller: "FaAdBundle:AdPost:thirdStep" }
+    
+facebook_paa_login:
+    path:     /third_step/facebook/login
+    defaults: { _controller: "FaAdBundle:AdPost:facebookPaaLogin" }
+    
+google_paa_login:
+    path:     /third_step/google/login
+    defaults: { _controller: "FaAdBundle:AdPost:googlePaaLogin" }
+    
+ad_post_third_step_registration:
+    path:     /third_step_registration
+    defaults: { _controller: "FaAdBundle:AdPost:thirdStepRegistration" }
+    
+ad_post_fourth_step:
+    path:     /fourth_step
+    defaults: { _controller: "FaAdBundle:AdPost:fourthStep" }
+
+ad_post_ajax_similar_adverts:
+    path:     /ajax/similar_adverts
+    defaults: { _controller: "FaAdBundle:AdPost:ajaxSimilarAdverts" }
+
+ad_post_ajax_price_suggestion:
+    path:     /ajax/price_suggestion
+    defaults: { _controller: "FaAdBundle:AdPost:ajaxPriceSuggestion" }
+
+ad_post_save_draft_ad:
+    path:     /save_draft_ad
+    defaults: { _controller: "FaAdBundle:AdPost:saveDraftAd" }
+    
+ad_post_similar_ad:
+    path:     /ajax/post_similar_ad/{adId}
+    defaults: { _controller: "FaAdBundle:AdPost:ajaxPostSimilarAd" }
+    options:
+        expose: true
+
+ad_post_ajax_event_time_search:
+    path:     /ajax/event_time/search/{term}
+    defaults: { _controller: "FaAdBundle:AdPost:ajaxEventTimeSearch" }
+    options:
+        expose: true
+
+add_user_business_details:
+    path:     /add_user_business_details
+    defaults: { _controller: "FaAdBundle:AdPost:addUserBusinessDetails" }
+
+ad_post_change_to_carweb_category:
+    path:     /change_to_carweb_category
+    defaults: { _controller: "FaAdBundle:AdPost:changeToCarWebCategory" }
+    options:
+        expose: true
+
+ad_vrm_lookup_ajax:
+    path:     /ajax/carweb/vrm/{vrm}/
+    defaults: { _controller: "FaAdBundle:Ad:ajaxGetCarwebDataByVRM" }
+    options:
+        expose: true
+
+ajax_edit_from_paa_fourth_step:
+    path:     /ajax/edit_from_paa/
+    defaults: { _controller: "FaAdBundle:AdPost:ajaxEditFromPaaFourthStep" }
+    options:
+        expose: true
+
+ad_post_set_step_session_data:
+    path:     /set_step_session_data/{adId}
+    defaults: { _controller: "FaAdBundle:AdPost:setStepSessionData" }
+    options:
+        expose: true
+
+open_draft_ad_popup_ajax:
+    path: /ajax/open_draft_ad_popup_ajax/
+    defaults: { _controller: "FaAdBundle:AdPost:openDraftAdPopupAjax"}
+    
+ad_post_ajax_mototrs_reg_no_fields:
+    path:     /ajax/ad_post_ajax_mototrs_reg_no_fields
+    defaults: { _controller: "FaAdBundle:AdPost:ajaxFirstStepMotorsRegNoFields" }

@@ -1,0 +1,24 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+
+{% set configRuleEditGrant = false %}
+{% set configRuleDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('config_rule_edit_admin') %}
+  {% set configRuleEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('config_rule_delete_admin') %}
+  {% set configRuleDeleteGrant = true %}
+{% endif %}
+
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'config_rule_new_admin'}) }}
+    {% use "FaCoreBundle:ConfigRuleAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+    {{ include('FaCoreBundle:ConfigRuleAdmin:list.html.twig', {'pagination': pagination}) }}
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

@@ -1,0 +1,73 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+$("{{ field }}").select2({
+	{% if dropdownCssClass is defined %} dropdownCssClass: '{{ dropdownCssClass }}', {% endif %}
+    cacheDataSource: [],
+    placeholder: "{{ placeHolder }}",
+    minimumInputLength: 2,
+    width: '100%',
+    multiple: true,
+    query: function(query) {
+        self = this;
+        var key = query.term;
+        var cachedData = self.cacheDataSource[key];
+
+        if(cachedData) {
+            query.callback({results: cachedData.results});
+            return;
+        } else {
+            $.ajax({
+                url: Routing.generate('{{ route }}', { term: query.term }),
+                dataType: 'json',
+                type: 'GET',
+                data: {page_limit: 10, {% if dimension_field is defined %} cd_id: $('{{ dimension_field }}').val(),  {% endif %}},
+                success: function(data) {
+                    self.cacheDataSource[key] = data;
+                    query.callback({results: data.results});
+                }
+            })
+        }
+    },
+    formatResult: formatResult,
+    formatSelection: formatSelection,
+});
+
+$(document).ready(function(){
+    if ($("{{ jsonField }}").val() != '') {
+        var data = jQuery.parseJSON($("{{ jsonField }}").val());
+        $('{{ field }}').select2('data', data);
+    } else {
+        $('{{ field }}').select2('data', '');
+    }
+
+    $("{{ field }}").on("select2-focus", function() {
+        $(this).siblings('small.error').html('');
+       
+        {% if field matches '/location/' %} 
+            $('#location_div').siblings('small.error').html('');
+        {% endif %}
+    });
+});
+
+function formatResult(node) {
+    if (node.id == node.text) {
+        $('.select2-results li:first').hide();
+        return;
+    }
+
+    if (node.text2) {
+        return node.text + '<div> in <span>' + node.text2 + '</span></div>';
+    }
+    return node.text;
+}
+
+function formatSelection(node) {
+    if (node.text2) {
+        return node.text + ' in ' + node.text2;
+    }
+    
+    return node.text;
+}
+
+//]]>
+</script>

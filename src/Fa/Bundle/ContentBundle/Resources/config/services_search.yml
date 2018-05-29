@@ -1,0 +1,61 @@
+services:
+        
+    fa.header_image.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:HeaderImage]
+        
+    fa.landing_page.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:LandingPage]
+        
+    fa.static_page.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:StaticPage]
+
+    fa.static_block.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:StaticPage]
+        
+    fa.seo_tool.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:SeoTool]
+
+    fa.banner.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:Banner]
+
+    fa.banner_page.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:BannerPage]
+
+    fa.banner_zone.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:BannerZone]
+        
+    fa.home_popular_image.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:HomePopularImage]
+
+    fa.seo_tool_popular_search.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:SeoToolPopularSearch]
+
+    fa.seo_tool_top_link.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:SeoToolTopLink]
+
+    fa.seo_tool_override.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:SeoToolOverride]

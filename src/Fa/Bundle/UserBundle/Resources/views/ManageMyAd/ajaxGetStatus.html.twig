@@ -1,0 +1,16 @@
+{% set container = fetch_container_instance() %}
+{% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
+{% set adUrl = ''%}
+
+
+{% set adId = ad.id %}
+{% set adCategoryId = null %}
+{% if adCategoryIdArray[adId] is defined %}
+    {% set adCategoryId = adCategoryIdArray[adId] %}
+{% endif %}
+{% if ad['status_id'] == adStatusLive %}
+    {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
+    {% set adUrl = adUrl|trim('/') %}
+{% endif %}
+
+{{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}

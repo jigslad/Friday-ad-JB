@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %} {{'Friday Ad Admin'|trans}} {% if block('page_title') %} - {{block('page_title')|trim}} {% endif %} {% endblock %}</title>
+    {{ include(
+        'FaAdminBundle:Default:scriptTop.html.twig'
+    ) }}
+    {% block scripttop %}{% endblock %}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-mainAdmin.css'
+        'bundles/faadmin/css/custom.css'
+        'bundles/faadmin/css/responsive.css'
+          %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
+    {% endstylesheets %}
+
+</head>
+
+<body>
+    <div class="off-canvas-wrap" data-offcanvas>
+        <div>
+            <!-- Off Canvas Menu -->
+                {{ render(controller('FaAdminBundle:Default:renderMenu', {'currentRoute': app.request.attributes.get('_route')})) }}
+            
+            <!-- main content goes here -->
+                <div class="row">
+                    <div class="columns dashboard_msg">
+                     {{ include(
+                        'FaCoreBundle::message.html.twig'
+                     ) }}
+                     </div>
+                 </div>
+    
+                 {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    {{ include(
+        'FaAdminBundle:Default:scriptBottom.html.twig'
+    ) }}
+
+    
+    {% block scriptbottom %}{% endblock %}
+
+<script type="text/javascript">
+    $(document).foundation();
+    $(document).ready(function () {
+        $('.dropdown').click(function () {
+            $('.off-canvas-wrap').css({ overflow: "visible" });
+        });
+     });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+seo_tool_admin:
+    path:     /
+    defaults: { _controller: "FaContentBundle:SeoToolAdmin:index" }
+
+seo_tool_new_admin:
+    path:     /new
+    defaults: { _controller: "FaContentBundle:SeoToolAdmin:new" }
+
+seo_tool_create_admin:
+    path:     /create
+    defaults: { _controller: "FaContentBundle:SeoToolAdmin:create" }
+    requirements: { methods: post }
+
+seo_tool_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaContentBundle:SeoToolAdmin:edit" }
+
+seo_tool_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaContentBundle:SeoToolAdmin:update" }
+    requirements: { methods: post|put }
+
+seo_tool_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaContentBundle:SeoToolAdmin:delete" }
+    
+seo_tool_upload_csv:
+    path:   /upload_csv
+    defaults:  { _controller: FaContentBundle:SeoToolAdmin:uploadCsv }
+    options:
+        expose: true

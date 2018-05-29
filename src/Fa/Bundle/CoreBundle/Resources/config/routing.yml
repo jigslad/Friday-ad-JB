@@ -1,0 +1,15 @@
+FaCoreBundle_configRule:
+    resource: '@FaCoreBundle/Resources/config/routing/config_rule.yml'
+    prefix:   /config_rule
+
+ajax_ad_enquiry_increment:
+    path:   /ajax_ad_enquiry_increment/{variableName}/{adId}
+    defaults:  { _controller: FaCoreBundle:Core:adEnquiryIncrement }
+    options:
+        expose: true
+        
+ajax_update_user_site_view_counter_field:
+    path:   /update_user_site_view_counter_field/{userId}/{fieldName}
+    defaults:  { _controller: FaCoreBundle:Core:updateUserSiteViewCounterField }
+    options:
+        expose: true

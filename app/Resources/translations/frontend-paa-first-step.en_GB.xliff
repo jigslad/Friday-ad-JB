@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="0229fbb4766753da2b34572200afc62f6b691953" resname="Next step: describe your item">
+        <jms:reference-file line="73">AdBundle/Form/AdPostCategorySelectType.php</jms:reference-file>
+        <source>Next step: describe your item</source>
+        <target state="new">Next step: describe your item</target>
+      </trans-unit>
+      <trans-unit id="058c8a37563a0a8009b1790d462878c99d44507f" resname="Please select category">
+        <jms:reference-file line="91">AdBundle/Form/AdPostCategorySelectType.php</jms:reference-file>
+        <jms:reference-file line="115">views/AdPost/firstStep.html.twig</jms:reference-file>
+        <source>Please select category</source>
+        <target state="new">Please select category</target>
+      </trans-unit>
+      <trans-unit id="ac7a4bdd7ca155b65e8b1f58e575b5cd2a1f046e" resname="Please select subcategory">
+        <jms:reference-file line="96">AdBundle/Form/AdPostCategorySelectType.php</jms:reference-file>
+        <jms:reference-file line="115">views/AdPost/firstStep.html.twig</jms:reference-file>
+        <jms:reference-file line="154">views/AdPost/firstStep.html.twig</jms:reference-file>
+        <source>Please select subcategory</source>
+        <target state="new">Please select subcategory</target>
+      </trans-unit>
+      <trans-unit id="6c8eb38637451a1ea5dd5f7823ba93cfe710a6cb" resname="Tell us what it is and we'll help you find the category">
+        <jms:reference-file line="20">views/AdPost/firstStep.html.twig</jms:reference-file>
+        <source>Tell us what it is and we'll help you find the category</source>
+        <target state="new">Tell us what it is and we'll help you find the category</target>
+      </trans-unit>
+      <trans-unit id="3e4215eacbcf49628b297de990fe7d30c824fee3" resname="What are you selling on Friday-Ad">
+        <jms:reference-file line="5">views/AdPost/firstStep.html.twig</jms:reference-file>
+        <source>What are you selling on Friday-Ad</source>
+        <target state="new">What are you selling on Friday-Ad</target>
+      </trans-unit>
+      <trans-unit id="a19a1296d8549f7dcb740004380f9495ebf5a884" resname="What are you selling on Friday-Ad?">
+        <jms:reference-file line="19">views/AdPost/firstStep.html.twig</jms:reference-file>
+        <source>What are you selling on Friday-Ad?</source>
+        <target state="new">What are you selling on Friday-Ad?</target>
+      </trans-unit>
+      <trans-unit id="99c3f2f462d405b3cc89efbf1a7dc6ceb89920cf" resname="eg. Children clothes or wardrobe">
+        <jms:reference-file line="151">views/AdPostAdmin/new.html.twig</jms:reference-file>
+        <jms:reference-file line="253">views/AdPost/firstStep.html.twig</jms:reference-file>
+        <source>eg. Children clothes or wardrobe</source>
+        <target state="new">eg. Children clothes or wardrobe</target>
+      </trans-unit>
+      <trans-unit id="9b8bada7463af9e50f43f6f643269b83b98b2a4c" resname="or choose from all categories">
+        <jms:reference-file line="31">views/AdPost/firstStep.html.twig</jms:reference-file>
+        <source>or choose from all categories</source>
+        <target state="new">or choose from all categories</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

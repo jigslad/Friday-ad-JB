@@ -1,0 +1,16 @@
+services:
+        
+    fa.message.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaMessageBundle:Message]
+
+    fa.notification_message.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaMessageBundle:NotificationMessage]
+
+    fa.message_spammer.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaMessageBundle:MessageSpammer]

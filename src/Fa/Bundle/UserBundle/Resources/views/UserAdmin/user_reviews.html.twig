@@ -1,0 +1,115 @@
+{% block user_reviews_html %}
+{% set userReviewRepository = fetch_repository('FaUserBundle:UserReview') %}
+{% set entityRepository = fetch_repository('FaEntityBundle:Entity') %}
+{% set statusArray = userReviewRepository.getStatusArray(fetch_container_instance()) %}
+
+{% set userReviewEditGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('user_review_edit_ajax_admin') %}
+  {% set userReviewEditGrant = true %}
+{% endif %}
+
+{% set userReviewDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('user_review_delete_admin') %}
+  {% set userReviewDeleteGrant = true %}
+{% endif %}
+
+<div class="row" id="user_edit_msg_div" style="display:none">
+    <div class="columns dashboard_msg">
+        <div id="user_edit_msg" class="alert-box success radius">{{ 'User review has been updated successfully.' }}</div>
+    </div>
+</div>
+<div class="row">
+    <div class="columns">
+        <div class="simple_table">
+            <p class="instruction ng-binding mt5" style="color:#ff0000">{{ 'Click on review message / status to change it.'|trans }}</p>
+            <table class="mb0">
+                <thead>
+                <tbody>
+                    {% if reviews|length > 0 %}
+                        {% for review in reviews %}
+                             {{ include ('FaUserBundle:UserAdmin:user_review_list.html.twig', {'review' : review, 'loop' : loop }) }}
+                             {% set reviewChildren = userReviewRepository.getNestedChildrenByParentId(review.id) %}
+                             {% if reviewChildren|length > 0 %}
+                                {% for reviewChild in reviewChildren %}
+                                    {% set isReplyFromUser = false %}
+                                    {% if review.user.id != reviewChild.user.id %}
+                                        {% set isReplyFromUser = true %}
+                                    {% endif %}
+                                    {{ include ('FaUserBundle:UserAdmin:user_review_list.html.twig', {'review' : reviewChild, 'isChild': true , 'loopchild' : loop }) }}
+                                {% endfor %}
+                             {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr class="odd gradeX">
+                            <td colspan="5" align="center">{{ 'No reviews found'|trans }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block user_reviews_script %}
+    <script src="{{ asset_url('faadmin/js/jquery.jeditable.js') }}"></script>
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        {% set status = fetch_repository('FaUserBundle:UserReview').getStatusArray(fetch_container_instance()) %}
+        {% set statusArrayJson = status|slice(1, (status|length), true)|json_encode %}
+        $(".editable_message").editable("{{ path('user_review_edit_ajax_admin') }}", { 
+            type   : 'textarea',
+            submitdata: { _method: "put", field: "message" },
+            select : false,
+            submit : "{{ 'Save'|trans }}",
+            cancel : "{{ 'Cancel'|trans }}",
+            tooltip : "{{ 'Click to edit'|trans }}",
+            //onblur : "ignore",
+            cssclass : "jeditable_form",
+            //event: "dblclick"
+            callback : function(value, settings) {
+                $('#user_edit_msg_div').fadeIn(function() {
+                    setTimeout(function() {
+                        $('#user_edit_msg_div').fadeOut();
+                    }, '3000');
+                });
+            }
+        });
+        $(".editable_report").editable("{{ path('user_review_edit_ajax_admin') }}", { 
+            type   : 'textarea',
+            submitdata: { _method: "put", field: "report" },
+            select : false,
+            submit : "{{ 'Save'|trans }}",
+            cancel : "{{ 'Cancel'|trans }}",
+            tooltip : "{{ 'Click to edit'|trans }}",
+            //onblur : "ignore",
+            cssclass : "jeditable_form",
+            //event: "dblclick"
+            callback : function(value, settings) {
+                $('#user_edit_msg_div').fadeIn(function() {
+                    setTimeout(function() {
+                        $('#user_edit_msg_div').fadeOut();
+                    }, '3000');
+                });
+            }
+        });
+        $('.editable_select').editable("{{ path('user_review_edit_ajax_admin') }}", {
+            type : 'select',
+            data : '{{ statusArrayJson|raw }}',
+            submitdata: { _method: "put", field: "status" },
+            tooltip : "{{ 'Click to edit'|trans }}",
+            //onblur : "ignore",
+            cssclass : "jeditable_form",
+            callback : function(value, settings) {
+                $('#user_edit_msg_div').fadeIn(function() {
+                    setTimeout(function() {
+                        $('#user_edit_msg_div').fadeOut();
+                    }, '3000');
+                });
+            }
+        });
+      });
+    //]]>
+    </script>
+{% endblock %}

@@ -1,0 +1,210 @@
+{% block search_html %}
+<div class="row">
+      <div class="columns">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+               {{ form_errors(form) }}
+
+                <div class="row">
+                    <div class="large-3 columns {% if form.rus_from_date.vars.errors|length %} error{% endif %}">
+                        <div class="relative">
+                            <span class="datepicker-icon event_start"></span>
+                            {{ form_widget(form.rus_from_date, {'attr': {'placeholder': 'Date from'}}) }}
+                            {{ form_errors(form.rus_from_date) }}
+                        </div>
+                    </div>
+                    <div class="large-3 columns {% if form.rus_to_date.vars.errors|length %} error{% endif %}">
+                        <div class="relative">
+                            <span class="datepicker-icon event_start"></span>
+                            {{ form_widget(form.rus_to_date, {'attr': {'placeholder': 'Date to'}}) }}
+                            {{ form_errors(form.rus_to_date) }}
+                         </div>
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.rus_date_filter_type) }}
+                    </div>
+                    <div class="large-3 columns"></div>
+                </div>
+
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.rus_name, {'attr': {'placeholder': 'Name'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.rus_email, {'attr': {'placeholder': 'Email address'}}) }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.rus_user_type) }}
+                    </div>
+                    <div class="large-2 columns"><label>{{ 'Report type'|trans }}</label>:</div>
+                    <div class="large-4 columns">
+                        {{ form_widget(form.rus_report_type) }}
+                    </div>
+                </div>
+
+                <hr class="hr_margin">
+
+                <div class="row" id="fa_ti_report_user_report_search_admin_rus_report_columns">
+                    {% set choicesIdArray = form.rus_report_columns.vars.choices|keys %}
+                    {% set columns = 3 %}
+                    {% set ctr = 0 %}
+                    {% set totalItems = form.rus_report_columns.vars.choices|length %}
+                    {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                    {% set extraColumn = (totalItems % columns) %}
+                    {% set colCounter = {} %}
+                    {% for i in 0..columns-1 %}
+                	{% if loop.index0 < extraColumn %}
+                	    {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                	{% else  %}
+                	    {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                	{% endif %}
+                    {% endfor %}
+                    {% for i in 0..columns-1 %}
+                	<div class="large-4 columns">
+                	    <ul class="checkbox-list">
+                		{% for k in 0..colCounter[i]-1 %}
+                		    {% if choicesIdArray[ctr] is defined %}
+                			{% set choice = form.rus_report_columns.vars.choices[ctr] %}
+                			<li>
+                			    <input type="checkbox" value="{{ choice.value }}" name="{{ form.rus_report_columns.vars.full_name }}[]" id="{{ form.rus_report_columns.vars.id }}_{{ choice.value }}" {% if searchParams['rus_report_columns'] is defined and choice.value in searchParams['rus_report_columns'] %}checked="checked"{% endif %} />
+                			    <label for="{{ form.rus_report_columns.vars.id }}_{{ choice.value }}">{{ choice.label|raw }}</label>
+                			</li>
+
+                		    {% endif %}
+                		    {% set ctr = ctr + 1 %}
+                		{% endfor %}
+                	    </ul>
+                	</div>
+                    {% endfor %}
+                </div>
+                {% do attribute(form, 'rus_report_columns').setRendered %}
+                {{ form_errors(form.rus_report_columns) }}
+
+                <hr class="hr_margin">
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.rus_csv_name, {'attr': {'class':'form-control', 'placeholder': 'Csv file name'}}) }}
+                        {{ form_errors(form.rus_csv_name) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.rus_csv_email, {'attr': {'class':'form-control', 'placeholder': 'Email address (Csv file will be emailed once generated)'}}) }}
+                        {{ form_errors(form.rus_csv_email) }}
+                    </div>
+                </div>
+                <hr class="hr_margin">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                    {{ form_widget(form.search, {'attr': {'class':'small button'}}) }}
+                    {% if userReportCsvList %}
+                        {{ form_widget(form.download_csv, {'attr': {'class':'small button'}}) }}
+                    {% else %}
+                        {% do attribute(form, 'download_csv').setRendered %}
+                    {% endif %}
+                    </div>
+                </div>
+            {{ form_end(form) }}
+       </div>
+  </div>
+<div id="userReportCsvListModal" class="reveal-modal small" data-reveal></div>
+{% endblock %}
+
+{% block search_script -%}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script>
+var reportType = "{{form.rus_report_type.vars.data}}";
+var previousCheckedFieldsArray = Array();
+
+if (reportType == 'all') {
+	enableDisableDisallowedFields(0);
+}
+
+$('.datepicker-icon').click(function(e){
+    $(this).next('input.fdatepicker').focus();
+});
+
+$('#fa_ti_report_user_report_search_admin_download_csv').click(function(e){
+    showUserReportCsvList();
+});
+
+$('#fa_ti_report_user_report_search_admin_rus_report_type_0').click(function(e){
+	enableDisableDisallowedFields(1);
+});
+
+$('#fa_ti_report_user_report_search_admin_rus_report_type_1').click(function(e){
+	enableDisableDisallowedFields(0);
+});
+
+function showUserReportCsvList()
+{
+    blockPage();
+    $.ajax({
+        type: "GET",
+        url : '{{ path('ajax_fa_ti_report_user_csv_list') }}',
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+        if (response.htmlContent.length) {
+            $('#userReportCsvListModal').html(response.htmlContent);
+            $('#userReportCsvListModal').foundation('reveal', 'open');
+        }
+    });
+}
+
+function enableDisableDisallowedFields(flag)
+{
+	var disallowedFieldsString = '{{disallowFieldsString}}';
+	var disallowedFieldsArray  = disallowedFieldsString.split(',');
+	var count = 0;
+
+	for(i = 0; i < disallowedFieldsArray.length; i++) {
+		var fieldValue = disallowedFieldsArray[i];
+		var inputId = $('#fa_ti_report_user_report_search_admin_rus_report_columns :input[value="'+fieldValue+'"]').attr('id');
+
+		if (flag == 1) {
+			  $('#fa_ti_report_user_report_search_admin_rus_report_columns :input[value="'+fieldValue+'"]').attr("disabled", false);
+			  $('#fa_ti_report_user_report_search_admin_rus_report_columns label[for="'+inputId+'"]').removeClass('disable-text');
+		} else if (flag == 0) {
+			  if (document.getElementById(inputId).checked == true) {
+				  previousCheckedFieldsArray[count] = fieldValue;
+				  count++;
+			  }
+			  $('#fa_ti_report_user_report_search_admin_rus_report_columns :input[value="'+fieldValue+'"]').attr("checked", false);
+			  $('#fa_ti_report_user_report_search_admin_rus_report_columns :input[value="'+fieldValue+'"]').attr("disabled", true);
+			  $('#fa_ti_report_user_report_search_admin_rus_report_columns label[for="'+inputId+'"]').addClass('disable-text');
+		}
+	}
+
+	if (flag == 1 && previousCheckedFieldsArray.length > 0) {
+		for(i = 0; i < previousCheckedFieldsArray.length; i++) {
+			$('#fa_ti_report_user_report_search_admin_rus_report_columns :input[value="'+previousCheckedFieldsArray[i]+'"]').prop("checked", "checked");
+		}
+	}
+}
+
+function deleteCsvFile(fileName)
+{
+    blockElement('#userReportCsvListModal');
+    $.ajax({
+        type: "GET",
+        url : '{{ path('ajax_fa_ti_report_user_csv_delete') }}',
+        data: {'fileName': fileName}
+    })
+    .always(function(response) {
+        unblockElement('#userReportCsvListModal');
+    })
+    .done(function(response) {
+        if (response.htmlContent.length) {
+            $('#userReportCsvListModal').html(response.htmlContent);
+        }
+        if (response.error.length) {
+            $(decorateMessage(response.error, 'alert')).insertBefore('#cvs_list_ul');
+        }
+    });
+}
+</script>
+{% endblock %}

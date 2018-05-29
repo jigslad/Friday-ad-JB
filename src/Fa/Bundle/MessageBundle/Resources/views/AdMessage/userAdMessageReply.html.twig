@@ -1,0 +1,424 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block title %}
+    {{'Message Reply'|trans({}, 'frontend-inbox')}}
+{% endblock %}
+
+{% use "FaMessageBundle:AdMessageAttachments:showAttachmentsUploader.html.twig" %}
+
+{% block scripttop %}
+    {{ block('message_attachments_slider_css') }}
+{% endblock %}
+
+{% block message_attachments_slider_css %}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/imageSlider.css'
+            'bundles/facore/css/owl.carousel.css'
+            'bundles/facore/css/owl.theme.css'
+            'bundles/facore/css/jquery.fancybox.css'
+              %}
+            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}?v=3"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body -%}
+{% set adRepository = fetch_repository('FaAdBundle:Ad') %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set messageSpammerRepository = fetch_repository('FaMessageBundle:MessageSpammer') %}
+{% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
+{% set adTitle = '' %}
+{% set userName = '' %}
+{% set isAdActive = false %}
+{% set isAllowCommunication = false %}
+{% set adId = '' %}
+{% set messsageAdId = '' %}
+{% set adStatusId = '' %}
+{% set adOwnerId = '' %}
+{% set reviewDetails = {} %}
+{% set objLoggedInUser = app.user %}
+{% set isNewMessageFlag = false %}
+{% set messageReceiverId = ''%}
+{% set messageReceiverStatus = ''%}
+{% set adOwnerStatus = ''%}
+{% set adUrl = '' %}
+
+{% if fullConversation[0] is defined %}
+    {% set adTitle = fullConversation[0]['ad_title'] %}
+    {% set adId = fullConversation[0]['ad_id'] %}
+    {% if adId is defined and adId != '' %}
+        {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
+    {% endif %}
+    {% set messsageAdId = fullConversation[0]['message_ad_id'] %}
+    {% if adId %}
+        {% set adStatusId = fullConversation[0]['ad_status_id'] %}
+        {% set objAd = adRepository.findOneById(adId) %}
+        {% set adOwnerId = objAd.getUser().getId() %}
+        {% set adOwnerStatus = objAd.getUser().getStatus().getId() %}
+    {% elseif fullConversation[0]['message_ad_id'] and fullConversation[0]['message_ad_id'] < 0 %}
+        {% set isNewMessageFlag = true %}
+        {% set adMessage = messageRepository.find(app.request.get('replyId')) %}
+        {% set adOwnerId = adMessage.getSender().getId() %}
+        {% set messageReceiverId = adMessage.getReceiver().getId() %}
+        {% set adOwnerStatus = userRepository.find(adOwnerId).getStatus().getId() %}
+        {% set messageReceiverStatus = userRepository.find(messageReceiverId).getStatus().getId() %}
+        {% set adTitle = fullConversation[0]['subject'] %}
+    {% endif %}
+
+    {% if fullConversation[0]['ad_status_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
+        {% set isAdActive = true %}
+    {% endif %}
+    {% if fullConversation[0]['ad_status_id'] != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID') %}
+        {% set isAllowCommunication = true %}
+    {% endif %}
+    {% if isNewMessageFlag and adOwnerStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') and messageReceiverStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
+        {% set isAllowCommunication = true %}
+        {% set isAdActive = true %}
+    {% endif %}
+    {% if adOwnerId == objLoggedInUser.getId() %}
+        {% set messageType = 'receiver' %}
+    {% else %}
+        {% set messageType = 'sender' %}
+    {% endif %}
+
+    {% if objLoggedInUser.getId() == fullConversation[0]['sender_user_id'] %}
+        {% set userName = fullConversation[0]['receiver_first_name']~' '~fullConversation[0]['receiver_last_name'] %}
+        {% if fullConversation[0]['message_status'] == constant('Fa\\Bundle\\MessageBundle\\Repository\\MessageRepository::MODERATION_QUEUE_STATUS_OKAY') %}
+            {% set reviewDetails = {'ad_id':fullConversation[0]['message_ad_id'], 'title':adTitle, 'user_id':fullConversation[0]['receiver_user_id'], 'first_name':fullConversation[0]['receiver_first_name'], 'last_name':fullConversation[0]['receiver_last_name'], 'user_status_id':fullConversation[0]['user_status_id'] } %}
+        {% endif %}
+    {% else %}
+        {% set userName = fullConversation[0]['sender_first_name']~' '~fullConversation[0]['sender_last_name'] %}
+        {% if fullConversation[0]['message_status'] == constant('Fa\\Bundle\\MessageBundle\\Repository\\MessageRepository::MODERATION_QUEUE_STATUS_OKAY') %}
+            {% set reviewDetails = {'ad_id':fullConversation[0]['message_ad_id'], 'title':adTitle, 'user_id':fullConversation[0]['sender_user_id'], 'first_name':fullConversation[0]['sender_first_name'], 'last_name':fullConversation[0]['sender_last_name'], 'user_status_id':fullConversation[0]['user_status_id'] } %}
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+<div class="posting-bg">
+    <div class="row d-board-main">
+        {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+        <div id="db-right-part" class="large-18 columns">
+            <h1 class="db-title">{{'Your conversation with %userName%'|trans({'%userName%': userName}, 'frontend-inbox')}}</h1>
+            <div id="mark_as_sold_msg_div" style="display:none"></div>
+            <div id="message_box">
+                <div class="reply-msg-heading clearfix">
+                    <div class="right">
+                        <div class="clearfix">
+                            <div class="reply-delete-msg">
+                                <a id="deleteButton" href="javascript:void(0);" class="delete-msg" onclick="removeMessageConfirmation('{{replyMessageId}}', '{{objLoggedInUser.getId()}}', '{{messsageAdId}}');">Delete</a>
+                            </div>
+                            <div class="right hide-for-small-only">
+                                {% if reviewDetails|length %}
+                                    <span id="msg_leave_review_link">
+                                        {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : reviewDetails, 'to_whom' : 'buyer', 'class' : 'button xs-btn-1 mt5 mb0 mymsg-review-btn', 'from_where': 'message'}) }}
+                                    </span>
+                                {% endif %}
+                                {% if isAdActive == true %}
+                                    {% if adOwnerId != objLoggedInUser.getId() %}
+                                        {% set messageSpammerObj = messageSpammerRepository.findOneBy({'ad_id': fullConversation[0]['message_ad_id'], 'reporter':app.user.getId(), 'spammer': adOwnerId}) %}
+                                    {% elseif adOwnerId == objLoggedInUser.getId() %}
+                                        {% set messageSpammerObj = messageSpammerRepository.findOneBy({'ad_id': fullConversation[0]['message_ad_id'], 'reporter':app.user.getId(), 'spammer': fullConversation[0]['sender_user_id']}) %}
+                                    {% endif %}
+                                    {% if not messageSpammerObj %}
+                                        <span class="report" id="report_user_btn" onclick="reportUser();">{{ 'Report'|trans({}, 'frontend-inbox') }}</span>
+                                    {% endif %}
+                                {% endif %}
+                                {% if not isNewMessageFlag and adOwnerId == objLoggedInUser.getId() and isAdActive == true %}
+                                    <span class="mark-sold" onclick="$('#markAsSoldModal').foundation('reveal', 'open');">{{ 'Mark as sold'|trans({}, 'frontend-inbox') }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <a onclick="history.back();" class="back-link left">{{'Go Back'|trans({}, 'frontend-inbox')}}</a>
+                        <h3>{{ 'Discussion about:'|trans({}, 'frontend-inbox')}} {% if (adUrl is defined and adUrl != '') %}<a  class="green-text" href="{{adUrl}}">{% endif %}{{'%adTitle%'|trans({'%adTitle%': adTitle}, 'frontend-inbox')|raw}}{% if (adUrl is defined and adUrl != '') %}</a>{% endif %}</h3>
+                    </div>
+                </div>
+
+                <div id="messages_div" class="reply-msg-content">
+                    {{ include('FaMessageBundle:AdMessage:showReplyMessage.html.twig') }}
+                </div>
+
+                {% set backRedirectUrl = app.request.headers.get('referer') %}
+
+                {% if  get_substr_count(backRedirectUrl, 'user_ad_message') == 0 and get_substr_count(backRedirectUrl, 'user_interested_ad_message') == 0 %}
+                    {% set backRedirectUrl = path('user_ad_message') %}
+                {% endif %}
+
+
+                <div class="write-reply">
+                {% if isAllowCommunication == true %}
+                    <div id="reply_msg_div" style="display:none"></div>
+                    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_message_ad_message_id'}}) }}
+                        {{ form_widget(form.text_message) }}
+                        {{ include('FaMessageBundle:AdMessageAttachments:messageUploadAttachments.html.twig') }}
+                        <div class="msg-btns">
+                            <button id="fa_message_message_ad_attachments" class="primary-btn-3 thin-btn button mb0 attach-files-btn">
+                                <span></span>{{'Attach files'|trans({}, 'frontend-inbox')}}
+                            </button>
+                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-2 thin-btn button mb0', 'onclick': 'sendReply()'}}) }}
+                        </div>
+                    {{ form_end(form) }}
+                {% else %}
+                    <div class="green-text">{{'Sorry ad is no more active, so communication is disabled for this ad!'|trans({}, 'frontend-inbox')}}</div>
+                {% endif %}
+                </div>
+            {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
+            {{ set_variables('AdMessage', {'replyId':messageRepository.getLastConversationId(app.request.get('replyId')), 'type': app.request.get('type'), 'adId': messsageAdId}) }}
+        </div>
+    </div>
+</div>
+
+<div id="leave_review_modal" class="reveal-modal" data-reveal></div>
+
+<div id="markAsSoldModal" class="reveal-modal tiny" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Ad sold!'|trans({}, 'frontend-inbox')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'You have marked this ad as sold.'|trans({}, 'frontend-inbox')}}</h5>
+                <div class="gray-text mt10">This will remove this ad from the listings.</div>
+            </div>
+        </div>
+        <div class="mt20">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAsSoldModal');markAsSold('{{adId}}');">{{'Continue'|trans({}, 'frontend-inbox')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="javascript:closeRevealModel('#markAsSoldModal');">{{'Cancel'|trans({}, 'frontend-inbox')}}</button>&nbsp;
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="reportUserModal" class="reveal-modal small" data-reveal></div>
+{{ include('FaMessageBundle:AdMessage:removeMessageModel.html.twig') }}
+{% endblock %}
+
+{% block scriptbottom %}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+{{ include('FaUserBundle:Review:reviewJs.html.twig', {'success_url': app.request.getUri}) }}
+{{ include('FaCoreBundle::starRatingJs.html.twig') }}
+{{ include('FaMessageBundle:AdMessage:messageJs.html.twig', {'page': 'conversation'}) }}
+{{ block('message_attachments_slider_js') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% set adMessageVariables = get_variables('AdMessage') %}
+    {% set replyId = adMessageVariables.replyId %}
+    {% set type = adMessageVariables.type %}
+    {% set adId = adMessageVariables.adId %}
+    var replyId = '{{replyId}}';
+    var type = '{{type}}';
+    var loggedInUserId = '{{app.user.getId()}}';
+    var adId = '{{adId}}';
+
+    scrollToElement('#fa_message_message_ad_save', '1000', -500);
+
+    var objMsgDiv = $(".reply-msg-wrap");
+    objMsgDiv.scrollTop(objMsgDiv[0].scrollHeight);
+
+    /*
+	$(function () {
+	    var objReplyBoxOffset = $('.write-reply').offset();
+	    var minHeight = 135;
+	    var maxHeight = 470;
+
+	    switch(parseInt(screen.height)) {
+	        case 720:
+	        	minHeight = 30;
+                maxHeight = 300;
+                break;
+	        case 768:
+	        	minHeight = 40;
+	            maxHeight = 375;
+	            break;
+	        case 864:
+	        	minHeight = 135;
+	        	maxHeight = 470;
+	        	break;
+	        case 960:
+	        	minHeight = 230;
+	        	maxHeight = 565;
+	        	break;
+	        case 1024:
+	        	minHeight = 290;
+		    	maxHeight = 630;
+		    	break;
+	        case 1080:
+	        	minHeight = 350;
+		    	maxHeight = 685;
+		    	break;
+	        case 1152:
+	        	minHeight = 420;
+		    	maxHeight = 755;
+		    	break;
+	        case 1200:
+	        	minHeight = 470;
+		    	maxHeight = 805;
+		    	break;
+	        case 1440:
+	        	minHeight = 700;
+		    	maxHeight = 1035;
+		    	break;
+	    }
+
+	    var msgMainDiv = "#messages_div";
+	    var msgSubDiv = ".reply-msg-wrap";
+	    $(msgMainDiv).innerHeight(minHeight);
+	    var objMsgMainDiv = document.getElementById("messages_div");
+	    var objMsgSubDiv = document.getElementsByClassName("reply-msg-wrap")[0];
+
+	    objMsgMainDiv.scrollTop = objMsgMainDiv.scrollHeight;
+	    objMsgSubDiv.scrollTop = objMsgSubDiv.scrollHeight;
+
+	    $(window).scroll(function () {
+	    	   var y = $(this).scrollTop();
+	    	   if (parseInt($(msgMainDiv).innerHeight()) < maxHeight) {
+	    		   $(msgMainDiv).innerHeight(y);
+	    		   $(msgSubDiv).innerHeight(y);
+	    	   }
+
+	    	   if (parseInt(objReplyBoxOffset.top) > 470) {
+	    		    $(msgMainDiv).innerHeight(y);
+	    		    $(msgSubDiv).innerHeight(y);
+	    	   }
+	    	   if (parseInt($(msgMainDiv).innerHeight()) > maxHeight) {
+	    		   $(msgMainDiv).innerHeight(maxHeight);
+	    		   $(msgSubDiv).innerHeight(maxHeight);
+	    	   }
+
+	    	   if (parseInt($(msgMainDiv).innerHeight()) < minHeight) {
+	    		   $(msgMainDiv).innerHeight(minHeight);
+	    		   $(msgSubDiv).innerHeight(minHeight);
+	    	   }
+	    	   //objMessagesDiv.scrollTop = objMessagesDiv.scrollHeight;
+	    	   objMsgMainDiv.scrollTop = objMsgMainDiv.scrollHeight;
+	    	   objMsgSubDiv.scrollTop = objMsgSubDiv.scrollHeight;
+	    }).scroll();
+	});*/
+
+    function sendReply()
+    {
+    	blockElement('.write-reply');
+
+    	var sessionId = '';
+    	//If any attachments uploaded.
+    	if (parseInt($('#messageAttachmentsList').children().length) > 0) {
+    	  sessionId = '{{ container.get('session').get('message_id') }}';
+      	}
+
+        $.ajax({
+            type: "POST",
+            url: '{{path("ajax_user_ad_message_reply_save")}}',
+            data: $('#fa_message_ad_message_id').serialize()+'&replyId='+replyId+'&type='+type+'&sessionId='+sessionId
+        })
+        .always(function(response) {
+                unblockElement('.write-reply');
+             })
+        .done(function(response) {
+                if (response.error.length) {
+                $('#reply_msg_div').html(decorateMessage(response.error, 'alert'));
+                $('#reply_msg_div').show();
+            }
+            if (response.successMsg.length) {
+                $('#reply_msg_div').html(decorateMessage(response.successMsg, 'success'));
+                $('#reply_msg_div').show();
+                $('#fa_message_message_ad_text_message').val('');
+                replyId = response.newReplyId;
+                $('#messages_div').html(response.messagesHtml)
+                $('#deleteButton').attr('onclick', "removeMessageConfirmation("+replyId+", "+loggedInUserId+", "+adId+");");
+                scrollToElement('#fa_message_message_ad_save', '1000', -500);
+                var objMsgDiv = $(".reply-msg-wrap");
+                objMsgDiv.scrollTop(objMsgDiv[0].scrollHeight);
+                $('#uploaded_attachments_div').html('');
+
+                //setTimeout(function(){ reloadMessages(replyId) }, 3000);
+                /*
+                replyId = response.newReplyId;
+                $('#fa_message_message_ad_text_message').val('');
+            	location.reload();*/
+            }
+        });
+    }
+
+    function reloadMessages(replyId)
+    {
+    	blockElement('#message_box');
+        $.ajax({
+            type: "POST",
+            url: '{{path("ajax_show_user_messages")}}',
+            data: 'replyId='+replyId
+        })
+        .always(function(response) {
+                unblockElement('#message_box');
+             })
+        .done(function(response) {
+                if (response.error.length) {
+                $('#reply_msg_div').html(decorateMessage(response.error, 'alert'));
+                $('#reply_msg_div').show();
+            } else {
+                $('#messages_div').html(response.messagesHtml)
+                $('#msg_leave_review_link').html(response.leaveReviewLinkHtml)
+                scrollToElement('#fa_message_message_ad_save', '1000', -500);
+                var objMsgDiv = $(".reply-msg-wrap");
+                objMsgDiv.scrollTop(objMsgDiv[0].scrollHeight);
+            }
+        });
+    }
+
+    function markAsSold(adId)
+    {
+        if (adId != '') {
+        	blockPage();
+        	$.ajax({
+                type: "POST",
+                url: '{{path("ajax_user_ad_message_mark_as_sold")}}',
+                data: {'adId':adId}
+            })
+            .always(function(response) {
+                unblockPage();
+             })
+            .done(function(response) {
+                    if (response.error.length) {
+                    $('#mark_as_sold_msg_div').html(decorateMessage(response.error, 'alert'));
+                    $('#mark_as_sold_msg_div').show();
+                }
+                if (response.successMsg.length) {
+                    $('.mark-sold').hide();
+                    $('#mark_as_sold_msg_div').html(decorateMessage(response.successMsg, 'success'));
+                    $('#mark_as_sold_msg_div').show();
+                }
+            });
+        }
+    }
+
+    function reportUser()
+    {
+        hideAlertMessage();
+        blockPage();
+        var route = Routing.generate('ajax_report_user', { 'replyId': '{{app.request.get('replyId')}}' });
+        $.ajax({
+            type: "GET",
+            url : route,
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.htmlContent.length) {
+                $('#reportUserModal').html(response.htmlContent);
+                $('#reportUserModal').foundation('reveal', 'open');
+            } else if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#message_box');
+                scrollToElement('#message_box', '1000', -150);
+            }
+        });
+    }
+//]]>
+</script>
+{{ set_variables('attachmentsUploadJavascriptBottom', {'loaded':'true'}) }}
+{{ block('attachmentsUploadJavascriptBottom') }}
+{% endblock %}

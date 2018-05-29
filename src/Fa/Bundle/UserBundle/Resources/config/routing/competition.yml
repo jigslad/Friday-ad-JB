@@ -1,0 +1,7 @@
+enter_in_competition:
+    path:     /ajax/enter/{transaction_id}
+    defaults: { _controller: "FaUserBundle:Competition:ajaxEnterInCompetition" }
+    
+leave_competition:
+    path:     /ajax/leave/{transaction_id}
+    defaults: { _controller: "FaUserBundle:Competition:ajaxLeaveCompetition" }

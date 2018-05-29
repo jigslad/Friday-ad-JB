@@ -1,0 +1,26 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="27" height="27" viewBox="-466 267 27 27" xml:space="preserve" enable-background="new -466 267 27 27">
+  <style type="text/css">
+    
+	.st0{fill:#9BCC21;stroke:#9BCC21;}
+	.st1{fill:#FFFFFF;}
+
+  </style>
+  <title>
+    Oval+ hover
+  </title>
+  <desc>
+    Created with Sketch Beta.
+  </desc>
+  <g id="Search-results-list" sketch:type="MSPage">
+    <g id="Desktop-HD-For-sale-3" transform="translate(-1087.000000, -229.000000)" sketch:type="MSArtboardGroup">
+      <g id="Search-bar-3-_x2B_-Navigation-Menu-3" transform="translate(-2.000000, 0.000000)" sketch:type="MSLayerGroup">
+        <g id="Search-bar-3" transform="translate(0.000000, 212.000000)" sketch:type="MSShapeGroup">
+          <g id="Oval_x2B_-hover" transform="translate(1090.000000, 18.000000)">
+            <path id="Oval-6" class="st0" d="M-453.5 292c6.9 0 12.5-5.6 12.5-12.5s-5.6-12.5-12.5-12.5 -12.5 5.6-12.5 12.5S-460.4 292-453.5 292z"/>
+            <path id="_x2B_" class="st1" d="M-458.3 280.8c-0.5 0-0.7-0.4-0.7-1.2v-0.2c0-0.8 0.2-1.2 0.7-1.2h3.5v-3.6c0-0.5 0.4-0.7 1.2-0.7h0.3c0.8 0 1.2 0.2 1.2 0.7v3.6h3.5c0.5 0 0.7 0.4 0.7 1.2v0.2c0 0.8-0.2 1.2-0.7 1.2h-3.5v3.5c0 0.5-0.4 0.7-1.2 0.7h-0.3c-0.8 0-1.2-0.2-1.2-0.7v-3.5H-458.3z"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

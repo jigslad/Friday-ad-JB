@@ -1,0 +1,20 @@
+{% set container = fetch_container_instance() %}
+<a class="close-reveal-modal" href="javascript:void(0)" onClick="closeAddReviewModalForm()">&#215;</a>
+<h5 class="modal-title">{{ 'Leave a review'|trans({}, 'frontend-review') }}</h5>
+<div class="modal-content">
+    <div class="leave-review-text">
+        {% if app.request.get('item_id') > 0 %}
+            {% set ad     = fetch_repository('FaAdBundle:Ad').find(app.request.get('item_id')) %}
+            {% set adUrl  = container.get('router').generate('ad_detail_page_by_id', {'id': app.request.get('item_id')}, true) %}
+            {% set adLink = '<a href="' ~ adUrl ~'">' ~ app.request.get("item_title") ~ '</a>' %}
+            {{ 'Leave a review for %user_name% about the item %ad_title%'|trans({'%user_name%': ('<span>' ~ app.request.get('user_name') ~ '</span>'), '%ad_title%' : (adLink)}, 'frontend-review')|raw}}
+        {% else %}
+            {{ 'Leave a review for %user_name% about %ad_title%'|trans({'%user_name%': ('<span>' ~ app.request.get('user_name') ~ '</span>'), '%ad_title%' : app.request.get("item_title")}, 'frontend-review')|raw}}
+        {% endif %}
+    </div>
+    <div class="clearfix">
+        <div id="leave_review_modal_form">
+            {{ include('FaUserBundle:Review:leaveReviewForm.html.twig') }}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,385 @@
+feed_category,fa_parent_category,fa_leaf_category,fa_leaf_category_lvl
+Agriculture Businesses,Businesses For Sale,Agricultural Businesses for sale,5
+Agricultural Supply Businesses,Businesses For Sale,Agricultural Businesses for sale,5
+Farms,Businesses For Sale,Agricultural Businesses for sale,5
+Miscellaneous Agriculture Businesses,Businesses For Sale,Agricultural Businesses for sale,5
+Ranches,Businesses For Sale,Agricultural Businesses for sale,5
+Engineering Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Electrical Services Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Engineering Consultancies,Businesses For Sale,Commercial Businesses for sale,5
+Engineering Manufacturing Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Mechanical Services Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Technical Service Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Food Businesses,Businesses For Sale,Catering Businesses for sale,5
+Cafes,Businesses For Sale,Catering Businesses for sale,5
+Bagel Shops,Businesses For Sale,Catering Businesses for sale,5
+Café Bars,Businesses For Sale,Catering Businesses for sale,5
+Cafes and Diners,Businesses For Sale,Catering Businesses for sale,5
+Coffee Shops,Businesses For Sale,Catering Businesses for sale,5
+Fast Food Franchises,Businesses For Sale,Catering Businesses for sale,5
+Ice Cream Parlours,Businesses For Sale,Catering Businesses for sale,5
+Non Franchise Fast Food Businesses,Businesses For Sale,Catering Businesses for sale,5
+Pizza Delivery Businesses,Businesses For Sale,Catering Businesses for sale,5
+Sandwich Shops / Sandwich Delivery Businesses,Businesses For Sale,Catering Businesses for sale,5
+Smoothie / Yogurt Bars,Businesses For Sale,Catering Businesses for sale,5
+Snack Bars,Businesses For Sale,Catering Businesses for sale,5
+Tea Rooms,Businesses For Sale,Catering Businesses for sale,5
+Catering Businesses,Businesses For Sale,Catering Businesses for sale,5
+Food and Drink Distributors,Businesses For Sale,Catering Businesses for sale,5
+Food and Drink Manufacturing Businesses,Businesses For Sale,Catering Businesses for sale,5
+Food and Drink Wholesalers,Businesses For Sale,Catering Businesses for sale,5
+Food Retail Businesses,Businesses For Sale,Catering Businesses for sale,5
+Bakers and Confectioners,Businesses For Sale,Catering Businesses for sale,5
+Butchers,Businesses For Sale,Catering Businesses for sale,5
+Convenience Stores,Businesses For Sale,Catering Businesses for sale,5
+Delicatessens,Businesses For Sale,Catering Businesses for sale,5
+Fishmongers,Businesses For Sale,Catering Businesses for sale,5
+Food Vending Businesses,Businesses For Sale,Catering Businesses for sale,5
+Grocers / Fruit and Veg Markets,Businesses For Sale,Catering Businesses for sale,5
+Health Food Shops,Businesses For Sale,Catering Businesses for sale,5
+Liquor Stores and Off Licences,Businesses For Sale,Catering Businesses for sale,5
+Miscellaneous Food Retailers,Businesses For Sale,Catering Businesses for sale,5
+Specialist Food Retailers,Businesses For Sale,Catering Businesses for sale,5
+Supermarkets,Businesses For Sale,Catering Businesses for sale,5
+Restaurants,Businesses For Sale,Catering Businesses for sale,5
+American Restaurants,Businesses For Sale,Catering Businesses for sale,5
+Asian Restaurants,Businesses For Sale,Catering Businesses for sale,5
+Bistros,Businesses For Sale,Catering Businesses for sale,5
+Chinese Restaurants,Businesses For Sale,Catering Businesses for sale,5
+European Restaurants,Businesses For Sale,Catering Businesses for sale,5
+Fish and Chip Shops,Businesses For Sale,Catering Businesses for sale,5
+Greek Restaurants,Businesses For Sale,Catering Businesses for sale,5
+Indian Restaurants,Businesses For Sale,Catering Businesses for sale,5
+Italian Restaurants,Businesses For Sale,Catering Businesses for sale,5
+Mexican Restaurants,Businesses For Sale,Catering Businesses for sale,5
+Middle Eastern Restaurants,Businesses For Sale,Catering Businesses for sale,5
+Miscellaneous Restaurants,Businesses For Sale,Catering Businesses for sale,5
+Pizza Restaurants,Businesses For Sale,Catering Businesses for sale,5
+Sushi / Seafood Restaurants,Businesses For Sale,Catering Businesses for sale,5
+Take Aways,Businesses For Sale,Catering Businesses for sale,5
+Franchise Resales,Businesses For Sale,Catering Businesses for sale,5
+Food Resale Franchises,Businesses For Sale,Catering Businesses for sale,5
+Leisure Resale Franchises,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Miscellaneous Resale Franchises,Businesses For Sale,Other Businesses for sale,5
+Retail Resale Franchises,Businesses For Sale,Retail Businesses for sale,5
+Service Resale Franchises,Businesses For Sale,Service Business for sale,5
+Leisure Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Entertainment and Fun Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Amusement Parks and Arcades,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Art Galleries and Museums,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Bookmakers / Gambling Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Casinos,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Children's Play Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Cinemas,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Hot Air Balloon Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Miscellaneous Entertainment and Fun Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Social Clubs,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Theatre Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Theme Parks,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Hotels and Holiday Accommodation Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Camping and Caravan Parks,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Guest Houses and Bed and Breakfast Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Holiday Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Holiday Resorts,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Hotels,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Motels,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+RV Parks,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+"Pubs, Bars and Nightclubs",Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Bars,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Nightclubs,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Premium Free Leaseholds,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Pubs,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Strip Clubs,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Recreation Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Aquatic and Marine Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Bowling Clubs,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Fishing and Related Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Golf and Related Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Health and Fitness Clubs,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Health Farms,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Horse Riding Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Misc Sports Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Outdoor Adventure Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Scuba Diving Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Ski and Related Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Snooker and Pool Centres,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Spas,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Sports Centres,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Sports Teams,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Swimming Pool Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Tennis Clubs,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Tourism Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Manufacturing Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Clothing and Footwear Manufacturers,Businesses For Sale,Manufacturing Businesses for sale,5
+Energy Related Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Furniture Manufacturers,Businesses For Sale,Manufacturing Businesses for sale,5
+Furniture Manufacturing Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Kitchen and Bedroom Manufacturers,Businesses For Sale,Manufacturing Businesses for sale,5
+Sawmills,Businesses For Sale,Manufacturing Businesses for sale,5
+Wood Products Manufacturing Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Machinery and Metal Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Fabrication Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Heavy Machinery Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Machine Shop,Businesses For Sale,Manufacturing Businesses for sale,5
+Metal Products Manufacturers,Businesses For Sale,Manufacturing Businesses for sale,5
+Miscellaneous Machinery and Metal Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Toolmakers and Precision Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Mining Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Other Manufacturing Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Chemical Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Electrical Appliance Manufacturers,Businesses For Sale,Manufacturing Businesses for sale,5
+Glass Products Manufacturers,Businesses For Sale,Manufacturing Businesses for sale,5
+House and Garden Products Manufacturing Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Industrial Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Medical Products Manufacturing Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Miscellaneous Manufacturing Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Oil and Petrochemical Related Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Plastic Fabrication Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Sign Makers,Businesses For Sale,Manufacturing Businesses for sale,5
+Sport Equipment Manufacturers,Businesses For Sale,Manufacturing Businesses for sale,5
+Transportation Related Manufacturing Businesses,Businesses For Sale,Manufacturing Businesses for sale,5
+Commercial Property,Businesses For Sale,Commercial Businesses for sale,5
+Development Opportunities,Businesses For Sale,Other Businesses for sale,5
+Gas / Petrol Service Stations,Businesses For Sale,Service Business for sale,5
+Industrial Warehouses / Distribution Businesses,Businesses For Sale,Other Businesses for sale,5
+Investment Opportunities,Businesses For Sale,Other Businesses for sale,5
+Land,Businesses For Sale,Other Businesses for sale,5
+Light Industrial Businesses,Businesses For Sale,Other Businesses for sale,5
+Management Rights Opportunities,Businesses For Sale,Other Businesses for sale,5
+Misc Properties,Businesses For Sale,Other Businesses for sale,5
+Offices,Businesses For Sale,Other Businesses for sale,5
+Residential Properties,Businesses For Sale,Catering Businesses for sale,5
+Retail Shops To Let,Businesses For Sale,Retail Businesses for sale,5
+Retail Warehouse Businesses / Trade Park Businesses,Businesses For Sale,Retail Businesses for sale,5
+Self Storage Warehouses,Businesses For Sale,Service Business for sale,5
+Shopping Centre Units,Businesses For Sale,Retail Businesses for sale,5
+Retail Businesses,Businesses For Sale,Retail Businesses for sale,5
+Clothing Businesses,Businesses For Sale,Retail Businesses for sale,5
+Bridal Wear Shops,Businesses For Sale,Retail Businesses for sale,5
+Childrens Wear Shops,Businesses For Sale,Retail Businesses for sale,5
+Dress Hire Businesses,Businesses For Sale,Retail Businesses for sale,5
+Fashion Accessory Businesses,Businesses For Sale,Retail Businesses for sale,5
+Haberdasheries,Businesses For Sale,Retail Businesses for sale,5
+Ladies Wear Shops,Businesses For Sale,Retail Businesses for sale,5
+Mens Wear Shops,Businesses For Sale,Retail Businesses for sale,5
+Miscellaneous Clothing Shops,Businesses For Sale,Retail Businesses for sale,5
+School Uniform Businesses,Businesses For Sale,Retail Businesses for sale,5
+Shoe Repair Businesses,Businesses For Sale,Retail Businesses for sale,5
+Shoe Shops,Businesses For Sale,Retail Businesses for sale,5
+Sports Shops,Businesses For Sale,Retail Businesses for sale,5
+Tailors,Businesses For Sale,Retail Businesses for sale,5
+Food and Drink Businesses,Businesses For Sale,Catering Businesses for sale,5
+General Retail Businesses,Businesses For Sale,Catering Businesses for sale,5
+Adult Shops,Businesses For Sale,Other Businesses for sale,5
+Antique and Art Shops,Businesses For Sale,Other Businesses for sale,5
+Bargain Stores,Businesses For Sale,Retail Businesses for sale,5
+Bicycle Shops,Businesses For Sale,Retail Businesses for sale,5
+Book Shops,Businesses For Sale,Retail Businesses for sale,5
+Card and Gift Shops,Businesses For Sale,Retail Businesses for sale,5
+Computer Stores,Businesses For Sale,Retail Businesses for sale,5
+Construction Supply Businesses,Businesses For Sale,Retail Businesses for sale,5
+Craft and Hobby Businesses,Businesses For Sale,Retail Businesses for sale,5
+E-Commerce Businesses,Businesses For Sale,Retail Businesses for sale,5
+Florists,Businesses For Sale,Retail Businesses for sale,5
+Jewellers,Businesses For Sale,Retail Businesses for sale,5
+Mail Order Businesses,Businesses For Sale,Retail Businesses for sale,5
+Military Stores,Businesses For Sale,Retail Businesses for sale,5
+Newsagents,Businesses For Sale,Retail Businesses for sale,5
+Office Furniture Businesses,Businesses For Sale,Retail Businesses for sale,5
+Party Stores,Businesses For Sale,Retail Businesses for sale,5
+Pet Grooming Businesses,Businesses For Sale,Retail Businesses for sale,5
+Pet Shops,Businesses For Sale,Retail Businesses for sale,5
+Phone Shops,Businesses For Sale,Retail Businesses for sale,5
+Post Offices,Businesses For Sale,Retail Businesses for sale,5
+Miscellaneous Retail Businesses,Businesses For Sale,Retail Businesses for sale,5
+Stationery and Office Supply Businesses,Businesses For Sale,Retail Businesses for sale,5
+Tobacconists,Businesses For Sale,Retail Businesses for sale,5
+Toy Shops,Businesses For Sale,Retail Businesses for sale,5
+Travel Agents,Businesses For Sale,Retail Businesses for sale,5
+Health and Beauty Businesses,Businesses For Sale,Retail Businesses for sale,5
+Cosmetic Stores,Businesses For Sale,Retail Businesses for sale,5
+Drug Stores and Pharmacies,Businesses For Sale,Retail Businesses for sale,5
+Hair and Beauty Salons,Businesses For Sale,Retail Businesses for sale,5
+Health and Beauty Supply Businesses,Businesses For Sale,Retail Businesses for sale,5
+Miscellaneous Health and Beauty Businesses,Businesses For Sale,Retail Businesses for sale,5
+Tanning Salons,Businesses For Sale,Service Business for sale,5
+Home and Garden Businesses,Businesses For Sale,Retail Businesses for sale,5
+Bathroom Related Businesses,Businesses For Sale,Retail Businesses for sale,5
+Carpet and Flooring Businesses,Businesses For Sale,Retail Businesses for sale,5
+Curtain and Blinds Businesses,Businesses For Sale,Retail Businesses for sale,5
+DIY Related Businesses,Businesses For Sale,Retail Businesses for sale,5
+Electrical Appliance Retailers,Businesses For Sale,Retail Businesses for sale,5
+Fireplace and Stove Businesses,Businesses For Sale,Retail Businesses for sale,5
+Furniture Businesses,Businesses For Sale,Retail Businesses for sale,5
+Garden Centres,Businesses For Sale,Retail Businesses for sale,5
+Glaziers,Businesses For Sale,Service Business for sale,5
+Hardware Stores,Businesses For Sale,Retail Businesses for sale,5
+Home Accessories Businesses,Businesses For Sale,Retail Businesses for sale,5
+Kitchen Related Businesses,Businesses For Sale,Retail Businesses for sale,5
+Miscellaneous Home and Garden Businesses,Businesses For Sale,Retail Businesses for sale,5
+Soft Furnishing Businesses,Businesses For Sale,Service Business for sale,5
+"TV, Audio, Video and Photographic Businesses",Businesses For Sale,Retail Businesses for sale,5
+"Miscellaneous TV, Audio, Video & Photographic Businesses",Businesses For Sale,Retail Businesses for sale,5
+Music Shops,Businesses For Sale,Retail Businesses for sale,5
+Photographic Service Businesses,Businesses For Sale,Service Business for sale,5
+"TV, Video and Hi Fi Shops",Businesses For Sale,Retail Businesses for sale,5
+Video and DVD Rental Businesses,Businesses For Sale,Retail Businesses for sale,5
+Video Game Stores,Businesses For Sale,Retail Businesses for sale,5
+Vehicle Related Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Auto Repair Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Boat Related Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Car Wash and Valet Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Commercial Vehicle Dealerships,Businesses For Sale,Car and Transport Businesses for sale,5
+Miscellaneous Vehicle Related Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Motor Cycle Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+New and Used Car Sale Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Tire Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Vehicle Accessory Shops,Businesses For Sale,Car and Transport Businesses for sale,5
+Services Businesses,Businesses For Sale,Service Business for sale,5
+Advertising and Marketing Businesses,Businesses For Sale,Service Business for sale,5
+Advertising Businesses,Businesses For Sale,Service Business for sale,5
+Design Agencies,Businesses For Sale,Service Business for sale,5
+Marketing Businesses,Businesses For Sale,Service Business for sale,5
+Sales Businesses,Businesses For Sale,Service Business for sale,5
+Construction Businesses,Businesses For Sale,Service Business for sale,5
+Building Maintenance Businesses,Businesses For Sale,Service Business for sale,5
+Building Services Businesses,Businesses For Sale,Service Business for sale,5
+Carpenters and Joiners,Businesses For Sale,Service Business for sale,5
+Civil Engineering Businesses,Businesses For Sale,Service Business for sale,5
+Construction Professional Firms,Businesses For Sale,Service Business for sale,5
+Electricians and Electrical Repair Businesses,Businesses For Sale,Service Business for sale,5
+Facilities Management Businesses,Businesses For Sale,Service Business for sale,5
+Fitout Businesses,Businesses For Sale,Service Business for sale,5
+Housebuilding Businesses,Businesses For Sale,Service Business for sale,5
+Main Contractors,Businesses For Sale,Service Business for sale,5
+Plumbing Businesses,Businesses For Sale,Service Business for sale,5
+Roofing Service Businesses,Businesses For Sale,Service Business for sale,5
+Specialist Subcontractors,Businesses For Sale,Service Business for sale,5
+Education Businesses,Businesses For Sale,Service Business for sale,5
+Child Care Nurseries,Businesses For Sale,Service Business for sale,5
+Computer Training Businesses,Businesses For Sale,Service Business for sale,5
+Corporate Training Businesses,Businesses For Sale,Service Business for sale,5
+Educational and School Related Businesses,Businesses For Sale,Service Business for sale,5
+Financial Businesses,Businesses For Sale,Service Business for sale,5
+Accountancy Practices,Businesses For Sale,Service Business for sale,5
+Book Keeping Businesses,Businesses For Sale,Service Business for sale,5
+Credit and Finance Companies,Businesses For Sale,Service Business for sale,5
+Financial Related Businesses,Businesses For Sale,Service Business for sale,5
+General Services Businesses,Businesses For Sale,Service Business for sale,5
+Conference Facilities,Businesses For Sale,Service Business for sale,5
+Dating Agencies,Businesses For Sale,Service Business for sale,5
+Dry Cleaners,Businesses For Sale,Service Business for sale,5
+Engraving Businesses,Businesses For Sale,Service Business for sale,5
+Entertainment Agencies,Businesses For Sale,Service Business for sale,5
+Framing Businesses,Businesses For Sale,Service Business for sale,5
+Funeral Businesses,Businesses For Sale,Service Business for sale,5
+Health and Safety Businesses,Businesses For Sale,Service Business for sale,5
+Import and Export Businesses,Businesses For Sale,Service Business for sale,5
+Laundries,Businesses For Sale,Service Business for sale,5
+Locksmiths,Businesses For Sale,Service Business for sale,5
+Miscellaneous Service Businesses,Businesses For Sale,Service Business for sale,5
+Personal Services,Businesses For Sale,Service Business for sale,5
+Photocopying Businesses,Businesses For Sale,Service Business for sale,5
+Printing and Typesetting Businesses,Businesses For Sale,Service Business for sale,5
+Security Businesses,Businesses For Sale,Service Business for sale,5
+Storage / Warehouse Businesses,Businesses For Sale,Service Business for sale,5
+Translation Businesses,Businesses For Sale,Service Business for sale,5
+Health Care Businesses,Businesses For Sale,Service Business for sale,5
+Alternative Health Businesses,Businesses For Sale,Service Business for sale,5
+Care Homes,Businesses For Sale,Care Businesses for sale,5
+Chiropractor Businesses,Businesses For Sale,Science and Medical Businesses for sale,5
+Dental Practices,Businesses For Sale,Science and Medical Businesses for sale,5
+Medical Practices,Businesses For Sale,Science and Medical Businesses for sale,5
+Medical Supply Businesses,Businesses For Sale,Science and Medical Businesses for sale,5
+Opticians and Optical Stores,Businesses For Sale,Science and Medical Businesses for sale,5
+Optometrists,Businesses For Sale,Science and Medical Businesses for sale,5
+Hire Businesses,Businesses For Sale,Other Businesses for sale,5
+Boat Hire Businesses,Businesses For Sale,Other Businesses for sale,5
+Car Hire Businesses,Businesses For Sale,Other Businesses for sale,5
+Carpet Cleaning Equipment Businesses,Businesses For Sale,Other Businesses for sale,5
+Commercial Vehicle Hire Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Entertainment Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Events Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Marquee Businesses,Businesses For Sale,"Leisure, Pub and Hotel Businesses for sale",5
+Miscellaneous Hire Businesses,Businesses For Sale,Other Businesses for sale,5
+Plant and Machinery Hire Businesses,Businesses For Sale,Other Businesses for sale,5
+Tool and Equipment Hire Businesses,Businesses For Sale,Other Businesses for sale,5
+House and Garden Businesses,Businesses For Sale,Retail Businesses for sale,5
+Bedroom Related Businesses,Businesses For Sale,Retail Businesses for sale,5
+Decorating Businesses,Businesses For Sale,Service Business for sale,5
+Domestic Cleaning Businesses,Businesses For Sale,Service Business for sale,5
+Flooring Service Businesses,Businesses For Sale,Service Business for sale,5
+Gardening Businesses,Businesses For Sale,Service Business for sale,5
+Interior Design Businesses,Businesses For Sale,Service Business for sale,5
+Landscape Gardening Businesses,Businesses For Sale,Service Business for sale,5
+Removal Businesses,Businesses For Sale,Service Business for sale,5
+Maintenance Businesses,Businesses For Sale,Service Business for sale,5
+Air Conditioning Businesses,Businesses For Sale,Service Business for sale,5
+Commercial Cleaning Businesses,Businesses For Sale,Service Business for sale,5
+Environmental Related Businesses,Businesses For Sale,Service Business for sale,5
+Heating Businesses,Businesses For Sale,Service Business for sale,5
+Industrial Cleaning Businesses,Businesses For Sale,Service Business for sale,5
+Machinery Repair and Maintenance Businesses,Businesses For Sale,Service Business for sale,5
+Miscellaneous Maintenance Businesses,Businesses For Sale,Service Business for sale,5
+Recycling Businesses,Businesses For Sale,Service Business for sale,5
+Pet Businesses,Businesses For Sale,Service Business for sale,5
+Boarding Kennels,Businesses For Sale,Service Business for sale,5
+Catteries,Businesses For Sale,Service Business for sale,5
+Miscellaneous Pet Service Businesses,Businesses For Sale,Service Business for sale,5
+Veterinary Businesses,Businesses For Sale,Service Business for sale,5
+Postal and Communication Businesses,Businesses For Sale,Service Business for sale,5
+Couriers and Despatch Businesses,Businesses For Sale,Service Business for sale,5
+Mail Box Businesses,Businesses For Sale,Service Business for sale,5
+Postal Businesses,Businesses For Sale,Service Business for sale,5
+Shipping Services Businesses,Businesses For Sale,Service Business for sale,5
+Telephone Service Businesses,Businesses For Sale,Service Business for sale,5
+Professional Service Businesses,Businesses For Sale,Service Business for sale,5
+Architect Practices,Businesses For Sale,Service Business for sale,5
+Business Brokerages,Businesses For Sale,Service Business for sale,5
+Consultancy Businesses,Businesses For Sale,Service Business for sale,5
+Estate Agencies,Businesses For Sale,Service Business for sale,5
+Insurance Related Businesses,Businesses For Sale,Service Business for sale,5
+Lawyers / Legal Firms,Businesses For Sale,Service Business for sale,5
+Management Consultancies,Businesses For Sale,Service Business for sale,5
+Miscellaneous Professional Businesses,Businesses For Sale,Service Business for sale,5
+Property Agencies,Businesses For Sale,Service Business for sale,5
+Property Services,Businesses For Sale,Service Business for sale,5
+Public Shell Companies,Businesses For Sale,Service Business for sale,5
+Ready Made Shelf Companies,Businesses For Sale,Service Business for sale,5
+Recruitment Agencies,Businesses For Sale,Service Business for sale,5
+Surveyors,Businesses For Sale,Service Business for sale,5
+Transportation Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Air Transport Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Boat Builders and Repair Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Chauffeur Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Driving Schools,Businesses For Sale,Car and Transport Businesses for sale,5
+Miscellaneous Transport Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Road Haulage and Freight Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Taxi Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Vehicle Leasing Businesses,Businesses For Sale,Car and Transport Businesses for sale,5
+Technology and Media Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Information Technology Businesses,Businesses For Sale,Commercial Businesses for sale,5
+IT Consultancy Businesses,Businesses For Sale,Commercial Businesses for sale,5
+IT Businesses,Businesses For Sale,Commercial Businesses for sale,5
+IT Maintenance Businesses,Businesses For Sale,Commercial Businesses for sale,5
+IT Manufacturing Businesses,Businesses For Sale,Commercial Businesses for sale,5
+IT Network Businesses,Businesses For Sale,Commercial Businesses for sale,5
+IT Retail Businesses,Businesses For Sale,Commercial Businesses for sale,5
+IT Software Businesses,Businesses For Sale,Commercial Businesses for sale,5
+IT Telecommunications Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Internet Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Domain Name Businesses,Businesses For Sale,Commercial Businesses for sale,5
+ISPs,Businesses For Sale,Commercial Businesses for sale,5
+Miscellaneous Internet Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Web Design and Development Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Websites,Businesses For Sale,Commercial Businesses for sale,5
+Media Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Film Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Miscellaneous Media Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Publishing Businesses,Businesses For Sale,Commercial Businesses for sale,5
+TV and Radio Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Wholesale and Distribution Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Distribution Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Miscellaneous Distribution Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Wholesale Businesses,Businesses For Sale,Commercial Businesses for sale,5
+Miscellaneous Wholesale Businesses,Businesses For Sale,Commercial Businesses for sale,5

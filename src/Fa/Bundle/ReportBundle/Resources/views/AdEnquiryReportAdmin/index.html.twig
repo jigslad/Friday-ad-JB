@@ -1,0 +1,53 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set exportToCsv     = false %}
+{% set adDownloadCsv   = false %}
+{% set adReportCsvList = false %}
+
+{% if fa_resource_authorization_manager.isGranted('fa_report_ad_enquiry_export_to_csv') %}
+  {% set exportToCsv = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('fa_report_ad_enquiry_download_csv') %}
+  {% set adDownloadCsv = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('ajax_fa_report_ad_enquiry_csv_list') %}
+  {% set adReportCsvList = true %}
+{% endif %}
+
+{% block content -%}
+    <div class="large-row">
+        {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew': false}) }}
+
+        {% use "FaReportBundle:AdEnquiryReportAdmin:search.html.twig" %}
+        {{ block('search_html') }}
+
+        {% if pagination is not null and pagination.getNbResults() %}
+            {% if exportToCsv %}
+                <div class="row">
+                    <div class="columns text-right mb10">
+                        <a href="{{ path('fa_report_ad_enquiry_export_to_csv') }}">{{'Export to csv'}}</a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+        {% if pagination is not null and searchParams|length %}
+            {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+        {% endif %}
+
+        {% if searchParams|length and form.vars.valid %}
+            {{ include('FaReportBundle:AdEnquiryReportAdmin:list.html.twig', {'pagination': pagination}) }}
+        {% endif %}
+
+        {% if pagination is not null and searchParams|length %}
+            {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

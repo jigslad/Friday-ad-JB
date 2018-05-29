@@ -1,0 +1,43 @@
+parameters:
+    fa.user.authenticator.class: Fa\Bundle\UserBundle\Security\UserAuthenticator
+    fa.user.logout.success.handler.class: Fa\Bundle\UserBundle\Security\LogoutSuccessHandler
+    fa.user.listener.email_confirmation.class: Fa\Bundle\UserBundle\EventListener\EmailConfirmationListener
+    fa.user.authentication_listener.class: Fa\Bundle\UserBundle\EventListener\AuthenticationListener
+    fa_user.review_moderation.request_build.class: Fa\Bundle\UserBundle\Moderation\ReviewModerationRequestBuild
+    fa_user.encoder.pbkdf2_password.class: Fa\Bundle\UserBundle\Encoder\Pbkdf2PasswordEncoder
+    fa_user.moderation.request_build.class: Fa\Bundle\UserBundle\Moderation\BusinessUserModerationRequestBuild
+
+services:
+    _defaults: 
+        public: true
+    
+    fa.user.authenticator:
+        class:     '%fa.user.authenticator.class%'
+        arguments: ['@security.encoder_factory', '@service_container']
+        
+    fa.user.authentication_listener:
+        class:     '%fa.user.authentication_listener.class%'
+        arguments: ["main", '@service_container']
+        tags:
+          - {name: kernel.event_subscriber }
+        
+    fa.user.logout.success.handler:
+        class:     '%fa.user.logout.success.handler.class%'
+        arguments: ['@router', '@service_container']
+
+    fa.user.listener.email_confirmation:
+        class:      '%fa.user.listener.email_confirmation.class%'
+        arguments: ['@service_container']
+        tags:
+          - {name: kernel.event_subscriber }
+
+    fa_user.review_moderation.request_build:
+        class: '%fa_user.review_moderation.request_build.class%'
+        arguments: ['@service_container']
+
+    fa_user.encoder.pbkdf2_password:
+        class: '%fa_user.encoder.pbkdf2_password.class%'
+        
+    fa_user.moderation.request_build:
+        class: '%fa_user.moderation.request_build.class%'
+        arguments: ['@service_container']

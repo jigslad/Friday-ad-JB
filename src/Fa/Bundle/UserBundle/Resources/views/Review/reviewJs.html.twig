@@ -1,0 +1,91 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        //
+    });
+
+    function openAddReviewModalForm(item_id, user_id, reviewer_id, item_title, user_name, to_whom)
+    {
+        $.ajax({
+            type: "post",
+            url: "{{ path('user_review_add_modal_ajax') }}",
+            data: {'item_id':item_id, 'user_id':user_id, 'reviewer_id':reviewer_id, 'item_title':item_title, 'user_name':user_name, 'to_whom':to_whom, 'is_form_load':true},
+            success: function(data) {
+                $('#leave_review_modal').html(data);
+                bindAddReviewSubmitFormEvent();
+                bindReviewMessageUpdateCharCounterEvent();
+                bindStarRatingEvents('user_review_rating', 'rating_text');
+                $('#leave_review_modal').foundation('reveal', 'open');
+            }
+        });
+    }
+
+    function closeAddReviewModalForm()
+    {
+        $('#leave_review_modal').foundation('reveal', 'close');
+    }
+    
+    function bindAddReviewSubmitFormEvent()
+    {
+        $("form[name='user_review']").submit(function(event) {
+            // Stop form from submitting normally
+            event.preventDefault();
+            blockElement('#leave_review_modal');
+            $.ajax({
+                type: "POST",
+                url: "{{path('user_review_add_modal_ajax')}}",
+                data: $('form[name="user_review"]').serialize()
+            })
+            .done(function(response) {
+                if (response.htmlContent.length) {
+                    unblockElement('#leave_review_modal');
+                    $('#leave_review_modal_form').html(response.htmlContent);
+                    bindAddReviewSubmitFormEvent();
+                    bindReviewMessageUpdateCharCounterEvent();
+                    bindStarRatingEvents('user_review_rating', 'rating_text');
+                    updateCharCounter('user_review_message');
+                    bindReviewFormErrorEvents();
+                }
+                if (response.success.length) {
+                    closeAddReviewModalForm();
+                    {% if success_url is defined %}
+                        window.location.href = "{{ success_url }}";
+                    {% endif %}
+                }
+            });
+        });
+    }
+    
+    function bindReviewMessageUpdateCharCounterEvent()
+    {
+        $('#user_review_message').keyup(function(e){
+            updateCharCounter($(this).attr('id'));
+        });
+    }
+
+    function updateCharCounter(fieldId)
+    {
+        var textCounterId = fieldId + '_textcounter';
+        var maxLimit      = $('#'+fieldId).attr('maxlength') ? parseInt($('#'+fieldId).attr('maxlength')) : 0;
+        var value         = $('#'+fieldId).val();
+
+        if (maxLimit) {
+           if (value.length > maxLimit) {
+               $('#'+fieldId).val(value.substring(0, maxLimit));
+               $('#'+fieldId).html('(0 characters left)');
+               return false;
+           } else {
+               $('#'+textCounterId).html('(' + (maxLimit - value.length) + ' characters left)');
+           }
+       }
+    }
+
+    function bindReviewFormErrorEvents(){
+        $('#user_review_message, .db-rating-stars a').focus(function(e){
+            $(this).nextAll('small.error').first().remove();
+            $(this).parent().nextAll('small.error').first().remove();
+        });
+    }
+//]]>
+</script>
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}

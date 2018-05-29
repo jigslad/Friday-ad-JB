@@ -1,0 +1,23 @@
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div data-alert class="alert-box success radius">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('info') %}
+<div data-alert class="alert-box info radius">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('notice') %}
+<div data-alert class="alert-box warning round">
+    {{ flashMessage }}
+</div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('error') %}
+<div data-alert class="alert-box alert round">
+    {{ flashMessage }}
+</div>
+{% endfor %}

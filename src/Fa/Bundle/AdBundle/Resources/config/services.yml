@@ -1,0 +1,62 @@
+parameters:
+    fa_ad.moderation.request_build.class: Fa\Bundle\AdBundle\Moderation\AdModerationRequestBuild
+    fa_ad.manager.ad_moderation.class: Fa\Bundle\AdBundle\Manager\AdModerationManager
+    fa_ad.print.api.response_build.class: Fa\Bundle\AdBundle\PrintApi\AdPrintResponseBuild
+    fa_ad.similarads.api.response_build.class: Fa\Bundle\AdBundle\SimilarAdApi\SimilarAdResponseBuild
+    fa_ad.tradeit.api.response_build.class: Fa\Bundle\AdBundle\TradeItAdApi\TradeItAdResponseBuild
+    fa_ad.manager.ad_post.class: Fa\Bundle\AdBundle\Manager\AdPostManager
+    fa_ad.manager.ad_routing.class: Fa\Bundle\AdBundle\Manager\AdRoutingManager
+    fa.nimber.manager.class: Fa\Bundle\AdBundle\Manager\NimberManager
+    fa_ad.ad.api.response_build.class: Fa\Bundle\AdBundle\AdApi\AdApiResponseBuild
+
+services:
+    _defaults: 
+        public: true
+    
+    fa_ad.moderation.request_build:
+        class: '%fa_ad.moderation.request_build.class%'
+        arguments: ['@service_container']
+
+    fa_ad.manager.ad_moderation:
+        class: '%fa_ad.manager.ad_moderation.class%'
+        arguments: ['@service_container']
+        
+    fa_ad.print.api.response_build:
+        class: '%fa_ad.print.api.response_build.class%'
+        arguments: ['@service_container']
+
+    fa_ad.manager.ad_post:
+        class: '%fa_ad.manager.ad_post.class%'
+        arguments: ['@service_container']
+        
+    fa_ad.manager.ad_routing:
+        class: '%fa_ad.manager.ad_routing.class%'
+        arguments: ['@router', '@service_container']
+        
+    fa_ad_kernel.request.listener:
+        class: Fa\Bundle\AdBundle\EventListener\AdRequestListener
+        arguments: ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            
+    fa_ad_kernel.routing.listener:
+        class: Fa\Bundle\AdBundle\EventListener\AdRouteListener
+        arguments: ['@router', '@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            
+    fa_ad.similarads.api.response_build:
+        class: '%fa_ad.similarads.api.response_build.class%'
+        arguments: ['@service_container']
+
+    fa_ad.tradeit.api.response_build:
+        class: '%fa_ad.tradeit.api.response_build.class%'
+        arguments: ['@service_container']
+        
+    fa.nimber.manager:
+        class: '%fa.nimber.manager.class%'
+        arguments: ['@service_container']
+        
+    fa_ad.ad.api.response_build:
+        class: '%fa_ad.ad.api.response_build.class%'
+        arguments: ['@service_container']

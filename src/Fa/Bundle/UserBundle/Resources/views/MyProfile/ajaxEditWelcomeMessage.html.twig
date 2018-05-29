@@ -1,0 +1,90 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% use "FaUserBundle:UserSiteImage:showUserSiteImageUploader.html.twig" %}
+
+{% set container = fetch_container_instance() %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title">{{'Edit welcome message'|trans({}, 'frontend-my-profile')}}</h5>
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'edit_welcome_message_id'}}) }}
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Welcome message'|trans({}, 'frontend-my-profile')}}</h5>
+                <div class="mt5">{{'A short paragraph describing your business. You can go into details in the next field.'|trans({}, 'frontend-my-profile')}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="columns">
+                {{ form_widget(form.company_welcome_message, {'attr': {'class': 'mt10 mb0 textcounter'}}) }}
+                <div class="clearfix">
+                    <div class="left">
+                        {{ form_errors(form.company_welcome_message) }}
+                    </div>
+                    <div class="profile-ins text-right" id="{{ attribute(form, 'company_welcome_message').vars.id }}_textcounter" ></div>
+                </div>
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#profileEditModal');;">{{'Cancel'|trans({}, 'frontend-my-profile')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+        $('.textcounter').each(function(e){
+            updateCharCounter($(this).attr('id'));
+        });
+    });
+    $('.textcounter').keyup(function(e){
+        updateCharCounter($(this).attr('id'));
+    });
+    $("#edit_welcome_message_id").submit(function(event) {
+        blockElement('#profileEditModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{path('ajax_edit_welcome_message')}}",
+            data: $("#edit_welcome_message_id").serialize()
+        })
+        .always(function(response) {
+            unblockElement('#profileEditModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#profileEditModal').html(response.htmlContent);
+            } else {
+                $('#business_welcome_message_div').html(response.successContent);
+                $('#profileEditModal').foundation('reveal', 'close');
+                $('#company_welcome_message_content').notify('{{'Welcome message edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
+                scrollToElement('#company_welcome_message_content', '1000', -150);
+            }
+        });
+    });
+
+    function updateCharCounter(fieldId)
+    {
+        var textCounterId = fieldId + '_textcounter';
+        var maxLimit      = $('#'+fieldId).attr('maxlength') ? parseInt($('#'+fieldId).attr('maxlength')) : 0;
+        var value         = $('#'+fieldId).val();
+
+        if (maxLimit) {
+           if (value.length > maxLimit) {
+               $('#'+fieldId).val(value.substring(0, maxLimit));
+               $('#'+fieldId).html('(0 characters left)');
+               return false;
+           } else {
+               $('#'+textCounterId).html('(' + (maxLimit - value.length) + ' characters left)');
+           }
+       }
+    }
+//]]>
+</script>

@@ -1,0 +1,79 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set adDeleteGrant = false %}
+{% set adChangeStatusGrant = false %}
+{% set adPostEditGrant = false %}
+{% set adDetailGrant = false %}
+{% set adPackageGrant = false %}
+{% set adPrintDatesGrant = false %}
+
+{% if fa_resource_authorization_manager.isGranted('ad_delete_admin') %}
+  {% set adDeleteGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('ad_change_status') %}
+  {% set adChangeStatusGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('ad_post_edit_admin') %}
+  {% set adPostEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('ad_detail_admin') %}
+  {% set adDetailGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('ad_package_purchase_admin') %}
+  {% set adPackageGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('ajax_print_dates_list_admin') %}
+  {% set adPrintDatesGrant = true %}
+{% endif %}
+
+{% block content -%}
+    <div class="large-row">
+        {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'ad_post_search_user_admin'}) }}
+
+        {% use "FaAdBundle:AdAdmin:search.html.twig" %}
+        {{ block('search_html') }}
+
+        {% if pagination %}
+
+        {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+        {{ include('FaAdBundle:AdAdmin:list.html.twig', {'pagination': pagination}) }}
+
+        {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        function showPrintInsertDateList(id)
+        {
+            var route = Routing.generate('ajax_print_dates_list_admin', { 'id': id });
+            blockPage();
+            $.ajax({
+                type: "GET",
+                url : route,
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                if (response.htmlContent.length) {
+                    $('#adPrintInsertDateListModal').html(response.htmlContent);
+                    $('#adPrintInsertDateListModal').foundation('reveal', 'open');
+                }
+            });
+        }
+    //]]>
+    </script>
+{% endblock %}

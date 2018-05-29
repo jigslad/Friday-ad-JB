@@ -1,0 +1,43 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block body %}
+    <div class="payment">
+        <div class="mb20">
+            <div class="row">
+                <div class="columns">
+                    <h1 class="text-center">{{'Payment'|trans({},'frontend-cyber-source')}}</h1>
+                </div>
+            </div>
+        </div>
+        
+        <div class="paa-bdr-box">
+            <div>
+                <h3 class="text-center">{{'Please complete your payment.'|trans({},'frontend-cyber-source')}}</h3>
+            </div>
+            <div class="payment-frame-lsize">
+                <form id="cybersource_3d_secure_form" name="cybersource_3d_form" action="{{ cyberSourceReply.payerAuthEnrollReply.acsURL }}" method="post" target="cybersource3DSecureFrame">
+                    <input type="hidden" name="PaReq" value="{{ cyberSourceReply.payerAuthEnrollReply.paReq }}" />
+                    <input type="hidden" name="TermUrl" value="{{ termUrl }}" />
+                    <input type="hidden" name="MD" value="{{ cyberSourceReply.payerAuthEnrollReply.xid }}" />
+                </form>
+                <iframe name="cybersource3DSecureFrame" frameBorder="0" class="payment-frame" align="center" onload="unblockPage();"></iframe>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        blockPage();
+        $(document).ready(function(){
+            $('#cybersource_3d_secure_form').submit();
+        });
+        function resizeIframe(obj) {
+            obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+            obj.style.width = '100%';
+        }
+    //]]>
+    </script>
+{% endblock %}

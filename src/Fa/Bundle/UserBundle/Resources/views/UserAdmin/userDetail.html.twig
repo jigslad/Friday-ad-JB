@@ -1,0 +1,13 @@
+<ul class="info_list">
+    <li class="clearfix"><label>{{ 'First name'|trans }}:</label> <div class="info_data">{{ user.firstName}}</div></li>
+    <li class="clearfix"><label>{{ 'Last name'|trans }}:</label> <div class="info_data">{{ user.lastName}}</div></li>
+    <li class="clearfix"><label>{{ 'Email'|trans }}:</label> <div class="info_data">{{ user.email}}</div></li>
+    <li class="clearfix"><label>{{ 'Customer type'|trans }}:</label> <div class="info_data">{{ userRepository.getUserRolesArray(user)|join(', ') }}</div></li>
+    <li class="clearfix"><label>{{ 'Last active'|trans }}:</label> <div class="info_data">{{ (user.lastLogin) ? user.lastLogin | localizeddate('short', 'medium', app.request.locale )  : '-' }}</div></li>
+    <li class="clearfix"><label>{{ 'Phone number'|trans }}:</label> <div class="info_data">{{ (user.phone) ? user.phone : '-'}}</div></li>
+    <li class="clearfix"><label>{{ 'Mobile number'|trans }}:</label> <div class="info_data">{{ (user.mobile) ? user.mobile : '-'}}</div></li>
+    <li class="clearfix"><label>{{ 'User name'|trans }}:</label> <div class="info_data">{{ (user.username) ? user.username : '-'}}</div></li>
+    <li class="clearfix"><label>{{ 'Contact by phone'|trans }}:</label> <div class="info_data">{{ (user.getContactThroughPhone()) ? 'Yes' : 'No'}}</div></li>
+    <li class="clearfix"><label>{{ 'Contact by email'|trans }}:</label> <div class="info_data">{{ (user.getContactThroughEmail()) ? 'Yes' : 'No'}}</div></li>
+    <li class="clearfix"><label>{{ 'Is private phone number?'|trans }}:</label> <div class="info_data">{{ (user.getIsPrivatePhoneNumber()) ? 'Yes' : 'No'}}</div></li>
+</ul>

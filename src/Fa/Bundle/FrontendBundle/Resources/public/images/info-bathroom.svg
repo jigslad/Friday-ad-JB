@@ -1,0 +1,46 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="81" height="81" viewBox="-359 195 81 81" xml:space="preserve" enable-background="new -359 195 81 81">
+  <style type="text/css">
+    
+	.st0{fill:#313133;}
+	.st1{fill:none;stroke:#B0D253;stroke-width:2;}
+	.st2{fill:none;stroke:#B0D253;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,4;}
+	.st3{fill:#A8DC28;}
+
+  </style>
+  <title>
+    No bathrooms icon
+  </title>
+  <desc>
+    Created with Sketch.
+  </desc>
+  <g id="Ad-details" sketch:type="MSPage">
+    <g id="Property-rent-sale---1st-tab" transform="translate(-577.000000, -1778.000000)" sketch:type="MSArtboardGroup">
+      <g id="Details" transform="translate(183.000000, 1415.000000)" sketch:type="MSLayerGroup">
+        <g id="Table" transform="translate(21.000000, 314.000000)" sketch:type="MSShapeGroup">
+          <g id="No-bathrooms-icon" transform="translate(375.000000, 51.000000)">
+            <path id="Fill-1" class="st0" d="M-282.1 233.6c0-21.2-17.2-38.4-38.4-38.4 -21.2 0-38.4 17.2-38.4 38.4 0 21.2 17.2 38.4 38.4 38.4C-299.4 272-282.1 254.8-282.1 233.6z"/>
+            <path id="Stroke-3" class="st1" d="M-320.5 272c21.2 0 38.4-17.2 38.4-38.4 0-21.2-17.2-38.4-38.4-38.4 -21.2 0-38.4 17.2-38.4 38.4C-358.9 254.8-341.7 272-320.5 272L-320.5 272z"/>
+            <path id="Stroke-6" class="st2" d="M-289.9 248.4c2.2-4.5 3.4-9.5 3.4-14.8 0-18.8-15.3-34-34-34s-34 15.3-34 34c0 14.6 9.3 27.1 22.3 31.9 3.7 1.3 7.6 2.1 11.7 2.1C-307.1 267.6-295.4 259.8-289.9 248.4z"/>
+            <path id="Stroke-15" class="st2" d="M-359 195"/>
+            <g id="Imported-Layers" transform="translate(16.000000, 18.000000)">
+              <path id="Fill-1_1_" class="st3" d="M-313.4 214.1c0 0-2.4 0.4-3.9 0.6 -2.9 1.1-3.6 3.4-6.8 3.4 -4.4 0.1-19.4 0.1-23.8 0 -3.2-0.1-3.9-2.3-6.8-3.4 -1.5-0.2-3.9-0.6-3.9-0.6 -0.1 0.3-1.1 1.6 0.7 2 1.1 0.2 0.6 4.8 0.6 5.4 0 5.7 3.8 9.6 9.4 9.6h23.8c5.6 0 9.4-3.9 9.4-9.6 0-0.6-0.5-5.2 0.6-5.4C-312.3 215.7-313.3 214.4-313.4 214.1L-313.4 214.1zM-329 221.5h-13.9c-0.4 0-0.6-0.3-0.6-0.7 0-0.4 0.3-0.7 0.6-0.7h13.9c0.4 0 0.6 0.3 0.6 0.7C-328.4 221.2-328.6 221.5-329 221.5L-329 221.5z"/>
+              <path id="Fill-2" class="st3" d="M-343.6 233.1c0 0.4-0.3 0.8-0.8 0.8h-2.8c-0.4 0-0.8-0.4-0.8-0.8 0-0.4 0.3-0.8 0.8-0.8h2.8C-343.9 232.4-343.6 232.7-343.6 233.1"/>
+              <path id="Fill-3" class="st3" d="M-322.5 233.1c0 0.4-0.3 0.8-0.8 0.8h-2.8c-0.4 0-0.8-0.4-0.8-0.8 0-0.4 0.3-0.8 0.8-0.8h2.8C-322.8 232.4-322.5 232.7-322.5 233.1"/>
+              <path id="Fill-4" class="st3" d="M-320.8 199.1c-0.2-2.2-2-4-4.2-4 -2.4 0-4.3 1.9-4.3 4.3h2c0-1.3 1-2.4 2.3-2.4 1.3 0 2.3 1.1 2.3 2.4v18.7h2L-320.8 199.1 -320.8 199.1"/>
+              <path id="Fill-5" class="st3" d="M-324.4 203.4c0 2.2-1.8 0.3-4 0.3 -2.2 0-4 1.9-4-0.3 0-2.2 1.8-4 4-4C-326.2 199.4-324.4 201.2-324.4 203.4"/>
+              <path id="Fill-6" class="st3" d="M-327.1 205.2h1v2.8h-1V205.2z"/>
+              <path id="Fill-7" class="st3" d="M-327.1 209.4h1v2.8h-1V209.4z"/>
+              <path id="Fill-8" class="st3" d="M-327.1 213.6h1v2.8h-1V213.6z"/>
+              <path id="Fill-9" class="st3" d="M-328.7 208.3l-0.9-0.3 0.7-2.7 0.9 0.3L-328.7 208.3"/>
+              <path id="Fill-10" class="st3" d="M-329.8 212.3l-0.9-0.3 0.7-2.7 0.9 0.3L-329.8 212.3"/>
+              <path id="Fill-11" class="st3" d="M-330.8 216.3l-0.9-0.3 0.7-2.7 0.9 0.3L-330.8 216.3"/>
+              <path id="Fill-12" class="st3" d="M-331.5 208l-0.8-0.5 1.4-2.4 0.8 0.5L-331.5 208"/>
+              <path id="Fill-13" class="st3" d="M-333.6 211.6l-0.8-0.5 1.4-2.4 0.8 0.5L-333.6 211.6"/>
+              <path id="Fill-14" class="st3" d="M-335.6 215.2l-0.8-0.5 1.4-2.4 0.8 0.5L-335.6 215.2"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

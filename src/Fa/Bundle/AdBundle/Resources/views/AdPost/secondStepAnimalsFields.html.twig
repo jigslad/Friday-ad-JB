@@ -1,0 +1,84 @@
+{% if attribute(form, field) is defined %}
+    {{ set_variables('formFields', {'lastField':field}) }}
+    {% if field == 'ad_type_id' %}
+        <div class="paa-bdr-box">
+            <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+            <div id="ad_type_choice_div" style="display:none">
+                {{ form_widget(attribute(form, field)) }}
+            </div>
+            <div class="capsule-links ad-type-links">
+                {% set selectedAdTypeId = attribute(form, field).vars.data %}
+                {% for choice in attribute(form, field).vars.choices %}
+                    {% set activeClass = '' %}
+                    {% if choice.value == selectedAdTypeId %}
+                        {% set activeClass = 'active' %}
+                    {% endif %}
+                    <a href="javascript:void(0)" class="ad_type_choice {{ activeClass }}" id="ad_type_choice_{{ choice.value }}">{{ choice.label }}</a>
+                {% endfor %}
+            </div>
+            {{ form_errors(attribute(form, field)) }}
+        </div>
+    {% elseif field == 'is_new' %}
+        <div class="paa-bdr-box btm-pa-0">
+            <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+            <div id="is_new_choice_div" style="display:none">
+                {{ form_widget(attribute(form, field)) }}
+            </div>
+            <div class="capsule-links">
+                {% set selectedIsNewId = attribute(form, field).vars.data %}
+                {% for choice in attribute(form, field).vars.choices %}
+                    {% set activeClass = '' %}
+                    {% if choice.value == selectedIsNewId %}
+                        {% set activeClass = 'active' %}
+                    {% endif %}
+                    <a href="javascript:void(0)" class="is_new_choice {{ activeClass }}" id="is_new_choice_{{ choice.value }}">{{ choice.label }}</a>
+                {% endfor %}
+            </div>
+            {{ form_errors(attribute(form, field)) }}
+        </div>
+    {% elseif field == 'title' %}
+        <div class="paa-bdr-box">
+            <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+            {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'eg. Little Tikes'|trans({}, 'frontend-paa-second-step'))}}) }}
+            {% if attribute(form, field).vars.size %}
+                <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-second-step') }}</div>
+            {% endif %}
+            {{ form_errors(attribute(form, field)) }}
+        </div>
+    {% elseif field == 'description' %}
+        <div class="paa-bdr-box">
+            <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+            {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
+            {% endif %}
+            {{ form_widget(attribute(form, field), {'attr': {'placeholder': ''}}) }}
+            {% if attribute(form, field).vars.size %}
+                <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-second-step') }}</div>
+            {% endif %}
+            {{ form_errors(attribute(form, field)) }}
+        </div>
+    {% elseif field == 'price' %}
+        <div id="paa_price">
+            <div class="paa-bdr-box bdr-none">
+                <h3 class="text-center" id="price_label">{{ attribute(form, field).vars.label }}</h3>
+                <div class="paa-title-ins" id="price_suggestion"></div>
+                <div id="paa_similar_adverts"></div>
+            </div>
+            <div class="small-wrapper">
+                <div class="paa-enter-price clearfix">
+                    <div class="price-icon">&pound;</div>
+                    {{ form_widget(attribute(form, field)) }}
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            </div>
+        </div>
+    {% elseif field == 'price_text' %}
+        <div id="paa_price_text">
+            <div class="paa-bdr-box bdr-none">
+                <h3 class="text-center" id="price_text_label">{{ attribute(form, field).vars.label }}</h3>
+            </div>
+            {{ form_widget(attribute(form, field)) }}
+            {{ form_errors(attribute(form, field)) }}
+        </div>
+    {% endif %}
+{% endif %}

@@ -1,0 +1,102 @@
+services:
+    fa_content.form.type.header_image_admin:
+        class: Fa\Bundle\ContentBundle\Form\HeaderImageAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_header_image_admin }
+
+    fa_content.form.type.header_image_search_admin:
+        class: Fa\Bundle\ContentBundle\Form\HeaderImageAdminSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_header_image_search_admin }
+            
+    fa_content.form.type.landing_page_admin:
+        class: Fa\Bundle\ContentBundle\Form\LandingPageAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_landing_page_admin }
+
+    fa_content.form.type.landing_page_search_admin:
+        class: Fa\Bundle\ContentBundle\Form\LandingPageSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_landing_page_search_admin }
+            
+    fa_content.form.type.static_page_admin:
+        class: Fa\Bundle\ContentBundle\Form\StaticPageAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_static_page_admin }
+
+    fa_content.form.type.static_page_search_admin:
+        class: Fa\Bundle\ContentBundle\Form\StaticPageSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_static_page_search_admin }
+
+    fa_content.form.type.seo_tool_admin:
+        class: Fa\Bundle\ContentBundle\Form\SeoToolAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_seo_tool_admin }
+
+    fa_content.form.type.seo_tool_search_admin:
+        class: Fa\Bundle\ContentBundle\Form\SeoToolSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_seo_tool_search_admin }
+
+    fa_content.form.type.static_block_admin:
+        class: Fa\Bundle\ContentBundle\Form\StaticBlockAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_static_block_admin }
+
+    fa_content.form.type.static_block_search_admin:
+        class: Fa\Bundle\ContentBundle\Form\StaticBlockSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_static_block_search_admin }
+
+    fa_content.form.type.banner_search_admin:
+        class: Fa\Bundle\ContentBundle\Form\BannerSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_banner_search_admin }
+
+    fa_content.form.type.banner_admin:
+        class: Fa\Bundle\ContentBundle\Form\BannerAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_banner_admin }
+            
+    fa_content.form.type.home_popular_image_admin:
+        class: Fa\Bundle\ContentBundle\Form\HomePopularImageAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_home_popular_image_admin }
+
+    fa_content.form.type.home_popular_image_search_admin:
+        class: Fa\Bundle\ContentBundle\Form\HomePopularImageAdminSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_home_popular_image_search_admin }
+            
+    fa_content.form.type.profile_page_contact_user:
+        class: Fa\Bundle\ContentBundle\Form\ProfilePageContactUserType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_profile_page_contact_user }
+
+    fa_content.form.type.seo_tool_override_search_admin:
+        class: Fa\Bundle\ContentBundle\Form\SeoToolOverrideSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_seo_tool_override_search_admin }
+
+    fa_content.form.type.seo_tool_override_admin:
+        class: Fa\Bundle\ContentBundle\Form\SeoToolOverrideAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_seo_tool_override_admin }

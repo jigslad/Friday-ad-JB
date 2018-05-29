@@ -1,0 +1,288 @@
+{% set container = fetch_container_instance() %}
+{% set packageRepository  = fetch_repository('FaPromotionBundle:Package') %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set currentDevice = 'D' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'T' %}
+{% endif %}
+{% set amazonPayManager  = container.get('fa.amazonpay.manager') %}
+{% set amazonPayConfig  = amazonPayManager.getAmazonpayConfig() %}
+{% set amazonPayMode = container.getParameter('fa.amazon.mode') %}
+{% set amazonPayJs = container.getParameter('fa.amazon.'~amazonPayMode~'.url') %}
+{% set amazonpayUrl = path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_AMAZONPAY')}) %}
+{% set isCreditUsed = false %}
+{% set totalVat = 0 %}
+{% set cartValue = array_unserialize(cart.getValue()) %}
+<div class="cart-list-main" id="cart_main_div">
+        <div class="row">
+            <div class="columns">
+                <h1 class="text-center">{{'Basket'|trans({}, 'backend-cart')}}</h1>
+                <div class="cart-list">
+                    <ul>
+                        <li class="hide-for-small-only">
+                            <div class="row">
+                                <div class="large-6 columns"><h2>{{'Adverts'|trans({}, 'backend-cart')}}</h2></div>
+                                <div class="large-3 columns"><h2 class="text-center">{{'Package'|trans({}, 'backend-cart')}}</h2></div>
+                                <div class="large-3 columns"><h2 class="text-center">{{'Cost'|trans({}, 'backend-cart')}}</h2></div>
+                            </div>
+                        </li>
+                        {% if cartDetails|length %}
+                            {% for cartDetail in cartDetails %}
+                                {% set packageId = null %}
+                                {% set value = array_unserialize(cartDetail['value'])%}
+                                {% if value['package'] is defined %}
+                                    {% set packageIdArray = value['package']|keys %}
+                                    {% set packageId = packageIdArray[0] %}
+                                {% endif %}
+                                {% if not isCreditUsed and value['user_credit_id'] is defined and value['user_credit_id'] and value['user_credit'] is defined and value['user_credit'] %}
+                                    {% set isCreditUsed = true  %}
+                                {% endif %}
+                                <li>
+                                    <div class="row">
+                                        <div class="large-6 columns">
+                                            <div class="cart-item clearfix">
+                                                <div class="cart-item-img">
+                                                    {% if cartDetail['path'] is defined and cartDetail['path'] is not null and cartDetail['hash'] is defined and cartDetail['hash'] is not null %}
+                                                        {% set adImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, cartDetail['ad_id'], cartDetail['path'], cartDetail['hash'], '300X225', cartDetail['aws'], cartDetail['image_name']]) %}
+                                                        <img src="{{ adImageUrl }}" />
+                                                    {% else %}
+                                                        <img src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="" />
+                                                    {% endif %}
+                                                </div>
+                                                <div class="cart-item-info">
+                                                    <h3>{{cartDetail['title']}}</h3>
+                                                    <h4>{{format_currency(cartDetail['price'])}}</h4>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="large-3 columns">
+                                            <div class="cart-item-type text-center">
+                                                {% if packageId %}
+                                                    {% set packageObj = packageRepository.find(packageId)%}
+                                                    <h3>{{packageObj.getTitle()}}</h3>
+                                                    <div class="row">
+                                                        {% if value['package'][packageId]['is_purchased'] is defined and value['package'][packageId]['is_purchased'] == 1 %}
+                                                            {% set packagePrintId = null %}
+                                                            {% if value['package'][packageId]['packagePrint'] is defined and value['package'][packageId]['packagePrint']['id'] is defined %}
+                                                                {% set packagePrintId = value['package'][packageId]['packagePrint']['id'] %}
+                                                            {% endif %}
+                                                            <div class="large-6 columns">
+                                                                <a href="{{path('ad_package_purchase_admin', {'adId': cartDetail['ad_id'], 'packageId': packageId, 'packagePrintId': packagePrintId})}}" class="secondary-btn-3 button expand">{{'Change'|trans({}, 'frontend-cart')}}</a>
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="large-6 columns">
+                                                            <a href="javascript:void(0);" onclick="return removeCartItem({{cartDetail['id']}});" class="secondary-btn-3 button expand">{{'Delete'|trans({}, 'backend-cart')}}</a>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="large-3 columns">
+                                            <div class="cart-item-price">
+                                                <h4>
+                                                    {% set totalVat = totalVat + cartDetail['vat_amount'] %}
+                                                    {{format_currency(cartDetail['amount'])}}
+                                                    <span>{{'(%vat%% vat included.)'|trans({'%vat%': cartDetail['vat']}, 'frontend-cart')}}</span>
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <div class="row">
+                                <div class="large-12 columns text-center">
+                                    {{'No items in your basket.'|trans({}, 'backend-cart')}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if cart.getAmount() > 0 or (cart.getAmount() <= 0 and cartValue['discount_values'] is defined and cartValue['discount_values']|length) %}
+                            {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}
+                                {% set discountValue = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getDiscountValuetoDisplay', [cartValue['discount_values']]) %}
+                                <li class="code-applied hide-for-small-only">
+                                    <div class="row">
+                                        <div class="large-3 right columns text-center remove_code">
+                                            <label class="mb0">{{'Code applied (%discount_value% Discount)'|trans({'%discount_value%': discountValue}, 'frontend-cart')}}</label>
+                                            <a href="javascript:removeDuscountcodeAlert();" class="bold">{{'Remove'|trans({}, 'frontend-cart')}}</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        {% if isCreditUsed %}
+                            <li class="code-applied hide-for-small-only">
+                                <div class="row">
+                                    <div class="large-3 right columns text-center remove_code">
+                                        <label class="mb0">{{'Credit applied'|trans({}, 'frontend-cart')}}</label>
+                                        <a href="javascript:removeCreditAlert();" class="bold">{{'Remove'|trans({}, 'frontend-cart')}}</a>
+                                    </div>
+                                </div>
+                            </li>   
+                        {% endif %}
+                        <li class="cart-total">
+                            <div class="row">
+                                <div class="large-6 columns">
+                                    {% if cart.getAmount() > 0 or (cart.getAmount() <= 0 and cartValue['discount_values'] is defined and cartValue['discount_values']|length) %}
+                                        <div class="promo-code">
+                                            <a href="javascript:hideShowPromotionCodeSectionForMobile();" class="show-code {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}up-arrow{% else %}down-arrow{% endif %}" id="promo_code_anchor_mobile">{{'Promotional Code'|trans({}, 'frontend-cart')}}</a>
+                                            <label class="hide-for-small-only mb10">{{'Promotional Code'|trans({}, 'frontend-cart')}}</label>
+                                            {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}
+                                                <div class="code-applied-mob remove_code" id="display_discount_applied_div">
+                                                    <label>{{'Code applied (%discount_value% Discount)'|trans({'%discount_value%': discountValue}, 'frontend-cart')}}</label>
+                                                    <a href="javascript:removeDuscountcodeAlert();" class="bold">{{'Remove'|trans({}, 'frontend-cart')}}</a>
+                                                </div>
+                                            {% endif %}
+                                            <div class="clearfix code-field {% if cartValue['discount_values'] is defined and cartValue['discount_values']|length %}promo-disable{% endif %}" {% if cartValue['discount_values'] is not defined and currentDevice == 'M' %} style="display:none;"{% endif %} id="discount_code_input_div">
+                                                <input type="text" class="white-field" name="discount_code" id="discount_code" placeholder="{{'Insert promotional code'|trans({}, 'frontend-cart')}}" />
+                                                <button class="secondary-btn-3 button expand" onclick="return applyDiscountcode();">{{'Apply'|trans({}, 'frontend-cart')}}</button>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if isCreditUsed %}
+                                        <div class="promo-code show-for-small-only">
+                                            <a href="javascript:hideShowCreditSectionForMobile();" class="show-code down-arrow" id="credit_anchor_mobile">{{'Credit'|trans({}, 'frontend-cart')}}</a>
+                                            <div class="code-applied-mob" id="display_credit_applied_div" style="display:none">
+                                                <label>{{'Credit applied '|trans({}, 'frontend-cart')}}</label>
+                                                <a href="javascript:removeCreditAlert();" class="bold">{{'Remove'|trans({}, 'frontend-cart')}}</a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="large-3 columns"><h2 class="cart-cost-text">{{'TOTAL COST'|trans({}, 'frontend-cart')}}:</h2></div>
+                                <div class="large-3 columns">
+                                    <div class="cart-item-price"><h4 class="total-price">{{format_currency(cart.getAmount())}}</h4></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="white-bg">
+            {% if cart.getAmount() > 0 %}
+                <div class="row">
+                    <div class="columns">
+                        <h1 class="text-center">{{'Pay now with'|trans({}, 'backend-cart')}}:</h1>
+                        <div class="pay-now-box clearfix">
+                              <div class="credit-cards-box  small-24 medium-12 large-6 columns {% if (isAdultAdvertPresent == 1) %} credit-cards-box-center{% endif %}" onclick="window.location='{{path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')})}}'"> </div>
+                              {% if (isAdultAdvertPresent == 0) %}
+                                <div class="small-24 medium-12 large-6 columns paypal-pad">
+                                  {#<div class="pay-or-caption hide-for-small-only">{{'or'|trans({}, 'backend-cart')}}</div>#}
+                                  <div class="paypal-box" onclick="window.location='{{path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')})}}'"> </div>
+                                  {#<div class="pay-or-caption hide-for-small-only amazon-or">{{'or'|trans({}, 'frontend-cart')}}</div>#}
+                                   <div id="AmazonPayButton"></div>
+                                   <div id="amazon-tooltip" class="image-tooltip-wrapper hide-for-small-only"><span class="image-tooltip">Amazon Pay allows you to pay for your ad on Friday-Ad using the card details stored on your Amazon account. Simply click and enter your Amazon login details.</span><span class="amazon-info-icon"></span></div>
+                                </div>
+                               {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if (cart.getAmount() > 0 and fa_resource_authorization_manager.isGranted('show_cart_skip_payment_button')) or cart.getAmount() <= 0 %}
+                <div class="small-wrapper skip-payment">
+                    {% if cart.getAmount() > 0 and fa_resource_authorization_manager.isGranted('show_cart_skip_payment_button') %}
+                        <h2 class="or-caption">{{'OR'|trans({}, 'backend-cart-case-sensitive')}}</h2>
+                        <form action="{% if app.request.get('offline_payment') == 1 %}{{path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_OFFLINE_PAYMENT')})}}{% else %}{{path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_FREE')})}}{% endif %}" method="GET" id="skip_payment_form">
+                            <div class="row">
+                                <div class="columns large-8">
+                                    <input type="text" name="skip_payment_reason" id="skip_payment_reason" placeholder="{{'Enter skip payment reason and/or Netsuite ID'|trans}}" />
+                                    {% if skipPaymentReasonError is defined and skipPaymentReasonError %}
+                                        <small class="error">{{'Please provide a reason for skipping payment.'|trans}}</small>
+                                    {% endif %}
+                                </div>
+                                <div class="columns large-4">
+                                    <button class="tiny button mb0" name="skip_payment_btn" id="skip_payment_btn" type="submit">{{'Skip payment'|trans({}, 'backend-cart')}}</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="columns large-12">
+                                    <input type="checkbox" {% if app.request.get('offline_payment') == 1 %}checked="checked"{% endif %} name="offline_payment" id="offline_payment" value="1" /><label for="offline_payment">{{'Skipping payment, but record transaction value (offline payment).'|trans}}</label>
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="text-center">
+                            <button class="tiny button mb0" name="skip_payment_btn" id="skip_payment_btn" type="button" onclick="window.location='{{path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_FREE')})}}'">{{'Post free ad'|trans({}, 'backend-cart')}}</button>
+                        </div>
+                    {% endif %}
+                    {% if popup is defined and popup %}
+                        <button type="reset" class="tiny button mb0" onclick="javascript:window.close();">{{ 'Close'|trans({}, 'messages') }}</button>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% block scriptbottom %}
+<script type='text/javascript'>
+    var host = "amzn.github.io";
+    var amznscrptload = 'yes';
+    if ((host === window.location.host) && (window.location.protocol !== "https:"))
+        window.location.protocol = "https";
+
+    window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId('{{amazonPayConfig['client_id']}}');
+    };
+
+    window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId('{{amazonPayConfig['client_id']}}');
+        amazon.Login.setUseCookie(true);
+    };
+</script>
+
+<script type='text/javascript'>
+    var authRequest;var amazonpath = "{{amazonpayUrl}}";
+    OffAmazonPayments.Button("AmazonPayButton", "{{amazonPayConfig['merchant_id']}}", {
+        type: "PwA",
+        color: "DarkGray",
+        size: "large",
+        authorization: function () {
+            loginOptions = { scope: "profile postal_code payments:widget payments:shipping_address", popup: true };
+            authRequest = amazon.Login.authorize(loginOptions, amazonpath);
+
+        },
+        onError: function (error) {
+            // something bad happened
+        }
+    });
+     function verifyLoggedIn() {
+        // if you want to display a message.
+        var msgElem = document.getElementById("login-state-msg");
+
+        var options = {
+            scope: "profile postal_code payments:widget payments:shipping_address",
+            popup: true,
+            interactive: 'never'
+        };
+
+        // check if we are logged in
+        authRequest = amazon.Login.authorize (options, function(response) {
+            // this code is executed ASYNCHRONOUSLY
+
+            if ( response.error ) {
+                // USER NOT LOGGED IN
+                console.log("verifyLoggedIn() - SESSION NOT ACTIVE - " + new Date());
+                msgElem.innerHTML = "NOT logged in yet. Click 'Amazon Pay' or Go to Login screen.";
+            } else {
+                // USER IS LOGGED IN
+                console.log("verifyLoggedIn() - SESSION ACTIVE - " + new Date());
+
+                // optionally, get the profile info
+                console.dir('access_token= ' + response.access_token);
+
+                amazon.Login.retrieveProfile(function (response) {
+                    // Display profile information.
+                    console.dir('CustomerId= ' + response.profile.CustomerId);
+                    console.dir('Name= ' + response.profile.Name);
+                    console.dir('PostalCode= ' + response.profile.PostalCode);
+                    console.dir('PrimaryEmail= ' + response.profile.PrimaryEmail);
+
+                    //alert("Hello " + response.profile.Name + "! Just click Pay!");
+                });
+            }
+        });
+    }
+</script>
+{% endblock %}

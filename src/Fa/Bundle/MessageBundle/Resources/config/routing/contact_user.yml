@@ -1,0 +1,5 @@
+contact_user:
+    path:   /{adId}/{senderId}/{receiverId}/{whoToWhome}
+    defaults:  { _controller: FaMessageBundle:ContactUser:contactUser }
+    options:
+        expose: true

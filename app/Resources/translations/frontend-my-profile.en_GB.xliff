@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="da39a3ee5e6b4b0d3255bfef95601890afd80709" resname="">
+        <jms:reference-file line="283">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <jms:reference-file line="284">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source></source>
+        <target state="new"></target>
+      </trans-unit>
+      <trans-unit id="2a0524e90cca082b816d9afeb7b342713acb863e" resname="(Only your initial will be publicly displayed)">
+        <jms:reference-file line="55">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <source>(Only your initial will be publicly displayed)</source>
+        <target state="new">(Only your initial will be publicly displayed)</target>
+      </trans-unit>
+      <trans-unit id="1b1310f174d2a37cf5827b681bdbacc9da17fac5" resname="(not displayed publicly for business users)">
+        <jms:reference-file line="75">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <jms:reference-file line="79">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>(not displayed publicly for business users)</source>
+        <target state="new">(not displayed publicly for business users)</target>
+      </trans-unit>
+      <trans-unit id="cb65d7d672934c6a014ac5d07deeb8463252affd" resname="A short paragraph describing your business. You can go into details in the next field.">
+        <jms:reference-file line="121">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>A short paragraph describing your business. You can go into details in the next field.</source>
+        <target state="new">A short paragraph describing your business. You can go into details in the next field.</target>
+      </trans-unit>
+      <trans-unit id="5c4698b6e0d6c775d648ff6a3ba4404803b3b226" resname="About you">
+        <jms:reference-file line="97">UserBundle/Form/UserPrivateProfileType.php</jms:reference-file>
+        <source>About you</source>
+        <target state="new">About you</target>
+      </trans-unit>
+      <trans-unit id="13a0bec1d6a112996292435bd6a12ec41ba09675" resname="About your company">
+        <jms:reference-file line="91">UserBundle/Form/UserBusinessProfileType.php</jms:reference-file>
+        <source>About your company</source>
+        <target state="new">About your company</target>
+      </trans-unit>
+      <trans-unit id="5fe581c9e30f2ba7a94ff28b96329af14ff4186a" resname="Add a logo to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy.">
+        <jms:reference-file line="104">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Add a logo to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy.</source>
+        <target state="new">Add a logo to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy.</target>
+      </trans-unit>
+      <trans-unit id="67dbb61cffd95f8a2d0dcf8c1b2d756cee04adb3" resname="Add a photo of yourself to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy.">
+        <jms:reference-file line="72">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <jms:reference-file line="87">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <source>Add a photo of yourself to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy.</source>
+        <target state="new">Add a photo of yourself to your profile. It doesn't just look nice - buyers prefer to see who they are buying from when deciding what to buy.</target>
+      </trans-unit>
+      <trans-unit id="cfea419c3b4e8b02ee586e70a28bf846e44cdda4" resname="Apply">
+        <jms:reference-file line="28">views/UserImage/renderProfileBigImage.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/UserSiteBanner/renderUserSiteBannerBigImage.html.twig</jms:reference-file>
+        <source>Apply</source>
+        <target state="new">Apply</target>
+      </trans-unit>
+      <trans-unit id="c8af83fb4c1ea103238bcdedb758767604d9423c" resname="Banner">
+        <jms:reference-file line="259">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Banner</source>
+        <target state="new">Banner</target>
+      </trans-unit>
+      <trans-unit id="a0b4c490939874f2aee136a8e0bc7d118832899d" resname="Banner changed successfully.">
+        <jms:reference-file line="76">views/MyProfile/myBusinessProfileJs.html.twig</jms:reference-file>
+        <source>Banner changed successfully.</source>
+        <target state="new">Banner changed successfully.</target>
+      </trans-unit>
+      <trans-unit id="238178e3aed1dcad9d43a4d3bc1e371d5d1941e1" resname="Banner uploaded successfully. You can reposition your cover photo.">
+        <jms:reference-file line="97">views/UserSiteBanner/showUserSiteBannerUploader.html.twig</jms:reference-file>
+        <source>Banner uploaded successfully. You can reposition your cover photo.</source>
+        <target state="new">Banner uploaded successfully. You can reposition your cover photo.</target>
+      </trans-unit>
+      <trans-unit id="3ecb5ba01e3c3b1b8e4bc1cf1d7f66708803d22c" resname="Basic info">
+        <jms:reference-file line="44">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <jms:reference-file line="68">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Basic info</source>
+        <target state="new">Basic info</target>
+      </trans-unit>
+      <trans-unit id="a8e3901b099ea34706704fbdeec5710f90df1334" resname="Business name">
+        <jms:reference-file line="95">UserBundle/Form/UserBusinessProfileUserDetailType.php</jms:reference-file>
+        <source>Business name</source>
+        <target state="new">Business name</target>
+      </trans-unit>
+      <trans-unit id="b47a8e293636ae24e477b84e1a143511c0a3936e" resname="Business profile">
+        <jms:reference-file line="46">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Business profile</source>
+        <target state="new">Business profile</target>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="27">views/UserImage/renderProfileBigImage.html.twig</jms:reference-file>
+        <jms:reference-file line="13">views/UserSiteBanner/renderUserSiteBannerBigImage.html.twig</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="a3c686e711e4720f99b4562bb3dbaae7ab658cf2" resname="Category">
+        <jms:reference-file line="184">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Category</source>
+        <target state="new">Category</target>
+      </trans-unit>
+      <trans-unit id="5042ced414c69117f135e0c5e514d9d97c74a354" resname="Change cover image">
+        <jms:reference-file line="213">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Change cover image</source>
+        <target state="new">Change cover image</target>
+      </trans-unit>
+      <trans-unit id="62a7b486b7ecb9efe221ea9bec709b6c43989c28" resname="Change image">
+        <jms:reference-file line="8">views/UserSiteBanner/userSiteBanner.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/UserSiteBanner/userSiteBanner.html.twig</jms:reference-file>
+        <jms:reference-file line="74">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <jms:reference-file line="82">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <jms:reference-file line="106">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <jms:reference-file line="114">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Change image</source>
+        <target state="new">Change image</target>
+      </trans-unit>
+      <trans-unit id="8f8804840c49e8283eda0c1c1ae49f559a733dec" resname="Company address">
+        <jms:reference-file line="99">UserBundle/Form/UserBusinessProfileType.php</jms:reference-file>
+        <source>Company address</source>
+        <target state="new">Company address</target>
+      </trans-unit>
+      <trans-unit id="cc0c7efc365d493602c4066fda02229880974a5c" resname="Crop logo image">
+        <jms:reference-file line="4">views/UserImage/renderProfileBigImage.html.twig</jms:reference-file>
+        <source>Crop logo image</source>
+        <target state="new">Crop logo image</target>
+      </trans-unit>
+      <trans-unit id="338680f85d35ec1e11042d759f797f1b49a13c13" resname="Crop profile image">
+        <jms:reference-file line="6">views/UserImage/renderProfileBigImage.html.twig</jms:reference-file>
+        <source>Crop profile image</source>
+        <target state="new">Crop profile image</target>
+      </trans-unit>
+      <trans-unit id="7f71e2d847bb838ed2655710a86cd7651e2956d6" resname="Design your agency profile">
+        <jms:reference-file line="195">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Design your agency profile</source>
+        <target state="new">Design your agency profile</target>
+      </trans-unit>
+      <trans-unit id="73d52b18f08b8ac2a5b48a8b8bb322a3d5f5fb88" resname="Design your business profile">
+        <jms:reference-file line="188">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Design your business profile</source>
+        <target state="new">Design your business profile</target>
+      </trans-unit>
+      <trans-unit id="21f7d8125f50d871ba8f6c48163c5eecbcd8a7e7" resname="Design your dealership">
+        <jms:reference-file line="193">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Design your dealership</source>
+        <target state="new">Design your dealership</target>
+      </trans-unit>
+      <trans-unit id="c69690b7c1826465e9b07adb6f9f5e1212713123" resname="Design your shop">
+        <jms:reference-file line="191">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Design your shop</source>
+        <target state="new">Design your shop</target>
+      </trans-unit>
+      <trans-unit id="5301648dcf6b53cefc9ed52999aaa92d4603cae0" resname="Edit">
+        <jms:reference-file line="7">views/UserSiteBanner/userSiteBanner.html.twig</jms:reference-file>
+        <source>Edit</source>
+        <target state="new">Edit</target>
+      </trans-unit>
+      <trans-unit id="8016e9a2a69cafdc984806a915162161a2b156ca" resname="Edit logo">
+        <jms:reference-file line="109">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Edit logo</source>
+        <target state="new">Edit logo</target>
+      </trans-unit>
+      <trans-unit id="bc0b6523b8a52c027be0dbf571e4cf2c312edae6" resname="Edit profile photo">
+        <jms:reference-file line="77">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <source>Edit profile photo</source>
+        <target state="new">Edit profile photo</target>
+      </trans-unit>
+      <trans-unit id="82da67b211249624f24f3c7db5642a5112c9446f" resname="Facebook">
+        <jms:reference-file line="102">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Facebook</source>
+        <target state="new">Facebook</target>
+      </trans-unit>
+      <trans-unit id="ad8b32900e9c7354a2d03a9b8c1dbea7a61eed9b" resname="Featured category">
+        <jms:reference-file line="232">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Featured category</source>
+        <target state="new">Featured category</target>
+      </trans-unit>
+      <trans-unit id="7e568a90221d853052b3466e581eb5f7c030b901" resname="First name">
+        <jms:reference-file line="79">UserBundle/Form/UserPrivateProfileType.php</jms:reference-file>
+        <jms:reference-file line="77">UserBundle/Form/UserBusinessProfileUserDetailType.php</jms:reference-file>
+        <source>First name</source>
+        <target state="new">First name</target>
+      </trans-unit>
+      <trans-unit id="e0cc637ab635fd8f03b16bc35fe32d7728740ee5" resname="From here you can edit your basic info, add photos and tell others a bit about yourself.">
+        <jms:reference-file line="36">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <source>From here you can edit your basic info, add photos and tell others a bit about yourself.</source>
+        <target state="new">From here you can edit your basic info, add photos and tell others a bit about yourself.</target>
+      </trans-unit>
+      <trans-unit id="c61d470dd7b7463229e6e14ff1786bd84bc405ac" resname="Get more visitors by upgrading!">
+        <jms:reference-file line="53">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Get more visitors by upgrading!</source>
+        <target state="new">Get more visitors by upgrading!</target>
+      </trans-unit>
+      <trans-unit id="3a1ab2fc4a450f718c535a3c82283bc83438f88f" resname="Google +">
+        <jms:reference-file line="110">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Google +</source>
+        <target state="new">Google +</target>
+      </trans-unit>
+      <trans-unit id="f790c75e4cdc209d01480ffea1ec390eaa67b189" resname="If you would like to display the location of your business on a map, please add a postcode.">
+        <jms:reference-file line="275">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>If you would like to display the location of your business on a map, please add a postcode.</source>
+        <target state="new">If you would like to display the location of your business on a map, please add a postcode.</target>
+      </trans-unit>
+      <trans-unit id="527a85f8f7a45e756d72a0e3f9a3b568ce980b86" resname="Image files">
+        <jms:reference-file line="78">views/UserSiteImage/showUserSiteImageUploader.html.twig</jms:reference-file>
+        <source>Image files</source>
+        <target state="new">Image files</target>
+      </trans-unit>
+      <trans-unit id="b4b2ce1d3fab7509ff120be720939a2bec6a7ace" resname="Invalid banner selected.">
+        <jms:reference-file line="280">UserBundle/Controller/UserSiteBannerController.php</jms:reference-file>
+        <source>Invalid banner selected.</source>
+        <target state="new">Invalid banner selected.</target>
+      </trans-unit>
+      <trans-unit id="adec36a821f81a6990b1e65d9e4ac5fb8ee2a205" resname="Last name">
+        <jms:reference-file line="88">UserBundle/Form/UserPrivateProfileType.php</jms:reference-file>
+        <jms:reference-file line="86">UserBundle/Form/UserBusinessProfileUserDetailType.php</jms:reference-file>
+        <source>Last name</source>
+        <target state="new">Last name</target>
+      </trans-unit>
+      <trans-unit id="bcaf595e2f99a680307d48faf9835c5b6135792f" resname="Let visitors know what you offer. Remember to make it appealing!">
+        <jms:reference-file line="267">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Let visitors know what you offer. Remember to make it appealing!</source>
+        <target state="new">Let visitors know what you offer. Remember to make it appealing!</target>
+      </trans-unit>
+      <trans-unit id="4ba23275f2d729e0948bd8e78f64469098ef9633" resname="Logo image">
+        <jms:reference-file line="87">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Logo image</source>
+        <target state="new">Logo image</target>
+      </trans-unit>
+      <trans-unit id="ab478f3efc840eebab919dff1b9512286f70c10c" resname="Map">
+        <jms:reference-file line="274">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Map</source>
+        <target state="new">Map</target>
+      </trans-unit>
+      <trans-unit id="9ba8d391c59aeb246fa3938363866f5e153da58a" resname="My Profile">
+        <jms:reference-file line="12">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <jms:reference-file line="24">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>My Profile</source>
+        <target state="new">My Profile</target>
+      </trans-unit>
+      <trans-unit id="24bb648e86fd3a94b5c3b8b5c57c9a3aeab12fa6" resname="Not available for users with basic business profile.">
+        <jms:reference-file line="204">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Not available for users with basic business profile.</source>
+        <target state="new">Not available for users with basic business profile.</target>
+      </trans-unit>
+      <trans-unit id="9165a8e1137032df2fa7334c9521cacbeb2f2045" resname="Or choose from the options below">
+        <jms:reference-file line="221">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Or choose from the options below</source>
+        <target state="new">Or choose from the options below</target>
+      </trans-unit>
+      <trans-unit id="ef4cd07228c3f4b7c702e193e1a1077a25076a4f" resname="Personalise your shop by uploading a cover photo. Minimum dimensions are 1190px x 350px.">
+        <jms:reference-file line="260">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Personalise your shop by uploading a cover photo. Minimum dimensions are 1190px x 350px.</source>
+        <target state="new">Personalise your shop by uploading a cover photo. Minimum dimensions are 1190px x 350px.</target>
+      </trans-unit>
+      <trans-unit id="782facfeed05fcec64ae29378f776c781e340f80" resname="Photo gallery">
+        <jms:reference-file line="266">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Photo gallery</source>
+        <target state="new">Photo gallery</target>
+      </trans-unit>
+      <trans-unit id="98a33d7d9ad2b554f09269a6b5b7a70adfc64c58" resname="Photo(s) uploaded successfully.">
+        <jms:reference-file line="114">views/UserSiteImage/showUserSiteImageUploader.html.twig</jms:reference-file>
+        <source>Photo(s) uploaded successfully.</source>
+        <target state="new">Photo(s) uploaded successfully.</target>
+      </trans-unit>
+      <trans-unit id="a45a7994973a234fae8e4759125b277f93838481" resname="Pinterest">
+        <jms:reference-file line="126">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Pinterest</source>
+        <target state="new">Pinterest</target>
+      </trans-unit>
+      <trans-unit id="69e3ee04df1f55906ef1897f957a6f504755e0fd" resname="Please correct errors and resubmit form.">
+        <jms:reference-file line="42">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Please correct errors and resubmit form.</source>
+        <target state="new">Please correct errors and resubmit form.</target>
+      </trans-unit>
+      <trans-unit id="058c8a37563a0a8009b1790d462878c99d44507f" resname="Please select category">
+        <jms:reference-file line="182">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Please select category</source>
+        <target state="new">Please select category</target>
+      </trans-unit>
+      <trans-unit id="da735ab3cc56b3a77f418e2a8804452f4faa612e" resname="Please select category where you would like to promote your profile">
+        <jms:reference-file line="233">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Please select category where you would like to promote your profile</source>
+        <target state="new">Please select category where you would like to promote your profile</target>
+      </trans-unit>
+      <trans-unit id="ac7a4bdd7ca155b65e8b1f58e575b5cd2a1f046e" resname="Please select subcategory">
+        <jms:reference-file line="211">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Please select subcategory</source>
+        <target state="new">Please select subcategory</target>
+      </trans-unit>
+      <trans-unit id="ef4d9e9996380a637ea62ef2e2abf57749783b5e" resname="Postcode">
+        <jms:reference-file line="139">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <jms:reference-file line="237">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Postcode</source>
+        <target state="new">Postcode</target>
+      </trans-unit>
+      <trans-unit id="88bcfae43fb825e0617fd1b263aabe043dd05ccf" resname="Problem in changing banner.">
+        <jms:reference-file line="277">UserBundle/Controller/UserSiteBannerController.php</jms:reference-file>
+        <source>Problem in changing banner.</source>
+        <target state="new">Problem in changing banner.</target>
+      </trans-unit>
+      <trans-unit id="6b111e7d463eb1c37f3849b4649f0746f83b9d73" resname="Problem in image upload.">
+        <jms:reference-file line="116">views/UserSiteImage/showUserSiteImageUploader.html.twig</jms:reference-file>
+        <source>Problem in image upload.</source>
+        <target state="new">Problem in image upload.</target>
+      </trans-unit>
+      <trans-unit id="09cb2bde99139b4ca7f17b8055f8d5e9e3bf127c" resname="Profile image">
+        <jms:reference-file line="59">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <source>Profile image</source>
+        <target state="new">Profile image</target>
+      </trans-unit>
+      <trans-unit id="e963907dac5cd5c017869b4c96c18021c9bd058b" resname="Remove">
+        <jms:reference-file line="78">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <jms:reference-file line="110">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Remove</source>
+        <target state="new">Remove</target>
+      </trans-unit>
+      <trans-unit id="d7a565e25b6f8d671c86c89b72d0ab84033a8a55" resname="Reposition your cover photo">
+        <jms:reference-file line="9">views/UserSiteBanner/renderUserSiteBannerBigImage.html.twig</jms:reference-file>
+        <source>Reposition your cover photo</source>
+        <target state="new">Reposition your cover photo</target>
+      </trans-unit>
+      <trans-unit id="eb30dbc7724934e16da1caa675973f4d3c69fa77" resname="Resize your image and drag to reposition">
+        <jms:reference-file line="10">views/UserImage/renderProfileBigImage.html.twig</jms:reference-file>
+        <source>Resize your image and drag to reposition</source>
+        <target state="new">Resize your image and drag to reposition</target>
+      </trans-unit>
+      <trans-unit id="179359b39edbd0bf0cdf3bb6b7dfb4223f663af2" resname="Save changes">
+        <jms:reference-file line="106">UserBundle/Form/UserPrivateProfileType.php</jms:reference-file>
+        <jms:reference-file line="126">UserBundle/Form/UserBusinessProfileType.php</jms:reference-file>
+        <jms:reference-file line="131">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Save changes</source>
+        <target state="new">Save changes</target>
+      </trans-unit>
+      <trans-unit id="293d2f859f5f61c0efbb7d8ee91fe7ed955e4388" resname="Show map on business profile">
+        <jms:reference-file line="147">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Show map on business profile</source>
+        <target state="new">Show map on business profile</target>
+      </trans-unit>
+      <trans-unit id="90d20bf39637c7e11d0b60cfa66ecb308fccabfb" resname="Some areas might be cropped on mobile screens">
+        <jms:reference-file line="10">views/UserSiteBanner/renderUserSiteBannerBigImage.html.twig</jms:reference-file>
+        <source>Some areas might be cropped on mobile screens</source>
+        <target state="new">Some areas might be cropped on mobile screens</target>
+      </trans-unit>
+      <trans-unit id="ca85a9cd7f4f4ac445654e78785f1570367537ba" resname="Sub-category">
+        <jms:reference-file line="213">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Sub-category</source>
+        <target state="new">Sub-category</target>
+      </trans-unit>
+      <trans-unit id="d15dc3ca4ecef5202f18f9cdd4862a2a1a9e4573" resname="Telephone 1">
+        <jms:reference-file line="105">UserBundle/Form/UserBusinessProfileType.php</jms:reference-file>
+        <jms:reference-file line="160">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Telephone 1</source>
+        <target state="new">Telephone 1</target>
+      </trans-unit>
+      <trans-unit id="5ebfb7d2d11330412bce5240006b5f2f23e78e3b" resname="Telephone 2">
+        <jms:reference-file line="113">UserBundle/Form/UserBusinessProfileType.php</jms:reference-file>
+        <jms:reference-file line="165">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Telephone 2</source>
+        <target state="new">Telephone 2</target>
+      </trans-unit>
+      <trans-unit id="33d674fe26c81c49e8e37b3377f536ffbc80b036" resname="Telephone(s)">
+        <jms:reference-file line="157">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Telephone(s)</source>
+        <target state="new">Telephone(s)</target>
+      </trans-unit>
+      <trans-unit id="fef186656fbe34cef4928f3363e9903608dfef17" resname="Tell people more about yourself by adding some extra information to your profile!">
+        <jms:reference-file line="92">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <source>Tell people more about yourself by adding some extra information to your profile!</source>
+        <target state="new">Tell people more about yourself by adding some extra information to your profile!</target>
+      </trans-unit>
+      <trans-unit id="ce55d0096e2e6d77a1dbe7068a3ec366fbd797ed" resname="Text us about your business here...">
+        <jms:reference-file line="135">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Text us about your business here...</source>
+        <target state="new">Text us about your business here...</target>
+      </trans-unit>
+      <trans-unit id="ae612acad5507c5a02d63b01968241aaf153cd1f" resname="The maximum image upload limit remains is ">
+        <jms:reference-file line="94">views/UserSiteImage/showUserSiteImageUploader.html.twig</jms:reference-file>
+        <source>The maximum image upload limit remains is </source>
+        <target state="new">The maximum image upload limit remains is </target>
+      </trans-unit>
+      <trans-unit id="5392c950bdde4be7e5f5b8fdc6a1ca5f21e905cf" resname="Twitter">
+        <jms:reference-file line="118">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Twitter</source>
+        <target state="new">Twitter</target>
+      </trans-unit>
+      <trans-unit id="5fbe5755ed8c82c9c66cff022568eee1b27bb3e1" resname="Upgrade your profile now!">
+        <jms:reference-file line="59">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <jms:reference-file line="205">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Upgrade your profile now!</source>
+        <target state="new">Upgrade your profile now!</target>
+      </trans-unit>
+      <trans-unit id="a564e951ed29cd11801dbf45b6fd48be85f20eb2" resname="Upload logo">
+        <jms:reference-file line="108">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Upload logo</source>
+        <target state="new">Upload logo</target>
+      </trans-unit>
+      <trans-unit id="888d7bc45d2f83856a1aea21323dc736b080e77e" resname="Upload profile photo">
+        <jms:reference-file line="76">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <source>Upload profile photo</source>
+        <target state="new">Upload profile photo</target>
+      </trans-unit>
+      <trans-unit id="248dcb1d3a7565101f879fc447427d28ef5746f6" resname="Upload your photo">
+        <jms:reference-file line="220">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Upload your photo</source>
+        <target state="new">Upload your photo</target>
+      </trans-unit>
+      <trans-unit id="db48c030755044f9e287df94c72f9053d7fbf6a6" resname="Uploading image please wait... ">
+        <jms:reference-file line="100">views/UserSiteImage/showUserSiteImageUploader.html.twig</jms:reference-file>
+        <source>Uploading image please wait... </source>
+        <target state="new">Uploading image please wait... </target>
+      </trans-unit>
+      <trans-unit id="bc17c1f0179a888f2a7e8389f67d4f2cf5cf4531" resname="Video">
+        <jms:reference-file line="94">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <jms:reference-file line="305">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Video</source>
+        <target state="new">Video</target>
+      </trans-unit>
+      <trans-unit id="a265b8d9513c63219bc45c14c7cfab95e5d9da3c" resname="Videos are a great way to give visitors an introduction of your business. Add a youtube link below.">
+        <jms:reference-file line="306">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>Videos are a great way to give visitors an introduction of your business. Add a youtube link below.</source>
+        <target state="new">Videos are a great way to give visitors an introduction of your business. Add a youtube link below.</target>
+      </trans-unit>
+      <trans-unit id="467829f3c1b338efbdd45ad6aaf135bdf18962e9" resname="We recommend you to upload an image&lt;br /&gt;with a minimum size of 1190px x 350px">
+        <jms:reference-file line="217">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source><![CDATA[We recommend you to upload an image<br />with a minimum size of 1190px x 350px]]></source>
+        <target state="new"><![CDATA[We recommend you to upload an image<br />with a minimum size of 1190px x 350px]]></target>
+      </trans-unit>
+      <trans-unit id="61a5e2d87846141b3be0bb1f298bfcb07141885a" resname="Website link">
+        <jms:reference-file line="121">UserBundle/Form/UserBusinessProfileType.php</jms:reference-file>
+        <source>Website link</source>
+        <target state="new">Website link</target>
+      </trans-unit>
+      <trans-unit id="93a5129472cc4f0b5adffc2446c71e91c59a0ad6" resname="Welcome message">
+        <jms:reference-file line="82">UserBundle/Form/UserBusinessProfileType.php</jms:reference-file>
+        <source>Welcome message</source>
+        <target state="new">Welcome message</target>
+      </trans-unit>
+      <trans-unit id="71cd13e40e5ee2d819b2394b881d2b31e4dfee54" resname="You currently have &lt;b&gt;%package_name%.&lt;/b&gt;">
+        <jms:reference-file line="50">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source><![CDATA[You currently have <b>%package_name%.</b>]]></source>
+        <target state="new"><![CDATA[You currently have <b>%package_name%.</b>]]></target>
+      </trans-unit>
+      <trans-unit id="53298c3446c96aa58c90fb727c236ae2b822ac22" resname="Your browser does not have Flash, Silverlight or HTML5 support.">
+        <jms:reference-file line="125">views/UserSiteImage/showUserSiteImageUploader.html.twig</jms:reference-file>
+        <source>Your browser does not have Flash, Silverlight or HTML5 support.</source>
+        <target state="new">Your browser does not have Flash, Silverlight or HTML5 support.</target>
+      </trans-unit>
+      <trans-unit id="c1c9cbe6993c406237b2c5ad48ec2dc4455aaab9" resname="Your profile">
+        <jms:reference-file line="33">views/MyProfile/privateProfile.html.twig</jms:reference-file>
+        <source>Your profile</source>
+        <target state="new">Your profile</target>
+      </trans-unit>
+      <trans-unit id="422c75905873ff0121ccebd2091c58f3371cebc5" resname="Your profile detail updated successfully.">
+        <jms:reference-file line="94">UserBundle/Controller/MyProfileController.php</jms:reference-file>
+        <source>Your profile detail updated successfully.</source>
+        <target state="new">Your profile detail updated successfully.</target>
+      </trans-unit>
+      <trans-unit id="fe694b23f560988030294549f3d170303407ff56" resname="Your shop detail updated successfully.">
+        <jms:reference-file line="106">UserBundle/Controller/MyProfileController.php</jms:reference-file>
+        <source>Your shop detail updated successfully.</source>
+        <target state="new">Your shop detail updated successfully.</target>
+      </trans-unit>
+      <trans-unit id="c51d295a61475cb2f3040c3859b8a642ff311f73" resname="eg. King House 101 Sunshine Road, Burgess Hill, West Sussesx, NH22 8LN">
+        <jms:reference-file line="151">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>eg. King House 101 Sunshine Road, Burgess Hill, West Sussesx, NH22 8LN</source>
+        <target state="new">eg. King House 101 Sunshine Road, Burgess Hill, West Sussesx, NH22 8LN</target>
+      </trans-unit>
+      <trans-unit id="dfa906fb572c4bb29ee404044e668bbd48118412" resname="eg. http://www.yourwebsitename.co.uk">
+        <jms:reference-file line="173">views/MyProfile/businessProfile.html.twig</jms:reference-file>
+        <source>eg. http://www.yourwebsitename.co.uk</source>
+        <target state="new">eg. http://www.yourwebsitename.co.uk</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

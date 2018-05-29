@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="8dd86c6d6c79b4eb75af3984f9bdc2e723c868d1" resname="Account status">
+        <jms:reference-file line="120">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Account status</source>
+        <target state="new">Account status</target>
+      </trans-unit>
+      <trans-unit id="8559034a07c963ad42cf81c2b60a01aecb6e7158" resname="Already have an account?">
+        <jms:reference-file line="77">views/Registration/register.html.twig</jms:reference-file>
+        <jms:reference-file line="101">views/Registration/register.html.twig</jms:reference-file>
+        <source>Already have an account?</source>
+        <target state="new">Already have an account?</target>
+      </trans-unit>
+      <trans-unit id="4f3a063f6237b324ef6dbb8421ddeb624484a89b" resname="Business category">
+        <jms:reference-file line="105">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Business category</source>
+        <target state="new">Business category</target>
+      </trans-unit>
+      <trans-unit id="a8e3901b099ea34706704fbdeec5710f90df1334" resname="Business name">
+        <jms:reference-file line="99">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Business name</source>
+        <target state="new">Business name</target>
+      </trans-unit>
+      <trans-unit id="1ceb1859741cb9ad66b3c88a5227e0b331329f70" resname="Contact by email">
+        <jms:reference-file line="98">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Contact by email</source>
+        <target state="new">Contact by email</target>
+      </trans-unit>
+      <trans-unit id="0c7fdc499facbc95f85be3fcd0711e2a2ceb388f" resname="Contact by phone">
+        <jms:reference-file line="97">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Contact by phone</source>
+        <target state="new">Contact by phone</target>
+      </trans-unit>
+      <trans-unit id="3f4f547d73646d774e8f690b36333e8c9572894b" resname="Create an account">
+        <jms:reference-file line="32">views/Registration/register.html.twig</jms:reference-file>
+        <source>Create an account</source>
+        <target state="new">Create an account</target>
+      </trans-unit>
+      <trans-unit id="c981d6a19b7c104cc238a8a909120c078a2b76a1" resname="Email address (not publicly displayed)">
+        <jms:reference-file line="94">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Email address (not publicly displayed)</source>
+        <target state="new">Email address (not publicly displayed)</target>
+      </trans-unit>
+      <trans-unit id="c47ae15370cfe1ed2781eedc1dc2547d12d9e972" resname="Help">
+        <jms:reference-file line="49">views/Registration/register.html.twig</jms:reference-file>
+        <source>Help</source>
+        <target state="new">Help</target>
+      </trans-unit>
+      <trans-unit id="3a85233086894b0cabf5a96ea4899a5c2e1ba525" resname="I'm a business advertiser">
+        <jms:reference-file line="66">UserBundle/Repository/RoleRepository.php</jms:reference-file>
+        <source>I'm a business advertiser</source>
+        <target state="new">I'm a business advertiser</target>
+      </trans-unit>
+      <trans-unit id="245e635d938fc207b7ac8325488930b0f95a61c4" resname="I'm a private advertiser">
+        <jms:reference-file line="65">UserBundle/Repository/RoleRepository.php</jms:reference-file>
+        <source>I'm a private advertiser</source>
+        <target state="new">I'm a private advertiser</target>
+      </trans-unit>
+      <trans-unit id="3dbaa1cc198b08ff42764b6772b563299015da2d" resname="Keep my phone number private &lt;br /&gt;&lt;b&gt;(recommended)&lt;/b&gt;">
+        <jms:reference-file line="96">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source><![CDATA[Keep my phone number private <br /><b>(recommended)</b>]]></source>
+        <target state="new"><![CDATA[Keep my phone number private <br /><b>(recommended)</b>]]></target>
+      </trans-unit>
+      <trans-unit id="adec36a821f81a6990b1e65d9e4ac5fb8ee2a205" resname="Last name">
+        <jms:reference-file line="93">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Last name</source>
+        <target state="new">Last name</target>
+      </trans-unit>
+      <trans-unit id="96dc1ed95a8b38efc481ac6bd8187906cfa42b24" resname="Log in here">
+        <jms:reference-file line="78">views/Registration/register.html.twig</jms:reference-file>
+        <jms:reference-file line="102">views/Registration/register.html.twig</jms:reference-file>
+        <source>Log in here</source>
+        <target state="new">Log in here</target>
+      </trans-unit>
+      <trans-unit id="709a23220f2c3d64d1e1d6d18c4d5280f8d82fca" resname="Name">
+        <jms:reference-file line="92">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Name</source>
+        <target state="new">Name</target>
+      </trans-unit>
+      <trans-unit id="c5ac4a4dd80e412d6d1222ba467165b4e50bfe79" resname="One of field is missing from Facebook (First Name, Last Name, Email).">
+        <jms:reference-file line="547">FrontendBundle/Controller/DefaultController.php</jms:reference-file>
+        <jms:reference-file line="128">UserBundle/Controller/RegistrationController.php</jms:reference-file>
+        <source>One of field is missing from Facebook (First Name, Last Name, Email).</source>
+        <target state="new">One of field is missing from Facebook (First Name, Last Name, Email).</target>
+      </trans-unit>
+      <trans-unit id="02e561710d9d5f7c2a900772b1e549ef37c159b1" resname="One of field is missing from Google (First Name, Last Name, Email).">
+        <jms:reference-file line="153">UserBundle/Controller/RegistrationController.php</jms:reference-file>
+        <source>One of field is missing from Google (First Name, Last Name, Email).</source>
+        <target state="new">One of field is missing from Google (First Name, Last Name, Email).</target>
+      </trans-unit>
+      <trans-unit id="8be3c943b1609fffbfc51aad666d0a04adf83c9d" resname="Password">
+        <jms:reference-file line="129">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Password</source>
+        <target state="new">Password</target>
+      </trans-unit>
+      <trans-unit id="058c8a37563a0a8009b1790d462878c99d44507f" resname="Please select category">
+        <jms:reference-file line="106">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Please select category</source>
+        <target state="new">Please select category</target>
+      </trans-unit>
+      <trans-unit id="d672995a14650d0e018026b64f297663d8c71c8d" resname="Register">
+        <jms:reference-file line="144">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Register</source>
+        <target state="new">Register</target>
+      </trans-unit>
+      <trans-unit id="55259dfc17d93ba22371b142e0a104717bf620bf" resname="Register with email">
+        <jms:reference-file line="83">views/Registration/register.html.twig</jms:reference-file>
+        <source>Register with email</source>
+        <target state="new">Register with email</target>
+      </trans-unit>
+      <trans-unit id="044b852f30b636aa923b18a61a35c79abc87556f" resname="Show password">
+        <jms:reference-file line="140">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Show password</source>
+        <target state="new">Show password</target>
+      </trans-unit>
+      <trans-unit id="d1071e87019db1e1eab470faaa587a4dc2f55ab3" resname="Telephone number (optional)">
+        <jms:reference-file line="95">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Telephone number (optional)</source>
+        <target state="new">Telephone number (optional)</target>
+      </trans-unit>
+      <trans-unit id="0889c683e6bd70210f1ee4be9e56f67ce116089f" resname="These are the details we got from %socialSiteName%, please confirm or change them.">
+        <jms:reference-file line="37">views/Registration/register.html.twig</jms:reference-file>
+        <source>These are the details we got from %socialSiteName%, please confirm or change them.</source>
+        <target state="new">These are the details we got from %socialSiteName%, please confirm or change them.</target>
+      </trans-unit>
+      <trans-unit id="d3f8654a225c80e6258d13d4249bfacc3fb67955" resname="These are the details we got from %socialSiteName%,&lt;br /&gt; please confirm or change them.">
+        <jms:reference-file line="87">views/Registration/register.html.twig</jms:reference-file>
+        <source><![CDATA[These are the details we got from %socialSiteName%,<br /> please confirm or change them.]]></source>
+        <target state="new"><![CDATA[These are the details we got from %socialSiteName%,<br /> please confirm or change them.]]></target>
+      </trans-unit>
+      <trans-unit id="27ea1bbe3a37a8b080be13ec98ad39dab0262c57" resname="This is the contact info buyers will use to get in touch.">
+        <jms:reference-file line="38">views/Registration/register.html.twig</jms:reference-file>
+        <jms:reference-file line="88">views/Registration/register.html.twig</jms:reference-file>
+        <source>This is the contact info buyers will use to get in touch.</source>
+        <target state="new">This is the contact info buyers will use to get in touch.</target>
+      </trans-unit>
+      <trans-unit id="f1b4f1e904c5dfcb320c6082cc820e30f20b8693" resname="User registration">
+        <jms:reference-file line="6">views/Registration/register.html.twig</jms:reference-file>
+        <source>User registration</source>
+        <target state="new">User registration</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

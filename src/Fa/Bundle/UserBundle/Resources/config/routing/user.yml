@@ -1,0 +1,38 @@
+logout:
+    path:   /logout
+
+fa_user_register:
+    path:     /register/
+    defaults: { _controller: FaUserBundle:Registration:register }
+
+fa_user_confirm_register:
+    path:     /register-confirm/
+    defaults: { _controller: FaUserBundle:Registration:confirm }
+
+fa_user_register_success:
+    path:     /register-success/
+    defaults: { _controller: FaUserBundle:Registration:success }
+    
+login_as_user:
+  path:  /login_as_user/{id}/{admin_id}/{key}/
+  defaults: { _controller: FaUserBundle:Security:logInAsUser }
+  
+reset_password:
+  path:  /reset_password/{id}/{key}/{mail_time}/
+  defaults: { _controller: FaUserBundle:ResetPassword:resetPassword }
+
+facebook_register:
+    path:   /facebook_register
+    defaults:  { _controller: FaUserBundle:Registration:facebookRegister }
+
+google_register:
+    path:   /google_register
+    defaults:  { _controller: FaUserBundle:Registration:googleRegister }
+
+proceed_user_type_update:
+    path:    /proceed_user_type_update
+    defaults:  { _controller: FaUserBundle:Security:updateUserType }
+    
+convert_user_to_business:
+    path:    /convert_user_to_business
+    defaults:  { _controller: FaUserBundle:Security:convertUserToBusiness }

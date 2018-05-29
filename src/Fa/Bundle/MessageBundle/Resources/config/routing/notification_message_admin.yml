@@ -1,0 +1,12 @@
+notification_message_admin:
+    path:     /
+    defaults: { _controller: "FaMessageBundle:NotificationMessageAdmin:index" }
+
+notification_message_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaMessageBundle:NotificationMessageAdmin:edit" }
+
+notification_message_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaMessageBundle:NotificationMessageAdmin:update" }
+    requirements: { methods: post|put }

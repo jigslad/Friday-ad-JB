@@ -1,0 +1,33 @@
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+<div class="vif-rec-slider">
+    <div class="rec-slider-cap">{{'Recommended'|trans({}, 'frontend-show-ad')}}</div>
+    <div class="owl-carousel slots-{{recommendedSlotArray|length}}" id="recommended-slider">
+        {% for recommendedSlot in recommendedSlotArray%}
+            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
+            {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
+            {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
+            {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
+            {% set only_domains = only_domains|replace({'www.': ''})%}
+            <div class="item">
+                <a class="tricky-link" href="javascript:void(0);" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">{{ userName }}</a>
+                <div class="clearfix">
+                    <div class="rec-slider-img">
+                        <div class="rec-img-holder {% if userLogo is null%}rec-placeholder{% endif %}">
+                            {% if userLogo is null%}
+                                <img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" />
+                            {% else %}
+                                <img src="{{ userLogo }}" alt="{{ userName }}" />
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="rec-slider-info">
+                        <h4>{{ recommendedSlot['title'] }}</h4>
+                        <div class="rec-slider-desc">
+                            {{ recommendedSlot['sub_title'] }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

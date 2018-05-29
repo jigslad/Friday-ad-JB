@@ -1,0 +1,117 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+$(function() {
+    var cache = {};
+    var userKeywordText = '';
+    $("{{ field }}").autocomplete({
+        minLength: 2,
+        source: function( request, response ) {
+            var term = request.term;
+            userKeywordText = term;
+            if ( term in cache ) {
+                response( cache[ term ] );
+                return;
+            }
+            $.ajax({
+                url: Routing.generate("{{ route }}", { term: request.term }),
+                dataType: 'json',
+                type: 'GET',
+                data: {page_limit: 10},
+                success: function(data) {
+                    var result = $.map(data['results'], function(item) {
+                        return {
+                            label: item.text,
+                            id: item.id,
+                            position: item.position,
+                        };
+                    });
+                    cache[ term ] = result;
+                    response(result);
+                }
+            });
+        },
+        select: function( event, ui ) {
+            $("{{ field }}"+'_close').show();
+            var keywordCategoryText = '';
+            var keywordCategoryId = ui.item.id.split('--');
+            var keywordCategoryTextRes = ui.item.label.split('<span>');
+            if (keywordCategoryTextRes.length > 1) {
+                keywordCategoryText = keywordCategoryTextRes[1];
+                keywordCategoryText = keywordCategoryText.replace("</span>", "");
+            }
+            ga('send', 'event', 'Site Search', 'Suggestion Position '+ui.item.position, userKeywordText+' - '+keywordCategoryId[0]+(keywordCategoryText ? ' - '+keywordCategoryText : ''));
+            if (keywordCategoryId.length > 1) {
+                $("{{ field }}").val(keywordCategoryId[0]);
+                $("#fa_top_search_keyword_category_id").val(keywordCategoryId[1]);
+            } else {
+                $("{{ field }}").val(keywordCategoryId[0]);
+            }
+            $('form[name="fa_top_search"]').submit();
+            return false;
+        },
+        open: function( event, ui ) {
+            $('.ui-autocomplete').css('width', $("{{ field }}").outerWidth()+'px');
+            {% if dropdownCssClass is defined %}
+                $('.ui-autocomplete').addClass("{{ dropdownCssClass }}");
+            {% endif %}
+        },
+        search: function( event, ui ) {
+            if ($("{{ field }}").val().length > 0) {
+                $("{{ field }}"+'_close').show();
+            }
+        },
+        focus: function( event, ui ) {
+            var keywordCategoryId = ui.item.id.split('--');
+            if (keywordCategoryId.length > 1) {
+                $("{{ field }}").val(keywordCategoryId[0]);
+                $("#fa_top_search_keyword_category_id").val(keywordCategoryId[1]);
+            } else {
+                $("{{ field }}").val(keywordCategoryId[0]);
+            }
+
+            $("{{ field }}"+'_close').show();
+            return false;
+        },
+        change: function( event, ui ) {
+            // TODO: redirect to search result based on keyword and category selected
+        },
+    }).autocomplete('instance')._renderItem = function( ul, item ) {
+         return $("<li>").append(item.label).appendTo( ul );
+    };
+});
+
+$(document).ready(function(){
+    {% if placeHolder is defined %}
+        $("{{ field }}").attr("placeholder", "{{ placeHolder }}");
+    {% endif %}
+    
+    $("{{ field }}"+'_close').click(function() {
+        $("{{ field }}").val('');
+        $("#fa_top_search_keyword_category_id").val('');
+        $(this).hide();
+    });
+
+    $("{{ field }}").keyup(function() {
+        if ($(this).val().length < 1) {
+            $("{{ field }}"+'_close').hide();
+        }
+    });
+
+    $("{{ field }}").focus(function() {
+        $(this).select();
+    });
+
+    $("{{ field }}").blur(function() {
+        if ($("{{ field }}").val().length == 0) {
+            $("{{ field }}"+'_close').hide();
+        }
+    });
+
+    if ($("{{ field }}").length > 0 && $("{{ field }}").val().length < 1) {
+        $("{{ field }}"+'_close').hide();
+    } else {
+        $("{{ field }}"+'_close').show();
+    }
+});
+//]]>
+</script>

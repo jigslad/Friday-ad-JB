@@ -1,0 +1,47 @@
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+             <table class="mb0">
+                 <thead>
+                     <tr>
+                         <th>
+                            {{ sortable_link('upsell_admin', 'upsell__title', 'Upsell title'|trans, sorter) }}
+                         </th>
+                         <th width="15%">
+                            {{ 'Status'|trans({}, 'messages') }}
+                         </th>
+                         <th width="14%"><i class="fi-widget"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for upsell in pagination.getCurrentPageResults() %}
+                          <tr class="gradeX">
+                              <td>{{ upsell.title }}</td>
+                              <td>{{ statusArray[upsell.status] }}</td>
+                              <td>
+                                  <button href="#" data-dropdown="drop{{ upsell.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                  <br />
+                                  <ul id="drop{{ upsell.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                      {% if upsellEditGrant %}
+                                         <li><a href="{{ path('upsell_edit_admin', {'id': upsell.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+                                      {% endif %}
+
+                                      {% if upsellDeleteGrant %}
+                                         <li><a href="{{ path('upsell_delete_admin', {'id': upsell.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this upsell?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+                                      {% endif %}
+                                  </ul>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="gradeX">
+                              <td colspan="5" align="center">{{ 'No upsell found'|trans({}, 'messages') }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+         </div>
+     </div>
+</div>

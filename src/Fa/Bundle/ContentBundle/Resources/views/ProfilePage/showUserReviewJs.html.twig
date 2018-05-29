@@ -1,0 +1,21 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    function loadMoreReviews(userId, limit, page, excludeIds)
+    {
+        $('#show_more_link').html("<div class='row'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Loading please wait... '|trans({}, 'frontend-profile-page') }}</div>");
+        var route = Routing.generate('show_profile_user_reviews', { 'userId': userId, 'limit': limit, 'page': page, 'excludeIds': excludeIds });
+        $.ajax({
+            type: "POST",
+            url : route,
+        })
+        .always(function(response) {
+            $('#show_more_link').remove();
+        })
+        .done(function(response) {
+            if (response.contentHtml.length) {
+                $(response.contentHtml).appendTo('#user_review_main_div');
+            }
+        });
+    }
+//]]>
+</script>

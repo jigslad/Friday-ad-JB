@@ -1,0 +1,75 @@
+<div class="owl-carousel fa-slider" id="{{ divId }}" data-equalizer>
+    {% set categoryBadgeArray = categoryRepository.getCategoryBadgeClassArray() %}
+    {% for latestAd in latestAds %}
+        {% set adCategoryId = attribute(latestAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
+        {% set rootCategoryId = attribute(latestAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+        {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+        {% set latestAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+        {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(latestAd) %}
+        {% set adListFields = adRepository.getAdListingFields(adCategoryId, latestAd, container) %}
+        {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(latestAd, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+        {% set imageAltString = null %}
+        {% if seoRule['image_alt'] is defined %}
+            {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], latestAd]) %}
+        {% endif %}
+        <div class="item" data-equalizer-watch>
+            {% if categoryBadgeArray[rootCategoryId] is defined %}
+                <span class="fa-slider-badge {{categoryBadgeArray[rootCategoryId]}}">Category</span>
+            {% endif %}
+            <a href="{{ adUrl }}" class="tricky-link">
+                {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')) is defined %}
+                   {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
+                {% endif %}
+            </a>
+            {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, latestAd, '300X225', 1) %}
+            <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
+                {% if imagePath %}
+                    <img class="lazyOwl" src="#empty" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                {% else %}
+                    <img class="lazyOwl" src="#empty" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                {% endif %}
+            </div>
+            <h3>
+                {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')) is defined %}
+                   {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
+                {% endif %}
+            </h3>
+            <div class="clearfix">
+                <div class="list-dimensions left">
+                    {% if adListFields|length %}
+                        {% for adFieldName, adListFieldValue in adListFields %}
+                            {% set adFieldClass = adRepository.getListingClass(adFieldName) %}
+                            {% if adListFieldValue is iterable %}
+                                {% for adListFieldVal in adListFieldValue %}
+                                    <span {% if adFieldClass %}class="{{ adFieldClass }}"{% endif %}>{{ adListFieldVal }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span {% if adFieldClass %}class="{{ adFieldClass }}"{% endif %}>{{ adListFieldValue }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="list-price">
+                    {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE')) is defined %}
+                        {{ format_currency(attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE'))) }}
+                        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
+                            <span>{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</span>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="clearfix">
+                {% if attribute(latestAd, 'away_from_location') is defined and attribute(latestAd, 'away_from_location') %}
+                    <div class="list-miles">
+                        {{ (attribute(latestAd, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}
+                    </div>
+                {% endif %}
+                <div class="list-hr-ago text-right">
+                    {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'PUBLISHED_AT')) is defined %}
+                        {{attribute(latestAd, constant(latestAdSolrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

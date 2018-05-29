@@ -1,0 +1,11 @@
+cache_admin:
+    path:     /
+    defaults: { _controller: "FaCoreBundle:CacheAdmin:index" }
+
+cache_clear_admin:
+    path:     /clear
+    defaults: { _controller: "FaCoreBundle:CacheAdmin:clear" }
+
+cache_generate_admin:
+    path:     /generate
+    defaults: { _controller: "FaCoreBundle:CacheAdmin:generate" }

@@ -1,0 +1,7 @@
+FaCoreBundle_configRule:
+    resource: '@FaCoreBundle/Resources/config/routing/config_rule_admin.yml'
+    prefix:   /config_rule
+
+FaCoreBundle_cache_admin:
+    resource: '@FaCoreBundle/Resources/config/routing/cache_admin.yml'
+    prefix:   /cache

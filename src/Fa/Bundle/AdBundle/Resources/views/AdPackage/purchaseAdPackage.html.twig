@@ -1,0 +1,618 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% block page_title %}
+    {% if promote is defined %}
+        {% if app.request.get('type') == 'promote' %}
+            {{'Promote ad'|trans({}, 'frontend-ad-package')}}
+        {% elseif app.request.get('type') == 'repost' %}
+            {{'Repost ad'|trans({}, 'frontend-ad-package')}}
+        {% endif %}
+    {% elseif purchase is defined %}
+        {{'Purchase package'|trans({}, 'frontend-ad-package')}}
+    {% endif %}
+{% endblock %}
+{% set container = fetch_container_instance() %}
+{% set packageIdArray = {} %}
+{% set printOptionCount = 0 %}
+{% if packages|length %}
+    {% for package in packages %}
+        {% set packageIdArray = packageIdArray|merge({0 : package.getPackage().getId()}) %}
+    {% endfor %}
+
+    {% set printPackageDuration = fetch_repository('FaPromotionBundle:PackagePrint').getPrintDurationForPackages(packageIdArray) %}
+    {% if printPackageDuration|length %}
+        {% set printEditions = fetch_repository('FaAdBundle:PrintEdition').getActivePrintEditionArray() %}
+        {% for printDuration in printPackageDuration %}
+            {% if printOptionCount < printDuration|length %}
+                {% set printOptionCount = printDuration|length %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+{% set isAdminPostedAd = false %}
+{% if adObj and adObj.getSource() == constant('Fa\\Bundle\\AdBundle\\Repository\\AdRepository::SOURCE_ADMIN') %}
+    {% set isAdminPostedAd = true %}
+{% endif %}
+
+{% set adRootCategoryId = null %}
+{% set userActiveCredits = {} %}
+{% set activeShopPackageDetail = {} %}
+{% set packageSrNoCredits = {} %}
+{% if categoryId is defined and categoryId %}
+    {% set adRootCategoryId = fetch_repository('FaEntityBundle:Category').getRootCategoryId(categoryId, container) %}
+    {% set userActiveCredits = fetch_repository('FaUserBundle:UserCredit').getActiveCreditForUserByCategory(app.user.getId(), adRootCategoryId, cart.getId(), adId) %}
+    {% if userActiveCredits|length %}
+        {% set activeShopPackageDetail = fetch_repository('FaUserBundle:UserPackage').getShopPackageDetailByUserIdForAdReport(app.user.getId()) %}
+        {% set packageSrNoCredits = fetch_repository('FaUserBundle:UserCredit').getPackageWiseActiveCreditForUser(userActiveCredits) %}
+    {% endif %}
+{% endif %}
+{% block body %}
+    {% if promote is defined %}
+        <form action="{{path('ad_promote', {'type': app.request.get('type'), 'adId':app.request.get('adId'), 'from': app.request.get('from'), 'business': app.request.get('business')})}}" method="post" id="package_purchase_form">
+    {% elseif purchase is defined %}
+        <form action="{{path('ad_package_purchase', {'adId':app.request.get('adId'), 'business': app.request.get('business')})}}" method="post" id="package_purchase_form">
+    {% endif  %}
+    <input type="hidden" name="credit_id" id="credit_id" />
+    <div class="white-bg pkg-bdr">
+        <div class="row">
+            <div class="columns">
+                <div class="paa-pkg-main">
+                    {% if backUrl is defined and backUrl %}
+                        <a href="{{ backUrl }}" class="paa-back-arrow-pkg" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
+                    {% endif %}
+                    <h1 class="text-center">{{'Your ad type: Essential details'|trans({}, 'frontend-ad-package')}}</h1>
+                    {% if app.request.get('type') %}
+                        <div class="mb10">
+                            {% if app.request.get('from') and app.request.get('from') == 'vif' %}
+                                <a href="{{ path('ad_detail_page_by_id', {'id': app.request.get('adId')}) }}" class="paa-back-arrow-pkg">{{'Go back'|trans({}, 'frontend-ad-package')}}</a>
+                            {% else %}
+                                <a href="{{ path('manage_my_ads_active') }}" class="paa-back-arrow-pkg">{{'Go back'|trans({}, 'frontend-ad-package')}}</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    {% if packages|length %}
+                        <div class="row fa-equalizer" id="package_equalizer">
+                            {% for package in packages %}
+                                {% set packageValues = array_unserialize(package.getPackage().getValue()) %}
+                                {% set packageActualPrice = 0 %}
+                                {% set packagePrice = '' %}
+
+                                {% if isAdminPostedAd %}
+                                    {% if printPackageDuration[package.getPackage().getId()][0]['admin_price'] is defined and printPackageDuration[package.getPackage().getId()][0]['admin_price'] is not null %}
+                                        {% if printPackageDuration[package.getPackage().getId()][0]['admin_price'] > 0 %}
+                                            {% set packageActualPrice = printPackageDuration[package.getPackage().getId()][0]['admin_price'] %}
+                                        {% endif %}
+                                    {% elseif printPackageDuration[package.getPackage().getId()][0]['price'] is defined and printPackageDuration[package.getPackage().getId()][0]['price'] is not null %}
+                                        {% if printPackageDuration[package.getPackage().getId()][0]['price'] > 0 %}
+                                            {% set packageActualPrice = printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                                        {% endif %}
+                                    {% elseif package.getPackage().getAdminPrice() is not null %}
+                                        {% if package.getPackage().getAdminPrice() > 0 %}
+                                            {% set packageActualPrice = package.getPackage().getAdminPrice() %}
+                                        {% endif %}
+                                    {% elseif package.getPackage().getPrice() is not null %}
+                                        {% if package.getPackage().getPrice() > 0 %}
+                                            {% set packageActualPrice = package.getPackage().getPrice() %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %}
+                                    {% if printPackageDuration[package.getPackage().getId()][0]['price'] is defined and printPackageDuration[package.getPackage().getId()][0]['price'] is not null %}
+                                        {% if printPackageDuration[package.getPackage().getId()][0]['price'] > 0 %}
+                                            {% set packageActualPrice = printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                                        {% endif %}
+                                    {% elseif package.getPackage().getPrice() is not null %}
+                                        {% if package.getPackage().getPrice() > 0 %}
+                                            {% set packageActualPrice = package.getPackage().getPrice() %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                                {% if packageActualPrice > 0 %}
+                                    {% set packagePrice = format_currency(packageActualPrice) %}
+                                {% else %}
+                                    {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
+                                {% endif %}
+
+                                <div class="{% if packages|length == 3 %}large-8{% elseif packages|length == 2 %}large-12{% else %}large-6{% endif%} columns">
+                                    <div class="paa-pkg-bg">
+                                        <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
+                                        {% set pkgBoxColorClass = 'pkg-green-head' %}
+                                        {% set pkgButtonColorClass = '' %}
+                                        {% if (locationGroupIds is defined and constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationGroupRepository::NON_PRINT_LOCATION_GROUP_ID') in locationGroupIds) %}
+                                            {% set pkgBoxColorClass = 'pkg-blue-head' %}
+                                            {% set pkgButtonColorClass = 'primary-btn-1' %}
+                                        {% endif %}
+                                        {% if packageActualPrice == 0 %}
+                                            {% set pkgBoxColorClass = 'pkg-grey-head' %}
+                                            {% set pkgButtonColorClass = 'primary-btn-grey' %}
+                                        {% endif %}
+                                        <div class="pkg-title {{ pkgBoxColorClass}}">{{package.getPackage().getLabel()}}</div>
+                                        <div id="active_package_{{package.getPackage().getId()}}">
+                                            <div class="pkg-subtitle">
+                                                <div class="hide">
+                                                    <span class="custom-radio {% if selectedPackageId == package.getPackage().getId() %} checked {% endif %}">
+                                                        <input type="radio" name="package_id" value="{{package.getPackage().getId()}}" {% if selectedPackageId == package.getPackage().getId() %} checked="checked" {% endif %} onclick="return highlightSelectedPackage('{{package.getPackage().getId()}}');" />
+                                                    </span>
+                                                </div>
+                                                {{package.getPackage().getTitle()}}
+                                            </div>
+                                            <div class="pkg-pricing {% if printPackageDuration[package.getPackage().getId()] is defined %}print-pkg{% elseif printPackageDuration is defined and printPackageDuration|length %}non-print-pkg{% endif %}">
+                                                <div class="pkg-pricing-wrap{% if printPackageDuration|length and printOptionCount > 3 %} pkg-pricing-equalizer{% endif %}">
+                                                    <H4 id="package_price_{{package.getPackage().getId()}}">
+                                                        {{packagePrice}} 
+                                                    </H4>
+                                                    {% if printPackageDuration[package.getPackage().getId()] is defined %}
+                                                        <div class="weekly-pkg">
+                                                            {% for printDuration in printPackageDuration[package.getPackage().getId()] %}
+                                                                {% set printDurationPrice = 0 %}
+                                                                {% set printFirstDurationPrice = 0 %}
+                                                                {% if isAdminPostedAd %}
+                                                                    {% set printDurationPrice = printDuration['admin_price'] is not null ? printDuration['admin_price'] : printDuration['price'] %}
+                                                                    {% set printFirstDurationPrice = printPackageDuration[package.getPackage().getId()][0]['admin_price'] is not null ? printPackageDuration[package.getPackage().getId()][0]['admin_price'] : printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                                                                {% else %}
+                                                                    {% set printDurationPrice = printDuration['price'] %}
+                                                                    {% set printFirstDurationPrice = printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                                                                {% endif %}
+                                                                <span class="pkg-box">
+                                                                    <span class="custom-radio {% if loop.index == 1 %}checked{% endif %}">
+                                                                        <input type="hidden" name="package_print_price_{{printDuration['id']}}" id="package_print_price_{{printDuration['id']}}" value="{{format_currency(printDurationPrice)}}" />
+                                                                        <input type="radio" {% if loop.index == 1 %} checked="checked" {% endif %} name="package_print_id_{{package.getPackage().getId()}}" id="package_print_id_{{printDuration['id']}}" value="{{printDuration['id']}}" onclick="return updatePackagePrice({{package.getPackage().getId()}}, {{printDuration['id']}})" />
+                                                                    </span>
+                                                                    <label for="package_print_id_{{printDuration['id']}}">
+                                                                        {% set fullDuration = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getFullDurationFromShortForm', [printDuration['duration']]) %}
+                                                                        {{fullDuration}} {{'in print'|trans({}, 'frontend-ad-package')}} {% if loop.index != 1 %}(+{{format_currency(printDurationPrice - printFirstDurationPrice)}}){% endif %}
+                                                                    </label>
+                                                                </span>
+                                                            {% endfor %}
+                                                        </div>
+
+                                                        <input type="hidden" name="package_print_edition_limit_{{ package.getPackage().getId() }}" id="package_print_edition_limit_{{ package.getPackage().getId() }}" value="{{ (printEditionLimits[package.getPackage().getId()] is defined ? printEditionLimits[package.getPackage().getId()] : 0) }}" />
+                                                        {% if printEditionLimits[package.getPackage().getId()] is defined %}
+                                                            <div class="edition-link">
+                                                                <a href="javascript:void(0);" id="print_edition_show_anchor_{{ package.getPackage().getId() }}" onclick="hideShowPrintEditions({{ package.getPackage().getId() }})">
+                                                                    {% if printEditionLimits[package.getPackage().getId()] == 1 %}
+                                                                        {{'Change your edition'|trans({}, 'frontend-ad-package')}}
+                                                                    {% elseif printEditionLimits[package.getPackage().getId()] > 1 %}
+                                                                        {{'Change your editions'|trans({}, 'frontend-ad-package')}}
+                                                                    {% endif %}
+                                                                </a>
+                                                            </div>
+                                                            <div class="pkg-error-msg" id="error_package_print_editions_{{ package.getPackage().getId() }}" style="display:none;">
+                                                                <div class="alert-box alert radius" data-alert="">
+                                                                    <span class="alert-icon">&nbsp;</span>
+                                                                    {% if errorMsg is not null %}
+                                                                        {{ errorMsg }}
+                                                                    {% else %}
+                                                                        {{'Please choose all print editions for your package.'|trans({}, 'frontend-ad-package')}}
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <div id="package_print_editions_{{ package.getPackage().getId() }}" style="display:none;" class="edition-fields">
+                                                                {% for editionCntr in 1..printEditionLimits[package.getPackage().getId()] %}
+                                                                    <select class="printSelect fa-select-white" name="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" id="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" onchange="updateSelects({{ package.getPackage().getId() }})">
+                                                                        <option value=''>{{'Select edition'|trans({}, 'frontend-ad-package')}}</option>
+                                                                        {% set selectedFlag = false %}
+                                                                        {% for editionId, editionName in printEditions %}
+                                                                            <option value="{{ editionId }}" {% if selectedPackageId and selectedPackageId == package.getPackage().getId() and selectedPrintEditions[editionCntr] is defined and editionId == selectedPrintEditions[editionCntr] %}{% set selectedFlag = true %}selected="selected"{% elseif not selectedFlag and defaultSelectedPrintEditions[editionCntr] is defined and editionId == defaultSelectedPrintEditions[editionCntr] %}selected="selected"{% endif %}>{{ editionName }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                {% endfor %}
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                                {% set userCreditId = fetch_repository('FaPromotionBundle:Package').isPackageValidForCredit(package.getPackage(), userActiveCredits, activeShopPackageDetail) %}
+                                                <button type="button" class="{% if pkgButtonColorClass is defined and pkgButtonColorClass != '' %}{{pkgButtonColorClass}}{% else %}primary-btn-2{% endif %} expand{% if not userCreditId or (userCreditId and package.getPackage().getPrice() <= 0) %} free-button-spacing{% endif %} choose_btn" onclick="return selectPackage({{package.getPackage().getId()}}, '{{ package.getPackage().getPrice() }}');" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
+                                                {% if package.getPackage().getPrice() > 0 and userCreditId %}
+                                                    {{'Pay for advert'|trans({}, 'frontend-ad-package')}}
+                                                {% else %}
+                                                    {% if purchase is defined and package.getPackage().getNewAdCta() %}
+                                                        {{package.getPackage().getNewAdCta()}}
+                                                    {% elseif promote is defined and package.getPackage().getRenewalAdCta() %}
+                                                        {{package.getPackage().getRenewalAdCta()}}
+                                                    {% else %}
+                                                        {{'Choose'|trans({}, 'frontend-ad-package')}}
+                                                    {% endif %}
+                                                {% endif %}
+                                                </button>
+                                                {% if package.getPackage().getPrice() > 0 and userCreditId %}
+                                                    {% set creditName = fetch_repository('FaUserBundle:UserCredit').getCreditPackageName(package.getPackage().getPackageSrNo()) %}
+                                                    <button type="button" class="primary-btn-1 expand credit_btn" onclick="return confirmCreditBox({{package.getPackage().getId()}}, {{package.getPackage().getPackageSrNo()}}, {{ (packageSrNoCredits[package.getPackage().getPackageSrNo()] is defined ? packageSrNoCredits[package.getPackage().getPackageSrNo()] : 0) }}, {{userCreditId}}, '{{ creditName }}', '{{ package.getPackage().getPrice() }}')" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
+                                                        <span>{{'Use credit'|trans({}, 'frontend-ad-package')}}</span>
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                            <div class="pkg-ins">
+                                                {{package.getPackage().getSubTitle()}}
+                                                <div class="pkg-includes show-for-small-only">
+                                                    <a href="javascript:void(0);" onclick="return showHidePackageUpsells({{package.getPackage().getId()}})" id="package_upsell_show_anchor_{{package.getPackage().getId()}}">{{"What's included?"|trans({}, 'frontend-ad-package')}}</a>
+                                                </div>
+                                            </div>
+                                            <ul class="pkg-points" id="package_upsells_{{package.getPackage().getId()}}">
+                                                {{strip_tags(package.getPackage().getDescription(), '<li><b>')|raw}}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="avail-payment-box">
+                            <div class="text-center p-b-20">Pay on the next page with...</div>
+                            {% if (isAdultAdvertPresent == 0) %}
+                                <div class="available-payment-options hide-for-small-only"></div>
+                                <div class="available-payment-options-mob show-for-small-only"></div>
+                            {% else %}
+                                <div class="available-payment-adult-options hide-for-small-only"></div>
+                                <div class="available-payment-adult-options-mob show-for-small-only"></div>
+                            {% endif %}
+                        </div>
+
+                    {% else %}
+                        {{'No ad packages found.'|trans({}, 'frontend-ad-package')}}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+    <div id="creditConfimBox" class="reveal-modal tiny remove-item-modal" data-reveal>
+        <a class="close-reveal-modal">&#215;</a>
+        <h5 class="modal-title">
+            {{'Use credit'|trans({}, 'frontend-ad-package')}}
+        </h5>
+        <div class="modal-content remove-modal">
+            <div class="row">
+                <div class="columns">
+                    <h5>{{'Are you sure you want to use a credit?'|trans({}, 'frontend-ad-package')}}</h5>
+                    <div class="mt15" id="remaining_credit_text"></div>
+                </div>
+            </div>
+            <div class="mt20 remove-item-btn">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeCreditBox('creditConfimBox');">{{'Cancel'|trans({}, 'frontend-ad-package')}}</button>
+                    </div>
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRevealModel('#creditConfimBox');selectCredit();">{{'Continue'|trans({}, 'frontend-ad-package')}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="unsufficientCreditForPrintBox" class="reveal-modal tiny remove-item-modal" data-reveal>
+        <a class="close-reveal-modal">&#215;</a>
+        <h5 class="modal-title">
+            {{'Use credit'|trans({}, 'frontend-ad-package')}}
+        </h5>
+        <div class="modal-content remove-modal">
+            <div class="row">
+                <div class="columns">
+                    <h5>{{'You have insufficient credits.'|trans({}, 'frontend-ad-package')}}</h5>
+                    <div class="mt15" id="prev_package_text"></div>
+                </div>
+            </div>
+            <div class="mt20 remove-item-btn">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeCreditBox('unsufficientCreditForPrintBox');">{{'Cancel'|trans({}, 'frontend-ad-package')}}</button>
+                    </div>
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRevealModel('#unsufficientCreditForPrintBox');selectCredit();">{{'Ok'|trans({}, 'frontend-ad-package')}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="unsufficientCreditBox" class="reveal-modal tiny remove-item-modal" data-reveal>
+        <a class="close-reveal-modal">&#215;</a>
+        <h5 class="modal-title">
+            {{'Use credit'|trans({}, 'frontend-ad-package')}}
+        </h5>
+        <div class="modal-content remove-modal">
+            <div class="row">
+                <div class="columns">
+                    <h5>{{'You have insufficient credits.'|trans({}, 'frontend-ad-package')}}</h5>
+                    <div class="mt15" >{{'Sorry! You only have enough credits.'|trans({}, 'frontend-ad-package')|raw}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if privateUserAdParams is defined and privateUserAdParams|length and not privateUserAdParams.allowPrivateUserToPostAdFlag %}
+        <div id="privateUserMaxAdPostLimitModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+          {{ include('FaAdBundle:AdPost:privateUserMaxAdPostLimit.html.twig', {}) }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block scriptbottom %}
+<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+<script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+
+    var creditPackageId = '';
+    var creditPackageSrNo = '';
+    var creditPackagePrice = '';
+    var userCreditId = '';
+    var printPackageDurationArr = new Array();
+    var printPackageIdDurationArr = new Array();
+    var userCreditPrintPackageDurationId = null;
+
+    {% if printPackageDuration is defined and printPackageDuration|length %}
+        {% for printDurationPackageId, packagePrintDuration in printPackageDuration %}
+            printPackageIdDurationArr['{{ printDurationPackageId }}'] = new Array(0)
+            {% for printDuration in packagePrintDuration %}
+                {% if printDuration['id'] is defined and printDuration['duration'] is defined %}
+                    printPackageDurationArr['{{ printDuration['id'] }}'] = {{ printDuration['duration']|replace({'w': ''}) }};
+                    printPackageIdDurationArr['{{ printDurationPackageId }}']['{{ printDuration['id'] }}'] = {{ printDuration['duration']|replace({'w': ''}) }};
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+    function confirmCreditBox(packageId, packageSrNo, packageSrNoCredits, creditId, creditName, packagePrice)
+    {
+        var totalPrintWeeks = null;
+        var totalCredit = 1;
+        if ($('#package_print_id_'+packageId) && $('input[name=package_print_id_'+packageId+']:checked').val()) {
+            totalPrintWeeks = printPackageDurationArr[$('input[name=package_print_id_'+packageId+']:checked').val()];
+            if (totalPrintWeeks > 0) {
+            	totalCredit = Math.ceil(totalPrintWeeks/4);
+            }
+        }
+        if ((packageSrNoCredits-totalCredit) >= 0 ) {
+            var remainingCreditText = '{{'If you proceed, you will have <b class="green-text">%remaining_credits%</b> <b class="green-text">%creditName%</b> credits remaining.'|trans({}, 'frontend-ad-package')|raw}}'.replace('%remaining_credits%', packageSrNoCredits - totalCredit).replace('%creditName%', creditName);
+            $('#remaining_credit_text').html(remainingCreditText);
+            creditPackageId = packageId;
+            creditPackageSrNo = packageSrNo;
+            creditPackagePrice = packagePrice;
+            userCreditId = creditId;
+            $('#creditConfimBox').foundation('reveal', 'open');
+        } else {
+            if (totalPrintWeeks && printPackageIdDurationArr[packageId]) {
+                var prevAvailableWeeks = null;
+                for(var i = (packageSrNoCredits * 4); i >= 1; i--) {
+                    printPackageDurationId = printPackageIdDurationArr[packageId].indexOf(i);
+                    if (!prevAvailableWeeks && printPackageDurationId > 0) {
+                        prevAvailableWeeks = i;
+                        userCreditPrintPackageDurationId = printPackageDurationId;
+                    }
+                }
+
+                if (prevAvailableWeeks > 0 && userCreditPrintPackageDurationId > 0) {
+                    var prevAvailableWeeksText = '{{'Sorry! You only have enough credits for <b class="green-text">%prev_available_weeks%</b> weeks.'|trans({}, 'frontend-ad-package')|raw}}'.replace('%prev_available_weeks%', prevAvailableWeeks);
+                    $('#prev_package_text').html(prevAvailableWeeksText);
+                    creditPackageId = packageId;
+                    creditPackageSrNo = packageSrNo;
+                    creditPackagePrice = packagePrice;
+                    userCreditId = creditId;
+                    $('#unsufficientCreditForPrintBox').foundation('reveal', 'open');
+                } else {
+                	$('#unsufficientCreditBox').foundation('reveal', 'open');
+                }
+            }
+        }
+    }
+
+    $('#creditConfimBox, #unsufficientCreditForPrintBox, #unsufficientCreditBox').bind('closed', function() {
+        closeCreditBox('creditConfimBox');
+    });
+    
+    function closeCreditBox(modelId)
+    {
+        $('#credit_id').val('');
+        creditPackageId = '';
+        creditPackageSrNo = '';
+        creditPackagePrice = '';
+        userCreditId = '';
+        userCreditPrintPackageDurationId = null;
+        closeRevealModel('#'+modelId);
+    }
+
+    function selectCredit()
+    {
+        if (creditPackageId) {
+            if (userCreditPrintPackageDurationId > 0) {
+            	$('input[name=package_print_id_'+creditPackageId+'][value='+userCreditPrintPackageDurationId+']').trigger('click');
+            }
+            $('#credit_id').val(userCreditId);
+            selectPackage(creditPackageId, creditPackagePrice);
+        }
+    }
+    
+    function showHidePackageUpsells(packageId)
+    {
+        if ($('#package_upsells_'+packageId).is(':visible')) {
+            $('#package_upsells_'+packageId).slideUp();
+            $('#package_upsell_show_anchor_'+packageId).text("{{"What's included?"|e('js')|raw|trans({}, 'frontend-ad-package')}}")
+        } else {
+            $('#package_upsells_'+packageId).slideDown();
+            $('#package_upsell_show_anchor_'+packageId).text("{{"Hide details"|trans({}, 'frontend-ad-package')}}")
+        }
+    }
+
+    function highlightSelectedPackage(packageId)
+    {
+        if (!packageId) {
+            packageId = $("input[name=package_id]:checked").val();
+        }
+
+        $('.paa-pkg-bg div').removeClass('pkg-active');
+        if (packageId) {
+            $('#active_package_'+packageId).addClass('pkg-active');
+            $('#purchase_btn').removeClass('disabled');
+        }
+    }
+
+    function selectPackage(packageId, packagePrice)
+    {
+    	{% if privateUserAdParams is defined and privateUserAdParams|length and not privateUserAdParams.allowPrivateUserToPostAdFlag %}
+            if (packagePrice <= 0) {
+                $('#privateUserMaxAdPostLimitModal').foundation('reveal', 'open');
+                return false;
+            }
+        {% endif %}
+        $('.pkg-error-msg').hide();
+        if (!packageId) {
+            packageId = $("input[name=package_id]:checked").val();
+        }
+        var submitForm = true;
+        var printEditionLimit = $('#package_print_edition_limit_'+packageId).val();
+        blockPage();
+        $('input[name=package_id][value='+packageId+']').trigger('click');
+        $('#package_print_editions_'+packageId).show();
+        if (printEditionLimit == 1) {
+            $('#print_edition_show_anchor_'+packageId).text("{{"Hide edition"|trans({}, 'frontend-ad-package')}}")
+        } else if (printEditionLimit > 1) {
+            $('#print_edition_show_anchor_'+packageId).text("{{"Hide editions"|trans({}, 'frontend-ad-package')}}")
+        }
+        $('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu('refresh');
+        setTimeout(function() { $('#package_equalizer').trigger('enable.equalizer'); }, 1000);
+        $('#package_print_editions_'+packageId+' .printSelect').each(
+            function (i, elem)
+            {
+                var $selected = $(elem).find("option:selected");
+                if (!$selected.val()) {
+                    $('#error_package_print_editions_'+packageId).show();
+                    scrollToElement('#print_edition_show_anchor_'+packageId);
+                    unblockPage();
+                    submitForm = false;
+                }
+            }
+        );
+
+        if (submitForm) {
+            $('#package_purchase_form').submit();
+        }
+    }
+
+    $(document).ready(function() {
+    	equalizeHeightOfAllcolumns('.pkg-title');
+    	equalizeHeightOfAllcolumns('.pkg-subtitle');
+    	if (!$('.credit_btn').length) {
+            $('.free-button-spacing').each(function() {
+                $(this).removeClass('free-button-spacing');
+            });
+        }
+        
+        highlightSelectedPackage();
+        bindEqualizerEvent('package_equalizer');
+        {% if selectedPackageId and app.request.get('packagePrintId') %}
+           $('#package_print_id_'+{{app.request.get('packagePrintId')}}).attr('checked', 'checked');
+           $('#package_print_id_'+{{app.request.get('packagePrintId')}}).trigger('click');
+        {% endif %}
+        {% if (not printEditionSelectedFlag and selectedPackageId is defined) or (selectedPackageId) %}
+            hideShowPrintEditions({{ selectedPackageId }});
+            {% if not printEditionSelectedFlag and selectedPackageId is defined %}
+                $('#error_package_print_editions_'+{{selectedPackageId}}).show();
+                scrollToElement('#print_edition_show_anchor_'+{{selectedPackageId}});
+            {% endif %}
+        {% endif %}
+    });
+
+    function bindEqualizerEvent(equalizerId)
+    {
+        $('#'+equalizerId).equalizer({
+            columns: '> div > div',
+            useHeight: 'height',
+            resizeable: true,
+            min: 0,
+            breakpoint: null,
+            disabled: 'breakpoint',
+            overflow: 'overflowed'
+        });
+    }
+
+    function updatePackagePrice(packageId, printDurationId)
+    {
+        if ($('#package_print_price_'+printDurationId).val() == '£0') {
+            $('#package_price_'+packageId).html('Free');
+        } else {
+            $('#package_price_'+packageId).html($('#package_print_price_'+printDurationId).val());
+        }
+
+        $('input[name=package_id][value='+packageId+']').trigger('click');
+    }
+
+    function hideShowPrintEditions(packageId)
+    {
+        var printEditionLimit = $('#package_print_editions_'+packageId+' .printSelect').length;
+        if ($('#package_print_editions_'+packageId).is(':visible')) {
+            $('#package_print_editions_'+packageId).slideUp();
+            if (printEditionLimit == 1) {
+                $('#print_edition_show_anchor_'+packageId).text("{{"Change your edition"|trans({}, 'frontend-ad-package')}}")
+            } else if (printEditionLimit > 1) {
+                $('#print_edition_show_anchor_'+packageId).text("{{"Change your editions"|trans({}, 'frontend-ad-package')}}")
+            }
+        } else {
+            $('#package_print_editions_'+packageId).slideDown();
+            if (printEditionLimit == 1) {
+                $('#print_edition_show_anchor_'+packageId).text("{{"Hide edition"|trans({}, 'frontend-ad-package')}}")
+            } else if (printEditionLimit > 1) {
+                $('#print_edition_show_anchor_'+packageId).text("{{"Hide editions"|trans({}, 'frontend-ad-package')}}")
+            }
+        }
+        $('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu('refresh');
+        setTimeout(function() { $('#package_equalizer').trigger('enable.equalizer'); }, 1000);
+        {% if printEditions is defined %}
+            updateSelects(packageId);
+        {% endif %}
+    }
+
+    {% if printEditions is defined %}
+        function updateSelects(packageId)
+        {
+            var selectElements = [];
+            var selectValueElements = [];
+            {% for editionId, editionName in printEditions %}
+                selectElements.push('{{editionId}}');
+                selectValueElements.push('{{editionName}}');
+            {% endfor %}
+            $('#package_print_editions_'+packageId+' .printSelect').each(
+
+            function (i, elem)
+            {
+                var $selected = $(elem).find("option:selected");
+                var $opts = $("<div>")
+                $opts.append('<option value="">{{'Select edition'|trans({}, 'frontend-ad-package')}}</option>');
+                for (i = 0; i < selectElements.length; i++)
+                {
+                    var value = selectElements[i];
+                    var optionName = selectValueElements[i];
+                    if ($selected.val() == value || !$('#package_print_editions_'+packageId+' .printSelect option[value=' + value + ']:selected').length)
+                    {
+                        $opts.append('<option value="' + value + '">' + optionName + '</option>');
+                    }
+                }
+                $(elem).html($opts.html());
+                if ($selected.length)
+                {
+                    $(elem).val($selected.val());
+                }
+                else
+                {
+                    $('#package_print_editions_'+packageId+' .printSelect').not(this).find('option[value=' + $(elem).val() + ']').remove();
+                }
+            });
+
+            setTimeout(function() { $('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu('refresh'); }, 200);
+        }
+    {% endif %}
+
+    function equalizeHeightOfAllcolumns(idSelector)
+    {
+    	// Get an array of all element heights
+        var elementHeights = $(idSelector).map(function() {
+            return $(this).height();
+        }).get();
+        
+        // Math.max takes a variable number of arguments
+        // `apply` is equivalent to passing each height as an argument
+        var maxHeight = Math.max.apply(null, elementHeights);
+        
+        // Set each height to the max height
+        $(idSelector).height(maxHeight);
+    }
+//]]>
+</script>
+{% endblock %}

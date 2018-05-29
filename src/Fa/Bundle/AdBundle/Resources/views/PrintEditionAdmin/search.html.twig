@@ -1,0 +1,27 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">
+          {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+             {{ form_errors(form) }}
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.print_edition__name, {'attr': {'class':'form-control', 'placeholder': 'Print Edition Name'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                      {{ form_widget(form.print_edition_rule__location_group__id, {'attr': {'class':'form-control', 'placeholder': 'Location Group'}}) }}
+                    </div>
+                </div>
+                <div class="search_box">
+                    <div class="row">
+                        <div class="large-6 columns">
+                          {{ form_widget(form.print_edition__status, {'attr': {'class':'form-control', 'placeholder': 'Status'}}) }}
+                        </div>
+                        <div class="large-6 columns">
+                            {{ form_widget(form.search, {'attr': {'class':'small button mb0'}}) }}
+                         </div>
+                    </div>
+                </div>
+          {{ form_end(form) }}
+     </div>
+</div>
+{% endblock %}

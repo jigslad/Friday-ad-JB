@@ -1,0 +1,25 @@
+profile_upsell_admin:
+    path:     /
+    defaults: { _controller: "FaPromotionBundle:ProfileUpsellAdmin:index" }
+
+profile_upsell_new_admin:
+    path:     /new
+    defaults: { _controller: "FaPromotionBundle:ProfileUpsellAdmin:new" }
+
+profile_upsell_create_admin:
+    path:     /create
+    defaults: { _controller: "FaPromotionBundle:ProfileUpsellAdmin:create" }
+    requirements: { methods: post }
+
+profile_upsell_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaPromotionBundle:ProfileUpsellAdmin:edit" }
+
+profile_upsell_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaPromotionBundle:ProfileUpsellAdmin:update" }
+    requirements: { methods: post|put }
+
+profile_upsell_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaPromotionBundle:ProfileUpsellAdmin:delete" }

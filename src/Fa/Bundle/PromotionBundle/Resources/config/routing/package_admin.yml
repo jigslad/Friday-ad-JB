@@ -1,0 +1,21 @@
+package_admin:
+    path:     /
+    defaults: { _controller: "FaPromotionBundle:PackageAdmin:index" }
+
+package_new_admin:
+    path:     /new
+    defaults: { _controller: "FaPromotionBundle:PackageAdmin:new" }
+
+package_create_admin:
+    path:     /create
+    defaults: { _controller: "FaPromotionBundle:PackageAdmin:create" }
+    requirements: { methods: post }
+
+package_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaPromotionBundle:PackageAdmin:edit" }
+
+package_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaPromotionBundle:PackageAdmin:update" }
+    requirements: { methods: post|put }

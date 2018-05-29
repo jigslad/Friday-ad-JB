@@ -1,0 +1,278 @@
+{% block userSiteBannerUploadStylesheets %}
+    {{ set_variables('userSiteBannerUploadStylesheets', {'loaded':'true'}) }}
+    {% if not get_variables('profileImageUploadStylesheets')|length %}
+        <link href="{{ asset_url('facore/css/jquery.guillotine.css') }}" rel="stylesheet">
+    {% endif %}
+{% endblock %}
+
+{% block userSiteBannerUploadHtml %}
+{{ set_variables('userSiteBannerUpload', {'userSiteId':userSiteId}) }}
+<div>
+    <div id="userSiteBannerMsg"></div>
+</div>
+{% endblock %}
+
+{% block userSiteBannerUploadJavascriptBottom %}
+    {% set container = fetch_container_instance() %}
+    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    {% set currentDevice = 'D' %}
+    {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+        {% set currentDevice = 'M' %}
+    {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+        {% set currentDevice = 'T' %}
+    {% endif %}
+    {% set isAdminLoggedIn = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isAdminLoggedIn', [fetch_container_instance()]) %}
+    {% set userSiteBannerUploadJavascriptBottomVariables = get_variables('userSiteBannerUploadJavascriptBottom') %}
+    {% if userSiteBannerUploadJavascriptBottomVariables.loaded is defined and userSiteBannerUploadJavascriptBottomVariables.loaded == 'true' %}
+        {% set container = fetch_container_instance() %}
+        {% set variables = get_variables('userSiteBannerUpload') %}
+        {% set fromProfilePageVariables = get_variables('fromProfilePageVariables') %}
+        {% set userSiteId    = (variables.userSiteId is defined ? variables.userSiteId : 0) %}
+        {% set maxFileSize = container.getParameter("fa.user.site.banner.allow_size_in_mb")~' mb' %}
+        {% set fromProfilePage = (fromProfilePageVariables.fromProfilePage is defined ? fromProfilePageVariables.fromProfilePage : false) %}
+        {% javascripts filter='uglifyjs2' output='bundles/js/compiled/showUserSiteBannerUploader.js'
+            'bundles/facore/js/jquery.guillotine.min.js'
+            'bundles/facore/js/plupload.full.min.js'
+        %}
+        <script src="{{ static_asset_url(asset_url) }}"></script>
+        {% endjavascripts %}
+        <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function(){
+            initUserSiteBannerUpload(true);
+        });
+
+        function initUserSiteBannerUpload(removeuserSiteBannerMsg)
+        {
+            var mainUploader = setUpUserSiteBannerUploader('pickUserSiteBannerFile', removeuserSiteBannerMsg);
+            mainUploader.init();
+
+            if (removeuserSiteBannerMsg) {
+                //$('#userSiteBannerMsg').html('');
+            }
+        }
+
+        function setUpUserSiteBannerUploader(id, removeuserSiteBannerMsg)
+        {
+            var msgId = '#user_site_banner_div';
+            {% if fromProfilePage %}
+                msgId = '#show_message_div';
+            {% endif %}
+            var errorFlag  = false;
+            var userSiteId     = '{{userSiteId}}';
+            var user_image = new Array();
+            var allowMaxSize = '{{container.getParameter("fa.user.site.banner.allow_size_in_mb")}}mb';
+            var uploader   = new plupload.Uploader({
+                runtimes : 'html5,flash,silverlight,html4',
+                unique_names :true,
+                multi_selection : false,
+                multipart : true,
+                browse_button : id, // you can pass in id...
+                url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_user_site_banner_save_admin") }}' {% else %} '{{ path("ajax_user_site_banner_save") }}' {% endif %},
+                multipart_params : {'fa_user_user_site_banner[user_site_id]' : userSiteId},
+                file_data_name : 'fa_user_user_site_banner[fileData]',
+                flash_swf_url : '{{asset_url('facore/js/Moxie.swf')}}',
+                silverlight_xap_url : '{{ asset_url('facore/js/Moxie.xap')}}',
+                
+                filters : {
+                    max_file_size : allowMaxSize,
+                    mime_types: 
+                    [
+                        {title : '{{"Image files"|trans}}', extensions : "jpg,jpeg,png,bmp,gif,JPG,JPEG,PNG,BMP,GIF"},
+                    ]
+                },
+    
+                init: {
+                    PostInit: function() {
+                        if (removeuserSiteBannerMsg) {
+                            $('#userSiteBannerMsg').html('');
+                        }
+                    },
+                    FilesAdded: function(up, files, response) {
+                        errorFlag = false;
+                        if(up.files.length > 1) {
+                            uploader.splice();
+                            $('#userSiteBannerMsg').html('');
+                            $('#userSiteBannerMsg').html(decorateMessage("{{ 'Image has been already uploaded.'|trans({}, 'frontend-paa') }}", 'alert'));
+                            return false;
+                        }
+                        else {
+                            uploader.start();
+                            $('#userSiteBannerMsg').html("<div class='row'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Uploading image please wait... '|trans({}, 'frontend-paa') }}</div>");
+                            $('.save_data').attr('disabled', true);
+                        }
+                    },
+                    FileUploaded: function(up, file, response) {
+                        var obj = $.parseJSON(response.response);
+                        if (obj.error.length) {
+                            errorFlag = true;
+                            $('#userSiteBannerMsg').html(decorateMessage(obj.error, 'alert'));
+                        }
+                    },
+                    UploadComplete: function(up, file) {
+                        if (!errorFlag) {
+                            hideAlertMessage();
+                            $(decorateMessage("{{'Banner uploaded successfully. You can reposition your cover photo.'|trans({}, 'frontend-my-profile')}}", 'success')).insertBefore(msgId);
+                            $('#shopBannerModal').foundation('reveal', 'close');
+                            var d = new Date();
+                            getUserSiteBanner(true);
+                            scrollToElement('#user_site_banner_div', '1000', -150);
+                            $('#userSiteBannerMsg').html('');
+                            getUserSiteBannerOriginalImage('{{ path('ajax_get_big_user_site_banner_image', {'userSiteId': userSiteId}) }}', false);
+                        } else {
+                            $('#userSiteBannerMsg').html(decorateMessage('{{'Problem in banner upload.'|trans}}', 'alert'));
+                        }
+                        {% if fromProfilePage %}
+                            $('.cover-img-edit').show();
+                            {% if currentDevice == 'M' %}
+                                $('.shops-logo').show();
+                            {% endif %}
+                        {% endif %}
+                        uploader.splice();
+                        $('.save_data').attr('disabled', false);
+                    },
+                    Error: function(up, err) {
+                       msg = err.message;
+                       if (msg == 'Init error.') {
+                           msg = "{{'Your browser does not have Flash, Silverlight or HTML5 support.'|trans({}, 'frontend-paa')}}";
+                       } else if (msg == 'File size error.') {
+                           msg = "{{'The size of image should not be greater than %max_file_size%.'|trans({'%max_file_size%' : (maxFileSize)}, 'frontend-paa')}}";
+                       } else if (msg == 'File extension error.') {
+                           msg = "{{'Image type must be one of the jpg, jpeg, png, gif, bmp.'|trans({}, 'frontend-paa')}}";
+                       }
+                       $('#userSiteBannerMsg').html(decorateMessage(msg, 'alert'));
+                    }
+                }
+            });
+            return uploader;
+        }
+        
+        function getUserSiteBannerOriginalImage(url, hideMessage)
+        {
+            {% if fromProfilePage %}
+                $('#shop_header_div').addClass('edit-cover-image');
+                closeBannerMenu();
+                $('.cover-img-edit').hide();
+                {% if currentDevice == 'M' %}
+                    $('.shops-logo').hide();
+                {% endif %}
+            {% endif %}
+            blockElement('#user_site_banner_div');
+            $.ajax({
+                type: "POST",
+                url: url,
+                async: false,
+                cache: false,
+            })
+            .always(function(response) {
+                unblockElement('#user_site_banner_div');
+            })
+            .done(function(response) {
+                if (hideMessage) {
+                    hideAlertMessage();
+                }
+                if (response.error.length) {
+                    $('#userSiteBannerMsg').html(decorateMessage(response.error, 'alert'));
+                }
+                if (response.image.length) {
+                    $('#user_site_banner_div').html(response.image);
+                    {% if fromProfilePage %}
+                        var cropContent = $('.edit-pro-banner').html();
+                        cropContent = cropContent.replace('clearfix', 'row');
+                        $('.edit-pro-banner').remove();
+                        $(".shops-header-content").append('<div class="edit-pro-banner">'+cropContent+'</div>');
+                    {% endif %}
+                    $("#user_site_banner_crop_big_image" ).load(function() {
+                        $('#crop_image_banner').show();
+                        var picture = $('#user_site_banner_crop_big_image');
+                        picture.guillotine({
+                          width: 1190,
+                          height: 365,
+                          zoomStep: 0.2,
+                          onChange: function(data, action){
+                            data.scale = parseFloat(data.scale.toFixed(4));
+                            for(var k in data) { $('#banner_'+k).val(data[k]); }
+                          }
+                        });
+
+                        // Initialize plugin (with custom event)
+                        picture.guillotine({eventOnChange: 'guillotinechange'});
+
+                        // Display inital data
+                        var data = picture.guillotine('getData');
+                        for(var k in data) { $('#banner_'+k).val(data[k]); }
+                    });
+                }
+            });
+        }
+        
+        function getUserSiteBanner(cache)
+        {
+        	{% if fromProfilePage %}
+                $('#shop_header_div').removeClass('edit-cover-image');
+                $('.cover-img-edit').show();
+                $('.edit-pro-banner').remove();
+                {% if currentDevice == 'M' %}
+                    $('.shops-logo').show();
+                {% endif %}
+            {% endif %}
+            blockElement('#user_site_banner_div');
+            if (typeof cache == 'undefined') {
+                cache = false;
+            }
+            $.ajax({
+                type: "POST",
+                url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_get_user_site_banner_images_admin") }}' {% else %} '{{ path("ajax_get_user_site_banner_images") }}' {% endif %},
+                data: { userSiteId: '{{userSiteId}}', 'cache': cache, 'fromProfilePage': '{{ fromProfilePage }}' },
+                async: false,
+            })
+            .always(function(response) {
+                unblockElement('#user_site_banner_div');
+            })
+            .done(function(response) {
+                $('#user_site_banner_div').html(response.images);
+            });
+        }
+        
+        function cropUserSiteBanner(url)
+        {
+        	var msgId = '#user_site_banner_div';
+            {% if fromProfilePage %}
+                msgId = '#show_message_div';
+            {% endif %}
+            blockElement('#user_site_banner_div');
+            var imgParams = '';
+            $('.cropImg').each(function(e){
+                imgParams += $(this).attr('name')+ '=' +$(this).val() + '&'
+            });
+            imgParams = imgParams.slice(0,-1);
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: imgParams
+            })
+            .always(function(response) {
+                unblockElement('#user_site_banner_div');
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.error.length) {
+                    $(decorateMessage(response.error, 'alert')).insertBefore(msgId);
+                }
+                if (response.successMsg.length) {
+                    $(decorateMessage(response.successMsg, 'success')).insertBefore(msgId);
+                    getUserSiteBanner(true);
+                }
+                scrollToElement('#user_site_banner_div', '1000', -150);
+            });
+        }
+
+        function closeBannerMenu()
+        {
+            $('#banner_image_upload').foundation('dropdown', 'close', $('#banner_image_upload'));
+        }
+        //]]>
+        </script>
+    {% endif %}
+{% endblock %}

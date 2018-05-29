@@ -1,0 +1,3 @@
+ajax_get_adult_searching_options:
+  path:     /ajax/get_adult_searching_options
+  defaults: { _controller: "FaContentBundle:LandingPage:ajaxGetAdultSearchingOptions" }

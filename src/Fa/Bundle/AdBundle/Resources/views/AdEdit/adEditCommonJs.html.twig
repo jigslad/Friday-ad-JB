@@ -1,0 +1,163 @@
+<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $('.textcounter').keyup(function(e){
+            updateCharCounter($(this).attr('id'));
+        });
+
+        $('#paa_step4_add_your_photos').click(function(e) {
+            $('html, body').animate({
+                scrollTop: $('#upload_image_div').offset().top
+            }, 1000);
+        });
+        
+        $('#element_features_id .custom-checkbox, #element_amenities_id .custom-checkbox, #element_bills_included_in_rent_id .custom-checkbox, #element_additional_job_requirements_id .custom-checkbox, #element_additional_benefits_id .custom-checkbox, #element_services_offered_id .custom-checkbox').click(function(e){
+            $(this).parent().toggleClass('active');
+        });
+        
+        {% set formFields = get_variables('formFields') %}
+        {% if formFields['lastField'] is defined %}
+            if ($('#element_'+ '{{ formFields['lastField'] }}').hasClass('paa-bdr-box')) {
+                $('#element_'+ '{{ formFields['lastField'] }}').addClass('bdr-none');
+            }
+        {% endif %}
+
+        {% if app.request.get('scrollTo') and app.request.get('scrollTo') == 'image' %}
+            setTimeout(function(){
+                scrollToElement('#image_header', '1000');
+        	}, 1500);
+        {% elseif app.request.get('scrollTo') and app.request.get('scrollTo') == 'video' %}
+            setTimeout(function(){
+                scrollToElement('#video_header', '1000');
+            }, 1500);
+        {% endif %}
+    });
+
+    $(document).foundation({
+        equalizer : {
+            // Specify if Equalizer should make elements equal height once they become stacked.
+            equalize_on_stack: true
+        }
+    });
+
+    function updateCharCounter(fieldId)
+    {
+        var textCounterId = fieldId + '_textcounter';
+        var maxLimit      = $('#'+fieldId).attr('maxlength') ? parseInt($('#'+fieldId).attr('maxlength')) : 0;
+        var value         = $('#'+fieldId).val();
+        //value             = value.replace(/(\r\n|\n|\r)/igm, '');
+        //value             = value.replace(/\s/g, '');
+
+        if (maxLimit) {
+           if (value.length > maxLimit) {
+               $('#'+fieldId).val(value.substring(0, maxLimit));
+               $('#'+fieldId).html('(0 characters left)');
+               return false;
+           } else {
+               $('#'+textCounterId).html('(' + (maxLimit - value.length) + ' characters left)');
+           }
+       }
+    }
+
+    function bindElementToggleEvent(formName)
+    {
+        $('.element_toggle').click(function(){
+            var targetElement = $(this).attr('id')+'_target';
+            $(this).toggleClass("tab-down tab-up");
+            $('#'+targetElement).toggle();
+
+            if($('#'+targetElement).is(':visible')) {
+                var selectMenuId = ($(this).attr('id').replace('element_toggle', formName));
+                if ($('#'+selectMenuId).hasClass('fa-select')) {
+                    $('#'+selectMenuId).selectmenu('refresh');
+                }
+                var equalizerId = ($(this).attr('id').replace('element_toggle_', ""))+'_equalizer';
+                if ($('#'+equalizerId).hasClass('fa-equalizer')) {
+                    bindEqualizerEvent(equalizerId);
+                }
+            }
+        });
+    }
+
+    function bindCapsuleButtonEvent(formName, field, fieldType)
+    {
+       var fieldChoice = field.replace('_id', '') + '_choice';
+       $('.'+fieldChoice).click(function(){
+           var choiceId    = $(this).attr('id');
+           var selectedId = choiceId.replace(fieldChoice+'_', '');
+
+           if (fieldType == 'drop-down') {
+               if ($('#'+choiceId).hasClass('active')) {
+                   $('.'+fieldChoice).removeClass('active');
+                   selectedId = '';
+               } else {
+                   $('.'+fieldChoice).removeClass('active');
+                   $('#'+choiceId).addClass('active');
+               }
+               $('#'+formName+'_'+field).val(selectedId);
+           } else if (fieldType == 'radio') {
+               $('.'+fieldChoice).removeClass('active');
+               $('#'+choiceId).addClass('active');
+               $("input[name='"+formName+"["+field+"]'][value='"+selectedId+"']").attr('checked', true);
+           } else if (fieldType == 'checkbox') {
+               if ($(this).hasClass('active')) {
+                   $(this).removeClass('active');
+               } else {
+                   $(this).addClass('active');
+               }
+               $("input[type='checkbox'][name='"+formName+"["+field+"][]'][value='"+selectedId+"']").trigger('click');
+           }
+       });
+    }
+    
+    function bindLocationEvents(formName)
+    {
+        $('#change_location_link').click(function(){
+            $('#location_field_div').show();
+        });
+
+        $('#find_on_map').click(function(){
+            var locationVal = $('#'+formName+'_location_autocomplete').val();
+            if (locationVal && locationVal != 'United Kingdom') {
+                $('#location_map_div').show();
+                showAddress(locationVal);
+            } else {
+                showAddress('United Kingdom');
+                $('#location_map_div').hide();
+            }
+            return false;
+        });
+
+        $('#'+formName+'_location_autocomplete').keypress(function(e){
+            var k = e.keyCode || e.which;
+            if(k == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        if (formName == 'fa_paa_edit_for_sale') {
+            $('#'+formName+'_location_autocomplete').blur(function(e){
+                var paymentMethodId = $("input[name='"+formName+"[payment_method_id]']:checked").val();
+                if ($.inArray(paymentMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')}}']) != '-1') {
+                    showPaypalSection(false);
+                }
+            });
+        }
+    }
+    
+    function bindEqualizerEvent(equalizerId)
+    {
+        $('#'+equalizerId).equalizer({
+            columns: '> li, div',
+            useHeight: 'height',
+            resizeable: true,
+            min: 0,
+            breakpoint: null,
+            disabled: 'breakpoint',
+            overflow: 'overflowed'
+       });
+    }
+//]]>
+</script>

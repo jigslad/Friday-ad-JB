@@ -1,0 +1,133 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+            {{ form_errors(form) }}
+
+            <div class="row">
+                <div class="large-3 columns">
+                    {{ form_widget(form.user__first_name, {'attr': {'class':'form-control', 'placeholder': 'First name'}}) }}
+                </div>
+                <div class="large-3 columns">
+                    {{ form_widget(form.user__last_name, {'attr': {'class':'form-control', 'placeholder': 'Last name'}}) }}
+                </div>
+                <div class="large-3 columns">
+                    {{ form_widget(form.user__email, {'attr': {'class':'form-control', 'placeholder': 'Customer Email'}}) }}
+                </div>
+                <div class="large-3 columns">
+                    {{ form_widget(form.user__phone, {'attr': {'class':'form-control', 'placeholder': 'Customer Phone Number'}}) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_widget(form.user__role, {'attr': {'class':'form-control', 'placeholder': 'Role Id'}}) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_widget(form.user__paypal_email, {'attr': {'class':'form-control', 'placeholder': 'Paypal Email Address'}}) }}
+                </div>
+            </div>
+
+            <hr class="hr_margin">
+
+            <div class="row">
+                <div class="large-3 columns">
+                    {{ form_widget(form.ad__id, {'attr': {'class':'form-control', 'placeholder': 'Advert Reference'}}) }}
+                </div>
+                <div class="large-3 columns">
+                    {{ form_widget(form.ad__ti_ad_id, {'attr': {'class':'form-control', 'placeholder': 'Old TI Advert Reference'}}) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_widget(form.ad__title, {'attr': {'class':'form-control', 'placeholder': 'Advert Title'}}) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-4 columns">
+                    {{ form_widget(form.ad__status, {'attr': {'class':'form-control'}}) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_widget(form.ad__created_at_from, {'attr': {'placeholder': 'Ad date placed from'}}) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_widget(form.ad__created_at_to, {'attr': {'placeholder': 'Ad date placed to'}}) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-4 columns">
+                    {{ form_widget(form.user__status, {'attr': {'class':'form-control'}}) }}
+                </div>
+                <div class="large-8 columns">
+                    <div class="admin_cat_search list_style_none">
+                        {{ form_widget(form.ad__category, {'attr': {'class':'form-control', 'placeholder': 'Advert Category'}}) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_widget(form.ad_user_package__package, {'attr': {'class':'form-control'}}) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_widget(form.payment_transaction__payment__cart_code, {'attr': {'placeholder': 'Order Number'}}) }}
+                </div>
+            </div>
+
+            <hr class="hr_margin">
+
+            <div class="search_box">
+                <div class="row">
+                    <div class="large-3 columns" style="vertical-align:top;">
+                        {{ form_widget(form.ad_locations__location_domicile__id, {'attr': {'class':'form-control'}}) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.ad_locations__location_town__id, {'attr': {'class':'form-control'}}) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.ad__is_feed_ad, {'attr': {'class':'form-control'}}) }}
+                        {{ form_widget(form.ad__is_detached_ad, {'attr': {'class':'form-control'}}) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.search, {'attr': {'class':'small button'}}) }}
+                    </div>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block search_script %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $("#fa_ad_ad_search_admin_ad_locations__location_domicile__id").change(function(){
+            var data = {
+                id: $(this).val()
+            };
+         
+            $.ajax({
+                type: 'post',
+                url: '{{ path("location_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    var $town_selector = $('#fa_ad_ad_search_admin_ad_locations__location_town__id');
+    
+                    $town_selector.html('<option value="">Select Town</option>');
+    
+                    for (var i=0, total = data.length; i < total; i++) {
+                        $town_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                    }
+                }
+            });
+        });
+        
+        $("#fa_ad_ad_search_admin_ad_locations__location_town__id").prepend('<option value="">{{ 'Select Town'|trans }}</option>');
+    });
+//]]>
+</script>
+
+{{ include('FaCoreBundle::autoSuggestField.html.twig', {'field' : '#fa_ad_ad_search_admin_ad__category', 'jsonField' : '#fa_ad_ad_search_admin_ad__category_json', 'placeHolder': 'Advert category'|trans, 'route' : 'category_ajax_term_admin', 'isMultiple' : false }) }}
+
+{% endblock %}

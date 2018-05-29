@@ -1,0 +1,33 @@
+header_image_admin:
+    path:     /
+    defaults: { _controller: "FaContentBundle:HeaderImageAdmin:index" }
+
+header_image_new_admin:
+    path:     /new
+    defaults: { _controller: "FaContentBundle:HeaderImageAdmin:new" }
+
+header_image_create_admin:
+    path:     /create
+    defaults: { _controller: "FaContentBundle:HeaderImageAdmin:create" }
+    requirements: { methods: post }
+
+header_image_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaContentBundle:HeaderImageAdmin:edit" }
+
+header_image_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaContentBundle:HeaderImageAdmin:update" }
+    requirements: { methods: post|put }
+
+header_image_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaContentBundle:HeaderImageAdmin:delete" }
+    
+header_right_image_delete_admin:
+    path:     /{id}/deleterightimage
+    defaults: { _controller: "FaContentBundle:HeaderImageAdmin:deleteRightImage" }
+    
+unwanted_header_image_delete_admin:
+    path:     /deleteunwantedimage
+    defaults: { _controller: "FaContentBundle:HeaderImageAdmin:deleteunwantedimage" }

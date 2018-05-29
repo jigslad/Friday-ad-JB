@@ -1,0 +1,66 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">
+          {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+             {{ form_errors(form) }}
+              <div class="row">
+              	<div class="large-6 columns">
+                  {{ form_widget(form.location_domicile__id, {'attr': {'class':'form-control', 'placeholder': 'Domicile'}}) }}
+                </div>
+                <div class="large-6 columns">
+                	{{ form_widget(form.location_town__id, {'attr': {'class':'form-control', 'placeholder': 'Town'}}) }}
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="large-6 columns">
+                  {{ form_widget(form.category__id, {'attr': {'class':'form-control'}}) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_widget(form.header_image__screen_type, {'attr': {'class':'form-control'}}) }}
+                </div>
+              </div>
+              
+              <div class="search_box">
+                <div class="row">
+	                <div class="large-6 columns">
+	                    {{ form_widget(form.header_image__status, {'attr': {'class':'form-control', 'placeholder': 'Status'}}) }}
+	                </div>
+	                <div class="large-6 columns">
+	                    {{ form_widget(form.search, {'attr': {'class':'small button mb0'}}) }}
+	                </div>
+                </div>
+              </div>
+          {{ form_end(form) }}
+     </div>
+</div>
+{% endblock %}
+
+{% block search_script %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        $("#fa_content_header_image_search_admin_location_domicile__id").change(function(){
+            var data = {
+                id: $(this).val()
+            };
+         
+            $.ajax({
+                type: 'post',
+                url: '{{ path("location_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    var $town_selector = $('#fa_content_header_image_search_admin_location_town__id');
+         
+                    $town_selector.html('<option value="">Select Town</option>');
+         
+                    for (var i=0, total = data.length; i < total; i++) {
+                        $town_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                    }
+                }
+            });
+        });
+    });
+    //]]>
+    </script>
+{% endblock %}

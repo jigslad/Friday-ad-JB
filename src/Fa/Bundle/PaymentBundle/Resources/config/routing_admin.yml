@@ -1,0 +1,4 @@
+FaPaymentBundle_delivery_method_option_admin:
+    resource: '@FaPaymentBundle/Resources/config/routing/delivery_method_option_admin.yml'
+    prefix:   /delivery_method_option
+    

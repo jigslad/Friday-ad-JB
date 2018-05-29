@@ -1,0 +1,52 @@
+{% set reportFieldsArray = staticCall('Fa\\Bundle\\ReportBundle\\Repository\\UserReportProfilePackageDailyRepository', 'getPPRReportFieldsChoices') %}
+{% set reportSortFieldsArray = staticCall('Fa\\Bundle\\ReportBundle\\Repository\\UserReportProfilePackageDailyRepository', 'getReportSortFields') %}
+
+<div class="row">
+    <div class="columns">
+        <div class="table-fix-col">
+            <div class="fa-scroller2">
+            <table class="fixed-table fatable">
+            {% if searchParams is defined %}
+                {% if searchParams['rus_report_columns'] is defined %}
+                    <thead>
+                        <tr>
+                            <th width="100">
+                                {{ sortable_link('fa_ti_report_user', 'name', 'Name', sorter) }}
+                            </th>
+                            {% for key, value in searchParams['rus_report_columns'] %}
+                                <th width="100">
+                                    {% if value in reportSortFieldsArray %}
+                                        {% if reportFieldsArray[value] is defined %}
+                                            {{ sortable_link('fa_ti_report_profile_package_revenue', value, reportFieldsArray[value], sorter) }}
+                                        {% endif %}
+                                    {% else %}
+                                        {% if reportFieldsArray[value] is defined %}
+                                            {{ reportFieldsArray[value] }}
+                                        {% endif %}
+                                    {% endif %}
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                {% endif %}
+             {% endif %}
+                 <tbody>
+
+                 {% for reportFieldsData in reportDataArray %}
+                    <tr>
+                        <td width="100">{{reportFieldsData['name']}}</td>
+                    {% for innerKey, value in searchParams['rus_report_columns'] %}
+                        <td width="100">
+                        {% if reportFieldsData[value] is defined %}
+                            {{ reportFieldsData[value] }}
+                        {% endif %}
+                        </td>
+                    {% endfor %}
+                    </tr>
+                 {% endfor %}
+                 </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>

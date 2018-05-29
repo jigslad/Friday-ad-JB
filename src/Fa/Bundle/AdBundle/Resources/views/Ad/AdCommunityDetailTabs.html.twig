@@ -1,0 +1,35 @@
+<div class="detail-tabpart-2" id="vif_tabs">
+    <dl class="accordion" data-accordion="">
+        <dd class="accordion-navigation">
+            <div class="content active" id="basic_info_panel">
+                {% if adDetailAndDimensionFields['detail'] is defined or adCommunityDetail['price'] is defined %}
+                    <ul class="details-info">
+                        {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
+                            <li class="clearfix">
+                                <div class="detail-text">{{fieldName}}</div>
+                                <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
+                            </li>
+                        {% endfor %}
+                        {% if adCommunityDetail['price'] is defined and adCommunityDetail['price'] %}
+                            <li class="clearfix">
+                                <div class="detail-text">
+                                    {{'Price'|trans({}, 'frontend-preview-ad')}}
+                                </div>
+                                <div class="detail-text">{{ format_currency(adCommunityDetail['price']) }}</div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+                {% if adCommunityDetail['description'] is defined %}
+                    <div class="hide-for-small-only">
+                        <div id="ad_desc">
+                            <p>{{adCommunityDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}</p>
+                        </div>
+                        <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-preview-ad') }}</a>
+                        <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-preview-ad') }}</a>
+                    </div>
+                {% endif %}
+            </div>
+        </dd>
+    </dl>
+</div>

@@ -1,0 +1,30 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set entityEditGrant = false %}
+{% set entityDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('dimension_edit_admin') %}
+  {% set entityEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('dimension_delete_admin') %}
+  {% set entityDeleteGrant = true %}
+{% endif %}
+
+{% block content -%}
+
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'dimension_new_admin'}) }}
+
+    {% use "FaEntityBundle:DimensionAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaEntityBundle:DimensionAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+        {{ form_errors(form) }}
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_widget(form.seo_tool_override__basic_fields_search, {'attr': {'class':'form-control', 'placeholder': 'Page title, Page url, H1 tag, Meta description'}}) }}
+                </div>
+                <div class="large-3 columns">
+                    {{ form_widget(form.seo_tool_override__status, {'attr': {'class':'form-control'}}) }}
+                </div>
+                <div class="large-3 columns">
+                    {{ form_widget(form.search, {'attr': {'class':'tiny button mb0'}}) }}
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

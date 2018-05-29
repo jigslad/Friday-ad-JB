@@ -1,0 +1,109 @@
+switchconcepts.com, U3dpdGNo-a62, DIRECT
+rubiconproject.com, 14766, RESELLER
+pubmatic.com, 30666, RESELLER, 5d62403b186f2ace
+thetradedesk.com, switchconcepts, RESELLER
+taboola.com, switchconceptopenrtb, RESELLER
+contextweb.com, 560031, RESELLER
+amazon-adsystem.com, 3160, RESELLER
+crimtan.com, switch, RESELLER
+quantcast.com, switchconcepts , RESELLER
+rhythmone.com, 1934627955, RESELLER
+ssphwy.com, switchconcepts, RESELLER
+EMXDGT.com, 59, DIRECT, 1e1d41537f7cad7f
+appnexus.com, 1356, RESELLER, f5ab79cb980f11d1 
+sovrn.com, 96786, RESELLER, fafdf38b16bf6b2b
+google.com, pub-0963091399044764, DIRECT, f08c47fec0942fa0
+google.com, pub-2024690810381654, RESELLER, f08c47fec0942fa0
+appnexus.com, 3391, RESELLER, f5ab79cb980f11d
+appnexus.com, 1019, RESELLER
+appnexus.com, 2688, RESELLER
+google.com, pub-1076181631997634, RESELLER, f08c47fec0942fa0
+google.com, pub-6205083306620034, RESELLER, f08c47fec0942fa0
+lijit.com, 231317, RESELLER, fafdf38b16bf6b2b
+openx.com, 537103367, RESELLER, a698e2ec38604c6
+rubiconproject.com, 15380, RESELLER
+sovrn.com, 231317, RESELLER, fafdf38b16bf6b2b
+Adyoulike.com, cd4f1e1b5839112f7ae31b6e6daba4ae, DIRECT
+smartadserver.com, 1827, RESELLER
+improvedigital.com, 335, RESELLER
+appnexus.com, 3538, RESELLER
+appnexus.com, 3539, RESELLER
+appnexus.com, 3540, RESELLER
+firstimpression.io, 6848, DIRECT, a960877e77e58dd6
+google.com, pub-3622156405313063, RESELLER, f08c47fec0942fa0
+openx.com, 537104992, RESELLER, 6a698e2ec38604c6
+sovrn.com, 243408, RESELLER, fafdf38b16bf6b2b
+lijit.com, 243408, RESELLER, fafdf38b16bf6b2b
+sovrn.com, 256420, RESELLER, fafdf38b16bf6b2b
+lijit.com, 256420, RESELLER, fafdf38b16bf6b2b
+adtech.com, 10297, RESELLER
+aolcloud.net, 10297, RESELLER
+contextweb.com, 558377, RESELLER, 89ff185a4c4e857c
+outbrain.com, 0043e7a761d92337b9269c2b10d9835c8d, RESELLER
+solads.media,883194,RESELLER
+solads.media,730730,RESELLER
+google.com, pub-3973255129039322, DIRECT, f08c47fec0942fa0
+google.com, pub-4170006775212586, RESELLER, f08c47fec0942fa0
+contextweb.com, 560961, RESELLER
+openx.com, 539504117, RESELLER, a698e2ec38604c6
+improvedigital.com, 185, Reseller 
+spotx.tv, 108933, Reseller, 7842df1d2fe2db34 
+spotxchange.com, 108933, Reseller, 7842df1d2fe2db34 
+appnexus.com, 7118, Reseller 
+openx.com, 537116751, Reseller, 6a698e2ec38604c6
+powerlinks.tagdeliver.com, 15340, DIRECT
+powerlinks.com, ce2cc770-0fc5-11e7-9df5-17cad4c0ab16, RESELLER
+contextweb.com, 581823, RESELLER
+powerlinks.tagdeliver.com, 15394, DIRECT
+connectignite.com, 15352, DIRECT
+powerlinks.tagdeliver.com, 15393, DIRECT
+experian.com, EXP_0122_A, RESELLER
+openx.com, 539438650, RESELLER, a698e2ec38604c6
+appnexus.com, 3623, RESELLER
+gumgum.com, 11645, RESELLER, ffdef49475d318a9
+lijit.com, 233612, DIRECT, fafdf38b16bf6b2b
+openx.com, 537120960, RESELLER
+openx.com, 538959099, RESELLER
+openx.com, 83499, RESELLER
+pubmatic.com, 137711, RESELLER
+pubmatic.com, 156212, RESELLER
+pubmatic.com, 62483, RESELLER
+smartadserver.com, 2923, RESELLER
+sovrn.com, 233612, DIRECT, fafdf38b16bf6b2b
+fridaymedia.tagdeliver.com, 15340, DIRECT
+contentignite.com, 284953, DIRECT
+triplelift.com, 4320, DIRECT, 6c33edb13117fd86
+contentignite.com, 228081, DIRECT
+contentignite.com, 228943, DIRECT
+powerlinks.com, ce2cbef0-0fc5-11e7-9ca4-314650adbedd, DIRECT #native #banner #video
+criteo.com, 733304, RESELLER
+contentignite.com, 228084, DIRECT
+contentignite.com, 228949, DIRECT
+contextweb.com, 575885, RESELLER
+tremorhub.com, 2ydim-em7ri, RESELLER, 1a4e959a1b50034a
+criteo.com, 733302, RESELLER
+contentignite.com, gb:19319/us:19319, DIRECT
+fridaymedia.tagdeliver.com, 15393, DIRECT
+contentignite.com, 231334, DIRECT
+contentignite.com, 231336, DIRECT
+contentignite.com, 231337, DIRECT
+fridaymedia.tagdeliver.com, 15394, DIRECT
+contentignite.com, 231338, DIRECT
+contentignite.com, 231339, DIRECT
+contentignite.com, 255790, DIRECT
+contentignite.com, 260035, DIRECT
+fridaymedia.tagdeliver.com, 15352, DIRECT
+contentignite.com, 228086, DIRECT
+contentignite.com, 254900, DIRECT
+contextweb.com, 580352, RESELLER
+criteo.com, 733471, RESELLER
+contentignite.com, 277542, DIRECT
+contentignite.com, 294470, DIRECT
+advertising.com, 25900, RESELLER
+advertising.com, 3679, DIRECT #video
+advertising.com, 5831, DIRECT #video
+advertising.com, 8044, DIRECT #video
+advertising.com, 8022, DIRECT #video
+fridaymedia.tagdeliver.com, 16001, DIRECT
+contentignite.com, 292174, DIRECT
+theagency.com, 1058, RESELLER

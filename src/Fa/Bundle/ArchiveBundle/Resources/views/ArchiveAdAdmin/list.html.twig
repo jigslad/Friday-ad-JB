@@ -1,0 +1,60 @@
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+
+{% set userIdArray = {} %}
+{% if pagination.getNbResults() %}
+    {% for archiveAd in pagination.getCurrentPageResults() %}
+        {% set userIdArray = userIdArray|merge({0 : archiveAd.user_id}) %}
+    {% endfor %}
+
+    {% set userDataArray = userRepository.getUserDataArrayByUserId(userIdArray) %}
+{% endif %}
+
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            {% set sortField = {'archive_ad__id': 'Advert reference'|trans, 'archive_ad__archived_at': 'Archived at'|trans,  'archive_ad__ad_view_counter': 'Number of views'|trans, 'archive_ad__email': 'Email'|trans} %}
+            {{ sortable_combo('ad_admin', sortField) }}
+
+            <table class="mb0">
+                <thead>
+                    <tr>
+                        <th width="5%">{{ 'Advert reference'|trans }}</th>
+                        <th width="7%">{{ 'User'|trans }}</th>
+                        <th width="20%">{{ 'Email'|trans }}</th>
+                        <th width="10%">{{ 'Number of views'|trans }}</th>
+                        <th width="10%">{{ 'Archived at'|trans }}</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                    {% if pagination.getNbResults() %}
+                        {% for archiveAd in pagination.getCurrentPageResults() %}
+	                        <tr class="gradeX">
+	                           <td>
+                                   <a href="javascript:void(0);" onclick="openWindow('{{ path('archive_ad_detail_admin', {'id': archiveAd.id}) }}', 'ad_detail', '1100', '800');">{{ archiveAd.id }}</a>
+	                           </td>
+	                           <td>
+	                               {% if userDataArray[archiveAd.user_id] is defined and userDataArray[archiveAd.user_id] != ' ' %}
+                                       {{ userDataArray[archiveAd.user_id]['first_name']}}&nbsp;{{ userDataArray[archiveAd.user_id]['last_name'] }}
+                                   {% endif %}
+	                           </td>
+	                           <td>
+                                   {{ archiveAd.email }}
+                               </td>
+	                           <td>
+	                               {{ archiveAd.ad_view_counter }}
+	                           </td>
+	                           <td>
+	                               {{ archiveAd.archived_at | localizeddate('short', 'medium', app.request.locale ) }}
+	                           </td>
+	                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="gradeX">
+                            <td colspan="11" align="center">{{ 'No Data Found'|trans }}</td>
+                        </tr>
+                    {% endif %}
+                 </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% block content -%}
+    <div class="large-row">
+        {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew': false}) }}
+
+        {% use "FaArchiveBundle:ArchiveAdAdmin:search.html.twig" %}
+        {{ block('search_html') }}
+
+        {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+        {{ include('FaArchiveBundle:ArchiveAdAdmin:list.html.twig', {'pagination': pagination}) }}
+
+        {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+{% set searchScript = block('search_script') is defined ? block('search_script') : '' %}
+    {{ searchScript }}
+{% endblock %}

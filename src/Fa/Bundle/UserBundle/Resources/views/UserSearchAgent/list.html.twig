@@ -1,0 +1,13 @@
+{% set userSearchAgentRepository  = fetch_repository('FaUserBundle:UserSearchAgent') %}
+{% if pagination.getNbResults() %}
+    {% for searchAgent in pagination.getCurrentPageResults() %}
+        {{ include('FaUserBundle:UserSearchAgent:searchAgentDetail.html.twig') }}
+    {% endfor %}
+{% else %}
+    <div class="row">
+        <div class="columns">
+            {{ 'No records found.'|trans({}, 'frontend-manage-my-ad') }}
+        </div>
+    </div>
+{% endif %}
+

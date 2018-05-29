@@ -1,0 +1,17 @@
+{% if attribute(form, 'business_phone') is defined %}
+    {% set field = 'business_phone' %}
+    {{ set_variables('formFields', {'lastField':field}) }}
+    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+        {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
+        {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
+        <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+            <div class="paa-title-ins">
+                {{ 'As a business user you can set a specific phone number for only this ad.'|trans({}, 'frontend-paa-fourth-step') }}
+            </div>
+            <div class="small-wrapper">
+                {{ form_widget(attribute(form, field)) }}
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        </div>
+    </div>
+{% endif %}

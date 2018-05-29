@@ -1,0 +1,101 @@
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    $(document).foundation({
+        accordion: {
+            multi_expand: true,
+            callback : function (accordion) {
+                accordionCallback(accordion);
+            }
+        }
+    });
+    $(document).ready(function(){
+        scrollToElement('#successMsgDiv', '1000', -150);
+        $('.textcounter').each(function(e){
+            updateCharCounter($(this).attr('id'));
+        });
+        if ($("#fa_user_user_business_shop_profile_zip").length) {
+            $("#fa_user_user_business_shop_profile_zip").val($("#fa_user_user_business_shop_profile_zip").val().toUpperCase());
+        }
+    });
+    $('.textcounter').keyup(function(e){
+        updateCharCounter($(this).attr('id'));
+    });
+    $('#my_profile .accordion-navigation .content').each(function(){
+        if ($(this).hasClass('active')) {
+            $(this).siblings('a').find('span:eq(1)').addClass('dark-arrow-up');
+            $(this).siblings('a').find('span:eq(1)').removeClass('dark-arrow-down');
+        } else {
+            $(this).siblings('a').find('span:eq(1)').addClass('dark-arrow-down');
+            $(this).siblings('a').find('span:eq(1)').removeClass('dark-arrow-up');
+        }
+    });
+    
+    function accordionCallback(accordion)
+    {
+        $(accordion).siblings('a').find('span:eq(1)').toggleClass("dark-arrow-down dark-arrow-up");
+        $(accordion).find('select.fa-select').selectmenu('refresh');
+        $(accordion).find('select.fa-select-white').selectmenu('refresh');
+        {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+            initProfileImageUpload(false);
+        {% endif %}
+    }
+    
+    function updateCharCounter(fieldId)
+    {
+        var textCounterId = fieldId + '_textcounter';
+        var maxLimit      = $('#'+fieldId).attr('maxlength') ? parseInt($('#'+fieldId).attr('maxlength')) : 0;
+        var value         = $('#'+fieldId).val();
+
+        if (maxLimit) {
+           if (value.length > maxLimit) {
+               $('#'+fieldId).val(value.substring(0, maxLimit));
+               $('#'+fieldId).html('(0 characters left)');
+               return false;
+           } else {
+               $('#'+textCounterId).html('(' + (maxLimit - value.length) + ' characters left)');
+           }
+       }
+    }
+    
+    function changeBanner(bannerId)
+    {
+        blockElement('#shopBannerModal');
+        $.ajax({
+            type: "POST",
+            url : '{{ path('ajax_my_profile_change_banner') }}',
+            data : {'bannerId': bannerId},
+        })
+        .always(function(response) {
+            unblockElement('#shopBannerModal');
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.htmlContent.length) {
+                $('#user_site_banner_div').html(response.htmlContent);
+                $('#shopBannerModal').foundation('reveal', 'close');
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#user_site_banner_div');
+                $('#shopBannerModal').foundation('reveal', 'close');
+            } else {
+                $(decorateMessage("{{'Banner changed successfully.'|trans({}, 'frontend-my-profile')}}", 'success')).insertBefore('#user_site_banner_div');
+                $('#shopBannerModal').foundation('reveal', 'close');
+            }
+            scrollToElement('#user_site_banner_div', '1000', -150);
+        });
+    }
+
+    // To upper Zip
+    $("#fa_user_user_business_shop_profile_zip").keyup(function(event) {
+        var box = event.target;
+        var txt = $(this).val();
+        var start = box.selectionStart;
+        var end = box.selectionEnd;
+
+        $(this).val(txt.toUpperCase());
+        box.setSelectionRange(start, end);
+    });
+//]]>
+</script>

@@ -1,0 +1,58 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block blockGaCode %}
+{{ include('FaFrontendBundle::gaCode.html.twig') }}
+{% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
+{% set paaBlock = staticPageRepository.getStaticBlockDetailArray('paa-completion-google-analytics-code' , fetch_container_instance()) %}
+{% if paaBlock['description'] is defined %}
+{{ paaBlock['description']|raw }}
+{% endif %}
+{% endblock %}
+    
+{% block page_title %}
+    {{'Payment Success'|trans({}, 'frontend-payment-success')}}
+{% endblock %}
+
+{% block body %}
+    <div class="payment">
+        <div class="row">
+            <div class="columns">
+                <h1 class="text-center">
+                    {% if cart.getAmount() %}
+                        {{'Payment Success'|trans({}, 'frontend-payment-success')}}
+                    {% elseif subscription == 1 %}
+                        {{'Free Subscription'|trans({}, 'frontend-payment-success')}}
+                    {% else %}
+                        {{'Free Advert'|trans({}, 'frontend-payment-success')}}
+                    {% endif %}
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="columns text-center">
+                <h4>{{'Thank you for your visit!'|trans({}, 'frontend-payment-success')}}</h4>
+                {{'Your transaction ID is'|trans({}, 'frontend-payment-success')}}: <b>{{cart.getCartCode}}</b> <br /><br />
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+{% if getTranscationJs is defined and getItemJs is defined %}
+    <script>
+        {% if ga_transaction is defined and ga_transaction.PAYMENT_ID is defined %}
+            ga('require', 'ecommerce');
+            {{ getTranscationJs | raw }}
+            {{ getItemJs | raw }}
+            ga('ecommerce:send');
+            $.ajax({
+                type: "POST",
+                url: "{{path('ajax_update_ga_status')}}",
+                data: {'id':'{{ ga_transaction.PAYMENT_ID }}'},
+            })
+            .done(function(response) {
+            });
+        {% endif %}
+    </script>
+{% endif %}
+{% endblock %}

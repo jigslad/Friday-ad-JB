@@ -1,0 +1,27 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{%set locationGroupTypeArray = staticCall('Fa\\Bundle\\EntityBundle\\Repository\\LocationGroupRepository', 'getLocationGroupTypeArray', [fetch_container_instance(), true]) %}
+
+{% set locationGroupEditGrant = false %}
+{% set locationGroupDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('location_group_edit_admin') %}
+  {% set locationGroupEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('location_group_delete_admin') %}
+  {% set locationGroupDeleteGrant = true %}
+{% endif %}
+
+{% block content %}
+  {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'location_group_new_admin'}) }}
+
+  {% use "FaEntityBundle:LocationGroupAdmin:search.html.twig" %}
+  {{ block('search_html') }}
+
+  {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+  {{ include('FaEntityBundle:LocationGroupAdmin:list.html.twig', {'pagination': pagination}) }}
+
+  {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}

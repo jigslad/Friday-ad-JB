@@ -1,0 +1,10 @@
+parameters:
+    fa.banner.manager.class: Fa\Bundle\ContentBundle\Manager\BannerManager
+
+services:
+    _defaults: 
+        public: true
+        
+    fa.banner.manager:
+        class: '%fa.banner.manager.class%'
+        arguments: ['@service_container']

@@ -1,0 +1,150 @@
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title">
+    {% if fromProfilePage is defined and fromProfilePage %}
+        {{'Edit image'|trans({}, 'frontend-my-profile')}}
+    {% else %}
+        {% if isCompany %}
+            {{'Crop logo image'|trans({}, 'frontend-my-profile')}}
+        {% else %}
+            {{'Crop profile image'|trans({}, 'frontend-my-profile')}}
+        {% endif %}
+    {% endif %}
+</h5>
+<div class="modal-content">
+    <div class="text-center">{{'Resize your image and drag to reposition'|trans({}, 'frontend-my-profile')}}</div>
+    <div class="crop-prof-img-main">
+        <div class="crop-prof-img"><img src="{{ imageUrl }}" id="profile_image_crop" /></div>
+
+        <div class="clearfix">
+            <span class="zoom-minus text-left">-</span>
+            <div id="zoom_div"></div>
+            <span class="zoom-plus text-right">+</span>
+        </div>
+
+        <div class="clearfix">
+            <input type="hidden" class="cropProfileImg" id="profile_crop_x" name="profile_crop_x" />
+            <input type="hidden" class="cropProfileImg" id="profile_crop_y" name="profile_crop_y" />
+            <input type="hidden" class="cropProfileImg" id="profile_crop_w" name="profile_crop_w" />
+            <input type="hidden" class="cropProfileImg" id="profile_crop_h" name="profile_crop_h" />
+            <input type="hidden" class="cropProfileImg" id="profile_crop_real_w" name="profile_crop_real_w" />
+            <input type="hidden" class="cropProfileImg" id="profile_crop_real_h" name="profile_crop_real_h" />
+            <button type="button" class="button secondary-btn-4 thin-btn expand mb0 left" onclick="javascript:closeRevealModel('#cropProfileImageModal');" id="cancelCropProfileImage" style="display:none" >{{'Cancel'|trans({}, 'frontend-my-profile')}}</button>
+            <button type="button" class="button secondary-btn-1 thin-btn expand mb0 right" id="cropProfileImage" onclick="return cropProfileImage();" style="display:none">{{'Apply'|trans({}, 'frontend-my-profile')}}</button>
+        </div>
+    </div>
+</div>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% set mobileDetectManager = fetch_container_instance().get('fa.mobile.detect.manager') %}
+    $(document).ready(function() {
+        var img = $('#profile_image_crop'); // Get my img elem
+        var orgwidth, orgheight;
+        $("<img/>") // Make in memory copy of image to avoid css issues
+            .attr("src", $(img).attr("src"))
+            .load(function() {
+                $('#cancelCropProfileImage, #cropProfileImage').show();
+                orgwidth = this.width;   // Note: $(this).width() will not
+                orgheight = this.height; // work for in memory images.
+                $('#profile_crop_real_w').val(orgwidth);
+                $('#profile_crop_real_h').val(orgheight);
+             });
+
+        var api;
+
+        function initJcrop() {
+            $('#profile_image_crop').Jcrop({
+              // start off with jcrop-light class
+              bgColor: 'white',
+              addClass: 'jcrop-light',
+              allowSelect: false,
+              allowResize: false,
+              {% if isCompany %}
+                  minSize: [160, 120],
+                  maxSize: [160, 120],
+              {% else %}
+                  minSize: [116, 116],
+                  maxSize: [116, 116],
+              {% endif %}
+              roundSelect:{% if isCompany %}false{% else %}true{% endif %},
+              onChange:   showCoords,
+              onSelect:   showCoords,
+            },function(){
+              api = this;
+              api.setSelect([65,50,65+250,45+185]);
+              api.setOptions({ bgFade: true });
+              {% if isCompany %}
+                  api.ui.selection.addClass('jcrop-selection bz-logo-selection');
+              {% else %}
+                  api.ui.selection.addClass('jcrop-selection pvt-logo-selection');
+              {% endif %}
+            });
+        }
+
+        initJcrop();
+        $("#zoom_div").slider({
+            value: 100,
+            max: 100,
+            min: 55,
+            slide: function(event, ui) {
+                resizeImage(orgwidth, orgheight);
+            },
+            change: function(event, ui) {
+                resizeImage(orgwidth, orgheight);
+            }
+        });
+
+        function resizeImage(orgwidth, orgheight) {
+            api.destroy();
+            var value = $('#zoom_div').slider('option', 'value');
+            var width = orgwidth * (value / 100);
+            var height = orgheight * (value / 100);
+            $('#profile_image_crop').width(width);
+            $('#profile_image_crop').height(height);
+            $('#profile_crop_real_w').val(width);
+            $('#profile_crop_real_h').val(height);
+
+            initJcrop();
+        }
+        // Simple event handler, called from onChange and onSelect
+        // event handlers, as per the Jcrop invocation above
+        function showCoords(c)
+        {
+            $('#profile_crop_x').val(c.x);
+            $('#profile_crop_y').val(c.y);
+            $('#profile_crop_w').val(c.w);
+            $('#profile_crop_h').val(c.h);
+        }
+    });
+
+    function cropProfileImage()
+    {
+        var imgParams = '';
+        $('.cropProfileImg').each(function(e){
+            imgParams += $(this).attr('name')+ '=' +$(this).val() + '&'
+        });
+        blockElement('#cropProfileImageModal');
+        $.ajax({
+            type: "POST",
+            url : '{{ path("ajax_crop_profile_image", {'userId': userId, 'isCompany': (isCompany ? 'true' : 'false')}) }}',
+            data: imgParams
+        })
+        .always(function(response) {
+            unblockElement('#cropProfileImageModal');
+        })
+        .done(function(response) {
+            if (response.error.length) {
+                $('#filelist').html(decorateMessage(response.error, 'alert'));
+           } else if (response.image.length) {
+               $('#profile_image_div, #left_profile_image_div, #top_profile_image_div').html(response.image);
+               $('#filelist').html(decorateMessage('{{ 'Profile image cropped successfully.' }}', 'success'));
+           }
+           closeRevealModel('#cropProfileImageModal');
+           scrollToElement('#filelist', '1000', -150);
+           unblockElement('#cropProfileImageModal');
+           {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+               initProfileImageUpload(false);
+           {% endif %}
+        });
+    }
+//]]>
+</script>

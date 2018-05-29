@@ -1,0 +1,21 @@
+services:
+        
+    fa.delivery_method_option.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaPaymentBundle:DeliveryMethodOption]
+
+    fa.cart.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaPaymentBundle:Cart]
+
+    fa.payment.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaPaymentBundle:Payment]
+        
+    fa.payment_transaction.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaPaymentBundle:PaymentTransaction]

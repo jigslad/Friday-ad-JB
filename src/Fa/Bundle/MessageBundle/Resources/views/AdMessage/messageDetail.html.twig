@@ -1,0 +1,92 @@
+{% if arrayMessage['sender_id'] == app.user.getId() %}
+    {% set userDisplayName = arrayMessage['receiver_first_name'] ~ ' ' ~ arrayMessage['receiver_last_name'] %}
+{% else %}
+    {% set userDisplayName = arrayMessage['sender_first_name'] ~ ' ' ~ arrayMessage['sender_last_name'] %}
+{% endif %}
+
+{% set isNewMessageFlag = false %}
+{% if arrayMessage['message_ad_id'] < 0 %}
+    {% set isNewMessageFlag = true %}
+{% endif %}
+{% if not isNewMessageFlag %}
+    {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': arrayMessage['ad_id']}, true) %}
+{% endif %}
+<div id="msg_{{arrayMessage['id']}}" class="my-msg-box {% if (arrayMessage['is_read'] == 0 and arrayMessage['sender_id'] != app.user.getId()) %}unread-msg{% endif %}">
+    {% if arrayMessage['receiver_id'] == app.user.getId() %}
+        {% set messageType = 'receiver' %}
+    {% else %}
+        {% set messageType = 'sender' %}
+    {% endif %}
+    <a href="{{path('user_ad_message_reply', {'type': messageType, 'replyId': arrayMessage['id']})}}" class="tricky-link">{{ userDisplayName }}</a>
+
+    <div class="clearfix">
+        <div class="large-3 columns">
+            {% if userLogosArray[arrayMessage['sender_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID')%}
+                {% set isCompanyUser = true %}
+            {% else %}
+                {% set isCompanyUser = false %}
+            {% endif %}
+
+            {% if arrayMessage['sender_id'] == app.user.getId() %}
+                {% if userLogosArray[arrayMessage['receiver_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID')%}
+                    {% set isCompanyUser = true %}
+                {% else %}
+                    {% set isCompanyUser = false %}
+                {% endif %}
+                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userLogosArray[arrayMessage['receiver_id']]['user_image'], arrayMessage['receiver_id'], null, null, true, isCompanyUser, userLogosArray[arrayMessage['receiver_id']]['status_id'], userDisplayName]) %}
+            {% else %}
+                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userLogosArray[arrayMessage['sender_id']]['user_image'], arrayMessage['sender_id'], null, null, true, isCompanyUser, userLogosArray[arrayMessage['sender_id']]['status_id'], userDisplayName]) %}
+            {% endif %}
+            <div class="my-msg-usericon{% if isCompanyUser == false %} rounded{% endif %}">
+                {% if userLogo %}
+                    {{userLogo|raw}}
+                {% else %}
+                    <img src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
+                {% endif %}
+            </div>
+        </div>
+        <div class="large-21 columns my-msg-content">
+            <div class="clearfix my-msg-heading">
+                <h3>{{userDisplayName}}</h3>
+                <div class="delete-msg-icon hide-for-small hide-for-medium">
+                    <div class="delete-msg-caption">Delete</div>
+                    <a href="javascript:void(0);" class="delete-msg" onclick="removeMessageConfirmation('{{arrayMessage['id']}}', '{{app.user.getId()}}', '{{arrayMessage['message_ad_id']}}');">Delete</a>
+                </div>
+                <span class="{% if (arrayMessage['has_attachments'] > 0) %}attach-icon{% endif %}">{{arrayMessage['created_at']|time_ago_in_words}}</span>
+            </div>
+            <div class="my-msg-title">
+                {% if isNewMessageFlag %}
+                    <b>{{arrayMessage['subject']}}</b>
+                {% else %}
+                    <b>{{arrayMessage['ad_title']}}</b>
+                {% endif %}
+            </div>
+            <div class="my-msg-desc">
+                {% if (arrayMessage['is_oneclickenq_message'] or arrayMessage['oneclickenq_reply']) %}
+                    {% if (arrayMessage['oneclickenq_reply'] == 'No' and arrayMessage['receiver_id'] == app.user.getId()) %}
+                        {% set itemSoldMsg = constant('Fa\\Bundle\\MessageBundle\\Repository\\MessageRepository::ONE_CLIK_NO_REPLY_MESSAGE_FOR_BUYER') %}
+                        {% set adLink = '<a href='~adUrl~' target="_blank">similar ads</a>' %}
+                        {{ itemSoldMsg|trans({'%site_name%': container.getParameter('service_name'), '%similar_ads%': adLink}, 'frontend-show-ad')|raw}}
+                    {% else %}
+                        {{arrayMessage['text_message']|raw}}
+                    {% endif %}
+                {% else %}
+                    {{trim_text(arrayMessage['text_message']|replace({"\\n": "<br />"}), 225)|raw}}
+                {% endif %}
+            </div>
+            {% if arrayMessage['attachment_org_file_name'] %}
+                <b>{{ 'Attached CV' }}: </b><a class="outside-tricky" href="javascript:downloadAttachment('{{arrayMessage['id']}}');">{{arrayMessage['attachment_org_file_name']}}</a>
+            {% endif %}
+            {% if arrayMessage['receiver_id'] == app.user.getId() and arrayMessage['is_oneclickenq_message'] and arrayMessage['oneclickenq_reply'] == NULL %}
+                <div class="my-respond-content mt10 hide-for-small">
+                    <b>{{ 'Respond to' }} {{userDisplayName}}:</b>
+                    <div class="mt10">
+                        <a href="javascript:void(0)" class="secondary-btn-1 button mb0" onclick="return replyOneClickEnq('{{arrayMessage['id']}}', '{{ arrayMessage['ad_id'] }}', 'Yes', 'Inbox_View');">{{'Yes'|trans({})}}</a>
+                        <a href="javascript:void(0)" class="secondary-btn-2 button mb0" onclick="return replyOneClickEnq('{{arrayMessage['id']}}', '{{ arrayMessage['ad_id'] }}', 'No', 'Inbox_View');"><span class="hide-for-small-only">{{'No - '|trans({})}}</span> {{'Mark as sold'|trans({})}}</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{{ include('FaMessageBundle:AdMessage:removeMessageModel.html.twig') }}

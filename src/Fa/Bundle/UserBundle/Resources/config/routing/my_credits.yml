@@ -1,0 +1,3 @@
+my_credits:
+    path:     /
+    defaults: { _controller: FaUserBundle:MyCredits:myCredits }

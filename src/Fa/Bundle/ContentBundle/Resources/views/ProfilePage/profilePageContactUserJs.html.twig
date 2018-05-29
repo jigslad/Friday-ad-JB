@@ -1,0 +1,37 @@
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+    $("#profilepage_contactuser").bind( "click", function() {
+        profilePageContactUser();
+    });
+});
+
+function profilePageContactUser(status = 1)
+{
+    blockPage();
+    $.ajax({
+        type: "GET",
+        url: "{{path('profile_page_contact_user', {'userId': userId })}}",
+        data: {'msg_div_id': '{{msg_div_id}}'},
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+        hideAlertMessage();
+        if (response.htmlContent.length) {
+            $('#profilePageContactUserModal').html(response.htmlContent);
+            $('#profilePageContactUserModal').foundation('reveal', 'open');
+            //same popup displaying at mybusiness detail email link for that below ga is not reuired ticket FFR-2185 
+            if(status == 1) {
+            	ga('send', 'event', 'CTA', 'Contact Seller button Profile', 'Profile {{ profileUserId }}');
+            }
+        } else if (response.error.length) {
+            $(decorateMessage(response.error, 'alert')).insertBefore('{{msg_div_id}}');
+            scrollToElement('{{msg_div_id}}', '1000', -150);
+        }
+    });
+}
+//]]>
+</script>

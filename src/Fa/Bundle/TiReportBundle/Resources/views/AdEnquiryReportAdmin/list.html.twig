@@ -1,0 +1,59 @@
+{% set container = fetch_container_instance() %}
+{% set adEnquiryReportRepository = fetch_repository('FaTiReportBundle:AdEnquiryReport', 'ti_history') %}
+{% set reportFieldsArray = staticCall('Fa\\Bundle\\ReportBundle\\Repository\\AdEnquiryReportRepository', 'getAdEnquiryReportFields', {'container':container}) %}
+{% set reportSortFieldsArray = staticCall('Fa\\Bundle\\ReportBundle\\Repository\\AdEnquiryReportRepository', 'getAdEnquiryReportSortFields') %}
+<div class="row">
+    <div class="columns">
+        <div class="table-fix-col">
+            <div class="fa-scroller2">
+                {% if searchParams['report_columns'] is defined %}
+                    <table class="fixed-table fatable">
+                        <thead>
+                            <tr>
+                                {% for key, value in searchParams['report_columns'] %}
+                                    <th width="100">
+                                        {% if value in reportSortFieldsArray %}
+                                            {{ sortable_link('fa_ti_report_ad_enquiry', value, reportFieldsArray[value], sorter) }}
+                                        {% else %}
+                                            {{ reportFieldsArray[value] }}
+                                        {% endif %}
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if pagination.getNbResults() %}
+                                {% for adEnquiryReport in pagination.getCurrentPageResults() %}
+                                {% set adEnquiryReportDetail = adEnquiryReportRepository.formatAdEnquiryReportRaw(adEnquiryReport, container, (loop.index + ((page-1) * 20))) %}
+                                    <tr>
+                                        {% for key, value in searchParams['report_columns'] %}
+                                            <td>
+                                                {% if adEnquiryReportDetail[value] is defined %}
+                                                    {% if value == 'description' %}
+                                                        {% if adEnquiryReportDetail[value]|length > 50 %}
+                                                            <a href="javascript:void(0);" title="{{ adEnquiryReportDetail[value] }}">{{ adEnquiryReportDetail[value]|slice(0,50)~'...' }}</a>
+                                                        {% else %}
+                                                            {{ adEnquiryReportDetail[value] }}
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {{ adEnquiryReportDetail[value] }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="{{searchParams['report_columns']|length}}" align="center">{{ 'No Data Found'|trans }}</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

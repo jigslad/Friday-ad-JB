@@ -1,0 +1,142 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% block body -%}
+
+<div class="white-bg pkg-bdr profile-pkg-bg">
+        <div class="row">
+            <div class="columns">
+                <div class="paa-pkg-main profile-pkgs">
+                    <div class="full-width-title">
+                        <h1 class="text-center">{{'Choose your profile'|trans({}, 'frontend-ad-package')}}</h1>
+                        <h2 class="text-center">{{'Start boosting your revenue. We have plan for everyone!'|trans({}, 'frontend-ad-package')}}</h2>
+                    </div>
+                    {% if app.request.get('from') %}
+                        <div class="mb10">
+                            <a href="{{ path('my_profile') }}" class="back-arrow-link">{{'Go back'|trans({}, 'frontend-ad-package')}}</a>
+                        </div>
+                    {% endif %}
+                    {% if shopPackages|length %}
+                        <div class="row" data-equalizer>
+                            {% set currentPackageId = null %}
+                            {% if currentPackage|default is not empty %}
+                                {% set currentPackageId = currentPackage.getPackage.getId() %}
+                            {% endif %}
+                            {% for package in shopPackages %}
+                            {% set active_class = null %}
+                                {% set packageValues = array_unserialize(package.getValue()) %}
+                                 {% set is_trail = 0 %}
+                                 {% if package.getPrice() > 0 and user.getFreeTrialEnable() == 1 and  package.getTrail() == 1 %}
+                                    {% set is_trail = true %}
+                                 {% endif %}
+                                 {% if currentPackageId is not null %}
+                                        {% if currentPackageId ==  package.getId() and currentPackage.remark != "reg_back" %}
+                                            {% set  active_class = 'active-pkg' %}
+                                        {% endif %}
+                                {% endif %}
+                                <div class="{% if shopPackages|length == 3 or shopPackages|length == 1 %}large-8{% elseif shopPackages|length == 2 %}large-12{% else %}large-6{% endif%} columns">
+                                    <div class="paa-pkg-bg {{ active_class }}" data-equalizer-watch>
+                                        {% if currentPackageId !=  package.getId() or (currentPackageId == package.getId() and currentPackage.remark == 'reg_back') %}
+                                            <a href="javascript:void(0);" class="pkg-selection" id="package_selection_{{package.getId()}}"  onclick="return selectPackage({{package.getId()}}, {{is_trail}});">Select Package</a>
+                                        {% endif %}
+                                        {% if is_trail == true %}
+                                            <div class="trial-badge">Trial</div>
+                                        {% endif %}
+
+                                        <div class="pkg-title {% if packageValues['title_class'] is defined %}{{packageValues['title_class']}}{% else %}pkg-gray-head{% endif %}">{{package.getSubTitle()}}</div>
+                                        <div id="active_package_{{package.getId()}}">
+                                            <div class="pkg-subtitle">
+                                                {{package.getTitle()}}
+                                            </div>
+
+                                            <div class="pkg-pricing bz-pkg-pricing profile-pkg-price">
+                                                <H4>
+                                                    {% if package.getPrice() > 0 %}
+                                                        {{format_currency(package.getPrice())}}<span> /month </span>
+                                                    {% else %}
+                                                        {{'Free'|trans({}, 'backend-ad-package')}}
+                                                    {% endif %}
+                                                </H4>
+
+                                          {% if currentPackageId is not null and currentPackage.remark != 'reg_back' %}
+                                            {% if currentPackageId ==  package.getId() %}
+                                                <div class="text-center">
+                                                    <span class="current-profile-img {% if shopPackages|length == 2 %}profile-small-img{% endif %}">Current Profile</span>
+                                                </div>
+                                            {% else %}
+                                                {% if currentPackage.getPackage.getPrice() > package.getPrice() %}
+                                                    <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} expand disabled"  onmouseover="$('#package_selection_{{package.getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getId()}}').attr('style', '');">
+                                                        {% if package.getNewAdCta() %}
+                                                            {{package.getNewAdCta()}}
+                                                        {% else %}
+                                                            {{'Choose'|trans({}, 'frontend-ad-package')}}
+                                                        {% endif %}
+                                                    </button>
+                                                {% else %}
+                                                    <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} expand" onclick="return selectPackage({{package.getId()}}, {{is_trail}});"  onmouseover="$('#package_selection_{{package.getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getId()}}').attr('style', '');">
+                                                        {% if package.getRenewalAdCta() %}
+                                                            {{package.getRenewalAdCta()}}
+                                                        {% else %}
+                                                            {{'Upgrade'|trans({}, 'frontend-ad-package')}}
+                                                        {% endif %}
+                                                    </button>
+                                                {% endif %}
+                                            {% endif %}
+                                           {% else %}
+                                             <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} expand" onclick="return selectPackage({{package.getId()}}, {{is_trail}});" onmouseover="$('#package_selection_{{package.getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getId()}}').attr('style', '');">
+                                                {% if package.getNewAdCta() %}
+                                                    {{package.getNewAdCta()}}
+                                                {% else %}
+                                                    {{'Choose'|trans({}, 'frontend-ad-package')}}
+                                                {% endif %}
+                                            </button>
+                                           {% endif %}
+                                           </div>
+
+                                            <div class="pkg-ins profile-pkg-ins">
+                                                {{ package.getDescription() | raw}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{'No ad packages found.'|trans({}, 'frontend-ad-package')}}
+                    {% endif %}
+                    <div class="show-for-small-only">
+                        <button id="purchase_btn" class="primary-btn-1 button expand disabled">{{'Place my ad'|trans({}, 'frontend-ad-package')}}</button>
+                    </div>
+
+                    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_user_package_admin_id'} }) }}
+                        <div class="hide">
+                            <div class="show">
+                                {{ form_row(form.package) }}
+                            </div>
+                            <ul class="button-group text-center">
+                                <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                            </ul>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    function selectPackage(packageId, trail_enable)
+    {
+        if (trail_enable == true) {
+            $('#fa_user_package_choose_trail_enable').val(1);
+        } else {
+            $('#fa_user_package_choose_trail_enable').val(0);
+        }
+
+        $('input:radio[name=fa_user_package_choose\\[package\\]][value='+packageId+']').attr('checked',true);
+        $('#fa_user_package_admin_id').submit();
+    }
+
+//]]>
+</script>
+{% endblock %}

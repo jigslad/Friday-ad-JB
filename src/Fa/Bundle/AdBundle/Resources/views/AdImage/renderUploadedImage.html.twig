@@ -1,0 +1,51 @@
+{% set container = fetch_container_instance() %}
+{% set showDragDropFlag = false %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% if not mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set showDragDropFlag = true %}
+{% endif %}
+{% set adImageRepository = fetch_repository('FaAdBundle:AdImage') %}
+{% set adImages = adImageRepository.getAdImages(adId) %}
+{% set isAdminLoggedIn = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isAdminLoggedIn', [fetch_container_instance()]) %}
+
+{% set bigImageRoute = "ajax_get_big_ad_image" %}
+{% if isAdminLoggedIn and isAdminLoggedIn.id %}
+    {% set bigImageRoute = "ajax_get_big_ad_image_admin" %}
+{% endif %}
+
+{% set adImgCount = adImages|length %}
+{% set container = fetch_container_instance() %}
+{% if not showDragDropFlag or (showDragDropFlag and adImgCount) %}
+<div class="main-photo">
+    <b>{{ 'Main photo'|trans({}, 'frontend-paa') }}</b>
+</div>
+
+<ul class="inline-list ui-sortable" id="adImageList">
+    {% if adImgCount %}
+        {% for adImage in adImages %}
+            <li data-image-ord="{{adImage.getOrd()}}" data-image-id="{{adImage.getId()}}" id="image_{{adImage.getId()}}" class="thumb-img-wrap">
+                <div class="adimg-thumb" style="position:relative">
+                    {% if adImage.getSessionId() %}
+                        {% set imageAdId = adImage.getSessionId() %}
+                    {% else %}
+                        {% set imageAdId = adImage.getAd().getId() %}
+                    {% endif %}
+                    {% set adImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, imageAdId, adImage.getPath(), adImage.getHash(), '800X600', adImage.getAws(), adImage.getImageName()]) %}
+                    <img alt="{{imageAdId}}_{{adImage.getHash()}}_800X600.jpg" src="{{ adImageUrl }}{% if cache is defined and cache == true %}?{{ random(1000) }}{% endif %}" title="{{ 'Drag photo to change order'|trans({}, 'frontend-paa') }}" />
+                    {% if adImage.getHash() %}
+                        <a class="secondary-btn-1 button edit-img" href="javascript:getOriginalImage('{{path(bigImageRoute, {'adId': imageAdId, 'imageId': adImage.getId(), 'imageHash': adImage.getHash(), 'vertical': vertical})}}')">{{'Edit'|trans({}, 'frontend-paa')}}</a>
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    {% endif %}
+    {% set imageRemains = (container.getParameter('fa.image.' ~ vertical ~ '_upload_limit') - adImgCount) %}
+    {% if imageRemains %}
+        <li class="thumb-img-wrap ui-sortable-disabled">
+            <div class="upload-thumb-img" style="position:relative">
+                <span id="pickfile_1" class="pickfiles needsclick">&nbsp;</span>
+            </div>
+        </li>
+    {% endif %}
+</ul>
+{% endif %}

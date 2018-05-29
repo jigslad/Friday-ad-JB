@@ -1,0 +1,289 @@
+{% set container = fetch_container_instance() %}
+{% set objRoleRepository = fetch_repository('FaUserBundle:Role') %}
+{% set objPaymentCyberSourceRepository = fetch_repository('FaPaymentBundle:PaymentCyberSource') %}
+{% set objCategoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set userTypesArray = objRoleRepository.getUserTypes() %}
+<div class="row">
+    <div class="columns">
+        <div class="table-fix-col">
+            <div class="fa-scroller2">
+                <center><h3>{{ 'Report generated: ' }}{{ "now"|date("d/m/Y") }}{{ ' for ' }}{% if (searchParams['email'] is defined) %}{{ searchParams['email'] }}{% else %}{{ searchParams['ad_id'] }}{% endif %}</h3></center>
+                <table cellspacing="0" cellpadding="0">
+                    <tr><td colspan="2"><h5>{{ 'Account Info' }}</h5></td></tr>
+                    <tr><td colspan="2"><b>{{ 'General account info' }}</b></td></tr>
+                    <tr>
+                        <td width="20%">{{ 'Email address:' }}</td>
+                        <td>{{ reportData['user_details']['email'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'First name:' }}</td>
+                        <td>{{ reportData['user_details']['first_name'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Last name:' }}</td>
+                        <td>{{ reportData['user_details']['last_name'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Username:' }}</td>
+                        <td>{{ reportData['user_details']['username'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'User type:' }}</td>
+                        <td>{{ userTypesArray[reportData['user_details']['user_role_id']] }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Telephone:' }}</td>
+                        <td>{{ reportData['user_details']['phone'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'About you message:' }}</td>
+                        <td>{{ reportData['user_details']['about_you'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Saved payment sources:' }}</td>
+                        <td>
+                            {% if (reportData['user_details']['card_numbers'] is defined and reportData['user_details']['card_numbers'] != '') %}
+                                {% set userCardNumbersArray = reportData['user_details']['card_numbers']|split(',') %}
+                                {% set userCardTypesArray = reportData['user_details']['card_types']|split(',') %}
+                                {% set numberOfCards = (userCardNumbersArray|length) - 1 %}
+                                {% set cardDetailsArray = {} %}
+                                {% for i in 0..numberOfCards %}
+                                    {% set cardDetailsArray = cardDetailsArray|merge(['* ' ~ userCardNumbersArray[i] ~ ' (' ~ objPaymentCyberSourceRepository.getCardTypeClass(userCardTypesArray[i])|capitalize ~ ')']) %}
+                                {% endfor %}
+                                {{ cardDetailsArray|join(', ') }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Saved address:' }}</td>
+                        <td>
+                            {% if (reportData['user_addresses'] is defined and reportData['user_addresses']|length > 0) %}
+                                {% set userAddressesArray = {} %}
+                                {% for userAddress in reportData['user_addresses'] %}
+                                    {% set addressStr = userAddress['first_name'] ~ ', ' ~ userAddress['street_address'] ~ ', ' ~  userAddress['domicile_name'] ~ ', ' ~  userAddress['town_name'] ~ ', ' ~ userAddress['zip'] ~ ', ' ~ userAddress['country_name'] %}
+                                    {{ addressStr }}<br>
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Last logged in:' }}</td>
+                        <td>{{ reportData['user_details']['last_login']|date('d/m/Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Last ip:' }}</td>
+                        <td>{{ reportData['user_details']['ip_address'] }}</td>
+                    </tr>
+                    <tr><td colspan="2"><b>{{ 'Business details' }}</b></td></tr>
+                    <tr>
+                        <td width="20%">{{ 'Business name:' }}</td>
+                        <td>{{ reportData['user_details']['business_name'] }}</td>
+                    </tr>
+                    <tr>
+                        <td width="20%">{{ 'Business category:' }}</td>
+                        <td>{{ objCategoryRepository.getRootCategoryName(reportData['user_details']['business_category_id'], container, true) }}</td>
+                    </tr>
+                    <tr>
+                        <td width="20%">{{ 'Business welcome message:' }}</td>
+                        <td>{{ reportData['user_details']['company_welcome_message'] }}</td>
+                    </tr>
+                    <tr>
+                        <td width="20%">{{ 'Company address:' }}</td>
+                        <td>{{ reportData['user_details']['company_address'] }}</td>
+                    </tr>
+                    <tr>
+                        <td width="20%">{{ 'Business telephone 1:' }}</td>
+                        <td>{{ reportData['user_details']['phone1'] }}</td>
+                    </tr>
+                    <tr>
+                        <td width="20%">{{ 'Business telephone 2:' }}</td>
+                        <td>{{ reportData['user_details']['phone2'] }}</td>
+                    </tr>
+                    <tr>
+                        <td width="20%">{{ 'Website link:' }}</td>
+                        <td>{{ reportData['user_details']['website_link'] }}</td>
+                    </tr>
+                    <tr><td colspan="2"><b>{{ 'Account purchases' }}</b></td></tr>
+                    <tr>
+                        <td colspan="2">
+                            {% if (reportData['account_purchases'] is defined and reportData['account_purchases']|length > 0) %}
+                                <table>
+                                    <tr><th>{{ 'Package name' }}</th><th>{{ 'Date of purchase' }}</th><th>{{ 'Price' }}</th><th>{{ 'Payment reference' }}</th></tr>
+                                    {% for userPackage in reportData['account_purchases'] %}
+                                        <tr>
+                                            <td>{{ userPackage['title'] }}</td>
+                                            <td>{{ userPackage['created_at']|date('d/m/Y') }}</td>
+                                            <td>{{ format_currency(userPackage['amount']) }}</td>
+                                            <td>{{ userPackage['cart_code'] }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            {% else %}
+                                <table>
+                                    <tr><td colspan="4">{{ 'No any purchases yet!' }}</td></tr>
+                                </table>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if (searchParams['include_ads'] is defined) %}
+                    <tr><td colspan="2"><h5>{{ 'Advert Info' }}&nbsp;({{ reportData['user_adverts']|length }})</h5></td></tr>
+                        {% if (reportData['user_adverts'] is defined and reportData['user_adverts']|length > 0) %}
+                            <tr>
+                                <td colspan="2">
+                                {% for adDetail in reportData['user_adverts'] %}
+                                    <table>
+                                    <tr>
+                                        <th width="15%">{{ 'Adref' }}</th>
+                                        <th width="25%">{{ 'Category' }}</th>
+                                        <th width="35%">{{ 'Advert title' }}</th>
+                                        <th width="25%">{{ 'Advert subtitle' }}</th>
+                                    </tr>
+                                    
+                                        <tr>
+                                            <td><b>{{ adDetail['id'] }}</b></td>
+                                            <td>{{ adDetail['category_path'] }}</td>
+                                            <td>{{ adDetail['title'] }}</td>
+                                            <td>{{ adDetail['title'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>{{ 'Advert description: ' }}</th>
+                                            <td colspan="3">{{ adDetail['description']|raw }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>{{ 'Advert images: ' }}</th>
+                                            <td colspan="3">
+                                                {% for adImage in adDetail['images'] %}
+                                                {{ adImage }}<br>
+                                                {% endfor %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>{{ 'Additional details: ' }}</th>
+                                            <td colspan="3">
+                                                {% for adDimensions in adDetail['dimensions'] %}
+                                                    {% for key, value in adDimensions %}
+                                                        {{ key }}:&nbsp;{{ value }}<br>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>{{ 'Advert purchases: ' }}</th>
+                                            <td colspan="3">
+                                                {% if (adDetail['purchases']|length > 0) %}
+                                                    <table>
+                                                        <tr>
+                                                            <th>{{ 'Advert package name' }}</th>
+                                                            <th>{{ 'Date of purchase' }}</th>
+                                                            <th>{{ 'Price' }}</th>
+                                                            <th>{{ 'Payment reference' }}</th>
+                                                        </tr>
+                                                        {% for adPackage in adDetail['purchases'] %}
+                                                            <tr>
+                                                                <td>{{ adPackage['title'] }}</td>
+                                                                <td>{{ adPackage['created_at']|date('d/m/Y') }}</td>
+                                                                <td>{{ format_currency(adPackage['amount']) }}</td>
+                                                                <td>{{ adPackage['cart_code'] }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </table>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>{{ 'Advert activity: ' }}</th>
+                                            <td colspan="3">
+                                                {% if (adDetail['activities']|length > 0) %}
+                                                    <table>
+                                                        <tr>
+                                                            <th>{{ 'Ad placed' }}</th>
+                                                            <th>{{ 'Original adref' }}</th>
+                                                            <th>{{ 'Edit date' }}</th>
+                                                            <th>{{ 'Expired date' }}</th>
+                                                            <th>{{ 'Expected expiry date' }}</th>
+                                                            <th>{{ 'Edit' }}</th>
+                                                            <th>{{ 'Expired' }}</th>
+                                                            <th>{{ 'Renewal' }}</th>
+                                                            <th>{{ 'Renewal date' }}</th>
+                                                            <th>{{ 'Ad status' }}</th>
+                                                            <th>{{ 'Ip Address' }}</th>
+                                                        </tr>
+                                                        {% for adActivity in adDetail['activities'] %}
+                                                            <tr>
+                                                                <td>{% if (adActivity['ad_created_at']) > 0 %}{{ adActivity['ad_created_at']|date('d/m/Y') }}{% endif %}</td>
+                                                                <td>{{ adActivity['ad_id'] }}</td>
+                                                                <td>{% if (adActivity['edited_at']) > 0 %}{{ adActivity['edited_at']|date('d/m/Y') }}{% endif %}</td>
+                                                                <td>{% if (adActivity['expired_at']) > 0 %}{{ adActivity['expired_at']|date('d/m/Y') }}{% endif %}</td>
+                                                                <td>{% if (adActivity['expires_at']) > 0 %}{{ adActivity['expires_at']|date('d/m/Y') }}{% endif %}</td>
+                                                                <td>{{ adActivity['is_edit'] }}</td>
+                                                                <td>{{ adActivity['is_expired'] }}</td>
+                                                                <td>{{ adActivity['is_renewed'] }}</td>
+                                                                <td>{% if (adActivity['renewed_at']) > 0 %}{{ adActivity['renewed_at']|date('d/m/Y') }}{% endif %}</td>
+                                                                <td>{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adActivity['status_id']) }}</td>
+                                                                <td>{{ adActivity['ip_addresses'] }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </table>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                    {% if (searchParams['include_messages'] is defined) %}
+                        <tr><td colspan="2"><h5>{{ 'Messages' }}&nbsp;({{ reportData['user_messages']|length }})</h5></td></tr>
+                        {% if (reportData['user_messages'] is defined and reportData['user_messages']|length > 0) %}
+                            {% set prvMsgAdId = '' %}
+                            {% set msgCounter = 0 %}
+                            {% for adMessage in reportData['user_messages'] %}
+                                {% if (prvMsgAdId != '' and prvMsgAdId != adMessage['ad_id']) %}
+                                            </table>
+                                         </td>
+                                    </tr>
+                                {% endif %}
+                                {% if (prvMsgAdId == '' or prvMsgAdId != adMessage['ad_id']) %}
+                                    <tr><td colspan="2">&nbsp;</td></tr>
+                                    <tr><th colspan="2">{{ adMessage['ad_id'] ~ ' Messages'}}</th></tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <table>
+                                                <tr>
+                                                    <th width="15%">{{ 'Sender' }}</th>
+                                                    <th width="15%">{{ 'Recipient' }}</th>
+                                                    <th width="20%">{{ 'Subject' }}</th>
+                                                    <th width="35%">{{ 'Message' }}</th>
+                                                    <th width="15%">{{ 'Date sent / ip' }}</th>
+                                                </tr>
+                                {% endif %}
+                                                <tr>
+                                                    <td>{{ adMessage['sender_email'] }}</td>
+                                                    <td>{{ adMessage['receiver_email'] }}</td>
+                                                    <td>{{ adMessage['subject'] }}</td>
+                                                    <td>{{ adMessage['text_message'] }}</td>
+                                                    <td>{{ adMessage['created_at']|date('d/m/Y') ~ ' / ' ~ adMessage['ip_address'] }}</td>
+                                                </tr>
+                                {% set prvMsgAdId = adMessage['ad_id'] %}
+                                {% set msgCounter = msgCounter + 1 %}
+                                {% if (msgCounter >= reportData['user_messages']|length) %}
+                                            </table>
+                                         </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                    {% if not app.request.get('popup') %}
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                <button class="small button" name="print" id="print" type="button" onclick="openWindow(window.location.href+'&popup=1', 'ad_detail', '1100', '800');">{{ 'Print' }}</button>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

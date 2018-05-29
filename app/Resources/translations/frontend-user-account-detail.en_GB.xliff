@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="df7a519e24eec0719d2dbe4d51d1972bf90bc26c" resname="(not publicly displayed)">
+        <jms:reference-file line="10">views/MyAccount/myAccountDetail.html.twig</jms:reference-file>
+        <source>(not publicly displayed)</source>
+        <target state="new">(not publicly displayed)</target>
+      </trans-unit>
+      <trans-unit id="8c684290ce0b8a8e6cee79a145e17554064a4760" resname="Change password">
+        <jms:reference-file line="32">views/MyAccount/myAccountDetail.html.twig</jms:reference-file>
+        <source>Change password</source>
+        <target state="new">Change password</target>
+      </trans-unit>
+      <trans-unit id="825cbccf6941ce68f80a447354815a79797a1d17" resname="Connect with Facebook">
+        <jms:reference-file line="14">views/MyAccount/myAccountDetail.html.twig</jms:reference-file>
+        <source>Connect with Facebook</source>
+        <target state="new">Connect with Facebook</target>
+      </trans-unit>
+      <trans-unit id="d79471ea691b7568e33b2a4eeb73e38ec321baf0" resname="Connected with Google">
+        <jms:reference-file line="15">views/MyAccount/myAccountDetail.html.twig</jms:reference-file>
+        <source>Connected with Google</source>
+        <target state="new">Connected with Google</target>
+      </trans-unit>
+      <trans-unit id="1ceb1859741cb9ad66b3c88a5227e0b331329f70" resname="Contact by email">
+        <jms:reference-file line="90">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Contact by email</source>
+        <target state="new">Contact by email</target>
+      </trans-unit>
+      <trans-unit id="0c7fdc499facbc95f85be3fcd0711e2a2ceb388f" resname="Contact by phone">
+        <jms:reference-file line="89">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Contact by phone</source>
+        <target state="new">Contact by phone</target>
+      </trans-unit>
+      <trans-unit id="9a439b8ba35c5bccd95b7f5d65f1f4a77759317a" resname="Create password">
+        <jms:reference-file line="47">views/MyAccount/myAccountDetail.html.twig</jms:reference-file>
+        <source>Create password</source>
+        <target state="new">Create password</target>
+      </trans-unit>
+      <trans-unit id="c94d3175a6560565410511df2cebab9cda96027e" resname="Email address">
+        <jms:reference-file line="84">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Email address</source>
+        <target state="new">Email address</target>
+      </trans-unit>
+      <trans-unit id="ea7a1c738b015b921c0e9cef338b3ce54880e532" resname="Facebook email and your account email is different.">
+        <jms:reference-file line="295">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>Facebook email and your account email is different.</source>
+        <target state="new">Facebook email and your account email is different.</target>
+      </trans-unit>
+      <trans-unit id="70b0d05cca9dfbe217ecd5fb1a5a8831ac80f78b" resname="Google email and your account email is different.">
+        <jms:reference-file line="332">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>Google email and your account email is different.</source>
+        <target state="new">Google email and your account email is different.</target>
+      </trans-unit>
+      <trans-unit id="c47ae15370cfe1ed2781eedc1dc2547d12d9e972" resname="Help">
+        <jms:reference-file line="20">views/MyAccount/myAccountDetail.html.twig</jms:reference-file>
+        <source>Help</source>
+        <target state="new">Help</target>
+      </trans-unit>
+      <trans-unit id="3dbaa1cc198b08ff42764b6772b563299015da2d" resname="Keep my phone number private &lt;br /&gt;&lt;b&gt;(recommended)&lt;/b&gt;">
+        <jms:reference-file line="88">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source><![CDATA[Keep my phone number private <br /><b>(recommended)</b>]]></source>
+        <target state="new"><![CDATA[Keep my phone number private <br /><b>(recommended)</b>]]></target>
+      </trans-unit>
+      <trans-unit id="d850ee188c7c55b64bc3624534de5c5051a57dc6" resname="New password">
+        <jms:reference-file line="100">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>New password</source>
+        <target state="new">New password</target>
+      </trans-unit>
+      <trans-unit id="e3053fbaa7622ccae5f59565e7fb553f9c2d79c8" resname="Old password">
+        <jms:reference-file line="118">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Old password</source>
+        <target state="new">Old password</target>
+      </trans-unit>
+      <trans-unit id="c5ac4a4dd80e412d6d1222ba467165b4e50bfe79" resname="One of field is missing from Facebook (First Name, Last Name, Email).">
+        <jms:reference-file line="310">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <jms:reference-file line="342">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>One of field is missing from Facebook (First Name, Last Name, Email).</source>
+        <target state="new">One of field is missing from Facebook (First Name, Last Name, Email).</target>
+      </trans-unit>
+      <trans-unit id="179359b39edbd0bf0cdf3bb6b7dfb4223f663af2" resname="Save changes">
+        <jms:reference-file line="91">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Save changes</source>
+        <target state="new">Save changes</target>
+      </trans-unit>
+      <trans-unit id="044b852f30b636aa923b18a61a35c79abc87556f" resname="Show password">
+        <jms:reference-file line="110">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Show password</source>
+        <target state="new">Show password</target>
+      </trans-unit>
+      <trans-unit id="d1071e87019db1e1eab470faaa587a4dc2f55ab3" resname="Telephone number (optional)">
+        <jms:reference-file line="87">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Telephone number (optional)</source>
+        <target state="new">Telephone number (optional)</target>
+      </trans-unit>
+      <trans-unit id="e0b4dc16ccbd1e9504082a3b0c9b20635fc89162" resname="Update your contact details">
+        <jms:reference-file line="9">views/MyAccount/myAccountDetail.html.twig</jms:reference-file>
+        <source>Update your contact details</source>
+        <target state="new">Update your contact details</target>
+      </trans-unit>
+      <trans-unit id="c60aed181686ca4c9c326f5831e6caf5ffeb80ba" resname="You already have old password.">
+        <jms:reference-file line="533">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>You already have old password.</source>
+        <target state="new">You already have old password.</target>
+      </trans-unit>
+      <trans-unit id="52e8a00c33402aa339aec53a7a4236928e0127ce" resname="You have been sent an email with a link to create a password.">
+        <jms:reference-file line="531">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>You have been sent an email with a link to create a password.</source>
+        <target state="new">You have been sent an email with a link to create a password.</target>
+      </trans-unit>
+      <trans-unit id="6299df5542213a2f356935d54b00e5ea46dd6721" resname="You have successfully connected with Facebook.">
+        <jms:reference-file line="306">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>You have successfully connected with Facebook.</source>
+        <target state="new">You have successfully connected with Facebook.</target>
+      </trans-unit>
+      <trans-unit id="3e34a8760bfd427a91640b2d2bb4962b7730bd9f" resname="You have successfully connected with Google.">
+        <jms:reference-file line="338">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>You have successfully connected with Google.</source>
+        <target state="new">You have successfully connected with Google.</target>
+      </trans-unit>
+      <trans-unit id="9c5c88177858e5547a498f2cd89405167d14ffff" resname="Your detail updated successfully.">
+        <jms:reference-file line="159">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>Your detail updated successfully.</source>
+        <target state="new">Your detail updated successfully.</target>
+      </trans-unit>
+      <trans-unit id="a6252b66904c2b87ca11b95e1f01fab3be570ff4" resname="Your details">
+        <jms:reference-file line="3">views/MyAccount/myAccountDetail.html.twig</jms:reference-file>
+        <source>Your details</source>
+        <target state="new">Your details</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,274 @@
+parameters:
+    fa.dotmailer.data.fields:
+        field1:
+            Name: EMAIL
+            Type: string
+            Visibility: Private
+        field2:
+            Name: GUID
+            Type: string
+            Visibility: Private
+        field3:
+            Name: OPTIN
+            Type: boolean
+            Visibility: Private
+        field4:
+            Name: OPENTYPE
+            Type: string
+            Visibility: Private
+        field5:
+            Name: FIRST_NAME
+            Type: string
+            Visibility: Private
+        field6:
+            Name: LAST_NAME
+            Type: string
+            Visibility: Private
+        field7:
+            Name: BUSINESS_NAME
+            Type: string
+            Visibility: Private
+        field8:
+            Name: POSTCODE
+            Type: string
+            Visibility: Public
+        field9:
+            Name: TOWN
+            Type: string
+            Visibility: Private
+        field10:
+            Name: COUNTY
+            Type: string
+            Visibility: Private
+        field11:
+            Name: PRINT_EDITION
+            Type: string
+            Visibility: Private
+        field12:
+            Name: USER_TYPE
+            Type: string
+            Visibility: Private
+        field13:
+            Name: PHONE_NUMBER
+            Type: string
+            Visibility: Private
+        field14:
+            Name: LAST_PAID
+            Type: date
+            Visibility: Private
+        field15:
+            Name: LAST_PAA
+            Type: date
+            Visibility: Private
+        field16:
+            Name: ENQUIRY_POSTCODE
+            Type: string
+            Visibility: Private
+        field17:
+            Name: ENQUIRY_TOWN
+            Type: string
+            Visibility: Private
+        field18:
+            Name: ENQUIRY_COUNTY
+            Type: string
+            Visibility: Private
+        field19:
+            Name: NEWSLETTER_SIGNUP
+            Type: date
+            Visibility: Private
+        field20:
+            Name: LAST_ENQUIRY
+            Type: date
+            Visibility: Private
+        field21:
+            Name: N-FOR-SALE
+            Type: boolean
+            Visibility: Private
+        field22:
+            Name: N-AGRICULTURAL
+            Type: boolean
+            Visibility: Private
+        field23:
+            Name: N-ANTIQUES
+            Type: boolean
+            Visibility: Private
+        field24:
+            Name: N-BABY-AND-KIDS
+            Type: boolean
+            Visibility: Private
+        field25:
+            Name: N-BIZARRE-BAZAAR
+            Type: boolean
+            Visibility: Private
+        field26:
+            Name: N-BUSINESS-OFFICE
+            Type: boolean
+            Visibility: Private
+        field27:
+            Name: N-ELECTRONICS
+            Type: boolean
+            Visibility: Private
+        field28:
+            Name: N-FASHION
+            Type: boolean
+            Visibility: Private
+        field29:
+            Name: N-HOME-AND-GARDEN
+            Type: boolean
+            Visibility: Private
+        field30:
+            Name: N-LEISURE
+            Type: boolean
+            Visibility: Private
+        field31:
+            Name: N-JOBS
+            Type: boolean
+            Visibility: Private
+        field32:
+            Name: N-JOB-SEEKERS
+            Type: boolean
+            Visibility: Private
+        field33:
+            Name: N-JOB-POSTERS
+            Type: boolean
+            Visibility: Private
+        field34:
+            Name: N-PROPERTIES
+            Type: boolean
+            Visibility: Private
+        field35:
+            Name: N-PROPERTIES-SALE
+            Type: boolean
+            Visibility: Private
+        field36:
+            Name: N-PROPERTIES-RENT
+            Type: boolean
+            Visibility: Private
+        field37:
+            Name: N-PROPERTIES-SHARE
+            Type: boolean
+            Visibility: Private
+        field38:
+            Name: N-SERVICES
+            Type: boolean
+            Visibility: Private
+        field39:
+            Name: N-BUSINESS-LEGAL
+            Type: boolean
+            Visibility: Private
+        field40:
+            Name: N-CELEBRATIONS
+            Type: boolean
+            Visibility: Private
+        field41:
+            Name: N-FAMILY-CARE-SERVIC
+            Type: boolean
+            Visibility: Private
+        field42:
+            Name: N-HEALTH-BEAUTY
+            Type: boolean
+            Visibility: Private
+        field43:
+            Name: N-MUSICAL
+            Type: boolean
+            Visibility: Private
+        field44:
+            Name: N-PET-FARMING-EQUEST
+            Type: boolean
+            Visibility: Private
+        field45:
+            Name: N-PROPERTY-HOME
+            Type: boolean
+            Visibility: Private
+        field46:
+            Name: N-TRANSPORT-SERVICES
+            Type: boolean
+            Visibility: Private
+        field47:
+            Name: N-MOTORS
+            Type: boolean
+            Visibility: Private
+        field48:
+            Name: N-CARS
+            Type: boolean
+            Visibility: Private
+        field49:
+            Name: N-BOATS
+            Type: boolean
+            Visibility: Private
+        field50:
+            Name: N-MOTORCYCLES
+            Type: boolean
+            Visibility: Private
+        field51:
+            Name: N-MOTORHOMES
+            Type: boolean
+            Visibility: Private
+        field52:
+            Name: N-FARM
+            Type: boolean
+            Visibility: Private
+        field53:
+            Name: N-HORSEBOXES
+            Type: boolean
+            Visibility: Private
+        field54:
+            Name: N-COMMERCIAL-VEHICLE
+            Type: boolean
+            Visibility: Private
+        field55:
+            Name: N-ANIMALS
+            Type: boolean
+            Visibility: Private
+        field56:
+            Name: N-HORSES
+            Type: boolean
+            Visibility: Private
+        field57:
+            Name: N-LIVESTOCK
+            Type: boolean
+            Visibility: Private
+        field58:
+            Name: N-CATS
+            Type: boolean
+            Visibility: Private
+        field59:
+            Name: N-DOGS
+            Type: boolean
+            Visibility: Private
+        field60:
+            Name: N-COMMUNITY
+            Type: boolean
+            Visibility: Private
+        field61:
+            Name: N-CLASSES-TUITION
+            Type: boolean
+            Visibility: Private
+        field62:
+            Name: N-CLUBS-SOCIETIES
+            Type: boolean
+            Visibility: Private
+        field63:
+            Name: N-FRIENDSHIP-DATING
+            Type: boolean
+            Visibility: Private
+        field64:
+            Name: N-WHATS-ON
+            Type: boolean
+            Visibility: Private
+        field65:
+            Name: N-IN-YOUR-AREA
+            Type: boolean
+            Visibility: Private
+        field66:
+            Name: N-COMPETITIONS
+            Type: boolean
+            Visibility: Private
+        field67:
+            Name: N-DEALS
+            Type: boolean
+            Visibility: Private
+        field68:
+            Name: N-THIRD-PARTY
+            Type: boolean
+            Visibility: Private

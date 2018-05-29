@@ -1,0 +1,7 @@
+get_ad_print_count:
+    path:     /api/getMagazineAdvertsCount/
+    defaults: { _controller: "FaAdBundle:AdPrint:getAdPrintCount" }
+
+get_ad_print_result:
+    path:     /api/getMagazineAdverts/
+    defaults: { _controller: "FaAdBundle:AdPrint:getAdPrintResult" }

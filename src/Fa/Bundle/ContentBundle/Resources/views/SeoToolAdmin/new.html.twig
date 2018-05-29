@@ -1,0 +1,359 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            <div class="row">
+                <div class="large-9 columns">
+                    {{ form_start(form, {'attr': {'novalidate': '', 'enctype' : 'multipart/form-data'}}) }}
+                        {{ form_row(form.page) }}
+                        {{ form_row(form.category_1) }}
+                        {{ form_row(form.category_2) }}
+                        {{ form_row(form.category_3) }}
+                        {{ form_row(form.category_4) }}
+                        {{ form_row(form.source_url) }}
+                        {{ form_row(form.target_url) }}
+                        <div id="image_seo_field_div">
+                            {{ form_row(form.image_alt) }}
+                            {{ form_row(form.image_alt_2) }}
+                            {{ form_row(form.image_alt_3) }}
+                            {{ form_row(form.image_alt_4) }}
+                            {{ form_row(form.image_alt_5) }}
+                            {{ form_row(form.image_alt_6) }}
+                            {{ form_row(form.image_alt_7) }}
+                            {{ form_row(form.image_alt_8) }}
+                        </div>
+                        <div id="seo_fields_div">
+                            {{ form_row(form.page_title) }}
+                            <div id="seo_fields_h1_div">
+                                {{ form_row(form.h1_tag) }}
+                            </div>
+                            {{ form_row(form.meta_description) }}
+                            {{ form_row(form.meta_keywords) }}
+                        </div>
+                        {{ form_row(form.status) }}
+                        <div id="seo_fields2_div">
+                            {{ form_row(form.no_index) }}
+                            {{ form_row(form.no_follow) }}
+                            {{ form_row(form.canonical_url) }}
+                        </div>
+                        <div id="popular_search_fields_div">
+                            {{ form_label(form.popular_search) }}
+                            {{ form_widget(form.popular_search) }}
+                            &nbsp;&nbsp;<button type="button" id="popular_search_csv_uploader" class="tiny button mb0">{{ 'Upload CSV'|trans({}, 'messages') }}</button>
+                            <div style="display:none;" id="popular_search_fields_main_div">
+                                <div class="row">
+                                    <div class="large-6 columns">
+                                        <label>{{'Popular keyword'}}</label>
+                                    </div>
+                                    <div class="large-6 columns">
+                                        <label>{{'Popular keyword url'}}</label>
+                                    </div>
+                                </div>
+                                {% for i in 1..7 %}
+                                    <div class="row">
+                                        <div class="large-6 columns">
+                                            {{ form_widget(form['popular_search_title_'~i]) }}
+                                            {{ form_errors(form['popular_search_title_'~i]) }}
+                                        </div>
+                                        <div class="large-6 columns">
+                                            {{ form_widget(form['popular_search_url_'~i]) }}
+                                            {{ form_errors(form['popular_search_url_'~i]) }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <div id="top_link_fields_div">
+                            {{ form_label(form.top_link) }}
+                            {{ form_widget(form.top_link) }}
+                            &nbsp;&nbsp;<button type="button" id="top_link_csv_uploader" class="tiny button mb0">{{ 'Upload CSV'|trans({}, 'messages') }}</button>
+
+                            <div style="display:none;" id="top_link_fields_main_div">
+                                <div class="row">
+                                    <div class="large-6 columns">
+                                        <label>{{'Top link keyword'}}</label>
+                                    </div>
+                                    <div class="large-6 columns">
+                                        <label>{{'Top link keyword url'}}</label>
+                                    </div>
+                                </div>
+                                {% for i in 1..20 %}
+                                    <div class="row">
+                                        <div class="large-6 columns">
+                                            {{ form_widget(form['top_link_title_'~i]) }}
+                                            {{ form_errors(form['top_link_title_'~i]) }}
+                                        </div>
+                                        <div class="large-6 columns">
+                                            {{ form_widget(form['top_link_url_'~i]) }}
+                                            {{ form_errors(form['top_link_url_'~i]) }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <div style="display:none;" id="list_content_div">
+                            <div>
+                                <div class="row">
+                                    <div class="large-12 columns">{{ form_row(form.list_content_title) }}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="large-12 columns">{{ form_row(form.list_content_detail) }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'seo_tool_admin'}) }}
+                    {{ form_end(form) }}
+                </div>
+                <div class="large-3 columns">
+                    <b>{{ 'Indexable Dimensions'|trans }}</b>
+                    <div style="overflow: auto; height: 500px;" id="item_dimensions_div">
+                        {{ staticCall('Fa\\Bundle\\EntityBundle\\Repository\\CategoryDimensionRepository', 'getIndexableDimesionsArray')|join('<br />')|raw }}
+                    </div>
+                    <div style="overflow: auto; height: 500px;" id="home_page_dimensions_div">
+                        {Location}
+                    </div>
+                    <div style="overflow: auto; height: 800px;" id="category_dimensions_div">
+                        {{ staticCall('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository', 'getIndexableDimesionsArray')|join('<br />')|raw }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'link', 'toolbar1' : 'bold italic underline, bullist numlist link styleselect fontsizeselect', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'false', 'custom_fontsize_formats': '8px 10px 12px 14px 18px 24px 36px' }) }}
+    <script src="{{ asset_url('facore/js/simple_ajax_uploader.js') }}"></script>
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        $("#fa_content_seo_tool_admin_category_1").change(function(){
+            loadCategoryByLevel($(this).val(), 2);
+            loadCategoryByLevel('', 3);
+            loadCategoryByLevel('', 4);
+        });
+
+        $("#fa_content_seo_tool_admin_category_2").change(function(){
+            loadCategoryByLevel($(this).val(), 3);
+            loadCategoryByLevel('', 4);
+        });
+
+        $("#fa_content_seo_tool_admin_category_3").change(function(){
+            loadCategoryByLevel($(this).val(), 4);
+        });
+
+        $("#fa_content_seo_tool_admin_page").change(function(){
+            hideShowSeofieldsByPage();
+        });
+
+        $("#fa_content_seo_tool_admin_popular_search").click(function(){
+            hideShowPopularSearchFields();
+        });
+        $("#fa_content_seo_tool_admin_top_link").click(function(){
+        	hideShowTopLinkFields();
+        });
+        hideShowSeofieldsByPage();
+        hideShowPopularSearchFields();
+        hideShowTopLinkFields();
+
+      $('#popular_search_csv_uploader').on('click', prepareCSVUpload('popular_search_csv_uploader'));
+      $('#top_link_csv_uploader').on('click', prepareCSVUpload('top_link_csv_uploader'));
+    });
+
+    function hideShowSeofieldsByPage()
+    {
+        var pageVal = $('#fa_content_seo_tool_admin_page').val();
+
+        if (pageVal == "{{ constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT') }}") {
+            $('#seo_fields_div, #seo_fields2_div, #popular_search_fields_div, #top_link_fields_div, #list_content_div').hide();
+            clearForm($('#seo_fields_div'));
+            clearForm($('#seo_fields2_div'));
+            $('#image_seo_field_div, #item_dimensions_div').show();
+            $('#home_page_dimensions_div, #category_dimensions_div').hide();
+        } else if (pageVal == "{{ constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::HOME_PAGE') }}") {
+            $('#image_seo_field_div, #seo_fields2_div, #seo_fields_h1_div, #popular_search_fields_div, #top_link_fields_div, #list_content_div').hide();
+            $('#seo_fields_div').show();
+            clearForm($('#seo_fields2_div'));
+            clearForm($('#seo_fields_h1_div'));
+            clearForm($('#image_seo_field_div'));
+            $('#item_dimensions_div, #category_dimensions_div').hide();
+            $('#home_page_dimensions_div').show();
+        } else if (pageVal == "{{ constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE') }}") {
+            $('#image_seo_field_div').hide();
+            clearForm($('#image_seo_field_div'));
+            $('#item_dimensions_div, #home_page_dimensions_div').hide();
+            $('#category_dimensions_div').show();
+            $('#seo_fields_div').show();
+            $('#seo_fields2_div').show();
+            $('#seo_fields_h1_div').show();
+            $('#popular_search_fields_div, #top_link_fields_div, #list_content_div').show();
+        } else {
+            $('#image_seo_field_div').hide();
+            $('#seo_fields_div').show();
+            $('#seo_fields2_div').show();
+            $('#seo_fields_h1_div').show();
+            clearForm($('#image_seo_field_div'));
+            $('#home_page_dimensions_div, #category_dimensions_div, #popular_search_fields_div, #top_link_fields_div, #list_content_div').hide();
+            $('#item_dimensions_div, #top_link_fields_div').show();
+        }
+    }
+
+    function hideShowPopularSearchFields()
+    {
+        var popularSearchFlag = $('#fa_content_seo_tool_admin_popular_search').is(':checked');
+        if (popularSearchFlag) {
+            $('#popular_search_fields_main_div').show();
+            $('#popular_search_csv_uploader').show();
+        } else {
+            $('#popular_search_fields_main_div').hide();
+            $('#popular_search_csv_uploader').hide();
+        }
+    }
+
+    function hideShowTopLinkFields()
+    {
+        var topLinkFlag = $('#fa_content_seo_tool_admin_top_link').is(':checked');
+        if (topLinkFlag) {
+            $('#top_link_fields_main_div').show();
+            $('#top_link_csv_uploader').show();
+        } else {
+            $('#top_link_fields_main_div').hide();
+            $('#top_link_csv_uploader').hide();
+        }
+    }
+
+    function loadCategoryByLevel(id, level)
+    {
+        var category_selector = $('#fa_content_seo_tool_admin_category_'+level);
+        category_selector.html('<option value="">{{'Select category'|trans}} '+level+'</option>');
+
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: (level == 4) ? '{{ path("category_ajax_get_nested_node_json") }}' : '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    for (var i=0, total = data.length; i < total; i++) {
+                        category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                    }
+                }
+            });
+        }
+    }
+
+    function prepareCSVUpload(uploaderId)
+    {
+      if (uploaderId == 'top_link_csv_uploader') {
+          var uploader1 = new ss.SimpleUpload({
+            button: document.getElementById(uploaderId),
+            url: '{{ path("seo_tool_upload_csv") }}',
+            name: 'objCSVFileTopLink',
+            multipart: true,
+            responseType: 'json',
+            startXHR: function() {
+                //Start progressbar
+                blockPage();
+            },
+            onSubmit: function() {
+                //Progressbar
+              },
+            onComplete: function( filename, response ) {
+                //Complete
+                  if (response.error == '') {
+                      var keywordTextBoxId;
+                      var responseDataArray = response.data;
+                      var startPoint = 1;
+                      var index = 1;
+                      var totalLength = parseInt(responseDataArray.length) / 2;
+                      for (i=0;i<totalLength;i++) {
+                        if (i == 0) {
+                          inputID = '#fa_content_seo_tool_admin_top_link_title_'+(startPoint);
+                          $(inputID).val(responseDataArray[i]);
+                          inputID = '#fa_content_seo_tool_admin_top_link_url_'+(startPoint);
+                          $(inputID).val(responseDataArray[i+1]);
+                         } else {
+                                inputID = '#fa_content_seo_tool_admin_top_link_title_'+(startPoint);
+                                index++;
+                                $(inputID).val(responseDataArray[index]);
+                                inputID = '#fa_content_seo_tool_admin_top_link_url_'+(startPoint);
+                                index++;
+                                $(inputID).val(responseDataArray[index]);
+                           }
+                        startPoint++;
+                      } 
+                  } else {
+                    alert(response.error);
+                  }
+                  unblockPage();
+              },
+            onError: function() {
+                //Error
+              }
+           });
+      } else if (uploaderId == 'popular_search_csv_uploader') {
+        var uploader2 = new ss.SimpleUpload({
+          button: document.getElementById(uploaderId),
+          url: '{{ path("seo_tool_upload_csv") }}',
+          name: 'objCSVFilePopularSearch',
+          multipart: true,
+          responseType: 'json',
+          startXHR: function() {
+              //Start progressbar
+              blockPage();
+          },
+          onSubmit: function() {
+              //Progressbar
+            },
+          onComplete: function( filename, response ) {
+              //Complete
+                if (response.error == '') {
+                    var keywordTextBoxId;
+                    var responseDataArray = response.data;
+                    var startPoint = 1;
+                    var index = 1;
+                    var totalLength = parseInt(responseDataArray.length) / 2;
+                    for (i=0;i<totalLength;i++) {
+                      if (i == 0) {
+                        inputID = '#fa_content_seo_tool_admin_popular_search_title_'+(startPoint);
+                        $(inputID).val(responseDataArray[i]);
+                        inputID = '#fa_content_seo_tool_admin_popular_search_url_'+(startPoint);
+                        $(inputID).val(responseDataArray[i+1]);
+                       } else {
+                              inputID = '#fa_content_seo_tool_admin_popular_search_title_'+(startPoint);
+                              index++;
+                              $(inputID).val(responseDataArray[index]);
+                              inputID = '#fa_content_seo_tool_admin_popular_search_url_'+(startPoint);
+                              index++;
+                              $(inputID).val(responseDataArray[index]);
+                         }
+                      startPoint++;
+                    }
+                } else {
+                  alert(response.error);
+                }
+                unblockPage();
+            },
+          onError: function() {
+              //Error
+            }
+         });
+       }
+    }
+    //]]>
+    </script>
+{% endblock %}

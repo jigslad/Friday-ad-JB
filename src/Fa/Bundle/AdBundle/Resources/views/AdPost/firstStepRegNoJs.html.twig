@@ -1,0 +1,327 @@
+<script language="javascript" type="text/javascript">
+    //<![CDATA[
+        function showHideRegNoFieldsOnLoad(hasRegNo) {
+            if (hasRegNo == 1) {
+               $('#reg_no_field').show();
+               $('#reg_no_error_msg').html('');
+               $('#reg_no_error_msg').hide();
+               {% if attribute(form, 'reg_no') is defined %}
+                   {% if attribute(form, 'reg_no').vars.data is null or attribute(form, 'reg_no').vars.errors|length %}
+                       $('#reg_no_details_fields').hide();
+                   {% else %}
+                       {% if app.request.get('is_cat_edit') %}
+                           loadRegNoFieldDetailsByRegNo($.trim($('#fa_paa_category_select_reg_no').val()));
+                       {% else %}
+                           $('#reg_no_details_fields').show();
+                           $('.fa-select').selectmenu('refresh');
+                       {% endif %}
+                   {% endif %}
+               {% endif %}
+               $(document).foundation('equalizer', 'reflow');
+               moveCategoryDiv();
+           } else {
+               $('#fa_paa_category_select_reg_no').val('');
+               $('#reg_no_field').hide();
+               {% if not app.request.get('is_edit') %} 
+                   $('#reg_no_details_fields').hide();
+               {% elseif(app.request.get('is_edit') == 1) %}
+                   $('#reg_no_details_fields').show();
+               {% endif %}
+               $('#category_choice_div_3').show();
+               moveCategoryDiv();
+               $('.fa-select').selectmenu('refresh');
+               $(document).foundation('equalizer', 'reflow');
+           }
+        }
+        
+        function showHideRegNoFields(hasRegNo) {
+           var categoryPath = getCategoryPath(lastLevel);
+           if (hasRegNo == 1) {
+               $('#reg_no_field').show();
+               $('.fa-select').selectmenu('refresh');
+               $('#reg_no_details_fields').hide();
+               $('#reg_no_error_msg').html('');
+               $('#reg_no_error_msg').hide();
+               moveCategoryDiv();
+               $(document).foundation('equalizer', 'reflow');
+               if (!$('#fa_paa_category_select_category_3').val()) {
+                   $('#category_choice_div_3').hide();
+               }
+               //GA Analytics code start
+               var eventLabel = categoryPath + ' - Yes';
+               ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
+               //GA Analytics code end
+           } else {
+               $('#fa_paa_category_select_reg_no').val('');
+               $('#fa_paa_category_select_reg_no').trigger('focus');
+               resetRegNoFields();
+        
+               $('#reg_no_field').hide();
+               {% if not app.request.get('is_edit') %} 
+                   $('#reg_no_details_fields').hide();
+               {% elseif(app.request.get('is_edit') == 1) %}
+            	   $('#reg_no_details_fields').show();
+               {% endif %}
+               $('#category_choice_div_3').show();
+               moveCategoryDiv();
+               scrollToElement($('#category_choice_div_3'));
+               $('.fa-select').selectmenu('refresh');
+               $(document).foundation('equalizer', 'reflow');
+               //GA Analytics code start
+               var eventLabel = categoryPath + ' - No';
+               regLookupResult = ' - No';
+               ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
+               //GA Analytics code end
+           }
+           $('#add_vehicle_msg').html('{{ "Add your vehicle details:"|trans({}, 'frontend-paa-second-step')}}');
+        }
+        
+        function checkCategoryWithCarWeb(regNo, regNoFieldsData)
+        {
+            var secondLevelCatId = null;
+            var thirdLevelCatId = null;
+            var fourthLevelCatId = null;
+            var showMsg = false;
+            var carsId       = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID') }}";
+            var comVehicleId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMERCIALVEHICLES_ID') }}";
+            var motorbikesId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID') }}";
+            msg = '<div id="carweb_category_msg" class="modal-content">'+"{{'Are you sure your vehicle is %MAKE-MODEL%? It seems that it is registered as %CARWEB-MAKE-MODEL%.'|trans({'%MAKE-MODEL%' : 'MAKE-MODEL', '%CARWEB-MAKE-MODEL%' : 'CARWEB-MAKE-MODEL'}, 'frontend-paa-second-step') }}";
+            msg += '<div class="veh-lookup"><a href="javascript:void(0)" id="close_carweb_category_msg">'+"{{ 'Continue without changing'|trans({}, 'frontend-paa-second-step')}}"+'</a><a href="javascript:void(0)" id="change_to_carweb_category">'+"{{ 'Change to %CARWEB-MAKE-MODEL%'|trans({'%CARWEB-MAKE-MODEL%': 'CARWEB-MAKEMODEL-CHANGED'}, 'frontend-paa-second-step') }}"+'</a></div>';
+            msg += '</div>';
+        
+            $('#carweb_category_msg').remove();
+
+            if (regNoFieldsData['cw_vehicle_cat_id'] == $('#fa_paa_category_select_category_2').val()) {
+                showMsg = false;
+                if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
+                    if (regNoFieldsData['cw_make_id'] && regNoFieldsData['cw_model_id']) {
+                        $('#fa_paa_category_select_category_3').val(regNoFieldsData['cw_make_id']).trigger('change');
+                        $('.fa-select').selectmenu('refresh');
+                        setTimeout(function(){
+                            $('#fa_paa_category_select_category_4').val(regNoFieldsData['cw_model_id']);
+                            $('.fa-select').selectmenu('refresh');
+                            enableDisableNextBtn();
+                        }, 500);
+                        
+                        $('#category_choice_div_3').show();
+                        $('#category_choice_div_4').show();
+                        $('.fa-select').selectmenu('refresh');
+                    } else {
+                        $('#category_choice_div_3').show();
+                        $('.fa-select').selectmenu('refresh');
+                        scrollToElement($('#category_choice_div_3'));
+                    }
+                } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
+                	if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_motorbike_id'] && regNoFieldsData['motorbike_id'] != regNoFieldsData['cw_motorbike_id']) {
+                        thirdLevelCatId = regNoFieldsData['cw_motorbike_id'];
+                        setTimeout(function(){
+                            $('#category_choice_div_3').show();
+                            $('#fa_paa_category_select_category_3').val(thirdLevelCatId).trigger('change');
+                            $('.fa-select').selectmenu('refresh');
+                            scrollToElement($('#category_choice_div_3'));
+                        }, 1000);
+                    } else {
+                        $('#category_choice_div_3').show();
+                        $('.fa-select').selectmenu('refresh');
+                        scrollToElement($('#category_choice_div_3'));
+                    }
+                }
+            } else {
+                if (regNoFieldsData['vehicle_cat_id'] == carsId || regNoFieldsData['vehicle_cat_id'] == comVehicleId) {
+                    if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
+                        if (regNoFieldsData['model_id'] && regNoFieldsData['cw_model_id'] && regNoFieldsData['model_id'] != regNoFieldsData['cw_model_id']) {
+                            msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['make']+' '+regNoFieldsData['model']+' ('+regNoFieldsData['vehicle_cat']+') </b>');
+                            msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')</b>');
+                            msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')');
+                            secondLevelCatId = regNoFieldsData['cw_vehicle_cat_id'];
+                            thirdLevelCatId = regNoFieldsData['cw_make_id'];
+                            fourthLevelCatId = regNoFieldsData['cw_model_id'];
+                            showMsg = true;
+                        } else {
+                        	$('#category_choice_div_3').show();
+                            $('.fa-select').selectmenu('refresh');
+                            scrollToElement($('#category_choice_div_3'));
+                        }
+                    } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
+                        if (regNoFieldsData['model_id'] && regNoFieldsData['cw_motorbike_id']) {
+                            msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['make']+' '+regNoFieldsData['model']+' ('+regNoFieldsData['vehicle_cat']+')</b>');
+                            msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_motorbike']+'</b>');
+                            msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_motorbike']);
+                            secondLevelCatId = regNoFieldsData['cw_vehicle_cat_id'];
+                            thirdLevelCatId = regNoFieldsData['cw_motorbike_id'];
+                            showMsg = true;
+                        } else {
+                            $('#category_choice_div_3').show();
+                            $('.fa-select').selectmenu('refresh');
+                            scrollToElement($('#category_choice_div_3'));
+                        }
+                    }
+                } else if (regNoFieldsData['vehicle_cat_id'] == motorbikesId) {
+                    if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
+                        if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_model_id']) {
+                            msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['motorbike']+'</b>');
+                            msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')</b>');
+                            msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')');
+                            secondLevelCatId = regNoFieldsData['cw_vehicle_cat_id'];
+                            thirdLevelCatId = regNoFieldsData['cw_make_id'];
+                            fourthLevelCatId = regNoFieldsData['cw_model_id'];
+                            showMsg = true;
+                        } else {
+                            $('#category_choice_div_3').show();
+                            $('.fa-select').selectmenu('refresh');
+                            scrollToElement($('#category_choice_div_3'));
+                        }
+                    } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
+                        if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_motorbike_id'] && regNoFieldsData['motorbike_id'] != regNoFieldsData['cw_motorbike_id']) {
+                            msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['motorbike']+'</b>');
+                            msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_motorbike']+'</b>');
+                            msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_motorbike']);
+                            secondLevelCatId = regNoFieldsData['cw_vehicle_cat_id'];
+                            thirdLevelCatId = regNoFieldsData['cw_motorbike_id'];
+                            showMsg = true;
+                        } else {
+                            $('#category_choice_div_3').show();
+                            $('.fa-select').selectmenu('refresh');
+                            scrollToElement($('#category_choice_div_3'));
+                        }
+                    }
+                }
+            }
+        
+            // if selected main category and carwen main category is different then reset select and auto-complete fields because of different entity id options.
+            if (regNoFieldsData['vehicle_cat_id'] != regNoFieldsData['cw_vehicle_cat_id']) {
+                resetCarWebFieldsDueToCategoryMismatch(regNoFieldsData);
+            }
+        
+            if (showMsg) {
+                $('#carweb_category_msg_modal').append(msg);
+                $('#carweb_category_msg_modal').foundation('reveal', 'open');
+                $('#change_to_carweb_category').click(function(e){
+                    $('.close-reveal-modal').trigger('click');
+                    loadRegNofields = false;
+                    if (secondLevelCatId) {
+                        $('#fa_paa_category_select_category_2').val(secondLevelCatId).trigger('change');
+        
+                        if (thirdLevelCatId) {
+                            setTimeout(function(){
+                                $('#fa_paa_category_select_category_3').val(thirdLevelCatId).trigger('change');
+                                $('.fa-select').selectmenu('refresh');
+                            }, 1000);
+                        } else {
+                        	setTimeout(function(){
+                        	    $('#category_choice_div_3').show();
+                                scrollToElement($('#category_choice_div_3'));
+                                $('.fa-select').selectmenu('refresh');
+                            }, 1000);
+                        }
+                        if (fourthLevelCatId) {
+                            setTimeout(function(){
+                                $('#fa_paa_category_select_category_4').val(fourthLevelCatId).trigger('change');
+                                $('.fa-select').selectmenu('refresh');
+                                enableDisableNextBtn();
+                            }, 1500);
+                        }
+                        loadRegNofields = true;
+                    } else {
+                        $('#category_choice_div_3').show();
+                        $('.fa-select').selectmenu('refresh');
+                        scrollToElement($('#category_choice_div_3'));
+                    }
+
+                    setTimeout(function(){
+                        $("#category_choices_div").appendTo("#reg_no_category_div");
+                    }, 1600);
+                });
+                
+                $('#close_carweb_category_msg').click(function(e){
+                    $('#carweb_category_msg').remove();
+                    $('.close-reveal-modal').trigger('click');
+                    $('#category_choice_div_3').show();
+                    $('.fa-select').selectmenu('refresh');
+                    scrollToElement($('#category_choice_div_3'));
+                });
+            }
+        }
+        
+        function resetCarWebFieldsDueToCategoryMismatch(regNoFieldsData)
+        {
+            Object.keys(regNoFieldsData).forEach(function(field) {
+                var fieldValue = regNoFieldsData[field];
+                if ($('#fa_paa_category_select_'+field).is("select")) {
+                   if (field != 'reg_year') {
+                       $('#fa_paa_category_select_'+field).val('');
+                       $('#fa_paa_category_select_'+field).selectmenu('refresh');
+                   }
+                }
+                $('#fa_paa_category_select_colour_id').val('');
+                $('#fa_paa_category_select_colour_id_autocomplete').val('');
+            });
+        }
+        
+        function loadRegNoFieldDetailsByRegNo(regNo)
+        {
+            var isSuccess = false;
+            if (regNo) {
+                var category_id = $('#fa_paa_category_select_category_2').val();
+                if ($('#fa_paa_category_select_category_3').val()) {
+                    category_id = $('#fa_paa_category_select_category_3').val();
+                }
+                if ($('#fa_paa_category_select_category_4').val()) {
+                    category_id = $('#fa_paa_category_select_category_4').val();
+                }
+                var route       = Routing.generate('ad_vrm_lookup_ajax', { 'vrm': regNo });
+        
+                $('#lookup_vehicle').html('{{ "Loading..."|trans({}, 'frontend-paa')}}');
+                $.ajax({
+                    type: 'post',
+                    url: route,
+                    async: false,
+                    data: {'category_id': category_id},
+                    success: function(data) {
+                        if (!$.isEmptyObject(data)) {
+                             var regNoFieldsData = data.reg_no_data;
+                             Object.keys(regNoFieldsData).forEach(function(field) {
+                                 $('#fa_paa_category_select_'+field).val(regNoFieldsData[field]);
+                             });
+                             $('#add_vehicle_msg').html('{{ "Confirm your vehicle details:"|trans({}, 'frontend-paa-second-step')}}');
+                             $('#reg_no_details_fields').show();
+                             $('.fa-select').selectmenu('refresh');
+                             checkCategoryWithCarWeb(regNo, regNoFieldsData);
+                             moveCategoryDiv();
+                             $(document).foundation('equalizer', 'reflow');
+                             isSuccess = true;
+                        } else {
+                            resetRegNoFields();
+                            $('.fa-select').selectmenu('refresh');
+                            $('#reg_no_details_fields').hide();
+                            $('#fa_paa_category_select_reg_no').addClass('error');
+                            $('#reg_no_error_msg').html('{{ "Please enter correct registration number."|trans({}, 'frontend-paa-second-step')}}');
+                            $('#reg_no_error_msg').show();
+                            $(document).foundation('equalizer', 'reflow');
+                            moveCategoryDiv();
+                        }
+                        $('#lookup_vehicle').html('{{ "Lookup Vehicle"|trans({}, 'frontend-paa-second-step')}}');
+                    }
+                });
+                return isSuccess;
+            } else {
+                resetRegNoFields();
+                $('#fa_paa_category_select_reg_no').addClass('error');
+                $('#reg_no_error_msg').html('{{ "Please enter registration number."|trans({}, 'frontend-paa-second-step')}}');
+                $('#reg_no_error_msg').show();
+                $('.fa-select').selectmenu('refresh');
+                $('#reg_no_details_fields').hide();
+                $(document).foundation('equalizer', 'reflow');
+                return isSuccess;
+            }
+        }
+        
+        function resetRegNoFields()
+        {
+            var regNoDetailsFields = ['colour_id', 'body_type_id', 'reg_year', 'fuel_type_id', 'transmission_id', 'engine_size', 'no_of_doors', 'no_of_seats', 'fuel_economy', '062mph', 'top_speed', 'ncap_rating', 'co2_emissions', 'colour_id_autocomplete']
+            regNoDetailsFields.forEach(function(field, index) {
+                $('#fa_paa_category_select_'+field).val('');
+            });
+        }
+//]]>
+</script>

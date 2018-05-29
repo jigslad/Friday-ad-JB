@@ -1,0 +1,65 @@
+{% set backUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdminBackUrl', [fetch_container_instance()]) %}
+{% extends 'FaAdminBundle::layout.html.twig' %}
+
+{% block content -%}
+<div class="row">
+   <div class="columns">
+       <h1>{{ heading }}</h1>
+   </div>
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <div class="panel-heading">
+                <p class="text-left pull-left">{{ 'Preview of %email%'|trans({'%email%': emailTemplate.name}, 'messages') }}</p>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <b>{{ 'Html Preview'|trans }}</b>
+                    <div class="simple_table">
+                        <div class="col-lg-7" id="html_iframe">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <b>{{ 'Text Preview'|trans }}</b>
+                    <div class="simple_table">
+                        {% if emailTemplate.identifier == 'email_template_layout' %}
+                            {{ emailTemplate.bodyText|raw }}
+                        {% else %}
+                            {% set emailTemplateText = emailTemplateLayout.bodyText|replace({'{{ email_body }}': emailTemplate.bodyText}) %}
+                            {{ emailTemplateText|replace({"\\n": "<br />"})|raw }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <ul class="button-group text-center">
+                <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('email_template_edit_admin', {'id': emailTemplate.id}) }}'">{{ 'Edit'|trans({}, 'messages') }}</button></li>
+                <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ backUrl ? backUrl : path('email_template_admin') }}'">{{ 'Back to list'|trans({}, 'messages') }}</button></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    function resizeIframe(obj) {
+        obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+        obj.style.width = '100%';
+      }
+    jQuery(window).load(function(){
+          jQuery('<iframe>').attr(
+            {
+              "src": "{{ path('email_template_preview_admin', {'id' : app.request.get('id')}) }}?onlyPreview=true&type=html",
+              "frameborder": "0",
+              "onload": "resizeIframe(this)"
+            }).appendTo("#html_iframe");
+        });
+    //]]>
+    </script>
+{% endblock %}

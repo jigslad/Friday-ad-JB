@@ -1,0 +1,128 @@
+<div class="large-8 columns">
+    <div class="detail-right-pane">
+        <p class="listed-date hide-for-small-only">
+        {% if attribute(adDetail, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT')) is defined %}
+            <span class="ago-icon">ago</span>{{attribute(adDetail, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT'))|time_ago_in_words}}
+        {% endif %}
+        </p>
+        <div class="details-price">
+            {% if attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) > 0 and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID')%}
+                <b class="item-price hide-for-small-only {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') or (rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID')) is defined) %}classes-tution-price{% endif %}">{{ format_currency(attribute(adDetail, constant(solrMapping ~ 'PRICE'))) }}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'messages')}}</span>{% endif %}{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID')) is defined %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID'))) }}</span>{% endif %}</b>
+            {% endif %}
+            {% if attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE')) > 0 %}
+                <div class="item-postage hide-for-small-only">
+                    <b>+ {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE'))) }}</b> {{ 'postage'|trans({}, 'frontend-show-ad') }}
+                </div>
+            {% endif %}
+            {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'EVENT_START')) is defined %}
+                {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(adDetail, constant(solrMapping ~ 'EVENT_START')), (attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) : null), container) %}
+                <div class="hide-for-small-only">
+                    <span class="whats-on item-preview-on">{{ eventStartDate }}</span>
+                </div>
+            {% endif %}
+            {% if attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')) is defined %}
+                <div class="hide-for-small-only">
+                    <span class="person-collection">
+                        {{ entityCacheManager.getEntityNameById('FaPaymentBundle:DeliveryMethodOption', attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID'))) }}
+                    </span>
+                </div>
+            {% endif %}
+            {% if not isSoldExpiredAdFlag and ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) or (adDetail['user'] is defined and showBuyNowWithPaypal)) %}
+                <div class="small-wrapper hide-for-small-only">
+                    {% if adDetail['user'] is defined and showBuyNowWithPaypal %}
+                        <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand paypal-btn" id="paypal-btn_btn_id" >{{'Buy now with'|trans({}, 'frontend-show-ad')}}<span class="paypal-icon">contact</span></a>
+                    {% endif %}
+                    {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
+                        <a href="javascript:void(0);" id="contact_seller_btn" onclick="return contactSeller('{{ adId }}', 'Contact Seller button')" class="primary-btn-1 button expand cont-seller-btn {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and attribute(adDetail, constant(solrMapping ~ 'PRICE')) is not defined %}mt10{% endif %}">
+                            {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                                {{'Apply'|trans({}, 'frontend-show-ad')}}
+                            {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+                                {{'Contact seller'|trans({}, 'frontend-show-ad')}}
+                            {% else %}
+                                {{'Contact'|trans({}, 'frontend-show-ad')}}
+                            {% endif %}
+                            {% if adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and adDetail['user']['contact_through_email'] == 1 %}
+                                <span class="contact-icon">contact</span>
+                            {% elseif adDetail['user'] is defined and not adDetail['user']['contact_through_phone'] and adDetail['user']['contact_through_email'] == 1 %}
+                                <span class="contact-email-icon">contact</span>
+                            {% elseif (adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and not adDetail['user']['contact_through_email']) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
+                                <span class="contact-phone-icon">contact</span>
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if (isOneclickenqbutton is defined and isOneclickenqbutton == true) %}
+            <div class="small-wrapper hide-for-small-only enquire-tip-wrap">
+                <a href="javascript:void(0)" class="primary-btn-2 button expand cont-seller-btn" onclick="return sendOneClickEnquiry();" >
+                    {{'Still available?'|trans({}, 'frontend-show-ad')}}<span class="enquire-icon">{{'Still available?'|trans({}, 'frontend-show-ad')}}</span>
+                </a>
+                <div class="enquire-tooltip">
+                    {{"Want to know if this item is still available? One click of the 'Still available?' button will alert the seller of your interest and prompt an immediate response."|trans({}, 'frontend-show-ad')}}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if adDetail['user'] is defined %}
+                {{ include('FaAdBundle:Ad:AdUserDetail.html.twig', {'adLatitude': latitude, 'adLongitude': longitude}) }}
+            {% endif %}
+
+            {% if not isSoldExpiredAdFlag %}
+                <div class="interested-item hide-for-small-only">
+                    {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ANIMALS_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')} %}
+                        <h3>{{'Got one like this?'|trans({}, 'frontend-show-ad')}}</h3>
+                        <a href="javascript:void(0);" onclick="return postSimilarAd('{{ adId }}')" class="secondary-btn-2 button expand" id="post_similar_item">{{'Sell it here!'|trans({}, 'frontend-show-ad')}}</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        {% if not isSoldExpiredAdFlag and rootCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
+            <div class="property-alert" id="create_alert_div">
+                <div class="create-alert">
+                    <h5 class="text-center">{{'Want us to send you an email when we receive more ads like this?'|trans({}, 'frontend-show-ad')}}</h5>
+                    {% if container.has('security.authorization_checker') and container.get('security.authorization_checker').isGranted("IS_AUTHENTICATED_REMEMBERED")%}
+                        <a href="javascript:void(0);" onclick="return createAlert('{{ adId }}', '');" class="secondary-btn-1 button expand alert-btn">{{'Create Alert'|trans({}, 'frontend-show-ad')}}</a>
+                    {% else %}
+                        <a href="javascript:void(0);" onclick="return createHalfAccount('{{ adId }}');" class="secondary-btn-1 button expand alert-btn">{{'Create Alert'|trans({}, 'frontend-show-ad')}}</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        
+        {% if (currentDevice == 'D' or currentDevice == 'T') and relatedBusinesses is defined and relatedBusinesses|length %}
+            {{ include('FaAdBundle:Ad:relatedBusinesses.html.twig') }}
+        {% endif %}
+
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_RIGHT_DESKTOP') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_RIGHT_TABLET') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+    </div>
+
+</div>
+<div id="contactSellerModal" class="reveal-modal small" data-reveal></div>
+
+{% if showNimber %}
+<div id="nimberCreateTaskModal" class="reveal-modal nimber-big-popup" data-reveal></div>
+<div id="nimberLearnMoreModal" class="reveal-modal nimber-big-popup" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+    <h5 class="modal-title text-center">{{'What is nimber?'|trans({}, 'frontend-nimber')}}</h5>
+    <div class="modal-content">
+        <div class="text-center">
+            <img src="{{ asset_url('fafrontend/images/delivered.png') }}" alt="" />
+        </div>
+        <p class="mt10">{{"Nimber is a community delivery service that matches items being sent with travellers going the same way. You post what you'd like to buy, and we notify bringers who travel that route. When someone can help they will make you an offer."|trans({}, 'frontend-nimber')}}</p>
+        <h5 class="what-next-title">{{"What's next?"|trans({}, 'frontend-nimber')}}</h5>
+        <p>
+            {{'Once you receive an offer, arrange pickup and delivery times with the bringer, accept the offer and wait for your items to arrive at your door.<br /><br /><b>Your card is never charged until your item has been successfully delivered, and there is no cost for posting a request.</b>'|trans({}, 'frontend-nimber')|raw}}
+        </p>
+        <div class="learn-ins">{{'Anything else you need to know? Contact us at'|trans({}, 'frontend-nimber')}} <a href="mailto:support@nimber.com">support@nimber.com</a></div>
+    </div>
+</div>
+{% endif %}
+
+{% if allowAdEdit %}
+    <div id="cropProfileImageModal" class="reveal-modal small" data-reveal></div>
+    <div id="profileEditModal" class="reveal-modal medium" data-reveal></div>
+{% endif %}

@@ -1,0 +1,14 @@
+{% if notifications|length > 0 %} 
+<div class="db-notifications">
+    <div class="inner">
+    
+      {% for notification in notifications %}
+        <div data-alert class="alert-box {{ notification['notification_type']}} radius">
+            <span class="alert-icon">&nbsp;</span>
+            {{ notification['message']| raw }}
+             <a href="javascript:void(0)" class="close" onclick="removeNotificationMessage({{ notification['id'] }});">&times;</a>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endif %}

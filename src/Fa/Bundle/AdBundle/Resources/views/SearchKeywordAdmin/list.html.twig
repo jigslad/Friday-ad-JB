@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <table class="mb0">
+                <thead>
+                    <tr>
+                        <th width="20%">{{ 'Keyword'|trans }}</th>
+                        <th width="10%">{{ 'Number of monthly searches'|trans }}</th>
+                        <th width="20%">{{ 'Categories'|trans }}</th>
+                        <th width="20%">{{ 'Processed date'|trans }}</th>
+                        <th width="20%"><i class="fa fa-gear"></i> Action</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                    {% if pagination.getNbResults() %}
+                        {% for searchKeyword in pagination.getCurrentPageResults() %}
+                            <tr class="gradeX">
+                               <td>
+                                   {{ searchKeyword.keyword }}
+                               </td>
+                               <td>
+                                   {{ searchKeyword.searchCount }}
+                               </td>
+                               <td>
+                                   {% if categoryIds[searchKeyword.id] is defined and categoryIds[searchKeyword.id] %}
+                                       {% for categoryId in categoryIds[searchKeyword.id] %}
+                                          - {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|join(' <b>></b> ')|raw }}
+                                           <br />
+                                       {% endfor %}
+                                   {% endif %}
+                               </td>
+                               <td>
+                                    {{ searchKeyword.updatedAt | localizeddate('short', 'medium', app.request.locale ) }}
+                               </td>
+                               <td>
+                                   {% if keywordEditGrant %}
+                                       <a href="{{ path('search_keyword_edit_admin', {'id': searchKeyword.id}) }}" class="tiny button">{{'Edit'|trans}}</a>
+                                   {% endif %}
+                                   {% if keywordDeleteGrant %}
+                                       &nbsp;<a href="{{ path('search_keyword_delete_admin', {'id': searchKeyword.id}) }}" class="tiny button" onclick="javascript:return confirm('{{ 'Do you want to delete this record?'|trans }}')">{{'Delete'|trans}}</a>
+                                   {% endif %}
+                               </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="gradeX">
+                            <td colspan="11" align="center">{{ 'No Data Found'|trans }}</td>
+                        </tr>
+                    {% endif %}
+                 </tbody>
+            </table>
+        </div>
+    </div>
+</div>

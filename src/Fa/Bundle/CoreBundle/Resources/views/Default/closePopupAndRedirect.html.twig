@@ -1,0 +1,11 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% if redirectUrl is defined %}
+        if (window.opener)
+            window.opener.location.href = '{{redirectUrl|raw}}';
+        else
+            window.location.href = '{{redirectUrl|raw}}';
+    {% endif %}
+    window.close();
+//]]>
+</script>

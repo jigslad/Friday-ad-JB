@@ -1,0 +1,54 @@
+{% set locationGroupIdArray = {} %}
+{% if pagination.getNbResults() %}
+    {% set locationGroupLocationRepository  = fetch_repository('FaEntityBundle:LocationGroupLocation') %}
+    {% for locationGroup in pagination.getCurrentPageResults() %}
+        {% set locationGroupIdArray = locationGroupIdArray|merge({0 : locationGroup.id}) %}
+    {% endfor %}
+    {% set locationGroupCount = locationGroupLocationRepository.getLocationGroupIdsCountArray(locationGroupIdArray) %}
+{% endif %}
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+             <table class="mb0">
+                 <thead>
+                     <tr>
+                         <th>
+                            {{ sortable_link('location_group_admin', 'location_group__name', 'Name'|trans, sorter) }}
+                         </th>
+                         <th width="18%">
+                            {{ 'Type'|trans }}
+                         </th>
+                         <th><i class="fi-widget"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for locationGroup in pagination.getCurrentPageResults() %}
+                          <tr class="gradeX">
+                              <td>{{ locationGroup.name }}</td>
+                              <td>{{ locationGroupTypeArray[locationGroup.type] }}</td>
+                              <td>
+                                  <button href="#" data-dropdown="drop{{ locationGroup.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                  <br />
+                                  <ul id="drop{{ locationGroup.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                      {% if locationGroupEditGrant %}
+                                         <li><a href="{{ path('location_group_edit_admin', {'id': locationGroup.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+                                      {% endif %}
+                                      {% if locationGroupDeleteGrant and locationGroupCount[locationGroup.id] is not defined %}
+                                         <li><a href="{{ path('location_group_delete_admin', {'id': locationGroup.id}) }}" onclick="javascript:return confirm('Do you want to proceed deleting this record?')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
+                                      {% endif %}
+                                  </ul>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="gradeX">
+                              <td colspan="5" align="center">{{ 'No record found'|trans({}, 'messages') }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+         </div>
+     </div>
+</div>

@@ -1,0 +1,25 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set feedLogShowGrant = false %}
+{% set feedLogDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('ad_feed_log_show_admin') %}
+  {% set feedLogShowGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('ad_feed_log_delete_admin') %}
+  {% set feedLogDeleteGrant = true %}
+{% endif %}
+
+{% block content -%}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew' : false}) }}
+
+    {% use "FaAdFeedBundle:FeedLogAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdFeedBundle:FeedLogAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}

@@ -1,0 +1,5 @@
+item_add_to_remote:
+    path:     /ajax/add_to_report/{adId}
+    defaults: { _controller: "FaAdBundle:AdReport:ajaxAdReport" }
+    options:
+        expose: true

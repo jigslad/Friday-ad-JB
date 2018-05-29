@@ -1,0 +1,7 @@
+fa_ti_entity_log:
+    path:     /
+    defaults: { _controller: "FaTiReportBundle:FaEntityLogAdmin:index" }
+
+fa_ti_entity_log_detail:
+    path:     /{id}/detail
+    defaults: { _controller: "FaTiReportBundle:FaEntityLogAdmin:detail" }

@@ -1,0 +1,31 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% block content %}
+<div class="row">
+	<div class="columns">
+	   <h1 class="dashboard_title">Dashboard</h1>
+	</div>
+</div>
+
+<div class="row dashboard">
+	<div class="columns">
+	    <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
+	        {% for resource in menus %}
+	        	{% if 'fa_ti_' not in resource.resourceGroup and (resource.resourceGroup in resources or app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SUPER_ADMIN_ID')) %}
+		            <li>
+		            	<div class="icon_wrap">
+			                <a href="{% if resource.resource %}{{ path(resource.resource) }}{% elseif resource.resourceGroup %}{{ path(resource.resourceGroup) }}{% endif %}"><i class="{{ resource.iconClass }} size-48"></i>
+			                <big>{{ resource.name }}</big></a>
+		                </div>
+		            </li>
+		        {% endif %}
+	        {% endfor %}
+	        <li>
+	        	<div class="icon_wrap">
+	        		<a href="{{ path('logout') }}" id="admin_header_index_logout"><i class="fi-unlock size-48"></i><big>{{'Log Out'|trans}}</big></a>
+	        	</div>
+	        </li>
+	    </ul>
+	</div>
+</div>
+<!-- /.row -->
+{% endblock %}

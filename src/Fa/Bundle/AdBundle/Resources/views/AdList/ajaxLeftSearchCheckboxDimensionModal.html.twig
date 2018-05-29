@@ -1,0 +1,69 @@
+<a class="close-reveal-modal">&#215;</a>
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set searchParams = app.request.get('searchParams') %}
+{% set dimensionId = app.request.get('dimensionId') %}
+{% set dimensionName = app.request.get('dimensionName') %}
+{% set dimensionField = app.request.get('dimensionField') %}
+{% set dimensionParams = searchParams %}
+{% set selectedValues = attribute(form, dimensionField).vars.data %}
+{% if (dimensionParams[dimensionField]) is defined %}
+    {% set dimensionParams = dimensionParams|merge({(dimensionField): ''}) %}
+{% endif %}
+<div id="{{ dimensionField }}_modal">
+    <h5 class="modal-title">{{ 'Showing %dimension%'|trans({'%dimension%':dimensionName}) }}</h5>
+    <div class="modal-content dimension-modal">
+        <div class="dimension-content">
+            <div class="clearfix">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                {{ form_errors(form) }}
+                    {% set dimensionFacetResult = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionFacetBySearchParams(dimensionField, dimensionParams, selectedValues, fetch_container_instance()) %}
+                    {% if dimensionFacetResult is defined and dimensionFacetResult|length > 0 %}
+                        {% set dimensionOptions = {} %}
+                        {% for child in attribute(form, dimensionField) %}
+                            {% if dimensionFacetResult[child.vars.value] is defined %}
+                                {% set dimensionOptions = dimensionOptions|merge({ 0 : child }) %}
+                            {% endif %}
+                        {% endfor %}
+                        {% set totalChoices = dimensionOptions|length %}
+                        {% set totalColumns = 4 %}
+                        {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+                        {% set choiceCount = 0 %}
+                        {% for child in dimensionOptions %}
+                            {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
+                            <ul class="white-checkbox dimension-list">
+                            {% endif %}
+                            {% set adCount = 0 %}
+                            {% if attribute(dimensionFacetResult, child.vars.value) is defined %}
+                                {% set adCount = attribute(dimensionFacetResult, child.vars.value) %}
+                            {% endif %}
+                            {% if adCount %}
+                                <li>
+                                    {{ form_widget(child) }}
+                                    <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                                    ({{ adCount }})
+                                </li>
+                                {% set choiceCount = choiceCount + 1 %}
+                            {% endif %}
+                            {% if choiceCount == totalChoices or (choiceCount % choicesPerColumn) == 0 %}
+                            </ul>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% do attribute(form, dimensionField).setRendered %}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer dimension-footer">
+        <div class="row">
+            <div class="large-12 columns">
+                <a href="javascript:void(0)" rel="nofollow" onClick="clearModalDimensionAllCheckboxes('{{ dimensionField }}')">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+            </div>
+            <div class="large-12 columns text-right">
+                <button class="secondary-btn-4 button" onClick="closeDimensionModal()">{{ 'Cancel'|trans({}, 'frontend-left-search') }}</button>
+                <button class="secondary-btn-1 button" onClick="closeDimensionModalAndSubmitForm()">{{ 'Apply'|trans({}, 'frontend-left-search') }}</button>
+            </div>
+        </div>
+    </div>
+</div>

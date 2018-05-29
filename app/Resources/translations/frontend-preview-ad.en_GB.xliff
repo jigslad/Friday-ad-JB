@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="c887b9d3b3905e1e3eb236a1e334ca966299726f" resname="About Us">
+        <jms:reference-file line="164">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <jms:reference-file line="227">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>About Us</source>
+        <target state="new">About Us</target>
+      </trans-unit>
+      <trans-unit id="cfea419c3b4e8b02ee586e70a28bf846e44cdda4" resname="Apply">
+        <jms:reference-file line="360">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Apply</source>
+        <target state="new">Apply</target>
+      </trans-unit>
+      <trans-unit id="d329a88ae3bcd3c2e60dad2de045191cdbcc8be4" resname="Buy now with">
+        <jms:reference-file line="369">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Buy now with</source>
+        <target state="new">Buy now with</target>
+      </trans-unit>
+      <trans-unit id="b37456c4530be810dc040f50da72eda09addfb0a" resname="Contact">
+        <jms:reference-file line="364">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Contact</source>
+        <target state="new">Contact</target>
+      </trans-unit>
+      <trans-unit id="96477483f635915464c31fe8474323dd45276555" resname="Contact seller">
+        <jms:reference-file line="362">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Contact seller</source>
+        <target state="new">Contact seller</target>
+      </trans-unit>
+      <trans-unit id="2263828738f6044e12bcf94897501e524d1e642a" resname="Create Alert">
+        <jms:reference-file line="389">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Create Alert</source>
+        <target state="new">Create Alert</target>
+      </trans-unit>
+      <trans-unit id="4173a96a528fa05b8b93214a3bd5af98fa55fe2a" resname="Edit details">
+        <jms:reference-file line="401">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Edit details</source>
+        <target state="new">Edit details</target>
+      </trans-unit>
+      <trans-unit id="84add5b2952787581cb9a8851eef63d1ec75d22b" resname="Email">
+        <jms:reference-file line="185">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Email</source>
+        <target state="new">Email</target>
+      </trans-unit>
+      <trans-unit id="82da67b211249624f24f3c7db5642a5112c9446f" resname="Facebook">
+        <jms:reference-file line="181">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Facebook</source>
+        <target state="new">Facebook</target>
+      </trans-unit>
+      <trans-unit id="9704b6631f6a67e3b6f771fa1b084fce99258a48" resname="Favourite">
+        <jms:reference-file line="176">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Favourite</source>
+        <target state="new">Favourite</target>
+      </trans-unit>
+      <trans-unit id="8fdc7549333dc4b0ca64320d70039992f53e267b" resname="Google Plus">
+        <jms:reference-file line="183">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Google Plus</source>
+        <target state="new">Google Plus</target>
+      </trans-unit>
+      <trans-unit id="30b56f8f8c0964b53f7e817be0b3b5338dd5a82a" resname="Got one like this?">
+        <jms:reference-file line="379">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Got one like this?</source>
+        <target state="new">Got one like this?</target>
+      </trans-unit>
+      <trans-unit id="70f8bb9a8a5393ef080507a89e4b98d139000d65" resname="Home">
+        <jms:reference-file line="42">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Home</source>
+        <target state="new">Home</target>
+      </trans-unit>
+      <trans-unit id="ab478f3efc840eebab919dff1b9512286f70c10c" resname="Map">
+        <jms:reference-file line="127">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Map</source>
+        <target state="new">Map</target>
+      </trans-unit>
+      <trans-unit id="c8b2e864eccb38901097806819bf6aba2eed7ae1" resname="Photos">
+        <jms:reference-file line="125">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Photos</source>
+        <target state="new">Photos</target>
+      </trans-unit>
+      <trans-unit id="a45a7994973a234fae8e4759125b277f93838481" resname="Pinterest">
+        <jms:reference-file line="184">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Pinterest</source>
+        <target state="new">Pinterest</target>
+      </trans-unit>
+      <trans-unit id="3e8248e32edfca0c629622b5b669c2d9ce4d0917" resname="Price">
+        <jms:reference-file line="16">views/Ad/AdCommunityDetailTabs.html.twig</jms:reference-file>
+        <source>Price</source>
+        <target state="new">Price</target>
+      </trans-unit>
+      <trans-unit id="32abdf99d470e368ff52f35bc0e2944650c9e6c1" resname="Read less">
+        <jms:reference-file line="24">views/Ad/AdServiceDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="30">views/Ad/AdJobDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="29">views/Ad/AdCommunityDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="159">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <jms:reference-file line="170">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <jms:reference-file line="314">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <jms:reference-file line="19">views/Ad/AdAdultDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="233">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Read less</source>
+        <target state="new">Read less</target>
+      </trans-unit>
+      <trans-unit id="ad086cf55b834c375e209972840f1342401d8c41" resname="Read more">
+        <jms:reference-file line="23">views/Ad/AdServiceDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="29">views/Ad/AdJobDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="28">views/Ad/AdCommunityDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="158">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <jms:reference-file line="169">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <jms:reference-file line="313">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <jms:reference-file line="18">views/Ad/AdAdultDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="232">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Read more</source>
+        <target state="new">Read more</target>
+      </trans-unit>
+      <trans-unit id="ee45c30326b750387589752c0f75e1dd87ddc7e4" resname="Report">
+        <jms:reference-file line="128">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Report</source>
+        <target state="new">Report</target>
+      </trans-unit>
+      <trans-unit id="27ce7480927fba34ad5da8cab3d757e6ee3cea1b" resname="Save &amp; publish">
+        <jms:reference-file line="404">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source><![CDATA[Save & publish]]></source>
+        <target state="new"><![CDATA[Save & publish]]></target>
+      </trans-unit>
+      <trans-unit id="40479a210561a3974834ed828a5940c6d2645795" resname="Save and publish">
+        <jms:reference-file line="404">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Save and publish</source>
+        <target state="new">Save and publish</target>
+      </trans-unit>
+      <trans-unit id="21167271aeae8ce24449dadcfc356c7183a0a9bb" resname="Sell it here!">
+        <jms:reference-file line="380">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Sell it here!</source>
+        <target state="new">Sell it here!</target>
+      </trans-unit>
+      <trans-unit id="09ca55ca52d207f2cc1d9339e0226a88e9e96e2f" resname="Share">
+        <jms:reference-file line="180">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Share</source>
+        <target state="new">Share</target>
+      </trans-unit>
+      <trans-unit id="839ac4f959d902221881c9725a84410c11e451cf" resname="The details">
+        <jms:reference-file line="317">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>The details</source>
+        <target state="new">The details</target>
+      </trans-unit>
+      <trans-unit id="0195b58b1866144ab8d97c7a1d06269ac4faffa5" resname="This is a draft of your advert">
+        <jms:reference-file line="69">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>This is a draft of your advert</source>
+        <target state="new">This is a draft of your advert</target>
+      </trans-unit>
+      <trans-unit id="5392c950bdde4be7e5f5b8fdc6a1ca5f21e905cf" resname="Twitter">
+        <jms:reference-file line="182">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Twitter</source>
+        <target state="new">Twitter</target>
+      </trans-unit>
+      <trans-unit id="fc17e969fe304f3abaf39d7ebc33de8ad8b5e0b5" resname="Want us to send you an email when we receive more ads like this?">
+        <jms:reference-file line="388">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Want us to send you an email when we receive more ads like this?</source>
+        <target state="new">Want us to send you an email when we receive more ads like this?</target>
+      </trans-unit>
+      <trans-unit id="a2cda2abc04c6630d60ff9e9b7b58c4db055bec0" resname="Your Free Ad so far...">
+        <jms:reference-file line="65">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>Your Free Ad so far...</source>
+        <target state="new">Your Free Ad so far...</target>
+      </trans-unit>
+      <trans-unit id="0e7766b460fd2a39a2fd81d4a3a636b033b52be4" resname="draft">
+        <jms:reference-file line="70">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>draft</source>
+        <target state="new">draft</target>
+      </trans-unit>
+      <trans-unit id="ead9eb78bb9b75102ded48b79266f27936802881" resname="per hour">
+        <jms:reference-file line="102">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <jms:reference-file line="342">views/Ad/showAdPreview.html.twig</jms:reference-file>
+        <source>per hour</source>
+        <target state="new">per hour</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

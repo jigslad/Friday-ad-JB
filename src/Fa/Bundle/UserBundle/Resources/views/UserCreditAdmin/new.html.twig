@@ -1,0 +1,91 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content %}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_promotion_package_discount_code_admin_id'}}) }}
+                {{ form_row(form.credit) }}
+                {{ form_row(form.category_id) }}
+                
+                {% set totalChoices = attribute(form, 'package_sr_no').vars.choices|length %}
+                {% set totalColumns = 3 %}
+                {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+                {% set choiceCount = 0 %}
+                {% set totalChoiceCount = 0 %}
+                {{ form_label(attribute(form, 'package_sr_no')) }} <span class="required">*</span>
+                <div class="row" id="package_sr_no_div" style="margin-bottom:10px!important">
+                    {% set choicesIdArray = form.package_sr_no.vars.choices|keys %}
+                    {% set columns = 3 %}
+                    {% set ctr = 0 %}
+                    {% set totalItems = form.package_sr_no.vars.choices|length %}
+                    {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                    {% set extraColumn = (totalItems % columns) %}
+                    {% set colCounter = {} %}
+                    {% for i in 0..columns-1 %}
+                        {% if loop.index0 < extraColumn %}
+                            {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                        {% else  %}
+                            {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                        {% endif %}
+                    {% endfor %}
+                    {% for i in 0..columns-1 %}
+                        <div class="large-4 columns">
+                            <ul class="checkbox-list">
+                                {% for k in 0..colCounter[i]-1 %}
+                                    {% if choicesIdArray[ctr] is defined %}
+                                        {% set child = attribute(attribute(form, 'package_sr_no'), ctr) %}
+                                        <li>
+                                            {{ form_widget(child) }}
+                                            <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                                        </li>
+                                    {% endif %}
+                                    {% set ctr = ctr + 1 %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
+                </div>
+                        
+                {{ form_errors(form.package_sr_no) }}
+                {{ form_row(form.paid_user_only) }}
+                <div class="row">
+                    <div class="large-3 columns">
+                        {{ form_label(form.expires_at) }}
+                        <div class="relative">
+                            <span class="datepicker-icon event_start"></span>
+                            {{ form_widget(form.expires_at, {'attr': {'placeholder': 'Expires at'}}) }}
+                            {{ form_errors(form.expires_at) }}
+                        </div>
+                    </div>
+                </div>
+                {{ form_row(form.status) }}
+                {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'package_admin'}) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $('.datepicker-icon').click(function(e){
+        $(this).next('input.fdatepicker').focus();
+    });
+    $(document).ready(function(){
+        $('#fa_user_user_credit_admin_package_sr_no_0').change(function() {
+            if($(this).is(":checked")) {
+                $('#package_sr_no_div :checkbox').prop('checked', true);
+            } else {
+                $('#package_sr_no_div :checkbox').prop('checked', false);
+            }
+        });
+    });    
+    //]]>
+    </script>
+{% endblock %}

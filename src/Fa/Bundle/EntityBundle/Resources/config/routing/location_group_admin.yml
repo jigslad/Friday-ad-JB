@@ -1,0 +1,25 @@
+location_group_admin:
+    path:     /
+    defaults: { _controller: "FaEntityBundle:LocationGroupAdmin:index" }
+
+location_group_new_admin:
+    path:     /new
+    defaults: { _controller: "FaEntityBundle:LocationGroupAdmin:new" }
+
+location_group_create_admin:
+    path:     /create
+    defaults: { _controller: "FaEntityBundle:LocationGroupAdmin:create" }
+    requirements: { methods: post }
+
+location_group_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaEntityBundle:LocationGroupAdmin:edit" }
+
+location_group_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaEntityBundle:LocationGroupAdmin:update" }
+    requirements: { methods: post|put }
+    
+location_group_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaEntityBundle:LocationGroupAdmin:delete" }

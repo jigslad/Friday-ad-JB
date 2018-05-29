@@ -1,0 +1,51 @@
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+                <thead>
+                    <tr>
+                        <th width="25%">
+                           {{ sortable_link('delivery_method_option_admin', 'delivery_method_option__name', 'Postage option name'|trans, sorter) }}
+                        </th>
+                        <th width="25%">
+                           {{ sortable_link('delivery_method_option_admin', 'delivery_method_option__cost', 'Postage option cost'|trans, sorter) }}
+                        </th>
+                         <th width="25%">
+                           {{ sortable_link('delivery_method_option_admin', 'delivery_method_option__status', 'Status'|trans, sorter) }}
+                        </th>
+                        <th width="25%"><i class="fa fa-gear"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pagination.getNbResults() %}
+                         {% for deliveryMethodOption in pagination.getCurrentPageResults() %}
+                         <tr class="gradeX">
+                             <td>{{ deliveryMethodOption.name }}</td>
+                             <td>{{ format_currency(deliveryMethodOption.cost) }}</td>
+                             <td>{{ statusArray[deliveryMethodOption.status] }}</td>
+                             <td>
+                                <button href="#" data-dropdown="drop{{ deliveryMethodOption.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                <br />
+                                <ul id="drop{{ deliveryMethodOption.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+	                               {% if deliveryMethodOptionEditGrant %}
+	                                   <li><a href="{{ path('delivery_method_option_edit_admin', {'id': deliveryMethodOption.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+	                               {% endif %}
+
+	                               {% if deliveryMethodOptionDeleteGrant %}
+	                                   <li><a href="{{ path('delivery_method_option_delete_admin', {'id': deliveryMethodOption.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this option?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+	                               {% endif %}
+                                </ul>
+                             </td>
+                         </tr>
+                         {% endfor %}
+                    {% else %}
+                         <tr class="odd gradeX">
+                             <td colspan="4" align="center">{{ 'No option found'|trans({}, 'messages') }}</td>
+                         </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

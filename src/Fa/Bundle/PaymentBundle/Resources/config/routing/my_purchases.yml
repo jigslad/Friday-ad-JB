@@ -1,0 +1,3 @@
+my_purchases:
+    path:     /
+    defaults: { _controller: "FaPaymentBundle:MyPurchases:myPurchases" }

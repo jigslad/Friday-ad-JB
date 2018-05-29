@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="e82e91e2a4203c41aa24853ca37d6e5645661f11" resname="%miles_away% miles away">
+        <jms:reference-file line="61">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <source>%miles_away% miles away</source>
+        <target state="new">%miles_away% miles away</target>
+      </trans-unit>
+      <trans-unit id="c0d171eb20cb82d4253e88bc8959170630ce8ca1" resname="(%total_review%&amp;nbsp;reviews)">
+        <jms:reference-file line="50">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <source><![CDATA[(%total_review%&nbsp;reviews)]]></source>
+        <target state="new"><![CDATA[(%total_review%&nbsp;reviews)]]></target>
+      </trans-unit>
+      <trans-unit id="c887b9d3b3905e1e3eb236a1e334ca966299726f" resname="About Us">
+        <jms:reference-file line="7">views/Ad/AdServiceDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="39">views/Ad/AdServiceDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="7">views/Ad/AdAdultDetailTabs.html.twig</jms:reference-file>
+        <source>About Us</source>
+        <target state="new">About Us</target>
+      </trans-unit>
+      <trans-unit id="00c08580ef18b7ca3f6a1139dfc2aee3789dc043" resname="Ad category not found.">
+        <jms:reference-file line="959">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <source>Ad category not found.</source>
+        <target state="new">Ad category not found.</target>
+      </trans-unit>
+      <trans-unit id="e72c4d3ac00bac871d5d80dd2c457b71f19accb6" resname="Ad reported successfully.">
+        <jms:reference-file line="67">AdBundle/Controller/AdReportController.php</jms:reference-file>
+        <jms:reference-file line="483">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Ad reported successfully.</source>
+        <target state="new">Ad reported successfully.</target>
+      </trans-unit>
+      <trans-unit id="d166fbc10889ecf13e79acfeeed7dbd31aefdc63" resname="Ad type">
+        <jms:reference-file line="30">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="85">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <source>Ad type</source>
+        <target state="new">Ad type</target>
+      </trans-unit>
+      <trans-unit id="1bed336066692d4bb8b04871b954e8eae51fd4c4" resname="Additional benefits">
+        <jms:reference-file line="53">views/Ad/AdJobDetailTabs.html.twig</jms:reference-file>
+        <source>Additional benefits</source>
+        <target state="new">Additional benefits</target>
+      </trans-unit>
+      <trans-unit id="1933be00837445935aec93d0bd6f471641164bc7" resname="Additional job requirements">
+        <jms:reference-file line="39">views/Ad/AdJobDetailTabs.html.twig</jms:reference-file>
+        <source>Additional job requirements</source>
+        <target state="new">Additional job requirements</target>
+      </trans-unit>
+      <trans-unit id="cf19addeca2287514d66d1c9bed4fd988516cc4d" resname="Amenities">
+        <jms:reference-file line="140">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <source>Amenities</source>
+        <target state="new">Amenities</target>
+      </trans-unit>
+      <trans-unit id="cfea419c3b4e8b02ee586e70a28bf846e44cdda4" resname="Apply">
+        <jms:reference-file line="30">views/Ad/AdDetailRightPanel.html.twig</jms:reference-file>
+        <jms:reference-file line="386">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Apply</source>
+        <target state="new">Apply</target>
+      </trans-unit>
+      <trans-unit id="253158eab957d4d7f7fb6bc6b2821fed9cfb52f7" resname="Back to search results">
+        <jms:reference-file line="112">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Back to search results</source>
+        <target state="new">Back to search results</target>
+      </trans-unit>
+      <trans-unit id="41eea51fd6d6b5574a100b310e1500d816e983f9" resname="Bills included">
+        <jms:reference-file line="154">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <source>Bills included</source>
+        <target state="new">Bills included</target>
+      </trans-unit>
+      <trans-unit id="c38860a3ba58e9263dba3ac926101f8b2358d4c9" resname="Buy now">
+        <jms:reference-file line="396">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Buy now</source>
+        <target state="new">Buy now</target>
+      </trans-unit>
+      <trans-unit id="d329a88ae3bcd3c2e60dad2de045191cdbcc8be4" resname="Buy now with">
+        <jms:reference-file line="40">views/Ad/AdDetailRightPanel.html.twig</jms:reference-file>
+        <source>Buy now with</source>
+        <target state="new">Buy now with</target>
+      </trans-unit>
+      <trans-unit id="f28563a477a994890a5c13b36a302433dcd73c8e" resname="Colour">
+        <jms:reference-file line="96">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source>Colour</source>
+        <target state="new">Colour</target>
+      </trans-unit>
+      <trans-unit id="b37456c4530be810dc040f50da72eda09addfb0a" resname="Contact">
+        <jms:reference-file line="34">views/Ad/AdDetailRightPanel.html.twig</jms:reference-file>
+        <jms:reference-file line="388">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Contact</source>
+        <target state="new">Contact</target>
+      </trans-unit>
+      <trans-unit id="612714e50db870fb250d1460b2659f9bd45a3026" resname="Contact request sent successfully.">
+        <jms:reference-file line="116">MessageBundle/Controller/ContactUserController.php</jms:reference-file>
+        <source>Contact request sent successfully.</source>
+        <target state="new">Contact request sent successfully.</target>
+      </trans-unit>
+      <trans-unit id="96477483f635915464c31fe8474323dd45276555" resname="Contact seller">
+        <jms:reference-file line="32">views/Ad/AdDetailRightPanel.html.twig</jms:reference-file>
+        <source>Contact seller</source>
+        <target state="new">Contact seller</target>
+      </trans-unit>
+      <trans-unit id="2263828738f6044e12bcf94897501e524d1e642a" resname="Create Alert">
+        <jms:reference-file line="62">views/Ad/AdDetailRightPanel.html.twig</jms:reference-file>
+        <jms:reference-file line="64">views/Ad/AdDetailRightPanel.html.twig</jms:reference-file>
+        <source>Create Alert</source>
+        <target state="new">Create Alert</target>
+      </trans-unit>
+      <trans-unit id="ad0c3a3e38e61adb0fb733efcbdf4bdf3b74a620" resname="Date available">
+        <jms:reference-file line="66">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="116">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <source>Date available</source>
+        <target state="new">Date available</target>
+      </trans-unit>
+      <trans-unit id="9631af52c66f1a5cd964380b009c74efdee01947" resname="Delivery">
+        <jms:reference-file line="45">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <source>Delivery</source>
+        <target state="new">Delivery</target>
+      </trans-unit>
+      <trans-unit id="3146106e2498701b8a492f658818eb8556d98fce" resname="Delivery method">
+        <jms:reference-file line="48">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <source>Delivery method</source>
+        <target state="new">Delivery method</target>
+      </trans-unit>
+      <trans-unit id="55f8ebc805e65b5b71ddafdae390e3be2bcd69af" resname="Description">
+        <jms:reference-file line="4">views/Ad/AdServiceDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="16">views/Ad/AdServiceDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="4">views/Ad/AdAdultDetailTabs.html.twig</jms:reference-file>
+        <source>Description</source>
+        <target state="new">Description</target>
+      </trans-unit>
+      <trans-unit id="9f4ca9ec08715def4a822d25f75f2d9b79b931c0" resname="Dimensions">
+        <jms:reference-file line="10">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="67">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <source>Dimensions</source>
+        <target state="new">Dimensions</target>
+      </trans-unit>
+      <trans-unit id="84add5b2952787581cb9a8851eef63d1ec75d22b" resname="Email">
+        <jms:reference-file line="254">views/Ad/showAd.html.twig</jms:reference-file>
+        <jms:reference-file line="6">views/ManageMyAd/socialShare.html.twig</jms:reference-file>
+        <jms:reference-file line="147">views/ManageMyAd/adDetail.html.twig</jms:reference-file>
+        <source>Email</source>
+        <target state="new">Email</target>
+      </trans-unit>
+      <trans-unit id="313e5ac58c5625bc58bce43a08cdcbc7a31b0e47" resname="Engine size">
+        <jms:reference-file line="65">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source>Engine size</source>
+        <target state="new">Engine size</target>
+      </trans-unit>
+      <trans-unit id="b03175ce0cd043bdd2448709c1d2fbcce5c4c42b" resname="Extra information">
+        <jms:reference-file line="168">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <source>Extra information</source>
+        <target state="new">Extra information</target>
+      </trans-unit>
+      <trans-unit id="82da67b211249624f24f3c7db5642a5112c9446f" resname="Facebook">
+        <jms:reference-file line="250">views/Ad/showAd.html.twig</jms:reference-file>
+        <jms:reference-file line="2">views/ManageMyAd/socialShare.html.twig</jms:reference-file>
+        <jms:reference-file line="143">views/ManageMyAd/adDetail.html.twig</jms:reference-file>
+        <source>Facebook</source>
+        <target state="new">Facebook</target>
+      </trans-unit>
+      <trans-unit id="9704b6631f6a67e3b6f771fa1b084fce99258a48" resname="Favourite">
+        <jms:reference-file line="65">AdBundle/Controller/AdFavoriteController.php</jms:reference-file>
+        <jms:reference-file line="118">AdBundle/Controller/AdFavoriteController.php</jms:reference-file>
+        <jms:reference-file line="241">views/Ad/showAd.html.twig</jms:reference-file>
+        <jms:reference-file line="243">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Favourite</source>
+        <target state="new">Favourite</target>
+      </trans-unit>
+      <trans-unit id="fc338f87a058158eb824b53705961801516a9460" resname="Features">
+        <jms:reference-file line="10">views/Ad/AdServiceDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="177">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source>Features</source>
+        <target state="new">Features</target>
+      </trans-unit>
+      <trans-unit id="0e58d4bf66100c3299f1322eedee942426e8f538" resname="Fuel type">
+        <jms:reference-file line="54">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source>Fuel type</source>
+        <target state="new">Fuel type</target>
+      </trans-unit>
+      <trans-unit id="8fdc7549333dc4b0ca64320d70039992f53e267b" resname="Google Plus">
+        <jms:reference-file line="252">views/Ad/showAd.html.twig</jms:reference-file>
+        <jms:reference-file line="4">views/ManageMyAd/socialShare.html.twig</jms:reference-file>
+        <jms:reference-file line="145">views/ManageMyAd/adDetail.html.twig</jms:reference-file>
+        <source>Google Plus</source>
+        <target state="new">Google Plus</target>
+      </trans-unit>
+      <trans-unit id="30b56f8f8c0964b53f7e817be0b3b5338dd5a82a" resname="Got one like this?">
+        <jms:reference-file line="51">views/Ad/AdDetailRightPanel.html.twig</jms:reference-file>
+        <source>Got one like this?</source>
+        <target state="new">Got one like this?</target>
+      </trans-unit>
+      <trans-unit id="70f8bb9a8a5393ef080507a89e4b98d139000d65" resname="Home">
+        <jms:reference-file line="115">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Home</source>
+        <target state="new">Home</target>
+      </trans-unit>
+      <trans-unit id="b8ba3c0fe54bd0fe4cc248b77b824f2474d2a032" resname="ISOFIX has by now become the international standard for all automobile and child safety seat manufacturers. This anchoring technology minimizes installation mistakes and optimizes the protective effect by means of a solid connection between child safety seat and vehicle.">
+        <jms:reference-file line="154">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source>ISOFIX has by now become the international standard for all automobile and child safety seat manufacturers. This anchoring technology minimizes installation mistakes and optimizes the protective effect by means of a solid connection between child safety seat and vehicle.</source>
+        <target state="new">ISOFIX has by now become the international standard for all automobile and child safety seat manufacturers. This anchoring technology minimizes installation mistakes and optimizes the protective effect by means of a solid connection between child safety seat and vehicle.</target>
+      </trans-unit>
+      <trans-unit id="7085a726d9b6999cb9455073575787837ed26e5e" resname="ISOfix">
+        <jms:reference-file line="153">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source>ISOfix</source>
+        <target state="new">ISOfix</target>
+      </trans-unit>
+      <trans-unit id="b00b97cbf245da4b0f6a1fecb0cec3d6731f495a" resname="Item dimensions">
+        <jms:reference-file line="69">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <source>Item dimensions</source>
+        <target state="new">Item dimensions</target>
+      </trans-unit>
+      <trans-unit id="ab478f3efc840eebab919dff1b9512286f70c10c" resname="Map">
+        <jms:reference-file line="190">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Map</source>
+        <target state="new">Map</target>
+      </trans-unit>
+      <trans-unit id="f67a0513bccc19c52875407b75123ebc154b6f91" resname="Mileage">
+        <jms:reference-file line="43">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source>Mileage</source>
+        <target state="new">Mileage</target>
+      </trans-unit>
+      <trans-unit id="473710d327804e484c1863690d91c3751e2c7c98" resname="More details">
+        <jms:reference-file line="46">views/Ad/AdServiceDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/Ad/AdJobDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="36">views/Ad/AdJobDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="137">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <source>More details</source>
+        <target state="new">More details</target>
+      </trans-unit>
+      <trans-unit id="cbb3761bf982afc8b0da1dd1f3f82d695adef732" resname="NCAP rating of %ncap_rating%/5">
+        <jms:reference-file line="144">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source>NCAP rating of %ncap_rating%/5</source>
+        <target state="new">NCAP rating of %ncap_rating%/5</target>
+      </trans-unit>
+      <trans-unit id="7d18f5b9fed9c7c5c77b58666d1015e06e35af55" resname="NCAP ratings refer to the crash protection and rollover safety of new vehicles. To achieve a high overall rating the car must deliver a balanced performance across all four areas: adult occupant protection, child occupant protection, pedestrian protection and safety assist.&lt;br /&gt;One star is the lowest rating; ﬁve stars is the highest.&lt;br /&gt;More stars equal safer cars.">
+        <jms:reference-file line="146">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source><![CDATA[NCAP ratings refer to the crash protection and rollover safety of new vehicles. To achieve a high overall rating the car must deliver a balanced performance across all four areas: adult occupant protection, child occupant protection, pedestrian protection and safety assist.<br />One star is the lowest rating; ﬁve stars is the highest.<br />More stars equal safer cars.]]></source>
+        <target state="new"><![CDATA[NCAP ratings refer to the crash protection and rollover safety of new vehicles. To achieve a high overall rating the car must deliver a balanced performance across all four areas: adult occupant protection, child occupant protection, pedestrian protection and safety assist.<br />One star is the lowest rating; ﬁve stars is the highest.<br />More stars equal safer cars.]]></target>
+      </trans-unit>
+      <trans-unit id="66a7482f624372a478c1ca3e307421a6172fb719" resname="No of bathrooms">
+        <jms:reference-file line="54">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="105">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <source>No of bathrooms</source>
+        <target state="new">No of bathrooms</target>
+      </trans-unit>
+      <trans-unit id="2c302d820218bf4db5f4c35fb552011ba3e3d00b" resname="No of bedrooms">
+        <jms:reference-file line="42">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="95">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <source>No of bedrooms</source>
+        <target state="new">No of bedrooms</target>
+      </trans-unit>
+      <trans-unit id="b41a92bed03261664717a6afdad4edf3d5d6ef6e" resname="Payment">
+        <jms:reference-file line="55">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <source>Payment</source>
+        <target state="new">Payment</target>
+      </trans-unit>
+      <trans-unit id="0e55fb3b04e225d83af1a64ec1cedc121fb61c32" resname="Payment method">
+        <jms:reference-file line="58">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <source>Payment method</source>
+        <target state="new">Payment method</target>
+      </trans-unit>
+      <trans-unit id="252bfdfe0e7fd3343ff2c554a7dc3d765a3776b7" resname="Performance &amp; economy">
+        <jms:reference-file line="7">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="112">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source><![CDATA[Performance & economy]]></source>
+        <target state="new"><![CDATA[Performance & economy]]></target>
+      </trans-unit>
+      <trans-unit id="c8b2e864eccb38901097806819bf6aba2eed7ae1" resname="Photos">
+        <jms:reference-file line="188">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Photos</source>
+        <target state="new">Photos</target>
+      </trans-unit>
+      <trans-unit id="a45a7994973a234fae8e4759125b277f93838481" resname="Pinterest">
+        <jms:reference-file line="253">views/Ad/showAd.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/ManageMyAd/socialShare.html.twig</jms:reference-file>
+        <jms:reference-file line="146">views/ManageMyAd/adDetail.html.twig</jms:reference-file>
+        <source>Pinterest</source>
+        <target state="new">Pinterest</target>
+      </trans-unit>
+      <trans-unit id="738aadd96a8a7795a6ffcdd3bd6758acb1779055" resname="Please login to contact buyer.">
+        <jms:reference-file line="133">MessageBundle/Controller/ContactUserController.php</jms:reference-file>
+        <jms:reference-file line="259">MessageBundle/Controller/ContactSellerController.php</jms:reference-file>
+        <source>Please login to contact buyer.</source>
+        <target state="new">Please login to contact buyer.</target>
+      </trans-unit>
+      <trans-unit id="3750bf74e99dfd09bd4f4dbb4cc1fded3144805b" resname="Please login to report ad.">
+        <jms:reference-file line="85">AdBundle/Controller/AdReportController.php</jms:reference-file>
+        <source>Please login to report ad.</source>
+        <target state="new">Please login to report ad.</target>
+      </trans-unit>
+      <trans-unit id="d645cb210da1b4ef3fe6502dba673a0846b10105" resname="Please wait... ">
+        <jms:reference-file line="465">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Please wait... </source>
+        <target state="new">Please wait... </target>
+      </trans-unit>
+      <trans-unit id="9a86cb3321109a15f95019c23e10e3cd1a13488e" resname="Postage &amp; Payment">
+        <jms:reference-file line="7">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="42">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <source><![CDATA[Postage & Payment]]></source>
+        <target state="new"><![CDATA[Postage & Payment]]></target>
+      </trans-unit>
+      <trans-unit id="1a4274ec4e5aaebad2d7607f2758f55c1140d14b" resname="Posting ads since %posting_date%">
+        <jms:reference-file line="55">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <source>Posting ads since %posting_date%</source>
+        <target state="new">Posting ads since %posting_date%</target>
+      </trans-unit>
+      <trans-unit id="737d970f2a82dbcd0c8282e3f96c8daab373d1a2" resname="Problem in report ad.">
+        <jms:reference-file line="70">AdBundle/Controller/AdReportController.php</jms:reference-file>
+        <source>Problem in report ad.</source>
+        <target state="new">Problem in report ad.</target>
+      </trans-unit>
+      <trans-unit id="32abdf99d470e368ff52f35bc0e2944650c9e6c1" resname="Read less">
+        <jms:reference-file line="26">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="12">views/Ad/AdDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="24">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="21">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="222">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Read less</source>
+        <target state="new">Read less</target>
+      </trans-unit>
+      <trans-unit id="ad086cf55b834c375e209972840f1342401d8c41" resname="Read more">
+        <jms:reference-file line="25">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="11">views/Ad/AdDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="20">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="221">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Read more</source>
+        <target state="new">Read more</target>
+      </trans-unit>
+      <trans-unit id="714e47a39dd0634ba01e7d479a57ef0a08233cc3" resname="Reg. year">
+        <jms:reference-file line="32">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source>Reg. year</source>
+        <target state="new">Reg. year</target>
+      </trans-unit>
+      <trans-unit id="ee45c30326b750387589752c0f75e1dd87ddc7e4" resname="Report">
+        <jms:reference-file line="191">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Report</source>
+        <target state="new">Report</target>
+      </trans-unit>
+      <trans-unit id="db6e7e410412f58574f766c3911f49badd42beca" resname="Safety">
+        <jms:reference-file line="129">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source>Safety</source>
+        <target state="new">Safety</target>
+      </trans-unit>
+      <trans-unit id="c8a647a9d1729bc4b1550153a068deb8ca34a2e3" resname="Safety &amp; features">
+        <jms:reference-file line="10">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="126">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <source><![CDATA[Safety & features]]></source>
+        <target state="new"><![CDATA[Safety & features]]></target>
+      </trans-unit>
+      <trans-unit id="49b613f0c602dd20d582efa261a5aa97f21c44a7" resname="See %userrole%'s other vacancies">
+        <jms:reference-file line="140">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <source>See %userrole%'s other vacancies</source>
+        <target state="new">See %userrole%'s other vacancies</target>
+      </trans-unit>
+      <trans-unit id="346af95014cc48bf5cd731799708634ad2cc8190" resname="See other vacancies">
+        <jms:reference-file line="142">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <source>See other vacancies</source>
+        <target state="new">See other vacancies</target>
+      </trans-unit>
+      <trans-unit id="2be82d1a6054cd5410f7aa0a4e8f3c5cc2fe7b18" resname="See seller's other items">
+        <jms:reference-file line="137">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <source>See seller's other items</source>
+        <target state="new">See seller's other items</target>
+      </trans-unit>
+      <trans-unit id="9764c5b4311968e787289d5cb85f18759838f9a7" resname="See seller's profile">
+        <jms:reference-file line="123">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <source>See seller's profile</source>
+        <target state="new">See seller's profile</target>
+      </trans-unit>
+      <trans-unit id="21167271aeae8ce24449dadcfc356c7183a0a9bb" resname="Sell it here!">
+        <jms:reference-file line="52">views/Ad/AdDetailRightPanel.html.twig</jms:reference-file>
+        <source>Sell it here!</source>
+        <target state="new">Sell it here!</target>
+      </trans-unit>
+      <trans-unit id="09ca55ca52d207f2cc1d9339e0226a88e9e96e2f" resname="Share">
+        <jms:reference-file line="249">views/Ad/showAd.html.twig</jms:reference-file>
+        <source>Share</source>
+        <target state="new">Share</target>
+      </trans-unit>
+      <trans-unit id="bad97643409442b23f883949c27d2b42e6a8af2f" resname="Similar ads">
+        <jms:reference-file line="9">views/Ad/AdDetailSimilarAds.html.twig</jms:reference-file>
+        <source>Similar ads</source>
+        <target state="new">Similar ads</target>
+      </trans-unit>
+      <trans-unit id="85ad11823f3b821a8075af057676fcbb62a75f27" resname="Sorry ad is no more active, so communication is disabled for this ad!">
+        <jms:reference-file line="84">MessageBundle/Controller/ContactUserController.php</jms:reference-file>
+        <source>Sorry ad is no more active, so communication is disabled for this ad!</source>
+        <target state="new">Sorry ad is no more active, so communication is disabled for this ad!</target>
+      </trans-unit>
+      <trans-unit id="dd7a1e79deca9ce13b590c6b3440a4ec69eb8a2d" resname="The basics">
+        <jms:reference-file line="4">views/Ad/AdJobDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="11">views/Ad/AdJobDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="4">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="16">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="4">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="15">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="4">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="11">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <source>The basics</source>
+        <target state="new">The basics</target>
+      </trans-unit>
+      <trans-unit id="839ac4f959d902221881c9725a84410c11e451cf" resname="The details">
+        <jms:reference-file line="29">views/Ad/AdForSaleDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="15">views/Ad/AdDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="26">views/Ad/AdMotorDetailTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/Ad/AdPropertyDetailTabs.html.twig</jms:reference-file>
+        <source>The details</source>
+        <target state="new">The details</target>
+      </trans-unit>
+      <trans-unit id="5392c950bdde4be7e5f5b8fdc6a1ca5f21e905cf" resname="Twitter">
+        <jms:reference-file line="251">views/Ad/showAd.html.twig</jms:reference-file>
+        <jms:reference-file line="3">views/ManageMyAd/socialShare.html.twig</jms:reference-file>
+        <jms:reference-file line="144">views/ManageMyAd/adDetail.html.twig</jms:reference-file>
+        <source>Twitter</source>
+        <target state="new">Twitter</target>
+      </trans-unit>
+      <trans-unit id="cca21aeb9d2038892899440dd13048add1020123" resname="Unable to find Live Ad.">
+        <jms:reference-file line="48">AdBundle/Controller/AdReportController.php</jms:reference-file>
+        <jms:reference-file line="941">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <source>Unable to find Live Ad.</source>
+        <target state="new">Unable to find Live Ad.</target>
+      </trans-unit>
+      <trans-unit id="e60c52c1b1cdbaded31e4fe8f49867e0a5d686bd" resname="Unable to find user.">
+        <jms:reference-file line="86">MessageBundle/Controller/ContactSellerController.php</jms:reference-file>
+        <source>Unable to find user.</source>
+        <target state="new">Unable to find user.</target>
+      </trans-unit>
+      <trans-unit id="b1169a42a8d2323db3d956f870f4db3633d857f5" resname="Visit agency">
+        <jms:reference-file line="111">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <source>Visit agency</source>
+        <target state="new">Visit agency</target>
+      </trans-unit>
+      <trans-unit id="c403429792e2eddfae0754266661ecb66440e264" resname="Visit dealership">
+        <jms:reference-file line="109">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <source>Visit dealership</source>
+        <target state="new">Visit dealership</target>
+      </trans-unit>
+      <trans-unit id="e36461d91e6135b29b116bc5a13663fe985634e5" resname="Visit profile">
+        <jms:reference-file line="104">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <jms:reference-file line="125">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <source>Visit profile</source>
+        <target state="new">Visit profile</target>
+      </trans-unit>
+      <trans-unit id="68d15c77f8a736f6d13fbd5f658b80f795daed06" resname="Visit shop">
+        <jms:reference-file line="107">views/Ad/AdUserDetail.html.twig</jms:reference-file>
+        <source>Visit shop</source>
+        <target state="new">Visit shop</target>
+      </trans-unit>
+      <trans-unit id="fc17e969fe304f3abaf39d7ebc33de8ad8b5e0b5" resname="Want us to send you an email when we receive more ads like this?">
+        <jms:reference-file line="60">views/Ad/AdDetailRightPanel.html.twig</jms:reference-file>
+        <source>Want us to send you an email when we receive more ads like this?</source>
+        <target state="new">Want us to send you an email when we receive more ads like this?</target>
+      </trans-unit>
+      <trans-unit id="70500a71ad2e4fad3986990533d398f7f10d546a" resname="You already have reported this ad.">
+        <jms:reference-file line="59">AdBundle/Controller/AdReportController.php</jms:reference-file>
+        <source>You already have reported this ad.</source>
+        <target state="new">You already have reported this ad.</target>
+      </trans-unit>
+      <trans-unit id="0c53075af6b34b4bfa95e7dd73615f6909039768" resname="You can not contact for your own ad.">
+        <jms:reference-file line="81">MessageBundle/Controller/ContactUserController.php</jms:reference-file>
+        <jms:reference-file line="59">MessageBundle/Controller/ContactSellerController.php</jms:reference-file>
+        <jms:reference-file line="90">MessageBundle/Controller/ContactSellerController.php</jms:reference-file>
+        <source>You can not contact for your own ad.</source>
+        <target state="new">You can not contact for your own ad.</target>
+      </trans-unit>
+      <trans-unit id="1557eac5e0b1156cee3daa88b3530c7eb41d0847" resname="You can not report your own ad.">
+        <jms:reference-file line="55">AdBundle/Controller/AdReportController.php</jms:reference-file>
+        <source>You can not report your own ad.</source>
+        <target state="new">You can not report your own ad.</target>
+      </trans-unit>
+      <trans-unit id="371aadf2b1175e6560943b715eb398b24956b2d5" resname="Your account was blocked.">
+        <jms:reference-file line="88">MessageBundle/Controller/ContactSellerController.php</jms:reference-file>
+        <source>Your account was blocked.</source>
+        <target state="new">Your account was blocked.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

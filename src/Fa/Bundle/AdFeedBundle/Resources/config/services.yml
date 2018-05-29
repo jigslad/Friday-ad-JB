@@ -1,0 +1,17 @@
+parameters:
+    fa_ad.manager.ad_feed_reader.class: Fa\Bundle\AdFeedBundle\Manager\AdFeedReaderManager
+    fa_ad.feed.parser.class: Fa\Bundle\AdFeedBundle\Feed\AdParser
+    fa_ad.feed.callback.manager.class: Fa\Bundle\AdFeedBundle\Manager\AdFeedCallbackManager
+
+services:
+    fa_ad.manager.ad_feed_reader:
+        class: '%fa_ad.manager.ad_feed_reader.class%'
+        arguments: ['@service_container']
+        
+    fa_ad.feed.parser:
+        class: '%fa_ad.feed.parser.class%'
+        arguments: ['@service_container']
+        
+    fa_ad.feed.callback.manager:
+        class: '%fa_ad.feed.callback.manager.class%'
+        arguments: ['@service_container']

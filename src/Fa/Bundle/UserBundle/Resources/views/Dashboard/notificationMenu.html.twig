@@ -1,0 +1,19 @@
+<div class="notification-counter">
+    You have <spam>(<span id="notification_head_counter">{{notifications|length}}</span>)</span> unread notifications
+</div>
+
+<div class="db-notifications">
+    <div class="inner">
+      {% for notification in notifications %}
+        <div data-alert class="alert-box {{ notification['notification_type']}} radius">
+            <span class="alert-icon">&nbsp;</span>
+            {{ notification['message']| raw }}
+             <a href="javascript:void(0)" class="close" onclick="removeNotificationMessage({{ notification['id'] }});">&times;</a>
+        </div>
+      {% endfor %}
+    </div>
+</div>
+
+{% if notifications|length > 0 %}
+    <a href="{{ path('dashboard_home') }}" class="button secondary-btn-1 expand mb0">View all notifications</a>
+{% endif %}

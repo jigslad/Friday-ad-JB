@@ -1,0 +1,137 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+
+{% set backUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdminCancelUrl', [fetch_container_instance()]) %}
+
+{% block content -%}
+{% set queryParams = app.request.query.all %}
+
+<div class="row">
+   <div class="columns">
+       <h1>{{ heading }}</h1>
+   </div>
+</div>
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                {{ form_row(form.first_name) }}
+                {{ form_row(form.last_name) }}
+                {{ form_row(form.email) }}
+                <div class="row">
+                    <div class="large-12 columns{% if form.phone.vars.errors|length %} error{% endif %}">
+                        {{ form_label(form.phone) }}
+                        {{ form_widget(form.phone) }}
+                        {{ form_errors(form.phone) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_label(form.is_private_phone_number) }}
+                        {{ form_widget(form.is_private_phone_number) }}
+                        {{ form_errors(form.is_private_phone_number) }}
+                    </div>
+                </div>
+                <div class="row"><div class="large-12 columns">&nbsp;</div></div>
+                <div class="row">
+                    <div class="large-12 columns{% if form.contact_through_email.vars.errors|length %} error{% endif %}">
+                        <label>{{ 'Contact me by'|trans }} <span class="required">*</span>:</label>
+                        {{ form_widget(form.contact_through_phone) }}<label for="fa_user_user_admin_contact_through_phone">{{ 'Phone'|trans }}</label>
+                        {{ form_widget(form.contact_through_email) }}<label for="fa_user_user_admin_contact_through_email">{{ 'Email'|trans }}</label><small>({{'My preferred method of contact from buyers is:'|trans}})</small>
+                        {{ form_errors(form.contact_through_email) }}
+                    </div>
+                </div>
+                <div class="row"><div class="large-12 columns">&nbsp;</div></div>
+                {{ form_row(form.password) }}
+                {{ form_row(form.roles) }}
+                <div class="row business_seller_fields" {% if isShowBusinessSeller is defined and isShowBusinessSeller != 1 %}style="display:none;"{% endif %}>
+                    <div class="large-12 columns">
+                        {{ form_label(form.business_name) }}
+                        {{ form_widget(form.business_name) }}
+                    </div>
+                </div>
+                <div class="row business_seller_fields" {% if isShowBusinessSeller is defined and isShowBusinessSeller != 1 %}style="display:none;"{% endif %}>
+                    <div class="large-12 columns{% if form.business_category_id.vars.errors|length %} error{% endif %}">
+                        {{ form_label(form.business_category_id) }} <span class="required">*</span>
+                        {{ form_widget(form.business_category_id) }}
+                        {{ form_errors(form.business_category_id) }}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="large-12 columns{% if form.old_meta_xml.vars.errors|length %} error{% endif %}">
+                        {{ form_label(form.old_meta_xml) }}
+                        {{ form_widget(form.old_meta_xml) }}
+                        {{ form_errors(form.old_meta_xml) }}
+                    </div>
+                </div>
+                
+                <ul class="button-group text-center">
+                    <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                    <li>{{ form_widget(form.saveAndNew, {'label': 'Save and new'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                    <li>{{ form_widget(form.saveAndCreateAd, {'label': 'Save and Create ad'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                    {% if queryParams.from is defined and queryParams.from == 'user_show' %}
+                        <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('user_show_admin', {'id': entity.id}) }}'">{{ 'Go back'|trans({}, 'messages') }}</button></li>
+                    {% else %}
+                        <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ backUrl ? backUrl : path('user_admin') }}'">{{ 'Go back'|trans({}, 'messages') }}</button></li>
+                    {% endif %}
+                </ul>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}
+
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+
+    $(document).ready(function(){
+        enableDisableContactThroughPhone();
+        showHideBusinessSellerFields();
+        $("#fa_user_user_admin_roles").change(function() {
+                showHideBusinessSellerFields();
+        });
+    });
+
+    function showHideBusinessSellerFields() {
+        var isBusinessSelerSelected = false;
+        $("#fa_user_user_admin_roles > option:selected").each(function() {
+            if (this.text == 'ROLE_BUSINESS_SELLER') {
+                isBusinessSelerSelected = true;
+            }
+        });
+
+        if (isBusinessSelerSelected)
+            $('.business_seller_fields').show();
+        else
+            $('.business_seller_fields').hide();
+    }
+
+    function enableDisableContactThroughPhone() {
+        $('#fa_user_user_admin_phone').keyup(function() {
+            validatePhoneAndEnableDisableContactThroughPhone();
+        });
+        validatePhoneAndEnableDisableContactThroughPhone();
+    }
+
+    function validatePhoneAndEnableDisableContactThroughPhone() {
+        var phone = $.trim($('#fa_user_user_admin_phone').val());
+        var phone = phone.replace(/\s/g, '');
+        var patt = new RegExp(/^\+?\d{7,11}$/);
+        if (patt.test(phone)) {
+            $('#fa_user_user_admin_contact_through_phone').attr('disabled', false);
+            $('#fa_user_user_admin_is_private_phone_number').attr('disabled', false);
+        } else {
+            $('#fa_user_user_admin_contact_through_phone').attr('checked', false);
+            $('#fa_user_user_admin_is_private_phone_number').attr('checked', false);
+            $('#fa_user_user_admin_contact_through_phone').attr('disabled', 'disabled');
+            $('#fa_user_user_admin_is_private_phone_number').attr('disabled', 'disabled');
+        }
+    }
+//]]>
+</script>
+{% endblock %}

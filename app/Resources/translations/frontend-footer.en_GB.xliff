@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="09fbd1c1fdb1c92961b4847b449798ce0c303449" resname="Can we help?">
+        <jms:reference-file line="19">Resources/views/footer.html.twig</jms:reference-file>
+        <source>Can we help?</source>
+        <target state="new">Can we help?</target>
+      </trans-unit>
+      <trans-unit id="82da67b211249624f24f3c7db5642a5112c9446f" resname="Facebook">
+        <jms:reference-file line="13">Resources/views/footer.html.twig</jms:reference-file>
+        <source>Facebook</source>
+        <target state="new">Facebook</target>
+      </trans-unit>
+      <trans-unit id="dbb69a64aee9960dd3d84c93cef5ee64824abe3a" resname="Find us on">
+        <jms:reference-file line="11">Resources/views/footer.html.twig</jms:reference-file>
+        <source>Find us on</source>
+        <target state="new">Find us on</target>
+      </trans-unit>
+      <trans-unit id="8fdc7549333dc4b0ca64320d70039992f53e267b" resname="Google Plus">
+        <jms:reference-file line="15">Resources/views/footer.html.twig</jms:reference-file>
+        <source>Google Plus</source>
+        <target state="new">Google Plus</target>
+      </trans-unit>
+      <trans-unit id="e59e8f15f76017b59aaf0246d5a07ba76a7d553e" resname="Locations">
+        <jms:reference-file line="21">Resources/views/footer.html.twig</jms:reference-file>
+        <source>Locations</source>
+        <target state="new">Locations</target>
+      </trans-unit>
+      <trans-unit id="a45a7994973a234fae8e4759125b277f93838481" resname="Pinterest">
+        <jms:reference-file line="16">Resources/views/footer.html.twig</jms:reference-file>
+        <source>Pinterest</source>
+        <target state="new">Pinterest</target>
+      </trans-unit>
+      <trans-unit id="2c2cd2ae8ff170115855201664f8bc10a106aa1d" resname="Testimonials">
+        <jms:reference-file line="22">Resources/views/footer.html.twig</jms:reference-file>
+        <source>Testimonials</source>
+        <target state="new">Testimonials</target>
+      </trans-unit>
+      <trans-unit id="5392c950bdde4be7e5f5b8fdc6a1ca5f21e905cf" resname="Twitter">
+        <jms:reference-file line="14">Resources/views/footer.html.twig</jms:reference-file>
+        <source>Twitter</source>
+        <target state="new">Twitter</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

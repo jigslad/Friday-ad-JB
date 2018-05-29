@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+                <thead>
+                    <tr>
+                        <th width="20%">
+                            {{ sortable_link('shop_package_admin', 'package__title', 'Package Title'|trans, sorter) }}
+                        </th>
+                        <th width="17%">
+                            {{ sortable_link('shop_package_admin', 'package__price', 'Package Price'|trans, sorter) }}
+                        </th>
+                        <th width="20%"> {{ 'Category'|trans({}, 'messages') }}</th>
+                        <th width="10%">
+                            {{ 'Status'|trans({}, 'messages') }}
+                        </th>
+                        <th><i class="fi-widget"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pagination.getNbResults() %}
+                        {% for package in pagination.getCurrentPageResults() %}
+                            <tr class="gradeX">
+                                <td>{{ package.title }}</td>
+                                <td>
+                                    {{ format_currency(package.price) }}
+                                </td>
+                                 <td>
+                                    {% if categoryLocationArray[package.id] is defined and categoryLocationArray[package.id]['category_id'] is defined %}
+                                        {{ categoryRepository.getCategoryPathArrayById(categoryLocationArray[package.id]['category_id'], false, containerInstance)|join(' > ') }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ statusArray[package.status] }}</td>
+                                <td>
+                                    <button href="#" data-dropdown="drop{{ package.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                    <br />
+                                    <ul id="drop{{ package.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                        {% if packageEditGrant %}
+                                            <li><a href="{{ path('shop_package_edit_admin', {'id': package.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+                                        {% endif %}
+                                       
+                                        {% if packageDeleteGrant %}
+                                            <li><a href="{{ path('shop_package_delete_admin', {'id': package.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this package?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="odd gradeX">
+                            <td colspan="5" align="center">{{ 'No package found'|trans({}, 'messages') }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

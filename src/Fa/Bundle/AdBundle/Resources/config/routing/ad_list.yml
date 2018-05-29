@@ -1,0 +1,37 @@
+ad_search_result:
+    path:     /search_result
+    defaults: { _controller: "FaAdBundle:AdList:topSearchResult" }
+
+ad_left_search_result:
+    path:     /left_search_result
+    defaults: { _controller: "FaAdBundle:AdList:leftSearchResult" }
+
+ad_left_search_dimension_modal_ajax:
+    path:     /left_search_dimension_modal
+    defaults: { _controller: "FaAdBundle:AdList:ajaxLeftSearchDimensionModal" }
+    
+ad_left_search_dimension_result:
+    path:     /left_search_dimension_result
+    defaults: { _controller: "FaAdBundle:AdList:leftSearchResult" }
+    
+ad_landing_page_search_result:
+    path:     /landing_page_search_result
+    defaults: { _controller: "FaAdBundle:AdList:landingPageSearchResult" }
+    
+shop_user_ad_left_search_result:
+    path:     /shop_user_left_search_result
+    defaults: { _controller: "FaAdBundle:AdList:shopUserAdsLeftSearchResult" }
+
+ad_show_ad_for_infobox:
+    path:     /infobox_ajax/{adId}
+    defaults: { _controller: "FaAdBundle:AdList:getAdDetailForMapBox" }
+    options:
+        expose: true
+
+ad_left_search_load_children_categories_ajax:
+    path:     /left_search_load_children_categories_ajax
+    defaults: { _controller: "FaAdBundle:AdList:ajaxLeftSearchLoadChildrenCategories" }
+
+ad_update_feed_ad_view_count_ajax:
+    path:     /update_fee_ad_view_count_ajax
+    defaults: { _controller: "FaAdBundle:AdList:ajaxUpdateFeedAdViewCount" }

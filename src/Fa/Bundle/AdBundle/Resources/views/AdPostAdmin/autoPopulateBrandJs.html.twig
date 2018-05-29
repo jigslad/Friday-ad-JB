@@ -1,0 +1,32 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+    {% if categoryDimensionId is defined and categoryDimensionId %}
+        $('#{{ form_name }}_title').blur(function() {
+            if ($(this).val().length) {
+                var adTitle = $(this).val();
+                adTitle = adTitle.replace('/', '-');
+                var route = Routing.generate('ad_post_ajax_auto_populate_brand_admin', { 'cd_id': '{{categoryDimensionId}}', 'ad_title': adTitle });
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url : route
+                })
+                .done(function(response) {
+                    if (response.brand_id_autocomplete.length) {
+                        $('#{{ form_name }}_brand_id_autocomplete').val(response.brand_id_autocomplete);
+                        $('#{{ form_name }}_brand_id').val(response.brand_id);
+                        $('#{{ form_name }}_brand_id_dimension_id').val(response.brand_id_dimension_id);
+                        $('#{{ form_name }}_brand_id_close').show();
+                    } else {
+                        $('#{{ form_name }}_brand_id_autocomplete').val('');
+                        $('#{{ form_name }}_brand_id').val('');
+                        $('#{{ form_name }}_brand_id_close').hide();
+                    }
+                });
+            }
+        });
+    {% endif %}
+});
+//]]>
+</script>

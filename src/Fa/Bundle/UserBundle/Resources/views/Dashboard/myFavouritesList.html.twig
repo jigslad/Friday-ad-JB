@@ -1,0 +1,17 @@
+{% set adRepository = fetch_repository('FaAdBundle:Ad') %}
+<div id="dashboard-favourites" class="fa-slider clearfix">
+    <div class="owl-carousel fa-slider" id="my-favourites-slider" data-equalizer>
+        {% if pagination.getNbResults() %}
+            {% for favouriteAdArray in pagination.getCurrentPageResults() %}
+
+                {{ include('FaUserBundle:MyFavourite:adDetail.html.twig', {'favouriteAdArray': favouriteAdArray, 'isSlider': true}) }}
+            {% endfor %}
+        {% else %}
+            <div class="row">
+                <div class="columns">
+                    {{ 'No records found.'|trans({}, 'frontend-my-favourites') }}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

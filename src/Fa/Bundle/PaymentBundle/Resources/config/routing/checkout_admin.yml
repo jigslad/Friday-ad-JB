@@ -1,0 +1,23 @@
+cybersource_checkout_admin:
+    path:     /cybersource
+    defaults: { _controller: "FaPaymentBundle:CyberSourceCheckoutAdmin:checkout" }
+    
+cybersource_delete_token_admin:
+    path:     /cybersource/delete/{id}
+    defaults: { _controller: "FaPaymentBundle:CyberSourceCheckoutAdmin:deleteToken" }
+    
+paypal_checkout_admin:
+    path:     /paypal
+    defaults: { _controller: "FaPaymentBundle:PaypalCheckoutAdmin:checkout" }
+    
+paypal_process_payment_admin:
+    path:     /paypal/process_payment
+    defaults: { _controller: "FaPaymentBundle:PaypalCheckoutAdmin:processPayment" }
+    
+checkout_payment_success_admin:
+    path:     /payment_success/{cartCode}
+    defaults: { _controller: "FaPaymentBundle:CheckoutAdmin:paymentSuccess" }
+    
+checkout_payment_failure_admin:
+    path:     /payment_failure/{cartCode}
+    defaults: { _controller: "FaPaymentBundle:CheckoutAdmin:paymentFailure" }

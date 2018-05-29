@@ -1,0 +1,19 @@
+FaPromotionBundle_package:
+        resource: '@FaPromotionBundle/Resources/config/routing/package_admin.yml'
+        prefix:   /package
+
+FaPromotionBundle_shop_package:
+        resource: '@FaPromotionBundle/Resources/config/routing/shop_package_admin.yml'
+        prefix:   /subscription
+        
+faPromotionBundle_upsell:
+    resource: '@FaPromotionBundle/Resources/config/routing/upsell_admin.yml'
+    prefix:   /upsell
+
+faPromotionBundle_profile_upsell:
+    resource: '@FaPromotionBundle/Resources/config/routing/profile_upsell_admin.yml'
+    prefix:   /profile/upsell
+
+FaPromotionBundle_package_discount_code:
+        resource: '@FaPromotionBundle/Resources/config/routing/package_discount_code_admin.yml'
+        prefix:   /package_discount_code

@@ -1,0 +1,25 @@
+package_discount_code_admin:
+    path:     /
+    defaults: { _controller: "FaPromotionBundle:PackageDiscountCodeAdmin:index" }
+
+package_discount_code_new_admin:
+    path:     /new
+    defaults: { _controller: "FaPromotionBundle:PackageDiscountCodeAdmin:new" }
+
+package_discount_code_create_admin:
+    path:     /create
+    defaults: { _controller: "FaPromotionBundle:PackageDiscountCodeAdmin:create" }
+    requirements: { methods: post }
+
+package_discount_code_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaPromotionBundle:PackageDiscountCodeAdmin:edit" }
+
+package_discount_code_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaPromotionBundle:PackageDiscountCodeAdmin:update" }
+    requirements: { methods: post|put }
+
+package_discount_code_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaPromotionBundle:PackageDiscountCodeAdmin:delete" }

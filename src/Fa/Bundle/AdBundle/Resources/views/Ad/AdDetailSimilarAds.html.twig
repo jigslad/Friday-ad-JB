@@ -1,0 +1,116 @@
+{% block similar_ads_html %}
+    {% set adRepository         = fetch_repository('FaAdBundle:Ad') %}
+    {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
+    {% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+    <div class="details-similar-item{% if isSoldExpiredAdFlag and similarAds['totalAds'] is defined and similarAds['totalAds'] <= 0 %} no-expired-items{% endif %}">
+        <div class="row">
+            <div class="columns">
+                <h2 class="text-center">
+                    {% if isSoldExpiredAdFlag %}
+                        {{'This advert has expired.'|trans({}, 'frontend-show-ad')}}<br />
+                        {% if similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
+                            {{'Here are some similar ads'|trans({}, 'frontend-show-ad')}}
+                        {% endif %}
+                    {% else %}
+                        {{'Similar ads'|trans({}, 'frontend-show-ad')}}
+                    {% endif %}
+                </h2>
+                {% if similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
+                    <div class="owl-carousel {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}motor-similar-item{% endif %}{% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID')} %}service-similar-slider{% endif %}" id="similar-item-slider" data-equalizer>
+                        {% for similarAd in similarAds['ads']%}
+                            {% set adCategoryId = attribute(similarAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
+                            {% set rootCategoryId = attribute(similarAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+                            {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+                            {% set similarAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+                            {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(similarAd) %}
+                            {% set adListFields = adRepository.getAdListingFields(adCategoryId, similarAd, container) %}
+                            {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(similarAd, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+                            {% set imageAltString = null %}
+                            {% if seoRule['image_alt'] is defined %}
+                                {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], similarAd]) %}
+                            {% endif %}
+                            <div class="item" data-equalizer-watch>
+                                <a href="{{ adUrl }}" class="tricky-link">
+                                    {% if attribute(similarAd, constant(similarAdSolrMapping ~ 'TITLE')) is defined %}
+                                       {{trim_text(attribute(similarAd, constant(similarAdSolrMapping ~ 'TITLE')), 65)|raw}}
+                                    {% endif %}
+                                </a>
+                                {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, similarAd, '300X225', 1) %}
+                                <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
+                                    {% if imagePath %}
+                                        <img class="lazyOwl" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                                    {% else %}
+                                        <img class="lazyOwl" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                                    {% endif %}
+                                </div>
+                                <h3>
+                                    {% if attribute(similarAd, constant(similarAdSolrMapping ~ 'TITLE')) is defined %}
+                                       {{trim_text(attribute(similarAd, constant(similarAdSolrMapping ~ 'TITLE')), 65)|raw}}
+                                    {% endif %}
+                                </h3>
+                                <div class="clearfix">
+                                    <div class="list-dimensions left">
+                                        {% if adListFields|length %}
+                                            {% for adFieldName, adListFieldValue in adListFields %}
+                                                {% set adFieldClass = adRepository.getListingClass(adFieldName) %}
+                                                {% if adListFieldValue is iterable %}
+                                                    {% for adListFieldVal in adListFieldValue %}
+                                                        <span {% if adFieldClass %}class="{{ adFieldClass }}"{% endif %}>{{ adListFieldVal }}</span>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <span {% if adFieldClass %}class="{{ adFieldClass }}"{% endif %}>{{ adListFieldValue }}</span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="list-price">
+                                        {% if attribute(similarAd, constant(similarAdSolrMapping ~ 'PRICE')) is defined and attribute(similarAd, constant(similarAdSolrMapping ~ 'PRICE')) > 0 %}
+                                            {{ format_currency(attribute(similarAd, constant(similarAdSolrMapping ~ 'PRICE'))) }}
+                                            {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(similarAd, constant(similarAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
+                                                <span>{{ adPropertyRepository.getRentPostFixText(attribute(similarAd, constant(similarAdSolrMapping ~ 'RENT_PER_ID')), container)}}</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                    {% if attribute(similarAd, 'away_from_location') is defined and attribute(similarAd, 'away_from_location') %}
+                                        <div class="list-miles">
+                                            {{ (attribute(similarAd, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}
+                                        </div>
+                                    {% endif %}
+                                    <div class="list-hr-ago text-right">
+                                        {% if attribute(similarAd, constant(similarAdSolrMapping ~ 'PUBLISHED_AT')) is defined %}
+                                            {{attribute(similarAd, constant(similarAdSolrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block similar_slider_js %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function() {
+    	{% if similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
+            var similarItemSlider = $("#similar-item-slider");
+            similarItemSlider.owlCarousel({
+                items : 4,
+                itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 3], [1050, 4]],
+                navigation: true,
+                pagination:false,
+                responsiveRefreshRate : 100,
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                lazyLoad: true,
+                scrollPerPage: true,
+            });
+        {% endif %}
+    });
+    //]]>
+    </script>
+{% endblock %}

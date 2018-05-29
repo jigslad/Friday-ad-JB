@@ -1,0 +1,9 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+{{ form_errors(form) }}
+<div class="mt20">
+    {{ form_row(form.first_name) }}
+    {{ form_row(form.email) }}
+</div>
+{{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0 mt10 expand'}}) }}
+{{ form_end(form) }}

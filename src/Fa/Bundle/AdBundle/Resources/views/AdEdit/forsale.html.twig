@@ -1,0 +1,300 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% block title %}
+    {{'Edit ad'|trans({}, 'frontend-ad-edit')}}
+{% endblock %}
+
+{% set container = fetch_container_instance() %}
+{% set categoryId = ad.category.id %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+
+{% use "FaAdBundle:AdImage:showImageUploader.html.twig" %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('imageUploadStylesheets') }}
+{% endblock %}
+
+{% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
+
+{% block body -%}
+    <div class="posting-bg">
+        {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+        <div class="row d-board-main">
+            <div class="off-canvas-wrap" data-offcanvas>
+                <div class="inner-wrap">
+                    {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                    <div id="db-middle-part" class="large-18 columns">
+                        <div id="middle-column">
+                            <a href="{{ path('manage_my_ads_active') }}" class="backto-my-items" title="{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}">{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}</a>
+                            <h1 class="text-center paa-title">{{ 'Edit your ad'|trans({}, 'frontend-ad-edit') }} </h1>
+                            <div class="big-wrapper">
+                                <div class="change-category clearfix">
+                                    <div class="cat-name-wrap">
+                                        <span>{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|join('<span class="seperator"></span>')|raw }}
+                                    </div>
+                                </div>
+                                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                                    {{ form_errors(form) }}
+                                    {% set orderedFields = form.paa_ordered_fields.vars.value|split(',') %}
+                                    {% if orderedFields|length  > 0 %}
+                                        {{ include('FaAdBundle:AdEdit:forsaleFields.html.twig') }}
+                                    {% endif %}
+                                    <div class="small-wrapper">
+                                        {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand mt30'}}) }}
+                                    </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+{{ include('FaAdBundle:AdEdit:adEditCommonJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    var defaultPrice     = ($('#fa_paa_edit_for_sale_price').val() == 0) ? '' : $('#fa_paa_edit_for_sale_price').val();
+    var defaultPriceText = $('#fa_paa_edit_for_sale_price_text').val();
+
+    $(document).ready(function(){
+        updateCharCounter('fa_paa_edit_for_sale_title');
+        updateCharCounter('fa_paa_edit_for_sale_personalized_title');
+        handlePriceWithAdType();
+        handleDimensionLabelByUnit();
+        bindCapsuleButtonEvent('fa_paa_edit_for_sale', 'condition_id', 'drop-down');
+        bindCapsuleButtonEvent('fa_paa_edit_for_sale', 'is_new', 'radio');
+        showPaypalSection(true);
+        showPostagePrice();
+        bindElementToggleEvent('fa_paa_edit_for_sale');
+        bindLocationEvents('fa_paa_edit_for_sale');
+
+        $("input[name='fa_paa_edit_for_sale[ad_type_id]']").click(function(e) {
+            $('#ad_type_choice_div .capsule-bg').removeClass('active');
+            $(this).parent().addClass('active');
+            handlePriceWithAdType($(this).val(), 'true');
+        });
+
+        $('.dimensions_unit_choice').click(function(){
+            var choiceId = $(this).attr('id');
+            var unitId   = choiceId.replace('dimensions_unit_choice_', '');
+
+            $('.dimensions_unit_choice').removeClass('active');
+            $('#'+choiceId).addClass('active');
+            $('#fa_paa_edit_for_sale_dimensions_unit').val(unitId);
+
+            handleDimensionLabelByUnit(unitId);
+        });
+
+        $('#fa_paa_edit_for_sale_paypal_email, #fa_paa_edit_for_sale_paypal_first_name, #fa_paa_edit_for_sale_paypal_last_name').focus(function(e){
+            $(this).removeClass('error');
+            $("#paypal_text_id").prev('small').remove();
+            $('#paypal_email_verify_status').hide();
+        });
+
+        
+        $('#verify_paypal_email_button').on( "click", function() {
+            showPaypalSection(true);
+        });
+
+        $("#fa_paa_edit_for_sale_qty").change(function(){
+             if ($(this).val()) {
+                if ($(this).val() == 0 || !$(this).val().match(/^([0-9]+)$/)) {
+                    $(this).val(1);
+                }
+             } else {
+                $(this).val(1);
+             }
+        });
+
+        $("input[name='fa_paa_edit_for_sale[payment_method_id]']").click(function(e) {
+            $('#payment_method_choice_div .capsule-bg').removeClass('active');
+            $(this).parent().addClass('active');
+            showPaypalSection(true, $(this).val());
+        });
+
+        $("input[name='fa_paa_edit_for_sale[delivery_method_option_id]']").click(function(e) {
+            $('#delivery_method_option_choice_div .capsule-bg').removeClass('active');
+            $(this).parent().addClass('active');
+
+            showPostagePrice($(this).val());
+        });
+    });
+   
+    function handlePriceWithAdType(adTypeId, checkSimilarShowHideLink)
+    {
+        if (!adTypeId) { 
+            adTypeId = $("input[name='fa_paa_edit_for_sale[ad_type_id]']:checked").val();
+        }
+
+        var forsaleId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FORSALE_ID') }}";
+        var wantedId  = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_WANTED_ID') }}";
+        var swapId    = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_SWAPPING_ID') }}";
+        var freeId    = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FREETOCOLLECTOR_ID') }}";
+
+        if (adTypeId == wantedId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').show();
+            $('#price_suggestion').hide();
+            $('#paa_similar_adverts').hide();
+            $('#price_label').html("{{ 'What are you willing to pay?'|trans({}, 'frontend-ad-edit') }}");
+            $('#fa_paa_edit_for_sale_price').val(defaultPrice);
+            $('#fa_paa_edit_for_sale_price_text').val('');
+            $('#paa_price .paa-bdr-box:first').addClass('paa-bdr-box-none');
+        } else if (adTypeId == swapId) {
+            $('#paa_price').hide();
+            $('#paa_price_text').show();
+            $('#price_label').html("{{ 'What would you like in exchange?'|trans({}, 'frontend-ad-edit') }}");
+            $('#fa_paa_edit_for_sale_price').val('');
+            $('#fa_paa_edit_for_sale_price_text').val(defaultPriceText);
+            $('#paa_price .paa-bdr-box:first').addClass('paa-bdr-box-none');
+        } else if (adTypeId == freeId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').hide();
+            $('#price_suggestion').hide();
+            $('#paa_similar_adverts').hide();
+            $('#fa_paa_edit_for_sale_price').val('0');
+            $('#fa_paa_edit_for_sale_price_text').val('');
+            $('#paa_price .paa-bdr-box:first').removeClass('paa-bdr-box-none');
+        } else if (adTypeId == forsaleId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').show();
+            $('#price_suggestion').show();
+            $('#paa_similar_adverts').show();
+            $('#price_label').html("{{ 'What\'s your price?'|trans({}, 'frontend-ad-edit') }}");
+            $('#fa_paa_edit_for_sale_price').val(defaultPrice);
+            $('#fa_paa_edit_for_sale_price_text').val('');
+            $('#paa_price .paa-bdr-box:first').removeClass('paa-bdr-box-none');
+            $('#paa_price .paa-bdr-box:first').addClass('paa-box-none');
+            if(typeof checkSimilarShowHideLink !== 'undefined' && checkSimilarShowHideLink == 'true'){
+               if($('#hide_similar_link').is(':visible')) {
+                   $('#paa_similar_adverts').show();
+               } else {
+                   $('#paa_similar_adverts').hide();
+               }
+           }
+        }
+    }
+    
+    function showPostagePrice(deliveryMethodId)
+    {
+        if (!deliveryMethodId) {
+            deliveryMethodId = $("input[name='fa_paa_edit_for_sale[delivery_method_option_id]']:checked").val();
+        }
+
+        if ($.inArray(deliveryMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::POSTED_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::POSTED_OR_COLLECT_ID')}}']) != '-1') {
+           $('#postage_section_id').show();
+        } else {
+            $('#fa_paa_edit_for_sale_postage_price').val('');
+            $('#postage_section_id').hide();
+        }
+    }
+    
+    function showPaypalSection(showMessage, paymentMethodId)
+    {
+       if (!paymentMethodId) {
+           paymentMethodId = $("input[name='fa_paa_edit_for_sale[payment_method_id]']:checked").val();
+       }
+
+       if ($.inArray(paymentMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')}}']) != '-1') {
+           blockElement('#forsale_paypal_block');
+           $.ajax({
+               type: "POST",
+               url : '{{ path('ajax_get_paypal_commission') }}',
+               data: {town_id: $('#fa_paa_edit_for_sale_location').val(), 'paypal_email': $('#fa_paa_edit_for_sale_paypal_email').val(), 'paypal_first_name': $('#fa_paa_edit_for_sale_paypal_first_name').val(), 'paypal_last_name': $('#fa_paa_edit_for_sale_paypal_last_name').val()},
+               cache: false,
+           })
+           .always(function(response) {
+               unblockElement('#forsale_paypal_block');
+           })
+           .done(function(data) {
+               $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through Paypal.'|trans({}, 'frontend-ad-edit')}}');
+               if (showMessage) {
+                   $("#paypal_text_id").prev('small').remove();
+               }
+               paypalCommission      = data.paypalCommission;
+               isPaypalVerifiedEmail = data.isPaypalVerifiedEmail;
+               if (paypalCommission > 0) {
+                   $('#paypal_text_id').show();
+               } else {
+                   $('#paypal_text_id').hide();
+               }
+               if ($("input[name='fa_paa_edit_for_sale[payment_method_id]']").is(':checked')) {
+                   $('#paypal_email_verify_status').removeClass('error-icon success-icon');
+                   if ($.inArray(paymentMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')}}']) != '-1') {
+                      $('#paypal_section_id').show();
+                      $('#paypal_text_id').html($('#paypal_text_id').html().replace('%paypal_commission%', paypalCommission+'%'));
+                      
+                      if (isPaypalVerifiedEmail) {
+                          $('#paypal_email_verify_status').addClass('success-icon');
+                          $('#paypal_email_verify_status').show('inline-block');
+                          $('#fa_paa_edit_for_sale_paypal_email, #fa_paa_edit_for_sale_paypal_first_name, #fa_paa_edit_for_sale_paypal_last_name').removeClass('error');
+                      } else {
+                          $('#paypal_email_verify_status').addClass('error-icon');
+                          if ($('#fa_paa_edit_for_sale_paypal_email').is(':visible') && $('#fa_paa_edit_for_sale_paypal_email').val().length) {
+                              if (showMessage) {
+                                  $('#fa_paa_edit_for_sale_paypal_email, #fa_paa_edit_for_sale_paypal_first_name, #fa_paa_edit_for_sale_paypal_last_name').addClass('error');
+                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-ad-edit')}}</small>").insertBefore('#paypal_text_id');
+                                  $('#paypal_email_verify_status').show('inline-block');
+                              }
+                          } else {
+                              if (showMessage) {
+                                  $('#fa_paa_edit_for_sale_paypal_email, #fa_paa_edit_for_sale_paypal_first_name, #fa_paa_edit_for_sale_paypal_last_name').addClass('error');
+                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-ad-edit')}}</small>").insertBefore('#paypal_text_id');
+                                  $('#paypal_email_verify_status').show('inline-block');
+                              }
+                          }
+                      }
+                   } else {
+                       $('#paypal_section_id').hide();
+                       $("#paypal_text_id").prev('small').remove();
+                       $('#paypal_email_verify_status').hide();
+                       $('#fa_paa_edit_for_sale_paypal_email, #fa_paa_edit_for_sale_paypal_first_name, #fa_paa_edit_for_sale_paypal_last_name').removeClass('error');
+                   }
+               } else {
+                   $('#paypal_section_id').hide();
+               }
+           });
+       } else {
+           $('#paypal_section_id').hide();
+           $("#paypal_text_id").prev('small').remove();
+           $('#paypal_email_verify_status').hide();
+           $('#fa_paa_edit_for_sale_paypal_email, #fa_paa_edit_for_sale_paypal_first_name, #fa_paa_edit_for_sale_paypal_last_name').removeClass('error');
+       }
+    }
+
+    function handleDimensionLabelByUnit(unitId)
+    {
+        if (!unitId) {
+            unitId = $('#fa_paa_edit_for_sale_dimensions_unit :checked').val();
+        }
+
+        if (unitId == 'cm') {
+            $('.dimensions_unit_label').html('('+ "{{ 'centimeters'|trans({}, 'frontend-ad-edit') }}" +')')
+        } else if (unitId == 'inch') {
+            $('.dimensions_unit_label').html('('+ "{{ 'inches'|trans({}, 'frontend-ad-edit') }}" +')')
+        }
+    }
+//]]>
+</script>
+{% if (form.brand_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_for_sale_brand_id', 'placeHolder': ((attribute(form, 'brand_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'brand_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'brand_id_autocomplete').vars.attr.placeholder : 'eg. Little Tikes or Playskool'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_for_sale_brand_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.colour_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_for_sale_colour_id', 'placeHolder': ((attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'colour_id_autocomplete').vars.attr.placeholder : 'eg. Pink or Blue or Multi coloured'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_for_sale_colour_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.location_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_for_sale_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}
+{% endif %}
+
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+{{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+{{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+{{ block('imageUploadJavascriptBottom') }}
+{{ block('googlemap_location_js') }}
+{% endblock %}

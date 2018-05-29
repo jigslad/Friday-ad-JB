@@ -1,0 +1,30 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block body %}
+
+<br /><br /><br />
+
+<div align="center"><b>Welcome to dotmailer!</b></div>
+
+<br /><br /><br />
+
+{% if message is defined %}
+    <div align="center">
+        {{ message|raw }}
+    </div>
+{% endif%}
+
+{% if createdField is defined %}
+    <div align="center">
+        {{ createdField|raw }}
+    </div>
+{% endif%}
+
+{% if notCreatedField is defined %}
+    <div align="center">
+        {{ notCreatedField|raw }}
+    </div>
+{% endif%}
+
+{% endblock %}
+

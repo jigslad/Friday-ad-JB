@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="0b0b32ad89204ab9254a3407640eda3a1294af5e" resname="Ad has not any delivery method selected.">
+        <jms:reference-file line="191">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <source>Ad has not any delivery method selected.</source>
+        <target state="new">Ad has not any delivery method selected.</target>
+      </trans-unit>
+      <trans-unit id="e1f3382a7f8b51d494db0fa1c7e7351cdd8e5555" resname="Add new delivery address">
+        <jms:reference-file line="206">UserBundle/Repository/UserAddressBookRepository.php</jms:reference-file>
+        <source>Add new delivery address</source>
+        <target state="new">Add new delivery address</target>
+      </trans-unit>
+      <trans-unit id="88d41938ac0d6e56921c2723aea452e2b318d43f" resname="Address line 2">
+        <jms:reference-file line="89">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <source>Address line 2</source>
+        <target state="new">Address line 2</target>
+      </trans-unit>
+      <trans-unit id="2e02623966f9391facf6eaefc8b079ed5b630bee" resname="Continue">
+        <jms:reference-file line="132">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <jms:reference-file line="78">views/AdBuyNow/collectionBuyNowAd.html.twig</jms:reference-file>
+        <source>Continue</source>
+        <target state="new">Continue</target>
+      </trans-unit>
+      <trans-unit id="c9d0dcc51879ea1b0ad316f0fc0a42977c2e840e" resname="Continue to PayPal to complete your purchase">
+        <jms:reference-file line="75">views/AdBuyNow/collectionBuyNowAd.html.twig</jms:reference-file>
+        <source>Continue to PayPal to complete your purchase</source>
+        <target state="new">Continue to PayPal to complete your purchase</target>
+      </trans-unit>
+      <trans-unit id="cbcf5311fa1d49a5a908bf395bd55976540bfc71" resname="House name/number">
+        <jms:reference-file line="80">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <source>House name/number</source>
+        <target state="new">House name/number</target>
+      </trans-unit>
+      <trans-unit id="aeaad744467f95fdab4e07750037cf2c33cca173" resname="I will collect the item">
+        <jms:reference-file line="199">UserBundle/Repository/UserAddressBookRepository.php</jms:reference-file>
+        <source>I will collect the item</source>
+        <target state="new">I will collect the item</target>
+      </trans-unit>
+      <trans-unit id="3517461d85661581bd04836d8d94ff01b4951f04" resname="Invalid address.">
+        <jms:reference-file line="120">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <source>Invalid address.</source>
+        <target state="new">Invalid address.</target>
+      </trans-unit>
+      <trans-unit id="8b0692dac87584e72504a2d629041354a4663ff5" resname="Invalid delivery method option.">
+        <jms:reference-file line="77">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="142">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <source>Invalid delivery method option.</source>
+        <target state="new">Invalid delivery method option.</target>
+      </trans-unit>
+      <trans-unit id="9a848402bc3301846b89776e8c304405c504c384" resname="Item you are trying to purchase is out of stock.">
+        <jms:reference-file line="292">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="372">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <source>Item you are trying to purchase is out of stock.</source>
+        <target state="new">Item you are trying to purchase is out of stock.</target>
+      </trans-unit>
+      <trans-unit id="cc379fdc24c44820edda49ac86081d658648244f" resname="Please login to buy item.">
+        <jms:reference-file line="172">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="358">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <source>Please login to buy item.</source>
+        <target state="new">Please login to buy item.</target>
+      </trans-unit>
+      <trans-unit id="59fcbee78c36c5bb5563d897ba31ce37d99ff1b5" resname="Post to">
+        <jms:reference-file line="203">UserBundle/Repository/UserAddressBookRepository.php</jms:reference-file>
+        <source>Post to</source>
+        <target state="new">Post to</target>
+      </trans-unit>
+      <trans-unit id="3582f5d4a8ffda6172d2aaa70aa9e89e3e421369" resname="Postage is not available for this item,&lt;br /&gt;you must arrange collection with the seller">
+        <jms:reference-file line="14">views/AdBuyNow/collectionBuyNowAd.html.twig</jms:reference-file>
+        <source><![CDATA[Postage is not available for this item,<br />you must arrange collection with the seller]]></source>
+        <target state="new"><![CDATA[Postage is not available for this item,<br />you must arrange collection with the seller]]></target>
+      </trans-unit>
+      <trans-unit id="ef4d9e9996380a637ea62ef2e2abf57749783b5e" resname="Postcode">
+        <jms:reference-file line="98">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <source>Postcode</source>
+        <target state="new">Postcode</target>
+      </trans-unit>
+      <trans-unit id="cd4debf87027fd973a222adbe2867475bb4eba69" resname="Review order">
+        <jms:reference-file line="9">views/AdBuyNow/collectionBuyNowAd.html.twig</jms:reference-file>
+        <jms:reference-file line="13">views/AdBuyNow/collectionBuyNowAd.html.twig</jms:reference-file>
+        <jms:reference-file line="15">views/AdBuyNow/postedBuyNowAd.html.twig</jms:reference-file>
+        <jms:reference-file line="20">views/AdBuyNow/postedBuyNowAd.html.twig</jms:reference-file>
+        <source>Review order</source>
+        <target state="new">Review order</target>
+      </trans-unit>
+      <trans-unit id="b0bbe5fc91d3155c652d3c9c6ba4131732a383cc" resname="State/county">
+        <jms:reference-file line="117">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <source>State/county</source>
+        <target state="new">State/county</target>
+      </trans-unit>
+      <trans-unit id="5c6505ae3c86714823827149ad981502943c3201" resname="TOTAL">
+        <jms:reference-file line="59">views/AdBuyNow/collectionBuyNowAd.html.twig</jms:reference-file>
+        <jms:reference-file line="118">views/AdBuyNow/postedBuyNowAd.html.twig</jms:reference-file>
+        <source>TOTAL</source>
+        <target state="new">TOTAL</target>
+      </trans-unit>
+      <trans-unit id="cc55bbe190859d77c3e0883e8aa064afd3a34ae2" resname="Town/city">
+        <jms:reference-file line="107">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <source>Town/city</source>
+        <target state="new">Town/city</target>
+      </trans-unit>
+      <trans-unit id="cca21aeb9d2038892899440dd13048add1020123" resname="Unable to find Live Ad.">
+        <jms:reference-file line="53">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="96">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="160">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="210">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="349">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <source>Unable to find Live Ad.</source>
+        <target state="new">Unable to find Live Ad.</target>
+      </trans-unit>
+      <trans-unit id="eb47d063d3c5397dee2b74b015ac053fc074d386" resname="You can not buy your own item.">
+        <jms:reference-file line="286">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="368">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <source>You can not buy your own item.</source>
+        <target state="new">You can not buy your own item.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,3 @@
+user_package_choose_profile:
+    path:     /choose-profile
+    defaults: { _controller: "FaUserBundle:UserPackage:displayPackage" }

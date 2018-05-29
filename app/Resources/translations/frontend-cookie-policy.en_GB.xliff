@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="bffae25a277079e45795446562e89f4e038a2bf0" resname="We use cookies to help you get the best experience when using our site. By continuing to use this website, you are agreeing to our  %cookie_policy_start%Cookie Policy%cookie_policy_end%">
+        <jms:reference-file line="11">Resources/views/cookiePolicy.html.twig</jms:reference-file>
+        <source>We use cookies to help you get the best experience when using our site. By continuing to use this website, you are agreeing to our  %cookie_policy_start%Cookie Policy%cookie_policy_end%</source>
+        <target state="new">We use cookies to help you get the best experience when using our site. By continuing to use this website, you are agreeing to our  %cookie_policy_start%Cookie Policy%cookie_policy_end%</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

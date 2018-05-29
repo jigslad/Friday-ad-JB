@@ -1,0 +1,3 @@
+parameters:
+    fa.user.logout.target: login
+    fa.admin.logout.target: admin_login

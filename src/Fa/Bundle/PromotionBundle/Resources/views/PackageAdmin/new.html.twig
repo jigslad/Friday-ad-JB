@@ -1,0 +1,210 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content %}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_promotion_package_admin_id'}}) }}
+                {{ form_row(form.role) }}
+                {{ form_row(form.category_1) }}
+                {{ form_row(form.category_2) }}
+                {{ form_row(form.category_3) }}
+                {{ form_row(form.category_4) }}
+                {{ form_row(form.location_group) }}
+                {{ form_row(form.upsells) }}
+                {% if form.printduration_count.vars.value %}
+                    {% for i in 1..form.printduration_count.vars.value %}
+                        <div class="row" id="print_duration_div_{{loop.index}}">
+                            <div class="large-3 columns">
+                                {{ form_row(attribute(form, 'print_duration_'~(loop.index))) }}
+                            </div>
+                            <div class="large-3 columns">
+                                {{ form_row(attribute(form, 'print_price_'~(loop.index))) }}
+                            </div>
+                            <div class="large-3 columns">
+                                {{ form_row(attribute(form, 'print_admin_price_'~(loop.index))) }}
+                            </div>
+                            <div class="large-3 columns">
+                                <br /><a href="javascript:removePrintDuration('{{loop.index}}');">{{'Remove'|trans}}</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <div class="row" id="add_print_duration_div" style="display:none">
+                    <div class="large-12 columns mb10">
+                        <a href="javascript:addMorePrintDuration();">{{'Add print duration'}}</a>
+                        {% do attribute(form, 'printduration_error').setRendered %}
+                        {{ form_errors(form.printduration_error) }}
+                   </div>
+                </div>
+                {{ form_row(form.price) }}
+                {{ form_row(form.admin_price) }}
+                {{ form_row(form.label) }}
+                {{ form_row(form.title) }}
+                {{ form_row(form.sub_title) }}
+                {{ form_row(form.new_ad_cta) }}
+                {{ form_row(form.renewal_ad_cta) }}
+                {{ form_row(form.description, {'attr': {'rows': '5', 'class': 'tinymce'}}) }}
+                {#{{ form_row(form.upgrade_description, {'attr': {'rows': '5', 'class': 'tinymce'}}) }}#}
+                {{ form_row(form.duration) }}
+                {{ form_row(form.email_template) }}
+                {{ form_row(form.package_sr_no) }}
+                {{ form_row(form.status) }}
+                {{ form_row(form.value) }}
+
+                {{ form_widget(form.is_admin_package) }}
+                {{ form_label(form.is_admin_package) }}
+                {{ form_errors(form.is_admin_package) }}
+
+                {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'package_admin'}) }}
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'menubar': 'false', 'toolbar1': 'bullist', 'toolbar2': 'false'}) }}
+    {% set upsellRepository = fetch_repository('FaPromotionBundle:Upsell') %}
+    {% set printPublicationUpsellIds = upsellRepository.getPrintPublicationUpsellIdsArray() %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        printPublicationUpsellIds = [{{printPublicationUpsellIds|join(',')}}];
+        showHideAddMorePrintDuration();
+
+        $("#fa_promotion_package_admin_category_1").change(function(){
+            loadCategoryByLevel($(this).val(), 2);
+            loadCategoryByLevel('', 3);
+            loadCategoryByLevel('', 4);
+        });
+
+        $("#fa_promotion_package_admin_category_2").change(function(){
+            loadCategoryByLevel($(this).val(), 3);
+            loadCategoryByLevel('', 4);
+        });
+
+        $("#fa_promotion_package_admin_category_3").change(function(){
+            loadCategoryByLevel($(this).val(), 4);
+        });
+    });
+
+    $('#fa_promotion_package_admin_upsells').change(function() {
+        showHideAddMorePrintDuration();
+    });
+
+    function showHideAddMorePrintDuration()
+    {
+        selectedVal = [];
+        $('#fa_promotion_package_admin_upsells :selected').each(function(i, selected){
+            selectedVal[i] = $(selected).val();
+        });
+        var printUpsellFlag = false;
+        if (selectedVal.length) {
+            for(i=0;i<=selectedVal.length;i++) {
+
+                if ($.inArray( parseInt(selectedVal[i]), printPublicationUpsellIds) != -1) {
+                    printUpsellFlag = true;
+                    break;
+                }
+            }
+        }
+
+        if (printUpsellFlag) {
+            $('#add_print_duration_div').show();
+        } else {
+            $('#add_print_duration_div').hide();
+            if ($('div[id^="print_duration_div_"]').length) {
+                $("div[id^='print_duration_div_']").each(function(index1) {
+                    $(this).remove();
+                });
+            }
+            $('#fa_promotion_package_admin_printduration_count').val($('div[id^="print_duration_div_"]').length);
+        }
+    }
+    function loadCategoryByLevel(id, level)
+    {
+        var category_selector = $('#fa_promotion_package_admin_category_'+level);
+        category_selector.html('<option value="">{{'Select category'|trans}} '+level+'</option>');
+
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: (level == 4) ? '{{ path("category_ajax_get_nested_node_json") }}' : '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    for (var i=0, total = data.length; i < total; i++) {
+                        category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                    }
+                }
+            });
+        }
+    }
+
+    function clearFields(divIdArray)
+    {
+
+        for (key in divIdArray)
+        {
+            $(divIdArray[key]+' input[type="text"]').val('');
+            $(divIdArray[key]+' input[type="checkbox"]').attr('checked', false);
+            $(divIdArray[key]+' input[type="radio"]').attr('checked', false);
+        }
+
+    }
+
+    function addMorePrintDuration()
+    {
+        printDurationCnt = $('div[id^="print_duration_div_"]').length;
+        if (printDurationCnt == 0) {
+            printDurationCnt = 1;
+        } else {
+            printDurationCnt = printDurationCnt + 1;
+        }
+        var html = '<div id="print_duration_div_'+printDurationCnt+'" class="row"><div class="large-3 columns"><div class="row"><div class="large-12 columns"><label for="fa_promotion_package_admin_print_duration_'+printDurationCnt+'">Duration '+printDurationCnt+' (eg. Week = 3w)</label><input type="text" autofocus="autofocus" name="fa_promotion_package_admin[print_duration_'+printDurationCnt+']" id="fa_promotion_package_admin_print_duration_'+printDurationCnt+'"></div></div></div><div class="large-3 columns"><div class="row"><div class="large-12 columns"><label for="fa_promotion_package_admin_print_price_'+printDurationCnt+'">Price £</label><input type="text" autofocus="autofocus" name="fa_promotion_package_admin[print_price_'+printDurationCnt+']" id="fa_promotion_package_admin_print_price_'+printDurationCnt+'"></div></div></div><div class="large-3 columns"><div class="row"><div class="large-12 columns"><label for="fa_promotion_package_admin_print_admin_price_'+printDurationCnt+'">Admin Price £</label><input type="text" autofocus="autofocus" name="fa_promotion_package_admin[print_admin_price_'+printDurationCnt+']" id="fa_promotion_package_admin_print_admin_price_'+printDurationCnt+'"></div></div></div><div class="large-3 columns"><br><a href="javascript:removePrintDuration('+printDurationCnt+');">Remove</a></div></div>';
+        $(html).insertBefore($('#add_print_duration_div'));
+        $('#fa_promotion_package_admin_printduration_count').val($('div[id^="print_duration_div_"]').length);
+    }
+
+    function removePrintDuration(id)
+    {
+        if ($('#print_duration_div_'+id)) {
+            $('#print_duration_div_'+id).remove();
+            $('#fa_promotion_package_admin_printduration_count').val($('div[id^="print_duration_div_"]').length);
+
+            if ($('div[id^="print_duration_div_"]').length) {
+                var i = 1;
+                $("div[id^='print_duration_div_']").each(function(index1) {
+                    $('#'+$(this).attr('id')+" label").each(function(index2) {
+                        if (index2 == 0) {
+                            $(this).text('Duration '+i+' (eg. Week = 3w)');
+                        }
+                    });
+                    $('#'+$(this).attr('id')+" input").each(function(index2) {
+                        if (index2 == 0) {
+                            $(this).attr('name', 'fa_promotion_package_admin[print_duration_'+i+']');
+                            $(this).attr('id', 'fa_promotion_package_admin_print_duration_'+i);
+                        } else if (index2 == 1) {
+                            $(this).attr('name', 'fa_promotion_package_admin[print_price_'+i+']');
+                            $(this).attr('id', 'fa_promotion_package_admin_print_price_'+i);
+                        } else if (index2 == 2) {
+                            $(this).attr('name', 'fa_promotion_package_admin[print_admin_price_'+i+']');
+                            $(this).attr('id', 'fa_promotion_package_admin_print_admin_price_'+i);
+                        }
+                    });
+                    i = i+1;
+                });
+            }
+        }
+    }
+    //]]>
+    </script>
+{% endblock %}

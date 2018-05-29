@@ -1,0 +1,105 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set currentDevice = 'D' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'T' %}
+{% endif %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title">{{'Edit about text'|trans({}, 'frontend-my-profile')}}</h5>
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'edit_about_text_id'}}) }}
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'About your company'|trans({}, 'frontend-my-profile')}}</h5>
+                <div class="mt5">{{'Tell us about your business here...'|trans({}, 'frontend-my-profile')}}</div>
+            </div>
+        </div>
+        <div class="row mt15">
+            <div class="columns">
+                {{ form_widget(form.about_us) }}
+                <div class="clearfix">
+                    <div class="left">
+                        {{ form_errors(form.about_us) }}
+                    </div>
+                    <div class="profile-ins text-right" id="{{ attribute(form, 'about_us').vars.id }}_textcounter" ></div>
+                </div>
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#profileEditModal');;">{{'Cancel'|trans({}, 'frontend-my-profile')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}
+{{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : '', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'false', 'charCounter' : 'true' }) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+        $('.textcounter').each(function(e){
+            updateCharCounter($(this).attr('id'));
+        });
+    });
+    $('.textcounter').keyup(function(e){
+        updateCharCounter($(this).attr('id'));
+    });
+    $("#edit_about_text_id").submit(function(event) {
+        blockElement('#profileEditModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{path('ajax_edit_about_us')}}",
+            data: $("#edit_about_text_id").serialize()
+        })
+        .always(function(response) {
+            unblockElement('#profileEditModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#profileEditModal').html(response.htmlContent);
+            } else {
+                $('#business_about_us_div').html(response.successContent);
+                $('#profileEditModal').foundation('reveal', 'close');
+                $('#business_about_us_heading').notify('{{'About us edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
+                scrollToElement('#business_about_us_div', '1000', -150);
+                {% if currentDevice == 'M' %}
+                    $('#business_about_us_div').readmore('destroy');
+                    $('#business_about_us_div').readmore({
+                        'embedCSS': false,
+                        'collapsedHeight': 250,
+                        'moreLink': '<div class="text-right"><a href="javascript:void(0);">Read more</a></div>',
+                        'lessLink': '<div class="text-right"><a href="javascript:void(0);">Read less</a></div>'
+                    });
+                {% endif %}
+            }
+        });
+    });
+
+    function updateCharCounter(fieldId)
+    {
+        var textCounterId = fieldId + '_textcounter';
+        var maxLimit      = $('#'+fieldId).attr('maxlength') ? parseInt($('#'+fieldId).attr('maxlength')) : 0;
+        var value         = $('#'+fieldId).val();
+
+        if (maxLimit) {
+           if (value.length > maxLimit) {
+               $('#'+fieldId).val(value.substring(0, maxLimit));
+               $('#'+fieldId).html('(0 characters left)');
+               return false;
+           } else {
+               $('#'+textCounterId).html('(' + (maxLimit - value.length) + ' characters left)');
+           }
+       }
+    }
+//]]>
+</script>

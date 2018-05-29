@@ -1,0 +1,87 @@
+{% set childCount = 0 %}
+{% set showSeeMore = false %}
+{% set selectedValues = attribute(form, filter).vars.data %}
+{% set dimensionParams = searchParams %}
+{% set getNoFollowLink = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(app.request.get('searchQueryString')) %}
+{% if (dimensionParams[filter]) is defined %}
+    {% set dimensionParams = dimensionParams|merge({(filter): ''}) %}
+{% endif %}
+{% set nonCrawlableDimensionValues = fetch_repository('FaEntityBundle:Entity').nonCrawlableDimensionValues() %}
+{% set dimensionFacetResult = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionFacetBySearchParams(filter, dimensionParams, selectedValues, fetch_container_instance(), true, null, null, false, cookieLocationDetails) %}
+
+{% set extraLabel = '' %}
+{% if 'berth_id' in filter %}
+    {% set extraLabel = ' berth' %}
+{% elseif 'number_of_bedrooms_id' in filter %}
+    {% set extraLabel = ' bedroom' %}
+{% endif %}
+{% if dimensionFacetResult is defined and dimensionFacetResult|length > 0 %}
+    <dd class="accordion-navigation">
+        {% set plusMinusClass = 'fi-plus' %}
+        {% set contentActiveClass = '' %}
+        {% if attribute(searchParams, filter) is defined %}
+            {% set plusMinusClass = 'fi-minus' %}
+            {% set contentActiveClass = 'active' %}
+        {% endif %}
+        <a href="{{ '#panel' ~ filterPanelCounter ~ 'b'}}" rel="nofollow" class="clearfix"><h5 class="left">{{ attribute(form, filter).vars.label }}</h5> <i class="right {{ plusMinusClass }}"></i></a>
+        <div id="{{ 'panel' ~ filterPanelCounter ~ 'b'}}" rel="nofollow" class="content {{ contentActiveClass }}">
+            <ul class="white-checkbox search-type crawlable-checkbox">
+                {% set dimensionOptions = {} %}
+                {% if sortBy == 'ad_count' %}
+                    {% for optionValue, counter in dimensionFacetResult %}
+                        {% for child in attribute(form, filter) %}
+                            {% if child.vars.value == optionValue %}
+                                {% set dimensionOptions = dimensionOptions|merge({ 0 : child }) %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    {% for child in attribute(form, filter) %}
+                        {% if child.vars.value in selectedValues %}
+                            {% set dimensionOptions = dimensionOptions|merge({ 0 : child }) %}
+                        {% endif %}
+                    {% endfor %}
+                    {% for child in attribute(form, filter) %}
+                        {% if dimensionFacetResult[child.vars.value] is defined and child.vars.value not in selectedValues %}
+                            {% set dimensionOptions = dimensionOptions|merge({ 0 : child }) %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% for child in dimensionOptions %}
+                    {% if childCount < showDimensionCount or childCount < (selectedValues|length) %}
+                        {% set activeClass = '' %}
+                        {% if child.vars.value in selectedValues %}
+                            {% set activeClass = 'checked' %}
+                        {% endif %}
+                        {% set adCount = 0 %}
+                        {% if attribute(dimensionFacetResult, child.vars.value) is defined %}
+                            {% set adCount = attribute(dimensionFacetResult, child.vars.value) %}
+                        {% endif %}
+                        {% if adCount %}
+                            <li>
+                                {% set queryParams = dimensionParams|merge({(filter): (child.vars.value)}) %}
+                                {% set queryParams = queryParams|merge({(filter~'_open'): ''}) %}
+                                {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams, null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
+                                {{ form_widget(child) }}
+                                {% if dimensionIsIndexable and child.vars.value not in nonCrawlableDimensionValues %}
+                                    <a href="{{ listurl }}" class="crowable_checkbox_link" onclick="return false;" {% if app.request.get('searchQueryString') or getNoFollowLink or 'item_' in listurl %}rel="nofollow"{% endif %}>{{ child.vars.label~extraLabel }}</a>
+                                {% endif %}
+                                <label for="{{ child.vars.id }}" class="crowable_checkbox_link_label">{{ child.vars.label }}</label>
+                                ({{ adCount }})
+                                {% set childCount = childCount + 1 %}
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        {% set showSeeMore = true %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <div class="see-more clearfix">
+                {% if showSeeMore %}
+                    <a href="javascript:void(0)" rel="nofollow" onClick="loadDimensionAllChoicesModal('{{ dimensionId }}', '{{ dimensionName }}', '{{filter}}', '{{ dimensionSearchType }}', '{{array_serialize(searchParams)|escape('js')}}')"><b>{{ 'See more'|trans({}, 'frontend-left-search') }}</b></a>
+                {% endif %}
+                <a href="javascript:void(0)" rel="nofollow" class="right clear_filter" id="{{ filter }}_clear">{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+            </div>
+        </div>
+    </dd>
+{% endif %}

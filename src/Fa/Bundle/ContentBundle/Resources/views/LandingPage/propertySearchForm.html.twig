@@ -1,0 +1,236 @@
+{% block propertySearchForm_html %}
+
+{% set property_for_sale_id = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_FOR_SALE_ID') %}
+{% set property_for_rent_id = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_FOR_RENT_ID') %}
+{% set property_share_id    = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_SHARE_ID') %}
+
+<h3 class="homepage-title">{{ 'Find a property'|trans({}, 'frontend-landing-page') }} </h3>
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+{{ form_errors(form) }}
+
+<div class="landing-divider">
+    <div class="row">
+        <div class="columns">
+            <div class="find-property">
+                <div class="capsule-links clearfix">
+                    <a href="javascript:void(0)" class="property_choice active" id="property_choice_{{ property_for_sale_id }}">{{ 'For sale'|trans({}, 'frontend-landing-page') }}</a>
+                    <a href="javascript:void(0)" class="property_choice" id="property_choice_{{ property_for_rent_id }}">{{ 'For rent'|trans({}, 'frontend-landing-page') }}</a>
+                    <a href="javascript:void(0)" class="property_choice" id="property_choice_{{ property_share_id }}">{{ 'To share'|trans({}, 'frontend-landing-page') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="landing-divider">
+    <div class="row">
+        <div class="large-16 columns">
+            <div class="mt20">
+                {{ form_label(attribute(form, 'item__property_type_id')) }}
+                <div id="property-type-circles" class="clearfix landing-circles hide-for-small-only"></div>
+            </div>
+
+            <div id="property_type_choices" class="show-for-small-only white-select">
+                {{ form_widget(attribute(form, 'item__property_type_id')) }}
+            </div>
+
+        </div>
+
+        <div class="large-8 columns property-distance">
+            <div class="landing-divider">
+                <div class="travel-distance">
+                    <label>{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</label>
+                    <ul class="clearfix">
+                        <li class="miles-col white-select">{{ form_widget(form.item__distance) }}</li>
+                        <li class="from-col">{{ 'from'|trans({}, 'frontend')}}</li>
+                        <li class="location-col">
+                            {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
+                            <a href="javascript:void(0);" id="fa_landing_page_property_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="property-budget">
+                <label>{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</label>
+                <ul class="budget-box clearfix">
+                    <li class="budget-field">
+                        <span>&pound;</span>{{ form_widget(form.item__price_from, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
+                    </li>
+                    <li class="budget-to-caption">{{ 'to'|trans({}, 'frontend')}}</li>
+                    <li class="budget-field">
+                        <span>&pound;</span>{{ form_widget(form.item__price_to, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
+                    </li>
+                    <li id="rent_per_container" style="display:none" class="white-select">
+                        {{ form_widget(form.item_property__rent_per_id) }}
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="small-wrapper">
+    <button class="secondary-btn-1 expand button mb0 landing-search-btn" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
+</div>
+{{ form_end(form) }}
+{% endblock %}
+
+{% block propertySearchForm_script %}
+{% set property_for_sale_id = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_FOR_SALE_ID') %}
+{% set property_for_rent_id = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_FOR_RENT_ID') %}
+{% set property_share_id    = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_SHARE_ID') %}
+
+{% set forRentRentPerDimensionId = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionIdByNameAndCategory(property_for_rent_id, 'Rent per', fetch_container_instance()) %}
+{% set shareRentPerDimensionId = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionIdByNameAndCategory(property_share_id, 'Rent per', fetch_container_instance()) %}
+
+{% set forRentRentPerOptions = fetch_repository('FaEntityBundle:Entity').getEntityArrayByType(forRentRentPerDimensionId, fetch_container_instance()) %}
+{% set shareRentPerOptions = fetch_repository('FaEntityBundle:Entity').getEntityArrayByType(shareRentPerDimensionId, fetch_container_instance()) %}
+
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $('.property_choice').click(function(){
+            $('.property_choice').removeClass('active');
+            $(this).addClass('active');
+
+            var choiceId    = $(this).attr('id');
+            var selectedId = choiceId.replace('property_choice_', '');
+            loadPropertyType(selectedId);
+            loadRentPerOptions(selectedId);
+
+            $('#fa_landing_page_property_search_item__category_id').val(selectedId);
+        });
+
+        $('#property_choice_'+'{{ property_for_sale_id }}').trigger('click');
+        setDefaultLocatonFromCookie();
+
+        $("form[name='fa_landing_page_property_search']").submit(function() {
+            $('#fa_landing_page_property_search_item__property_type_id').val('');
+        });
+    });
+
+    function setDefaultLocatonFromCookie()
+    {
+        if (checkCookie('location')) {
+            var locationCookie = $.parseJSON(decodeURIComponent(getCookie('location')));
+            $('#fa_landing_page_property_search_item__location').val(locationCookie.location);
+            $('#fa_landing_page_property_search_item__location_autocomplete').val(locationCookie.location_text);
+        }
+    }
+
+    function loadRentPerOptions(id)
+    {
+        var rent_per_selector = $('#fa_landing_page_property_search_item_property__rent_per_id');
+        rent_per_selector.html('<option value="">{{ 'Rent per'|trans({}, 'frontend-landing-page') }}</option>');
+
+        if (id == '{{ property_for_rent_id }}') {
+            $('#rent_per_container').show();
+            $('#rent_per_container').parent().addClass('rent-per-field');
+            {% for value,text in forRentRentPerOptions %}
+                rent_per_selector.append('<option value="'+ '{{ value }}'+'">'+ '{{ text }}' +'</option>');
+            {% endfor %}
+            rent_per_selector.selectmenu('refresh');
+        } else if (id == '{{ property_share_id }}') {
+            $('#rent_per_container').show();
+            $('#rent_per_container').parent().addClass('rent-per-field');
+            {% for value,text in shareRentPerOptions %}
+                rent_per_selector.append('<option value="'+ '{{ value }}'+'">'+ '{{ text }}' +'</option>');
+            {% endfor %}
+            rent_per_selector.selectmenu('refresh');
+        } else {
+            rent_per_selector.html('<option value="">{{ 'Rent per'|trans({}, 'frontend-landing-page') }}</option>');
+            rent_per_selector.selectmenu('refresh');
+            $('#rent_per_container').parent().removeClass('rent-per-field');
+            $('#rent_per_container').hide();
+        }
+    }
+
+    function loadPropertyType(id)
+    {
+        var property_type_selector = $('#fa_landing_page_property_search_item__property_type_id');
+        property_type_selector.html('<option value="">{{ 'Any'|trans({}, 'frontend-landing-page') }}</option>');
+
+        $('#property-type-circles').addClass('loading');
+        $('#property-type-circles').html('<a href="javascript:void(0)" class="any-category active property_type" id="property_type_">{{ 'Any'|trans({}, 'frontend-landing-page') }}</a>');
+
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                async:false,
+                success: function(data) {
+                    if (data.length > 0) {
+                        $('#property-type-circles').removeClass('loading');
+                        for (var i=0, total = data.length; i < total; i++) {
+                            property_type_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                            var linkClass = data[i].text.replace(/\s/g, '-');
+                            switch(data[i].id) {
+                                case 705:
+                                    linkClass = 'commercial';
+                                    break;
+                                case 700:
+                                    linkClass = 'flats';
+                                    break;
+                                case 703:
+                                    linkClass = 'garages';
+                                    break;
+                                case 699:
+                                    linkClass = 'houses';
+                                    break;
+                                case 710:
+                                    linkClass = 'land';
+                                    break;
+                                case 702:
+                                    linkClass = 'mobile-homes';
+                                    break;
+                                case 714:
+                                    linkClass = 'overseas';
+                                    break;
+                                case 704:
+                                    linkClass = 'parking';
+                                    break;
+                                case 701:
+                                    linkClass = 'rooms';
+                                    break;
+                            }
+                            
+                            linkClass = 'pt-'+linkClass;
+                            $('#property-type-circles').append('<a href="javascript:void(0)" class="'+linkClass+' property_type" id="property_type_'+data[i].id+'">'+data[i].text+'</a>');
+                        }
+                    }
+                    bindPropertyTypeCircleClickEvent();
+                }
+            });
+        }
+    }
+
+    function bindPropertyTypeCircleClickEvent()
+    {
+        $('.property_type').click(function(){
+            $('.property_type').removeClass('active');
+            $(this).addClass('active');
+
+            var choiceId   = $(this).attr('id');
+            var selectedId = choiceId.replace('property_type_', '');
+
+            $('#fa_landing_page_property_search_item__property_type_id').val(selectedId);
+
+            if (selectedId) {
+                $('#fa_landing_page_property_search_item__category_id').val(selectedId);
+            } else {
+                var selectedCategoryId = $('.property_choice.active').attr('id').replace('property_choice_', '');
+                $('#fa_landing_page_property_search_item__category_id').val(selectedCategoryId);
+            }
+        });
+    }
+//]]>
+</script>
+{{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_landing_page_property_search_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
+{% endblock %}

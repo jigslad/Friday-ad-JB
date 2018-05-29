@@ -1,0 +1,35 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            <div class="row">
+                <div class="large-8 columns">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                    {{ form_errors(form) }}
+                    {{ form_row(form.name) }}
+                    {{ form_row(form.message) }}
+                    {{ form_row(form.status) }}
+                    {{ form_row(form.notification_type) }}
+                    {% if entity.id %}
+                        {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'notification_message_admin', 'isSaveAndNew': false}) }}
+                    {% endif %}
+                    {{ form_end(form) }}
+                </div>
+                <div class="large-4 columns">
+                    <b>{{ 'Indexable Dimensions'|trans }}</b>
+                    <div style="overflow: auto; height: 500px;">
+                        {{ staticCall('Fa\\Bundle\\MessageBundle\\Repository\\NotificationMessageRepository', 'getNotificationMessageVariablesArray')|join('<br />')|raw }}
+                    </div>
+                </div>
+           </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

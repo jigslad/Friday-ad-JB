@@ -1,0 +1,45 @@
+{% set container = fetch_container_instance() %}
+{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+<h3>Our latest ads</h3>
+<div class="owl-carousel fa-slider" id="latest-item-slider" data-equalizer>
+    {% for latestAd in pagination %}
+        {% set adCategoryId = attribute(latestAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
+        {% set rootCategoryId = attribute(latestAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+        {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+        {% set latestAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+        {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(latestAd) %}
+        {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(latestAd, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+        {% set imageAltString = null %}
+        {% if seoRule['image_alt'] is defined %}
+            {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], latestAd]) %}
+        {% endif %}
+        <div class="item" data-equalizer-watch>
+            <a href="{{ adUrl }}" class="tricky-link">
+                {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')) is defined %}
+                   {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
+                {% endif %}
+            </a>
+            {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, latestAd, '300X225', 1) %}
+            <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
+                {% if imagePath %}
+                    <img class="lazyOwl" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                {% else %}
+                    <img class="lazyOwl" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                {% endif %}
+            </div>
+            <div class="list-price">
+                {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE')) is defined %}
+                    {{ format_currency(attribute(latestAd, constant(latestAdSolrMapping ~ 'PRICE'))) }}
+                    {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
+                        <span>{{ adPropertyRepository.getRentPostFixText(attribute(latestAd, constant(latestAdSolrMapping ~ 'RENT_PER_ID')), container)}}</span>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <a href="{{ adUrl }}"><h3>
+                {% if attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')) is defined %}
+                   {{trim_text(attribute(latestAd, constant(latestAdSolrMapping ~ 'TITLE')), 65)|raw}}
+                {% endif %}
+            </h3></a>
+        </div>
+    {% endfor %}
+</div>

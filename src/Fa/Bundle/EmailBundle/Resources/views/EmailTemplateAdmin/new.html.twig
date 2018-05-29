@@ -1,0 +1,93 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+
+{% set emailTemplate = fetch_repository('FaEmailBundle:EmailTemplate').findOneBy({'identifier':'email_template_layout'}) %}
+{% block content -%}
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <div class="panel-heading">
+                <p class="text-left pull-left"><b>{{ 'Note'|trans({}, 'messages') }}</b>: {{ 'Do not change variable which is inside curly braces eg. {{ email_body }}'|trans({}, 'messages') }}</p>
+                <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            </div>
+            {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.subject) }}
+                <div class="row">
+                    <div class="large-9 columns {% if form.body_html.vars.errors|length %} error{% endif %}">
+                        {{ form_label(form.body_html) }} <span class="required">*</span>
+                        {{ form_widget(form.body_html, {'attr': {'autofocus': 'autofocus'}}) }}
+                        {{ form_errors(form.body_html) }}
+                    </div>
+                    <div class="large-3 columns">
+                    <b>{{ 'Variables'|trans }}</b>
+                        <div style="overflow: auto; height: 215px;">
+                            {{ array_unserialize(entity.getVariable())|join('<br />')|raw }}
+                            {% if entity.id > 0 %}<br />{% endif %}
+                            {{ 'Global'|trans }}<br />
+                            {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getGlobalEmailTemplateVariables')|join('<br />')|raw }}
+                        </div>
+                   </div>
+                </div>
+                <p><a id="body_html_preview_anchor" href="javascript:void(0);"><i class="fi-eye"></i> {{ 'Preview'|trans({}, 'messages') }}</a></p>
+                <div id="body_html_preview" class="simple_table" style="display:none"></div>
+                <div id="body_html_layout_preview" style="display:none">{% if entity.getIdentifier() != 'email_template_layout' %} {{ emailTemplate.getBodyHtml()|replace({'{{ email_body|raw }}': 'email_body|raw'})|raw }} {% else %} {{ emailTemplate.getBodyHtml()|raw }} {% endif %}</div>
+                <div class="row">
+                    <div class="large-9 columns {% if form.body_text.vars.errors|length %} error{% endif %}">
+                        {{ form_label(form.body_text) }} <span class="required">*</span>
+                        {{ form_widget(form.body_text, {'attr': {'autofocus': 'autofocus'}}) }}
+                        {{ form_errors(form.body_text) }}
+                    </div>
+                    <div class="large-3 columns">
+                    <b>{{ 'Variables'|trans }}</b>
+                        <div style="overflow: auto; height: 215px;">
+                            {{ array_unserialize(entity.getVariable())|join('<br />')|raw }}
+                            {% if entity.id > 0 %}<br />{% endif %}
+                            {{ 'Global'|trans }}<br />
+                            {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getGlobalEmailTemplateVariables')|join('<br />')|raw }}
+                        </div>
+                   </div>
+                </div>
+                {{ form_row(form.body_text) }}
+                <p><a id="body_text_preview_anchor" href="javascript:void(0);"><i class="fi-eye"></i> {{ 'Preview'|trans({}, 'messages') }}</a></p>
+                <div id="body_text_preview" style="display:none"></div>
+                <div id="body_text_layout_preview" style="display:none">{% if entity.getIdentifier() != 'email_template_layout' %} {{ emailTemplate.getBodyText()|replace({'{{ email_body }}': 'email_body'}) }} {% else %} {{ emailTemplate.getBodyText() }} {% endif %}</div>
+                {{ form_row(form.sender_email) }}
+                {{ form_row(form.sender_name) }}
+                {{ form_row(form.type) }}
+                {{ form_row(form.status) }}
+                {{ form_row(form.params_help) }}
+
+                {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'email_template_admin', 'isSaveAndPreview': true}) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $('#body_html_preview_anchor').bind("click", function() {
+        showPreview('fa_email_template_email_template_admin_body_html', 'body_html_preview', false);
+    });
+    $('#body_text_preview_anchor').bind("click", function() {
+        showPreview('fa_email_template_email_template_admin_body_text', 'body_text_preview', true);
+    });
+    function showPreview(sourceId, destId, isTextBody)
+    {
+        {% if entity.getIdentifier() != 'email_template_layout' %}
+            if (isTextBody) {
+                $('#'+destId).html($('#body_text_layout_preview').html().replace('email_body', $('#'+sourceId).val()).replace(/\n/g,"<br />"));
+            }
+            else {
+                $('#'+destId).html($('#body_html_layout_preview').html().replace('email_body|raw', $('#'+sourceId).val()));
+            }
+        {% endif %}
+        $('#'+destId).show();
+    }
+    //]]>
+    </script>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% if relatedBusinesses is defined and relatedBusinesses|length %}
+    {% cache 'ad_detail_mobile|'~adCategoryId~'front/related_businesses' 120 %}
+    <div class="related-busines">
+        <div class="row">
+            <div class="columns">
+                <h3 class="mb20">{{ relatedBusinessesHeading }}</h3>
+                <div class="owl-carousel small-slider" id="related_businesses_mobile_slider" data-equalizer>
+                    {% set userRepository = fetch_repository('FaUserBundle:User') %}
+                    {% for relatedBusiness in relatedBusinesses %}
+                        {% set relatedBusinessUserId = relatedBusiness['id'] %}
+                        {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(relatedBusinessUserId) %}
+                        <div class="item" data-equalizer-watch>
+                            
+                            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), relatedBusinessUserId, true, true]) %}
+                            {% set userName = userRepository.getUserProfileName(relatedBusinessUserId, container) %}
+                            {% set userNameAltText = userRepository.getUserProfileName(relatedBusinessUserId, container)~' - Friday-Ad' %}
+                            <a class="tricky-link" href="{{ profilePageUrl }}">{{ userName }}</a>
+                            <div class="small-img">
+                                <div class="pvt-seller-img bz-seller-img">
+                                {% if userLogo %}
+                                    <img class="lazyOwl" data-src="{{ userLogo }}" alt="{{ userNameAltText }}" />
+                                {% else %}
+                                    <div class="profile-placeholder">
+                                        <img class="lazyOwl" data-src="{{ asset_url('fafrontend/images/user-no-logo.svg') }}" alt="{{ userNameAltText }}" />
+                                    </div>
+                                {% endif %}
+                                </div>
+                            </div>
+                            <div class="small-info">{{ userName }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endcache %}
+{% endif %}

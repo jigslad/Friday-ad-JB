@@ -1,0 +1,29 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="30" height="24" viewBox="-464 269 30 24" xml:space="preserve" enable-background="new -464 269 30 24">
+  <style type="text/css">
+    
+	.st0{fill:#EFEFEF;}
+	.st1{fill:#A8DC28;}
+
+  </style>
+  <title>
+    Motors
+  </title>
+  <desc>
+    Created with Sketch Beta.
+  </desc>
+  <g id="PAA" sketch:type="MSPage">
+    <g id="menu-mobile" transform="translate(-15.000000, -151.000000)" sketch:type="MSArtboardGroup">
+      <g id="Navigation-Menu-_x2B_-cross-close-_x2B_-Menu-panel-1" transform="translate(-561.000000, -36.000000)" sketch:type="MSLayerGroup">
+        <g id="Menu-panel-1" transform="translate(557.000000, 96.000000)" sketch:type="MSShapeGroup">
+          <g id="Motors-_x2B_-Fill-2-_x2B_-Oval-23-_x2B_-Oval-24" transform="translate(19.000000, 88.000000)">
+            <g id="Motors" transform="translate(0.000000, 3.000000)">
+              <path id="Fill-2" class="st0" d="M-437.7 285.3c0 1.4-1.1 2.5-2.5 2.5s-2.5-1.1-2.5-2.5 1.1-2.5 2.5-2.5S-437.7 283.9-437.7 285.3L-437.7 285.3 -437.7 285.3zM-438.9 280.2h-20l1.8-8.1c0 0 4.1-0.9 8.2-0.9s8.2 0.9 8.2 0.9L-438.9 280.2 -438.9 280.2zM-457.7 282.8c1.4 0 2.5 1.1 2.5 2.5s-1.1 2.5-2.5 2.5 -2.5-1.1-2.5-2.5C-460.3 283.9-459.1 282.8-457.7 282.8L-457.7 282.8 -457.7 282.8zM-434.4 276.1c0-0.5-0.4-0.9-0.9-0.9h-1.8v3.6h-0.5l-1.4-8.1c0 0-5-0.9-10-0.9s-10 0.9-10 0.9l-1.4 8.1h-0.5v-3.6h-1.8c-0.5 0-0.9 0.4-0.9 0.9v3.6c0 0.5 0.4 0.8 0.9 0.8l1.8 0.1h0.2l-0.2 0.9c-1 0-1.8 0.8-1.8 1.8v4.5c0 1 0.8 1.8 1.8 1.8v1.7c0 0.5 0.4 1 0.9 1h2.7c0.5 0 0.9-0.4 0.9-1v-1.7h14.5v1.7c0 0.5 0.4 1 0.9 1h2.7c0.5 0 0.9-0.4 0.9-1v-1.7c1 0 1.8-0.8 1.8-1.8v-4.5c0-1-0.8-1.8-1.8-1.8l-0.2-0.9h0.2l1.8-0.1c0.5 0 1-0.3 1-0.8L-434.4 276.1 -434.4 276.1z"/>
+              <circle class="st1" cx="-457.7" cy="285.3" r="1.4"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+  <path class="st1" d="M-438.7 285.3c0 0.8-0.7 1.5-1.5 1.5s-1.5-0.7-1.5-1.5 0.7-1.5 1.5-1.5C-439.4 283.9-438.7 284.5-438.7 285.3L-438.7 285.3 -438.7 285.3z"/>
+</svg>

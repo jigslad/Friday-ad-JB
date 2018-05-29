@@ -1,0 +1,8 @@
+{% if app.request.get('type') == 'html' %}
+    {% if emailTemplate.identifier == 'email_template_layout' %}
+        {{ emailTemplate.bodyHtml|raw }}
+    {% else %}
+        {% set emailTemplateHtml = emailTemplateLayout.bodyHtml|replace({'{{ email_body|raw }}': emailTemplate.bodyHtml}) %}
+        {{ emailTemplateHtml|raw }}
+    {% endif %}
+{% endif %}

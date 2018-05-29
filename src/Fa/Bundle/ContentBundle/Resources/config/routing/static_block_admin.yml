@@ -1,0 +1,25 @@
+static_block_admin:
+    path:     /
+    defaults: { _controller: "FaContentBundle:StaticBlockAdmin:index" }
+
+static_block_new_admin:
+    path:     /new
+    defaults: { _controller: "FaContentBundle:StaticBlockAdmin:new" }
+
+static_block_create_admin:
+    path:     /create
+    defaults: { _controller: "FaContentBundle:StaticBlockAdmin:create" }
+    requirements: { methods: post }
+
+static_block_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaContentBundle:StaticBlockAdmin:edit" }
+
+static_block_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaContentBundle:StaticBlockAdmin:update" }
+    requirements: { methods: post|put }
+
+static_block_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaContentBundle:StaticBlockAdmin:delete" }

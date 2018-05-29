@@ -1,0 +1,47 @@
+{% set container = fetch_container_instance() %}
+{% set showDragDropFlag = false %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% if not mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set showDragDropFlag = true %}
+{% endif %}
+{% set messageAttachmentsRepository = fetch_repository('FaMessageBundle:MessageAttachments') %}
+{% set messageAttachments = messageAttachmentsRepository.getMessageAttachments(messageId) %}
+{% set isAdminLoggedIn = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isAdminLoggedIn', [fetch_container_instance()]) %}
+
+{% set bigImageRoute = "ajax_get_big_ad_image" %}
+{% if isAdminLoggedIn and isAdminLoggedIn.id %}
+    {% set bigImageRoute = "ajax_get_big_ad_image_admin" %}
+{% endif %}
+
+{% set messageAttachmentsCount = messageAttachments|length %}
+{% set container = fetch_container_instance() %}
+{% if not showDragDropFlag or (showDragDropFlag and messageAttachmentsCount) %}
+    {% if messageAttachmentsCount %}
+        {% if (messageAttachmentsCount >= 4) %}
+            {% set attachmentClass = 'attachment-4' %}
+        {% else %}
+            {% set attachmentClass = 'attachment-'~messageAttachmentsCount %}
+        {% endif %}
+        <ul class="clearfix {{ attachmentClass }}" id="messageAttachmentsList">
+                {% for messageAttachment in messageAttachments %}
+                    <li data-image-ord="{{messageAttachment.getId()}}" data-image-id="{{messageAttachment.getId()}}" id="image_{{messageAttachment.getId()}}" class="">
+                        {% if messageAttachment.getSessionId() %}
+                            {% set messageId = messageAttachment.getSessionId() %}
+                        {% else %}
+                            {% set messageId = messageAttachment.getMessage().getId() %}
+                        {% endif %}
+                        {#% set messageAttachmentUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getmessageAttachmentUrl', [container, messageId, messageAttachment.getPath(), messageAttachment.getHash(), '800X600', messageAttachment.getAws(), messageAttachment.getImageName()]) %#}
+                        <span class="attachment-name">{{ messageAttachment.getOriginalFileName() }}</span>&nbsp;
+                        <span class="attachment-size">
+                            {% if (messageAttachment.getSize() >= 1000000) %}
+                                {{ '('~((messageAttachment.getSize()/1000000)|number_format(2))~'MB)' }}
+                            {% else %}
+                                {{ '('~((messageAttachment.getSize()/1000)|number_format(2))~'kB)' }}
+                            {% endif %}
+                        </span>
+                        <a href="javascript:deleteAttachment('{{path('ajax_delete_message_attachments', {'messageId': messageId, 'attachmentId': messageAttachment.getId(), 'attachmentHash': messageAttachment.getHash()})}}')" class="delete-msg-attch">Close</a>
+                    </li>
+                {% endfor %}
+        </ul>
+    {% endif %}
+{% endif %}

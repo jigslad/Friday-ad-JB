@@ -1,0 +1,3 @@
+ad_edit:
+    path:     /{id}
+    defaults: { _controller: "FaAdBundle:AdEdit:edit" }

@@ -1,0 +1,66 @@
+fa_admin_home_page:
+    path:     /
+    defaults: { _controller: FaAdminBundle:Default:index }
+
+fa_user_admin:
+    resource: '@FaUserBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+
+fa_admin_menu:
+    path:     /menu/render
+    defaults: { _controller: FaAdminBundle:Default:renderMenu }
+    
+fa_entity_admin:
+    resource: '@FaEntityBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+
+fa_lexic_translation_admin:
+    resource: '@FaLexikTranslationBundle/Resources/config/routing_admin.yml'
+
+fa_email_admin:
+    resource: '@FaEmailBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+    
+fa_promotion_admin:
+    resource: '@FaPromotionBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+
+fa_content_admin:
+    resource: '@FaContentBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+    
+fa_core_admin:
+    resource: '@FaCoreBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+
+fa_payment_admin:
+    resource: '@FaPaymentBundle/Resources/config/routing_admin.yml'
+    prefix:   / 
+
+fa_ad_admin:
+    resource: '@FaAdBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+
+fa_archive_ad_admin:
+    resource: '@FaArchiveBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+
+fa_report_admin:
+    resource: '@FaReportBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+
+fa_dotmailer_admin:
+    resource: '@FaDotMailerBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+
+fa_message_admin:
+    resource: '@FaMessageBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+
+fa_ad_feed_admin:
+    resource: '@FaAdFeedBundle/Resources/config/routing_admin.yml'
+    prefix:   /
+
+fa_ti_report_admin:
+    resource: '@FaTiReportBundle/Resources/config/routing_admin.yml'
+    prefix:   /

@@ -1,0 +1,208 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+{% set configTypeWithCategory = [constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::AD_EXPIRATION_DAYS')] %}
+{% set configTypeWithLocation = [constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PAYPAL_COMMISION'), constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PRODUCT_INSERTION_FEE')] %}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+           {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+           {% if entity.id %}
+               {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+                 <b>{{ 'Configuration'|trans }} : </b> {{ entity.getConfig().getName() }}
+                 {% if entity.category.id is defined %}
+                     <br /><br />
+                     <b>{{ 'Category'|trans }} : </b> {{ categoryRepository.getCategoryPathArrayById(entity.category.id)|join(' > ') }}
+                 {% endif %}
+                 {% if entity.getLocationGroup().getId() is defined %}
+                     <br /><br />
+                     <b>{{ 'Location Group'|trans }} : </b> {{ entity.getLocationGroup().getName() }}
+                 {% endif %}
+                 <br /><br />
+                 {{ form_row(form.value) }}
+                 {% set showPeriod = 'none' %}
+                 {% if entity.getConfig().getId() in configTypeWithLocation %}
+                     {% set showPeriod = 'inline' %}
+                 {% endif %}
+                 <div id="periodDiv" style="display:{{ showPeriod }}">
+                     {{ form_row(form.period_from) }}
+                     {{ form_row(form.period_to) }}
+                 </div>
+                 {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'config_rule_admin', 'isSaveAndNew': false}) }}
+           {% else %}
+               {{ form_row(form.config) }}
+               {{ form_row(form.value) }}
+               <div id="categoryDiv" style="display:none">
+                   {{ form_row(form.category_1) }}
+                   {{ form_row(form.category_2) }}
+                   {{ form_row(form.category_3) }}
+                   {{ form_row(form.category_4) }}
+               </div>
+               <div id="locationDiv" style="display:none">
+                   {{ form_row(form.location_group) }}
+               </div>
+               <div id="periodDiv" style="display:none">
+                   {{ form_row(form.period_from) }}
+                   {{ form_row(form.period_to) }}
+               </div>
+               {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'config_rule_admin'}) }}
+           {% endif %}
+           {{ form_end(form) }}
+       </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    var paypalCommision     = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PAYPAL_COMMISION') }}
+    var productInsertionFee = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PRODUCT_INSERTION_FEE') }}
+    var listingTopAdSlots   = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LISTING_TOPAD_SLOTS') }}
+    var periodBeforeCheckingViews   = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PERIOD_BEFORE_CHECKING_VIEWS') }}
+    var precedingPeriodToCheckViews = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PRECEDING_PERIOD_TO_CHECK_VIEWS') }}
+    var vatAmount = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::VAT_AMOUNT') }}
+    var clickEditVehicleAdvertsPackageId = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::CLICKEDITVEHICLEADVERTS_PACKAGE_ID') }}
+    var adzunaMotorsFeedUserIds = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::ADZUNA_MOTORS_FEED_USER_IDS') }}
+    var dotmailerEnrollmentProgramId = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::DOTMAILER_ENROLLMENT_PROGRAM_ID') }}
+    var numberOfOrganicResults = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::NUMBER_OF_ORGANIC_RESULTS') }}
+    var numberOfBusinessPageSlots = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::NUMBER_OF_BUSINESSPAGE_SLOTS') }}
+    var topBusinessPage = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::TOP_BUSINESSPAGE') }}
+    var serviceCategory = {{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') }}
+    var adultCategory = {{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') }}
+    var category1Value = new Array();
+    var category1Text = new Array();
+
+    $(document).ready(function(){
+    	var i = 0;
+    	$("#fa_core_config_rule_admin_category_1 > option").each(function() {
+    		category1Text[i] = this.text;
+    		category1Value[i] = this.value;
+    		i++;
+    	});
+        {% if entity.id %}
+        {% else %}
+            showHideFieldsByConfigOption($("#fa_core_config_rule_admin_config").val());
+            resetCategory1DropDown($("#fa_core_config_rule_admin_config").val());
+        {% endif %}
+        changeValueLabel();
+        $("#fa_core_config_rule_admin_category_1").change(function(){
+            loadCategoryByLevel($(this).val(), 2);
+            loadCategoryByLevel('', 3);
+            loadCategoryByLevel('', 4);
+        });
+
+        $("#fa_core_config_rule_admin_category_2").change(function(){
+            loadCategoryByLevel($(this).val(), 3);
+            loadCategoryByLevel('', 4);
+        });
+
+        $("#fa_core_config_rule_admin_category_3").change(function(){
+            loadCategoryByLevel($(this).val(), 4);
+        });
+
+        $("#fa_core_config_rule_admin_config").change(function(){
+            showHideFieldsByConfigOption($(this).val());
+            $("#fa_core_config_rule_admin_category_1").val($("#fa_core_config_rule_admin_category_1 option:first").val());
+            loadCategoryByLevel('', 2);
+            loadCategoryByLevel('', 3);
+            loadCategoryByLevel('', 4);
+            resetCategory1DropDown($(this).val());
+            changeValueLabel();
+
+            $("#fa_core_config_rule_admin_location_group option").removeAttr("selected");
+        });
+    });
+
+    function loadCategoryByLevel(id, level)
+    {
+        var category_selector = $('#fa_core_config_rule_admin_category_'+level);
+        category_selector.html('<option value="">Select Category '+level+'</option>');
+
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: (level == 4) ? '{{ path("category_ajax_get_nested_node_json") }}' : '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    for (var i=0, total = data.length; i < total; i++) {
+                        category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                    }
+                }
+            });
+        }
+    }
+
+    function showHideFieldsByConfigOption(config)
+    {
+        if (config) {
+            if (config == paypalCommision || config == productInsertionFee) {
+                $('#categoryDiv').hide();
+                $('#locationDiv').show();
+                $('#periodDiv').show();
+            } else if (config == listingTopAdSlots || config == periodBeforeCheckingViews || config == precedingPeriodToCheckViews || config == vatAmount || config == numberOfOrganicResults || config == clickEditVehicleAdvertsPackageId || config == adzunaMotorsFeedUserIds || config == dotmailerEnrollmentProgramId) {
+                $('#categoryDiv').hide();
+                $('#locationDiv').hide();
+                $('#periodDiv').hide();
+            } else {
+                $('#categoryDiv').show();
+                $('#locationDiv').hide();
+                $('#periodDiv').hide();
+            }
+        } else {
+            $('#categoryDiv').hide();
+            $('#locationDiv').hide();
+            $('#periodDiv').hide();
+        }
+    }
+
+    function resetCategory1DropDown(config)
+    {
+    	var category_selector = $('#fa_core_config_rule_admin_category_1');
+    	$('#fa_core_config_rule_admin_category_1 option').remove();
+
+    	if (config == numberOfBusinessPageSlots || config == topBusinessPage) {
+        	for (i=0;i<category1Value.length;i++) {
+            	if (category1Value[i] == '' || category1Value[i] == serviceCategory || category1Value[i] == adultCategory) {
+            		   category_selector.append('<option value="' + category1Value[i] + '">' + category1Text[i] + '</option>');
+            	}
+            }
+    	} else {
+    		for (i=0;i<category1Value.length;i++) {
+            	category_selector.append('<option value="' + category1Value[i] + '">' + category1Text[i] + '</option>');
+            }
+    	}
+    }
+    
+    function changeValueLabel()
+    {
+    	{% if entity.id %}
+    	    var config = '{{ entity.getConfig().getId() }}';
+    	{% else %}
+            var config = $('#fa_core_config_rule_admin_config').val();
+        {% endif %}
+        var label  = null;
+        if (config) {
+            switch(config) {
+                case '{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::TOP_BUSINESSPAGE') }}':
+                    label = '{{ 'Business profile userref'|trans }}';
+                    break;
+            }
+
+            if (label) {
+                $('label[for=fa_core_config_rule_admin_value]').text(label);
+            } else {
+            	$('label[for=fa_core_config_rule_admin_value]').text('{{ 'Value'|trans }}');
+            }
+        }
+    }
+    //]]>
+    </script>
+{% endblock %}

@@ -1,0 +1,163 @@
+fa_report_user:
+    path:     /reports/user_report
+    defaults: { _controller: FaReportBundle:UserReportAdmin:index }
+    
+fa_report_ad:
+    path:     /reports/ad_report
+    defaults: { _controller: FaReportBundle:AdReportAdmin:index }
+    
+fa_report_ad_export_to_csv:
+    path:     /reports/ad_report_export_to_csv
+    defaults: { _controller: FaReportBundle:AdReportAdmin:exportAdReportToCsv }
+    
+ajax_fa_report_ad_csv_list:
+    path:     /ajax/reports/ad_report_csv_list
+    defaults: { _controller: FaReportBundle:AdReportAdmin:ajaxListAdReportCsv }
+    
+ajax_fa_report_ad_csv_delete:
+    path:     /ajax/reports/ad_report_csv_delete
+    defaults: { _controller: FaReportBundle:AdReportAdmin:ajaxDeleteAdReportCsv }
+    
+fa_report_ad_download_csv:
+    path:     /reports/ad_report_download_csv/{fileName}
+    defaults: { _controller: FaReportBundle:AdReportAdmin:downloadAdReportCsv }
+
+fa_report_user_export_to_csv:
+    path:     /reports/user_report_export_to_csv
+    defaults: { _controller: FaReportBundle:UserReportAdmin:exportToCSV }
+
+ajax_fa_report_user_csv_list:
+    path:     /ajax/reports/user_report_csv_list
+    defaults: { _controller: FaReportBundle:UserReportAdmin:ajaxListUserReportCsv }
+
+fa_report_user_download_csv:
+    path:     /reports/user_report_download_csv/{fileName}
+    defaults: { _controller: FaReportBundle:UserReportAdmin:downloadUserReportCsv }
+
+ajax_fa_report_user_csv_delete:
+    path:     /ajax/reports/user_report_csv_delete
+    defaults: { _controller: FaReportBundle:UserReportAdmin:ajaxDeleteUserReportCsv }
+
+fa_report_ad_enquiry:
+    path:     /reports/ad_enquiry_report
+    defaults: { _controller: FaReportBundle:AdEnquiryReportAdmin:index }
+
+fa_report_ad_enquiry_export_to_csv:
+    path:     /reports/ad_enquiry_report_export_to_csv
+    defaults: { _controller: FaReportBundle:AdEnquiryReportAdmin:exportAdEnquiryReportToCsv }
+
+ajax_fa_report_ad_enquiry_csv_list:
+    path:     /ajax/reports/ad_enquiry_report_csv_list
+    defaults: { _controller: FaReportBundle:AdEnquiryReportAdmin:ajaxListAdEnquiryReportCsv }
+
+ajax_fa_report_ad_enquiry_csv_delete:
+    path:     /ajax/reports/ad_enquiry_report_csv_delete
+    defaults: { _controller: FaReportBundle:AdEnquiryReportAdmin:ajaxDeleteAdEnquiryReportCsv }
+
+fa_report_ad_enquiry_download_csv:
+    path:     /reports/ad_enquiry_report_download_csv/{fileName}
+    defaults: { _controller: FaReportBundle:AdEnquiryReportAdmin:downloadAdEnquiryReportCsv }
+
+fa_report_ad_print:
+    path:     /reports/ad_print_report
+    defaults: { _controller: FaReportBundle:AdPrintReportAdmin:index }
+    
+fa_report_ad_print_export_to_csv:
+    path:     /reports/ad_print_report_export_to_csv
+    defaults: { _controller: FaReportBundle:AdPrintReportAdmin:exportAdPrintReportToCsv }
+
+ajax_fa_report_ad_print_csv_list:
+    path:     /ajax/reports/ad_print_report_csv_list
+    defaults: { _controller: FaReportBundle:AdPrintReportAdmin:ajaxListAdPrintReportCsv }
+    
+ajax_fa_report_ad_print_csv_delete:
+    path:     /ajax/reports/ad_print_report_csv_delete
+    defaults: { _controller: FaReportBundle:AdPrintReportAdmin:ajaxDeleteAdPrintReportCsv }
+
+fa_report_ad_print_download_csv:
+    path:     /reports/ad_print_report_download_csv/{fileName}
+    defaults: { _controller: FaReportBundle:AdPrintReportAdmin:downloadAdPrintReportCsv }
+
+fa_report_profile_package_revenue:
+    path:     /reports/profile_package_revenue_report
+    defaults: { _controller: FaReportBundle:ProfilePackageRevenueReportAdmin:index }
+    
+fa_report_profile_package_revenue_export_to_csv:
+    path:     /reports/profile_package_revenue_report_export_to_csv
+    defaults: { _controller: FaReportBundle:ProfilePackageRevenueReportAdmin:exportToCSV }
+
+ajax_fa_report_profile_package_revenue_csv_list:
+    path:     /ajax/reports/profile_package_revenue_report_csv_list
+    defaults: { _controller: FaReportBundle:ProfilePackageRevenueReportAdmin:ajaxListPPRReportCsv }
+
+fa_report_profile_package_revenue_download_csv:
+    path:     /reports/profile_package_revenue_report_download_csv/{fileName}
+    defaults: { _controller: FaReportBundle:ProfilePackageRevenueReportAdmin:downloadPPRReportCsv }
+
+ajax_fa_report_profile_package_revenue_csv_delete:
+    path:     /ajax/reports/profile_package_revenue_report_csv_delete
+    defaults: { _controller: FaReportBundle:ProfilePackageRevenueReportAdmin:ajaxDeletePPRReportCsv }
+    
+fa_report_automated_email:
+    path:     /reports/automated_email_report
+    defaults: { _controller: FaReportBundle:AutomatedEmailReportAdmin:index }
+    
+fa_report_automated_email_export_to_csv:
+    path:     /reports/automated_email_report_export_to_csv
+    defaults: { _controller: FaReportBundle:AutomatedEmailReportAdmin:exportAutomatedEmailReportToCsv }
+    
+ajax_fa_report_automated_email_csv_list:
+    path:     /ajax/reports/automated_email_report_csv_list
+    defaults: { _controller: FaReportBundle:AutomatedEmailReportAdmin:ajaxListAutomatedEmailReportCsv }
+    
+ajax_fa_report_automated_email_csv_delete:
+    path:     /ajax/reports/automated_email_report_csv_delete
+    defaults: { _controller: FaReportBundle:AutomatedEmailReportAdmin:ajaxDeleteAutomatedEmailReportCsv }
+    
+fa_report_automated_email_download_csv:
+    path:     /reports/automated_email_report_download_csv/{fileName}
+    defaults: { _controller: FaReportBundle:AutomatedEmailReportAdmin:downloadAutomatedEmailReportCsv }
+
+fa_report_user_profile:
+    path:     /reports/user_profile_report
+    defaults: { _controller: FaReportBundle:UserProfileReportAdmin:index }
+    
+fa_report_user_profile_export_to_csv:
+    path:     /reports/user_profile_report_export_to_csv
+    defaults: { _controller: FaReportBundle:UserProfileReportAdmin:exportToCSV }
+
+ajax_fa_report_user_profile_csv_list:
+    path:     /ajax/reports/user_profile_report_csv_list
+    defaults: { _controller: FaReportBundle:UserProfileReportAdmin:ajaxListUserProfileReportCsv }
+
+fa_report_user_profile_download_csv:
+    path:     /reports/user_profile_report_download_csv/{fileName}
+    defaults: { _controller: FaReportBundle:UserProfileReportAdmin:downloadUserProfileReportCsv }
+
+ajax_fa_report_user_profile_csv_delete:
+    path:     /ajax/reports/user_profile_report_csv_delete
+    defaults: { _controller: FaReportBundle:UserProfileReportAdmin:ajaxDeleteUserProfileReportCsv }
+
+fa_ad_feed_click_report:
+    path:     /reports/ad_feed_click_report
+    defaults: { _controller: FaReportBundle:AdFeedClickReportAdmin:index }
+
+fa_report_ad_feed_click_export_to_csv:
+    path:     /reports/ad_feed_click_report_export_to_csv
+    defaults: { _controller: FaReportBundle:AdFeedClickReportAdmin:exportAdFeedClickReportToCsv }
+
+ajax_fa_report_ad_feed_click_csv_list:
+    path:     /ajax/reports/ad_feed_click_report_csv_list
+    defaults: { _controller: FaReportBundle:AdFeedClickReportAdmin:ajaxListAdFeedClickReportCsv }
+
+ajax_fa_report_ad_feed_click_csv_delete:
+    path:     /ajax/reports/ad_feed_click_report_csv_delete
+    defaults: { _controller: FaReportBundle:AdFeedClickReportAdmin:ajaxDeleteAdFeedClickReportCsv }
+
+fa_report_ad_feed_click_download_csv:
+    path:     /reports/ad_feed_click_report_download_csv/{fileName}
+    defaults: { _controller: FaReportBundle:AdFeedClickReportAdmin:downloadAdFeedClickReportCsv }
+
+fa_report_police:
+    path:     /reports/police_report
+    defaults: { _controller: FaReportBundle:PoliceReportAdmin:index }

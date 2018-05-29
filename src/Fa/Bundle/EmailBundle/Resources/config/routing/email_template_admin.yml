@@ -1,0 +1,33 @@
+email_template_admin:
+    path:     /
+    defaults: { _controller: "FaEmailBundle:EmailTemplateAdmin:index" }
+
+email_template_new_admin:
+    path:     /new
+    defaults: { _controller: "FaEmailBundle:EmailTemplateAdmin:new" }
+
+email_template_create_admin:
+    path:     /create
+    defaults: { _controller: "FaEmailBundle:EmailTemplateAdmin:create" }
+    requirements: { methods: post }
+
+email_template_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaEmailBundle:EmailTemplateAdmin:edit" }
+
+email_template_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaEmailBundle:EmailTemplateAdmin:update" }
+    requirements: { methods: post|put }
+
+email_template_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaEmailBundle:EmailTemplateAdmin:delete" }
+    
+email_template_preview_admin:
+    path:     /{id}/preview
+    defaults: { _controller: "FaEmailBundle:EmailTemplateAdmin:preview" }
+    
+email_template_schedule_admin:
+    path:     /{id}/schedule
+    defaults: { _controller: "FaEmailBundle:EmailTemplateAdmin:params" }

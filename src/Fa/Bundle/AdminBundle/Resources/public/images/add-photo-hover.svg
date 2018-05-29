@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="118px" height="91px" viewBox="0 0 118 91" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch Beta 3.2 (9961) - http://www.bohemiancoding.com/sketch -->
+    <title>add photo hover</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="PAA" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Desktop-HD-For-sale-5" sketch:type="MSArtboardGroup" transform="translate(-658.000000, -988.000000)">
+            <g id="Phase-1" sketch:type="MSLayerGroup" transform="translate(-2.000000, 260.000000)">
+                <g id="4-Add-more-details-2" transform="translate(459.000000, 21.000000)" sketch:type="MSShapeGroup">
+                    <g id="Add-photos" transform="translate(1.000000, 563.000000)">
+                        <g id="add-photo-hover" transform="translate(200.000000, 144.000000)">
+                            <rect id="Rectangle-123" fill="#FFFFFF" x="0" y="0" width="118" height="91"></rect>
+                            <rect id="Rectangle-127" fill="#6AB6FF" x="7" y="7" width="104" height="77"></rect>
+                            <path d="M7,84 L111,84 L110.757794,42.7076287 L89.1458069,62.5438049 L45.8330902,31 L7,62.6272671 L7,84 Z" id="Path-106" fill="#7A472A"></path>
+                            <circle id="Oval-70" fill="#FFCB00" cx="89" cy="28" r="11"></circle>
+                            <path d="M55,42 L55,25 L65,25 L65,42 L81,42 L81,52 L65,52 L65,68 L55,68 L55,52 L38,52 L38,42 L55,42 Z" id="Plus" fill="#A8DC28"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,170 @@
+############### AdBundle ######################################################
+
+# Command to expire what's on category advert (Daily at 12:15 AM)
+php /web/test.friday-ad.co.uk/app/console fa:update:expire-whatson-ad
+15 0 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:expire-whatson-ad
+
+# Send draft ad alert email (Daily at 12:20 AM)
+20 0 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:draft-ad-alert
+
+# Command to expire advert (Daily at 12:30 AM)
+php /web/test.friday-ad.co.uk/app/console fa:update:ad-expire-alert
+30 0 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:ad-expire-alert --last_months=2
+
+# Send ad renew email (Daily at 12:35 AM)
+php /web/test.friday-ad.co.uk/app/console fa:update:ad-renew-alert
+35 0 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:ad-renew-alert
+
+# Send search agent alert (Daily at 12:40 AM)
+40 0 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:search-agent-alert
+
+# Update ad print status (Daily at 12:45 AM)
+45 0 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:ad-print-status
+
+# Update ad refresh ad date (Daily at 12:50 AM)
+50 0 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:ad-refresh-date --last_days=7
+
+# Update ad view counter from redis (Daily at 01:00 AM)
+0 1 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:ad-view-counter
+
+# Update ad solr index 1 day older (Daily at 2:00 AM)
+0 2 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:ad-solr-index --status="A" add --last_days=1
+
+# Update ad view counter for last 7 days into new solr core for landing page (Daily at 3:00 AM)
+0 3 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:ad-view-counter-solr-index
+
+# Upload image to s3 cloude (Daily run for every minute like deamon)
+* * * * * /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:upload:image-s3
+
+# Send email to ad which has not already been booked into a print product and is within the print location group(Monday at 09:00 AM)
+0 9 * * 1  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:print-your-ad-upsell-alert
+
+# Send email for low view count [Enable this cron after 3 days of live]
+0 2 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:send-low-view-alert
+
+# Send email for low enquiry count [Enable this cron after 3 days of live]
+0 3 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:send-low-enquiry-alert
+
+# Future ad post cron (Daily at 6:00 AM)
+0 6 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:post:future-ad
+
+############### AdFeedBundle ###################################################### 
+
+
+
+############### ArchiveBundle ######################################################
+
+# Move ad to archive (Daily at 3:30 AM)
+30 3 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:move:ad-to-archive
+
+
+############### CoreBundle ######################################################
+
+# Flush redis cache (No need in cron)
+
+php /web/test.friday-ad.co.uk/app/console fa:redis:flushall
+
+# Generate entity cache
+php /web/test.friday-ad.co.uk/app/console fa:update:entity generate
+
+############### EntityBundle ######################################################
+
+# Update category count for paa firs step (Daily at 01:10 AM)
+10 1 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:generate:adpost-category-ad-count-cache
+
+# Not clear (No need in cron)
+php /web/test.friday-ad.co.uk/app/console fa:generate:category-cache-for-autosuggest
+
+# Generate categoyr slug path (No need in cron), may need to run manually after clearing the cache
+php /web/test.friday-ad.co.uk/app/console fa:generate:category-slug-path
+
+# Generate entity url keys (No need in cron), may need to run manually after clearing the cache
+php /web/test.friday-ad.co.uk/app/console fa:generate:entity-url-keys
+
+############### MessageBundle ######################################################
+
+# Send contact for moderation (Daily at 04:00 AM)
+0 4 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:send:contact-for-moderation
+
+############### PaymentBundle ######################################################
+
+# Flush shopping cart older then 1 week (Daily at 01:20 AM)
+20 1 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:flush:shopping-cart --olderThan='1w'
+
+# Subscription recurring (Daily at 01:30 AM)
+30 1 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:recurring-subscription
+
+# Review Reminder (Daily at 01:30 AM)
+30 1 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:review-reminder
+
+############### UserBundle ######################################################
+# Update user ad statistics  (No need to do anything now)
+php /web/test.friday-ad.co.uk/app/console fa:update:user-ad-statistics all
+
+# Update yac number
+php /web/test.friday-ad.co.uk/app/console fa:update:user-ad-yac-number allocate --user_id=1 (Need to run manually for missing user)
+php /web/test.friday-ad.co.uk/app/console fa:update:user-ad-yac-number setsold --user_id=1 (Need to run manually for missing user)
+
+# User package expiration command (Daily at 01:40 AM)
+40 1 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:user-package-expiration
+
+# User trial notification command  (Daily at 01:45 AM)
+45 1 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console /web/test.friday-ad.co.uk/app/console fa:user-package-trial-notification
+
+# Update user view counter from redis (Hourly)
+0 * * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:user-view-counter
+
+############### ReportBundle ######################################################
+
+
+# Update user report category and edition (Daily at 4:45 AM)
+45 4 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:user-report-category-edition
+
+# Update user daily activity (Only one time)
+php /web/test.friday-ad.co.uk/app/console fa:update:user-report all --type="both"
+
+# (Daily at 3:15 AM)
+15 3 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:update:user-report beforeoneday --type="user"
+# (Daily at 3:25 AM)
+25 3 * * *  /usr/bin/php  /web/test.friday-ad.co.uk/app/console fa:update:user-report beforeoneday --type="ad"
+
+# Update ad report (Daily at 4:00 AM)
+0 4 * * *  /usr/bin/php  /web/test.friday-ad.co.uk/app/console fa:update:ad-report beforeoneday
+#0 4 * * *  /usr/bin/php  /web/test.friday-ad.co.uk/app/console fa:update:ad-report all
+
+# Update ad enquiry report (Daily at 4:30 AM)
+30 4 * * *  /usr/bin/php  /web/test.friday-ad.co.uk/app/console fa:update:ad-enquiry-report beforeoneday
+#0 4 * * *  /usr/bin/php  /web/test.friday-ad.co.uk/app/console fa:update:ad-enquiry-report all
+
+# Update ad print report (Daily at 5:00 AM)
+0 5 * * *  /usr/bin/php  /web/test.friday-ad.co.uk/app/console fa:update:ad-print-report beforeoneday
+#0 5 * * *  /usr/bin/php  /web/test.friday-ad.co.uk/app/console fa:update:ad-print-report all
+
+############### DotmailerBundle ######################################################
+
+# (Daily at 6:00 PM)
+0 18 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:dotmailer:bulk-import --last_days=7
+
+# (Daily at 9:00 PM)
+0 21 * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:dotmailer:export-filter --is_24h_loop=1
+
+# (Daily at every 15 minute)
+
+15 * * * *  /usr/bin/php /web/test.friday-ad.co.uk/app/console fa:dotmailer:export-update-status
+
+
+ ############### AdFeedBundle ######################################################
+
+# Run feed at every 4 hour (Every 4 hour)
+
+0 0,4,8,12,16,20 * * * /bin/sh /web/friday-ad.co.uk/src/Fa/Bundle/AdFeedBundle/Command/feed.sh -tClickEditVehicleAdvert
+0 1,5,9,13,17,21 * * * /bin/sh /web/friday-ad.co.uk/src/Fa/Bundle/AdFeedBundle/Command/feed.sh -tBoatAdvert
+0 2,6,10,14,18,22 * * * /bin/sh /web/friday-ad.co.uk/src/Fa/Bundle/AdFeedBundle/Command/feed.sh -tHorseAdvert
+0 3,7,11,15,19,23 * * * /bin/sh /web/friday-ad.co.uk/src/Fa/Bundle/AdFeedBundle/Command/feed.sh -tPropertyAdvert
+0 3,7,11,15,19,23 * * * /bin/sh /web/friday-ad.co.uk/src/Fa/Bundle/AdFeedBundle/Command/feed.sh -tPetAdvert
+0 1,5,9,13,17,21 * * * /bin/sh /web/friday-ad.co.uk/src/Fa/Bundle/AdFeedBundle/Command/feed.sh -tMerchandiseAdvert
+
+# Feed export
+11 0 * * * /usr/bin/php /web/friday-ad.co.uk/app/console fa:export-news-now-feed
+11 30 * * * /bin/sh /web/friday-ad.co.uk/src/Fa/Bundle/AdFeedBundle/Command/trovit.sh
+6 0 * * * /bin/sh /web/friday-ad.co.uk/src/Fa/Bundle/AdFeedBundle/Command/eazyads.sh

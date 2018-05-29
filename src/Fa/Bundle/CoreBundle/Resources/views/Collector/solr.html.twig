@@ -1,0 +1,54 @@
+{% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
+{% block toolbar %}
+    {% set icon %}
+        <img width="20" height="28" alt="Solr" style="border-width: 0; vertical-align: middle; margin-right: 5px;" src="data:image/png;base64,AAABAAEAICAAAAEAGACoDAAAFgAAACgAAAAgAAAAQAAAAAEAGAAAAAAAgAwAAAAAAAAAAAAAAAAAAAAAAAD8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjo6Ph8iOgoQNg4UNhYcOCQoOjQ2Pj4+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjw8PicqPBAWOAsSOBMYOBgeOh0iOiImPC8yPj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjc4PjAyPDc4Pj0+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjo6PjEyPDw8Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjo6PjEyPCcqOhwgOBMYOAsSNgUMNBAWNjU2Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj0+PjEyPCMmOhgcOA8WNgoQNgYONgUMNAUMNAcONggQNgkQNgYONgoQNjM0PD8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj4+PjM0PCcqOh0iOhQaOA0UNggQNgUMNAUMNAYONggONgkQNgoQNgcONgoSNjY4Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj4+PjY2PiwuPCImOhccOA8UNgkQNgYMNAUMNAIKNA8UNjw8Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PjY2PiwuPDI0PDo6Pj4+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjg4Pi4wPCMmOhgcOAoQNiAkOj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjw8PiksOg8UNgYONg4UNhQaOBoeOCAkOicqOi0wPDQ0PDo6Pj8+Pj8+Pj8+Pj8+Pjs6Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj4+Pj8+Pj8+Pj0+PiUoOgoQNgIKNAUMNAUMNAUMNAYMNAcONgoQNg4UNhIYOBgcOB8iOiUoOjAyPD8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj4+PiwuPCYqOj4+Pj8+Pj8+Pjo6Ph8kOgkQNgUMNAkQNgkQNgkQNgkQNggONgcONgYONgUMNAMKNAsSODo6Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj4+PhoeOAsSNiYqOjw8Pj8+Pj8+PjU2PhkeOAYONgYONgkQNgkQNgkQNgkQNgkQNgkQNgkQNgcONiwuPD8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PiksPDk6Pj8+Pj8+PhgeOAAINA0UNiImOjk6Pj8+Pj8+PjAyPBQYOAUMNAcONgoQNgkQNgkQNgkQNgkQNgcONh4iOj8+Pj4+PjQ0PD8+Pj4+Pj08Pj8+PjY2Pjo6Pj8+PjEyPBEWNjo6Pj8+Pj8+PhccOAMKNAUMNAsSNh4iOjY2Pj8+Pj8+PiosPA8UNgQMNAgONgoQNgkQNgkQNggQNhQaOD8+PiksPCosPD8+PjM0PC4wPD8+PjI0PCEkOj8+Pj8+PhUaOAsSNjg4Pj8+Pj0+PhQaOAUMNAgQNgUMNAkQNhoeODM0PD8+Pj8+PiQoOgsSNgUMNAkQNgoQNgkQNhAWNj08Pg8WODI0PD8+PiksOiAkOj8+Pjs6PgwSNjY4Pj8+PjM0PAMKNA0SNjU2Pj8+Pjw8PhEWNgUMNAoQNgkQNgUMNAcONhccODAyPD8+Pj08Ph4iOggONgUMNAkQOA0UNiMmOgcONjk6Pj8+Ph8iOhQaOD8+Pj8+Pg0SNhkeOD8+Pj8+PhYaOAMKNAsSNjI0PD8+Pjk6Pg4UNgYONgoQNgkQNgkQNgYONgYONhMYOCwuPD8+Pjg4PhkeOAYONgoQNgwSNg4UOD4+Pj8+PhYcOA0SNj8+Pj8+PhYaOAMKNDI0PD8+Pi4wPAYMNAcONgkQNi8wPD8+Pjc4PgwSNgYONgoQNgkQNgkQNgkQNgYONgUMNBAWNiksPD0+PjI0PhoeOA8UNhMYOD8+Pj4+Pg8UNggONjg4Pj8+PhwgOAIKNBUaOD8+Pj8+PhIYOAcONgcONgcONiwuPD8+PjQ2PgoQNgcONgoQNgkQNgkQNgkQNgkQNgcONgUMNA0UNicqPDk6PhccOBccOj8+Pjc4PgkQNgUMNC4wPD8+PiMmOgUMNAUMNCwuPD8+PiosPAUMNAoQNggONgYONigqOj8+PjIyPAgONggONgoQNgkQNgkQNgkQNgkQNgkQNggONgMKNh8iOiUoOhwgOj8+Pi4wPAYMNAUMNCQoOj8+PiksPAUMNAcONhAWNj4+Pj4+Pg8UNgcONgoQNggQNgUMNCUoOj8+Pi8wPAYONggONgoQNgkQNgkQNgkQNgkQNgkQNgcONiwuPDQ2PiksPD8+PiMmOgUMNAYMNBkeOD8+Pi8wPAYONgkQNgQMNCYoOj8+PiYoOgQMNAoQNgkQNgkQNgUMNCEkOj8+PisuPAUMNAgQNgkQNgkQNgkQNgkQNggONg4UODs8Pj8+Pjw8Pj8+PhgeOAYONgcONhAWNj8+PjY2PggONgkQNggONgsSNjs8Pjw8PgwSNggONgkQNgkQNgkQNgQMNB4iOj8+PigqOgUMNAkQNgkQNgkQNgoQNgUMNCAkOj8+Pj8+Pj8+Pj4+PhAWNgcONgkQNgoQNjo6Pjw8PgsSNggQNgoQNgUMNB8kOj8+PiImOgQMNAoQNgkQNgkQNgkQNgQMNBoeOD8+PiUoOgQMNAkQNgkQNggQNgkQNjk6Pj8+Pj8+Pj8+PjY2PgcONgkQNgkQNgYONjAyPD8+Pg8WNggONgkQNgkQNggONjg4Pjs6PgoQNggQNgkQNgkQNgkQNgkQNgQMNBccOD8+PiImOgQMNAkQNgQMNCMmOj8+Pj8+Pj8+Pj8+Pjs8PhAWNgYONgoQNgUMNCUoOj8+PhQaOAcONgkQNgoQNgUMNBkeOD8+Ph4iOgUMNAkQNgkQNgkQNgkQNgoQNgUMNBQaOD8+Ph8kOgAINBMYOD4+Pj8+Pj8+Pj8+Pj8+Pj8+PjY2PgoQNgcONgYONhoeOD8+PhoeOAYMNgkQNgkQNgkQNgYMNjM0PDk6PggONgkQNgkQNgkQNgkQNgkQNgoQNgUMNBIYODk6Ph4iOjY4Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PjM0PAoSNgQMNBEWNj8+PiEkOgUMNAkQNgkQNgkQNgYONhMYOD8+PhoeOAUMNAkQNgkQNgkQNgkQNgkQNgoQNgEKNBUaOD8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PjY2PhAWNgQMNDw8PigsOgUMNAkQNgkQNgkQNgkQNgUMNC4wPDc4PgYONgkQNgkQNgkQNgoQNggQNgQMNBMYODY2Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj08PhwgODM0PC8wPAQMNAkQNgkQNgkQNgkQNgcONg4UNj8+PhccOAYONgkQNggONgUMNAkQNiImOj4+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PjY4PgwSOAYONgcONggQNgkQNgoQOAQMNicqPDQ2PgQMNgYONg0UOB8kOjg4Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjo6PissPB0iOhQaOA8WNg0UNgwSNhIYNjo6PiMmOissPDo6Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="/>
+        <span class="sf-toolbar-status">{{ collector.commandcount }}</span>
+    {% endset %}
+    {% set text %}
+        <div class="sf-toolbar-info-piece">
+            <b>Queries</b>
+            <span>{{ collector.commandcount }}</span>
+        </div>
+        <div class="sf-toolbar-info-piece">
+            <b>Query time</b>
+            <span>{{ '%0.2f'|format(collector.time) }} ms</span>
+        </div>
+    {% endset %}
+    {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
+{% endblock %}
+
+{% block menu %}
+<span class="label">
+    <span class="icon">
+        <img width="32" height="28" src="data:image/png;base64, AAABAAEAICAAAAEAGACoDAAAFgAAACgAAAAgAAAAQAAAAAEAGAAAAAAAgAwAAAAAAAAAAAAAAAAAAAAAAAD8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjo6Ph8iOgoQNg4UNhYcOCQoOjQ2Pj4+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjw8PicqPBAWOAsSOBMYOBgeOh0iOiImPC8yPj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjc4PjAyPDc4Pj0+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjo6PjEyPDw8Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjo6PjEyPCcqOhwgOBMYOAsSNgUMNBAWNjU2Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj0+PjEyPCMmOhgcOA8WNgoQNgYONgUMNAUMNAcONggQNgkQNgYONgoQNjM0PD8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj4+PjM0PCcqOh0iOhQaOA0UNggQNgUMNAUMNAYONggONgkQNgoQNgcONgoSNjY4Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj4+PjY2PiwuPCImOhccOA8UNgkQNgYMNAUMNAIKNA8UNjw8Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PjY2PiwuPDI0PDo6Pj4+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjg4Pi4wPCMmOhgcOAoQNiAkOj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjw8PiksOg8UNgYONg4UNhQaOBoeOCAkOicqOi0wPDQ0PDo6Pj8+Pj8+Pj8+Pj8+Pjs6Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj4+Pj8+Pj8+Pj0+PiUoOgoQNgIKNAUMNAUMNAUMNAYMNAcONgoQNg4UNhIYOBgcOB8iOiUoOjAyPD8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj4+PiwuPCYqOj4+Pj8+Pj8+Pjo6Ph8kOgkQNgUMNAkQNgkQNgkQNgkQNggONgcONgYONgUMNAMKNAsSODo6Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj4+PhoeOAsSNiYqOjw8Pj8+Pj8+PjU2PhkeOAYONgYONgkQNgkQNgkQNgkQNgkQNgkQNgkQNgcONiwuPD8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PiksPDk6Pj8+Pj8+PhgeOAAINA0UNiImOjk6Pj8+Pj8+PjAyPBQYOAUMNAcONgoQNgkQNgkQNgkQNgkQNgcONh4iOj8+Pj4+PjQ0PD8+Pj4+Pj08Pj8+PjY2Pjo6Pj8+PjEyPBEWNjo6Pj8+Pj8+PhccOAMKNAUMNAsSNh4iOjY2Pj8+Pj8+PiosPA8UNgQMNAgONgoQNgkQNgkQNggQNhQaOD8+PiksPCosPD8+PjM0PC4wPD8+PjI0PCEkOj8+Pj8+PhUaOAsSNjg4Pj8+Pj0+PhQaOAUMNAgQNgUMNAkQNhoeODM0PD8+Pj8+PiQoOgsSNgUMNAkQNgoQNgkQNhAWNj08Pg8WODI0PD8+PiksOiAkOj8+Pjs6PgwSNjY4Pj8+PjM0PAMKNA0SNjU2Pj8+Pjw8PhEWNgUMNAoQNgkQNgUMNAcONhccODAyPD8+Pj08Ph4iOggONgUMNAkQOA0UNiMmOgcONjk6Pj8+Ph8iOhQaOD8+Pj8+Pg0SNhkeOD8+Pj8+PhYaOAMKNAsSNjI0PD8+Pjk6Pg4UNgYONgoQNgkQNgkQNgYONgYONhMYOCwuPD8+Pjg4PhkeOAYONgoQNgwSNg4UOD4+Pj8+PhYcOA0SNj8+Pj8+PhYaOAMKNDI0PD8+Pi4wPAYMNAcONgkQNi8wPD8+Pjc4PgwSNgYONgoQNgkQNgkQNgkQNgYONgUMNBAWNiksPD0+PjI0PhoeOA8UNhMYOD8+Pj4+Pg8UNggONjg4Pj8+PhwgOAIKNBUaOD8+Pj8+PhIYOAcONgcONgcONiwuPD8+PjQ2PgoQNgcONgoQNgkQNgkQNgkQNgkQNgcONgUMNA0UNicqPDk6PhccOBccOj8+Pjc4PgkQNgUMNC4wPD8+PiMmOgUMNAUMNCwuPD8+PiosPAUMNAoQNggONgYONigqOj8+PjIyPAgONggONgoQNgkQNgkQNgkQNgkQNgkQNggONgMKNh8iOiUoOhwgOj8+Pi4wPAYMNAUMNCQoOj8+PiksPAUMNAcONhAWNj4+Pj4+Pg8UNgcONgoQNggQNgUMNCUoOj8+Pi8wPAYONggONgoQNgkQNgkQNgkQNgkQNgkQNgcONiwuPDQ2PiksPD8+PiMmOgUMNAYMNBkeOD8+Pi8wPAYONgkQNgQMNCYoOj8+PiYoOgQMNAoQNgkQNgkQNgUMNCEkOj8+PisuPAUMNAgQNgkQNgkQNgkQNgkQNggONg4UODs8Pj8+Pjw8Pj8+PhgeOAYONgcONhAWNj8+PjY2PggONgkQNggONgsSNjs8Pjw8PgwSNggONgkQNgkQNgkQNgQMNB4iOj8+PigqOgUMNAkQNgkQNgkQNgoQNgUMNCAkOj8+Pj8+Pj8+Pj4+PhAWNgcONgkQNgoQNjo6Pjw8PgsSNggQNgoQNgUMNB8kOj8+PiImOgQMNAoQNgkQNgkQNgkQNgQMNBoeOD8+PiUoOgQMNAkQNgkQNggQNgkQNjk6Pj8+Pj8+Pj8+PjY2PgcONgkQNgkQNgYONjAyPD8+Pg8WNggONgkQNgkQNggONjg4Pjs6PgoQNggQNgkQNgkQNgkQNgkQNgQMNBccOD8+PiImOgQMNAkQNgQMNCMmOj8+Pj8+Pj8+Pj8+Pjs8PhAWNgYONgoQNgUMNCUoOj8+PhQaOAcONgkQNgoQNgUMNBkeOD8+Ph4iOgUMNAkQNgkQNgkQNgkQNgoQNgUMNBQaOD8+Ph8kOgAINBMYOD4+Pj8+Pj8+Pj8+Pj8+Pj8+PjY2PgoQNgcONgYONhoeOD8+PhoeOAYMNgkQNgkQNgkQNgYMNjM0PDk6PggONgkQNgkQNgkQNgkQNgkQNgoQNgUMNBIYODk6Ph4iOjY4Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PjM0PAoSNgQMNBEWNj8+PiEkOgUMNAkQNgkQNgkQNgYONhMYOD8+PhoeOAUMNAkQNgkQNgkQNgkQNgkQNgoQNgEKNBUaOD8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PjY2PhAWNgQMNDw8PigsOgUMNAkQNgkQNgkQNgkQNgUMNC4wPDc4PgYONgkQNgkQNgkQNgoQNggQNgQMNBMYODY2Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj08PhwgODM0PC8wPAQMNAkQNgkQNgkQNgkQNgcONg4UNj8+PhccOAYONgkQNggONgUMNAkQNiImOj4+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PjY4PgwSOAYONgcONggQNgkQNgoQOAQMNicqPDQ2PgQMNgYONg0UOB8kOjg4Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pjo6PissPB0iOhQaOA8WNg0UNgwSNhIYNjo6PiMmOissPDo6Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+Pj8+PgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==" alt="Solr" />
+    </span>
+    <strong>Solr</strong>
+    <span class="count">
+        <span>{{ collector.commandcount }}</span>
+        <span>{{ '%0.0f'|format(collector.time) }} ms</span>
+    </span>
+</span>
+{% endblock %}
+
+{% block panel %}
+    <h2>Commands</h2>
+
+    {% if not collector.commandcount %}
+        <p><em>No commands.</em></p>
+    {% else %}
+        <ul class="alt">
+            {% for command in collector.commands %}
+                <li class="{{ cycle(['odd', 'even'], loop.index) }}{% if command.error %} error{% endif %}">
+                    <div>
+                        <code>{{ command.cmd }}</code>
+                    </div>
+                    <small>
+                        <strong>Time</strong>: {{ '%0.2f'|format(command.executionMS) }} ms
+                        <strong>Connection</strong>: {{ command.conn }}
+                        {% if command.error %}<strong>Error</strong>: {{ command.error }}{% endif %}
+                    </small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

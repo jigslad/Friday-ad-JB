@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="1fd266c217d796db7382651498389bb639d8eaa2" resname="All Categories">
+        <jms:reference-file line="9">views/AdList/leftSearchCategoryLinks.html.twig</jms:reference-file>
+        <source>All Categories</source>
+        <target state="new">All Categories</target>
+      </trans-unit>
+      <trans-unit id="cfea419c3b4e8b02ee586e70a28bf846e44cdda4" resname="Apply">
+        <jms:reference-file line="67">views/AdList/ajaxLeftSearchCheckboxDimensionModal.html.twig</jms:reference-file>
+        <source>Apply</source>
+        <target state="new">Apply</target>
+      </trans-unit>
+      <trans-unit id="a700d210a0638641632fdc88feca31549e8440e6" resname="Business Seller">
+        <jms:reference-file line="165">AdBundle/Form/AdLeftSearchType.php</jms:reference-file>
+        <source>Business Seller</source>
+        <target state="new">Business Seller</target>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="66">views/AdList/ajaxLeftSearchCheckboxDimensionModal.html.twig</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="6ccb60071be8f00760a3824d9f7d0fad57de789f" resname="Categories">
+        <jms:reference-file line="4">views/AdList/leftSearchCategoryLinks.html.twig</jms:reference-file>
+        <jms:reference-file line="30">views/AdList/leftSearchCategoryLinks.html.twig</jms:reference-file>
+        <source>Categories</source>
+        <target state="new">Categories</target>
+      </trans-unit>
+      <trans-unit id="719ea396ad92e01b4757ec2b93bb1e5f270f771d" resname="Clear">
+        <jms:reference-file line="63">views/AdList/ajaxLeftSearchCheckboxDimensionModal.html.twig</jms:reference-file>
+        <jms:reference-file line="61">views/AdList/leftSearchLinkDimensionFilters.html.twig</jms:reference-file>
+        <jms:reference-file line="70">views/AdList/leftSearchCheckboxDimensionFilters.html.twig</jms:reference-file>
+        <jms:reference-file line="28">views/AdList/leftSearchSellerLinks.html.twig</jms:reference-file>
+        <source>Clear</source>
+        <target state="new">Clear</target>
+      </trans-unit>
+      <trans-unit id="73d11520fb27d2e5ce547c35b73bf5d533ffb907" resname="Distance I'm happy to travel">
+        <jms:reference-file line="43">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="59">views/AdList/leftSearch.html.twig</jms:reference-file>
+        <source>Distance I'm happy to travel</source>
+        <target state="new">Distance I'm happy to travel</target>
+      </trans-unit>
+      <trans-unit id="bbb6e2a62b3b4716f9a699ba42940ccbd33647f3" resname="Keyword search">
+        <jms:reference-file line="20">views/AdList/leftSearch.html.twig</jms:reference-file>
+        <source>Keyword search</source>
+        <target state="new">Keyword search</target>
+      </trans-unit>
+      <trans-unit id="bee2d7bb1f1f69161797640c07d9ae09242c04e5" resname="My budget is from">
+        <jms:reference-file line="56">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="36">views/AdList/leftSearch.html.twig</jms:reference-file>
+        <source>My budget is from</source>
+        <target state="new">My budget is from</target>
+      </trans-unit>
+      <trans-unit id="192931397df073401ef740cf0360ee8628a8e6c2" resname="Nearby towns">
+        <jms:reference-file line="82">views/AdList/leftSearch.html.twig</jms:reference-file>
+        <source>Nearby towns</source>
+        <target state="new">Nearby towns</target>
+      </trans-unit>
+      <trans-unit id="aa2699757d0e83c3c07e5ca39f785e64f22eb5c9" resname="Private Seller">
+        <jms:reference-file line="165">AdBundle/Form/AdLeftSearchType.php</jms:reference-file>
+        <source>Private Seller</source>
+        <target state="new">Private Seller</target>
+      </trans-unit>
+      <trans-unit id="da8c56912b1b73220b9b3d6fe86c49165bb37b4c" resname="Reset search">
+        <jms:reference-file line="114">views/AdList/leftSearch.html.twig</jms:reference-file>
+        <jms:reference-file line="116">views/AdList/leftSearch.html.twig</jms:reference-file>
+        <source>Reset search</source>
+        <target state="new">Reset search</target>
+      </trans-unit>
+      <trans-unit id="bce06414177f72ab70e6387b6af9f8ceef0d6049" resname="Search">
+        <jms:reference-file line="76">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="33">views/AdList/leftSearchRangeDimensionFilters.html.twig</jms:reference-file>
+        <jms:reference-file line="50">views/AdList/leftSearchDateRangeDimensionFilters.html.twig</jms:reference-file>
+        <source>Search</source>
+        <target state="new">Search</target>
+      </trans-unit>
+      <trans-unit id="47c77bf0a809f27bf05714fc575272bbef8e23e6" resname="See less">
+        <jms:reference-file line="80">views/AdList/leftSearchCategoryLinks.html.twig</jms:reference-file>
+        <source>See less</source>
+        <target state="new">See less</target>
+      </trans-unit>
+      <trans-unit id="c510d6c04c0951500c8e43f623e9f8886c378aec" resname="See more">
+        <jms:reference-file line="79">views/AdList/leftSearchCategoryLinks.html.twig</jms:reference-file>
+        <jms:reference-file line="53">views/AdList/leftSearchLinkDimensionFilters.html.twig</jms:reference-file>
+        <jms:reference-file line="68">views/AdList/leftSearchCheckboxDimensionFilters.html.twig</jms:reference-file>
+        <source>See more</source>
+        <target state="new">See more</target>
+      </trans-unit>
+      <trans-unit id="8598222918d3c6e513d63060cf55e2971ded729a" resname="Select">
+        <jms:reference-file line="165">AdBundle/Form/AdLeftSearchType.php</jms:reference-file>
+        <source>Select</source>
+        <target state="new">Select</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,21 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+{% set printDeadlineEditGrant = false %}
+{% set printDeadlineDeleteGrant = false %}
+
+{% if fa_resource_authorization_manager.isGranted('print_deadline_edit_admin') %}
+  {% set printDeadlineEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('print_deadline_delete_admin') %}
+  {% set printDeadlineDeleteGrant = true %}
+{% endif %}
+
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'print_deadline_new_admin'}) }}
+    {% use "FaAdBundle:PrintDeadlineAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+    {{ include('FaAdBundle:PrintDeadlineAdmin:list.html.twig', {'pagination': pagination}) }}
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}

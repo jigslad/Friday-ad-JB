@@ -1,0 +1,383 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% set loggedInUserName = app.user.getProfileName() %}
+{% set isReviewTypeSet = 0 %}
+{% set queryParams = app.request.query.all %}
+{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+
+{% if 'reviewType' in queryParams|keys %}
+    {% set isReviewTypeSet = 1 %}
+{% endif %}
+{% block scripttop %}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/dashboard.css'
+        'bundles/facore/css/owl.carousel.css'
+        'bundles/facore/css/owl.theme.css'
+          %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}
+    {{'Dashboard'|trans({}, 'frontend-dashboard')}}
+{% endblock %}
+
+{% block body %}
+<div class="posting-bg">
+    {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+    <div class="row d-board-main">
+        <div class="off-canvas-wrap" data-offcanvas>
+            <div class="inner-wrap">
+                {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                <div id="db-right-part" class="large-18 columns">
+                    <div class="db-content">
+                        {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'dashboard' })) }}
+                        <h1 class="db-title">
+                            {{'Hi %loggedInUserName%'|trans({'%loggedInUserName%':loggedInUserName}, 'frontend-dashboard')}} {{'welcome to your dashboard'|trans({}, 'frontend-dashboard')}}
+                        </h1>
+                        <br>
+                        <div class="db-section">
+                            <dl class="accordion" data-accordion>
+                                <dd class="accordion-navigation">
+                                    <div class="section-head">
+                                        <span class="my-msgs-icon">{{'My messages'|trans() }} {% if myMessagesParameters['totalMsgCount'] > 0 %}({{myMessagesParameters['totalMsgCount']}}){% endif %}</span>
+                                        <a class="db-view-all" href="{{path('user_ad_message_all')}}">View all</a>
+                                    </div>
+                                    <div class="content active">
+                                        {% set messageType = app.request.get('messageType') %}
+                                        {% if (myMessagesParameters['pagination'] is defined and myMessagesParameters['pagination'].getNbResults() > 0) or (messageType != 'all') %}
+                                            {% set pagination = myMessagesParameters['pagination'] %}
+                                            {{ include('FaUserBundle:Dashboard:myMessagesList.html.twig', {'myMessagesParameters': myMessagesParameters}) }}
+                                        {% else %}
+                                            {{ "You don't have any messages yet, but we're sure you will get some very soon."|trans({}, 'frontend-dashboard') }}
+                                        {% endif %}
+                                    </div>
+                                </dd>
+                                <dd class="accordion-navigation">
+                                    <div class="section-head">
+                                        {% set totalAds = 0 %}
+                                        {% if myAdsParameters['totalAdCount'] is defined and myAdsParameters['totalAdCount'] > 0 %}
+                                            {% set totalAds = myAdsParameters['totalAdCount'] %}
+                                        {% endif %}
+                                        <span class="manage-my-items">{{ 'Manage my ads (%totalAds%)'|trans({'%totalAds%':totalAds}, 'frontend-dashboard') }}</span>
+                                        <a class="db-view-all" href="{{path('manage_my_ads_active')}}">View all</a>
+                                    </div>
+                                    <div class="content active">
+                                        {% if myAdsParameters['pagination'] is defined and myAdsParameters['pagination'].getNbResults() > 0 %}
+                                            {% set pagination = myAdsParameters['pagination'] %}
+                                            {{ include('FaUserBundle:Dashboard:myAdsList.html.twig', {'pagination': pagination}) }}
+                                        {% else %}
+                                            {% set linkText = 'place one now' %}
+                                            {% set placeOneNow = '<a href="'~path('ad_post_first_step')~'">'~linkText~'</a>' %}
+                                            {{ "You have any recent ads, why not %placeOneNow%?"|trans({'%placeOneNow%':placeOneNow}, 'frontend-dashboard')|raw }}
+                                        {% endif %}
+                                    </div>
+                                </dd>
+                                <dd class="accordion-navigation">
+                                    <div class="section-head">
+                                        {% set totalRecentlyAds = recentlyViewedAds|length %}
+                                        <span class="recent-view-icon">{{ 'Recently viewed ads (%totalRecentlyAds%)'|trans({'%totalRecentlyAds%':totalRecentlyAds}, 'frontend-dashboard') }}</span>
+                                    </div>
+                                    <div class="content active recently-viewed">
+                                        {% if recentlyViewedAds|length > 0 %}
+                                            {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+                                            {{ include('FaFrontendBundle:Default:homePageRecommendedAdsSlider.html.twig', {'divId': 'recommended-item-slider', 'ads': recentlyViewedAds, 'noImageColor': 'grey'}) }}
+                                        {% else %}
+                                            {% set linkText = 'browse ads' %}
+                                            {% set browseAds = '<a href="'~searchResultUrl~'">'~linkText~'</a>' %}
+                                            {{ "You haven’t viewed any ads recently, %browseAds% now."|trans({'%browseAds%':browseAds}, 'frontend-dashboard')|raw }}
+                                        {% endif %}
+                                    </div>
+                                </dd>
+                                <dd class="accordion-navigation">
+                                    <div class="section-head">
+                                        <span class="my-saved-searches">{{ 'Alerts & Searches (%totalSavedSearches%)'|trans({'%totalSavedSearches%':mySavedSearchesParameters['pagination'].getNbResults()}, 'frontend-dashboard') }}</span>
+                                        <a class="db-view-all" href="{{path('list_search_agent')}}">View all</a>
+                                    </div>
+                                    <div class="content active">
+                                        {% if mySavedSearchesParameters['pagination'] is defined and mySavedSearchesParameters['pagination'].getNbResults() > 0 %}
+                                            {% set pagination = mySavedSearchesParameters['pagination'] %}
+                                            {{ include('FaUserBundle:Dashboard:mySavedSearchesList.html.twig', {'pagination': pagination}) }}
+                                        {% else %}
+                                            {{ "You don't have saved searches yet."|trans({}, 'frontend-dashboard') }}
+                                            {% set linkText = 'search now' %}
+                                            {% set searchNow = '<a href="'~searchResultUrl~'">'~linkText~'</a>' %}
+                                            {{ "Save your favourite searches and even receive daily email alerts with matching items, %searchNow%."|trans({'%searchNow%':searchNow}, 'frontend-dashboard')|raw }}
+                                        {% endif %}
+                                    </div>
+                                </dd>
+                                <dd class="accordion-navigation">
+                                    {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}
+                                        <div class="section-head">
+                                            <span class="db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':myFavouritesParameters['pagination'].getNbResults()}, 'frontend-dashboard') }}</span>
+                                            <a class="db-view-all" href="{{path('my_favourite')}}">View all</a>
+                                        </div>
+                                    {% else %}
+                                        <div class="section-head">
+                                            <span class="db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':0}, 'frontend-dashboard') }}</span>
+                                        </div>
+                                    {% endif %}
+                                    <div class="content active">
+                                        {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}
+                                            {% set pagination = myFavouritesParameters['pagination'] %}
+                                            {{ include('FaUserBundle:Dashboard:myFavouritesList.html.twig', {'pagination': pagination}) }}
+                                        {% else %}
+                                            {{ "You don’t have any recent favourite ads, next time you see something you like, click the heart to save it here."|trans({}, 'frontend-dashboard') }}
+                                        {% endif %}
+
+                                    </div>
+                                </dd>
+                                <dd class="accordion-navigation" id="review_section">
+                                    <div class="section-head">
+                                        <span class="db-my-reviews">{{ 'Reviews (%totalReviewsCount%)'|trans({'%totalReviewsCount%':myReviewsParameters['totalReviewsCount']}, 'frontend-dashboard') }}</span>
+                                        <a class="db-view-all" href="{{path('user_review_list')}}">{{ 'View all'|trans({}, 'frontend-dashboard') }}</a>
+                                    </div>
+                                    <div class="content active">
+                                        {% set reviewType = app.request.get('reviewType') %}
+                                        {% if (myReviewsParameters['pagination'] is defined and myReviewsParameters['pagination'].getNbResults() > 0) or (reviewType != 'all') %}
+                                            {% set pagination = myReviewsParameters['pagination'] %}
+                                            {{ include('FaUserBundle:Dashboard:myReviewsList.html.twig', {'myReviewsParameters': myReviewsParameters}) }}
+                                        {% else %}
+                                            {{ "You don’t have any reviews yet. Leave a review next time you buy or sell something!"|trans({}, 'frontend-dashboard') }}
+                                        {% endif %}
+
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="leave_review_modal" class="reveal-modal" data-reveal></div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    {{ include('FaUserBundle:Review:reviewJs.html.twig', {'success_url': app.request.getUri}) }}
+    {{ include('FaCoreBundle::starRatingJs.html.twig') }}
+    {{ include('FaUserBundle:Review:reviewResponseJs.html.twig', {'success_url': app.request.getUri}) }}
+    {{ include('FaMessageBundle:AdMessage:messageJs.html.twig', {'page': 'listing'}) }}
+    <script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function() {
+        var recommendedItemSlider = $("#recommended-item-slider");
+        recommendedItemSlider.owlCarousel({
+            items : 6,
+            itemsCustom:[[320, 1], [568, 3], [768, 3], [1024, 4], [1151, 4]],
+            navigation: true,
+            pagination:false,
+            responsiveRefreshRate : 100,
+            navigationText: ['<img src="/bundles/fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="/bundles/fafrontend/images/small-slider-next.svg" alt="" />'],
+            lazyLoad: true,
+            scrollPerPage: true,
+        });
+        var isReviewTypeSet = '{{isReviewTypeSet}}';
+        if (parseInt(isReviewTypeSet) == 1) {
+            scrollToElement($('#review_section'));
+        }
+    });
+
+    var adIdToRemove = '';
+    var statusIdToChange = '';
+
+    function removeAdConfirmation(adId, currentAdStatus)
+    {
+    	adIdToRemove = adId;
+        if (currentAdStatus == "{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')}}") {
+        	$('#markAdAsSoldOrExpireModal').foundation('reveal', 'open');
+        } else {
+        	$('#markAdAsInactiveModal').foundation('reveal', 'open');
+        }
+    }
+
+    function closeRemoveAdConfirmationBox(modelId)
+    {
+    	adIdToRemove = '';
+    	statusIdToChange = '';
+    	closeRevealModel('#'+modelId);
+    }
+
+    var ajaxLoading = false;
+    function changeAdStatus(statusId)
+    {
+        statusIdToChange = statusId;
+        if (!ajaxLoading && adIdToRemove != '') {
+            ajaxLoading = true;
+            blockPage();
+            blockElement('.db-right-part');
+            $.ajax({
+                type: "POST",
+                url: '{{path("ajax_manage_my_ads_change_status")}}',
+                data: {'adId':adIdToRemove, 'newStatusId':statusIdToChange},
+                cache:false,
+                asyn:false
+            })
+            .always(function(response) {
+                unblockPage();
+             })
+            .done(function(response) {
+                location.reload();
+            });
+        }
+    }
+
+    var latestItemSlider = $("#my-favourites-slider");
+    latestItemSlider.owlCarousel({
+        items : 3,
+        itemsCustom:[[320, 1], [568, 2], [768, 2], [1024, 3]],
+        navigation: true,
+        pagination:false,
+        responsiveRefreshRate : 100,
+        navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+        lazyLoad: true,
+        scrollPerPage: true,
+    });
+
+    function removeFromFavorite(id)
+    {
+        var route = Routing.generate('ad_remove_from_favorite', { 'adId': id });
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url : route,
+            data : {type: 'detail'},
+        })
+        .always(function(response) {
+                unblockPage();
+         })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.anchorHtml.length) {
+            	location.reload();
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#listing_'+id);
+            }
+        });
+    }
+
+    function openSocialSharePopup(adUrl, adTitle)
+    {
+        if (adUrl != '' && adTitle != '') {
+        	blockPage();
+        	blockElement('.db-right-part');
+        	$.ajax({
+                type: "POST",
+                url: '{{path("manage_my_ads_social_share_popup")}}',
+                data: {'adUrl':adUrl, 'adTitle':adTitle}
+            })
+            .always(function(response) {
+                unblockPage();
+             })
+            .done(function(response) {
+                $('#social_share_icon_div').html(response.htmlContent);
+            	$('#socialShareMobileModal').foundation('reveal', 'open');
+            });
+        }
+    }
+
+    var savedSearchIdToRemove = '';
+    var savedSearchIdToRename = '';
+
+    function updateSavedSearchAgent(id)
+    {
+        var route = Routing.generate('update_search_agent', { 'userSearchAgentId': id });
+        {% if guid is defined %}
+            route = route + "?guid={{ guid }}";
+        {% endif %}
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url : route,
+            data : {'emailAlert': $('#emailAlert_'+id).is(":checked") ? 1 : 0},
+        })
+        .always(function(response) {
+                unblockPage();
+            })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.error && response.error.length) {
+                $(decorateMessage(response.error, 'alert')).prependTo('#saved_search_'+id);
+            } else if (response.success && response.success.length) {
+                $(decorateMessage(response.success, 'success')).prependTo('#saved_search_'+id);
+            }
+        });
+    }
+
+    function removeSavedSearch()
+    {
+        if (savedSearchIdToRemove != '') {
+            var route = Routing.generate('delete_search_agent', { 'userSearchAgentId': savedSearchIdToRemove });
+            blockPage();
+            $.ajax({
+                type: "POST",
+                url : route,
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.error.length) {
+                    $(decorateMessage(response.error, 'alert')).insertBefore('#saved_search_'+id);
+                } else {
+                    location.reload();
+                }
+            });
+        }
+    }
+
+    function removeSavedSearchConfirmation(savedSearchId)
+    {
+        savedSearchIdToRemove = savedSearchId;
+        $('#removeSavedSearch').foundation('reveal', 'open');
+    }
+
+    function renameSavedSearchConfirmation(savedSearchId)
+    {
+        savedSearchIdToRename = savedSearchId;
+        var searchAgentTitle = $('#saved_search_title_'+savedSearchIdToRename+'_desktop').html();
+        if (parseInt(searchAgentTitle.length) == 0) {
+            searchAgentTitle = $('#saved_search_title_'+savedSearchIdToRename+'_mobile').html();
+        }
+        $('#txt_title').val(searchAgentTitle);
+        $('#renameSavedSearch').foundation('reveal', 'open');
+    }
+
+    function renameSavedSearch()
+    {
+        if (savedSearchIdToRename != '') {
+            var searchAgentTitle = $('#txt_title').val();
+            searchAgentTitle = searchAgentTitle.trim();
+
+            if (searchAgentTitle == '') {
+                $('#blankTitleAlert').foundation('reveal', 'open');
+            } else {
+                var route = Routing.generate('rename_search_agent', { 'userSearchAgentId': savedSearchIdToRename, 'userSearchAgentTitle': searchAgentTitle });
+                blockPage();
+                $.ajax({
+                    type: "POST",
+                    url : route,
+                })
+                .always(function(response) {
+                    unblockPage();
+                })
+                .done(function(response) {
+                    hideAlertMessage();
+                    if (response.error.length) {
+                        $(decorateMessage(response.error, 'alert')).prependTo('#saved_search_'+savedSearchIdToRename);
+                    } else {
+                        $('#saved_search_title_'+savedSearchIdToRename+'_mobile').html(searchAgentTitle);
+                        $('#saved_search_title_'+savedSearchIdToRename+'_desktop').html(searchAgentTitle);
+                        scrollToElement('#saved_search_'+savedSearchIdToRename, '1000', -100);
+                        $(decorateMessage(response.successMsg, 'success')).prependTo('#saved_search_'+savedSearchIdToRename);
+                    }
+                });
+            }
+        }
+    }
+    //]]>
+    </script>
+{% endblock %}

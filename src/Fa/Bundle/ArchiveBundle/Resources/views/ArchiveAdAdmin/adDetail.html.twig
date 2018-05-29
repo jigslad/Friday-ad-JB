@@ -1,0 +1,193 @@
+{% extends 'FaAdminBundle::popupLayout.html.twig' %}
+{% use "FaAdBundle:AdImage:renderImageSlider.html.twig" %}
+{% use "FaCoreBundle:GoogleMap:renderLocationUsingCustomMarker.html.twig" %}
+{% set adImages = {} %}
+{% set adId = ad.getId() %}
+{% set container = fetch_container_instance() %}
+{% set allowAdEdit = false %}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set rootCategoryId = categoryRepository.getRootCategoryId(adDetail['category_id'], container) %}
+{% set youtubeVideoUrl = null %}
+
+{% set isFinance = false %}
+
+{% if adDetail['images'] is defined %}
+    {% set adImageCount = adDetail['images']|length %}
+{% else %}
+    {% set adImageCount = 0 %}
+{% endif %}
+
+{% set imageAltString = null %}
+
+{% block scripttop %}
+    {{ block('image_slider_css') }}
+{% endblock %}
+
+{% block content -%}
+<div class="large-row">
+    <div class="row">
+       <div class="columns">
+           <h1>{{'Detail of ad %adId% '|trans({'%adId%': ad.getId()})}}</h1>
+       </div>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="columns">
+            <div class="panel">
+                <div class="row detail-main">
+                    <div class="large-9 columns">
+                        <h3>{{adDetail['title']}}</h3>
+                        {% if adDetail['personalized_title'] is defined and adDetail['personalized_title'] in not null %}
+                            {{adDetail['personalized_title']}}
+                        {% endif %}
+                        <ul id="adDetailMainTabs" class="tabs tab-menu clearfix" data-tab>
+                            <li class="active"><a href="#photo_panel">{{'Photos'|trans}}</a></li>
+                            <li><a href="#map_panel">{{'Map'|trans}}</a></li>
+                        </ul>
+                        <div class="tabs-content">
+                            <div class="content active" id="photo_panel">
+                                {% if adDetail['images'] is defined %}
+                                    {% set adImages = adDetail['images'] %}
+                                {% endif %}
+                                {{ block('image_slider_html') }}
+                            </div>
+                            <div class="content" id="map_panel">
+                                {% set latitude = null %}
+                                {% set longitude = null %}
+                                {% if adDetail['latitude'] is defined and adDetail['longitude'] is defined %}
+                                    {% set latitude = adDetail['latitude'] %}
+                                    {% set longitude = adDetail['longitude'] %}
+                                    {% set mapHeight = '400px' %}
+                                    {% set mapWidth =  '800px' %}
+                                    {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'tabId': 'adDetailMainTabs', 'mapContentId': 'map_panel'}) }}
+                                {% endif %}
+                                {{ block('googlemap_location_html') }}
+                            </div>
+                        </div>
+
+                        <div class="detail-tabpart-2" id="vif_tabs">
+                            <ul class="tabs tab-menu clearfix hide-for-small-only" data-tab>
+                                <li class="tab-title active"><a href="#basic_info_panel">{{'The basics'|trans}}</a></li>
+                                <li class="tab-title"><a href="#postage_payment_panel">{{'Postage & Payment'|trans}}</a></li>
+                                <li class="tab-title"><a href="#dimension_panel">{{'Dimensions'|trans}}</a></li>
+                            </ul>
+                            <dl class="accordion" data-accordion>
+                                <dd class="accordion-navigation">
+                                    <a class="show-for-small-only" id="basic_info_panel_anchor" href="#basic_info_panel" aria-hidden="true" tabindex="-1">{{'The basics'|trans}} <i class="right fi-minus"></i></a>
+                                    <div class="content active" id="basic_info_panel">
+                                        <div id="ad_desc">
+                                            {% if adDetail['description'] is defined %}
+                                                <p>{{adDetail['description']|raw}}</p>
+                                            {% endif %}
+                                        </div>
+                                        <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'messages') }}</a>
+                                        <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'messages') }}</a>
+                                        {% if adDetail['detail'] is defined %}
+                                            <h5>{{'The details'|trans({}, 'messages')}}</h5>
+                                               <ul class="details-info">
+                                                   {% for fieldName, fieldValue in adDetail['detail'] %}
+                                                       <li class="clearfix">
+                                                           <div class="detail-text">{{fieldName}}</div>
+                                                           <div class="detail-text">{{fieldValue|join(',')}}</div>
+                                                       </li>
+                                                   {% endfor %}
+                                               </ul>
+                                        {% endif %}
+                                    </div>
+                                    <a class="show-for-small-only" href="#postage_payment_panel" aria-hidden="true" tabindex="-1">{{'Postage & Payment'|trans}}<i class="fi-plus right"></i></a>
+                                    <div class="content" id="postage_payment_panel">
+                                        {% if adDetail['payment_method'] is defined and adDetail['payment_method'] or adDetail['delivery_method_name'] is defined and adDetail['delivery_method_name'] %}
+                                            {% if adDetail['delivery_method_name'] is defined and adDetail['delivery_method_name'] %}
+                                               <h5>{{'Delivery'|trans({}, 'messages')}}</h5>
+                                               <ul class="details-info">
+                                                   <li class="clearfix">
+                                                       <div class="detail-text">{{'Delivery method'|trans({}, 'messages')}}</div>
+                                                       <div class="detail-text">{{adDetail['delivery_method_name']}}</div>
+                                                   </li>
+                                               </ul>
+                                            {% endif %}
+
+                                            {% if adDetail['payment_method'] is defined and adDetail['payment_method'] %}
+                                                <h5 class="mt10">{{'Payment'|trans({}, 'messages')}}</h5>
+                                                <ul class="details-info">
+                                                    <li class="clearfix">
+                                                        <div class="detail-text">{{'Payment method'|trans({}, 'messages')}}</div>
+                                                        <div class="detail-text">{{adDetail['payment_method']}}</div>
+                                                    </li>
+                                                </ul>
+                                            {% endif %}
+                                        {% else %}
+                                            {{'No Postage & Payment options available for ad.'|trans({}, 'messages')}}
+                                        {% endif %}
+                                    </div>
+                                    <a class="show-for-small-only" href="#dimension_panel" aria-hidden="true" tabindex="-1">{{'Dimensions'|trans}}<i class="fi-plus right"></i></a>
+                                    <div class="content" id="dimension_panel">
+                                        {% if adDetail['dimension'] is defined %}
+                                            <h5>{{'Item dimensions'|trans({}, 'messages')}}</h5>
+                                            <ul class="details-info">
+                                                {% for fieldName, fieldValue in adDetail['dimension'] %}
+                                                    <li class="clearfix">
+                                                        <div class="detail-text">{{fieldName}}</div>
+                                                        <div class="detail-text">{{fieldValue}}</div>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                           {{'No dimension available for ad.'|trans({}, 'messages')}}
+                                        {% endif %}
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="large-3 columns text-center">
+                        {% if adDetail['published_at'] is defined and adDetail['published_at'] is not null %}
+                            <div class="listed-date">
+                                {{'Listed'|trans}}: {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [adDetail['published_at'], fetch_container_instance()]) }}
+                            </div>
+                        {% endif %}
+                        {% if adDetail['price'] is defined %}
+                            <div class="item-price">
+                                {{ format_currency(adDetail['price'])}}
+                            </div>
+                        {% endif %}
+                        {% if adDetail['delivery_method_name'] is defined and adDetail['delivery_method_name'] %}
+                            <span class="person-collection">{{ adDetail['delivery_method_name'] }}</span>
+                        {% endif %}
+                        {% if adDetail['user'] is defined %}
+                            {{ include('FaAdBundle:Ad:AdUserDetail.html.twig', {'adLatitude': latitude, 'adLongitude': longitude}) }}
+                        {% endif %}
+                    </div>
+                </div>
+                <ul class="button-group text-center">
+                    <li><button type="reset" class="tiny button mb0" onclick="javascript:window.close();">{{ 'Close'|trans({}, 'messages') }}</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{fetch_container_instance().getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script>
+    {{ block('image_slider_js') }}
+    {{ block('googlemap_location_js') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function(){
+            handleReadMoreLess('ad_desc', 350);
+            $('#vif_tabs .accordion-navigation a').click(function() {
+                $(this).find('i').toggleClass("fi-plus fi-minus");
+            });
+
+            $('#vif_tabs .accordion-navigation .content').each(function(){
+                if ($(this).hasClass('active')) {
+                    $('#'+$(this).attr('id')+'_anchor').find('i').addClass('fi-minus').removeClass('fi-plus');
+                } else {
+                    $('#'+$(this).attr('id')+'_anchor').find('i').addClass('fi-plus').removeClass('fi-minus');
+                }
+            });
+        });
+    //]]>
+    </script>
+{% endblock %}

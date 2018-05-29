@@ -1,0 +1,60 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    var callFromGlobalHA = '';
+    function createHalfAccount(ad_id, callFrom)
+    {
+    	callFromGlobalHA = callFrom;
+        var isDetailPage = false;
+        if (ad_id) {
+	        sendGaForCreateAnAlert();
+            isDetailPage = true;
+        }
+
+        hideAlertMessage();
+        blockPage();
+        $.ajax({
+            type: "post",
+            url: "{{ path('user_half_account_create_ajax') }}",
+            data: {'is_form_load':true, 'is_detail_page':isDetailPage},
+            success: function(data) {
+                unblockPage();
+                $('#createHalfAccountModal').html(data);
+                bindHalfAccountSubmitFormEvent(ad_id, callFromGlobalHA);
+                $('#createHalfAccountModal').foundation('reveal', 'open');
+            }
+        });
+    }
+
+    function bindHalfAccountSubmitFormEvent(ad_id, callFrom)
+    {
+    	callFromGlobalHA = callFrom;
+        $("form[name='fa_user_half_account']").submit(function(event) {
+            // Stop form from submitting normally
+            event.preventDefault();
+            blockElement('#createHalfAccountModal');
+            $.ajax({
+                type: "POST",
+                url: "{{path('user_half_account_create_ajax')}}",
+                data: $('form[name="fa_user_half_account"]').serialize()
+            })
+            .done(function(response) {
+                if (response.htmlContent.length) {
+                    unblockElement('#createHalfAccountModal');
+                    $('#createHalfAccountModalForm').html(response.htmlContent);
+                    bindHalfAccountSubmitFormEvent(ad_id, callFromGlobalHA);
+                }
+                if (response.success.length && response.user_id) {
+                    $('#createHalfAccountModal').foundation('reveal', 'close');
+
+                    if (ad_id) {
+                        sendGaForCreateAlert('halfacoount');
+                        createAlert(ad_id, response.user_id);
+                    } else {
+                        saveSearchAgent(response.user_id, callFromGlobalHA);
+                    }
+                }
+            });
+        });
+    }
+//]]>
+</script>

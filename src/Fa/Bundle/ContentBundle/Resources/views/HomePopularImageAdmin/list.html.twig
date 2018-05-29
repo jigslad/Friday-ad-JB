@@ -1,0 +1,59 @@
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+                <thead>
+                <tr>
+                    <th width="20%">
+                       {{ 'Image'|trans }}
+                    </th>
+                    <th width="20%">
+                       {{ sortable_link('home_popular_image_admin', 'home_popular_image__status', 'Status'|trans, sorter) }}
+                    </th>
+                    <th width="15%">
+                       {{ sortable_link('home_popular_image_admin', 'home_popular_image__created_at', 'Created at'|trans, sorter) }}
+                    </th>
+                    <th width="10%"><i class="fi-widget"></i> Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                     {% if pagination.getNbResults() %}
+                     {% for homePopularImage in pagination.getCurrentPageResults() %}
+                        <tr class="gradeX">
+                            <td>
+                                {% if homePopularImage.file_name %}
+                                    <img src="{{ shared_url(homePopularImage.path~'/'~homePopularImage.file_name) }}?{{ random(1000) }}" width="100px" />
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if homePopularImage.status is not null %}
+                                    {{ statusArray[homePopularImage.status] }}
+                                {% endif %}
+                            </td>
+                            <td>{{ homePopularImage.created_at | localizeddate('short', 'medium', app.request.locale ) }}</td>
+                            <td>
+                                 <button href="#" data-dropdown="drop{{ homePopularImage.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                 <br />
+                                 <ul id="drop{{ homePopularImage.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                  {% if homePopularImageEditGrant %}
+                                    <li><a href="{{ path('home_popular_image_edit_admin', {'id': homePopularImage.id}) }}"><i class="fi-pencil"></i> Edit</a></li>
+                                  {% endif %}
+                                  
+                                  {% if homePopularImageDeleteGrant %}
+                                    <li><a href="{{ path('home_popular_image_delete_admin', {'id': homePopularImage.id}) }}" onclick="javascript:return confirm('Do you want to proceed deleting this image?')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
+                                  {% endif %}
+                                  </ul>
+                            </td>
+                        </tr>
+                     {% endfor %}
+                     {% else %}
+                        <tr class="gradeX">
+                            <td colspan="4" align="center">{{ 'No records found'|trans }}</td>
+                        </tr>
+                     {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

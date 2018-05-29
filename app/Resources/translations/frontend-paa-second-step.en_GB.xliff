@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="0d4d1f16af6636e0afd5d97b5e22a5604c76335b" resname="(%textCount% characters left)">
+        <jms:reference-file line="10">views/AdPost/secondStepPropertyFields.html.twig</jms:reference-file>
+        <jms:reference-file line="24">views/AdPost/secondStepPropertyFields.html.twig</jms:reference-file>
+        <jms:reference-file line="9">views/AdPost/secondStepAdultFields.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/AdPost/secondStepAdultFields.html.twig</jms:reference-file>
+        <jms:reference-file line="43">views/AdPost/secondStepForSaleFields.html.twig</jms:reference-file>
+        <jms:reference-file line="59">views/AdPost/secondStepForSaleFields.html.twig</jms:reference-file>
+        <jms:reference-file line="73">views/AdPost/secondStepMotorsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="85">views/AdPost/secondStepMotorsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="9">views/AdPost/secondStepServicesFields.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/AdPost/secondStepServicesFields.html.twig</jms:reference-file>
+        <jms:reference-file line="43">views/AdPost/secondStepAnimalsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="55">views/AdPost/secondStepAnimalsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="13">views/AdPost/secondStepCommunityFields.html.twig</jms:reference-file>
+        <jms:reference-file line="25">views/AdPost/secondStepCommunityFields.html.twig</jms:reference-file>
+        <jms:reference-file line="37">views/AdPost/secondStepCommunityFields.html.twig</jms:reference-file>
+        <jms:reference-file line="9">views/AdPost/secondStepJobsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/AdPost/secondStepJobsFields.html.twig</jms:reference-file>
+        <source>(%textCount% characters left)</source>
+        <target state="new">(%textCount% characters left)</target>
+      </trans-unit>
+      <trans-unit id="18a4dd16195556b61ea05b4eff29476cb538dc82" resname="Add a time">
+        <jms:reference-file line="282">views/AdPostAdmin/community.html.twig</jms:reference-file>
+        <jms:reference-file line="286">views/AdPostAdmin/community.html.twig</jms:reference-file>
+        <jms:reference-file line="53">views/AdPost/secondStepCommunity.html.twig</jms:reference-file>
+        <jms:reference-file line="55">views/AdPost/secondStepCommunity.html.twig</jms:reference-file>
+        <source>Add a time</source>
+        <target state="new">Add a time</target>
+      </trans-unit>
+      <trans-unit id="a1ef83ab0b6cb01ecdafe31bca0003ab1c0b6e9f" resname="Add a title and description to your ad">
+        <jms:reference-file line="20">views/AdPost/secondStepCommunity.html.twig</jms:reference-file>
+        <source>Add a title and description to your ad</source>
+        <target state="new">Add a title and description to your ad</target>
+      </trans-unit>
+      <trans-unit id="3d3f0d4066fb722ca544682e0abbec14f3310d34" resname="Add your vehicle details:">
+        <jms:reference-file line="41">views/AdPost/secondStepMotorsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="44">views/AdPost/secondStepMotorsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="121">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Add your vehicle details:</source>
+        <target state="new">Add your vehicle details:</target>
+      </trans-unit>
+      <trans-unit id="4fe8eaa448d163e5c9d096419ae0a20ba6fd05da" resname="Are you sure your vehicle is %MAKE-MODEL%? It seems that it is registered as %CARWEB-MAKE-MODEL%.">
+        <jms:reference-file line="130">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Are you sure your vehicle is %MAKE-MODEL%? It seems that it is registered as %CARWEB-MAKE-MODEL%.</source>
+        <target state="new">Are you sure your vehicle is %MAKE-MODEL%? It seems that it is registered as %CARWEB-MAKE-MODEL%.</target>
+      </trans-unit>
+      <trans-unit id="a3c686e711e4720f99b4562bb3dbaae7ab658cf2" resname="Category">
+        <jms:reference-file line="24">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <jms:reference-file line="25">views/AdPost/secondStepCommunity.html.twig</jms:reference-file>
+        <jms:reference-file line="20">views/AdPost/secondStepForSale.html.twig</jms:reference-file>
+        <jms:reference-file line="20">views/AdPost/secondStepAnimals.html.twig</jms:reference-file>
+        <jms:reference-file line="20">views/AdPost/secondStepJobs.html.twig</jms:reference-file>
+        <jms:reference-file line="22">views/AdPost/secondStepServices.html.twig</jms:reference-file>
+        <jms:reference-file line="22">views/AdPost/secondStepAdult.html.twig</jms:reference-file>
+        <jms:reference-file line="22">views/AdPost/secondStepProperty.html.twig</jms:reference-file>
+        <source>Category</source>
+        <target state="new">Category</target>
+      </trans-unit>
+      <trans-unit id="64fbd995d3b6b156ee26ae3c03e6516434c34c12" resname="Change">
+        <jms:reference-file line="27">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <jms:reference-file line="28">views/AdPost/secondStepCommunity.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/AdPost/secondStepForSale.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/AdPost/secondStepAnimals.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/AdPost/secondStepJobs.html.twig</jms:reference-file>
+        <jms:reference-file line="25">views/AdPost/secondStepServices.html.twig</jms:reference-file>
+        <jms:reference-file line="25">views/AdPost/secondStepAdult.html.twig</jms:reference-file>
+        <jms:reference-file line="25">views/AdPost/secondStepProperty.html.twig</jms:reference-file>
+        <source>Change</source>
+        <target state="new">Change</target>
+      </trans-unit>
+      <trans-unit id="7e73bbfa6bc81880ad736b37eb4315c0395fbc84" resname="Change category">
+        <jms:reference-file line="27">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <jms:reference-file line="28">views/AdPost/secondStepCommunity.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/AdPost/secondStepForSale.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/AdPost/secondStepAnimals.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/AdPost/secondStepJobs.html.twig</jms:reference-file>
+        <jms:reference-file line="25">views/AdPost/secondStepServices.html.twig</jms:reference-file>
+        <jms:reference-file line="25">views/AdPost/secondStepAdult.html.twig</jms:reference-file>
+        <jms:reference-file line="25">views/AdPost/secondStepProperty.html.twig</jms:reference-file>
+        <source>Change category</source>
+        <target state="new">Change category</target>
+      </trans-unit>
+      <trans-unit id="e9bbe1790d8f75979545bd9062e3523d7bc9923f" resname="Change to %CARWEB-MAKE-MODEL%">
+        <jms:reference-file line="131">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Change to %CARWEB-MAKE-MODEL%</source>
+        <target state="new">Change to %CARWEB-MAKE-MODEL%</target>
+      </trans-unit>
+      <trans-unit id="e590e4b6db2a61df339b725b26bdd4f814334d62" resname="Confirm your vehicle details:">
+        <jms:reference-file line="39">views/AdPost/secondStepMotorsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="233">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Confirm your vehicle details:</source>
+        <target state="new">Confirm your vehicle details:</target>
+      </trans-unit>
+      <trans-unit id="56a32e8177e69c866219306898b4918670e2f13a" resname="Continue without changing">
+        <jms:reference-file line="131">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Continue without changing</source>
+        <target state="new">Continue without changing</target>
+      </trans-unit>
+      <trans-unit id="c17019d4042557c5bcbbd6addf6f5dd0869bc1e4" resname="Describe your event and choose event dates">
+        <jms:reference-file line="18">views/AdPost/secondStepCommunity.html.twig</jms:reference-file>
+        <source>Describe your event and choose event dates</source>
+        <target state="new">Describe your event and choose event dates</target>
+      </trans-unit>
+      <trans-unit id="a5bba81e12535ebfe2d548681b5567b860b193f5" resname="Describe your item">
+        <jms:reference-file line="15">views/AdPost/secondStepAdult.html.twig</jms:reference-file>
+        <source>Describe your item</source>
+        <target state="new">Describe your item</target>
+      </trans-unit>
+      <trans-unit id="ffec7338ca1894bde96815408fb81c4dcbebe272" resname="Describe your item and choose your price">
+        <jms:reference-file line="20">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <jms:reference-file line="15">views/AdPost/secondStepForSale.html.twig</jms:reference-file>
+        <jms:reference-file line="15">views/AdPost/secondStepAnimals.html.twig</jms:reference-file>
+        <jms:reference-file line="15">views/AdPost/secondStepJobs.html.twig</jms:reference-file>
+        <jms:reference-file line="15">views/AdPost/secondStepProperty.html.twig</jms:reference-file>
+        <source>Describe your item and choose your price</source>
+        <target state="new">Describe your item and choose your price</target>
+      </trans-unit>
+      <trans-unit id="7b2e4a2c4d95da15034b071cf12770d3a6b14e6e" resname="Describe your item here.You can add details about your business in the next step.">
+        <jms:reference-file line="19">views/AdPost/secondStepAdultFields.html.twig</jms:reference-file>
+        <source>Describe your item here.You can add details about your business in the next step.</source>
+        <target state="new">Describe your item here.You can add details about your business in the next step.</target>
+      </trans-unit>
+      <trans-unit id="f59dd2f4d3577905048c00bc822193b6cff133ce" resname="Describe your property and let users know its main characteristics and details.">
+        <jms:reference-file line="20">views/AdPost/secondStepPropertyFields.html.twig</jms:reference-file>
+        <source>Describe your property and let users know its main characteristics and details.</source>
+        <target state="new">Describe your property and let users know its main characteristics and details.</target>
+      </trans-unit>
+      <trans-unit id="66f2dd380eaf606977451c7af298b1dd47362f6a" resname="Describe your service">
+        <jms:reference-file line="15">views/AdPost/secondStepServices.html.twig</jms:reference-file>
+        <source>Describe your service</source>
+        <target state="new">Describe your service</target>
+      </trans-unit>
+      <trans-unit id="ac5a22e0bbb9e362c9949f5a0f6bf3fa19a13db4" resname="Describe your service here.You can add details about your business in the next step.">
+        <jms:reference-file line="19">views/AdPost/secondStepServicesFields.html.twig</jms:reference-file>
+        <source>Describe your service here.You can add details about your business in the next step.</source>
+        <target state="new">Describe your service here.You can add details about your business in the next step.</target>
+      </trans-unit>
+      <trans-unit id="a2bb9d34b8a1a79665858d354585cf147e0dee4e" resname="End">
+        <jms:reference-file line="109">views/AdPostAdmin/community.html.twig</jms:reference-file>
+        <jms:reference-file line="74">views/AdPost/secondStepCommunityFields.html.twig</jms:reference-file>
+        <source>End</source>
+        <target state="new">End</target>
+      </trans-unit>
+      <trans-unit id="ef0a172123a26849250ddb01da80857257eb0373" resname="Enter it here">
+        <jms:reference-file line="15">views/AdPost/secondStepMotorsFields.html.twig</jms:reference-file>
+        <source>Enter it here</source>
+        <target state="new">Enter it here</target>
+      </trans-unit>
+      <trans-unit id="7b756193e38fb8624c58d6c7450ee884dd21cdbe" resname="Hide similar items">
+        <jms:reference-file line="7">views/AdPost/ajaxPriceSuggestion.html.twig</jms:reference-file>
+        <source>Hide similar items</source>
+        <target state="new">Hide similar items</target>
+      </trans-unit>
+      <trans-unit id="c1e10b68152040cc8491e06350f5b9a752a507f4" resname="Let users know starting date.">
+        <jms:reference-file line="81">views/AdPostAdmin/community.html.twig</jms:reference-file>
+        <jms:reference-file line="46">views/AdPost/secondStepCommunityFields.html.twig</jms:reference-file>
+        <source>Let users know starting date.</source>
+        <target state="new">Let users know starting date.</target>
+      </trans-unit>
+      <trans-unit id="567563f8536ffb34e1014f2944b42337c8aeae79" resname="Lookup Vehicle">
+        <jms:reference-file line="19">views/AdPost/secondStepMotorsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="246">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Lookup Vehicle</source>
+        <target state="new">Lookup Vehicle</target>
+      </trans-unit>
+      <trans-unit id="e6766e89dc4abb0bfd3dc82e15505a1ed07bb903" resname="Next step: add more details">
+        <jms:reference-file line="62">AdBundle/Form/AdPostSecondStepType.php</jms:reference-file>
+        <source>Next step: add more details</source>
+        <target state="new">Next step: add more details</target>
+      </trans-unit>
+      <trans-unit id="1a9080aaae6b06a3f963b593d569f51754c3bfa1" resname="Next step: your details">
+        <jms:reference-file line="64">AdBundle/Form/AdPostSecondStepType.php</jms:reference-file>
+        <source>Next step: your details</source>
+        <target state="new">Next step: your details</target>
+      </trans-unit>
+      <trans-unit id="1dcfad2b04af982f825c1305ab68e1454deb4a8d" resname="Please enter correct registration number.">
+        <jms:reference-file line="243">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Please enter correct registration number.</source>
+        <target state="new">Please enter correct registration number.</target>
+      </trans-unit>
+      <trans-unit id="81dd48fc23bc581414ff049a6a1092595d152123" resname="Please enter registration number.">
+        <jms:reference-file line="252">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Please enter registration number.</source>
+        <target state="new">Please enter registration number.</target>
+      </trans-unit>
+      <trans-unit id="bf168d8bf8c9b9c15b96e9849179a12ca211c1a6" resname="Please type the colour">
+        <jms:reference-file line="315">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Please type the colour</source>
+        <target state="new">Please type the colour</target>
+      </trans-unit>
+      <trans-unit id="6304150e559f9ea8fbd7b8ecaaf26eeb66a197b2" resname="Please type the make">
+        <jms:reference-file line="324">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <jms:reference-file line="326">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Please type the make</source>
+        <target state="new">Please type the make</target>
+      </trans-unit>
+      <trans-unit id="3c98fdce8246d929ee29a4fd1af382aa0583841c" resname="Please type the manufacturer">
+        <jms:reference-file line="311">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Please type the manufacturer</source>
+        <target state="new">Please type the manufacturer</target>
+      </trans-unit>
+      <trans-unit id="6792bff279a739fe9228e7179b21d25985162223" resname="Please type the model of above selected make">
+        <jms:reference-file line="332">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <jms:reference-file line="334">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Please type the model of above selected make</source>
+        <target state="new">Please type the model of above selected make</target>
+      </trans-unit>
+      <trans-unit id="a36489523ec40212db5ded49881e8775b7a0bf3b" resname="Please type the part manufacturer">
+        <jms:reference-file line="319">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Please type the part manufacturer</source>
+        <target state="new">Please type the part manufacturer</target>
+      </trans-unit>
+      <trans-unit id="6cdf440a79e122f4094871b0dc0be115ec6693c0" resname="Please type the part of vehicle">
+        <jms:reference-file line="339">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Please type the part of vehicle</source>
+        <target state="new">Please type the part of vehicle</target>
+      </trans-unit>
+      <trans-unit id="055a3e4a883959a415ff40100f03a2d61608bd8e" resname="Salary details can be added later">
+        <jms:reference-file line="19">views/AdPost/secondStepJobsFields.html.twig</jms:reference-file>
+        <source>Salary details can be added later</source>
+        <target state="new">Salary details can be added later</target>
+      </trans-unit>
+      <trans-unit id="426e995abe3623e65f3e32db24603c22937d5162" resname="Select model">
+        <jms:reference-file line="285">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <jms:reference-file line="294">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <jms:reference-file line="299">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Select model</source>
+        <target state="new">Select model</target>
+      </trans-unit>
+      <trans-unit id="25911d48e023cd10fc08d378641ee620f5e39d86" resname="Show more">
+        <jms:reference-file line="10">views/AdPost/ajaxSimilarAdverts.html.twig</jms:reference-file>
+        <source>Show more</source>
+        <target state="new">Show more</target>
+      </trans-unit>
+      <trans-unit id="f518ca5e03e1b48e3da13a3e325761939f8bda3f" resname="Show similar items">
+        <jms:reference-file line="8">views/AdPost/ajaxPriceSuggestion.html.twig</jms:reference-file>
+        <source>Show similar items</source>
+        <target state="new">Show similar items</target>
+      </trans-unit>
+      <trans-unit id="01affa250a3d3923c28a7560795c043d646aa747" resname="Similar items">
+        <jms:reference-file line="4">views/AdPost/ajaxSimilarAdverts.html.twig</jms:reference-file>
+        <source>Similar items</source>
+        <target state="new">Similar items</target>
+      </trans-unit>
+      <trans-unit id="eddcb89274d406caa1de88a3f213dcd52a3d5db3" resname="Similar items on Friday-ad are being advertised at between &lt;b&gt;&amp;pound;%lowerPrice%&lt;/b&gt; and &lt;b&gt;&amp;pound;%upperPrice%&lt;/b&gt; depending on its condition.">
+        <jms:reference-file line="3">views/AdPost/ajaxPriceSuggestion.html.twig</jms:reference-file>
+        <source><![CDATA[Similar items on Friday-ad are being advertised at between <b>&pound;%lowerPrice%</b> and <b>&pound;%upperPrice%</b> depending on its condition.]]></source>
+        <target state="new"><![CDATA[Similar items on Friday-ad are being advertised at between <b>&pound;%lowerPrice%</b> and <b>&pound;%upperPrice%</b> depending on its condition.]]></target>
+      </trans-unit>
+      <trans-unit id="fc612a2fcc722bde9d98ae18bea42764812b6784" resname="Starts">
+        <jms:reference-file line="86">views/AdPostAdmin/community.html.twig</jms:reference-file>
+        <jms:reference-file line="51">views/AdPost/secondStepCommunityFields.html.twig</jms:reference-file>
+        <source>Starts</source>
+        <target state="new">Starts</target>
+      </trans-unit>
+      <trans-unit id="dc2a39261783eee8f07d43bd49fc7b7d0291ef42" resname="What are you willing to pay?">
+        <jms:reference-file line="224">views/AdPost/secondStepForSale.html.twig</jms:reference-file>
+        <jms:reference-file line="207">views/AdPost/secondStepJs.html.twig</jms:reference-file>
+        <source>What are you willing to pay?</source>
+        <target state="new">What are you willing to pay?</target>
+      </trans-unit>
+      <trans-unit id="816ac1cf747c13d0bf748345889f0002c9d42926" resname="What would you like in exchange?">
+        <jms:reference-file line="232">views/AdPost/secondStepForSale.html.twig</jms:reference-file>
+        <jms:reference-file line="215">views/AdPost/secondStepJs.html.twig</jms:reference-file>
+        <source>What would you like in exchange?</source>
+        <target state="new">What would you like in exchange?</target>
+      </trans-unit>
+      <trans-unit id="2567fab605db933d596286974aa138a889f15e7d" resname="What's your price?">
+        <jms:reference-file line="251">views/AdPost/secondStepForSale.html.twig</jms:reference-file>
+        <jms:reference-file line="234">views/AdPost/secondStepJs.html.twig</jms:reference-file>
+        <source>What's your price?</source>
+        <target state="new">What's your price?</target>
+      </trans-unit>
+      <trans-unit id="b2028cfcc78f7fd44821aacab16481a32f1dfc70" resname="When?">
+        <jms:reference-file line="79">views/AdPostAdmin/community.html.twig</jms:reference-file>
+        <jms:reference-file line="44">views/AdPost/secondStepCommunityFields.html.twig</jms:reference-file>
+        <source>When?</source>
+        <target state="new">When?</target>
+      </trans-unit>
+      <trans-unit id="1f634656be78fc015075c71c90a7c766c87bd475" resname="You can add dimensions, condition and brand in the next steps">
+        <jms:reference-file line="54">views/AdPost/secondStepForSaleFields.html.twig</jms:reference-file>
+        <source>You can add dimensions, condition and brand in the next steps</source>
+        <target state="new">You can add dimensions, condition and brand in the next steps</target>
+      </trans-unit>
+      <trans-unit id="36adadef978287f9f515364cf2129400fecddb8f" resname="You can add time and duration if you want">
+        <jms:reference-file line="82">views/AdPostAdmin/community.html.twig</jms:reference-file>
+        <jms:reference-file line="47">views/AdPost/secondStepCommunityFields.html.twig</jms:reference-file>
+        <source>You can add time and duration if you want</source>
+        <target state="new">You can add time and duration if you want</target>
+      </trans-unit>
+      <trans-unit id="d272693fbc409e30a46411c997c170cffb10dc67" resname="eg. Flat for rent in Brighton">
+        <jms:reference-file line="8">views/AdPost/secondStepPropertyFields.html.twig</jms:reference-file>
+        <source>eg. Flat for rent in Brighton</source>
+        <target state="new">eg. Flat for rent in Brighton</target>
+      </trans-unit>
+      <trans-unit id="ab301aa60edfcfcccb9c70eae6c34a6ae15b7418" resname="eg. General construction works">
+        <jms:reference-file line="7">views/AdPost/secondStepAdultFields.html.twig</jms:reference-file>
+        <jms:reference-file line="7">views/AdPost/secondStepServicesFields.html.twig</jms:reference-file>
+        <source>eg. General construction works</source>
+        <target state="new">eg. General construction works</target>
+      </trans-unit>
+      <trans-unit id="4ac8f0e3fea52d2a6ae9156d6b5b664a7a514fc6" resname="eg. Little Tikes">
+        <jms:reference-file line="41">views/AdPost/secondStepForSaleFields.html.twig</jms:reference-file>
+        <jms:reference-file line="71">views/AdPost/secondStepMotorsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="41">views/AdPost/secondStepAnimalsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="7">views/AdPost/secondStepJobsFields.html.twig</jms:reference-file>
+        <source>eg. Little Tikes</source>
+        <target state="new">eg. Little Tikes</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

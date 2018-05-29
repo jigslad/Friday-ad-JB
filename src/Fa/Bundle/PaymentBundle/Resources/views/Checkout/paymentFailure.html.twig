@@ -1,0 +1,23 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block page_title %}
+    {{'Payment Failure'|trans({}, 'frontend-cart-failure')}}
+{% endblock %}
+
+{% block body %}
+    <div class="payment">
+        <div class="row">
+            <div class="columns">
+                <h1 class="text-center">{{'Payment Failure'|trans({}, 'frontend-payment-failure')}}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="columns text-center">
+                <h4>{{'Something went wrong in payment!'|trans({}, 'frontend-payment-failure')}}</h4>
+                {{'Your transaction ID is'|trans({}, 'frontend-payment-failure')}}: <b>{{cart.getCartCode}}</b> <br />
+                <br />
+                {{'Please contact our administrator.'|trans({}, 'frontend-payment-failure')}}
+            </div>
+        </div>
+    </div>
+{% endblock %}

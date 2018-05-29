@@ -1,0 +1,6 @@
+services:
+    fa_promotion.entity_listener.package:
+        class: Fa\Bundle\PromotionBundle\Listener\PackageListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }

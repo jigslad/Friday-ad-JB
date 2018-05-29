@@ -1,0 +1,144 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% block page_title %}
+    {{'Post an Ad Add more details'|trans({}, 'frontend-paa')}}
+{% endblock %}
+
+{% use "FaAdBundle:AdImage:showImageUploader.html.twig" %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('imageUploadStylesheets') }}
+{% endblock %}
+
+{% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
+{% use "FaAdBundle:AdPost:fourthStepCommonPushNotification.html.twig" %}
+
+{% block body %}
+    <div class="posting-bg">
+        <div class="fad-sign-bdr">&nbsp;</div>
+        <div class="row paa-main">
+            {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 4}) }}
+            <div id="middle-column" class="large-12 columns">
+                <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
+                <h1 class="text-center">{{ 'Almost there!'|trans({}, 'frontend-paa-fourth-step') }}</h1>
+                <h2 class="text-center subtitle paa-title">{{ 'Add some photos and a few more details if you want to.'|trans({}, 'frontend-paa-fourth-step') }}</h2>
+
+                {% if ad and ad.id %}
+                    {% set categoryId = ad.category.id %}
+                    {% set orderedFields = form.fourth_step_ordered_fields.vars.value|split(',') %}
+                    <div class="big-wrapper">
+                        {{ include('FaAdBundle:AdPost:fourthStepShowSecondStepFieldsData.html.twig') }}
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'frmPAA'}}) }}
+                            {{ form_errors(form) }}
+                            {% set adJobsRepository = fetch_repository('FaAdBundle:AdJobs') %}
+                            {{ adJobsRepository.copyBusinessLogo(fetch_container_instance(), ad.id) }}
+                            {{ include('FaAdBundle:AdPost:fourthStepJobsFields.html.twig') }}
+                            <div class="small-wrapper">
+                                {{ form_widget(form.preview, {'attr': {'class':'secondary-btn-2 expand'}}) }}
+                                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                {% endif %}
+            </div>
+            {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-jobs-fourth-step'}) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+{{ parent() }}
+{{ include('FaAdBundle:AdPost:paaLocationJs.html.twig') }}
+{{ include('FaAdBundle:AdPost:fourthStepCommonJs.html.twig') }}
+<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+   $(document).ready(function(){
+       handleReadMoreLess('paa_desc', 220);
+       bindLocationEvents('fa_paa_fourth_step_jobs');
+
+       hideShowSalaryBand();
+       $("#frmCommon").submit(function( event ) {
+           hideShowSalaryBand();
+       });
+       $('#fa_paa_fourth_step_jobs_salary_type_id').change(function(){
+           hideShowSalaryBand();
+       });
+
+       {% set formFields = get_variables('formFields') %}
+       {% if formFields['lastField'] is defined %}
+           if ($('#element_'+ '{{ formFields['lastField'] }}').hasClass('paa-bdr-box')) {
+               $('#element_'+ '{{ formFields['lastField'] }}').addClass('bdr-none');
+           }
+           {% if (formFields['lastField'] in {0: 'photo_error', 1: 'location_autocomplete', 2: 'qty', 3: 'delivery_method_option_id', 4: 'payment_method_id', 5: 'youtube_video_url'}) %}
+               $('#fa_paa_fourth_step_jobs_preview').addClass('mt30');
+           {% endif %}
+       {% endif %}
+       
+       $('.textcounter').keyup(function(e){
+           updateCharCounter($(this).attr('id'));
+       });
+
+        $('#paa_step4_add_your_photos').click(function(e) {
+            $('html, body').animate({
+                scrollTop: $('#upload_image_div').offset().top
+            }, 1000);
+        });
+
+        $('.element_toggle').click(function(){
+            var targetElement = $(this).attr('id')+'_target';
+            $(this).toggleClass("tab-down tab-up");
+            $('#'+targetElement).toggle();
+            if($('#'+targetElement).is(':visible')) {
+                var selectMenuId = ($(this).attr('id').replace('element_toggle', "fa_paa_fourth_step_jobs"));
+                if ($('#'+selectMenuId).hasClass('fa-select')) {
+                    $('#'+selectMenuId).selectmenu('refresh');
+                }
+                var equalizerId = ($(this).attr('id').replace('element_toggle_', ""))+'_equalizer';
+                if ($('#'+equalizerId).hasClass('fa-equalizer')) {
+                    bindEqualizerEvent(equalizerId);
+                }
+            }
+        });
+        
+        $('#element_additional_job_requirements_id .custom-checkbox, #element_additional_benefits_id .custom-checkbox').click(function(e){
+            $(this).parent().toggleClass('active');
+        });
+    });
+
+   function hideShowSalaryBand()
+   {
+	   fa_paa_fourth_step_jobs_salary_type_id
+       if ($('#fa_paa_fourth_step_jobs_salary_type_id').val() == '2454') {
+           $('#salary_band_id_div').show();
+           $('#fa_paa_fourth_step_jobs_salary_band_id').selectmenu('refresh');
+       } else {
+           $('#fa_paa_fourth_step_jobs_salary_band_id').val('');
+           $('#salary_band_id_div').hide();
+       }
+   }
+   
+   function bindEqualizerEvent(equalizerId)
+   {
+       $('#'+equalizerId).equalizer({
+           columns: '> li, div',
+           useHeight: 'height',
+           resizeable: true,
+           min: 0,
+           breakpoint: null,
+           disabled: 'breakpoint',
+           overflow: 'overflowed'
+       });
+   }
+//]]>
+</script>
+
+{% if (form.location_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_jobs_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}
+{% endif %}
+
+{{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+{{ block('imageUploadJavascriptBottom') }}
+{{ block('googlemap_location_js') }}
+{% endblock %}

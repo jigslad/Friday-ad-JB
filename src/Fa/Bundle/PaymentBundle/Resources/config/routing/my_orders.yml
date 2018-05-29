@@ -1,0 +1,9 @@
+my_orders:
+    path:     /
+    defaults: { _controller: "FaPaymentBundle:MyOrders:myOrders" }
+    
+ajax_update_order_status:
+    path:     /ajax/update_status/{orderId}
+    defaults: { _controller: "FaPaymentBundle:MyOrders:ajaxUpdateOrderStatus" }
+    options:
+        expose: true

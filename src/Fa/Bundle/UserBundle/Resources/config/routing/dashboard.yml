@@ -1,0 +1,17 @@
+dashboard_home:
+    path:     /
+    defaults: { _controller: FaUserBundle:Dashboard:index }
+    requirements:
+        extraParams: 'all_ads'
+        
+notification_remove:
+    path:     /ajax/remove_notification/{messsageId}/
+    defaults: { _controller: "FaUserBundle:Dashboard:ajaxRemoveMessage" }
+    options:
+        expose: true
+        
+notification_show:
+    path:     /ajax/display/notification/
+    defaults: { _controller: "FaUserBundle:Dashboard:displayNotificationForMenu" }
+    options:
+        expose: true

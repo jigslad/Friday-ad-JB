@@ -1,0 +1,65 @@
+user_admin:
+    path:     /
+    defaults: { _controller: "FaUserBundle:UserAdmin:index" }
+
+user_show_admin:
+    path:     /{id}/show
+    defaults: { _controller: "FaUserBundle:UserAdmin:show" }
+
+user_ad_list_admin:
+    path:     /{id}/ads
+    defaults: { _controller: "FaUserBundle:UserAdmin:showUserAd" }
+    
+user_new_admin:
+    path:     /new
+    defaults: { _controller: "FaUserBundle:UserAdmin:new" }
+
+user_create_admin:
+    path:     /create
+    defaults: { _controller: "FaUserBundle:UserAdmin:create" }
+    requirements: { methods: post }
+
+user_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaUserBundle:UserAdmin:edit" }
+
+user_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaUserBundle:UserAdmin:update" }
+    requirements: { methods: post|put }
+
+user_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaUserBundle:UserAdmin:delete" }
+
+user_send_reset_password_link:
+    path:     /{id}/reset-password
+    defaults: { _controller: "FaUserBundle:ResetPassword:sendResetLink" }
+    options:
+        expose: true
+
+user_change_status:
+    path:     /{id}/change-status
+    defaults: { _controller: "FaUserBundle:UserAdmin:changeStatus" }
+    options:
+        expose: true
+
+user_reviews_list_admin:
+    path:     /{id}/reviews
+    defaults: { _controller: "FaUserBundle:UserAdmin:showUserReviews" }
+
+user_review_edit_ajax_admin:
+    path:     /user_review_edit
+    defaults: { _controller: "FaUserBundle:UserAdmin:userReviewEditAjax" }
+    
+user_review_delete_admin:
+    path:     /{id}/user_review_delete
+    defaults: { _controller: "FaUserBundle:UserAdmin:userReviewDelete" }
+
+user_reviews_list_left_for_other_admin:
+    path:     /{id}/reviews/left_for_other
+    defaults: { _controller: "FaUserBundle:UserAdmin:showUserReviewsLeftForOther" }
+
+user_payment_list_admin:
+    path:     /{id}/payments
+    defaults: { _controller: "FaUserBundle:UserAdmin:showUserPayment" }

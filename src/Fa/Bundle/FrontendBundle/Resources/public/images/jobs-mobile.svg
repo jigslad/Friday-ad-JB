@@ -1,0 +1,36 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="61" height="61" viewBox="-369 205 61 61" xml:space="preserve" enable-background="new -369 205 61 61">
+  <style type="text/css">
+    
+	.st0{fill:#EFEFEF;}
+	.st1{fill:none;stroke:#313133;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,4;}
+	.st2{fill:#313133;}
+
+  </style>
+  <title>
+    Jobs-mobile
+  </title>
+  <desc>
+    Created with Sketch.
+  </desc>
+  <g id="Homepage" sketch:type="MSPage">
+    <g id="Home-Mobile-portrait" transform="translate(-170.000000, -419.000000)" sketch:type="MSArtboardGroup">
+      <g id="Hero" transform="translate(-320.000000, -182.000000)" sketch:type="MSLayerGroup">
+        <g id="What-will-you-discover_x3F_-Copy" transform="translate(320.000000, 580.000000)" sketch:type="MSShapeGroup">
+          <g id="categories" transform="translate(9.000000, 21.000000)">
+            <g id="Jobs-mobile" transform="translate(161.364920, 0.000000)">
+              <g id="Jobs-Hover-inactive" transform="translate(0.087700, 0.054861)">
+                <path id="Fill-1" class="st0" d="M-308.9 235.2c0-16.5-13.5-30-30-30s-30 13.5-30 30c0 16.5 13.5 30 30 30S-308.9 251.7-308.9 235.2z"/>
+                <path id="Stroke-6" class="st1" d="M-315.1 246.7c1.7-3.5 2.6-7.4 2.6-11.5 0-14.6-11.9-26.5-26.5-26.5s-26.5 11.9-26.5 26.5c0 11.4 7.2 21.1 17.4 24.9 2.9 1.1 5.9 1.6 9.1 1.6C-328.4 261.7-319.4 255.5-315.1 246.7z"/>
+                <g id="jobs-icon" transform="translate(31.245936, 29.863978) rotate(2.000000) translate(-31.245936, -29.863978) translate(23.745936, 16.363978)">
+                  <path id="Fill-2" class="st2" d="M-354.2 225.6l3.1 13.4 -5.1 5.2 -5.4-4.9 2.2-13.5L-354.2 225.6z"/>
+                  <path id="Fill-3" class="st2" d="M-352.8 226.3l1.3 4.4 2.3 2.8 1.9-1.5 -1.4-2.7L-352.8 226.3"/>
+                  <path id="Fill-4" class="st2" d="M-358.8 218.3l3.5-0.1c1 0 1.8 0.7 1.8 1.6l0.1 2.5c0 0.9-0.7 1.7-1.7 1.7l-3.5 0.1c-1 0-1.8-0.7-1.8-1.6l-0.1-2.5C-360.5 219.1-359.8 218.3-358.8 218.3"/>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

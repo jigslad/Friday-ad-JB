@@ -1,0 +1,12 @@
+roleresourcepermission:
+    path:     /
+    defaults: { _controller: "FaUserBundle:RoleResourcePermission:index" }
+
+roleresourcepermission_create:
+    path:     /create
+    defaults: { _controller: "FaUserBundle:RoleResourcePermission:create" }
+    requirements: { methods: post }
+
+roleresourcepermission_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "FaUserBundle:RoleResourcePermission:edit" }

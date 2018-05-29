@@ -1,0 +1,25 @@
+location:
+    path:     /
+    defaults: { _controller: "FaEntityBundle:LocationAdmin:index" }
+
+location_new:
+    path:     /new/{parent_id}
+    defaults: { _controller: "FaEntityBundle:LocationAdmin:new" }
+
+location_create:
+    path:     /create/{parent_id}
+    defaults: { _controller: "FaEntityBundle:LocationAdmin:create" }
+    requirements: { methods: post }
+
+location_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "FaEntityBundle:LocationAdmin:edit" }
+
+location_update:
+    path:     /{id}/update
+    defaults: { _controller: "FaEntityBundle:LocationAdmin:update" }
+    requirements: { methods: post|put }
+
+location_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "FaEntityBundle:LocationAdmin:delete" }

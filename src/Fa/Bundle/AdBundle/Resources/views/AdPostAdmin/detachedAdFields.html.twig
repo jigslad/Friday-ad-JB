@@ -1,0 +1,26 @@
+{% if not user %}
+<br />
+<div class="row mb20 mt10">
+    <div class="large-12 columns">
+       <div class="photo_section">
+            <p>
+                <span class="photo_title">{{ 'Detached ad details'|trans }}</span>
+            </p> 
+            {% if attribute(form, 'phone') is defined %}
+                {{ form_row(attribute(form, 'phone')) }}
+            {% endif %}
+            
+            {% if attribute(form, 'use_privacy_number') is defined %}
+                {{ form_widget(attribute(form, 'use_privacy_number')) }}
+                {{ form_label(attribute(form, 'use_privacy_number')) }}
+                {{ form_errors(attribute(form, 'use_privacy_number')) }}
+            {% endif %}
+
+            {% if attribute(form, 'email') is defined %}
+                <br /><br />
+                {{ form_row(attribute(form, 'email')) }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}

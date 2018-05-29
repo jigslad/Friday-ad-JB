@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="80dc9b67fc39c0af354e99d7c0268d3e93e6b394" resname="Newsletter preferences">
+        <jms:reference-file line="5">views/MyAccount/myNewsletterPref.html.twig</jms:reference-file>
+        <source>Newsletter preferences</source>
+        <target state="new">Newsletter preferences</target>
+      </trans-unit>
+      <trans-unit id="0607dab1b8ed99bac1cc1d423f5dfa20b730dd88" resname="Newsletter preferences updated successfully.">
+        <jms:reference-file line="273">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>Newsletter preferences updated successfully.</source>
+        <target state="new">Newsletter preferences updated successfully.</target>
+      </trans-unit>
+      <trans-unit id="3602cbf91af9a82ecf62bfd0a9d06ab15024a3e6" resname="Select the news, offers and promotions that you would like to receive from Friday-Ad.">
+        <jms:reference-file line="13">views/MyAccount/myNewsletterPref.html.twig</jms:reference-file>
+        <jms:reference-file line="15">views/MyAccount/myNewsletterPref.html.twig</jms:reference-file>
+        <source>Select the news, offers and promotions that you would like to receive from Friday-Ad.</source>
+        <target state="new">Select the news, offers and promotions that you would like to receive from Friday-Ad.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

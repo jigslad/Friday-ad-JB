@@ -1,0 +1,21 @@
+buy_now:
+    path:     /{adId}/
+    defaults: { _controller: "FaAdBundle:AdBuyNow:buyNowAd" }
+    
+collection_buy_now:
+    path:     /collection/{adId}/
+    defaults: { _controller: "FaAdBundle:AdBuyNow:collectionBuyNowAd" }
+    
+posted_buy_now:
+    path:     /posted/{adId}/
+    defaults: { _controller: "FaAdBundle:AdBuyNow:postedBuyNowAd" }
+    
+ajax_buy_now:
+    path:     /ajax/{adId}/
+    defaults: { _controller: "FaAdBundle:AdBuyNow:ajaxBuyNowAd" }
+    options:
+        expose: true
+        
+paypal_adaptive_process_payment:
+    path:     /process/buy_now/{cartCode}/
+    defaults: { _controller: "FaAdBundle:AdBuyNow:processBuyNowAd" }

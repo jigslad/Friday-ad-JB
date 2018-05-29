@@ -1,0 +1,196 @@
+{% block user_ad_html %}
+    {% set queryParams = app.request.query.all %}
+    
+    {% set adRepository       = fetch_repository('FaAdBundle:Ad') %}
+    {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+    {% set containerInstance  = fetch_container_instance() %}
+    {% set adPrintRepository = fetch_repository('FaAdBundle:AdPrint') %}
+    
+    {% set adDeleteGrant = false %}
+    {% set adChangeStatusGrant = false %}
+    {% set adPostEditGrant = false %}
+    {% set adPostAddGrant = false %}
+    {% set adDetailGrant = false %}
+    {% set adPackageGrant = false %}
+    {% set adPrintDatesGrant = false %}
+    
+    {% if fa_resource_authorization_manager.isGranted('ad_delete_admin') %}
+      {% set adDeleteGrant = true %}
+    {% endif %}
+    
+    {% if fa_resource_authorization_manager.isGranted('ad_change_status') %}
+      {% set adChangeStatusGrant = true %}
+    {% endif %}
+    
+    {% if fa_resource_authorization_manager.isGranted('ad_post_edit_admin') %}
+      {% set adPostEditGrant = true %}
+    {% endif %}
+    
+    {% if fa_resource_authorization_manager.isGranted('ad_post_new_admin') %}
+      {% set adPostAddGrant = true %}
+    {% endif %}
+    
+    {% if fa_resource_authorization_manager.isGranted('ad_detail_admin') %}
+      {% set adDetailGrant = true %}
+    {% endif %}
+    
+    {% if fa_resource_authorization_manager.isGranted('ad_package_purchase_admin') %}
+      {% set adPackageGrant = true %}
+    {% endif %}
+    
+    {% if fa_resource_authorization_manager.isGranted('ajax_print_dates_list_admin') %}
+      {% set adPrintDatesGrant = true %}
+    {% endif %}
+    
+    {% set adIdArray = {} %}
+    {% if pagination.getNbResults() %}
+        {% for ad in pagination.getCurrentPageResults() %}
+            {% set adIdArray = adIdArray|merge({0 : ad.id}) %}
+        {% endfor %}
+    
+        {% set adCategoryIdArray = adRepository.getAdCategoryIdArrayByAdId(adIdArray) %}
+        {% set displayCategoryArray = categoryRepository.getDisplayCategoryArrayByAdCategoryId(adCategoryIdArray, false, containerInstance) %}
+        {% set statusIdArray = adRepository.getStatusIdArrayByAdId(adIdArray) %}
+        {% if adPrintDatesGrant %}
+            {% set adPrintDataArray = adPrintRepository.checkPaidPrintEntryForAd(adIdArray) %}
+        {% endif %}
+    {% endif %}
+    
+    {{ include('FaUserBundle:UserAdmin:userAdSearch.html.twig') }}
+    <div style="margin-top:10px;">
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination} ) }}
+    </div>
+    <div class="row">
+        <div class="columns">
+            <div class="outline">
+                {% if adPostAddGrant %}
+                    <a href="{{ path('ad_post_new_admin', {'user_id': user.id, 'return_url': path('user_ad_list_admin', {'id': user.id}) }) }}" class="left tiny button">{{ 'Create Ad'|trans({}, 'messages') }}</a>
+                {% endif %}
+                <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+                <table class="mb0">
+                    <thead>
+                        <tr class="field-heading">
+                            <th width="15%">
+                                {{ sortable_link('user_ad_list_admin', 'ad__id', 'Ad id'|trans, sorter, {'id': user.id}) }}
+                            </th>
+                            <th width="15%">
+                                {{ sortable_link('user_ad_list_admin', 'ad__title', 'Title'|trans, sorter, {'id': user.id}) }}
+                            </th>
+                            <th width="5%">{{ 'Status'|trans }}</th>
+                            <th width="10%">
+                                {{ 'Category'|trans }}
+                            </th>
+                            <th width="20%">
+                                {{ sortable_link('user_ad_list_admin', 'ad__created_at', 'Created at'|trans, sorter, {'id': user.id}) }}
+                            </th>
+                            {% if adPrintDatesGrant %}
+                                <th width="20%">{{ 'Print inserts'|trans }}</th>
+                            {% endif %}
+                            <th width="10%"><i class="fa fa-gear"></i> Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if pagination.getNbResults() %}
+                            {% for ad in pagination.getCurrentPageResults() %}
+                                <tr class="odd gradeX">
+                                    <td>
+                                        {% if adDetailGrant %}
+                                            <a href="javascript:void(0);" onclick="openWindow('{{ path('ad_detail_admin', {'id': ad.id}) }}', 'ad_detail', '1100', '800');">{{ ad.id }}</a>
+                                        {% else %}
+                                            {{ ad.id }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ trim_text(ad.title, 20) }}</td>
+                                    <td>
+                                        {% if statusIdArray[ad.id] is defined and statusIdArray[ad.id] is not null %}
+                                            {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', statusIdArray[ad.id]) }}
+                                        {% endif %}
+                                        &nbsp;
+                                    </td>
+                                    <td>
+                                        {% if displayCategoryArray is defined and displayCategoryArray[ad.id] is defined %}
+                                           {{ displayCategoryArray[ad.id]|join(' > ') }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ ad.created_at | localizeddate('short', 'medium', app.request.locale ) }}</td>
+                                    {% if adPrintDatesGrant %}
+                                       <td>
+                                           {% if adPrintDataArray[ad.id] is defined %}
+                                                <a href="javascript:showPrintInsertDateList({{ad.id}});">{{'View print dates'|trans}}</a>
+                                           {% else %}
+                                           -
+                                           {% endif %}
+                                       </td>
+                                    {% endif %}
+                                    <td>
+                                       <button href="#" data-dropdown="drop{{ ad.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">{{ 'Select'|trans }}</button>
+                                       <br />
+                                       <ul id="drop{{ ad.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                           {% if adPostEditGrant %}
+                                               <li><a href="{{ path('ad_post_edit_admin', {'id': ad.id, 'return_url': path('user_ad_list_admin', {'id': user.id}) }) }}"><i class="fi-pencil"></i> {{'Edit'|trans}}</a></li>
+                                           {% endif %}
+                                           
+                                           {% if adDeleteGrant %}
+                                               <li><a href="{{ path('ad_delete_admin', {'id': ad.id, 'return_url': path('user_ad_list_admin', {'id': user.id}) }) }}" onclick="javascript:return confirm('Do you want to proceed deleting this record?')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
+                                           {% endif %}
+                                           
+                                           {% if adChangeStatusGrant and statusIdArray[ad.id] is defined and statusIdArray[ad.id] is not null and ad.future_publish_at is null %}
+                                             {% if statusIdArray[ad.id] not in {
+                                                0:constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_DRAFT_ID'),
+                                                1:constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID'),
+                                                2:constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID'),
+                                                3:constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID')} %}
+                                                <li><a href="{{ path('ad_change_status', {'id': ad.id, 'return_url': path('user_ad_list_admin', {'id': user.id}) }) }}"><i class="fi-loop"></i> {{ 'Change Status'|trans }}</a></li>
+                                             {% endif %}
+                                           {% endif %}
+                                           
+                                           {% if adDetailGrant %}
+                                             <li><a href="javascript:void(0);" onclick="openWindow('{{ path('ad_detail_admin', {'id': ad.id}) }}', 'ad_detail', '1100', '800');"><i class="fi-eye"></i> {{ 'View Ad Detail'|trans }}</a></li>
+                                           {% endif %}
+                                           
+                                           {% if adPackageGrant %}
+                                             <li><a href="javascript:void(0);" onclick="openWindow('{{ path('ad_package_purchase_admin', {'adId': ad.id }) }}', 'ad_package', '1100', '800');"><i class="fi-social-dropbox"></i> {{ 'Assign package'|trans }}</a></li>
+                                           {% endif %}
+                                       </ul>
+                                   </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr class="odd gradeX">
+                                <td colspan="5" align="center">{{ 'No ads found'|trans }}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination} )}}
+    <div id="adPrintInsertDateListModal" class="reveal-modal small" data-reveal></div>
+{% endblock %}
+
+{% block user_ad_script %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        function showPrintInsertDateList(id)
+        {
+            var route = Routing.generate('ajax_print_dates_list_admin', { 'id': id });
+            blockPage();
+            $.ajax({
+                type: "GET",
+                url : route,
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                if (response.htmlContent.length) {
+                    $('#adPrintInsertDateListModal').html(response.htmlContent);
+                    $('#adPrintInsertDateListModal').foundation('reveal', 'open');
+                }
+            });
+        }
+    //]]>
+    </script>
+{% endblock %}

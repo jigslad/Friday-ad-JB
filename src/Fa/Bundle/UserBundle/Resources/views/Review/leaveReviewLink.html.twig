@@ -1,0 +1,33 @@
+{% set user_id     = reviewDetails['user_id'] %}
+{% set ad_id       = reviewDetails['ad_id'] %}
+{% set reviewer_id = fetch_container_instance().get('security.token_storage').getToken().getUser().getId() %}
+{% set ad_title    = reviewDetails['title'] %}
+{% set linkText = 'Leave a review'|trans({}, 'frontend-review') %}
+{% set anchorClass = '' %}
+{% set user_status_id = '' %}
+{% set from_message = false %}
+
+{% if reviewDetails['user_status_id'] is defined and reviewDetails['user_status_id'] %}
+    {% set user_status_id = reviewDetails['user_status_id'] %}
+{% endif %}
+
+{% if from_where is defined and from_where == 'message' %}
+    {% set from_message = true %}
+{% endif %}
+
+{% if reviewDetails['business_name'] is defined and reviewDetails['business_name'] %}
+    {% set user_name   = reviewDetails['business_name'] %}
+{% else %}
+    {% set user_name   = (reviewDetails['first_name'] ~ ' ' ~ reviewDetails['last_name'])|capitalize %}
+{% endif %}
+
+{% if review_link_text is defined and review_link_text is not null %}
+    {% set linkText = review_link_text %}
+{% endif %}
+
+{% if fetch_repository('FaUserBundle:UserReview').isAdReviewable(ad_id, reviewer_id, user_id, user_status_id, from_message) %}
+    {% if class is defined %}
+        {% set anchorClass = class %}
+    {% endif %}
+    <a class="{{anchorClass}}" href="javascript:void(0)" title="{{ linkText }}" onClick="openAddReviewModalForm('{{ ad_id }}', '{{ user_id }}', '{{ reviewer_id }}', '{{ ad_title|escape('js') }}', '{{ user_name|escape('js') }}', '{{ to_whom }}')">{{ linkText }}</a>
+{% endif %}

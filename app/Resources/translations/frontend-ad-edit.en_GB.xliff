@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="0d4d1f16af6636e0afd5d97b5e22a5604c76335b" resname="(%textCount% characters left)">
+        <jms:reference-file line="18">views/AdEdit/communityFields.html.twig</jms:reference-file>
+        <jms:reference-file line="33">views/AdEdit/communityFields.html.twig</jms:reference-file>
+        <jms:reference-file line="48">views/AdEdit/communityFields.html.twig</jms:reference-file>
+        <jms:reference-file line="142">views/AdEdit/communityFields.html.twig</jms:reference-file>
+        <jms:reference-file line="45">views/AdEdit/propertyFields.html.twig</jms:reference-file>
+        <jms:reference-file line="64">views/AdEdit/propertyFields.html.twig</jms:reference-file>
+        <jms:reference-file line="118">views/AdEdit/propertyFields.html.twig</jms:reference-file>
+        <jms:reference-file line="44">views/AdEdit/servicesFields.html.twig</jms:reference-file>
+        <jms:reference-file line="63">views/AdEdit/servicesFields.html.twig</jms:reference-file>
+        <jms:reference-file line="89">views/AdEdit/servicesFields.html.twig</jms:reference-file>
+        <jms:reference-file line="18">views/AdEdit/jobsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="37">views/AdEdit/jobsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="18">views/AdEdit/adultFields.html.twig</jms:reference-file>
+        <jms:reference-file line="37">views/AdEdit/adultFields.html.twig</jms:reference-file>
+        <jms:reference-file line="63">views/AdEdit/adultFields.html.twig</jms:reference-file>
+        <jms:reference-file line="73">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <jms:reference-file line="92">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <jms:reference-file line="280">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <jms:reference-file line="90">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="105">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="246">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="69">views/AdEdit/animalsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="84">views/AdEdit/animalsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="123">views/AdEdit/animalsFields.html.twig</jms:reference-file>
+        <source>(%textCount% characters left)</source>
+        <target state="new">(%textCount% characters left)</target>
+      </trans-unit>
+      <trans-unit id="99cca681af616c96500c567f78b1901501ed50d7" resname="Ad has been deleted which you want to edit.">
+        <jms:reference-file line="64">AdBundle/Controller/AdEditController.php</jms:reference-file>
+        <source>Ad has been deleted which you want to edit.</source>
+        <target state="new">Ad has been deleted which you want to edit.</target>
+      </trans-unit>
+      <trans-unit id="027ea00b7a5fce8dda157b53c7fe03bb6ab55921" resname="Ad has been deleted which you want to promote.">
+        <jms:reference-file line="59">AdBundle/Controller/AdPackageController.php</jms:reference-file>
+        <source>Ad has been deleted which you want to promote.</source>
+        <target state="new">Ad has been deleted which you want to promote.</target>
+      </trans-unit>
+      <trans-unit id="18a4dd16195556b61ea05b4eff29476cb538dc82" resname="Add a time">
+        <jms:reference-file line="113">views/AdEdit/community.html.twig</jms:reference-file>
+        <jms:reference-file line="116">views/AdEdit/community.html.twig</jms:reference-file>
+        <source>Add a time</source>
+        <target state="new">Add a time</target>
+      </trans-unit>
+      <trans-unit id="9169b711a8344e72221acf9b58c5ec0ff9f6b429" resname="Add some personality to your ad with a short quote statement that tells buyers what makes your item a good buy eg. &quot;Kept in the garage&quot;">
+        <jms:reference-file line="237">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <source>Add some personality to your ad with a short quote statement that tells buyers what makes your item a good buy eg. "Kept in the garage"</source>
+        <target state="new">Add some personality to your ad with a short quote statement that tells buyers what makes your item a good buy eg. "Kept in the garage"</target>
+      </trans-unit>
+      <trans-unit id="3a8198872d08858f8117a1c24b255e2d6568a190" resname="Add some personality to your ad with a short quote statement that tells buyers what makes your itenm a good buy eg. &quot;Kept in the garage&quot;">
+        <jms:reference-file line="133">views/AdEdit/communityFields.html.twig</jms:reference-file>
+        <jms:reference-file line="271">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <jms:reference-file line="114">views/AdEdit/animalsFields.html.twig</jms:reference-file>
+        <source>Add some personality to your ad with a short quote statement that tells buyers what makes your itenm a good buy eg. "Kept in the garage"</source>
+        <target state="new">Add some personality to your ad with a short quote statement that tells buyers what makes your itenm a good buy eg. "Kept in the garage"</target>
+      </trans-unit>
+      <trans-unit id="cc708a45cb3cf8b16eedc7865b7d48ea8cccdfb6" resname="Add some personality to your ad with a short quote statement that tells users what's good about what you are advertising.">
+        <jms:reference-file line="109">views/AdEdit/propertyFields.html.twig</jms:reference-file>
+        <jms:reference-file line="80">views/AdEdit/servicesFields.html.twig</jms:reference-file>
+        <jms:reference-file line="54">views/AdEdit/adultFields.html.twig</jms:reference-file>
+        <source>Add some personality to your ad with a short quote statement that tells users what's good about what you are advertising.</source>
+        <target state="new">Add some personality to your ad with a short quote statement that tells users what's good about what you are advertising.</target>
+      </trans-unit>
+      <trans-unit id="3d3f0d4066fb722ca544682e0abbec14f3310d34" resname="Add your vehicle details:">
+        <jms:reference-file line="142">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="51">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="54">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <source>Add your vehicle details:</source>
+        <target state="new">Add your vehicle details:</target>
+      </trans-unit>
+      <trans-unit id="4fe8eaa448d163e5c9d096419ae0a20ba6fd05da" resname="Are you sure your vehicle is %MAKE-MODEL%? It seems that it is registered as %CARWEB-MAKE-MODEL%.">
+        <jms:reference-file line="151">views/AdEdit/motors.html.twig</jms:reference-file>
+        <source>Are you sure your vehicle is %MAKE-MODEL%? It seems that it is registered as %CARWEB-MAKE-MODEL%.</source>
+        <target state="new">Are you sure your vehicle is %MAKE-MODEL%? It seems that it is registered as %CARWEB-MAKE-MODEL%.</target>
+      </trans-unit>
+      <trans-unit id="ce581928043eb4974e1820e24034004b836b7bcc" resname="Back to Manage my ads">
+        <jms:reference-file line="30">views/AdEdit/adult.html.twig</jms:reference-file>
+        <jms:reference-file line="30">views/AdEdit/community.html.twig</jms:reference-file>
+        <jms:reference-file line="33">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="28">views/AdEdit/animals.html.twig</jms:reference-file>
+        <jms:reference-file line="30">views/AdEdit/jobs.html.twig</jms:reference-file>
+        <jms:reference-file line="30">views/AdEdit/services.html.twig</jms:reference-file>
+        <jms:reference-file line="30">views/AdEdit/property.html.twig</jms:reference-file>
+        <jms:reference-file line="27">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <source>Back to Manage my ads</source>
+        <target state="new">Back to Manage my ads</target>
+      </trans-unit>
+      <trans-unit id="0ad39c4fb6564dfa056850094a9b7ff44814b09e" resname="Buyers like branded items, tell them what brand it is to help them find it.">
+        <jms:reference-file line="205">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>Buyers like branded items, tell them what brand it is to help them find it.</source>
+        <target state="new">Buyers like branded items, tell them what brand it is to help them find it.</target>
+      </trans-unit>
+      <trans-unit id="a3c686e711e4720f99b4562bb3dbaae7ab658cf2" resname="Category">
+        <jms:reference-file line="35">views/AdEdit/adult.html.twig</jms:reference-file>
+        <jms:reference-file line="35">views/AdEdit/community.html.twig</jms:reference-file>
+        <jms:reference-file line="38">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="33">views/AdEdit/animals.html.twig</jms:reference-file>
+        <jms:reference-file line="35">views/AdEdit/jobs.html.twig</jms:reference-file>
+        <jms:reference-file line="35">views/AdEdit/services.html.twig</jms:reference-file>
+        <jms:reference-file line="35">views/AdEdit/property.html.twig</jms:reference-file>
+        <jms:reference-file line="32">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <source>Category</source>
+        <target state="new">Category</target>
+      </trans-unit>
+      <trans-unit id="e590e4b6db2a61df339b725b26bdd4f814334d62" resname="Confirm your vehicle details:">
+        <jms:reference-file line="253">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="49">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <source>Confirm your vehicle details:</source>
+        <target state="new">Confirm your vehicle details:</target>
+      </trans-unit>
+      <trans-unit id="7b2e4a2c4d95da15034b071cf12770d3a6b14e6e" resname="Describe your item here.You can add details about your business in the next step.">
+        <jms:reference-file line="32">views/AdEdit/adultFields.html.twig</jms:reference-file>
+        <source>Describe your item here.You can add details about your business in the next step.</source>
+        <target state="new">Describe your item here.You can add details about your business in the next step.</target>
+      </trans-unit>
+      <trans-unit id="f59dd2f4d3577905048c00bc822193b6cff133ce" resname="Describe your property and let users know its main characteristics and details.">
+        <jms:reference-file line="59">views/AdEdit/propertyFields.html.twig</jms:reference-file>
+        <source>Describe your property and let users know its main characteristics and details.</source>
+        <target state="new">Describe your property and let users know its main characteristics and details.</target>
+      </trans-unit>
+      <trans-unit id="ac5a22e0bbb9e362c9949f5a0f6bf3fa19a13db4" resname="Describe your service here.You can add details about your business in the next step.">
+        <jms:reference-file line="58">views/AdEdit/servicesFields.html.twig</jms:reference-file>
+        <source>Describe your service here.You can add details about your business in the next step.</source>
+        <target state="new">Describe your service here.You can add details about your business in the next step.</target>
+      </trans-unit>
+      <trans-unit id="9f4ca9ec08715def4a822d25f75f2d9b79b931c0" resname="Dimensions">
+        <jms:reference-file line="288">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>Dimensions</source>
+        <target state="new">Dimensions</target>
+      </trans-unit>
+      <trans-unit id="c69c99c2281c96956e6cb599248412a24ea86dbf" resname="Edit ad">
+        <jms:reference-file line="91">AdBundle/Controller/AdEditController.php</jms:reference-file>
+        <jms:reference-file line="5">views/AdEdit/adult.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdEdit/community.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdEdit/animals.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdEdit/jobs.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdEdit/services.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdEdit/property.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <source>Edit ad</source>
+        <target state="new">Edit ad</target>
+      </trans-unit>
+      <trans-unit id="2d39be3af6848e1e89d7999bdd5713bfe342d32f" resname="Edit your ad">
+        <jms:reference-file line="31">views/AdEdit/adult.html.twig</jms:reference-file>
+        <jms:reference-file line="31">views/AdEdit/community.html.twig</jms:reference-file>
+        <jms:reference-file line="34">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="29">views/AdEdit/animals.html.twig</jms:reference-file>
+        <jms:reference-file line="31">views/AdEdit/jobs.html.twig</jms:reference-file>
+        <jms:reference-file line="31">views/AdEdit/services.html.twig</jms:reference-file>
+        <jms:reference-file line="31">views/AdEdit/property.html.twig</jms:reference-file>
+        <jms:reference-file line="28">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <source>Edit your ad</source>
+        <target state="new">Edit your ad</target>
+      </trans-unit>
+      <trans-unit id="a2bb9d34b8a1a79665858d354585cf147e0dee4e" resname="End">
+        <jms:reference-file line="86">views/AdEdit/communityFields.html.twig</jms:reference-file>
+        <source>End</source>
+        <target state="new">End</target>
+      </trans-unit>
+      <trans-unit id="ef0a172123a26849250ddb01da80857257eb0373" resname="Enter it here">
+        <jms:reference-file line="25">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <source>Enter it here</source>
+        <target state="new">Enter it here</target>
+      </trans-unit>
+      <trans-unit id="d36c092c01407147aa06793ac14fe0d3334e2a79" resname="Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through Paypal.">
+        <jms:reference-file line="204">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <source>Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through Paypal.</source>
+        <target state="new">Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through Paypal.</target>
+      </trans-unit>
+      <trans-unit id="99dad8790391324210543de60e004029da455184" resname="How long is it?">
+        <jms:reference-file line="308">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>How long is it?</source>
+        <target state="new">How long is it?</target>
+      </trans-unit>
+      <trans-unit id="b15116eb1bbdb5ef363a026900fffea0a35f2a9a" resname="How many are you selling?">
+        <jms:reference-file line="131">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>How many are you selling?</source>
+        <target state="new">How many are you selling?</target>
+      </trans-unit>
+      <trans-unit id="05b46ab61d1ba855d6a341fa64675336ef8a9f2f" resname="How tall is it?">
+        <jms:reference-file line="322">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>How tall is it?</source>
+        <target state="new">How tall is it?</target>
+      </trans-unit>
+      <trans-unit id="4f5ae596881601c87e1303a461b249fa9f53c533" resname="How wide is it?">
+        <jms:reference-file line="315">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>How wide is it?</source>
+        <target state="new">How wide is it?</target>
+      </trans-unit>
+      <trans-unit id="77d5e2e78dc6af14d63839e4f85814998f2a9270" resname="If you like you can add a postage charge">
+        <jms:reference-file line="155">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>If you like you can add a postage charge</source>
+        <target state="new">If you like you can add a postage charge</target>
+      </trans-unit>
+      <trans-unit id="c1e10b68152040cc8491e06350f5b9a752a507f4" resname="Let users know starting date.">
+        <jms:reference-file line="58">views/AdEdit/communityFields.html.twig</jms:reference-file>
+        <source>Let users know starting date.</source>
+        <target state="new">Let users know starting date.</target>
+      </trans-unit>
+      <trans-unit id="f18ce8d9f9c7f0776c23b64005894fd88484351c" resname="Let your potential buyers know about the service of your item.">
+        <jms:reference-file line="343">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <source>Let your potential buyers know about the service of your item.</source>
+        <target state="new">Let your potential buyers know about the service of your item.</target>
+      </trans-unit>
+      <trans-unit id="d303027c0a24f8925f8041b1548e76e81ace7a0f" resname="Let your potential buyers know how well you've looked after your %vehicle%.">
+        <jms:reference-file line="260">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <source>Let your potential buyers know how well you've looked after your %vehicle%.</source>
+        <target state="new">Let your potential buyers know how well you've looked after your %vehicle%.</target>
+      </trans-unit>
+      <trans-unit id="fb24fd97be87e8293b02ca305dd99faa38b71b46" resname="Let your potential buyers know how well you've looked after your car.">
+        <jms:reference-file line="242">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>Let your potential buyers know how well you've looked after your car.</source>
+        <target state="new">Let your potential buyers know how well you've looked after your car.</target>
+      </trans-unit>
+      <trans-unit id="567563f8536ffb34e1014f2944b42337c8aeae79" resname="Lookup Vehicle">
+        <jms:reference-file line="266">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="29">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <source>Lookup Vehicle</source>
+        <target state="new">Lookup Vehicle</target>
+      </trans-unit>
+      <trans-unit id="a8df2fec28d8948a0326722029c7492b88ee4fbe" resname="Maximum">
+        <jms:reference-file line="348">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <jms:reference-file line="374">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>Maximum</source>
+        <target state="new">Maximum</target>
+      </trans-unit>
+      <trans-unit id="5d398eef3ecc3ea6a161734581d0bd3d920b64d8" resname="Minimum">
+        <jms:reference-file line="341">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <jms:reference-file line="367">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>Minimum</source>
+        <target state="new">Minimum</target>
+      </trans-unit>
+      <trans-unit id="8bebc63cc9397c6ca9dfc7e88bca5314b3376724" resname="Net Profit">
+        <jms:reference-file line="334">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>Net Profit</source>
+        <target state="new">Net Profit</target>
+      </trans-unit>
+      <trans-unit id="945ce046db9a1d8d1758d051a5b8c9d8706a2d03" resname="No ad exists which you want to edit.">
+        <jms:reference-file line="56">AdBundle/Controller/AdEditController.php</jms:reference-file>
+        <source>No ad exists which you want to edit.</source>
+        <target state="new">No ad exists which you want to edit.</target>
+      </trans-unit>
+      <trans-unit id="92fba83d72dea9ed1bb93539e9385afbf1e0c462" resname="No ad exists which you want to promote.">
+        <jms:reference-file line="55">AdBundle/Controller/AdPackageController.php</jms:reference-file>
+        <source>No ad exists which you want to promote.</source>
+        <target state="new">No ad exists which you want to promote.</target>
+      </trans-unit>
+      <trans-unit id="42bc05976ca78e14ba08eda2b197de918c6e63f2" resname="Please enter a Paypal verified email address. You'll need to add and confirm your bank account in Paypal.">
+        <jms:reference-file line="231">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <jms:reference-file line="237">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <source>Please enter a Paypal verified email address. You'll need to add and confirm your bank account in Paypal.</source>
+        <target state="new">Please enter a Paypal verified email address. You'll need to add and confirm your bank account in Paypal.</target>
+      </trans-unit>
+      <trans-unit id="1dcfad2b04af982f825c1305ab68e1454deb4a8d" resname="Please enter correct registration number.">
+        <jms:reference-file line="263">views/AdEdit/motors.html.twig</jms:reference-file>
+        <source>Please enter correct registration number.</source>
+        <target state="new">Please enter correct registration number.</target>
+      </trans-unit>
+      <trans-unit id="81dd48fc23bc581414ff049a6a1092595d152123" resname="Please enter registration number.">
+        <jms:reference-file line="272">views/AdEdit/motors.html.twig</jms:reference-file>
+        <source>Please enter registration number.</source>
+        <target state="new">Please enter registration number.</target>
+      </trans-unit>
+      <trans-unit id="bf168d8bf8c9b9c15b96e9849179a12ca211c1a6" resname="Please type the colour">
+        <jms:reference-file line="332">views/AdEdit/motors.html.twig</jms:reference-file>
+        <source>Please type the colour</source>
+        <target state="new">Please type the colour</target>
+      </trans-unit>
+      <trans-unit id="6304150e559f9ea8fbd7b8ecaaf26eeb66a197b2" resname="Please type the make">
+        <jms:reference-file line="341">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="343">views/AdEdit/motors.html.twig</jms:reference-file>
+        <source>Please type the make</source>
+        <target state="new">Please type the make</target>
+      </trans-unit>
+      <trans-unit id="3c98fdce8246d929ee29a4fd1af382aa0583841c" resname="Please type the manufacturer">
+        <jms:reference-file line="328">views/AdEdit/motors.html.twig</jms:reference-file>
+        <source>Please type the manufacturer</source>
+        <target state="new">Please type the manufacturer</target>
+      </trans-unit>
+      <trans-unit id="6792bff279a739fe9228e7179b21d25985162223" resname="Please type the model of above selected make">
+        <jms:reference-file line="349">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="351">views/AdEdit/motors.html.twig</jms:reference-file>
+        <source>Please type the model of above selected make</source>
+        <target state="new">Please type the model of above selected make</target>
+      </trans-unit>
+      <trans-unit id="a36489523ec40212db5ded49881e8775b7a0bf3b" resname="Please type the part manufacturer">
+        <jms:reference-file line="336">views/AdEdit/motors.html.twig</jms:reference-file>
+        <source>Please type the part manufacturer</source>
+        <target state="new">Please type the part manufacturer</target>
+      </trans-unit>
+      <trans-unit id="6cdf440a79e122f4094871b0dc0be115ec6693c0" resname="Please type the part of vehicle">
+        <jms:reference-file line="356">views/AdEdit/motors.html.twig</jms:reference-file>
+        <source>Please type the part of vehicle</source>
+        <target state="new">Please type the part of vehicle</target>
+      </trans-unit>
+      <trans-unit id="055a3e4a883959a415ff40100f03a2d61608bd8e" resname="Salary details can be added later">
+        <jms:reference-file line="32">views/AdEdit/jobsFields.html.twig</jms:reference-file>
+        <source>Salary details can be added later</source>
+        <target state="new">Salary details can be added later</target>
+      </trans-unit>
+      <trans-unit id="efc007a393f66cdb14d57d385822a3d9e36ef873" resname="Save">
+        <jms:reference-file line="104">AdBundle/Form/AdEditType.php</jms:reference-file>
+        <source>Save</source>
+        <target state="new">Save</target>
+      </trans-unit>
+      <trans-unit id="40479a210561a3974834ed828a5940c6d2645795" resname="Save and publish">
+        <jms:reference-file line="102">AdBundle/Form/AdEditType.php</jms:reference-file>
+        <source>Save and publish</source>
+        <target state="new">Save and publish</target>
+      </trans-unit>
+      <trans-unit id="70676882e8cd72188a96b6cba19e2a271c8dd6aa" resname="Save and repost">
+        <jms:reference-file line="100">AdBundle/Form/AdEditType.php</jms:reference-file>
+        <source>Save and repost</source>
+        <target state="new">Save and repost</target>
+      </trans-unit>
+      <trans-unit id="426e995abe3623e65f3e32db24603c22937d5162" resname="Select model">
+        <jms:reference-file line="306">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="315">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="320">views/AdEdit/motors.html.twig</jms:reference-file>
+        <source>Select model</source>
+        <target state="new">Select model</target>
+      </trans-unit>
+      <trans-unit id="f7c6da507d86b8110700185cc5162b822c5314c8" resname="Sometimes known as &quot;%vehicle% tax&quot; or &quot;vehicle excise duty&quot; - whatever you call it, let us know when yours expires:">
+        <jms:reference-file line="317">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <source>Sometimes known as "%vehicle% tax" or "vehicle excise duty" - whatever you call it, let us know when yours expires:</source>
+        <target state="new">Sometimes known as "%vehicle% tax" or "vehicle excise duty" - whatever you call it, let us know when yours expires:</target>
+      </trans-unit>
+      <trans-unit id="fc612a2fcc722bde9d98ae18bea42764812b6784" resname="Starts">
+        <jms:reference-file line="63">views/AdEdit/communityFields.html.twig</jms:reference-file>
+        <source>Starts</source>
+        <target state="new">Starts</target>
+      </trans-unit>
+      <trans-unit id="37d816dcb223e620d9e97afb8659536f1151263e" resname="The condition of my %vehicle% is:">
+        <jms:reference-file line="261">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <source>The condition of my %vehicle% is:</source>
+        <target state="new">The condition of my %vehicle% is:</target>
+      </trans-unit>
+      <trans-unit id="c0cbb1a31666355589d1000048b7eba3ef33e49a" resname="The condition of my item is:">
+        <jms:reference-file line="243">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>The condition of my item is:</source>
+        <target state="new">The condition of my item is:</target>
+      </trans-unit>
+      <trans-unit id="beef8df1d1a7feaec79ed01b746b3d8211b2c9d2" resname="The longer you have on your MOT, the more valuable your item.">
+        <jms:reference-file line="290">views/AdEdit/motorsFields.html.twig</jms:reference-file>
+        <source>The longer you have on your MOT, the more valuable your item.</source>
+        <target state="new">The longer you have on your MOT, the more valuable your item.</target>
+      </trans-unit>
+      <trans-unit id="981787c8a952387237aca9591c158360fe87c218" resname="Turnover">
+        <jms:reference-file line="360">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>Turnover</source>
+        <target state="new">Turnover</target>
+      </trans-unit>
+      <trans-unit id="f629f11d7f0a20cae7844c6060132ba3dddfd91b" resname="Type postal code or town">
+        <jms:reference-file line="71">views/AdEdit/adult.html.twig</jms:reference-file>
+        <jms:reference-file line="119">views/AdEdit/community.html.twig</jms:reference-file>
+        <jms:reference-file line="83">views/AdEdit/animals.html.twig</jms:reference-file>
+        <jms:reference-file line="70">views/AdEdit/jobs.html.twig</jms:reference-file>
+        <jms:reference-file line="72">views/AdEdit/services.html.twig</jms:reference-file>
+        <jms:reference-file line="100">views/AdEdit/property.html.twig</jms:reference-file>
+        <source>Type postal code or town</source>
+        <target state="new">Type postal code or town</target>
+      </trans-unit>
+      <trans-unit id="dc2a39261783eee8f07d43bd49fc7b7d0291ef42" resname="What are you willing to pay?">
+        <jms:reference-file line="135">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <source>What are you willing to pay?</source>
+        <target state="new">What are you willing to pay?</target>
+      </trans-unit>
+      <trans-unit id="816ac1cf747c13d0bf748345889f0002c9d42926" resname="What would you like in exchange?">
+        <jms:reference-file line="143">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <source>What would you like in exchange?</source>
+        <target state="new">What would you like in exchange?</target>
+      </trans-unit>
+      <trans-unit id="2567fab605db933d596286974aa138a889f15e7d" resname="What's your price?">
+        <jms:reference-file line="162">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <source>What's your price?</source>
+        <target state="new">What's your price?</target>
+      </trans-unit>
+      <trans-unit id="b2028cfcc78f7fd44821aacab16481a32f1dfc70" resname="When?">
+        <jms:reference-file line="56">views/AdEdit/communityFields.html.twig</jms:reference-file>
+        <source>When?</source>
+        <target state="new">When?</target>
+      </trans-unit>
+      <trans-unit id="1f634656be78fc015075c71c90a7c766c87bd475" resname="You can add dimensions, condition and brand in the next steps">
+        <jms:reference-file line="87">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <source>You can add dimensions, condition and brand in the next steps</source>
+        <target state="new">You can add dimensions, condition and brand in the next steps</target>
+      </trans-unit>
+      <trans-unit id="36adadef978287f9f515364cf2129400fecddb8f" resname="You can add time and duration if you want">
+        <jms:reference-file line="59">views/AdEdit/communityFields.html.twig</jms:reference-file>
+        <source>You can add time and duration if you want</source>
+        <target state="new">You can add time and duration if you want</target>
+      </trans-unit>
+      <trans-unit id="32209f0ecbf755c5ee36a7711ec19c7724e88fe4" resname="You can not edit other user's ad.">
+        <jms:reference-file line="60">AdBundle/Controller/AdEditController.php</jms:reference-file>
+        <source>You can not edit other user's ad.</source>
+        <target state="new">You can not edit other user's ad.</target>
+      </trans-unit>
+      <trans-unit id="5bda4805dd75cd0a1507f4a3ae5085febda2136d" resname="You can not refresh this ad now.">
+        <jms:reference-file line="128">UserBundle/Controller/ManageMyAdController.php</jms:reference-file>
+        <source>You can not refresh this ad now.</source>
+        <target state="new">You can not refresh this ad now.</target>
+      </trans-unit>
+      <trans-unit id="aea3126024a92672bbcffab88ea30e59caea9fcf" resname="You can not refresh this ad.">
+        <jms:reference-file line="132">UserBundle/Controller/ManageMyAdController.php</jms:reference-file>
+        <source>You can not refresh this ad.</source>
+        <target state="new">You can not refresh this ad.</target>
+      </trans-unit>
+      <trans-unit id="ff462aeea01e1db781f4ab5ed996e5e7dd222092" resname="You can not update this ad.">
+        <jms:reference-file line="155">UserBundle/Controller/ManageMyAdController.php</jms:reference-file>
+        <source>You can not update this ad.</source>
+        <target state="new">You can not update this ad.</target>
+      </trans-unit>
+      <trans-unit id="00062ab7d7643b29ecf6966d35719417ffb639b6" resname="Your advert %advert_title% has been refreshed.">
+        <jms:reference-file line="126">UserBundle/Controller/ManageMyAdController.php</jms:reference-file>
+        <source>Your advert %advert_title% has been refreshed.</source>
+        <target state="new">Your advert %advert_title% has been refreshed.</target>
+      </trans-unit>
+      <trans-unit id="bc73f81aa6efcddaa7b981e11f21c343d2564b76" resname="Your advert %advert_title% has been updated.">
+        <jms:reference-file line="153">UserBundle/Controller/ManageMyAdController.php</jms:reference-file>
+        <source>Your advert %advert_title% has been updated.</source>
+        <target state="new">Your advert %advert_title% has been updated.</target>
+      </trans-unit>
+      <trans-unit id="b0e3c1a1d3ef74f4f422a40c4d81af215328aa44" resname="centimeters">
+        <jms:reference-file line="261">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <source>centimeters</source>
+        <target state="new">centimeters</target>
+      </trans-unit>
+      <trans-unit id="4ac8f0e3fea52d2a6ae9156d6b5b664a7a514fc6" resname="eg. Little Tikes">
+        <jms:reference-file line="16">views/AdEdit/communityFields.html.twig</jms:reference-file>
+        <jms:reference-file line="43">views/AdEdit/propertyFields.html.twig</jms:reference-file>
+        <jms:reference-file line="42">views/AdEdit/servicesFields.html.twig</jms:reference-file>
+        <jms:reference-file line="16">views/AdEdit/jobsFields.html.twig</jms:reference-file>
+        <jms:reference-file line="16">views/AdEdit/adultFields.html.twig</jms:reference-file>
+        <jms:reference-file line="71">views/AdEdit/forsaleFields.html.twig</jms:reference-file>
+        <jms:reference-file line="67">views/AdEdit/animalsFields.html.twig</jms:reference-file>
+        <source>eg. Little Tikes</source>
+        <target state="new">eg. Little Tikes</target>
+      </trans-unit>
+      <trans-unit id="05317216c18c3dd26550dca6a1ad2f6ac32df20d" resname="eg. Pink or Blue or Multi coloured">
+        <jms:reference-file line="79">views/AdEdit/animals.html.twig</jms:reference-file>
+        <source>eg. Pink or Blue or Multi coloured</source>
+        <target state="new">eg. Pink or Blue or Multi coloured</target>
+      </trans-unit>
+      <trans-unit id="45766b48566e9b43f132f6c9e16b054bd846df06" resname="inches">
+        <jms:reference-file line="263">views/AdEdit/forsale.html.twig</jms:reference-file>
+        <source>inches</source>
+        <target state="new">inches</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

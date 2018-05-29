@@ -1,0 +1,38 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+        {{ form_errors(form) }}
+            <div class="search_box">
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.dotmailer_filter__status) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.dotmailer_filter__created_by) }}
+                    </div>
+                </div>
+
+                <div class="row"><div class="large-6 columns">&nbsp;</div></div>
+                
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.dotmailer_filter__name, {'attr': {'class':'form-control', 'placeholder': 'Filter name'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.dotmailer_filter__is_24h_loop) }}
+                    </div>
+                </div>
+                
+                <div class="row"><div class="large-6 columns">&nbsp;</div></div>
+
+	            <div class="row">
+	                <div class="large-6 columns">
+	                    {{ form_widget(form.search, {'attr': {'class':'small button mb0'}}) }}
+	                </div>
+	            </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% set container = fetch_container_instance() %}
+
+{% block title %}
+    {{'Review detail'|trans({}, 'frontend-review')}}
+{% endblock %}
+
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% block body -%}
+    <div id="leave_review_modal" class="reveal-modal" data-reveal></div>
+    <div class="posting-bg">
+        <div class="user-review">
+            {{ include('FaUserBundle:Review:details.html.twig', {'review' : review}) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+{{ include('FaUserBundle:Review:reviewJs.html.twig', {'success_url': app.request.getUri}) }}
+{{ include('FaCoreBundle::starRatingJs.html.twig') }}
+{{ include('FaUserBundle:Review:reviewResponseJs.html.twig', {'success_url': app.request.getUri, 'is_mobile':true}) }}
+{% endblock %}

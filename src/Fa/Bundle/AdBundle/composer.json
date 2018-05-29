@@ -1,0 +1,29 @@
+{
+    "name": "bundle/ad-bundle",
+    "type": "symfony-bundle",
+    "description": "Ad bundle",
+    "keywords": [],
+    "homepage": "http://www.friday-ad.co.uk/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sagar Lotiya",
+            "email": "sagar@aspl.in",
+            "homepage": "http://aspl.in"
+        },
+        {
+            "name": "Fiare Oy",
+            "homepage": "http://fiare.fi"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": { "Fa\\Bundle\\AdBundle\\": "" }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "master"
+        }
+    }
+}

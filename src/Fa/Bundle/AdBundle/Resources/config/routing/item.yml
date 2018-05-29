@@ -1,0 +1,29 @@
+show_draft_ad:
+    path:     /preview/{adId}
+    defaults: { _controller: "FaAdBundle:Ad:showAdPreview" }
+
+ad_vrm_lookup:
+    path:     /carweb/vrm/{vrm}/
+    defaults: { _controller: "FaAdBundle:Ad:getCarwebDataByVRM" }
+    
+got_it_one_click_enq_ajax:
+    path: /ajax/got_it_one_click_enq/
+    defaults: { _controller: "FaAdBundle:Ad:gotItOneClickEnqAjax"}
+
+send_one_click_enq_ajax:
+    path: /ajax/send_one_click_enq/
+    defaults: { _controller: "FaAdBundle:Ad:sendOneClickEnqAjax"}
+
+fetch_category_text_by_ad_ajax:
+    path: /ajax/fetch_category_text_by_ad/{adId}
+    defaults: { _controller: "FaAdBundle:Ad:fetchCategoryPathByAdAjax"}
+    options:
+        expose: true
+
+set_ad_detail_ga_cookie_ajax:
+    path:   /set_ad_detail_ga_cookie
+    defaults:  { _controller: "FaAdBundle:Ad:ajaxSetGACookie" }
+    
+set_ad_detail_ga__after_cookie_ajax:
+    path:   /set_ad_detail_ga_after_cookie
+    defaults:  { _controller: "FaAdBundle:Ad:ajaxSetGAAfterCookie" }

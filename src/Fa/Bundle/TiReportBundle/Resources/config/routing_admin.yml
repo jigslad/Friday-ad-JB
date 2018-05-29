@@ -1,0 +1,7 @@
+fa_ti_report_admin:
+    resource: '@FaTiReportBundle/Resources/config/routing/report_admin.yml'
+    prefix:   /ti
+    
+fa_ti_log_admin:
+    resource: '@FaTiReportBundle/Resources/config/routing/ti_entity_log_admin.yml'
+    prefix:   /ti-log

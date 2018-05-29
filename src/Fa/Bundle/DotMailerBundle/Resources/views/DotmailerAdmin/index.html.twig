@@ -1,0 +1,309 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew': false}) }}
+    <div class="row">
+        <div class="columns">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+            {{ form_errors(form) }}
+                <div class="row">
+                    <div class="large-12 columns">
+                        <div class="mb20">
+                            {{ form_widget(form.dotmailer__opt_in) }}
+                            {{ form_label(form.dotmailer__opt_in) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <h5>{{ 'Source'|trans }}</h5>
+                <div class="row">
+                    <div class="large-12 columns">
+                        <div class="mb20">
+                            {{ form_widget(form.dotmailer__fad_user) }}
+                            {{ form_label(form.dotmailer__fad_user) }}
+                            
+                            {{ form_widget(form.dotmailer__ti_user) }}
+                            {{ form_label(form.dotmailer__ti_user) }}
+                        </div>
+                    </div>
+                </div>
+
+                <h5>{{ 'Newsletter types'|trans }}</h5>
+                <div class="row">
+                    <div class="large-12 columns">
+                        <div class="mb20 clearfix">
+                            {% set totalChoices = form.dotmailer__dotmailer_newsletter_type_id.vars.choices|length %}
+                            {% set totalColumns = 3 %}
+                            {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+                            {% set choiceCount = 0 %}
+                            {% for child in form.dotmailer__dotmailer_newsletter_type_id %}
+                                {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
+                                <ul class="checkbox-list">
+                                {% endif %}
+                                    <li>
+                                        {{ form_widget(child) }}
+                                        <label for="{{ child.vars.id }}">{{ child.vars.label|raw }}</label>
+                                    </li>
+                                    {% set choiceCount = choiceCount + 1 %}
+                                {% if choiceCount == totalChoices or (choiceCount % choicesPerColumn) == 0 %}
+                                </ul>
+                                {% endif %}
+                            {% endfor %}
+                            {% do form.dotmailer__dotmailer_newsletter_type_id.setRendered %}
+                        </div>
+                    </div>
+                </div>
+    
+                <h5>{{ 'Advert placed'|trans }}</h5>
+                <div class="row inline-row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.dotmailer_info__paa_category_id, {'attr': {'placeholder': 'Type category'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        <div class="large-5 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer_info__paa_created_at_from) }}
+                            </div>
+                        </div>
+                        <div class="large-1 columns">
+                            <label class="inline">{{ 'to'|trans }}</label>
+                        </div>
+                        <div class="large-5 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer_info__paa_created_at_to) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h5>{{ 'Enquiry made'|trans }}</h5>
+                <div class="row inline-row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.dotmailer_info__enquiry_category_id, {'attr': {'placeholder': 'Type category'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        <div class="large-5 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer_info__enquiry_created_at_from) }}
+                            </div>
+                        </div>
+                        <div class="large-1 columns">
+                            <label class="inline">{{ 'to'|trans }}</label>
+                        </div>
+                        <div class="large-5 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer_info__enquiry_created_at_to) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row inline-row">
+                    <div class="large-2 columns">
+                        <label class="inline">{{ 'Enquiry town'|trans }}</label>
+                    </div>
+                    <div class="large-10 columns">
+                        <div class="large-8 columns">
+                            {{ form_widget(form.dotmailer__enquiry_town_id) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row inline-row">
+                    <div class="large-2 columns">
+                        <label class="inline">{{ 'Enquiry county'|trans }}</label>
+                    </div>
+                    <div class="large-10 columns">
+                        <div class="large-8 columns">
+                            {{ form_widget(form.dotmailer__enquiry_county_id) }}
+                        </div>
+                    </div>
+                </div>
+
+                <h5>{{ 'Email data'|trans }}</h5>
+                <div class="row inline-row">
+                    <div class="large-2 columns">
+                        <label class="inline">{{ 'Town'|trans }}</label>
+                    </div>
+                    <div class="large-10 columns">
+                        <div class="large-8 columns">
+                            {{ form_widget(form.dotmailer__town_id) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row inline-row">
+                    <div class="large-2 columns">
+                        <label class="inline">{{ 'County'|trans }}</label>
+                    </div>
+                    <div class="large-10 columns">
+                        <div class="large-8 columns">
+                            {{ form_widget(form.dotmailer__county_id) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row inline-row">
+                    <div class="large-2 columns">
+                        <label class="inline">{{ 'User type'|trans }}</label>
+                    </div>
+                    <div class="large-10 columns">
+                        <div class="large-4 columns">
+                            {{ form_widget(form.dotmailer__role_id) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row inline-row">
+                    <div class="large-2 columns">
+                        {{ form_label(form.dotmailer__business_category_id) }}
+                    </div>
+                    <div class="large-10 columns">
+                        <div class="large-4 columns">
+                            {{ form_widget(form.dotmailer__business_category_id) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row inline-row">
+                    <div class="large-2 columns">
+                        <label class="inline">{{ 'Print edition'|trans }}</label>
+                    </div>
+                    <div class="large-10 columns">
+                        <div class="large-4 columns">
+                            {{ form_widget(form.dotmailer__print_edition_id) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row inline-row">
+                    <div class="large-2 columns">
+                        <label class="inline">{{ 'Last paid advert'|trans}}</label>
+                    </div>
+                    <div class="large-10 columns">
+                        <div class="large-4 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer__last_paid_at_from) }}
+                            </div>
+                        </div>
+                        <div class="large-1 columns">
+                            <label class="inline">{{ 'to'|trans }}</label>
+                        </div>
+                        <div class="large-4 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer__last_paid_at_to) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row inline-row">
+                    <div class="large-2 columns">
+                        <label class="inline">{{ 'Last advert placed'|trans}}</label>
+                    </div>
+                    <div class="large-10 columns">
+                        <div class="large-4 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer__last_paa_at_from) }}
+                            </div>
+                        </div>
+                        <div class="large-1 columns">
+                            <label class="inline">{{ 'to'|trans }}</label>
+                        </div>
+                        <div class="large-4 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer__last_paa_at_to) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row inline-row">
+                    <div class="large-2 columns">
+                        <label class="inline">{{ 'Last enquiry made'|trans}}</label>
+                    </div>
+                    <div class="large-10 columns">
+                        <div class="large-4 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer__last_enquiry_at_from) }}
+                            </div>
+                        </div>
+                        <div class="large-1 columns">
+                            <label class="inline">{{ 'to'|trans }}</label>
+                        </div>
+                        <div class="large-4 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer__last_enquiry_at_to) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row inline-row">
+                    <div class="large-2 columns">
+                        <label class="inline">{{ 'Newsletter signup'|trans}}</label>
+                    </div>
+                    <div class="large-10 columns">
+                        <div class="large-4 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer__newsletter_signup_at_from) }}
+                            </div>
+                        </div>
+                        <div class="large-1 columns">
+                            <label class="inline">{{ 'to'|trans }}</label>
+                        </div>
+                        <div class="large-4 columns">
+                            <div class="relative">
+                                <span class="datepicker-icon"></span>
+                                {{ form_widget(form.dotmailer__newsletter_signup_at_to) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="search_box">
+                    <div class="row">
+                       <div class="large-12 columns text-center ">
+                           {{ form_widget(form.search, {'attr': {'class':'small button mb0'}}) }}
+                       </div>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    var formTargetCounter = 1;
+    $(document).ready(function(){
+        $('form[name="fa_dotmailer_dotmailer_search_admin"]').submit(function(e){
+            // specify a unique target name
+            var target = 'dotmailer_search_form_'+formTargetCounter;
+            
+            window.open('', target, 'width=auto,height=auto,scrollbars=1');
+            $(this).attr('target', target);
+            
+            formTargetCounter = formTargetCounter + 1;
+        });
+    });
+    //]]>
+    </script>
+    {{ include('FaCoreBundle::autoSuggestMultipleField.html.twig', {'field' : '#fa_dotmailer_dotmailer_search_admin_dotmailer_info__paa_category_id', 'jsonField' : '#fa_dotmailer_dotmailer_search_admin_dotmailer_info__paa_category_id_json', 'placeHolder': 'Type category'|trans, 'route' : 'category_ajax_term_admin' }) }}
+    {{ include('FaCoreBundle::autoSuggestMultipleField.html.twig', {'field' : '#fa_dotmailer_dotmailer_search_admin_dotmailer_info__enquiry_category_id', 'jsonField' : '#fa_dotmailer_dotmailer_search_admin_dotmailer_info__enquiry_category_id_json', 'placeHolder': 'Type category'|trans, 'route' : 'category_ajax_term_admin' }) }}
+    {{ include('FaCoreBundle::autoSuggestMultipleField.html.twig', {'field' : '#fa_dotmailer_dotmailer_search_admin_dotmailer__town_id', 'jsonField' : '#fa_dotmailer_dotmailer_search_admin_dotmailer__town_id_json', 'placeHolder': 'Type town'|trans, 'route' : 'town_ajax_find_town_only_by_term' }) }}
+    {{ include('FaCoreBundle::autoSuggestMultipleField.html.twig', {'field' : '#fa_dotmailer_dotmailer_search_admin_dotmailer__county_id', 'jsonField' : '#fa_dotmailer_dotmailer_search_admin_dotmailer__county_id_json', 'placeHolder': 'Type county'|trans, 'route' : 'county_ajax_find_county_by_term' }) }}
+    {{ include('FaCoreBundle::autoSuggestMultipleField.html.twig', {'field' : '#fa_dotmailer_dotmailer_search_admin_dotmailer__enquiry_town_id', 'jsonField' : '#fa_dotmailer_dotmailer_search_admin_dotmailer__enquiry_town_id_json', 'placeHolder': 'Type town'|trans, 'route' : 'town_ajax_find_town_only_by_term' }) }}
+    {{ include('FaCoreBundle::autoSuggestMultipleField.html.twig', {'field' : '#fa_dotmailer_dotmailer_search_admin_dotmailer__enquiry_county_id', 'jsonField' : '#fa_dotmailer_dotmailer_search_admin_dotmailer__enquiry_county_id_json', 'placeHolder': 'Type county'|trans, 'route' : 'county_ajax_find_county_by_term' }) }}
+{% endblock %}

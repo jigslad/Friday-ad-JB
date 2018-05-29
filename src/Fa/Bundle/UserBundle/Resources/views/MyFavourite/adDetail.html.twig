@@ -1,0 +1,86 @@
+{% set adId = favouriteAdArray['id'] %}
+{% set adDetail = favouriteAdArray %}
+{% set adRepository         = fetch_repository('FaAdBundle:Ad') %}
+{% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
+{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+
+{% if isSlider is not defined or isSlider == false %}
+<div class="owl-item">
+{% endif %}
+    {% set adCategoryId = attribute(adDetail, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
+    {% set rootCategoryId = attribute(adDetail, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+    {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+    {% set adDetailSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+    {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(adDetail) %}
+    {% set adListFields = adRepository.getAdListingFields(adCategoryId, adDetail, container) %}
+    {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(adDetail, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+    {% set imageAltString = null %}
+    {% if seoRule['image_alt'] is defined %}
+        {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], adDetail]) %}
+    {% endif %}
+    <div class="item" data-equalizer-watch>
+        <a href="javascript:void(0);" onclick="return removeFromFavorite('{{adId}}');" class="fa-slider-badge heart-badge">&nbsp;</a>
+        {% if attribute(adDetail, constant(adDetailSolrMapping ~ 'STATUS_ID')) == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
+            <span class="sold-ribbon">{{ 'Ad Sold'|trans({}, 'frontend-my-favourites') }}</span>
+        {% elseif attribute(adDetail, constant(adDetailSolrMapping ~ 'STATUS_ID')) == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
+            <span class="expired-ribbon">{{ 'Ad Expired'|trans({}, 'frontend-my-favourites') }}</span>
+        {% endif %}
+        <a class="tricky-link" href="{{adUrl}}">
+        	{% if attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')) is defined %}
+               {{trim_text(attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')), 65)|raw}}
+            {% endif %}
+        </a>
+        {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, adDetail, '300X225', 1) %}
+        <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
+            {% if imagePath %}
+                <img src="{{ imagePath }}" alt="{{ imageAltString }}" />
+            {% else %}
+                <img src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+            {% endif %}
+        </div>
+        <h3>
+            {% if attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')) is defined %}
+               {{trim_text(attribute(adDetail, constant(adDetailSolrMapping ~ 'TITLE')), 65)|raw}}
+            {% endif %}
+        </h3>
+        <div class="clearfix">
+            <div class="list-dimensions left">
+                {% if adListFields|length %}
+                    {% for adFieldName, adListFieldValue in adListFields %}
+                        {% set adFieldClass = adRepository.getListingClass(adFieldName) %}
+                        {% if adListFieldValue is iterable %}
+                            {% for adListFieldVal in adListFieldValue %}
+                                <span {% if adFieldClass %}class="{{ adFieldClass }}"{% endif %}>{{ adListFieldVal }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span {% if adFieldClass %}class="{{ adFieldClass }}"{% endif %}>{{ adListFieldValue }}</span>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="list-price">
+                {% if attribute(adDetail, constant(adDetailSolrMapping ~ 'PRICE')) is defined %}
+                    {{ format_currency(attribute(adDetail, constant(adDetailSolrMapping ~ 'PRICE'))) }}
+                    {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(adDetailSolrMapping ~ 'RENT_PER_ID')) is defined %}
+                        <span>{{ adPropertyRepository.getRentPostFixText(attribute(adDetail, constant(adDetailSolrMapping ~ 'RENT_PER_ID')), container)}}</span>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="clearfix">
+            {% if attribute(adDetail, 'away_from_location') is defined and attribute(adDetail, 'away_from_location') %}
+                <div class="list-miles">
+                    {{ (attribute(adDetail, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}
+                </div>
+            {% endif %}
+            <div class="list-hr-ago text-right">
+                {% if attribute(adDetail, constant(adDetailSolrMapping ~ 'PUBLISHED_AT')) is defined %}
+                    {{attribute(adDetail, constant(adDetailSolrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% if isSlider is not defined or isSlider == false %}
+</div>
+{% endif %}

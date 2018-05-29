@@ -1,0 +1,307 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set adUser = ad.getUser() ? ad.getUser() : null %}
+{% set adPhoneNumber = (ad.getPrivacyNumber() ? ad.getPrivacyNumber() : (adUser ? adUser.getPhone() : (ad.getPhone() ? ad.getPhone() : null))) %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set categoryPath = categoryRepository.getCategoryPathArrayById(ad.getCategory().getId(), false, container) %}
+{% set userTypeText = null %}
+{% set catString = ad.getId() %}
+{% if adUser %}
+    {% if adUser.getRole() and adUser.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+        {% set userTypeText = 'Business ad' %}
+    {% elseif adUser.getRole() and adUser.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
+        {% set userTypeText = 'Private ad' %}
+    {% endif %}
+{% endif %}
+{% set catString = catString ~'-' ~ userTypeText %}
+{% for categoryId,categoryName in categoryPath %}
+    {% set catString = catString ~ '-' ~ categoryName %}
+{% endfor %}
+<a class="close-reveal-modal">&#215;</a>
+{% set adOwnerName = adUser ? adUser.getProfileName() : null %}
+{% set jobCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+<h5 class="modal-title">
+    {% if rootCategoryId == jobCategoryId %}
+        {{'Apply for this job'|trans({}, 'frontend-contact-seller')}}
+    {% else %}
+        {{'Ask %user_name% a question..'|trans({'%user_name%': adOwnerName}, 'frontend-contact-seller')}}
+    {% endif %}
+</h5>
+{% if adUser %}
+    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'contact_seller_id'}}) }}
+{% endif %}
+    <div class="modal-content">
+        {% if app.user and app.request.cookies.has('contact_seller_flag') and app.request.cookies.has('contact_seller_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.cookies.get('contact_seller_flag') %}
+            <div data-alert class="alert-box success radius">
+                <span class="alert-icon">&nbsp;</span>
+                {{'You have successfully logged in.'|trans({}, 'frontend')}}
+                <a href="javascript:void(0)" class="close">&times;</a>
+            </div>
+            {{ fetch_repository('FaUserBundle:User').removeUserCookies() }}
+        {% endif %}
+        <div data-alert class="alert-box alert radius" style="display:none;" id="deadlock_error_main">
+            <span class="alert-icon">&nbsp;</span>
+            <span id="deadlock_error"></span>
+            <a href="javascript:void(0)" class="close">&times;</a>
+        </div>
+        {% if ad.getBusinessPhone() %}
+            <div class="contact-box contact-box-2">
+                <h1>
+                    <span class="phone-icon"></span>
+                    <span id="span_contact_number_part">{{ ad.getBusinessPhone()|slice(0,-2) }}<span>XX</span></span>
+                    {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+                        <a href="tel:{{ ad.getBusinessPhone() }}" onclick="adEnquiryIncrement('call_click', '{{ad.getId()}}');">
+                    {% endif %}
+                        <span id="span_contact_number_full" style="display:none;">{{ ad.getBusinessPhone() }}</span>
+                    {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+                        </a>
+                    {% endif %}
+                </h1><a class="button xs-btn-1" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
+            </div>
+        {% else %}
+            {% if adPhoneNumber and (adUser and adUser.getContactThroughPhone() or adUser is null) %}
+                <div class="contact-box contact-box-2">
+                    <h1>
+                        <span class="phone-icon"></span>
+                        <span id="span_contact_number_part">{{ adPhoneNumber|slice(0,-2) }}<span>XX</span></span>
+                        {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+                            <a href="tel:{{ adPhoneNumber }}" onclick="adEnquiryIncrement('call_click', '{{ad.getId()}}');">
+                        {% endif %}
+                            <span id="span_contact_number_full" style="display:none;">{{ adPhoneNumber }}</span>
+                        {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+                            </a>
+                        {% endif %}
+                    </h1><a class="button xs-btn-1" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
+                    {% if ad.getPrivacyNumber() %}
+                        <div class="text-center">{{'This is a privacy number.'|trans({}, 'frontend-contact-seller')}} <a href="javascript:void(0)" data-reveal-id="privacyNumberModal">{{'Find out more'|trans({}, 'frontend-contact-seller')}}</a></div>
+                    {% endif %}
+                </div>
+                <div id="privacyNumberModal" class="reveal-modal" data-reveal>
+                    {% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
+                    {% set privacyNumberBlock = staticPageRepository.getStaticBlockDetailArray('privacy-number-block', fetch_container_instance()) %}
+    
+                    {% if privacyNumberBlock['title'] is defined %}
+                        <a class="close-reveal-modal">&#215;</a>
+                        <h5 class="modal-title">{{privacyNumberBlock['title']}}</h5>
+                        <div class="modal-content">
+                            {{privacyNumberBlock['description']|raw}}
+                        </div>
+                    {% endif %}
+                </div>
+                {% if adUser and adUser.getContactThroughEmail() %}
+                    <h5>{{'Or send a message.'|trans({}, 'frontend-contact-seller')}}</h5>
+                {% endif %}
+            {% elseif adUser and adUser.getContactThroughEmail() %}
+                <h5>{{'Send a message.'|trans({}, 'frontend-contact-seller')}}</h5>
+            {% endif %}
+        {% endif %}
+        {% if adUser and adUser.getContactThroughEmail() %}
+            <p>{{'Want to find out a bit more about advert? Send a message.'|trans({}, 'frontend-contact-seller')}}</p>
+            {{ form_row(form.sender_first_name) }}
+
+            {% if form.sender_email is defined %}
+                {{ form_row(form.sender_email) }}
+            {% endif %}
+
+            {% if rootCategoryId == jobCategoryId %}
+                <label class="inline-b">{{ 'Attach CV'|trans({}, 'frontend-contact-seller') }}</label> ({{'Optional'|trans({}, 'frontend-contact-seller')}})
+                <div id="attachment_div" class="attachment-textbox {% if form.attachment.vars.errors|length %}error{% endif %}">
+                    <a href="javascript:void(0);" title="{{'Cancle attachment'|trans({}, 'frontend-contact-seller')}}" id="btn_delete_attachment" class="delete-attached"></a>
+                    <span id="attachment_filename_span">{{ 'Only PDF, DOC, DOCX or RTF'|trans({}, 'frontend-contact-seller') }}</span>
+                    {{ form_widget(form.attachment) }}
+                </div>
+                {{ form_errors(form.attachment) }}
+                <label>{{ 'Cover Letter'|trans({}, 'frontend-contact-seller') }}</label>
+                {% set attrArray = {} %}
+                {% if form.text_message.vars.errors|length %}
+                    {% set attrArray = {'attr':{'class': ' error'}} %}
+                {% endif %}
+                {{ form_widget(form.text_message, attrArray) }}
+                {{ form_errors(form.text_message) }}
+            {% else %}
+                {{ form_row(form.text_message) }}
+                {{ form_widget(form.attachment, {'attr':{'style':'display:none'}}) }}
+            {% endif %}
+
+            <ul class="receive-alert">
+                <li>
+                    {{ form_widget(form.search_agent) }}
+                    {{ form_label(form.search_agent) }}
+                </li>
+                <li>
+                    {{ form_widget(form.email_alert) }}
+                    {{ form_label(form.email_alert) }}
+                </li>
+                <li>
+                    {{ form_widget(form.third_party_email_alert) }}
+                    {{ form_label(form.third_party_email_alert) }}
+                </li>
+            </ul>
+
+            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand'}}) }}
+        {% else %}
+            {% for fieldName, fieldValue in form.children %}
+                {% do attribute(form, fieldName).setRendered %}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% if adUser %}
+    <input type="hidden" value="{{ deadlockRetry }}" name="deadlockRetry" id="deadlockRetry" />
+    {{ form_end(form) }}
+{% endif %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+        bindCustomRadioEvent();
+        bindCustomCheckboxEvent();
+        tickUntickEmailAndThirdPartyAlertCheckbox();
+    });
+    var deadlockRetry = 0;
+    var resetEmailalertFlag = true;
+    $("#contact_seller_id").submit(function(event) {
+        blockElement('#contactSellerModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        searchAgent = $('#fa_message_contact_seller_search_agent:checked').val();
+        $.ajax({
+            type: "POST",
+            url: "{{path('contact_seller', {'adId': ad.getId() })}}",
+            data: new FormData(this),
+            contentType: false,
+            processData:false,
+        })
+        .always(function(response) {
+            unblockElement('#contactSellerModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#contactSellerModal').html(response.htmlContent);
+                $('#deadlockRetry').val(response.deadlockRetry);
+                deadlockRetry = parseInt($('#deadlockRetry').val());
+                if (response.deadlockError.length && deadlockRetry == 3) {
+                    $('#deadlock_error').html(response.deadlockError);
+                    $('#deadlock_error_main').show();
+                    scrollToElement('#deadlock_error_main', '1000', -150);
+                } else if (response.deadlockError.length && deadlockRetry < 3) {
+                    sleep(1000);
+                    $('#deadlockRetry').val(deadlockRetry+1);
+                    $("#contact_seller_id").submit();
+                }
+            } else if (response.error.length) {
+                $('#contactSellerModal').foundation('reveal', 'close');
+                $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                scrollToElement('#adDetailMainTabs', '1000', -150);
+            } else {
+                $('#contactSellerModal').foundation('reveal', 'close');
+                $(decorateMessage('{{'Contact request sent successfully.'|trans({}, 'frontend-contact-seller')}}', 'success')).insertBefore('#adDetailMainTabs');
+
+                if (searchAgent == 1) {
+                    ga('send', 'event', 'Email Alerts', 'Contact-seller-signup');
+                }
+
+                ga('send', 'event', 'CTA', 'Send Email', '{{ catString }}');
+                scrollToElement('#adDetailMainTabs', '1000', -150);
+            }
+        });
+    });
+
+    // add multiple select / deselect functionality
+    $("#fa_message_contact_seller_third_party_email_alert").change(function () {
+    	if ($('#fa_message_contact_seller_third_party_email_alert').parent().hasClass('checked')) {
+            $('#fa_message_contact_seller_third_party_email_alert').attr('checked', true);
+        } else {
+            $('#fa_message_contact_seller_third_party_email_alert').attr('checked', false);
+        }
+        
+        if ($('#fa_message_contact_seller_third_party_email_alert').attr('checked')) {
+            $('#fa_message_contact_seller_email_alert').attr('checked', $('#fa_message_contact_seller_third_party_email_alert').attr('checked'));
+        	$('#fa_message_contact_seller_email_alert').parent().addClass('checked');
+        }
+    });
+
+    $("#fa_message_contact_seller_email_alert").change(function(){
+        if ($('#fa_message_contact_seller_email_alert').parent().hasClass('checked')) {
+        	$('#fa_message_contact_seller_email_alert').attr('checked', true);
+        } else {
+        	$('#fa_message_contact_seller_email_alert').attr('checked', false);
+        }
+    	if (!$('#fa_message_contact_seller_email_alert').attr('checked')) {
+    		$('#fa_message_contact_seller_third_party_email_alert').attr('checked', false);
+            $('#fa_message_contact_seller_third_party_email_alert').parent().removeClass('checked');
+        } 
+    });
+    
+    function tickUntickEmailAndThirdPartyAlertCheckbox()
+    {
+        if ($('#fa_message_contact_seller_third_party_email_alert').attr('checked') && !$('#fa_message_contact_seller_email_alert').attr('checked')) {
+        	$('#fa_message_contact_seller_email_alert').parent().removeClass('checked');
+            $('#fa_message_contact_seller_email_alert').attr('checked', false);
+        }
+    }
+    
+    function sleep(milliseconds) {
+      var start = new Date().getTime();
+      for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+          break;
+        }
+      }
+    }
+    function toggleContactNumber() {
+        $('#span_contact_number_full').toggle();
+        $('#span_contact_number_part').toggle();
+        $('#btn_reveal').toggle();
+        ga('send', 'event', 'CTA', 'Call Now', '{{ catString }}');
+        adEnquiryIncrement('call_click', '{{ad.getId()}}');
+    }
+    $("#fa_message_contact_seller_attachment").change(function(event) {
+        var fileName = $("#fa_message_contact_seller_attachment").val();
+        var fileNameArray = fileName.split("\\");
+        if (fileNameArray.length > 0) {
+            fileName = fileNameArray[fileNameArray.length - 1];
+        }
+        $('#attachment_filename_span').html(fileName);
+        if ($("#fa_message_contact_seller_attachment").val() != '') {
+            $('#attachment_div').addClass('delete-attachment');
+        }
+        else {
+            $('#attachment_div').removeClass('delete-attachment');
+        }
+    });
+
+    $("#btn_delete_attachment").click(function(event) {
+        $('#attachment_div').removeClass('delete-attachment');
+        $("#fa_message_contact_seller_attachment").val('');
+        $('#attachment_filename_span').html('{{ 'Only PDF, DOC, DOCX or RTF'|trans({}, 'frontend-contact-seller') }}');
+    });
+    
+    $("#fa_message_contact_seller_sender_email").blur(function(){
+        if ($("#fa_message_contact_seller_sender_email").val() && resetEmailalertFlag) {
+            $.ajax({
+                type: "POST",
+                url: "{{path('ajax_contact_seller_get_email_alert')}}",
+                data: {'emailAddress': $("#fa_message_contact_seller_sender_email").val()},
+            })
+            .done(function(response) {
+                resetEmailalertFlag = false;
+                if (response.isEmailAlertEnabled) {
+                    $('#fa_message_contact_seller_email_alert').parent().addClass('checked');
+                    $('#fa_message_contact_seller_email_alert').attr('checked', true);
+                } else if (!response.isEmailAlertEnabled) {
+                    $('#fa_message_contact_seller_email_alert').parent().removeClass('checked');
+                    $('#fa_message_contact_seller_email_alert').attr('checked', false);
+                }
+                if (response.isThirdPartyEmailAlertEnabled) {
+                    $('#fa_message_contact_seller_third_party_email_alert').parent().addClass('checked');
+                    $('#fa_message_contact_seller_third_party_email_alert').attr('checked', true);
+                } else if (!response.isThirdPartyEmailAlertEnabled) {
+                    $('#fa_message_contact_seller_third_party_email_alert').parent().removeClass('checked');
+                    $('#fa_message_contact_seller_third_party_email_alert').attr('checked', false);
+                }
+            });
+        }
+    });
+//]]>
+</script>

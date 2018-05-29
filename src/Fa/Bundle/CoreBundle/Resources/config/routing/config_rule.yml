@@ -1,0 +1,3 @@
+ajax_get_paypal_commission:
+    path:     /ajax/get_payapl_commission
+    defaults: { _controller: "FaCoreBundle:ConfigRule:ajaxGetPaypalCommission" }

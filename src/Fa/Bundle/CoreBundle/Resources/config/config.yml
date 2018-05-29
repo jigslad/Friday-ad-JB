@@ -1,0 +1,4 @@
+# Twig Configuration
+twig:
+    globals:
+        fa_resource_authorization_manager: '@fa.resource.authorization.manager'

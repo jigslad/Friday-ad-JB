@@ -1,0 +1,18 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+{{ form_errors(form) }}
+<label>{{ 'Rate this %to_whom% '|trans({'%to_whom%' : (app.request.get('to_whom'))}, 'frontend-review') }}</label>
+{{ include('FaCoreBundle::starRating.html.twig', {'form' : form, 'field': 'rating'}) }}
+<div class="mt30">
+    {{ form_label(form.message) }}
+    {{ form_widget(form.message) }}
+    {% if form.message.vars.max_length %}
+        <div class="paa-title-char" id="{{ form.message.vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : form.message.vars.max_length }, 'frontend-review') }}</div>
+    {% endif %}
+    {{ form_errors(form.message) }}
+</div>
+
+<div class="field-300 right mt20">
+    {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0 expand'}}) }}
+</div>
+{{ form_end(form) }}

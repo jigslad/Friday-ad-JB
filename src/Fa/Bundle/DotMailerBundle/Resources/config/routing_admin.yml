@@ -1,0 +1,7 @@
+FaDotMailerBundle_dotmailer_admin:
+    resource: '@FaDotMailerBundle/Resources/config/routing/dotmailer_admin.yml'
+    prefix:   /dotmailer
+
+FaDotMailerBundle_dotmailer_filter_admin:
+    resource: '@FaDotMailerBundle/Resources/config/routing/dotmailer_filter_admin.yml'
+    prefix:   /dotmailer_filter

@@ -1,0 +1,51 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            <div class="row">
+                <div class="large-9 columns">
+                    {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                        {{ form_row(form.title) }}
+                        {{ form_row(form.description, {'attr': {'rows': '15', 'class': 'tinymce'}}) }}
+                        {{ form_row(form.additional_info, {'attr': {'rows': '15', 'class': 'tinymce'}}) }}
+                        {{ form_row(form.status) }}
+                        <div class="form-group">
+                            <h4>{{ 'Seo'|trans }}</h4>
+                        </div>
+                        <hr class="hr_margin">
+                        {{ form_row(form.page_title) }}
+                        {{ form_row(form.h1_tag) }}
+                        {{ form_row(form.meta_description) }}
+                        {{ form_row(form.meta_keywords) }}
+                        {{ form_row(form.slug) }}
+                        {{ form_row(form.no_index) }}
+                        {{ form_row(form.no_follow) }}
+                        {{ form_row(form.include_in_footer) }}
+                        {{ form_row(form.canonical_url_status) }}
+                        {{ form_row(form.canonical_url) }}
+
+                        {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'static_page_admin'}) }}
+                    {{ form_end(form) }}
+                </div>
+                <div class="large-3 columns">
+                    <b>{{ 'Indexable Dimensions'|trans }}</b>
+                    <div style="overflow: auto; height: 500px;">
+                        {Location}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'not_posting': true}) }}
+{% endblock %}

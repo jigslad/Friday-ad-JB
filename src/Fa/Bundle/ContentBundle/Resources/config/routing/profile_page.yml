@@ -1,0 +1,35 @@
+show_private_profile_page:
+    path:     /profile/{profileNameSlug}-{userId}/
+    defaults: { _controller: "FaContentBundle:ProfilePage:showPrivateProfilePage" }
+    requirements:
+        profileNameSlug: "([A-Za-z0-9_-]+)$"
+    
+show_private_user_ads:
+    path:     /profile/{profileNameSlug}-{userId}/{pageString}/
+    defaults: { _controller: "FaContentBundle:ProfilePage:showPrivateUserAds" }
+    requirements:
+        profileNameSlug: "([A-Za-z0-9_-]+)$"
+        pageString: ".+"
+        
+show_business_profile_page:
+    path:     /business/{profileNameSlug}/
+    defaults: { _controller: "FaContentBundle:ProfilePage:showBusinessProfilePage" }
+
+show_profile_user_reviews:
+    path:     /ajax/profile/{userId}/{limit}/{page}/{excludeIds}
+    defaults: { _controller: "FaContentBundle:ProfilePage:showUserReview" }
+    requirements:
+        limit: \d+
+        page: \d+
+    options:
+        expose: true
+
+pixel_track:
+    path:     /ptrack/pxlt
+    defaults: { _controller: "FaContentBundle:StaticPage:pix1" }
+    
+profile_page_contact_user:
+    path:   /ajax/{userId}
+    defaults:  { _controller: FaContentBundle:ProfilePage:profilePageContactUser }
+    options:
+        expose: true

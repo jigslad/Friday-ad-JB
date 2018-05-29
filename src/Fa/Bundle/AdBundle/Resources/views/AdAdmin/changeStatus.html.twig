@@ -1,0 +1,54 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+<div class="row">
+   <div class="columns">
+       <h1>{{ heading }}</h1>
+   </div>
+   <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            <div class="row">
+                <div class="large-12 columns">
+                    <b>{{ 'Advert reference'|trans }} : </b> {{ entity.id }}
+                </div>
+            </div>
+            {% if entity.status %}
+                <div class="row">
+                    <div class="large-12 columns">
+                        <b>{{ 'Current ad status'|trans }} : </b> {{ entity.status.name }}
+                    </div>
+                </div>
+            {% endif %}
+            {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                {{ form_row(form.ad_status) }}
+                <ul class="button-group text-center">
+                    <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                    <li>
+                        {% if form.return_url.vars.value %}
+                            {% set returnUrl = form.return_url.vars.value %}
+                        {% elseif app.request.get('return_url') %}
+                            {% set returnUrl = app.request.get('return_url') %}
+                        {% else %}
+                            {% set returnUrl = path('ad_admin') %}
+                        {% endif %}
+                        <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ returnUrl }}'">{{ 'Cancel'|trans({}, 'messages') }}</button>
+                    </li>
+                </ul>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}
+{% block scriptbottom %}
+<script>
+$(document).ready(function () {
+$(window).scrollTop(0);
+});
+</script>
+{% endblock %}

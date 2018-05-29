@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="1780ecaa1645d8f2e90070ffc936c6c2b21e27de" resname="Animals">
+        <jms:reference-file line="80">views/Default/index.html.twig</jms:reference-file>
+        <source>Animals</source>
+        <target state="new">Animals</target>
+      </trans-unit>
+      <trans-unit id="1ee54a86d6857b7c4959f6e0bc995c7d57fe76cc" resname="Best from our Friday adventurers">
+        <jms:reference-file line="135">views/Default/index.html.twig</jms:reference-file>
+        <source>Best from our Friday adventurers</source>
+        <target state="new">Best from our Friday adventurers</target>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="25">views/Default/errorPageSearch.html.twig</jms:reference-file>
+        <jms:reference-file line="36">views/Default/homePageSearch.html.twig</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="bfd58ee3a270f3a931009900e1008d549bbd7453" resname="Community">
+        <jms:reference-file line="83">views/Default/index.html.twig</jms:reference-file>
+        <source>Community</source>
+        <target state="new">Community</target>
+      </trans-unit>
+      <trans-unit id="61b4905981cd92e205d48f16d09a2a7c37f9a909" resname="Find out what your friends are selling">
+        <jms:reference-file line="156">views/Default/index.html.twig</jms:reference-file>
+        <source>Find out what your friends are selling</source>
+        <target state="new">Find out what your friends are selling</target>
+      </trans-unit>
+      <trans-unit id="94c5371e48caf317f1ed52951fcd2b2a3ce75bed" resname="For Sale">
+        <jms:reference-file line="65">views/Default/index.html.twig</jms:reference-file>
+        <source>For Sale</source>
+        <target state="new">For Sale</target>
+      </trans-unit>
+      <trans-unit id="8448fe9b45a14ab1e932e72708ed43d2ca5c8c2e" resname="Here are some of the best ads from our community members.">
+        <jms:reference-file line="136">views/Default/index.html.twig</jms:reference-file>
+        <source>Here are some of the best ads from our community members.</source>
+        <target state="new">Here are some of the best ads from our community members.</target>
+      </trans-unit>
+      <trans-unit id="437736fdb5bb707abdc048483193c86b9a99983e" resname="Jobs">
+        <jms:reference-file line="71">views/Default/index.html.twig</jms:reference-file>
+        <source>Jobs</source>
+        <target state="new">Jobs</target>
+      </trans-unit>
+      <trans-unit id="6c2a5d4247f4970f093f4c1a6e800c89421cd689" resname="Latest ads">
+        <jms:reference-file line="108">views/Default/index.html.twig</jms:reference-file>
+        <source>Latest ads</source>
+        <target state="new">Latest ads</target>
+      </trans-unit>
+      <trans-unit id="36145b62ef0a202e50eb82e49c4538d969bca571" resname="Latest in %locationName%">
+        <jms:reference-file line="106">views/Default/index.html.twig</jms:reference-file>
+        <source>Latest in %locationName%</source>
+        <target state="new">Latest in %locationName%</target>
+      </trans-unit>
+      <trans-unit id="5c34de3fa584db022a79ef907326c586e3eaeccf" resname="Looking for...">
+        <jms:reference-file line="7">views/Default/errorPageSearch.html.twig</jms:reference-file>
+        <jms:reference-file line="18">views/Default/homePageSearch.html.twig</jms:reference-file>
+        <source>Looking for...</source>
+        <target state="new">Looking for...</target>
+      </trans-unit>
+      <trans-unit id="97f3d63fbac3d59b4ec87ff5a1249e40e45ed5cb" resname="Motors">
+        <jms:reference-file line="68">views/Default/index.html.twig</jms:reference-file>
+        <source>Motors</source>
+        <target state="new">Motors</target>
+      </trans-unit>
+      <trans-unit id="b0a98216a32426b9e66a4ac1eb6df2e96e1b495c" resname="Ok">
+        <jms:reference-file line="24">views/Default/errorPageSearch.html.twig</jms:reference-file>
+        <jms:reference-file line="35">views/Default/homePageSearch.html.twig</jms:reference-file>
+        <source>Ok</source>
+        <target state="new">Ok</target>
+      </trans-unit>
+      <trans-unit id="9ae33a7d0ecb82cae8f04aafab20bf90425b7b8c" resname="Property">
+        <jms:reference-file line="77">views/Default/index.html.twig</jms:reference-file>
+        <source>Property</source>
+        <target state="new">Property</target>
+      </trans-unit>
+      <trans-unit id="fd316b7c502381bae53b74d8cf9d7c7df621b0d0" resname="Recently viewed">
+        <jms:reference-file line="147">views/Default/index.html.twig</jms:reference-file>
+        <source>Recently viewed</source>
+        <target state="new">Recently viewed</target>
+      </trans-unit>
+      <trans-unit id="b0bf6d163dc6b550b7e5c3eae76be372666a6dc4" resname="Recommended for you">
+        <jms:reference-file line="93">views/Default/index.html.twig</jms:reference-file>
+        <source>Recommended for you</source>
+        <target state="new">Recommended for you</target>
+      </trans-unit>
+      <trans-unit id="bce06414177f72ab70e6387b6af9f8ceef0d6049" resname="Search">
+        <jms:reference-file line="8">views/Default/errorPageSearch.html.twig</jms:reference-file>
+        <jms:reference-file line="19">views/Default/homePageSearch.html.twig</jms:reference-file>
+        <source>Search</source>
+        <target state="new">Search</target>
+      </trans-unit>
+      <trans-unit id="5cbd584046863bc7b753e57e8681a98a87f36f0f" resname="Services">
+        <jms:reference-file line="74">views/Default/index.html.twig</jms:reference-file>
+        <source>Services</source>
+        <target state="new">Services</target>
+      </trans-unit>
+      <trans-unit id="4b68d0d35274cf36c65ac8fd6be8919ab4fd1134" resname="Sign In with Facebook">
+        <jms:reference-file line="158">views/Default/index.html.twig</jms:reference-file>
+        <source>Sign In with Facebook</source>
+        <target state="new">Sign In with Facebook</target>
+      </trans-unit>
+      <trans-unit id="7ed7f414e57f194f0c61f6cfc2b273d1107e57e9" resname="Sorry no location available with such name">
+        <jms:reference-file line="14">views/Default/errorPageSearch.html.twig</jms:reference-file>
+        <jms:reference-file line="25">views/Default/homePageSearch.html.twig</jms:reference-file>
+        <source>Sorry no location available with such name</source>
+        <target state="new">Sorry no location available with such name</target>
+      </trans-unit>
+      <trans-unit id="768e0c1c69573fb588f61f1308a015c11468e05f" resname="Title">
+        <jms:reference-file line="13">views/Default/errorPageSearch.html.twig</jms:reference-file>
+        <jms:reference-file line="24">views/Default/homePageSearch.html.twig</jms:reference-file>
+        <source>Title</source>
+        <target state="new">Title</target>
+      </trans-unit>
+      <trans-unit id="130e57024e323c790651223c556d7edb060edecb" resname="Verified member since %posting_date%">
+        <jms:reference-file line="43">views/Default/homePageFeaturedAdsSlider.html.twig</jms:reference-file>
+        <source>Verified member since %posting_date%</source>
+        <target state="new">Verified member since %posting_date%</target>
+      </trans-unit>
+      <trans-unit id="931e1a4b152ad9d10b855bd058727fe6a05a903b" resname="View all">
+        <jms:reference-file line="114">views/Default/index.html.twig</jms:reference-file>
+        <source>View all</source>
+        <target state="new">View all</target>
+      </trans-unit>
+      <trans-unit id="3b9c901c41044281d8392d60dff569aeb41277cc" resname="What are you searching for? Whether it’s a bargain bicycle or an emergency&lt;br /&gt; electrician, there’s all sorts of gems to be discovered. Get browsing today ...">
+        <jms:reference-file line="13">views/Default/homePageSearch.html.twig</jms:reference-file>
+        <source><![CDATA[What are you searching for? Whether it’s a bargain bicycle or an emergency<br /> electrician, there’s all sorts of gems to be discovered. Get browsing today ...]]></source>
+        <target state="new"><![CDATA[What are you searching for? Whether it’s a bargain bicycle or an emergency<br /> electrician, there’s all sorts of gems to be discovered. Get browsing today ...]]></target>
+      </trans-unit>
+      <trans-unit id="e0112cdc56148079b83c86fb06733467262dddff" resname="What you will Discover?">
+        <jms:reference-file line="51">views/Default/index.html.twig</jms:reference-file>
+        <source>What you will Discover?</source>
+        <target state="new">What you will Discover?</target>
+      </trans-unit>
+      <trans-unit id="07d4d02e6a5e897933275fa15d20cf5ed4cadc7e" resname="What's popular">
+        <jms:reference-file line="125">views/Default/index.html.twig</jms:reference-file>
+        <source>What's popular</source>
+        <target state="new">What's popular</target>
+      </trans-unit>
+      <trans-unit id="6299df5542213a2f356935d54b00e5ea46dd6721" resname="You have successfully connected with Facebook.">
+        <jms:reference-file line="541">FrontendBundle/Controller/DefaultController.php</jms:reference-file>
+        <source>You have successfully connected with Facebook.</source>
+        <target state="new">You have successfully connected with Facebook.</target>
+      </trans-unit>
+      <trans-unit id="7550b672e162c224c309bdea5d48ca975081a904" resname="change">
+        <jms:reference-file line="19">views/Default/errorPageSearch.html.twig</jms:reference-file>
+        <jms:reference-file line="30">views/Default/homePageSearch.html.twig</jms:reference-file>
+        <source>change</source>
+        <target state="new">change</target>
+      </trans-unit>
+      <trans-unit id="af10ef20dd9060bbeead0afbc55381a66af442ef" resname="in">
+        <jms:reference-file line="18">views/Default/errorPageSearch.html.twig</jms:reference-file>
+        <jms:reference-file line="29">views/Default/homePageSearch.html.twig</jms:reference-file>
+        <source>in</source>
+        <target state="new">in</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

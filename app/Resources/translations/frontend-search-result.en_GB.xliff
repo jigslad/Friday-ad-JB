@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="1b0f47f57d358785d08560250a67c11ffd169117" resname="%keywords% near you...">
+        <jms:reference-file line="70">views/AdList/mapSearchResult.html.twig</jms:reference-file>
+        <source>%keywords% near you...</source>
+        <target state="new">%keywords% near you...</target>
+      </trans-unit>
+      <trans-unit id="0b3dbe657047bcb428b8f29a5d1638e3125e3208" resname="%resultCount% results">
+        <jms:reference-file line="26">views/AdList/searchResultHeader.html.twig</jms:reference-file>
+        <source>%resultCount% results</source>
+        <target state="new">%resultCount% results</target>
+      </trans-unit>
+      <trans-unit id="fd085994d3ba8272201b4f7bdbd59c38e349caf9" resname="%resultCount% results found">
+        <jms:reference-file line="28">views/ProfilePage/showShopUserAds.html.twig</jms:reference-file>
+        <source>%resultCount% results found</source>
+        <target state="new">%resultCount% results found</target>
+      </trans-unit>
+      <trans-unit id="ba65e35e90b71f13a3f82ebb610c320a40ee5815" resname="%resultCount% results found %searchTerm%">
+        <jms:reference-file line="28">views/AdList/searchResultHeader.html.twig</jms:reference-file>
+        <source>%resultCount% results found %searchTerm%</source>
+        <target state="new">%resultCount% results found %searchTerm%</target>
+      </trans-unit>
+      <trans-unit id="f1eb552b861def2e474439e5cf27f564b46fabac" resname="Ad marked as favorite successfully.">
+        <jms:reference-file line="57">UserBundle/Listener/UserLoginListener.php</jms:reference-file>
+        <source>Ad marked as favorite successfully.</source>
+        <target state="new">Ad marked as favorite successfully.</target>
+      </trans-unit>
+      <trans-unit id="ac066591edb7d47406e88eed7ba536040a82daf4" resname="Homepage">
+        <jms:reference-file line="6">views/AdList/searchResultHeader.html.twig</jms:reference-file>
+        <source>Homepage</source>
+        <target state="new">Homepage</target>
+      </trans-unit>
+      <trans-unit id="d18df8ebce0e4eb4131998b0527558b4729b05da" resname="Like this results?">
+        <jms:reference-file line="3">views/AdList/saveSearch.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdList/saveSearch.html.twig</jms:reference-file>
+        <source>Like this results?</source>
+        <target state="new">Like this results?</target>
+      </trans-unit>
+      <trans-unit id="a1fffaaafb7cc996685bceb829c053cc4f7de43d" resname="List">
+        <jms:reference-file line="36">views/AdList/searchResultHeader.html.twig</jms:reference-file>
+        <source>List</source>
+        <target state="new">List</target>
+      </trans-unit>
+      <trans-unit id="ab478f3efc840eebab919dff1b9512286f70c10c" resname="Map">
+        <jms:reference-file line="37">views/AdList/searchResultHeader.html.twig</jms:reference-file>
+        <source>Map</source>
+        <target state="new">Map</target>
+      </trans-unit>
+      <trans-unit id="49ed6222b375847dc244fa856bad4f0ec87beed2" resname="No ad found matching your criteria.">
+        <jms:reference-file line="133">views/AdList/searchResult.html.twig</jms:reference-file>
+        <source>No ad found matching your criteria.</source>
+        <target state="new">No ad found matching your criteria.</target>
+      </trans-unit>
+      <trans-unit id="64f060005eb9e9ad2fea2e4098db521858d7ce43" resname="No ads available.">
+        <jms:reference-file line="60">views/ProfilePage/showUserAds.html.twig</jms:reference-file>
+        <jms:reference-file line="75">views/ProfilePage/showShopUserAds.html.twig</jms:reference-file>
+        <source>No ads available.</source>
+        <target state="new">No ads available.</target>
+      </trans-unit>
+      <trans-unit id="393cb2b1b5dbf9954eeee3bed28c160b79aa7b09" resname="Please login to add ad to favourite.">
+        <jms:reference-file line="83">AdBundle/Controller/AdFavoriteController.php</jms:reference-file>
+        <source>Please login to add ad to favourite.</source>
+        <target state="new">Please login to add ad to favourite.</target>
+      </trans-unit>
+      <trans-unit id="ea798253c71aa5cb8da04c0caca014ed7962c1d3" resname="Problem in adding ad to favourite.">
+        <jms:reference-file line="68">AdBundle/Controller/AdFavoriteController.php</jms:reference-file>
+        <source>Problem in adding ad to favourite.</source>
+        <target state="new">Problem in adding ad to favourite.</target>
+      </trans-unit>
+      <trans-unit id="0972acdec126322769f2b03db472ce09665ad9ac" resname="Problem in removing ad from favourite.">
+        <jms:reference-file line="121">AdBundle/Controller/AdFavoriteController.php</jms:reference-file>
+        <source>Problem in removing ad from favourite.</source>
+        <target state="new">Problem in removing ad from favourite.</target>
+      </trans-unit>
+      <trans-unit id="e15760689d8a83369c5d10c47d6a79b85956c6e1" resname="Refine">
+        <jms:reference-file line="43">views/ProfilePage/showShopUserAds.html.twig</jms:reference-file>
+        <jms:reference-file line="51">views/AdList/searchResultHeader.html.twig</jms:reference-file>
+        <source>Refine</source>
+        <target state="new">Refine</target>
+      </trans-unit>
+      <trans-unit id="2f87583865cc18cde4be390489aa2e116e946295" resname="Refine your search">
+        <jms:reference-file line="52">views/ProfilePage/showShopUserAds.html.twig</jms:reference-file>
+        <jms:reference-file line="60">views/AdList/searchResultHeader.html.twig</jms:reference-file>
+        <source>Refine your search</source>
+        <target state="new">Refine your search</target>
+      </trans-unit>
+      <trans-unit id="81fb33ba6bcab591c42623a347cbeaab3dd5411a" resname="Save this search">
+        <jms:reference-file line="3">views/AdList/saveSearch.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdList/saveSearch.html.twig</jms:reference-file>
+        <source>Save this search</source>
+        <target state="new">Save this search</target>
+      </trans-unit>
+      <trans-unit id="88a9b07d73a2af23e68872dfe76cd76db81e5ba7" resname="Search result">
+        <jms:reference-file line="72">views/AdList/mapSearchResult.html.twig</jms:reference-file>
+        <source>Search result</source>
+        <target state="new">Search result</target>
+      </trans-unit>
+      <trans-unit id="1ecaeeff33ffb5370634887bf167b1e4ef931ae0" resname="Showing 1000 results near by you on map.">
+        <jms:reference-file line="63">views/AdList/mapSearchResult.html.twig</jms:reference-file>
+        <source>Showing 1000 results near by you on map.</source>
+        <target state="new">Showing 1000 results near by you on map.</target>
+      </trans-unit>
+      <trans-unit id="adc4e96a478be02a8147b100bd68113f38b89f80" resname="Sort">
+        <jms:reference-file line="44">views/ProfilePage/showShopUserAds.html.twig</jms:reference-file>
+        <jms:reference-file line="52">views/AdList/searchResultHeader.html.twig</jms:reference-file>
+        <source>Sort</source>
+        <target state="new">Sort</target>
+      </trans-unit>
+      <trans-unit id="a2a5bdeca9391be1e0cdff1c19895bae7fadc2c2" resname="Sort by">
+        <jms:reference-file line="34">views/ProfilePage/showShopUserAds.html.twig</jms:reference-file>
+        <jms:reference-file line="41">views/AdList/searchResultHeader.html.twig</jms:reference-file>
+        <source>Sort by</source>
+        <target state="new">Sort by</target>
+      </trans-unit>
+      <trans-unit id="e39889d3f6c1aecc599c79e7846957f8f1525770" resname="Unable to find Ad.">
+        <jms:reference-file line="79">MessageBundle/Controller/ContactUserController.php</jms:reference-file>
+        <source>Unable to find Ad.</source>
+        <target state="new">Unable to find Ad.</target>
+      </trans-unit>
+      <trans-unit id="cca21aeb9d2038892899440dd13048add1020123" resname="Unable to find Live Ad.">
+        <jms:reference-file line="52">MessageBundle/Controller/ContactSellerController.php</jms:reference-file>
+        <jms:reference-file line="192">MessageBundle/Controller/ContactSellerController.php</jms:reference-file>
+        <jms:reference-file line="51">AdBundle/Controller/AdFavoriteController.php</jms:reference-file>
+        <source>Unable to find Live Ad.</source>
+        <target state="new">Unable to find Live Ad.</target>
+      </trans-unit>
+      <trans-unit id="69bd4ef9fbd0894a22759c3766b859defbdedbc8" resname="View">
+        <jms:reference-file line="48">views/AdList/searchResultHeader.html.twig</jms:reference-file>
+        <source>View</source>
+        <target state="new">View</target>
+      </trans-unit>
+      <trans-unit id="1d5a89bb4990021e22fe63c2a9128b96b9d2384c" resname="You are trying to do unauthorized access.">
+        <jms:reference-file line="173">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <jms:reference-file line="183">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <jms:reference-file line="321">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <jms:reference-file line="366">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <source>You are trying to do unauthorized access.</source>
+        <target state="new">You are trying to do unauthorized access.</target>
+      </trans-unit>
+      <trans-unit id="c1de2cb964f5c7f2ceceeb2e34c133c1f2d9c895" resname="You can not add your own ad to favourite.">
+        <jms:reference-file line="60">AdBundle/Controller/AdFavoriteController.php</jms:reference-file>
+        <source>You can not add your own ad to favourite.</source>
+        <target state="new">You can not add your own ad to favourite.</target>
+      </trans-unit>
+      <trans-unit id="4d1a920f5ef344ad0db83e0e4acb3ae480055560" resname="Your save search email alerts has been updated successfully.">
+        <jms:reference-file line="188">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <source>Your save search email alerts has been updated successfully.</source>
+        <target state="new">Your save search email alerts has been updated successfully.</target>
+      </trans-unit>
+      <trans-unit id="a48eff5b368f8fbee9c08e0aee8b20a25e8bc2b1" resname="miles away">
+        <jms:reference-file line="53">views/LandingPage/latestAdsSlider.html.twig</jms:reference-file>
+        <jms:reference-file line="59">views/Ad/AdDetailSimilarAds.html.twig</jms:reference-file>
+        <jms:reference-file line="135">views/AdList/listDetail.html.twig</jms:reference-file>
+        <jms:reference-file line="58">views/AdList/mapListDetail.html.twig</jms:reference-file>
+        <jms:reference-file line="66">views/AdList/mapListDetail.html.twig</jms:reference-file>
+        <jms:reference-file line="54">views/Default/homePageLatestAdsSlider.html.twig</jms:reference-file>
+        <source>miles away</source>
+        <target state="new">miles away</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,2138 @@
+<?php
+
+/**
+ * This file is part of the fa bundle.
+ *
+ * @copyright Copyright (c) 2014, FMG
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Fa\Bundle\AdBundle\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Fa\Bundle\CoreBundle\Controller\CoreController;
+use Fa\Bundle\EntityBundle\Repository\EntityRepository;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
+use Fa\Bundle\EntityBundle\Repository\LocationRepository;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+use Fa\Bundle\AdBundle\Solr\AdAnimalsSolrFieldMapping;
+use Fa\Bundle\AdBundle\Solr\AdMotorsSolrFieldMapping;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Fa\Bundle\PromotionBundle\Repository\PackageRepository;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
+use Fa\Bundle\UserBundle\Solr\UserSolrFieldMapping;
+use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Fa\Bundle\ReportBundle\Entity\AdFeedClickReportDaily;
+use Fa\Bundle\AdBundle\Form\AdTopSearchType;
+use Fa\Bundle\AdBundle\Form\AdLeftSearchType;
+use Fa\Bundle\UserBundle\Form\UserHalfAccountEmailOnlyType;
+use Fa\Bundle\AdBundle\Form\AdLeftSearchDimensionType;
+
+/**
+ * This controller is used for ad listing.
+ *
+ * @author Sagar Lotiya <sagar@aspl.in>
+ * @copyright 2014 Friday Media Group Ltd
+ * @version v1.0
+ */
+class AdListController extends CoreController
+{
+    /**
+     * Top search.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function topSearchAction(Request $request)
+    {
+        $formManager = $this->get('fa.formmanager');
+        
+        $form        = $formManager->createForm(AdTopSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_search_result')));
+
+        $bindSearchParams = array();
+        $searchParams     = $request->get('searchParams');
+
+        //echo '<pre>';print_r($searchParams);die;
+
+        if ($searchParams && count($searchParams)) {
+            foreach ($form->all() as $field) {
+                if (isset($searchParams[$field->getName()])) {
+                    $bindSearchParams[$field->getName()] = $searchParams[$field->getName()];
+                }
+            }
+
+            if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+                $bindSearchParams['tmpLeafLevelCategoryId'] = $searchParams['item__category_id'];
+                $cat = $this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($searchParams['item__category_id'], false, $this->container);
+                $parent = $this->getRepository('FaEntityBundle:Category')->getCategoryArrayById(key($cat), $this->container);
+                if ($parent) {
+                    $bindSearchParams['item__category_id'] =  $parent['id'];
+                }
+            }
+            $form->submit($bindSearchParams);
+        }
+
+        $parameters = array('form' => $form->createView(), 'searchParams' => $searchParams);
+
+        if ($request->get('isHomeSearch')) {
+            return $this->render('FaFrontendBundle:Default:homePageSearch.html.twig', $parameters);
+        } elseif ($request->get('isErrorSearch')) {
+            return $this->render('FaFrontendBundle:Default:errorPageSearch.html.twig', $parameters);
+        } else {
+            return $this->render('FaAdBundle:AdList:topSearch.html.twig', $parameters);
+        }
+    }
+
+
+    /**
+     * Top search result.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function searchResultAction(Request $request)
+    {
+        //$requestlocation = ($request->cookies->get('location')!='')?$request->cookies->get('location'):($request->get('location')!=''?$request->get('location'):($request->attributes->get('location')?$request->attributes->get('location'):'uk'));
+        $requestlocation = $request->get('location');
+        //echo '<pre>';print_r($request);die;
+        // Redirect to page 1 if page exceed more than 250.
+        if ($request->get('page') && $request->get('page') > 250) {
+            $url = str_replace('page-'.$request->get('page'), 'page-1', $request->getUri());
+            $url = str_replace('page='.$request->get('page'), 'page=1', $url);
+
+            return $this->redirect($url, 301);
+        }
+
+        $currentRoute = $request->get('_route');
+        //for TI motor redirect
+        if ($currentRoute == 'ti_motor_listing_page' && $request->attributes->get('not_found') == 1) {
+
+            $pageString  = $request->get('page_string');
+            $locationS   = $requestlocation;
+
+            $locationString = $this->getRepository('FaAdBundle:TiRedirects')->getNewByOld($locationS, $this->container, true);
+            if ($locationString) {
+                $locationS = $locationString;
+            }
+
+            if (preg_match("/-N-1z1|-N-1z0|-N-2m|-N-2o|-N-2t|-N-2y|-N-31|-N-g2/", $request->get('page_string'), $matches)) {
+                $pageString = substr($request->get('page_string'), 0, strpos($request->get('page_string'), $matches[0])).$matches[0];
+            }
+
+            $redirect = $this->getRepository('FaAdBundle:TiRedirects')->getNewByOld($pageString, $this->container);
+
+            if ($redirect) {
+                if ($redirect == 'homepage') {
+                    $url = $this->container->get('router')->generate('fa_frontend_homepage', array(), true);
+                } else {
+                    $url = $this->generateUrl('listing_page', array('location' => $locationS, 'page_string' => rtrim($redirect, '/')), true);
+                }
+                return $this->redirect($url, 301);
+            }
+
+            throw new NotFoundHttpException('Invalid location.');
+        } else if ($currentRoute == 'ti_motor_listing_page') {
+            $tiPath = $requestlocation.'/'.$request->get('page_string');
+            $tiUrl = 'http://'.$this->container->getParameter('fa.ti.motor.host').'/'.$tiPath;
+            $key = md5($request->getClientIp().$request->headers->get('User-Agent'));
+            $tiPath = $this->container->getParameter('base_url').'/'.$tiPath;
+            CommonManager::setCacheVersion($this->container, 'ti_url_'.$key, $tiUrl);
+
+            return $this->redirect($tiPath, 301);
+        }
+
+        if ($request->attributes->get('not_found') == 1 && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location'))) {
+            $redirect = $this->getRepository('FaAdBundle:Redirects')->getNewByOld($request->get('page_string'), $this->container);
+            if ($redirect) {
+                $url = $this->generateUrl('listing_page', array('location' => $requestlocation, 'page_string' => rtrim($redirect, '/')), true);
+                return $this->redirect($url, 301);
+            }
+
+            throw new NotFoundHttpException('Invalid location.');
+        }
+
+        $pageUrl = $this->getPageUrl($request);
+        $findersSearchParams = $request->get('finders');
+        if (isset($findersSearchParams['advertgone'])) {
+            unset($findersSearchParams['advertgone']);
+        }
+        $objSeoToolOverride = NULL;
+        if ($pageUrl) {
+            $objSeoToolOverride = $this->getRepository('FaContentBundle:SeoToolOverride')->findSeoRuleByPageUrl($pageUrl, $findersSearchParams, $this->container);
+        }
+		
+        //get SEO Source URL for classic-car
+        if (strpos($pageUrl, 'motors/classic-cars') !== false && !$request->query->has('item_motors__reg_year')) {
+        	$getClassicCarRegYear = $this->getRepository('FaContentBundle:SeoTool')->findSeoSourceUrlMotorRegYear( 'motors/classic-cars/' );
+        	if( !empty( $getClassicCarRegYear ) ) {
+        		$findersSearchParams['item_motors__reg_year'] = $getClassicCarRegYear;
+        	}
+        }
+        
+        if (!in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location'))) {
+            if (preg_match("/[A-Z]/", $request->getPathInfo())) {
+                $url = str_replace($request->getPathInfo(), strtolower($request->getPathInfo()), $request->getUri());
+                return $this->redirect($url, 301);
+            }
+            // set location in cookie
+            $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
+            if (!$cookieLocationDetails) {
+                $cookieLocationDetails = array();
+            }
+
+            // check if location is exist and not uk.
+            $cookieValue = '';
+            if ($requestlocation != null && $requestlocation != 'uk' && (!isset($cookieLocationDetails['slug']) || $cookieLocationDetails['slug'] != $requestlocation)) {
+                $cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($requestlocation, $this->container, true);
+                if (count($cookieValue) && count($cookieValue) !== count(array_intersect($cookieValue, $cookieLocationDetails))) {
+                    $response = new Response();
+                    $cookieValue = json_encode($cookieValue);
+
+                    $response->headers->clearCookie('location');
+                    $response->headers->setCookie(new Cookie('location', $cookieValue, time() + (365*24*60*60*1000), '/', null, false, false));
+                    $response->sendHeaders();
+                }
+            } elseif ($requestlocation != null && $requestlocation == 'uk') {
+                $response = new Response();
+                $response->headers->clearCookie('location');
+                $response->sendHeaders();
+
+                $cookieValue = json_encode(array(
+                    'location' => LocationRepository::COUNTY_ID,
+                    'slug'     => 'uk',
+                    'location_text' => 'United Kingdom',
+                ));
+            }
+        }
+
+        // get location from cookie
+        if (isset($cookieValue) && $cookieValue) {
+            $cookieLocationDetails = json_decode($cookieValue, true);
+        } else {
+            $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
+        }
+
+        $mapFlag = $request->get('map', false);
+        $data    = $this->setDefaultParameters($request, $mapFlag, 'finders', $cookieLocationDetails);
+
+        $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: null;
+        $page           = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page']: 1;
+        $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
+
+        // top sorting.
+        if ($currentRoute == 'show_business_user_ads' || $currentRoute == "show_business_user_ads_location" || $currentRoute == "show_business_user_ads_page") {
+            if (isset($data['query_sorter']) && isset($data['query_sorter']['item']['is_top_ad'])) {
+                unset($data['query_sorter']['item']['is_top_ad']);
+            }
+
+            if (!$cookieLocationDetails && isset($data['query_sorter']['item']) && isset($data['query_sorter']['item']['geodist'])) {
+                unset($data['query_sorter']['item']['geodist']);
+            }
+        }
+
+        if ($request->attributes->get('customized_page')) {
+            list($keywords, $data) = $this->handleCustomizedUrl($data, $request);
+        }
+
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $this->get('fa.solrsearch.manager')->init('ad', $keywords, $data, $page, $recordsPerPage, 0, true);
+        $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+
+        // fetch result set from solr
+        $result      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
+        $resultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+        $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+        $facetResult = get_object_vars($facetResult);
+
+        /*$nextMiles              = 0;
+        $expandMilesresultCount = 'XX';
+        if (isset($data['search']['item__distance']) && $data['search']['item__distance'] < 200) {
+            $nextMiles              = $this->getNextMiles($data['search']['item__distance']);
+            $expandMilesresultCount = $this->getExpandDistanceAdCount($request, $keywords, $data, $resultCount, $nextMiles);
+        }*/
+
+        $locationFacets = array();
+        if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
+            $locationFacets =  get_object_vars($facetResult['a_l_town_id_txt']);
+
+            if (isset($locationFacets[$data['search']['item__location']])) {
+                unset($locationFacets[$data['search']['item__location']]);
+            }
+            $locationFacets = array_slice(array_unique($locationFacets), 0, 5, true);
+        }
+
+        // initialize pagination manager service and prepare listing with pagination based of solr result
+        $this->get('fa.pagination.manager')->init($result, $page, $recordsPerPage, $resultCount);
+        $pagination = $this->get('fa.pagination.manager')->getSolrPagination();
+
+        // set search params in cookie.
+        $this->setSearchParamsCookie($data);
+
+        $rootCategoryId = null;
+        if (isset($data['search']['item__category_id'])) {
+            $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($data['search']['item__category_id'], $this->container);
+        }
+        $parameters = array(
+            'pagination'             => $pagination,
+            'resultCount'            => $resultCount,
+            'locationFacets'         => $locationFacets,
+            'searchParams'           => $findersSearchParams,
+            'keywords'               => $keywords,
+            'facetResult'            => $facetResult,
+            'topAdResult'            => $this->getSearchResultTopAds($data, $keywords, $page, $mapFlag, $request, $rootCategoryId),
+            'searchAgentData'        => array('sorter' => $data['sorter'], 'search' => $data['search']),
+            'cookieLocationDetails'  => $cookieLocationDetails,
+            //'expandMilesresultCount' => $expandMilesresultCount,
+            //'nextMiles'              => $nextMiles,
+            'objSeoToolOverride'     => $objSeoToolOverride,
+            'rootCategoryId'         => $rootCategoryId,
+        );
+
+        // for business user ads page
+        if ($currentRoute == 'show_business_user_ads' || $currentRoute == "show_business_user_ads_location" || $currentRoute == "show_business_user_ads_page") {
+            $userSite = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('slug' => $request->get('profileNameSlug')));
+            if (!$userSite || ($userSite && $userSite->getSlug() != $request->get('profileNameSlug'))) {
+                throw new HttpException(410);
+            } else {
+                $user              = $userSite->getUser();
+                $userId            = $user->getId();
+                $userDetail        = $this->getRepository('FaUserBundle:User')->getBusinessUserProfileDetail($userId, true, true, $this->container);
+                if (!$userDetail['id']) {
+                    throw new HttpException(410);
+                }
+                $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($user);
+
+                if ($activeShopPackage && $activeShopPackage->getPackage() && $activeShopPackage->getPackage()->getPackageText() == PackageRepository::SHP_PACKAGE_BASIC_TEXT) {
+                    $parameters = array(
+                        'userDetail' => $userDetail,
+                        'pagination'      => $pagination,
+                    );
+
+                    return $this->render('FaContentBundle:ProfilePage:showUserAds.html.twig', $parameters);
+                } elseif ($activeShopPackage && $activeShopPackage->getPackage() && $activeShopPackage->getPackage()->getPackageText() != PackageRepository::SHP_PACKAGE_BASIC_TEXT) {
+                    $parameters = array(
+                        'userDetail' => $userDetail,
+                        'pagination'      => $pagination,
+                        'searchParams'    => $findersSearchParams,
+                        'facetResult'     => $facetResult,
+                        'locationFacets'  => $locationFacets,
+                        'cookieLocationDetails' => $cookieLocationDetails,
+                    );
+
+                    return $this->render('FaContentBundle:ProfilePage:showShopUserAds.html.twig', $parameters);
+                } else {
+                    return $this->handleMessage($this->get('translator')->trans('User does not have any package assigned.', array(), 'frontend-profile-page'), 'fa_frontend_homepage', array(), 'error');
+                }
+            }
+        }
+
+        if ($resultCount && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_location', 'show_business_user_ads_page'))) {
+            // profile categories other than Services & Adults
+            if (!in_array($rootCategoryId, array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
+                $shopParameters = $this->getShopUserBySearchCriteria($data, $request);
+                if (count($shopParameters)) {
+                    $parameters = $parameters + $shopParameters;
+                }
+            }
+            // profile categories Services & Adults
+            if ($rootCategoryId) {
+                if (in_array($rootCategoryId, array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
+                    $shopBusinessParameters = $this->getBusinessUserBySearchCriteria($data, $request);
+                    if (count($shopBusinessParameters)) {
+                        $parameters = $parameters + $shopBusinessParameters;
+                    }
+                }
+            }
+        }
+
+
+        $templateName = 'searchResult';
+        if ($mapFlag) {
+            $templateName = 'mapSearchResult';
+        }
+
+        $objResponse = null;
+        if (isset($rootCategoryId) && $rootCategoryId == CategoryRepository::ADULT_ID) {
+        	$objResponse = CommonManager::setCacheControlHeaders();
+        }
+//echo 'paremeters==<pre>';print_r($parameters);die;
+        return $this->render('FaAdBundle:AdList:'.$templateName.'.html.twig', $parameters, $objResponse);
+    }
+
+    /**
+     *
+     * @param  array $data
+     * @return array
+     */
+    private function handleCustomizedUrl($data, $request)
+    {
+        $queryParams = array();
+        $customize_url_data = $request->attributes->get('customized_page');
+        $source_url = $customize_url_data['source_url'];
+        $source_data = parse_url($source_url);
+
+        if (isset($source_data['query'])) {
+            $cqparams = explode('&', $source_data['query']);
+        } else {
+            $cqparams = array();
+        }
+        $qa = array();
+        $keyword = null;
+
+        foreach ($cqparams as $key => $val) {
+            $vparams = explode('=', $val);
+            if (count($vparams) == 2) {
+                $qa[$vparams[0]] = $vparams[1];
+            }
+        }
+
+        $request->attributes->set('finders', array_merge_recursive($request->attributes->get('finders'), $qa));
+
+        foreach ($qa as $key => $val) {
+            if (preg_match('/^(.*)_id$/', $key) || preg_match('/reg_year|mileage_range|engine_size_range/', $key)) {
+                $queryParams[$key] = explode("__", $val);
+
+                if (preg_match('/^(.*)_id$/', $key)) {
+                    $queryParams[$key] = array_map('intval', explode("__", $val));
+                }
+            } else {
+                if ($key == 'keywords') {
+                    $keyword = $val;
+                } else {
+                    $queryParams[$key] = $val;
+                }
+            }
+        }
+
+        $request->attributes->set('finders', array_replace_recursive($request->attributes->get('finders'), $queryParams));
+
+        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'), 'finders', array('finders' => $queryParams));
+        $queryParams = $this->get('fa.searchfilters.manager')->getFiltersData();
+        $data['query_filters'] = array_replace_recursive($queryParams['query_filters'], $data['query_filters']);
+
+        return array($keyword, $data);
+    }
+
+
+
+    /**
+     * Get shop user by search criteria.
+     *
+     * @param array   $data    Search parameters.
+     * @param Request $request Request object.
+     *
+     * @return array
+     */
+    private function getShopUserBySearchCriteria($data, $request)
+    {
+        $shopPackageCategories  = array(CategoryRepository::FOR_SALE_ID, CategoryRepository::MOTORS_ID, CategoryRepository::JOBS_ID, CategoryRepository::PROPERTY_ID, CategoryRepository::ANIMALS_ID, CategoryRepository::COMMUNITY_ID);
+        $profileExposureUserIds = array();
+        $profileExposureMiles   = array();
+        $rootCategoryId = null;
+
+        // for showing profile page.
+        if (isset($data['search']['item__category_id'])) {
+            $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($data['search']['item__category_id'], $this->container);
+            if (in_array($rootCategoryId, $shopPackageCategories)) {
+                $profileExposureMiles = $this->getRepository('FaPromotionBundle:Package')->getShopPackageProfileExposureUpsellByCategory($data['search']['item__category_id'], $this->container);
+            }
+        } else {
+            foreach ($shopPackageCategories as $shopPackageCategoryId) {
+                $profileExposureMiles = array_merge($profileExposureMiles, $this->getRepository('FaPromotionBundle:Package')->getShopPackageProfileExposureUpsellByCategory($shopPackageCategoryId, $this->container));
+            }
+            $profileExposureMiles = array_unique($profileExposureMiles);
+        }
+
+        if (count($profileExposureMiles)) {
+            $viewedProfileExposureUserIds = array();
+            if ($request->cookies->get('profile_exposure_user_ids_'.$rootCategoryId) && $request->cookies->get('profile_exposure_user_ids_'.$rootCategoryId) != CommonManager::COOKIE_DELETED) {
+                $viewedProfileExposureUserIds = array_filter(explode(',', $request->cookies->get('profile_exposure_user_ids_'.$rootCategoryId)));
+            }
+
+            foreach ($profileExposureMiles as $profileExposureMile) {
+                if (isset($data['search']['item__category_id']) && isset($rootCategoryId) && $rootCategoryId) {
+                    $profileExposureUserIds = array_merge($profileExposureUserIds, $this->getProfileExposureUser($data, $profileExposureMile, array($rootCategoryId), $viewedProfileExposureUserIds));
+                } else {
+                    $profileExposureUserIds = array_merge($profileExposureUserIds, $this->getProfileExposureUser($data, $profileExposureMile, $shopPackageCategories, $viewedProfileExposureUserIds));
+                }
+            }
+
+            if (!count($profileExposureUserIds)) {
+                $viewedProfileExposureUserIds = array();
+                foreach ($profileExposureMiles as $profileExposureMile) {
+                    if (isset($data['search']['item__category_id']) && isset($rootCategoryId) && $rootCategoryId) {
+                        $profileExposureUserIds = array_merge($profileExposureUserIds, $this->getProfileExposureUser($data, $profileExposureMile, array($rootCategoryId), $viewedProfileExposureUserIds, $rootCategoryId));
+                    } else {
+                        $profileExposureUserIds = array_merge($profileExposureUserIds, $this->getProfileExposureUser($data, $profileExposureMile, $shopPackageCategories, $viewedProfileExposureUserIds, $rootCategoryId));
+                    }
+                }
+            }
+
+            if (count($profileExposureUserIds)) {
+                $profileUserDetail          = $profileExposureUserIds[array_rand($profileExposureUserIds)];
+                $profileUserId              = $profileUserDetail['id'];
+                if (isset($profileUserDetail['location'])) {
+                    $data['query_filters']['item']['location'] = $profileUserDetail['location'];
+                }
+                $profileExposureUserAds = $this->getProfileExposureUserAds($profileUserId, $data);
+                $parameters['profileExposureUserAds'] = $profileExposureUserAds;
+                $parameters['profileUserId']          = $profileUserId;
+                $parameters['profileUserDetail']      = $this->getRepository('FaUserBundle:User')->getProfileExposureUserDetailForAdList($profileUserId, $this->container);
+
+                $viewedProfileExposureUserIds[] = $profileUserId;
+                $response = new Response();
+                $response->headers->setCookie(new Cookie('profile_exposure_user_ids_'.$rootCategoryId, implode(',', $viewedProfileExposureUserIds), CommonManager::getTimeStampFromEndDate(date('Y-m-d'))));
+                $response->sendHeaders();
+
+                return $parameters;
+            }
+
+            $response = new Response();
+            $response->headers->setCookie(new Cookie('profile_exposure_user_ids_'.$rootCategoryId, implode(',', $viewedProfileExposureUserIds), CommonManager::getTimeStampFromEndDate(date('Y-m-d'))));
+            $response->sendHeaders();
+
+            return array();
+        }
+
+        return array();
+    }
+
+    /**
+     * Set search param cookie.
+     *
+     * @param array $data Search parameters
+     */
+    private function setSearchParamsCookie($data)
+    {
+        if ((isset($data['search']) && count($data['search'])) || (isset($data['query_filters']) && count($data['query_filters']))) {
+            if (isset($data['search']['item__category_id']) || isset($data['search']['keywords'])) {
+                $rootCategoryId = null;
+                $searchParams   = (isset($data['query_filters']) && count($data['query_filters'])) ? $data['query_filters'] : array();
+
+                if (isset($data['search']['item__category_id'])) {
+                    $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($data['search']['item__category_id'], $this->container);
+                }
+                if (isset($data['search']['keywords'])) {
+                    $searchParams['keywords'] = $data['search']['keywords'];
+                }
+
+                if (!isset($data['search']['item__category_id']) || (isset($data['search']['item__category_id']) && $rootCategoryId != CategoryRepository::ADULT_ID)) {
+                    $response = new Response();
+                    $response->headers->setCookie(new Cookie('home_page_search_params', serialize($searchParams), time() + (365*24*60*60*1000), '/', null, false, false));
+                    $response->sendHeaders();
+                }
+            }
+        }
+    }
+
+    /**
+     * Top search result.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function topSearchResultAction(Request $request)
+    {
+        return new Response();
+    }
+
+    /**
+     * Ad landing page search result.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function landingPageSearchResultAction(Request $request)
+    {
+        return new Response();
+    }
+
+    /**
+     * Left search.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function leftSearchAction(Request $request, $isShopPage = false)
+    {
+        $bindSearchParams = array();
+        $basicParams      = array();
+        $searchParams     = $request->get('searchParams');
+
+        $parentIdArray = array();
+        if (isset($searchParams['item_motors__make_id']) && $searchParams['item_motors__make_id']) {
+            if (is_array($searchParams['item_motors__make_id']) && count($searchParams['item_motors__make_id'])) {
+                $parentIdArray['model_id'] = $searchParams['item_motors__make_id'][0];
+            } else {
+                $parentIdArray['model_id'] = $searchParams['item_motors__make_id'];
+            }
+        }
+
+        $formManager = $this->get('fa.formmanager');
+        $form = $formManager->createForm(AdLeftSearchType::class, array('isShopPage' => $isShopPage, 'parentIdArray' => $parentIdArray), array('method' => 'GET', 'action' => ($isShopPage ? $this->generateUrl('shop_user_ad_left_search_result') : $this->generateUrl('ad_left_search_result'))));
+
+        foreach ($searchParams as $key => $val) {
+            if (in_array($key, array('keywords', 'item__price_from', 'item__price_to', 'item__distance', 'item__category_id', 'item__location', 'item__is_trade_ad', 'item__user_id'))) {
+                $basicParams[$key] = $val;
+            }
+        }
+
+        if (isset($searchParams['item__location']) && $searchParams['item__location']) {
+            $locationText = $this->getRepository('FaEntityBundle:Postcode')->getPostCodTextByLocation($searchParams['item__location'], $this->container);
+            if (!$locationText) {
+                if (preg_match('/^\d+$/', $searchParams['item__location'])) {
+                    $locationText = $this->getRepository('FaEntityBundle:Location')->getLocationNameWithParentNameById($searchParams['item__location'], $this->container, false);
+                } else if (preg_match('/^([\d]+,[\d]+)$/', $searchParams['item__location'])) {
+                    $localityTown = explode(',', $searchParams['item__location']);
+                    $locality     = $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Locality', $localityTown[0]);
+                    $town         = $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Location', $localityTown[1]);
+                    $locationText = $locality.','.$town;
+                }
+
+                if (!$locationText) {
+                    if ($searchParams['item__location'] == LocationRepository::COUNTY_ID) {
+                        $locationText = null;
+                    } else {
+                        $locationText = $this->getRepository('FaEntityBundle:Location')->getLocationTextByLocation($searchParams['item__location'], $this->container);
+                        if (!$locationText) {
+                            $locationText = $this->getRepository('FaEntityBundle:Locality')->getLocationTextByLocation($searchParams['item__location'], $this->container);
+                        }
+                    }
+
+                    //$searchParams['item__location'] = $locationText;
+                }
+            }
+
+            $searchParams['item__location_autocomplete'] = $locationText;
+        }
+
+        $dimensions = array();
+        if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+            $dimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayWithFieldByCategoryId($searchParams['item__category_id'], $this->container);
+        }
+
+        if ($searchParams && count($searchParams)) {
+            foreach ($form->all() as $field) {
+                if (isset($searchParams[$field->getName()])) {
+                    if (isset($dimensions[$field->getName()]['search_type']) && in_array($dimensions[$field->getName()]['search_type'], array('choice_single', 'choice_link', 'choice_radio'))) {
+                        $bindSearchParams[$field->getName()] = $searchParams[$field->getName()][0];
+                    } else {
+                        $bindSearchParams[$field->getName()] = $searchParams[$field->getName()];
+                    }
+                }
+            }
+            $form->submit($bindSearchParams);
+        }
+//echo 'paremeters==<pre>';print_r($searchParams);die;
+        $parameters = array('form' => $form->createView(), 'locationFacets' => $request->get('locationFacets'), 'facetResult' => $request->get('facetResult', 'facetResult'), 'basicParams' => $basicParams, 'isShopPage' => $isShopPage, 'cookieLocationDetails' => $request->get('cookieLocationDetails'));
+        
+        return $this->render('FaAdBundle:AdList:leftSearch.html.twig', $parameters);
+    }
+
+    /**
+     * Left search result.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function leftSearchResultAction(Request $request)
+    {
+        return new Response();
+    }
+
+    /**
+     * Left search result for shop user ads.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function shopUserAdsLeftSearchResultAction(Request $request)
+    {
+        return new Response();
+    }
+
+    /**
+     * Set default parameters for sorting and paging for different listing view.
+     *
+     * @param Request $request               Request object.
+     * @param boolean $mapFlag               Boolean flag for map.
+     * @param string  $searchType            Left or top search.
+     * @param array   $cookieLocationDetails Location cookie value.
+     *
+     * @return array
+     */
+    public function setDefaultParameters($request, $mapFlag, $searchType, $cookieLocationDetails = array())
+    {
+        $currentRoute      = $request->get('_route');
+        $hasSortField      = true;
+        $parentCategoryIds = array();
+        // set default sorting for list view
+        if (!$request->get('sort_field') && !$mapFlag) {
+            $request->request->set('sort_field', 'item__weekly_refresh_published_at');
+            $request->request->set('sort_ord', 'desc');
+            $hasSortField = false;
+        }
+
+        // initialize search filter manager service and prepare filter data for searching
+        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'), 'finders');
+        $data = $this->get('fa.searchfilters.manager')->getFiltersData();
+
+        // add published at as second sort
+        if (!$mapFlag) {
+            if ($request->get('sort_field') == 'item__weekly_refresh_published_at') {
+                unset($data['query_sorter']['item']['weekly_refresh_published_at']);
+            }
+
+            if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
+                $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($data['search']['item__category_id'], false, $this->container));
+            }
+
+            //$data['query_sorter']['item']['weekly_refresh_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+            // if 1st level category is what's on then sort by event end.
+            if (!$hasSortField && isset($parentCategoryIds[1]) && $parentCategoryIds[1] == CategoryRepository::WHATS_ON_ID) {
+                $data['query_sorter']['ad_community']['event_start'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+            } /*elseif (!$hasSortField && isset($parentCategoryIds[0]) && $parentCategoryIds[0] == CategoryRepository::SERVICES_ID) {
+                //if service category then sort by nearest first else by rating
+                if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
+                    $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+                    $request->attributes->set('sort_field', 'item__geodist');
+                    $request->attributes->set('sort_ord', 'asc');
+                } else {
+                    $data['query_sorter']['user']['rating'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+                    $request->attributes->set('sort_field', 'user__rating');
+                    $request->attributes->set('sort_ord', 'desc');
+                }
+            }*/ else {
+                if ((!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
+                    if (is_array($cookieLocationDetails) &&
+                       (!isset($cookieLocationDetails['latitude']) || !$cookieLocationDetails['latitude']) &&
+                       (!isset($cookieLocationDetails['longitude']) || !$cookieLocationDetails['longitude']) &&
+                       (isset($data['query_sorter']['item']) && isset($data['query_sorter']['item']['geodist']))) {
+                        unset($data['query_sorter']['item']['geodist']);
+                    }
+                }
+                if (isset($data['search']['keywords']) && strlen(trim($data['search']['keywords']))) {
+                    $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 4);
+                }
+                $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
+            }
+            $data['query_sorter']['item']['is_top_ad'] = array('sort_ord' => 'desc', 'field_ord' => 3);
+        }
+
+        //set default sorting for map
+        if ($mapFlag) {
+            unset($data['query_sorter']);
+
+            if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
+                if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
+                    $data['query_sorter']['item']['geodist'] = 'asc';
+                }
+            }
+
+            $data['query_sorter']['item']['weekly_refresh_published_at'] = 'desc';
+            $data['sorter']['sort_field'] = 'item__weekly_refresh_published_at';
+            $data['sorter']['sort_ord'] = 'desc';
+            $data['pager']['page']  = 1;
+            $data['pager']['limit'] = $this->container->getParameter('fa.search.map.records.per.page');
+            $data['select_fields'] = array('item' => array('id', 'title', 'latitude', 'longitude'));
+        } else {
+            $numberOfRecords = $this->getRepository('FaCoreBundle:ConfigRule')->getNumberOfOrganicResult($this->container);
+            if ($numberOfRecords) {
+                $data['pager']['limit'] = $numberOfRecords;
+            } else {
+                $data['pager']['limit'] = $this->container->getParameter('fa.search.records.per.page');
+            }
+        }
+
+        // Active or expired ads
+        if (isset($data['search']['expired_ads']) && $data['search']['expired_ads']) {
+            $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_EXPIRED_ID;
+        } else {
+            $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+        }
+
+        // ads with min 1 photo
+        if (isset($data['search']['items_with_photo']) && $data['search']['items_with_photo']) {
+            $data['query_filters']['item']['image_count'] = '1|';
+        }
+
+        $data['facet_fields'] = array(
+                                    AdSolrFieldMapping::TOWN_ID     => array('limit' => 5, 'min_count' => 1),
+                                    AdSolrFieldMapping::CATEGORY_ID => array('min_count' => 1),
+                                    AdSolrFieldMapping::ROOT_CATEGORY_ID => array('min_count' => 1)
+                                );
+
+        // Add dimension filters facets
+        if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
+            $categoryName = $this->getRepository('FaEntityBundle:Category')->getRootCategoryName($data['search']['item__category_id'], $this->container, true);
+            $dimensions   = $this->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($data['search']['item__category_id'], $this->container);
+            $solrMapping  = '';
+            if ($categoryName) {
+                $solrMapping = 'Fa\Bundle\AdBundle\Solr\Ad'.$categoryName.'SolrFieldMapping::';
+            }
+
+            foreach ($dimensions as $dimensionId => $dimension) {
+                $dimensionName   = $dimension['name'];
+                $searchTypeArray = explode('_', $dimension['search_type']);
+                if ($searchTypeArray[0] == 'choice') {
+                    $dimensionField = str_replace(array('(', ')', ',', '?', '|', '.', '/', '\\', '*', '+', '-', '"', "'"), '', $dimensionName);
+                    $dimensionField = str_replace(' ', '_', strtoupper($dimensionField)).'_ID';
+                    $facetField     = $solrMapping.$dimensionField;
+
+                    if ($dimensionField == 'AD_TYPE_ID') {
+                        $facetField = 'Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping::TYPE_ID';
+                    }
+
+                    if (defined($facetField)) {
+                        $data['facet_fields'][constant($facetField)] = array('min_count' => 1);
+                    }
+                }
+            }
+        }
+
+        // ad location filter with distance
+        if (isset($data['search']['item__location']) && $data['search']['item__location']) {
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
+        }
+	//$data['query_filters']['item']['is_blocked_ad'] = 0;
+        // remove adult results when there is no category selected
+        if (!isset($data['search']['item__category_id']) && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location'))) {
+            $data['static_filters'] = ' AND -'.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Left search modal.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function ajaxLeftSearchDimensionModalAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $searchParams        = array();
+            $searchParams        = unserialize($request->get('searchParams'));
+            $dimensionSearchType = $request->get('dimensionSearchType');
+
+            $request->request->set('searchParams', $searchParams);
+            $formManager = $this->get('fa.formmanager');
+            $form        = $formManager->createForm(AdLeftSearchDimensionType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_left_search_dimension_result')));
+
+            $bindSearchParams = array();
+            if ($searchParams && count($searchParams)) {
+                foreach ($form->all() as $field) {
+                    if (isset($searchParams[$field->getName()])) {
+                        if ($dimensionSearchType == 'choice_link') {
+                            $bindSearchParams[$field->getName()] = (isset($searchParams[$field->getName()][0]) ? $searchParams[$field->getName()][0] : '');
+                        } elseif ($dimensionSearchType == 'choice_checkbox') {
+                            $bindSearchParams[$field->getName()] = $searchParams[$field->getName()];
+                        }
+                    }
+                }
+                $form->submit($bindSearchParams);
+            }
+
+            $parameters = array('form' => $form->createView());
+            if ($dimensionSearchType == 'choice_link') {
+                return $this->render('FaAdBundle:AdList:ajaxLeftSearchLinkDimensionModal.html.twig', $parameters);
+            } elseif ($dimensionSearchType == 'choice_checkbox') {
+                return $this->render('FaAdBundle:AdList:ajaxLeftSearchCheckboxDimensionModal.html.twig', $parameters);
+            }
+        }
+
+        return new Response();
+    }
+
+    /**
+     * Find top ads randomly as defined slots.
+     *
+     * @param array   $data           Search parameters.
+     * @param string  $keywords       Keywords.
+     * @param array   $page           Page.
+     * @param boolean $mapFlag        Boolean flag for map.
+     * @param Request $request        Request object.
+     * @param integer $rootCategoryId Root category id.
+     *
+     * @return array
+     */
+    private function getSearchResultTopAds($data, $keywords = null, $page = 1, $mapFlag = false, $request, $rootCategoryId)
+    {
+        $topAdResult = $this->getTopAds($data, $keywords, $page, $mapFlag, true, $request, $rootCategoryId);
+
+        if (!count($topAdResult)) {
+            $topAdResult = $this->getTopAds($data, $keywords, $page, $mapFlag, false, $request, $rootCategoryId);
+        }
+
+        return $topAdResult;
+    }
+
+    /**
+     * Find top ads randomly as defined slots.
+     *
+     * @param array   $data           Search parameters.
+     * @param string  $keywords       Keywords.
+     * @param array   $page           Page.
+     * @param boolean $mapFlag        Boolean flag for map.
+     * @param boolean $skipAds        Boolean flag for skip viewed ads.
+     * @param Request $request        Request object.
+     * @param integer $rootCategoryId Root category id.
+     *
+     * @return array
+     */
+    private function getTopAds($data, $keywords = null, $page = 1, $mapFlag = false, $skipAds = true, $request, $rootCategoryId)
+    {
+        $topAdResult = array();
+        if (!$mapFlag && $page == 1) {
+            $data['query_filters']['item']['is_top_ad'] = '1';
+            $data['query_sorter']['item'] = array('random' => 'desc');
+            unset($data['facet_fields']);
+
+            if ($skipAds) {
+                $viewedTopAds = array_filter(explode(',', $request->cookies->get('top_ads_search_result_'.$rootCategoryId)));
+                if (count($viewedTopAds)) {
+                    $viewedTopAds = array_unique($viewedTopAds);
+                    if (isset($data['static_filters'])) {
+                        $data['static_filters'] = $data['static_filters'].' AND -'.AdSolrFieldMapping::ID.':('.implode(' ', $viewedTopAds).')';
+                    } else {
+                        $data['static_filters'] = ' AND -'.AdSolrFieldMapping::ID.':('.implode(' ', $viewedTopAds).')';
+                    }
+                }
+            } else {
+                $viewedTopAds = array();
+            }
+
+            $recordsPerPage = $this->getRepository('FaCoreBundle:Configrule')->getListingTopAdSlots($this->container);
+            $this->get('fa.solrsearch.manager')->init('ad', $keywords, $data, $page, $recordsPerPage, 0, true);
+            $topAdResult = $this->get('fa.solrsearch.manager')->getSolrResponseDocs();
+            $topAdCount = count($topAdResult);
+
+            if ($topAdCount) {
+                foreach ($topAdResult as $topAd) {
+                    $viewedTopAds[] = $topAd['id'];
+                }
+                $viewedTopAds = array_unique($viewedTopAds);
+            }
+
+            $response = new Response();
+            $response->headers->setCookie(new Cookie('top_ads_search_result_'.$rootCategoryId, implode(',', $viewedTopAds), CommonManager::getTimeStampFromEndDate(date('Y-m-d'))));
+            $response->sendHeaders();
+        }
+
+        return $topAdResult;
+    }
+
+    public function getAdDetailForMapBoxAction($adId, Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $data['query_filters']['item']['id'] = $adId;
+            $this->get('fa.solrsearch.manager')->init('ad', null, $data, 1, 1);
+            $adResult = $this->get('fa.solrsearch.manager')->getSolrResponseDocs();
+            if ($adResult) {
+                return $this->render('FaAdBundle:AdList:mapListDetail.html.twig', array('ad' => $adResult[0]));
+            }
+
+            return new Response('No advert detail found.');
+        }
+
+        return new Response();
+    }
+
+    /**
+     * Show listing blocks.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function showListingSeoBlocksAction(Request $request, $searchParams, $location = null, $seoPageRule = null, $orgRequest = null)
+    {
+        //remove ads with image filter
+        if (isset($searchParams['search']['items_with_photo'])) {
+            unset($searchParams['search']['items_with_photo']);
+        }
+
+        $parentCategoryIds = array();
+        $seoSearchParams   = array();
+        $categoryId        = null;
+        $mapFlag           = $request->get('map', 0);
+        $searchQueryString = $orgRequest->getQueryString();
+
+        $page = $orgRequest->get('page');
+        if (!$page) {
+            $routeParams = $orgRequest->attributes->get('_route_params');
+            if (isset($routeParams['page'])) {
+                $page = $routeParams['page'];
+            }
+        }
+        // set seo search parameters and solr search parameters.
+        if ($mapFlag) {
+            $seoSearchParams['map'] = $mapFlag;
+        }
+        if (isset($searchParams['search']['item__location']) && $searchParams['search']['item__location']) {
+            $seoSearchParams['item__location'] = $searchParams['search']['item__location'];
+        }
+        if (isset($searchParams['search']['item__category_id']) && $searchParams['search']['item__category_id']) {
+            $categoryId        = $searchParams['search']['item__category_id'];
+            $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $this->container));
+            $indexableDimensionFieldArray = $this->getRepository('FaEntityBundle:CategoryDimension')->getIndexableDimensionFieldsArrayByCategoryId($categoryId, $this->container);
+            $seoSearchParams['item__category_id']         = $categoryId;
+            $data['query_filters']['item']['category_id'] = $categoryId;
+
+            // set all indexable fields.
+            if (count($indexableDimensionFieldArray)) {
+                foreach ($indexableDimensionFieldArray as $indexableDimensionField) {
+                    if (isset($searchParams['search'][$indexableDimensionField]) && $searchParams['search'][$indexableDimensionField]) {
+                        $explodeRes                                            = explode('__', $indexableDimensionField);
+                        $data['query_filters'][$explodeRes[0]][$explodeRes[1]] = $searchParams['search'][$indexableDimensionField];
+                        $seoSearchParams[$indexableDimensionField]             = $searchParams['search'][$indexableDimensionField];
+                    }
+                }
+            }
+        }
+
+        // initialize search filter manager service and prepare filter data for searching
+        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'));
+
+        // Active ads
+        $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+        // fetch location from cookie.
+        $cookieLocation = CommonManager::getLocationDetailFromParamsOrCookie($location, $request, $this->container);
+
+        $blocks = $this->getListingBlockParams($categoryId, $parentCategoryIds, $cookieLocation, $seoPageRule, $seoSearchParams);
+
+        $data['facet_fields'] = array();
+        if (!count($cookieLocation)) {
+            $data['facet_fields'] = array(
+                AdSolrFieldMapping::DOMICILE_ID => array('limit' => $blocks[AdSolrFieldMapping::DOMICILE_ID]['facet_limit'], 'min_count' => 1),
+                AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
+            );
+        } else {
+            if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
+                $data['query_sorter']['item']['geodist'] = 'asc';
+            }
+
+            // for jobs and property and all their children categories need to show county seo box.
+            if (isset($parentCategoryIds[0]) && in_array($parentCategoryIds[0], array(CategoryRepository::JOBS_ID, CategoryRepository::PROPERTY_ID))) {
+                $data['facet_fields'] = array(
+                    AdSolrFieldMapping::DOMICILE_ID => array('limit' => 9, 'min_count' => 1),
+                    AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
+                );
+            } else {
+                $data['facet_fields'] = array(
+                    AdSolrFieldMapping::TOWN_ID => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
+                );
+            }
+        }
+
+        // set facet categorywise.
+        list($blocks, $data) = $this->getSeoBlocksByCategory($categoryId, $parentCategoryIds, $blocks, $cookieLocation, $searchParams, $data, $seoPageRule, $seoSearchParams);
+
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $this->get('fa.solrsearch.manager')->init('ad', '', $data);
+        if (count($cookieLocation)) {
+            if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
+            }
+        }
+        $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+
+        // fetch result set from solr
+        $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+
+        if ($facetResult) {
+            $facetResult = get_object_vars($facetResult);
+            foreach ($blocks as $solrFieldName => $block) {
+                if ($solrFieldName == 'a_m_make_id_i' && isset($seoSearchParams['item_motors__model_id'])) {
+                    unset($seoSearchParams['item_motors__model_id']);
+                }
+                if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
+                    $blocks[$solrFieldName]['facet'] = get_object_vars($facetResult[$solrFieldName]);
+                }
+            }
+        }
+
+        //to show seo block for For Sale, Jobs, Property
+        if (isset($blocks[AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID]) && isset($parentCategoryIds[0]) && in_array($parentCategoryIds[0], array(CategoryRepository::JOBS_ID, CategoryRepository::PROPERTY_ID, CategoryRepository::FOR_SALE_ID))) {
+            $tmpSearchParams = array();
+            $tmpSearchParams['search']['item__category_id'] = $parentCategoryIds[0];
+            $tmpSearchParams['search']['item__location'] = LocationRepository::COUNTY_ID;
+            $facetResult = $this->getDimensionFacetByField(AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID, 'item__category_id', $blocks[AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID]['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            if (count($facetResult)) {
+                $blocks[AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID]['facet'] = array($categoryId => 1) + $facetResult;
+            }
+            if (!count($facetResult)) {
+                $blocks[AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID]['facet'] = array($categoryId => 1) + $this->getDimensionFacetByField(AdSolrFieldMapping::PARENT_CATEGORY_LVL_2_ID, 'item__category_id', $blocks[AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID]['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            }
+        } elseif (isset($blocks[AdAnimalsSolrFieldMapping::SPECIES_ID.'_UK']) && isset($parentCategoryIds[2]) && isset($parentCategoryIds[2]) == CategoryRepository::BIRDS) {
+            $tmpSearchParams = array();
+            $tmpSearchParams['search']['item__category_id'] = $parentCategoryIds[2];
+            $tmpSearchParams['search']['item__location'] = LocationRepository::COUNTY_ID;
+            $facetResult = $this->getDimensionFacetByField(AdAnimalsSolrFieldMapping::SPECIES_ID, 'item_animals__species_id', $blocks[AdAnimalsSolrFieldMapping::SPECIES_ID]['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            if (count($facetResult)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                $blocks[AdAnimalsSolrFieldMapping::SPECIES_ID.'_UK']['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $facetResult;
+            }
+        } elseif (isset($blocks[AdAnimalsSolrFieldMapping::BREED_ID.'_UK']) && isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::DOGS_AND_PUPPIES, CategoryRepository::HORSES, CategoryRepository::CATS_AND_KITTENS))) {
+            $tmpSearchParams = array();
+            $tmpSearchParams['search']['item__category_id'] = $parentCategoryIds[2];
+            $tmpSearchParams['search']['item__location'] = LocationRepository::COUNTY_ID;
+            $facetResult = $this->getDimensionFacetByField(AdAnimalsSolrFieldMapping::BREED_ID, 'item_animals__breed_id', $blocks[AdAnimalsSolrFieldMapping::BREED_ID]['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            if (count($facetResult)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                $blocks[AdAnimalsSolrFieldMapping::BREED_ID.'_UK']['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $facetResult;
+            }
+        } elseif (isset($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID.'_UK']) && isset($parentCategoryIds[1]) && in_array($parentCategoryIds[1], array(CategoryRepository::BOATS_ID, CategoryRepository::FARM_ID))) {
+            $tmpSearchParams = array();
+            $tmpSearchParams['search']['item__category_id'] = $parentCategoryIds[1];
+            $tmpSearchParams['search']['item__location'] = LocationRepository::COUNTY_ID;
+            $facetResult = $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::MANUFACTURER_ID, 'item_motors__manufacturer_id', $blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID.'_UK']['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            if (count($facetResult)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                $blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID.'_UK']['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $facetResult;
+            }
+        } elseif (isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK']) && isset($parentCategoryIds[0]) && in_array($parentCategoryIds[0], array(CategoryRepository::MOTORS_ID))) {
+            $maxParentCategoryCnt = (count($parentCategoryIds) - 1);
+            $tmpSearchParams = array();
+            $tmpSearchParams['search']['item__category_id'] = (isset($parentCategoryIds[$maxParentCategoryCnt]) ? $parentCategoryIds[$maxParentCategoryCnt] : null);
+            $tmpSearchParams['search']['item__location'] = LocationRepository::COUNTY_ID;
+            $facetResult = $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::MAKE_ID, 'item_motors__make_id', $blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK']['facet_limit'], $tmpSearchParams, $this->container, null, false, $cookieLocation);
+            if (count($facetResult)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                $blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK']['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $facetResult;
+            }
+        }
+
+        //switch position of top maked in uk and town
+        if (isset($parentCategoryIds[1]) && (isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK']) || (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']))) && isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID]) && in_array(isset($parentCategoryIds[1]), array(CategoryRepository::CARS_ID, CategoryRepository::MOTORHOMES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_STATIC_CARAVANS_ID, CategoryRepository::COMMERCIALVEHICLES_ID, CategoryRepository::MOTORBIKES_ID, CategoryRepository::MOTORBIKES_MOTORBIKES_ID, CategoryRepository::MOTORBIKES_QUAD_BIKES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID))) {
+            if (isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK'])) {
+                $blocks = CommonManager::arraySwapAssoc(AdMotorsSolrFieldMapping::MAKE_ID.'_UK', AdMotorsSolrFieldMapping::MAKE_ID, $blocks);
+            }
+            if (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID]) && isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID]['facet']) && count($blocks[AdMotorsSolrFieldMapping::MAKE_ID]['facet'])) {
+                $blocks = CommonManager::arraySwapAssoc(CategoryRepository::MOTORS_ID.'_top_links', AdMotorsSolrFieldMapping::MAKE_ID, $blocks);
+            }
+        }
+
+        //switch position of model
+        if (isset($parentCategoryIds[1]) && (isset($blocks[AdMotorsSolrFieldMapping::MODEL_ID.'_UK']) || (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']))) && isset($blocks[AdMotorsSolrFieldMapping::MODEL_ID]) && in_array(isset($parentCategoryIds[1]), array(CategoryRepository::CARS_ID, CategoryRepository::MOTORHOMES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_STATIC_CARAVANS_ID, CategoryRepository::COMMERCIALVEHICLES_ID, CategoryRepository::MOTORBIKES_ID, CategoryRepository::MOTORBIKES_MOTORBIKES_ID, CategoryRepository::MOTORBIKES_QUAD_BIKES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID))) {
+            if (isset($blocks[AdMotorsSolrFieldMapping::MODEL_ID.'_UK']) && isset($blocks[AdMotorsSolrFieldMapping::MODEL_ID.'_UK']['facet']) && count($blocks[AdMotorsSolrFieldMapping::MODEL_ID.'_UK']['facet']) && isset($blocks[AdMotorsSolrFieldMapping::MODEL_ID]) && isset($blocks[AdMotorsSolrFieldMapping::MODEL_ID]['facet']) && count($blocks[AdMotorsSolrFieldMapping::MODEL_ID]['facet'])) {
+                $blocks = CommonManager::arraySwapAssoc(AdMotorsSolrFieldMapping::MODEL_ID.'_UK', AdMotorsSolrFieldMapping::MODEL_ID, $blocks);
+            }
+            if (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && isset($blocks[AdMotorsSolrFieldMapping::MODEL_ID]) && isset($blocks[AdMotorsSolrFieldMapping::MODEL_ID]['facet']) && count($blocks[AdMotorsSolrFieldMapping::MODEL_ID]['facet'])) {
+                $blocks = CommonManager::arraySwapAssoc(CategoryRepository::MOTORS_ID.'_top_links', AdMotorsSolrFieldMapping::MODEL_ID, $blocks);
+            }
+        }
+
+        //switch position of manufacturer
+        if (isset($parentCategoryIds[1]) && (isset($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID.'_UK']) || (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']))) && isset($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID]) && in_array(isset($parentCategoryIds[1]), array(CategoryRepository::CARS_ID, CategoryRepository::MOTORHOMES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_STATIC_CARAVANS_ID, CategoryRepository::COMMERCIALVEHICLES_ID, CategoryRepository::MOTORBIKES_ID, CategoryRepository::MOTORBIKES_MOTORBIKES_ID, CategoryRepository::MOTORBIKES_QUAD_BIKES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID))) {
+            if (isset($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID.'_UK']) && isset($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID.'_UK']['facet']) && count($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID.'_UK']['facet']) && isset($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID]) && isset($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID]['facet']) && count($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID]['facet'])) {
+                $blocks = CommonManager::arraySwapAssoc(AdMotorsSolrFieldMapping::MANUFACTURER_ID.'_UK', AdMotorsSolrFieldMapping::MANUFACTURER_ID, $blocks);
+            }
+            if (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && count($blocks[CategoryRepository::MOTORS_ID.'_top_links']['facet']) && isset($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID]) && isset($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID]['facet']) && count($blocks[AdMotorsSolrFieldMapping::MANUFACTURER_ID]['facet'])) {
+                $blocks = CommonManager::arraySwapAssoc(CategoryRepository::MOTORS_ID.'_top_links', AdMotorsSolrFieldMapping::MANUFACTURER_ID, $blocks);
+            }
+        }
+
+        $parameters = array(
+            'blocks'          => $blocks,
+            'seoSearchParams' => $seoSearchParams,
+            'categoryId'      => $categoryId,
+            'seoPageRule'     => $seoPageRule,
+            'page'            => $page,
+            'cookieLocation'  => $cookieLocation,
+            'searchParams'    => $searchParams,
+            'searchQueryString'=> $searchQueryString,
+        );
+        return $this->render('FaAdBundle:AdList:showListingSeoBlocks.html.twig', $parameters);
+    }
+
+    /**
+     * Get seo blocks facet by category.
+     *
+     * @param integer $categoryId        Category id.
+     * @param array   $parentCategoryIds Array of parent categories.
+     * @param array   $blocks            Block array.
+     * @param array   $cookieLocation    Array of location.
+     * @param array   $searchParams      Array of search parameters.
+     * @param array   $data              Array of facet fields.
+     *
+     * @return array
+     */
+    private function getSeoBlocksByCategory($categoryId, $parentCategoryIds, $blocks, $cookieLocation, $searchParams, $data, $seoPageRule, $seoSearchParams)
+    {
+        $rootCategoryId = (isset($parentCategoryIds[0]) ? $parentCategoryIds[0] : null);
+
+        if ($rootCategoryId) {
+            // check for cars and commercial vehicles
+            if (isset($parentCategoryIds[1]) && in_array($parentCategoryIds[1], array(CategoryRepository::CARS_ID, CategoryRepository::COMMERCIALVEHICLES_ID))) {
+                if (count($parentCategoryIds) >= 3) {
+                    if (isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID])) {
+                        unset($blocks[AdMotorsSolrFieldMapping::MAKE_ID]);
+                    }
+                    if (isset($blocks[CategoryRepository::MOTORS_ID.'_top_links'])) {
+                        unset($blocks[CategoryRepository::MOTORS_ID.'_top_links']);
+                    }
+                    $topModelLinks = array();
+                    if (count($cookieLocation) && count($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                        $topModelLinks = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
+                        $blocks = CommonManager::insertBeforeArray($blocks, AdSolrFieldMapping::TOWN_ID, array(CategoryRepository::MOTORS_ID.'_top_links' => array(
+                            'heading' => $this->get('translator')->trans('Top Models', array(), 'frontend-search-list-block'),
+                            'is_category_specific' => false,
+                            'is_top_links' => true,
+                            'facet' => $topModelLinks
+                        )));
+                    }
+                    if (count($cookieLocation) && !count($topModelLinks)) {
+                        $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                        $blocks = CommonManager::insertBeforeArray($blocks, AdSolrFieldMapping::TOWN_ID, array(AdMotorsSolrFieldMapping::MODEL_ID.'_UK' => array(
+                            'heading' => $this->get('translator')->trans('Top Models', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__category_id',
+                            'is_category_specific' => true,
+                            'facet_limit'          => 19,
+                            'dimension_name'       => 'model',
+                            'repository'           => 'FaEntityBundle:Category',
+                            'show_all_link'        => false,
+                            'facet'                => array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_ID, 'item__category_id', 19, $searchParams, $this->container, ' AND (a_parent_category_lvl_3_id_i : '.$parentCategoryIds[2].')', true, $cookieLocation),
+                            'first_entry_as_uk' => true,
+                        )));
+                    }
+                    $blocks = CommonManager::insertBeforeArray($blocks, AdSolrFieldMapping::TOWN_ID, array(AdMotorsSolrFieldMapping::MODEL_ID =>  array(
+                        'heading' => $this->get('translator')->trans('Top Models'.(isset($cookieLocation['location_text']) ? ' in '.$cookieLocation['location_text'] : null), array(), 'frontend-search-list-block'),
+                        'search_field_name' => 'item__category_id',
+                        'is_category_specific' => true,
+                        'facet_limit'          => 25,
+                        'dimension_name'       => 'model',
+                        'repository'           => 'FaEntityBundle:Category',
+                        'show_all_link'        => false,
+                        'facet'                => $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_ID, 'item__category_id', (count($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_parent_category_lvl_3_id_i : '.$parentCategoryIds[2].')', true, $cookieLocation),
+                    )));
+                } else {
+                    $solrFieldName = AdMotorsSolrFieldMapping::MAKE_ID;
+                    $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_MAKE_ID, 'item__category_id', (count($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_category_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_2_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_3_id_i : ('.$parentCategoryIds[1].'))', true, $cookieLocation);
+                    $blocks[$solrFieldName]['repository'] = 'FaEntityBundle:Category';
+                    $blocks[$solrFieldName]['search_field_name'] = 'item__category_id';
+                    if (!count($cookieLocation)) {
+                        $blocks[$solrFieldName]['show_all_link'] = true;
+                    }
+                    if (count($cookieLocation) && !isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK'])) {
+                        $solrFieldName = AdMotorsSolrFieldMapping::MAKE_ID.'_UK';
+                        $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                        $blocks[$solrFieldName]['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_MAKE_ID, 'item__category_id', $blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK']['facet_limit'], $searchParams, $this->container, ' AND (a_parent_category_lvl_2_id_i : '.$parentCategoryIds[1].')', true, $cookieLocation);
+                        $blocks[$solrFieldName]['repository'] = 'FaEntityBundle:Category';
+                        $blocks[$solrFieldName]['search_field_name'] = 'item__category_id';
+                        $blocks[$solrFieldName]['first_entry_as_uk'] = true;
+                    }
+                }
+            } else {
+                //remove make if cat is not Boats, Farm, Motorbikes, Motorhomes & Caravans.
+                if ($rootCategoryId == CategoryRepository::MOTORS_ID && (!isset($parentCategoryIds[1]) || !in_array($parentCategoryIds[1], array(CategoryRepository::MOTORBIKES_ID, CategoryRepository::MOTORHOMES_AND_CARAVANS_ID)))) {
+                    unset($blocks[AdMotorsSolrFieldMapping::MAKE_ID]);
+                }
+
+                if (in_array($rootCategoryId, array(CategoryRepository::MOTORS_ID, CategoryRepository::ANIMALS_ID))) {
+                    foreach ($blocks as $solrFieldName => $block) {
+                        $blocksTmpSearchParams = $searchParams;
+                        if ($solrFieldName == 'a_m_make_id_i' && isset($blocksTmpSearchParams['search']) && isset($blocksTmpSearchParams['search']['item_motors__model_id'])) {
+                            unset($blocksTmpSearchParams['search']['item_motors__model_id']);
+                        }
+                        if ($block['is_category_specific'] && (!isset($block['first_entry_as_uk']))) {
+                            $categoryDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getDimesionsByCategoryId($categoryId, $this->container);
+                            $categoryDimensions = array_map('strtolower', $categoryDimensions);
+                            if (count($categoryDimensions) && in_array($block['dimension_name'], $categoryDimensions)) {
+                                if (isset($searchParams['search'][$block['search_field_name']]) || count($cookieLocation)) {
+                                    $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField($solrFieldName, $block['search_field_name'], $block['facet_limit'], $blocksTmpSearchParams, $this->container, null ,true, $cookieLocation);
+                                } else {
+                                    $data['facet_fields'][$solrFieldName] = array('limit' => $block['facet_limit'], 'min_count' => 1);
+                                }
+                                $categoryDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getDimesionsByCategoryId($categoryId, $this->container);
+                                $categoryDimensions = array_map('strtolower', $categoryDimensions);
+
+                                if (!count($cookieLocation) && ($rootCategoryId == CategoryRepository::ANIMALS_ID || $categoryId == CategoryRepository::MOTORHOMES_ID || $categoryId == CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID || ($rootCategoryId == CategoryRepository::MOTORS_ID && count($parentCategoryIds) == 2))) {
+                                    $blocks[$solrFieldName]['show_all_link'] = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return array($blocks, $data);
+    }
+
+    /**
+     * Get blocks.
+     *
+     * @param integer $categoryId        Category id.
+     * @param array   $parentCategoryIds Array of parent categories.
+     * @param array   $cookieLocation    Array of location.
+     *
+     * @return array
+     */
+    private function getListingBlockParams($categoryId, $parentCategoryIds, $cookieLocation, $seoPageRule, $seoSearchParams)
+    {
+        $locationFlag = count($cookieLocation);
+        $blocks = array();
+        $rootCategoryId = (isset($parentCategoryIds[0]) ? $parentCategoryIds[0] : null);
+        if ($rootCategoryId == CategoryRepository::FOR_SALE_ID) {
+            $forsaleTopLinkArray = array();
+            if (count($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                $forsaleTopLinkArray = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
+            }
+            if (count($forsaleTopLinkArray)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                array_unshift($forsaleTopLinkArray, array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl));
+                $blocks = $blocks + array(
+                    CategoryRepository::FOR_SALE_ID.'_top_links' => array(
+                        'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                        'is_category_specific' => false,
+                        'is_top_links' => true,
+                        'facet' => $forsaleTopLinkArray
+                    )
+                );
+            } else {
+                $blocks = $blocks+ array(
+                    AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID => array(
+                        'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                        'search_field_name' => 'item__category_id',
+                        'is_category_specific' => true,
+                        'is_top_links' => false,
+                        'facet_limit' => 19,
+                        'repository'  => 'FaEntityBundle:Category',
+                        'first_entry_as_uk' => true,
+                        'removeOtherParams' => true,
+                    )
+                );
+            }
+        } elseif ($rootCategoryId == CategoryRepository::MOTORS_ID && $locationFlag) {
+            $motorTopLinkArray = array();
+            if (count($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                $motorTopLinkArray = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
+            }
+            if (count($motorTopLinkArray)) {
+                $heading = $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block');
+                if (isset($parentCategoryIds[1]) && in_array($parentCategoryIds[1], array(CategoryRepository::BOATS_ID, CategoryRepository::FARM_ID))) {
+                    $heading = $this->get('translator')->trans('Top Manufacturers', array(), 'frontend-search-list-block');
+                }
+                $blocks =$blocks + array(
+                    CategoryRepository::MOTORS_ID.'_top_links' => array(
+                        'heading' => $heading,
+                        'is_category_specific' => false,
+                        'is_top_links' => true,
+                        'facet' => $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container)
+                    ));
+            } else {
+                if (isset($parentCategoryIds[1]) && in_array($parentCategoryIds[1], array(CategoryRepository::BOATS_ID, CategoryRepository::FARM_ID))) {
+                    $blocks = $blocks + array(
+                        AdMotorsSolrFieldMapping::MANUFACTURER_ID.'_UK' => array(
+                            'heading' => $this->get('translator')->trans('Top Manufacturers', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item_motors__manufacturer_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit' => 19,
+                            'repository'  => 'FaEntityBundle:Entity',
+                            'first_entry_as_uk' => true,
+                        ));
+                } else {
+                    $blocks = $blocks + array(
+                        AdMotorsSolrFieldMapping::MAKE_ID.'_UK' => array(
+                            'heading' => $this->get('translator')->trans('Top Makes in UK', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item_motors__make_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit' => 19,
+                            'repository'  => 'FaEntityBundle:Entity',
+                            'first_entry_as_uk' => true,
+                        ));
+                }
+            }
+        } elseif ($rootCategoryId == CategoryRepository::ANIMALS_ID && $locationFlag) {
+            $animalsTopLinkArray = array();
+            if (count($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                $animalsTopLinkArray = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
+            }
+            if (count($animalsTopLinkArray)) {
+                $heading = $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block');
+                if (isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::BIRDS))) {
+                    $heading = $this->get('translator')->trans('Top Species', array(), 'frontend-search-list-block');
+                }
+                $blocks = $blocks + array(
+                    CategoryRepository::ANIMALS_ID.'_top_links' => array(
+                        'heading' => $heading,
+                        'is_category_specific' => false,
+                        'is_top_links' => true,
+                        'facet' => $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container)
+                    ));
+            } elseif (isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::BIRDS))) {
+                $blocks = $blocks + array(
+                    AdAnimalsSolrFieldMapping::SPECIES_ID.'_UK' => array(
+                        'heading' => $this->get('translator')->trans('Top Species', array(), 'frontend-search-list-block'),
+                        'search_field_name' => 'item_animals__species_id',
+                        'is_category_specific' => true,
+                        'is_top_links' => false,
+                        'facet_limit' => 19,
+                        'repository'  => 'FaEntityBundle:Entity',
+                        'first_entry_as_uk' => true,
+                    ));
+            } elseif (isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::DOGS_AND_PUPPIES, CategoryRepository::HORSES, CategoryRepository::CATS_AND_KITTENS))) {
+                $blocks = $blocks + array(
+                    AdAnimalsSolrFieldMapping::BREED_ID.'_UK' => array(
+                        'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                        'search_field_name' => 'item_animals__breed_id',
+                        'is_category_specific' => true,
+                        'is_top_links' => false,
+                        'facet_limit' => 19,
+                        'repository'  => 'FaEntityBundle:Entity',
+                        'first_entry_as_uk' => true,
+                    ));
+            }
+        } elseif (in_array($rootCategoryId, array(CategoryRepository::PROPERTY_ID, CategoryRepository::JOBS_ID))) {
+            $jobPropertyTopLinkArray = array();
+            if (count($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                $jobPropertyTopLinkArray = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
+            }
+            if (count($jobPropertyTopLinkArray)) {
+                $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
+                array_unshift($jobPropertyTopLinkArray, array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl));
+                $blocks = $blocks + array(
+                    $rootCategoryId.'_top_links' => array(
+                        'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                        'is_category_specific' => false,
+                        'is_top_links' => true,
+                        'facet' => $jobPropertyTopLinkArray
+                    )
+                );
+            } else {
+                $blocks = $blocks + array(
+                    AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID => array(
+                        'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                        'search_field_name' => 'item__category_id',
+                        'is_category_specific' => true,
+                        'is_top_links' => false,
+                        'facet_limit'          => 19,
+                        'repository'           => 'FaEntityBundle:Category',
+                        'first_entry_as_uk' => true,
+                        'removeOtherParams' => true,
+                    )
+                );
+            }
+        }
+        $blocks = $blocks + array(
+            AdAnimalsSolrFieldMapping::BREED_ID => array(
+                'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item_animals__breed_id',
+                'is_category_specific' => true,
+                'is_top_links' => false,
+                'facet_limit'          => ($locationFlag ? 10 : 25),
+                'dimension_name'       => 'breed',
+                'repository'           => 'FaEntityBundle:Entity',
+            ),
+            AdAnimalsSolrFieldMapping::SPECIES_ID => array(
+                'heading' => $this->get('translator')->trans('Top Species'.(isset($cookieLocation['location_text']) ? ' in '.$cookieLocation['location_text'] : null), array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item_animals__species_id',
+                'is_category_specific' => true,
+                'is_top_links' => false,
+                'facet_limit'          => ($locationFlag ? 10 : 25),
+                'dimension_name'       => 'species',
+                'repository'           => 'FaEntityBundle:Entity',
+            ),
+            AdMotorsSolrFieldMapping::MAKE_ID => array(
+                'heading' => $this->get('translator')->trans('Top Makes', array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item_motors__make_id',
+                'is_category_specific' => true,
+                'is_top_links' => false,
+                'facet_limit'          => ($locationFlag ? 10 : 25),
+                'dimension_name'       => 'make',
+                'repository'           => 'FaEntityBundle:Entity',
+            ),
+            AdMotorsSolrFieldMapping::MANUFACTURER_ID => array(
+                'heading' => $this->get('translator')->trans('Top Manufacturers'.(isset($cookieLocation['location_text']) ? ' in '.$cookieLocation['location_text'] : null), array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item_motors__manufacturer_id',
+                'is_category_specific' => true,
+                'is_top_links' => false,
+                'facet_limit'          => ($locationFlag ? 10 : 25),
+                'dimension_name'       => 'manufacturer',
+                'repository'           => 'FaEntityBundle:Entity',
+            ),
+            AdSolrFieldMapping::DOMICILE_ID => array(
+                'heading' => $this->get('translator')->trans('Top Counties', array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item__location',
+                'is_category_specific' => false,
+                'is_top_links' => false,
+                'facet_limit'          => 10,
+                'repository'           => 'FaEntityBundle:Location',
+            ),
+            AdSolrFieldMapping::TOWN_ID => array(
+                'heading' => $this->get('translator')->trans('Top Cities/Towns', array(), 'frontend-search-list-block'),
+                'search_field_name' => 'item__location',
+                'is_category_specific' => false,
+                'is_top_links' => false,
+                'facet_limit'          => 20,
+                'repository'           => 'FaEntityBundle:Location',
+            ),
+        );
+
+        return $blocks;
+    }
+
+    /**
+     * Get facet by parameters.
+     *
+     * @param string  $solrFieldName   Solr mapping field name.
+     * @param string  $searchFieldName Solr search field name.
+     * @param integer $facetLimit      Facet limit.
+     * @param array   $searchParams    Array of search params.
+     * @param object  $container       Container identifier.
+     * @param string  $staticFilters   Solr search static filters.
+     *
+     * @return array
+     */
+    public function getDimensionFacetByField($solrFieldName, $searchFieldName, $facetLimit, $searchParams, $container, $staticFilters = null, $removeSearchFieldName = true, $cookieLocation = null)
+    {
+        // Active ads
+        $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
+        if ($removeSearchFieldName && isset($searchParams['search'][$searchFieldName])) {
+            unset($searchParams['search'][$searchFieldName]);
+        }
+
+        // static filters.
+        if ($staticFilters) {
+        	$appendStaticfilters = '';
+        	$appendStaticfilters = $this->getAppendableStaticFilters($searchParams);
+            $data['static_filters'] = $staticFilters.$appendStaticfilters;
+        }
+
+        if (isset($searchParams['search']['item__category_id']) && $searchParams['search']['item__category_id']) {
+            $categoryId                   = $searchParams['search']['item__category_id'];
+            $indexableDimensionFieldArray = $this->getRepository('FaEntityBundle:CategoryDimension')->getIndexableDimensionFieldsArrayByCategoryId($categoryId, $this->container);
+            $data['query_filters']['item']['category_id'] = $categoryId;
+
+            if (count($indexableDimensionFieldArray)) {
+                foreach ($indexableDimensionFieldArray as $indexableDimensionField) {
+                    if (isset($searchParams['search'][$indexableDimensionField]) && $searchParams['search'][$indexableDimensionField]) {
+                        $explodeRes                                            = explode('__', $indexableDimensionField);
+                        $data['query_filters'][$explodeRes[0]][$explodeRes[1]] = $searchParams['search'][$indexableDimensionField];
+                    }
+                }
+            }
+        }       
+        if (isset($searchParams['search']['item__location']) && $searchParams['search']['item__location']) {
+            $data['query_filters']['item']['location'] = $searchParams['search']['item__location'].'|30';
+        }
+
+        $data['facet_fields'][$solrFieldName] = array('limit' => $facetLimit, 'min_count' => 1);                
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $container->get('fa.solrsearch.manager')->init('ad', '', $data);
+        
+        if (count($cookieLocation)) {
+            if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
+            }
+        }
+        $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+        $facetResult  = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+
+        $facetArray = array();
+        if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
+            $facetArray = get_object_vars($facetResult[$solrFieldName]);
+        }
+
+        return $facetArray;
+    }
+
+    /**
+     * Get profile exposure user.
+     *
+     * @param array   $searchParams                 Search parameters.
+     * @param string  $exposureMiles                Miles.
+     * @param array   $shopPackageCategories        Shop package categories.
+     * @param boolean $viewedProfileExposureUserIds Skip viewed users.
+     *
+     * @return array
+     */
+    private function getProfileExposureUser($searchParams, $exposureMiles, $shopPackageCategories = array(), $viewedProfileExposureUserIds)
+    {
+        $userIds            = array();
+        $data               = array();
+        $keywords           = (isset($searchParams['search']['keywords']) ? $searchParams['search']['keywords'] : null);
+        $page               = 1;
+        $recordsPerPage     = 2;
+        $additionaldistance = 0;
+
+        //set ad criteria to search
+        if (isset($searchParams['query_filters']) && isset($searchParams['query_filters']['item']['location']) && $searchParams['query_filters']['item']['location']) {
+            list($locationId, $distance) = explode('|', $searchParams['query_filters']['item']['location']);
+            if ($exposureMiles === 'national') {
+                $additionaldistance = 100000;
+            } else {
+                $additionaldistance = $exposureMiles;
+            }
+            $searchParams['query_filters']['item']['location'] = $locationId.'|'.($distance+$additionaldistance);
+        }
+
+        $data['select_fields']  = array('item' => array('user_id'));
+        $data['query_filters']  = (isset($searchParams['query_filters']) ? $searchParams['query_filters'] : array());
+        $data['static_filters'] = ' AND '.AdSolrFieldMapping::HAS_PROFILE_EXPOSURE.':1 AND '.AdSolrFieldMapping::PROFILE_EXPOSURE_MILES.':'.$exposureMiles;
+        if (count($shopPackageCategories)) {
+            $data['static_filters'] = $data['static_filters'].' AND ('.AdSolrFieldMapping::SHOP_PACKAGE_CATEGORY_ID.':'.implode(' OR '.AdSolrFieldMapping::SHOP_PACKAGE_CATEGORY_ID.':', $shopPackageCategories).')';
+        }
+
+        if (count($viewedProfileExposureUserIds)) {
+            $viewedProfileExposureUserIds = array_unique($viewedProfileExposureUserIds);
+            if (isset($data['static_filters'])) {
+                $data['static_filters'] = $data['static_filters'].' AND -'.AdSolrFieldMapping::USER_ID.': ("'.implode('" "', $viewedProfileExposureUserIds).'")';
+            } else {
+                $data['static_filters'] = ' AND -'.AdSolrFieldMapping::USER_ID.': ("'.implode('" "', $viewedProfileExposureUserIds).'")';
+            }
+        }
+
+        $data['query_sorter']   = array();
+        if (strlen($keywords)) {
+            $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+        }
+        $data['query_sorter']['item']['random'] = array('sort_ord' => 'desc', 'field_ord' => 2);
+        $data['group_fields'] = array(
+            AdSolrFieldMapping::USER_ID => array('limit' => 1),
+        );
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+        $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage, 0, true);
+        $solrResponse = $solrSearchManager->getSolrResponse();
+        $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseGroupFields($solrResponse);
+        if (isset($facetResult[AdSolrFieldMapping::USER_ID]) && isset($facetResult[AdSolrFieldMapping::USER_ID]['groups']) && count($facetResult[AdSolrFieldMapping::USER_ID]['groups'])) {
+            $adUsers = $facetResult[AdSolrFieldMapping::USER_ID]['groups'];
+            foreach ($adUsers as $userCnt => $adUser) {
+                $adUser = get_object_vars($adUser);
+                if (isset($adUser['groupValue']) && $adUser['groupValue']) {
+                    $userIds[$userCnt] = array(
+                        'id' => $adUser['groupValue'],
+                    );
+                    if (isset($searchParams['query_filters']) && isset($searchParams['query_filters']['item']['location']) && $searchParams['query_filters']['item']['location']) {
+                        $userIds[$userCnt]['location'] = $searchParams['query_filters']['item']['location'];
+                    }
+                }
+            }
+        }
+
+        return $userIds;
+    }
+
+    /**
+     * Get profile exposure user ads.
+     *
+     * @param integer $userId       A Request object.
+     * @param array   $searchParams Search parameters.
+     *
+     * @return array
+     */
+    private function getProfileExposureUserAds($userId, $searchParams)
+    {
+        $profileExposureUserAds = $this->getProfileExposureUserAdsSolrResult($userId, $searchParams);
+
+        if (count($profileExposureUserAds) < 12) {
+            $adIds = array();
+            foreach ($profileExposureUserAds as $profileExposureUserAd) {
+                $adIds[] = $profileExposureUserAd[AdSolrFieldMapping::ID];
+            }
+            $profileExposureUserOtherAds = $this->getProfileExposureUserAdsSolrResult($userId, array(), $adIds);
+            $i = count($profileExposureUserAds);
+            foreach ($profileExposureUserOtherAds as $profileExposureUserOtherAd) {
+                if ($i <= 12) {
+                    $profileExposureUserAds[$i] = $profileExposureUserOtherAd;
+                    $i++;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return $profileExposureUserAds;
+    }
+
+    /**
+     * Get profile exposure user ads.
+     *
+     * @param integer $userId       A Request object.
+     * @param array   $searchParams Search parameters.
+     *
+     * @return array
+     */
+    private function getProfileExposureUserAdsSolrResult($userId, $searchParams = array(), $adIds = array())
+    {
+        $data                 = array();
+        $page                 = 1;
+        $recordsPerPage       = 12;
+        $data['query_sorter'] = array();
+
+        if (count($searchParams)) {
+            $keywords               = (isset($searchParams['search']['keywords']) ? $searchParams['search']['keywords'] : null);
+            $data['query_filters']  = (isset($searchParams['query_filters']) ? $searchParams['query_filters'] : array());
+            if (strlen($keywords)) {
+                $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+            } else {
+                $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+            }
+        } else {
+            $keywords = null;
+            $data['query_filters']['item']['status_id']   = EntityRepository::AD_STATUS_LIVE_ID;
+            $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+        }
+
+        $data['query_filters']['item']['user_id'] = $userId;
+        if (count($adIds)) {
+            $data['static_filters'] = ' AND -'.AdSolrFieldMapping::ID.': ('.implode(' ', $adIds).')';
+        }
+        //set ad criteria to search
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+        $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage, 0, true);
+
+        $solrResponse = $solrSearchManager->getSolrResponse();
+
+        return $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
+    }
+
+    /**
+     * Get shop user by search criteria.
+     *
+     * @param array   $data    Search parameters.
+     * @param Request $request Request object.
+     *
+     * @return array
+     */
+    private function getBusinessUserBySearchCriteria($data, $request)
+    {
+        $shopPackageCategories = array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID);
+        $businessExposureUsers = array();
+        $businessExposureMiles = array();
+        $categoryId            = (isset($data['query_filters']) && isset($data['query_filters']['item']['category_id']) && $data['query_filters']['item']['category_id'] ? $data['query_filters']['item']['category_id'] : null);
+
+        // for showing profile page.
+        if (isset($data['search']['item__category_id'])) {
+            $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($data['search']['item__category_id'], $this->container);
+            if (in_array($rootCategoryId, $shopPackageCategories)) {
+                $businessExposureMiles = $this->getRepository('FaPromotionBundle:Package')->getShopPackageProfileExposureUpsellByCategory($data['search']['item__category_id'], $this->container);
+            }
+        }
+
+        $businessExposureUserDetails = array();
+        $topBusiness = $this->getRepository('FaCoreBundle:ConfigRule')->getTopBusiness($data['search']['item__category_id'], $this->container);
+        if ($topBusiness) {
+            $businessExposureUserDetails = $this->getRepository('FaUserBundle:User')->getTopbusinessUserDetailForAdList($topBusiness, $this->container);
+        }
+        $businessExposureUsers       = array();
+        if (count($businessExposureMiles)) {
+            $viewedBusinessExposureUserIds = array_filter(explode(',', $request->cookies->get('business_exposure_user_ids_'.$rootCategoryId)));
+
+            foreach ($businessExposureMiles as $businessExposureMile) {
+                foreach ($this->getBusinessExposureUser($data, $businessExposureMile, $viewedBusinessExposureUserIds) as $businessExposureUser) {
+                    $businessExposureUsers[] = $businessExposureUser;
+                    $viewedBusinessExposureUserIds[] = $businessExposureUser['id'];
+                }
+            }
+
+            if (!count($businessExposureUsers)) {
+                $viewedBusinessExposureUserIds = array();
+                foreach ($businessExposureMiles as $businessExposureMile) {
+                    foreach ($this->getBusinessExposureUser($data, $businessExposureMile, array()) as $businessExposureUser) {
+                        $businessExposureUsers[] = $businessExposureUser;
+                        $viewedBusinessExposureUserIds[] = $businessExposureUser['id'];
+                    }
+                }
+            }
+
+            $response = new Response();
+            $response->headers->setCookie(new Cookie('business_exposure_user_ids_'.$rootCategoryId, implode(',', $viewedBusinessExposureUserIds), CommonManager::getTimeStampFromEndDate(date('Y-m-d'))));
+            $response->sendHeaders();
+
+            if (count($businessExposureUsers)) {
+                shuffle($businessExposureUsers);
+                $businessPageLimit = $this->getRepository('FaCoreBundle:ConfigRule')->getBusinessPageSlots($categoryId, $this->container);
+                for ($i = 0; $i < $businessPageLimit; $i++) {
+                    if (isset($businessExposureUsers[$i])) {
+                        $businessExposureUser = $businessExposureUsers[$i];
+                        $businessExposureUserDetails[] = array(
+                            'user_id' => $businessExposureUser[UserShopDetailSolrFieldMapping::ID],
+                            'company_welcome_message' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::COMPANY_WELCOME_MESSAGE]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::COMPANY_WELCOME_MESSAGE] : null),
+                            'about_us' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::ABOUT_US]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::ABOUT_US] : null),
+                            'company_logo' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH] : null),
+                            'status_id' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID] : null),
+                            'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
+                        );
+                    }
+                }
+            }
+        }
+
+        $parameters['businessExposureUsersDetails'] = $businessExposureUserDetails;
+
+        return $parameters;
+    }
+
+    /**
+     * Get profile exposure user.
+     *
+     * @param array   $searchParams                  Search parameters.
+     * @param string  $exposureMiles                 Miles.
+     * @param array   $viewedBusinessExposureUserIds Array of viewed user ids.
+     *
+     * @return array
+     */
+    private function getBusinessExposureUser($searchParams, $exposureMiles, $viewedBusinessExposureUserIds = array())
+    {
+        $data               = array();
+        $keywords           = (isset($searchParams['search']['keywords']) ? $searchParams['search']['keywords'] : null);
+        $categoryId         = (isset($searchParams['query_filters']) && isset($searchParams['query_filters']['item']['category_id']) && $searchParams['query_filters']['item']['category_id'] ? $searchParams['query_filters']['item']['category_id'] : null);
+        $page               = 1;
+        $recordsPerPage     = $this->getRepository('FaCoreBundle:ConfigRule')->getBusinessPageSlots($categoryId, $this->container);
+        $additionaldistance = 0;
+
+        //set ad criteria to search
+        if (isset($searchParams['query_filters']) && isset($searchParams['query_filters']['item']['location']) && $searchParams['query_filters']['item']['location']) {
+            list($locationId, $distance) = explode('|', $searchParams['query_filters']['item']['location']);
+            if ($exposureMiles === 'national') {
+                $additionaldistance = 100000;
+            } else {
+                $additionaldistance = $exposureMiles;
+            }
+            $data['query_filters']['user_shop_detail']['location'] = $locationId.'|'.($distance+$additionaldistance);
+        }
+
+        //set ad criteria to search
+        $data['static_filters'] = ' AND '.UserShopDetailSolrFieldMapping::PROFILE_EXPOSURE_MILES.':'.$exposureMiles;
+        if ($categoryId) {
+            $data['query_filters']['user_shop_detail']['profile_exposure_category_id'] = $categoryId;
+        }
+
+        if (count($viewedBusinessExposureUserIds)) {
+            $viewedBusinessExposureUserIds = array_unique($viewedBusinessExposureUserIds);
+            if (isset($data['static_filters'])) {
+                $data['static_filters'] = $data['static_filters'].' AND -'.UserShopDetailSolrFieldMapping::ID.': ("'.implode('" "', $viewedBusinessExposureUserIds).'")';
+            } else {
+                $data['static_filters'] = ' AND -'.UserShopDetailSolrFieldMapping::ID.': ("'.implode('" "', $viewedBusinessExposureUserIds).'")';
+            }
+        }
+
+        $data['query_sorter']   = array();
+        if (strlen($keywords)) {
+            $data['query_sorter']['user_shop_detail']['score'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+        }
+        $data['query_sorter']['user_shop_detail']['random'] = array('sort_ord' => 'desc', 'field_ord' => 2);
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+        $solrSearchManager->init('user.shop.detail', $keywords, $data, $page, $recordsPerPage, 0, true);
+        $solrResponse = $solrSearchManager->getSolrResponse();
+        $result = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
+
+        return $result;
+    }
+
+    /**
+     * Load children categories based on parent.
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function ajaxLeftSearchLoadChildrenCategoriesAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $searchParams = unserialize($request->get('searchParams'));
+            $facetResult  = $this->getRepository('FaEntityBundle:Category')->getCategoryFacetBySearchParams($searchParams, $this->container);
+
+            $parameters = array('searchParams' => $searchParams, 'facetResult' => $facetResult);
+            return $this->render('FaAdBundle:AdList:leftSearchCategoryLinksMobile.html.twig', $parameters);
+        }
+
+        return new Response();
+    }
+
+    /**
+     * This action is used for create user half account.
+     *
+     * @param Request $request A Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function createAlertBlockAction(Request $request)
+    {
+        $formManager = $this->get('fa.formmanager');
+        $form        = $formManager->createForm(UserHalfAccountEmailOnlyType::class, null, array('method' => 'POST'));
+
+        if ($request->isXmlHttpRequest() && 'POST' === $request->getMethod() && $request->get('is_form_load', null) == null) {
+            if ($formManager->isValid($form)) {
+                $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('email')->getData()));
+                return new JsonResponse(array('success' => '1', 'user_id' => $user->getId()));
+            } else {
+                return new JsonResponse(array('success' => '', 'user_id' => '', 'errorMessage' => 'Please enter valid email address.'));
+            }
+        }
+
+        $parameters = array('form' => $form->createView());
+        return $this->render('FaAdBundle:AdList:createAlertBlock.html.twig', $parameters);
+    }
+
+    /**
+     * This action is used for fetch expanded distance count.
+     *
+     * @param Request $request A Request object.
+     * @param Array   $keyword     keyword array.
+     * @param Array   $data        data array.
+     * @param Integer $resultCount result count.
+     * @param Integer $nextMiles   next miles.
+     *
+     * @return Response A Response object.
+     */
+    public function getExpandDistanceAdCount($request, $keywords, $data, $resultCount, $nextMiles)
+    {
+        return 0;
+        $currentUrl  = $request->getUri();
+        $cacheKey    = 'getExpandDistanceAdCount_'.md5($currentUrl);
+        $cachedValue = CommonManager::getCacheVersion($this->container, $cacheKey);
+
+        if ($cachedValue !== false) {
+            return $cachedValue;
+        }
+
+         $dataNext = $data;
+         $dataNext['search']['item__distance'] = $nextMiles;
+         $dataNext['query_filters']['item']['distance'] = $nextMiles;
+         $dataNext['query_filters']['item']['location'] = $dataNext['search']['item__location'].'|'.$nextMiles;
+
+         // initialize solr search manager service and fetch data based of above prepared search options
+         $this->get('fa.solrsearch.manager')->init('ad', $keywords, $dataNext, 1, 10, 0, true);
+         $solrResponseNext = $this->get('fa.solrsearch.manager')->getSolrResponse();
+
+         // fetch result set from solr
+         $resultNext             = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponseNext);
+         $expandMilesresultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponseNext);
+         $expandMilesresultCount = $expandMilesresultCount - $resultCount;
+
+         CommonManager::setCacheVersion($this->container, $cacheKey, $expandMilesresultCount, 600);
+
+         return $expandMilesresultCount;
+    }
+
+    /**
+     * This action is used for get next miles
+     *
+     * @param Integer $currentDistance integer
+     *
+     * @return Integer.
+     */
+    public function getNextMiles($currentDistance)
+    {
+        return 0;
+        $nextMiles = 0;
+        $milesArray = $this->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container);
+
+        if ($milesArray && isset($currentDistance)) {
+         $index = array_search($currentDistance, array_keys($milesArray));
+         $index = $index + 1;
+         $count = 0;
+         foreach ($milesArray as $key => $value) {
+          if ($count == $index) {
+           $nextMiles = $key;
+          }
+          $count++;
+         }
+        }
+        return $nextMiles;
+    }
+
+    /**
+     * This action is used for get page url.
+     *
+     * @param Request $request object
+     *
+     * @return String.
+     */
+    public function getPageUrl($request)
+    {
+        $pageUrl = $request->getPathInfo();
+        if ($request->getQueryString() != '') {
+            $pageUrl .= '?' . $request->getQueryString();
+        }
+
+        if ($pageUrl) {
+            $pageUrlArray = array_filter(explode('/', $pageUrl));
+
+            if ($pageUrlArray && is_array($pageUrlArray) && count($pageUrlArray) > 0) {
+                $count = 1;
+                $pageUrl = '';
+                foreach ($pageUrlArray as $key => $value) {
+                    if ($count > 1) {
+                        $pageUrl = $pageUrl . '/' . $value;
+                    }
+                    $count++;
+                }
+                $pageUrl = trim($pageUrl, '/');
+            }
+        }
+
+        return $pageUrl;
+    }
+
+    /**
+     * This action is used to update feed ad view count.
+     *
+     * @param Request $request object
+     *
+     * @return String.
+     */
+    public function ajaxUpdateFeedAdViewCountAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest())
+        {
+            $adId = $request->get('adId');
+            $createdAt = CommonManager::getTimeStampFromStartDate(date("Y-m-d"));
+            $adDetail = $this->getRepository('FaAdFeedBundle:AdFeed')->findOneByAd($adId);
+            $adFeedSiteId = $adDetail->getRefSiteId();
+            $adFeedClick = CommonManager::getHistoryRepository($this->container, 'FaReportBundle:AdFeedClickReportDaily')->findOneBy(array('ad_id' => $adId, 'ad_feed_site_id' => $adFeedSiteId, 'created_at' => $createdAt));
+
+            $this->historyEntityManager = $this->container->get('doctrine')->getManager('history');
+
+            if(!$adFeedClick) {
+                $adFeedClick = new AdFeedClickReportDaily();
+                $adFeedClick->setAdId($adId);
+                $adFeedClick->setAdFeedSiteId($adFeedSiteId);
+                $adFeedClick->setCreatedAt($createdAt);
+                $adFeedClick->setView('1');
+
+                $this->historyEntityManager->persist($adFeedClick);
+                $this->historyEntityManager->flush($adFeedClick);
+            } else {
+                $adFeedClick->setAdId($adId);
+                $adFeedClick->setAdFeedSiteId($adFeedSiteId);
+                $adFeedClick->setCreatedAt($createdAt);
+                $adFeedClick->setView($adFeedClick->getView() + 1);
+                $this->historyEntityManager->persist($adFeedClick);
+                $this->historyEntityManager->flush($adFeedClick);
+            }
+        }
+
+        return new JsonResponse();
+    }
+
+    public function getAppendableStaticFilters($searchParams) {
+    	$appendQueryFilters = '';
+    	if(isset($searchParams['search']['item_motors__colour_id']) && $searchParams['search']['item_motors__colour_id']) {
+            if (count($searchParams['search']['item_motors__colour_id'])) {
+            	$itemMotorsColourIds = $searchParams['search']['item_motors__colour_id'];
+            	$appendQueryFilters .= ' AND (';
+            	//$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+            	foreach($itemMotorsColourIds as $itemMotorsColourId) {
+            		$appendQueryFilters .= "(a_m_colour_id_i : (".$itemMotorsColourId.")) OR ";
+            	}
+            	$appendQueryFilters = rtrim($appendQueryFilters," OR ");
+            	$appendQueryFilters .= ')';
+
+            }    	
+        }
+
+        if(isset($searchParams['search']['item_motors__body_type_id']) && $searchParams['search']['item_motors__body_type_id']) {
+            if (count($searchParams['search']['item_motors__body_type_id'])) {
+            	$itemMotorsBodyTypeIds = $searchParams['search']['item_motors__body_type_id'];
+            	$appendQueryFilters .= ' AND (';
+            	//$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+            	foreach($itemMotorsBodyTypeIds as $itemMotorsBodyTypeId) {
+            		$appendQueryFilters .= "(a_m_body_type_id_i : (".$itemMotorsBodyTypeId.")) OR ";
+            	}
+            	$appendQueryFilters = rtrim($appendQueryFilters," OR ");
+            	$appendQueryFilters .= ')';
+
+            }    	
+        }
+
+        if(isset($searchParams['search']['item_motors__fuel_type_id']) && $searchParams['search']['item_motors__fuel_type_id']) {
+            if (count($searchParams['search']['item_motors__fuel_type_id'])) {
+            	$itemMotorsFuelTypeIds = $searchParams['search']['item_motors__fuel_type_id'];
+            	$appendQueryFilters .= ' AND (';
+            	//$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+            	foreach($itemMotorsFuelTypeIds as $itemMotorsFuelTypeId) {
+            		$appendQueryFilters .= "(a_m_fuel_type_id_i : (".$itemMotorsFuelTypeId.")) OR ";
+            	}
+            	$appendQueryFilters = rtrim($appendQueryFilters," OR ");
+            	$appendQueryFilters .= ')';
+
+            }    	
+        }
+
+        if(isset($searchParams['search']['item_motors__reg_year']) && $searchParams['search']['item_motors__reg_year']) {
+            if (count($searchParams['search']['item_motors__reg_year'])) {
+            	$itemMotorsRegYears = $searchParams['search']['item_motors__reg_year'];
+            	$appendQueryFilters .= ' AND (';
+            	//$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+            	foreach($itemMotorsRegYears as $itemMotorsRegYear) {
+            		$appendQueryFilters .= "(a_m_reg_year_s : (".$itemMotorsRegYear.")) OR ";
+            	}
+            	$appendQueryFilters = rtrim($appendQueryFilters," OR ");
+            	$appendQueryFilters .= ')';
+
+            }    	
+        }
+
+        if(isset($searchParams['search']['item_motors__transmission_id']) && $searchParams['search']['item_motors__transmission_id']) {
+            if (count($searchParams['search']['item_motors__transmission_id'])) {
+            	$itemMotorsTransmissionIds = $searchParams['search']['item_motors__transmission_id'];
+            	$appendQueryFilters .= ' AND (';
+            	//$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+            	foreach($itemMotorsTransmissionIds as $itemMotorsTransmissionId) {
+            		$appendQueryFilters .= "(a_m_transmission_id_i : (".$itemMotorsTransmissionId.")) OR ";
+            	}
+            	$appendQueryFilters = rtrim($appendQueryFilters," OR ");
+            	$appendQueryFilters .= ')';
+
+            }    	
+        }
+
+		/*if(isset($searchParams['search']['item_motors__mileage_range']) && $searchParams['search']['item_motors__mileage_range']) {
+            if (count($searchParams['search']['item_motors__mileage_range'])) {
+            	$itemMotorsMileageRanges = $searchParams['search']['item_motors__mileage_range'];
+            	$appendQueryFilters .= ' AND (';
+            	//$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+            	foreach($itemMotorsMileageRanges as $itemMotorsMileageRange) {
+            		$appendQueryFilters .= "(a_m_mileage_d : (".$itemMotorsMileageRange.")) OR ";
+            	}
+            	$appendQueryFilters = rtrim($appendQueryFilters," OR ");
+            	$appendQueryFilters .= ')';
+
+            }    	
+        }*/
+
+        if(isset($searchParams['search']['item_motors__condition_id']) && $searchParams['search']['item_motors__condition_id']) {
+            if (count($searchParams['search']['item_motors__condition_id'])) {
+            	$itemMotorsConditionIds = $searchParams['search']['item_motors__condition_id'];
+            	$appendQueryFilters .= ' AND (';
+            	//$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+            	foreach($itemMotorsConditionIds as $itemMotorsConditionId) {
+            		$appendQueryFilters .= "(a_m_condition_id_i : (".$itemMotorsConditionId.")) OR ";
+            	}
+            	$appendQueryFilters = rtrim($appendQueryFilters," OR ");
+            	$appendQueryFilters .= ')';
+
+            }    	
+        }
+        
+        return $appendQueryFilters; 
+    }
+}

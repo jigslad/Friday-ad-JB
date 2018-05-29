@@ -1,0 +1,9 @@
+{% if totalAds is defined and totalAds >= 5 %}
+        {% if lowerPrice is defined and lowerPrice and upperPrice is defined and upperPrice %}
+            {{ "Similar adverts on Friday-Ad are being priced between <b>&pound;%lowerPrice%</b> and <b>&pound;%upperPrice%</b>."|trans({'%lowerPrice%': lowerPrice, '%upperPrice%': upperPrice}, 'frontend-paa-second-step')|raw }}
+            <br />
+        {% endif %}
+
+        <a href="javascript:void(0)" class="show_hide_similar_link" id="hide_similar_link" style="display:none">{{ 'Hide similar items'|trans({}, 'frontend-paa-second-step') }}</a>
+        <a href="javascript:void(0)" class="show_hide_similar_link" id="show_similar_link">{{ 'Show similar items'|trans({}, 'frontend-paa-second-step') }}</a>
+{% endif %}

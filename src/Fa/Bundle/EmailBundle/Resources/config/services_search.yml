@@ -1,0 +1,11 @@
+services:
+        
+    fa.email_template.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEmailBundle:EmailTemplate]
+        
+    fa.email_queue.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEmailBundle:EmailQueue]

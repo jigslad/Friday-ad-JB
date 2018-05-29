@@ -1,0 +1,14 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Core CSS - Include with every page -->
+{% stylesheets filter='uglifycss' output='bundles/css/compiled/mainAdmin.css'
+    'bundles/faadmin/css/foundation.css'
+    'bundles/faadmin/foundation-icons/foundation-icons.css'
+    'bundles/faadmin/css/select2.css'
+    'bundles/faadmin/css/select2-foundation5.css'
+    'bundles/faadmin/css/foundation-datepicker.css'
+    'bundles/faadmin/css/jquery-ui.min.css'
+      %}
+    <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
+{% endstylesheets %}

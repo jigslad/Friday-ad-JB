@@ -1,0 +1,32 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set containerInstance = fetch_container_instance() %}
+
+{% set packageEditGrant = false %}
+{% set packageDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('shop_package_edit_admin') %}
+  {% set packageEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('shop_package_delete_admin') %}
+  {% set packageDeleteGrant = true %}
+{% endif %}
+
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'shop_package_new_admin'}) }}
+    {% set searchHtml = block('search_html') is defined ? block('search_html') : '' %}
+    {{ searchHtml }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaPromotionBundle:ShopPackageAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+{% set searchScript = block('search_script') is defined ? block('search_script') : '' %}
+    {{ searchScript }}
+{% endblock %}

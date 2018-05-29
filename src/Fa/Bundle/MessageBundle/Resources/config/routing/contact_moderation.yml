@@ -1,0 +1,7 @@
+contact_moderation_request:
+    path:     /request/{id}
+    defaults: { _controller: "FaMessageBundle:ContactModeration:request" }
+
+contact_moderation_response:
+    path:     /response
+    defaults: { _controller: "FaMessageBundle:ContactModeration:response" }

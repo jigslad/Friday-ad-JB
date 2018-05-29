@@ -1,0 +1,58 @@
+{% set userBusinessRole = constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+
+{% if app.user and app.user.getRole().getId() == userBusinessRole %}
+    {% set userCreatedAt          = app.user.getCreatedAt() %}
+    {% set userCreatedBeforeDate  = '21-09-2015 23:59:59' | date('U') %}
+    {% set isUserTypeChanged      = app.user.getIsUserTypeChanged() %}
+
+    {% if (userCreatedAt <= userCreatedBeforeDate or app.user.getUserPopup()) and isUserTypeChanged == FALSE %}
+    <div id="userTypeChangedModal" class="private-business-modal reveal-modal medium center" data-reveal>
+        <div class="modal-content remove-modal">
+            <div class="row">
+                <div class="columns">
+                    <h3>{{'Sorry - This will take just 5 seconds!'|trans({}, 'frontend-show-ad')}}</h3>
+                    <p class="mt30">{{"We want to provide our users with the best possible on-site experience and to do so, we want to know just one thing..."|trans({}, 'frontend-show-ad')}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="columns">
+                    <h2>{{"Are you a private or business user?"|trans({}, 'frontend-show-ad')}}</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 small-12 columns">
+                    <div class="private-icon">{{ "Private"|trans({}, 'frontend-show-ad') }}</div>
+                    <a class="primary-btn-2 button expand" href="javascript:void(0)" onclick="return forceUpdateUserType('Private');">{{ "Private"|trans({}, 'frontend-show-ad') }}</a>
+                </div>
+                <div class="large-12 small-12 columns">
+                    <div class="business-icon">{{ "Business"|trans({}, 'frontend-show-ad') }}</div>
+                    <a class="primary-btn-2 button expand" href="javascript:void(0)" onclick="return forceUpdateUserType('Business');">{{ "Business"|trans({}, 'frontend-show-ad') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    function forceUpdateUserType(userType)
+    {
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url: "{{path('proceed_user_type_update')}}",
+            data: {type:userType}
+        })
+        .done(function(response) {
+            unblockPage();
+            closeRevealModel('#userTypeChangedModal');
+            location.reload();
+        });
+    }
+    $('#userTypeChangedModal').foundation('reveal', 'open', {
+        close_on_background_click : false,
+        close_on_esc : false
+    });
+    //]]>
+    </script>
+    {% endif %}
+{% endif %}

@@ -1,0 +1,310 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% set container = fetch_container_instance() %}
+{% set allowProfileEdit = false %}
+{% if app.getUser() and userDetail["id"] is defined and userDetail["id"] == app.getUser().getId() %}
+    {% set allowProfileEdit = true %}
+    {% use "FaUserBundle:UserImage:showProfileImageUploader.html.twig" %}
+    {% use "FaUserBundle:UserSiteBanner:showUserSiteBannerUploader.html.twig" %}
+    {% set deleteRoute = "ajax_delete_user_image" %}
+    {% set getProfileBigImageRoute = "ajax_get_profile_big_image" %}
+{% endif %}
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set userUpsellRepository = fetch_repository('FaUserBundle:UserUpsell') %}
+{% set userUpsell = userUpsellRepository.getUserUpsellArray(userDetail['id']) %}
+{% set userSiteImageRepository = fetch_repository('FaUserBundle:UserSiteImage') %}
+{% set userSiteImages = null %}
+{% if userDetail["site_id"] is defined and userDetail["site_id"] %}
+    {% set userSiteImages = userSiteImageRepository.getUserSiteImages(userDetail["site_id"]) %}
+{% endif %}
+{% set profileAdsUrl = container.get('fa_ad.manager.ad_routing').getProfilePageAdsUrl(userDetail['id']) %}
+
+{% set businessName = '' %}
+{% if userDetail['user_name'] is defined and userDetail['user_name']|length %}
+    {% set businessName = userDetail['user_name'] %} 
+{% endif %}
+
+{% block page_title %}
+    {% set businessLocationName = '' %}
+    {% set businessCategoryName = '' %}
+    {% if userDetail['town_name'] is defined and userDetail['town_name']|length %}
+        {% set businessLocationName = userDetail['town_name'] %}
+    {% endif %}
+    {% if userDetail['business_category_id'] is defined and userDetail['business_category_id'] %}
+        {% set businessCategoryName = fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', userDetail['business_category_id']) %}
+    {% endif %}
+    {% if businessName and (businessLocationName or businessCategoryName) %}
+        {{ businessName }} - {{ businessLocationName }} {{ businessCategoryName }} | Friday-Ad Business
+    {% elseif businessName %}
+        {{ businessName }} | Friday-Ad Business
+    {% elseif businessLocationName or businessCategoryName %}
+        {{ businessLocationName }} {{ businessCategoryName }} | Friday-Ad Business
+    {% else %}
+        Friday-Ad Business
+    {% endif %}
+{% endblock %}
+
+{% block scripttop %}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/showBusinessShopProfilePageMobile.css'
+        'bundles/facore/css/jquery.fancybox.css'
+        'bundles/facore/css/owl.carousel.css'
+        'bundles/facore/css/owl.theme.css'
+          %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
+    {% endstylesheets %}
+    {% if allowProfileEdit %}
+        {{ block('userSiteBannerUploadStylesheets') }}
+        {{ block('profileImageUploadStylesheets') }}
+        {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+{{ include('FaContentBundle:ProfilePage:shopHeader.html.twig') }}
+
+<div class="shops-main">
+    <div class="row" id="profile_main_div">
+        {% if allowProfileEdit %}
+            {{ set_variables('profileImageUploadStylesheets', {'loaded':'false'}) }}
+            {{ set_variables('fromProfilePageVariables', {'fromProfilePage':true}) }}
+            {{ render(controller('FaUserBundle:UserImage:showProfileImageUploader', {'userId': app.user.getId(), 'isCompany': true})) }}
+            {{ set_variables('profileImageUploadJavascriptBottom', {'loaded':'false'}) }}
+        {% endif %}
+        <div class="columns" id="show_message_div">
+            {{ include('FaContentBundle:ProfilePage:shopDetail.html.twig') }}
+            
+            {% if userDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
+                {% if userDetail['about_us']|length %}
+                    <div class="mt30" id="business_about_us_heading">
+                        <div class="clearfix">
+                            <h3 class="shop-profile-title left">{{ 'About us'|trans({}, 'frontend-profile-page') }}</h3>
+                            {% if allowProfileEdit %}
+                                <div class="profile-edit clearfix about-edit">
+                                    <div class="right relative">
+                                        <a href="javascript:void(0);" onclick="return editAboutUs();">Edit</a>
+                                        <div class="edit-tooltip">{{'Edit your about text'|trans({}, 'frontend-profile-page')}}</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div id="business_about_us_div">
+                             {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide']) %}
+                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
+                             {{ adDescWithReplacedPhoneAndEmail|raw }}
+                        </div>
+                    </div>
+                {% elseif allowProfileEdit %}
+                    <div class="mt30" id="business_about_us_heading">
+                        <div class="clearfix">
+                            <h3 class="shop-profile-title left">{{ 'About us'|trans({}, 'frontend-profile-page') }}</h3>
+                            {% if allowProfileEdit %}
+                                <div class="profile-edit clearfix about-edit">
+                                    <div class="right relative">
+                                        <a href="javascript:void(0);" onclick="return editAboutUs();">Edit</a>
+                                        <div class="edit-tooltip">{{'Edit your about text'|trans({}, 'frontend-profile-page')}}</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div id="business_about_us_div">
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="shop-cont-info" id="business_address_detail_div">
+                    {{ include('FaContentBundle:ProfilePage:showBusinessAddressDetail.html.twig') }}
+                </div>
+                
+                <div id="business_map_div">
+                    {{ include('FaContentBundle:ProfilePage:showMap.html.twig') }}
+                </div>
+                
+                <div id="business_social_icons_div">
+                    {{ include('FaContentBundle:ProfilePage:showSocialIcons.html.twig') }}
+                </div>
+                
+                <div class="shop-reviews-main">{{ render(controller('FaContentBundle:ProfilePage:showUserReview', {'userId': userDetail['id'], 'reviewHeading':'Our reviews'|trans({}, 'frontend-profile-page') })) }}</div>
+                
+                {% if userDetail['website_link'] is defined  and userDetail['website_link']|length %}
+                    {% set websiteLabel = 'Visit website'|trans({}, 'frontend-profile-page') %}  
+                    {% set profileWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail['website_link']]) %}    
+                    <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 button expand"><span class="website-icon"></span>{{ websiteLabel }}</a>
+                {% endif %} 
+
+
+                <div class="shop-latest-slider">
+                    {{ render(controller('FaContentBundle:ProfilePage:showShopUserLatestAds', {'userId': userDetail['id'], 'slider': 1 })) }}
+                    
+                    <a href="{{ profileAdsUrl }}" class="button secondary-btn-1 expand mb10">{{ 'View all our ads'|trans({}, 'frontend-profile-page') }}</a>
+                </div>
+            {% endif %}
+            
+            {% if userDetail['business_category_id'] not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
+                {{ render(controller('FaContentBundle:ProfilePage:showShopUserLatestAds', {'userId': userDetail['id'] })) }}
+
+                <a href="{{ profileAdsUrl }}" class="button secondary-btn-1 expand mb10">{{ 'View all our ads'|trans({}, 'frontend-profile-page') }}</a>
+                
+                <div class="shop-cont-info" id="business_address_detail_div">
+                    {{ include('FaContentBundle:ProfilePage:showBusinessAddressDetail.html.twig') }}
+                </div>
+
+                <div id="business_map_div">
+                    {{ include('FaContentBundle:ProfilePage:showMap.html.twig') }}
+                </div>
+            
+                <div id="business_social_icons_div">
+                    {{ include('FaContentBundle:ProfilePage:showSocialIcons.html.twig') }}
+                </div>    
+                
+                <div class="shop-reviews-main">{{ render(controller('FaContentBundle:ProfilePage:showUserReview', {'userId': userDetail['id'], 'reviewHeading':'Our reviews'|trans({}, 'frontend-profile-page') })) }}</div>
+                
+                {% if userDetail['about_us']|length %}
+                    <div id="business_about_us_heading">
+                        <div class="clearfix">
+                            <h3 class="shop-profile-title left">{{ 'About us'|trans({}, 'frontend-profile-page') }}</h3>
+                            {% if allowProfileEdit %}
+                                <div class="profile-edit clearfix about-edit">
+                                    <div class="right relative">
+                                        <a href="javascript:void(0);" onclick="return editAboutUs();">Edit</a>
+                                        <div class="edit-tooltip">{{'Edit your about text'|trans({}, 'frontend-profile-page')}}</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div id="business_about_us_div">
+                             {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide']) %}
+                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
+                             {{ adDescWithReplacedPhoneAndEmail|raw }}
+                        </div>
+                    </div>
+                {% elseif allowProfileEdit %}
+                    <div class="mt30" id="business_about_us_heading">
+                        <div class="clearfix">
+                            <h3 class="shop-profile-title left">{{ 'About us'|trans({}, 'frontend-profile-page') }}</h3>
+                            {% if allowProfileEdit %}
+                                <div class="profile-edit clearfix about-edit">
+                                    <div class="right relative">
+                                        <a href="javascript:void(0);" onclick="return editAboutUs();">Edit</a>
+                                        <div class="edit-tooltip">{{'Edit your about text'|trans({}, 'frontend-profile-page')}}</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div id="business_about_us_div">
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+            
+            <div id="business_gallery_div">
+                {{ include('FaContentBundle:ProfilePage:showShopGallery.html.twig') }}
+            </div>
+            
+            <div id="business_video_div">
+                {{ include('FaContentBundle:ProfilePage:showVideo.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
+<div id="profilePageContactUserModal" class="reveal-modal small" data-reveal></div>
+{% if allowProfileEdit %}
+    <div id="cropProfileImageModal" class="reveal-modal small" data-reveal></div>
+    <div id="profileEditModal" class="reveal-modal medium" data-reveal></div>
+    <div id="profileEditLocationModal" class="reveal-modal tiny" data-reveal></div>
+    {% set userSiteBannerRepository = fetch_repository('FaUserBundle:UserSiteBanner') %}
+    {% set userSiteBannerOtherImages = userSiteBannerRepository.getUserSiteBannerOtherImages() %}
+    <div id="shopBannerModal" class="reveal-modal small" data-reveal>
+        <a class="close-reveal-modal">&#215;</a>
+        <h5 class="modal-title">
+            {{'Change cover image'|trans({}, 'frontend-my-profile')}}
+        </h5>
+        <div class="modal-content">
+            <div class="text-center">
+                {{'We recommend you to upload an image<br />with a minimum size of 1190px x 350px'|trans({}, 'frontend-my-profile')}}
+                {{ render(controller('FaUserBundle:UserSiteBanner:showUserSiteBannerUploader', {'userSiteId': userSiteObj.getId()})) }}
+                {{ set_variables('userSiteBannerUploadJavascriptBottom', {'loaded':'false'}) }}
+                <div class="relative">
+                    <a href="javascript:void(0);" class="button secondary-btn-1 expand mt15 needsclick" id="pickUserSiteBannerFile">{{'Upload your photo'|trans({}, 'frontend-my-profile')}}</a>
+                </div>
+                <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
+                <ul class="cover-img-thumbs clearfix">
+                    {% for userSiteBannerOtherImage in userSiteBannerOtherImages%}
+                        <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ shared_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block scriptbottom %}
+    {% if allowProfileEdit %}
+        {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+        {{ set_variables('profileImageUploadJavascriptBottom', {'loaded':'true'}) }}
+        {{ block('profileImageUploadJavascriptBottom') }}
+        {{ set_variables('userSiteBannerUploadJavascriptBottom', {'loaded':'true'}) }}
+        {{ block('userSiteBannerUploadJavascriptBottom') }}
+    {% endif %}
+    {{ include('FaContentBundle:ProfilePage:shopProfilePageJs.html.twig') }}
+    {{ include('FaContentBundle:ProfilePage:profilePageContactUserJs.html.twig', {'msg_div_id': '#show_message_div', 'userId': (userDetail['id'] is defined ? staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'encryptDecrypt', ['profilepage', userDetail['id'], 'encrypt']) : null), 'profileUserId': (userDetail['id'] is defined ? userDetail['id'] : null) }) }}
+    <script src="{{ asset_url('facore/js/readmore.min.js') }}"></script>
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function() {
+            $('#business_about_us_div').readmore({
+                'embedCSS': false,
+                'collapsedHeight': 250,
+                'moreLink': '<div class="text-right"><a href="javascript:void(0);">Read more</a></div>',
+                'lessLink': '<div class="text-right"><a href="javascript:void(0);">Read less</a></div>'
+            });
+        });
+    //]]>
+    </script>
+{% endblock %}
+
+{% block dimension2 %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% if app.user.getId() is not defined or app.user.getId() is null %}
+    	ga('set', 'dimension9', 'not logged in');
+    {% else %}
+    	ga('set', 'dimension9', 'logged in');
+    {% endif %}
+    
+    ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Business_Page'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+
+    function openBusinessWebsite(businessName)
+    {
+         updateUserSiteViewCounterField('{{userDetail['id']}}', 'profile_page_website_url_click_count', '');
+         ga('send', 'event', 'CTA', 'url click', businessName);
+    }
+
+    function gaSendDealerNameCopyEvent(businessName)
+    {
+        ga('send', 'event', 'Options', 'Copy dealer name - Business page', businessName);
+    }
+
+    function toggleContactNumberForDesc(index) {
+        $('#span_contact_number_full_desc_'+index).show();
+        $('#span_contact_number_part_desc_'+index).hide();
+        ga('send', 'event', 'CTA', 'Call Now - business page (Description)', '{{ businessName }}');
+    }
+
+    function contactSeller() { 
+    	ga('send', 'event', 'CTA', ' Email contact click Profile (Description)', '{{ businessName }}');
+    	profilePageContactUser();    		
+    }
+    
+//]]>
+</script>
+<script>
+   function openUserWebsite(userId, websiteUrl, businessName)
+    {
+        window.open(websiteUrl);
+        updateUserSiteViewCounterField(userId, 'profile_page_website_url_click_count', '');
+        ga('send', 'event', 'CTA', 'url click - business page', businessName);
+    }
+ </script>
+{% endblock %}

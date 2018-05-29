@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="af5391b953087e4bae019af5bc5485a4289f6787" resname="Add new card">
+        <jms:reference-file line="147">PaymentBundle/Repository/PaymentCyberSourceRepository.php</jms:reference-file>
+        <source>Add new card</source>
+        <target state="new">Add new card</target>
+      </trans-unit>
+      <trans-unit id="5d3421996895ff428073204b4bad57ca628e07a3" resname="Add payment source">
+        <jms:reference-file line="11">views/CyberSourceCheckout/checkout.html.twig</jms:reference-file>
+        <source>Add payment source</source>
+        <target state="new">Add payment source</target>
+      </trans-unit>
+      <trans-unit id="88d41938ac0d6e56921c2723aea452e2b318d43f" resname="Address line 2">
+        <jms:reference-file line="95">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Address line 2</source>
+        <target state="new">Address line 2</target>
+      </trans-unit>
+      <trans-unit id="d656fbb4ffda8bc9ac63310750f12c266c7d4e43" resname="Billing details">
+        <jms:reference-file line="28">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <jms:reference-file line="39">views/CyberSourceCheckoutAdmin/checkout.html.twig</jms:reference-file>
+        <jms:reference-file line="47">views/CyberSourceCheckout/checkout.html.twig</jms:reference-file>
+        <source>Billing details</source>
+        <target state="new">Billing details</target>
+      </trans-unit>
+      <trans-unit id="26b1ca6b96b8273f9ecd098c8778988dbdd08440" resname="Card details">
+        <jms:reference-file line="57">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <source>Card details</source>
+        <target state="new">Card details</target>
+      </trans-unit>
+      <trans-unit id="7853ef76b50d432e6a0483c5fae2b84ca276f004" resname="Card number (no dashes or spaces)">
+        <jms:reference-file line="155">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Card number (no dashes or spaces)</source>
+        <target state="new">Card number (no dashes or spaces)</target>
+      </trans-unit>
+      <trans-unit id="536eb731cb208a9f3b18fd878d8073a589857319" resname="Cardholders name (as it appears on your card)">
+        <jms:reference-file line="146">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Cardholders name (as it appears on your card)</source>
+        <target state="new">Cardholders name (as it appears on your card)</target>
+      </trans-unit>
+      <trans-unit id="7a13c26fb3013e6dcb9c957b58a1e777d735d2cd" resname="Choose payment method">
+        <jms:reference-file line="16">views/CyberSourceCheckoutAdmin/checkout.html.twig</jms:reference-file>
+        <jms:reference-file line="24">views/CyberSourceCheckout/checkout.html.twig</jms:reference-file>
+        <source>Choose payment method</source>
+        <target state="new">Choose payment method</target>
+      </trans-unit>
+      <trans-unit id="60dee38933959dfdae71ec0ee78d9ddb94f8ba0e" resname="County">
+        <jms:reference-file line="123">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>County</source>
+        <target state="new">County</target>
+      </trans-unit>
+      <trans-unit id="00b96a5fda7778ddec713e4076c300504b29ec61" resname="Do you want to proceed deleting this option?">
+        <jms:reference-file line="24">views/CyberSourceCheckoutAdmin/checkout.html.twig</jms:reference-file>
+        <jms:reference-file line="32">views/CyberSourceCheckout/checkout.html.twig</jms:reference-file>
+        <source>Do you want to proceed deleting this option?</source>
+        <target state="new">Do you want to proceed deleting this option?</target>
+      </trans-unit>
+      <trans-unit id="6b440cd5068018a3303145563b2440098d7c3f0f" resname="Expiry date">
+        <jms:reference-file line="173">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Expiry date</source>
+        <target state="new">Expiry date</target>
+      </trans-unit>
+      <trans-unit id="21ee05e2231599b4627a3f5e72785ea6d4c14b57" resname="Find address">
+        <jms:reference-file line="52">views/AdBuyNow/postedBuyNowAd.html.twig</jms:reference-file>
+        <jms:reference-file line="18">views/UserAddressBook/ajaxNewAddress.html.twig</jms:reference-file>
+        <jms:reference-file line="36">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <jms:reference-file line="51">views/CyberSourceCheckoutAdmin/checkout.html.twig</jms:reference-file>
+        <jms:reference-file line="57">views/CyberSourceCheckout/checkout.html.twig</jms:reference-file>
+        <source>Find address</source>
+        <target state="new">Find address</target>
+      </trans-unit>
+      <trans-unit id="cbcf5311fa1d49a5a908bf395bd55976540bfc71" resname="House name/number">
+        <jms:reference-file line="86">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>House name/number</source>
+        <target state="new">House name/number</target>
+      </trans-unit>
+      <trans-unit id="8db1c5e073f92c7456efffd9b508f096bdd56d64" resname="Invalid token.">
+        <jms:reference-file line="73">PaymentBundle/Controller/CyberSourceCheckoutAdminController.php</jms:reference-file>
+        <jms:reference-file line="80">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <source>Invalid token.</source>
+        <target state="new">Invalid token.</target>
+      </trans-unit>
+      <trans-unit id="14f2706f4350b7c1226649c1a304f1d91b76ada1" resname="Maestro (UK Domestic)">
+        <jms:reference-file line="83">PaymentBundle/Repository/PaymentCyberSourceRepository.php</jms:reference-file>
+        <source>Maestro (UK Domestic)</source>
+        <target state="new">Maestro (UK Domestic)</target>
+      </trans-unit>
+      <trans-unit id="d4f3176c906654684e64e3aa25a76b355475ad1f" resname="MasterCard">
+        <jms:reference-file line="82">PaymentBundle/Repository/PaymentCyberSourceRepository.php</jms:reference-file>
+        <source>MasterCard</source>
+        <target state="new">MasterCard</target>
+      </trans-unit>
+      <trans-unit id="082bc378cd60e17a38d99898b21955299c5b60c8" resname="Month">
+        <jms:reference-file line="174">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Month</source>
+        <target state="new">Month</target>
+      </trans-unit>
+      <trans-unit id="a0ff36194d5ee64c766c7835a8ad433deaf8e3d3" resname="No payment will be taken until the trial period ends, and you are free to cancel before this time.">
+        <jms:reference-file line="14">views/CyberSourceCheckout/checkout.html.twig</jms:reference-file>
+        <source>No payment will be taken until the trial period ends, and you are free to cancel before this time.</source>
+        <target state="new">No payment will be taken until the trial period ends, and you are free to cancel before this time.</target>
+      </trans-unit>
+      <trans-unit id="748c323563fa6fbdd11c83ad179d271f720fa73a" resname="Pay now">
+        <jms:reference-file line="192">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Pay now</source>
+        <target state="new">Pay now</target>
+      </trans-unit>
+      <trans-unit id="c4ed8b6fb8391ecd229588d35c684cf576743ab3" resname="Pay now and place my ad">
+        <jms:reference-file line="195">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Pay now and place my ad</source>
+        <target state="new">Pay now and place my ad</target>
+      </trans-unit>
+      <trans-unit id="b41a92bed03261664717a6afdad4edf3d5d6ef6e" resname="Payment">
+        <jms:reference-file line="9">views/CyberSourceCheckoutAdmin/checkout.html.twig</jms:reference-file>
+        <jms:reference-file line="16">views/CyberSourceCheckout/checkout.html.twig</jms:reference-file>
+        <source>Payment</source>
+        <target state="new">Payment</target>
+      </trans-unit>
+      <trans-unit id="ef4d9e9996380a637ea62ef2e2abf57749783b5e" resname="Postcode">
+        <jms:reference-file line="104">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Postcode</source>
+        <target state="new">Postcode</target>
+      </trans-unit>
+      <trans-unit id="dfe7b010a392c08c8a8600b55711364382af7dc8" resname="Problem in payment.">
+        <jms:reference-file line="156">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <source>Problem in payment.</source>
+        <target state="new">Problem in payment.</target>
+      </trans-unit>
+      <trans-unit id="d18e75ecf195321dbcee80a18d39f561297eb761" resname="Problem in payment. Your transaction ID is %transaction_id%.">
+        <jms:reference-file line="154">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <source>Problem in payment. Your transaction ID is %transaction_id%.</source>
+        <target state="new">Problem in payment. Your transaction ID is %transaction_id%.</target>
+      </trans-unit>
+      <trans-unit id="b31bc31987b1e764a37f43d61bcbf7831616b3bb" resname="Save my card securely">
+        <jms:reference-file line="194">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Save my card securely</source>
+        <target state="new">Save my card securely</target>
+      </trans-unit>
+      <trans-unit id="f6a8a2fbae018c4ea523cce114a013efa8fc574b" resname="Security code">
+        <jms:reference-file line="85">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <jms:reference-file line="107">views/CyberSourceCheckoutAdmin/checkout.html.twig</jms:reference-file>
+        <jms:reference-file line="106">views/CyberSourceCheckout/checkout.html.twig</jms:reference-file>
+        <source>Security code</source>
+        <target state="new">Security code</target>
+      </trans-unit>
+      <trans-unit id="a9bbfb3cdd5ba146bcc46026d0ebb63335274374" resname="Security code (3 digits on the back of the card)">
+        <jms:reference-file line="164">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Security code (3 digits on the back of the card)</source>
+        <target state="new">Security code (3 digits on the back of the card)</target>
+      </trans-unit>
+      <trans-unit id="735c47bcf81179d992481f5637f6c0f038aab6b0" resname="There is no item in your cart.">
+        <jms:reference-file line="55">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <source>There is no item in your cart.</source>
+        <target state="new">There is no item in your cart.</target>
+      </trans-unit>
+      <trans-unit id="ff0ccce6048afb96985a35feae2d198db311abb3" resname="To continue with your one month free trial please add a valid card to your account.">
+        <jms:reference-file line="12">views/CyberSourceCheckout/checkout.html.twig</jms:reference-file>
+        <source>To continue with your one month free trial please add a valid card to your account.</source>
+        <target state="new">To continue with your one month free trial please add a valid card to your account.</target>
+      </trans-unit>
+      <trans-unit id="cc55bbe190859d77c3e0883e8aa064afd3a34ae2" resname="Town/city">
+        <jms:reference-file line="113">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Town/city</source>
+        <target state="new">Town/city</target>
+      </trans-unit>
+      <trans-unit id="8201464a0e80138777b8c32237634ea4180dafcb" resname="Visa">
+        <jms:reference-file line="81">PaymentBundle/Repository/PaymentCyberSourceRepository.php</jms:reference-file>
+        <source>Visa</source>
+        <target state="new">Visa</target>
+      </trans-unit>
+      <trans-unit id="2a60b351c7b8b222b3a594d02675446decae59c3" resname="Visa Electron">
+        <jms:reference-file line="84">PaymentBundle/Repository/PaymentCyberSourceRepository.php</jms:reference-file>
+        <source>Visa Electron</source>
+        <target state="new">Visa Electron</target>
+      </trans-unit>
+      <trans-unit id="879e32326c5217968ac8e3a14e4a8a5214957264" resname="Year">
+        <jms:reference-file line="183">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Year</source>
+        <target state="new">Year</target>
+      </trans-unit>
+      <trans-unit id="b6bd97cabdc7104f91ae22903ae1162182fed3d6" resname="You have successfully upgraded to %package-name%. Please check and update your profile information now!.">
+        <jms:reference-file line="83">UserBundle/Controller/UserPackageController.php</jms:reference-file>
+        <source>You have successfully upgraded to %package-name%. Please check and update your profile information now!.</source>
+        <target state="new">You have successfully upgraded to %package-name%. Please check and update your profile information now!.</target>
+      </trans-unit>
+      <trans-unit id="1d20aa38fd040d85b5b59f8bc4a35a2ce7b0d128" resname="You have successfully upgraded to %package-name%. Please check and update your profile information now!. Your transaction ID is %transaction_id%.">
+        <jms:reference-file line="145">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <source>You have successfully upgraded to %package-name%. Please check and update your profile information now!. Your transaction ID is %transaction_id%.</source>
+        <target state="new">You have successfully upgraded to %package-name%. Please check and update your profile information now!. Your transaction ID is %transaction_id%.</target>
+      </trans-unit>
+      <trans-unit id="b4b43a26a04db75718a101255d258572450dd26f" resname="Your payment received successfully.">
+        <jms:reference-file line="147">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <jms:reference-file line="159">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <source>Your payment received successfully.</source>
+        <target state="new">Your payment received successfully.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

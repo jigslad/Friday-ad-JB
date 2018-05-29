@@ -1,0 +1,137 @@
+{% block search_html %}
+<div class="row">
+      <div class="columns">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+               {{ form_errors(form) }}
+
+                <div class="row">
+                    <div class="large-6 columns {% if form.from_date.vars.errors|length %} error{% endif %}">
+                        <div class="relative">
+                            <span class="datepicker-icon event_start"></span>
+                            {{ form_widget(form.from_date, {'attr': {'placeholder': 'Date from'}}) }}
+                            {{ form_errors(form.from_date) }}
+                        </div>
+                    </div>
+                    <div class="large-6 columns {% if form.to_date.vars.errors|length %} error{% endif %}">
+                        <div class="relative">
+                            <span class="datepicker-icon event_start"></span>
+                            {{ form_widget(form.to_date, {'attr': {'placeholder': 'Date to'}}) }}
+                            {{ form_errors(form.to_date) }}
+                         </div>
+                    </div>
+                </div>
+
+                <hr class="hr_margin">
+
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.ad_id, {'attr': {'class':'form-control', 'placeholder': 'Advert Reference'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.ad_feed_site_id, {'attr': {'class':'form-control', 'placeholder': 'Email address'}}) }}
+                    </div>
+                </div>
+
+                <hr class="hr_margin">
+
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        <div class="row">
+                            <div class="large-1 columns">
+	                            {{ form_label(form.feed_report_type) }}
+                            </div>
+                            <div class="large-11 columns">
+                                {{ form_widget(form.feed_report_type) }} 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="hr_margin">
+
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.csv_name, {'attr': {'class':'form-control', 'placeholder': 'CSV name'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.csv_email, {'attr': {'class':'form-control', 'placeholder': 'Email address (Csv file will be emailed once generated)'}}) }}
+                        {{ form_errors(form.csv_email) }}
+                    </div>
+                </div>
+
+                <hr class="hr_margin">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_widget(form.search, {'attr': {'class':'small button'}}) }}
+                        {{ form_widget(form.reset, {'attr': {'class':'small button'}}) }}
+                        {% if adReportCsvList %}
+                            {{ form_widget(form.download_csv, {'attr': {'class':'small button'}}) }}
+                        {% else %}
+                            {% do attribute(form, 'download_csv').setRendered %}
+                        {% endif %}
+                    </div>
+                </div>
+
+            {{ form_end(form) }}
+       </div>
+  </div>
+  <div id="adFeedClickReportCsvListModal" class="reveal-modal small" data-reveal></div>
+{% endblock %}
+
+{% block search_script -%}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $('.datepicker-icon').click(function(e){
+        $(this).next('input.fdatepicker').focus();
+    });
+    $('#fa_report_ad_feed_click_search_admin_reset').click(function(e){
+        window.location.href = "{{ path('fa_ad_feed_click_report') }}";
+    });
+    $('#fa_report_ad_feed_click_search_admin_download_csv').click(function(e){
+        showAdFeedClickReportCsvList();
+    });
+    
+    function showAdFeedClickReportCsvList()
+    {
+        blockPage();
+        $.ajax({
+            type: "GET",
+            url : '{{ path('ajax_fa_report_ad_feed_click_csv_list') }}',
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#adFeedClickReportCsvListModal').html(response.htmlContent);
+                $('#adFeedClickReportCsvListModal').foundation('reveal', 'open');
+            }
+        });
+    }
+
+    function deleteCsvFile(fileName)
+    {
+        blockElement('#adFeedClickReportCsvListModal');
+        $.ajax({
+            type: "GET",
+            url : '{{ path('ajax_fa_report_ad_feed_click_csv_delete') }}',
+            data: {'fileName': fileName}
+        })
+        .always(function(response) {
+            unblockElement('#adFeedClickReportCsvListModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#adFeedClickReportCsvListModal').html(response.htmlContent);
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#cvs_list_ul');
+            }
+        });
+    }
+//]]>
+</script>
+{% endblock %}

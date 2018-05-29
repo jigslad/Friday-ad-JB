@@ -1,0 +1,39 @@
+{% set container = fetch_container_instance() %}
+{% set isAdminLoggedIn = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isAdminLoggedIn', [container]) %}
+{% set imageObj = '' %}
+{% if isCompany is defined and isCompany == true %}
+    {% set imageObj = fetch_repository('FaUserBundle:UserSite').findOneBy({'user' : userId}) %}
+{% else %}
+    {% set imageObj = fetch_repository('FaUserBundle:User').find(userId) %}
+{% endif %}
+{% set deleteRoute = "ajax_delete_user_image" %}
+{% if isAdminLoggedIn and isAdminLoggedIn.id %}
+    {% set deleteRoute = "ajax_delete_user_image_admin" %}
+{% endif %}
+<div class="main-photo">
+    <b>{{ 'Upload image'|trans({}, 'frontend-paa') }}</b>
+</div>
+<ul class="inline-list" id="userImageList">
+    {% if imageObj and imageObj.path %}
+        <li class="thumb-img-wrap">
+            <div class="adimg-thumb" style="position:relative">
+            {% if isCompany is defined and isCompany == true %}
+                {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserCompanyLogoUrl', [container, userId, imageObj.path]) %}
+                <img alt="{{userId}}.jpg" src="{{ imageUrl }}?{{ random(1000) }}" />
+            {% else %}
+                {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserImageUrl', [container, userId, imageObj.path]) %}
+                <img alt="{{userId}}.jpg" src="{{ imageUrl }}?{{ random(1000) }}" />
+            {% endif %}
+            </div>
+            <div>
+                <a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': userId, 'isCompany': isCompany}) }}')" class="xs-btn-2 button remove-logo-btn" id="remove_img"><span class="delete-icon"></span>{{ 'Remove'|trans({}, 'frontend-paa-fourth-step')}}</a>
+            </div>
+        </li>
+    {% else %}
+        <li class="thumb-img-wrap">
+            <div class="upload-thumb-img" style="position:relative">
+                <span id="pickfile">&nbsp;</span>
+            </div>
+        </li>
+    {% endif %}
+</ul>

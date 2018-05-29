@@ -1,0 +1,18 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE delivery_method_option;
+TRUNCATE TABLE delivery_method_option_translation;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+INSERT INTO `delivery_method_option` (`id`, `name`, `cost`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Collection only', NULL, 1, 1418887667, NULL),
+(2, 'Posted', NULL, 1, 1418887667, NULL),
+(3, 'Post or Collect', NULL, 1, 1418887667, 1418888523);
+
+
+INSERT INTO `delivery_method_option_translation` (`id`, `object_id`, `locale`, `field`, `content`) VALUES
+(1, 1, 'en_US', 'name', 'Collection only'),
+(2, 2, 'en_US', 'name', 'Posted'),
+(3, 3, 'en_US', 'name', 'Post or Collect');

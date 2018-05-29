@@ -1,0 +1,31 @@
+dimension_admin:
+    path:     /
+    defaults: { _controller: "FaEntityBundle:DimensionAdmin:index" }
+
+dimension_new_admin:
+    path:     /new
+    defaults: { _controller: "FaEntityBundle:DimensionAdmin:new" }
+
+dimension_create_admin:
+    path:     /create
+    defaults: { _controller: "FaEntityBundle:DimensionAdmin:create" }
+    requirements: { methods: post }
+
+dimension_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaEntityBundle:DimensionAdmin:edit" }
+
+dimension_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaEntityBundle:DimensionAdmin:update" }
+    requirements: { methods: post|put }
+
+dimension_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaEntityBundle:DimensionAdmin:delete" }
+
+ajax_dimension_get_dimension_admin:
+    path:     /ajax/get_dimension/{category_id}/
+    defaults: { _controller: "FaEntityBundle:DimensionAdmin:ajaxGetDimension" }
+    options:
+        expose: true

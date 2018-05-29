@@ -1,0 +1,945 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="01b3e3f538da7aae6cc03591d5766e2197b76a36" resname="%dimensionLabel% is invalid.">
+        <jms:reference-file line="522">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <source>%dimensionLabel% is invalid.</source>
+        <target state="new">%dimensionLabel% is invalid.</target>
+      </trans-unit>
+      <trans-unit id="b1b5f6bd03427e75e9ce71473e18c62c65bae4ef" resname="%paa_field% is invalid.">
+        <jms:reference-file line="280">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <jms:reference-file line="285">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <source>%paa_field% is invalid.</source>
+        <target state="new">%paa_field% is invalid.</target>
+      </trans-unit>
+      <trans-unit id="e38ca5444aabb57e98d399d15da234a1108197bd" resname="About you can have maximum 2000 characters.">
+        <jms:reference-file line="101">UserBundle/Form/UserPrivateProfileType.php</jms:reference-file>
+        <source>About you can have maximum 2000 characters.</source>
+        <target state="new">About you can have maximum 2000 characters.</target>
+      </trans-unit>
+      <trans-unit id="873f0cafa7f2922bd8a48d675596f96e914ff136" resname="An account with this email address already exists, Please %login_anchor%.">
+        <jms:reference-file line="168">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>An account with this email address already exists, Please %login_anchor%.</source>
+        <target state="new">An account with this email address already exists, Please %login_anchor%.</target>
+      </trans-unit>
+      <trans-unit id="e1117cf3854ed53f2c1041553753a0a21ce65ae2" resname="An account with this email address already exists.">
+        <jms:reference-file line="297">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <jms:reference-file line="303">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <jms:reference-file line="212">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>An account with this email address already exists.</source>
+        <target state="new">An account with this email address already exists.</target>
+      </trans-unit>
+      <trans-unit id="0b83250e1b2bc39210645e5796fb5a8e61b0efb3" resname="Banner zone is required.">
+        <source>Banner zone is required.</source>
+        <target state="new">Banner zone is required.</target>
+      </trans-unit>
+      <trans-unit id="cc176a2e03d3299cd3e6f76a1410a674420cb518" resname="Category name is required.">
+        <source>Category name is required.</source>
+        <target state="new">Category name is required.</target>
+      </trans-unit>
+      <trans-unit id="2a2e14d86342f38050b3dfa0b6564cf0964865d9" resname="Category slug is required.">
+        <source>Category slug is required.</source>
+        <target state="new">Category slug is required.</target>
+      </trans-unit>
+      <trans-unit id="ea6ac41a6ab68bdbdfb8fdca352654581e205a46" resname="Code is required.">
+        <source>Code is required.</source>
+        <target state="new">Code is required.</target>
+      </trans-unit>
+      <trans-unit id="b2bf5f90fac3fb81deab4d72a1cc311ae8607de7" resname="Company name should not be blank.">
+        <jms:reference-file line="143">UserBundle/Form/UserSiteType.php</jms:reference-file>
+        <source>Company name should not be blank.</source>
+        <target state="new">Company name should not be blank.</target>
+      </trans-unit>
+      <trans-unit id="b637b504568cbc2e1694c30ae67237115bc13dad" resname="Configuration rule is already set for this user.">
+        <source>Configuration rule is already set for this user.</source>
+        <target state="new">Configuration rule is already set for this user.</target>
+      </trans-unit>
+      <trans-unit id="b9a833865ec1da5020500ecde2e7c695c10a40d1" resname="Cost cannot be longer than {{ limit }} digits long.">
+        <source>Cost cannot be longer than {{ limit }} digits long.</source>
+        <target state="new">Cost cannot be longer than {{ limit }} digits long.</target>
+      </trans-unit>
+      <trans-unit id="c9133521a67145f18e7b52a372b4bb9fbf44102e" resname="Date available is invalid.">
+        <jms:reference-file line="289">AdBundle/Form/AdPostPropertyAdminType.php</jms:reference-file>
+        <jms:reference-file line="296">AdBundle/Form/AdPostPropertyAdminType.php</jms:reference-file>
+        <jms:reference-file line="198">AdBundle/Form/AdPostFourthStepPropertyType.php</jms:reference-file>
+        <jms:reference-file line="205">AdBundle/Form/AdPostFourthStepPropertyType.php</jms:reference-file>
+        <source>Date available is invalid.</source>
+        <target state="new">Date available is invalid.</target>
+      </trans-unit>
+      <trans-unit id="7e2035964dee556b51d5c6c9f81b180b445f8152" resname="Date available should not be less than today.">
+        <jms:reference-file line="303">AdBundle/Form/AdPostPropertyAdminType.php</jms:reference-file>
+        <jms:reference-file line="212">AdBundle/Form/AdPostFourthStepPropertyType.php</jms:reference-file>
+        <source>Date available should not be less than today.</source>
+        <target state="new">Date available should not be less than today.</target>
+      </trans-unit>
+      <trans-unit id="2325110fce4b0ef4e4f2ae18a130b56b2b377ad0" resname="Day is required.">
+        <source>Day is required.</source>
+        <target state="new">Day is required.</target>
+      </trans-unit>
+      <trans-unit id="8befeb3a2fa9705f0414dddfad1ad06d0464708c" resname="Deadline day is required.">
+        <source>Deadline day is required.</source>
+        <target state="new">Deadline day is required.</target>
+      </trans-unit>
+      <trans-unit id="9e8439314938c75af180e22c1a976ee38c70c9e4" resname="Deadline time is required.">
+        <source>Deadline time is required.</source>
+        <target state="new">Deadline time is required.</target>
+      </trans-unit>
+      <trans-unit id="22413c1aa68f5e86ecfa536b91c6b9ebaa0ee032" resname="Deposit is invalid.">
+        <jms:reference-file line="318">AdBundle/Form/AdPostPropertyAdminType.php</jms:reference-file>
+        <jms:reference-file line="227">AdBundle/Form/AdPostFourthStepPropertyType.php</jms:reference-file>
+        <source>Deposit is invalid.</source>
+        <target state="new">Deposit is invalid.</target>
+      </trans-unit>
+      <trans-unit id="791daf86acf91bb9b37132a9561b792eda6d733b" resname="Display order can not be empty.">
+        <jms:reference-file line="125">AdBundle/Form/PaaFieldAdminType.php</jms:reference-file>
+        <source>Display order can not be empty.</source>
+        <target state="new">Display order can not be empty.</target>
+      </trans-unit>
+      <trans-unit id="e76054c2a70c19bda1832dc71a1489fe3b271ad8" resname="Display order is not a valid integer.">
+        <jms:reference-file line="124">AdBundle/Form/PaaFieldAdminType.php</jms:reference-file>
+        <source>Display order is not a valid integer.</source>
+        <target state="new">Display order is not a valid integer.</target>
+      </trans-unit>
+      <trans-unit id="e9677f6857d9e30596f2a5d69054c0ace47bb5d0" resname="Duration cannot be longer than {{ limit }} characters long.">
+        <source>Duration cannot be longer than {{ limit }} characters long.</source>
+        <target state="new">Duration cannot be longer than {{ limit }} characters long.</target>
+      </trans-unit>
+      <trans-unit id="34a6ef50ccbd6fb2a99d77ab85c2d1300e55ac0a" resname="Email can have maximum 100 characters.">
+        <source>Email can have maximum 100 characters.</source>
+        <target state="new">Email can have maximum 100 characters.</target>
+      </trans-unit>
+      <trans-unit id="c79fce0e911ca460fbb29671a1b69d96fa41d45f" resname="Email is required.">
+        <jms:reference-file line="98">UserBundle/Form/UserHalfAccountType.php</jms:reference-file>
+        <source>Email is required.</source>
+        <target state="new">Email is required.</target>
+      </trans-unit>
+      <trans-unit id="9a5b57830bb9affc14cbc6d03b242bb96537a697" resname="Entity name can have maximum 200 characters.">
+        <source>Entity name can have maximum 200 characters.</source>
+        <target state="new">Entity name can have maximum 200 characters.</target>
+      </trans-unit>
+      <trans-unit id="30a8d478e3f0e958b64619b49ae854a89c791880" resname="Entity name is required.">
+        <source>Entity name is required.</source>
+        <target state="new">Entity name is required.</target>
+      </trans-unit>
+      <trans-unit id="d2122067ebfa86402712fb66e8b649186df76d1d" resname="Entity type is required.">
+        <source>Entity type is required.</source>
+        <target state="new">Entity type is required.</target>
+      </trans-unit>
+      <trans-unit id="7ef4e9c0ff567ce7398e420a53f367b240f4e743" resname="File is required">
+        <jms:reference-file line="181">ContentBundle/Form/LandingPageAdminType.php</jms:reference-file>
+        <jms:reference-file line="196">ContentBundle/Form/LandingPageAdminType.php</jms:reference-file>
+        <source>File is required</source>
+        <target state="new">File is required</target>
+      </trans-unit>
+      <trans-unit id="7e184124bef0d0f557db5341fecc03a1f7aff8e6" resname="File is required.">
+        <source>File is required.</source>
+        <target state="new">File is required.</target>
+      </trans-unit>
+      <trans-unit id="dd0ae6bf4339c5a1c965625d4dcba172bf93752d" resname="Filter name should not be blank.">
+        <jms:reference-file line="83">DotMailerBundle/Form/DotmailerFilterAdminType.php</jms:reference-file>
+        <source>Filter name should not be blank.</source>
+        <target state="new">Filter name should not be blank.</target>
+      </trans-unit>
+      <trans-unit id="b89c9f7c9ddf39f72b1d764f276c1aecd0b62245" resname="First name can have maximum 30 characters.">
+        <source>First name can have maximum 30 characters.</source>
+        <target state="new">First name can have maximum 30 characters.</target>
+      </trans-unit>
+      <trans-unit id="fd5f7f4c5e18e7fd377bd1637449dbd549f8a4ef" resname="First name is required.">
+        <source>First name is required.</source>
+        <target state="new">First name is required.</target>
+      </trans-unit>
+      <trans-unit id="2e228918009d6bc434edd1764465700fe53ee850" resname="First name must be at least 2 characters long.">
+        <source>First name must be at least 2 characters long.</source>
+        <target state="new">First name must be at least 2 characters long.</target>
+      </trans-unit>
+      <trans-unit id="b0fa9653d6494ad607872dc2e99e126693182bb2" resname="For category dimension either value or min or max is required.">
+        <jms:reference-file line="202">EntityBundle/Form/DimensionAdminType.php</jms:reference-file>
+        <source>For category dimension either value or min or max is required.</source>
+        <target state="new">For category dimension either value or min or max is required.</target>
+      </trans-unit>
+      <trans-unit id="1e5bc25e794c8cdb296d00b113e5b1cadc6a016e" resname="For selected category dimension this maximum value already added.">
+        <jms:reference-file line="220">EntityBundle/Form/DimensionAdminType.php</jms:reference-file>
+        <source>For selected category dimension this maximum value already added.</source>
+        <target state="new">For selected category dimension this maximum value already added.</target>
+      </trans-unit>
+      <trans-unit id="249a94b9c688cde03a8f5808cb6163f805aaff1c" resname="For selected category dimension this minimum value already added.">
+        <jms:reference-file line="214">EntityBundle/Form/DimensionAdminType.php</jms:reference-file>
+        <source>For selected category dimension this minimum value already added.</source>
+        <target state="new">For selected category dimension this minimum value already added.</target>
+      </trans-unit>
+      <trans-unit id="420ac8a37f80188c5db33c6b238e822d007d8a93" resname="For selected category dimension this value already added.">
+        <jms:reference-file line="208">EntityBundle/Form/DimensionAdminType.php</jms:reference-file>
+        <source>For selected category dimension this value already added.</source>
+        <target state="new">For selected category dimension this value already added.</target>
+      </trans-unit>
+      <trans-unit id="b922a0c590ff34b74d36f9948d8adc923c8d5af9" resname="Global rule is already added for this config option.">
+        <jms:reference-file line="197">CoreBundle/Form/ConfigRuleAdminType.php</jms:reference-file>
+        <source>Global rule is already added for this config option.</source>
+        <target state="new">Global rule is already added for this config option.</target>
+      </trans-unit>
+      <trans-unit id="e669ab5791b4966c8215795609e4206841921ef2" resname="Insert date day is required.">
+        <source>Insert date day is required.</source>
+        <target state="new">Insert date day is required.</target>
+      </trans-unit>
+      <trans-unit id="21053f0a41216a7a098ed88ffa87f3f98ce3d715" resname="Insert date time is required.">
+        <source>Insert date time is required.</source>
+        <target state="new">Insert date time is required.</target>
+      </trans-unit>
+      <trans-unit id="809d5a8ff841cf313088445033978ef4c3f58c54" resname="Insertion price cannot be longer than {{ limit }} digits long.">
+        <source>Insertion price cannot be longer than {{ limit }} digits long.</source>
+        <target state="new">Insertion price cannot be longer than {{ limit }} digits long.</target>
+      </trans-unit>
+      <trans-unit id="01126f54afac9b3005dd042f7b6983486fb712eb" resname="Invalid email or password.">
+        <jms:reference-file line="134">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <jms:reference-file line="142">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <source>Invalid email or password.</source>
+        <target state="new">Invalid email or password.</target>
+      </trans-unit>
+      <trans-unit id="2deabbd2fca00ee704aa9b4e6bca9d42fada812f" resname="Invalid payment source.">
+        <jms:reference-file line="153">UserBundle/Form/UserAccountProfileType.php</jms:reference-file>
+        <source>Invalid payment source.</source>
+        <target state="new">Invalid payment source.</target>
+      </trans-unit>
+      <trans-unit id="0cc909be0f2da4ba1a41bb22abd333ee5d822722" resname="Invalid username or password.">
+        <jms:reference-file line="87">UserBundle/Security/UserAuthenticator.php</jms:reference-file>
+        <jms:reference-file line="133">UserBundle/Security/UserAuthenticator.php</jms:reference-file>
+        <source>Invalid username or password.</source>
+        <target state="new">Invalid username or password.</target>
+      </trans-unit>
+      <trans-unit id="4049b4756937a2e61cce9d7d3a7500b14b8ee1d6" resname="Label can not be empty.">
+        <jms:reference-file line="108">AdBundle/Form/PaaFieldAdminType.php</jms:reference-file>
+        <source>Label can not be empty.</source>
+        <target state="new">Label can not be empty.</target>
+      </trans-unit>
+      <trans-unit id="f3e236ae435a480bcb7b0affd341f1451dc21070" resname="Landing page already exist for selected category.">
+        <jms:reference-file line="133">ContentBundle/Form/LandingPageAdminType.php</jms:reference-file>
+        <source>Landing page already exist for selected category.</source>
+        <target state="new">Landing page already exist for selected category.</target>
+      </trans-unit>
+      <trans-unit id="a97ee70390239060b6122ba7893fc669ee388308" resname="Last name can have maximum 30 characters.">
+        <source>Last name can have maximum 30 characters.</source>
+        <target state="new">Last name can have maximum 30 characters.</target>
+      </trans-unit>
+      <trans-unit id="a077f21659c2fa1b63d38d09783b44e438a17a1f" resname="Last name is required.">
+        <source>Last name is required.</source>
+        <target state="new">Last name is required.</target>
+      </trans-unit>
+      <trans-unit id="c57542135c57931345c3d3f8324288832d9307fd" resname="Last name must be at least 2 characters long.">
+        <source>Last name must be at least 2 characters long.</source>
+        <target state="new">Last name must be at least 2 characters long.</target>
+      </trans-unit>
+      <trans-unit id="b4ba14fa2dc5751340d1bed7771c8355ee543b30" resname="Location is invalid.">
+        <jms:reference-file line="770">AdBundle/Form/AdPostType.php</jms:reference-file>
+        <jms:reference-file line="771">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <source>Location is invalid.</source>
+        <target state="new">Location is invalid.</target>
+      </trans-unit>
+      <trans-unit id="65a0caaa71a090ea65de010240e0ca5dbbdd8a31" resname="Location name is required.">
+        <source>Location name is required.</source>
+        <target state="new">Location name is required.</target>
+      </trans-unit>
+      <trans-unit id="a29556fa4ba8bf9e88712270920b21a39d5b0647" resname="Location should not be blank.">
+        <jms:reference-file line="639">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <jms:reference-file line="731">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <source>Location should not be blank.</source>
+        <target state="new">Location should not be blank.</target>
+      </trans-unit>
+      <trans-unit id="5d84260b0cd8d68a22ebdf856e3c9dc5c5ca8f2d" resname="Maximum value is not a valid number.">
+        <jms:reference-file line="142">AdBundle/Form/PaaFieldAdminType.php</jms:reference-file>
+        <source>Maximum value is not a valid number.</source>
+        <target state="new">Maximum value is not a valid number.</target>
+      </trans-unit>
+      <trans-unit id="7fe5c7c84d9c70585d9661eec682c70cd1e1666e" resname="Message should not be blank.">
+        <jms:reference-file line="103">UserBundle/Form/UserReviewResponseType.php</jms:reference-file>
+        <source>Message should not be blank.</source>
+        <target state="new">Message should not be blank.</target>
+      </trans-unit>
+      <trans-unit id="502b7c1c55c060424cd4d74944c3cc1025961713" resname="Minimum 1 photo is required.">
+        <jms:reference-file line="812">AdBundle/Form/AdPostType.php</jms:reference-file>
+        <jms:reference-file line="813">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <source>Minimum 1 photo is required.</source>
+        <target state="new">Minimum 1 photo is required.</target>
+      </trans-unit>
+      <trans-unit id="746faed9cedc101915573d1782eb76406678c3ad" resname="Minimum value is not a valid number.">
+        <jms:reference-file line="134">AdBundle/Form/PaaFieldAdminType.php</jms:reference-file>
+        <source>Minimum value is not a valid number.</source>
+        <target state="new">Minimum value is not a valid number.</target>
+      </trans-unit>
+      <trans-unit id="d7659e2c4af20a35375510634997a133eefa08f2" resname="Name is required.">
+        <jms:reference-file line="91">UserBundle/Form/UserHalfAccountType.php</jms:reference-file>
+        <source>Name is required.</source>
+        <target state="new">Name is required.</target>
+      </trans-unit>
+      <trans-unit id="585b6ad18526007b1e44678f97a7b26657955ac7" resname="Old password and new password must be different.">
+        <jms:reference-file line="194">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Old password and new password must be different.</source>
+        <target state="new">Old password and new password must be different.</target>
+      </trans-unit>
+      <trans-unit id="f42523208e04d0066bb45dfeebdffabf8635ee3a" resname="Password and confirm password not matched.">
+        <jms:reference-file line="138">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <jms:reference-file line="150">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <jms:reference-file line="73">UserBundle/Form/ResetPasswordType.php</jms:reference-file>
+        <source>Password and confirm password not matched.</source>
+        <target state="new">Password and confirm password not matched.</target>
+      </trans-unit>
+      <trans-unit id="b90a03eb47359064d0cb5d4df3681fa365d3666b" resname="Perido To date should be greater than Period From date.">
+        <jms:reference-file line="208">CoreBundle/Form/ConfigRuleAdminType.php</jms:reference-file>
+        <source>Perido To date should be greater than Period From date.</source>
+        <target state="new">Perido To date should be greater than Period From date.</target>
+      </trans-unit>
+      <trans-unit id="dec2eec05470f4b1a731aad555709e11cf3f2b0d" resname="Phone is required.">
+        <jms:reference-file line="313">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <jms:reference-file line="179">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Phone is required.</source>
+        <target state="new">Phone is required.</target>
+      </trans-unit>
+      <trans-unit id="423549f1f75bffd6f911d56c3f2fa9f64b7ad842" resname="Phone number can have maximum 11 characters.">
+        <source>Phone number can have maximum 11 characters.</source>
+        <target state="new">Phone number can have maximum 11 characters.</target>
+      </trans-unit>
+      <trans-unit id="01901a7933cbb28e52239dc882bcba1ecb1aafa8" resname="Phone number must be at least 6 characters long.">
+        <source>Phone number must be at least 6 characters long.</source>
+        <target state="new">Phone number must be at least 6 characters long.</target>
+      </trans-unit>
+      <trans-unit id="1101104c8ea94b9343f685dd7e684652d0b290b5" resname="Please add atleast one domicile or town.">
+        <jms:reference-file line="100">EntityBundle/Form/LocationGroupAdminType.php</jms:reference-file>
+        <jms:reference-file line="162">EntityBundle/Form/LocationGroupAdminType.php</jms:reference-file>
+        <source>Please add atleast one domicile or town.</source>
+        <target state="new">Please add atleast one domicile or town.</target>
+      </trans-unit>
+      <trans-unit id="11b171026ec64407281a628c24f87b229c2b1f3e" resname="Please enter about yourself text.">
+        <jms:reference-file line="100">UserBundle/Form/UserPrivateProfileType.php</jms:reference-file>
+        <source>Please enter about yourself text.</source>
+        <target state="new">Please enter about yourself text.</target>
+      </trans-unit>
+      <trans-unit id="a1d5a80cd4a648e83ec395599a056efe9c457f17" resname="Please enter address line 2.">
+        <jms:reference-file line="91">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <source>Please enter address line 2.</source>
+        <target state="new">Please enter address line 2.</target>
+      </trans-unit>
+      <trans-unit id="47e966a0d30ceb65ccfa2873657765ba78d18c2e" resname="Please enter alpha numeric value only.">
+        <source>Please enter alpha numeric value only.</source>
+        <target state="new">Please enter alpha numeric value only.</target>
+      </trans-unit>
+      <trans-unit id="3778280b3556bb28d5b6b318bf028fc86a2000c3" resname="Please enter business name.">
+        <jms:reference-file line="97">UserBundle/Form/UserBusinessProfileUserDetailType.php</jms:reference-file>
+        <source>Please enter business name.</source>
+        <target state="new">Please enter business name.</target>
+      </trans-unit>
+      <trans-unit id="8aa62f9aa8145446b335e691c6d8f3cf7f4c1605" resname="Please enter card number.">
+        <jms:reference-file line="140">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="157">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please enter card number.</source>
+        <target state="new">Please enter card number.</target>
+      </trans-unit>
+      <trans-unit id="2438457c79d6d680829898682f1d6bd220d04ef8" resname="Please enter cardholder name.">
+        <jms:reference-file line="131">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="148">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please enter cardholder name.</source>
+        <target state="new">Please enter cardholder name.</target>
+      </trans-unit>
+      <trans-unit id="3073ea7013470aa419e9cb0c77dd9ffc90bbf900" resname="Please enter confirm password.">
+        <jms:reference-file line="137">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <source>Please enter confirm password.</source>
+        <target state="new">Please enter confirm password.</target>
+      </trans-unit>
+      <trans-unit id="fb3e5601ff8ccf1ef999811a74ed1ff8834ba7c6" resname="Please enter correct old password.">
+        <jms:reference-file line="192">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Please enter correct old password.</source>
+        <target state="new">Please enter correct old password.</target>
+      </trans-unit>
+      <trans-unit id="4fb5e85f56b866dde9ff697d38ea95ad715eefeb" resname="Please enter correct phone number.">
+        <source>Please enter correct phone number.</source>
+        <target state="new">Please enter correct phone number.</target>
+      </trans-unit>
+      <trans-unit id="e94a32c2f81b20d3887777fadaacf7b33155cb40" resname="Please enter correct phone number. It should contain minimum 6 digit and maximum 11 digit.">
+        <source>Please enter correct phone number. It should contain minimum 6 digit and maximum 11 digit.</source>
+        <target state="new">Please enter correct phone number. It should contain minimum 6 digit and maximum 11 digit.</target>
+      </trans-unit>
+      <trans-unit id="462a61e3da707c2ff628f0681c27ecf0dc0a2b7a" resname="Please enter correct telephone 1. It should contain minimum 6 digit and maximum 11 digit.">
+        <jms:reference-file line="106">UserBundle/Form/UserBusinessProfileType.php</jms:reference-file>
+        <jms:reference-file line="107">UserBundle/Form/UserSiteType.php</jms:reference-file>
+        <source>Please enter correct telephone 1. It should contain minimum 6 digit and maximum 11 digit.</source>
+        <target state="new">Please enter correct telephone 1. It should contain minimum 6 digit and maximum 11 digit.</target>
+      </trans-unit>
+      <trans-unit id="c846fd89632be2414a13466b8b7c9d465f405001" resname="Please enter correct telephone 2. It should contain minimum 6 digit and maximum 11 digit.">
+        <jms:reference-file line="114">UserBundle/Form/UserBusinessProfileType.php</jms:reference-file>
+        <jms:reference-file line="115">UserBundle/Form/UserSiteType.php</jms:reference-file>
+        <source>Please enter correct telephone 2. It should contain minimum 6 digit and maximum 11 digit.</source>
+        <target state="new">Please enter correct telephone 2. It should contain minimum 6 digit and maximum 11 digit.</target>
+      </trans-unit>
+      <trans-unit id="84ef1528d3ebd4552c30c2b0c678a89f58fedb28" resname="Please enter correct telephone number. It should contain minimum 6 digit and maximum 11 digit.">
+        <jms:reference-file line="950">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <source>Please enter correct telephone number. It should contain minimum 6 digit and maximum 11 digit.</source>
+        <target state="new">Please enter correct telephone number. It should contain minimum 6 digit and maximum 11 digit.</target>
+      </trans-unit>
+      <trans-unit id="2be20e04e9e6fcf7e639f8c3ebe5d31a22d98a9e" resname="Please enter description.">
+        <source>Please enter description.</source>
+        <target state="new">Please enter description.</target>
+      </trans-unit>
+      <trans-unit id="95800f62cc5ae6295b0a3a9bf9a3e638566fe4dd" resname="Please enter email address.">
+        <jms:reference-file line="87">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <jms:reference-file line="83">UserBundle/Form/ForgotPasswordType.php</jms:reference-file>
+        <source>Please enter email address.</source>
+        <target state="new">Please enter email address.</target>
+      </trans-unit>
+      <trans-unit id="61eb24bfa38bd15e614ad357a73feeca578ffa3f" resname="Please enter email html body.">
+        <source>Please enter email html body.</source>
+        <target state="new">Please enter email html body.</target>
+      </trans-unit>
+      <trans-unit id="8457ffbc611da74b0f741bf17f4e6dc2fd9daa8a" resname="Please enter email subject.">
+        <source>Please enter email subject.</source>
+        <target state="new">Please enter email subject.</target>
+      </trans-unit>
+      <trans-unit id="a55aa7c946b04552ac817e4bb9a272040b29f84e" resname="Please enter email template name.">
+        <source>Please enter email template name.</source>
+        <target state="new">Please enter email template name.</target>
+      </trans-unit>
+      <trans-unit id="117d55a301b0236418dc989000e2c45210bee89d" resname="Please enter email text body.">
+        <source>Please enter email text body.</source>
+        <target state="new">Please enter email text body.</target>
+      </trans-unit>
+      <trans-unit id="88a1b52a5732397d7e5417ad2b3801e7eb014c4c" resname="Please enter email.">
+        <jms:reference-file line="141">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <jms:reference-file line="90">MessageBundle/Form/ContactBuyerType.php</jms:reference-file>
+        <source>Please enter email.</source>
+        <target state="new">Please enter email.</target>
+      </trans-unit>
+      <trans-unit id="b68781ada5266e0da7bc2d1de88e59b55a17508d" resname="Please enter existing user's email.">
+        <jms:reference-file line="996">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <source>Please enter existing user's email.</source>
+        <target state="new">Please enter existing user's email.</target>
+      </trans-unit>
+      <trans-unit id="9f827b21f42316818aab2e700a25ca34c95f93ab" resname="Please enter first name.">
+        <jms:reference-file line="81">UserBundle/Form/UserPrivateProfileType.php</jms:reference-file>
+        <jms:reference-file line="79">UserBundle/Form/UserBusinessProfileUserDetailType.php</jms:reference-file>
+        <source>Please enter first name.</source>
+        <target state="new">Please enter first name.</target>
+      </trans-unit>
+      <trans-unit id="a806057bdb47626929e59a134f807350438f7481" resname="Please enter full name.">
+        <jms:reference-file line="87">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <source>Please enter full name.</source>
+        <target state="new">Please enter full name.</target>
+      </trans-unit>
+      <trans-unit id="fe7667b6e3209078f3b24f851a0e7d25107d5424" resname="Please enter house name/number.">
+        <jms:reference-file line="82">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <jms:reference-file line="97">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <jms:reference-file line="82">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="88">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please enter house name/number.</source>
+        <target state="new">Please enter house name/number.</target>
+      </trans-unit>
+      <trans-unit id="fe1e7ad0a71287cd9758ae353f62813a8a1ac256" resname="Please enter intro text.">
+        <source>Please enter intro text.</source>
+        <target state="new">Please enter intro text.</target>
+      </trans-unit>
+      <trans-unit id="3cda50f074867d8bef5ef460515b6d0c266fd209" resname="Please enter last name.">
+        <jms:reference-file line="90">UserBundle/Form/UserPrivateProfileType.php</jms:reference-file>
+        <jms:reference-file line="88">UserBundle/Form/UserBusinessProfileUserDetailType.php</jms:reference-file>
+        <source>Please enter last name.</source>
+        <target state="new">Please enter last name.</target>
+      </trans-unit>
+      <trans-unit id="e3ad2906065a6e55da109615066033d9109c5293" resname="Please enter location group name.">
+        <source>Please enter location group name.</source>
+        <target state="new">Please enter location group name.</target>
+      </trans-unit>
+      <trans-unit id="d3193fe00a247476fbf83372fa63a8ac2eca7deb" resname="Please enter message.">
+        <jms:reference-file line="109">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <jms:reference-file line="121">MessageBundle/Form/ContactBuyerType.php</jms:reference-file>
+        <jms:reference-file line="82">MessageBundle/Form/MessageAdType.php</jms:reference-file>
+        <jms:reference-file line="81">MessageBundle/Form/MessageUserType.php</jms:reference-file>
+        <source>Please enter message.</source>
+        <target state="new">Please enter message.</target>
+      </trans-unit>
+      <trans-unit id="9640a4333d9b1eeb788c1203a5013c491f7c5427" resname="Please enter name.">
+        <jms:reference-file line="80">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <jms:reference-file line="80">MessageBundle/Form/ContactBuyerType.php</jms:reference-file>
+        <source>Please enter name.</source>
+        <target state="new">Please enter name.</target>
+      </trans-unit>
+      <trans-unit id="e93acbb6bc42bc31fc8d8ebf07abec5ed53d11d4" resname="Please enter new password.">
+        <jms:reference-file line="185">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Please enter new password.</source>
+        <target state="new">Please enter new password.</target>
+      </trans-unit>
+      <trans-unit id="2152c50709c57bfc8210317d7209ecceea6e3c7a" resname="Please enter old password.">
+        <jms:reference-file line="189">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <source>Please enter old password.</source>
+        <target state="new">Please enter old password.</target>
+      </trans-unit>
+      <trans-unit id="d073538c1863eda3733a95bd98ddaf4b342f59a3" resname="Please enter package description.">
+        <source>Please enter package description.</source>
+        <target state="new">Please enter package description.</target>
+      </trans-unit>
+      <trans-unit id="c2ccec3593daa73bf818af6f5c90fb7eac90637a" resname="Please enter package name.">
+        <source>Please enter package name.</source>
+        <target state="new">Please enter package name.</target>
+      </trans-unit>
+      <trans-unit id="cd536f7a506f6a602f1d4ff65177bda891d9c7e9" resname="Please enter package sub title.">
+        <source>Please enter package sub title.</source>
+        <target state="new">Please enter package sub title.</target>
+      </trans-unit>
+      <trans-unit id="596f68834c8375fcb48b5aa765e17cf4e393b624" resname="Please enter parameter value.">
+        <jms:reference-file line="73">EmailBundle/Form/EmailTemplateParamsAdminType.php</jms:reference-file>
+        <source>Please enter parameter value.</source>
+        <target state="new">Please enter parameter value.</target>
+      </trans-unit>
+      <trans-unit id="8ab2649746e61c7ba0acdd6532949fa615153854" resname="Please enter password.">
+        <jms:reference-file line="112">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <jms:reference-file line="136">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <jms:reference-file line="131">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Please enter password.</source>
+        <target state="new">Please enter password.</target>
+      </trans-unit>
+      <trans-unit id="a917a64eea4548f43d978136a0226b0dc1f55a26" resname="Please enter phone number.">
+        <jms:reference-file line="177">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Please enter phone number.</source>
+        <target state="new">Please enter phone number.</target>
+      </trans-unit>
+      <trans-unit id="83bfa3293ee4eaa8ff042585e0919025d0e88d6b" resname="Please enter postcode.">
+        <jms:reference-file line="100">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <jms:reference-file line="115">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <jms:reference-file line="100">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="106">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please enter postcode.</source>
+        <target state="new">Please enter postcode.</target>
+      </trans-unit>
+      <trans-unit id="bed2d450f8910e046e6030c7910c95892b388d5f" resname="Please enter recur day.">
+        <source>Please enter recur day.</source>
+        <target state="new">Please enter recur day.</target>
+      </trans-unit>
+      <trans-unit id="1b9f231afc2c093891eb32d25794032515d928de" resname="Please enter security code.">
+        <jms:reference-file line="149">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="166">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please enter security code.</source>
+        <target state="new">Please enter security code.</target>
+      </trans-unit>
+      <trans-unit id="d476e3c399ddf3134cd950365549b4bd8fb085b7" resname="Please enter sender email.">
+        <source>Please enter sender email.</source>
+        <target state="new">Please enter sender email.</target>
+      </trans-unit>
+      <trans-unit id="9e80128b558147ec0ca1eb3cb492fe5abb59fd29" resname="Please enter sender name.">
+        <source>Please enter sender name.</source>
+        <target state="new">Please enter sender name.</target>
+      </trans-unit>
+      <trans-unit id="f964ca1645ff54e5e7b75260977eacaa55a2da71" resname="Please enter testimonial.">
+        <jms:reference-file line="80">UserBundle/Form/TestimonialType.php</jms:reference-file>
+        <source>Please enter testimonial.</source>
+        <target state="new">Please enter testimonial.</target>
+      </trans-unit>
+      <trans-unit id="156ae4ae47ff87f836cf064a07ca50a39e74d081" resname="Please enter time.">
+        <source>Please enter time.</source>
+        <target state="new">Please enter time.</target>
+      </trans-unit>
+      <trans-unit id="62fb1e64771e575d84a48575906c41acfb37e451" resname="Please enter title.">
+        <source>Please enter title.</source>
+        <target state="new">Please enter title.</target>
+      </trans-unit>
+      <trans-unit id="60d7d305ffe04bd898ad17bfb3044b5ebca7d636" resname="Please enter town/city.">
+        <jms:reference-file line="109">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <jms:reference-file line="125">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <jms:reference-file line="109">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="115">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please enter town/city.</source>
+        <target state="new">Please enter town/city.</target>
+      </trans-unit>
+      <trans-unit id="cddaf3067a0056714635010f95c2403633ea8788" resname="Please enter upsell title.">
+        <source>Please enter upsell title.</source>
+        <target state="new">Please enter upsell title.</target>
+      </trans-unit>
+      <trans-unit id="6c17c04c3b33a2d63c3139a74bcc5063d34968a5" resname="Please enter valid canonical url.">
+        <source>Please enter valid canonical url.</source>
+        <target state="new">Please enter valid canonical url.</target>
+      </trans-unit>
+      <trans-unit id="a37e7bdc7ca0d0e3f5750aa2ae1c0184cb9bba3d" resname="Please enter valid email.">
+        <jms:reference-file line="142">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <source>Please enter valid email.</source>
+        <target state="new">Please enter valid email.</target>
+      </trans-unit>
+      <trans-unit id="58f5b1a8a9a7ed88bffe1ad2611deb69ee17fc0e" resname="Please enter valid post code.">
+        <jms:reference-file line="143">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <jms:reference-file line="159">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <jms:reference-file line="193">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="217">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please enter valid post code.</source>
+        <target state="new">Please enter valid post code.</target>
+      </trans-unit>
+      <trans-unit id="55bb59808011610f8b02512a6dc7610a183fbf73" resname="Please enter valid postcode.">
+        <jms:reference-file line="252">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Please enter valid postcode.</source>
+        <target state="new">Please enter valid postcode.</target>
+      </trans-unit>
+      <trans-unit id="3289ca546c08890c62634bc5bad809e3b1c9fbc3" resname="Please enter valid state/county name.">
+        <jms:reference-file line="157">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <jms:reference-file line="173">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <jms:reference-file line="207">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="231">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please enter valid state/county name.</source>
+        <target state="new">Please enter valid state/county name.</target>
+      </trans-unit>
+      <trans-unit id="c02dbc81f58fb3d87ae3eeeea9c06bd8267845ce" resname="Please enter valid town/city name.">
+        <jms:reference-file line="150">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <jms:reference-file line="166">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <jms:reference-file line="200">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="224">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please enter valid town/city name.</source>
+        <target state="new">Please enter valid town/city name.</target>
+      </trans-unit>
+      <trans-unit id="cc6578c0cda7209f9f14d3a25443b0cab6dae4be" resname="Please enter valid youtube video url.">
+        <jms:reference-file line="260">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>Please enter valid youtube video url.</source>
+        <target state="new">Please enter valid youtube video url.</target>
+      </trans-unit>
+      <trans-unit id="c156ec87fc28e772bf1927731563fea2c32d0309" resname="Please landing page type.">
+        <source>Please landing page type.</source>
+        <target state="new">Please landing page type.</target>
+      </trans-unit>
+      <trans-unit id="bd0b95d8bfc9ccdbb0ec62e782cb1392041f6a89" resname="Please select account status.">
+        <jms:reference-file line="104">AdBundle/Form/AdPostRegistrationType.php</jms:reference-file>
+        <jms:reference-file line="122">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <jms:reference-file line="101">UserBundle/Form/UserAccountProfileType.php</jms:reference-file>
+        <source>Please select account status.</source>
+        <target state="new">Please select account status.</target>
+      </trans-unit>
+      <trans-unit id="3d10871cc63afe39d13b5ea3242d7805d3692dd9" resname="Please select atleast one category">
+        <jms:reference-file line="85">EntityBundle/Form/DimensionAdminType.php</jms:reference-file>
+        <source>Please select atleast one category</source>
+        <target state="new">Please select atleast one category</target>
+      </trans-unit>
+      <trans-unit id="fbe31d44b7ea1b654a56668f8f04afd40f9b0ee6" resname="Please select atleast one role.">
+        <jms:reference-file line="317">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <source>Please select atleast one role.</source>
+        <target state="new">Please select atleast one role.</target>
+      </trans-unit>
+      <trans-unit id="28e354e0252d7bc8580644e95eba35a503a37c82" resname="Please select business category.">
+        <jms:reference-file line="321">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <jms:reference-file line="184">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <jms:reference-file line="143">UserBundle/Form/UserAccountProfileType.php</jms:reference-file>
+        <source>Please select business category.</source>
+        <target state="new">Please select business category.</target>
+      </trans-unit>
+      <trans-unit id="a3d2af2abd6c9113b28108e06bb3593e670c63c4" resname="Please select category dimension">
+        <jms:reference-file line="156">EntityBundle/Form/DimensionAdminType.php</jms:reference-file>
+        <source>Please select category dimension</source>
+        <target state="new">Please select category dimension</target>
+      </trans-unit>
+      <trans-unit id="1dbb5b5caadfb0c38677358cef063e8847e37715" resname="Please select category.">
+        <source>Please select category.</source>
+        <target state="new">Please select category.</target>
+      </trans-unit>
+      <trans-unit id="9559cdef585453d48d3aa4fc70c58b4112d46cd4" resname="Please select config option">
+        <jms:reference-file line="74">CoreBundle/Form/ConfigRuleAdminType.php</jms:reference-file>
+        <source>Please select config option</source>
+        <target state="new">Please select config option</target>
+      </trans-unit>
+      <trans-unit id="b83325170b1355800c8c7afc50bdfee464cff628" resname="Please select delivery address.">
+        <jms:reference-file line="126">AdBundle/Form/AdBuyNowDeliveryAddressType.php</jms:reference-file>
+        <source>Please select delivery address.</source>
+        <target state="new">Please select delivery address.</target>
+      </trans-unit>
+      <trans-unit id="52b4249e95731fa1376a489b854294fb5b001e1f" resname="Please select either contact by phone or email.">
+        <jms:reference-file line="308">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <jms:reference-file line="309">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <jms:reference-file line="175">UserBundle/Form/UserAccountDetailType.php</jms:reference-file>
+        <jms:reference-file line="173">UserBundle/Form/RegistrationType.php</jms:reference-file>
+        <source>Please select either contact by phone or email.</source>
+        <target state="new">Please select either contact by phone or email.</target>
+      </trans-unit>
+      <trans-unit id="f466826de18a6b0bbe2162b87d77c2220a3bd577" resname="Please select expiry month.">
+        <jms:reference-file line="159">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="176">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please select expiry month.</source>
+        <target state="new">Please select expiry month.</target>
+      </trans-unit>
+      <trans-unit id="0838b539e6c2d6cd5a9c5e9b4c546e7f8bfa6217" resname="Please select expiry year.">
+        <jms:reference-file line="168">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="185">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please select expiry year.</source>
+        <target state="new">Please select expiry year.</target>
+      </trans-unit>
+      <trans-unit id="abf7b67694a7e7a5958aaf0065ec4daf0be1f0ea" resname="Please select frequency.">
+        <source>Please select frequency.</source>
+        <target state="new">Please select frequency.</target>
+      </trans-unit>
+      <trans-unit id="5aeb20fb1636648ee0f2c213014b34d36f21213a" resname="Please select location group type.">
+        <source>Please select location group type.</source>
+        <target state="new">Please select location group type.</target>
+      </trans-unit>
+      <trans-unit id="20d1dfe3e441b403094a7683c587fa14d6bee270" resname="Please select monthhs to recur on.">
+        <jms:reference-file line="272">EmailBundle/Form/EmailTemplateScheduleAdminType.php</jms:reference-file>
+        <source>Please select monthhs to recur on.</source>
+        <target state="new">Please select monthhs to recur on.</target>
+      </trans-unit>
+      <trans-unit id="77d7823d1a129bea19fc4554f3988a1047463b12" resname="Please select monthly days to recur on.">
+        <jms:reference-file line="134">EmailBundle/Form/EmailTemplateScheduleAdminType.php</jms:reference-file>
+        <jms:reference-file line="152">EmailBundle/Form/EmailTemplateScheduleAdminType.php</jms:reference-file>
+        <jms:reference-file line="285">EmailBundle/Form/EmailTemplateScheduleAdminType.php</jms:reference-file>
+        <source>Please select monthly days to recur on.</source>
+        <target state="new">Please select monthly days to recur on.</target>
+      </trans-unit>
+      <trans-unit id="79c10a5d8eb1cee9177c0e04b708d56735939388" resname="Please select months to recur on.">
+        <jms:reference-file line="123">EmailBundle/Form/EmailTemplateScheduleAdminType.php</jms:reference-file>
+        <source>Please select months to recur on.</source>
+        <target state="new">Please select months to recur on.</target>
+      </trans-unit>
+      <trans-unit id="a1adbf886a03b47da404dc7d774a093e67bd0f71" resname="Please select new ad status.">
+        <jms:reference-file line="135">AdBundle/Form/ChangeStatusAdminType.php</jms:reference-file>
+        <source>Please select new ad status.</source>
+        <target state="new">Please select new ad status.</target>
+      </trans-unit>
+      <trans-unit id="c78e049d899b64d11b0f67d405f9761011a04464" resname="Please select package status.">
+        <source>Please select package status.</source>
+        <target state="new">Please select package status.</target>
+      </trans-unit>
+      <trans-unit id="a9f04de5d7d087585a68a4c160eafed2f7701a1d" resname="Please select payment method.">
+        <jms:reference-file line="132">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Please select payment method.</source>
+        <target state="new">Please select payment method.</target>
+      </trans-unit>
+      <trans-unit id="0fc1e83cd89aaaa2253bbf182cb1f8a621f67ec0" resname="Please select payment source.">
+        <jms:reference-file line="109">UserBundle/Form/UserAccountProfileType.php</jms:reference-file>
+        <source>Please select payment source.</source>
+        <target state="new">Please select payment source.</target>
+      </trans-unit>
+      <trans-unit id="61fb6c7bd92fbf5c0d5c008e3d906527da501e76" resname="Please select recurring.">
+        <source>Please select recurring.</source>
+        <target state="new">Please select recurring.</target>
+      </trans-unit>
+      <trans-unit id="1a232469e4ce3933623573b64c5dcc163a807249" resname="Please select status.">
+        <source>Please select status.</source>
+        <target state="new">Please select status.</target>
+      </trans-unit>
+      <trans-unit id="a86a7f1fa01649bcb73b831bb0afc2eebd159368" resname="Please select upsell status.">
+        <source>Please select upsell status.</source>
+        <target state="new">Please select upsell status.</target>
+      </trans-unit>
+      <trans-unit id="7348840e07c667bff75226c40d84de5128abc06e" resname="Please select upsell type.">
+        <source>Please select upsell type.</source>
+        <target state="new">Please select upsell type.</target>
+      </trans-unit>
+      <trans-unit id="a73d45db5fccf53f16bc6ccad815359c4057b6a0" resname="Please select user type.">
+        <jms:reference-file line="102">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <source>Please select user type.</source>
+        <target state="new">Please select user type.</target>
+      </trans-unit>
+      <trans-unit id="504f496659babc2e698d8843b9aff445f8d0ac9a" resname="Please select weekly days to recur on.">
+        <jms:reference-file line="112">EmailBundle/Form/EmailTemplateScheduleAdminType.php</jms:reference-file>
+        <jms:reference-file line="260">EmailBundle/Form/EmailTemplateScheduleAdminType.php</jms:reference-file>
+        <source>Please select weekly days to recur on.</source>
+        <target state="new">Please select weekly days to recur on.</target>
+      </trans-unit>
+      <trans-unit id="4f961649f4099c237bebcd1311895cca2a0aaca6" resname="Please upload a valid file (Only allowed PDF, DOC, DOCX, or RTF).">
+        <jms:reference-file line="98">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <jms:reference-file line="110">MessageBundle/Form/ContactBuyerType.php</jms:reference-file>
+        <source>Please upload a valid file (Only allowed PDF, DOC, DOCX, or RTF).</source>
+        <target state="new">Please upload a valid file (Only allowed PDF, DOC, DOCX, or RTF).</target>
+      </trans-unit>
+      <trans-unit id="4618af3c45e3621a43c78bc82ef749637548a8a9" resname="Please upload a valid jpg, gif, png, bmp.">
+        <jms:reference-file line="93">AdBundle/Form/AdImageType.php</jms:reference-file>
+        <jms:reference-file line="91">UserBundle/Form/UserSiteBannerType.php</jms:reference-file>
+        <jms:reference-file line="93">UserBundle/Form/UserImageType.php</jms:reference-file>
+        <jms:reference-file line="91">UserBundle/Form/UserSiteImageType.php</jms:reference-file>
+        <source>Please upload a valid jpg, gif, png, bmp.</source>
+        <target state="new">Please upload a valid jpg, gif, png, bmp.</target>
+      </trans-unit>
+      <trans-unit id="996c118c4b241f4c6843ac4497145236b896fc4f" resname="Price cannot be longer than {{ limit }} digits long.">
+        <source>Price cannot be longer than {{ limit }} digits long.</source>
+        <target state="new">Price cannot be longer than {{ limit }} digits long.</target>
+      </trans-unit>
+      <trans-unit id="3078ca6f4cc069e122c258899c88c7be70e4a5ea" resname="Price is invalid.">
+        <jms:reference-file line="787">AdBundle/Form/AdPostType.php</jms:reference-file>
+        <jms:reference-file line="273">AdBundle/Form/AdPostPropertyAdminType.php</jms:reference-file>
+        <jms:reference-file line="788">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <source>Price is invalid.</source>
+        <target state="new">Price is invalid.</target>
+      </trans-unit>
+      <trans-unit id="ce0ead08f1f52b23aa9dc723038f22d5c4e192d6" resname="Rating is required.">
+        <jms:reference-file line="95">UserBundle/Form/UserReviewType.php</jms:reference-file>
+        <source>Rating is required.</source>
+        <target state="new">Rating is required.</target>
+      </trans-unit>
+      <trans-unit id="90b0700afa349dcda0f38f3b7ee90e6067a6fa9e" resname="Role is required.">
+        <source>Role is required.</source>
+        <target state="new">Role is required.</target>
+      </trans-unit>
+      <trans-unit id="cd0f52edfd329c8cb24aa6c43ef5f3a5ef28290b" resname="Rule is already set for selected category : %categoryName%">
+        <jms:reference-file line="174">CoreBundle/Form/ConfigRuleAdminType.php</jms:reference-file>
+        <source>Rule is already set for selected category : %categoryName%</source>
+        <target state="new">Rule is already set for selected category : %categoryName%</target>
+      </trans-unit>
+      <trans-unit id="8313fbb47224ca4657863dc20d44f73a8aa744bf" resname="Rule is already set for selected category and location group : (%categoryName%, %locationGroup%)">
+        <jms:reference-file line="191">CoreBundle/Form/ConfigRuleAdminType.php</jms:reference-file>
+        <source>Rule is already set for selected category and location group : (%categoryName%, %locationGroup%)</source>
+        <target state="new">Rule is already set for selected category and location group : (%categoryName%, %locationGroup%)</target>
+      </trans-unit>
+      <trans-unit id="5636f5475dee09ed7b7a0e4bd3458e39f2ca243a" resname="Rule is already set for selected location group : %locationGroup%">
+        <jms:reference-file line="181">CoreBundle/Form/ConfigRuleAdminType.php</jms:reference-file>
+        <source>Rule is already set for selected location group : %locationGroup%</source>
+        <target state="new">Rule is already set for selected location group : %locationGroup%</target>
+      </trans-unit>
+      <trans-unit id="d869cfaae3c48c0c9038d272536efafbadca947c" resname="Stage should be integer.">
+        <jms:reference-file line="150">AdBundle/Form/PaaFieldAdminType.php</jms:reference-file>
+        <source>Stage should be integer.</source>
+        <target state="new">Stage should be integer.</target>
+      </trans-unit>
+      <trans-unit id="a6c53fe98c16498caaabb2fe245bf8bdacee8cf0" resname="Status is required.">
+        <source>Status is required.</source>
+        <target state="new">Status is required.</target>
+      </trans-unit>
+      <trans-unit id="6ba2b691b60e886dba18c72afb9ab11907e5e808" resname="Telephone number is required.">
+        <jms:reference-file line="991">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <jms:reference-file line="1001">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <source>Telephone number is required.</source>
+        <target state="new">Telephone number is required.</target>
+      </trans-unit>
+      <trans-unit id="00a857edcb6e956efb16ef002f251e19835aeff9" resname="The email &quot;{{ value }}&quot; is not a valid email.">
+        <jms:reference-file line="88">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <jms:reference-file line="84">UserBundle/Form/ForgotPasswordType.php</jms:reference-file>
+        <source>The email "{{ value }}" is not a valid email.</source>
+        <target state="new">The email "{{ value }}" is not a valid email.</target>
+      </trans-unit>
+      <trans-unit id="11cf42aa93613248dccaf831d3689078bbde82c0" resname="The url '{{ value }}' is not valid url.">
+        <source>The url '{{ value }}' is not valid url.</source>
+        <target state="new">The url '{{ value }}' is not valid url.</target>
+      </trans-unit>
+      <trans-unit id="00966f2732445b6f4ad2c716edd951c39401e6a6" resname="The value {{ value }} is not a valid alpha numeric.">
+        <source>The value {{ value }} is not a valid alpha numeric.</source>
+        <target state="new">The value {{ value }} is not a valid alpha numeric.</target>
+      </trans-unit>
+      <trans-unit id="4671f7941fc8c6be5ec957ecace64ab0967aad6d" resname="The value {{ value }} is not a valid float value.">
+        <source>The value {{ value }} is not a valid float value.</source>
+        <target state="new">The value {{ value }} is not a valid float value.</target>
+      </trans-unit>
+      <trans-unit id="61c051497bbfa3c481da08eb459f9d5b241c1345" resname="The value {{ value }} is not a valid integer.">
+        <source>The value {{ value }} is not a valid integer.</source>
+        <target state="new">The value {{ value }} is not a valid integer.</target>
+      </trans-unit>
+      <trans-unit id="698b215a83caefa6238a11308668d43c22f06071" resname="This category name already exist in our database.">
+        <source>This category name already exist in our database.</source>
+        <target state="new">This category name already exist in our database.</target>
+      </trans-unit>
+      <trans-unit id="c90b0c57a429775db56ed69e39ae43dddad0b64c" resname="This email is not registered in Friday-Ad.">
+        <jms:reference-file line="105">UserBundle/Form/ForgotPasswordType.php</jms:reference-file>
+        <source>This email is not registered in Friday-Ad.</source>
+        <target state="new">This email is not registered in Friday-Ad.</target>
+      </trans-unit>
+      <trans-unit id="34e6d9225984c410459952e2a1e3d185f09ab3f9" resname="This email template name already exist in our database.">
+        <source>This email template name already exist in our database.</source>
+        <target state="new">This email template name already exist in our database.</target>
+      </trans-unit>
+      <trans-unit id="05d55b3c26e9631dfd499f7e382d92e0a137704c" resname="This email {{ value }} is not a valid email.">
+        <source>This email {{ value }} is not a valid email.</source>
+        <target state="new">This email {{ value }} is not a valid email.</target>
+      </trans-unit>
+      <trans-unit id="1efb0a85677583c11a7e2ef237a29143813cc337" resname="This entity name already exist in our database.">
+        <source>This entity name already exist in our database.</source>
+        <target state="new">This entity name already exist in our database.</target>
+      </trans-unit>
+      <trans-unit id="6a166a62aed2689bee253d45e1a035c938062ad2" resname="This location group name already exist in our database.">
+        <source>This location group name already exist in our database.</source>
+        <target state="new">This location group name already exist in our database.</target>
+      </trans-unit>
+      <trans-unit id="262048def1228b589d8e1a016988e06b974d892b" resname="This location name already exist in our database.">
+        <source>This location name already exist in our database.</source>
+        <target state="new">This location name already exist in our database.</target>
+      </trans-unit>
+      <trans-unit id="19b89d2681ac97dbeafc15032ae992112ef03710" resname="This name already exist in our database.">
+        <source>This name already exist in our database.</source>
+        <target state="new">This name already exist in our database.</target>
+      </trans-unit>
+      <trans-unit id="ae93eb6116fcaf1e46298060361724829186f2ff" resname="This print edition name is already exist in our system.">
+        <source>This print edition name is already exist in our system.</source>
+        <target state="new">This print edition name is already exist in our system.</target>
+      </trans-unit>
+      <trans-unit id="288e8d54d793f35684b3c4bec20119dc090ff9f7" resname="This slug already exist in our database.">
+        <source>This slug already exist in our database.</source>
+        <target state="new">This slug already exist in our database.</target>
+      </trans-unit>
+      <trans-unit id="d976e048e85f2d10dca4f80c233e764141fab9ff" resname="This title already exist in our database.">
+        <source>This title already exist in our database.</source>
+        <target state="new">This title already exist in our database.</target>
+      </trans-unit>
+      <trans-unit id="09fbefbc00a17781b8cafae375c38174c97d669c" resname="This upsell name already exist in our database.">
+        <source>This upsell name already exist in our database.</source>
+        <target state="new">This upsell name already exist in our database.</target>
+      </trans-unit>
+      <trans-unit id="b2e6e8b78d65f83573ca9ec11b3ce83f93ca4b84" resname="This url already exist in our database.">
+        <source>This url already exist in our database.</source>
+        <target state="new">This url already exist in our database.</target>
+      </trans-unit>
+      <trans-unit id="7929166bf9ebe7fbc12f9a98da745844901d1aa2" resname="Time is required.">
+        <source>Time is required.</source>
+        <target state="new">Time is required.</target>
+      </trans-unit>
+      <trans-unit id="916255ca6d31a8babf22b003aab9d39a270fd497" resname="Unknown card types, allowed card types are Visa, MasterCard, Maestro (UK Domestic) and Visa Electron.">
+        <jms:reference-file line="213">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <jms:reference-file line="237">PaymentBundle/Form/CyberSourceCheckoutType.php</jms:reference-file>
+        <source>Unknown card types, allowed card types are Visa, MasterCard, Maestro (UK Domestic) and Visa Electron.</source>
+        <target state="new">Unknown card types, allowed card types are Visa, MasterCard, Maestro (UK Domestic) and Visa Electron.</target>
+      </trans-unit>
+      <trans-unit id="aa6806d6206fc66f2a30ab1650a225cc2c81ddaa" resname="Url can have maximum 255 characters.">
+        <source>Url can have maximum 255 characters.</source>
+        <target state="new">Url can have maximum 255 characters.</target>
+      </trans-unit>
+      <trans-unit id="441b866add8d6c0f6bb89e258ffa143dc69382f7" resname="Url is required.">
+        <source>Url is required.</source>
+        <target state="new">Url is required.</target>
+      </trans-unit>
+      <trans-unit id="d7587ce42eae1de43fe68e6b84a3a7f2598ddc59" resname="Username can have maximum 100 characters.">
+        <source>Username can have maximum 100 characters.</source>
+        <target state="new">Username can have maximum 100 characters.</target>
+      </trans-unit>
+      <trans-unit id="30fa8890b24870944348f61f9a0379d62e3d31bb" resname="Username is required.">
+        <source>Username is required.</source>
+        <target state="new">Username is required.</target>
+      </trans-unit>
+      <trans-unit id="033b3dee91cf3c0f3d0e71b71656e594cf61389e" resname="Value is required.">
+        <source>Value is required.</source>
+        <target state="new">Value is required.</target>
+      </trans-unit>
+      <trans-unit id="efa9f844130d3bad144786ca2e2e0a3bfe5d9187" resname="Value should not be blank.">
+        <jms:reference-file line="261">AdBundle/Form/AdPostType.php</jms:reference-file>
+        <jms:reference-file line="784">AdBundle/Form/AdPostType.php</jms:reference-file>
+        <jms:reference-file line="270">AdBundle/Form/AdPostPropertyAdminType.php</jms:reference-file>
+        <jms:reference-file line="251">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <jms:reference-file line="785">AdBundle/Form/AdPostAdminType.php</jms:reference-file>
+        <source>Value should not be blank.</source>
+        <target state="new">Value should not be blank.</target>
+      </trans-unit>
+      <trans-unit id="6b17c3b233dbe92fd254057efc525d864d45acf6" resname="You cannot edit user type or business category setting while you have live adverts or a paid profile subscription.">
+        <jms:reference-file line="281">UserBundle/Form/UserAdminType.php</jms:reference-file>
+        <jms:reference-file line="146">UserBundle/Form/UserAccountProfileType.php</jms:reference-file>
+        <source>You cannot edit user type or business category setting while you have live adverts or a paid profile subscription.</source>
+        <target state="new">You cannot edit user type or business category setting while you have live adverts or a paid profile subscription.</target>
+      </trans-unit>
+      <trans-unit id="3c9d42f7025aea5af5896e5c95f2ea1ac0a46e9e" resname="You have to introduce postcode.">
+        <jms:reference-file line="143">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>You have to introduce postcode.</source>
+        <target state="new">You have to introduce postcode.</target>
+      </trans-unit>
+      <trans-unit id="89fc617bc675c71d304782c1ef8a1830c21ce2fe" resname="You have to select a category.">
+        <jms:reference-file line="179">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>You have to select a category.</source>
+        <target state="new">You have to select a category.</target>
+      </trans-unit>
+      <trans-unit id="d6043a88259d60e68f933c394582a8cbd186992e" resname="You have to select a subcategory.">
+        <jms:reference-file line="195">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <jms:reference-file line="201">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <jms:reference-file line="267">UserBundle/Form/UserBusinessShopProfileType.php</jms:reference-file>
+        <source>You have to select a subcategory.</source>
+        <target state="new">You have to select a subcategory.</target>
+      </trans-unit>
+      <trans-unit id="80b7c98cf9dfa729badd9297631ea10152df7a07" resname="Your status is not active.">
+        <jms:reference-file line="136">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <jms:reference-file line="107">UserBundle/Form/ForgotPasswordType.php</jms:reference-file>
+        <source>Your status is not active.</source>
+        <target state="new">Your status is not active.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

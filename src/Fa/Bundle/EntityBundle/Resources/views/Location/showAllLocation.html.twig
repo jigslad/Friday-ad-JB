@@ -1,0 +1,29 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% set container = fetch_container_instance() %}
+{% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
+
+{% block title %}
+    {{'Choose your location'|trans({}, 'frontend-location')}}
+{% endblock %}
+
+
+{% block body -%}
+    {% cache 'footer|locations|front/locations' 86400 %}
+        {% set townIds   = locationRepository.getTopTownIdsForLocation(container) %}
+        {% set countries = locationRepository.getLocationByLevel(1) %}
+        {% set counties  = locationRepository.getLocationByLevel(2) %}
+        {% set towns     = locationRepository.getLocationByIds(townIds) %}
+        
+        <h1 class="simple-heading location-heading">{{'Choose your location'|trans({}, 'frontend-location')}}</h1>
+        
+        <div class="choose-location counties">
+            {{ include('FaEntityBundle:Location:renderLocations.html.twig', {'locations': countries}) }}
+            {{ include('FaEntityBundle:Location:renderLocations.html.twig', {'locations': counties, 'route': 'show_all_towns_by_county', 'blockName': 'Counties'|trans({}, 'frontend-location')}) }}
+        </div>
+        
+        <div class="choose-location towns">
+            {{ include('FaEntityBundle:Location:renderLocations.html.twig', {'locations': towns, 'blockName': 'Top Towns'|trans({}, 'frontend-location')}) }}
+        </div>
+    {% endcache %}
+{% endblock %}

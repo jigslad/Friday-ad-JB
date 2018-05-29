@@ -1,0 +1,16 @@
+{% if userDetail['town_name']|length %}
+    <b>{{ userDetail['town_name'] }},</b>
+{% endif %}
+{% if userDetail['domicile_name']|length %}
+    {{ userDetail['domicile_name'] }},
+    {{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')) }} -
+{% endif %}
+<i>{{'Member since'|trans({}, 'frontend-profile-page')}} {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userDetail['created_at'], fetch_container_instance(), null, null, 'MMM Y']) }}</i>
+{% if allowProfileEdit %}
+    <div class="profile-edit ">
+        <div class="relative right">
+            <a href="javascript:void(0);" onclick="return editLocation();">Edit</a>
+            <div class="edit-tooltip">{{'Edit your location'|trans({}, 'frontend-profile-page')}}</div>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,39 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    function bindLocationEvents(formName)
+    {
+        $('#change_location_link').click(function(){
+            $('#location_field_div').show();
+        });
+
+        $('#find_on_map').click(function(){
+            var locationVal = $('#'+formName+'_location_autocomplete').val();
+            if (locationVal && locationVal != 'United Kingdom') {
+                $('#location_map_div').show();
+                showAddress(locationVal);
+            } else {
+                showAddress('United Kingdom');
+                $('#location_map_div').hide();
+            }
+            return false;
+        });
+
+        $('#'+formName+'_location_autocomplete').keypress(function(e){
+            var k = e.keyCode || e.which;
+            if(k == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        if (formName == 'fa_paa_fourth_step_for_sale') {
+            $('#'+formName+'_location_autocomplete').blur(function(e){
+                var paymentMethodId = $("input[name='"+formName+"[payment_method_id]']:checked").val();
+                if ($.inArray(paymentMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')}}']) != '-1') {
+                    showPaypalSection(false);
+                }
+            });
+        }
+    }
+//]]>
+</script>

@@ -1,0 +1,3 @@
+category_dimension_list:
+    path:     /{categoryString}/{dimensionName}/
+    defaults: { _controller: "FaEntityBundle:CategoryDimension:showCategoryDimension" }

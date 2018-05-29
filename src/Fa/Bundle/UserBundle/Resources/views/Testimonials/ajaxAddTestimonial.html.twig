@@ -1,0 +1,49 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title">{{'Send us your testimonial'|trans({}, 'frontend-testimonials')}}</h5>
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'testimonial_id'}}) }}
+    <div class="modal-content">
+        {% if app.user and app.request.cookies.has('add_testimonial_flag') and app.request.cookies.has('add_testimonial_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.cookies.get('add_testimonial_flag') %}
+            <div data-alert class="alert-box success radius">
+                <span class="alert-icon">&nbsp;</span>
+                {{'You have successfully logged in.'|trans({}, 'frontend')}}
+                <a href="javascript:void(0)" class="close">&times;</a>
+            </div>
+            {{ fetch_repository('FaUserBundle:User').removeUserCookies() }}
+        {% endif %}
+        <p>{{'Tell us about your experience with Friday-Ad.'|trans({}, 'frontend-testimonials')}}</p>
+        {{ form_row(form.comment) }}
+        <b class="black-text">{% if app.user and app.user.getFirstName() is not null %}{{ app.user.getFirstName() }}, {% endif%}{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [date().timestamp, container]) }}</b>
+        {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand'}}) }}
+    </div>
+{{ form_end(form) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+    });
+    $("#testimonial_id").submit(function(event) {
+        blockElement('#addTestimonialModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{path('add_testimonial')}}",
+            data: $("#testimonial_id").serialize()
+        })
+        .always(function(response) {
+            unblockElement('#addTestimonialModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#addTestimonialModal').html(response.htmlContent);
+            } else {
+                $('#addTestimonialModal').foundation('reveal', 'close');
+                $('#testimonials_list_id').prepend(decorateMessage('{{'Testimonial sent successfully, administrator will review it.'|trans({}, 'frontend-testimonials')}}', 'success'));
+                scrollToElement('#testimonials_list_id', '1000', -150);
+            }
+        });
+    });
+//]]>
+</script>

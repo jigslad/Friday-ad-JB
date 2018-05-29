@@ -1,0 +1,7 @@
+user_package_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaUserBundle:UserPackageAdmin:displayPackage" }
+    
+user_package_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaUserBundle:UserPackageAdmin:assignPackage" }

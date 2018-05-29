@@ -1,0 +1,215 @@
+<div class="detail-tabpart-2" id="vif_tabs">
+    <ul class="tabs hide-for-small-only" data-tab id="ad_motors_tabs">
+        {% if adDetailAndDimensionFields['performance_economy'] is defined or adDetailAndDimensionFields['safety_features'] is defined %}
+            <li class="tab-title active"><a href="#basic_info_panel" id="basic_info_panel_tab">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
+        {% endif %}
+        {% if adDetailAndDimensionFields['performance_economy'] is defined %}
+            <li class="tab-title"><a href="#performance_economy_panel" id="performance_economy_panel_tab">{{'Performance & economy'|trans({}, 'frontend-show-ad')}}</a></li>
+        {% endif %}
+        {% if adDetailAndDimensionFields['safety_features'] is defined %}
+            <li class="tab-title"><a href="#safety_features_panel" id="safety_features_panel_tab">{{'Safety & features'|trans({}, 'frontend-show-ad')}}</a></li>
+        {% endif %}
+    </ul>
+    <dl class="accordion" data-accordion="">
+        <dd class="accordion-navigation">
+            <a href="#basic_info_panel" id="basic_info_panel_anchor" class="show-for-small-only">{{'The basics'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
+            <div class="content active" id="basic_info_panel">
+                <div class="hide-for-small-only">
+                    <div id="ad_desc">
+                        {% if adMotorDetail['description'] is defined %}
+                            {{ adMotorDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}
+                            
+                        {% endif %}
+                    </div>
+                    <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-show-ad') }}</a>
+                    <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-show-ad') }}</a>
+                </div>
+                {% if adCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_STATIC_CARAVANS_ID')}%}
+                    <h5 class="hide-for-small-only">{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
+    
+                    <div class="motor-info">
+                        <div class="info-row">
+                        	<div class="clearfix" data-equalizer>
+                            <div class="info-box" data-equalizer-watch>
+                                <label>{{'Reg. year'|trans({}, 'frontend-show-ad')}}</label>
+                                <span class="motor-info-icon info-year"></span>
+                                <span class="info-dtl">
+                                    {% if metaData['reg_year'] is defined %}
+                                        {{ ucfirst(metaData['reg_year']|replace({'-': ' '})) }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="info-box" data-equalizer-watch>
+                                <label>{{'Mileage'|trans({}, 'frontend-show-ad')}}</label>
+                                <span class="motor-info-icon info-mileage"></span>
+                                <span class="info-dtl">
+                                    {% if metaData['mileage'] is defined %}
+                                        {{ format_number(metaData['mileage']) }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="info-box" data-equalizer-watch>
+                                <label>{{'Fuel type'|trans({}, 'frontend-show-ad')}}</label>
+                                <span class="motor-info-icon info-fuel"></span>
+                                <span class="info-dtl">
+                                    {% if adMotorDetail['fuel_type_id'] is defined %}
+                                        {% if isAdPreview is defined and isAdPreview == true %}
+                                            {{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', adMotorDetail['fuel_type_id']) }}
+                                        {% else %}
+                                            {{ adRepository.getAdDetailLinks('FUEL_TYPE_ID', solrMapping, solrMapping~'FUEL_TYPE_ID', 'FaEntityBundle:Entity', '', adDetail, container, entityCacheManager, categoryPath|keys)|raw }}
+                                        {% endif %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="info-box" data-equalizer-watch>
+                                <label>{{'Engine size'|trans({}, 'frontend-show-ad')}}</label>
+                                <span class="motor-info-icon info-engine"></span>
+                                <span class="info-dtl">
+                                    {% if isAdPreview is not defined and metaData['engine_size'] is defined and secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID') %}
+                                        {{ adRepository.getAdDetailLinks('ENGINE_SIZE', solrMapping, solrMapping~'ENGINE_SIZE', 'FaEntityBundle:Entity', '', adDetail, container, entityCacheManager, categoryPath|keys)|raw }}
+                                    {% elseif metaData['engine_size'] is defined %}
+                                        {{ metaData['engine_size']~' '~adMotorRepository.getUnitByField('engine_size') }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </span>
+                            </div>
+                            </div>
+                        </div>
+                        {% set fieldCnt = 0 %}
+                        {% if adDetailAndDimensionFields['detail'] is defined and adDetailAndDimensionFields['detail']|length %}
+                            {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
+                                {% if fieldCnt == 0 or (fieldCnt % 4) == 0 %}
+                                    <div class="info-row">
+                                    <div class="clearfix" data-equalizer>
+                                {% endif %}
+                                <div class="info-box" data-equalizer-watch><label>{{ fieldName }}:</label><span class="info-dtl">{{ fieldValue|join(', ')|raw }}</span></div>
+                                {% if (fieldCnt % 4) == 3 or fieldCnt == (adDetailAndDimensionFields['detail']|length - 1) %}
+                                    </div>
+                                    </div>
+                                {% endif %}
+                                {% set fieldCnt = fieldCnt + 1 %}
+                            {% endfor %}
+                        {% endif %}
+    
+                        {% if adCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_MOTORBIKES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_STATIC_CARAVANS_ID')}%}
+                            <div class="info-row color-row">
+                            	<div class="clearfix" data-equalizer>
+                                <div class="info-box {{ cycle(['odd', 'even'], (fieldCnt % 4)) }}" data-equalizer-watch>
+                                    <label>{{'Colour'|trans({}, 'frontend-show-ad')}}:</label>
+                                    <span class="info-dtl">
+                                        {% if adMotorDetail['colour_id'] is defined %}
+                                            {{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', adMotorDetail['colour_id']) }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% elseif adCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_STATIC_CARAVANS_ID')} and adDetailAndDimensionFields['detail'] is defined and adDetailAndDimensionFields['detail']|length %}
+                    <h5 class="hide-for-small-only">{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
+                    <ul class="details-info">
+                        {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
+                            <li class="clearfix">
+                                <div class="detail-text">{{fieldName}}</div>
+                                <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            {% if adDetailAndDimensionFields['performance_economy'] is defined %}
+                <a href="#performance_economy_panel" class="show-for-small-only">{{'Performance & economy'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+                <div class="content" id="performance_economy_panel">
+                    <ul class="details-info">
+                         {% for fieldName, fieldValue in adDetailAndDimensionFields['performance_economy'] %}
+                             <li class="clearfix">
+                                 <div class="detail-text">{{fieldName}}</div>
+                                 <div class="detail-text">{{fieldValue}}</div>
+                             </li>
+                         {% endfor %}
+                     </ul>
+                </div>
+             {% endif %}
+
+             {% if adDetailAndDimensionFields['safety_features'] is defined %}
+                <a href="#safety_features_panel" class="show-for-small-only" id="safety_features_panel_tab">{{'Safety & features'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+                <div class="content" id="safety_features_panel">
+                    {% if metaData['ncap_rating'] is defined or adMotorRepository.hasISOFixFeature(featureIds) or safetyFeatureIds|length %}
+                        <h5>{{'Safety'|trans({}, 'frontend-show-ad')}}</h5>
+                        {% if metaData['ncap_rating'] is defined or adMotorRepository.hasISOFixFeature(featureIds) %}
+                            <div class="clearfix">
+                                {% if metaData['ncap_rating'] is defined %}
+                                    {% if metaData['ncap_rating'] > 5 %}
+                                        {% set percentage = 100 %}
+                                    {% else %}
+                                        {% set percentage = ((metaData['ncap_rating'] / 5) * 100) %}
+                                    {% endif %}
+                                    <div class="safety-block {% if not adMotorRepository.hasISOFixFeature(featureIds) %}single-block{% endif %}">
+                                        <div class="safety-icon ncap-icon"></div>
+                                        <div class="safety-rating">
+                                            <div class="safety-stars"></div>
+                                            <div class="safety-star-fill" style="width:{{percentage}}%"></div>
+                                        </div>
+                                        <h5>{{'NCAP rating of %ncap_rating%/5'|trans({'%ncap_rating%': metaData['ncap_rating']}, 'frontend-show-ad')}}</h5>
+                                        <div class="safety-content">
+                                            {{'NCAP ratings refer to the crash protection and rollover safety of new vehicles. To achieve a high overall rating the car must deliver a balanced performance across all four areas: adult occupant protection, child occupant protection, pedestrian protection and safety assist.<br />One star is the lowest rating; ﬁve stars is the highest.<br />More stars equal safer cars.'|trans({}, 'frontend-show-ad')|raw}}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% if adMotorRepository.hasISOFixFeature(featureIds) %}
+                                    <div class="safety-block {% if metaData['ncap_rating'] is not defined %}single-block{% endif %}">
+                                        <div class="safety-icon iso-icon"></div>
+                                        <h5 class="iso-title">{{'ISOfix'|trans({}, 'frontend-show-ad')}}</h5>
+                                        <div class="safety-content">{{ 'ISOFIX has by now become the international standard for all automobile and child safety seat manufacturers. This anchoring technology minimizes installation mistakes and optimizes the protective effect by means of a solid connection between child safety seat and vehicle.'|trans({}, 'frontend-show-ad') }}</div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if safetyFeatureIds|length %}
+                            <div class="safety-features">
+                                <ul class="details-info">
+                                    {% for featureId in safetyFeatureIds %}
+                                        {% if featureId %}
+                                            <li class="clearfix">
+                                                <div class="detail-text">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', featureId) }}</div>
+                                                <div class="detail-text text-center"><span class="safety-fe-check"></span></div>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                             </div>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if otherFeatureIds|length %}
+                        <h5 class="safety-title">{{'Features'|trans({}, 'frontend-show-ad')}}</h5>
+                        <div class="safety-features">
+                            <ul class="details-info">
+                                {% for featureId in otherFeatureIds %}
+                                    {% if featureId %}
+                                        <li class="clearfix">
+                                            <div class="detail-text">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', featureId) }}</div>
+                                            <div class="detail-text text-center"><span class="safety-fe-check"></span></div>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </dd>
+    </dl>
+</div>

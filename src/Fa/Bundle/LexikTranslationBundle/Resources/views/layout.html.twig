@@ -1,0 +1,6 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% block scriptbottom %}
+    {{ parent() }}
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
+    <script src="{{ asset_url('lexiktranslation/ng-table/ng-table.min.js') }}"></script>
+{% endblock %}

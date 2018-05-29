@@ -1,0 +1,119 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content %}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_promotion_package_admin_id'}}) }}
+                {{ form_row(form.role) }}
+                {{ form_row(form.category) }}
+                {{ form_row(form.upsells) }}
+                {{ form_row(form.price) }}
+                {{ form_row(form.title) }}
+                {{ form_row(form.sub_title) }}
+                {{ form_row(form.new_ad_cta) }}
+                {{ form_row(form.renewal_ad_cta) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.duration) }}
+                {{ form_row(form.status) }}
+                {{ form_row(form.trail) }}
+                {{ form_row(form.value) }}
+                {{ form_row(form.is_admin_package) }}
+                <div class="row">
+                    <div class="large-12 columns">
+                        <div class="form-group">
+                            <h4>{{ 'Add credits'|trans }}</h4>
+                        </div>
+                        <hr class="hr_margin">
+                        {% for z in 1..3 %}
+                            <h4>{{ 'Credit'~' '~(loop.index)|trans }}</h4>
+                            <div class="row">
+                                <div class="large-3 columns">
+                                    {{ form_row(attribute(form, 'credit_'~(loop.index))) }}
+                                </div>
+                                <div class="large-3 columns">
+                                    {{ form_row(attribute(form, 'category_id_'~(loop.index))) }}
+                                </div>
+                                <div class="large-3 columns">
+                                    {{ form_row(attribute(form, 'duration_value_'~(loop.index))) }}
+                                </div>
+                                <div class="large-3 columns">
+                                    {{ form_row(attribute(form, 'duration_type_'~(loop.index))) }}
+                                </div>
+                            </div>
+                            
+                            {% set totalChoices = attribute(form, 'package_sr_no_'~(loop.index)).vars.choices|length %}
+                            {% set totalColumns = 3 %}
+                            {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+                            {% set choiceCount = 0 %}
+                            {% set totalChoiceCount = 0 %}
+                            {{ form_label(attribute(form, 'package_sr_no_'~(loop.index))) }} <span class="required">*</span>
+                            <div class="row" id="package_sr_no_div_{{ loop.index }}" style="margin-bottom:10px!important">
+                                {% set choicesIdArray = attribute(form, 'package_sr_no_'~(loop.index)).vars.choices|keys %}
+                                {% set columns = 3 %}
+                                {% set ctr = 0 %}
+                                {% set totalItems = attribute(form, 'package_sr_no_'~(loop.index)).vars.choices|length %}
+                                {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                                {% set extraColumn = (totalItems % columns) %}
+                                {% set colCounter = {} %}
+                                {% for i in 0..columns-1 %}
+                                    {% if loop.index0 < extraColumn %}
+                                        {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                    {% else  %}
+                                        {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% for i in 0..columns-1 %}
+                                    <div class="large-4 columns">
+                                        <ul class="checkbox-list">
+                                            {% for k in 0..colCounter[i]-1 %}
+                                                {% if choicesIdArray[ctr] is defined %}
+                                                    {% set child = attribute(attribute(form, 'package_sr_no_'~(z)), ctr) %}
+                                                    <li>
+                                                        {{ form_widget(child) }}
+                                                        <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                                                    </li>
+                                                {% endif %}
+                                                {% set ctr = ctr + 1 %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {{ form_errors(attribute(form, 'package_sr_no_'~(loop.index))) }}
+                            
+                            {{ form_row(attribute(form, 'paid_user_only_'~(loop.index))) }}
+                            <hr class="hr_margin">
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'shop_package_admin'}) }}
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+    	{% for i in 1..3 %}
+            $('#fa_promotion_shop_package_admin_package_sr_no_{{loop.index}}_0').change(function() {
+                if($(this).is(":checked")) {
+                    $('#package_sr_no_div_{{ loop.index }} :checkbox').prop('checked', true);
+                } else {
+                    $('#package_sr_no_div_{{ loop.index }} :checkbox').prop('checked', false);
+                }
+            });
+        {% endfor %}
+    });    
+    //]]>
+    </script>
+{% endblock %}

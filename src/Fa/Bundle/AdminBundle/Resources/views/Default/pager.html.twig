@@ -1,0 +1,25 @@
+<div id="pager" class="row clearfix">
+	<div class="columns">
+	    <div class="col-sm-5 left">
+	         {% if pagination.getNbPages() == pagination.getCurrentPage() %}
+	            {% set to = pagination.getNbResults() %}
+	         {% else %}
+	            {% set to = pagination.getCurrentPage() * pagination.getMaxPerPage() %}
+	         {% endif %}
+	         {% set from = 0 %}
+	         {% if pagination.getNbResults() %}
+	            {% set from = ((pagination.getCurrentPage() - 1) * pagination.getMaxPerPage()) + 1 %}
+	         {% endif %}
+	         Showing
+	         {{ from }}
+	         to {{ to }}
+	         of {{ pagination.getNbResults() }} entries
+	    </div>
+	    {% if (pagination.haveToPaginate()) %}
+	    <div class="col-sm-7 right">
+	         {#{ pagerfanta(pagination, 'twitter_bootstrap3', {'prev_message': '&laquo; Previous', 'next_message': 'Next &raquo;', 'css_container_class': 'pagination pull-right'}) }#}
+                 {{ pagerfanta(pagination, 'foundation_pager_admin') }}
+	    </div>
+	    {% endif %}
+	</div>
+</div>

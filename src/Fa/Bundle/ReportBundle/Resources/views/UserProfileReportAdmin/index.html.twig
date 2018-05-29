@@ -1,0 +1,49 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set userReportRepository = fetch_repository('FaReportBundle:UserReport', 'history') %}
+{% set disallowFieldsArray = userReportRepository.getNotAvailableFieldsArrayForGroupTypeReport() %}
+{% set disallowFieldsString = disallowFieldsArray|join(',') %}
+
+{% set exportToCsv     = false %}
+{% set userReportCsvList = false %}
+
+{% if fa_resource_authorization_manager.isGranted('fa_report_user_profile_export_to_csv') %}
+  {% set exportToCsv = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('ajax_fa_report_user_profile_csv_list') %}
+  {% set userReportCsvList = true %}
+{% endif %}
+
+{% block content -%}
+    <div class="large-row">
+        {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew': false}) }}
+
+        {% use "FaReportBundle:UserProfileReportAdmin:search.html.twig" %}
+        {{ block('search_html') }}
+
+        {% if reportDataArray is not null %}
+            {% if isExport and exportToCsv %}
+                <div class="row">
+                    <div class="columns text-right mb10"><a href="{{path('fa_report_user_profile_export_to_csv')}}">{{'Export to csv'|trans()}}</a></div>
+                </div>
+            {% endif %}
+
+            {% if pagination is not null and searchParams is defined %}
+                {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+            {% endif %}
+
+            {{ include('FaReportBundle:UserProfileReportAdmin:list.html.twig', {'pagination': pagination}) }}
+
+            {% if pagination is not null and searchParams is defined %}
+                {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

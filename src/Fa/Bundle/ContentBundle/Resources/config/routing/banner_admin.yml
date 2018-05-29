@@ -1,0 +1,29 @@
+banner_admin:
+    path:     /
+    defaults: { _controller: "FaContentBundle:BannerAdmin:index" }
+
+banner_new_admin:
+    path:     /new
+    defaults: { _controller: "FaContentBundle:BannerAdmin:new" }
+
+banner_create_admin:
+    path:     /create
+    defaults: { _controller: "FaContentBundle:BannerAdmin:create" }
+    requirements: { methods: post }
+
+banner_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaContentBundle:BannerAdmin:edit" }
+
+banner_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaContentBundle:BannerAdmin:update" }
+    requirements: { methods: post|put }
+
+banner_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaContentBundle:BannerAdmin:delete" }
+    
+banner_ajax_get_pages_by_zone:
+    path:     /ajax/getpages
+    defaults: { _controller: "FaContentBundle:BannerAdmin:ajaxGetPagesByZone" }

@@ -1,0 +1,97 @@
+{% set container = fetch_container_instance() %}
+{% set getNoFollowLink = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(app.request.get('searchQueryString')) %}
+{% if searchParams.item__category_id is not defined or searchParams.item__category_id == '' %}
+    <dd class="accordion-navigation keep-shown">
+        <a href="#panel0a" rel="nofollow" class="clearfix"><h5 class="left">{{ 'Categories'|trans({}, 'frontend-left-search')}}</h5></a>
+        {% set mainCategories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
+        {% set mainCategoriesKeys = mainCategories|keys %}
+        {% set parentFullSlug = null %}
+        {% set secondLevelParentFullSlug = null %}
+        {% if mainCategoriesKeys[0] is defined %} 
+            {% set parentFullSlug = fetch_repository('FaEntityBundle:Category').getFullSlugById(mainCategoriesKeys[0], fetch_container_instance()) %}
+        {% endif %}
+        {% if mainCategoriesKeys[1] is defined %} 
+            {% set secondLevelParentFullSlug = fetch_repository('FaEntityBundle:Category').getFullSlugById(mainCategoriesKeys[1], fetch_container_instance()) %}
+        {% endif %}
+        <div class="content active clearfix">
+            <div class="search-cat-sub-list">
+                <ul>
+                    <li><label>{{ 'All Categories'|trans({}, 'frontend-left-search') }}</label></li>
+                    {% for categoryId, categoryName in mainCategories %}
+                        {% set adCount = 0 %}
+                        {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(categoryId, fetch_container_instance()) %}
+                        {% for nestedCategoryId in nestedChildrenCategories %}
+                            {% if facetResult.a_category_id_i[nestedCategoryId] is defined %}
+                                {% set adCount =  adCount + facetResult.a_category_id_i[nestedCategoryId] %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if adCount > 0 %}
+                            {% set queryParams = {'fa_left_search' : searchParams|merge({'item__category_id': categoryId})} %}
+                            {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search'], null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
+                            <li><a href="{{ listurl }}" {% if app.request.get('searchQueryString') or getNoFollowLink %}rel="nofollow"{% endif %}>{{ categoryName }} ({{ adCount }})</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </dd>
+{% else %}
+    <dd class="accordion-navigation keep-shown">
+        <a href="#panel1a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Categories'|trans({}, 'frontend-left-search')}}</h5></a>
+        <div class="content active clearfix">
+          {% set parentCategories = categoryPath|slice(0, (categoryPath|length-1), true) %}
+          {% if parentCategories|length > 0 %}
+              <div class="search-cat-parent-list">
+                  <ul>
+                      {% for categoryId, categoryName in parentCategories %}
+                          {% set queryParams = {'fa_left_search' : basicParams|merge({'item__category_id': categoryId})} %}
+                         {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search'], null, false, categoryPath|keys, false, parentFullSlug, secondLevelParentFullSlug) %}
+                          <li><a href="{{ listurl }}">{{ categoryName }}</a></li>
+                      {% endfor %}
+                  </ul>
+              </div>
+          {% endif %}
+          {% set childCategories = fetch_repository('FaEntityBundle:Category').getChildrenKeyValueArrayByParentId(searchParams.item__category_id, fetch_container_instance()) %}
+          {% set showCatsCount = 14 %}
+          {% set childCatCount = 1 %}
+          <div class="search-cat-sub-list">
+              <ul>
+                  <li><label>{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }}</label></li>
+                  {% if childCategories|length > 0 %}
+                      {% for childCategoryId, childCategoryName in childCategories %}
+                          {% set adCount = 0 %}
+                          {% if facetResult.a_category_id_i[childCategoryId] is defined %}
+                              {% set adCount = facetResult.a_category_id_i[childCategoryId] %}
+                          {% else %}
+                              {% set nestedChildrenCategories = fetch_repository('FaEntityBundle:Category').getNestedLeafChildrenIdsByCategoryId(childCategoryId, fetch_container_instance()) %}
+                              {% for nestedCategoryId in nestedChildrenCategories %}
+                                  {% if facetResult.a_category_id_i[nestedCategoryId] is defined %}
+                                      {% set adCount =  adCount + facetResult.a_category_id_i[nestedCategoryId] %}
+                                  {% endif %}
+                              {% endfor %}
+                          {% endif %}
+                          {% if adCount > 0 %}
+                              {% set queryParams = {'fa_left_search' : searchParams|merge({'item__category_id': childCategoryId})} %}
+                              {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search'], null, false, categoryPath|keys, false, parentFullSlug, secondLevelParentFullSlug) %}
+                              {% if  childCatCount > showCatsCount %}
+                                  <li class="hide more_result"><a href="{{ listurl }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} >{{ childCategoryName }} ({{ adCount }})</a></li>
+                              {% else %}
+                                {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search'], null, false, categoryPath|keys, false, parentFullSlug, secondLevelParentFullSlug) %}
+                                  <li><a href="{{ listurl }}" {% if app.request.get('searchQueryString') or getNoFollowLink  %}rel="nofollow"{% endif %}>{{ childCategoryName }} ({{ adCount }})</a></li>
+                              {% endif %}
+                              {% set childCatCount = childCatCount + 1 %}
+                          {% endif %}
+                      {% endfor %}
+                  {% endif %}
+                  {% if searchParams.item__category_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                  	<li><a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Cams</a> </li>
+                  {% endif %}
+              </ul>
+              {% if (childCatCount - 1) > showCatsCount %}
+                  <a href="javascript:void(0)" rel="nofollow" class="see_more" >{{ 'See more'|trans({}, 'frontend-left-search') }}</a>
+                  <a href="javascript:void(0)" rel="nofollow" style="display:none" class="see_less" >{{ 'See less'|trans({}, 'frontend-left-search') }}</a>
+              {% endif %}
+          </div>
+        </div>
+    </dd>
+{% endif %}

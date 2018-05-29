@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="51f6f82bdf66efa3c33882fa0c90174d4248af8a" resname="Cart item deleted successfully.">
+        <jms:reference-file line="81">PaymentBundle/Controller/CartAdminController.php</jms:reference-file>
+        <source>Cart item deleted successfully.</source>
+        <target state="new">Cart item deleted successfully.</target>
+      </trans-unit>
+      <trans-unit id="541db1cd8d4a7df50ea6165963680437bfbdd492" resname="Item is not available in your cart.">
+        <jms:reference-file line="86">PaymentBundle/Controller/CartAdminController.php</jms:reference-file>
+        <source>Item is not available in your cart.</source>
+        <target state="new">Item is not available in your cart.</target>
+      </trans-unit>
+      <trans-unit id="b7909fcdcb359f87baee0ede529a9d2b181d699f" resname="Please select valid payment method..">
+        <jms:reference-file line="140">PaymentBundle/Controller/CartAdminController.php</jms:reference-file>
+        <source>Please select valid payment method..</source>
+        <target state="new">Please select valid payment method..</target>
+      </trans-unit>
+      <trans-unit id="830a8bcc3def2303c588b3b8d1c6a54c926dfb93" resname="Problem in deleting cart item.">
+        <jms:reference-file line="83">PaymentBundle/Controller/CartAdminController.php</jms:reference-file>
+        <source>Problem in deleting cart item.</source>
+        <target state="new">Problem in deleting cart item.</target>
+      </trans-unit>
+      <trans-unit id="dfe7b010a392c08c8a8600b55711364382af7dc8" resname="Problem in payment.">
+        <jms:reference-file line="134">PaymentBundle/Controller/CartAdminController.php</jms:reference-file>
+        <source>Problem in payment.</source>
+        <target state="new">Problem in payment.</target>
+      </trans-unit>
+      <trans-unit id="5d5e84b20182b4ee5e2bc2f70c59a2d8aa71f6e8" resname="You do not have any item in your cart.">
+        <jms:reference-file line="104">PaymentBundle/Controller/CartAdminController.php</jms:reference-file>
+        <source>You do not have any item in your cart.</source>
+        <target state="new">You do not have any item in your cart.</target>
+      </trans-unit>
+      <trans-unit id="060b424a4ae768bcb12e69e381f4704673e8d7ef" resname="Your advert has been published successfully.">
+        <jms:reference-file line="130">PaymentBundle/Controller/CartAdminController.php</jms:reference-file>
+        <source>Your advert has been published successfully.</source>
+        <target state="new">Your advert has been published successfully.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

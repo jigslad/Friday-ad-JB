@@ -1,0 +1,23 @@
+#fa_frontend_homepage:
+#    path:     /
+#    defaults: { _controller: FaFrontendBundle:Default:index }
+
+home_page_facebook_login_register:
+    path:   /facebook_login_register/
+    defaults:  { _controller: FaFrontendBundle:Default:homePageFacebookLoginRegister }
+    
+ajax_get_header_image:
+    path:   /ajax/header_image/
+    defaults:  { _controller: FaFrontendBundle:Default:ajaxHomePageGetHeaderImage }
+    
+ajax_get_header_menu:
+    path:   /ajax/header_menu/
+    defaults:  { _controller: FaFrontendBundle:Default:ajaxHeaderMenu }
+    
+android_os_manifest_json:
+    path:   /manifest-json
+    defaults:  { _controller: FaFrontendBundle:Default:androidOsManifestJson }
+    
+ajax_clear_ti_url_from_redis:
+    path:   /ajax_/remove-ti-url
+    defaults:  { _controller: FaFrontendBundle:Default:ajaxRemoveTiUrlFromRedis }

@@ -1,0 +1,52 @@
+parameters:
+#    fa_entity.example.class: Fa\Bundle\EntityBundle\Example
+
+services:
+    fa_entity.form.type.entity_admin_search:
+        class: Fa\Bundle\EntityBundle\Form\EntitySearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: entity_admin_search }
+
+    fa_entity.form.type.entity_admin:
+        class: Fa\Bundle\EntityBundle\Form\EntityType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: entity_admin }
+
+    fa_entity.form.type.dimension_admin:
+        class: Fa\Bundle\EntityBundle\Form\DimensionAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_entity_dimension_admin }
+
+    fa_entity.form.type.dimension_search_admin:
+        class: Fa\Bundle\EntityBundle\Form\DimensionSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_entity_dimension_search_admin }
+
+    fa_entity.form.type.category_admin:
+        class: Fa\Bundle\EntityBundle\Form\CategoryAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_entity_category_admin }
+            
+    fa_entity.form.type.location_group_admin:
+        class: Fa\Bundle\EntityBundle\Form\LocationGroupAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_entity_location_group_admin }
+            
+    fa_entity.form.type.location_group_search_admin:
+        class: Fa\Bundle\EntityBundle\Form\LocationGroupSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_entity_location_group_search_admin }
+            
+    fa_entity.form.type.fa_entity_log_search_admin:
+        class: Fa\Bundle\EntityBundle\Form\FaEntityLogSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_entity_log_search_admin }
+    

@@ -1,0 +1,25 @@
+{% if userSiteObj %}
+    {% set cropImageRoute = "ajax_crop_user_site_banner_image" %}
+
+    <div class="frame profile-banner">
+        <img id="user_site_banner_crop_big_image" src="{{ shared_url(userSiteObj.getBannerPath()~'/banner_'~userSiteObj.getId()~'_org.jpg') }}?{{ random(1000) }}" />
+        <div class="edit-pro-banner">
+            <div class="clearfix">
+                <div class="large-12 columns">
+                    <h2>{{'Reposition your cover photo'|trans({}, 'frontend-my-profile')}}</h2>
+                    <p>{{'Some areas might be cropped on mobile screens'|trans({}, 'frontend-my-profile')}}</p>
+                </div>
+                <div class="edit-pro-btns large-12 columns">
+                    <a class="xs-btn-2 button" href="javascript:void(0);" onclick="return getUserSiteBanner(true);">{{'Cancel'|trans({}, 'frontend-my-profile')}}</a>
+                    <a class="xs-btn-1 button" href="javascript:void(0);" onclick="return cropUserSiteBanner('{{ path(cropImageRoute, {'userSiteId': userSiteObj.getId()}) }}')" style="display:none;" id="crop_image_banner">{{'Apply'|trans({}, 'frontend-my-profile')}}</a>
+                    <input type="hidden" id="banner_x" name="banner_x" class="cropImg" />
+                        <input type="hidden" id="banner_y" name="banner_y" class="cropImg" />
+                        <input type="hidden" id="banner_w" name="banner_w" class="cropImg" />
+                        <input type="hidden" id="banner_h" name="banner_h" class="cropImg" />
+                        <input type="hidden" id="banner_angle" name="banner_angle" class="cropImg" />
+                        <input type="hidden" id="banner_scale" name="banner_scale" class="cropImg" />
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

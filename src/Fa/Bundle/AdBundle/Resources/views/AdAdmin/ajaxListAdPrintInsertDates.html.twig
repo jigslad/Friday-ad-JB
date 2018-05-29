@@ -1,0 +1,41 @@
+{% set adRepository = fetch_repository('FaAdBundle:Ad') %}
+{% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
+{% set adPrintRepository = fetch_repository('FaAdBundle:AdPrint') %}
+
+{% set ad = adRepository.findOneBy({'id': id})%}
+{% set adPrintDetails = {} %}
+{% if ad %}
+    {% set adPrintDetails = adPrintRepository.getAllPaidPrintEntryForAd(ad.getId()) %}
+{% endif %}
+<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+<h5 id="modalTitle" class="modal-title">{{ 'Ad print insert dates list for ad id: %ad_id%'|trans({'%ad_id%': ad.getId()}) }}</h5>
+<div class="modal-content2" id="print_dates_list">
+    {% if adPrintDetails|length %}
+        <ul class="info_list csv-list" id="cvs_list_ul">
+            <li>
+                <div class="row">
+                    <div class="large-6 columns">
+                        <b>{{ 'Print edition'|trans }}</b>
+                    </div>
+                    <div class="large-6 columns">
+                        <b>{{ 'Print insert date'|trans }}</b>
+                    </div>
+                </div>
+            </li>
+            {% for adPrintDetail in adPrintDetails[ad.getId()] %}
+                <li>
+                    <div class="row">
+                        <div class="large-6 columns">
+                            {{ fa_entity_cache_manager.getEntityNameById('FaAdBundle:PrintEdition', adPrintDetail['print_edition_id']) }}
+                        </div>
+                        <div class="large-6 columns">
+                            {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [adPrintDetail['insert_date'], fetch_container_instance()]) }}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {{ 'No print insert dates found.' }}
+    {% endif %}
+</div>

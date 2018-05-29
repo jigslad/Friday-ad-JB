@@ -1,0 +1,47 @@
+{% set rootCategoryNameCamelCase = fetch_repository('FaEntityBundle:Category').getRootCategoryName(searchParams.item__category_id, fetch_container_instance(), true) %}
+{% set rootCategoryName = fetch_repository('FaEntityBundle:Category').getRootCategoryName(searchParams.item__category_id, fetch_container_instance()) %}
+{% set dimensionFilters = fetch_repository('FaEntityBundle:CategoryDimension').getLeftSearchableDimensionFieldsArrayByCategoryId(searchParams.item__category_id, fetch_container_instance()) %}
+{% if dimensionFilters|length > 0 %}
+    {% set filterPanelCounter = 2 %}
+    {% set showDimensionCount = 12 %}
+    {% for dimensionId, dimension in dimensionFilters %}
+        {% set dimensionIsIndexable = dimension.is_index %}
+        {% set dimensionName = dimension.name %}
+        {% set dimensionSearchType = dimension.search_type %}
+        {% set filter = get_dimension_field_from_name(dimensionName, rootCategoryName, dimensionSearchType) %}
+        {% if rootCategoryId is not null and rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID') %}
+            {% set searchParams = searchParams|merge({ (filter~'_open'): true}) %}
+        {% endif %}
+        {% if attribute(form, filter) is defined %}
+            {% if dimensionSearchType == 'choice_checkbox' %}
+                {% set sortBy = 'ad_count' %}
+                {% if 'number_of_stalls_id' in filter or 'tonnage_id' in filter or 'berth_id' in filter or 'reg_year' in filter or 'mileage_range' in filter or 'number_of_bathrooms_id' in filter or 'number_of_bedrooms_id' in filter or 'number_of_rooms_available_id' in filter or 'engine_size_range' in filter %}
+                    {% set sortBy = 'ord'%}
+                {% endif %}
+                {{ include('FaAdBundle:AdList:leftSearchCheckboxDimensionFilters.html.twig') }}
+            {% elseif dimensionSearchType == 'choice_link' %}
+                {% if 'model_id' in filter %}
+                    {% if attribute(searchParams, 'item_motors__make_id') is defined %}
+                        {{ include('FaAdBundle:AdList:leftSearchLinkDimensionFilters.html.twig') }}
+                    {% endif %}
+                {% else %}
+                    {{ include('FaAdBundle:AdList:leftSearchLinkDimensionFilters.html.twig') }}
+                {% endif %}
+            {% elseif dimensionSearchType == 'date' or dimensionSearchType == 'text' %}
+                {{ include('FaAdBundle:AdList:leftSearchTextDimensionFilters.html.twig') }} 
+            {% endif %}
+            {% set filterPanelCounter = filterPanelCounter + 1 %}
+            {% do attribute(form, filter).setRendered %}
+        {% else %}
+            {% if dimensionSearchType == 'range_date' %}
+                {{ include('FaAdBundle:AdList:leftSearchDateRangeDimensionFilters.html.twig') }}
+                {% set filterPanelCounter = filterPanelCounter + 1 %}
+            {% endif %}
+            
+            {% if dimensionSearchType == 'range_text' %}
+                {{ include('FaAdBundle:AdList:leftSearchRangeDimensionFilters.html.twig') }}
+                {% set filterPanelCounter = filterPanelCounter + 1 %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}

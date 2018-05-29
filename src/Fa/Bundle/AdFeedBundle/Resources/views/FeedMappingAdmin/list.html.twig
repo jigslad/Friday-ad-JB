@@ -1,0 +1,46 @@
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+                <thead>
+                    <tr>
+                        <th width="25%">
+                           {{ sortable_link('ad_feed_mapping_admin', 'ad_feed_mapping__text', 'Text'|trans, sorter) }}
+                        </th>
+                        <th width="25%">
+                           {{ sortable_link('ad_feed_mapping_admin', 'ad_feed_mapping__target', 'Target'|trans, sorter) }}
+                        </th>
+                        <th width="25%"><i class="fa fa-gear"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pagination.getNbResults() %}
+                         {% for mapping in pagination.getCurrentPageResults() %}
+                         <tr class="gradeX">
+                             <td>{{ mapping.text }}</td>
+                             <td>{{ mapping.target }}</td>
+                             <td>
+                                <button href="#" data-dropdown="drop{{ mapping.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                <br />
+                                <ul id="drop{{ mapping.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                    {% if feedMappingEditGrant %}
+	                                   <li><a href="{{ path('ad_feed_mapping_edit_admin', {'id': mapping.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+                                    {% endif %}
+                                    {% if feedMappingDeleteGrant %}
+	                                   <li><a href="{{ path('ad_feed_mapping_delete_admin', {'id': mapping.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this option?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+                                    {% endif %}
+                                </ul>
+                             </td>
+                         </tr>
+                         {% endfor %}
+                    {% else %}
+                         <tr class="odd gradeX">
+                             <td colspan="4" align="center">{{ 'No option found'|trans({}, 'messages') }}</td>
+                         </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

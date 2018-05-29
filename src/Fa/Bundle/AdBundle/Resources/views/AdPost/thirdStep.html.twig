@@ -1,0 +1,121 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% block page_title %}
+    {{'Post an Ad Add your details'|trans({}, 'frontend-paa-login')}}
+{% endblock %}
+
+{% set loginError = strip_tags(form_errors(form), '')|trim %}
+
+{% block body %}
+    <div class="posting-bg">
+        <div class="fad-sign-bdr">&nbsp;</div>
+        <div class="row paa-main">
+            {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 3}) }}
+            <div id="middle-column" class="large-12 columns">
+                <a href="{{ path('ad_post_second_step', {'is_edit' : 1}) }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
+                <h1 class="text-center paa-title">{{'Save your ad'|trans({}, 'frontend-paa-login')}}</h1>
+                <div class="small-wrapper">
+                    <div class="paa-save-item">
+                        {{ form_start(form, {'attr': {'novalidate': '', 'id': 'paa_login_id'}}) }}
+                          {{ form_errors(form) }}
+                          {{ form_row(form.username, {'attr': {'tabindex':'1'}}) }}
+                          {{ form_widget(form.user_type, {'attr': {'onchange':'showUserTypeField()', 'class': 'label-inline paa-user-type'}}) }}
+                          {{ form_errors(form.user_type) }}
+                          <div id="paa_password_field_div" class="relative paa-forgot-pwd">
+                              {{ form_row(form.password, {'attr': {'tabindex':'2'}}) }}
+                              <a href="{{ path('forgot_password') }}" data-reveal-id="forgotPasswordModal" data-reveal-ajax="true">{{'Forgot password?'|trans({}, 'frontend-paa-login')}}</a>
+                              <div class="label-inline">
+                                  {{ form_row(form.show_password) }}
+                              </div>
+                          </div>
+                          {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 button expand'}}) }}
+                          {{ form_end(form) }}
+                          
+                          <div class="connect-text">{{'Or connect with'|trans({}, 'frontend-paa-login')}}</div>
+                          
+                          <div class="clearfix text-center">
+                              {% if facebookLoginUrl %}
+                                <button type="reset" class="fb-btn" onclick="javascript:fbLoginPopupLocal('{{ facebookLoginUrl }}');">{{ 'Login With FB'|trans({}, 'frontend-paa-login') }}</button>
+                            {% endif %}
+                            {% if googleLoginUrl %}
+                                <button type="reset" class="gplus-btn" onclick="javascript:googleLoginPopupLocal('{{ googleLoginUrl }}');">{{ 'Login With Google'|trans({}, 'frontend-paa-login') }}</button>
+                            {% endif %}
+                        </div>
+                        <p class="post-info">{{"We won't post anything <b>without your permission.</b>"|trans({}, 'frontend-paa-login')|raw}}</p>
+                    </div>
+                </div>
+                
+                <div id="forgotPasswordModal" class="reveal-modal small" data-reveal></div>
+            </div>
+            {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-login-third-step'}) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+      {% if (gaStr is defined and gaStr != '') %}
+         {% if (isErrors is defined and isErrors == 1) %}
+             ga('send', 'event', 'PAA - Step 3', 'Form error', '{{gaStr}}');
+         {% else %}
+             ga('send', 'event', 'PAA - Step 2', 'Next step', '{{gaStr}}');
+         {% endif %}
+      {% elseif (loginError is defined and loginError != '') %}
+          ga('send', 'event', 'PAA - Step 3', 'Form error', '{{loginError}}');
+      {% endif %}
+      
+        showUserTypeField();
+        // untick show_password
+        if ($('#fa_paa_login_show_password').is(':checked')) {
+            $('#fa_paa_login_show_password').attr('checked', false);
+            $('#fa_paa_login_show_password').closest('span').removeClass('checked');
+        }
+    });
+
+    function showUserTypeField()
+    {
+        var userType = "";
+        var selected = $("input[type='radio'][name='fa_paa_login[user_type]']:checked");
+        if (selected.length > 0) {
+            userType = selected.val();
+        }
+        
+        if (userType == 2) {
+            $('#fa_paa_login_password').val('');
+            $('#paa_password_field_div').hide();
+            $('#fa_paa_login_save').text("{{'Sign up with email'|trans({}, 'frontend-paa-login')}}");
+        } else {
+            $('#paa_password_field_div').show();
+            $('#fa_paa_login_save').text("{{'Next step: add more details'|trans({}, 'frontend-paa-login')}}");
+        }
+    }
+    
+    $("#fa_paa_login_show_password").click(function() {
+        showHidePassword();
+    });
+
+    function showHidePassword() {
+        if ($('#fa_paa_login_show_password:checked').val()) {
+            $('#fa_paa_login_password').attr('type', 'text');
+        } else {
+            $('#fa_paa_login_password').attr('type', 'password');
+        }
+    }
+
+    function fbLoginPopupLocal(facebookLoginUrl)
+    {
+      ga('send', 'event', 'PAA - Step 3', 'Next step', 'facebook');
+      fbLoginPopup(facebookLoginUrl);
+    }
+
+    function googleLoginPopupLocal(googleLoginUrl)
+    {
+      ga('send', 'event', 'PAA - Step 3', 'Next step', 'google +');
+      googleLoginPopup(googleLoginUrl);
+    }
+//]]>
+</script>
+{% endblock %}

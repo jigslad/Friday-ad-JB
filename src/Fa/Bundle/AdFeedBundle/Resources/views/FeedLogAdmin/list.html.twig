@@ -1,0 +1,69 @@
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+                <thead>
+                    <tr>
+                        <th width="5%">
+                           {{ sortable_link('ad_feed_log_admin', 'ad_feed__ad__id', 'Ad id'|trans, sorter) }}
+                        </th>
+                        <th width="5%">
+                           {{ sortable_link('ad_feed_log_admin', 'ad_feed__user__email', 'User id'|trans, sorter) }}
+                        </th>
+                        <th width="10%">
+                           {{ sortable_link('ad_feed_log_admin', 'ad_feed__trans_id', 'Trans ID'|trans, sorter) }}
+                           <br />
+                           {{ sortable_link('ad_feed_log_admin', 'ad_feed__unique_id', 'Unique ID'|trans, sorter) }}
+                        </th>
+                        <th width="5%">
+                           {{ sortable_link('ad_feed_log_admin', 'ad_feed__status', 'Status'|trans, sorter) }}
+                        </th>
+                        <th width="20%">
+                           {{ sortable_link('ad_feed_log_admin', 'ad_feed__remark', 'Remark'|trans, sorter) }}
+                        </th>
+                        <th width="10%">
+                           {{ sortable_link('ad_feed_log_admin', 'ad_feed__created_at', 'Created at'|trans, sorter) }}
+                        </th>
+                        <th width="10%">
+                           {{ sortable_link('ad_feed_log_admin', 'ad_feed__last_modified', 'Last Modified'|trans, sorter) }}
+                        </th>
+                        <th width="20%"><i class="fa fa-gear"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pagination.getNbResults() %}
+                         {% for feed_ad in pagination.getCurrentPageResults() %}
+                         <tr class="gradeX">
+                             <td>{{ feed_ad.ad_id }}</td>
+                             <td>{{ feed_ad.email }}</td>
+                             <td>{{ feed_ad.trans_id }}
+                             {{ feed_ad.unique_id }}</td>
+                             <td>{{ feed_ad.status }}</td>
+                             <td>{{ feed_ad.remark }}</td>
+                             <td>{{ feed_ad.created_at | localizeddate('short', 'medium', app.request.locale )}}</td>
+                             <td>{{ feed_ad.last_modified.format('Y-m-d H:i:s') }}</td>
+                             <td>
+                                <button href="#" data-dropdown="drop{{ feed_ad.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                <br />
+                                <ul id="drop{{ feed_ad.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                    {% if feedLogShowGrant %}
+	                                   <li><a href="{{ path('ad_feed_log_show_admin', {'id': feed_ad.id}) }}"><i class="fi-pencil"></i> {{ 'Show'|trans({}, 'messages') }}</a></li>
+                                    {% endif %}
+                                    {% if feedLogDeleteGrant %}
+	                                   <li><a href="{{ path('ad_feed_log_delete_admin', {'id': feed_ad.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this option?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+                                    {% endif %}
+                                </ul>
+                             </td>
+                         </tr>
+                         {% endfor %}
+                    {% else %}
+                         <tr class="odd gradeX">
+                             <td colspan="4" align="center">{{ 'No option found'|trans({}, 'messages') }}</td>
+                         </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

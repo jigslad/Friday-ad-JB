@@ -1,0 +1,44 @@
+fa_homepage:
+    resource: '@FaFrontendBundle/Resources/config/routing/homepage.yml'
+    prefix:   /
+    
+fa_user:
+    resource: '@FaUserBundle/Resources/config/routing.yml'
+    prefix:   /
+
+fa_ad:
+    resource: '@FaAdBundle/Resources/config/routing.yml'
+    prefix:   /
+
+fa_message:
+    resource: '@FaMessageBundle/Resources/config/routing.yml'
+    prefix:   /
+
+fa_entity:
+    resource: '@FaEntityBundle/Resources/config/routing.yml'
+    prefix:   /
+    
+fa_payment:
+    resource: '@FaPaymentBundle/Resources/config/routing.yml'
+    prefix:   /
+
+fa_core:
+    resource: '@FaCoreBundle/Resources/config/routing.yml'
+    prefix:   /
+
+fa_dotmailer:
+    resource: '@FaDotMailerBundle/Resources/config/routing.yml'
+    prefix:   /
+    
+fa_frontend_ajax_user_location:
+    path:     /ajax/user_location
+    defaults: { _controller: FaFrontendBundle:Default:ajaxUserLocation }
+
+#content bundle should be last one as routing
+fa_content:
+    resource: '@FaContentBundle/Resources/config/routing.yml'
+    prefix:   /
+
+fa_error_404:
+    path:     /error/404
+    defaults: { _controller: FaFrontendBundle:Error:error404 }

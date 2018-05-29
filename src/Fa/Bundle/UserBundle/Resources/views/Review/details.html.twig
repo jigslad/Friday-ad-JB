@@ -1,0 +1,89 @@
+{% set respond = fetch_repository('FaUserBundle:UserReview').getUserReviewResponse(review.id, review.user_id) %}
+{% if review.reviewer_business_name %}
+    {% set reviewer_name = review.reviewer_business_name %}
+{% else %}
+    {% set reviewer_name = (review.reviewer_first_name ~ ' ' ~ review.reviewer_last_name)|capitalize %}
+{% endif %}
+<div class="my-msg-box show-review-detail">
+    <div class="reply-msg-heading">
+        <h3><a href="{{ path('user_review_list')}}">{{ reviewer_name }} - {{ review.ad_title }}</a></h3>
+    </div>
+    <div class="review-dtl-content">
+        <div class="clearfix">
+            <div class="large-3 columns">
+                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), review.reviewer_image, review.reviewer_id, null, null]) %}
+                <div class="my-msg-usericon">
+                    {% if userLogo %}
+                        {{userLogo|raw}}
+                    {% else %}
+                        <img src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
+                    {% endif %}
+                </div>
+            </div>
+            <div class="large-21 columns my-msg-content">
+                <div class="clearfix my-msg-heading">
+                    <h3>{{ reviewer_name }}</h3>
+                    <span>{{review['created_at']|time_ago_in_words}}</span>
+                </div>
+
+                <div class="clearfix">
+                    <div class="my-review-title"><a href="{{ container.get('router').generate('ad_detail_page_by_id', {'id': review.ad_id}, true) }}">{{ review.ad_title }}</a></div>
+                    <div class="user-rating clearfix">
+                        <div class="left">{{ include('FaCoreBundle::showStarRating.html.twig', {'rating': review.rating}) }}</div>
+                        <div class="right">
+                            {% set reviewDetails = {'ad_id':review.ad_id, 'title':review.ad_title, 'user_id':review.reviewer_id, 'first_name':review.reviewer_first_name, 'last_name':review.reviewer_last_name, 'business_name':review.reviewer_business_name, 'user_status_id':review.user_status_id } %}
+                            {% set review_link_text = 'Review this buyer'|trans({}, 'frontend-review') %}
+                            {% set to_whom = 'buyer' %}
+                            {% if review.is_seller %}
+                                {% set to_whom = 'advertiser' %}
+                                {% set review_link_text = 'Review this advertiser'|trans({}, 'frontend-review') %}
+                            {% endif %}
+                           {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : reviewDetails, 'to_whom' : to_whom, 'review_link_text' : review_link_text}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="user-review-content respond-description clearfix">
+                    {{ review.message }}
+                </div>
+                <div class="user-review-content clearfix respond-review">
+                    <div class="large-18 columns">
+                        {% if respond|length == 0 %}
+                            <div class="mt5 outside-tricky">
+                                <a href="javascript:void(0)" class="response_link" id="response_link_{{ review.id }}" title="{{ 'Respond to this review'|trans({}, 'frontend-review') }}" onClick="loadResponseForm('{{ review.id }}', '{{ review.user_id }}')">{{ 'Respond to this review'|trans({}, 'frontend-review') }}</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="large-6 columns outside-tricky">&nbsp;</div>
+                </div>
+
+                {% if respond|length and respond.status == 1 %}
+                    <div class="clearfix reply-review">
+                        <div class="large-3 columns">
+                            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), respond.responder_image, respond.responder_id]) %}
+                            <div class="my-msg-usericon respond-icon">
+                                {% if userLogo %}
+                                    {{userLogo|raw}}
+                                {% else %}
+                                    <img src="{{ asset_url('fafrontend/images/user-icon.svg') }}" alt="" />
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="large-21 columns">
+                            <div class="clearfix my-msg-heading">
+                             {% if respond.responder_business_name %}
+                                 {% set responder_name = respond.responder_business_name %}
+                             {% else %}
+                                 {% set responder_name = (respond.responder_first_name ~ ' ' ~ respond.responder_last_name)|capitalize %}
+                             {% endif %}
+                             <h3>{{ '%responder_name% responded to this review'|trans({'%responder_name%' : responder_name}, 'frontend-review')}}</h3>
+                            </div>
+                            {{ respond.message }}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="write-reply mb0 respond_box" style="display:none" id="respond_box_{{ review.id }}"></div>
+</div>

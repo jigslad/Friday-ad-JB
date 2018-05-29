@@ -1,0 +1,104 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% block page_title %}
+    {{'Describe your item'|trans({}, 'frontend-paa')}}
+{% endblock %}
+
+{% block body %}
+    <div class="posting-bg">
+        <div class="fad-sign-bdr">&nbsp;</div>
+        <div class="row paa-main">
+            {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 2}) }}
+            <div id="middle-column" class="large-12 columns">
+                <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
+                {% set categoryId = attribute(first_step_data, 'category_id') %}
+                {% set whatsOnCategoryId = fetch_repository('FaEntityBundle:Category').getCategoryIdByLevel(categoryId, 1, fetch_container_instance()) %}
+                {% if whatsOnCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') %}
+                    <h1 class="text-center paa-title">{{ 'Describe your event and choose event dates'|trans({}, 'frontend-paa-second-step') }} </h1>
+                {% else %}
+                    <h1 class="text-center paa-title">{{ 'Add a title and description to your ad'|trans({}, 'frontend-paa-second-step') }} </h1>
+                {% endif %}
+                <div class="big-wrapper">
+                    <div class="change-category clearfix">
+                        <div class="left cat-name-wrap">
+                            <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|join('<span class="seperator"></span>')|raw }}
+                        </div>
+                        <div class="right">
+                            <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
+                        </div>
+                    </div>
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        {{ form_errors(form) }}
+                        {% set orderedFields = form.second_step_ordered_fields.vars.value|split(',') %}
+                        {% if orderedFields|length  > 0 %}
+                            {{ include('FaAdBundle:AdPost:secondStepCommunityFields.html.twig') }}
+                        {% endif %}
+                        <div class="small-wrapper">
+                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+            {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-community-second-step'}) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaAdBundle:AdPost:secondStepJs.html.twig', {'categoryName' : 'community'}) }}
+
+    {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_second_step_community_event_start_time', 'placeHolder': ((attribute(form, 'event_start_time').vars.attr.placeholder is defined and attribute(form, 'event_start_time').vars.attr.placeholder is not null) ? attribute(form, 'event_start_time').vars.attr.placeholder : 'Add a time'|trans({}, 'frontend-paa-second-step')), 'route' : 'ad_post_ajax_event_time_search'}) }}
+
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_second_step_community_event_end_time', 'placeHolder': ((attribute(form, 'event_end_time').vars.attr.placeholder is defined and attribute(form, 'event_end_time').vars.attr.placeholder is not null) ? attribute(form, 'event_end_time').vars.attr.placeholder : 'Add a time'|trans({}, 'frontend-paa-second-step')), 'route' : 'ad_post_ajax_event_time_search'}) }}
+
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+
+    $(document).ready(function(){
+        bindDatePickerEvent();
+        showHideEventEnd();
+        $('.datepicker-icon').click(function(e){
+            $(this).next('input.fdatepicker-paa').focus();
+        });
+    });
+
+    function showHideEventEnd() {
+        if ($('#fa_paa_second_step_community_include_end_time_0').is(':checked')) {
+            $('#event_end_block').show();
+        } else {
+            $('#event_end_block').hide();
+        }
+
+        $('#fa_paa_second_step_community_include_end_time_0').click(function() {
+            if ($(this).is(':checked')) {
+                $('#event_end_block').show();
+            } else {
+                $('#event_end_block').hide();
+                $('#fa_paa_second_step_community_event_end').val('');
+                $('#fa_paa_second_step_community_event_end_time').val('');
+                $('#fa_paa_second_step_community_event_end_time_autocomplete').val('');
+            }
+        });
+    }
+
+    function bindDatePickerEvent() {
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+     
+        $('.fdatepicker-paa').fdatepicker({
+            format: 'dd/mm/yyyy',
+            onRender: function (date) {
+                return date.valueOf() < now.valueOf() ? 'disabled' : '';
+            }
+        }).on('show', function(ev) {
+            $('.datepicker').css('width', ($(ev.target).width() + 28) +'px');
+        });
+    }
+
+//]]>
+</script>
+{% endblock %}
+

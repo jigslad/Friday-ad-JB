@@ -1,0 +1,368 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% block title %}
+    {{'Edit ad'|trans({}, 'frontend-ad-edit')}}
+{% endblock %}
+
+{% set container = fetch_container_instance() %}
+{% set categoryId = ad.category.id %}
+{% set categoryPathArray = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, container) %}
+{% set categorykeys = categoryPathArray|keys %}
+{% set rootMotorsCategoryId = categorykeys|slice(1, 1)[0] %}
+{% set rootMotorsCategoryName = fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', rootMotorsCategoryId) %}
+{% set categoryName = 'Motors' %}
+{% set secondRootMotorsCategoryId = categorykeys|slice(2, 1)[0] %}
+
+{% use "FaAdBundle:AdImage:showImageUploader.html.twig" %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('imageUploadStylesheets') }}
+{% endblock %}
+
+{% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
+
+{% block body -%}
+    <div class="posting-bg">
+        {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+        <div class="row d-board-main">
+            <div class="off-canvas-wrap" data-offcanvas>
+                <div class="inner-wrap">
+                    {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                    <div id="db-middle-part" class="large-18 columns">
+                        <div id="middle-column">
+                            <a href="{{ path('manage_my_ads_active') }}" class="backto-my-items" title="{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}">{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}</a>
+                            <h1 class="text-center paa-title">{{ 'Edit your ad'|trans({}, 'frontend-ad-edit') }} </h1>
+                            <div class="big-wrapper">
+                                <div class="change-category clearfix">
+                                    <div class="cat-name-wrap">
+                                        <span>{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span> {{ categoryPathArray|join('<span class="seperator"></span>')|raw }}
+                                    </div>
+                                </div>
+                                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                                    {{ form_errors(form) }}
+                                    {% set orderedFields = form.paa_ordered_fields.vars.value|split(',') %}
+                                    {% if orderedFields|length  > 0 %}
+                                        {{ include('FaAdBundle:AdEdit:motorsFields.html.twig') }}
+                                    {% endif %}
+                                    <div class="small-wrapper">
+                                        {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand mt30'}}) }}
+                                    </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+{{ include('FaAdBundle:AdEdit:adEditCommonJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        updateCharCounter('fa_paa_edit_motors_title');
+        updateCharCounter('fa_paa_edit_motors_personalized_title');
+        bindCapsuleButtonEvent('fa_paa_edit_motors', 'condition_id', 'drop-down');
+        bindElementToggleEvent('fa_paa_edit_motors');
+        bindLocationEvents('fa_paa_edit_motors');
+        loadModelsByMakeId();
+        showHideRegNoFieldsOnLoad($("input[name='fa_paa_edit_motors[has_reg_no]']:checked").val());
+        $("input[name='fa_paa_edit_motors[has_reg_no]']").change(function(){
+            showHideRegNoFields($(this).val());
+        });
+        
+        $('#lookup_vehicle').click(function(){
+            var regNo = $.trim($('#fa_paa_edit_motors_reg_no').val());
+            loadRegNoFieldDetailsByRegNo(regNo);
+        });
+        
+        $('#fa_paa_edit_motors_reg_no').on('focus', function(){
+             $('#reg_error').remove();
+             $('#fa_paa_edit_motors_reg_no').removeClass('error');
+             $('#reg_no_error_msg').html('');
+             $('#reg_no_error_msg').hide();
+        })
+        
+        $('#fa_paa_edit_motors_reg_no').keydown(function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $('#lookup_vehicle').trigger('click');
+                return false;
+            }
+        });
+    });
+    
+    function showHideRegNoFieldsOnLoad(hasRegNo)
+    {
+        if (hasRegNo == 1) {
+           $('#reg_no_field').show();
+           $('#reg_no_error_msg').html('');
+           $('#reg_no_error_msg').hide();
+           {% if attribute(form, 'reg_no') is defined %}
+               {% if attribute(form, 'reg_no').vars.data is null or attribute(form, 'reg_no').vars.errors|length %}
+                   $('#reg_no_details_fields').hide();
+               {% else %}
+                   {% if app.request.get('is_cat_edit') %}
+                       loadRegNoFieldDetailsByRegNo($.trim($('#fa_paa_edit_motors_reg_no').val()));
+                   {% else %}
+                       $('#reg_no_details_fields').show();
+                       $('.fa-select').selectmenu('refresh');
+                   {% endif %}
+               {% endif %}
+           {% endif %}
+       } else {
+           $('#fa_paa_edit_motors_reg_no').val('');
+           $('#reg_no_field').hide();
+           $('#reg_no_details_fields').show();
+           $('.fa-select').selectmenu('refresh');
+       }
+    }
+    
+    function showHideRegNoFields(hasRegNo)
+    {
+       if (hasRegNo == 1) {
+           $('#reg_no_field').show();
+           $('.fa-select').selectmenu('refresh');
+           $('#reg_no_details_fields').hide();
+           $('#reg_no_error_msg').html('');
+           $('#reg_no_error_msg').hide();
+       } else {
+           $('#fa_paa_edit_motors_reg_no').val('');
+           $('#fa_paa_edit_motors_reg_no').trigger('focus');
+           resetRegNoFields();
+
+           $('#reg_no_field').hide();
+           $('#reg_no_details_fields').show();
+           $('.fa-select').selectmenu('refresh');
+       }
+       $('#add_vehicle_msg').html('{{ "Add your vehicle details:"|trans({}, 'frontend-ad-edit')}}');
+    }
+
+    function checkCategoryWithCarWeb(regNo, regNoFieldsData)
+    {
+        var showMsg = false;
+        var carsId       = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID') }}";
+        var comVehicleId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMERCIALVEHICLES_ID') }}";
+        var motorbikesId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID') }}";
+        msg = '<div id="carweb_category_msg" class="modal-content">'+"{{'Are you sure your vehicle is %MAKE-MODEL%? It seems that it is registered as %CARWEB-MAKE-MODEL%.'|trans({'%MAKE-MODEL%' : 'MAKE-MODEL', '%CARWEB-MAKE-MODEL%' : 'CARWEB-MAKE-MODEL'}, 'frontend-ad-edit') }}";
+        msg += '</div>';
+
+        $('#carweb_category_msg').remove();
+        if (regNoFieldsData['vehicle_cat_id'] == carsId || regNoFieldsData['vehicle_cat_id'] == comVehicleId) {
+            if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
+                if (regNoFieldsData['model_id'] && regNoFieldsData['cw_model_id'] && regNoFieldsData['model_id'] != regNoFieldsData['cw_model_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_model_id'], 'r_no' : regNo});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['make']+' '+regNoFieldsData['model']+' ('+regNoFieldsData['vehicle_cat']+') </b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')');
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+                    
+                    showMsg = true;
+                }
+            } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
+                if (regNoFieldsData['model_id'] && regNoFieldsData['cw_motorbike_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_motorbike_id'], 'r_no' : regNo});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['make']+' '+regNoFieldsData['model']+' ('+regNoFieldsData['vehicle_cat']+')</b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_motorbike']);
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+                    
+                    showMsg = true;
+                }
+            }
+        } else if (regNoFieldsData['vehicle_cat_id'] == motorbikesId) {
+            if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
+                if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_model_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_model_id'], 'r_no' : regNo});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')');
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+                    
+                    showMsg = true;
+                }
+            } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
+                if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_motorbike_id'] && regNoFieldsData['motorbike_id'] != regNoFieldsData['cw_motorbike_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_motorbike_id'], 'r_no' : regNo});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_motorbike']);
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+                    
+                    showMsg = true;
+                }
+            }
+        }
+
+        // if selected main category and carwen main category is different then reset select and auto-complete fields because of different entity id options.
+        if (regNoFieldsData['vehicle_cat_id'] != regNoFieldsData['cw_vehicle_cat_id']) {
+            resetCarWebFieldsDueToCategoryMismatch(regNoFieldsData);
+        }
+
+        if (showMsg) {
+            $('#carweb_category_msg_modal').append(msg);
+            $('#carweb_category_msg_modal').foundation('reveal', 'open');
+            $('#close_carweb_category_msg').click(function(e){
+                $('#carweb_category_msg').remove();
+                $('.close-reveal-modal').trigger('click');
+            });
+            
+            $('#change_to_carweb_category').click(function(e){
+                $('#carweb_category_msg').remove();
+                $('.close-reveal-modal').trigger('click');
+            });
+        }
+    }
+
+    function resetCarWebFieldsDueToCategoryMismatch(regNoFieldsData)
+    {
+        Object.keys(regNoFieldsData).forEach(function(field) {
+            var fieldValue = regNoFieldsData[field];
+            if ($('#fa_paa_edit_motors_'+field).is("select")) {
+               if (field != 'reg_year') {
+                   $('#fa_paa_edit_motors_'+field).val('');
+                   $('#fa_paa_edit_motors_'+field).selectmenu('refresh');
+               }
+            }
+            $('#fa_paa_edit_motors_colour_id').val('');
+            $('#fa_paa_edit_motors_colour_id_autocomplete').val('');
+        });
+    }
+
+    function loadRegNoFieldDetailsByRegNo(regNo)
+    {
+        if (regNo) {
+            var category_id = "{{ categoryId }}"
+            var route       = Routing.generate('ad_vrm_lookup_ajax', { 'vrm': regNo });
+
+            $('#lookup_vehicle').html('{{ "Loading..."|trans({}, 'frontend-paa')}}');
+            $.ajax({
+                type: 'post',
+                url: route,
+                data: {'category_id': category_id},
+                success: function(data) {
+                    if (!$.isEmptyObject(data)) {
+                         var regNoFieldsData = data.reg_no_data;
+                         Object.keys(regNoFieldsData).forEach(function(field) {
+                             $('#fa_paa_edit_motors_'+field).val(regNoFieldsData[field]);
+                         });
+                         $('#add_vehicle_msg').html('{{ "Confirm your vehicle details:"|trans({}, 'frontend-ad-edit')}}');
+                         $('#reg_no_details_fields').show();
+                         $('.fa-select').selectmenu('refresh');
+
+                         checkCategoryWithCarWeb(regNo, regNoFieldsData);
+                    } else {
+                        resetRegNoFields();
+                        $('.fa-select').selectmenu('refresh');
+                        $('#reg_no_details_fields').hide();
+                        $('#fa_paa_edit_motors_reg_no').addClass('error');
+                        $('#reg_no_error_msg').html('{{ "Please enter correct registration number."|trans({}, 'frontend-ad-edit')}}');
+                        $('#reg_no_error_msg').show();
+                    }
+                    $('#lookup_vehicle').html('{{ "Lookup Vehicle"|trans({}, 'frontend-ad-edit')}}');
+                }
+            });
+        } else {
+            resetRegNoFields();
+            $('#fa_paa_edit_motors_reg_no').addClass('error');
+            $('#reg_no_error_msg').html('{{ "Please enter registration number."|trans({}, 'frontend-ad-edit')}}');
+            $('#reg_no_error_msg').show();
+            $('.fa-select').selectmenu('refresh');
+            $('#reg_no_details_fields').hide();
+        }
+    }
+
+    function resetRegNoFields()
+    {
+        var regNoDetailsFields = ['colour_id', 'body_type_id', 'reg_year', 'fuel_type_id', 'transmission_id', 'engine_size', 'no_of_doors', 'no_of_seats', 'fuel_economy', '062mph', 'top_speed', 'ncap_rating', 'co2_emissions', 'colour_id_autocomplete']
+        regNoDetailsFields.forEach(function(field, index) {
+            $('#fa_paa_edit_motors_'+field).val('');
+        });
+    }
+    
+    function loadModelsByMakeId(makeId)
+    {
+        {% if rootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID') %}
+        var selectedModelId = $('#fa_paa_edit_motors_model_id').val();
+
+        if (!makeId) {
+            makeId = $('#fa_paa_edit_motors_make_id').val();
+        }
+
+        if (makeId) {
+            var data = {
+                parent_id: makeId
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("entity_ajax_get_options_by_partent_json") }}',
+                data: data,
+                success: function(data) {
+                    if (data.length > 0) {
+                        $('#fa_paa_edit_motors_model_id').html('<option value="">{{ 'Select model'|trans({}, 'frontend-ad-edit') }}</option>');
+                        for (var i=0, total = data.length; i < total; i++) {
+                            if (selectedModelId == data[i].id) {
+                                $('#fa_paa_edit_motors_model_id').append('<option value="' + data[i].id + '" selected="selected">' + data[i].text + '</option>');
+                            } else {
+                                $('#fa_paa_edit_motors_model_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                            }
+                        }
+                    } else {
+                        $('#fa_paa_edit_motors_model_id').html('<option value="">{{ 'Select model'|trans({}, 'frontend-ad-edit') }}</option>');
+                    }
+                }
+            });
+        } else {
+            $('#fa_paa_edit_motors_model_id').html('<option value="">{{ 'Select model'|trans({}, 'frontend-ad-edit') }}</option>');
+            $('#fa_paa_edit_motors_model_id').selectmenu('refresh');
+        }
+        {% endif %}
+    }
+//]]>
+</script>
+{% if (form.manufacturer_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_motors_manufacturer_id', 'placeHolder': ((attribute(form, 'manufacturer_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'manufacturer_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'manufacturer_id_autocomplete').vars.attr.placeholder : 'Please type the manufacturer'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_motors_manufacturer_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.colour_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_motors_colour_id', 'placeHolder': ((attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'colour_id_autocomplete').vars.attr.placeholder : 'Please type the colour'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_motors_colour_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.part_manufacturer_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_motors_part_manufacturer_id', 'placeHolder': ((attribute(form, 'part_manufacturer_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'part_manufacturer_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'part_manufacturer_id_autocomplete').vars.attr.placeholder : 'Please type the part manufacturer'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_motors_part_manufacturer_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.make_id_autocomplete) is defined %}
+    {% if secondRootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_ID') %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_motors_make_id', 'placeHolder': ((attribute(form, 'make_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'make_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'make_id_autocomplete').vars.attr.placeholder : 'Please type the make'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_motors_make_id_dimension_id', 'child_field' : '#fa_paa_edit_motors_model_id'}) }}
+    {% else %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_motors_make_id', 'placeHolder': ((attribute(form, 'make_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'make_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'make_id_autocomplete').vars.attr.placeholder : 'Please type the make'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_motors_make_id_dimension_id'}) }}
+    {% endif %}
+{% endif %}
+
+{% if (form.model_id_autocomplete) is defined %}
+    {% if secondRootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_ID') %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_motors_model_id', 'placeHolder': ((attribute(form, 'model_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'model_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'model_id_autocomplete').vars.attr.placeholder : 'Please type the model of above selected make'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_motors_model_id_dimension_id', 'parent_field' : '#fa_paa_edit_motors_make_id'}) }}
+    {% else %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_motors_model_id', 'placeHolder': ((attribute(form, 'model_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'model_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'model_id_autocomplete').vars.attr.placeholder : 'Please type the model of above selected make'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_motors_model_id_dimension_id'}) }}
+    {% endif %}
+{% endif %}
+
+{% if (form.part_of_vehicle_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_motors_part_of_vehicle_id', 'placeHolder': ((attribute(form, 'part_of_vehicle_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'part_of_vehicle_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'part_of_vehicle_id_autocomplete').vars.attr.placeholder : 'Please type the part of vehicle'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_motors_part_of_vehicle_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.location_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_motors_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}
+{% endif %}
+
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+{{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+{{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+{{ block('imageUploadJavascriptBottom') }}
+{{ block('googlemap_location_js') }}
+{% endblock %}

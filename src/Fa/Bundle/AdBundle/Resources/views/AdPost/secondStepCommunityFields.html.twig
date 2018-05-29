@@ -1,0 +1,114 @@
+{% set eventRendered = false %}
+{% for field in orderedFields %}
+    {% if attribute(form, field) is defined %}
+        {{ set_variables('formFields', {'lastField':field}) }}
+        {% if field == 'title' %}
+            <div class="paa-bdr-box">
+                <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                    <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
+                {% endif %}
+                {{ form_widget(attribute(form, field)) }}
+                {% if attribute(form, field).vars.size %}
+                    <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-second-step') }}</div>
+                {% endif %}
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'description' %}
+            <div class="paa-bdr-box">
+                <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                    <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
+                {% endif %}
+                {{ form_widget(attribute(form, field), {'attr': {'placeholder': ''}}) }}
+                {% if attribute(form, field).vars.size %}
+                    <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-second-step') }}</div>
+                {% endif %}
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'venue_name' %}
+            <div class="paa-bdr-box">
+                <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                    <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
+                {% endif %}
+                {{ form_widget(attribute(form, field)) }}
+                {% if attribute(form, field).vars.size %}
+                    <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-second-step') }}</div>
+                {% endif %}
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'event_start' or field == 'event_start_time_autocomplete' or field == 'event_end' or field == 'event_end_time_autocomplete'  or field == 'include_end_time' %}
+            {% if eventRendered == false %}
+                <div class="paa-bdr-box">
+                    <h3 class="text-center">{{ 'When?'|trans({}, 'frontend-paa-second-step') }}</h3>
+                    <div class="paa-title-ins">
+                        {{ 'Let users know starting date.'|trans({}, 'frontend-paa-second-step') }}<br />
+                        {{ 'You can add time and duration if you want'|trans({}, 'frontend-paa-second-step') }}
+                    </div>
+                    {% if attribute(form, 'event_start') is defined %}
+                       <div class="event-dates">
+                           <label>{{ 'Starts'|trans({}, 'frontend-paa-second-step') }}</label>
+                           <div class="relative">
+                               <span class="datepicker-icon event_start"></span>
+                               {{ form_widget(attribute(form, 'event_start'), {'attr': {'placeholder': ((attribute(form, 'event_start').vars.attr.placeholder is defined and attribute(form, 'event_start').vars.attr.placeholder is not null) ? attribute(form, 'event_start').vars.attr.placeholder : 'dd/mm/yyyy'), 'class': 'fdatepicker-paa'}}) }}
+                               {{ form_errors(attribute(form, 'event_start')) }}
+                           </div>
+                           {% if attribute(form, 'event_start_time_autocomplete') is defined %}
+                               <div class="relative">
+                               {{ form_widget(attribute(form, 'event_start_time_autocomplete')) }}
+                               <a href="javascript:void(0);" id="fa_paa_second_step_community_event_start_time_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                               </div>
+                               {{ form_errors(attribute(form, 'event_start_time_autocomplete')) }}
+                           {% endif %}
+                           {% if attribute(form, 'include_end_time') is defined %}
+                               <div class="label-inline">
+                                   {{ form_widget(attribute(form, 'include_end_time')) }}
+                                   {{ form_errors(attribute(form, 'include_end_time')) }}
+                               </div>
+                           {% endif %}
+                       </div>
+                   {% endif %}
+                   {% if attribute(form, 'event_end') is defined %}
+                       <div class="event-dates event-ends" id="event_end_block">
+                           <label>{{ 'End'|trans({}, 'frontend-paa-second-step') }}</label>
+                           <div class="relative">
+                               <span class="datepicker-icon event_end"></span>
+                               {{ form_widget(attribute(form, 'event_end'), {'attr': {'placeholder': ((attribute(form, 'event_end').vars.attr.placeholder is defined and attribute(form, 'event_end').vars.attr.placeholder is not null) ? attribute(form, 'event_end').vars.attr.placeholder : 'dd/mm/yyyy'), 'class': 'fdatepicker-paa'}}) }}
+                               {{ form_errors(attribute(form, 'event_end')) }}
+                           </div>
+                           {% if attribute(form, 'event_end_time_autocomplete') is defined %}
+                               <div class="relative">
+                               {{ form_widget(attribute(form, 'event_end_time_autocomplete')) }}
+                               <a href="javascript:void(0);" id="fa_paa_second_step_community_event_end_time_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                               </div>
+                               {{ form_errors(attribute(form, 'event_end_time_autocomplete')) }}
+                           {% endif %}
+                       </div>
+                   {% endif %}
+                </div>
+                {% set eventRendered = true %}
+            {% endif %}
+        {% elseif field == 'price' %}
+            <div class="paa-bdr-box">
+                <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                <div class="small-wrapper paa-enter-price clearfix">
+                    <div class="price-icon">&pound;</div>
+                    {{ form_widget(attribute(form, field)) }}
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            </div>
+        {% else %}
+            <div class="paa-bdr-box">
+                <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                <div class="small-wrapper">
+                    {{ form_widget(attribute(form, field)) }}
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+
+<div class="paa-title-ins" id="price_suggestion"></div>
+<div id="paa_similar_adverts"></div>

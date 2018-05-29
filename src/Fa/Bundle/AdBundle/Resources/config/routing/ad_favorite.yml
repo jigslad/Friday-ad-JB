@@ -1,0 +1,11 @@
+ad_add_to_favorite:
+    path:     /ajax/add_to_favorite/{adId}
+    defaults: { _controller: "FaAdBundle:AdFavorite:ajaxAddToFavorite" }
+    options:
+        expose: true
+        
+ad_remove_from_favorite:
+    path:     /ajax/remove_from_favorite/{adId}
+    defaults: { _controller: "FaAdBundle:AdFavorite:ajaxRemoveFromFavorite" }
+    options:
+        expose: true

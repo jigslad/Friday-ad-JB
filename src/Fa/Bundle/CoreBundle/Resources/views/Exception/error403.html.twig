@@ -1,0 +1,23 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+
+{% block content %}
+    <div class="text-center">
+        <div class="bg-img403"></div>
+        <h1>Application Error</h1>
+        <p class="red-text">Oops! {{ status_text }}</p>
+        <p><a href="{{path("fa_user_admin_welcome")}}">Go to home</a></p>
+    </div>
+{% endblock %}
+
+{% block dimension2 %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+   {% if app.user.getId() is not defined or app.user.getId() is null %}
+    	ga('set', 'dimension9', 'not logged in');
+    {% else %}
+    	ga('set', 'dimension9', 'logged in');
+    {% endif %}
+    ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  '_403_page'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+//]]>
+</script>
+{% endblock %}

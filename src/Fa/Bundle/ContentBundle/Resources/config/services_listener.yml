@@ -1,0 +1,60 @@
+services:
+    fa_content.entity_listener.static_page:
+        class: Fa\Bundle\ContentBundle\Listener\StaticPageListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_content.entity_listener.seo_tool:
+        class: Fa\Bundle\ContentBundle\Listener\SeoToolListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_content.entity_listener.seo_tool_popular_search:
+        class: Fa\Bundle\ContentBundle\Listener\SeoToolPopularSearchListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+
+    fa_content.entity_listener.banner:
+        class: Fa\Bundle\ContentBundle\Listener\BannerListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_content.entity_listener.header_image:
+        class: Fa\Bundle\ContentBundle\Listener\HeaderImageListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_content.entity_listener.home_popular_image:
+        class: Fa\Bundle\ContentBundle\Listener\HomePopularImageListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+
+    fa_content.entity_listener.landing_page_info:
+        class: Fa\Bundle\ContentBundle\Listener\LandingPageInfoListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+
+    fa_content.entity_listener.landing_page_popular_search:
+        class: Fa\Bundle\ContentBundle\Listener\LandingPagePopularSearchListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_content.entity_listener.seo_tool_top_link:
+        class: Fa\Bundle\ContentBundle\Listener\SeoToolTopLinkListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+
+    fa_content.entity_listener.seo_tool_override:
+        class: Fa\Bundle\ContentBundle\Listener\SeoToolOverrideListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }

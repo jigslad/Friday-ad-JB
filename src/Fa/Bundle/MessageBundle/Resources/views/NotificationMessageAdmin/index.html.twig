@@ -1,0 +1,23 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set entityRepository = fetch_repository('FaEntityBundle:Entity') %}
+{% set statusArray = entityRepository.getStatusArray(fetch_container_instance(), false) %}
+
+{% set notificationMessageEditGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('notification_message_edit_admin') %}
+  {% set notificationMessageEditGrant = true %}
+{% endif %}
+
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew': false}) }}
+
+    {% use "FaMessageBundle:NotificationMessageAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaMessageBundle:NotificationMessageAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}

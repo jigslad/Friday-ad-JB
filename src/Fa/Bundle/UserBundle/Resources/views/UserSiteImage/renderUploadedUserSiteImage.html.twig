@@ -1,0 +1,35 @@
+{% set userSiteImageRepository = fetch_repository('FaUserBundle:UserSiteImage') %}
+{% set userSiteImages = userSiteImageRepository.getUserSiteImages(userSiteId) %}
+{% set isAdminLoggedIn = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isAdminLoggedIn', [fetch_container_instance()]) %}
+
+{% set bigImageRoute = "ajax_get_big_user_site_image" %}
+{% if isAdminLoggedIn and isAdminLoggedIn.id %}
+    {% set bigImageRoute = "ajax_get_big_user_site_image_admin" %}
+{% endif %}
+
+{% set userSiteImgCount = 0 %}
+{% set container = fetch_container_instance() %}
+<ul class="inline-list ui-sortable" id="userSiteImageList">
+    {% if userSiteImages and userSiteImages|length %}
+        {% set userSiteImgCount = userSiteImages|length %}
+        {% for userSiteImage in userSiteImages %}
+            <li data-image-ord="{{userSiteImage.getOrd()}}" data-image-id="{{userSiteImage.getId()}}" id="image_{{userSiteImage.getId()}}" class="thumb-img-wrap">
+                <div class="adimg-thumb" style="position:relative">
+                    {% set userSiteImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteImageUrl', [container, userSiteId, userSiteImage.getPath(), userSiteImage.getHash(), '300X225']) %}
+                    <img alt="{{userSiteId}}_{{userSiteImage.getHash()}}_300X225.jpg" src="{{ userSiteImageUrl }}{% if cache is defined and cache == true %}?{{ random(1000) }}{% endif %}" title="{{ 'Drag photo to change order'|trans({}, 'frontend-paa') }}" />
+                    {% if userSiteImage.getHash() %}
+                        <a class="secondary-btn-1 button edit-img" href="javascript:getUserSiteOriginalImage('{{path(bigImageRoute, {'userSiteId': userSiteId, 'imageId': userSiteImage.getId(), 'imageHash': userSiteImage.getHash()})}}')">{{'Edit'|trans({}, 'frontend-paa')}}</a>
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    {% endif %}
+    {% set imageRemains = (container.getParameter('fa.image.user.site.upload_limit') - userSiteImgCount) %}
+    {% if imageRemains %}
+        <li class="thumb-img-wrap ui-sortable-disabled">
+            <div class="upload-thumb-img" style="position:relative">
+                <span id="pickfile_1" class="pickfiles needsclick">&nbsp;</span>
+            </div>
+        </li>
+    {% endif %}
+</ul>

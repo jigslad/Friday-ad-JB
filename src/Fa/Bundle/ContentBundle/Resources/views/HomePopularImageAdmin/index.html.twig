@@ -1,0 +1,30 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+{% set homePopularImageEditGrant = false %}
+{% set homePopularImageDeleteGrant = false %}
+
+{% if fa_resource_authorization_manager.isGranted('home_popular_image_edit_admin') %}
+  {% set homePopularImageEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('home_popular_image_delete_admin') %}
+  {% set homePopularImageDeleteGrant = true %}
+{% endif %}
+
+{% block content -%}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'home_popular_image_new_admin'}) }}
+
+    {% use "FaContentBundle:HomePopularImageAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaContentBundle:HomePopularImageAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+{% set searchScript = block('search_script') is defined ? block('search_script') : '' %}
+{{ searchScript }}
+{% endblock %}

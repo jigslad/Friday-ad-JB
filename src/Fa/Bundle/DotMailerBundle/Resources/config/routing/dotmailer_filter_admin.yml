@@ -1,0 +1,29 @@
+dotmailer_filter_admin:
+    path:     /
+    defaults: { _controller: "FaDotMailerBundle:DotmailerFilterAdmin:index" }
+
+dotmailer_filter_new_admin:
+    path:     /new
+    defaults: { _controller: "FaDotMailerBundle:DotmailerFilterAdmin:new" }
+
+dotmailer_filter_create_admin:
+    path:     /create
+    defaults: { _controller: "FaDotMailerBundle:DotmailerFilterAdmin:create" }
+    requirements: { methods: post }
+
+dotmailer_filter_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaDotMailerBundle:DotmailerFilterAdmin:edit" }
+
+dotmailer_filter_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaDotMailerBundle:DotmailerFilterAdmin:update" }
+    requirements: { methods: post|put }
+
+dotmailer_filter_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaDotMailerBundle:DotmailerFilterAdmin:delete" }
+    
+dotmailer_filter_approve_admin:
+    path:     /{id}/approve_export
+    defaults: { _controller: "FaDotMailerBundle:DotmailerFilterAdmin:approve" }

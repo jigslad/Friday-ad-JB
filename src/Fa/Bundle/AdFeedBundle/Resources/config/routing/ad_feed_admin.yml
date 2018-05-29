@@ -1,0 +1,12 @@
+ad_feed_log_admin:
+    path:     /
+    defaults: { _controller: "FaAdFeedBundle:AdFeedLogAdmin:index" }
+
+ad_feed_log_show_admin:
+    path:     /{id}
+    defaults: { _controller: "FaAdFeedBundle:AdFeedLogAdmin:view" }
+    
+ad_feed_log_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaAdFeedBundle:AdFeedLogAdmin:delete" }
+    requirements: { methods: post|delete|get }

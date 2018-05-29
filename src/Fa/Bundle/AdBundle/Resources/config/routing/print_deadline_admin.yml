@@ -1,0 +1,27 @@
+print_deadline_admin:
+    path:     /
+    defaults: { _controller: "FaAdBundle:PrintDeadlineAdmin:index" }
+
+print_deadline_new_admin:
+    path:     /new
+    defaults: { _controller: "FaAdBundle:PrintDeadlineAdmin:new" }
+    options:
+        expose: true
+
+print_deadline_create_admin:
+    path:     /create
+    defaults: { _controller: "FaAdBundle:PrintDeadlineAdmin:create" }
+    requirements: { methods: post }
+
+print_deadline_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaAdBundle:PrintDeadlineAdmin:edit" }
+
+print_deadline_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaAdBundle:PrintDeadlineAdmin:update" }
+    requirements: { methods: post|put }
+
+print_deadline_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaAdBundle:PrintDeadlineAdmin:delete" }

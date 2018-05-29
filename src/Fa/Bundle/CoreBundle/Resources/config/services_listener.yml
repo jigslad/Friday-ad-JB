@@ -1,0 +1,6 @@
+services:
+    fa_core.entity_listener.config_rule:
+        class: Fa\Bundle\CoreBundle\Listener\ConfigRuleListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }

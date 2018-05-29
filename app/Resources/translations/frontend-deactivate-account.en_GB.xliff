@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="28">views/MyAccount/deactivateAccount.html.twig</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="fd9fd676bc9b0a86ff5fb7b34ac55299895a30a7" resname="Deactivate account">
+        <jms:reference-file line="3">views/MyAccount/deactivateAccount.html.twig</jms:reference-file>
+        <jms:reference-file line="13">views/MyAccount/deactivateAccount.html.twig</jms:reference-file>
+        <source>Deactivate account</source>
+        <target state="new">Deactivate account</target>
+      </trans-unit>
+      <trans-unit id="2daf0ad682b5ae6c35c3141cd6822b164c9d7ec4" resname="Deactivate account?">
+        <jms:reference-file line="17">views/MyAccount/deactivateAccount.html.twig</jms:reference-file>
+        <source>Deactivate account?</source>
+        <target state="new">Deactivate account?</target>
+      </trans-unit>
+      <trans-unit id="b0a98216a32426b9e66a4ac1eb6df2e96e1b495c" resname="Ok">
+        <jms:reference-file line="31">views/MyAccount/deactivateAccount.html.twig</jms:reference-file>
+        <source>Ok</source>
+        <target state="new">Ok</target>
+      </trans-unit>
+      <trans-unit id="dc1649a16c1496db3e4073be6a73faf5121aeae7" resname="Sign out">
+        <jms:reference-file line="41">views/MyAccount/deactivateAccount.html.twig</jms:reference-file>
+        <source>Sign out</source>
+        <target state="new">Sign out</target>
+      </trans-unit>
+      <trans-unit id="d582e48cda1ce2dc08385c9cfc52a2ac5cad017a" resname="This will deactivate your account and you will no longer be able to log in. Any adverts you have will be removed from the site.">
+        <jms:reference-file line="22">views/MyAccount/deactivateAccount.html.twig</jms:reference-file>
+        <source>This will deactivate your account and you will no longer be able to log in. Any adverts you have will be removed from the site.</source>
+        <target state="new">This will deactivate your account and you will no longer be able to log in. Any adverts you have will be removed from the site.</target>
+      </trans-unit>
+      <trans-unit id="062c050cc68e50893da58f4a25e51bd3ac698202" resname="We would be sorry to see you go. If you're having a problem with your account please %contact_us% first and see if we can help.">
+        <jms:reference-file line="12">views/MyAccount/deactivateAccount.html.twig</jms:reference-file>
+        <source>We would be sorry to see you go. If you're having a problem with your account please %contact_us% first and see if we can help.</source>
+        <target state="new">We would be sorry to see you go. If you're having a problem with your account please %contact_us% first and see if we can help.</target>
+      </trans-unit>
+      <trans-unit id="9a8448da8d33fcc68eefea4143a9709fbc9ad1ca" resname="Your account deactivated successfully.">
+        <jms:reference-file line="453">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>Your account deactivated successfully.</source>
+        <target state="new">Your account deactivated successfully.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

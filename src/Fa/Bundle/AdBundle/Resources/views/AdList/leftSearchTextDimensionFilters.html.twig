@@ -1,0 +1,21 @@
+{% set plusMinusClass     = '' %}
+{% set contentActiveClass = '' %}
+{% set keepShownClass     = '' %}
+{% set panelId            = 'panel' ~ filterPanelCounter ~ 'b' %}
+{% if attribute(searchParams, filter~'_open') is defined %}
+    {% set contentActiveClass = 'active' %}
+    {% set keepShownClass     = 'keep-shown' %}
+    {% set panelId            = '' %}
+{% else %}
+    {% set plusMinusClass = 'fi-plus' %}
+    {% if attribute(searchParams, filter) is defined %}
+        {% set plusMinusClass = 'fi-minus' %}
+        {% set contentActiveClass = 'active' %}
+    {% endif %}
+{% endif %}
+<dd class="accordion-navigation {{ contentActiveClass }} {{ keepShownClass }}">
+    <a href="{{ '#panel' ~ filterPanelCounter ~ 'b'}}" class="clearfix"><h5 class="left">{{ attribute(form, filter).vars.label }}</h5> <i class="right {{ plusMinusClass }}"></i></a>
+    <div {% if panelId is not null %}id="{{ panelId }}"{% endif %} class="content {{ contentActiveClass }}">
+        {{ form_widget(attribute(form, filter)) }}
+    </div>
+</dd>

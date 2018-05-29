@@ -1,0 +1,19 @@
+{% set container = fetch_container_instance() %}
+{% set seoToolPopularSearchRepository = fetch_repository('FaContentBundle:SeoToolPopularSearch') %}
+{% set popularSearchArray = seoToolPopularSearchRepository.getPopularSearchArrayBySeoToolId(seoFields['seo_tool_id'], container) %}
+{% if popularSearchArray|length %}
+    <div class="search-filters">
+        <dl class="accordion" data-accordion>
+            <dd class="accordion-navigation">
+                <a href="javascript:void(0);" rel="nofollow" ><h5>{{'Popular Searches'|trans({}, 'frontend-left--popular-search')}}</h5></a>
+                <div class="content active clearfix">
+                    <ul class="seller-link">
+                        {% for popularSearch in popularSearchArray %}
+                            <li><a href="{{ seoToolPopularSearchRepository.getPopularSearchUrl(popularSearch['url'], cookieLocationDetails, mapFlag, container) }}">{{ popularSearch['title'] }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </dd>
+        </dl>
+    </div>
+{% endif %}

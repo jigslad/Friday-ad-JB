@@ -1,0 +1,37 @@
+location_ajax_get_node:
+    path:     /location/ajax/getnode/
+    defaults: { _controller: "FaEntityBundle:Location:ajaxGetNode" }
+
+location_ajax_get_node_json:
+    path:     /location/ajax/get/nodejson/
+    defaults: { _controller: "FaEntityBundle:Location:ajaxGetNodeJson" }
+    
+location_group_ajax_get_node_json:
+    path:     /location/ajax/get/location_group_nodejson/
+    defaults: { _controller: "FaEntityBundle:Location:ajaxGetNodeJsonForLocationGroup" }
+
+town_ajax_find_town_by_term:
+    path:     /location/ajax/find_town/{term}/
+    defaults: { _controller: "FaEntityBundle:Location:ajaxGetTownsByTerm" }
+    options:
+        expose: true
+
+show_all_locations:
+    path:     /locations/
+    defaults: { _controller: "FaEntityBundle:Location:showAllLocation" }
+    
+show_all_towns_by_county:
+    path:     /locations/{countySlug}/
+    defaults: { _controller: "FaEntityBundle:Location:showAllTownsByCounty" }
+
+county_ajax_find_county_by_term:
+    path:     /location/ajax/find_county/{term}/
+    defaults: { _controller: "FaEntityBundle:Location:ajaxGetCountiesByTerm" }
+    options:
+        expose: true
+
+town_ajax_find_town_only_by_term:
+    path:     /location/ajax/find_town_only/{term}/
+    defaults: { _controller: "FaEntityBundle:Location:ajaxGetTownsOnlyByTerm" }
+    options:
+        expose: true

@@ -1,0 +1,10 @@
+services:
+    fa.ad_feed_mapping.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdFeedBundle:AdFeedMapping]
+    fa.ad_feed.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdFeedBundle:AdFeed]
+

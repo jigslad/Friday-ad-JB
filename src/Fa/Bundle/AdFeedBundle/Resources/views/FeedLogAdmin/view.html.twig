@@ -1,0 +1,92 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+
+{% set backUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdminBackUrl', [fetch_container_instance()]) %}
+
+{% block content -%}
+<div class="row">
+   <div class="columns">
+       <h1>{{ heading }}</h1>
+   </div>
+   
+   <div class="row">
+    <div class="columns">
+        <div class="outline">
+               <ul class="info_list">
+                <li class="clearfix">
+                    <label>{{ 'REF ID'|trans }}:</label> 
+                        <div class="info_data">
+                            {{ ad_feed.getTransId }}
+                        </div>
+                </li>
+                <li class="clearfix">
+                    <label>{{ 'Id'|trans }}:</label> 
+                        <div class="info_data">
+                            {{ ad_feed.id}}
+                        </div>
+                </li>
+                <li class="clearfix">
+                    <label>{{ 'Ref Site ID'|trans }}:</label> 
+                        <div class="info_data">
+                            {{ ad_feed.getRefSiteId}}
+                        </div>
+                </li>
+                <li class="clearfix">
+                    <label>{{ 'Email'|trans }}:</label> 
+                        <div class="info_data">
+                        {% if ad_feed.user is not null %}
+                            {{ ad_feed.user.email}}
+                         {% endif %}
+                        </div>
+                </li>
+                <li class="clearfix">
+                    <label>{{ 'Ad id'|trans }}:</label> 
+                        <div class="info_data">
+                         {% if ad_feed.ad is not null %}
+                            {{ ad_feed.ad.id}}
+                         {% endif %}
+                        </div>
+                </li>
+                <li class="clearfix">
+                    <label>{{ 'Status'|trans }}:</label> 
+                        <div class="info_data">
+                            {{ ad_feed.status}}
+                        </div>
+                </li>
+                <li class="clearfix">
+                    <label>{{ 'Created at'|trans }}:</label> 
+                        <div class="info_data">
+                            {{ ad_feed.getCreatedAt | localizeddate('short', 'medium', app.request.locale )}}
+                        </div>
+                </li>
+                <li class="clearfix">
+                    <label>{{ 'Last Modified at'|trans }}:</label> 
+                        <div class="info_data">
+                            {{ ad_feed.getLastModified.format('Y-m-d H:i:s')}}
+                        </div>
+                </li>
+                {% set ad_text  = array_unserialize(ad_feed.getAdText) %}
+                <li class="clearfix">
+                    <label>{{ 'Original source'|trans }}:</label> 
+                        <div class="info_data">
+                            {% if ad_text.full_data is defined %}
+                                <pre>
+                                {{ array_unserialize(ad_text.full_data) | json_encode(128) }}
+                                <pre/>
+                            {% endif %}
+                        </div>
+                </li>
+                <li class="clearfix">
+                    <label>{{ 'Mapped data'|trans }}:</label> 
+                        <div class="info_data">
+                                <pre>
+                                {{ dump_data(ad_text) }}
+                                <pre/>
+                        </div>
+                </li>
+                
+            </ul>
+        </div>
+     </div>
+   </div>
+
+{% endblock %}

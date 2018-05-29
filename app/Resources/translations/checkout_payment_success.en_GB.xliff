@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="2deabbd2fca00ee704aa9b4e6bca9d42fada812f" resname="Invalid payment source.">
+        <jms:reference-file line="277">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <source>Invalid payment source.</source>
+        <target state="new">Invalid payment source.</target>
+      </trans-unit>
+      <trans-unit id="8db1c5e073f92c7456efffd9b508f096bdd56d64" resname="Invalid token.">
+        <jms:reference-file line="223">PaymentBundle/Controller/CyberSourceCheckoutAdminController.php</jms:reference-file>
+        <source>Invalid token.</source>
+        <target state="new">Invalid token.</target>
+      </trans-unit>
+      <trans-unit id="ee6772287efd23c6c54d2af00d25c671387f712f" resname="Payment source has been deleted successfully.">
+        <jms:reference-file line="308">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <source>Payment source has been deleted successfully.</source>
+        <target state="new">Payment source has been deleted successfully.</target>
+      </trans-unit>
+      <trans-unit id="ce9ca7e40699846cda78f8e244d00c8efe1a31b8" resname="This record can not be removed from database because it's reference exists in database.">
+        <jms:reference-file line="236">PaymentBundle/Controller/CyberSourceCheckoutAdminController.php</jms:reference-file>
+        <jms:reference-file line="298">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <source>This record can not be removed from database because it's reference exists in database.</source>
+        <target state="new">This record can not be removed from database because it's reference exists in database.</target>
+      </trans-unit>
+      <trans-unit id="670bc7f99d17614373e87ad2ff761aa543461e97" resname="Token has been deleted successfully.">
+        <jms:reference-file line="241">PaymentBundle/Controller/CyberSourceCheckoutAdminController.php</jms:reference-file>
+        <source>Token has been deleted successfully.</source>
+        <target state="new">Token has been deleted successfully.</target>
+      </trans-unit>
+      <trans-unit id="3ba32141456afca515c6fa74ed493ef8968d6546" resname="Unable to find payment source.">
+        <jms:reference-file line="281">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <source>Unable to find payment source.</source>
+        <target state="new">Unable to find payment source.</target>
+      </trans-unit>
+      <trans-unit id="29b9a5f1c75b8191eb75f65bd78eb11e1bdc469a" resname="Unable to find token.">
+        <jms:reference-file line="227">PaymentBundle/Controller/CyberSourceCheckoutAdminController.php</jms:reference-file>
+        <source>Unable to find token.</source>
+        <target state="new">Unable to find token.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

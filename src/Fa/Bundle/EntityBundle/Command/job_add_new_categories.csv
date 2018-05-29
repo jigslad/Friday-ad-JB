@@ -1,0 +1,289 @@
+parent_level;parent;child_level;child
+1;jobs;2;Accountancy and Finance Jobs
+1;jobs;2;Office, Admin and PA Jobs
+1;jobs;2;Automotive Jobs
+1;jobs;2;Aviation Jobs
+1;jobs;2;Childcare Jobs
+1;jobs;2;Bar Jobs
+1;jobs;2;Charity, Non-Profit and Volunteering Jobs
+1;jobs;2;Computing and IT Jobs
+1;jobs;2;Construction, Tradesmen and Property Jobs
+1;jobs;2;Education Jobs
+1;jobs;2;Engineering Jobs
+1;jobs;2;Farming, Gardening and Pet Jobs
+1;jobs;2;General Jobs
+1;jobs;2;Health, Beauty and Fitness Jobs
+1;jobs;2;Healthcare and Medicine Jobs
+1;jobs;2;Home and Social Care Jobs
+1;jobs;2;Hospitality and Catering Jobs
+1;jobs;2;Law Jobs
+1;jobs;2;Marketing, Media and PR Jobs
+1;jobs;2;Recruitment and HR Jobs
+1;jobs;2;Sales, Retail and Customer Service Jobs
+1;jobs;2;Seasonal and Overseas Jobs
+1;jobs;2;Graduate Jobs and Apprenticeships
+2;Childcare Jobs;3;Babysitting Jobs
+2;Accountancy and Finance Jobs;3;Banking Jobs
+2;General Jobs;3;Handyman Jobs
+2;Charity, Non-Profit and Volunteering Jobs;3;Other Charity, Non-Profit, and Volunteering Jobs
+2;Office, Admin and PA Jobs;3;Data Entry
+2;Healthcare and Medicine Jobs;3;Dental Jobs
+2;General Jobs;3;Warehouse Jobs
+2;Farming, Gardening and Pet Jobs;3;Equine Jobs
+2;Farming, Gardening and Pet Jobs;3;Farming Jobs
+2;General Jobs;3;Flyering Jobs
+2;Farming, Gardening and Pet Jobs;3;Gardening and Landscaping Jobs
+2;Marketing, Media and PR Jobs;3;Design and Creative Jobs
+2;General Jobs;3;Host Families
+2;Hospitality and Catering Jobs;3;Hotel Management and Admin Jobs
+2;General Jobs;3;Housekeeping and Cleaning Jobs
+2;General Jobs;3;Manufacturing Jobs
+2;Automotive Jobs;3;Aftermarket Jobs
+2;General Jobs;3;Modelling Jobs
+2;General Jobs;3;Music Jobs
+2;Office, Admin and PA Jobs;3;Receptionist Jobs
+2;Recruitment and HR Jobs;3;Recruitment Consultant Jobs
+2;Sales, Retail and Customer Service Jobs;3;Retail Jobs
+2;Sales, Retail and Customer Service Jobs;3;Sales Jobs
+2;"Seasonal and Overseas Jobs ";3;Summer Season Jobs
+2;Office, Admin and PA Jobs;3;Secretarial Jobs
+2;General Jobs;3;Security Jobs
+2;Health, Beauty and Fitness Jobs;3;Sports and Healthclub Jobs
+2;Graduate Jobs and Apprenticeships;3;Graduate Jobs
+2;Sales, Retail and Customer Service Jobs;3;Telesales Jobs
+2;Farming, Gardening and Pet Jobs;3;Veterinary Jobs
+2;Hospitality and Catering Jobs;3;Food and Beverage Jobs
+2;General Jobs;3;Other General Jobs
+2;Accountancy and Finance Jobs;3;Accounts Assistant Jobs and Accountancy Apprenticeships
+2;Accountancy and Finance Jobs;3;Accounts Payable and Purchase Ledger Jobs
+2;Accountancy and Finance Jobs;3;Accounts Receivable and Credit Control Jobs
+2;Accountancy and Finance Jobs;3;Asset Management Jobs
+2;Accountancy and Finance Jobs;3;Banking Jobs
+2;Accountancy and Finance Jobs;3;Bookkeeping Jobs
+2;Accountancy and Finance Jobs;3;Financial Advisor Jobs
+2;Accountancy and Finance Jobs;3;Financial Analyst Jobs
+2;Accountancy and Finance Jobs;3;Financial Services and Retail Banking Jobs
+2;Accountancy and Finance Jobs;3;Insurance Jobs
+2;Accountancy and Finance Jobs;3;Investment Jobs
+2;Accountancy and Finance Jobs;3;Management Accountant and Financial Controller Jobs
+2;Accountancy and Finance Jobs;3;Mortgage Broker Jobs
+2;Accountancy and Finance Jobs;3;Payroll Jobs
+2;Accountancy and Finance Jobs;3;Other Accountancy and Finance Jobs
+2;Office, Admin and PA Jobs;3;Admin Jobs
+2;Office, Admin and PA Jobs;3;Data Entry
+2;Office, Admin and PA Jobs;3;Office Manager Jobs
+2;Office, Admin and PA Jobs;3;Personal Assistant Jobs
+2;Office, Admin and PA Jobs;3;Procurement Jobs
+2;Office, Admin and PA Jobs;3;Receptionist Jobs
+2;Office, Admin and PA Jobs;3;Secretarial Jobs
+2;Office, Admin and PA Jobs;3;Other Admin, Secretarial and PA Jobs
+2;Automotive Jobs;3;Dealership Jobs
+2;Automotive Jobs;3;Rail Jobs
+2;Automotive Jobs;3;Aftermarket Jobs
+2;Automotive Jobs;3;Driver Jobs
+2;Automotive Jobs;3;Transport and Logistics Jobs
+2;Automotive Jobs;3;Other Automotive Jobs
+2;Aviation Jobs;3;Aircraft Mechanic and Engineer Jobs
+2;Aviation Jobs;3;Cabin Crew Jobs
+2;Aviation Jobs;3;Airport Jobs
+2;Aviation Jobs;3;Helicopter Jobs
+2;Aviation Jobs;3;Pilot Jobs
+2;Aviation Jobs;3;Other Aviation Jobs
+2;Childcare Jobs;3;Babysitting Jobs
+2;Childcare Jobs;3;Nanny Jobs
+2;Childcare Jobs;3;Live-in Nanny Jobs
+2;Childcare Jobs;3;Maternity Nurse  Jobs
+2;Childcare Jobs;3;Other Childcare Jobs
+2;Charity, Non-Profit and Volunteering Jobs;3;Charity Admin Jobs
+2;Charity, Non-Profit and Volunteering Jobs;3;"Charity Marketing and PR "
+2;Charity, Non-Profit and Volunteering Jobs;3;Charity Shop Jobs
+2;Charity, Non-Profit and Volunteering Jobs;3;Volunteering Jobs
+2;Charity, Non-Profit and Volunteering Jobs;3;Other Charity, Non-Profit, and Volunteering Jobs
+2;Computing and IT Jobs;3;Business Analyst Jobs
+2;Computing and IT Jobs;3;Database, System, and Networking Admin Jobs
+2;Computing and IT Jobs;3;IT Project Management Jobs
+2;Computing and IT Jobs;3;IT Support Jobs
+2;Computing and IT Jobs;3;Programming Jobs
+2;Computing and IT Jobs;3;Quality Assurance and Testing Jobs
+2;Computing and IT Jobs;3;Web Design Jobs
+2;Computing and IT Jobs;3;Web Developer Jobs
+2;Computing and IT Jobs;3;Other Computing and IT Jobs
+2;Construction, Tradesmen and Property Jobs;3;Architecture Jobs
+2;Construction, Tradesmen and Property Jobs;3;Bricklaying Jobs
+2;Construction, Tradesmen and Property Jobs;3;Building Service and Maintenance Jobs
+2;Construction, Tradesmen and Property Jobs;3;Building Surveyor Jobs
+2;Construction, Tradesmen and Property Jobs;3;Caretaker Jobs
+2;Construction, Tradesmen and Property Jobs;3;Carpentary and Joinery Jobs
+2;Construction, Tradesmen and Property Jobs;3;Electrician Jobs
+2;Construction, Tradesmen and Property Jobs;3;Labourer Jobs
+2;Construction, Tradesmen and Property Jobs;3;Painting and Decorating Jobs
+2;Construction, Tradesmen and Property Jobs;3;Plastering Jobs
+2;Construction, Tradesmen and Property Jobs;3;Plumbing Jobs
+2;Construction, Tradesmen and Property Jobs;3;Quantity Surveyor Jobs
+2;Construction, Tradesmen and Property Jobs;3;Other Construction, Tradesmen, and Property Jobs
+2;Education Jobs;3;Adult Education Jobs
+2;Education Jobs;3;Higher Education Jobs
+2;Education Jobs;3;International Teaching and TEFL Jobs
+2;Education Jobs;3;Language Teaching Jobs
+2;Education Jobs;3;Learning Support Assistant Jobs
+2;Education Jobs;3;Primary Teaching Jobs
+2;Education Jobs;3;School Jobs
+2;Education Jobs;3;Secondary Teaching Jobs
+2;Education Jobs;3;Special Educational Needs Jobs
+2;Education Jobs;3;Supply Teacher Jobs
+2;Education Jobs;3;Teaching Assistant Jobs
+2;Education Jobs;3;Tutoring Jobs
+2;Education Jobs;3;"Other Education Jobs "
+2;Engineering Jobs;3;Aeronautical Engineering Jobs
+2;Engineering Jobs;3;Aerospace Engineering Jobs
+2;Engineering Jobs;3;Chemical Engineering Jobs
+2;Engineering Jobs;3;Civil Engineering Jobs
+2;Engineering Jobs;3;Electrical Engineering Jobs
+2;Engineering Jobs;3;Geotechnical Engineering Jobs
+2;Engineering Jobs;3;Graduate Engineering Jobs
+2;Engineering Jobs;3;Maintenance Engineer Jobs
+2;Engineering Jobs;3;Marine Engineering Jobs
+2;Engineering Jobs;3;Mechanical Engineering Jobs
+2;Engineering Jobs;3;Structural Engineering Jobs
+2;Engineering Jobs;3;Other Engineering Jobs
+2;Farming, Gardening and Pet Jobs;3;Animal Jobs
+2;Farming, Gardening and Pet Jobs;3;Dog Grooming Jobs
+2;Farming, Gardening and Pet Jobs;3;Dog Walking Jobs
+2;Farming, Gardening and Pet Jobs;3;Equine Jobs
+2;Farming, Gardening and Pet Jobs;3;Farming Jobs
+2;Farming, Gardening and Pet Jobs;3;Gardening and Landscaping Jobs
+2;Farming, Gardening and Pet Jobs;3;Petsitting Jobs
+2;Farming, Gardening and Pet Jobs;3;Veterinary Jobs
+2;Farming, Gardening and Pet Jobs;3;Other Farming, Gardening, and Pet Jobs
+2;General Jobs;3;Flyering Jobs
+2;General Jobs;3;Handyman Jobs
+2;General Jobs;3;Host Families
+2;General Jobs;3;Housekeeping and Cleaning Jobs
+2;General Jobs;3;Manufacturing Jobs
+2;General Jobs;3;Modelling Jobs
+2;General Jobs;3;Music Jobs
+2;General Jobs;3;Promotional Jobs
+2;General Jobs;3;Security Jobs
+2;General Jobs;3;Warehouse Jobs
+2;General Jobs;3;Other General Jobs
+2;Health, Beauty and Fitness Jobs;3;Gym and Fitness Jobs
+2;Health, Beauty and Fitness Jobs;3;Hairdressing and Styling Jobs
+2;Health, Beauty and Fitness Jobs;3;Massage Therapist Jobs
+2;Health, Beauty and Fitness Jobs;3;Nail Technician Jobs
+2;Health, Beauty and Fitness Jobs;3;Personal Trainer Jobs
+2;Health, Beauty and Fitness Jobs;3;Spa and Beauty Jobs
+2;Health, Beauty and Fitness Jobs;3;Sports and Healthclub Jobs
+2;Health, Beauty and Fitness Jobs;3;Other Health, Beauty, and Fitness Jobs
+2;Healthcare and Medicine Jobs;3;Biotechnology Jobs
+2;Healthcare and Medicine Jobs;3;Dental Jobs
+2;Healthcare and Medicine Jobs;3;GP Jobs
+2;Healthcare and Medicine Jobs;3;Healthcare Jobs
+2;Healthcare and Medicine Jobs;3;Medical Jobs
+2;Healthcare and Medicine Jobs;3;Nursing Jobs
+2;Healthcare and Medicine Jobs;3;Occupational Therapy Jobs
+2;Healthcare and Medicine Jobs;3;Pharmaceutical Jobs
+2;Healthcare and Medicine Jobs;3;Support Care Jobs
+2;Healthcare and Medicine Jobs;3;Other Healthcare and Medical Jobs
+2;Home and Social Care Jobs;3;Care Assistant Jobs
+2;Home and Social Care Jobs;3;Care Home Jobs
+2;Home and Social Care Jobs;3;Carer Jobs
+2;Home and Social Care Jobs;3;Domiciliary Care Jobs
+2;Home and Social Care Jobs;3;Personal Assistant Jobs
+2;Home and Social Care Jobs;3;Social Work Jobs
+2;Home and Social Care Jobs;3;Support Worker Jobs
+2;Home and Social Care Jobs;3;Other Home and Social Care Jobs
+2;Hospitality and Catering Jobs;3;Food and Beverage Jobs
+2;Hospitality and Catering Jobs;3;Concierge Jobs
+2;Hospitality and Catering Jobs;3;Events Jobs
+2;Hospitality and Catering Jobs;3;Front Desk and Receptionist Jobs
+2;Hospitality and Catering Jobs;3;Hotel Maintenance Jobs
+2;Hospitality and Catering Jobs;3;Hotel Management and Admin Jobs
+2;Hospitality and Catering Jobs;3;Other Hospitality and Catering Jobs
+2;Law Jobs;3;Advocacy Jobs
+2;Law Jobs;3;Barrister Jobs
+2;Law Jobs;3;Law Graduate Jobs
+2;Law Jobs;3;Lawyer Jobs
+2;Law Jobs;3;Inhouse Legal Counsel Jobs
+2;Law Jobs;3;Legal Secretary Jobs
+2;Law Jobs;3;Licenced Conveyancing Jobs
+2;Law Jobs;3;Paralegal and Trainee Law Jobs
+2;Law Jobs;3;Solicitor Jobs
+2;Law Jobs;3;Other Legal Jobs
+2;Marketing, Media and PR Jobs;3;Advertising Jobs
+2;Marketing, Media and PR Jobs;3;Brand Manager Jobs
+2;Marketing, Media and PR Jobs;3;Design and Creative Jobs
+2;Marketing, Media and PR Jobs;3;Digital Marketing, SEO and PPC Jobs
+2;Marketing, Media and PR Jobs;3;Event and Field Marketing Jobs
+2;Marketing, Media and PR Jobs;3;Freelance Marketing Jobs
+2;Marketing, Media and PR Jobs;3;Graduate Marketing Jobs
+2;Marketing, Media and PR Jobs;3;Marketing Jobs
+2;Marketing, Media and PR Jobs;3;PR Jobs
+2;Marketing, Media and PR Jobs;3;Writing Jobs
+2;Marketing, Media and PR Jobs;3;Other Marketing, Media, and PR Jobs
+2;Recruitment and HR Jobs;3;Graduate and Trainee HR Jobs
+2;Recruitment and HR Jobs;3;Graduate and Trainee Recruitment Jobs
+2;Recruitment and HR Jobs;3;HR Consultant and Advisor Jobs
+2;Recruitment and HR Jobs;3;Recruitment Consultant Jobs
+2;Recruitment and HR Jobs;3;Senior HR Jobs
+2;Recruitment and HR Jobs;3;Senior Recruitment Jobs
+2;Recruitment and HR Jobs;3;Other Recruitment and HR Jobs
+2;Sales, Retail and Customer Service Jobs;3;Business Development Jobs
+2;Sales, Retail and Customer Service Jobs;3;Customer Service Jobs
+2;Sales, Retail and Customer Service Jobs;3;Field Sales Jobs
+2;Sales, Retail and Customer Service Jobs;3;Retail Jobs
+2;Sales, Retail and Customer Service Jobs;3;Sales Jobs
+2;Sales, Retail and Customer Service Jobs;3;Senior Sales Jobs
+2;Sales, Retail and Customer Service Jobs;3;Telesales Jobs
+2;Sales, Retail and Customer Service Jobs;3;Trainee/Graduate Sales Jobs
+2;Sales, Retail and Customer Service Jobs;3;Other Sales, Retail, and Customer Service Jobs
+2;Seasonal and Overseas Jobs;3;Campsite Jobs
+2;Seasonal and Overseas Jobs;3;Caravan Park Jobs
+2;Seasonal and Overseas Jobs;3;Cruise Ship Jobs
+2;Seasonal and Overseas Jobs;3;Gap Year Jobs
+2;Seasonal and Overseas Jobs;3;Holiday Park Jobs
+2;Seasonal and Overseas Jobs;3;Summer Season Jobs
+2;Seasonal and Overseas Jobs;3;Travel and Tourism Jobs
+2;Seasonal and Overseas Jobs;3;Winter Season Jobs
+2;Seasonal and Overseas Jobs;3;Other Seasonal Jobs
+2;Graduate Jobs and Apprenticeships;3;Apprenticeships
+2;Graduate Jobs and Apprenticeships;3;Graduate Jobs
+2;Graduate Jobs and Apprenticeships;3;Internships
+2;Graduate Jobs and Apprenticeships;3;Jobs overseas
+2;Graduate Jobs and Apprenticeships;3;Student Jobs
+2;Graduate Jobs and Apprenticeships;3;Trainee Jobs
+2;Graduate Jobs and Apprenticeships;3;Work Experince
+2;Graduate Jobs and Apprenticeships;3;Other Graduate Jobs & Internships
+3;Insurance Jobs;4;Claims Handler Jobs
+3;Insurance Jobs;4;Insurance Broker Jobs
+3;Insurance Jobs;4;Insurance Underwriter Jobs
+3;Aftermarket Jobs;4;Mechanic Jobs
+3;Aftermarket Jobs;4;Car Valeting Jobs
+3;Aftermarket Jobs;4;MOT Tester Jobs
+3;Aftermarket Jobs;4;Tyre Fitter Jobs
+3;Aftermarket Jobs;4;Body Shop Jobs
+3;Aftermarket Jobs;4;Parts Advisor Jobs
+3;Aftermarket Jobs;4;Vehicle Technician Jobs
+3;Aftermarket Jobs;4;Breakdown and Vehicle Recovery Jobs
+3;Aftermarket Jobs;4;Other Automotive Aftermarket Jobs
+3;Driver Jobs;4;HGC Driver Jobs
+3;Driver Jobs;4;Courier Jobs
+3;Driver Jobs;4;Delivery Driver Jobs
+3;Driver Jobs;4;Hiab Driver Jobs
+3;Driver Jobs;4;Bus Driver Jobs
+3;Driver Jobs;4;Forklift Driver Jobs
+3;Driver Jobs;4;Other Driver Jobs
+3;Transport and Logistics Jobs;4;Fleet Jobs
+3;Transport and Logistics Jobs;4;Logistics Jobs
+3;Transport and Logistics Jobs;4;Supply Chain Jobs
+3;Transport and Logistics Jobs;4;Other Transport and Logistics Jobs
+3;Airport Jobs;4;Airport Security Jobs
+3;Airport Jobs;4;Baggage Handler Jobs
+3;Airport Jobs;4;Ground Crew Jobs
+3;Airport Jobs;4;Other Airport Jobs
+3;Food and Beverage Jobs;4;Chef Jobs
+3;Food and Beverage Jobs;4;Chef de Partie Jobs
+3;Food and Beverage Jobs;4;Sous Chef Jobs
+3;Food and Beverage Jobs;4;Commis Chef Jobs
+3;Food and Beverage Jobs;4;Kitchen Porter Jobs
+3;Food and Beverage Jobs;4;Waiting Staff Jobs
+3;Food and Beverage Jobs;4;Restaurant Manager Jobs

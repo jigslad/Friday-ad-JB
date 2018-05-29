@@ -1,0 +1,17 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">
+          {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'search_box outline'}}) }}
+             {{ form_errors(form) }}
+                <div class="row">
+	                <div class="large-6 columns">
+	                  {{ form_widget(form.print_deadline_rule__location_group__id, {'attr': {'class':'form-control', 'placeholder': 'Location Group'}}) }}
+	                </div>
+	                <div class="large-6 columns">
+	                   {{ form_widget(form.search, {'attr': {'class':'small button mb0'}}) }}
+	                </div>
+                </div>
+          {{ form_end(form) }}
+     </div>
+</div>
+{% endblock %}

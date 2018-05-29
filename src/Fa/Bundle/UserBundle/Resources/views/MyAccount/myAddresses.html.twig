@@ -1,0 +1,36 @@
+<dd class="accordion-navigation">
+    <a href="#panel6b" class="section-head">
+        <span class="address-book-icon">{{ 'Address book'|trans({}, 'frontend-user-address-book') }}</span>
+        <span>&nbsp;</span>
+    </a>
+    <div id="panel6b" class="content address-book">
+        <div class="mb20 hide-for-small-only">{{ 'Manage your saved addresses'|trans({}, 'frontend-user-address-book') }}</div>
+        <div class="row" id="address_book_main">
+            {{ include('FaUserBundle:MyAccount:listAddress.html.twig') }}
+        </div>
+        <div id="addressBookDeleteModal" class="reveal-modal tiny" data-reveal>
+            <a class="close-reveal-modal">&#215;</a>
+            <h5 class="modal-title">
+                {{'Remove an address?'|trans({}, 'frontend-user-address-book')}}
+            </h5>
+            <div class="modal-content remove-modal">
+                <div class="row">
+                    <div class="columns">
+                        <h5>{{'This will remove this address.'|trans({}, 'frontend-user-address-book')}}</h5>
+                    </div>
+                </div>
+                <div class="mt20">
+                    <div class="row">
+                        <div class="columns large-12">
+                            <button type="button" class="button secondary-btn-4 thin-btn expand  mb0" onclick="javascript:closeRevealModel('#addressBookDeleteModal');">{{'Cancel'|trans({}, 'frontend-user-address-book')}}</button>
+                        </div>
+                        <div class="columns large-12">
+                            <button type="button" id="remove_address_btn" class="button secondary-btn-1 thin-btn expand  mb0">{{'Ok'|trans({}, 'frontend-user-address-book')}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="addressBookModal" class="reveal-modal small" data-reveal></div>
+    </div>
+</dd>

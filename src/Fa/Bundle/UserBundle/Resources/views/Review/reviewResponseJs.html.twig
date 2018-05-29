@@ -1,0 +1,92 @@
+<script src="{{ asset_url('fafrontend/js/autosize.js') }}" type="text/javascript"></script>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        //
+    });
+
+    function loadResponseForm(review_id, responder_id)
+    {
+        $('.respond_box').html('');
+        $('.respond_box').hide();
+        $('.response_link').show();
+
+        var dataParams = {'review_id':review_id, 'responder_id':responder_id, 'is_respond_form_load':true};
+        {% if is_mobile is defined %}
+            dataParams['is_mobile'] = 1;
+        {% endif %}
+
+        $.ajax({
+            type: "post",
+            url: "{{ path('user_review_response_add_ajax') }}",
+            data: dataParams,
+            success: function(data) {
+                $('#respond_box_'+review_id).html(data);
+                $('#respond_box_'+review_id).show();
+                $('#response_link_'+review_id).hide();
+                bindAddResponseSubmitFormEvent(review_id);
+                
+                {% if is_mobile is defined %}
+                    bindMessageAutoResizeEvent();
+                    $('.review-dtl-content').addClass('fixed-height');
+                {% endif %}
+            }
+        });
+    }
+
+    function bindMessageAutoResizeEvent()
+    {
+        $('#user_review_response_message').css('max-height', '120px');
+        autosize($('#user_review_response_message'));
+    }
+
+    function bindAddResponseSubmitFormEvent(review_id)
+    {
+        $("form[name='user_review_response']").submit(function(event) {
+            // Stop form from submitting normally
+            event.preventDefault();
+            blockElement('#respond_box_'+review_id);
+
+            var formAction = "{{path('user_review_response_add_ajax')}}";
+            {% if is_mobile is defined or app.request.get('is_mobile') == 1 %}
+                formAction = "{{path('user_review_response_add_ajax', {'is_mobile':1})}}";
+            {% endif %}
+
+            $.ajax({
+                type: "POST",
+                url: formAction,
+                data: $('form[name="user_review_response"]').serialize()
+            })
+            .done(function(response) {
+                if (response.htmlContent.length) {
+                    unblockElement('#respond_box_'+review_id);
+                    $('#respond_box_'+review_id).html(response.htmlContent);
+                    bindAddResponseSubmitFormEvent(review_id);
+                    $('#user_review_response_message').addClass('error');
+                    $('#respond-review-msg-error').html(decorateMessage($('#respond-review-msg-error').find('small.error').text(), 'alert'));
+                    bindResponseFormErrorEvent();
+                    
+                    {% if is_mobile is defined or app.request.get('is_mobile') == 1 %}
+                        bindMessageAutoResizeEvent();
+                    {% else %}
+                        $('#user_review_response_message').css('margin-bottom', '1rem');
+                    {% endif %}
+                }
+                if (response.success.length) {
+                    {% if success_url is defined %}
+                        window.location.href = "{{ success_url }}";
+                    {% endif %}
+                }
+            });
+        });
+    }
+
+    function bindResponseFormErrorEvent(){
+        $('#user_review_response_message').focus(function(e){
+            $('#respond-review-msg-error').html('');
+            $(this).removeClass('error');
+        });
+    }
+//]]>
+</script>
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}

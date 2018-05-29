@@ -1,0 +1,230 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% form_theme catForm 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+<div class="row">
+   <div class="columns">
+       <h1>{{ heading }}</h1>
+   </div>
+</div>
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            {{ form_start(catForm, {'attr': {'novalidate': '', 'id': 'cat-form'} }) }}
+            <div class="row">
+                <div class="large-12 columns">
+                    <b>{{ 'Username'|trans }} : </b> {{ user.username }}
+                </div>
+                
+                <div class="large-12 columns">
+                    {{ set_variables('user_package_category_select', {'totalLevel' : totalLevel }) }}
+                    {% if totalLevel %}
+                        <div class="row" id="category_choices_div">
+                            <div class="columns">
+                                <div class="admin_cat_search list_style_none">
+                                    {% for i in 1..totalLevel %}
+                                        {% set field = 'category_' ~ i %}
+                                        <div id="category_choice_div_{{ i }}" class="category_choices_div" {% if not catForm[field].vars.choices|length %} style="display:none;" {%endif%}>
+                                            {{ form_row(attribute(catForm, field)) }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% if catForm.zip is defined %}
+                <div class="row">
+                    <div class="columns">
+                        {{ form_row(attribute(catForm, 'zip')) }}
+                    </div>
+                </div>
+            {% endif %}
+            {{ form_end(catForm) }}
+            
+            <div class="paa-pkg-main shop-pkg-main">
+                <div class="row fa-equalizer" id="package_equalizer">
+                {% set currentPackageId = null %}
+                {% if currentPackage|default is not empty %}
+                    {% set currentPackageId = currentPackage.getPackage.getId() %}
+                {% endif %}
+                
+                {% for package in shopPackages %}
+                {% set packageValues = array_unserialize(package.getValue()) %}
+                        <div class="large-4 columns">
+                            <div class="paa-pkg-bg">
+                                <div class="pkg-title {% if packageValues['title_class'] is defined %}{{packageValues['title_class']}}{% else %}pkg-gray-head{% endif %}">{{package.getSubTitle()}}</div>
+                                <div>
+                                
+                                    <div class="pkg-subtitle">
+                                        {{package.getTitle()}}
+                                    </div>
+                                    
+                                    <div class="pkg-pricing">
+                                    
+                                        <div class="pkg-pricing bz-pkg-pricing profile-pkg-price">
+                                            <H4>
+                                                {% if package.getPrice() > 0 %}
+                                                    {{format_currency(package.getPrice())}}<span> /month </span>
+                                                {% else %}
+                                                    {{'Free'|trans({}, 'backend-ad-package')}}
+                                                {% endif %}
+                                            </H4>
+                                            
+                                            {% if currentPackageId ==  package.getId() %}
+                                                {% if currentPackage.getExpiresAt > 0 %}
+                                                    <div class="pricing-date">Exp. on {{ currentPackage.getExpiresAt | localizeddate('short', 'none', app.request.locale )}}</div>
+                                                {% else %}
+                                                    <div class="pricing-date">Unlimited time</div>
+                                                {% endif %}
+                                            {% else %}
+                                                <div class="pricing-date">&nbsp;</div>
+                                            {% endif %}
+                                        </div>
+                                    
+                                        {% if currentPackageId is not null %}
+                                            {% if currentPackageId ==  package.getId() %}
+                                                <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} expand hide-for-small-only" onclick="return selectPackage({{package.getId()}});">{{'Renew'|trans({}, 'frontend-ad-package')}}</button>
+                                            {% else %}
+                                            
+                                                {% if user.getBusinessCategoryId() != package.getShopCategory().getId() %}
+                                                    <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} expand hide-for-small-only" onclick="return selectPackage({{package.getId()}});">{{'Choose'|trans({}, 'frontend-ad-package')}}</button>
+                                                {% else %}
+                                                    {% if currentPackage.getPackage.getPrice() > package.getPrice() %}
+                                                        <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} expand hide-for-small-only" onclick="return selectPackage({{package.getId()}});">{{'Downgrade'|trans({}, 'frontend-ad-package')}}</button>
+                                                    {% else %}
+                                                        <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} expand hide-for-small-only" onclick="return selectPackage({{package.getId()}});">{{'Upgrade'|trans({}, 'frontend-ad-package')}}</button>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endif %}
+                                       {% else %}
+                                         <button type="button" class="{% if packageValues['btn_class'] is defined %}{{packageValues['btn_class']}}{% else %}primary-btn-3{% endif %} expand hide-for-small-only" onclick="return selectPackage({{package.getId()}});">{{'Choose'|trans({}, 'frontend-ad-package')}}</button>
+                                       {% endif %}
+                                    </div>
+                                    
+                                    <div class="pkg-ins profile-pkg-ins">
+                                        {{ package.getDescription() | raw }}
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+            {% endfor %}
+             </div>
+             </div>
+             <ul class="button-group text-center">
+                <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('user_admin') }}'">{{ 'Cancel'|trans({}, 'messages') }}</button></li>
+             </ul>
+             
+            {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_user_package_admin_id'} }) }}
+            {{ form_errors(form) }}
+                <div class="hide">
+                    <div class="show">
+                        {{ form_row(form.package) }}
+                    </div>
+                    <ul class="button-group text-center">
+                        <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                    </ul>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+
+    $('#form_category_1').on('change', function() {
+      $('#cat-form').submit(); 
+    });
+    
+    $('#form_is_auto_renew').change(function() {
+      $('#fa_user_package_admin_is_auto_renew').val($('#form_is_auto_renew').val()); 
+    });
+    
+    function selectPackage(packageId)
+    {
+        $('input:radio[name=fa_user_package_admin\\[package\\]][value='+packageId+']').attr('checked',true);
+        $('#fa_user_package_admin_id').attr('action', $('#fa_user_package_admin_id').attr('action')+'?'+$('#cat-form').serialize())
+        $('#fa_user_package_admin_id').submit();
+    }
+    
+    {% set totalLevel = attribute(get_variables('user_package_category_select'), 'totalLevel') %}
+    var totalLevel = '{{ totalLevel }}';
+    var lastLevel  = $('#form_category_last_level').val();
+
+    $(document).ready(function(){
+    	bindEqualizerEvent('package_equalizer');
+        if (totalLevel > 1) {
+            $('.category').change(function(e) {
+               var fieldId   = $(this).attr('id');
+               var level     = fieldId.replace('form_category_', '');
+               var nextLevel = parseInt(level) + 1;
+               loadCategoryByLevel($(this).val(), nextLevel);
+            });
+        }
+    });
+
+    function loadCategoryByLevel(id, level)
+    {
+        var category_selector = $('#form_category_'+level);
+        var selectMsg         = (level == 1) ? 'Please select category' : 'Please select subcategory';
+        category_selector.html('<option value="">' + selectMsg + '</option>');
+
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    if (data.length > 0) {
+                        lastLevel = level;
+                        category_selector.nextAll('small.error').first().remove();
+                        category_selector.parent().removeClass('error');
+                        $('#category_choice_div_' + level).show();
+                        $(category_selector).show();
+                        for (var i=0, total = data.length; i < total; i++) {
+                            category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                        }
+                    } else {
+                        lastLevel = parseInt(level) - 1;
+                    }
+                    resetAndHideCategoryChoiceFields();
+                    $('#form_category_last_level').val(lastLevel);
+                }
+            });
+        } else {
+            lastLevel = parseInt(level) - 1;
+            resetAndHideCategoryChoiceFields();
+        }
+    }
+    
+    function resetAndHideCategoryChoiceFields()
+    {
+        for (var l = (parseInt(lastLevel) + 1); l <= totalLevel; l++) {
+            $('#form_category_' + l).html('<option value="">Please select subcategory</option>');
+            $('#category_choice_div_' + l).hide();
+        }
+   }
+
+    function bindEqualizerEvent(equalizerId)
+    {
+        $('#'+equalizerId).equalizer({
+            columns: '> div > div',
+            useHeight: 'height',
+            resizeable: true,
+            min: 0,
+            breakpoint: null,
+            disabled: 'breakpoint',
+            overflow: 'overflowed'
+        });
+    }
+//]]>
+</script>
+{% endblock %}

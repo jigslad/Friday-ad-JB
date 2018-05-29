@@ -1,0 +1,95 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set categoryId = attribute(adDetail, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
+{% set rootCategoryId = attribute(adDetail, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+{% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+{% set solrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+
+{% block page_title %}
+    {{'Review order'|trans({}, 'frontend-buy-now')}}
+{% endblock %}
+
+{% block body %}
+    <h1 class="simple-heading">{{'Review order'|trans({}, 'frontend-buy-now')}}</h1>
+    <h2 class="order-subtitle">{{'Postage is not available for this item,<br />you must arrange collection with the seller'|trans({}, 'frontend-buy-now')|raw}}</h2>
+    <div class="order-item">
+        <div class="item-wrapper">
+            <div class="clearfix">
+                <div class="item-img">
+                    {% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+                    {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(adDetail, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+                    {% set imageAltString = null %}
+                    {% if seoRule['image_alt'] is defined %}
+                        {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], adDetail]) %}
+                    {% endif %}
+                    {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, adDetail, '300X225', 1) %}
+                    {% if imagePath %}
+                        <img src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                    {% else %}
+                        <img src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
+                    {% endif %}
+                </div>
+                <div class="order-info">
+                    <div class="row">
+                        <div class="large-18 columns">
+                            <h3>
+                                {% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
+                                   {{trim_text(attribute(adDetail, constant(solrMapping ~ 'TITLE')), 70)|raw}}
+                                {% endif %}
+                            </h3>
+                        </div>
+                        <div class="large-6 columns text-right">
+                            <h3>
+                                {% if attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined %}
+                                    {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'PRICE'))) }}
+                                {% endif %}
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="row postage">
+                        <div class="large-18 columns">
+                            Postage cost
+                        </div>
+                        <div class="large-6 columns text-right">
+                            {{ format_currency(0) }}
+                        </div>
+                    </div>
+                    <div class="row postage-total">
+                        <div class="large-18 columns">
+                            <h3>{{'TOTAL'|trans({}, 'frontend-buy-now')}}</h3>
+                        </div>
+                        <div class="large-6 columns text-right">
+                            <h3>
+                                {% if attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined %}
+                                    {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'PRICE'))) }}
+                                {% endif %}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="pb30">
+        <h2 class="text-center pb30 black-text">{{'Continue to PayPal to complete your purchase'|trans({}, 'frontend-buy-now')}}</h2>
+        <div class="small-wrapper">
+            <form name="collection_buy_now" id="collection_buy_now" method="post" action="{{ path('collection_buy_now', {'adId': adObj.getId()}) }}"></form>
+                <button class="primary-btn-1 expand" id="collection_paypal_btn">{{'Continue'|trans({}, 'frontend-buy-now')}}</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $('#collection_paypal_btn').click(function(){
+        $('#collection_buy_now').submit();
+        $(this).attr('disabled', true);
+        blockPage();
+    });
+    //]]>
+    </script>
+{% endblock %}

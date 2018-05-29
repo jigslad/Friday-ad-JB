@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="93a65749baa15ca2fc16e8e85d5fae7f8f6cdbc5" resname="0 mile">
+        <jms:reference-file line="61">views/AdList/topSearch.html.twig</jms:reference-file>
+        <source>0 mile</source>
+        <target state="new">0 mile</target>
+      </trans-unit>
+      <trans-unit id="6a72085653e4c5be8c7640c868ef787cbcf063d1" resname="All">
+        <jms:reference-file line="77">AdBundle/Form/AdTopSearchType.php</jms:reference-file>
+        <source>All</source>
+        <target state="new">All</target>
+      </trans-unit>
+      <trans-unit id="060be00f4f266242360002d88dfca23a03981b39" resname="All categories">
+        <jms:reference-file line="89">AdBundle/Form/AdTopSearchType.php</jms:reference-file>
+        <source>All categories</source>
+        <target state="new">All categories</target>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="24">views/AdList/topSearch.html.twig</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="73d11520fb27d2e5ce547c35b73bf5d533ffb907" resname="Distance I'm happy to travel">
+        <jms:reference-file line="58">views/AdList/topSearch.html.twig</jms:reference-file>
+        <source>Distance I'm happy to travel</source>
+        <target state="new">Distance I'm happy to travel</target>
+      </trans-unit>
+      <trans-unit id="5c34de3fa584db022a79ef907326c586e3eaeccf" resname="Looking for...">
+        <jms:reference-file line="13">views/AdList/topSearch.html.twig</jms:reference-file>
+        <source>Looking for...</source>
+        <target state="new">Looking for...</target>
+      </trans-unit>
+      <trans-unit id="9477d87136fecd00d850d4f9987616b21a170d9e" resname="My budget is">
+        <jms:reference-file line="47">views/AdList/topSearch.html.twig</jms:reference-file>
+        <source>My budget is</source>
+        <target state="new">My budget is</target>
+      </trans-unit>
+      <trans-unit id="b0a98216a32426b9e66a4ac1eb6df2e96e1b495c" resname="Ok">
+        <jms:reference-file line="23">views/AdList/topSearch.html.twig</jms:reference-file>
+        <source>Ok</source>
+        <target state="new">Ok</target>
+      </trans-unit>
+      <trans-unit id="6c45e2c2fb1cd3096f5c247196ee568801db65d3" resname="Set search preferences">
+        <jms:reference-file line="36">views/AdList/topSearch.html.twig</jms:reference-file>
+        <source>Set search preferences</source>
+        <target state="new">Set search preferences</target>
+      </trans-unit>
+      <trans-unit id="7ed7f414e57f194f0c61f6cfc2b273d1107e57e9" resname="Sorry no location available with such name">
+        <jms:reference-file line="31">views/AdList/topSearch.html.twig</jms:reference-file>
+        <source>Sorry no location available with such name</source>
+        <target state="new">Sorry no location available with such name</target>
+      </trans-unit>
+      <trans-unit id="768e0c1c69573fb588f61f1308a015c11468e05f" resname="Title">
+        <jms:reference-file line="30">views/AdList/topSearch.html.twig</jms:reference-file>
+        <source>Title</source>
+        <target state="new">Title</target>
+      </trans-unit>
+      <trans-unit id="7550b672e162c224c309bdea5d48ca975081a904" resname="change">
+        <jms:reference-file line="18">views/AdList/topSearch.html.twig</jms:reference-file>
+        <source>change</source>
+        <target state="new">change</target>
+      </trans-unit>
+      <trans-unit id="af10ef20dd9060bbeead0afbc55381a66af442ef" resname="in">
+        <jms:reference-file line="16">views/AdList/topSearch.html.twig</jms:reference-file>
+        <source>in</source>
+        <target state="new">in</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

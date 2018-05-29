@@ -1,0 +1,155 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set dotmailerFilterEditGrant = false %}
+{% set dotmailerFilterDeleteGrant = false %}
+{% set dotmailerFilterApproveGrant = false %}
+
+{% if fa_resource_authorization_manager.isGranted('dotmailer_filter_edit_admin') %}
+  {% set dotmailerFilterEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('dotmailer_filter_delete_admin') %}
+  {% set dotmailerFilterDeleteGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('dotmailer_filter_approve_admin') %}
+  {% set dotmailerFilterApproveGrant = true %}
+{% endif %}
+
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'dotmailer_admin'}) }}
+    
+    {% use "FaDotMailerBundle:DotmailerFilterAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+    
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+    <div class="row">
+        <div class="columns">
+            <div class="outline">
+                <table class="mb0">
+                    <thead>
+                        <tr>
+                            <th width="20%">
+                                {{ sortable_link('dotmailer_filter_admin', 'dotmailer_filter__name', 'Name', sorter) }}
+                            </th>
+                            <th width="10%">
+                                {{ 'Number of emails'|trans }}
+                            </th>
+                            <th width="15%">
+                                {{ sortable_link('dotmailer_filter_admin', 'dotmailer_filter__created_by', 'Created by', sorter) }}
+                            </th>
+                            <th width="15%">
+                                {{ sortable_link('dotmailer_filter_admin', 'dotmailer_filter__created_at', 'Created at', sorter) }}
+                            </th>
+                            <th width="10%">
+                                {{ sortable_link('dotmailer_filter_admin', 'dotmailer_filter__is_24h_loop', 'Repeat every 24h', sorter) }}
+                            </th>
+                            <th width="12%">
+                                {{ sortable_link('dotmailer_filter_admin', 'dotmailer_filter__status', 'Status', sorter) }}
+                            </th>
+                            <th width="18%">
+                                {{ 'Action'|trans }}<input type="checkbox" name="checkAll" id="checkAll">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if pagination.getNbResults() %}
+                            {% set roles = fetch_repository('FaUserBundle:Role').getUserTypes() %}
+                            {% set newsletterTypes = fetch_repository('FaDotMailerBundle:DotmailerNewsletterType').getKeyValueArray(fetch_container_instance()) %}
+                            {% set printEditions = fetch_repository('FaAdBundle:PrintEdition').getActivePrintEditionArray() %}
+                            {% set statusArray = staticCall('Fa\\Bundle\\DotMailerBundle\\Repository\\DotmailerFilterRepository', 'getStatusArray') %}
+                            <form method="post" name="frmDeleteFilter" id="frmDeleteFilter" action="{{ path('dotmailer_filter_delete_admin', {'id': '0'}) }}">
+                            {% for dotmailerFilter in pagination.getCurrentPageResults() %}
+                                <tr>
+                                    <td>
+                                        <a href="javascript:void(0)" class="show_hide_link" id="filter_{{ dotmailerFilter.id }}" title="{{ 'Filters'|trans }}"><i class="fi-plus"></i></a>
+                                        &nbsp;&nbsp;{{ dotmailerFilter.name }}
+                                    </td>
+                                    <td>{{ fetch_repository('FaDotMailerBundle:Dotmailer').getResultCountBasedOnFilters(array_unserialize(dotmailerFilter.filters), fetch_container_instance()) }}</td>
+                                    <td>{{ dotmailerFilter.createdBy }}</td>
+                                    <td>{{ dotmailerFilter.createdAt | localizeddate('short', 'medium', app.request.locale ) }}</td>
+                                    <td>{% if dotmailerFilter.is24hLoop == 1 %} {{ 'Yes'|trans }} {% else %} {{ 'No'|trans }} {% endif %}</td>
+                                    <td>
+                                        {% if dotmailerFilter.status is defined and statusArray[dotmailerFilter.status] is defined %}
+                                            {{ statusArray[dotmailerFilter.status] }}
+                                        {% else %}
+                                            {{ 'Pending' }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                       <button href="#" data-dropdown="drop{{ dotmailerFilter.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">{{'Select'|trans}}</button>
+                                       <ul id="drop{{ dotmailerFilter.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                       {% if dotmailerFilterEditGrant %}
+                                         <li><a href="{{ path('dotmailer_filter_edit_admin', {'id': dotmailerFilter.id}) }}"><i class="fi-pencil"></i> {{'Edit'|trans}}</a></li>
+                                       {% endif %}
+                                       {% if dotmailerFilterApproveGrant and (dotmailerFilter.status == constant('Fa\\Bundle\\DotMailerBundle\\Repository\\DotmailerFilterRepository::STATUS_PENDING')  or dotmailerFilter.status == constant('Fa\\Bundle\\DotMailerBundle\\Repository\\DotmailerFilterRepository::STATUS_FAILED')) %}
+                                         <li><a href="{{ path('dotmailer_filter_approve_admin', {'id': dotmailerFilter.id}) }}"><i class="fi-like"></i> {{'Approve & export emails'|trans}}</a></li>
+                                       {% endif %}
+                                       {% if dotmailerFilterDeleteGrant %}
+                                           <li><a href="{{ path('dotmailer_filter_delete_admin', {'id': dotmailerFilter.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to delete this record?'|trans }}')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
+                                       {% endif %}
+                                       </ul>
+                                       <input type="checkbox" class="delete_dotmailer_filter" name="delete_filter_checkbox[]" value="{{ dotmailerFilter.id }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" id="filter_details_space_{{ dotmailerFilter.id }}"></td>
+                                    <td colspan="7" class="filter-opt" style="display:none" id="filter_details_{{ dotmailerFilter.id }}">
+                                        {% set params = array_unserialize(dotmailerFilter.filters) %}
+                                        {% if params is defined and params %}
+                                            {{ include('FaDotMailerBundle:DotmailerAdmin:list_filters.html.twig', {'searchParams' : (params)}) }}
+                                        {% else %}
+                                            {{ 'No filters'|trans }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                                <tr>
+                                    <td colspan="6">&nbsp;</td>
+                                    <td><button type="button" value="Delete filters" id="delete_filters_button" class="tiny button mb0">{{ 'Delete selected'|trans({}, 'messages') }}</button></td>
+                                </tr>
+                            </form>
+                        {% else %}
+                            <tr>
+                                <td colspan="7" align="center">{{ 'No records found'|trans({}, 'messages') }}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $('.show_hide_link').click(function(){
+           var fitlerLinkId    = $(this).attr('id');
+           var fitlerId        = fitlerLinkId.replace('filter_', '');
+           var fitlerDetailsId = 'filter_details_'+fitlerId;
+
+           $(this).find('i').toggleClass("fi-plus fi-minus");
+           $('#filter_details_space_'+fitlerId).toggle();
+           $('#'+fitlerDetailsId).toggle();
+           return false;
+       });
+
+        $("#checkAll").click(function(){
+          $('.delete_dotmailer_filter').not(this).prop('checked', this.checked);
+        });
+
+        $("#delete_filters_button").click(function(e){
+          var totalSelected = $("[name='delete_filter_checkbox[]']:checked").length;
+          if (totalSelected > 0) {
+              if (confirm("Are you sure to delete selected filters?")) {
+                $("#frmDeleteFilter").submit();
+              }
+          } else {
+            alert("Please select at least one filter!");
+          }
+        });
+    });
+//]]>
+</script>
+{% endblock %}

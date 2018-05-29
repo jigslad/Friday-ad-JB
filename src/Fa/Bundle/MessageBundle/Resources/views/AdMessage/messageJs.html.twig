@@ -1,0 +1,60 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    var messageIdToRemove = "";
+    var userIdToRemove    = "";
+    var adIdToRemove      = "";
+    var page              = '{{page}}';
+
+    function removeMessageConfirmation(messageId, userId, adId)
+    {
+    	messageIdToRemove = messageId;
+    	userIdToRemove    = userId;
+    	adIdToRemove      = adId;
+        $('#removeMessageModal').foundation('reveal', 'open');
+    }
+
+    function deleteMessage()
+    {
+    	var route = Routing.generate('ajax_delete_message', { 'messageId': messageIdToRemove, 'userId': userIdToRemove, 'adId': adIdToRemove });
+    	$.ajax({
+            type: "POST",
+            url: route,
+        })
+        .always(function(response) {
+            unblockPage();
+         })
+        .done(function(response) {
+            if (page == 'listing') {
+            	   location.reload();
+            } else if (page == 'conversation') {
+            	var redirectRoute = Routing.generate('user_ad_message_all');
+            	location.href = redirectRoute;
+            }
+        });
+    }
+
+    function replyOneClickEnq(messageId, adId, ans, callFrom)
+    {
+      blockPage();
+      var route = Routing.generate('fetch_category_text_by_ad_ajax', { 'adId': adId });
+      $.ajax({
+        type: "POST",
+        url: route,
+      })
+      .done(function(objResponse) {
+            var otherDetail = ans + ' - ' + callFrom + ' - ' + objResponse.categoryText;
+            ga('send', 'event', 'CTA', 'Seller Availability Response', otherDetail);
+            $.ajax({
+              type: "POST",
+              url: "{{path('reply_one_click_enq_ajax')}}",
+              data: {'messageId':messageId, 'adId':adId, 'ans':ans}
+            })
+            .done(function(response) {
+              unblockPage();
+              var redirectRoute = Routing.generate('user_ad_message_all');
+              location.href = redirectRoute;
+            });
+      });
+    }
+//]]>
+</script>

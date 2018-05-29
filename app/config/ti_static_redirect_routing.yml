@@ -1,0 +1,681 @@
+ti_redirect_Jobs:
+    path: /Jobs
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+
+ti_redirect_Classifieds:
+    path: /InternationalClassifieds
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+
+ti_redirect_Reasons:
+    path: /Reasons
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+        
+ti_redirect_for_sale_near_you:
+    path: /for-sale-near-you 
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+
+ti_redirect_popular-searches:
+    path: /popular-searches{page_string}
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+    requirements:
+      page_string: ".+"
+
+ti_redirect_Recycling:
+    path: /Recycling
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+
+ti_redirect_motor_change_location:
+  path: /change-location
+  defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+  host: '%fa.ti.motor.host%'
+
+ti_redirect_for_sale_change_location:
+  path: /change-location
+  defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_article1:
+  path: /article/
+  defaults: { _controller: FaFrontendBundle:Default:articleTiRedirect }
+  host: '%fa.tradeit.host%'
+
+ti_redirect_article2:
+  path: /article/
+  defaults: { _controller: FaFrontendBundle:Default:articleTiRedirect }
+  host: '%fa.ti.motor.host%'
+      
+ti_redirect_article:
+  path: /article/{page_string}
+  defaults: { _controller: FaFrontendBundle:Default:articleTiRedirect }
+  host: '%fa.tradeit.host%'
+  requirements:
+      page_string: ".+"
+      
+ti_redirect_topic:
+  path: /topic/{page_string}
+  defaults: { _controller: FaFrontendBundle:Default:articleTiRedirect }
+  host: '%fa.tradeit.host%'
+  requirements:
+      page_string: ".+"
+      
+ti_motor_redirect_article:
+  path: /article/{page_string}
+  defaults: { _controller: FaFrontendBundle:Default:articleTiRedirect }
+  host: '%fa.ti.motor.host%'
+  requirements:
+      page_string: ".+"
+      
+ti_motor_redirect_topic:
+  path: /topic/{page_string}
+  defaults: { _controller: FaFrontendBundle:Default:articleTiRedirect }
+  host: '%fa.ti.motor.host%'
+  requirements:
+      page_string: ".+"
+      
+ti_redirect_change_location:
+  path: /change-location/{location}
+  defaults: { _controller: FaFrontendBundle:Default:redirectToLocationPage }
+  host: '%fa.tradeit.host%'
+
+ti_redirect_old_category_slug_change_location:
+  path: /{location}/{old_cat_slug}
+  defaults: { _controller: FaFrontendBundle:Default:redirectOldCategorySlugChange }
+  host: '%fa.tradeit.host%'
+  requirements:
+        old_cat_slug: "(.*)house-rubbish-clearance(.*)|(.*)non-digital-cameras(.*)|(.*)farming-wanted(.*)"
+        
+ti_redirect_urgent_2:
+  path: /{location}/urgent/{page_string}
+  defaults: { _controller: FaFrontendBundle:Default:changeTiLocation }
+  host: '%fa.tradeit.host%'
+  requirements:
+      page_string: ".+"
+      
+ti_redirect_urgent_3:
+  path: /{location}/urgent/
+  defaults: { _controller: FaFrontendBundle:Default:changeTiLocation }
+  host: '%fa.tradeit.host%'
+  requirements:
+      page_string: ".+"
+      
+ti_redirect_N-1z141z2:
+  path: /{location}/N-1z141z2{page_string}
+  defaults: { _controller: FaFrontendBundle:Default:changeTiLocation }
+  host: '%fa.tradeit.host%'
+  requirements:
+      page_string: ".+"
+      
+ti_redirect_urgent_1:
+  path: /{location}/urgent-property-rentals{page_string}
+  defaults: { _controller: FaFrontendBundle:Default:changeTiLocation }
+  host: '%fa.tradeit.host%'
+  requirements:
+      page_string: ".+"
+
+ti_redirect_popular-searches_2:
+  path: /{location}/popular-searches/{page_string}
+  defaults: { _controller: FaFrontendBundle:Default:changeTiLocation }
+  host: '%fa.tradeit.host%'
+  requirements:
+      page_string: ".+"
+
+ti_redirect_popular:
+  path: /{location}/popular
+  defaults: { _controller: FaFrontendBundle:Default:changeTiLocation }
+  host: '%fa.tradeit.host%'
+
+ti_redirect_BuyingABicycle:
+    path: /StaySafe/{SafeSection}
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /stay-safe-help/
+        permanent: true
+    requirements:
+        SafeSection: "^(|BuyingABicycle|BuyingACar|BuyingAndSellingSafely|BuyingAPet|BuyingSafely|FAQ|FindingAJobSafely|HolidayAndTravel|Property|ProtectYourselfFromScamEmails|ReportingProblemsToThePolice|SellingSafely|Services|WatchOutForOnlineScams)$"
+
+ti_redirect_video_pages:
+    path: /video/{video_page}
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+    requirements:
+        video_page: "^(|s-and-n-tyres-motor-racing-video|ksm-auto-clinic-video|how-to-change-a-tyre|davis-rentals-video|association-of-carers-video|5-tips-for-creating-the-perfect-print-ad)$"
+
+ti_redirect_Help:
+    path: /Help
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /stay-safe-help/
+        permanent: true
+        
+ti_redirect_UK:
+    path: /uk
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+
+ti_redirect_motor_my_account:
+  path: /MyAccount
+  defaults:
+      _controller: FrameworkBundle:Redirect:redirect
+      route: my_account
+      permanent: true
+      ignoreAttributes: true
+  host: '%fa.ti.motor.host%'
+  
+ti_redirect_auto_email:
+  path: /Emails/Tracking/
+  defaults: { _controller: FaFrontendBundle:Default:redirectEmail }
+  host: '%fa.tradeit.host%'
+
+ti_redirect_auto_email2:
+  path: /Emails/Tracking
+  defaults: { _controller: FaFrontendBundle:Default:redirectEmail }
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_for_about_us:
+  path: /AboutUs.asp/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /about-us/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_for_about_us2:
+  path: /AboutUs/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /about-us/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_for_caravans:
+  path: /caravans/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/motors/motorhomes-caravans/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_for_vanandtrucksforsale:
+  path: /vanandtrucksforsale/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/motors/commercial-vehicles/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_horse-feed-N-1z1414e:
+  path: /horse-feed-N-1z1414e
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/animals/horses-equestrian/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_PrivacyInfoaspx:
+  path: /PrivacyInfo.aspx
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /privacy-policy/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_for_old_jobs:
+  path: /jobs.asp/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /uk/jobs/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_loginRegister:
+  path: LogInRegister.asp/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /login/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_motors_cars-under-1000:
+  path: /motors/cars-under-1000/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /uk/motors/cars-under-1000/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_motors_sedgebrook:
+  path: /motors/sedgebrook/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /motors/sedgebrook-grantham/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_MySavedSearches:
+  path: /MySavedSearches/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /search_agent/list/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_NewTermsAndConditions:
+  path: /NewTermsAndConditions.asp/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /terms-and-conditions/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_PlaceAnAd_LogIn:
+  path: /PlaceAnAd/LogIn.asp/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /paa/first_step
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_PlaceAnAd:
+  path: /PlaceAnAd/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /paa/first_step
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_PlaceAnAdIndex:
+  path: /PlaceAnAd/Index.asp/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /paa/first_step
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_Privacycookiepolicy:
+  path: /Privacycookiepolicy.asp/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /cookies-policy/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_Car-Auctions-in-Crawley:
+  path: /search/Car-Auctions-in-Crawley/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /crawley/motors/cars/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_sell-my-furniture:
+  path: /sell-my-furniture/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /sell-my-bedroom-furniture/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_sell-your-stuff:
+  path: /sell-your-stuff/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /sell-my-stuff/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_signin:
+  path: /signin/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /login/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_ukescorts:
+  path: /uk/escorts/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /uk/adult/escort-services/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_Retail-Jobs-in-Worthing:
+  path: /uk/Retail-Jobs-in-Worthing/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /worthing/jobs/retail-jobs/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_videos-and-n-tyres:
+  path: /video/s-and-n-tyres-motor-racing-video/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: http://blog.trade-it.co.uk/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_VideoCompetition:
+  path: /VideoCompetition.asp/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: http://blog.trade-it.co.uk/competitions/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_win-shopping-vouchers:
+  path: /win-shopping-vouchers/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: http://blog.trade-it.co.uk/competitions/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_Christmas:
+  path: /ChristmasWishesEntry.asp/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: http://blog.trade-it.co.uk/competitions/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_uk_Car-Auctions-in-Crawley:
+  path: /uk/Car-Auctions-in-Crawley/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/motors/cars/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_1z13zwl:
+  path: /uk/used-caravans-and-motorhomes-for-sale/motorhomes-n-1z13zwl/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/motors/motorhomes-caravans/motorhomes/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_1z0usth:
+  path: /advertiser/rogate-garage-N-1z0usth
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /business/rogate-garage/
+        permanent: true
+  host: '%fa.ti.motor.host%'
+  
+ti_redirect_1z0uumt:
+  path: /advertiser/vale-motorcycles-N-1z0uumt
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /business/vale-motorcycles/
+        permanent: true
+  host: '%fa.ti.motor.host%'
+
+ti_redirect_1z141fd:
+  path: /uk/services/building-home-services/builders-n-1z141fd/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/services/property-home-services/builders/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_N-1z1419o:
+  path: /warwick/N-1z1419o/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/animals/pets/dogs-puppies/bichon-frise/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_for_advertise_sell:
+  path: /{redirection_old}
+  host: '%fa.tradeit.host%'
+  defaults:
+      _controller: FrameworkBundle:Redirect:redirect
+      route: fa_frontend_homepage
+      permanent: true
+      ignoreAttributes: true
+  requirements:
+      redirection_old: "(advertise/free-ads/|vouchers-coupons-N-1z141vh|advertise/sell-stuff/|accounts/|sitemap/|vouchers/|region-w-uk-bristol-gloucestershire-cheltenham/|region-w-uk-bristol/|region-w-uk-bristol-somerset-taunton/|lendalfoot|HowTo/PlaceAnAd.asp|sell-junk-online/|accounts/powerseller/1686449/|uk/N-g2|advertise/sell-your-stuff-new/|topic/jobs-in-sussex/|advertise/sell-your-stuff/|buyonline.asp|Category/5/Web/Channel.asp/|changeEdition.asp|ChristmasWishesList.asp|Class/4620/Web/SearchResults.asp/|FADDealerList.asp|Help.asp|international-classifieds.asp|PrintVoucherTI.asp|Scam.asp|SearchResults.asp|sellonline.asp|siteindex.asp|SiteIndex/|tips-for-interviewing/index.asp/|VoucherDetailsTI.asp|VoucherSearchResultsWB.asp)"
+
+ti_redirect_Welcome:
+    path: /Welcome.htm
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+
+ti_redirect_HomeNEW:
+    path: /HomeNEW.asp
+    host: '%fa.tradeit.host%'
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: fa_frontend_homepage
+        permanent: true
+        ignoreAttributes: true
+
+ti_redirect_caravans-motorhomes-caravans:
+  path: /caravans-motorhomes-caravans/region-w-uk-bristol-wiltshire/page-5
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/motors/motorhomes-caravans/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_whats-on-boot-sales-fairs:
+  path: /whats-on-boot-sales-fairs/region-w-uk-bristol-avon-bristol/ItsBackWhitchurchCarBoot-14682989.html/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/community/whats-on/boot-fairs-garage-sales/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_horsemart-horses-and-ponies-friesian-horse:
+  path: /horsemart-horses-and-ponies-friesian-horse/region-w-uk-bristol-gloucestershire-cheltenham/Beautiful152hh13yroldFriesianXgelding-14664051.html
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/animals/horses-equestrian/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_for-sale-free-to-collector_1:
+  path: /for-sale-free-to-collector/region-w-uk-bristol-wiltshire-bradford-on-avon/2Henschickensfreetogoodhome-14104129.html
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/animals/livestock/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_for-sale-bedroomsMarksSpencerHideawayBed:
+  path: /for-sale-bedrooms/region-w-uk-bristol-avon-bristol/MarksSpencerHideawayBed-14638683.html
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /for-sale/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_for-sale-bedroomsJohnLewisAnnaSwinging:
+  path: /for-sale-bedrooms/region-w-uk-bristol-avon-bristol/JohnLewisAnnaSwingingCribwithmattress-14638788.html
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /for-sale/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_cars-rover-mini:
+  path: /cars-rover-mini/region-w-uk-bristol-avon-bath/roverminicoopersports29300miles-14421932.html
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/motors/cars/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_carspage:
+  path: /cars/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/motors/cars/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_whats-on-pubs-restaurants:
+  path: /whats-on-pubs-restaurants/region-w-uk-bristol/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/community/whats-on/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_horsebox-trailers-N-1z1413o:
+  path: /horsebox-trailers-N-1z1413o
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/motors/horseboxes-trailers/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_for-sale-mobile-phones:
+  path: /for-sale-mobile-phones/region-w-uk-bristol/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/for-sale/electronics/phones-accessories/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_for-sale-bicycles:
+  path: /for-sale-bicycles/region-w-uk-bristol/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/for-sale/leisure/bicycles/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_for-sale-free-to-collector:
+  path: /for-sale-free-to-collector/region-w-uk-bristol/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/for-sale/free-to-collector/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_find-an-expert-scaffolding:
+  path: /find-an-expert-scaffolding/region-w-uk-bristol/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/services/property-home-services/scaffolding-services/
+        permanent: true
+  host: '%fa.tradeit.host%'
+  
+ti_redirect_find-an-expert-plumbing-heating:
+  path: /find-an-expert-plumbing-heating/region-w-uk-bristol/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/services/property-home-services/plumbers-heating/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_cars-alfa-romeo-gtv:
+  path: /cars-alfa-romeo-gtv/region-w-uk-bristol/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/motors/cars/alfa-romeo/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_cars-fiat-seicento:
+  path: /cars-fiat-seicento/region-w-uk-bristol/
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/motors/cars/fiat/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_region-w-uk-bristolregion:
+  path: /region-w-uk-bristolregion-w-uk-bristol/horses-and-equestrian/livery-stables-schools/livery-N-1z14149
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /bristol/animals/horses-equestrian/horse-livery-stables/
+        permanent: true
+  host: '%fa.tradeit.host%'
+
+ti_redirect_region-w-uk-bristol-daewoo-tacuma:
+  path: /region-w-uk-bristol/used-cars/daewoo-tacuma-N-i2
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: http://'%fa.main.host%'/bristol/motors/cars/daewoo/
+        permanent: true
+  host: '%fa.ti.motor.host%'
+
+ti_redirect_region-w-uk-bristol-renault-megane:
+  path: /region-w-uk-bristol/used-cars/renault-megane-N-hg
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: http://'%fa.main.host%'/bristol/motors/cars/renault/megane/
+        permanent: true
+  host: '%fa.ti.motor.host%'
+
+ti_redirect_region-w-uk-bristol-renault-maseratti:
+  path: /region-w-uk-bristol/used-cars-for-sale/maseratti-N-1z140po
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: http://'%fa.main.host%'/bristol/motors/cars/
+        permanent: true
+  host: '%fa.ti.motor.host%'
+
+ti_redirect_region-w-uk-bristol-scam_advice:
+  path: /scam_advice
+  defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /stay-safe-help
+        permanent: true
+  host: '%fa.tradeit.host%'

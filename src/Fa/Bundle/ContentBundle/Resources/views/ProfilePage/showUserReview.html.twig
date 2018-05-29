@@ -1,0 +1,14 @@
+{% if pagination.getNbResults() %}
+    {% set excludeIds = '' %}
+    {% for review in pagination.getCurrentPageResults() %}
+        {% set excludeIds = excludeIds~review.id~',' %}
+    {% endfor %}
+    <h3 class="shop-profile-title" id="profile_review_heading">{{ reviewHeading }}</h3>
+    <div class="row">
+        <div class="columns">
+            <div class="my-msg-main user-review" id="user_review_main_div">
+                {{ include('FaContentBundle:ProfilePage:listUserReview.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endif %}

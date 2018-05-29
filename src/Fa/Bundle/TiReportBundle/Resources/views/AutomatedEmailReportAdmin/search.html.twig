@@ -1,0 +1,113 @@
+{% block search_html %}
+<div class="row">
+      <div class="columns">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+               {{ form_errors(form) }}
+
+                <div class="row">
+                    <div class="large-3 columns {% if form.from_date.vars.errors|length %} error{% endif %}">
+                        <div class="relative">
+                            <span class="datepicker-icon event_start"></span>
+                            {{ form_widget(form.from_date, {'attr': {'placeholder': 'Date from'}}) }}
+                            {{ form_errors(form.from_date) }}
+                        </div>
+                    </div>
+                    <div class="large-3 columns {% if form.to_date.vars.errors|length %} error{% endif %}">
+                        <div class="relative">
+                            <span class="datepicker-icon event_start"></span>
+                            {{ form_widget(form.to_date, {'attr': {'placeholder': 'Date to'}}) }}
+                            {{ form_errors(form.to_date) }}
+                         </div>
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.identifier) }}
+                    </div>
+                </div>
+
+                <hr class="hr_margin">
+                
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.csv_name, {'attr': {'class':'form-control', 'placeholder': 'Search filter name'}}) }}
+                        {{ form_errors(form.csv_name) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.csv_email, {'attr': {'class':'form-control', 'placeholder': 'Email address (Csv file will be emailed once generated)'}}) }}
+                        {{ form_errors(form.csv_email) }}
+                    </div>
+                </div>
+                <hr class="hr_margin">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_widget(form.search, {'attr': {'class':'small button'}}) }}
+                        {{ form_widget(form.reset, {'attr': {'class':'small button'}}) }}
+                        {% if reportCsvList %}
+                            {{ form_widget(form.download_csv, {'attr': {'class':'small button'}}) }}
+                        {% else %}
+                            {% do attribute(form, 'download_csv').setRendered %}
+                        {% endif %}
+                    </div>
+                </div>
+
+            {{ form_end(form) }}
+       </div>
+  </div>
+  <div id="automatedEmailReportCsvListModal" class="reveal-modal small" data-reveal></div>
+{% endblock %}
+
+{% block search_script -%}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $('.datepicker-icon').click(function(e){
+        $(this).next('input.fdatepicker').focus();
+    });
+    $('#fa_ti_report_automated_email_search_admin_reset').click(function(e){
+        window.location.href = "{{ path('fa_ti_report_automated_email') }}";
+    });
+    $('#fa_ti_report_automated_email_search_admin_download_csv').click(function(e){
+        showAutomatedEmailReportCsvList();
+    });
+    
+    function showAutomatedEmailReportCsvList()
+    {
+        blockPage();
+        $.ajax({
+            type: "GET",
+            url : '{{ path('ajax_fa_ti_report_automated_email_csv_list') }}',
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#automatedEmailReportCsvListModal').html(response.htmlContent);
+                $('#automatedEmailReportCsvListModal').foundation('reveal', 'open');
+            }
+        });
+    }
+    
+    function deleteCsvFile(fileName)
+    {
+        blockElement('#automatedEmailReportCsvListModal');
+        $.ajax({
+            type: "GET",
+            url : '{{ path('ajax_fa_ti_report_automated_email_csv_delete') }}',
+            data: {'fileName': fileName}
+        })
+        .always(function(response) {
+            unblockElement('#automatedEmailReportCsvListModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#automatedEmailReportCsvListModal').html(response.htmlContent);
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#cvs_list_ul');
+            }
+        });
+    }
+//]]>
+</script>
+{% endblock %}

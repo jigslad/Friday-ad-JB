@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="8353cd6c76b25af0fcbb7075898d6f8aa12c12b2" resname="In-valid paypal token.">
+        <jms:reference-file line="125">PaymentBundle/Controller/PaypalCheckoutController.php</jms:reference-file>
+        <source>In-valid paypal token.</source>
+        <target state="new">In-valid paypal token.</target>
+      </trans-unit>
+      <trans-unit id="dfe7b010a392c08c8a8600b55711364382af7dc8" resname="Problem in payment.">
+        <jms:reference-file line="265">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="409">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="496">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="79">PaymentBundle/Controller/PaypalCheckoutController.php</jms:reference-file>
+        <jms:reference-file line="157">PaymentBundle/Controller/PaypalCheckoutController.php</jms:reference-file>
+        <source>Problem in payment.</source>
+        <target state="new">Problem in payment.</target>
+      </trans-unit>
+      <trans-unit id="735c47bcf81179d992481f5637f6c0f038aab6b0" resname="There is no item in your cart.">
+        <jms:reference-file line="53">PaymentBundle/Controller/PaypalCheckoutController.php</jms:reference-file>
+        <jms:reference-file line="109">PaymentBundle/Controller/PaypalCheckoutController.php</jms:reference-file>
+        <source>There is no item in your cart.</source>
+        <target state="new">There is no item in your cart.</target>
+      </trans-unit>
+      <trans-unit id="b4b43a26a04db75718a101255d258572450dd26f" resname="Your payment received successfully.">
+        <jms:reference-file line="492">AdBundle/Controller/AdBuyNowController.php</jms:reference-file>
+        <jms:reference-file line="81">PaymentBundle/Controller/PaypalCheckoutController.php</jms:reference-file>
+        <jms:reference-file line="153">PaymentBundle/Controller/PaypalCheckoutController.php</jms:reference-file>
+        <jms:reference-file line="159">PaymentBundle/Controller/PaypalCheckoutController.php</jms:reference-file>
+        <source>Your payment received successfully.</source>
+        <target state="new">Your payment received successfully.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

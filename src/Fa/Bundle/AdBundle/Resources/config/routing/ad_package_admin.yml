@@ -1,0 +1,3 @@
+ad_package_purchase_admin:
+    path:     /purchase/{adId}/{popup}
+    defaults: { _controller: 'FaAdBundle:AdPackageAdmin:purchaseAdPackage', popup: 0 }

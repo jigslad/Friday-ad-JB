@@ -1,0 +1,9 @@
+{% set percentage = ((rating / 5) * 100) %}
+<div class="rating_star">
+   <div class="star_img" title="{{ '%star_rating% out of 5'|trans({'%star_rating%' : rating}, 'frontend') }}">
+       <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+   </div>
+   <div class="star_fill" style="width:{{ percentage }}%" title="{{ '%star_rating% out of 5'|trans({'%star_rating%' : rating}, 'frontend') }}">
+       <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+   </div>
+</div>

@@ -1,0 +1,132 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% set container = fetch_container_instance() %}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set userCreditRepository = fetch_repository('FaUserBundle:UserCredit') %}
+
+{% block title %}
+    {{'My Credits'|trans({}, 'frontend-my-credits')}}
+{% endblock %}
+
+{% block body -%}
+    <div class="posting-bg" id="my_credits">
+        {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+        <div class="row d-board-main">
+            <div class="off-canvas-wrap" data-offcanvas>
+                <div class="inner-wrap">
+                    {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                    <div id="db-right-part" class="large-18 columns">
+                        <h1 class="db-title">{{'Credits'|trans({}, 'frontend-my-credits')}}</h1>
+                        <div class="row bz-profile-title">
+                            <div class="large-18 columns">
+                                <h2 class="db-sub-title">
+                                    {{'View all your active credits. To use them, just place an ad and click \'Use credit\' when choosing your package'|trans({}, 'frontend-my-credits')|raw}}
+                                </h2>
+                            </div>
+                            <div class="large-6 columns text-right">
+                                <a href="{{ path('ad_post_first_step') }}" class="primary-btn-1 button">{{'Place an ad'|trans({}, 'frontend-my-credits')}}</a>
+                            </div>
+                        </div>
+                        <div class="total-credits-remaining">
+                            {{'Total credits:'|trans({}, 'frontend-manage-my-ad')}} {{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}
+                        </div>
+                        <div id="manage-credits" class="db-content">
+                            <div class="db-section">
+                                {% if userCredits|length %}
+                                    <dl class="accordion" data-accordion>
+                                    {% for userCreditCategoryId, userCredit in userCredits %}
+                                        {% set categoryClassName = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [userCreditCategoryId])|replace({'_':'-'}) %}
+                                        <dd class="accordion-navigation">
+                                            <a href="#panel{{categoryClassName}}" class="section-head {% if loop.index == 1 %}active{% endif %}">
+                                                <span class="{{categoryClassName}}-icon manage-credits-icon">{{ categoryRepository.getRootCategoryName(userCreditCategoryId, container)|replace({'_': ' '})|capitalize }} ({{ userCredit['credit'] }})</span>
+                                                <span>&nbsp;</span>
+                                            </a>
+                                            <div id="panel{{categoryClassName}}" class="content {% if loop.index == 1 %}active{% endif %}">
+                                                <div class="clearfix credit-blocks">
+                                                    <ul>
+                                                        {% for userCreditDetail in userCredit %}
+                                                            {% if userCreditDetail['package_sr_no'] is defined %}
+                                                                <li>
+                                                                    <div class="inner-box">
+                                                                        <div class="credit-title">
+                                                                            {% set creditTitle = {} %}
+                                                                            {% for userCreditPackageSrNo in userCreditDetail['package_sr_no'] %}
+                                                                                {% set creditTitle = creditTitle|merge({0 : userCreditRepository.getCreditPackageName(userCreditPackageSrNo)}) %}
+                                                                            {% endfor %}
+                                                                            {{ creditTitle|join(' + ') }}
+                                                                        </div>
+                                                                        <p>{{'%credits% credits remaining'|trans({'%credits%': userCreditDetail['credit'] }, 'frontend-my-credits')}}</p>
+                                                                        {% if userCreditDetail['expires_at'] is not null %}
+                                                                            <div class="expiry-date">{{'Expiry date:'|trans({}, 'frontend-my-credits')}} {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userCreditDetail['expires_at'], container, null, null, 'd MMMM YYYY']) }}</div>
+                                                                        {% else %}
+                                                                            <div class="expiry-date">{{'Expiry date:'|trans({}, 'frontend-my-credits')}} {{'Infinite'|trans({}, 'frontend-my-credits')}}</div>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </dd>
+                                    {% endfor %}
+                                    </dl>
+                                {% else %}
+                                    {{'No credits available.'|trans({}, 'frontend-my-credits')}}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function() {
+            bindEqualizerEvent();
+        });
+        $(document).foundation({
+            accordion: {
+                multi_expand: true,
+                callback : function (accordion) {
+                    accordionCallback(accordion);
+                }
+            }
+        });
+
+        $('#my_credits .accordion-navigation .content').each(function(){
+            if ($(this).hasClass('active')) {
+                $(this).siblings('a').find('span:eq(1)').addClass('dark-arrow-up');
+                $(this).siblings('a').find('span:eq(1)').removeClass('dark-arrow-down');
+            } else {
+                $(this).siblings('a').find('span:eq(1)').addClass('dark-arrow-down');
+                $(this).siblings('a').find('span:eq(1)').removeClass('dark-arrow-up');
+            }
+        });
+        
+        function accordionCallback(accordion)
+        {
+            $(accordion).siblings('a').find('span:eq(1)').toggleClass("dark-arrow-down dark-arrow-up");
+            bindEqualizerEvent();
+        }
+
+        function bindEqualizerEvent()
+        {
+            $('.credit-blocks').equalizer({
+                columns: '> ul > li > div',
+                useHeight: 'i',
+                resizeable: true,
+                min: 70,
+                breakpoint: null,
+                disabled: 'breakpoint',
+                overflow: 'overflowed'
+            });
+        }
+    //]]>
+    </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+user_config_rule_admin:
+    path:     /
+    defaults: { _controller: "FaUserBundle:UserConfigRuleAdmin:index" }
+    
+user_config_rule_new_admin:
+    path:     /new
+    defaults: { _controller: "FaUserBundle:UserConfigRuleAdmin:new" }
+
+user_config_rule_create_admin:
+    path:     /create
+    defaults: { _controller: "FaUserBundle:UserConfigRuleAdmin:create" }
+    requirements: { methods: post }
+
+user_config_rule_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaUserBundle:UserConfigRuleAdmin:edit" }
+
+user_config_rule_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaUserBundle:UserConfigRuleAdmin:update" }
+    requirements: { methods: post|put }
+
+user_config_rule_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaUserBundle:UserConfigRuleAdmin:delete" }
+    
+user_config_rule_add_edit_admin:
+    path:     /add-edit/{user_id}/{config_id}
+    defaults: { _controller: "FaUserBundle:UserConfigRuleAdmin:addEdit" }
+
+user_config_rule_add_edit_save_admin:
+    path:     /add-edit-save
+    defaults: { _controller: "FaUserBundle:UserConfigRuleAdmin:addEditSave" }

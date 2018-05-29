@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="1ad13813a902a4053c88203118018f86b882fe64" resname="%username%, You have successfully logged in to Friday Ads.">
+        <jms:reference-file line="249">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <jms:reference-file line="263">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <jms:reference-file line="344">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <source>%username%, You have successfully logged in to Friday Ads.</source>
+        <target state="new">%username%, You have successfully logged in to Friday Ads.</target>
+      </trans-unit>
+      <trans-unit id="c94d3175a6560565410511df2cebab9cda96027e" resname="Email address">
+        <jms:reference-file line="85">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <source>Email address</source>
+        <target state="new">Email address</target>
+      </trans-unit>
+      <trans-unit id="f99d98e85f9064a9b39c10c0d10fa2151df4a764" resname="Forgot Password">
+        <jms:reference-file line="5">views/Security/forgotPassword.html.twig</jms:reference-file>
+        <source>Forgot Password</source>
+        <target state="new">Forgot Password</target>
+      </trans-unit>
+      <trans-unit id="4c29f7f0335807c2524d8c36d531496aee23f473" resname="Forgot password?">
+        <jms:reference-file line="25">views/AdPost/thirdStep.html.twig</jms:reference-file>
+        <source>Forgot password?</source>
+        <target state="new">Forgot password?</target>
+      </trans-unit>
+      <trans-unit id="017e9c8066c409494dfe614f09dd045944c6104a" resname="I have an account">
+        <jms:reference-file line="99">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <source>I have an account</source>
+        <target state="new">I have an account</target>
+      </trans-unit>
+      <trans-unit id="13a3f13a0e3d6cce8374a6d8e4edd219b093e09b" resname="I'm new to Friday-Ad">
+        <jms:reference-file line="99">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <source>I'm new to Friday-Ad</source>
+        <target state="new">I'm new to Friday-Ad</target>
+      </trans-unit>
+      <trans-unit id="1df771e49eb14cf38bd2ff01bbff8351edd6e266" resname="Login With FB">
+        <jms:reference-file line="34">views/AdPost/thirdStep.html.twig</jms:reference-file>
+        <source>Login With FB</source>
+        <target state="new">Login With FB</target>
+      </trans-unit>
+      <trans-unit id="c2fa3ffb07613ebfb64249e3f6784ae9973817f3" resname="Login With Google">
+        <jms:reference-file line="37">views/AdPost/thirdStep.html.twig</jms:reference-file>
+        <source>Login With Google</source>
+        <target state="new">Login With Google</target>
+      </trans-unit>
+      <trans-unit id="e6766e89dc4abb0bfd3dc82e15505a1ed07bb903" resname="Next step: add more details">
+        <jms:reference-file line="116">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <jms:reference-file line="72">views/AdPost/thirdStep.html.twig</jms:reference-file>
+        <source>Next step: add more details</source>
+        <target state="new">Next step: add more details</target>
+      </trans-unit>
+      <trans-unit id="c5ac4a4dd80e412d6d1222ba467165b4e50bfe79" resname="One of field is missing from Facebook (First Name, Last Name, Email).">
+        <jms:reference-file line="444">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <source>One of field is missing from Facebook (First Name, Last Name, Email).</source>
+        <target state="new">One of field is missing from Facebook (First Name, Last Name, Email).</target>
+      </trans-unit>
+      <trans-unit id="02e561710d9d5f7c2a900772b1e549ef37c159b1" resname="One of field is missing from Google (First Name, Last Name, Email).">
+        <jms:reference-file line="527">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <source>One of field is missing from Google (First Name, Last Name, Email).</source>
+        <target state="new">One of field is missing from Google (First Name, Last Name, Email).</target>
+      </trans-unit>
+      <trans-unit id="9e810fde076ce7b0c99174369d9892fa55b34dc0" resname="Or connect with">
+        <jms:reference-file line="30">views/AdPost/thirdStep.html.twig</jms:reference-file>
+        <source>Or connect with</source>
+        <target state="new">Or connect with</target>
+      </trans-unit>
+      <trans-unit id="8be3c943b1609fffbfc51aad666d0a04adf83c9d" resname="Password">
+        <jms:reference-file line="110">AdBundle/Form/AdPostLoginType.php</jms:reference-file>
+        <source>Password</source>
+        <target state="new">Password</target>
+      </trans-unit>
+      <trans-unit id="61daf9c35afca1afc602083e1e2ea868ff4dfc78" resname="Post an Ad Add your details">
+        <jms:reference-file line="5">views/AdPost/thirdStep.html.twig</jms:reference-file>
+        <source>Post an Ad Add your details</source>
+        <target state="new">Post an Ad Add your details</target>
+      </trans-unit>
+      <trans-unit id="7b3ab341f3ff045914462f251daa0d443cabcefe" resname="Save your ad">
+        <jms:reference-file line="15">views/AdPost/thirdStep.html.twig</jms:reference-file>
+        <source>Save your ad</source>
+        <target state="new">Save your ad</target>
+      </trans-unit>
+      <trans-unit id="7d5131e6f2b01cbdfc38bb18a80f4dcb345e70d0" resname="Sign up with email">
+        <jms:reference-file line="69">views/AdPost/thirdStep.html.twig</jms:reference-file>
+        <source>Sign up with email</source>
+        <target state="new">Sign up with email</target>
+      </trans-unit>
+      <trans-unit id="693f205cc7dabe53e49392c3827544dbcb98fe7f" resname="We won't post anything &lt;b&gt;without your permission.&lt;/b&gt;">
+        <jms:reference-file line="40">views/AdPost/thirdStep.html.twig</jms:reference-file>
+        <source><![CDATA[We won't post anything <b>without your permission.</b>]]></source>
+        <target state="new"><![CDATA[We won't post anything <b>without your permission.</b>]]></target>
+      </trans-unit>
+      <trans-unit id="7f26a285c51103a1c8a8cda7ece1abb2b4e53296" resname="You have successfully logged in.">
+        <jms:reference-file line="405">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <jms:reference-file line="493">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <source>You have successfully logged in.</source>
+        <target state="new">You have successfully logged in.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

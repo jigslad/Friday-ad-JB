@@ -1,0 +1,7 @@
+archive_ad_admin:
+    path:     /
+    defaults: { _controller: "FaArchiveBundle:ArchiveAdAdmin:index" }
+
+archive_ad_detail_admin:
+    path:     /{id}/ad_detail
+    defaults: { _controller: "FaArchiveBundle:ArchiveAdAdmin:adDetail" }

@@ -1,0 +1,21 @@
+services:
+        
+    fa.package.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaPromotionBundle:Package]
+        
+    fa.upsell.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaPromotionBundle:Upsell]
+        
+    fa.package_rule.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaPromotionBundle:PackageRule]
+
+    fa.package_discount_code.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaPromotionBundle:PackageDiscountCode]

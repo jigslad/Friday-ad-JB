@@ -1,0 +1,3 @@
+FaArchiveBundle_archive_ad_admin:
+    resource: '@FaArchiveBundle/Resources/config/routing/archive_ad_admin.yml'
+    prefix:   /archive_ad

@@ -1,0 +1,9 @@
+ad_package_purchase:
+    path:     /purchase/{adId}
+    defaults: { _controller: "FaAdBundle:AdPackage:purchaseAdPackage" }
+    
+ad_promote:
+    path:     /{type}/{adId}
+    defaults: { _controller: "FaAdBundle:AdPackage:promoteAd" }
+    requirements:
+        type:  promote|repost|renew

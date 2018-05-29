@@ -1,0 +1,250 @@
+{% set counter = 0 %}
+{% set prvSender = 0 %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
+{% set messageAttachmentsRepository = fetch_repository('FaMessageBundle:MessageAttachments') %}
+{% set container = fetch_container_instance() %}
+{% set isOneclickenqReplied = 0 %}
+{% set messageAttachmentsImages = {} %}
+{% set allMessageAttachmentImages = {} %}
+{% set messageCounter = 0 %}
+
+<div class="reply-msg-wrap">
+{% for message in fullConversation %}
+    {% if app.user.getId() == message['sender_user_id'] or (app.user.getId() != message['sender_user_id'] and message['message_status'] == constant('Fa\\Bundle\\MessageBundle\\Repository\\MessageRepository::MODERATION_QUEUE_STATUS_OKAY')) %}
+        {% if app.user.getId() == message['sender_user_id']%}
+            {% set rowClass = 'chat-right' %}
+            {% set profileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(message['sender_user_id']) %}
+        {% else %}
+            {% set rowClass = 'chat-left' %}
+            {% set profileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(message['sender_user_id']) %}
+        {% endif %}
+        {% if (message['oneclickenq_reply'] == 'Yes' or message['oneclickenq_reply'] == 'No') %}
+            {% if (message['oneclickenq_reply'] == 'No') %}
+                {% set rowClass = '' %}
+            {% endif %}
+            {% set isOneclickenqReplied = 1 %}
+        {% endif %}
+        {% set messageAttachmentsOthers = messageAttachmentsRepository.getMessageAttachments(message['id'], {'is_image':0}) %}
+        {% set messageAttachmentsImages = messageAttachmentsRepository.getMessageAttachments(message['id'], {'is_image':1}) %}
+        {% set totalAttachments = messageAttachmentsOthers|length + messageAttachmentsImages|length %}
+        {% set allMessageAttachmentImages = allMessageAttachmentImages|merge({(loop.index - 1) : messageAttachmentsImages}) %}
+        {% set singleAttachmentId = '' %}
+        <div class="reply-chat">
+            <div class="row {{ rowClass }}">
+                {% if (message['oneclickenq_reply'] == NULL or message['oneclickenq_reply'] == 'Yes') %}
+                <div class="large-3 columns">
+                    {% set userRole = userRepository.getUserRole(message['sender_user_id']) %}
+                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), message['sender_user_id']], true) %}
+                    <div class="chat-usericon {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}square{% endif %}">
+                        {% if userLogo %}
+                            {{userLogo|raw}}
+                        {% else %}
+                            <img src="/bundles/fafrontend/images/user-icon.svg" alt="" />
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                <div class="{% if (message['oneclickenq_reply'] == NULL or message['oneclickenq_reply'] == 'Yes') %}large-21{% else %}large-24{% endif %} columns">
+                    <div class="chat-graybox">
+                        <div class={% if (isOneclickenqReplied == 1) %}"mb0"{% endif %}>
+                            {% if (message['is_oneclickenq_message'] or message['oneclickenq_reply']) %}
+                                {% if (message['oneclickenq_reply'] == 'No' and message['receiver_user_id'] == app.user.getId()) %}
+                                    {% set itemSoldMsg = constant('Fa\\Bundle\\MessageBundle\\Repository\\MessageRepository::ONE_CLIK_NO_REPLY_MESSAGE_FOR_BUYER') %}
+                                    {% set adLink = '<a href='~adUrl~' target="_blank">similar ads</a>' %}
+                                    {{ itemSoldMsg|trans({'%site_name%': container.getParameter('service_name'), '%similar_ads%': adLink}, 'frontend-show-ad')|raw}}
+                                {% else %}
+                                    {{message['html_message']|raw}}
+                                {% endif %}
+                            {% else %}
+                                {{message['text_message']|raw}}
+                            {% endif %}
+                            
+                            {% if messageAttachmentsOthers %}
+                                {% for messageAttachment in messageAttachmentsOthers %}
+                                    <div class="document-icon">{{ messageAttachment.getOriginalFileName() }} 
+                                    <span class="gray-text bold">
+                                    {% if (messageAttachment.getSize() >= 1000000) %}
+                                        {{ '('~((messageAttachment.getSize()/1000000)|number_format(2))~'MB)' }}
+                                    {% else %}
+                                        {{ '('~((messageAttachment.getSize()/1000)|number_format(2))~'kB)' }}
+                                    {% endif %}
+                                    </span>
+                                    <a href="javascript:downloadAttachments('', '{{messageAttachment.getId()}}');">Download</a></div>
+                                    {% set singleAttachmentId = messageAttachment.getId() %}
+                                {% endfor %}
+                            {% endif %}
+                            
+                            {% if messageAttachmentsImages %}
+                                <div class="img-attachments mt10">
+                                    <ul class="clearfix img-attch-block-3" id="messageAttachmentsList">
+                                        {% set counter = 1 %}
+                                        {% for messageAttachment in messageAttachmentsImages %}
+                                            <li data-image-ord="{{messageAttachment.getId()}}" data-image-id="{{messageAttachment.getId()}}" id="image_{{messageAttachment.getId()}}" class="">
+                                                {% set messageAttachmentUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getMessageAttachmentUrl', [container, messageAttachment]) %}
+                                                    <div class="img-attach-thumb">
+                                                        <img src="{{ messageAttachmentUrl }}" />
+                                                        <div class="img-attach-links">
+                                                            <a href="javascript:downloadAttachments('', '{{messageAttachment.getId()}}');" class="download-img-link">Download Image</a>
+                                                            <a href="javascript:renderFancyBox('{{ messageCounter }}', '{{ (counter-1) }}');" class="view-img-link">View Image</a>
+                                                        </div>
+                                                    </div>
+                                            </li>
+                                            {% set counter = counter + 1 %}
+                                            {% set singleAttachmentId = messageAttachment.getId() %}
+                                        {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                                
+                            {% if app.user.getId() != message['sender_user_id']%}
+                                {% if (message['show_attachments_ignored_message']) %}
+                                    <div class="alert-box info radius outside-tricky" data-alert="" id="message_info_{{ message['id'] }}"><span class="alert-icon">&nbsp;</span>{{ "One or more files were intercepted by our moderation system. We care about our user's safety and make sure we only allow safe file types to be sent." }}<a class="close" onclick="markMessageWarning('message_info_{{ message['id'] }}', '{{message['id']}}', 'show_attachments_ignored_message', '0');" href="javascript:void(0);"></a></div>
+                                {% endif %}
+                                
+                                {% if (message['has_attachments'] > 0) %}
+                                    {% if (message['show_attachments_removed_message'] and messageAttachmentsOthers|length == 0 and messageAttachmentsImages|length == 0) %}
+                                        <div class="alert-box info radius outside-tricky mt10" data-alert="" id="message_notice_{{ message['id'] }}"><span class="alert-icon">&nbsp;</span>{{ 'Sorry, attachments are removed after 6 months.' }}<a class="close" onclick="markMessageWarning('message_notice_{{ message['id'] }}', '{{message['id']}}', 'show_attachments_removed_message', '0');" href="javascript:void(0);"></a></div>
+                                    {% elseif (message['show_attachments_remove_message'] and (messageAttachmentsOthers|length > 0 or messageAttachmentsImages|length > 0)) %}
+                                        <div class="alert-box warning radius outside-tricky" data-alert="" id="message_notice_{{ message['id'] }}"><span class="alert-icon">&nbsp;</span>{{ 'Attachments are only stored for 6 months - please download the file if you wish to keep a copy.' }}<a class="close" onclick="markMessageWarning('message_notice_{{ message['id'] }}', '{{message['id']}}', 'show_attachments_remove_message', '0');" href="javascript:void(0);"></a></div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="clearfix">
+                            {% if (message['oneclickenq_reply'] == NULL) %}
+                                <div class="left">
+                                    <a target="_blank" href="{{profileUrl}}">
+                                        {% if app.user.getId() == message['sender_user_id'] %} {{'You'|trans({}, 'frontend-inbox')}} {% else %} {{message['sender_first_name']}} {{message['sender_last_name']}} {% endif %}
+                                    </a> 
+                                    <span class="gray-text"> {{ messageRepository.getCustomMessageTime(message['created_at'], container) }}</span>
+                                    <br />
+                                    {% if message['attachment_org_file_name'] %}
+                                        <b>{{ 'Attached CV' }}: </b><a href="javascript:downloadAttachment('{{message['id']}}');">{{message['attachment_org_file_name']}}</a>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            
+                            {% if (messageAttachmentsOthers or messageAttachmentsImages) %}
+                            <div class="right">
+                                {% if (totalAttachments > 1) %}
+                                    <a href="javascript:downloadAttachments('{{ message['id'] }}', '');" class="download-link">Download all</a>
+                                {% else %}
+                                    <a href="javascript:downloadAttachments('', '{{ singleAttachmentId }}');" class="download-link">Download all</a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if message['receiver_user_id'] == app.user.getId() and message['is_oneclickenq_message']  and message['oneclickenq_reply'] == NULL %}
+            <div class="reply-chat oneenq_reply_box">
+                <div class="row">
+                    <div class="large-24 columns">
+                        <div class="chat-graybox my-respond-content center">
+                            <b>{{ 'Respond to' }} {% if app.user.getId() == message['sender_user_id'] %} {{'You'|trans({}, 'frontend-inbox')}} {% else %} {{message['sender_first_name']}} {{message['sender_last_name']}} {% endif %}:</b>
+                            <div class="mt10">
+                                <a href="javascript:void(0)" class="secondary-btn-1 button mb0" onclick="return replyOneClickEnq('{{message['id']}}', '{{ message['ad_id'] }}', 'Yes', 'Conversation_View');">{{'Yes'|trans({})}}</a>
+                                <a href="javascript:void(0)" class="secondary-btn-2 button mb0" onclick="return replyOneClickEnq('{{message['id']}}', '{{ message['ad_id'] }}', 'No', 'Conversation_View');"><span class="hide-for-small-only">{{'No - '|trans({})}}</span>{{'Mark as sold'|trans({})}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        {% set counter = counter + 1 %}
+        {% set prvSender = message['sender_user_id'] %}
+        {% set messageCounter = messageCounter + 1 %}
+    {% endif %}
+{% endfor %}
+</div>
+
+{% block message_attachments_slider_js %}
+<script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
+<script src="{{ asset_url('facore/js/jquery.fancybox.pack.js') }}"></script>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% if (allMessageAttachmentImages is defined) %}
+        var current;
+        var messageAttachmentImagesArray = new Array();
+        {% set mainLoopIndex = 0 %}
+        {% for messageAttachmentImages in allMessageAttachmentImages %}
+            {% set innerLoopIndex = 0 %}
+            messageAttachmentImagesArray[{{mainLoopIndex}}] = new Array();
+            {% for messageAttachment in messageAttachmentImages %}
+                {% set messageAttachmentUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getMessageAttachmentUrl', [container, messageAttachment, 1]) %}
+                messageAttachmentImagesArray[{{mainLoopIndex}}][{{innerLoopIndex}}] = {'href' : '{{ messageAttachmentUrl }}', 'imageHash': '{{ messageAttachment.hash }}', 'imageId': '{{loop.index}}'},
+                {% set innerLoopIndex = innerLoopIndex + 1 %}
+            {% endfor %}
+            {% set mainLoopIndex = mainLoopIndex + 1 %}
+        {% endfor %}
+    {% endif %}
+
+    {% if (isOneclickenqReplied == 1) %}
+        //If buyer have enquired multiple times for same ad then only last reply box will be shown.
+        $('div.oneenq_reply_box:not(div.oneenq_reply_box:last-child)').hide();
+    {% endif %}
+    
+
+    function downloadAttachment(messageId)
+    {
+        var route = Routing.generate('download_message_attachment', { 'messageId': messageId });
+        document.location = route;
+    }
+    
+    function downloadAttachments(messageId, attachmentId)
+    {
+        var route = Routing.generate('ajax_download_message_attachments', { 'messageId': messageId, 'attachmentId': attachmentId });
+        document.location = route;
+    }
+
+    function renderFancyBox(currentMessageIndex, currentImageIndex)
+    {
+      var currentMessageAttachmentImagesArray = messageAttachmentImagesArray[currentMessageIndex];
+      console.log(currentMessageAttachmentImagesArray);
+      $.fancybox(
+          currentMessageAttachmentImagesArray,
+          {
+              index: currentImageIndex,
+              padding: 0,
+              margin: [145, 60, 65, 60],
+              autoCenter: true,
+              helpers:
+              {
+                  overlay: {
+                      locked: false
+                  }
+              },
+              beforeShow: function(current, previous) {
+                //beforeShow
+              },
+              beforeClose: function(current, previous) {
+                //beforeClose
+              },
+          }
+      );
+    }
+
+    function markMessageWarning(divID, messageId, fieldName, fieldValue)
+    {
+        blockPage();
+        var route = Routing.generate('ajax_mark_message_field', { 'messageId': messageId, 'fieldName': fieldName, 'fieldValue': fieldValue });
+        $.ajax({
+          type: "POST",
+          url: route,
+          })
+          .always(function(response) {
+            //nothing
+           })
+          .done(function(response) {
+            unblockPage();
+            $('#'+divID).hide();
+          });
+    }
+//]]>
+</script>
+{% endblock %}

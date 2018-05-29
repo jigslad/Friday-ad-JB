@@ -1,0 +1,102 @@
+{% set packageIdArray = {} %}
+{% if pagination.getNbResults() %}
+    {% for package in pagination.getCurrentPageResults() %}
+        {% set packageIdArray = packageIdArray|merge({0 : package.id}) %}
+    {% endfor %}
+
+    {% set printPackageDuration = fetch_repository('FaPromotionBundle:PackagePrint').getPrintDurationForPackages(packageIdArray) %}
+{% endif %}
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+                <thead>
+                    <tr>
+                        <th width="20%">
+                            {{ sortable_link('package_admin', 'package__title', 'Package Title'|trans, sorter) }}
+                        </th>
+                        <th width="17%">
+                            {{ 'Package Price '|trans({}, 'messages') }}
+                        </th>
+                        <th width="17%">
+                            {{ 'Admin Package Price '|trans({}, 'messages') }}
+                        </th>
+                        <th width="20%"> {{ 'Category'|trans({}, 'messages') }}</th>
+                        <th width="15%"> {{ 'Location Group'|trans({}, 'messages') }}</th>
+                        <th width="10%">
+                            {{ 'Status'|trans({}, 'messages') }}
+                        </th>
+                        <th><i class="fi-widget"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pagination.getNbResults() %}
+                        {% for package in pagination.getCurrentPageResults() %}
+                            <tr class="gradeX">
+                                <td>
+                                    {{ package.title }}
+                                    {% if package.is_admin_package %}
+                                        <br />(Admin package)
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if printPackageDuration[package.id] is defined %}
+                                        {% for printDuration in printPackageDuration[package.id] %}
+                                            {% set fullDuration = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getFullDurationFromShortForm', [printDuration['duration']]) %} 
+                                            {{format_currency(printDuration['price'])}} {{'for'|trans}} {{fullDuration}} {{'in print'|trans}} <br />
+                                        {% endfor %}
+                                    {% elseif package.price is not null %}
+                                        {{format_currency(package.price)}}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if printPackageDuration[package.id] is defined %}
+                                        {% for printDuration in printPackageDuration[package.id] %}
+                                            {% set fullDuration = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getFullDurationFromShortForm', [printDuration['duration']]) %} 
+                                            {{format_currency(printDuration['admin_price'])}} {{'for'|trans}} {{fullDuration}} {{'in print'|trans}} <br />
+                                        {% endfor %}
+                                    {% elseif package.admin_price is not null %}
+                                        {{format_currency(package.admin_price)}}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if categoryLocationArray[package.id] is defined and categoryLocationArray[package.id]['category_id'] is defined %}
+                                        {{ categoryRepository.getCategoryPathArrayById(categoryLocationArray[package.id]['category_id'], false, containerInstance)|join(' > ') }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if categoryLocationArray[package.id] is defined and categoryLocationArray[package.id]['location'] is defined %}
+                                        {{ categoryLocationArray[package.id]['location']|join('<br />')|raw }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ statusArray[package.status] }}</td>
+                                <td>
+                                    <button href="#" data-dropdown="drop{{ package.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                    <br />
+                                    <ul id="drop{{ package.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                        {% if packageEditGrant %}
+                                            <li><a href="{{ path('package_edit_admin', {'id': package.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="odd gradeX">
+                            <td colspan="5" align="center">{{ 'No package found'|trans({}, 'messages') }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

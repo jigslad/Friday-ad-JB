@@ -1,0 +1,25 @@
+<dd class="accordion-navigation">
+    <a href="#panel8b" class="section-head">
+        <span class="invoices-icon">{{ 'Invoices'|trans({}, 'frontend-user-invoices') }}</span>
+        <span>&nbsp;</span>
+    </a>
+    <div id="panel8b" class="content invoices-panel">
+        {% if invoiceMonths|length %}
+            <div class="invoice-month clearfix">
+                <label>{{ 'Select month'|trans({}, 'frontend-user-invoices') }}:</label>
+                <div class="white-select">
+                    <select class="fa-select-white" name="invoice_month_year" id="invoice_month_year" onchange="loadInvoices(this.value)">
+                        {% for invoiceValue, invoiceName in invoiceMonths %}
+                            <option value="{{ invoiceValue }}"> {{ invoiceName }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div id="invoices_item_div">
+                {{ include('FaUserBundle:MyAccount:listInvoice.html.twig') }}
+            </div>
+        {% else %}
+            <div class="mb20 hide-for-small-only">{{ 'No invoices found'|trans({}, 'frontend-user-invoices') }}</div>
+        {% endif %}
+    </div>
+</dd>

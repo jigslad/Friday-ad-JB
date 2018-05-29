@@ -1,0 +1,7 @@
+user_half_account_create_ajax:
+    path:   /create_ajax
+    defaults:  { _controller: FaUserBundle:HalfAccount:ajaxCreate }
+
+user_half_account_create_email_only_ajax:
+    path:   /create_email_only_ajax
+    defaults:  { _controller: FaAdBundle:AdList:createAlertBlock }

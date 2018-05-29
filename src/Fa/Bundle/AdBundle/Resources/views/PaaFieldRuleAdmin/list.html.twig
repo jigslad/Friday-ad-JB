@@ -1,0 +1,47 @@
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <table class="mb0">
+                 <thead>
+                     <tr class="field-heading">
+                         <th width="85%">
+                            {{ 'Category'|trans }}
+                         </th>
+                         <th width="15%"><i class="fa fa-gear"></i> Action</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for paaFieldRule in pagination.getCurrentPageResults() %}
+                          <tr class="odd gradeX">
+                              <td>
+                                  {{ categoryRepository.getCategoryPathArrayById(paaFieldRule.category_id)|join(' > ') }}
+                              </td>
+                              <td>
+                               <button href="#" data-dropdown="drop{{ paaFieldRule.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">{{'Select'|trans}}</button>
+                               <br />
+                               <ul id="drop{{ paaFieldRule.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                               {% if paaFieldRuleShowGrant %}
+                                   <li><a href="{{ path('paa_field_rule_show_admin', {'id': paaFieldRule.category_id}) }}"><i class="fi-eye"></i> {{'Show'|trans}}</a></li>
+                               {% endif %}
+                               {% if paaFieldRuleEditGrant %}
+                                 <li><a href="{{ path('paa_field_rule_edit_admin', {'id': paaFieldRule.id}) }}"><i class="fi-pencil"></i> {{'Edit'|trans}}</a></li>
+                               {% endif %}
+                               {% if paaFieldRuleDeleteGrant and paaFieldRule.category_lvl > 1 %}
+                                   <li><a href="{{ path('paa_field_rule_delete_admin', {'id': paaFieldRule.category_id}) }}" onclick="javascript:return confirm('{{ 'Do you want to delete this record?'|trans }}')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
+                               {% endif %}
+                               </ul>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="odd gradeX">
+                              <td colspan="5" align="center">{{ 'No records found'|trans }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+         </div>
+     </div>
+</div>

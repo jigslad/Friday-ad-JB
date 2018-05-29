@@ -1,0 +1,29 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+
+{% set roleEditGrant = false %}
+{% set roleDeleteGrant = false %}
+{% set rolePermissionGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('role_edit') %}
+  {% set roleEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('role_delete') %}
+  {% set roleDeleteGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('roleresourcepermission_edit') %}
+  {% set rolePermissionGrant = true %}
+{% endif %}
+
+{% block content -%}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'role_new'}) }}
+
+    {% use "FaUserBundle:Role:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaUserBundle:Role:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }} 
+{% endblock %}

@@ -1,0 +1,19 @@
+ajax_user_site_banner_save:
+    path:     /ajax/save_image
+    defaults: { _controller: FaUserBundle:UserSiteBanner:ajaxSaveUploadedImage }
+    
+ajax_get_user_site_banner_images:
+    path:     /ajax/get_image
+    defaults: { _controller: FaUserBundle:UserSiteBanner:ajaxRenderUploadedImage }
+
+ajax_get_big_user_site_banner_image:
+    path:     /ajax/get_big_image/{userSiteId}/
+    defaults: { _controller: FaUserBundle:UserSiteBanner:ajaxGetBigImage }
+    
+ajax_crop_user_site_banner_image:
+    path:     /ajax/crop_image/{userSiteId}/
+    defaults: { _controller: FaUserBundle:UserSiteBanner:ajaxCropImage }
+    
+ajax_my_profile_change_banner:
+    path:     /ajax/change_banner/
+    defaults: { _controller: FaUserBundle:UserSiteBanner:ajaxChangeBanner }

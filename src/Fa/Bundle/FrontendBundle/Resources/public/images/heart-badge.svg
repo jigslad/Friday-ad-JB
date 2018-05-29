@@ -1,0 +1,30 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="44" height="45" viewBox="-377 213 44 45" xml:space="preserve" enable-background="new -377 213 44 45">
+  <style type="text/css">
+    
+	.st0{fill:#FFFFFF;stroke:#FFFFFF;stroke-width:4;}
+	.st1{fill:#A8DC28;}
+
+  </style>
+  <title>
+    heart-badge
+  </title>
+  <desc>
+    Created with Sketch.
+  </desc>
+  <g id="Dashboard" sketch:type="MSPage">
+    <g id="Dashboard_x5F_Home-_x28_Tablet-Portrait_x29_-" transform="translate(-210.000000, -2305.000000)" sketch:type="MSArtboardGroup">
+      <g id="dashboard-elements" transform="translate(-323.000000, 402.000000)" sketch:type="MSLayerGroup">
+        <g id="my-favourite" transform="translate(272.000000, 1809.000000)" sketch:type="MSShapeGroup">
+          <g id="Ads-Copy" transform="translate(242.000000, 82.000000)">
+            <g id="NEXT-_x2B_-PREV-2">
+              <g id="heart-badge" transform="translate(21.000000, 14.000000)">
+                <path id="Fill-1" class="st0" d="M-337 233.3c0-11-9-20-20-20s-20 9-20 20c0 11 9 20 20 20S-337 244.3-337 233.3L-337 233.3z"/>
+                <path id="Imported-Layers-Copy-2" class="st1" d="M-351 224.6c2.2 0.2 4.6 2.2 5 6v1.3c-0.3 3.6-3 8.1-11 13.7 -8-5.6-10.7-10.1-11-13.7v-1.3c0.3-3.8 2.8-5.8 5-6 0.4 0 0.7-0.1 1-0.1 2.5 0 3.7 1.1 5.1 2.7 1.4-1.6 2.6-2.7 5.1-2.7C-351.6 224.5-351.3 224.5-351 224.6z"/>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,5 @@
+{% block pushNotification %}
+    {% if not app.request.get('is_edit') and 'third_step' in refererUrl %}
+        OneSignal.push(["sendTags", {'PAA_process': 'logged_in'}]);
+    {% endif %}
+{% endblock %}

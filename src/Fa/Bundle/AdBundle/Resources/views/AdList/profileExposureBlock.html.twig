@@ -1,0 +1,90 @@
+{% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
+    {% set userProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(profileUserDetail['user_id']) %}
+    {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), profileUserDetail['company_logo'], profileUserDetail['user_id'], null, null, true, true, profileUserDetail['status_id'], profileUserDetail['user_name']]) %}
+    {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
+    <div class="listing-exposure">
+        <div class="gray-text text-right">{{'Featured business'|trans({}, 'frontend-profile-exposure')}}</div>
+        <div class="list-featured-bz">
+            <div class="row">
+                <div class="large-6 columns">
+                    {% if profileUserDetail['business_category_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+                        <div class="fad-shop-icon">AD SHOP</div>
+                    {% endif %}
+                    <div class="exposure-logo">
+                        <div class="exposure-logo-thumb">
+                            {{userCompanyLogo|raw}}
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-center">{{profileUserDetail['user_name']}}</h2>
+                    
+                    <div class="exposure-rating">
+                    {% if (profileUserDetail and profileUserDetail['user_rating'] and profileUserDetail['user_rating'] > 0) %}
+                      {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': profileUserDetail['user_rating']}) }}
+                    {% endif %}
+                    </div>
+                    {% set profileLabel = 'Visit profile'|trans({}, 'frontend-profile-exposure') %}
+                    {% if profileUserDetail['business_category_id'] is defined and profileUserDetail['business_category_id'] is not null %}
+                        {% if profileUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')}  %}
+                            {% set profileLabel = 'Visit shop'|trans({}, 'frontend-profile-exposure') %}
+                        {% elseif profileUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID')}  %}
+                            {% set profileLabel = 'Visit dealership'|trans({}, 'frontend-profile-exposure') %}
+                        {% elseif profileUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')}  %}
+                            {% set profileLabel = 'Visit agency'|trans({}, 'frontend-profile-exposure') %}
+                        {% endif %}
+                    {% endif %}
+                    {% set gaEventLabel = profileUserDetail['user_name'] ~ ' - Business ad' %}
+                    <a href='javascript:visitUserProfileOrAd("{{ userProfileUrl }}", "Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
+                </div>
+                <div class="large-18 columns">
+                    <div class="owl-carousel fa-slider" id="shop-user-item-slider" data-equalizer>
+                        {% set adPosition = 1 %}
+                        {% for profileExposureUserAd in profileExposureUserAds %}
+                            {% set adCategoryId = attribute(profileExposureUserAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
+                            {% set rootCategoryId = attribute(profileExposureUserAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+                            {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+                            {% set profileExposureUserAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+                            {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(profileExposureUserAd) %}
+                            {% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+                            {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(profileExposureUserAd, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+                            {% set imageAltString = null %}
+                            {% if seoRule['image_alt'] is defined %}
+                                {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], profileExposureUserAd]) %}
+                            {% endif %}
+                            <div class="item" data-equalizer-watch>
+                                {% set gaEventLabel = profileUserDetail['user_name'] ~ ' - ' ~ adPosition %}
+                                <a class="tricky-link" href='javascript:visitUserProfileOrAd("{{ adUrl }}", "Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>
+                                	{% if attribute(profileExposureUserAd, constant(profileExposureUserAdSolrMapping ~ 'TITLE')) is defined %}
+                                       {{trim_text(attribute(profileExposureUserAd, constant(profileExposureUserAdSolrMapping ~ 'TITLE')), 65)|raw}}
+                                    {% endif %}
+                                </a>
+                                {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, profileExposureUserAd, '300X225', 1) %}
+                                <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
+                                    {% if imagePath %}
+                                        <img class="lazyOwl" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                                    {% else %}
+                                        <img class="lazyOwl" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                                    {% endif %}
+                                </div>
+                                <div class="list-price">
+                                    {% if attribute(profileExposureUserAd, constant(profileExposureUserAdSolrMapping ~ 'PRICE')) is defined %}
+                                        {{ format_currency(attribute(profileExposureUserAd, constant(profileExposureUserAdSolrMapping ~ 'PRICE'))) }}
+                                        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(profileExposureUserAd, constant(profileExposureUserAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
+                                            <span>{{ adPropertyRepository.getRentPostFixText(attribute(profileExposureUserAd, constant(profileExposureUserAdSolrMapping ~ 'RENT_PER_ID')), container)}}</span>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <h3>
+                                    {% if attribute(profileExposureUserAd, constant(profileExposureUserAdSolrMapping ~ 'TITLE')) is defined %}
+                                       {{trim_text(attribute(profileExposureUserAd, constant(profileExposureUserAdSolrMapping ~ 'TITLE')), 65)|raw}}
+                                    {% endif %}
+                                </h3>
+                            </div>
+                            {% set adPosition = adPosition + 1 %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,25 @@
+home_popular_image_admin:
+    path:     /
+    defaults: { _controller: "FaContentBundle:HomePopularImageAdmin:index" }
+
+home_popular_image_new_admin:
+    path:     /new
+    defaults: { _controller: "FaContentBundle:HomePopularImageAdmin:new" }
+
+home_popular_image_create_admin:
+    path:     /create
+    defaults: { _controller: "FaContentBundle:HomePopularImageAdmin:create" }
+    requirements: { methods: post }
+
+home_popular_image_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaContentBundle:HomePopularImageAdmin:edit" }
+
+home_popular_image_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaContentBundle:HomePopularImageAdmin:update" }
+    requirements: { methods: post|put }
+
+home_popular_image_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaContentBundle:HomePopularImageAdmin:delete" }

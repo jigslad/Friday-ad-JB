@@ -1,0 +1,33 @@
+category_admin:
+    path:     /
+    defaults: { _controller: "FaEntityBundle:CategoryAdmin:index" }
+
+category_new_admin:
+    path:     /new/{parent_id}
+    defaults: { _controller: "FaEntityBundle:CategoryAdmin:new" }
+
+category_create_admin:
+    path:     /create/{parent_id}
+    defaults: { _controller: "FaEntityBundle:CategoryAdmin:create" }
+    requirements: { methods: post }
+
+category_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaEntityBundle:CategoryAdmin:edit" }
+
+category_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaEntityBundle:CategoryAdmin:update" }
+    requirements: { methods: post|put }
+
+category_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaEntityBundle:CategoryAdmin:delete" }
+
+category_ajax_get_node:
+    path:     /ajax/getnode
+    defaults: { _controller: "FaEntityBundle:CategoryAdmin:ajaxGetNode" }
+
+category_ajax_move_node:
+    path:     /ajax/movenode
+    defaults: { _controller: "FaEntityBundle:CategoryAdmin:ajaxMoveNode" }

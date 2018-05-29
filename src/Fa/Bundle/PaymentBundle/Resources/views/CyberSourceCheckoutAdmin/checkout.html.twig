@@ -1,0 +1,192 @@
+{% extends popup == 'true' ? 'FaAdminBundle::popupLayout.html.twig' : 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+
+{% block content %}
+    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form_admin'}}) }}
+    <div class="payment">
+        <div class="row">
+            <div class="columns">
+                <h1 class="text-center">{{'Payment'|trans({},'frontend-cyber-source')}}</h1>
+            </div>
+        </div>
+        <div class="paa-bdr-box">
+            <h3 class="text-center">{{'Choose payment method'|trans({},'frontend-cyber-source')}}</h3>
+            <ul class="choose-payment-method white-radio" id="payment_method_id">
+                {% for choice in form.payment_method.vars.choices %}
+                    <li>
+                        <div class="small-wrapper label-inline">
+                            <span class="custom-radio {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" /></span>
+                            <label for="{{ form.payment_method.vars.id }}_{{ choice.value }}">{{ choice.label|raw }}</label>
+                            {% if choice.value %}
+                                <a href="{{ path('cybersource_delete_token_admin', {'id': choice.value}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this option?'|trans({}, 'frontend-cyber-source') }}')" class="delete-icon"></a>
+                            {% endif %}
+                            {% if loop.index == form.payment_method.vars.choices|length %}
+                                {{ form_errors(form.payment_method) }}
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+                {% do attribute(form, 'payment_method').setRendered %}
+            </ul>
+            
+            <div id="card_detail" style="display:none">
+                <div class="white-bg">
+                    <div class="small-wrapper">
+                        <div class="paa-bdr-box bdr-none">
+                            <h3 class="text-center">{{'Billing details'|trans({},'frontend-cyber-source')}}</h3>
+                            
+                            <div class="payment-row first-row">
+                                {{ form_row(form.street_address) }}
+                            </div>
+                            
+                            <div class="payment-row {% if form.zip.vars.errors|length %} error{% endif %}">
+                                <div class="row">
+                                    <div class="large-12 columns">
+                                        {{ form_label(form.zip) }} <span class="required">*</span>
+                                        <div class="postcode clearfix">
+                                            {{ form_widget(form.zip) }}
+                                            <button type="button" class="button secondary-btn-1 right" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
+                                        </div>
+                                        <small id="zip_error_div" class="error" style="display:none"></small>
+                                        <span id="form_zip_error">{{ form_errors(form.zip) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-row">
+                                {{ form_row(form.street_address_2) }}
+                            </div>
+                            
+                            <div class="payment-row">
+                                {{ form_row(form.town) }}
+                            </div>
+                            
+                            <div class="payment-row">
+                                {{ form_row(form.county) }}
+                            </div>
+                           </div>
+                       </div>
+                </div>
+                <div class="small-wrapper">
+                    <div>
+                        <div class="payment-cards">&nbsp;</div>
+                        <div class="payment-row first-row white-select">
+                            {{ form_label(form.card_type) }}
+                            {{ form_widget(form.card_type, {'attr': {'class': 'fa-select-white'}}) }}
+                            {{ form_errors(form.card_type) }}
+                        </div>
+                        
+                        <div class="payment-row">
+                            {{ form_label(form.card_holder_name) }}
+                            {{ form_widget(form.card_holder_name, {'attr': {'class': 'white-field'}}) }}
+                            {{ form_errors(form.card_holder_name) }}
+                        </div>
+                        
+                        <div class="payment-row card-num">
+                            {{ form_label(form.card_number) }}
+                            {{ form_widget(form.card_number, {'attr': {'class': 'white-field'}}) }}
+                            {{ form_errors(form.card_number) }}
+                        </div>
+                        
+                        <div class="payment-row white-select">
+                            {{ form_label(form.card_expity_month) }}
+                            <div class="expiry-date">
+                                {{ form_widget(form.card_expity_month, {'attr': {'class': 'fa-select-white'}}) }}
+                                {{ form_widget(form.card_expity_year, {'attr': {'class': 'fa-select-white'}}) }}
+                            </div>
+                            {{ form_errors(form.card_expity_month) }}
+                            {{ form_errors(form.card_expity_year) }}
+                        </div>
+                        
+                        <div class="payment-row security-code">
+                            {{ form_label(form.card_security_code) }}
+                            {{ form_widget(form.card_security_code, {'attr': {'class': 'white-field'}}) }}
+                            <div class="sec-code-icon">{{'Security code'|trans({},'frontend-cyber-source')}}</div>
+                            {{ form_errors(form.card_security_code) }}
+                        </div>
+                        
+                        <div class="payment-row">
+                            <div class="label-inline white-checkbox">
+                                {{ form_widget(form.is_save_credit_card) }}
+                                {{ form_label(form.is_save_credit_card) }}
+                                {{ form_errors(form.is_save_credit_card) }}
+                            </div>
+                        </div>
+                    </div>
+               </div>
+           </div>
+           <div class="small-wrapper" id="pay_now_btn">
+                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+           </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $('#fa_payment_cyber_source_checkout_save').click(function(){
+        blockPage();
+        $(this).attr('disabled', true);
+        $('#cyber_source_form_admin').submit();
+        return false;
+    });
+    $(document).ready(function(){
+        {% if app.request.getMethod() != 'POST' %}
+            $("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").trigger('click');
+        {% endif %}
+        showHideCardDetail();
+    });
+    
+    function getUserAddress()
+    {
+        $.ajax({
+            type: "POST",
+            url : '{{ path("ajax_get_user_address_admin") }}',
+            data: { postCode: $('#fa_payment_cyber_source_checkout_zip').val(), 'userId': '{{ cartUserId }}'}
+        })
+        .done(function(response) {
+            $('#form_zip_error').hide();
+            if (response.errorMsg.length) {
+                //clearForm($('#cyber_source_form_admin'));
+                $('#zip_error_div').html(response.errorMsg);
+                $('#zip_error_div').show();
+            } else {
+                $('#zip_error_div').hide();
+                if (response.street_address && response.street_address.length) {
+                    $('#fa_payment_cyber_source_checkout_street_address').val(response.street_address);
+                    $('#fa_payment_cyber_source_checkout_street_address').focus();
+                }
+                if (response.street_address_2 && response.street_address_2.length) {
+                    $('#fa_payment_cyber_source_checkout_street_address_2').val(response.street_address_2);
+                    $('#fa_payment_cyber_source_checkout_street_address_2').focus();
+                }
+                if (response.town_name && response.town_name.length) {
+                    $('#fa_payment_cyber_source_checkout_town').val(response.town_name);
+                    $('#fa_payment_cyber_source_checkout_town').focus();
+                }
+                if (response.domicile_name && response.domicile_name.length) {
+                    $('#fa_payment_cyber_source_checkout_county').val(response.domicile_name);
+                    $('#fa_payment_cyber_source_checkout_county').focus();
+                }
+            }
+        });
+    }
+    
+    function showHideCardDetail()
+    {
+        var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();
+        if (paymentMethod == 0) {
+            $('#card_detail').show();
+            $('#pay_now_btn').removeClass('checkout')
+        } else {
+            $('#card_detail').hide();
+            clearForm('#card_detail');
+            $('#pay_now_btn').addClass('checkout')
+        }
+    }
+    //]]>
+    </script>
+{% endblock %}

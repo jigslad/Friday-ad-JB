@@ -1,0 +1,254 @@
+C:\>mysqldump -hlocalhost -uroot -pfiarein fridayad_restore > D:\Fiare\Dump\fridayad_restore.sql
+
+C:\>mysqldump -hlocalhost -uroot -pfiarein paa_restore > D:\Fiare\Dump\paa_restore.sql
+
+# without last modified time
+sudo -u apache php app/console fa:feed:download  add  --type="ClickEditVehicleAdvert" --site_id=10
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:parse  --type="ClickEditVehicleAdvert" --site_id=10 image
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:parse  --type="ClickEditVehicleAdvert" --site_id=10 parse
+sudo -u apache php app/console fa:feed:download  add  --type="ClickEditVehicleAdvert" --site_id=10
+
+
+sudo -u nginx php app/console fa:feed:download  add  --type="ClickEditVehicleAdvert" --site_id=10 --modified_since="2015-01-13T04:35:09Z"
+sudo -u nginx php app/console fa:feed:download  add  --type="ClickEditVehicleAdvert" --site_id=10 --force=1
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:parse  --type="ClickEditVehicleAdvert" --site_id=10 image
+sudo -u nginx php -d memory_limit="1024M" app/console fa:feed:parse  --type="ClickEditVehicleAdvert" --site_id=10 parse
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:update add --force=1 --ad_ref=SN8182079
+sudo -u nginx php -d memory_limit="1024M" app/console fa:feed:update add --force=remap --ad_ref=SN8182079
+sudo -u nginx php -d memory_limit="1024M" app/console fa:feed:update add --force=remap --status="R"
+
+
+sudo -u apache php app/console fa:feed:download  add  --type="PropertyAdvert" --site_id=10 --modified_since="2015-01-01T04:35:09Z"
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:parse  --type="PropertyAdvert" --site_id=10 image
+sudo -u apache php -d memory_limit="1024M" app/console fa:feed:parse  --type="PropertyAdvert" --site_id=10 parse
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:update add --force=1 --type="PropertyAdvert"
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:update add --force=remap --type="PropertyAdvert" --ad_ref=4b7c5e9bb1b33382fbdf98639c5244ad9aa33a
+
+sudo -u apache php app/console fa:feed:download  add  --type="PetAdvert" --site_id=10 --modified_since="2015-01-01T04:35:09Z"
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:parse  --type="PetAdvert" --site_id=10 image
+sudo -u apache php -d memory_limit="1024M" app/console fa:feed:parse  --type="PetAdvert" --site_id=10 parse
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:update add --force=1 --type="PetAdvert" --status="R"
+
+
+
+sudo -u nginx php app/console fa:feed:download  add  --type="PetAdvert" --site_id=10 --modified_since="2015-01-01T04:35:09Z"
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:parse  --type="PetAdvert" --site_id=10 image
+sudo -u nginx php -d memory_limit="1024M" app/console fa:feed:parse  --type="PetAdvert" --site_id=10 parse
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:update add --type="PetAdvert"
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:update add --type="PetAdvert" --force=remap --status="R"
+
+
+sudo -u nginx php app/console fa:feed:download  add  --type="HorseAdvert" --site_id=10 --modified_since="2015-01-01T04:35:09Z"
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:parse  --type="HorseAdvert" --site_id=10 image
+sudo -u nginx php -d memory_limit="1024M" app/console fa:feed:parse  --type="HorseAdvert" --site_id=10 parse
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:update add --type="HorseAdvert"
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:update add --type="HorseAdvert" --force=remap --status="R"
+
+
+
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:parse  --type="HorseAdvert" --site_id=10 parse
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:parse  --type="HorseAdvert" --site_id=10 image
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:update add --force=remap --type="HorseAdvert"
+
+
+sudo -u nginx php app/console fa:feed:download  add  --type="PropertyAdvert" --site_id=10 --modified_since="2015-01-01T04:35:09Z"
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:parse  --type="PropertyAdvert" --site_id=10 image
+sudo -u nginx php -d memory_limit="1024M" app/console fa:feed:parse  --type="PropertyAdvert" --site_id=10 parse
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:update add --force=1 --type="PropertyAdvert"
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:update add --force=remap --type="PropertyAdvert" --ad_ref=4b7c5e9bb1b33382fbdf98639c5244ad9aa33a
+
+
+
+
+sudo -u apache php app/console fa:feed:download  add  --type="ClickEditVehicleAdvert" --site_id=10 --modified_since="2015-06-20T04:35:09Z"
+sudo -u apache php app/console fa:feed:download  add  --type="ClickEditVehicleAdvert" --site_id=10 --force=1
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:parse  --type="ClickEditVehicleAdvert" --site_id=10 image
+sudo -u apache php -d memory_limit="1024M" app/console fa:feed:parse  --type="ClickEditVehicleAdvert" --site_id=10 parse
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:update add --force=1 
+
+
+sudo -u apache php app/console fa:feed:download  add  --type="BoatAdvert" --site_id=10 --modified_since="2015-06-20T04:35:09Z"
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:parse  --type="BoatAdvert" --site_id=10 image
+sudo -u apache php -d memory_limit="1024M" app/console fa:feed:parse  --type="BoatAdvert" --site_id=10 parse
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:update add --force=1 
+
+
+sudo -u apache php app/console fa:feed:download  add  --type="PropertyAdvert" --site_id=10 --modified_since="2015-06-20T04:35:09Z"
+
+
+UPDATE dotmailer d  SET d.last_paa_at = NULL;
+UPDATE dotmailer d  SET d.last_paa_at = (select di.paa_created_at from dotmailer_info di where di.segment="paa" and di.dotmailer_id = d.id group by di.`dotmailer_id`  order by di.`paa_created_at` DESC);
+UPDATE dotmailer d  SET d.last_enquiry_at = NULL;
+UPDATE dotmailer d  SET d.last_enquiry_at = (select di.enquiry_created_at from dotmailer_info di where di.segment="enquiry" and di.dotmailer_id = d.id group by di.`dotmailer_id`  order by di.`enquiry_created_at` DESC);
+
+
+UPDATE WebShared_restore11214_dbo.NewsletterUsers N SET N.LastAdvertise = (SELECT NU.LastAdvertise From newslatters.NewsletterUsers NU WHERE NU.ID = N.ID)
+
+select di.enquiry_created_at from dotmailer_info di where di.segment="enquiry" group by di.`dotmailer_id`
+select * from dotmailer_info di where di.segment="enquiry" group by di.`dotmailer_id`
+
+sudo -u apache php -d memory_limit="1024M" app/console fa:export-trovit-feed --category="Vehicles"
+sudo -u apache php -d memory_limit="1024M" app/console fa:export-trovit-feed --category="Jobs"
+
+
+sudo -u apache php app/console fa:update:ad-solr-index --category="Horses" --status="A" add
+
+SN8182079
+
+00d1f62e7e77b6cf5b65eccb7d228eef
+
+UPDATE category SET clean_name = REPLACE(name, ' ', '');
+UPDATE category SET clean_name = REPLACE(clean_name, '-', '');
+UPDATE category SET clean_name = REPLACE(clean_name, '/', '');
+UPDATE category SET clean_name = REPLACE(clean_name, '.', '');
+UPDATE category SET clean_name = REPLACE(clean_name, '+', '');
+UPDATE category SET clean_name = LOWER(clean_name);
+
+
+sed -i '1s/^/<?xml version="1.0" encoding="utf-8"?>/' /home/janak/web/feed_data/export/TrovitJobXML.xml
+
+
+
+
+
+sudo -u nginx php -d memory_limit="1024M" app/console fa:update:dotmailer-data add
+
+
+sudo -u apache php app/console fa:feed:download  add  --type="BoatAdvert" --site_id=10 --modified_since="2015-01-01T04:35:09Z"
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:parse  --type="BoatAdvert" --site_id=10 image
+sudo -u apache php -d memory_limit="1024M" app/console fa:feed:parse  --type="BoatAdvert" --site_id=10 parse
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:update add --force=1 --type="BoatAdvert"
+
+
+sudo -u nginx php app/console fa:feed:download  add  --type="BoatAdvert" --site_id=10 --modified_since="2015-01-01T04:35:09Z"
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:parse  --type="BoatAdvert" --site_id=10 image
+sudo -u nginx php -d memory_limit="1024M" app/console fa:feed:parse  --type="BoatAdvert" --site_id=10 parse
+sudo -u nginx php -d memory_limit="512M" app/console fa:feed:update add --type="MerchandiseAdvert" --force=remap --ad_id="13161829"
+
+
+
+sudo -u apache php app/console fa:feed:download  add  --type="MerchandiseAdvert" --site_id=10 --modified_since="2015-01-01T04:35:09Z"
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:parse  --type="MerchandiseAdvert" --site_id=10 image
+sudo -u apache php -d memory_limit="1024M" app/console fa:feed:parse  --type="MerchandiseAdvert" --site_id=10 parse
+sudo -u apache php -d memory_limit="512M" app/console fa:feed:update add --force=remap --type="MerchandiseAdvert"
+
+http://beta.api.fmgfeedaggregation.com/api/v2/adverts?appkey=f8c1508&modifiedSince=2015-01-01T04:35:09Z&siteId=10&advertType=CarAdvert&limit=1000&offset=0
+
+
+
+UPDATE ad_main am SET am.trans_id = (SELECT af.unique_id from ad_feed af where am.trans_id = af.trans_id and ref_site_id = 2) where am.id in (select a.ad_id from ad_feed a where a.ref_site_id = 2);
+UPDATE ad am SET am.trans_id = (SELECT af.unique_id from ad_feed af where am.trans_id = af.trans_id and ref_site_id = 2) where am.id in (select a.ad_id from ad_feed a where a.ref_site_id = 2);
+ab  -A fridayad:Friday-Ad-Cat  -n1000 -c10 http://cat.friday-ad.fiareads.com/uk/motors/cars/
+
+select u2.id, u2.username from user u2 where u2.username in (select u.username from user u where u.id in (select af.user_id from ad_feed af where af.ref_site_id = 6))
+
+DELETE u1 FROM user u1, user u2 WHERE u1.id > u2.id AND u1.username = u2.username AND u1.id IN (select af.user_id from ad_feed af where af.ref_site_id = 6)
+
+select u2.id, u2.username from user u2 where u2.username in (select u.username from user u where u.id in (select af.user_id from ad_feed af where af.ref_site_id = 6))
+
+DELETE u1 FROM user u1, user u2 WHERE u1.id > u2.id AND u1.username = u2.username AND u1.id > 300000 AND u2.id > 300000
+
+Jarno
+@Sagar, when you get time, can you check if you can login to windows server now
+134.213.6.218
+Sagar
+@Jarno, yes
+checking
+Jarno
+User name:31336-fiarein
+Password: sp6DaChu
+
+Domain: LON
+
+
+rocess started.
+Source database:-- MSSQL database --
+Host: 127.0.0.1
+Port: 1433
+User: sa
+Password: No
+Database: WebShared_Restore
+CharSet: utf8
+
+Destination database:-- MySQL database --
+Host: localhost
+Port: 3306
+User: root
+Password: Yes
+Database: web
+CharSet: utf8
+Use SSH: No
+Use SSL: No
+
+Removing database 'web'.
+Creating database 'web'.
+Connecting to the source database.
+Connecting to the destination database.
+Creating table 'AdvertsExtra'.
+Creating table 'OAuthProvider'.
+Creating table 'FridayAdSavedAdverts'.
+Creating table 'FridayAdSavedSearches'.
+Creating table 'NewsletterUsers'.
+Creating table 'BusinessCategory'.
+Creating table 'OBP_Advert'.
+Creating table 'OBP_AdvertAboutBusiness'.
+Creating table 'OBP_AdvertContactDetails'.
+Creating table 'OBP_AdvertBusinessDetails'.
+Creating table 'OBP_AdvertPhoto'.
+Creating table 'OBP_AdvertAppearance'.
+Creating table 'RegisteredUsersStatus'.
+Creating table 'SpecificBusinessTrade'.
+Creating table 'RegisteredUsers'.
+Copying data for table 'AdvertsExtra'.
+Table "AdvertsExtra". Done for 00:02:19
+Copying data for table 'OAuthProvider'.
+Table "OAuthProvider". Done for 00:00:01
+Copying data for table 'FridayAdSavedAdverts'.
+Table "FridayAdSavedAdverts". Done for 00:00:01
+Copying data for table 'FridayAdSavedSearches'.
+Table "FridayAdSavedSearches". Done for 00:02:07
+Copying data for table 'NewsletterUsers'.
+Table "NewsletterUsers". Done for 00:13:14
+Copying data for table 'BusinessCategory'.
+Table "BusinessCategory". Done for 00:00:01
+Copying data for table 'OBP_Advert'.
+Table "OBP_Advert". Done for 00:00:03
+Copying data for table 'OBP_AdvertAboutBusiness'.
+-- 
+ 2006: MySQL server has gone away
+Table "OBP_AdvertAboutBusiness". Done for 00:00:07
+Copying data for table 'OBP_AdvertContactDetails'.
+Table "OBP_AdvertContactDetails". Done for 00:00:02
+Copying data for table 'OBP_AdvertBusinessDetails'.
+Table "OBP_AdvertBusinessDetails". Done for 00:00:04
+Copying data for table 'OBP_AdvertPhoto'.
+Table "OBP_AdvertPhoto". Done for 00:00:07
+Copying data for table 'OBP_AdvertAppearance'.
+Table "OBP_AdvertAppearance". Done for 00:00:03
+Copying data for table 'RegisteredUsersStatus'.
+Table "RegisteredUsersStatus". Done for 00:00:00
+Copying data for table 'SpecificBusinessTrade'.
+Table "SpecificBusinessTrade". Done for 00:00:01
+Copying data for table 'RegisteredUsers'.
+Table "RegisteredUsersStatus". Done for 00:00:00
+Copying data for table 'SpecificBusinessTrade'.
+Table "SpecificBusinessTrade". Done for 00:00:01
+Copying data for table 'RegisteredUsers'.
+Table "RegisteredUsers". Done for 00:40:53
+Closing connections.
+Process completed, but several errors occurred during operation
+
+# location data
+locality location location_group location_group_location postcode region throughfare
+
+# entity data 
+category category_dimension config config_rule delivery_method_option dotmailer_newsletter_type entity mapping_category
+
+# redirect data
+motors_redirects
+
+# content data
+email_template header_image home_popular_image landing_page landing_page_info notification_message paa_field paa_field_rule package package_print package_print
+
+UPDATE ad a set a.`category_id` = (SELECT new_id from mapping_category m WHERE a.`old_class_id` = m.id AND a.old_class_id IS NOT NULL AND a.old_sub_class_id IS NULL) WHERE a.old_class_id IN (293,294,296,493,551);
+

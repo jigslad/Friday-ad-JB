@@ -1,0 +1,19 @@
+applepay_checkout:
+    path:     /applepay
+    defaults: { _controller: "FaPaymentBundle:ApplepayCheckout:checkout" }
+    
+applepay_process_payment:
+    path:     /applepay/process_payment
+    defaults: { _controller: "FaPaymentBundle:ApplepayCheckout:processPayment" }    
+    
+subcription_checkout_payment_success:
+    path:     /subcription/payment_success/{cartCode}
+    defaults: { _controller: "FaPaymentBundle:Checkout:paymentSuccess", subscription: 1 }
+        
+subcription_checkout_payment_failure:
+    path:     /subcription/payment_failure/{cartCode}
+    defaults: { _controller: "FaPaymentBundle:Checkout:paymentFailure", subscription: 1 }
+
+ajax_update_ga_status:
+    path:     /ajax/ga_status
+    defaults: { _controller: "FaPaymentBundle:Checkout:ajaxUpdateGaStatus"}

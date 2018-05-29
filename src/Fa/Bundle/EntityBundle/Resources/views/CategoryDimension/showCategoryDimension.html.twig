@@ -1,0 +1,59 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% set container = fetch_container_instance() %}
+
+{% block body %}
+<div class="row">
+    <div class="columns">
+        <br />
+        <div id="list_location_box" class="fa-accordion">
+            <dl class="accordion" data-accordion>
+                <dd class="accordion-navigation">
+                    <a href="#panelCounty" class="clearfix"><h5 class="left">{{ categoryDimension.getName() }}</h5></a>
+                    <div id="panelCounty" class="content active clearfix">
+                        <ul class="link-list">
+                            {% set columns = 3 %}
+                            {% set ctr = 0 %}
+                            {% if isCategoryMake %}
+                                {% set categoryMakes = dimensions %}
+                                {% set dimensions = categoryMakes|keys %}
+                            {% endif %}
+                            
+                            {% set totalItems = dimensions|length %}
+                            {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                            {% set extraColumn = (totalItems % columns) %}
+                            {% set colCounter = {} %}
+                             {% for i in 0..columns-1 %}
+                                 {% if loop.index0 < extraColumn %}
+                                     {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                 {% else  %}
+                                     {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                                 {% endif %}
+                             {% endfor %}
+                             {% for i in 0..columns-1 %}
+                                 <div class="large-8 columns">
+                                     {% for k in 0..colCounter[i]-1 %}
+                                         {% if dimensions[ctr] is defined %}
+                                            {% if isCategoryMake %}
+                                                {% set dimensionId = dimensions[ctr] %}
+                                                {% set dimensioncount = dimensionFacets[dimensionId] is defined ? dimensionFacets[dimensionId] : 0 %}
+                                                {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(seoSearchParams|merge({ (dimensionFieldName): dimensionId})) %}
+                                                <a href="{{ searchResultUrl }}">{{ categoryMakes[dimensionId] }} {# ({{ dimensioncount }}) #}</a>
+                                            {% else %}
+                                                {% set dimension = dimensions[ctr] %}
+                                                {% set dimensioncount = dimensionFacets[dimension.getId()] is defined ? dimensionFacets[dimension.getId()] : 0 %}
+                                                {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(seoSearchParams|merge({ (dimensionFieldName): {0: dimension.getId()}})) %}
+                                                <a href="{{ searchResultUrl }}">{{dimension.getName()}} {# ({{ dimensioncount }}) #}</a>
+                                            {% endif %}
+                                         {% endif %}
+                                         {% set ctr = ctr + 1 %}
+                                     {% endfor %}
+                               </div>
+                             {% endfor %}
+                        </ul>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %}

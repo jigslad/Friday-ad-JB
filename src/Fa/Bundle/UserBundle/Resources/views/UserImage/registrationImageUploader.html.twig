@@ -1,0 +1,203 @@
+<div class="field-300">
+    <div id="filelist"></div>
+</div>
+{% set mobileDetectManager = fetch_container_instance().get('fa.mobile.detect.manager') %}
+{% set isAdminLoggedIn = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isAdminLoggedIn', [fetch_container_instance()]) %}
+{% set container = fetch_container_instance() %}
+{% set maxFileSize = (isCompany ? container.getParameter("fa.company.allow_size_in_mb")~' mb' : container.getParameter("fa.user.allow_size_in_mb")~' mb') %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+var formName = '{{formName}}';
+$(document).ready(function(){
+    initProfileImageUpload(true);
+});
+
+function initProfileImageUpload(removeFileList)
+{
+    if ($('.pickProfileFile').length > 0) {
+        $('.pickProfileFile').each(function(e) {
+             var mainUploader = setUpUploader($(this).attr('id'), removeFileList);
+             mainUploader.init();
+        });
+    }
+
+    if (removeFileList) {
+        //$('#filelist').html('');
+    }
+}
+
+function setUpUploader(id, removeFileList)
+{
+    var errorFlag  = false;
+    var userId     = '{{userId}}';
+    var isCompany  = '{{isCompany}}';
+    var profileImage  = '{{profileImage}}';
+    var user_image = new Array();
+
+    if (isCompany) {
+        var allowMaxSize = '{{container.getParameter("fa.company.allow_size_in_mb")}}mb';
+    } else {
+        var allowMaxSize = '{{container.getParameter("fa.user.allow_size_in_mb")}}mb';
+    }
+    var uploader   = new plupload.Uploader({
+        runtimes : 'html5,flash,silverlight,html4',
+        unique_names :true,
+        multi_selection : false,
+        multipart : true,
+        browse_button : id, // you can pass in id...
+        url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_user_image_save_admin") }}' {% else %} '{{ path("ajax_user_image_save") }}' {% endif %},
+        multipart_params : {'fa_user_image[user_id]' : userId, 'fa_user_image[is_company]' : isCompany, 'fa_user_image[profileImage]' : profileImage},
+        file_data_name : 'fa_user_image[fileData]',
+        flash_swf_url : '{{asset_url('facore/js/Moxie.swf')}}',
+        silverlight_xap_url : '{{ asset_url('facore/js/Moxie.xap')}}',
+
+        filters : {
+            max_file_size : allowMaxSize,
+            mime_types:
+            [
+                {title : '{{"Image files"|trans}}', extensions : "jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF"},
+            ]
+        },
+
+        init: {
+            PostInit: function() {
+                if (removeFileList) {
+                    $('#filelist').html('');
+                }
+            },
+            FilesAdded: function(up, files, response) {
+                errorFlag = false;
+                if(up.files.length > 1) {
+                    uploader.splice();
+                    $('#filelist').html('');
+                    $('#filelist').html(decorateMessage("{{ 'Image has been already uploaded.'|trans({}, 'frontend-paa') }}", 'alert'));
+                    return false;
+                }
+                else {
+                    uploader.start();
+                    $('#filelist').html("<div class='row'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Uploading image please wait... '|trans({}, 'frontend-paa') }}</div>");
+                    $('.save_data').attr('disabled', true);
+                }
+                closeProfileMenu();
+            },
+            FileUploaded: function(up, file, response) {
+             //do nothing
+            },
+            UploadComplete: function(up, file) {
+                isCompany = 0;
+                if ($("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+                  isCompany = 1;
+                }
+                if (!errorFlag) {
+                    if (isCompany) {
+                        $('#filelist').html(decorateMessage("{{'Company logo has been uploaded successfully.'|trans({}, 'frontend-paa') }}", 'success'));
+                    } else {
+                        $('#filelist').html(decorateMessage("{{'User image has been uploaded successfully.'|trans({}, 'frontend-paa') }}", 'success'));
+                    }
+                    $('#profile_change_btn_with_opt').show();
+                    $('#profile_change_btn_without_opt').hide();
+                } else {
+                    if (isCompany) {
+                        $('#filelist').html(decorateMessage('{{'Problem in company logo upload.'|trans}}', 'alert'));
+                    } else {
+                        $('#filelist').html(decorateMessage('{{'Problem in user image upload.'|trans}}', 'alert'));
+                    }
+                }
+                uploader.splice();
+                getImage();
+                $('.save_data').attr('disabled', false);
+            },
+            Error: function(up, err) {
+               msg = err.message;
+               if (msg == 'Init error.') {
+                   msg = "{{'Your browser does not have Flash, Silverlight or HTML5 support.'|trans({}, 'frontend-paa')}}";
+               } else if (msg == 'File size error.') {
+                   msg = "{{'The size of image should not be greater than %max_file_size%.'|trans({'%max_file_size%' : (maxFileSize)}, 'frontend-paa')}}";
+               } else if (msg == 'File extension error.') {
+                   msg = "{{'Image type must be one of the jpg, jpeg, png, gif.'|trans({}, 'frontend-paa')}}";
+               }
+               $('#filelist').html(decorateMessage(msg, 'alert'));
+               closeProfileMenu();
+            }
+        }
+    });
+    return uploader;
+}
+
+function getImage()
+{
+  var isCompany = 0;
+  if ($("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+    isCompany = 1;
+  }
+  
+    $.ajax({
+        type: "POST",
+        url : '{{ path("ajax_get_user_image") }}',
+        data: { userId: '{{userId}}', isCompany: isCompany, profileImage: '{{profileImage}}'}
+    })
+    .done(function(response) {
+        $('#profile_image_div, #left_profile_image_div, #top_profile_image_div').html(response.image);
+    });
+}
+
+function deleteImage(url)
+{
+    closeProfileMenu();
+    $('.remove-logo-btn').unbind("click");
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {profileImage: '{{profileImage}}'}
+    })
+    .done(function(response) {
+        if (response.error.length) {
+            $('#filelist').html(decorateMessage(response.error, 'alert'));
+        }
+        if (response.successMsg.length) {
+            $('#filelist').html(decorateMessage(response.successMsg, 'success'));
+            $('#profile_change_btn_with_opt').hide();
+            $('#profile_change_btn_without_opt').show();
+            $('#profile_image_div, #left_profile_image_div, #top_profile_image_div').html(response.image);
+        }
+        {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+            initProfileImageUpload(false);
+        {% endif %}
+    });
+}
+
+function getProfileBigImage(url)
+{
+    var isCompany = 0;
+    if ($("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+      isCompany = 1;
+    }
+    
+    closeProfileMenu();
+    blockPage();
+    $.ajax({
+        type: "GET",
+        url : url,
+        data: {isCompany: isCompany},
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+        hideAlertMessage();
+        if (response.htmlContent.length) {
+            $('#cropProfileImageModal').html(response.htmlContent);
+            $('#cropProfileImageModal').foundation('reveal', 'open');
+        } else if (response.error.length) {
+            $('#filelist').html(decorateMessage(response.error, 'alert'));
+            scrollToElement('#filelist', '1000', -150);
+        }
+    });
+}
+
+function closeProfileMenu()
+{
+    $('#profile_image_upload').foundation('dropdown', 'close', $('#profile_image_upload'));
+}
+//]]>
+</script>

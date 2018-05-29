@@ -1,0 +1,7 @@
+get_ad_api_count:
+    path:     /api/getAdvertsCount/
+    defaults: { _controller: "FaAdBundle:AdApi:getAdApiCount" }
+
+get_ad_api_result:
+    path:     /api/getAdverts/
+    defaults: { _controller: "FaAdBundle:AdApi:getAdApiResult" }

@@ -1,0 +1,30 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+
+{% block content -%}
+<div class="row">
+   <div class="columns">
+       <h1>{{ emailTemplate.name }} : {{ heading }}</h1>
+   </div>
+</div>
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            {% if form is  defined %}
+                 <div class="panel-heading">
+                    <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+                 </div>
+                {% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+                {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_email_template_params'}}) }}
+                {{ form_widget(form) }}
+                {{ form_errors(form) }}
+                {{ form_end(form) }}
+            {% endif %}
+
+            <div>
+            {{ emailTemplate.getParamsHelp|raw }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}

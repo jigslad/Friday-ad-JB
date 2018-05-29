@@ -1,0 +1,303 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
+{% if (app.user.getId() is defined) %}
+    {% set userId = app.user.getId() %}
+{% else  %}
+    {% set userId = tempUserId %}
+{% endif %}
+{% use "FaUserBundle:UserImage:showProfileImageUploader.html.twig" %}
+{% block scripttop %}
+    {{ block('profileImageUploadStylesheets') }}
+    {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
+{% endblock %}
+{% set getProfileBigImageRoute = "ajax_get_profile_big_image_registration" %}
+{% set formName = 'fa_paa_registration' %}
+{% block page_title %}
+    {{'Post an Ad Add your details'|trans({}, 'frontend-paa-register')}}
+{% endblock %}
+
+{% block body %}
+    <div class="posting-bg">
+        <div class="fad-sign-bdr">&nbsp;</div>
+        <div class="row paa-main">
+            {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 3}) }}
+            <div id="middle-column" class="large-12 columns">
+                <a href="{{ path('ad_post_third_step') }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
+                {% set socialMediaData = app.session.get('paa_user_info') %}
+                {% if socialMediaData['user_facebook_id'] is defined or socialMediaData['user_google_id'] is defined %}
+                    {% if socialMediaData['user_facebook_id'] is defined %}
+                        {% set socialSiteName = 'Facebook' %}
+                    {% elseif socialMediaData['user_google_id'] is defined %}
+                        {% set socialSiteName = 'Google' %}
+                    {% endif %}
+                    <h1 class="text-center paa-title">{{'Confirm your details'|trans({}, 'frontend-paa-register')}}</h1>
+                    <h2 class="text-center subtitle">{{'These are the details we got from %socialSiteName%,<br /> please confirm or change them.'|trans({'%socialSiteName%': socialSiteName}, 'frontend-paa-register')|raw}}</h2>
+                    <h4 class="text-center subtitle">{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-paa-register')}}</h4>
+                {% else %}
+                    <h1 class="text-center paa-title">{{'Your details'|trans({}, 'frontend-paa-register')}}</h1>
+                    <h2 class="text-center subtitle paa-title">{{'We just need a few details so that we know how buyers can contact you.'|trans({}, 'frontend-paa-register')}}</h2>
+                {% endif %}
+                
+                <div class="small-wrapper">
+                    <div class="your-details">
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_row(form.first_name) }}
+                            {{ form_row(form.last_name) }}
+                            {{ form_row(form.email) }}
+                            {% if form.password is defined %}
+                                <div class="reg-pwd">
+                                    {{ form_row(form.password) }}
+                                    <div class="label-inline">
+                                        {{ form_row(form.show_password) }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {{ form_row(form.phone) }}
+                            <div class="hlight-box clearfix pvt-phone-num white-checkbox {% if form.is_private_phone_number.vars.errors|length %}mb0{% endif %}">
+                                {{ form_widget(form.is_private_phone_number) }}
+                                {{ form_label(form.is_private_phone_number) }}
+                                <a href="#" class="help-icon" data-reveal-id="privacyNumberModal">{{'Help'|trans({}, 'frontend-register')}}</a>
+                            </div>
+                            {{ form_errors(form.is_private_phone_number) }}
+                            <div class="buyer-contact">
+                                <label>{{'I would like buyers to contact me by:'|trans({}, 'frontend-paa-register')}}</label>
+                                <div class="label-inline">
+                                    {{ form_row(form.contact_through_phone) }}
+                                    {{ form_row(form.contact_through_email) }}
+                                </div>
+                            </div>
+                            <div class="paa-role">
+                              {{ form_row(form.user_roles, {'attr': {'add-br': true}}) }}
+                            </div>
+                            <div class="paa-role">
+                                <label class="required">{{'Upload a logo image:'|trans({}, 'frontend-paa-register')}}</label>
+                                  <div id="logo_uploader_div">
+                                    {{ include('FaUserBundle:UserImage:registrationImageUploader.html.twig', {'userId': userId, 'isCompany': isCompany, 'profileImage': ''}) }}
+                                  </div>
+                                  <div class="clearfix">
+                                        <div class="profile-logo-img">
+                                            <div class="bz-profile-logo{% if isCompany == 0 %} rounded{% endif %}" id="profile_image_div">
+                                            </div>
+                                        </div>
+                                        <div class="profile-logo-ins private-profile reg-profile-btn">
+                                            <div id="profile_change_btn_with_opt" {% if logoUploaded == 0 %}style="display:none;"{% endif %}>
+                                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-2 button dropdown thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                                <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
+                                                    <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
+                                                    <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': userId, 'isCompany': isCompany}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
+                                                    <li><a href="javascript:removeImage()">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                                                </ul>
+                                            </div>
+                                            <div id="profile_change_btn_without_opt" {% if logoUploaded == 1 %}style="display:none;"{% endif %}>
+                                                <a href="javascript:void(0);" id="pickProfileFile1" class="primary-btn-2 button pickProfileFile needsclick thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="business_seller_fields" style="display:none;">
+                                {{ form_row(form.business_name) }}
+                            </div>
+                            <div class="label-inline mb10">
+                                {{ form_row(form.is_email_alert_enabled) }}
+                            </div>
+                            <div class="label-inline mb10">
+                                {{ form_row(form.is_third_party_email_alert_enabled) }}
+                            </div>
+                            {{ form_widget(form.Register, {'attr': {'class':'primary-btn-1 button expand'}}) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+            {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-registration-third-step'}) }}
+        </div>
+    </div>
+    <div id="privacyNumberModal" class="reveal-modal" data-reveal>
+        {% set privacyNumberBlock = staticPageRepository.getStaticBlockDetailArray('privacy-number-block', fetch_container_instance()) %}
+        <a class="close-reveal-modal">&#215;</a>
+        {% if privacyNumberBlock['title'] is defined %}
+            <h5 class="modal-title">{{privacyNumberBlock['title']}}</h5>
+        {% endif %}
+        <div class="modal-content">
+            {{privacyNumberBlock['description']|raw}}
+        </div>
+    </div>
+    <div id="cropProfileImageModal" class="reveal-modal small" data-reveal></div>
+{% endblock %}
+
+{% block scriptbottom %}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+{% javascripts filter='uglifyjs2' output='bundles/js/compiled/showProfileImageUploader.js'
+    'bundles/facore/js/plupload.full.min.js'
+    'bundles/fafrontend/js/jquery.Jcrop.min.js'
+    'bundles/facore/js/jquery.ui.touch-punch.min.js'
+%}
+<script src="{{ static_asset_url(asset_url) }}"></script>
+{% endjavascripts %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        {% if (gaStr is defined and gaStr != '') %}
+           ga('send', 'event', 'PAA - Step 3b', 'Form error', '{{gaStr}}');
+        {% else %}
+           ga('send', 'event', 'PAA - Step 3', 'Next step', 'registration');
+        {% endif %}
+        showHideBusinessSellerFields();
+        enableDisableContactThroughPhone();
+        tickUntickEmailAndThirdPartyAlertCheckbox();
+        // untick show_password
+        if ($('#fa_paa_registration_show_password').is(':checked')) {
+            $('#fa_paa_registration_show_password').attr('checked', false);
+            $('#fa_paa_registration_show_password').closest('span').removeClass('checked');
+        }
+        
+        $("#fa_paa_registration_show_password").click(function() {
+            showHidePassword();
+        });
+
+        $("input[name='fa_paa_registration[user_roles]']:radio").change(function() {
+            showHideBusinessSellerFields();
+        });
+
+        function showHidePassword() {
+            if ($('#fa_paa_registration_show_password:checked').val()) {
+                $('#fa_paa_registration_password').attr('type', 'text');
+            } else {
+                $('#fa_paa_registration_password').attr('type', 'password');
+            }
+        }
+        
+        function showHideBusinessSellerFields() {
+            if ($("input[name='fa_paa_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+                $('.business_seller_fields').show();
+                $('.fa-select').selectmenu('refresh');
+                $('.profile-logo-ins').addClass('bz-profile-btn');
+                if ($('#profile_change_btn_with_opt').css('display') == 'none') {
+                  $('#profile_image_div').html('{{businessUserLogo|raw}}')
+                } else {
+                $.ajax({
+                  type: "POST",
+                  url : '{{ path("ajax_get_user_image") }}',
+                  data: { userId: '{{userId}}', isCompany: '1'}
+                })
+               .done(function(response) {
+                  $('#profile_image_div').html(response.image);
+                });
+              }
+              $('#profile_image_div').removeClass('rounded');
+            }
+            else {
+                $('.business_seller_fields').hide();
+                $('.profile-logo-ins').removeClass('bz-profile-btn');
+                if ($('#profile_change_btn_with_opt').css('display') == 'none') {
+                  $('#profile_image_div').html('{{privateUserLogo|raw}}')
+                } else {
+                    $.ajax({
+                      type: "POST",
+                      url : '{{ path("ajax_get_user_image") }}',
+                      data: { userId: '{{userId}}', isCompany: '0'}
+                    })
+                   .done(function(response) {
+                      $('#profile_image_div').html(response.image);
+                   });
+                }
+                $('#profile_image_div').addClass('rounded');
+            }
+        }
+
+        function enableDisableContactThroughPhone() {
+            $('#fa_paa_registration_phone').keyup(function() {
+                validatePhoneAndEnableDisableContactThroughPhone();
+            });
+            validatePhoneAndEnableDisableContactThroughPhone();
+        }
+
+        function validatePhoneAndEnableDisableContactThroughPhone() {
+            var phone = $.trim($('#fa_paa_registration_phone').val());
+            var phone = phone.replace(/\s/g, '');
+            var patt = new RegExp(/^\+?\d{7,11}$/);
+            if (patt.test(phone)) {
+                $('#fa_paa_registration_contact_through_phone').parent().removeClass('checkbox-disabled');
+                $('#fa_paa_registration_contact_through_phone').attr('disabled', false);
+
+                $('#fa_paa_registration_is_private_phone_number').parent().removeClass('checkbox-disabled');
+                $('#fa_paa_registration_is_private_phone_number').attr('disabled', false);
+            } else {
+                $('#fa_paa_registration_contact_through_phone').parent().addClass('checkbox-disabled');
+                $('#fa_paa_registration_contact_through_phone').attr('checked', false);
+                $('#fa_paa_registration_contact_through_phone').attr('disabled', 'disabled');
+                $('#fa_paa_registration_contact_through_phone').parent().removeClass('checked');
+
+                $('#fa_paa_registration_is_private_phone_number').parent().addClass('checkbox-disabled');
+                $('#fa_paa_registration_is_private_phone_number').attr('checked', false);
+                $('#fa_paa_registration_is_private_phone_number').attr('disabled', 'disabled');
+                $('#fa_paa_registration_is_private_phone_number').parent().removeClass('checked');
+            }
+        }
+   });
+
+    function removeImage()
+    {
+      var isCompany = 0;
+      if ($("input[name='fa_paa_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+        isCompany = 1;
+      }
+      $.ajax({
+        type: "POST",
+        url : '{{ path("ajax_remove_temp_user_image") }}',
+        data: { userId: '{{userId}}'},
+      })
+      .done(function(response) {
+        if (isCompany == 1) {
+          $('#profile_image_div').html(response.businessUserLogo);
+        } else {
+          $('#profile_image_div').html(response.privateUserLogo);
+        }
+        $('#profile_image_upload').foundation('dropdown', 'close', $('#profile_image_upload'));
+        $('#profile_change_btn_with_opt').hide();
+        $('#profile_change_btn_without_opt').show();
+        $('#filelist').html('');
+        
+        if (response.error.length) {
+            $('#filelist').html(decorateMessage(response.error, 'alert'));
+        } else if (response.successMsg) {
+          $('#filelist').html(decorateMessage(response.successMsg, 'success'));}
+      });
+    }
+
+    // add multiple select / deselect functionality
+    $("#fa_paa_registration_is_third_party_email_alert_enabled").change(function () {
+        if ($('#fa_paa_registration_is_third_party_email_alert_enabled').parent().hasClass('checked')) {
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', true);
+        } else {
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
+        }
+        
+        if ($('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked')) {
+        	$('#fa_paa_registration_is_email_alert_enabled').attr('checked', $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked'));
+            $('#fa_paa_registration_is_email_alert_enabled').parent().addClass('checked');
+        }
+    });
+
+    $("#fa_paa_registration_is_email_alert_enabled").change(function(){
+        if ($('#fa_paa_registration_is_email_alert_enabled').parent().hasClass('checked')) {
+            $('#fa_paa_registration_is_email_alert_enabled').attr('checked', true);
+        } else {
+            $('#fa_paa_registration_is_email_alert_enabled').attr('checked', false);
+        }
+        if (!$('#fa_paa_registration_is_email_alert_enabled').attr('checked')) {
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked', false);
+            $('#fa_paa_registration_is_third_party_email_alert_enabled').parent().removeClass('checked');
+        } 
+    });
+    
+    function tickUntickEmailAndThirdPartyAlertCheckbox()
+    {
+        if ($('#fa_paa_registration_is_third_party_email_alert_enabled').attr('checked') && !$('#fa_paa_registration_is_email_alert_enabled').attr('checked')) {
+            $('#fa_paa_registration_is_email_alert_enabled').parent().removeClass('checked');
+            $('#fa_paa_registration_is_email_alert_enabled').attr('checked', false);
+        }
+    }
+//]]>
+</script>
+{% endblock %}

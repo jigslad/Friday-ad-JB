@@ -1,0 +1,30 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+           {{ form_errors(form) }}
+
+            <div class="row">
+                <div class="large-4 columns">
+                    {{ form_widget(form.fa_entity_log__loggedAt, {'attr': {'placeholder': 'Logged at'|trans }}) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_widget(form.fa_entity_log__objectId, {'attr': {'placeholder': 'Entity id'|trans }}) }}
+                </div>
+                <div class="large-4 columns">
+                    {{ form_widget(form.fa_entity_log__objectClass, {'attr': {'placeholder': 'Entity class'|trans}}) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-4 columns">
+                    {{ form_widget(form.fa_entity_log__username, {'attr': {'placeholder': 'Username'|trans}}) }}
+                </div>
+                <div class="large-8 columns">
+                    {{ form_widget(form.search, {'attr': {'class':'small button mb0'}}) }}
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

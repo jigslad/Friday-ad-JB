@@ -1,0 +1,31 @@
+FaContentBundle_header_image_admin:
+    resource: '@FaContentBundle/Resources/config/routing/header_image_admin.yml'
+    prefix:   /header_image
+
+FaContentBundle_landing_page_admin:
+    resource: '@FaContentBundle/Resources/config/routing/landing_page_admin.yml'
+    prefix:   /landing_page
+    
+FaContentBundle_static_page_admin:
+    resource: '@FaContentBundle/Resources/config/routing/static_page_admin.yml'
+    prefix:   /static_page
+
+FaContentBundle_static_block_admin:
+    resource: '@FaContentBundle/Resources/config/routing/static_block_admin.yml'
+    prefix:   /static_block
+    
+FaContentBundle_seo_tool_admin:
+    resource: '@FaContentBundle/Resources/config/routing/seo_tool_admin.yml'
+    prefix:   /seo_tool
+
+FaContentBundle_banner_admin:
+    resource: '@FaContentBundle/Resources/config/routing/banner_admin.yml'
+    prefix:   /banner
+    
+FaContentBundle_home_popular_admin:
+    resource: '@FaContentBundle/Resources/config/routing/home_popular_image_admin.yml'
+    prefix:   /popular
+
+FaContentBundle_seo_tool_override_admin:
+    resource: '@FaContentBundle/Resources/config/routing/seo_tool_override_admin.yml'
+    prefix:   /seo_tool_override

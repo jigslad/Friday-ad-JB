@@ -1,0 +1,41 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+               {{ form_errors(form) }}
+               <div class="form-group{% if form.file.vars.errors|length %} has-error{% endif %}">
+                   {{ form_label(form.file) }} <span class="required">*</span>
+                   {{ form_widget(form.file) }}
+                   {{ form_errors(form.file) }}
+                   <span class="help-block">{{ 'Allowed image extensions are jpg, png, svg and gif.'|trans({}, 'messages') }}</span>
+                   <span class="help-block">{{ 'Dimensions for Image: 250px x 324px'|trans({}, 'messages')|raw }}</span>
+                   <br />
+                   {% if entity.id %}
+                       <img src="{{shared_url(entity.getPath()~'/'~entity.getFileName())}}?{{ random(1000) }}" width="100px" /><br /><br />
+                   {% endif %}
+               </div>
+               <div class="form-group{% if form.overlay_file.vars.errors|length %} has-error{% endif %}">
+                   {{ form_label(form.overlay_file) }} <span class="required">*</span>
+                   {{ form_widget(form.overlay_file) }}
+                   {{ form_errors(form.overlay_file) }}
+                   <span class="help-block">{{ 'Allowed image extensions are jpg, png, gif and svg.'|trans({}, 'messages') }}</span>
+                   <br />
+                   {% if entity.id %}
+                       <img src="{{shared_url(entity.getPath()~'/'~entity.getOverLayFileName())}}?{{ random(1000) }}" width="100px" /><br /><br />
+                   {% endif %}
+               </div>
+               {{ form_row(form.url) }}
+               {{ form_row(form.status) }}
+               {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'home_popular_image_admin'}) }}
+           {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,440 @@
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).foundation({
+        accordion: {
+            multi_expand: true,
+            callback : function (accordion) {
+                accordionCallback(accordion);
+            }
+        }
+    });
+    $('#fa_user_card_zip').focus(function(e){
+        $('#card_zip_error_div').hide()
+    });
+    $(document).ready(function(){
+        bindCustomRadioEvent();
+        unsubscribeFromAll();
+        showHideBusinessSellerFields();
+        enableDisableContactThroughPhone();
+        bindFormErrorEvents();
+        {% if not userCardForm.vars.valid %}
+            showHideUserCard(true);
+        {% endif %}
+        scrollToElement('#successMsgDiv', '1000', -150);
+        bindEqualizerEvent('newsletter_equalizer');
+    });
+    $('#my_account .accordion-navigation .content').each(function(){
+        if ($(this).hasClass('active')) {
+            $(this).siblings('a').find('span:eq(1)').addClass('dark-arrow-up');
+            $(this).siblings('a').find('span:eq(1)').removeClass('dark-arrow-down');
+        } else {
+            $(this).siblings('a').find('span:eq(1)').addClass('dark-arrow-down');
+            $(this).siblings('a').find('span:eq(1)').removeClass('dark-arrow-up');
+        }
+    });
+    
+    function accordionCallback(accordion)
+    {
+        $(accordion).siblings('a').find('span:eq(1)').toggleClass("dark-arrow-down dark-arrow-up");
+        $(accordion).find('select.fa-select').selectmenu('refresh');
+        $(accordion).find('select.fa-select-white').selectmenu('refresh');
+        bindEqualizerEvent('newsletter_equalizer');
+    }
+    
+    // untick show_password
+    if ($('#fa_user_user_account_detail_show_password').is(':checked')) {
+        $('#fa_user_user_account_detail_show_password').attr('checked', false);
+        $('#fa_user_user_account_detail_show_password').closest('span').removeClass('checked');
+    }
+
+    $("input[name='fa_user_user_account_profile[user_roles]']:radio").change(function() {
+        showHideBusinessSellerFields();
+    });
+
+    $("#fa_user_user_account_detail_show_password").click(function() {
+        showHidePassword();
+    });
+    
+    function showHidePassword() {
+        if ($('#fa_user_user_account_detail_show_password:checked').val()) {
+            $('#fa_user_user_account_detail_new_password').attr('type', 'text');
+            $('#fa_user_user_account_detail_old_password').attr('type', 'text');
+        } else {
+            $('#fa_user_user_account_detail_new_password').attr('type', 'password');
+            $('#fa_user_user_account_detail_old_password').attr('type', 'password');
+        }
+    }
+    
+    function showHideBusinessSellerFields() {
+        if ($("input[name='fa_user_user_account_profile[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+            $('.business_seller_fields').show();
+            $('.myacc-profile-dtl').show();
+            $('.fa-select-white').selectmenu('refresh');
+        }
+        else {
+            $('.business_seller_fields').hide();
+            $('.myacc-profile-dtl').hide();
+        }
+    }
+
+    function enableDisableContactThroughPhone() {
+        $('#fa_user_user_account_detail_phone').keyup(function() {
+            validatePhoneAndEnableDisableContactThroughPhone();
+        });
+        validatePhoneAndEnableDisableContactThroughPhone();
+    }
+
+    function validatePhoneAndEnableDisableContactThroughPhone() {
+        var phone = $.trim($('#fa_user_user_account_detail_phone').val());
+        var phone = phone.replace(/\s/g, '');
+        var patt = new RegExp(/^\+?\d{7,11}$/);
+        if (patt.test(phone)) {
+            $('#fa_user_user_account_detail_contact_through_phone').parent().removeClass('checkbox-disabled');
+            $('#fa_user_user_account_detail_is_private_phone_number').parent().removeClass('checkbox-disabled');
+            $('#fa_user_user_account_detail_contact_through_phone').attr('disabled', false);
+            $('#fa_user_user_account_detail_is_private_phone_number').attr('disabled', false);
+        } else {
+            $('#fa_user_user_account_detail_contact_through_phone').parent().addClass('checkbox-disabled');
+            $('#fa_user_user_account_detail_contact_through_phone').attr('checked', false);
+            $('#fa_user_user_account_detail_is_private_phone_number').parent().addClass('checkbox-disabled');
+            $('#fa_user_user_account_detail_is_private_phone_number').attr('checked', false);
+            $('#fa_user_user_account_detail_contact_through_phone').attr('disabled', 'disabled');
+            $('#fa_user_user_account_detail_is_private_phone_number').attr('disabled', 'disabled');
+            $('#fa_user_user_account_detail_contact_through_phone').parent().removeClass('checked');
+            $('#fa_user_user_account_detail_is_private_phone_number').parent().removeClass('checked');
+        }
+    }
+    
+    $('#paypal_email, #paypal_first_name, #paypal_last_name').focus(function(e){
+        $(this).removeClass('error');
+    });
+    
+    function updatePaypalEmail()
+    {
+        blockElement('#panel3b');
+        $.ajax({
+            type: "POST",
+            url : '{{ path('ajax_update_paypal_email') }}',
+            data: {'paypal_email': $('#paypal_email').val(), 'paypal_first_name': $('#paypal_first_name').val(), 'paypal_last_name': $('#paypal_last_name').val()},
+            cache: false,
+        })
+        .always(function(response) {
+           unblockElement('#panel3b');
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            $('#paypal_email_verify_status').removeClass('error-icon tickmark-icon');
+            if (response.successMsg.length) {
+                $(decorateMessage(response.successMsg, 'success')).prependTo('#panel3b');
+                $('#paypal_email_verify_status').addClass('tickmark-icon');
+                $('#paypal_email, #paypal_first_name, #paypal_last_name').removeClass('error');
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).prependTo('#panel3b');
+                $('#paypal_email_verify_status').addClass('error-icon');
+                $('#paypal_email, #paypal_first_name, #paypal_last_name').addClass('error');
+            }
+            
+            $('#paypal_email_verify_status').show();
+        });
+    }
+    
+    function unsubscribeFromAll() {
+        if ($('#user_newsletter_dotmailer_newsletter_unsubscribe').is(':checked')) {
+            $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").attr('checked', false);
+            $('#newsletter_categories span.checked').removeClass('checked');
+        }
+
+        $("#user_newsletter_dotmailer_newsletter_unsubscribe").click(function() {
+            if ($('#user_newsletter_dotmailer_newsletter_unsubscribe').is(':checked')) {
+                $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").attr('checked', false);
+                $('#newsletter_categories span.checked').removeClass('checked');
+            }
+        });
+
+        $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").click( function () {
+            if ($(this).is(':checked')) {
+                $("#user_newsletter_dotmailer_newsletter_unsubscribe").attr('checked', false);
+                $('#user_newsletter_dotmailer_newsletter_unsubscribe').parent().removeClass('checked');
+            }
+        });
+    }
+    
+    function addNewAddressBook()
+    {
+        $('#card_detail').hide();
+        clearForm('#user_card_form');
+        $('.expiry-date').nextAll('small.error').first().remove();
+        $('.expiry-date').nextAll('small.error').first().remove();
+        $('#add_new_card_anchor').show();
+        
+        blockPage();
+        $.ajax({
+            type: "GET",
+            url : '{{ path('ajax_add_new_address') }}',
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.htmlContent.length) {
+                $('#addressBookModal').html(response.htmlContent);
+                $('#addressBookModal').foundation('reveal', 'open');
+            } else if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
+                scrollToElement('#panel6b', '1000', -150);
+            }
+        });
+    }
+    
+    function editAddressBook(addressBookId)
+    {
+        $('#card_detail').hide();
+        clearForm('#user_card_form');
+        $('.expiry-date').nextAll('small.error').first().remove();
+        $('.expiry-date').nextAll('small.error').first().remove();
+        $('#add_new_card_anchor').show();
+        var route = Routing.generate('ajax_edit_address', { 'addressBookId': addressBookId });
+        blockPage();
+        $.ajax({
+            type: "GET",
+            url : route,
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.htmlContent.length) {
+                $('#addressBookModal').html(response.htmlContent);
+                $('#addressBookModal').foundation('reveal', 'open');
+            } else if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
+                scrollToElement('#panel6b', '1000', -150);
+            }
+        });
+    }
+
+    function getUserAddress()
+    {
+        blockElement('#addressBookModal');
+        $.ajax({
+            type: "POST",
+            url : '{{ path("ajax_get_user_address") }}',
+            data: { postCode: $('#fa_user_user_address_book_zip').val()}
+        })
+        .always(function(response) {
+            unblockElement('#addressBookModal');
+        })
+        .done(function(response) {
+            $('#form_zip_error').hide();
+            if (response.errorMsg.length) {
+                //clearForm($('#user_address_id'));
+                $('#zip_error_div').html(response.errorMsg);
+                $('#zip_error_div').show();
+            } else {
+                $('#zip_error_div').hide();
+                if (response.street_address && response.street_address.length) {
+                    $('#fa_user_user_address_book_street_address').val(response.street_address);
+                    $('#fa_user_user_address_book_street_address').focus();
+                }
+                if (response.street_address_2 && response.street_address_2.length) {
+                    $('#fa_user_user_address_book_street_address_2').val(response.street_address_2);
+                    $('#fa_user_user_address_book_street_address_2').focus();
+                }
+                if (response.town_name && response.town_name.length) {
+                    $('#fa_user_user_address_book_town').val(response.town_name);
+                    $('#fa_user_user_address_book_town').focus();
+                }
+                if (response.domicile_name && response.domicile_name.length) {
+                    $('#fa_user_user_address_book_county').val(response.domicile_name);
+                    $('#fa_user_user_address_book_county').focus();
+                }
+            }
+        });
+    }
+    
+    function getUserCardAddress()
+    {
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url : '{{ path("ajax_get_user_address") }}',
+            data: { postCode: $('#fa_user_card_zip').val()}
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            $('#form_zip_error').hide();
+            if (response.errorMsg.length) {
+                //clearForm($('#user_card_form'));
+                $('#card_zip_error_div').html(response.errorMsg);
+                $('#card_zip_error_div').show();
+            } else {
+                $('#card_zip_error_div').hide();
+                if (response.street_address.length) {
+                    $('#fa_user_card_street_address').val(response.street_address);
+                    $('#fa_user_card_street_address').focus();
+                }
+                if (response.street_address_2 && response.street_address_2.length) {
+                    $('#fa_user_card_street_address_2').val(response.street_address_2);
+                    $('#fa_user_card_street_address_2').focus();
+                }
+                if (response.town_name.length) {
+                    $('#fa_user_card_town').val(response.town_name);
+                    $('#fa_user_card_town').focus();
+                }
+                if (response.domicile_name.length) {
+                    $('#fa_user_card_county').val(response.domicile_name);
+                    $('#fa_user_card_county').focus();
+                }
+            }
+        });
+    }
+    
+    function removePaymentSource(url)
+    {
+        $('#paymentSourceDeleteModal').foundation('reveal', 'open');
+        $('#remove_payment_source_btn').unbind();
+        $('#remove_payment_source_btn').bind( "click", function() {
+            $('#paymentSourceDeleteModal').foundation('reveal', 'close');
+            window.location.href = url;
+        });
+    }
+    
+    function confirmDeleteAddress(addressBookId)
+    {
+        $('#addressBookDeleteModal').foundation('reveal', 'open');
+        $('#remove_address_btn').unbind();
+        $('#remove_address_btn').bind( "click", function() {
+            $('#addressBookDeleteModal').foundation('reveal', 'close');
+            deleteAddress(addressBookId);
+        });
+    }
+    
+    function deleteAddress(addressBookId)
+    {
+        var route = Routing.generate('ajax_delete_address', { 'addressBookId': addressBookId });
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url : route,
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
+                scrollToElement('#panel6b', '1000', -150);
+            } else {
+                if (response.listHtmlContent.length) {
+                    $('#address_book_main').html(response.listHtmlContent);
+                }
+                $(decorateMessage('{{'Address deleted successfully.'|trans({}, 'frontend-user-address-book')}}', 'success')).insertBefore('#address_book_main');
+                scrollToElement('#panel6b', '1000', -150);
+                bindCustomRadioEvent();
+            }
+        });
+    }
+    
+    function showHideUserCard(showFlag)
+    {
+        if (showFlag) {
+            $('#add_new_card_anchor').hide();
+            $('#card_detail').show();
+            $('.fa-select-white').selectmenu('refresh');
+        } else {
+            $('#card_detail').hide();
+            clearForm('#user_card_form');
+            $('.expiry-date').nextAll('small.error').first().remove();
+            $('.expiry-date').nextAll('small.error').first().remove();
+            $('#add_new_card_anchor').show();
+            scrollToElement('#panel2b', '1000', -150);
+        }
+    }
+    
+    function bindEqualizerEvent(equalizerId)
+    {
+        if ($('#'+equalizerId).is(':visible')) {
+            $('#'+equalizerId).equalizer({
+                columns: '> div',
+                useHeight: 'height',
+                resizeable: true,
+                min: 0,
+                breakpoint: null,
+                disabled: 'breakpoint',
+                overflow: 'overflowed'
+            });
+    	}
+    }
+    
+    function updateInvoiceAddress(addressBookId)
+    {
+        var route = Routing.generate('ajax_update_invoice_address', { 'addressBookId': addressBookId });
+        blockElement('#panel6b');
+        $.ajax({
+            type: "POST",
+            url : route,
+        })
+        .always(function(response) {
+            unblockElement('#panel6b');
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
+                scrollToElement('#panel6b', '1000', -150);
+            } else {
+                if (response.listHtmlContent.length) {
+                    $('#address_book_main').html(response.listHtmlContent);
+                }
+                $(decorateMessage('{{'Invoice address updated successfully.'|trans({}, 'frontend-user-address-book')}}', 'success')).insertBefore('#address_book_main');
+                scrollToElement('#panel6b', '1000', -150);
+                bindCustomRadioEvent();
+            }
+        });
+    }
+    
+    function loadInvoices(monthYear)
+    {
+        blockElement('#panel8b');
+        $.ajax({
+            type: "POST",
+            url : '{{ path('ajax_load_invoice') }}',
+            data: {'invoiceMonthYear': monthYear}
+        })
+        .always(function(response) {
+            unblockElement('#panel8b');
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).prependTo('#panel8b');
+                scrollToElement('#panel8b', '1000', -150);
+            } else {
+                if (response.listHtmlContent.length) {
+                    $('#invoices_item_div').html(response.listHtmlContent);
+                }
+            }
+        });
+    }
+    
+    function viewInvoiceReceipt(orderId)
+    {
+        var route = Routing.generate('invoice_receipt', { 'orderId': orderId, 'action':'viewonly' });
+        window.open(route,"Invoice receipt", "height=600, width=800, status=no, titlebar=no, menubar=no, location=no, toolbar=no, resizable=no, scrollbars=yes");
+    }
+
+    function printInvoiceReceipt(orderId)
+    {
+        var route = Routing.generate('invoice_receipt', { 'orderId': orderId, 'action':'viewandprint' });
+        window.open(route,"Invoice receipt", "height=600, width=800, status=no, titlebar=no, menubar=no, location=no, toolbar=no, resizable=no, scrollbars=yes");
+    }
+//]]>
+</script>

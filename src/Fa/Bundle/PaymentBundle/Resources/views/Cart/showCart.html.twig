@@ -1,0 +1,444 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block page_title %}
+    {{'Basket'|trans({}, 'frontend-cart')}}
+{% endblock %}
+
+{% block body %}
+
+    <div class="cart-list-main" id="cart_main_div">
+        {{ include('FaPaymentBundle:Cart:cart.html.twig') }}
+    </div>
+    <div id="removeDiscountcodeModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+        <a class="close-reveal-modal">&#215;</a>
+        <h5 class="modal-title">
+            {{'Remove discount code?'|trans({}, 'frontend-manage-my-ad')}}
+        </h5>
+        <div class="modal-content remove-modal">
+            <div class="row">
+                <div class="columns">
+                    <h5>{{'Are you sure that you want to remove this discount code?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+                </div>
+            </div>
+            <div class="mt20 remove-item-btn">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="removeDiscountCode();">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</button>
+                    </div>
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#removeDiscountcodeModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="removeCreditModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+        <a class="close-reveal-modal">&#215;</a>
+        <h5 class="modal-title">
+            {{'Remove credit?'|trans({}, 'frontend-manage-my-ad')}}
+        </h5>
+        <div class="modal-content remove-modal">
+            <div class="row">
+                <div class="columns">
+                    <h5>{{'Are you sure that you want to remove credit?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+                </div>
+            </div>
+            <div class="mt20 remove-item-btn">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="removeCredit();">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</button>
+                    </div>
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#removeCreditModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+{% set amazonPayManager  = container.get('fa.amazonpay.manager') %}
+{% set amazonPayConfig  = amazonPayManager.getAmazonpayConfig() %}
+{% set amazonPayMode = container.getParameter('fa.amazon.mode') %}
+{% set amazonPayJs = container.getParameter('fa.amazon.'~amazonPayMode~'.url') %}
+{% set amazonpayUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_AMAZONPAY')}) %}
+<script type='text/javascript' src="{{ amazonPayJs }}"></script>
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    function removeCartItem(transactionId, categoryPath)
+    {
+        ga('send', 'event', 'PAA - Step Cart', 'Delete', categoryPath);
+        if (confirm('{{'Are you sure you want to remove selected item?'|trans({}, 'frontend-cart')}}')) {
+            route = Routing.generate('remove_cart_item', { 'transactionId': transactionId });
+            window.location.href = route;
+        } else {
+            return false;
+        }
+    }
+    
+    $('#discount_code').focus(function(e){
+        if ($(this).hasClass('error')) {
+            $(this).nextAll('small.error').first().remove();
+            $(this).removeClass('error');
+        }
+    });
+    
+    function applyDiscountcode()
+    {
+        if ($('#discount_code').hasClass('error')) {
+            $('#discount_code').nextAll('small.error').first().remove();
+            $('#discount_code').removeClass('error');
+        }
+        blockPage();
+        $.ajax({
+            type: "GET",
+            url: "{{path('apply_package_code')}}",
+            data: {'code': $('#discount_code').val()}
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.error.length) {
+                $("#discount_code").addClass('error');
+                $('<small class="error">'+response.error+'</small>').insertAfter("#discount_code");
+            } else if (response.htmlContent.length) {
+                $('#cart_main_div').html(response.htmlContent);
+            }
+        });
+    }
+    
+    function removeDuscountcodeAlert()
+    {
+        $('#removeDiscountcodeModal').foundation('reveal', 'open');
+    }
+
+    function removeCreditAlert()
+    {
+        $('#removeCreditModal').foundation('reveal', 'open');
+    }
+    
+    function removeDiscountCode()
+    {
+        blockPage();
+        closeRevealModel('#removeDiscountcodeModal');
+        $.ajax({
+            type: "GET",
+            url: "{{path('remove_package_code')}}"
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertAfter('#cart_main_div');
+            } else if (response.htmlContent.length) {
+                $('#cart_main_div').html(response.htmlContent);
+                if (response.code.length) {
+                    $('#discount_code').val(response.code);
+                }
+            }
+        });
+    }
+
+    function removeCredit()
+    {
+        blockPage();
+        closeRevealModel('#removeCreditModal');
+        $.ajax({
+            type: "GET",
+            url: "{{path('remove_package_credit')}}"
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertAfter('#cart_main_div');
+            } else if (response.htmlContent.length) {
+                $('#cart_main_div').html(response.htmlContent);
+            }
+        });
+    }
+    
+    function hideShowPromotionCodeSectionForMobile()
+    {
+        if ($('#discount_code_input_div').is(':visible')) {
+            $('#discount_code_input_div').hide();
+            $('#display_discount_applied_div').hide();
+            $('#promo_code_anchor_mobile').removeClass('up-arrow');
+            $('#promo_code_anchor_mobile').addClass('down-arrow');
+        } else {
+        	$('#discount_code_input_div').show();
+            $('#display_discount_applied_div').show();
+            $('#promo_code_anchor_mobile').addClass('up-arrow');
+            $('#promo_code_anchor_mobile').removeClass('down-arrow');
+        }
+    }
+
+    function hideShowCreditSectionForMobile()
+    {
+        if ($('#display_credit_applied_div').is(':visible')) {
+            $('#display_credit_applied_div').hide();
+            $('#credit_anchor_mobile').removeClass('up-arrow');
+            $('#credit_anchor_mobile').addClass('down-arrow');
+        } else {
+            $('#display_credit_applied_div').show();
+            $('#credit_anchor_mobile').addClass('up-arrow');
+            $('#credit_anchor_mobile').removeClass('down-arrow');
+        }
+    }
+
+    function sendGaAndRedirect(redirectUrl, action, label)
+    {
+        ga('send', 'event', 'PAA - Step Cart', action, label);
+        window.location.href = redirectUrl;
+    }
+//]]>
+</script>
+
+<script>
+/*
+Copyright (C) 2016 Apple Inc. All Rights Reserved.
+See LICENSE.txt for this sample’s licensing information
+Abstract:
+The main client-side JS. Handles displaying the Apple Pay button and requesting a payment.
+*/
+
+/**
+* This method is called when the page is loaded.
+* We use it to show the Apple Pay button as appropriate.
+* Here we're using the ApplePaySession.canMakePayments() method,
+* which performs a basic hardware check. 
+*
+* If we wanted more fine-grained control, we could use
+* ApplePaySession.canMakePaymentsWithActiveCards() instead.
+*/
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.ApplePaySession) {
+        if (ApplePaySession.canMakePayments) {
+            showApplePayButton();
+        }
+    }
+});
+
+function amazonBtnGA(gaVar) {
+	ga('send', 'event', 'PAA - Step Cart', 'Amazon Pay', gaVar);
+}
+
+function showApplePayButton() {
+    HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+    const buttons = document.getElementsByClassName("apple-pay-button");
+    for (let button of buttons) {
+        button.className += " visible";
+    }
+}
+
+/**
+* Apple Pay Logic
+* Our entry point for Apple Pay interactions.
+* Triggered when the Apple Pay button is pressed
+*/
+
+function applePayButtonClicked() {
+    const paymentRequest = {
+        countryCode: 'US',
+        currencyCode: 'USD',
+        shippingMethods: [
+            {
+                label: 'Free Shipping',
+                amount: '0.00',
+                identifier: 'free',
+                detail: 'Delivers in five business days',
+            },
+
+            {
+                label: 'Express Shipping',
+                amount: '5.00',
+                identifier: 'express',
+                detail: 'Delivers in two business days',
+            },
+        ],
+
+        lineItems: [
+            {
+                label: 'Shipping',
+                amount: '0.00',
+            }
+        ],
+        total: {
+            label: 'Apple Pay Example',
+            amount: '8.99',
+        },
+
+        supportedNetworks:[ 'amex', 'discover', 'masterCard', 'visa'],
+        merchantCapabilities: [ 'supports3DS' ],
+        requiredShippingContactFields: [ 'postalAddress', 'email' ],
+    };
+
+    const session = new ApplePaySession(1, paymentRequest);
+    /**
+    * Merchant Validation
+    * We call our merchant session endpoint, passing the URL to use
+    */
+
+    session.onvalidatemerchant = (event) => {
+        console.log("Validate merchant");
+        const validationURL = event.validationURL;
+
+        getApplePaySession(event.validationURL).then(function(response) {
+            console.log(response);
+            session.completeMerchantValidation(response);
+        });
+    };
+
+    /**
+    * Shipping Method Selection
+    * If the user changes their chosen shipping method we need to recalculate
+    * the total price. We can use the shipping method identifier to determine
+    * which method was selected.
+    */
+
+    session.onshippingmethodselected = (event) => {
+        const shippingCost = event.shippingMethod.identifier === 'free' ? '0.00' : '5.00';
+        const totalCost = event.shippingMethod.identifier === 'free' ? '8.99' : '13.99';
+
+        const lineItems = [
+            {
+                label: 'Shipping',
+                amount: shippingCost,
+            },
+
+        ];
+
+        const total = {
+            label: 'Apple Pay Example',
+            amount: totalCost,
+        };
+
+        session.completeShippingMethodSelection(ApplePaySession.STATUS_SUCCESS, total, lineItems);
+    };
+
+    /**
+    * Payment Authorization
+    * Here you receive the encrypted payment data. You would then send it
+    * on to your payment provider for processing, and return an appropriate
+    * status in session.completePayment()
+    */
+
+    session.onpaymentauthorized = (event) => {
+        // Send payment for processing...
+        const payment = event.payment;
+
+        // ...return a status and redirect to a confirmation page
+        session.completePayment(ApplePaySession.STATUS_SUCCESS);
+        window.location.href = "/checkout_payment_success";
+    }
+
+    // All our handlers are setup - start the Apple Pay payment
+    session.begin();
+}
+function getApplePaySession(url) {
+  return new Promise(function (resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/getApplePaySession');
+    xhr.onload = function () {
+      if (this.status >= 200 && this.status < 300) {
+        resolve(JSON.parse(xhr.response));
+      } else {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      }
+    };
+
+    xhr.onerror = function () {
+      reject({
+        status: this.status,
+        statusText: xhr.statusText
+      });
+    };
+
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify({url: url}));
+
+  });
+
+}
+</script>
+<script type='text/javascript'>
+    var host = "amzn.github.io";
+    var amznscrptload = 'yes';
+    if ((host === window.location.host) && (window.location.protocol !== "https:"))
+        window.location.protocol = "https";
+
+    window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId('{{amazonPayConfig['client_id']}}');
+    };
+
+    window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId('{{amazonPayConfig['client_id']}}');
+        amazon.Login.setUseCookie(true);
+    };
+</script>
+<script type='text/javascript'>
+    var authRequest;var amazonpath = "{{amazonpayUrl}}";
+    OffAmazonPayments.Button("AmazonPayButton", "{{amazonPayConfig['merchant_id']}}", {
+        type: "PwA",
+        color: "DarkGray",
+        size: "large",
+        authorization: function () {
+            loginOptions = { scope: "profile postal_code payments:widget payments:shipping_address", popup: true };
+            authRequest = amazon.Login.authorize(loginOptions, amazonpath);
+
+        },
+        onError: function (error) {
+            // something bad happened
+        }
+    });
+     function verifyLoggedIn() {
+        // if you want to display a message.
+        var msgElem = document.getElementById("login-state-msg");
+
+        var options = {
+            scope: "profile postal_code payments:widget payments:shipping_address",
+            popup: true,
+            interactive: 'never'
+        };
+
+        // check if we are logged in
+        authRequest = amazon.Login.authorize (options, function(response) {
+            // this code is executed ASYNCHRONOUSLY
+
+            if ( response.error ) {
+                // USER NOT LOGGED IN
+                console.log("verifyLoggedIn() - SESSION NOT ACTIVE - " + new Date());
+                msgElem.innerHTML = "NOT logged in yet. Click 'Amazon Pay' or Go to Login screen.";
+            } else {
+                // USER IS LOGGED IN
+                console.log("verifyLoggedIn() - SESSION ACTIVE - " + new Date());
+
+                // optionally, get the profile info
+                console.dir('access_token= ' + response.access_token);
+
+                amazon.Login.retrieveProfile(function (response) {
+                    // Display profile information.
+                    console.dir('CustomerId= ' + response.profile.CustomerId);
+                    console.dir('Name= ' + response.profile.Name);
+                    console.dir('PostalCode= ' + response.profile.PostalCode);
+                    console.dir('PrimaryEmail= ' + response.profile.PrimaryEmail);
+
+                    alert("Hello " + response.profile.Name + "! Just click Pay!");
+                });
+            }
+        });
+    }
+</script>
+
+{% endblock %}

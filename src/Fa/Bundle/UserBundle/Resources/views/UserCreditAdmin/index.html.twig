@@ -1,0 +1,41 @@
+{% set queryParams = app.request.query.all %}
+
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set packageRepository = fetch_repository('FaPromotionBundle:Package') %}
+{% set packageTypeArray = packageRepository.getPackageTypeArray() %}
+{% set userCreditUsedRepository = fetch_repository('FaUserBundle:UserCreditUsed') %}
+{% set containerInstance = fetch_container_instance() %}
+
+{% set userCreditEditGrant = false %}
+{% set userCreditDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('user_credit_edit_admin') %}
+  {% set userCreditEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('user_credit_delete_admin') %}
+  {% set userCreditDeleteGrant = true %}
+{% endif %}
+
+{% block content %}
+    <div class="row">
+        <div class="columns">
+            <h1 class="left">{{ 'User credits'|trans }}</h1>
+            {% if fa_resource_authorization_manager.isGranted('user_credit_new_admin') %} 
+                <a href="{{ path('user_credit_new_admin', {'userId': app.request.get('userId')}) }}" class="right tiny button add_user_btn">{{ 'Add New'|trans({}, 'messages') }}</a> 
+            {% endif %}
+        </div>
+    </div>
+
+    {% use "FaUserBundle:UserCreditAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaUserBundle:UserCreditAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

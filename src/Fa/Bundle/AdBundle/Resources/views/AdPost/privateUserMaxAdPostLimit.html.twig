@@ -1,0 +1,60 @@
+{% set container = fetch_container_instance() %}
+{% set privateAdPostLimit = privateUserAdParams.privateUserAdPostLimitRules.privateUserAdPostLimit %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title"><span class="ads-limit-icon"></span>{{'Maximum ad limit'|trans({}, 'frontend-contact-seller')}}</h5>
+<div class="modal-content remove-modal remove-item-modal">
+    <div class="row">
+        <div class="columns">
+            <h5 class="mb20">{{'Maximum number of ad placements reached'|trans({}, 'frontend-contact-seller')}}</h5>
+            
+            <p>{{'You are unable to place more than <b class="black-text">%private_ad_post_limit%</b> free %ad_text% as a private user in this category.'|trans({'%private_ad_post_limit%': privateAdPostLimit, '%ad_text%': (privateAdPostLimit == 1 ? 'ad' : 'ads')}, 'frontend-contact-seller')|raw}}</p>
+
+            <p>{{'Don\'t worry though, you can continue placing this ad by any of the following methods:'|trans({}, 'frontend-contact-seller')}}</p>
+
+            <p>{{'a) Click \'Continue placing ad\' to place ad at our competitive business rates'|trans({}, 'frontend-contact-seller')}}</p>
+            <p>{{'b) %business_user_link% and place unlimited ads'|trans({'%business_user_link%': '<a href="javascript:void(0);" class="bold" onclick="convertUserToBusiness();">Become a business advertiser</a>'}, 'frontend-contact-seller')|raw}}</p>
+            <p>{{'c) Visit %my_ads_link% to expire one of your live ads and continue with this one'|trans({'%my_ads_link%': '<a href="javascript:void(0);" class="bold" onclick="showManageMyAds();">Manage my ads</a>'}, 'frontend-contact-seller')|raw}}</p>
+        </div>
+    </div>
+    <div class="row center mt10">
+        <div class="columns">
+            <a onclick="showBusinessPackages()" href="javascript:void(0);" class="secondary-btn-1 button expand mb10">{{'Continue placing ad'|trans({}, 'frontend-contact-seller')}}</a>
+        </div>
+    </div>
+</div>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+    });
+
+    function convertUserToBusiness()
+    {
+    	ga('send', 'event', 'CTA', 'Ad limit - Become business adv');
+        blockElement('#privateUserMaxAdPostLimitModal');
+        $.ajax({
+            type: "POST",
+            url: "{{path('convert_user_to_business')}}",
+            data: {userId:{{ app.user.getId()}}, businessCategoryId: {{ categoryId }}}
+        })
+        .always(function(response) {
+            unblockElement('#privateUserMaxAdPostLimitModal');
+        })
+        .done(function(response) {
+            closeRevealModel('#privateUserMaxAdPostLimitModal');
+            window.location="{{ path('user_package_choose_profile') }}";
+        });
+    }
+
+    function showBusinessPackages()
+    {
+        ga('send', 'event', 'CTA', 'Ad limit - Continue ad');
+        addToCurrentUrl({'business':'1'}, true);
+    }
+
+    function showManageMyAds()
+    {
+        ga('send', 'event', 'CTA', 'Ad limit - Manage my ads');
+        window.location = '{{ path('manage_my_ads_active') }}';
+    }
+//]]>
+</script>

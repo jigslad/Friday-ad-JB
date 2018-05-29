@@ -1,0 +1,47 @@
+1) Package Array
+
+Array
+(
+    [package] => Array
+        (
+            [2] => Array
+                (
+                    [id] => 2
+                    [price] => 2.99
+                    [price_type] => 0
+                    [insertion_price] => 
+                    [commission] => 
+                    [duration] => 1m
+                    [upsell] => Array
+                        (
+                            [3] => Array
+                                (
+                                    [id] => 3
+                                    [value] => 8
+                                    [value1] => 
+                                    [duration] => 
+                                )
+
+                            [10] => Array
+                                (
+                                    [id] => 10
+                                    [value] => 7
+                                    [value1] => 
+                                    [duration] => 
+                                )
+
+                            [14] => Array
+                                (
+                                    [id] => 14
+                                    [value] => 
+                                    [value1] => 
+                                    [duration] => 
+                                )
+
+                        )
+
+                )
+
+        )
+
+)

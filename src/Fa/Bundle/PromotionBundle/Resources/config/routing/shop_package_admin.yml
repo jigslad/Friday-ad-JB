@@ -1,0 +1,25 @@
+shop_package_admin:
+    path:     /
+    defaults: { _controller: "FaPromotionBundle:ShopPackageAdmin:index" }
+
+shop_package_new_admin:
+    path:     /new
+    defaults: { _controller: "FaPromotionBundle:ShopPackageAdmin:new" }
+
+shop_package_create_admin:
+    path:     /create
+    defaults: { _controller: "FaPromotionBundle:ShopPackageAdmin:create" }
+    requirements: { methods: post }
+
+shop_package_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaPromotionBundle:ShopPackageAdmin:edit" }
+
+shop_package_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaPromotionBundle:ShopPackageAdmin:update" }
+    requirements: { methods: post|put }
+
+shop_package_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaPromotionBundle:ShopPackageAdmin:delete" }

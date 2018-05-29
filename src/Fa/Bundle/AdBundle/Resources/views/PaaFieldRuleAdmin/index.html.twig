@@ -1,0 +1,30 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+{% set paaFieldRuleEditGrant = false %}
+{% set paaFieldRuleDeleteGrant = false %}
+{% set paaFieldRuleShowGrant = false %}
+
+{% if fa_resource_authorization_manager.isGranted('paa_field_rule_edit_admin') %}
+  {% set paaFieldRuleEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('paa_field_rule_delete_admin') %}
+  {% set paaFieldRuleDeleteGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('paa_field_rule_show_admin') %}
+  {% set paaFieldRuleShowGrant = true %}
+{% endif %}
+
+{% block content -%}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'paa_field_rule_new_admin'}) }}
+    {% use "FaAdBundle:PaaFieldRuleAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+    {{ include('FaAdBundle:PaaFieldRuleAdmin:list.html.twig', {'pagination': pagination}) }}
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

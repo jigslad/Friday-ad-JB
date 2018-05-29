@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="af5391b953087e4bae019af5bc5485a4289f6787" resname="Add new card">
+        <jms:reference-file line="21">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <source>Add new card</source>
+        <target state="new">Add new card</target>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="111">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="3bd42339af5c191ff0580b2250431a27bec543c6" resname="Enter new card">
+        <jms:reference-file line="25">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <source>Enter new card</source>
+        <target state="new">Enter new card</target>
+      </trans-unit>
+      <trans-unit id="b0a98216a32426b9e66a4ac1eb6df2e96e1b495c" resname="Ok">
+        <jms:reference-file line="114">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <source>Ok</source>
+        <target state="new">Ok</target>
+      </trans-unit>
+      <trans-unit id="e963907dac5cd5c017869b4c96c18021c9bd058b" resname="Remove">
+        <jms:reference-file line="14">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <source>Remove</source>
+        <target state="new">Remove</target>
+      </trans-unit>
+      <trans-unit id="c462b8cb27cc890119a44b994de0b0c6977794f1" resname="Remove payment source?">
+        <jms:reference-file line="100">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <source>Remove payment source?</source>
+        <target state="new">Remove payment source?</target>
+      </trans-unit>
+      <trans-unit id="3900c0c8d352e9cb837ce606b2ca8b860140440e" resname="Saved payment sources">
+        <jms:reference-file line="3">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <source>Saved payment sources</source>
+        <target state="new">Saved payment sources</target>
+      </trans-unit>
+      <trans-unit id="c3f398c916adb69fb3a22536d53061560f260324" resname="This will remove your payment source.">
+        <jms:reference-file line="105">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <source>This will remove your payment source.</source>
+        <target state="new">This will remove your payment source.</target>
+      </trans-unit>
+      <trans-unit id="8edd9c99790b92a3f65fa026734551d8d41714be" resname="You do not have saved any payment sources.">
+        <jms:reference-file line="19">views/MyAccount/mySavedPaymentSources.html.twig</jms:reference-file>
+        <source>You do not have saved any payment sources.</source>
+        <target state="new">You do not have saved any payment sources.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

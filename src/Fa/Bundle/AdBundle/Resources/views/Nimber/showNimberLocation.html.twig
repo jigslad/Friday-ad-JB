@@ -1,0 +1,55 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'get_estimate_form_id'}}) }}
+<div class="nimber-box">
+    <div class="nimber-box-bdr">
+        <div class="clearfix">
+            <span class="nimber-logo">&nbsp;</span>
+            <div class="nimber-text">
+                {{'Get it picked up and then delivered to your door by people going your way.'|trans({}, 'frontend-nimber')}}
+                <a href="javascript:void(0);" data-reveal-id="nimberLearnMoreModal">{{'Learn more'|trans({}, 'frontend-nimber')}}</a>
+            </div>
+        </div>
+        <div class="clearfix nimber-fields">
+            <div class="nimber-postcode">
+                {{ form_widget(form.zip, {'attr':{'class': 'white-field', 'placeholder': 'Type your postcode...'|trans({}, 'frontend-nimber')}}) }}
+                {{ form_errors(form.zip) }}
+            </div>
+            {{ form_widget(form.get_estimate_btn, {'attr': {'class':'secondary-btn-1 button mb0'}}) }}
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% if js %}
+        $(document).ready(function() {
+            bindFormErrorEvents();
+        });
+        $('#get_estimate_form_id').bind('submit', function(event){
+            blockElement('#nimber_div');
+            $('#fa_nimber_postcode_get_estimate_btn').text("{{'Calculating cost...'|trans({}, 'frontend-nimber')}}");
+            // Stop form from submitting normally
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{path('nimber_location', {'adId': adId })}}",
+                data: new FormData(this),
+                contentType: false,
+                processData:false,
+            })
+            .always(function(response) {
+                $('#fa_nimber_postcode_get_estimate_btn').text("{{'Get delivery estimate'|trans({}, 'frontend-nimber')}}");
+                unblockElement('#nimber_div');
+            })
+            .done(function(response) {
+                if (response.error.length) {
+                    $("#fa_nimber_postcode_zip").addClass('error');
+                    $('<small class="error">'+response.error+'</small>').insertAfter("#fa_nimber_postcode_zip");
+                } else if (response.htmlContent.length) {
+                    $('#nimber_div').html(response.htmlContent);
+                }
+            });
+        });
+    {% endif %}
+//]]>
+</script>

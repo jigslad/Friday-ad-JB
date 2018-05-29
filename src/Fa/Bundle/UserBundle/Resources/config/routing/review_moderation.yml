@@ -1,0 +1,7 @@
+review_moderation_request:
+    path:     /request/{id}
+    defaults: { _controller: "FaUserBundle:ReviewModeration:request" }
+
+review_moderation_response:
+    path:     /response
+    defaults: { _controller: "FaUserBundle:ReviewModeration:response" }

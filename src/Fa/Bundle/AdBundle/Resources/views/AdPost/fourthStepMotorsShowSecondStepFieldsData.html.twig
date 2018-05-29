@@ -1,0 +1,319 @@
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|join('<span class="seperator"></span>')|raw }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_first_step', {'is_edit' : 1}) }}');" title="{{ 'Change category'|trans({}, 'frontend-paa-fourth-step') }}" onclick="">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% if ad.title is defined and ad.title %}
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Ad title'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ ad.title }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change ad title'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if ad.description is defined and ad.description %}
+<div class="change-category clearfix">
+    <div class="clearfix">
+        <div class="desc-col-1">
+            <div class="clearfix">
+                <span class="cat-caption left">{{ 'Description'|trans({}, 'frontend-paa-fourth-step') }}:</span>
+                <div class="paa-desc">
+                    <div id="paa_desc">{{ ad.description|raw }}</div>
+                    <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend') }}</a>
+                    <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend') }}</a>
+               </div>
+            </div>
+        </div>
+        <div class="desc-col-2">
+            <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change description'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% if ad.price is defined and ad.price %}
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Sale price'|trans({}, 'frontend-paa-fourth-step') }}:</span>&pound;{{ ad.price}}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change price'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if adMotorsMetaData.reg_no is defined and adMotorsMetaData.reg_no %}
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Registration'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.reg_no }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change registration'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if adMotors.manufacturer_id is defined and adMotors.manufacturer_id %}
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Manufacturer'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.manufacturer_id) }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if adMotorsMetaData.manufacturer is defined and adMotorsMetaData.manufacturer %}
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Manufacturer'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.manufacturer }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if adMotors.make_id is defined and adMotors.make_id %}
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Make'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.make_id) }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change make'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if adMotorsMetaData.make is defined and adMotorsMetaData.make %}
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Make'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.make }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change make'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if adMotors.model_id is defined and adMotors.model_id %}
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Model'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.model_id) }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if adMotorsMetaData.model is defined and adMotorsMetaData.model %}
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Model'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.model }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change model'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if adMotors.part_of_vehicle_id is defined and adMotors.part_of_vehicle_id %}
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Part of vehicle'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.part_of_vehicle_id) }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change part of the vehicle'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if adMotorsMetaData.part_of_vehicle is defined and adMotorsMetaData.part_of_vehicle %}
+<div class="change-category clearfix">
+    <div class="left cat-name-wrap">
+        <span class="cat-caption">{{ 'Part of vehicle'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.part_of_vehicle }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change part of the vehicle'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if adMotors.part_manufacturer_id is defined and adMotors.part_manufacturer_id %}
+<div class="change-category clearfix">
+    <div class="left">
+        <span class="cat-caption">{{ 'Part manufacturer'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.part_manufacturer_id) }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change part manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+{% if adMotorsMetaData.part_manufacturer is defined and adMotorsMetaData.part_manufacturer %}
+<div class="change-category clearfix">
+    <div class="left">
+        <span class="cat-caption">{{ 'Part manufacturer'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.part_manufacturer }}
+    </div>
+    <div class="right">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change part manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+{% endif %}
+
+{% if rootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID') or 
+rootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMERCIALVEHICLES_ID') or 
+rootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID')
+%}
+
+{% if (adMotors.colour_id is defined and adMotors.colour_id is not null and adMotors.colour_id != 0) or adMotorsMetaData.colour is defined or (adMotors.body_type_id is defined and adMotors.body_type_id is not null and adMotors.body_type_id != 0) or 
+adMotorsMetaData.reg_year is defined or (adMotors.fuel_type_id is defined and adMotors.fuel_type_id is not null and adMotors.fuel_type_id != 0) or (adMotors.transmission_id is defined and adMotors.transmission_id is not null and adMotors.transmission_id != 0) or
+adMotorsMetaData.engine_size is defined or adMotorsMetaData.no_of_doors is defined or adMotorsMetaData.no_of_seats is defined or 
+adMotorsMetaData.mileage is defined or adMotorsMetaData.fuel_economy is defined or attribute(adMotorsMetaData, '062mph') is defined or 
+adMotorsMetaData.top_speed is defined or adMotorsMetaData.co2_emissions is defined or adMotorsMetaData.ncap_rating is defined %}
+
+<div class="change-category">
+    <div class="clearfix">
+        <div class="left cat-name-wrap">
+            <span class="cat-caption">{{ '%vehicle% details'|trans({'%vehicle%' : rootMotorsCategoryName|slice(0, ((rootMotorsCategoryName|length) -1))}, 'frontend-paa-fourth-step') }}</span>
+        </div>
+        <div class="right">
+            <a href="javascript:void(0)" title="{{ 'Show details'|trans({}, 'frontend-paa-fourth-step') }}" id="show_all_details_link" >{{ 'Show'|trans({}, 'frontend-paa-fourth-step') }}</a> | 
+            <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change details'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+        </div>
+    </div>
+    <div id="all_details" style="display:none">
+        {% if (adMotors.colour_id is defined and adMotors.colour_id is not null and adMotors.colour_id != 0) or adMotorsMetaData.colour is defined or (adMotors.body_type_id is defined and adMotors.body_type_id is not null and adMotors.body_type_id != 0) or 
+        adMotorsMetaData.reg_year is defined or (adMotors.fuel_type_id is defined and adMotors.fuel_type_id is not null and adMotors.fuel_type_id != 0) or (adMotors.transmission_id is defined and adMotors.transmission_id is not null and adMotors.transmission_id != 0) or
+        adMotorsMetaData.engine_size is defined or adMotorsMetaData.no_of_doors is defined or adMotorsMetaData.no_of_seats is defined or 
+        adMotorsMetaData.mileage is defined %}
+        <div id="basic_details" class="fa-accordion">
+            <dl class="accordion" data-accordion>
+                <dd class="accordion-navigation">
+                    <a href="javascript:void(0)"><h5>{{ 'The basics'|trans({}, 'frontend-paa-fourth-step') }}</h5></a>
+                    <div class="content active">
+                        <ul class="details-info paa-dtl-info">
+                            {% if adMotors.colour_id is defined and adMotors.colour_id %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'Colour'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.colour_id) }}</div>
+                                </li>
+                            {% endif %}
+                            {% if adMotorsMetaData.colour is defined and adMotorsMetaData.colour %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'Colour'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ adMotorsMetaData.colour }}</div>
+                                </li>
+                            {% endif %}
+                            {% if adMotors.body_type_id is defined and adMotors.body_type_id %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'Body type'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.body_type_id) }}</div>
+                                </li>
+                            {% endif %}
+                            {% if adMotorsMetaData.reg_year is defined and adMotorsMetaData.reg_year %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'Reg. year'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ ucfirst(adMotorsMetaData.reg_year|replace({'-': ' '})) }}</div>
+                                </li>
+                            {% endif %}
+                            {% if adMotors.fuel_type_id is defined and adMotors.fuel_type_id %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'Fuel type'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.fuel_type_id) }}</div>
+                                </li>
+                            {% endif %}
+                            {% if adMotors.transmission_id is defined and adMotors.transmission_id %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'Transmission'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.transmission_id) }}</div>
+                                </li>
+                            {% endif %}
+                            {% if adMotorsMetaData.engine_size is defined and adMotorsMetaData.engine_size %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'Engine size'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ adMotorsMetaData.engine_size }} {{fetch_repository('FaAdBundle:AdMotors').getUnitByField('engine_size')}}</div>
+                                </li>
+                            {% endif %}
+                            {% if adMotorsMetaData.no_of_doors is defined and adMotorsMetaData.no_of_doors %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'No. of doors'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ adMotorsMetaData.no_of_doors }}</div>
+                                </li>
+                            {% endif %}
+                            {% if adMotorsMetaData.no_of_seats is defined and adMotorsMetaData.no_of_seats %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'No. of seats'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ adMotorsMetaData.no_of_seats }}</div>
+                                </li>
+                            {% endif %}
+                            {% if adMotorsMetaData.mileage is defined and adMotorsMetaData.mileage %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'Mileage'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ adMotorsMetaData.mileage }}</div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+        {% endif %}
+        
+        {% if adMotorsMetaData.fuel_economy is defined or attribute(adMotorsMetaData, '062mph') is defined or 
+        adMotorsMetaData.top_speed is defined or adMotorsMetaData.co2_emissions is defined %}
+        <div id="performance_details" class="fa-accordion">
+            <dl class="accordion" data-accordion>
+                <dd class="accordion-navigation">
+                    <a href="javascript:void(0)"><h5>{{ 'Performance'|trans({}, 'frontend-paa-fourth-step') }}</h5></a>
+                    <div class="content active">
+                        <ul class="details-info paa-dtl-info">
+                            {% if adMotorsMetaData.fuel_economy is defined and adMotorsMetaData.fuel_economy %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'MPG'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ adMotorsMetaData.fuel_economy }} {{fetch_repository('FaAdBundle:AdMotors').getUnitByField('fuel_economy')}}</div>
+                                </li>
+                            {% endif %}
+                            {% if attribute(adMotorsMetaData, '062mph') is defined and attribute(adMotorsMetaData, '062mph') %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ '0-62 MPH'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ attribute(adMotorsMetaData, '062mph') }} {{fetch_repository('FaAdBundle:AdMotors').getUnitByField('062mph')}}</div>
+                                </li>
+                            {% endif %}
+                            {% if adMotorsMetaData.top_speed is defined and adMotorsMetaData.top_speed %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'Top speed'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ adMotorsMetaData.top_speed }} {{fetch_repository('FaAdBundle:AdMotors').getUnitByField('top_speed')}}</div>
+                                </li>
+                            {% endif %}
+                            {% if adMotorsMetaData.co2_emissions is defined and adMotorsMetaData.co2_emissions %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'Co2 emissions'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ adMotorsMetaData.co2_emissions }} {{fetch_repository('FaAdBundle:AdMotors').getUnitByField('co2_emissions')}}</div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+        {% endif %}
+        
+        {% if adMotorsMetaData.ncap_rating is defined %}
+        <div id="safety_details" class="fa-accordion">
+            <dl class="accordion" data-accordion>
+                <dd class="accordion-navigation">
+                    <a href="javascript:void(0)"><h5>{{ 'Safety'|trans({}, 'frontend-paa-fourth-step') }}</h5></a>
+                    <div class="content active">
+                        <ul class="details-info paa-dtl-info">
+                            {% if adMotorsMetaData.ncap_rating is defined and adMotorsMetaData.ncap_rating %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ 'Ncap rating'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                    <div class="detail-text">{{ adMotorsMetaData.ncap_rating }} {{fetch_repository('FaAdBundle:AdMotors').getUnitByField('ncap_rating')}}</div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </dd>
+            </dl>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endif %}

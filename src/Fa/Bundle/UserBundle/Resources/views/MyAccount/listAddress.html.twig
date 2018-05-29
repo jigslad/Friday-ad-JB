@@ -1,0 +1,44 @@
+{% if userAddresses|length %}
+    {% for userAddressId, userAddress in userAddresses%}
+        <div class="large-8 columns">
+            <div class="myacc-address-box">
+                <h5>
+                {% if userAddress['first_name'] is defined and userAddress['first_name']|trim|length %}
+                    {{ userAddress['first_name'] }}
+                {% else %}
+                    {{app.user.getFullName()}}
+                {% endif %}
+                
+                </h5>
+                <p>
+                    {% if userAddress['street_address'] is defined and userAddress['street_address']|trim|length %}
+                        {{ userAddress['street_address'] }}<br />
+                    {% endif %}
+                    {% if userAddress['domicile_name'] is defined and userAddress['domicile_name']|trim|length %}
+                        {{ userAddress['domicile_name'] }}<br />
+                    {% endif %}
+                    {% if userAddress['town_name'] is defined and userAddress['town_name']|trim|length %}
+                        {{ userAddress['town_name'] }}{% if userAddress['zip'] %}, {{ userAddress['zip'] }}{% endif %}
+                        <br />
+                    {% endif %}
+                    {% if userAddress['country_name'] is defined and userAddress['country_name']|trim|length %}
+                        {{ userAddress['country_name'] }}
+                    {% endif %}
+                </p>
+                <a href="javascript:void(0)" onclick="javascript:editAddressBook('{{ userAddressId }}')" class="xs-btn-2 button"><span class="edit-icon"></span>{{ 'Edit'|trans({}, 'frontend-user-address-book') }}</a>
+                <a href="javascript:void(0)" class="xs-btn-2 button" onclick="javascript:confirmDeleteAddress('{{ userAddressId }}');"><span class="delete-icon"></span>{{ 'Remove'|trans({}, 'frontend-user-address-book') }}</a>
+                <div class="label-inline mt15">
+                    <span class="custom-radio {% if userAddress['is_invoice_address']%}checked{% endif%}">
+                        <input type="radio" onchange="updateInvoiceAddress({{ userAddressId }});" name="is_invoice_address" id="is_invoice_address_{{ userAddressId }}" {% if userAddress['is_invoice_address']%}checked="checked"{% endif%} value="{{ userAddressId }}">
+                    </span>
+                    <label for="is_invoice_address_{{ userAddressId }}">{{ 'Invoice address'|trans({}, 'frontend-user-address-book') }}</label>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="large-8 columns end">
+    <div class="address-btn {% if not userAddresses|length %}single-address{% endif %}">
+        <a href="javascript:void(0);" onclick="javascript:addNewAddressBook();" class="xs-btn-1 button expand">{{ 'Add an address'|trans({}, 'frontend-user-address-book') }}</a>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set exportToCsv     = false %}
+{% set reportCsvList = false %}
+
+{% if fa_resource_authorization_manager.isGranted('fa_report_automated_email_export_to_csv') %}
+  {% set exportToCsv = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('ajax_fa_report_automated_email_csv_list') %}
+  {% set reportCsvList = true %}
+{% endif %}
+
+{% block content -%}
+    <div class="large-row">
+        {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew': false}) }}
+
+        {% use "FaReportBundle:AutomatedEmailReportAdmin:search.html.twig" %}
+        {{ block('search_html') }}
+
+        {% if pagination is not null and pagination.getNbResults() %}
+            {% if exportToCsv %}
+                <div class="row">
+                    <div class="columns text-right mb10">
+                        <a href="{{ path('fa_report_automated_email_export_to_csv') }}">{{'Export to csv'}}</a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if searchParams|length and form.vars.valid %}
+            {{ include('FaReportBundle:AutomatedEmailReportAdmin:list.html.twig', {'pagination': pagination}) }}
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

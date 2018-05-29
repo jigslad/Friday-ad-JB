@@ -1,0 +1,40 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            <div class="row">
+                <div class="large-9 columns">
+                    {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                        <div id="seo_fields_div">
+                            {{ form_row(form.page_title) }}
+                            {{ form_row(form.page_url) }}
+                            {{ form_row(form.h1_tag) }}
+                            {{ form_row(form.meta_description) }}
+                            {{ form_row(form.no_index) }}
+                            {{ form_row(form.no_follow) }}
+                            {{ form_row(form.canonical_url) }}
+                        </div>
+                        {{ form_row(form.status) }}
+                        {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'seo_tool_override_admin'}) }}
+                    {{ form_end(form) }}
+                </div>
+                <div class="large-3 columns">
+                    <b>{{ 'Indexable Dimensions'|trans }}</b>
+                    <div style="overflow: auto; height: 800px;" id="category_dimensions_div">
+                        {{ staticCall('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository', 'getIndexableDimesionsArray')|join('<br />')|raw }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'link', 'toolbar1' : 'bold italic underline, bullist numlist link styleselect fontsizeselect', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'false', 'custom_fontsize_formats': '8px 10px 12px 14px 18px 24px 36px' }) }}
+{% endblock %}

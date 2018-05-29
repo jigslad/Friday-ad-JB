@@ -1,0 +1,55 @@
+{% if adImgObj %}
+    {% set container = fetch_container_instance() %}
+    {% set isImageInTemp = true %}
+    {% set isAdminLoggedIn = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isAdminLoggedIn', [container]) %}
+    {% set cropImageRoute = "ajax_crop_ad_image" %}
+    {% if isAdminLoggedIn and isAdminLoggedIn.id %}
+        {% set cropImageRoute = "ajax_crop_ad_image_admin" %}
+    {% endif %}
+    {% set deleteRoute = "ajax_delete_ad_images" %}
+    {% if isAdminLoggedIn and isAdminLoggedIn.id %}
+        {% set deleteRoute = "ajax_delete_ad_images_admin" %}
+    {% endif %}
+    {% set resetImageRoute = "ajax_reset_ad_image" %}
+    {% if isAdminLoggedIn and isAdminLoggedIn.id %}
+        {% set resetImageRoute = "ajax_reset_ad_image_admin" %}
+    {% endif %}
+
+    <div id='content'>
+        <p align="left">
+            <span style="font-size:20px;font-weight:bold">{% trans with {'%img_no%': adImgObj.ord , '%img_count%': fetch_container_instance().getParameter('fa.image.' ~ vertical ~ '_upload_limit')} %}Photos: %img_no% of %img_count%{% endtrans %}</span>
+            <span style="font-size:16px;font-weight:bold;color:#a7adbb"> ({{ 'min. of 1 photo required'|trans }})</span>
+        </p>
+        <div style="border:1px solid #000;padding:15px">
+        <span style="font-size:20px;font-weight:bold;color:#a7adbb">{{ 'Edit your photo'|trans }}</span>
+        <div class='frame'>
+            {% if adImgObj.getSessionId() %}
+                {% set imageAdId = adImgObj.getSessionId() %}
+            {% else %}
+                {% set imageAdId = adImgObj.getAd().getId() %}
+            {% endif %}
+            {% set adCropBigImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, imageAdId, adImgObj.getPath(), adImgObj.getHash(), '', adImgObj.getAws(), adImgObj.getImageName()]) %}
+            <img id='crop_big_image' src="{{ adCropBigImageUrl }}?{{ random(1000) }}">
+        </div>
+        <div id='controls'>
+          <span id="reset_image_success_msg"></span>
+          {% if adImgObj.getOrd() > 1 %}
+              <button id="make_main_photo" class="tiny button" type="button" onclick="makeMainPhoto('{{ adImgObj.getId() }}', '{{ adImgObj.getOrd() }}')">{{'Make main photo'|trans}}</button>
+          {% endif %}
+          <button id='zoom_out' class="tiny button" type='button' title='Zoom out'> {{'Zoom out'|trans}} </button>
+          <button id='zoom_in' class="tiny button" type='button' title='Zoom in'> {{'Zoom in'|trans}} </button>
+          <button id='rotate' class="tiny button" type='button' title='Rotate right'> {{'Rotate'|trans}} </button>
+          <button id='fit' class="tiny button" type='button' title='Fit image'> {{'Fit Image'|trans}}  </button>
+        </div>
+          <input type="hidden" id="x" name="x" class="cropImg" />
+          <input type="hidden" id="y" name="y" class="cropImg" />
+          <input type="hidden" id="w" name="w" class="cropImg" />
+          <input type="hidden" id="h" name="h" class="cropImg" />
+          <input type="hidden" id="angle" name="angle" class="cropImg" />
+          <input type="hidden" id="scale" name="scale" class="cropImg" />
+          <button type="button" id='crop_image' onclick="cropImage('{{path(cropImageRoute, {'adId': imageAdId, 'imageId': adImgObj.getId(), 'imageHash': adImgObj.getHash(), 'is_admin': 1})}}')" style="display:none;" class="tiny button mb0">{{'Crop & save'|trans}}</button>
+          <button id='crop_close' class="tiny button mb0" type='button'>{{'Cancel'|trans}}</button>
+          <button id="remove_img" class="alert tiny button mb0" type="button" onclick="deleteImage('{{path(deleteRoute, {'adId': imageAdId, 'imageId': adImgObj.getId(), 'imageHash': adImgObj.getHash(), 'vertical': vertical, 'is_admin': 1})}}')">{{'Remove'|trans}}</button>
+      </div>
+    </div>
+{% endif %}

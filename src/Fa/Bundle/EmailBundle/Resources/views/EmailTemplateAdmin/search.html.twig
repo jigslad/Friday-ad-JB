@@ -1,0 +1,27 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+        {{ form_errors(form) }}
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_widget(form.email_template__name, {'attr': {'class':'form-control', 'placeholder': 'Email template name'|trans }}) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_widget(form.email_template__subject, {'attr': {'class':'form-control', 'placeholder': 'Email template subject'|trans }}) }}
+                </div>
+            </div>
+            <div class="search_box">
+	            <div class="row">
+	                <div class="large-6 columns">
+	                    {{ form_widget(form.email_template__status, {'attr': {'class':'form-control' }}) }}
+	                </div>
+	                <div class="large-6 columns">
+	                    {{ form_widget(form.search, {'attr': {'class':'small button mb0'}}) }}
+	                </div>
+	            </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

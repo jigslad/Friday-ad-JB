@@ -1,0 +1,42 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block title %}
+    {{'My favourites'|trans({}, 'frontend-my-favourites')}}
+{% endblock %}
+
+{% set container = fetch_container_instance() %}
+
+{% block body -%}
+
+{{ include('FaUserBundle:MyFavourite:list.html.twig', {}) }}
+
+{% endblock %}
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    function removeFromFavorite(id)
+    {
+        var route = Routing.generate('ad_remove_from_favorite', { 'adId': id });
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url : route,
+            data : {type: 'detail'},
+        })
+        .always(function(response) {
+                unblockPage();
+         })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.anchorHtml.length) {
+            	location.reload();
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#listing_'+id);
+            }
+        });
+    }
+  //]]>
+    </script>
+{% endblock %}

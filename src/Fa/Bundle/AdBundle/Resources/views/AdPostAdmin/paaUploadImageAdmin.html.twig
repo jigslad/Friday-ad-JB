@@ -1,0 +1,26 @@
+<div style="display:none;">
+    {{ form_widget(attribute(form, 'photo_error')) }}
+</div>
+<div class="row">
+    <div class="large-12 columns mb20">
+       <div class="photo_section"> 
+        <p>
+            <span class="photo_title">
+                {% if form.photo_error.vars.label is defined and form.photo_error.vars.label is not null %}
+                    {{ form.photo_error.vars.label }}
+                {% else %}
+                    {{ 'Photos'|trans({}, 'frontend-paa-fourth-step') }}<br />
+                {% endif %}
+            </span>
+        </p>
+        <p><b>{{ 'Add some photos of your item'|trans }}</b></p>
+        {% if entity.id %}
+            {{ render(controller('FaAdBundle:AdImage:showImageUploader', {'adId': entity.id, 'is_admin' : 1, 'vertical': vertical, 'formName': form.vars.name, 'maxValue': (form.photo_error.vars.attr.max_value is defined ? form.photo_error.vars.attr.max_value : null) })) }}
+        {% else %}
+            {{ render(controller('FaAdBundle:AdImage:showImageUploader', {'is_admin' : 1, 'admin_ad_counter': app.request.get('admin_ad_counter'), 'vertical': vertical, 'formName': form.vars.name, 'maxValue': (form.photo_error.vars.attr.max_value is defined ? form.photo_error.vars.attr.max_value : null)})) }}
+        {% endif %}
+        {{ set_variables('imageUploadJavascriptBottom', {'loaded':'false'}) }}
+        </div>
+    </div>
+</div>
+{{ form_errors(attribute(form, 'photo_error')) }}

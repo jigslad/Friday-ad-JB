@@ -1,0 +1,13 @@
+{% set container         = fetch_container_instance() %}
+{% set objUserRepository = fetch_repository('FaUserBundle:User') %}
+{% set isTrustedUser     = objUserRepository.isTrustedUser(userId, userUpsells, container) %}
+{% set adultCategoryId   = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+
+{% if (isTrustedUser and businessCategoryId is defined and businessCategoryId != adultCategoryId) %}
+    {% set objCategoryRepository = fetch_repository('FaEntityBundle:Category') %}
+    {% set className             = objCategoryRepository.getTrustedLogoClassCategoryWise(businessCategoryId) %}
+    <div class="{{ className }} trusted-user">
+        <span>?</span>
+        <div class="trusted-user-tooltip">{{ 'Rest assured we do our utmost to ensure a safe marketplace for all to enjoy. This user meets all of our moderation requirements.'|trans({}, 'frontend-profile-page') }}</div>
+    </div>
+{% endif %}

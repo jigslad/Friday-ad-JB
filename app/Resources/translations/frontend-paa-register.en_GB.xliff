@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="343784ff4bdf86664fcd72727d6d13bce9889ab3" resname="Confirm your details">
+        <jms:reference-file line="22">views/AdPost/thirdStepRegistration.html.twig</jms:reference-file>
+        <source>Confirm your details</source>
+        <target state="new">Confirm your details</target>
+      </trans-unit>
+      <trans-unit id="00e6b474f1a503042e61918ae1427ec2ca37f4c5" resname="I would like buyers to contact me by:">
+        <jms:reference-file line="42">views/AdPost/thirdStepRegistration.html.twig</jms:reference-file>
+        <jms:reference-file line="52">views/Registration/register.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/MyAccount/myAccountDetail.html.twig</jms:reference-file>
+        <source>I would like buyers to contact me by:</source>
+        <target state="new">I would like buyers to contact me by:</target>
+      </trans-unit>
+      <trans-unit id="61daf9c35afca1afc602083e1e2ea868ff4dfc78" resname="Post an Ad Add your details">
+        <jms:reference-file line="5">views/AdPost/thirdStepRegistration.html.twig</jms:reference-file>
+        <source>Post an Ad Add your details</source>
+        <target state="new">Post an Ad Add your details</target>
+      </trans-unit>
+      <trans-unit id="d3f8654a225c80e6258d13d4249bfacc3fb67955" resname="These are the details we got from %socialSiteName%,&lt;br /&gt; please confirm or change them.">
+        <jms:reference-file line="23">views/AdPost/thirdStepRegistration.html.twig</jms:reference-file>
+        <source><![CDATA[These are the details we got from %socialSiteName%,<br /> please confirm or change them.]]></source>
+        <target state="new"><![CDATA[These are the details we got from %socialSiteName%,<br /> please confirm or change them.]]></target>
+      </trans-unit>
+      <trans-unit id="27ea1bbe3a37a8b080be13ec98ad39dab0262c57" resname="This is the contact info buyers will use to get in touch.">
+        <jms:reference-file line="24">views/AdPost/thirdStepRegistration.html.twig</jms:reference-file>
+        <source>This is the contact info buyers will use to get in touch.</source>
+        <target state="new">This is the contact info buyers will use to get in touch.</target>
+      </trans-unit>
+      <trans-unit id="fad1b68008ea4a75df8f302e8778722acf935b5a" resname="We just need a few details so that we know how buyers can contact you.">
+        <jms:reference-file line="27">views/AdPost/thirdStepRegistration.html.twig</jms:reference-file>
+        <source>We just need a few details so that we know how buyers can contact you.</source>
+        <target state="new">We just need a few details so that we know how buyers can contact you.</target>
+      </trans-unit>
+      <trans-unit id="a6252b66904c2b87ca11b95e1f01fab3be570ff4" resname="Your details">
+        <jms:reference-file line="26">views/AdPost/thirdStepRegistration.html.twig</jms:reference-file>
+        <source>Your details</source>
+        <target state="new">Your details</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

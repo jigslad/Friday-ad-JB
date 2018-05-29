@@ -1,0 +1,38 @@
+{% set automatedEmailReportCsvDelete = false %}
+{% set automatedEmailReportCsvDownload = false %}
+
+{% if fa_resource_authorization_manager.isGranted('ajax_fa_ti_report_automated_email_csv_delete') %}
+  {% set automatedEmailReportCsvDelete = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('fa_ti_report_automated_email_download_csv') %}
+  {% set automatedEmailReportCsvDownload = true %}
+{% endif %}
+
+<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+<h5 id="modalTitle" class="modal-title">{{ 'Automated email report csv list.'|trans }}</h5>
+<div class="modal-content2" id="report_csv_list">
+    {% if csvDelete is defined and csvDelete %}
+        <div data-alert class="alert-box success radius">
+            {{'Csv report deleted successfully.'}}
+        </div>
+    {% endif %}
+    {% if fileList|length %}
+        <ul class="info_list csv-list" id="cvs_list_ul">
+            {% for fileName in fileList %}
+                <li>
+                    {% if automatedEmailReportCsvDownload %}
+                        <a href="{{ path('fa_ti_report_automated_email_download_csv', {'fileName': fileName}) }}"><i class="fi-download"></i>&nbsp;{{ fileName }}</a>
+                    {% else %}
+                        {{ fileName }}
+                    {% endif %}
+                    {% if automatedEmailReportCsvDelete %}
+                        <a href="javascript:void(0);" onclick="return deleteCsvFile('{{ fileName }}');" class="delete-icon right"></a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        {{ 'No csv files available.' }}
+    {% endif %}
+</div>

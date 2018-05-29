@@ -1,0 +1,189 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content %}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_promotion_package_discount_code_admin_id'}}) }}
+                {{ form_row(form.code) }}
+                {{ form_row(form.discount_type) }}
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_label(form.discount_value) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-3 columns" style="padding-right:0">
+                        {{ form_widget(form.discount_value) }}
+                    </div>
+                    <div class="large-9 columns" style="padding-left:5px;padding-top:5px;">
+                        <b id="discount_value_sign">%</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_errors(form.discount_value) }}
+                    </div>
+                </div>
+                
+                {% set totalChoices = attribute(form, 'package_sr_no').vars.choices|length %}
+                {% set totalColumns = 3 %}
+                {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+                {% set choiceCount = 0 %}
+                {% set totalChoiceCount = 0 %}
+                <h3>{{ form_label(attribute(form, 'package_sr_no')) }}</h3>
+                <div class="row" id="package_sr_no_div" style="margin-bottom:10px!important">
+                    {% for child in attribute(form, 'package_sr_no') %}
+                        {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 2 %}
+                        <div class="large-4 columns left">
+                        {% endif %}
+                            <div>
+                                {{ form_widget(child) }}
+                                <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                            </div>
+                            {% set choiceCount = choiceCount + 1 %}
+                            {% set totalChoiceCount = totalChoiceCount + 1 %}
+                        {% if totalChoiceCount == totalChoices or (choiceCount % choicesPerColumn) == 2 %}
+                        </div>
+                        {% set choiceCount = 0 %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {{ form_row(form.admin_only_package) }}
+                {{ form_row(form.package_sr_no) }}
+                {{ form_row(form.category_id) }}
+                {{ form_row(form.role_ids) }}
+                <div id="paid_user_field_div" style="display:none">
+                    {{ form_row(form.paid_user_only) }}
+                </div>
+                {{ form_row(form.status) }}
+                <div class="row">
+                    <div class="large-3 columns">
+                        {{ form_label(form.expires_at) }}
+                        <div class="relative">
+                            <span class="datepicker-icon event_start"></span>
+                            {{ form_widget(form.expires_at, {'attr': {'placeholder': 'Expires at'}}) }}
+                            {{ form_errors(form.expires_at) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_label(form.total_limit) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-3 columns" style="padding-right:0">
+                        {{ form_widget(form.total_limit) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_errors(form.total_limit) }}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_label(form.user_limit) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-3 columns" style="padding-right:0">
+                        {{ form_widget(form.user_limit) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_errors(form.user_limit) }}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_label(form.monthly_user_limit) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-3 columns" style="padding-right:0">
+                        {{ form_widget(form.monthly_user_limit) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_errors(form.monthly_user_limit) }}
+                    </div>
+                </div>
+
+                {{ form_row(form.emails) }}
+                {{ form_row(form.description) }}
+                {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'package_admin'}) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $('.datepicker-icon').click(function(e){
+        $(this).next('input.fdatepicker').focus();
+    });
+    $(document).ready(function(){
+        hideShowPaidUserOption();
+        changeDiscountValueSign();
+        $('#fa_promotion_package_discount_code_admin_role_ids input:checked').each(function() {
+            hideShowPaidUserOnlyField($(this));
+        });
+        
+        $('#fa_promotion_package_discount_code_admin_package_sr_no_0').change(function() {
+            if($(this).is(":checked")) {
+                $('#package_sr_no_div :checkbox').prop('checked', true);
+            } else {
+                $('#package_sr_no_div :checkbox').prop('checked', false);
+            }
+        });
+        
+        $('#fa_promotion_package_discount_code_admin_discount_type').change(function() {
+            changeDiscountValueSign();
+        });
+    });
+    
+    function hideShowPaidUserOption()
+    {
+        $("#fa_promotion_package_discount_code_admin_role_ids input[type=checkbox]").click(function(){
+            hideShowPaidUserOnlyField($(this));
+        });
+    }
+    
+    function hideShowPaidUserOnlyField(checkboxObj)
+    {
+        var businessUserFlag = false;
+        if (checkboxObj.is(":checked") && checkboxObj.val() == '{{ constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') }}') {
+            businessUserFlag = true;
+        }
+        if (businessUserFlag) {
+            $('#paid_user_field_div').show();
+        } else {
+            $('#paid_user_field_div').hide();
+        }
+    }
+    
+    function changeDiscountValueSign()
+    {
+        if ($('#fa_promotion_package_discount_code_admin_discount_type').val() == '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\PackageDiscountCodeRepository::PACKAGE_PERCENTAGE_DISCOUNT_TYPE_ID') }}') {
+            $('#discount_value_sign').html('%');
+        } else if ($('#fa_promotion_package_discount_code_admin_discount_type').val() == '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\PackageDiscountCodeRepository::PACKAGE_CASH_DISCOUNT_TYPE_ID') }}') {
+        	$('#discount_value_sign').html('£');
+        }
+    }
+    //]]>
+    </script>
+        {{ include('FaCoreBundle::autoSuggestField.html.twig', {'field' : '#fa_promotion_package_discount_code_admin_category_id', 'jsonField' : '#fa_promotion_package_discount_code_admin_category_id_json', 'placeHolder': 'Category'|trans, 'route' : 'category_ajax_term_admin', 'isMultiple' : false }) }}
+{% endblock %}

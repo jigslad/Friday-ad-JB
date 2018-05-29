@@ -1,0 +1,33 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="11" height="9" viewBox="0 0 11 9" xml:space="preserve" enable-background="new 0 0 11 9">
+  <style type="text/css">
+    
+	.st0{fill:#A8A8A8;}
+	.st1{fill:none;}
+
+  </style>
+  <title>
+    arrow dropdown hover
+  </title>
+  <desc>
+    Created with Sketch.
+  </desc>
+  <g id="PAA" sketch:type="MSPage">
+    <g id="Desktop-HD-For-sale-2" transform="translate(-848.000000, -620.000000)" sketch:type="MSArtboardGroup">
+      <g id="Phase-1" transform="translate(-2.000000, -127.000000)" sketch:type="MSLayerGroup">
+        <g id="_x31_.2-what-are-you-selling" transform="translate(459.000000, 434.000000)">
+          <g id="select-input-3" transform="translate(113.000000, 296.000000)">
+            <g id="arrow-6" transform="translate(278.000000, 17.000000)">
+              <g id="arrow-dropdown-hover">
+                <g sketch:type="MSShapeGroup">
+                  <path id="path-1" class="st0" d="M5.6 9L11 0H0"/>
+                </g>
+                <path id="path-1_1_" class="st1" d="M5.6 9L11 0H0"/>
+                <path id="path-1_2_" class="st1" d="M5.6 9L11 0H0"/>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

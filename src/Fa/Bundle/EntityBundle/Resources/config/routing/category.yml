@@ -1,0 +1,21 @@
+category_ajax_term_postad:
+    path:     /ajax/paa/find/{term}
+    defaults: { _controller: "FaEntityBundle:Category:ajaxGetPostadCategory" }
+    options:
+        expose: true
+
+category_ajax_get_node_json:
+    path:     /ajax/get/nodejson
+    defaults: { _controller: "FaEntityBundle:Category:ajaxGetNodeJson" }
+    options:
+        expose: true
+
+category_ajax_get_nested_node_json:
+    path:     /ajax/get/nested_nodejson
+    defaults: { _controller: "FaEntityBundle:Category:ajaxGetNestedNodeJson" }
+
+category_ajax_get_category_name_by_id:
+    path:     /ajax/get/category_name
+    defaults: { _controller: "FaEntityBundle:Category:ajaxGetCategoryNameById" }
+    options:
+        expose: true

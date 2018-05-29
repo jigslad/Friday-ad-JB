@@ -1,0 +1,244 @@
+parameters:
+#    fa_entity.example.class: Fa\Bundle\EntityBundle\Example
+     fa_user.form.type.user_config_rule_admin.class: Fa\Bundle\UserBundle\Form\UserConfigRuleAdminType
+
+services:
+    fa_user.form.type.registration:
+       class: Fa\Bundle\UserBundle\Form\RegistrationType
+       tags:
+            - { name: form.type, alias: user_registration }
+       arguments: ['@doctrine', '@security.encoder_factory', '@service_container']
+
+    fa_user.form.type.user_admin:
+        class: Fa\Bundle\UserBundle\Form\UserAdminType
+        arguments: ['@doctrine', '@security.encoder_factory', '@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_admin }
+
+    fa_user.form.type.user_reset_password:
+        class: Fa\Bundle\UserBundle\Form\ResetPasswordType
+        arguments: ['@doctrine', '@security.encoder_factory', '@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_reset_password }
+
+    fa_user.form.type.user_search_admin:
+        class: Fa\Bundle\UserBundle\Form\UserSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_search_admin }
+
+    fa_user.form.type.user_change_status_admin:
+        class: Fa\Bundle\UserBundle\Form\ChangeStatusType
+        arguments: ['@doctrine', '@security.encoder_factory']
+        tags:
+            - { name: form.type, alias: fa_user_user_change_status_admin }
+
+    fa_user.form.type.user_config_rule_admin:
+        class: '%fa_user.form.type.user_config_rule_admin.class%'
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_user_user_config_rule_admin }
+            
+    fa_user.form.type.forgot_password:
+        class: Fa\Bundle\UserBundle\Form\ForgotPasswordType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_forgot_password }
+
+    fa_user.form.type.user_package_admin:
+        class: Fa\Bundle\UserBundle\Form\UserPackageAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_package_admin }
+
+    fa_user.form.type.user_package:
+        class: Fa\Bundle\UserBundle\Form\UserPackageType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_package_choose }
+
+    fa_user.form.type.testimonials_admin:
+        class: Fa\Bundle\UserBundle\Form\TestimonialsAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_testimonials_admin }
+
+    fa_user.form.type.testimonials_search_admin:
+        class: Fa\Bundle\UserBundle\Form\TestimonialsSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_testimonials_search_admin }
+            
+    fa_user.form.type.user_ad_search_admin:
+        class: Fa\Bundle\UserBundle\Form\UserAdSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_ad_search_admin }
+
+    fa_user.form.type.user_payment_search_admin:
+        class: Fa\Bundle\UserBundle\Form\UserPaymentSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_payment_search_admin }
+            
+    fa_user.form.type.my_item_search:
+        class: Fa\Bundle\UserBundle\Form\ManageMyAdSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_my_item_search }
+            
+    fa_user.form.type.testimonial:
+        class: Fa\Bundle\UserBundle\Form\TestimonialType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_testimonial }
+
+    fa_user.form.type.user_site:
+       class: Fa\Bundle\UserBundle\Form\UserSiteType
+       arguments: ['@service_container']
+       tags:
+            - { name: form.type, alias: user_site }
+
+    fa_user.form.type.user_image:
+        class: Fa\Bundle\UserBundle\Form\UserImageType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_image }
+
+    fa_user.form.type.newsletter:
+       class: Fa\Bundle\UserBundle\Form\NewsletterType
+       tags:
+            - { name: form.type, alias: user_newsletter }
+       arguments: ['@doctrine', '@security.encoder_factory', '@service_container']
+       
+    fa_user.form.type.user_account_detail:
+        class: Fa\Bundle\UserBundle\Form\UserAccountDetailType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_account_detail }
+            
+    fa_user.form.type.user_account_profile:
+        class: Fa\Bundle\UserBundle\Form\UserAccountProfileType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_account_profile }
+            
+    fa_user.form.type.user_address_book:
+        class: Fa\Bundle\UserBundle\Form\UserAddressBookType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_address_book }
+
+    fa_user.form.type.user_review:
+       class: Fa\Bundle\UserBundle\Form\UserReviewType
+       arguments: ['@service_container']
+       tags:
+            - { name: form.type, alias: user_review }
+
+    fa_user.form.type.user_review_response:
+       class: Fa\Bundle\UserBundle\Form\UserReviewResponseType
+       arguments: ['@service_container']
+       tags:
+            - { name: form.type, alias: user_review_response }
+            
+    fa_user.form.type.user_card:
+        class: Fa\Bundle\UserBundle\Form\UserCardType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_card }
+
+    fa_user.form.type.user_private_profile:
+        class: Fa\Bundle\UserBundle\Form\UserPrivateProfileType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_private_profile }
+            
+    fa_user.form.type.user_business_profile:
+        class: Fa\Bundle\UserBundle\Form\UserBusinessProfileType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_business_profile }
+
+    fa_user.form.type.user_business_shop_profile:
+        class: Fa\Bundle\UserBundle\Form\UserBusinessShopProfileType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_business_shop_profile }
+
+    fa_user.form.type.user_site_image:
+        class: Fa\Bundle\UserBundle\Form\UserSiteImageType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_site_image }
+
+    fa_user.form.type.user_site_banner:
+        class: Fa\Bundle\UserBundle\Form\UserSiteBannerType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_site_banner }
+
+    fa_user.form.type.user_half_account:
+        class: Fa\Bundle\UserBundle\Form\UserHalfAccountType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_user_half_account }
+
+    fa_user.form.type.user_half_account_email_only:
+        class: Fa\Bundle\UserBundle\Form\UserHalfAccountEmailOnlyType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_user_half_account_email_only }
+
+    fa_user.form.type.user_edit_welcome_message:
+        class: Fa\Bundle\UserBundle\Form\EditWelcomeMessageType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_edit_welcome_message }
+            
+    fa_user.form.type.user_edit_contact_details:
+        class: Fa\Bundle\UserBundle\Form\EditContactDetailsType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_edit_contact_details }
+
+    fa_user.form.type.user_edit_social_profiles:
+        class: Fa\Bundle\UserBundle\Form\EditSocialProfilesType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_edit_social_profiles }
+
+    fa_user.form.type.user_edit_about_us:
+        class: Fa\Bundle\UserBundle\Form\EditAboutUsType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_edit_about_us }
+
+    fa_user.form.type.user_edit_video:
+        class: Fa\Bundle\UserBundle\Form\EditVideoType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_edit_video }
+            
+    fa_user.form.type.user_edit_location:
+        class: Fa\Bundle\UserBundle\Form\EditLocationType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_edit_location }
+            
+    fa_user.form.type.user_credit_admin:
+        class: Fa\Bundle\UserBundle\Form\UserCreditAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_credit_admin }
+            
+    fa_user.form.type.user_credit_search_admin:
+        class: Fa\Bundle\UserBundle\Form\UserCreditSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_credit_search_admin }
+            
+    fa_user.form.type.competition:
+        class: Fa\Bundle\UserBundle\Form\CompetitionType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_competition }

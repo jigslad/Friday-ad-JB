@@ -1,0 +1,225 @@
+{% if searchParams is defined and searchParams %}
+{% if roles is not defined %}
+    {% set roles = fetch_repository('FaUserBundle:Role').getUserTypes() %}
+{% endif %}
+{% if newsletterTypes is not defined %}
+    {% set newsletterTypes = fetch_repository('FaDotMailerBundle:DotmailerNewsletterType').getKeyValueArray(fetch_container_instance()) %}
+{% endif %}
+{% if printEditions is not defined %}
+    {% set printEditions = fetch_repository('FaAdBundle:PrintEdition').getActivePrintEditionArray() %}
+{% endif %}
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <ul class="details-info">
+                {% if searchParams.dotmailer__dotmailer_newsletter_type_id is defined and searchParams.dotmailer__dotmailer_newsletter_type_id|length %}
+                    {% set selectedTypes = {} %}
+                    {% for id in searchParams.dotmailer__dotmailer_newsletter_type_id %}
+                        {% set selectedTypes = selectedTypes|merge({0 : newsletterTypes[id]}) %}
+                    {% endfor %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Newsletter types'|trans }}</div>
+                        <div class="detail-text">{{ selectedTypes|join(', ')|striptags }}</div>
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer_info__paa_category_id is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Advert placed in'|trans }}</div>
+                        <div class="detail-text">
+                            {% set idValues = {} %}
+                            {% set ids = searchParams.dotmailer_info__paa_category_id|split(',')%}
+                            {% for id in ids %}
+                                {% set idValues = idValues|merge({0:(fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', id))}) %}
+                            {% endfor %}
+                            {{ idValues|join(', ')}}
+                        </div>
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer_info__paa_created_at_from is defined or searchParams.dotmailer_info__paa_created_at_to is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Advert placed at'|trans }}</div>
+                        {% if searchParams.dotmailer_info__paa_created_at_from is defined and searchParams.dotmailer_info__paa_created_at_to is defined %}
+                            <div class="detail-text">{{ searchParams.dotmailer_info__paa_created_at_from }} - {{ searchParams.dotmailer_info__paa_created_at_to }}</div>
+                        {% elseif searchParams.dotmailer_info__paa_created_at_from is defined and searchParams.dotmailer_info__paa_created_at_to is not defined %}
+                            <div class="detail-text">{{ 'From'|trans }} {{ searchParams.dotmailer_info__paa_created_at_from }}
+                        {% elseif searchParams.dotmailer_info__paa_created_at_from is not defined and searchParams.dotmailer_info__paa_created_at_to is defined %}
+                            <div class="detail-text">{{ 'Upto'|trans }} {{ searchParams.dotmailer_info__paa_created_at_to }}</div>
+                        {% endif %}
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer_info__enquiry_category_id is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Advert enquiry made in'|trans }}</div>
+                        <div class="detail-text">
+                            {% set idValues = {} %}
+                            {% set ids = searchParams.dotmailer_info__enquiry_category_id|split(',')%}
+                            {% for id in ids %}
+                                {% set idValues = idValues|merge({0:(fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', id))}) %}
+                            {% endfor %}
+                            {{ idValues|join(', ')}}
+                        </div>
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer_info__enquiry_created_at_from is defined or searchParams.dotmailer_info__enquiry_created_at_to is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Advert enquiry made at'|trans }}</div>
+                        {% if searchParams.dotmailer_info__enquiry_created_at_from is defined and searchParams.dotmailer_info__enquiry_created_at_to is defined %}
+                            <div class="detail-text">{{ searchParams.dotmailer_info__enquiry_created_at_from }} - {{ searchParams.dotmailer_info__enquiry_created_at_to }}</div>
+                        {% elseif searchParams.dotmailer_info__enquiry_created_at_from is defined and searchParams.dotmailer_info__enquiry_created_at_to is not defined %}
+                            <div class="detail-text">{{ 'From'|trans }} {{ searchParams.dotmailer_info__enquiry_created_at_from }}
+                        {% elseif searchParams.dotmailer_info__enquiry_created_at_from is not defined and searchParams.dotmailer_info__enquiry_created_at_to is defined %}
+                            <div class="detail-text">{{ 'Upto'|trans }} {{ searchParams.dotmailer_info__enquiry_created_at_to }}</div>
+                        {% endif %}
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__enquiry_town_id is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Enquiry town'|trans }}</div>
+                        <div class="detail-text">
+                            {% set idValues = {} %}
+                            {% set ids = searchParams.dotmailer__enquiry_town_id|split(',')%}
+                            {% for id in ids %}
+                                {% set idValues = idValues|merge({0:(fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Location', id))}) %}
+                            {% endfor %}
+                            {{ idValues|join(', ')}}
+                        </div>
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__enquiry_county_id is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Enquiry county'|trans }}</div>
+                        <div class="detail-text">
+                            {% set idValues = {} %}
+                            {% set ids = searchParams.dotmailer__enquiry_county_id|split(',')%}
+                            {% for id in ids %}
+                                {% set idValues = idValues|merge({0:(fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Location', id))}) %}
+                            {% endfor %}
+                            {{ idValues|join(', ')}}
+                        </div>
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__town_id is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Town'|trans }}</div>
+                        <div class="detail-text">
+                            {% set idValues = {} %}
+                            {% set ids = searchParams.dotmailer__town_id|split(',')%}
+                            {% for id in ids %}
+                                {% set idValues = idValues|merge({0:(fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Location', id))}) %}
+                            {% endfor %}
+                            {{ idValues|join(', ')}}
+                        </div>
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__county_id is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'County'|trans }}</div>
+                        <div class="detail-text">
+                            {% set idValues = {} %}
+                            {% set ids = searchParams.dotmailer__county_id|split(',')%}
+                            {% for id in ids %}
+                                {% set idValues = idValues|merge({0:(fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Location', id))}) %}
+                            {% endfor %}
+                            {{ idValues|join(', ')}}
+                        </div>
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__role_id is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'User type'|trans }}</div>
+                        <div class="detail-text">
+                            {% if searchParams.dotmailer__role_id == '-1' %}
+                                {{ 'Other'|trans }}
+                            {% else %}
+                                {{ roles[searchParams.dotmailer__role_id] }}
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__print_edition_id is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Print edtion'|trans }}</div>
+                        {% if searchParams.dotmailer__print_edition_id == 'any-area' %}
+                            <div class="detail-text">{{ 'Any area'|trans }}</div>
+                        {% elseif searchParams.dotmailer__print_edition_id == 'non-print-area' %}
+                            <div class="detail-text">{{ 'Non print area'|trans }}</div>
+                        {% elseif searchParams.dotmailer__print_edition_id == 'all-print-area' %}
+                            <div class="detail-text">{{ 'Any print area'|trans }}</div>
+                        {% else %}
+                            <div class="detail-text">{{ printEditions[searchParams.dotmailer__print_edition_id] }}</div>
+                        {% endif %}
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__last_paid_at_from is defined or searchParams.dotmailer__last_paid_at_to is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Last advert paid at'|trans }}</div>
+                        {% if searchParams.dotmailer__last_paid_at_from is defined and searchParams.dotmailer__last_paid_at_to is defined %}
+                            <div class="detail-text">{{ searchParams.dotmailer__last_paid_at_from }} - {{ searchParams.dotmailer__last_paid_at_to }}</div>
+                        {% elseif searchParams.dotmailer__last_paid_at_from is defined and searchParams.dotmailer__last_paid_at_to is not defined %}
+                            <div class="detail-text">{{ 'From'|trans }} {{ searchParams.dotmailer__last_paid_at_from }}
+                        {% elseif searchParams.dotmailer__last_paid_at_from is not defined and searchParams.dotmailer__last_paid_at_to is defined %}
+                            <div class="detail-text">{{ 'Upto'|trans }} {{ searchParams.dotmailer__last_paid_at_to }}</div>
+                        {% endif %}
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__last_paa_at_from is defined or searchParams.dotmailer__last_paa_at_to is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Last advert placed at'|trans }}</div>
+                        {% if searchParams.dotmailer__last_paa_at_from is defined and searchParams.dotmailer__last_paa_at_to is defined %}
+                            <div class="detail-text">{{ searchParams.dotmailer__last_paa_at_from }} - {{ searchParams.dotmailer__last_paa_at_to }}</div>
+                        {% elseif searchParams.dotmailer__last_paa_at_from is defined and searchParams.dotmailer__last_paa_at_to is not defined %}
+                            <div class="detail-text">{{ 'From'|trans }} {{ searchParams.dotmailer__last_paa_at_from }}
+                        {% elseif searchParams.dotmailer__last_paa_at_from is not defined and searchParams.dotmailer__last_paa_at_to is defined %}
+                            <div class="detail-text">{{ 'Upto'|trans }} {{ searchParams.dotmailer__last_paa_at_to }}</div>
+                        {% endif %}
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__last_enquiry_at_from is defined or searchParams.dotmailer__last_enquiry_at_to is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Last enquiry made at'|trans }}</div>
+                        {% if searchParams.dotmailer__last_enquiry_at_from is defined and searchParams.dotmailer__last_enquiry_at_to is defined %}
+                            <div class="detail-text">{{ searchParams.dotmailer__last_enquiry_at_from }} - {{ searchParams.dotmailer__last_enquiry_at_to }}</div>
+                        {% elseif searchParams.dotmailer__last_enquiry_at_from is defined and searchParams.dotmailer__last_enquiry_at_to is not defined %}
+                            <div class="detail-text">{{ 'From'|trans }} {{ searchParams.dotmailer__last_enquiry_at_from }}
+                        {% elseif searchParams.dotmailer__last_enquiry_at_from is not defined and searchParams.dotmailer__last_enquiry_at_to is defined %}
+                            <div class="detail-text">{{ 'Upto'|trans }} {{ searchParams.dotmailer__last_enquiry_at_to }}</div>
+                        {% endif %}
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__newsletter_signup_at_from is defined or searchParams.dotmailer__newsletter_signup_at_to is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Newsletter signup at'|trans }}</div>
+                        {% if searchParams.dotmailer__newsletter_signup_at_from is defined and searchParams.dotmailer__newsletter_signup_at_to is defined %}
+                            <div class="detail-text">{{ searchParams.dotmailer__newsletter_signup_at_from }} - {{ searchParams.dotmailer__newsletter_signup_at_to }}</div>
+                        {% elseif searchParams.dotmailer__newsletter_signup_at_from is defined and searchParams.dotmailer__newsletter_signup_at_to is not defined %}
+                            <div class="detail-text">{{ 'From'|trans }} {{ searchParams.dotmailer__newsletter_signup_at_from }}
+                        {% elseif searchParams.dotmailer__newsletter_signup_at_from is not defined and searchParams.dotmailer__newsletter_signup_at_to is defined %}
+                            <div class="detail-text">{{ 'Upto'|trans }} {{ searchParams.dotmailer__newsletter_signup_at_to }}</div>
+                        {% endif %}
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__fad_user is defined  %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'FAD user'|trans }}</div>
+                        <div class="detail-text">{{ 'Yes'|trans }}</div>
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__ti_user is defined  %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'TI user'|trans }}</div>
+                        <div class="detail-text">{{ 'Yes'|trans }}</div>
+                    </li>
+                {% endif %}
+                {% if searchParams.dotmailer__business_category_id is defined %}
+                    <li class="clearfix">
+                        <div class="detail-text">{{ 'Business category'|trans }}</div>
+                        <div class="detail-text">
+                            {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.dotmailer__business_category_id) }}
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}

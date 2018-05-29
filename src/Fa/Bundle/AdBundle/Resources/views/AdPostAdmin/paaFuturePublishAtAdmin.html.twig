@@ -1,0 +1,13 @@
+{% set displayFuturePublishAt = 'display:none;' %}
+{% if(form.future_publish_at.vars.data) %}
+    {% set displayFuturePublishAt = 'display:block;' %}
+{% endif %}
+{% set futurePublishedAtMessage = 'Please select print deadline carefully - this date cannot be edited once you have saved this ad'|trans() %}
+{% if (form.vars.value.id is defined and form.vars.value.id is not null) %}
+    {% set futurePublishedAtMessage = "Changing 'published date' now will NOT correct print insert dates. Changing this date now will only change when advert becomes live."|trans() %}
+{% endif %}
+{{ form_label(attribute(form, 'future_publish_at')) }}
+<div class="relative">
+    {{ form_widget(attribute(form, 'future_publish_at')) }}
+    <span id="future_publish_at_note_span" style="color:red;{{ displayFuturePublishAt }}">{{ futurePublishedAtMessage }}</span>
+</div>

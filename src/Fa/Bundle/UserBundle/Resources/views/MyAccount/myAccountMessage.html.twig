@@ -1,0 +1,9 @@
+{% if app.session.flashbag.has(msgName) %}
+    {% for flashMessage in app.session.flashbag.get(msgName) %}
+        <div data-alert class="alert-box success radius" id="successMsgDiv">
+            <span class="alert-icon">&nbsp;</span>
+            {{ flashMessage }}
+            <a href="javascript:void(0)" class="close">&times;</a>
+        </div>
+    {% endfor%}
+{% endif %}

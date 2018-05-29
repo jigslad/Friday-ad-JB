@@ -1,0 +1,12 @@
+services:
+     fa_solr.logger:
+        class: Fa\Bundle\CoreBundle\Logger\SolrLogger
+        tags:
+            - { name: solr.logger, channel: "fa_solr"}
+        arguments: ['@logger']
+        
+     fa.solr.data_collector:
+        class: Fa\Bundle\CoreBundle\DataCollector\SolrDataCollector
+        tags:
+            - { name: data_collector, template: "FaCoreBundle:Collector:solr.html.twig", id: "solr" }
+        arguments: ['@fa_solr.logger']

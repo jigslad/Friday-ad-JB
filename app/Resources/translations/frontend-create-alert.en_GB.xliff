@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="65f783e8f2df9338cd1aea32707b290175c65577" resname="Alert setup!">
+        <jms:reference-file line="6">views/UserSearchAgent/ajaxShowCreatedAlert.html.twig</jms:reference-file>
+        <source>Alert setup!</source>
+        <target state="new">Alert setup!</target>
+      </trans-unit>
+      <trans-unit id="645b72bf13621870c4720876762a9c8aed801ed6" resname="Daily email alerts">
+        <jms:reference-file line="21">views/UserSearchAgent/ajaxShowCreatedAlert.html.twig</jms:reference-file>
+        <source>Daily email alerts</source>
+        <target state="new">Daily email alerts</target>
+      </trans-unit>
+      <trans-unit id="e9b450d14bc2363d292c84f17cfad5cfbd58a458" resname="Done">
+        <jms:reference-file line="30">views/UserSearchAgent/ajaxShowCreatedAlert.html.twig</jms:reference-file>
+        <source>Done</source>
+        <target state="new">Done</target>
+      </trans-unit>
+      <trans-unit id="03507f475440f63f9b5358b9e7f300e8a84da571" resname="Manage your &lt;a href=&quot;%search_agent_link%&quot;&gt;alerts.&lt;/a&gt;">
+        <jms:reference-file line="17">views/UserSearchAgent/ajaxShowCreatedAlert.html.twig</jms:reference-file>
+        <source><![CDATA[Manage your <a href="%search_agent_link%">alerts.</a>]]></source>
+        <target state="new"><![CDATA[Manage your <a href="%search_agent_link%">alerts.</a>]]></target>
+      </trans-unit>
+      <trans-unit id="cca21aeb9d2038892899440dd13048add1020123" resname="Unable to find Live Ad.">
+        <jms:reference-file line="267">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <source>Unable to find Live Ad.</source>
+        <target state="new">Unable to find Live Ad.</target>
+      </trans-unit>
+      <trans-unit id="e60c52c1b1cdbaded31e4fe8f49867e0a5d686bd" resname="Unable to find user.">
+        <jms:reference-file line="277">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <source>Unable to find user.</source>
+        <target state="new">Unable to find user.</target>
+      </trans-unit>
+      <trans-unit id="5d4f0c180c2b3350a865229621b70d85c7317765" resname="You have setup an alert for ads like this!">
+        <jms:reference-file line="16">views/UserSearchAgent/ajaxShowCreatedAlert.html.twig</jms:reference-file>
+        <source>You have setup an alert for ads like this!</source>
+        <target state="new">You have setup an alert for ads like this!</target>
+      </trans-unit>
+      <trans-unit id="2205887077be66766ee0654f8a24ad0ac525b11c" resname="You will receive an alert if we find more ads that match this search.">
+        <jms:reference-file line="27">views/UserSearchAgent/ajaxShowCreatedAlert.html.twig</jms:reference-file>
+        <source>You will receive an alert if we find more ads that match this search.</source>
+        <target state="new">You will receive an alert if we find more ads that match this search.</target>
+      </trans-unit>
+      <trans-unit id="371aadf2b1175e6560943b715eb398b24956b2d5" resname="Your account was blocked.">
+        <jms:reference-file line="279">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <source>Your account was blocked.</source>
+        <target state="new">Your account was blocked.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

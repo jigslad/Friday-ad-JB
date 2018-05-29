@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="59c9d7b5d77a109c430a8ae507945922a11d49a9" resname="Apply for this job">
+        <jms:reference-file line="11">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Apply for this job</source>
+        <target state="new">Apply for this job</target>
+      </trans-unit>
+      <trans-unit id="53a6ae899cfb6f1ce4ef14213cbdf1852dda4ebd" resname="Ask %user_name% a question..">
+        <jms:reference-file line="12">views/ContactUser/ajaxContactUser.html.twig</jms:reference-file>
+        <jms:reference-file line="13">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Ask %user_name% a question..</source>
+        <target state="new">Ask %user_name% a question..</target>
+      </trans-unit>
+      <trans-unit id="d6477a054b1ebfe2f42908362bef6eaa3a3f7f37" resname="Attach CV">
+        <jms:reference-file line="88">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <jms:reference-file line="100">MessageBundle/Form/ContactBuyerType.php</jms:reference-file>
+        <jms:reference-file line="70">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Attach CV</source>
+        <target state="new">Attach CV</target>
+      </trans-unit>
+      <trans-unit id="be87e7de2153e58cf594a7d1d0912ddfe57fc190" resname="Cancle attachment">
+        <jms:reference-file line="72">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Cancle attachment</source>
+        <target state="new">Cancle attachment</target>
+      </trans-unit>
+      <trans-unit id="612714e50db870fb250d1460b2659f9bd45a3026" resname="Contact request sent successfully.">
+        <jms:reference-file line="141">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Contact request sent successfully.</source>
+        <target state="new">Contact request sent successfully.</target>
+      </trans-unit>
+      <trans-unit id="526a60149ab6d792b4917b00fbaf6627c6e4a3c3" resname="Cover Letter">
+        <jms:reference-file line="77">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Cover Letter</source>
+        <target state="new">Cover Letter</target>
+      </trans-unit>
+      <trans-unit id="84add5b2952787581cb9a8851eef63d1ec75d22b" resname="Email">
+        <jms:reference-file line="139">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <jms:reference-file line="88">MessageBundle/Form/ContactBuyerType.php</jms:reference-file>
+        <source>Email</source>
+        <target state="new">Email</target>
+      </trans-unit>
+      <trans-unit id="9a5ac23f267012ac9fcaf5ab0107147982c1f319" resname="Find out more">
+        <jms:reference-file line="41">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Find out more</source>
+        <target state="new">Find out more</target>
+      </trans-unit>
+      <trans-unit id="68f4145fee7dde76afceb910165924ad14cf0d00" resname="Message">
+        <jms:reference-file line="108">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <jms:reference-file line="120">MessageBundle/Form/ContactBuyerType.php</jms:reference-file>
+        <source>Message</source>
+        <target state="new">Message</target>
+      </trans-unit>
+      <trans-unit id="709a23220f2c3d64d1e1d6d18c4d5280f8d82fca" resname="Name">
+        <jms:reference-file line="79">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <jms:reference-file line="79">MessageBundle/Form/ContactBuyerType.php</jms:reference-file>
+        <source>Name</source>
+        <target state="new">Name</target>
+      </trans-unit>
+      <trans-unit id="41366b9337fdeca0b5f52e8f1c46cf7743046d95" resname="Only PDF, DOC, DOCX or RTF">
+        <jms:reference-file line="73">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <jms:reference-file line="177">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Only PDF, DOC, DOCX or RTF</source>
+        <target state="new">Only PDF, DOC, DOCX or RTF</target>
+      </trans-unit>
+      <trans-unit id="0c6c4102d4dfec3b1aa41117e0e344046c58a151" resname="Optional">
+        <jms:reference-file line="70">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Optional</source>
+        <target state="new">Optional</target>
+      </trans-unit>
+      <trans-unit id="7c42605af369479a29c1cb6dee22712e623202cc" resname="Or send a message.">
+        <jms:reference-file line="56">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Or send a message.</source>
+        <target state="new">Or send a message.</target>
+      </trans-unit>
+      <trans-unit id="7b432cdc54acbb800857fb6b7d8a947771a05785" resname="Receive email alerts for adverts like this">
+        <jms:reference-file line="126">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <source>Receive email alerts for adverts like this</source>
+        <target state="new">Receive email alerts for adverts like this</target>
+      </trans-unit>
+      <trans-unit id="fe6841e50e561341ac5565061525913d91e9e2b9" resname="Receive news and promotions from Friday Ad">
+        <jms:reference-file line="116">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <source>Receive news and promotions from Friday Ad</source>
+        <target state="new">Receive news and promotions from Friday Ad</target>
+      </trans-unit>
+      <trans-unit id="90c0c2eb98de8fd7c569cfc05a7ffd87d83c5ae6" resname="Reveal">
+        <jms:reference-file line="40">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Reveal</source>
+        <target state="new">Reveal</target>
+      </trans-unit>
+      <trans-unit id="9bc2575c3930437e80555f78757b783c842e8e66" resname="Send">
+        <jms:reference-file line="132">MessageBundle/Form/ContactSellerType.php</jms:reference-file>
+        <jms:reference-file line="124">MessageBundle/Form/ContactBuyerType.php</jms:reference-file>
+        <source>Send</source>
+        <target state="new">Send</target>
+      </trans-unit>
+      <trans-unit id="2fe3821dbe09c137fe096262e7561eb1cf851c9f" resname="Send a message.">
+        <jms:reference-file line="59">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Send a message.</source>
+        <target state="new">Send a message.</target>
+      </trans-unit>
+      <trans-unit id="c5bbde4db9a1e8c36b8ffa1ad127820fc3430fd8" resname="This is a privacy number.">
+        <jms:reference-file line="41">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>This is a privacy number.</source>
+        <target state="new">This is a privacy number.</target>
+      </trans-unit>
+      <trans-unit id="eb4da46964ecd073db03aae89cc87300043ee76f" resname="Want to find out a bit more about advert? Send a message.">
+        <jms:reference-file line="62">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <source>Want to find out a bit more about advert? Send a message.</source>
+        <target state="new">Want to find out a bit more about advert? Send a message.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

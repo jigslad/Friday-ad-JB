@@ -1,0 +1,180 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set entityRepository = fetch_repository('FaEntityBundle:Entity') %}
+{% set statusArray      = entityRepository.getStatusArray(fetch_container_instance()) %}
+
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+{% set container = fetch_container_instance() %}
+{% set entityLogRepository  = fetch_repository('FaEntityBundle:FaEntityLog') %}
+{% set module = entityLogRepository.getModuleNameByObjectClass(entity_log.objectClass) %}
+{% set paaFieldRepository  = fetch_repository('FaAdBundle:PaaField') %}
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>{{ 'Entity id'|trans }}</td>
+                        <td>{{ entity_log.objectId }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Entity class'|trans }}</td>
+                        <td>{{ entityLogRepository.getObjectClassArray(entity_log.objectClass) }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Username'|trans }}</td>
+                        <td>{{ entity_log.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Activity'|trans }}</td>
+                        <td>{{ entity_log.action|capitalize }}</td>
+                    </tr>
+	                <tr>
+                        <td>{{ 'Logged at'|trans }}</td>
+                        <td>{{ entity_log.loggedAt|localizeddate('short', 'medium', app.request.locale ) }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ 'Ip address'|trans }}</td>
+                        <td>{{ entity_log.getCreationIp() }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table>
+                                <thead>
+                                    <th width="10%">{{ 'Field Name'|trans }}</th>
+                                    <th width="45%">{{ 'Previous'|trans }}</th>
+                                    <th width="45%">{{ 'New'|trans }}</th>
+                                </thead>
+                                {% set entityDetailArr = entityLogRepository.getEntityFieldLabel(module, entity_log.objectId, container) %}
+                                {% for key, value in entity_log.data %}
+                                    <tr>
+                                        <td style="vertical-align:top">{{ (entityDetailArr[0][key] is defined ? entityDetailArr[0][key] : key|humanize) }}</td>
+                                        <td {% if key == 'body_html' %}class="log-detail"{% endif %}>
+                                            {% if module in {0: 'ad_for_sale', 1: 'ad_adult', 2: 'ad_animals', 3: 'ad_community', 4: 'ad_jobs', 5: 'ad_motors', 6: 'ad_property', 7: 'ad_services'} %}
+                                                {% if key == 'meta_data' %}
+                                                    {% for key1, value1 in array_unserialize(value.previous) %}
+                                                        {{ (entityDetailArr[0][key1] is defined ? entityDetailArr[0][key1] : key1|humanize) }}:
+                                                        {{ paaFieldRepository.getPaaFieldValueForLog(key1, value1, entityDetailArr[1], entityDetailArr[3], container, staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'camelize', [module|replace({'ad_': ''})]) ) }}<br />
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {{ paaFieldRepository.getPaaFieldValueForLog(key, value.previous, entityDetailArr[1], entityDetailArr[3], container, staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'camelize', [module|replace({'ad_': ''})]) ) }}
+                                                {% endif %}
+                                            {% else %}
+                                                {% if entity_log.action == 'remove'%}
+                                                    {% if value.new is iterable %}
+                                                        {% if value.new|length %}
+                                                            {% for new in value.new %}
+                                                                {% if new.name is defined %}
+                                                                    {{ new.name }}<br />
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            -
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if key in {0: 'renewed_at', 1: 'expires_at', 2: 'started_at'} %}
+                                                            {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [value.new, fetch_container_instance(), null, null, 'dd/MM/YY']) }}
+                                                        {% elseif key == 'status' and value.new %}
+                                                            {{ statusArray[value.new] }}
+                                                        {% else %}
+                                                            {{ value.new|raw }}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if value.previous is iterable %}
+                                                        {% if value.previous|length %}
+                                                            {% for previous in value.previous %}
+                                                                {% if previous.name is defined %}
+                                                                    {{ previous.name }}<br />
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            -
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if key in {0: 'renewed_at', 1: 'expires_at', 2: 'started_at'} %}
+                                                            {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [value.previous, fetch_container_instance(), null, null, 'dd/MM/YY']) }}
+                                                        {% elseif key == 'status' and value.previous %}
+                                                            {{ statusArray[value.previous] }}
+                                                        {% else %}
+                                                            {{ value.previous|raw }}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                        <td {% if key == 'body_html' %}class="log-detail"{% endif %}>
+                                            {% if module in {0: 'ad_for_sale', 1: 'ad_adult', 2: 'ad_animals', 3: 'ad_community', 4: 'ad_jobs', 5: 'ad_motors', 6: 'ad_property', 7: 'ad_services'} %}
+                                                {% if key == 'meta_data' %}
+                                                    {% for key1, value1 in array_unserialize(value.new) %}
+                                                        {{ (entityDetailArr[0][key1] is defined ? entityDetailArr[0][key1] : key1|humanize) }}:
+                                                        {{ paaFieldRepository.getPaaFieldValueForLog(key1, value1, entityDetailArr[1], entityDetailArr[3], container, staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'camelize', [module|replace({'ad_': ''})]) ) }}<br />
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {{ paaFieldRepository.getPaaFieldValueForLog(key, value.new, entityDetailArr[1], entityDetailArr[3], container, staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'camelize', [module|replace({'ad_': ''})]) ) }}
+                                                {% endif %}
+                                            {% else %}
+                                                {% if entity_log.action == 'remove'%}
+                                                    {% if value.previous is iterable %}
+                                                        {% if value.previous|length %}
+                                                            {% for previous in value.previous %}
+                                                                {% if previous.name is defined %}
+                                                                    {{ previous.name }}<br />
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            -
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if key in {0: 'renewed_at', 1: 'expires_at', 2: 'started_at'} %}
+                                                            {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [value.previous, fetch_container_instance(), null, null, 'dd/MM/YY']) }}
+                                                        {% elseif key == 'status' and value.previous %}
+                                                            {{ statusArray[value.previous] }}
+                                                        {% else %}
+                                                            {{ value.previous|raw }}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if value.new is iterable %}
+                                                        {% if value.new|length %}
+                                                            {% for new in value.new %}
+                                                                {% if new.name is defined %}
+                                                                    {{ new.name }}<br />
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            -
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if key in {0: 'renewed_at', 1: 'expires_at', 2: 'started_at'} %}
+                                                            {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [value.new, fetch_container_instance(), null, null, 'dd/MM/YY']) }}
+                                                        {% elseif key == 'status' and value.new %}
+                                                            {{ statusArray[value.new] }}
+                                                        {% else %}
+                                                            {{ value.new|raw }}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            {% set backUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdminCancelUrl', [fetch_container_instance()]) %}
+                            <ul class="button-group text-center">
+                                <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ backUrl ? backUrl : path(cancelUrl) }}'">{{ 'Go back'|trans({}, 'messages') }}</button></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

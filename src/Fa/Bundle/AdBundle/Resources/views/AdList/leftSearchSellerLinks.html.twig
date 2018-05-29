@@ -1,0 +1,48 @@
+{% set dimensionParams = searchParams %}
+{% if (dimensionParams['item__is_trade_ad']) is defined %}
+    {% set dimensionParams = dimensionParams|merge({('item__is_trade_ad'): ''}) %}
+{% endif %}
+{% set isTradeAdCount = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionFacetBySearchParams('item__is_trade_ad', dimensionParams, {}, fetch_container_instance(), false, null, null, false, {}, true) %}
+{% set userTypeLabels = adRepository.getLeftSearchLabelForUserType(rootCategoryId) %}
+{% set getNoFollowLink = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(app.request.get('searchQueryString')) %}
+<dd class="accordion-navigation keep-shown">
+    <a href="#panel1b" rel="nofollow" class="clearfix"><h5 class="left">{{userTypeLabels['header']}}</h5></a>
+    <div class="content active clearfix">
+        <ul class="seller-link">
+            {% set selectedValue = attribute(form, 'item__is_trade_ad').vars.data %}
+            {% for choice in attribute(form, 'item__is_trade_ad').vars.choices %}
+                {% if choice.value != '' %}
+                    {% set activeClass = '' %}
+                    {% set choiceLabel = '' %}
+                    {% if choice.value == selectedValue %}
+                        {% set activeClass = 'bold' %}
+                    {% endif %}
+                    {% if choice.label == 'Private Seller' %}
+                        {% set choiceLabel = userTypeLabels['private_user'] %}
+                        {% if isTradeAdCount['false'] is defined %}
+                            {% set choiceLabel = choiceLabel ~ ' (' ~ isTradeAdCount['false'] ~ ')' %}
+                        {% else %}
+                            {% set choiceLabel = choiceLabel ~ ' (0)' %}
+                        {% endif %}
+                    {% else %}
+                        {% set choiceLabel = userTypeLabels['business_user'] %}
+                        {% if isTradeAdCount['true'] is defined %}
+                            {% set choiceLabel = choiceLabel ~ ' (' ~ isTradeAdCount['true'] ~ ')' %}
+                        {% else %}
+                            {% set choiceLabel = choiceLabel ~ ' (0)' %}
+                        {% endif %}
+                    {% endif %}
+                    {% set sellerQueryParams = searchParams|merge({'item__is_trade_ad': (choice.value)}) %}
+                    {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(sellerQueryParams, null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
+                    <li><a href="{{ listurl }}"  class="{{activeClass}}" rel="nofollow">{{ choiceLabel }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <div class="see-more clearfix">
+            {% set sellerQueryParams  = searchParams|merge({'item__is_trade_ad': ''}) %}
+            {% set linkClearurl = container.get('fa_ad.manager.ad_routing').getListingUrl(sellerQueryParams, null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
+            <a href="{{ linkClearurl }}" class="right" {% if app.request.get('searchQueryString') or getNoFollowLink %}rel="nofollow"{% endif %}>{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+        </div>
+    </div>
+</dd>
+<div style="display:none">{{ form_widget(attribute(form, 'item__is_trade_ad')) }}</div>

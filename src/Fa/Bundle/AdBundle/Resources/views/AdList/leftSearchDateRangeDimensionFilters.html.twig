@@ -1,0 +1,54 @@
+{% if attribute(form, filter~'_from') is defined or attribute(form, filter~'_to') is defined %}
+    {% set plusMinusClass     = '' %}
+    {% set contentActiveClass = '' %}
+    {% set keepShownClass     = '' %}
+    {% set panelId            = 'panel' ~ filterPanelCounter ~ 'b' %}
+    
+    {% if attribute(searchParams, filter~'_open') is defined %}
+        {% set contentActiveClass = 'active' %}
+        {% set keepShownClass     = 'keep-shown' %}
+        {% set panelId            = '' %}
+    {% else %}
+        {% set plusMinusClass = 'fi-plus' %}
+        {% if attribute(searchParams, filter~'_from') is defined or attribute(searchParams, filter~'_to') is defined or attribute(searchParams, filter~'_period') is defined %}
+            {% set plusMinusClass = 'fi-minus' %}
+            {% set contentActiveClass = 'active' %}
+        {% endif %}
+    {% endif %}
+    {% set filterLabel = '' %}
+    {% if attribute(form, filter~'_from') is defined %}
+        {% set filterLabel = attribute(form, filter~'_from').vars.label %}
+    {% elseif attribute(form, filter~'_to') is defined %}
+        {% set filterLabel =  attribute(form, filter~'_to').vars.label %}
+    {% endif %}
+    <dd class="accordion-navigation {{ contentActiveClass }} {{ keepShownClass }}">
+        <a href="{{ '#panel' ~ filterPanelCounter ~ 'b'}}" class="clearfix"><h5 class="left">{{ filterLabel }}</h5> <i class="right {{ plusMinusClass }}"></i></a>
+        <div {% if panelId is not null %}id="{{ panelId }}"{% endif %} class="content {{ contentActiveClass }}">
+            {% set showHideDates = 'none' %}
+            {% if attribute(form, (filter~'_period')) is defined %}
+                {% set selectedPeriod = attribute(form, filter~'_period').vars.data %}
+                {% if selectedPeriod and selectedPeriod == 'specific-dates' %}
+                    {% set showHideDates = 'inline' %}
+                {% endif %}
+                <div class="white-select">
+                    {{ form_widget(attribute(form, filter~'_period'), {'attr': {'class': 'date_period fa-select-white'}}) }}
+                </div>
+            {% endif %}
+            <div class="event-dates" style="display:{{showHideDates}}">
+                {% if attribute(form, (filter~'_from')) is defined %}
+                    <div class="relative">
+                        <span class="datepicker-icon"></span>
+                        {{ form_widget(attribute(form, filter~'_from')) }}
+                    </div>
+                {% endif %}
+                {% if attribute(form, filter~'_to') is defined %}
+                    <div class="relative">
+                        <span class="datepicker-icon"></span>
+                        {{ form_widget(attribute(form, filter~'_to')) }}
+                    </div>
+                {% endif %}
+                <button class="secondary-btn-2 expand" type="submit"> {{ 'Search'|trans({}, 'frontend-left-search') }} </button>
+            </div>
+        </div>
+    </dd>
+{% endif %}

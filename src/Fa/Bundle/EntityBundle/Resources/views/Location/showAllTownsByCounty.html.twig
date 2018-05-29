@@ -1,0 +1,47 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% set container = fetch_container_instance() %}
+{% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
+{% set localityRepository = fetch_repository('FaEntityBundle:Locality') %}
+
+{% block title %}
+    {{'Choose your location'|trans({}, 'frontend-location')}}
+{% endblock %}
+
+
+{% block body -%}
+        {% set towns = locationRepository.findBy({'parent': countyId}, {'name': 'ASC'}) %}
+        {% set townIds = {} %}
+        {% set townLocalityArray = {} %}
+        {% if towns|length %}
+            {% for town in towns %}
+                {% set townLvls = '' %}
+                {% set townLvls = town.getLvl() %}
+                {% if(townLvls==2) %}
+                    {% set townIds = townIds|merge({0 : town.getId()}) %}
+                {% endif %}
+                {% set townLocalityArray = townLocalityArray|merge({0 : {'name': town.getName(), 'url': town.getUrl()}}) %}
+            {% endfor %}
+            {% set localities = localityRepository.getLocalitiesArrayByTwonIds(townIds) %}
+            {% for locality in localities %}
+                {% set townLocalityArray = townLocalityArray|merge({0 : {'name': locality.getName(), 'url': locality.getUrl()}}) %}
+            {% endfor %}
+            {% set townLocalityArray = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'msort', [townLocalityArray, 'name']) %}
+        {% endif %}
+        <h1 class="simple-heading location-heading">{{'Choose your location'|trans({}, 'frontend-location')}}</h1>
+        
+        {% if countyInfo|length %}
+        <div class="choose-location counties">
+            <div class="row">
+                <div class="columns">
+                {% set locationHomePageUrl = container.get('fa_ad.manager.ad_routing').getLocationHomePageUrl(countyInfo['slug']) %}
+                {% set locationLink = '<a href="'~path('show_all_locations')~'">'~'Locations'|trans({}, 'frontend-location')~'</a>' %}
+                {{ 'Select your local area below or view all ads from %county_link% or go to %locations_link%'|trans({'%county_link%': '<a href="'~locationHomePageUrl~'">'~countyInfo['county']~'</a>', '%locations_link%': locationLink}, 'frontend-location')|raw }} 
+                </div>
+            </div>
+            
+            {{ include('FaEntityBundle:Location:renderLocations.html.twig', {'locations': townLocalityArray, 'blockName': 'Towns in %county_name%'|trans({'%county_name%': countyInfo['county']}, 'frontend-location')}) }}
+        </div>
+        {% endif %}
+    
+{% endblock %}

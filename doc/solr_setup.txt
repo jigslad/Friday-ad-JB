@@ -1,0 +1,107 @@
+1) We have two cores. 'core0' is for ads and 'core1' is for users
+
+2) Put below block in 'app/config/parameters.yml' file and change solr configuration for both cores if needed.
+ parameters:
+        fa.solr.client.ad:
+            hostname: localhost
+            port: 8983
+            path:  /solr/core0
+            login: ''
+            password: ''
+            timeout: 5
+        fa.solr.client.user:
+            hostname: localhost
+            port: 8983
+            path:  /solr/core1
+            login: ''
+            password: ''
+            timeout: 5
+
+3) We can add more cores in 'src/Fa/Bundle/CoreBundle/Solr/multicore' directory and setting for that core in 'src/Fa/Bundle/CoreBundle/Solr/multicore/solr.xml' file and also change solr host and port in same file if needed.
+
+4) Solr index data for 'core0' stores in 'data/solrdata/ad' and for 'core1' stores in 'data/solrdata/user'
+
+5) Give permission 775 recursively to 'data/solrdata' directory and also change group:owner to nginx:nginx.
+
+6) We are using solr version : solr-4.8.1 (Download: https://archive.apache.org/dist/lucene/solr/4.8.1/solr-4.8.1.tgz)
+   
+7) Install solr-4.8.1.tgz to any of the directory on server. for e.g. /web2/software/solr-4.8.1
+
+8) Solr 'solr-4.8.1' version dependencies
+
+   - Java version : 1.7 or greater.
+   - Php Solr Extension Version : 2.0.0 (http://pecl.php.net/package/solr/2.0.0)
+   
+9) To use solr multicore, we need to start solr with following option
+
+   -Dsolr.solr.home=PROJECT_DOCUMENT_ROOT/src/Fa/Bundle/CoreBundle/Solr/multicore
+
+10) Change default port "8983" in SOLR_SOURCE/example/etc/jetty.xml if it is different.
+
+    ...
+    <New class="org.eclipse.jetty.server.bio.SocketConnector">
+    ....
+    <Set name="port"><SystemProperty name="jetty.port" default="8983"/></Set>
+    ....
+
+
+11) Create solr start and stop script.
+
+   vi /etc/init.d/solr_481
+
+   #!/bin/sh -e
+
+    # Starts, stops, and restarts solr
+    
+    SOLR_DIR="SOLR_481_PATH/example/"
+    LOG_FILE="SOLR_481_LOGFILE"
+    JAVA="JAVA_PATH"
+    JAVA_OPTIONS="-Xmx512m -DSTOP.PORT=8079 -DSTOP.KEY=stop -Dsolr.solr.home=PROJECT_WEB_ROOT/src/Fa/Bundle/CoreBundle/Solr/multicore -jar start.jar"
+
+    case $1 in
+        start)
+            echo "Starting Solr"
+            cd $SOLR_DIR
+            $JAVA $JAVA_OPTIONS 2> $LOG_FILE &
+            ;;
+        stop)
+            echo "Stopping Solr"
+            cd $SOLR_DIR
+            $JAVA $JAVA_OPTIONS --stop
+            ;;
+        restart)
+            $0 stop
+            sleep 1
+            $0 start
+            ;;
+        *)
+            echo "Usage: $0 {start|stop|restart}" >&2
+            exit 1
+            ;;
+    esac
+
+12)
+
+    replace 'SOLR_481_PATH' '/web2/software/solr-4.8.1' -- /etc/init.d/solr_481
+    replace 'SOLR_481_LOGFILE' '/var/log/solr-4.8.1.log' -- /etc/init.d/solr_481
+    replace 'JAVA_PATH' '/usr/bin/java' -- /etc/init.d/solr_481
+    replace 'PROJECT_WEB_ROOT' '/web2/test.friday-ad.co.uk' -- /etc/init.d/solr_481
+    
+    Please note that change the e.g. /web2/software/solr-4.8.1 to the directory where you have installed your solr as mentioned in step 7)
+
+
+13) Do the solr indexing using following command:
+
+    sudo -u nginx php app/console fa:update:ad-solr-index --status="A" delete
+    sudo -u nginx php app/console fa:update:ad-solr-index --status="A" add
+
+    No need to perform commands following for now.
+    #sudo -u nginx php app/console fa:update:ad-solr-index --category="For Sale" --status="A" add
+    #sudo -u nginx php app/console fa:update:ad-solr-index --category="Jobs" --status="A" add
+    #sudo -u nginx php app/console fa:update:ad-solr-index --category="Animals" --status="A" add
+    #sudo -u nginx php app/console fa:update:ad-solr-index --category="Community" --status="A" add
+    #sudo -u nginx php app/console fa:update:ad-solr-index --category="Property" --status="A" add
+    #sudo -u nginx php app/console fa:update:ad-solr-index --category="Services" --status="A" add
+    #sudo -u nginx php app/console fa:update:ad-solr-index --category="Motors" --status="A" add
+
+14) After index you can see ad listed in listing and searching.

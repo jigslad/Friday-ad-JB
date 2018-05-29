@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="85dfa32c97d8618d1bea083609e2c8a29845abe5" resname="Account">
+        <jms:reference-file line="79">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>Account</source>
+        <target state="new">Account</target>
+      </trans-unit>
+      <trans-unit id="4187f2b4a93e0f618c2e28fb635ed175661b0aa1" resname="Buying">
+        <jms:reference-file line="69">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>Buying</source>
+        <target state="new">Buying</target>
+      </trans-unit>
+      <trans-unit id="6c9fc990898478022834278db2a52594773d2b71" resname="Close menu">
+        <jms:reference-file line="97">Resources/views/layout.html.twig</jms:reference-file>
+        <source>Close menu</source>
+        <target state="new">Close menu</target>
+      </trans-unit>
+      <trans-unit id="2729fe9180414874847ad48d62ae02df5794dd79" resname="Dashboard Home">
+        <jms:reference-file line="33">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>Dashboard Home</source>
+        <target state="new">Dashboard Home</target>
+      </trans-unit>
+      <trans-unit id="15141eab3a284730f02299b8c2e6cafa64ae4622" resname="Edit profile">
+        <jms:reference-file line="53">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>Edit profile</source>
+        <target state="new">Edit profile</target>
+      </trans-unit>
+      <trans-unit id="ef9e105faf653fc9bec5dc7ac97123bf9688de54" resname="Manage my ads">
+        <jms:reference-file line="52">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>Manage my ads</source>
+        <target state="new">Manage my ads</target>
+      </trans-unit>
+      <trans-unit id="f1702b4686278becffc88baabe6f4b7a8355532c" resname="Messages">
+        <jms:reference-file line="34">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>Messages</source>
+        <target state="new">Messages</target>
+      </trans-unit>
+      <trans-unit id="2051e4674186986d26c3209de9b817351ce59eba" resname="My favourites">
+        <jms:reference-file line="73">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>My favourites</source>
+        <target state="new">My favourites</target>
+      </trans-unit>
+      <trans-unit id="016110b88affc1e1436a21f580fd369007259277" resname="My saved searches">
+        <jms:reference-file line="74">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>My saved searches</source>
+        <target state="new">My saved searches</target>
+      </trans-unit>
+      <trans-unit id="197101e9db29b481dbd829e370657959b2ccd29e" resname="Open menu">
+        <jms:reference-file line="100">Resources/views/layout.html.twig</jms:reference-file>
+        <jms:reference-file line="1">views/Default/leftCanvasMenuLink.html.twig</jms:reference-file>
+        <source>Open menu</source>
+        <target state="new">Open menu</target>
+      </trans-unit>
+      <trans-unit id="cded093321ddaa4c0eaf56ef36f84dd53a9527be" resname="Orders">
+        <jms:reference-file line="54">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>Orders</source>
+        <target state="new">Orders</target>
+      </trans-unit>
+      <trans-unit id="6c4e94f10417cf4b0124f30fd22274288155668f" resname="Purchases">
+        <jms:reference-file line="75">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>Purchases</source>
+        <target state="new">Purchases</target>
+      </trans-unit>
+      <trans-unit id="b83c4cdafef5813f0872892b666e2b04466198c4" resname="Reviews">
+        <jms:reference-file line="35">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>Reviews</source>
+        <target state="new">Reviews</target>
+      </trans-unit>
+      <trans-unit id="4cbdcca331f8173c5e09a769806a35d3f5180b26" resname="Selling">
+        <jms:reference-file line="48">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>Selling</source>
+        <target state="new">Selling</target>
+      </trans-unit>
+      <trans-unit id="3f2adc24f636b8386feec06be64811020f3b90ab" resname="View your profile">
+        <jms:reference-file line="28">views/Default/userLeftMenu.html.twig</jms:reference-file>
+        <source>View your profile</source>
+        <target state="new">View your profile</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,37 @@
+parameters:
+    fa.dotmailer.createdatafield.class: Fa\Bundle\DotMailerBundle\Resource\CreateDataField
+    fa.dotmailer.createcontact.class: Fa\Bundle\DotMailerBundle\Resource\CreateContact
+    fa.dotmailer.getcontact.class: Fa\Bundle\DotMailerBundle\Resource\GetContact
+    fa.dotmailer.getaddressbook.class: Fa\Bundle\DotMailerBundle\Resource\GetAddressBook
+    fa.dotmailer.createaddressbook.class: Fa\Bundle\DotMailerBundle\Resource\CreateAddressBook
+    fa.dotmailer.getcontactbyemail.class: Fa\Bundle\DotMailerBundle\Resource\GetContactByEmail
+    fa.dotmailer.deletecontact.class: Fa\Bundle\DotMailerBundle\Resource\DeleteContact
+
+services:
+    fa.dotmailer.createdatafield.resource:
+        class: '%fa.dotmailer.createdatafield.class%'
+        arguments: ['@service_container']
+
+    fa.dotmailer.createcontact.resource:
+        class: '%fa.dotmailer.createcontact.class%'
+        arguments: ['@service_container']
+
+    fa.dotmailer.getcontact.resource:
+        class: '%fa.dotmailer.getcontact.class%'
+        arguments: ['@service_container']
+
+    fa.dotmailer.getaddressbook.resource:
+        class: '%fa.dotmailer.getaddressbook.class%'
+        arguments: ['@service_container']
+
+    fa.dotmailer.createaddressbook.resource:
+        class: '%fa.dotmailer.createaddressbook.class%'
+        arguments: ['@service_container']
+
+    fa.dotmailer.getcontactbyemail.resource:
+        class: '%fa.dotmailer.getcontactbyemail.class%'
+        arguments: ['@service_container']
+
+    fa.dotmailer.deletecontact.resource:
+        class: '%fa.dotmailer.deletecontact.class%'
+        arguments: ['@service_container']

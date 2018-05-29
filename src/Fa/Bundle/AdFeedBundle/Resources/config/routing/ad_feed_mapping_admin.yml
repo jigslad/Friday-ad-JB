@@ -1,0 +1,17 @@
+ad_feed_mapping_admin:
+    path:     /
+    defaults: { _controller: "FaAdFeedBundle:FeedMappingAdmin:index" }
+
+ad_feed_mapping_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaAdFeedBundle:FeedMappingAdmin:edit" }
+
+ad_feed_mapping_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaAdFeedBundle:FeedMappingAdmin:update" }
+    requirements: { methods: post|put }
+
+ad_feed_mapping_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaAdFeedBundle:FeedMappingAdmin:delete" }
+    requirements: { methods: post|delete|get }

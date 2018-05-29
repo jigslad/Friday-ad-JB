@@ -1,0 +1,38 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig', { 'heading': 'Add Translation'}) }}
+
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+               {{ form_row(form.key) }}
+               {{ form_row(form.domain) }}
+               <div class="form-group">
+                   {{ form_label(form.translations) }}
+               </div>
+               {% for translation in form.translations %}
+                   <div class="form-group{% if form_errors(translation.content) %} has-error{% endif %}">
+                   {{ form_label(translation, null,{'label_attr': {'class': 'required'} }) }} <span class="required">*</span>
+                   {{ form_widget(translation.content, { 'attr': {'class': 'form-control'} }) }}
+                   {{ form_errors(translation.content) }}
+                   {{ form_widget(translation.locale) }}
+               </div>
+               {% endfor %}
+               <ul class="button-group text-center">
+                    <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                    {% if isSaveAndNew is not defined %}
+                    <li>{{ form_widget(form.save_add, {'label': 'Save and new'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                    {% endif %}
+                    <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('lexik_translation_grid') }}'">{{ 'Cancel'|trans({}, 'messages') }}</button></li>
+                </ul>
+           {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

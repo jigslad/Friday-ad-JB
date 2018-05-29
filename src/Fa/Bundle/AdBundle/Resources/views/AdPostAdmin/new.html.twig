@@ -1,0 +1,235 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set backUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdminCancelUrl', [fetch_container_instance()]) %}
+{% set backToUserListUrl = app.session.get('admin_backto_userlist_url') %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = {{ 'mandatory fields'|trans({}, 'messages') }}</p>
+           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+               {{ form_errors(form) }}
+               <p>{{ 'Select advert categoy'|trans }} </p>
+               <div class="row" id="category_autocomplete_div">
+                   <div class="columns">
+                       <div class="admin_cat_search list_style_none">
+                           {{ form_widget(form.category_id) }}
+                       </div>
+                   </div>
+               </div>
+
+               <div align="center" class="mb15">{{ 'OR choose from ALL categories'}}</div>
+               {% set totalLevel = fetch_repository('FaEntityBundle:Category').getMaxLevel() %}
+               {{ set_variables('paa_category_select', {'totalLevel' : totalLevel }) }}
+               {% if totalLevel %}
+                   <div class="row" id="category_choices_div">
+                       <div class="columns">
+                           <div class="admin_cat_search list_style_none">
+                               {% for i in 1..totalLevel %}
+                                   <div id="category_choice_div_{{ i }}" class="category_choices_div">
+                                       {% set field = 'category_' ~ i %}
+                                       {{ form_widget(attribute(form, field)) }}
+                                   </div>
+                               {% endfor %}
+                           </div>
+                      </div>
+                   </div>
+               {% endif %}
+               
+               <ul class="button-group text-center">
+                   <li><button type="button" class="tiny button mb0" onclick="submitForm();">{{ 'Continue ad posting'|trans({}, 'messages') }}</button></li>
+                   <li>
+                       {% if app.request.get('return_url') %}
+                           <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ app.request.get('return_url') }}'">{{ 'Back to user ads'|trans({}, 'messages') }}</button>
+                       {% else %}
+                           <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ backToUserListUrl ? backToUserListUrl : path('user_admin') }}'">{{ 'Back to user list'|trans({}, 'messages') }}</button>
+                       {% endif %}
+                   </li>
+               </ul>
+           {{ form_end(form) }}
+       </div>
+   </div>
+</div>
+
+{% endblock %}
+
+{% block scriptbottom -%}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% set totalLevel = attribute(get_variables('paa_category_select'), 'totalLevel') %}
+    var totalLevel = '{{ totalLevel }}';
+    var lastLevel  = '';
+
+    $(document).ready(function(){
+        $('.category_choices_div').hide();
+        $('#category_choice_div_1').show();
+        $('#fa_paa_category_select_admin_category_1').show();
+
+        // when select2 close event fired then check if any category selected then re-set choice fields
+        $('#fa_paa_category_select_admin_category_id').on("select2-close", function(e) {
+            if ($('#fa_paa_category_select_admin_category_id').val()) {
+                $('#fa_paa_category_select_admin_category_1').val('');
+                loadCategoryByLevel('', 2);
+                $('.select2-search-choice-close').show();
+                $('#category_choice_div_1').show();
+                $('#fa_paa_category_select_admin_category_1').show();
+                submitForm();
+            } else {
+                $('.select2-search-choice-close').hide();
+            }
+        });
+        
+        // when select2 removed event fired then check if any category selected then re-set choice fields
+        $('#fa_paa_category_select_admin_category_id').on("select2-removed", function(e) {
+            if ($('#fa_paa_category_select_admin_category_id').val() == '') {
+                $('#fa_paa_category_select_admin_category_id').val('');
+                loadCategoryByLevel('', 2);
+                $('#category_choice_div_1').show();
+                $('#fa_paa_category_select_admin_category_1').show();
+                $('.select2-search-choice-close').hide();
+            }
+        });
+
+        // Remove selected auto complete category when category changed from choice field
+        $('.category').change(function(e) {
+           var fieldId   = $(this).attr('id');
+           var level     = fieldId.replace('fa_paa_category_select_admin_category_', '');
+           var nextLevel = parseInt(level) + 1;
+
+           resetCategoryAutocompleteField();
+           loadCategoryByLevel($(this).val(), nextLevel);
+        });
+    });
+
+    function loadCategoryByLevel(id, level)
+    {
+        var category_selector = $('#fa_paa_category_select_admin_category_'+level);
+        var selectMsg         = (level == 1) ? 'Please select category' : 'Please select subcategory';
+        category_selector.html('<option value="">' + selectMsg + '</option>');
+
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    if (data.length > 0) {
+                        lastLevel = level;
+                        $('#category_choice_div_' + level).show();
+                        $(category_selector).show();
+                        for (var i=0, total = data.length; i < total; i++) {
+                            category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                        }
+                    } else {
+                        lastLevel = parseInt(level) - 1;
+                    }
+                    resetAndHideCategoryChoiceFields();
+                }
+            });
+        } else {
+            lastLevel = parseInt(level) - 1;
+            resetAndHideCategoryChoiceFields();
+        }
+    }
+    
+    function resetAndHideCategoryChoiceFields()
+    {
+        for (var l = (parseInt(lastLevel) + 1); l <= totalLevel; l++) {
+            $('#fa_paa_category_select_admin_category_' + l).html('<option value="">Please select subcategory</option>');
+            $('#category_choice_div_' + l).hide();
+        }
+    }
+
+    function resetCategoryAutocompleteField()
+    {
+        $('#fa_paa_category_select_admin_category_id').val('');
+        $('.select2-choice').addClass('select2-default');
+        $('.select2-choice .select2-chosen').html('{{ 'eg. Children clothes or wardrobe'|trans({}, 'frontend-paa-first-step') }}');
+        $('.select2-search-choice-close').hide();
+    }
+
+    function loadCategoryByLevel1(id, level)
+    {
+        var category_selector = $('#fa_paa_category_select_admin_category_'+level);
+        var selectMsg         = (level == 1) ? 'Please select category' : 'Please select subcategory';
+        category_selector.html('<option value="">' + selectMsg + '</option>');
+
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    if (data.length > 0) {
+                        lastLevel = level;
+                        $('#category_choice_div_' + level).show();
+                        $(category_selector).show();
+                        for (var i=0, total = data.length; i < total; i++) {
+                            category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                        }
+                    } else {
+                        lastLevel = parseInt(level) - 1;
+                        for (var l = level; l <= totalLevel; l++) {
+                            $('#category_choice_div_' + l).hide();
+                        }
+                    }
+                }
+            });
+        } else {
+            lastLevel = parseInt(level) - 1;
+            for (var l = level; l <= totalLevel; l++) {
+                $('#category_choice_div_' + l).hide();
+            }
+        }
+    }
+    
+    function submitForm()
+    {
+        var user_id = $('#fa_paa_category_select_admin_user_id').val();
+        var route = '';
+        var category_id = '';
+
+        // check for last level child category entered or not
+        var last_category_id = $("#fa_paa_category_select_admin_category_" + lastLevel).val();
+        var autocomplete_category_id = $('#fa_paa_category_select_admin_category_id').val();
+
+        if (last_category_id || autocomplete_category_id)
+        {
+            category_id = last_category_id ? last_category_id : autocomplete_category_id;
+            route   = Routing.generate('ad_post_new_from_category_admin', { 'user_id': user_id, 'admin_ad_counter': '{{adminAdCounter}}','category_id': category_id });
+
+            {% if app.request.get('return_url') %}
+                route = route + '?return_url=' + '{{ app.request.get("return_url") }}';
+            {% endif %}
+        }
+        else
+        {
+            var first_category_id = $("#fa_paa_category_select_admin_category_1").val();
+            if (!first_category_id && !autocomplete_category_id) {
+                alert("{{ 'Please search advert category or choose from all categories.'|trans }}");
+            } else {
+                alert("{{ 'Please select subcategory'|trans }}");
+            }
+            return false;
+        }
+
+       {% if app.request.get('ad_id') %}
+           $('#fa_paa_category_select_admin_category_id').val(category_id);
+           $('form[name="fa_paa_category_select_admin"]').submit();
+       {% else %}
+           window.location.replace(route);
+       {% endif %}
+    }
+//]]>
+</script>
+{{ include('FaCoreBundle::autoSuggestField.html.twig', {'field' : '#fa_paa_category_select_admin_category_id', 'jsonField' : '#fa_paa_category_select_admin_category_id_json', 'placeHolder': 'eg. Children clothes or wardrobe'|trans, 'route' : 'category_ajax_term_postad', 'isSingle' : true }) }}
+{% endblock %}

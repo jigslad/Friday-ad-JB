@@ -1,0 +1,53 @@
+ad_image_upload:
+    path:     /image_upload
+    defaults: { _controller: FaAdBundle:Default:index }
+
+ajax_ad_image_save:
+    path:     /ajax/save_image
+    defaults: { _controller: FaAdBundle:AdImage:ajaxSaveUploadedImage }
+
+ajax_get_ad_images:
+    path:     /ajax/get_image
+    defaults: { _controller: FaAdBundle:AdImage:ajaxRenderUploadedImage }
+
+ajax_delete_ad_images:
+    path:     /ajax/delete_image/{adId}/{imageId}/{imageHash}/{vertical}
+    defaults: { _controller: FaAdBundle:AdImage:ajaxDeleteImage }
+
+ajax_get_big_ad_image:
+    path:     /ajax/get_big_image/{adId}/{imageId}/{imageHash}
+    defaults: { _controller: FaAdBundle:AdImage:ajaxGetBigImage }
+    
+ajax_crop_ad_image:
+    path:     /ajax/crop_image/{adId}/{imageId}/{imageHash}
+    defaults: { _controller: FaAdBundle:AdImage:ajaxCropImage }
+    
+ajax_change_ad_image_order:
+    path:     /ajax/change_image_order/{adId}
+    defaults: { _controller: FaAdBundle:AdImage:ajaxChangeAdImageOrder }
+
+ajax_make_main_image:
+    path:     /ajax/make_main_image/{adId}
+    defaults: { _controller: FaAdBundle:AdImage:ajaxMakeMainImage }
+
+ajax_reset_ad_image:
+    path:     /ajax/reset_image/{adId}/{imageId}/{imageHash}/{vertical}
+    defaults: { _controller: FaAdBundle:AdImage:ajaxResetImage }
+    
+ajax_rotate_ad_image:
+    path:     /ajax/rotate_image/{adId}/{size}/{imageHash}
+    defaults: { _controller: FaAdBundle:AdImage:ajaxRotateImage }
+    options:
+        expose: true
+        
+show_ad_image_upload_no_photo:
+    path:     /image_upload/{adIdUserId}
+    defaults: { _controller: FaAdBundle:AdImage:showImageUploaderForNoPhotoAd }
+    requirements:
+        adIdUserId: "(.*){10,}"
+        
+ajax_validate_ad_image_upload_no_photo:
+    path:     /ajax/validate/image_upload/{adIdUserId}
+    defaults: { _controller: FaAdBundle:AdImage:ajaxValidateImageUploaderForNoPhotoAd }
+    requirements:
+        adIdUserId: "(.*){10,}"

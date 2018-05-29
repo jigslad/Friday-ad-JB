@@ -1,0 +1,29 @@
+resource:
+    path:     /
+    defaults: { _controller: "FaUserBundle:Resource:index" }
+
+resource_new:
+    path:     /new/{parent_id}
+    defaults: { _controller: "FaUserBundle:Resource:new" }
+
+resource_create:
+    path:     /create/{parent_id}
+    defaults: { _controller: "FaUserBundle:Resource:create" }
+    requirements: { methods: post }
+
+resource_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "FaUserBundle:Resource:edit" }
+
+resource_update:
+    path:     /{id}/update
+    defaults: { _controller: "FaUserBundle:Resource:update" }
+    requirements: { methods: post|put }
+
+resource_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "FaUserBundle:Resource:delete" }
+    
+resource_ajax_get_node:
+    path:     /ajax/getnode
+    defaults: { _controller: "FaUserBundle:Resource:ajaxGetNode" }

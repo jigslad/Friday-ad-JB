@@ -1,0 +1,113 @@
+{% set container = fetch_container_instance() %}
+{% if container.getParameter('fa.amazon.mode') == 'live' %}
+    {% set amazon_url_js = container.getParameter('fa.amazon.live.url') %}
+{% else %}
+    {% set amazon_url_js = container.getParameter('fa.amazon.test.url') %}
+{% endif %}
+<!-- Core Scripts - Include with every page -->
+{% javascripts filter='uglifyjs2' output='bundles/js/compiled/mainAdmin.js'
+'bundles/faadmin/js/vendor/modernizr.js'
+'bundles/faadmin/js/vendor/jquery.js'
+'bundles/fosjsrouting/js/router.js'
+'bundles/faadmin/js/vendor/select2.min.js'
+'bundles/facore/js/common.js'
+'bundles/faadmin/js/foundation.min.js'
+'bundles/faadmin/js/foundation/foundation.datepicker.js'
+'bundles/faadmin/js/vendor/jquery-ui.min.js'
+%}
+<script src="{{ static_asset_url(asset_url) }}?v=2"></script>
+{% endjavascripts %}
+<script>
+if(typeof amznscrptload == 'undefined')
+{
+   var script = document.createElement('script');
+   script.type = "text/javascript";
+   script.src = "{{amazon_url_js}}";
+   document.getElementsByTagName('head')[0].appendChild(script);
+}
+</script>
+<script language="javascript" type="text/javascript">
+    $('#admin_header_logout, #admin_header_index_logout').on('click', function() {
+        if (!!$.cookie('amazon_Login_accessToken')) {
+            amazon.Login.logout();
+            document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            $("#AmazonPayButton").show();
+            $("#addressBookWidgetDiv").hide();
+            $("#walletWidgetDiv").hide();
+            $("#access-token").val("");
+            $("#order-reference").val("");
+        }
+    });
+</script>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $.ajax({
+      url: '{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}',
+      async: false,
+      dataType: "script",
+    });
+    //bindFormErrorEvents();
+    $('.fdatepicker').fdatepicker({format: 'dd/mm/yyyy'});
+    $('.datepicker-icon').click(function(e){
+        $(this).next('input.fdatepicker').focus();
+    });
+    function ajaxindicatorstart(text)
+    {
+        if($('body').find('#resultLoading').attr('id') != 'resultLoading'){
+            $('body').append('<div id="resultLoading" style="display:none"><div><img src="{{ asset_url('faadmin/images/ajax_spinner.gif') }}"><div>'+text+'</div></div></div>');
+        }
+    
+        $('#resultLoading').css({
+            'width':'100%',
+            'height':'100%',
+            'position':'fixed',
+            'z-index':'10000000',
+            'top':'0',
+            'left':'0',
+            'right':'0',
+            'bottom':'0',
+            'margin':'auto',
+        });
+    
+        $('#resultLoading>div:first').css({
+            'width': '250px',
+            'height':'75px',
+            'text-align': 'center',
+            'position': 'fixed',
+            'top':'0',
+            'left':'0',
+            'right':'0',
+            'bottom':'0',
+            'margin':'auto',
+            'font-size':'16px',
+            'z-index':'10',
+            'color':'#000000',
+            'background':'#ffffff',
+            'border-radius':'0.6em',
+            'border':'1px solid #d0d0d0',
+            'box-shadow': '0 1px 1px -1px #ffffff',
+            'padding': '10px'
+        });
+    
+        $('#resultLoading .bg').height('100%');
+           $('#resultLoading').fadeIn(300);
+        $('body').css('cursor', 'wait');
+    }
+    
+    function ajaxindicatorstop()
+    {
+        $('#resultLoading .bg').height('100%');
+           $('#resultLoading').fadeOut(300);
+        $('body').css('cursor', 'default');
+    }
+    
+    // remove empty left menus
+    $( document ).ready(function() {
+        $("ul.off-canvas-list > li").each(function() {
+            if ($(this).find('ul:first').length == 0) {
+                $(this).remove();
+            }
+        });
+    });
+//]]>
+</script>

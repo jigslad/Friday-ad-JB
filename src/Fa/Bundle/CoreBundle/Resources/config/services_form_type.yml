@@ -1,0 +1,28 @@
+parameters:
+    fa_core.form.type.config_rule_admin.class: Fa\Bundle\CoreBundle\Form\ConfigRuleAdminType
+    fa_core.form.type.config_rule_search_admin.class: Fa\Bundle\CoreBundle\Form\ConfigRuleSearchAdminType
+    fa_core.form.type.js_choice.class: Fa\Bundle\CoreBundle\Form\Type\JsChoiceType
+    fa_core.form.type.tel.class: Fa\Bundle\CoreBundle\Form\Type\TelType
+
+services:
+    fa_core.form.type.config_rule_admin:
+        class: '%fa_core.form.type.config_rule_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_core_config_rule_admin }
+
+    fa_core.form.type.config_rule_search_admin:
+        class: '%fa_core.form.type.config_rule_search_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_core_config_rule_search_admin }
+
+    fa_core.form.type.js_choice:
+        class: '%fa_core.form.type.js_choice.class%'
+        tags:
+            - { name: form.type, alias: js_choice }
+
+    fa_core.form.type.tel:
+        class: '%fa_core.form.type.tel.class%'
+        tags:
+            - { name: form.type, alias: tel }

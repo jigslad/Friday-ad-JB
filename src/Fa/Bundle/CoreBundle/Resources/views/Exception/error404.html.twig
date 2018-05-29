@@ -1,0 +1,28 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block page_title %}
+    Page Not Found | Friday-Ad
+{% endblock %}
+
+{% block body %}
+    <div class="row text-center error-page">
+        <div  class="bg-img404"></div>
+        <h1>Congratz! You’ve found the 404 Error page!</h1>
+        <h2 class="ptop_spac">Next, find something you really want from the search bar below or visit</h2>
+        <a href="{{ path('fa_frontend_homepage') }}" class="hp-link">Friday Ad homepage</a>
+        {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isErrorSearch': true } )) }}
+    </div>
+{% endblock %}
+
+{% block dimension2 %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+   {% if app.user.getId() is not defined or app.user.getId() is null %}
+    	ga('set', 'dimension9', 'not logged in');
+    {% else %}
+    	ga('set', 'dimension9', 'logged in');
+    {% endif %}
+    ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  '_404_page'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+//]]>
+</script>
+{% endblock %}

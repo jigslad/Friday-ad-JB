@@ -1,0 +1,41 @@
+my_account_newsletter:
+    path:     /newsletter/
+    defaults: { _controller: FaUserBundle:Newsletter:index }
+
+my_account:
+    path:     /
+    defaults: { _controller: FaUserBundle:MyAccount:myAccount }
+    schemes: [https]
+
+my_account_facebook_login:
+    path:   /facebook_login/
+    defaults:  { _controller: FaUserBundle:MyAccount:userDetailFacebookLogin }
+    
+my_account_google_login:
+    path:   /google_login/
+    defaults:  { _controller: FaUserBundle:MyAccount:userDetailGoogleLogin }
+    
+ajax_update_paypal_email:
+    path:     /ajax/update_payapl_email/
+    defaults:  { _controller: FaUserBundle:MyAccount:ajaxUpdatePaypalEmail }
+    
+my_account_cancel_subscription:
+    path:   /cancel_subscription/
+    defaults:  { _controller: FaUserBundle:MyAccount:userCancelSubscription }
+    
+deactivate_account:
+    path:   /deactivate/
+    defaults:  { _controller: FaUserBundle:MyAccount:deactivateAccount }
+    
+create_new_password:
+    path:   /create_new_password/
+    defaults:  { _controller: FaUserBundle:MyAccount:sendCreatePasswordLink }
+    
+invoice_receipt:
+    path:   /invoice_receipt/{orderId}
+    defaults:  { _controller: FaUserBundle:MyAccount:invoiceReceipt }
+    options:
+        expose: true
+ajax_load_invoice:
+    path:   /ajax/load_invoice/
+    defaults:  { _controller: FaUserBundle:MyAccount:ajaxLoadInvoice }

@@ -1,0 +1,58 @@
+{% set bannerRepository = fetch_repository('FaContentBundle:Banner') %}
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+             <table class="table table-striped table-bordered table-hover">
+                 <thead class="mb0">
+                     <tr>
+                         <th width="25%">
+                            {{ sortable_link('banner_admin', 'banner_zone__name', 'Zone'|trans, sorter) }}
+                         </th>
+                         <th width="20%">{{ 'Category'|trans({}, 'messages') }}</th>
+                         <th width="40%">
+                            {{ 'Pages'|trans({}, 'messages') }}
+                         </th>
+                         <th width="15%"><i class="fa fa-gear"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for arrayBanner in pagination.getCurrentPageResults() %}
+                              {% set objBanner      = bannerRepository.find(arrayBanner['id']) %}
+                              {% set objBannerPages = objBanner.getBannerPages() %}
+                              {% set strBannerPages = '' %}
+                              <tr class="gradeX">
+                                  <td>{{ arrayBanner['zone_name'] }}</td>
+                                  <td>{{ arrayBanner['category_name'] }}</td>
+                                  <td>
+                                    {% for objBannerPage in objBannerPages %}
+                                        {% set strBannerPages = strBannerPages ~ ', ' ~ objBannerPage.getName() %}
+                                    {% endfor %}
+                                    {{ strBannerPages|trim(', ') }}
+                                  </td>
+                                  <td>
+                                      <button href="#" data-dropdown="drop{{ arrayBanner['id'] }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                      <br />
+                                      <ul id="drop{{ arrayBanner['id'] }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+    	                                  {% if bannerEditGrant %}
+    	                                      <li><a href="{{ path('banner_edit_admin', {'id': arrayBanner['id']}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+    	                                  {% endif %}
+
+    	                                  {% if bannerDeleteGrant %}
+    	                                      <li><a href="{{ path('banner_delete_admin', {'id': arrayBanner['id']}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this record?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+    	                                  {% endif %}
+                                      </ul>
+                                  </td>
+                              </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="odd gradeX">
+                              <td colspan="4" align="center">{{ 'No record found'|trans({}, 'messages') }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+        </div>
+    </div>
+</div>

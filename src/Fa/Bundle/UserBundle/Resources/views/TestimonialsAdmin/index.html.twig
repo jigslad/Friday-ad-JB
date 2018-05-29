@@ -1,0 +1,49 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set entityRepository = fetch_repository('FaEntityBundle:Entity') %}
+{% set statusArray = entityRepository.getStatusArray1(fetch_container_instance(), false) %}
+
+{% set testimonialsEditGrant = false %}
+{% set testimonialsDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('testimonials_edit_admin') %}
+  {% set testimonialsEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('testimonials_delete_admin') %}
+  {% set testimonialsDeleteGrant = true %}
+{% endif %}
+
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew': false}) }}
+
+    {% use "FaUserBundle:TestimonialsAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaUserBundle:TestimonialsAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+<script>
+$(document).ready(function(){
+    $(".toggle-status").click(function(){
+        var id     = $(this).attr('testimonials-id');
+        var status = $(this).attr('testimonials-status');
+
+        $.ajax({
+            url: "{{ path('ajax_testimonials_change_status') }}",
+            dataType: 'json',
+            type: 'POST',
+            data: {id: id, status: status},
+            success: function(data) {
+                location.reload();
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

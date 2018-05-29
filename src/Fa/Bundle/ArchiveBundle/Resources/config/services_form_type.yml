@@ -1,0 +1,6 @@
+services:
+    fa_archive.form.type.archive_ad_search_admin:
+        class: Fa\Bundle\ArchiveBundle\Form\ArchiveAdSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_archive_archive_ad_search_admin }

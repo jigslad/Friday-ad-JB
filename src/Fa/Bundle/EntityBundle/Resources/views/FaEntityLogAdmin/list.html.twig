@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <table>
+                <thead>
+                    <tr>
+                        <th width="10%">
+                            {{ 'Entity id'|trans }}
+                        </th>
+                        <th width="20%">
+                            {{ 'Entity class'|trans }}
+                        </th>
+                        <th width="20%">
+                            {{ 'Username'|trans }}
+                        </th>
+                        <th width="20%">
+                            {{ 'Logged at'|trans }}
+                        </th>
+                        <th width="10%">
+                            {{ 'Activity'|trans }}
+                        </th>
+                        <th><i class="fi-widget"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pagination.getNbResults() %}
+                         {% for fa_entity_log in pagination.getCurrentPageResults() %}
+                             <tr class="gradeX">
+                                 <td>{{ fa_entity_log.objectId }}</td>
+                                 <td>{{ entityLogRepository.getObjectClassArray(fa_entity_log.objectClass) }}</td>
+                                 <td>{{ fa_entity_log.username }}</td>
+                                 <td>{{ fa_entity_log.loggedAt|localizeddate('short', 'medium', app.request.locale ) }}</td>
+                                 <td>{{ fa_entity_log.action|capitalize }}</td>
+                                 <td>
+                                 <button href="#" data-dropdown="drop{{ fa_entity_log.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                    <br />
+                                    <ul id="drop{{ fa_entity_log.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                        <li><a href="{{ path('entity_log_detail', {'id': fa_entity_log.id}) }}"><i class="fi-eye"></i> {{ 'Detail'|trans({}, 'messages') }}</a></li>
+                                    </ul>
+                                 </td>
+                             </tr>
+                         {% endfor %}
+                    {% else %}
+                         <tr class="gradeX">
+                             <td colspan="5" align="center">{{ 'No entity log found'|trans({}, 'messages') }}</td>
+                         </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

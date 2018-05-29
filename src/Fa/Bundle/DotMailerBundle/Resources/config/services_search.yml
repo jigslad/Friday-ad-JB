@@ -1,0 +1,16 @@
+services:
+        
+    fa.dotmailer.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaDotMailerBundle:Dotmailer]
+
+    fa.dotmailer_info.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaDotMailerBundle:DotmailerInfo]
+
+    fa.dotmailer_filter.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaDotMailerBundle:DotmailerFilter]

@@ -1,0 +1,87 @@
+{% set userSiteRepository = fetch_repository('FaUserBundle:UserSite') %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set userRole = userRepository.getUserRole(app.user.getId(), container) %}
+{% set userCompanyLogo = null %}
+{% set userLogo = null %}
+{% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}
+    {% set userSiteObj = userSiteRepository.findOneBy({'user': app.user.getId()}) %}
+    {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), (userSiteObj ? userSiteObj.getPath() : null), app.user.getId(), null, null, true, true, app.user.getStatus().getId(), app.user.getProfileName()]) %}
+{% endif %}
+{% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
+    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), app.user.getImage(), app.user.getId(), null, null, true, false, app.user.getStatus().getId(), app.user.getProfileName()]) %}
+{% endif %}
+{% set myProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(app.user.getId()) %}
+{% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
+{% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
+{% set userCreditRepository = fetch_repository('FaUserBundle:UserCredit') %}
+
+<div id="db-left-part" class="large-6 columns left-off-canvas-menu">
+    <div class="clearfix">
+        <div class="user-name">
+            <div class="user-pro-pic {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}rounded{% endif %}">
+                <span id="left_profile_image_div">
+                    {% if userCompanyLogo %}
+                        {{userCompanyLogo|raw}}
+                    {% elseif userLogo %}
+                        {{userLogo|raw}}
+                    {% endif %}
+                </span>
+            </div>
+            <h2>{{ app.user.getProfileName() }}</h2>
+            <a href="{{ myProfileUrl }}">{{ 'View your profile'|trans({}, 'frontend-dashboard-left-menu') }}</a>
+        </div>
+    </div>
+
+    <ul class="db-left-menu">
+        <li><a href="{{path('dashboard_home')}}" class="{% if currentRoute == 'dashboard_home' %}active{% endif %}"><span class="menu-item">{{ 'Dashboard Home'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+        <li><a href="{{path('user_ad_message_all')}}" class="{% if currentRoute == 'user_ad_message_all' or currentRoute == 'user_ad_message_reply' %}active{% endif %}"><span class="menu-item">{{ 'Messages'|trans({}, 'frontend-dashboard-left-menu') }}{% if totalUnreadMsg > 0 %} <span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</span></a></li>
+        <li><a href="{{ path('user_review_list') }}" class="{% if currentRoute == 'user_review_list' %}active{% endif %}"><span class="menu-item">{{ 'Reviews'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+
+        {% if currentRoute in {0: 'manage_my_ads_active', 1: 'my_orders', 2: 'my_profile'} %}
+            {% set menuToggleClass = 'fi-minus' %}
+            {% set menuToggleStyle = 'display:block;' %}
+        {% else %}
+            {#% set menuToggleClass = 'fi-plus' %}
+            {% set menuToggleStyle = 'display:none;' %#}
+            {% set menuToggleClass = 'fi-minus' %}
+            {% set menuToggleStyle = 'display:block;' %}
+        {% endif %}
+        <li class="db-left-submenu">
+            <a href="javascript:void(0);">
+                <span class="menu-item" onclick="toggleDashboardLeftMenu('selling');">{{ 'Selling'|trans({}, 'frontend-dashboard-left-menu') }}</span>
+                <i class="right {{menuToggleClass}}" id="selling_i"></i>
+            </a>
+            <ul id="selling_ul" style="{{menuToggleStyle}}">
+                <li><a href="{{ path('manage_my_ads_active') }}" class="{% if currentRoute == 'manage_my_ads_active' %}active{% endif %}"><span class="menu-item">{{ 'Manage my ads'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+                {% if userCreditRepository.getActiveCreditCountForUser(app.user.getId()) > 0 %}
+                    <li><a href="{{ path('my_credits') }}" class="{% if currentRoute == 'my_credits' %}active{% endif %}"><span class="menu-item">{{ 'Credits'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+                {% endif %}
+                <li><a href="{{ path('my_profile') }}" class="{% if currentRoute == 'my_profile' %}active{% endif %}"><span class="menu-item">{{ 'Edit profile'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+                <li><a href="{{ path('my_orders') }}" class="{% if currentRoute == 'my_orders' %}active{% endif %}"><span class="menu-item">{{ 'Orders'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+            </ul>
+        </li>
+
+        {% if currentRoute in {0: 'list_search_agent', 1: 'my_purchases', 2: 'my_favourite'}  %}
+            {% set menuToggleClass = 'fi-minus' %}
+            {% set menuToggleStyle = 'display:block;' %}
+        {% else %}
+            {#% set menuToggleClass = 'fi-plus' %}
+            {% set menuToggleStyle = 'display:none;' %#}
+            {% set menuToggleClass = 'fi-minus' %}
+            {% set menuToggleStyle = 'display:block;' %}
+        {% endif %}
+        <li class="db-left-submenu">
+            <a href="javascript:void(0);" onclick="toggleDashboardLeftMenu('buying');">
+                <span class="menu-item">{{ 'Buying'|trans({}, 'frontend-dashboard-left-menu') }}</span>
+                <i class="right {{menuToggleClass}}" id="buying_i"></i>
+            </a>
+            <ul id="buying_ul" style="{{menuToggleStyle}}">
+                <li><a href="{{ path('my_favourite') }}" class="{% if currentRoute == 'my_favourite' %}active{% endif %}"><span class="menu-item">{{ 'My favourites'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+                <li><a href="{{ path('list_search_agent') }}" class="{% if currentRoute == 'list_search_agent' %}active{% endif %}"><span class="menu-item">{{ 'Alerts and searches'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+                <li><a href="{{ path('my_purchases') }}" class="{% if currentRoute == 'my_purchases' %}active{% endif %}"><span class="menu-item">{{ 'Purchases'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+            </ul>
+        </li>
+
+        <li><a href="{{ path('my_account') }}" class="{% if currentRoute == 'my_account' %}active{% endif %}"><span class="menu-item">{{ 'Account'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+    </ul>
+</div>

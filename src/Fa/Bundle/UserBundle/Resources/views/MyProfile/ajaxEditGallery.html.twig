@@ -1,0 +1,81 @@
+{% use "FaUserBundle:UserSiteImage:showUserSiteImageUploader.html.twig" %}
+{% set container = fetch_container_instance() %}
+{{ block('userSiteImageUploadStylesheets') }}
+
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title">{{'Edit gallery'|trans({}, 'frontend-my-profile')}}</h5>
+<form method="post" name="edit_gallery_id" id="edit_gallery_id" action="{{path('ajax_edit_gallery')}}">
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Photo gallery'|trans({}, 'frontend-my-profile')}}</h5>
+                <div class="mt5">{{'Let visitors know what you offer. Remember to make it appealing!'|trans({}, 'frontend-my-profile')}}</div>
+            </div>
+        </div>
+        <div class="row mt5">
+            <div class="columns">
+                {{ render(controller('FaUserBundle:UserSiteImage:showUserSiteImageUploader', {'userSiteId': userSiteObj.getId() })) }}
+                {{ set_variables('userSiteImageUploadJavascriptBottom', {'loaded':'false'}) }}
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-24 columns">
+                    <button type="button" id="fa_user_edit_location_save" name="fa_user_edit_location[save]" class="button secondary-btn-1 thin-btn expand" onclick="closeRevealModel('#profileEditModal');">{{'Confirm'|trans({}, 'frontend-my-profile')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{{ set_variables('userSiteImageUploadJavascriptBottom', {'loaded':'true'}) }}
+{{ block('userSiteImageUploadJavascriptBottom') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+    });
+
+    $('#profileEditModal').bind('closed', function() {
+    	$("#edit_gallery_id").submit();
+	});
+    $("#edit_gallery_id").submit(function(event) {
+        blockElement('#profileEditModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{path('ajax_edit_gallery')}}",
+            data: $("#edit_gallery_id").serialize()
+        })
+        .always(function(response) {
+            unblockElement('#profileEditModal');
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.htmlContent.length) {
+                $('#profileEditModal').html(response.htmlContent);
+            } else {
+                var oldGalleryontentLength = $('#business_gallery_div').html().length;
+                $('#business_gallery_div').html(response.successContent);
+                $(".fancybox").fancybox({
+                    openEffect  : 'none',
+                    closeEffect : 'none',
+                    padding: 0,
+                    margin: [65, 60, 65, 60],
+                    autoCenter: true,
+                    helpers: {
+                            overlay: {
+                            locked: false
+                        }
+                    }
+                });
+                $('#profileEditModal').foundation('reveal', 'close');
+                if ($('#business_gallery_div').html().length != oldGalleryontentLength) {
+                    $('#business_gallery_div').notify('{{'Gallery edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
+                }
+                scrollToElement('#business_gallery_div', '1000', -150);
+            }
+        });
+    });
+//]]>
+</script>

@@ -1,0 +1,11 @@
+<div class="hide-for-small-only">
+    {% if (pagination.haveToPaginate()) %}
+        {{ pagerfanta(pagination, 'foundation_google_pager', {addToEndPage: addToEndPage, seoPager: seoPager}) }}
+    {% endif %}
+</div>
+
+<div class="show-for-small-only">
+    {% if (pagination.haveToPaginate()) %}
+        {{ pagerfanta(pagination, 'foundation_google_pager', {proximity: 2, seoPager: seoPager}) }}
+    {% endif %}
+</div>

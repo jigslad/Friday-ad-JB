@@ -1,0 +1,7 @@
+FaPaymentBundle_my_purchases:
+    resource: '@FaPaymentBundle/Resources/config/routing/my_purchases.yml'
+    prefix:   /my_purchases/
+    
+FaPaymentBundle_order_receipt:
+    resource: '@FaPaymentBundle/Resources/config/routing/order_receipt.yml'
+    prefix:   /order_receipt/

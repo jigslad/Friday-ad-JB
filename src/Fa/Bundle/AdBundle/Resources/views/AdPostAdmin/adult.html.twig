@@ -1,0 +1,208 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% use "FaAdBundle:AdImage:showImageUploaderAdmin.html.twig" %}
+
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set userRole = userRepository.getUserRole(app.user.getId(), fetch_container_instance()) %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('imageUploadStylesheets') }}
+{% endblock %}
+
+{% block content %}
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% if entity.id %}
+    {% if entity.user %}
+       {% set user   = entity.user %}
+       {% set userId = entity.user.id %}
+   {% else %}
+       {% set userId = 'no_user' %}
+       {% set user   = '' %}
+   {% endif %}
+{% else %}
+    {% set userId = form.user_id.vars.value %}
+    {% if app.request.get('user_id') %}
+        {% set userId = app.request.get('user_id') %}
+    {% endif %}
+    {% set user = fetch_repository('FaUserBundle:User').find(userId) %}
+{% endif %}
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = {{ 'mandatory fields'|trans({}, 'messages') }}</p>
+           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+               {{ form_errors(form) }}
+               <div class="row">
+                   <div class="large-12 columns mb15">
+                   <p style="font-size:20px;font-weight:bold">{{ 'Describe your item'|trans }}</p>
+                   {% if user %}
+                       <p>
+                           <b>{{ 'Seller'|trans }} : </b> {{ user.getFullName() }} ( {{ user.email }} )
+                       </p>
+                   {% endif %}
+                   {% if entity.id %}
+                       {% set categoryId = entity.category.id %}
+                       <p>
+                           <b>{{ 'Category'|trans }} : </b> {{ categoryRepository.getCategoryPathArrayById(categoryId)|join(' > ') }}
+                           {{ include('FaAdBundle:AdPostAdmin:adEditCategoryChangeLink.html.twig', {'entity': entity}) }}
+                       </p>
+                   {% else %}
+                       {% set categoryId = form.category_id.vars.value %}
+                       {% if app.request.get('category_id') %}
+                           {% set categoryId = app.request.get('category_id') %}
+                       {% endif %}
+                       <p>
+                           <b>{{ 'Category'|trans }} : </b> {{ categoryRepository.getCategoryPathArrayById(categoryId)|join(' > ') }}
+                           &nbsp;<a href="{{ path('ad_post_new_admin', { 'user_id' : userId, 'admin_ad_counter': app.request.get('admin_ad_counter') }) }}" onclick="javascript:return confirm('Do you really want to change the category?')" style="text-decoration:underline">{{ 'Change'|trans }}</a>
+                       </p>
+                    {% endif %}
+                    
+                    {% if categoryId is not null %}
+                        {% set categoryPathArray = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance()) %}
+                        {% set categorykeys  = categoryPathArray|keys %}
+                        {% set orderedFields = form.paa_ordered_fields.vars.value|split(',') %}
+                        {% for field in orderedFields %}
+                            {% if field == 'title' or field == 'description' or field == 'personalized_title' %}
+                                {{ form_label(attribute(form, field)) }}
+                                {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'eg. Little Tikes')}}) }}
+                                {% if attribute(form, field).vars.size %}
+                                    <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'messages') }}</div>
+                                {% endif %}
+                                {{ form_errors(attribute(form, field)) }}
+                            {% elseif field == 'location_autocomplete' %}
+                                {{ form_label(attribute(form, field)) }}
+                                <div class="relative">
+                                    {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                                    <a href="javascript:void(0);" id="fa_paa_adult_admin_location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                </div>
+                                {{ form_errors(attribute(form, field)) }}
+                            {% elseif field == 'business_phone' %}
+                                {{ include('FaAdBundle:AdPostAdmin:businessPhoneField.html.twig') }}
+                            {% elseif field == 'photo_error' %}
+                                {{ include('FaAdBundle:AdPostAdmin:paaUploadImageAdmin.html.twig', {'vertical':'adult'}) }}
+                            {% else %}
+                                {{ form_row(attribute(form, field)) }}
+                            {% endif %}
+                        {% endfor %}
+                        {% if form.future_publish_at is defined %}
+                            {{ include('FaAdBundle:AdPostAdmin:paaFuturePublishAtAdmin.html.twig') }}
+                        {% endif %}
+                        
+                        {{ include('FaAdBundle:AdPostAdmin:detachedAdFields.html.twig') }}
+                    {% endif %}
+                    <br />
+                    <ul class="button-group text-center">
+                        {% if entity.id and entity.getStatus().getId() != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                            <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                        {% elseif entity.id and entity.getStatus().getId() == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                            <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                        {% elseif not entity.id %}
+                            <li>{{ form_widget(form.save, {'label': 'Save as draft'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                        {% else %}
+                            {% do attribute(form, 'save').setRendered %}
+                        {% endif %}
+
+                        {% if attribute(form, 'publish') is defined and entity.id and entity.getStatus().getId() == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                            {% do attribute(form, 'publish').setRendered %}
+                        {% endif %}
+
+                        {% if attribute(form, 'publish') is defined %}
+                            {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_ADMIN_HIDE_SKIP_PAYMENT') and userId == 'no_user' %}
+                                {% do attribute(form, 'publish').setRendered %}
+                            {% else %}
+                                <li>{{ form_widget(form.publish, {'label': 'Publish'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if attribute(form, 'saveAndPreview') is defined %}
+                            <li>{{ form_widget(form.saveAndPreview, {'label': 'Save and preview'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                        {% endif %}
+
+                        {% if entity.id %}
+                            <li>
+                                {% if form.return_url.vars.value %}
+                                    {% set returnUrl = form.return_url.vars.value %}
+                                {% elseif app.request.get('return_url') %}
+                                    {% set returnUrl = app.request.get('return_url') %}
+                                {% else %}
+                                    {% set returnUrl = path('ad_admin') %}
+                                {% endif %}
+                                <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ returnUrl }}'">{{ 'Go back'|trans({}, 'messages') }}</button>
+                            </li>
+                        {% else %}
+                            <li>
+                                {% set returnUrl = '' %}
+                                {% if form.return_url.vars.value %}
+                                    {% set returnUrl = form.return_url.vars.value %}
+                                {% elseif app.request.get('return_url') %}
+                                    {% set returnUrl = app.request.get('return_url') %}
+                                {% endif %}
+                                {% if returnUrl %}
+                                    <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('ad_post_new_admin', {'user_id' : userId, 'return_url' : returnUrl }) }}'">{{ 'Go back'|trans({}, 'messages') }}</button>
+                                {% else %}
+                                    <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('ad_post_new_admin', {'user_id' : userId }) }}'">{{ 'Go back'|trans({}, 'messages') }}</button>
+                                {% endif %} 
+                            </li>
+                        {% endif %}
+                   </ul>
+                   </div>
+               </div>
+           {{ form_end(form) }}
+       </div>
+   </div>
+</div>
+
+{% endblock %}
+
+{% block scriptbottom %}
+{{ parent() }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $('html, body').animate({
+            scrollTop: 0
+        }, 1);
+        updateCharCounter('fa_paa_adult_admin_personalized_title');
+        updateCharCounter('fa_paa_adult_admin_title');
+
+        $('.textcounter').keyup(function(e){
+            updateCharCounter($(this).attr('id'));
+        });
+    });
+
+    function updateCharCounter(fieldId)
+    {
+        var textCounterId = fieldId + '_textcounter';
+        var maxLimit      = $('#'+fieldId).attr('maxlength') ? parseInt($('#'+fieldId).attr('maxlength')) : 0;
+        var value         = $('#'+fieldId).val();
+
+        if (maxLimit) {
+           if (value.length > maxLimit) {
+               $('#'+fieldId).val(value.substring(0, maxLimit));
+               $('#'+fieldId).html('(0 characters left)');
+               return false;
+           } else {
+               $('#'+textCounterId).html('(' + (maxLimit - value.length) + ' characters left)');
+           }
+       }
+    }
+//]]>
+</script>
+{% if (form.location_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_adult_admin_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices'}) }}
+{% endif %}
+
+{% if categoryDimensionId is defined and categoryDimensionId %}
+    {{ include('FaAdBundle:AdPostAdmin:autoPopulateBrandJs.html.twig', {'categoryDimensionId' : categoryDimensionId, 'form_name': form.vars.name }) }}
+{% endif %}
+
+{% if form.future_publish_at is defined %}
+    {{ include('FaAdBundle:AdPostAdmin:paaFuturePublishAtAdminJS.html.twig', {"publishAtId": "fa_paa_adult_admin_future_publish_at"}) }}
+{% endif %}
+
+{{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+{{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+{{ block('imageUploadJavascriptBottom') }}
+{% endblock %}

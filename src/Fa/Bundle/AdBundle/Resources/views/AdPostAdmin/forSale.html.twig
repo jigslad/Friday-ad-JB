@@ -1,0 +1,546 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% use "FaAdBundle:AdImage:showImageUploaderAdmin.html.twig" %}
+
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set userRole = userRepository.getUserRole(app.user.getId(), fetch_container_instance()) %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('imageUploadStylesheets') }}
+{% endblock %}
+
+{% block content %}
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set userUpsellRepository = fetch_repository('FaUserBundle:UserUpsell') %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% if entity.id %}
+    {% if entity.user %}
+        {% set userObj = entity.user %}
+        {% set user    = entity.user %}
+        {% set userId  = entity.user.id %}
+    {% else %}
+        {% set userId = 'no_user' %}
+        {% set userObj = '' %}
+        {% set user    = '' %}
+    {% endif %}
+{% else %}
+    {% set userId = form.user_id.vars.value %}
+    {% if app.request.get('user_id') %}
+        {% set userId = app.request.get('user_id') %}
+    {% endif %}
+    {% set userObj = fetch_repository('FaUserBundle:User').find(userId) %}
+    {% set user    = userObj %}
+{% endif %}
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = {{ 'mandatory fields'|trans({}, 'messages') }}</p>
+           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+               {{ form_errors(form) }}
+               <div class="row">
+                   <div class="large-12 columns mb15">
+                   <p style="font-size:20px;font-weight:bold">{{ 'Describe your item'|trans }}</p>
+                   {% if userObj %}
+                       <p>
+                           <b>{{ 'Seller'|trans }} : </b> {{ userObj.getFullName() }} ( {{ userObj.email }} )
+                       </p>
+                   {% endif %}
+                   {% if entity.id %}
+                       {% set categoryId = entity.category.id %}
+                       <p>
+                           <b>{{ 'Category'|trans }} : </b> {{ categoryRepository.getCategoryPathArrayById(categoryId)|join(' > ') }}
+                           {{ include('FaAdBundle:AdPostAdmin:adEditCategoryChangeLink.html.twig', {'entity': entity}) }}
+                       </p>
+                   {% else %}
+                       {% set categoryId = form.category_id.vars.value %}
+                       {% if app.request.get('category_id') %}
+                           {% set categoryId = app.request.get('category_id') %}
+                       {% endif %}
+                       <p>
+                           <b>{{ 'Category'|trans }} : </b> {{ categoryRepository.getCategoryPathArrayById(categoryId)|join(' > ') }}
+                           &nbsp;<a href="{{ path('ad_post_new_admin', { 'user_id' : userId, 'admin_ad_counter': app.request.get('admin_ad_counter') }) }}" onclick="javascript:return confirm('Do you really want to change the category?')" style="text-decoration:underline">{{ 'Change'|trans }}</a>
+                       </p>
+                    {% endif %}
+                    
+                    {% if categoryId is not null %}
+                        {% set orderedFields = form.paa_ordered_fields.vars.value|split(',') %}
+                        {% if orderedFields|length  > 0 %}
+                            {% set isDimensionRendered = false %}
+                            {% set isNetProfitRendered = false %}
+                            {% set isTurnoverRendered = false %}
+                            {% for field in orderedFields %}
+                                {% if attribute(form, field) is defined %}
+                                    {% if field == 'dimensions_length' or field == 'dimensions_width' or field == 'dimensions_height' %}
+                                        {% if isDimensionRendered == false %}
+                                            {{ 'Dimensions'|trans }}
+                                            {{ form_row(attribute(form, 'dimensions_unit')) }}
+                                            
+                                            <label>{{ attribute(form, 'dimensions_length').vars.label }} <span class="dimensions_unit_label"></span></label>
+                                            {{ form_widget(attribute(form, 'dimensions_length'), {'attr': {'placeholder': ((attribute(form, 'dimensions_length').vars.attr.placeholder is defined and attribute(form, 'dimensions_length').vars.attr.placeholder is not null) ? attribute(form, 'dimensions_length').vars.attr.placeholder : 'How long is it?'|trans) }}) }}
+                                            {{ form_errors(attribute(form, 'dimensions_length')) }}
+                                            
+                                            <label>{{ attribute(form, 'dimensions_width').vars.label }} <span class="dimensions_unit_label"></span></label>
+                                            {{ form_widget(attribute(form, 'dimensions_width'), {'attr': {'placeholder': ((attribute(form, 'dimensions_width').vars.attr.placeholder is defined and attribute(form, 'dimensions_width').vars.attr.placeholder is not null) ? attribute(form, 'dimensions_width').vars.attr.placeholder : 'How wide is it?'|trans) }}) }}
+                                            {{ form_errors(attribute(form, 'dimensions_width')) }}
+                                            
+                                            <label>{{ attribute(form, 'dimensions_height').vars.label }} <span class="dimensions_unit_label"></span></label>
+                                            {{ form_widget(attribute(form, 'dimensions_height'), {'attr': {'placeholder': ((attribute(form, 'dimensions_height').vars.attr.placeholder is defined and attribute(form, 'dimensions_height').vars.attr.placeholder is not null) ? attribute(form, 'dimensions_height').vars.attr.placeholder : 'How tall is it?'|trans) }}) }}
+                                            {{ form_errors(attribute(form, 'dimensions_height')) }}
+                                            {% set isDimensionRendered = true %}
+                                        {% endif %} 
+                                    {% elseif field == 'net_profit_min' or field == 'net_profit_max' %}
+                                        {% if isNetProfitRendered == false %}
+                                            {{ 'Net Profit'|trans }}
+                                            <div class="price-field">
+                                                <div class="price-icon">&pound;</div>
+                                                {{ form_widget(attribute(form, 'net_profit_min'), {'attr': {'placeholder': ((attribute(form, 'net_profit_min').vars.attr.placeholder is defined and attribute(form, 'net_profit_min').vars.attr.placeholder is not null) ? attribute(form, 'net_profit_min').vars.attr.placeholder : 'Minimum'|trans) }}) }}
+                                                {{ form_errors(attribute(form, 'net_profit_min')) }}
+                                            </div>
+                                            <div class="price-field">
+                                                <div class="price-icon">&pound;</div>
+                                                {{ form_widget(attribute(form, 'net_profit_max'), {'attr': {'placeholder': ((attribute(form, 'net_profit_max').vars.attr.placeholder is defined and attribute(form, 'net_profit_max').vars.attr.placeholder is not null) ? attribute(form, 'net_profit_max').vars.attr.placeholder : 'Maximum'|trans) }}) }}
+                                                {{ form_errors(attribute(form, 'net_profit_max')) }}
+                                            </div>
+                                            {% set isNetProfitRendered = true %}
+                                        {% endif %}
+                                    {% elseif field == 'turnover_min' or field == 'turnover_max' %}
+                                        {% if isTurnoverRendered == false %}
+                                            {{ 'Turnover'|trans }}
+                                            <div class="price-field">
+                                                <div class="price-icon">&pound;</div>
+                                                {{ form_widget(attribute(form, 'turnover_min'), {'attr': {'placeholder': ((attribute(form, 'turnover_min').vars.attr.placeholder is defined and attribute(form, 'turnover_min').vars.attr.placeholder is not null) ? attribute(form, 'turnover_min').vars.attr.placeholder : 'Minimum'|trans) }}) }}
+                                                {{ form_errors(attribute(form, 'turnover_min')) }}
+                                            </div>
+    
+                                            <div class="price-field">
+                                                <div class="price-icon">&pound;</div>
+                                                {{ form_widget(attribute(form, 'turnover_max'), {'attr': {'placeholder': ((attribute(form, 'turnover_max').vars.attr.placeholder is defined and attribute(form, 'turnover_max').vars.attr.placeholder is not null) ? attribute(form, 'turnover_max').vars.attr.placeholder : 'Maximum'|trans) }}) }}
+                                                {{ form_errors(attribute(form, 'turnover_max')) }}
+                                            </div>
+                                            {% set isTurnoverRendered = true %}
+                                        {% endif %}
+                                    {% elseif field == 'title' or field == 'description' or field == 'personalized_title' %}
+                                        {{ form_label(attribute(form, field)) }}
+                                        {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'eg. Little Tikes')}}) }}
+                                        {% if attribute(form, field).vars.max_length %}
+                                            <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.max_length }, 'messages') }}</div>
+                                        {% endif %}
+                                        {{ form_errors(attribute(form, field)) }}
+                                    {% elseif field == 'price' %}
+                                        <div id="paa_price">
+                                            {{ form_label(attribute(form, field)) }}
+                                            <div class="price-field">
+                                                <div class="price-icon">&pound;</div>
+                                                {{ form_widget(attribute(form, field)) }}
+                                                {{ form_errors(attribute(form, field)) }}
+                                            </div>
+                                        </div>
+                                    {% elseif field == 'price_text' %}
+                                        <div id="paa_price_text">
+                                            {{ form_label(attribute(form, field)) }}
+                                            {{ form_widget(attribute(form, field)) }}
+                                            {{ form_errors(attribute(form, field)) }}
+                                        </div>
+                                    {% elseif field == 'location_autocomplete' %}
+                                        {{ form_label(attribute(form, field)) }}
+                                        <div class="relative">
+                                            {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                                            <a href="javascript:void(0);" id="fa_paa_for_sale_admin_location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                        </div>
+                                        {{ form_errors(attribute(form, field)) }}
+                                    {% elseif field == 'business_phone' %}
+                                        {{ include('FaAdBundle:AdPostAdmin:businessPhoneField.html.twig') }}
+                                    {% elseif field == 'photo_error' %}
+                                        {{ include('FaAdBundle:AdPostAdmin:paaUploadImageAdmin.html.twig', {'vertical':'for_sale'}) }}
+                                    {% elseif field == 'colour_id_autocomplete' %}
+                                        {{ form_label(attribute(form, field)) }}
+                                        <div class="relative">
+                                            {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                                            <a href="javascript:void(0);" id="fa_paa_for_sale_admin_colour_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                        </div>
+                                        {{ form_errors(attribute(form, field)) }}
+                                    {% elseif field == 'brand_id_autocomplete' %}
+                                        {{ form_label(attribute(form, field)) }}
+                                        <div class="relative">
+                                            {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                                            <a href="javascript:void(0);" id="fa_paa_for_sale_admin_brand_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                        </div>
+                                        {{ form_errors(attribute(form, field)) }}
+                                    {% elseif field == 'payment_method_id' %}
+                                        <div id="forsale_paypal_block">
+                                            {{ form_row(attribute(form, field)) }}
+                                            {% if attribute(form, 'paypal_email') is defined %}
+                                                {% if userObj %}
+                                                    {{ set_variables('paypalCommission', {'userId':userObj.getId()}) }}
+                                                {% else %}
+                                                    {{ set_variables('paypalCommission', {'userId':userId}) }}
+                                                {% endif %}
+                                                <div class="paa-paypal-mail" id="paypal_section_id" {% if not form.paypal_email.vars.errors|length %}style="display:none;"{% endif %}>
+                                                    {% set paypalUserEmail = null %}
+                                                    {% set paypalFirstName = null %}
+                                                    {% set paypalLastName = null %}
+                                                    {% if userObj and userObj.getPaypalEmail() and app.request.getMethod() not in {0:'POST', 1:'PUT'}  %}
+                                                        {% set paypalUserEmail = userObj.getPaypalEmail() %}
+                                                    {% elseif app.request.getMethod() in {0:'POST', 1:'PUT'} %}
+                                                        {% if app.request.get('fa_paa_for_sale_admin').paypal_email is defined %}
+                                                            {% set paypalUserEmail = app.request.get('fa_paa_for_sale_admin').paypal_email %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% if userObj and userObj.getPaypalFirstName() and app.request.getMethod() not in {0:'POST', 1:'PUT'} %}
+                                                        {% set paypalFirstName = userObj.getPaypalFirstName() %}
+                                                    {% elseif app.request.getMethod() in {0:'POST', 1:'PUT'} %}
+                                                        {% if app.request.get('fa_paa_for_sale_admin').paypal_first_name is defined %}
+                                                            {% set paypalFirstName = app.request.get('fa_paa_for_sale_admin').paypal_first_name %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% if userObj and userObj.getPaypalLastName() and app.request.getMethod() not in {0:'POST', 1:'PUT'} %}
+                                                        {% set paypalLastName = userObj.getPaypalLastName() %}
+                                                    {% elseif app.request.getMethod() in {0:'POST', 1:'PUT'} %}
+                                                        {% if app.request.get('fa_paa_for_sale_admin').paypal_last_name is defined %}
+                                                            {% set paypalLastName = app.request.get('fa_paa_for_sale_admin').paypal_last_name %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {{ form_widget(attribute(form, 'paypal_first_name'), {'value': paypalFirstName, 'attr': {'class' : 'white-field', 'placeholder': 'Paypal first name'|trans({}, 'frontend-paa-fourth-step')}}) }}
+                                                    {{ form_widget(attribute(form, 'paypal_last_name'), {'value': paypalLastName, 'attr': {'class' : 'white-field', 'placeholder': 'Paypal last name'|trans({}, 'frontend-paa-fourth-step')}}) }}
+                                                    {{ form_widget(attribute(form, 'paypal_email'), {'value': paypalUserEmail, 'attr': {'class' : 'white-field', 'placeholder': 'Paypal email address'|trans({}, 'frontend-paa-fourth-step')}}) }}
+                                                    <button type="button" class="secondary-btn-1" id="verify_paypal_email_button">{{'Verify'|trans({}, 'frontend-paa-fourth-step')}}</button><span class="error-icon" id="paypal_email_verify_status" style="display:none;">error</span>
+                                                    {{ form_errors(attribute(form, 'paypal_email')) }}
+                                                    <div class="paypal-ins" id="paypal_text_id"></div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% elseif field == 'delivery_method_option_id' %}
+                                        <div>
+                                            {{ form_row(attribute(form, field)) }}
+                                            {% if form.postage_price is defined %}
+                                                <div id="postage_section_id" {% if not form.postage_price.vars.errors|length %}style="display:none;"{% endif %}>
+                                                    <div class="delivery-ins">{{ 'If you like you can add a postage charge'|trans({}, 'frontend-paa-fourth-step') }}</div>
+                                                    <div class="price-field">
+                                                        <div class="price-icon">&pound;</div>
+                                                        {{ form_widget(attribute(form, 'postage_price'), {'attr': {'class' : 'white-field'}}) }}
+                                                        {{ form_errors(attribute(form, 'postage_price')) }}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% elseif field == 'qty' %}
+                                        {% set hasItemQtyUpsell = false %}
+                                        {% if userObj %}
+                                            {% set userUpsell = userUpsellRepository.getUserUpsellArray(userObj.getId()) %}
+                                            {% if constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::SHOP_ITEM_QUANTITIES_ID') in userUpsell %}
+                                                {% set hasItemQtyUpsell = true %}
+                                            {% endif %}
+                                        {% endif %}
+                                        <div {% if not hasItemQtyUpsell %}style="display:none;"{% endif %}>
+                                            {{ form_row(attribute(form, field)) }}
+                                        </div>
+                                    {% else %}
+                                        {{ form_row(attribute(form, field)) }}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if form.future_publish_at is defined %}
+                            {{ include('FaAdBundle:AdPostAdmin:paaFuturePublishAtAdmin.html.twig') }}
+                        {% endif %}
+                        {{ include('FaAdBundle:AdPostAdmin:detachedAdFields.html.twig') }}
+                    {% endif %}
+                    <br />
+                    <ul class="button-group text-center">
+                        {% if entity.id and entity.getStatus().getId() != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                            <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                        {% elseif entity.id and entity.getStatus().getId() == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                            <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                        {% elseif not entity.id %}
+                            <li>{{ form_widget(form.save, {'label': 'Save as draft'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                        {% else %}
+                            {% do attribute(form, 'save').setRendered %}
+                        {% endif %}
+
+                        {% if attribute(form, 'publish') is defined and entity.id and entity.getStatus().getId() == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                            {% do attribute(form, 'publish').setRendered %}
+                        {% endif %}
+
+                        {% if attribute(form, 'publish') is defined %}
+                            {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_ADMIN_HIDE_SKIP_PAYMENT') and userId == 'no_user' %}
+                                {% do attribute(form, 'publish').setRendered %}
+                            {% else %}
+                                <li>{{ form_widget(form.publish, {'label': 'Publish'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if attribute(form, 'saveAndPreview') is defined %}
+                            <li>{{ form_widget(form.saveAndPreview, {'label': 'Save and preview'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                        {% endif %}
+
+                        {% if entity.id %}
+                            <li>
+                                {% if form.return_url.vars.value %}
+                                    {% set returnUrl = form.return_url.vars.value %}
+                                {% elseif app.request.get('return_url') %}
+                                    {% set returnUrl = app.request.get('return_url') %}
+                                {% else %}
+                                    {% set returnUrl = path('ad_admin') %}
+                                {% endif %}
+                                <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ returnUrl }}'">{{ 'Go back'|trans({}, 'messages') }}</button>
+                            </li>
+                        {% else %}
+                            <li>
+                                {% set returnUrl = '' %}
+                                {% if form.return_url.vars.value %}
+                                    {% set returnUrl = form.return_url.vars.value %}
+                                {% elseif app.request.get('return_url') %}
+                                    {% set returnUrl = app.request.get('return_url') %}
+                                {% endif %}
+                                {% if returnUrl %}
+                                    <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('ad_post_new_admin', {'user_id' : userId, 'return_url' : returnUrl }) }}'">{{ 'Go back'|trans({}, 'messages') }}</button>
+                                {% else %}
+                                    <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('ad_post_new_admin', {'user_id' : userId }) }}'">{{ 'Go back'|trans({}, 'messages') }}</button>
+                                {% endif %} 
+                            </li>
+                        {% endif %}
+                   </ul>
+                   </div>
+               </div>
+           {{ form_end(form) }}
+       </div>
+   </div>
+</div>
+
+{% endblock %}
+
+{% block scriptbottom %}
+{{ parent() }}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    var defaultPrice     = ($('#fa_paa_for_sale_admin_price').val() == 0) ? '' : $('#fa_paa_for_sale_admin_price').val();
+    var defaultPriceText = $('#fa_paa_for_sale_admin_price_text').val();
+   
+    $(document).ready(function(){
+        $('html, body').animate({
+            scrollTop: 0
+        }, 1);
+        showPostagePrice();
+        showPaypalSection(true);
+        handleDimensionLabelByUnit();
+        updateCharCounter('fa_paa_for_sale_admin_personalized_title');
+        updateCharCounter('fa_paa_for_sale_admin_title');
+        handlePriceWithAdType();
+
+        $('.textcounter').keyup(function(e){
+            updateCharCounter($(this).attr('id'));
+        });
+
+        $('#fa_paa_for_sale_admin_dimensions_unit').change(function(){
+            handleDimensionLabelByUnit($(this).val());
+        });
+        
+        $('#verify_paypal_email_button').on( "click", function() {
+            showPaypalSection(true);
+        });
+        
+        $('#fa_paa_for_sale_admin_ad_type_id').change(function(){
+            handlePriceWithAdType($(this).val());
+        });
+        
+        $("#fa_paa_for_sale_admin_qty").change(function(){
+            if ($(this).val()) {
+               if ($(this).val() == 0 || !$(this).val().match(/^([0-9]+)$/)) {
+                   $(this).val(1);
+               }
+            } else {
+               $(this).val(1);
+            }
+       });
+
+       $('#fa_paa_for_sale_admin_location_autocomplete').blur(function(e){
+           var paymentMethodId = $("input[name='fa_paa_for_sale_admin[payment_method_id]']:checked").val();
+           if ($.inArray(paymentMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')}}']) != '-1') {
+               showPaypalSection(false);
+           }
+       });
+        
+       $("input[name='fa_paa_for_sale_admin[payment_method_id]']").click(function(e){
+           showPaypalSection(false);
+       });
+       
+       $("input[name='fa_paa_for_sale_admin[delivery_method_option_id]']").click(function(e){
+           showPostagePrice();
+       });
+        
+       $('#fa_paa_for_sale_admin_paypal_email, #fa_paa_for_sale_admin_paypal_first_name, #fa_paa_for_sale_admin_paypal_last_name').focus(function(e){
+           $("#paypal_text_id").prev('small').remove();
+           $('#paypal_email_verify_status').hide();
+       });
+    });
+    
+    function showPostagePrice()
+    {
+        var deliveryMethodId = $("input[name='fa_paa_for_sale_admin[delivery_method_option_id]']:checked").val();
+        
+        if ($.inArray(deliveryMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::POSTED_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::POSTED_OR_COLLECT_ID')}}']) != '-1') {
+           $('#postage_section_id').show();
+        } else {
+            $('#fa_paa_for_sale_admin_postage_price').val('');
+            $('#postage_section_id').hide();
+        }
+    }
+    
+    function showPaypalSection(showMessage)
+    {
+        {% set paypalCommissionFields = get_variables('paypalCommission') %}
+        {% if paypalCommissionFields['userId'] is defined %}
+        blockElement('#forsale_paypal_block');
+        $.ajax({
+            type: "POST",
+            url : '{{ path('ajax_get_paypal_commission') }}',
+            data: {user_id: '{{ paypalCommissionFields['userId'] }}',town_id: $('#fa_paa_for_sale_admin_location').val(), 'paypal_email': $('#fa_paa_for_sale_admin_paypal_email').val(), 'paypal_first_name': $('#fa_paa_for_sale_admin_paypal_first_name').val(), 'paypal_last_name': $('#fa_paa_for_sale_admin_paypal_last_name').val()},
+            cache: false,
+        })
+        .always(function(response) {
+           unblockElement('#forsale_paypal_block');
+        })
+        .done(function(data) {
+            $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through Paypal.'|trans({}, 'frontend-paa-fourth-step')}}');
+            if (showMessage) {
+                $("#paypal_text_id").prev('small').remove();
+            }
+            paypalCommission      = data.paypalCommission;
+            isPaypalVerifiedEmail = data.isPaypalVerifiedEmail;
+            if (paypalCommission > 0) {
+                $('#paypal_text_id').show();
+            } else {
+                $('#paypal_text_id').hide();
+            }
+            if ($("input[name='fa_paa_for_sale_admin[payment_method_id]']").is(':checked')) {
+                $('#paypal_email_verify_status').removeClass('error-icon success-icon');
+                var paymentMethodId = $("input[name='fa_paa_for_sale_admin[payment_method_id]']:checked").val();
+                if ($.inArray(paymentMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')}}']) != '-1') {
+                    $('#paypal_section_id').show();
+                    $('#paypal_text_id').html($('#paypal_text_id').html().replace('%paypal_commission%', paypalCommission+'%'));
+                    
+                    if (isPaypalVerifiedEmail) {
+                        $('#paypal_email_verify_status').addClass('success-icon');
+                        $('#paypal_email_verify_status').show('inline-block');
+                        $('#fa_paa_for_sale_admin_paypal_email, #fa_paa_for_sale_admin_paypal_first_name, #fa_paa_for_sale_admin_paypal_last_name').removeClass('error');
+                    } else {
+                        $('#paypal_email_verify_status').addClass('error-icon');
+                        if ($('#fa_paa_for_sale_admin_paypal_email').is(':visible') && $('#fa_paa_for_sale_admin_paypal_email').val().length) {
+                            if (showMessage) {
+                                $('#fa_paa_for_sale_admin_paypal_email, #fa_paa_for_sale_admin_paypal_first_name, #fa_paa_for_sale_admin_paypal_last_name').addClass('error');
+                                $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                $('#paypal_email_verify_status').show('inline-block');
+                            }
+                        } else {
+                            if (showMessage) {
+                                $('#fa_paa_for_sale_admin_paypal_email, #fa_paa_for_sale_admin_paypal_first_name, #fa_paa_for_sale_admin_paypal_last_name').addClass('error');
+                                $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                $('#paypal_email_verify_status').show('inline-block');
+                            }
+                        }
+                    }
+                 } else {
+                     $('#paypal_section_id').hide();
+                     $("#paypal_text_id").prev('small').remove();
+                     $('#paypal_email_verify_status').hide();
+                     $('#fa_paa_for_sale_admin_paypal_email, #fa_paa_for_sale_admin_paypal_first_name, #fa_paa_for_sale_admin_paypal_last_name').removeClass('error');
+                 }
+            } else {
+                $('#paypal_section_id').hide();
+            }
+        });
+        {% endif %}
+    }
+    
+    function updateCharCounter(fieldId)
+    {
+        var textCounterId = fieldId + '_textcounter';
+        var maxLimit      = $('#'+fieldId).attr('maxlength') ? parseInt($('#'+fieldId).attr('maxlength')) : 0;
+        var value         = $('#'+fieldId).val();
+
+        if (maxLimit) {
+           if (value.length > maxLimit) {
+               $('#'+fieldId).val(value.substring(0, maxLimit));
+               $('#'+fieldId).html('(0 characters left)');
+               return false;
+           } else {
+               $('#'+textCounterId).html('(' + (maxLimit - value.length) + ' characters left)');
+           }
+       }
+    }
+    
+    function handleDimensionLabelByUnit(unitId)
+    {
+        if (!unitId) {
+            unitId = $('input[type="radio"][name="fa_paa_for_sale_admin\[dimensions_unit\]"]:checked').val();
+        }
+
+        if (unitId == 'cm') {
+            $('.dimensions_unit_label').html('('+ "{{ 'centimeters'|trans }}" +')')
+        } else if (unitId == 'inch') {
+            $('.dimensions_unit_label').html('('+ "{{ 'inches'|trans }}" +')')
+        }
+    }
+
+    function handlePriceWithAdType(adTypeId)
+    {
+        if (!adTypeId) { 
+            adTypeId = $("input[name='fa_paa_for_sale_admin[ad_type_id]']:checked").val();
+        }
+
+        var forsaleId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FORSALE_ID') }}";
+        var wantedId  = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_WANTED_ID') }}";
+        var swapId    = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_SWAPPING_ID') }}";
+        var freeId    = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FREETOCOLLECTOR_ID') }}";
+
+        if (adTypeId == wantedId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').show();
+            $('#fa_paa_for_sale_admin_price').val(defaultPrice);
+            $('#fa_paa_for_sale_admin_price_text').val('');
+        } else if (adTypeId == swapId) {
+            $('#paa_price').hide();
+            $('#paa_price_text').show();
+            $('#fa_paa_for_sale_admin_price').val('');
+            $('#fa_paa_for_sale_admin_price_text').val(defaultPriceText);
+        } else if (adTypeId == freeId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').hide();
+            $('#fa_paa_for_sale_admin_price').val('0');
+            $('#fa_paa_for_sale_admin_price_text').val('');
+        } else if (adTypeId == forsaleId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').show();
+            $('#fa_paa_for_sale_admin_price').val(defaultPrice);
+            $('#fa_paa_for_sale_admin_price_text').val('');
+        }
+    }
+//]]>
+</script>
+{% if (form.brand_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_for_sale_admin_brand_id', 'placeHolder': ((attribute(form, 'brand_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'brand_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'brand_id_autocomplete').vars.attr.placeholder : 'eg. Little Tikes or Playskool'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_for_sale_admin_brand_id_dimension_id', 'dropdownCssClass': 'white-choices'}) }}
+{% endif %}
+
+{% if categoryDimensionId is defined and categoryDimensionId %}
+    {{ include('FaAdBundle:AdPostAdmin:autoPopulateBrandJs.html.twig', {'categoryDimensionId' : categoryDimensionId, 'form_name': form.vars.name }) }}
+{% endif %}
+
+{% if (form.colour_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_for_sale_admin_colour_id', 'placeHolder': ((attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'colour_id_autocomplete').vars.attr.placeholder : 'eg. Pink or Blue or Multi coloured'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_for_sale_admin_colour_id_dimension_id', 'dropdownCssClass': 'white-choices'}) }}
+{% endif %}
+
+{% if (form.location_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_for_sale_admin_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices'}) }}
+{% endif %}
+
+{% if form.future_publish_at is defined %}
+    {{ include('FaAdBundle:AdPostAdmin:paaFuturePublishAtAdminJS.html.twig', {"publishAtId": "fa_paa_for_sale_admin_future_publish_at"}) }}
+{% endif %}
+
+{{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+{{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+{{ block('imageUploadJavascriptBottom') }}
+{% endblock %}

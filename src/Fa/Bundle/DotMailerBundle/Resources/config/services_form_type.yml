@@ -1,0 +1,18 @@
+services:
+    fa_dotmailer.form.type.dotmailer_search_admin:
+        class: Fa\Bundle\DotMailerBundle\Form\DotmailerSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_dotmailer_dotmailer_search_admin }
+
+    fa_dotmailer.form.type.dotmailer_filter_admin:
+        class: Fa\Bundle\DotMailerBundle\Form\DotmailerFilterAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_dotmailer_dotmailer_filter_admin }
+
+    fa_dotmailer.form.type.dotmailer_filter_search_admin:
+        class: Fa\Bundle\DotMailerBundle\Form\DotmailerFilterSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_dotmailer_dotmailer_filter_search_admin }

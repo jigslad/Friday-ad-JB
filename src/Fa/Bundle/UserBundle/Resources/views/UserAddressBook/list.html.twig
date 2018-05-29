@@ -1,0 +1,21 @@
+{% if userAddresses|length %}
+    {% for userAddressId, userAddressDetail in userAddresses %}
+        <div class="row">
+            <div class="columns">
+                <div class="own-item">
+                    <div class="row" id="user_address_{{ userAddressId }}">
+                        <div class="large-24 columns">
+                            {{userAddressDetail|join('<br />')|raw}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="row">
+        <div class="columns">
+            {{ 'No records found.'|trans({}, 'frontend-my-account') }}
+        </div>
+    </div>
+{% endif %}

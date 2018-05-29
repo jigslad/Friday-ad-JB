@@ -1,0 +1,195 @@
+{% block search_html %}
+<div class="row">
+      <div class="columns">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+               {{ form_errors(form) }}
+
+                <div class="row">
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__first_name, {'attr': {'class':'form-control', 'placeholder': 'First name'}}) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__last_name, {'attr': {'class':'form-control', 'placeholder': 'Last name'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.user__business_name, {'attr': {'class':'form-control', 'placeholder': 'Business name'}}) }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__email, {'attr': {'class':'form-control', 'placeholder': 'Customer Email'}}) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__phone, {'attr': {'class':'form-control', 'placeholder': 'Customer Phone Number'}}) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__paypal_email, {'attr': {'class':'form-control', 'placeholder': 'Paypal Email Address'}}) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__id, {'attr': {'class':'form-control', 'placeholder': 'User Reference'}}) }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.role__id, {'attr': {'class':'form-control', 'placeholder': 'Role Id'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.user__status, {'attr': {'class':'form-control'}}) }}
+                    </div>
+                </div>
+
+                <hr class="hr_margin">
+
+                <div class="row">
+                    <div class="large-3 columns">
+                        {{ form_widget(form.ad__id, {'attr': {'class':'form-control', 'placeholder': 'Advert Reference'}}) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.ad__ti_ad_id, {'attr': {'class':'form-control', 'placeholder': 'Old TI Advert Reference'}}) }}
+                    </div>
+                     <div class="large-6 columns">
+                        {{ form_widget(form.ad__status, {'attr': {'class':'form-control', 'placeholder': 'Ad status'}}) }}
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.ad__created_at_from, {'attr': {'placeholder': 'Ad date placed from'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.ad__created_at_to, {'attr': {'placeholder': 'Ad date placed to'}}) }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="columns">
+                        <div class="error">{{ form_errors(attribute(form, 'ad__created_at_from')) }}</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="columns">
+                        <div class="admin_cat_search list_style_none">
+	                        {{ form_widget(form.ad__nested_category, {'attr': {'class':'form-control', 'placeholder': 'Advert Category'}}) }}
+	                    </div>
+                    </div>
+                </div>
+
+                <hr class="hr_margin">
+
+                <div class="search_box">
+	                <div class="row">
+	                    <div class="large-3 columns" style="vertical-align:top;">
+	                        {{ form_widget(form.user__location_domicile, {'attr': {'class':'form-control'}}) }}
+	                    </div>
+	                    <div class="large-3 columns">
+	                        {{ form_widget(form.user__location_town, {'attr': {'class':'form-control'}}) }}
+	                    </div>
+                        <div class="large-3 columns">
+                            {{ form_widget(form.user__credit, {'attr': {'class':'form-control'}}) }}
+                        </div>
+	                    <div class="large-3 columns">
+	                        {{ form_widget(form.user__user_package__package_id, {'attr': {'class':'form-control'}}) }}
+	                    </div>
+	                </div>
+                </div>
+                
+                <hr class="hr_margin">
+                
+                <div class="row">
+                    <div class="large-9 columns">&nbsp;</div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.search, {'attr': {'class':'small button right'}}) }}
+                    </div>
+                </div>
+            {{ form_end(form) }}
+       </div>
+  </div>
+{% endblock %}
+
+{% block search_script -%}
+<script>
+$(document).ready(function(){
+    $("#fa_user_user_search_admin_user__location_domicile").change(function(){
+        var data = {
+            id: $(this).val()
+        };
+
+        $.ajax({
+            type: 'post',
+            url: '{{ path("location_ajax_get_node_json") }}',
+            data: data,
+            success: function(data) {
+                var $town_selector = $('#fa_user_user_search_admin_user__location_town');
+
+                $town_selector.html('<option value="">Select Town</option>');
+
+                for (var i=0, total = data.length; i < total; i++) {
+                    $town_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                }
+            }
+        });
+    });
+
+    $("#fa_user_user_search_admin_user__location_town").prepend('<option value="">{{ 'Select Town'|trans }}</option>');
+});
+
+$("#fa_user_user_search_admin_ad__nested_category").select2({
+    placeholder: "Select category",
+    minimumInputLength: 1,
+    width: '100%',
+    multiple: true,
+    ajax: {
+        url: Routing.generate('category_ajax_term_admin', { term: '1' }),
+        dataType: 'json',
+        data: function (term, page) {
+            return {
+                term: term, // search term
+                page_limit: 10,
+            };
+        },
+        results: function (data, page) {
+            // since we are using custom formatting functions we do not need to alter remote JSON data
+            return {results: data.results};
+        },
+        formatResult: formatResult,
+        formatSelection: formatSelection,
+    },
+});
+if ($("#fa_user_user_search_admin_ad__nested_category_json").val() != '') {
+    $('#fa_user_user_search_admin_ad__nested_category').select2('data', jQuery.parseJSON($("#fa_user_user_search_admin_ad__nested_category_json").val()));
+}
+function formatResult(node) {
+    return '<div>' + node.id + '</div>';
+};
+
+function formatSelection(node) {
+    return node.id;
+};
+
+$("#checkAll").click(function(){
+  $('.user_change_status').not(this).prop('checked', this.checked);
+});
+
+$("#user_change_status_button").click(function(e){
+  var totalSelected = $("[name='change_status_checkbox[]']:checked").length;
+  var userIds = '';
+  if (totalSelected > 0) {
+        $("[name='change_status_checkbox[]']:checked").each(function () {
+          var id = $(this).attr("value");
+          if (userIds == '')
+            userIds = id;
+          else
+            userIds = userIds + ',' + id;
+        });
+        var route = Routing.generate('user_change_status', { 'id': userIds });
+        location.href = route;
+  } else {
+    alert("Please select at least one user!");
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,94 @@
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+                <thead>
+                    <tr>
+                        <th width="20%">
+                            {{ sortable_link('package_discount_code_admin', 'package_discount_code__code', 'Package discount code'|trans, sorter) }}
+                        </th>
+                        <th width="10%">
+                            {{ 'Discount type '|trans({}, 'messages') }}
+                        </th>
+                        <th width="10%">
+                            {{ 'Discount value'|trans({}, 'messages') }}
+                        </th>
+                        <th width="10%"> {{ 'Package type'|trans({}, 'messages') }}</th>
+                        <th width="20%"> {{ 'Category'|trans({}, 'messages') }}</th>
+                        <th width="10%"> {{ 'User roles'|trans({}, 'messages') }}</th>
+                        <th width="10%">
+                            {{ 'Status'|trans({}, 'messages') }}
+                        </th>
+                        <th><i class="fi-widget"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pagination.getNbResults() %}
+                        {% for packageDiscountCode in pagination.getCurrentPageResults() %}
+                            <tr class="gradeX">
+                                <td>
+                                    {{ packageDiscountCode.code }}
+                                </td>
+                                <td>
+                                    {% if packageDiscountCodeTypeArray[packageDiscountCode.discount_type] is defined %}
+                                        {{ packageDiscountCodeTypeArray[packageDiscountCode.discount_type] }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ packageDiscountCode.discount_value }}
+                                </td>
+                                <td>
+                                    {% if packageDiscountCode.package_sr_no %}
+                                        {% set packageSrNos = packageDiscountCode.package_sr_no|split(',') %}
+                                        {% for packageSrNo in packageSrNos %}
+                                            {% if packageTypeArray[packageSrNo] is defined %}
+                                                {{ packageTypeArray[packageSrNo] }}<br />
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if packageDiscountCode.category_id %}
+                                        {{ categoryRepository.getCategoryPathArrayById(packageDiscountCode.category_id, false, containerInstance)|join(' > ') }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% set roleIds = packageDiscountCode.role_ids|split(',') %}
+                                    {% if roleIds|length %}
+                                        {% for roleId in roleIds %}
+                                            {% if roleIdArray[roleId] is defined %}
+                                                {{ roleIdArray[roleId] }}<br />
+                                            {% endif %}
+                                        {% endfor%}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ statusArray[packageDiscountCode.status] }}</td>
+                                <td>
+                                    <button href="#" data-dropdown="drop{{ packageDiscountCode.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                    <br />
+                                    <ul id="drop{{ packageDiscountCode.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                        {% if packageDiscountCodeEditGrant %}
+                                            <li><a href="{{ path('package_discount_code_edit_admin', {'id': packageDiscountCode.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+                                        {% endif %}
+                                        {% if packageDiscountCodeDeleteGrant %}
+                                         <li><a href="{{ path('package_discount_code_delete_admin', {'id': packageDiscountCode.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this code?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+                                      {% endif %}
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="odd gradeX">
+                            <td colspan="5" align="center">{{ 'No package discount code found'|trans({}, 'messages') }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

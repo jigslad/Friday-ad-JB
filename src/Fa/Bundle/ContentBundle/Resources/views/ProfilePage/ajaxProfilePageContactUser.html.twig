@@ -1,0 +1,152 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% set container = fetch_container_instance() %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+<a class="close-reveal-modal">&#215;</a>
+{% set adOwnerName = contactUserObj ? contactUserObj.getProfileName() : null %}
+<h5 class="modal-title">
+    {{'Ask %user_name% a question..'|trans({'%user_name%': adOwnerName}, 'frontend-contact-seller')}}
+</h5>
+{% if contactUserObj %}
+    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'profile_page_contact_user_id'}}) }}
+{% endif %}
+    <div class="modal-content">
+        {% if contactUserObj and contactUserObj.getContactThroughPhone() %}
+            
+            {% if userSiteObj and userSiteObj.getPhone1() is not null %}
+                <div class="contact-box contact-box-2">
+                    <h1>
+                        <span class="phone-icon"></span>
+                        <span id="span_contact_number_part">{{ userSiteObj.getPhone1()|slice(0,-2) }}<span>XX</span></span>
+                        {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+                            <a href="tel:{{ userSiteObj.getPhone1() }}">
+                        {% endif %}
+                            <span id="span_contact_number_full" style="display:none;">{{ userSiteObj.getPhone1() }}</span>
+                        {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+                            </a>
+                        {% endif %}
+                    </h1><a class="button xs-btn-1" id="btn_reveal" href="javascript:toggleContactNumber();"><span class="btn-white-arrow"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
+                </div>
+            {% endif %}
+            {% if userSiteObj and userSiteObj.getPhone2() is not null %}
+                <div class="contact-box contact-box-2">
+                    <h1>
+                        <span class="phone-icon"></span>
+                        <span id="span_contact_number_part_2">{{ userSiteObj.getPhone2()|slice(0,-2) }}<span>XX</span></span>
+                        {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+                            <a href="tel:{{ userSiteObj.getPhone2() }}">
+                        {% endif %}
+                            <span id="span_contact_number_full_2" style="display:none;">{{ userSiteObj.getPhone2() }}</span>
+                        {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+                            </a>
+                        {% endif %}
+                    </h1><a class="button xs-btn-1" id="btn_reveal_2" href="javascript:toggleContactNumber2();"><span class="btn-white-arrow"></span>{{'Reveal'|trans({}, 'frontend-contact-seller')}}</a>
+                </div>
+            {% endif %}
+        {% endif %}
+        {% if contactUserObj and contactUserObj.getContactThroughEmail() %}
+            <h5>{{'Send a message.'|trans({}, 'frontend-contact-seller')}}</h5>
+            <p>{{'Want to find out a bit more about advert? Send a message.'|trans({}, 'frontend-contact-seller')}}</p>
+            {{ form_row(form.sender_first_name) }}
+
+            {% if form.sender_email is defined %}
+                {{ form_row(form.sender_email) }}
+            {% endif %}
+
+            {{ form_row(form.subject) }}
+            {{ form_row(form.text_message) }}
+
+            <ul class="receive-alert">
+                <li>
+                    {{ form_widget(form.email_alert) }}
+                    {{ form_label(form.email_alert) }}
+                </li>
+            </ul>
+
+            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand mt20 mb0'}}) }}
+        {% else %}
+            {% for fieldName, fieldValue in form.children %}
+                {% do attribute(form, fieldName).setRendered %}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% if contactUserObj %}
+    <input type="hidden" name="msg_div_id" id="msg_div_id" value="{{msg_div_id}}" />
+    {{ form_end(form) }}
+{% endif %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+        bindCustomRadioEvent();
+        bindCustomCheckboxEvent();
+    });
+    $("#profile_page_contact_user_id").submit(function(event) {
+        blockElement('#profilePageContactUserModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{path('profile_page_contact_user', {'userId': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'encryptDecrypt', ['profilepage', contactUserObj.getId(), 'encrypt']) })}}",
+            data: new FormData(this),
+            contentType: false,
+            processData:false,
+        })
+        .always(function(response) {
+            unblockElement('#profilePageContactUserModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#profilePageContactUserModal').html(response.htmlContent);
+            } else if (response.error.length) {
+                $('#profilePageContactUserModal').foundation('reveal', 'close');
+                $(decorateMessage(response.error, 'alert')).insertBefore('{{msg_div_id}}');
+                scrollToElement('{{msg_div_id}}', '1000', -150);
+            } else {
+                updateUserSiteViewCounterField('{{ contactUserObj.getId() }}', 'profile_page_email_sent_count', '');
+                $('#profilePageContactUserModal').foundation('reveal', 'close');
+                $(decorateMessage('{{'Contact request sent successfully.'|trans({}, 'frontend-contact-seller')}}', 'success')).insertBefore('{{msg_div_id}}');
+                scrollToElement('{{msg_div_id}}', '1000', -150);
+                ga('send', 'event', 'CTA', 'Send email Profile', 'Profile {{ contactUserObj.getId() }}');
+            }
+        });
+    });
+    
+    var resetEmailalertFlag = true;
+    $("#fa_content_profile_page_contact_user_sender_email").blur(function(){
+        if ($("#fa_content_profile_page_contact_user_sender_email").val() && resetEmailalertFlag) {
+            $.ajax({
+                type: "POST",
+                url: "{{path('ajax_contact_seller_get_email_alert')}}",
+                data: {'emailAddress': $("#fa_content_profile_page_contact_user_sender_email").val()},
+            })
+            .done(function(response) {
+                resetEmailalertFlag = false;
+                if (response.isEmailAlertEnabled) {
+                    $('#fa_content_profile_page_contact_user_email_alert').parent().addClass('checked');
+                    $('#fa_content_profile_page_contact_user_email_alert').attr('checked', true);
+                } else if (!response.isEmailAlertEnabled) {
+                    $('#fa_content_profile_page_contact_user_email_alert').parent().removeClass('checked');
+                    $('#fa_content_profile_page_contact_user_email_alert').attr('checked', false);
+                }
+            });
+        }
+    });
+
+    function toggleContactNumber() {
+        updateUserSiteViewCounterField('{{contactUserObj.getId()}}', 'profile_page_phone_click_count', 'phone1');
+        $('#span_contact_number_full').toggle();
+        $('#span_contact_number_part').toggle();
+        $('#btn_reveal').toggle();
+        ga('send', 'event', 'CTA', 'Call Now - business page', '{{ adOwnerName }}');
+    }
+
+    function toggleContactNumber2() {
+        updateUserSiteViewCounterField('{{contactUserObj.getId()}}', 'profile_page_phone_click_count', 'phone2');
+        $('#span_contact_number_full_2').toggle();
+        $('#span_contact_number_part_2').toggle();
+        $('#btn_reveal_2').toggle();
+        ga('send', 'event', 'CTA', 'Call Now No.2 - business page', '{{ adOwnerName }}');
+    }
+//]]>
+</script>

@@ -1,0 +1,83 @@
+Local working flow
+========================
+
+1) Your dev brach must be clean before you move to local branch.
+
+Create new branch
+
+2) git checkout -b FFR-1190
+
+Switch between brach
+
+3) git checkout dev
+   git checkout FFR-1190
+
+4) How to check branch
+
+   git branch
+   active branch will be displayed with *
+
+5) a) Commit changes before move to another branch and track commit object
+       Commit your local brach change(FFR-1190) and collect commit object using, in comment use ticket number FFR-1190-1 as per sequence.
+       git log
+    
+       Take top object and not the bottom
+       abe57a6ff25d251fbe75ec59ca31891814ea26fb
+    
+       While adding in ticket keep number
+       1) abe57a6ff25d251fbe75ec59ca31891814ea26fb
+
+   b) Stash : Save changes before move to another branch and apply back when you come again to this branch (http://git-scm.com/docs/git-stash)
+      1) 'git stash list' (Show all staths list)
+         stash@{0}: WIP on FFR-1190: 7b8a99e remove archive ad from solr
+      2) 'git stash'
+      3) 'git stash list'
+         stash@{0}: WIP on FFR-1190: 7b8a99e remove archive ad from solr
+         stash@{1}: WIP on FFR-1190: 7b8a99e remove archive ad from solr
+      4) Track/Save last stash of particulat branch to apply again => stash@{1}
+      5) Apply changes again by stash@{1} when you come again to this branch
+         'git stash apply stash@{1}'
+
+6) Merge local brach to dev branch
+   git checkout dev
+   git pull
+   git merge --no-ff FFR-1190 (solve any conflict)
+   git push
+   git log
+
+   Take top object and not the bottom
+   abcdefghijklmnopqurstuvwxyz
+
+   List out in ticket as merge object like M1, M2
+   M1) abcdefghijklmnopqurstuvwxyz
+
+7) Delete local branch
+   git branch -D FFR-1190
+
+
+Take customer approved ticket to stage
+============================================
+
+1) git fetch origin dev
+
+2) git cherry-pick abe57a6ff25d251fbe75ec59ca31891814ea26fb
+
+3) git push
+
+OR
+
+1) git pull origin dev
+
+2) git push
+
+Pull in master branch from stage brach
+=============================================
+
+1) git pull origin stage
+
+2) git push
+
+Pull in live
+=========================
+
+1) git pull

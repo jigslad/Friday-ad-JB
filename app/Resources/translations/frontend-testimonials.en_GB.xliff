@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="15f9201a45ed743e4e1a9a77a5e84c557b704c1d" resname="Here are the latest testimonials from people like you">
+        <jms:reference-file line="12">views/Testimonials/list.html.twig</jms:reference-file>
+        <source>Here are the latest testimonials from people like you</source>
+        <target state="new">Here are the latest testimonials from people like you</target>
+      </trans-unit>
+      <trans-unit id="7cd1d44b3c669cee4c26966b8db2380d1e04db61" resname="No records found.">
+        <jms:reference-file line="27">views/Testimonials/list.html.twig</jms:reference-file>
+        <source>No records found.</source>
+        <target state="new">No records found.</target>
+      </trans-unit>
+      <trans-unit id="7dae0580269f332114263f1c19b86ff2406a4861" resname="Please login to add testimonial.">
+        <jms:reference-file line="104">UserBundle/Controller/TestimonialsController.php</jms:reference-file>
+        <source>Please login to add testimonial.</source>
+        <target state="new">Please login to add testimonial.</target>
+      </trans-unit>
+      <trans-unit id="9bc2575c3930437e80555f78757b783c842e8e66" resname="Send">
+        <jms:reference-file line="83">UserBundle/Form/TestimonialType.php</jms:reference-file>
+        <source>Send</source>
+        <target state="new">Send</target>
+      </trans-unit>
+      <trans-unit id="9f3de6422020e5f5515f8a32259cad3722a0c7de" resname="Send us your comment">
+        <jms:reference-file line="35">views/Testimonials/list.html.twig</jms:reference-file>
+        <source>Send us your comment</source>
+        <target state="new">Send us your comment</target>
+      </trans-unit>
+      <trans-unit id="51e17cfec8bed80e60e35f4e9bb229815045b826" resname="Send us your testimonial">
+        <jms:reference-file line="4">views/Testimonials/ajaxAddTestimonial.html.twig</jms:reference-file>
+        <source>Send us your testimonial</source>
+        <target state="new">Send us your testimonial</target>
+      </trans-unit>
+      <trans-unit id="85850b68765d3259514fe37ea6f649868c79b258" resname="Tell us about your experience with Friday-Ad.">
+        <jms:reference-file line="15">views/Testimonials/ajaxAddTestimonial.html.twig</jms:reference-file>
+        <source>Tell us about your experience with Friday-Ad.</source>
+        <target state="new">Tell us about your experience with Friday-Ad.</target>
+      </trans-unit>
+      <trans-unit id="289006061059addc1a7e857fa48295b5fdc4b641" resname="Testimonial">
+        <jms:reference-file line="79">UserBundle/Form/TestimonialType.php</jms:reference-file>
+        <source>Testimonial</source>
+        <target state="new">Testimonial</target>
+      </trans-unit>
+      <trans-unit id="7e2f9470fdc8cb666cd9c8f05a4b66a16aeea173" resname="Testimonial sent successfully, administrator will review it.">
+        <jms:reference-file line="43">views/Testimonials/ajaxAddTestimonial.html.twig</jms:reference-file>
+        <source>Testimonial sent successfully, administrator will review it.</source>
+        <target state="new">Testimonial sent successfully, administrator will review it.</target>
+      </trans-unit>
+      <trans-unit id="2c2cd2ae8ff170115855201664f8bc10a106aa1d" resname="Testimonials">
+        <jms:reference-file line="4">views/Testimonials/list.html.twig</jms:reference-file>
+        <jms:reference-file line="11">views/Testimonials/list.html.twig</jms:reference-file>
+        <source>Testimonials</source>
+        <target state="new">Testimonials</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

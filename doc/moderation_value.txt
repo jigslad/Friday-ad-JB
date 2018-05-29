@@ -1,0 +1,126 @@
+Array
+(
+    [ad] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 500197740
+                    [price] => 9.99
+                    [is_new] => 1
+                    [use_privacy_number] => 
+                    [privacy_number] => 
+                    [use_email_response] => 
+                    [use_map_link] => 
+                    [trans_id] => 11686E38-321F-45EA-BECF-4208FCCC2709
+                    [ad_ref] => YI429A6HH
+                    [old_status] => DRAFT
+                    [tamsin_ad_ref] => 
+                    [title] => LADIES & GIRLS HIPSTER SKINNY LEG SMART SCHOOL CASUAL WORK WEAR TROUSER S 6-16
+                    [description] => <p>LADIES &amp; GIRLS HIPSTER SKINNY LEG SMART SCHOOL CASUAL WORK WEAR TROUSER S 6-16 http://stores.ebay.co.uk/FUNKYSCHIC. http://twitter.com/funkyschic</p>
+                    [creation_ip] => 
+                    [modify_ip] => 
+                    [has_video] => 
+                    [renewed_at] => 
+                    [expires_at] => 1411772400
+                    [is_renewal_mail_sent] => 
+                    [renew_count] => 
+                    [sold_at] => 
+                    [sold_price] => 
+                    [created_at] => 1408840120
+                    [published_at] => 1408840960
+                    [updated_at] => 1417412834
+                    [personalized_title] => My title
+                    [qty] => 
+                    [qty_sold] => 
+                    [old_cat_id] => 5002
+                    [old_class_id] => 8004
+                    [old_sub_class_id] => 1254
+                    [update_type] => forsale_edit
+                )
+
+        )
+
+    [images] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 118903
+                    [path] => uploads/ad/500197701_500197800
+                    [hash] => 6167d39913c0510d
+                    [org_size] => a:2:{s:5:"width";i:800;s:6:"height";i:534;}
+                    [ord] => 1
+                    [video] => 
+                    [video_url] => 
+                    [status] => 1
+                    [created_at] => 1417418219
+                    [updated_at] => 
+                    [session_id] => 
+                    [trans_id] => 
+                    [update_type] => 
+                )
+
+            [1] => Array
+                (
+                    [id] => 118904
+                    [path] => uploads/ad/500197701_500197800
+                    [hash] => 90775c41adbe5297
+                    [org_size] => a:2:{s:5:"width";i:500;s:6:"height";i:335;}
+                    [ord] => 2
+                    [video] => 
+                    [video_url] => 
+                    [status] => 1
+                    [created_at] => 1417418316
+                    [updated_at] => 
+                    [session_id] => 
+                    [trans_id] => 
+                    [update_type] => 
+                )
+
+        )
+
+    [dimensions] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 2
+                    [ad_id] => XXX
+                    [age_range_id] => 828
+                    [brand_id] => 671
+                    [brand_clothing_id] => 
+                    [business_type_id] => 
+                    [condition_id] => 
+                    [colour_id] => 
+                    [leg_id] => 
+                    [main_colour_id] => 821
+                    [neck_id] => 
+                    [size_id] => 
+                    [waist_id] => 
+                    [dimensions_length] => 
+                    [dimensions_width] => 
+                    [dimensions_height] => 
+                    [power] => 
+                    [net_profit_min] => 
+                    [net_profit_max] => 
+                    [turnover_min] => 
+                    [turnover_max] => 
+                    [event_date] => 
+                    [meta_data] => a:1:{s:12:"condition_id";i:84;}
+                )
+
+        )
+        
+    [locations] => Array
+        (
+            [0] => Array
+                (
+                    [ad_id] => XXX
+                    [postcode] => BS1 4RB
+                    [latitude] => 51.448349
+                    [longitude] => -2.593731
+                    [town_id] => XXX
+                    [domicile_id] => XXX
+                    [locality_id] => XXX
+                    [update_type] =>
+                )
+        )
+)

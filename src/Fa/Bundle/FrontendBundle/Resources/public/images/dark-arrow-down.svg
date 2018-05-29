@@ -1,0 +1,20 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="12px" height="7px" viewBox="0 0 12 7" xml:space="preserve" enable-background="new 0 0 12 7">
+  <style type="text/css">
+    
+	.st0{fill:none;stroke:#313133;stroke-width:2;}
+
+  </style>
+  <title>
+    dark-arrow
+  </title>
+  <desc>
+    Created with Sketch.
+  </desc>
+  <g id="Dashboard" sketch:type="MSPage">
+    <g id="Inbox-Personal-message-list-Mobile-Portrait" transform="translate(-272.000000, -1948.000000)" sketch:type="MSArtboardGroup">
+      <g id="dark-arrow" transform="translate(273.000000, 1948.500000)" sketch:type="MSLayerGroup">
+        <path id="select-arrow" sketch:type="MSShapeGroup" class="st0" d="M10 1L5 5 0 1"/>
+      </g>
+    </g>
+  </g>
+</svg>

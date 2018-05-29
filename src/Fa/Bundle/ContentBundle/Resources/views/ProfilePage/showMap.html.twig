@@ -1,0 +1,13 @@
+{% set showMap = true %}
+{% if userDetail["show_map"] is defined and not userDetail["show_map"] and userDetail["business_category_id"] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
+    {% set showMap = false %}
+{% endif %}
+{% if showMap and userDetail["latitude"] is defined and userDetail["latitude"] and userDetail["longitude"] is defined and userDetail["longitude"] %}
+    <div class="shop-map clearfix">
+        <h5>{{'Map'|trans({}, 'frontend-profile-page')}}</h5>
+        <div class="shop-map-wrapper">
+            <div id="googlemaps" style="height:180px;width:250px"></div>
+        </div>
+        <a href="//maps.google.com/maps?z=12&t=m&q=loc:{{userDetail['latitude']}}+{{userDetail['longitude']}}" target="_blank" class="right" onclick="javascript:updateUserSiteViewCounterField('{{userDetail['id']}}', 'profile_page_map_click_count', '');" >{{'View on Google Maps'|trans({}, 'frontend-profile-page')}}</a>
+    </div>
+{% endif %}

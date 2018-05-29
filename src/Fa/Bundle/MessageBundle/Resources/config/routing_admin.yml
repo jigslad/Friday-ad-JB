@@ -1,0 +1,3 @@
+FaMessageBundle_notification_message_admin:
+    resource: '@FaMessageBundle/Resources/config/routing/notification_message_admin.yml'
+    prefix:   /notification_message

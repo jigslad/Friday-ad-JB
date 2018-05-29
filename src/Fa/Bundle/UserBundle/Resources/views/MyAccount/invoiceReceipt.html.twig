@@ -1,0 +1,170 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <script src="{{ asset_url('fafrontend/js/vendor/jquery.js') }}"></script>
+    <meta charset="utf-8" />
+    <title>Invoice</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_asset_url('/bundles/fafrontend/css/google-fonts.css') }}" />
+    <style>
+        body{font-family: 'Asap', sans-serif;font-size:15px;line-height:24px}
+        .lsize{width:750px}
+        .mt10{margin-top:10px}
+        .clearfix:after{content:"";display:block;height:0;clear:both;visibility:hidden}
+        .invoice-street{line-height:normal;font-style:italic}
+        .receipt-item{border-top:2px dotted #313133;padding:17px 3px}
+        .receipt-item .col-1{width:257px;float:left;font-size:14px}
+        .receipt-item .col-2{width:207px;float:left;padding-left:50px;font-size:14px}
+        .receipt-item .col-2 p{margin:5px 0}
+        .receipt-item .col-1.order-no, .receipt-item .col-2.order-no{font-size:16px}
+        .receipt-item .col-1.order-no b, .receipt-item .col-2.order-no b{margin-right:8px}
+        .receipt-item .col-3{width:160px;float:left;font-size:14px;padding-left:70px}
+        .shipping-address{font-size:13px;line-height:normal;font-style:italic}
+    </style>
+</head>
+<body>
+    <div class="lsize">
+        <img style="margin: 20px 0" src="{{ shared_url('/bundles/fafrontend/images/fad-logo.svg') }}" alt="" />
+
+        <div class="receipt-item clearfix">
+            <div class="col-1 order-no"><b>{{ 'Transaction ID'|trans({}, 'frontend-user-invoices') }}</b> {{ userInvoiceDetail['cart_code'] }}</div>
+            <div class="col-2 order-no"><b>{{ 'Invoice Date'|trans({}, 'frontend-user-invoices') }}</b> {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userInvoiceDetail['created_at'], fetch_container_instance(), null, null, 'dd/MM/YY']) }}</div>
+        </div>
+
+        <div class="receipt-item clearfix">
+            {% if userInvoiceDetail['invoice_address']|length %}
+                <div class="col-1">
+                    <b>{{ 'Bill to'|trans({}, 'frontend-user-invoices') }}</b><br />
+                    {% if userInvoiceDetail['invoice_address']['first_name'] is defined and userInvoiceDetail['invoice_address']['first_name']|trim|length %}
+                        {{ userInvoiceDetail['invoice_address']['first_name'] }}<br />
+                    {% else %}
+                        {{app.user.getFullName()}}
+                    {% endif %}
+                    <div class="invoice-street">
+                        {% if userInvoiceDetail['invoice_address']['street_address'] is defined and userInvoiceDetail['invoice_address']['street_address']|trim|length %}
+                            {{ userInvoiceDetail['invoice_address']['street_address'] }}<br />
+                        {% endif %}
+                        {% if userInvoiceDetail['invoice_address']['domicile_name'] is defined and userInvoiceDetail['invoice_address']['domicile_name']|trim|length %}
+                            {{ userInvoiceDetail['invoice_address']['domicile_name'] }}<br />
+                        {% endif %}
+                        {% if userInvoiceDetail['invoice_address']['town_name'] is defined and userInvoiceDetail['invoice_address']['town_name']|trim|length %}
+                            {{ userInvoiceDetail['invoice_address']['town_name'] }}{% if userInvoiceDetail['invoice_address']['zip'] %}, {{ userInvoiceDetail['invoice_address']['zip'] }}{% endif %}
+                            <br />
+                        {% endif %}
+                        {% if userInvoiceDetail['invoice_address']['country_name'] is defined and userInvoiceDetail['invoice_address']['country_name']|trim|length %}
+                            {{ userInvoiceDetail['invoice_address']['country_name'] }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-2">&nbsp;</div>
+            {% endif %}
+            <div class="{% if userInvoiceDetail['invoice_address']|length %}col-3{% else %}col-1{% endif %}">
+                <b>{{ 'Payment Method'|trans({}, 'frontend-user-invoices') }}</b><br />
+                {% if userInvoiceDetail['payment_token'] is defined and userInvoiceDetail['payment_token'] is not null %}
+                    {{ userInvoiceDetail['payment_token'] }}
+                {% else %}
+                    {{ userInvoiceDetail['payment_method']|capitalize }}
+                {% endif %}
+            </div>
+        </div>
+
+        {% if userInvoiceDetail['payment_for'] == constant('Fa\\Bundle\\PaymentBundle\\Repository\\TransactionDetailRepository::PAYMENT_FOR_PACKAGE') %}
+            <div class="receipt-item clearfix" style="padding-bottom:0">
+                <div class="col-1">
+                    <b>{{ 'Package name'|trans({}, 'frontend-user-invoices') }}</b>
+                </div>
+                <div class="col-2">
+                    <b>{{ 'Advert title'|trans({}, 'frontend-user-invoices') }}</b>
+                </div>
+                <div class="col-3">
+                    <b>{{ 'Price excluding VAT'|trans({}, 'frontend-user-invoices') }}</b>
+                </div>
+            </div>
+            {% if userInvoiceDetail['package'] is defined %}
+                {% for package in userInvoiceDetail['package'] %}
+                    <div class="receipt-item clearfix" style="border:0;padding-top:0;padding-bottom:0">
+                        <div class="col-1">
+                            {{ package['package_name'] }}
+                        </div>
+                        <div class="col-2">
+                            {{ package['ad_title'] }}&nbsp;
+                        </div>
+                        <div class="col-3">
+                            {{ format_currency(package['amount_without_vat']) }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% elseif userInvoiceDetail['payment_for'] == constant('Fa\\Bundle\\PaymentBundle\\Repository\\TransactionDetailRepository::PAYMENT_FOR_SHOP') %}
+            <div class="receipt-item clearfix" style="padding-bottom:0">
+                <div class="col-1">
+                    <b>{{ 'Package name'|trans({}, 'frontend-user-invoices') }}</b>
+                </div>
+                <div class="col-2">
+                    <b>{{ 'Package type'|trans({}, 'frontend-user-invoices') }}</b>
+                </div>
+                <div class="col-3">
+                    <b>{{ 'Price'|trans({}, 'frontend-user-invoices') }}</b>
+                </div>
+            </div>
+            {% if userInvoiceDetail['package'] is defined %}
+                {% for package in userInvoiceDetail['package'] %}
+                    <div class="receipt-item clearfix" style="border:0;padding-top:0;padding-bottom:0">
+                        <div class="col-1">
+                            {{ package['package_name'] }}&nbsp;
+                        </div>
+                        <div class="col-2">
+                            {{ 'Monthly subscription'|trans({}, 'frontend-user-invoices') }}
+                        </div>
+                        <div class="col-3">
+                            {{ format_currency(package['amount_without_vat']) }} {{ '(exc. VAT)'|trans({}, 'frontend-user-invoices') }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+
+        <div class="receipt-item clearfix" style="border:0">
+            <div class="col-1">
+                <b>{{ 'Total amout without VAT'|trans({}, 'frontend-user-invoices') }}</b><br />
+                <b>{{ 'Total amount of VAT at %vat%%'|trans({'%vat%': userInvoiceDetail['vat']}, 'frontend-user-invoices') }}</b><br />
+                <b>{{ 'Total amount including VAT'|trans({}, 'frontend-user-invoices') }}</b>
+            </div>
+            <div class="col-2">&nbsp;</div>
+            <div class="col-3">
+                {{ format_currency(userInvoiceDetail['total_amount_without_vat']) }}<br />
+                {{ format_currency(userInvoiceDetail['total_amount_of_vat']) }}<br />
+                <b>{{ format_currency(userInvoiceDetail['total_amount']) }}</b>
+            </div>
+        </div>
+
+        <div class="receipt-item">
+            <div class="invoice-street">
+
+                {{ 'Friday-Ad Ltd<br />
+                    London Road<br />
+                    Sayers Common<br />
+                    West Sussex<br />
+                    BN6 9HS'|trans({}, 'frontend-user-invoices')|raw }}
+
+            </div>
+            <div class="mt10">
+            {{ 'Registered in Cardiff. No. 2311783'|trans({}, 'frontend-user-invoices') }}<br />
+            {{ 'Vat Reg No. 508 8745 16'|trans({}, 'frontend-user-invoices') }}
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+$(window).load(function()
+{
+   var action = "{{action}}"
+
+   if (action == "viewandprint") {
+    window.print();
+   }
+});
+//]]>
+</script>

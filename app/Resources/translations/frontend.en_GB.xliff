@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="409ad9c8b2a6a2f71a46cec02534273fbf5a53e7" resname="%star_rating% out of 5">
+        <jms:reference-file line="3">Resources/views/showStarRating.html.twig</jms:reference-file>
+        <jms:reference-file line="6">Resources/views/showStarRating.html.twig</jms:reference-file>
+        <source>%star_rating% out of 5</source>
+        <target state="new">%star_rating% out of 5</target>
+      </trans-unit>
+      <trans-unit id="ea7a1c738b015b921c0e9cef338b3ce54880e532" resname="Facebook email and your account email is different.">
+        <jms:reference-file line="117">UserBundle/Controller/ThirdPartyLoginController.php</jms:reference-file>
+        <source>Facebook email and your account email is different.</source>
+        <target state="new">Facebook email and your account email is different.</target>
+      </trans-unit>
+      <trans-unit id="b1e95801b1dce73cc692c7baa20a1c56289a2990" resname="Friday-Ad">
+        <jms:reference-file line="2">Resources/views/simpleHeader.html.twig</jms:reference-file>
+        <jms:reference-file line="80">Resources/views/header.html.twig</jms:reference-file>
+        <source>Friday-Ad</source>
+        <target state="new">Friday-Ad</target>
+      </trans-unit>
+      <trans-unit id="9ce3bd4224c8c1780db56b4125ecf3f24bf748b7" resname="OK">
+        <jms:reference-file line="12">Resources/views/cookiePolicy.html.twig</jms:reference-file>
+        <source>OK</source>
+        <target state="new">OK</target>
+      </trans-unit>
+      <trans-unit id="89e944f8eb377852ecb003a3915c7e6b11d4bde6" resname="Please wait...">
+        <jms:reference-file line="10">views/Default/blockJs.html.twig</jms:reference-file>
+        <jms:reference-file line="41">views/Default/blockJs.html.twig</jms:reference-file>
+        <source>Please wait...</source>
+        <target state="new">Please wait...</target>
+      </trans-unit>
+      <trans-unit id="32abdf99d470e368ff52f35bc0e2944650c9e6c1" resname="Read less">
+        <jms:reference-file line="35">views/AdPost/fourthStepPropertyShowSecondStepFieldsData.html.twig</jms:reference-file>
+        <jms:reference-file line="35">views/AdPost/fourthStepServicesShowSecondStepFieldsData.html.twig</jms:reference-file>
+        <jms:reference-file line="36">views/AdPost/fourthStepShowSecondStepFieldsData.html.twig</jms:reference-file>
+        <jms:reference-file line="26">views/AdPost/fourthStepAdultShowSecondStepFieldsData.html.twig</jms:reference-file>
+        <jms:reference-file line="28">views/AdPost/fourthStepMotorsShowSecondStepFieldsData.html.twig</jms:reference-file>
+        <source>Read less</source>
+        <target state="new">Read less</target>
+      </trans-unit>
+      <trans-unit id="ad086cf55b834c375e209972840f1342401d8c41" resname="Read more">
+        <jms:reference-file line="34">views/AdPost/fourthStepPropertyShowSecondStepFieldsData.html.twig</jms:reference-file>
+        <jms:reference-file line="34">views/AdPost/fourthStepServicesShowSecondStepFieldsData.html.twig</jms:reference-file>
+        <jms:reference-file line="35">views/AdPost/fourthStepShowSecondStepFieldsData.html.twig</jms:reference-file>
+        <jms:reference-file line="25">views/AdPost/fourthStepAdultShowSecondStepFieldsData.html.twig</jms:reference-file>
+        <jms:reference-file line="27">views/AdPost/fourthStepMotorsShowSecondStepFieldsData.html.twig</jms:reference-file>
+        <source>Read more</source>
+        <target state="new">Read more</target>
+      </trans-unit>
+      <trans-unit id="4b68d0d35274cf36c65ac8fd6be8919ab4fd1134" resname="Sign In with Facebook">
+        <jms:reference-file line="34">views/Security/login.html.twig</jms:reference-file>
+        <source>Sign In with Facebook</source>
+        <target state="new">Sign In with Facebook</target>
+      </trans-unit>
+      <trans-unit id="c301cadf567771284432bc1a3f06c2273a9ad377" resname="Sign In with Google">
+        <jms:reference-file line="37">views/Security/login.html.twig</jms:reference-file>
+        <source>Sign In with Google</source>
+        <target state="new">Sign In with Google</target>
+      </trans-unit>
+      <trans-unit id="b0e862566adf44952c574286f70186463fcec419" resname="Sign Up with Facebook">
+        <jms:reference-file line="91">views/Registration/register.html.twig</jms:reference-file>
+        <source>Sign Up with Facebook</source>
+        <target state="new">Sign Up with Facebook</target>
+      </trans-unit>
+      <trans-unit id="169c6c4e8187d3c79fe83870913c27c27b2dd956" resname="Sign Up with Google">
+        <jms:reference-file line="92">views/Registration/register.html.twig</jms:reference-file>
+        <source>Sign Up with Google</source>
+        <target state="new">Sign Up with Google</target>
+      </trans-unit>
+      <trans-unit id="7f26a285c51103a1c8a8cda7ece1abb2b4e53296" resname="You have successfully logged in.">
+        <jms:reference-file line="18">views/ContactUser/ajaxContactUser.html.twig</jms:reference-file>
+        <jms:reference-file line="23">views/ContactSeller/ajaxContactSeller.html.twig</jms:reference-file>
+        <jms:reference-file line="134">UserBundle/Controller/ThirdPartyLoginController.php</jms:reference-file>
+        <jms:reference-file line="158">UserBundle/Controller/ThirdPartyLoginController.php</jms:reference-file>
+        <jms:reference-file line="232">UserBundle/Controller/ThirdPartyLoginController.php</jms:reference-file>
+        <jms:reference-file line="120">UserBundle/Security/UserAuthenticator.php</jms:reference-file>
+        <jms:reference-file line="11">views/UserSearchAgent/ajaxShowCreatedAlert.html.twig</jms:reference-file>
+        <jms:reference-file line="11">views/UserSearchAgent/ajaxShowSaveSearchAgent.html.twig</jms:reference-file>
+        <jms:reference-file line="10">views/Testimonials/ajaxAddTestimonial.html.twig</jms:reference-file>
+        <source>You have successfully logged in.</source>
+        <target state="new">You have successfully logged in.</target>
+      </trans-unit>
+      <trans-unit id="80b7c98cf9dfa729badd9297631ea10152df7a07" resname="Your status is not active.">
+        <jms:reference-file line="396">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <jms:reference-file line="412">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <jms:reference-file line="484">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <jms:reference-file line="500">AdBundle/Controller/AdPostController.php</jms:reference-file>
+        <jms:reference-file line="125">UserBundle/Controller/ThirdPartyLoginController.php</jms:reference-file>
+        <jms:reference-file line="141">UserBundle/Controller/ThirdPartyLoginController.php</jms:reference-file>
+        <jms:reference-file line="223">UserBundle/Controller/ThirdPartyLoginController.php</jms:reference-file>
+        <jms:reference-file line="133">UserBundle/Controller/SecurityController.php</jms:reference-file>
+        <jms:reference-file line="149">UserBundle/Controller/SecurityController.php</jms:reference-file>
+        <jms:reference-file line="225">UserBundle/Controller/SecurityController.php</jms:reference-file>
+        <jms:reference-file line="241">UserBundle/Controller/SecurityController.php</jms:reference-file>
+        <source>Your status is not active.</source>
+        <target state="new">Your status is not active.</target>
+      </trans-unit>
+      <trans-unit id="0b1e95cfd9775191a7224d0a218ae79187e80c1d" resname="from">
+        <jms:reference-file line="33">views/LandingPage/carSearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="46">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="66">views/AdList/leftSearch.html.twig</jms:reference-file>
+        <source>from</source>
+        <target state="new">from</target>
+      </trans-unit>
+      <trans-unit id="4374aaee247fb237ce6c97d5c8d64bbe474d16de" resname="to">
+        <jms:reference-file line="21">views/LandingPage/carSearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="61">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="49">views/AdList/leftSearch.html.twig</jms:reference-file>
+        <source>to</source>
+        <target state="new">to</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

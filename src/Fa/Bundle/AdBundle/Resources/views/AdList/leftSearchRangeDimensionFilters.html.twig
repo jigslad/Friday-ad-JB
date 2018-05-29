@@ -1,0 +1,36 @@
+{% if attribute(form, filter~'_from') is defined or attribute(form, filter~'_to') is defined %}
+    {% set plusMinusClass     = '' %}
+    {% set contentActiveClass = '' %}
+    {% set keepShownClass     = '' %}
+    {% set panelId            = 'panel' ~ filterPanelCounter ~ 'b' %}
+    
+    {% if attribute(searchParams, filter~'_open') is defined %}
+        {% set contentActiveClass = 'active' %}
+        {% set keepShownClass     = 'keep-shown' %}
+        {% set panelId            = '' %}
+    {% else %}
+        {% set plusMinusClass = 'fi-plus' %}
+        {% if attribute(searchParams, filter~'_from') is defined %}
+            {% set plusMinusClass = 'fi-minus' %}
+            {% set contentActiveClass = 'active' %}
+        {% endif %}
+    {% endif %}
+    {% set filterLabel = '' %}
+    {% if attribute(form, filter~'_from') is defined %}
+        {% set filterLabel = attribute(form, filter~'_from').vars.label %}
+    {% elseif attribute(form, filter~'_to') is defined %}
+        {% set filterLabel =  attribute(form, filter~'_to').vars.label %}
+    {% endif %}
+    <dd class="accordion-navigation {{ contentActiveClass }} {{ keepShownClass }}">
+        <a href="{{ '#panel' ~ filterPanelCounter ~ 'b'}}" class="clearfix"><h5 class="left">{{ filterLabel }}</h5> <i class="right {{ plusMinusClass }}"></i></a>
+        <div {% if panelId is not null %}id="{{ panelId }}"{% endif %} class="content {{ contentActiveClass }}">
+            {% if attribute(form, (filter~'_from')) is defined %}
+                {{ form_widget(attribute(form, filter~'_from')) }}
+            {% endif %}
+            {% if attribute(form, filter~'_to') is defined %}
+                {{ form_widget(attribute(form, filter~'_to')) }}
+            {% endif %}
+            <button class="secondary-btn-2 expand" type="submit"> {{ 'Search'|trans({}, 'frontend-left-search') }} </button>
+        </div>
+    </dd>
+{% endif %}

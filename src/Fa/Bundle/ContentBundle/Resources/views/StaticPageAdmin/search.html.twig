@@ -1,0 +1,20 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+        {{ form_errors(form) }}
+            <div class="row">
+	            <div class="large-6 columns">
+	                {{ form_widget(form.static_page__title, {'attr': {'class':'form-control', 'placeholder': 'Static page title'|trans }}) }}
+	            </div>
+	            <div class="large-3 columns">
+                    {{ form_widget(form.static_page__status, {'attr': {'class':'form-control' }}) }}
+                </div>
+                <div class="large-3 columns">
+                    {{ form_widget(form.search, {'attr': {'class':'small button mb0'}}) }}
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'FaAdminBundle::loginlayout.html.twig' %}
+
+{% block content %}
+    <div id="login-dialog">
+    	<div class="row">
+	        <div class="large-12 columns">
+	            {{ include(
+	             'FaCoreBundle::message.html.twig'
+	            ) }}
+	            <div class="panel mb0">
+	            	<h3><img src="{{ asset_url('faadmin/images/logo.png') }}" /></h3>
+                    {% if error %}
+                    	<div data-alert class="alert-box alert radius">{{ error.message }}</div>
+                    {% endif %}
+                    <form action="{{ path('admin_login_check') }}" method="post">
+                        <fieldset class="mb0">
+                            <div class="form-group">
+                                <input class="form-control" placeholder="User name" id="username" name="_username" type="text" autofocus value="{{ last_username }}">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Password" id="password" name="_password" type="password" value="">
+                            </div>
+                            <!-- Change this to a button or input when using this as a form -->
+                            <button type="submit" class="tiny button mb0">{{ 'Log In'|trans }}</button>
+                        </fieldset>
+                    </form>
+	            </div>
+	        </div>
+        </div>
+    </div>
+{% endblock %}

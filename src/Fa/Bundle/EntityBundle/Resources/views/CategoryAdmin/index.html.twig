@@ -1,0 +1,117 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+
+{% block scripttop %}
+  <link href="{{ asset_url('facore/jstree/themes/default/style.min.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content -%}
+    <div class="row">
+        <div class="columns">
+            <h1>{{ heading }}</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+	    <div class="columns">
+	    	<div class="panel">
+		      <div id="jstree_div">
+		      </div>
+    		</div>
+    	</div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+<script src="{{ asset_url('facore/jstree/jstree.min.js') }}"></script>
+<script>
+  $(function () {
+    $('#jstree_div').jstree({
+        "core" : {
+          'data' : {
+                'url' : '{{ path('category_ajax_get_node') }}',
+                'data' : function (node) {
+                    return { 'id' : node.id };
+                }
+            },
+          "animation" : 0,
+          "check_callback" : true
+        },
+        "contextmenu": {
+          items: {
+            {% if fa_resource_authorization_manager.isGranted('category_new_admin') %}
+            "create": {
+              "label"  : '{{ 'Add child category'|trans({}, 'messages') }}',
+              "action" : function (data) {
+                        var inst = $.jstree.reference(data.reference),
+                          obj = inst.get_node(data.reference);
+                          parent_id = obj.id;
+                          route = "{{ path('category_new_admin', { 'parent_id': "PARENT_ID" }) }}";
+                          route = route.replace("PARENT_ID", parent_id);
+                        $(location).attr("href", route);
+                      }
+            },
+            {% endif %}
+            {% if fa_resource_authorization_manager.isGranted('category_edit_admin') %}
+            "rename": {
+              "label"  : '{{ 'Edit category'|trans({}, 'messages') }}',
+              "action" : function (data) {
+                        var inst = $.jstree.reference(data.reference),
+                          obj = inst.get_node(data.reference);
+                          id = obj.id;
+                          route = "{{ path('category_edit_admin', { 'id': "ID" }) }}";
+                          route = route.replace("ID", id);
+                        $(location).attr("href", route);
+                      }
+            },
+            {% endif %}
+            
+            {% if fa_resource_authorization_manager.isGranted('category_delete_admin') %}
+            "remove" : {
+              "separator_before"  : false,
+              "icon"        : false,
+              "separator_after" : false,
+              "_disabled"     : false, //(this.check("delete_node", data.reference, this.get_parent(data.reference), "")),
+              "label"       : '{{ 'Delete category'|trans({}, 'messages') }}',
+              "action"      : function (data) {
+                if (confirm('{{ 'Do you want to proceed deleting this category?'|trans({}, 'messages') }}'))
+                {
+                    var inst = $.jstree.reference(data.reference),
+                      obj = inst.get_node(data.reference);
+                      id = obj.id;
+                      route = "{{ path('category_delete_admin', { 'id': "ID" }) }}";
+                      route = route.replace("ID", id);
+                      $(location).attr("href", route);
+                }
+              }
+            }
+            {% endif %}
+          }
+        },
+        "plugins" : [ "wholerow", "contextmenu", "state", "dnd" ]
+    });
+    $('#jstree_div').on("move_node.jstree", function (e, data) {
+        var c = confirm('{{ "Are you sure you want to move this category?"|trans({}, 'messages') }}');
+        if (c == false) {
+            window.location = "{{ path('category_admin') }}";
+            return false;
+        }
+
+        $.ajax({
+            url:"{{ path('category_ajax_move_node') }}",
+            method: "post",
+            data: {'id': data.node.id, 'parent_id': data.parent, 'position': data.position},
+            cache: false,
+            success: function (response) {
+                if (response) {
+                    alert('{{ 'Category moved successfully.'|trans({}, 'messages') }}');
+                    window.location = "{{ path('category_admin') }}"
+                } else {
+                    alert('{{ "sorry category doesn't moved successfully."|trans({}, 'messages') }}');
+                }
+            }
+        })
+    });
+  });
+</script>
+{% endblock %}

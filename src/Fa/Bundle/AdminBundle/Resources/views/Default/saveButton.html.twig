@@ -1,0 +1,28 @@
+{% set backUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdminCancelUrl', [fetch_container_instance()]) %}
+<ul class="button-group text-center">
+    <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+    {% if isSaveAndNew is not defined %}
+        <li>{{ form_widget(form.saveAndNew, {'label': 'Save and new'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+    {% endif %}
+    {% if isSaveAndPreview is defined %}
+        <li>{{ form_widget(form.saveAndPreview, {'label': 'Save and preview'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+    {% endif %}
+    <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ backUrl ? backUrl : path(cancelUrl) }}'">{{ 'Go Back'|trans({}, 'messages') }}</button></li>
+    {% if isDelete is defined and entity.id and deleteGrant %}
+        <li><button type="button" class="tiny alert button mb0" onclick="javascript:deleteRecord();">{{ 'Delete'|trans({}, 'messages') }}</button></li>
+    {% endif %}
+</ul>
+
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% if isDelete is defined and entity.id %} 
+    function deleteRecord()
+    {
+        if (confirm('Do you want to delete this record?'))
+        {
+            window.location.href = "{{ path(deleteUrl, {'id': entity.id}) }}";
+        }
+    }
+    {% endif %}
+//]]>
+</script>

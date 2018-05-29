@@ -1,0 +1,69 @@
+{% set childCount = 0 %}
+{% set showSeeMore = false %}
+{% set selectedValue = attribute(form, filter).vars.data %}
+{% set dimensionParams = searchParams %}
+{% set getNoFollowLink = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(app.request.get('searchQueryString')) %}
+{% if (dimensionParams[filter]) is defined %}
+    {% set dimensionParams = dimensionParams|merge({(filter): ''}) %}
+{% endif %}
+{% set nonCrawlableDimensionValues = fetch_repository('FaEntityBundle:Entity').nonCrawlableDimensionValues() %}
+{% set dimensionFacetResult = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionFacetBySearchParams(filter, dimensionParams, selectedValue, fetch_container_instance(), true, null, null, false, cookieLocationDetails) %}
+{% if dimensionFacetResult is defined and dimensionFacetResult|length > 0 %}
+    <dd class="accordion-navigation">
+        {% set plusMinusClass = 'fi-plus' %}
+        {% set contentActiveClass = '' %}
+        {% if attribute(searchParams, filter) is defined %}
+            {% set plusMinusClass = 'fi-minus' %}
+            {% set contentActiveClass = 'active' %}
+        {% endif %}
+        <a href="{{ '#panel' ~ filterPanelCounter ~ 'b'}}" class="clearfix"><h5 class="left">{{ attribute(form, filter).vars.label }}</h5> <i class="right {{ plusMinusClass }}"></i></a>
+        <div id="{{ 'panel' ~ filterPanelCounter ~ 'b'}}" class="content {{ contentActiveClass }}">
+            {% set dimensionOptions = {} %}
+            {% for optionValue, counter in dimensionFacetResult %}
+                {% for choice in attribute(form, filter).vars.choices %}
+                    {% if choice.value == optionValue %}
+                        {% set dimensionOptions = dimensionOptions|merge({ 0 : choice }) %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            <ul class="seller-link">
+                {% for choice in dimensionOptions %}
+                    {% if childCount < showDimensionCount or childCount < (selectedValue|length) %}
+                        {% set activeClass = '' %}
+                        {% if choice.value == selectedValue %}
+                            {% set activeClass = 'bold' %}
+                        {% endif %}
+                        {% set adCount = 0 %}
+                        {% if attribute(dimensionFacetResult, choice.value) is defined %}
+                            {% set adCount = attribute(dimensionFacetResult, choice.value) %}
+                        {% endif %}
+                        {% if adCount %}
+                            <li>
+                                {% set queryParams = dimensionParams|merge({(filter): (choice.value)}) %}
+                                {% set queryParams = queryParams|merge({(filter~'_open'): ''}) %}
+                                {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams, null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
+                                <a href="{{ listurl }}" class="{{activeClass}}" {% if not dimensionIsIndexable or getNoFollowLink or app.request.get('searchQueryString') or 'item_' in listurl or choice.value in nonCrawlableDimensionValues %}rel="nofollow"{% endif %}>{{ choice.label }} ({{ adCount }})</a>
+                                {% set childCount = childCount + 1 %}
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        {% set showSeeMore = true %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <div class="see-more clearfix">
+                {% if showSeeMore %}
+                    <a href="javascript:void(0)" {% if getNoFollowLink  %}rel="nofollow"{% endif %} onClick="loadDimensionAllChoicesModal('{{ dimensionId }}', '{{ dimensionName }}', '{{filter}}', '{{ dimensionSearchType }}', '{{array_serialize(searchParams)|escape('js')}}')"><b>{{ 'See more'|trans({}, 'frontend-left-search') }}</b></a>
+                {% endif %}
+                {% if filter == 'item_motors__make_id' %}
+                    {% set queryParams  = dimensionParams|merge({(filter): '', 'item_motors__model_id': ''}) %}
+                {% else %}
+                    {% set queryParams  = dimensionParams|merge({(filter): ''}) %}
+                {% endif %}
+                {% set linkClearurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams, null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
+                <a href="{{ linkClearurl }}" class="right" {% if app.request.get('searchQueryString') or getNoFollowLink or 'item_' in linkClearurl %}rel="nofollow"{% endif %}>{{ 'Clear'|trans({}, 'frontend-left-search') }}</a>
+            </div>
+        </div>
+    </dd>
+<div style="display:none">{{ form_widget(attribute(form, filter)) }}</div>
+{% endif %}

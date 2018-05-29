@@ -1,0 +1,28 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="20" height="20" viewBox="0 0 20 20" xml:space="preserve" enable-background="new 0 0 20 20">
+  <style type="text/css">
+    
+	.st0{fill:#EFEFEF;stroke:#E3E3E3;}
+	.st1{fill:none;stroke:#A8DC28;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;}
+
+  </style>
+  <title>
+    Checked box 2
+  </title>
+  <desc>
+    Created with Sketch.
+  </desc>
+  <g id="Search-results-list" sketch:type="MSPage">
+    <g id="Desktop-Search-results-12" transform="translate(-192.000000, -1645.000000)" sketch:type="MSArtboardGroup">
+      <g id="Filters" transform="translate(182.000000, 627.000000)" sketch:type="MSLayerGroup">
+        <g id="Group" transform="translate(1.000000, 645.000000)" sketch:type="MSShapeGroup">
+          <g id="Bike-type" transform="translate(0.000000, 132.000000)">
+            <g id="Checked-box-2" transform="translate(9.000000, 241.000000)">
+              <path id="Rectangle-20" class="st0" d="M2 0h16c1.1 0 2 0.9 2 2v16c0 1.1-0.9 2-2 2H2c-1.1 0-2-0.9-2-2V2C0 0.9 0.9 0 2 0z"/>
+              <path id="Path-59" class="st1" d="M5 10l3.8 4L15 6"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

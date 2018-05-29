@@ -1,0 +1,25 @@
+user_credit_admin:
+    path:     /{userId}
+    defaults: { _controller: "FaUserBundle:UserCreditAdmin:index" }
+
+user_credit_new_admin:
+    path:     /{userId}/new
+    defaults: { _controller: "FaUserBundle:UserCreditAdmin:new" }
+
+user_credit_create_admin:
+    path:     /{userId}/create
+    defaults: { _controller: "FaUserBundle:UserCreditAdmin:create" }
+    requirements: { methods: post }
+
+user_credit_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaUserBundle:UserCreditAdmin:edit" }
+
+user_credit_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaUserBundle:UserCreditAdmin:update" }
+    requirements: { methods: post|put }
+
+user_credit_delete_admin:
+    path:     /{id}/{userId}/delete
+    defaults: { _controller: "FaUserBundle:UserCreditAdmin:delete" }

@@ -1,0 +1,41 @@
+<div class="owl-carousel small-slider" id="{{ divId }}" data-equalizer>
+    {% for ad in ads %}
+        {% set adCategoryId = attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
+        {% set rootCategoryId = attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+        {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+        {% set adSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+        {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(ad) %}
+        {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(ad, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+        {% set imageAltString = null %}
+        {% if seoRule['image_alt'] is defined %}
+            {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], ad]) %}
+        {% endif %}
+        <div class="item" data-equalizer-watch>
+            <a class="tricky-link" href="{{ adUrl }}">
+            	{% if attribute(ad, constant(adSolrMapping ~ 'TITLE')) is defined %}
+                   {{trim_text(attribute(ad, constant(adSolrMapping ~ 'TITLE')), 50)|raw}}
+                {% endif %}
+            </a>
+            {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, ad, '300X225', 1) %}
+            <div class="small-img {% if not imagePath %}similar-placeholder{% endif %}">
+                {% if imagePath %}
+                    <img class="lazyOwl" src="#empty" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                {% else %}
+                    {% if noImageColor is defined and noImageColor == 'grey' %}
+                        <img class="lazyOwl" src="#empty" data-src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
+                    {% else %}
+                        <img class="lazyOwl" src="#empty" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="small-content">
+                {% if attribute(ad, constant(adSolrMapping ~ 'PRICE')) is defined %}
+                    <b>{{ format_currency(attribute(ad, constant(adSolrMapping ~ 'PRICE'))) }}</b>
+                {% endif %}
+                {% if attribute(ad, constant(adSolrMapping ~ 'TITLE')) is defined %}
+                   {{trim_text(attribute(ad, constant(adSolrMapping ~ 'TITLE')), 50)|raw}}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,20 @@
+Fa\Bundle\EntityBundle\Entity\Entity:
+    properties:
+        name:
+            - NotBlank:
+                message: Entity name is required.
+                groups: shared_entity
+            - Length:
+                max: 200
+                maxMessage: Entity name can have maximum 200 characters.
+                groups: shared_entity
+        category_dimension:
+            - NotNull:
+                message: Entity type is required.
+                groups: shared_entity
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [category_dimension, name]
+            errorPath: name
+            message: 'This entity name already exist in our database.'
+            groups: shared_entity

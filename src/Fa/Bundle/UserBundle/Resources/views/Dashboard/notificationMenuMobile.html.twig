@@ -1,0 +1,5 @@
+{% if count > 0 %}
+<li><a href="{{ path('dashboard_home') }}">Notifications <span class="notification-digit">({{count}})</span></a></li>
+{% else %}
+<li><a href="javascript:void(0);">Notifications <span class="notification-digit">({{count}})</span></a></li>
+{% endif %}

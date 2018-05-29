@@ -1,0 +1,36 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="56" height="56" viewBox="0 0 56 56" xml:space="preserve" enable-background="new 0 0 56 56">
+  <style type="text/css">
+    
+	.st0{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,4;}
+	.st1{fill:#EFEFEF;}
+
+  </style>
+  <title>
+    Animals-hero-icon
+  </title>
+  <desc>
+    Created with Sketch.
+  </desc>
+  <g id="landing-page" sketch:type="MSPage">
+    <g id="Desktop---Landing-Page-Animals" transform="translate(-691.000000, -190.000000)" sketch:type="MSArtboardGroup">
+      <g id="Hero" transform="translate(-84.000000, 53.000000)" sketch:type="MSLayerGroup">
+        <g id="p-_x2B_-for-sale-active-2-_x2B_-For-sale-_x2B_-Line" transform="translate(539.000000, 138.000000)" sketch:type="MSShapeGroup">
+          <g id="for-sale-active-2-_x2B_-For-sale" transform="translate(139.000000, 0.000000)">
+            <g id="Animals-hero-icon">
+              <g transform="translate(98.000000, 0.000000)">
+                <path id="Stroke-6" class="st0" d="M51.1 38.4c1.7-3.5 2.6-7.4 2.6-11.5 0-14.6-11.9-26.5-26.5-26.5S0.7 12.2 0.7 26.8C0.7 38.2 8 48 18.1 51.7c2.9 1.1 5.9 1.6 9.1 1.6C37.7 53.3 46.8 47.2 51.1 38.4z"/>
+                <g id="paw-icon" transform="translate(26.221704, 25.844188) rotate(13.000000) translate(-26.221704, -25.844188) translate(10.721704, 9.888306)">
+                  <path id="Fill-1_1_" class="st1" d="M8.6 28.6c-0.9-4 3.9-11.6 7.8-12.5C19.7 15.4 28 19.7 29 24c1.3 5.7-4.6 2.7-9.8 3.9C13.9 29.1 9.8 34.2 8.6 28.6"/>
+                  <path id="Fill-2" class="st1" d="M13.1 7c1.5 2.8 1.1 5.9-0.8 6.8 -1.9 1-4.7-0.5-6-3.4C4.8 7.8 5.2 4.7 7.1 3.6 9 2.7 11.7 4.2 13.1 7"/>
+                  <path id="Fill-3" class="st1" d="M8.6 21.3c-1.5 1.2-4.3 0.4-6.1-1.9s-2.1-5.1-0.5-6.3C3.5 11.9 6.2 12.8 8 15 9.8 17.2 10.1 20.1 8.6 21.3L8.6 21.3z"/>
+                  <path id="Fill-4" class="st1" d="M15.4 6.6c0 3.2 1.6 5.7 3.8 5.8 2.1 0 3.9-2.6 3.9-5.7 0.1-3.2-1.6-5.7-3.8-5.8C17.2 0.8 15.4 3.4 15.4 6.6"/>
+                  <path id="Fill-5" class="st1" d="M25.8 17.3c1.9 0.5 4-1.6 4.7-4.4S30.1 7.5 28.2 7c-1.9-0.5-4 1.5-4.6 4.4C22.8 14.3 23.9 17 25.8 17.3L25.8 17.3z"/>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

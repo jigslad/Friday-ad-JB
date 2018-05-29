@@ -1,0 +1,49 @@
+admin_login:
+    path:   /login
+    defaults:  { _controller: FaUserBundle:Security:login }
+
+admin_login_check:
+    path:   /login_check
+
+admin_logout:
+    path:   /logout
+    
+fa_user_admin_welcome:
+    path: /
+    defaults: { _controller: FaUserBundle:Admin:welcome }
+
+FaUserBundle_role:
+        resource: '@FaUserBundle/Resources/config/routing/role.yml'
+        prefix:   /user/role
+
+FaUserBundle_permission:
+        resource: '@FaUserBundle/Resources/config/routing/permission.yml'
+        prefix:   /user/permission
+
+FaUserBundle_resource:
+        resource: '@FaUserBundle/Resources/config/routing/resource.yml'
+        prefix:   /resource
+        
+FaUserBundle_roleresourcepermission:
+        resource: '@FaUserBundle/Resources/config/routing/roleresourcepermission.yml'
+        prefix:   /user/role/assign-resource
+
+FaUserBundle_user_admin:
+      resource: '@FaUserBundle/Resources/config/routing/user_admin.yml'
+      prefix:   /user
+
+FaUserBundle_user_package:
+      resource: '@FaUserBundle/Resources/config/routing/user_package_admin.yml'
+      prefix:   /user_package
+
+FaUserBundle_user_config_rule_admin:
+      resource: '@FaUserBundle/Resources/config/routing/user_config_rule_admin.yml'
+      prefix:   /user_config_rule
+      
+FaUserBundle_testimonials_admin:
+      resource: '@FaUserBundle/Resources/config/routing/testimonials_admin.yml'
+      prefix:   /testimonials
+
+FaUserBundle_user_credit_admin:
+      resource: '@FaUserBundle/Resources/config/routing/user_credit_admin.yml'
+      prefix:   /user_credit

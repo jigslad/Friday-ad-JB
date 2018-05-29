@@ -1,0 +1,62 @@
+<div class="detail-tabpart-2" id="vif_tabs">
+    <ul class="tabs hide-for-small-only" data-tab id="ad_property_tabs">
+        {% if (adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null) or servicesOfferedIds|length %}
+            <li class="tab-title active"><a href="#basic_info_panel" id="description-tab-id" >{{'Description'|trans({}, 'frontend-show-ad')}}</a></li>
+        {% endif %}
+        {% if adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null %}
+            <li class="tab-title"><a href="#about_us_panel" id="aboutus-tab-id">{{'About Us'|trans({}, 'frontend-show-ad')}}</a></li>
+        {% endif %}
+        {% if servicesOfferedIds|length %}
+            <li class="tab-title"><a href="#features_panel" id="features_panel_tab">{{'Features'|trans({}, 'frontend-show-ad')}}</a></li>
+        {% endif %}
+    </ul>
+    <dl class="accordion" data-accordion="">
+        <dd class="accordion-navigation">
+            {% if (adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null) or servicesOfferedIds|length %}
+                <a href="#basic_info_panel" id="basic_info_panel_anchor" class="show-for-small-only">{{'Description'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
+            {% endif %}
+            <div class="content active" id="basic_info_panel">
+                {% if adServiceDetail['description'] is defined %}
+                    <div id="ad_desc">
+                        <p>{{adServiceDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}</p>
+                    </div>
+                    <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-preview-ad') }}</a>
+                    <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-preview-ad') }}</a>
+                {% endif %}
+                {% if adDetailAndDimensionFields['detail'] is defined %}
+                    <ul class="details-info">
+                        {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
+                            <li class="clearfix">
+                                <div class="detail-text">{{fieldName}}</div>
+                                <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
+            {% if adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null %}
+                <a href="#about_us_panel" class="show-for-small-only" id="aboutus-tab-id">{{'About Us'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+                <div class="content" id="about_us_panel">
+                    <p>{{adDetail['user']['about_us']|replace({"\\n": "<br />", "&nbsp;": " "})|raw}}</p>
+                </div>
+            {% endif %}
+            
+            {% if servicesOfferedIds|length %}
+                <a href="#features_panel" class="show-for-small-only">{{'More details'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+                <div class="content" id="features_panel">
+                    <div class="safety-features">
+                        <ul class="details-info">
+                            {% for servicesOfferedId in servicesOfferedIds %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', servicesOfferedId) }}</div>
+                                    <div class="detail-text text-center"><span class="safety-fe-check"></span></div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </dd>
+    </dl>
+</div>

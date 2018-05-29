@@ -1,0 +1,126 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block page_title %}
+    {{'Add photos'|trans({}, 'frontend-add-photos')}}
+{% endblock %}
+
+{% use "FaAdBundle:AdImage:showImageUploader.html.twig" %}
+{% block stylesheets %}
+    {{ block('imageUploadStylesheets') }}
+{% endblock %}
+
+{% block body %}
+    <div class="photo-static-page-main relative">
+        {{ include('FaAdBundle:AdPost:dragDropMessage.html.twig') }}
+        <input type="hidden" name="adImgHash" id="adImgHash" value="{{ adImgHash }}" />
+        <h1 class="text-center">{{'Add photos'|trans({},'frontend-add-photos')}}</h1>
+
+        <div class="white-bg pkg-bdr">
+            <div class="photo-static-page">
+                <div id="upload_image_div">
+                    <div class="paa-gray-box btm-pa-0">
+                        <h3 class="text-center">
+                            {% if adPaaFieldRule.label is defined and adPaaFieldRule.label is not null %}
+                                {{ adPaaFieldRule.label }}
+                            {% else %}
+                                {{ 'Images'|trans({}, 'frontend-paa-fourth-step') }}<br />
+                            {% endif %}
+                        </h3>
+                        <div class="text-center">
+                            <p class="mb0">
+                                {% if vertical is defined and vertical == 'jobs' %}
+                                    <span id="paa_image_upload_tips">{{ 'Upload an image with the logo of your company. This will be used as the main image of your ad. You can add other images if you want to.'|trans({}, 'frontend-paa-fourth-step')}}</span>
+                                {% else %}
+                                    <span id="paa_image_upload_tips">{{ 'Add some images to your advert. You can add multiple images at a time.'|trans({}, 'frontend-paa-fourth-step')}}</span>
+                                {% endif %}
+                                {% if adPaaFieldRule.help_text is defined and adPaaFieldRule.help_text is not null %}
+                                    &nbsp;
+                                    <div class="image-tooltip-wrapper"><span class="image-tooltip">{{ adPaaFieldRule.help_text|raw }}</span><span class="info-icon">info</span></div>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="mt20">
+                            {{ render(controller('FaAdBundle:AdImage:showImageUploader', {'adId': adId, 'vertical': vertical, 'userId': (userId is defined ? userId : null), 'maxValue': (adPaaFieldRule.max_value is defined ? adPaaFieldRule.max_value : null) })) }}
+                            {{ set_variables('imageUploadJavascriptBottom', {'loaded':'false'}) }}
+                        </div>
+                    </div>
+                    <div class="small-wrapper">
+                        <button type="button" onclick="javascript:saveImageUpload();" class="primary-btn-1 expand button mt40">{{ 'Save changes'|trans({}, 'frontend-add-photo') }}</button>
+                    </div>
+                </div>
+                <div id="crop_big_image_div"></div>
+            </div>
+        </div>
+    </div>
+    <div id="saveAddPhotoModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+        <a class="close-reveal-modal">&#215;</a>
+        <h5 class="modal-title">
+            {{'Add a photo'|trans({}, 'frontend-add-photo')}}
+        </h5>
+        <div class="modal-content remove-modal">
+            <div class="row">
+                <div class="columns">
+                    <h5>{{'Thank you!'|trans({}, 'frontend-add-photo')}}</h5>
+                    <div class="mt15">
+                        {{'Your photos will be added to your advert as soon as they\'ve gone through moderation. This shouldn\'t take long.'|trans({}, 'frontend-add-photo')|raw}}
+                    </div>
+                    <div class="mt15">
+                        {{'Feel free to add more photos.'|trans({}, 'frontend-add-photo')|raw}}
+                    </div>
+                </div>
+            </div>
+            <div class="mt20 remove-item-btn">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="addMorePhotos();">{{'Add more'|trans({}, 'frontend-add-photo')}}</button>
+                    </div>
+                    <div class="large-12 columns">
+                        <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#saveAddPhotoModal');window.location='{{ path('fa_frontend_homepage') }}'">{{'No thanks'|trans({}, 'frontend-add-photo')}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    
+    {{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+    {{ block('imageUploadJavascriptBottom') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    function addMorePhotos()
+    {
+        closeRevealModel('#saveAddPhotoModal');
+        ga('send', 'event', 'CTA', 'Add more photos click');
+    }
+    
+    function saveImageUpload()
+    {
+        blockElement('#upload_image_div');
+        $.ajax({
+            url : '{{ path("ajax_validate_ad_image_upload_no_photo", {"adIdUserId": adIdUserId}) }}',
+            type: 'POST',
+            cache: false,
+            data: {adImgHash: $('#adImgHash').val()},
+        }).
+        always(function(response) {
+        	unblockElement('#upload_image_div');
+        })
+        .done(function(response) {
+            if (response.error.length) {
+                $('#filelist').html(decorateMessage(response.error, 'alert'));
+                scrollToElement('#filelist', '1000', -150);
+            }
+
+            if (response.successMsg.length) {
+                $('#saveAddPhotoModal').foundation('reveal', 'open');
+                $('#adImgHash').val(response.adImgHash);
+                ga('send', 'event', 'Ad details', 'Add photo - autoemail');
+            }
+        });
+    }
+    //]]>
+    </script>
+{% endblock %}

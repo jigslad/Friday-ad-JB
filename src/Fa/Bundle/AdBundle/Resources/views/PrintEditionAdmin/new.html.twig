@@ -1,0 +1,26 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+               {{ form_errors(form) }}
+               {{ form_row(form.name) }}
+               {{ form_row(form.code) }}
+               {{ form_row(form.deadline_day_of_week) }}
+               {{ form_row(form.deadline_time_of_day) }}
+               {{ form_row(form.insert_date_day_of_week) }}
+               {{ form_row(form.insert_date_time_of_day) }}
+               {{ form_row(form.status) }}
+               {{ form_row(form.location_group) }}
+
+               {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'print_edition_admin'}) }}
+           {{ form_end(form) }}
+       </div>
+   </div>
+</div>
+{% endblock %}

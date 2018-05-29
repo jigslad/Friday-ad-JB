@@ -1,0 +1,234 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block title %}
+    {{'Alerts & Searches'|trans({}, 'frontend-my-saved-searches')}}
+{% endblock %}
+
+{% set container = fetch_container_instance() %}
+
+{% block body -%}
+
+{% if guid is not defined %}
+<div class="posting-bg">
+    {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+    <div class="row d-board-main">
+        <div class="off-canvas-wrap" data-offcanvas>
+        {% endif %}
+            {% if guid is not defined %}
+                <div class="inner-wrap">
+            {% else %}
+                <div class="row">
+            {% endif %}
+
+                {% if guid is not defined %}
+                    {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                {% endif %}
+
+                {% if guid is not defined %}
+                    <div id="db-right-part" class="large-18 columns">
+                {% else %}
+                    <div id="db-right-part-guid" class="large-18 columns">
+                {% endif %}
+
+                    <h1 class="db-title">{{'Alerts & Searches (%saved_search_count%)'|trans({'%saved_search_count%': pagination.getNbResults()}, 'frontend-manage-my-ad')}}</h1>
+                    <h2 class="db-sub-title">Set up alerts for searches and you’ll always know when new items have been added via an email alert. Never miss out again!</h2>
+
+                    {{ include('FaFrontendBundle:Default:pager.html.twig', {}) }}
+
+                    {{ include('FaUserBundle:UserSearchAgent:list.html.twig', {}) }}
+
+                    {{ include('FaFrontendBundle:Default:pager.html.twig', {}) }}
+                </div>
+            </div>
+{% if guid is not defined %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if guid is not defined %}
+<div id="renameSavedSearch" class="reveal-modal tiny" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Rename your saved search'|trans({}, 'frontend-my-saved-searches')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <label>{{'New name'|trans({}, 'frontend-my-saved-searches')}}</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="columns">
+                <input type="text" name="txt_title" id="txt_title" maxlength="50">
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-24 columns">
+                <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="closeRevealModel('#removeSavedSearch'); renameSavedSearch();">{{'Save changes'|trans({}, 'frontend-my-saved-searches')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if guid is not defined %}
+<div id="removeSavedSearch" class="reveal-modal tiny" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Stop search alert'|trans({}, 'frontend-my-saved-searches')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Are you sure you want to stop this search alert?'|trans({}, 'frontend-my-saved-searches')}}</h5>
+            </div>
+        </div>
+        <div class="mt20 remove-search-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#removeSavedSearch');removeSavedSearch();">{{'Ok'|trans({}, 'frontend-my-saved-searches')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="closeRevealModel('#removeSavedSearch');">{{'Cancel'|trans({}, 'frontend-my-saved-searches')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="blankTitleAlert" class="reveal-modal tiny" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Blank title'|trans({}, 'frontend-my-saved-searches')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Sorry saved search name can not be blank!!'|trans({}, 'frontend-my-saved-searches')}}</h5>
+            </div>
+        </div>
+        <div class="mt20">
+            <div class="row">
+                <div class="large-24 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#blankTitleAlert'); renameSavedSearch();">{{'Ok'|trans({}, 'frontend-my-saved-searches')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scriptbottom %}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    var savedSearchIdToRemove = '';
+    var savedSearchIdToRename = '';
+
+    {% if userSearchAgentId is defined %}
+      renameSavedSearchConfirmation('{{userSearchAgentId}}');
+    {% endif %}
+
+    function updateSavedSearchAgent(id)
+    {
+        var route = Routing.generate('update_search_agent', { 'userSearchAgentId': id });
+        {% if guid is defined %}
+            route = route + "?guid={{ guid }}";
+        {% endif %}
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url : route,
+            data : {'emailAlert': $('#emailAlert_'+id).is(":checked") ? 1 : 0},
+        })
+        .always(function(response) {
+                unblockPage();
+            })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.error && response.error.length) {
+                $(decorateMessage(response.error, 'alert')).prependTo('#saved_search_'+id);
+            } else if (response.success && response.success.length) {
+                $(decorateMessage(response.success, 'success')).prependTo('#saved_search_'+id);
+            }
+        });
+    }
+
+    function removeSavedSearch()
+    {
+    	if (savedSearchIdToRemove != '') {
+        	var route = Routing.generate('delete_search_agent', { 'userSearchAgentId': savedSearchIdToRemove });
+        	blockPage();
+            $.ajax({
+                type: "POST",
+                url : route,
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.error.length) {
+                    $(decorateMessage(response.error, 'alert')).insertBefore('#saved_search_'+id);
+                } else {
+                    location.reload();
+                }
+            });
+    	}
+    }
+
+    function removeSavedSearchConfirmation(savedSearchId)
+    {
+    	savedSearchIdToRemove = savedSearchId;
+        $('#removeSavedSearch').foundation('reveal', 'open');
+    }
+
+    function renameSavedSearchConfirmation(savedSearchId)
+    {
+    	savedSearchIdToRename = savedSearchId;
+    	var searchAgentTitle = $('#saved_search_title_'+savedSearchIdToRename+'_desktop').html();
+    	if (parseInt(searchAgentTitle.length) == 0) {
+    		searchAgentTitle = $('#saved_search_title_'+savedSearchIdToRename+'_mobile').html();
+    	}
+    	$('#txt_title').val(searchAgentTitle);
+        $('#renameSavedSearch').foundation('reveal', 'open');
+    }
+
+    function renameSavedSearch()
+    {
+    	if (savedSearchIdToRename != '') {
+    		var searchAgentTitle = $('#txt_title').val();
+    		searchAgentTitle = searchAgentTitle.trim();
+
+    		if (searchAgentTitle == '') {
+    			$('#blankTitleAlert').foundation('reveal', 'open');
+    		} else {
+            	var route = Routing.generate('rename_search_agent', { 'userSearchAgentId': savedSearchIdToRename, 'userSearchAgentTitle': searchAgentTitle });
+            	blockPage();
+                $.ajax({
+                    type: "POST",
+                    url : route,
+                })
+                .always(function(response) {
+                    unblockPage();
+                })
+                .done(function(response) {
+                    hideAlertMessage();
+                    if (response.error.length) {
+                        $(decorateMessage(response.error, 'alert')).prependTo('#saved_search_'+savedSearchIdToRename);
+                    } else {
+                    	$('#saved_search_title_'+savedSearchIdToRename+'_mobile').html(searchAgentTitle);
+                    	$('#saved_search_title_'+savedSearchIdToRename+'_desktop').html(searchAgentTitle);
+                        scrollToElement('#saved_search_'+savedSearchIdToRename, '1000', -100);
+                    	$(decorateMessage(response.successMsg, 'success')).prependTo('#saved_search_'+savedSearchIdToRename);
+                    }
+                });
+    		}
+    	}
+    }
+//]]>
+</script>
+{% endblock %}

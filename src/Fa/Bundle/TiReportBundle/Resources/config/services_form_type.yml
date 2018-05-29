@@ -1,0 +1,48 @@
+services:
+    fa_report.form.type.ti_user_report_search_admin:
+        class: Fa\Bundle\TiReportBundle\Form\UserReportSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ti_report_user_report_search_admin }
+
+    fa_report.form.type.ti_item_report_search_admin:
+        class: Fa\Bundle\TiReportBundle\Form\AdReportSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ti_item_report }
+
+    fa_report.form.type.ti_ad_enquiry_search_admin:
+        class: Fa\Bundle\TiReportBundle\Form\AdEnquiryReportSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ti_report_ad_enquiry_search_admin }
+
+    fa_report.form.type.ti_item_print_report_search_admin:
+        class: Fa\Bundle\TiReportBundle\Form\AdPrintReportSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ti_report_item_print_report_search_admin }
+
+    fa_report.form.type.ti_ppr_report_search_admin:
+        class: Fa\Bundle\TiReportBundle\Form\ProfilePackageRevenueReportSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ti_report_profile_package_revenue_report_search_admin }
+
+    fa_report.form.type.ti_automated_email_report_search_admin:
+        class: Fa\Bundle\TiReportBundle\Form\AutomatedEmailReportSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ti_report_automated_email_search_admin }
+
+    fa_report.form.type.ti_user_profile_report_search_admin:
+        class: Fa\Bundle\TiReportBundle\Form\UserProfileReportSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ti_report_user_profile_report_search_admin }
+
+    fa_report.form.type.ti_ad_feed_click_search_admin:
+        class: Fa\Bundle\TiReportBundle\Form\AdFeedClickSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ti_report_ad_feed_click_search_admin }

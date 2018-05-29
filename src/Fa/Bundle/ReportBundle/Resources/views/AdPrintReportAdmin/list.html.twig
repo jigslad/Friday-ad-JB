@@ -1,0 +1,63 @@
+{% set container = fetch_container_instance() %}
+{% set adPrintReportDailyRepository = fetch_repository('FaReportBundle:AdPrintReportDaily', 'history') %}
+{% set reportFieldsArray = staticCall('Fa\\Bundle\\ReportBundle\\Repository\\AdPrintReportDailyRepository', 'getAdPrintReportFields') %}
+{% set reportSortFieldsArray = staticCall('Fa\\Bundle\\ReportBundle\\Repository\\adPrintReportDailyRepository', 'getAdPrintReportSortFields') %}
+
+{% set userReportRepository = fetch_repository('FaReportBundle:UserReport', 'history') %}
+
+{% set userIdArray = {} %}
+{% if pagination.getNbResults() %}
+    {% for adPrintReport in pagination.getCurrentPageResults() %}
+        {% set userIdArray = userIdArray|merge({0 : adPrintReport.user_id}) %}
+    {% endfor %}
+
+    {% set userDataArray = userReportRepository.getUserDetailByUserIds(userIdArray) %}
+{% endif %}
+
+<div class="row">
+    <div class="columns">
+        <div class="table-fix-col">
+            <div class="fa-scroller2">
+                <table class="fixed-table fatable">
+                    <thead>
+                        <tr>
+                            {% for key, value in reportFieldsArray %}
+                                <th width="100">
+                                    {% if key in reportSortFieldsArray %}
+                                        {{ sortable_link('fa_report_ad_print', key, value, sorter) }}
+                                    {% else %}
+                                        {{ value }}
+                                    {% endif %}
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if pagination.getNbResults() %}
+                            {% for adPrintReport in pagination.getCurrentPageResults() %}
+                                {% set adPrintReportDetail = adPrintReportDailyRepository.formatAdPrintReportRaw(adPrintReport, container) %}
+                                <tr>
+                                    {% for key, value in reportFieldsArray %}
+                                        <td>
+                                            {% if adPrintReportDetail[key] is defined %}
+                                                {{ adPrintReportDetail[key] }}
+                                            {% elseif userDataArray[adPrintReport.user_id][key] is defined %}
+                                                {{ userDataArray[adPrintReport.user_id][key] }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </th>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="{{reportFieldsArray|length}}" align="center">{{ 'No Data Found'|trans }}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

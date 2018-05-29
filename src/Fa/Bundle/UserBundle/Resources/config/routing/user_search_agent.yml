@@ -1,0 +1,29 @@
+save_search_agent:
+    path:   /save/
+    defaults:  { _controller: FaUserBundle:UserSearchAgent:saveSearchAgent }
+        
+update_search_agent:
+    path:   /update/{userSearchAgentId}/
+    defaults:  { _controller: FaUserBundle:UserSearchAgent:updateSearchAgent }
+    options:
+        expose: true
+
+list_search_agent:
+    path:   /list/
+    defaults:  { _controller: FaUserBundle:UserSearchAgent:listSearchAgent }
+    
+delete_search_agent:
+    path:   /delete/{userSearchAgentId}/
+    defaults:  { _controller: FaUserBundle:UserSearchAgent:deleteSearchAgent }
+    options:
+        expose: true
+    
+ajax_create_alert:
+    path:   /ajax/create_alert/
+    defaults:  { _controller: FaUserBundle:UserSearchAgent:ajaxCreateAlert }
+
+rename_search_agent:
+    path:   /rename/{userSearchAgentId}/{userSearchAgentTitle}/
+    defaults:  { _controller: FaUserBundle:UserSearchAgent:renameSearchAgent }
+    options:
+        expose: true

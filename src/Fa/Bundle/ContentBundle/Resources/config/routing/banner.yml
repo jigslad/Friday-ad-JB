@@ -1,0 +1,5 @@
+banner_ajax_get_banner_by_zone:
+    path:     /ajax/getbannerbyzone/{zoneId}/{id}
+    defaults: { _controller: "FaContentBundle:Banner:getBannerByZoneAjax" }
+    options:
+        expose: true

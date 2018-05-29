@@ -1,0 +1,16 @@
+{% if paaBlockSlug is defined %}
+{% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
+{% set paaBlock = staticPageRepository.getStaticBlockDetailArray(paaBlockSlug, fetch_container_instance()) %}
+{% endif %}
+<div id="right-column" class="large-6 columns" data-equalizer-watch>
+    <div class="paa-help-text">
+        {% if paaBlock['title'] is defined %}
+            {% set twoLineClass = '' %}
+            {% if paaBlockSlug is defined and (paaBlockSlug == 'paa-for-sale-fourth-step' or paaBlockSlug == 'paa-login-third-step' or paaBlockSlug == 'paa-registration-third-step') %}
+                {% set twoLineClass = 'two-line' %}
+            {% endif %}
+            <h4 class="{{ twoLineClass }}">{{paaBlock['title']|raw}}</h4>
+            {{paaBlock['description']|raw}}
+        {% endif %}
+    </div>
+</div>

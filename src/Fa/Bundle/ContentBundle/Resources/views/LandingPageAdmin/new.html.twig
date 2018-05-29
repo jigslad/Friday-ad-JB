@@ -1,0 +1,237 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+
+{% set container = fetch_container_instance() %}
+
+{% block content -%}
+
+{% set landingPageImages = {} %}
+{% if entity.id %}
+    {% set landingPageImages = fetch_repository('FaContentBundle:LandingPageInfo').getLandingPageImages(entity.id) %}
+{% endif %}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            <div class="row">
+                <div class="large-12 columns">
+                    {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                        {% if entity.id %}
+                            {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+                            {% set landingPageTypeArr = fetch_repository('FaContentBundle:LandingPage').getLandingPageTypeArray(container , false) %}
+                            {% if entity.type is defined and landingPageTypeArr[entity.type] is defined %}
+                                 <b>{{ 'Type'|trans }} : </b> {{ landingPageTypeArr[entity.type] }}
+                                 <br /><br />
+                             {% endif %}
+                             {% if entity.category.id is defined %}
+                                 <b>{{ 'Category'|trans }} : </b> {{ categoryRepository.getCategoryPathArrayById(entity.category.id)|join(' > ') }}
+                                 <br /><br />
+                             {% endif %}
+                        {% else %}
+                            {{ form_row(form.type) }}
+                            {{ form_row(form.category, {'attr': {'onchange': 'return appendToUrl();'}}) }}
+                        {% endif %}
+                        {{ form_row(form.description) }}
+                        <div class="form-group{% if form.file.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.file) }} <span class="required">*</span>
+                            {{ form_widget(form.file, {'attr': {'class': 'preview_img'}}) }}
+                            {{ form_errors(form.file) }}
+                            <span class="help-block">{{ 'Allowed image extensions are jpg, png, svg and gif.'|trans({}, 'messages') }}</span>
+                            <span class="help-block">{{ 'Dimensions for Image: 2000px x 380px'|trans({}, 'messages')|raw }}</span>
+                            <br />
+                            {% if entity.id %}
+                                <img src="{{shared_url(entity.getPath()~'/'~entity.getFileName())}}?{{ random(1000) }}" width="100px" id="{{ form.file.vars.id }}_img" /><br /><br />
+                            {% endif %}
+                        </div>
+                        {% if imagesArray is defined and imagesArray|length %}
+                            {% for sectionId, images in imagesArray %}
+                                <div class="form-group">
+                                    <h4>{{ fetch_repository('FaContentBundle:LandingPageInfo').getLandigPageSectionNameById(sectionId) }}</h4>
+                                </div>
+                                <div class="row">
+                                    <div class="large-4 columns mb10">
+                                        &nbsp;
+                                    </div>
+                                    <div class="large-4 columns mb10">
+                                        <b>{{'Background image'}}</b><br /><br />
+                                        <span class="help-block">{{ 'Allowed image extensions are jpg, png, svg and gif.'|trans({}, 'messages') }}</span>
+                                        <span class="help-block">{{ 'Dimensions for Image: 400px x 206px'|trans({}, 'messages')|raw }}</span>
+                                    </div>
+                                    <div class="large-4 columns mb10">
+                                        <b>{{'Overlay image'}}</b><br /><br />
+                                        <span class="help-block">{{ 'Allowed image extensions are jpg, png gif and svg.'|trans({}, 'messages') }}</span>
+                                        <span class="help-block">{{ 'Dimensions for Image: 206px x auto'|trans({}, 'messages')|raw }}</span>
+                                    </div>
+                                </div>
+                                {% for image in images %}
+                                    {% if attribute(form, image['field_name']) is defined %}
+                                        <div class="form-group{% if attribute(form, image['field_name']).vars.errors|length %} has-error{% endif %}">
+                                            <div class="row">
+                                                <div class="large-4 columns mb10">
+                                                    {{ form_label(attribute(form, image['field_name'])) }} <span class="required">*</span>
+                                                </div>
+                                                <div class="large-4 columns mb10">
+                                                    {{ form_widget(attribute(form, image['field_name']), {'attr': {'class': 'preview_img'}}) }}
+                                                    {{ form_errors(attribute(form, image['field_name'])) }}
+                                                    <br />
+                                                    {% if entity.id and landingPageImages[sectionId][image['type']][image['id']]['file_name'] is defined %}
+                                                        <img src="{{shared_url(landingPageImages[sectionId][image['type']][image['id']]['file_name'])}}?{{ random(1000) }}" width="100px" id="{{ attribute(form, image['field_name']).vars.id }}_img" /><br /><br />
+                                                    {% endif %}
+                                                </div>
+                                                <div class="large-4 columns mb10">
+                                                    {% if attribute(form, image['field_name']~'_overlay') is defined %}
+                                                        {{ form_widget(attribute(form, image['field_name']~'_overlay'), {'attr': {'class': 'preview_img'}}) }}
+                                                        {{ form_errors(attribute(form, image['field_name']~'_overlay')) }}
+                                                        <br />
+                                                        {% if entity.id and landingPageImages[sectionId][image['type']][image['id']]['overlay_file_name'] is defined %}
+                                                        <img src="{{shared_url(landingPageImages[sectionId][image['type']][image['id']]['overlay_file_name'])}}?{{ random(1000) }}" width="100px" id="{{ attribute(form, image['field_name']~'_overlay').vars.id }}_img" /><br /><br />
+                                                    {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <div class="row">
+                            <div class="large-9 columns">
+                                <div class="form-group">
+                                    <h4>{{ 'Seo'|trans }}</h4>
+                                </div>
+                                <hr class="hr_margin">
+                                {{ form_row(form.page_title) }}
+                                {{ form_row(form.h1_tag) }}
+                                {{ form_row(form.meta_description) }}
+                                {{ form_row(form.meta_keywords) }}
+                                {{ form_row(form.no_index) }}
+                                {{ form_row(form.no_follow) }}
+                            </div>
+                            <div class="large-3 columns">
+                                <b>{{ 'Indexable Dimensions'|trans }}</b>
+                                <div style="overflow: auto; height: 100px;" id="category_dimensions_div">
+                                    {Location}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="popular_search_fields_div">
+                            {{ form_row(form.popular_search) }}
+                            <div style="display:none;" id="popular_search_fields_main_div">
+                                <div class="row">
+                                    <div class="large-6 columns">
+                                        <label>{{'Popular keyword'}}</label>
+                                    </div>
+                                    <div class="large-6 columns">
+                                        <label>{{'Popular keyword url'}}</label>
+                                    </div>
+                                </div>
+                                {% for i in 1..12 %}
+                                    <div class="row">
+                                        <div class="large-6 columns">
+                                            {{ form_widget(form['popular_search_title_'~i]) }}
+                                            {{ form_errors(form['popular_search_title_'~i]) }}
+                                        </div>
+                                        <div class="large-6 columns">
+                                            {{ form_widget(form['popular_search_url_'~i]) }}
+                                            {{ form_errors(form['popular_search_url_'~i]) }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'landing_page_admin'}) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        {% if entity.id is not defined %}
+        $("form[name='fa_content_landing_page_admin']").submit(function() {
+            var isImageUploaded = true;
+            $("input[type='file']").each(function(index, value) {
+                if (!$(this).val()) {
+                    isImageUploaded = false;
+                    alert('Please upload mandatory images.')
+                    $('html, body').animate({
+                        scrollTop: $(this).offset().top - 70
+                    }, 1000);
+                    
+                    return false;
+                }
+            });
+
+            if (!isImageUploaded) {
+                return false;
+            }
+
+            return true;
+        });
+        {% endif %}
+        
+        $('.preview_img').change(function(e){
+            readURL(this);
+        });
+        $("#fa_content_landing_page_admin_popular_search").click(function(){
+            hideShowPopularSearchFields();
+        });
+        hideShowPopularSearchFields();
+    });
+    function appendToUrl() {
+        var url = '{{ path('landing_page_new_admin') }}';
+        if ($('#fa_content_landing_page_admin_type').val()) {
+            if (url.indexOf('?') > -1){
+               url += '&'+$('#fa_content_landing_page_admin_type').attr('name')+'='+$('#fa_content_landing_page_admin_type').val();
+            }else{
+                url += '?'+$('#fa_content_landing_page_admin_type').attr('name')+'='+$('#fa_content_landing_page_admin_type').val();
+            }
+        }
+        
+        if ($('#fa_content_landing_page_admin_category').val()) {
+            if (url.indexOf('?') > -1){
+               url += '&'+$('#fa_content_landing_page_admin_category').attr('name')+'='+$('#fa_content_landing_page_admin_category').val();
+            }else{
+                url += '?'+$('#fa_content_landing_page_admin_category').attr('name')+'='+$('#fa_content_landing_page_admin_category').val();
+            }
+        }
+        window.location.href = url;
+    }
+
+    function readURL(input)
+    {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            var imgId = $(input).attr('id')+'_img';
+    
+            reader.onload = function (e) {
+                $('#'+imgId).attr('src', e.target.result);
+            }
+    
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    function hideShowPopularSearchFields()
+    {
+        var popularSearchFlag = $('#fa_content_landing_page_admin_popular_search').is(':checked');
+        if (popularSearchFlag) {
+            $('#popular_search_fields_main_div').show();
+        } else {
+            $('#popular_search_fields_main_div').hide();
+        }
+    }
+    //]]>
+    </script>
+{% endblock %}

@@ -1,0 +1,31 @@
+config_rule_admin:
+    path:     /
+    defaults: { _controller: "FaCoreBundle:ConfigRuleAdmin:index" }
+    
+config_rule_new_admin:
+    path:     /new
+    defaults: { _controller: "FaCoreBundle:ConfigRuleAdmin:new" }
+
+config_rule_create_admin:
+    path:     /create
+    defaults: { _controller: "FaCoreBundle:ConfigRuleAdmin:create" }
+    requirements: { methods: post }
+
+config_rule_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaCoreBundle:ConfigRuleAdmin:edit" }
+
+config_rule_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaCoreBundle:ConfigRuleAdmin:update" }
+    requirements: { methods: post|put }
+
+config_rule_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaCoreBundle:ConfigRuleAdmin:delete" }
+
+category_ajax_term_admin:
+    path:     /ajax/find/{term}
+    defaults: { _controller: "FaCoreBundle:ConfigRuleAdmin:categoryAjax" }
+    options:
+        expose: true

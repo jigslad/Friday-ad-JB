@@ -1,0 +1,22 @@
+{% extends (app.request.get('popup') ? 'FaAdminBundle::printPopupLayout.html.twig' : 'FaAdminBundle::layout.html.twig') %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% block content -%}
+    <div class="large-row">
+        {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew': false}) }}
+
+        {% if not app.request.get('popup') %}
+            {% use "FaReportBundle:PoliceReportAdmin:search.html.twig" %}
+            {{ block('search_html') }}
+        {% endif %}
+        
+        {% if searchParams|length and form.vars.valid %}
+            {{ include('FaReportBundle:PoliceReportAdmin:list.html.twig') }}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

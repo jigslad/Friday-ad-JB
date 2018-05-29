@@ -1,0 +1,92 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+
+{% set backUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdminBackUrl', [fetch_container_instance()]) %}
+{% set cancelUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdminCancelUrl', [fetch_container_instance()]) %}
+{% set backToUserListUrl = app.session.get('admin_backto_userlist_url') %}
+
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set currentRoute = app.request.attributes.get('_route') %}
+
+{% set userAdListGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('user_ad_list_admin') %}
+  {% set userAdListGrant = true %}
+{% endif %}
+
+{% set userReviewsListGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('user_reviews_list_admin') %}
+  {% set userReviewsListGrant = true %}
+{% endif %}
+
+{% set userPaymentListGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('user_payment_list_admin') %}
+  {% set userPaymentListGrant = true %}
+{% endif %}
+
+{% set userCreditGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('user_credit_admin') %}
+    {% set userCreditGrant = true %}
+{% endif %}
+
+{% block content -%}
+<div class="row">
+   <div class="columns">
+       <h1>{{ heading }}</h1>
+   </div>
+</div>
+
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <p class="instruction text-left">{{ 'Detail of user %user%'|trans({'%user%': user.fullName}, 'messages') }}</p>
+                <ul class="tab-menu clearfix">
+                    <li {% if currentRoute == 'user_show_admin' %} class="active" {% endif %}><a href="{{ path('user_show_admin', {'id': user.id}) }}">{{ 'Basic information'|trans }}</a></li>
+                    {% if userAdListGrant %}
+                        <li {% if currentRoute == 'user_ad_list_admin' %} class="active" {% endif %}><a href="{{ path('user_ad_list_admin', {'id': user.id}) }}">{{ 'User ads'|trans }}</a></li>
+                    {% endif %}
+                    {% if userPaymentListGrant %}
+                        <li {% if currentRoute == 'user_payment_list_admin' %} class="active" {% endif %}><a href="{{ path('user_payment_list_admin', {'id': user.id}) }}">{{ 'User payments'|trans }}</a></li>
+                    {% endif %}
+                    {% if userReviewsListGrant %}
+                        <li {% if currentRoute == 'user_reviews_list_admin' %} class="active" {% endif %}><a href="{{ path('user_reviews_list_admin', {'id': user.id}) }}">{{ 'User Reviews'|trans }}</a></li>
+                        <li {% if currentRoute == 'user_reviews_list_left_for_other_admin' %} class="active" {% endif %}><a href="{{ path('user_reviews_list_left_for_other_admin', {'id': user.id}) }}">{{ 'User Reviews Left for Others'|trans }}</a></li>
+                    {% endif %}
+                    {% if userCreditGrant %}
+                        <li {% if currentRoute == 'user_credit_admin' %} class="active" {% endif %}><a href="{{ path('user_credit_admin', {'userId': user.id}) }}">{{ 'User credits'|trans }}</a></li>
+                    {% endif %}
+                </ul>
+                <div class="tabs-content">
+                    {% if currentRoute == 'user_show_admin' %}
+                        {% include 'FaUserBundle:UserAdmin:userDetail.html.twig'%}
+                    {% elseif currentRoute == 'user_ad_list_admin' %}
+                        {% use "FaUserBundle:UserAdmin:userAd.html.twig" %}
+                        {{ block('user_ad_html') }}
+                    {% elseif currentRoute == 'user_reviews_list_admin' %}
+                        {% use "FaUserBundle:UserAdmin:user_reviews.html.twig" %}
+                        {{ block('user_reviews_html') }}
+                    {% elseif currentRoute == 'user_reviews_list_left_for_other_admin' %}
+                        {% use "FaUserBundle:UserAdmin:user_reviews.html.twig" %}
+                        {{ block('user_reviews_html') }}
+                    {% elseif currentRoute == 'user_payment_list_admin' %}
+                        {% include 'FaUserBundle:UserAdmin:userPayment.html.twig' %}
+                    {% elseif currentRoute == 'user_credit_admin' %}
+                        {% include 'FaUserBundle:UserCreditAdmin:index.html.twig' %}
+                    {% endif %}
+                </div>
+                <ul class="button-group text-center">
+                    <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ backToUserListUrl ? backToUserListUrl : path('user_admin') }}'">{{ 'Back to user list'|trans({}, 'messages') }}</button></li>
+                    {% if currentRoute == 'user_show_admin' %}
+                        <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('user_edit_admin', {'id': user.id, 'from': 'user_show'}) }}'">{{ 'Edit user'|trans({}, 'messages') }}</button></li>
+                    {% endif %}
+                    {% if currentRoute == 'user_show_admin' %}
+                        <li><a href="/login_as_user/{{ user.id }}/{{ app.user.id }}/{{ md5(user.id~user.username~user.password) }}" target="_blank" style="color:#fff"><button type="reset" class="tiny button mb0">{{ 'Login as user'|trans({}, 'messages') }}</button></a>
+                    {% endif %}
+                </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('user_reviews_script') }}
+    {{ block('user_ad_script') }}
+{% endblock %}

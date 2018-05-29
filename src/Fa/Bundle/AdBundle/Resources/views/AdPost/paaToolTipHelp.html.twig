@@ -1,0 +1,9 @@
+{% if paaBlockSlug is defined %}
+    {% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
+    {% set paaBlock = staticPageRepository.getStaticBlockDetailArray(paaBlockSlug, fetch_container_instance()) %}
+    {% if paaBlock is defined and paaBlock is not null %}
+        <span data-tooltip aria-haspopup="true" class="has-tip tip-top" title="{{ paaBlock['description']|raw }}"><span class="info-icon">info</span></span>
+    {% endif %}
+{% else %}
+    <span data-tooltip aria-haspopup="true" class="has-tip" title=""><span class="info-icon">info</span></span>
+{% endif %}

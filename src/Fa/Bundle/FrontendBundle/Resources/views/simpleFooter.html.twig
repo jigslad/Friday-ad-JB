@@ -1,0 +1,25 @@
+<footer class="simple-footer">
+	<div class="fad-logo">
+        <span>F-Ad</span>
+    </div>
+</footer>
+{{ include('FaFrontendBundle::userLocation.html.twig') }}
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        if (!checkCookie('FAD')) {
+            $('#cookie_notification_bar').show();
+        }
+    });
+
+    function setCookiePolicy()
+    {
+        var expiration_date = new Date();
+        expiration_date.setFullYear(expiration_date.getFullYear() + 10);
+        var domain = '.'+'{{ app.request.host }}';
+        document.cookie = "FAD=1; expires=" + expiration_date.toGMTString() + "; path=/; domain="+ domain +";";
+    }
+//]]>
+</script>
+{% endblock %}

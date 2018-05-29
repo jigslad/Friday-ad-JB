@@ -1,0 +1,283 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% block page_title %}
+    {{'Describe your item'|trans({}, 'frontend-paa')}}
+{% endblock %}
+
+{% block body %}
+    <div class="posting-bg">
+        <div class="fad-sign-bdr">&nbsp;</div>
+        <div class="row paa-main">
+            {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 2}) }}
+            <div id="middle-column" class="large-12 columns">
+                <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
+                <h1 class="text-center paa-title">{{ 'Describe your item and choose your price'|trans({}, 'frontend-paa-second-step') }} </h1>
+                <div class="big-wrapper">
+                    <div class="change-category clearfix">
+                        <div class="left cat-name-wrap">
+                            {% set categoryId = attribute(first_step_data, 'category_id') %}
+                            <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|join('<span class="seperator"></span>')|raw }}
+                        </div>
+                        <div class="right">
+                            <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
+                        </div>
+                    </div>
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        {{ form_errors(form) }}
+                        {% if categoryId is not null %}
+                            {% set orderedFields = form.second_step_ordered_fields.vars.value|split(',') %}
+                            {% if orderedFields|length  > 0 %}
+                                {% for field in orderedFields %}
+                                    {{ include('FaAdBundle:AdPost:secondStepForSaleFields.html.twig', {'form': form, 'field': field}) }}
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                        <div class="small-wrapper">
+                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+            {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-for-sale-second-step'}) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+{{ parent() }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+   var defaultPrice     = ($('#fa_paa_second_step_for_sale_price').val() == 0) ? '' : $('#fa_paa_second_step_for_sale_price').val();
+   var defaultPriceText = $('#fa_paa_second_step_for_sale_price_text').val();
+
+   $(document).ready(function(){
+     //GA Analytics code start
+     {% if (gaStr is defined and gaStr != '') %}
+         ga('send', 'event', 'PAA - Step 2', 'Form error', '{{gaStr}}');
+     {% endif %}
+     //GA Analytics code end
+	   if ({{ app.request.get('is_copy', 0)}}) 
+       {
+           if ($('small.error').length) {
+               $('small.error').each(function() {
+                   $(this).hide();
+               });
+           }
+           
+           $('input[type="text"], select, input[type="radio"],input[type="checkbox"]').each(function() {
+               $(this).removeClass('error');
+           });
+           
+           window.scrollTo(0, 0);
+       }
+       updateCharCounter('fa_paa_second_step_for_sale_title');
+       getPriceSuggestions();
+       loadSimilarAdverts(1);
+       handlePriceWithAdType();
+
+       $("input[name='fa_paa_second_step_for_sale[ad_type_id]']").click(function(e) {
+            $('#ad_type_choice_div .capsule-bg').removeClass('active');
+            $(this).parent().addClass('active');
+            handlePriceWithAdType($(this).val(), 'true');
+       });
+       
+       $('.is_new_choice').click(function(){
+           var choiceId = $(this).attr('id');
+           var isNew    = choiceId.replace('is_new_choice_', '');
+
+           $('.is_new_choice').removeClass('active');
+           $('#'+choiceId).addClass('active');
+           $("input[name='fa_paa_second_step_for_sale[is_new]'][value='"+isNew+"']").attr('checked', true);
+       });
+
+       $('.textcounter').keyup(function(e){
+           updateCharCounter($(this).attr('id'));
+       });
+
+       $("#fa_paa_second_step_for_sale_title").change(function(){
+            getPriceSuggestions();
+            loadSimilarAdverts(1);
+       });
+
+       {% set formFields = get_variables('formFields') %}
+       {% if formFields['lastField'] is defined %}
+           $('#fa_paa_second_step_for_sale_'+ '{{ formFields['lastField'] }}').closest('div .paa-bdr-box').addClass('bdr-none');
+           if ('{{formFields['lastField']}}' == 'price_text' && !$('#fa_paa_second_step_for_sale_'+ '{{ formFields['lastField'] }}').is(':visible')) {
+        	   $('#fa_paa_second_step_for_sale_price').closest('div .paa-bdr-box').addClass('bdr-none');
+           }
+           if ('{{formFields['lastField']}}' == 'is_new') {
+               $('#is_new_choice_0').closest('div .paa-bdr-box').addClass('bdr-none');
+           }
+       {% endif %}
+    });
+   
+    function showHideSimilarAdverts()
+    {
+        $(".show_hide_similar_link").click(function() {
+           $(".show_hide_similar_link").toggle();
+           $("#paa_similar_adverts").toggle();
+
+           if($('#paa_similar_adverts').is(':visible')) {
+               $('#paa_price .paa-bdr-box:first').removeClass('paa-box-none');
+           } else {
+               $('#paa_price .paa-bdr-box:first').addClass('paa-box-none');
+           }
+       });
+    }
+    
+    function getPriceSuggestions()
+    {
+        var title = $('#fa_paa_second_step_for_sale_title').val();
+        var category_id = '{{ attribute(first_step_data, 'category_id') }}';
+
+        if (title && category_id) {
+            var data = {
+                title: title,
+                category_id: category_id
+            };
+         
+            $.ajax({
+                type: 'post',
+                url: '{{ path("ad_post_ajax_price_suggestion") }}',
+                data: data,
+                success: function(data) {
+                    $('#price_suggestion').html(data);
+                    showHideSimilarAdverts();
+                }
+            });
+        } else {
+            $('#price_suggestion').html('');
+        }
+    }
+    
+    function loadSimilarAdverts(page)
+    {
+        var title = $('#fa_paa_second_step_for_sale_title').val();
+        var category_id = '{{ attribute(first_step_data, 'category_id') }}';
+        var page = page;
+
+        if(typeof page === 'undefined'){
+            page = $('#similar_ad_page').val();
+        }
+
+        if (title && category_id) {
+            var data = {
+                title: title,
+                category_id: category_id,
+                page: page
+            };
+         
+            $.ajax({
+                type: 'post',
+                url: '{{ path("ad_post_ajax_similar_adverts") }}',
+                data: data,
+                success: function(data) {
+                    if (page == 1) {
+                        $('#paa_similar_adverts').html(data);
+                        $('#paa_similar_adverts').hide();
+                    } else {
+                        $('#list_similar_adverts').append(data);
+                    }
+                    
+                    // Hide show more link if shown ads is greater or equal to total similar ads
+                    var totalshownAds = (parseInt(page) * 5);
+                    var totalAds      = parseInt($('#similar_ad_total').val());
+                    var totalAdsFound = parseInt($('#total_similar_ad_found').val());
+                    if (totalshownAds >= totalAds || totalshownAds >= totalAdsFound) {
+                        $('#show_more_link').hide();
+                    }
+
+                    // Store next page to show more similar ads
+                    $('#similar_ad_page').val(parseInt(page) + 1);
+
+                    $(document).foundation('equalizer', 'reflow');
+                }
+            });
+        } else {
+            $('#paa_similar_adverts').html('');
+            $('#paa_price .paa-bdr-box:first').addClass('paa-box-none');
+        }
+    }
+
+    function updateCharCounter(fieldId)
+    {
+        var textCounterId = fieldId + '_textcounter';
+        var maxLimit      = $('#'+fieldId).attr('maxlength') ? parseInt($('#'+fieldId).attr('maxlength')) : 0;
+        var value         = $('#'+fieldId).val();
+
+        if (maxLimit) {
+           if (value.length > maxLimit) {
+               $('#'+fieldId).val(value.substring(0, maxLimit));
+               $('#'+fieldId).html('(0 characters left)');
+               return false;
+           } else {
+               $('#'+textCounterId).html('(' + (maxLimit - value.length) + ' characters left)');
+           }
+       }
+    }
+    
+    function handlePriceWithAdType(adTypeId, checkSimilarShowHideLink)
+    {
+        if (!adTypeId) {
+            adTypeId = $("input[name='fa_paa_second_step_for_sale[ad_type_id]']:checked").val();
+        }
+
+        var forsaleId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FORSALE_ID') }}";
+        var wantedId  = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_WANTED_ID') }}";
+        var swapId    = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_SWAPPING_ID') }}";
+        var freeId    = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FREETOCOLLECTOR_ID') }}";
+
+        if (adTypeId == wantedId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').show();
+            $('#price_suggestion').hide();
+            $('#paa_similar_adverts').hide();
+            $('#price_label').html("{{ 'What are you willing to pay?'|trans({}, 'frontend-paa-second-step') }}");
+            $('#fa_paa_second_step_for_sale_price').val(defaultPrice);
+            $('#fa_paa_second_step_for_sale_price_text').val('');
+            $('#paa_price .paa-bdr-box:first').addClass('paa-bdr-box-none');
+            $('div .btm-pa-0').removeClass('bdr-none');
+        } else if (adTypeId == swapId) {
+            $('#paa_price').hide();
+            $('#paa_price_text').show();
+            $('#price_label').html("{{ 'What would you like in exchange?'|trans({}, 'frontend-paa-second-step') }}");
+            $('#fa_paa_second_step_for_sale_price').val('');
+            $('#fa_paa_second_step_for_sale_price_text').val(defaultPriceText);
+            $('#paa_price .paa-bdr-box:first').addClass('paa-bdr-box-none');
+            $('div .btm-pa-0').removeClass('bdr-none');
+        } else if (adTypeId == freeId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').hide();
+            $('#price_suggestion').hide();
+            $('#paa_similar_adverts').hide();
+            $('#fa_paa_second_step_for_sale_price').val('0');
+            $('#fa_paa_second_step_for_sale_price_text').val('');
+            $('#paa_price .paa-bdr-box:first').removeClass('paa-bdr-box-none');
+            $('div .btm-pa-0').addClass('bdr-none');
+        } else if (adTypeId == forsaleId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').show();
+            $('#price_suggestion').show();
+            $('#paa_similar_adverts').show();
+            $('#price_label').html("{{ 'What\'s your price?'|trans({}, 'frontend-paa-second-step') }}");
+            $('#fa_paa_second_step_for_sale_price').val(defaultPrice);
+            $('#fa_paa_second_step_for_sale_price_text').val('');
+            $('#paa_price .paa-bdr-box:first').removeClass('paa-bdr-box-none');
+            $('div .btm-pa-0').removeClass('bdr-none');
+
+            $('#paa_price .paa-bdr-box:first').addClass('paa-box-none');
+            if(typeof checkSimilarShowHideLink !== 'undefined' && checkSimilarShowHideLink == 'true'){
+               if($('#hide_similar_link').is(':visible')) {
+                   $('#paa_similar_adverts').show();
+               } else {
+                   $('#paa_similar_adverts').hide();
+               }
+           }
+        }
+    }
+
+//]]>
+</script>
+{{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+{% endblock %}

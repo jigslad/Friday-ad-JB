@@ -1,0 +1,30 @@
+<aside class="left-off-canvas-menu">
+    <ul class="off-canvas-list">
+    	{% set prevLevel = 1 %}
+        {% for resource in menus %}
+            {% set resourceName = resource.resource ? resource.resource : resource.resourceGroup %}
+        	{% if resource.lvl == 1 or resourceName in resources or app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SUPER_ADMIN_ID') %}
+			    {% if prevLevel > 1 and resource.lvl == prevLevel %}
+			      </li>
+			    {% endif %}
+			    {% if resource.lvl > prevLevel %}
+			      {% set lvlClassName = (resource.lvl == 2) ? 'second' : 'third' %}
+			      <ul class="left-submenu">
+			      	<li class="back"><a href="#">Back</a></li>
+			    {% elseif resource.lvl < prevLevel %}
+			    {% set ulLiLoop = prevLevel - resource.lvl %}
+			    {% for i in 1..ulLiLoop %}
+			  		</ul></li>
+			    {% endfor %}
+			    {% endif %}
+			    {% set hasChild = resource.rgt - resource.lft %}
+			    {% if menusWithActiveChild[resource.id] is defined and not menusWithActiveChild[resource.id]['hasChild'] %}
+                    {% set hasChild = 1 %}
+                {% endif %}
+			    <li {% if hasChild > 1 %} class="has-submenu" {% endif %}>
+			      <a href="{% if resource.resource %}{{ path(resource.resource) }}{% elseif resource.resourceGroup %}{{ path(resource.resourceGroup) }}{% else %}#{% endif %}"><i class="fa {{ resource.iconClass }} fa-fw"></i> {{ resource.name }} {% if resource.resourceGroup %}<i class="fa fa-chevron-right"></i>{% endif %}</a>
+			      {% set prevLevel = resource.lvl %}
+        	{% endif %}
+        {% endfor %}
+    </ul>
+</aside>

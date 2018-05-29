@@ -1,0 +1,63 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title">{{'Edit social profiles'|trans({}, 'frontend-my-profile')}}</h5>
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'edit_social_profiles_id'}}) }}
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Social profiles'|trans({}, 'frontend-my-profile')}}</h5>
+                <div class="mt5">{{'If you would like to display links to your social pages, please add the addresses for each social network.'|trans({}, 'frontend-my-profile')}}</div>
+            </div>
+        </div>
+        <div class="row mt5">
+            <div class="columns">
+                {{ form_row(form.facebook_url) }}
+                {{ form_row(form.twitter_url) }}
+                {{ form_row(form.google_url) }}
+                {{ form_row(form.pinterest_url) }}
+                {{ form_row(form.instagram_url) }}
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#profileEditModal');;">{{'Cancel'|trans({}, 'frontend-my-profile')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+    });
+    $("#edit_social_profiles_id").submit(function(event) {
+        blockElement('#profileEditModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{path('ajax_edit_social_profiles')}}",
+            data: $("#edit_social_profiles_id").serialize()
+        })
+        .always(function(response) {
+            unblockElement('#profileEditModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#profileEditModal').html(response.htmlContent);
+            } else {
+                $('#business_social_icons_div').html(response.successContent);
+                $('#profileEditModal').foundation('reveal', 'close');
+                $('#business_social_icons_div').notify('{{'Social profiles edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
+                scrollToElement('#business_social_icons_div', '1000', -150);
+            }
+        });
+    });
+//]]>
+</script>

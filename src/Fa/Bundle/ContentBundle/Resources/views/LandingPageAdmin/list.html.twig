@@ -1,0 +1,51 @@
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+             <table class="table table-striped table-bordered table-hover">
+                 <thead class="mb0">
+                     <tr>
+                         <th width="20%">
+                            {{ sortable_link('landing_page_admin', 'landing_page__h1_tag', 'Title'|trans, sorter) }}
+                         </th>
+                         <th width="20%">
+                            {{ 'Type'|trans }}
+                         </th>
+                         <th width="20%">
+                            {{ 'Status'|trans({}, 'messages') }}
+                         </th>
+                         <th width="10%"><i class="fa fa-gear"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for landingPage in pagination.getCurrentPageResults() %}
+                          <tr class="gradeX">
+                              <td>{{ landingPage.h1_tag }}</td>
+                              <td>{{ typeArray[landingPage.type] }}</td>
+                              <td>{{ statusArray[landingPage.status] }}</td>
+                              <td>
+                                  <button href="#" data-dropdown="drop{{ landingPage.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                  <br />
+                                  <ul id="drop{{ landingPage.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+	                                  {% if landingPageEditGrant %}
+	                                      <li><a href="{{ path('landing_page_edit_admin', {'id': landingPage.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+	                                  {% endif %}
+
+	                                  {% if landingPageDeleteGrant %}
+	                                      <li><a href="{{ path('landing_page_delete_admin', {'id': landingPage.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this Landing Page?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+	                                  {% endif %}
+                                  </ul>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="odd gradeX">
+                              <td colspan="4" align="center">{{ 'No landing page found'|trans({}, 'messages') }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+        </div>
+    </div>
+</div>

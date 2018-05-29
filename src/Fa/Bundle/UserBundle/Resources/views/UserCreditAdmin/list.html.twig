@@ -1,0 +1,75 @@
+{% set userCreditIdArray = {} %}
+{% if pagination.getNbResults() %}
+    {% for userCredit in pagination.getCurrentPageResults() %}
+        {% set userCreditIdArray = userCreditIdArray|merge({0 : userCredit.id}) %}
+    {% endfor %}
+    {% set userCreditUsedArray = userCreditUsedRepository.getCreditUsedByUserCreditIds(userCreditIdArray) %}
+{% endif %}
+
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+                <thead>
+                    <tr>
+                        <th width="20%">
+                            {{ 'Credits <br />Remaining / Used'|trans({}, 'messages')|raw }}
+                        </th>
+                        <th width="40%"> {{ 'Package type'|trans({}, 'messages') }}</th>
+                        <th width="20%"> {{ 'Category'|trans({}, 'messages') }}</th>
+                        <th width="10%">
+                            {{ 'Status'|trans({}, 'messages') }}
+                        </th>
+                        <th width="10%"><i class="fi-widget"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pagination.getNbResults() %}
+                        {% for userCredit in pagination.getCurrentPageResults() %}
+                            <tr class="gradeX">
+                                <td>
+                                    {{ userCredit.credit }} / {{ (userCreditUsedArray[userCredit.id] is defined ? userCreditUsedArray[userCredit.id] : 0) }}
+                                </td>
+                                <td>
+                                    {% if userCredit.package_sr_no %}
+                                        {% set packageSrNos = userCredit.package_sr_no|split(',') %}
+                                        {% for packageSrNo in packageSrNos %}
+                                            {% if packageTypeArray[packageSrNo] is defined %}
+                                                {{ packageTypeArray[packageSrNo] }}<br />
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if userCredit.category_id %}
+                                        {{ categoryRepository.getCategoryPathArrayById(userCredit.category_id, false, containerInstance)|join(' > ') }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ statusArray[userCredit.status] }}</td>
+                                <td>
+                                    <button href="#" data-dropdown="drop{{ userCredit.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                    <br />
+                                    <ul id="drop{{ userCredit.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                        {% if userCreditEditGrant %}
+                                            <li><a href="{{ path('user_credit_edit_admin', {'userId': app.request.get('userId'), 'id': userCredit.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+                                        {% endif %}
+                                        {% if userCreditDeleteGrant %}
+                                         <li><a href="{{ path('user_credit_delete_admin', {'userId': app.request.get('userId'), 'id': userCredit.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this credit?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+                                      {% endif %}
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="odd gradeX">
+                            <td colspan="5" align="center">{{ 'No user credits found'|trans({}, 'messages') }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

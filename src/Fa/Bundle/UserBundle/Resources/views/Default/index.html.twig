@@ -1,0 +1,5 @@
+{% extends 'FaCoreBundle::layout.html.twig' %}
+
+{% block content %}
+Welcome! {% if app.user %} {{ app.user.firstName }} {% endif %}
+{% endblock %}

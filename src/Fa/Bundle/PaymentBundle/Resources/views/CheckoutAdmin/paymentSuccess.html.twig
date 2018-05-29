@@ -1,0 +1,32 @@
+{% extends popup == 'true' ? 'FaAdminBundle::popupLayout.html.twig' : 'FaAdminBundle::layout.html.twig' %}
+
+{% block page_title %}
+    {{'Payment Success'|trans({}, 'backend-payment-success')}}
+{% endblock %}
+
+{% block content %}
+    <div class="payment">
+        <div class="row">
+            <div class="columns">
+                <h1 class="text-center">
+                    {% if cartAmount %}
+                        {{'Payment Success'|trans({}, 'frontend-payment-success')}}
+                    {% else %}
+                        {{'Free Advert'|trans({}, 'frontend-payment-success')}}
+                    {% endif %}
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="columns text-center">
+                {{'Transaction ID is'|trans({}, 'backend-payment-success')}}: <b>{{cartCode}}</b>
+                {% if popup is defined and popup %}
+                    <br /><br /><br />
+                    <ul class="button-group text-center">
+                        <li><button type="reset" class="tiny button mb0" onclick="javascript:window.close();">{{ 'Close'|trans({}, 'messages') }}</button></li>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

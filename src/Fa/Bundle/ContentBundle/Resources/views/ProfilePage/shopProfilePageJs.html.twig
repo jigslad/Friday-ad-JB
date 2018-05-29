@@ -1,0 +1,298 @@
+{% javascripts filter='uglifyjs2' output='bundles/js/compiled/shopProfilePageJs_v1.js'
+    'bundles/facore/js/googleMap.js'
+    'bundles/facore/js/jquery.fancybox.pack.js'
+    'bundles/facore/js/owl.carousel.min.js'
+    'bundles/facore/js/notify.min.js'
+%}
+<script src="{{ static_asset_url(asset_url) }}?v=1"></script>
+{% endjavascripts %}
+{{ include('FaContentBundle:ProfilePage:showUserReviewJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        $('#profile_change_btn_with_opt_anchor, #pickProfileFile1').hover(
+             function () {
+                $('.profile-img-overlay').show();
+             }, 
+             function () {
+            	 $('.profile-img-overlay').hide();
+             }
+        );
+        $('#shop_banner_anchhor').hover(
+            function () {
+               $('.cover-img-overlay').show();
+            }, 
+            function () {
+                $('.cover-img-overlay').hide();
+            }
+        );
+        {% set showMap = true %}
+        {% if userDetail["show_map"] is defined and not userDetail["show_map"] and userDetail["business_category_id"] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
+            {% set showMap = false %}
+        {% endif %}
+        {% if showMap and userDetail["latitude"] is defined and userDetail["latitude"] and userDetail["longitude"] is defined and userDetail["longitude"] %}
+            initialize();
+            showCustomMarker('{{userDetail["latitude"]}}', '{{userDetail["longitude"]}}', '{{ asset_url('fafrontend/images/map-marker.png') }}');
+        {% endif %}
+        {% if userSiteImages|length %}
+            $(".fancybox").fancybox({
+                openEffect  : 'none',
+                closeEffect : 'none',
+                padding: 0,
+                margin: [65, 60, 65, 60],
+                autoCenter: true,
+                helpers: {
+                        overlay: {
+                        locked: false
+                    }
+                }
+            });
+        {% endif %}
+        
+        {% if userDetail["youtube_video_url"] is defined and userDetail["youtube_video_url"] %}
+            $("#shopVideo").click(function() {
+                $.fancybox({
+                    'padding'       : 0,
+                    'autoScale'     : false,
+                    'transitionIn'  : 'none',
+                    'transitionOut' : 'none',
+                    'title'         : this.title,
+                    'width'         : 640,
+                    'height'        : 385,
+                    'href'          : this.href,
+                    'type'          : 'swf',
+                    'swf'           : {
+                    'wmode'             : 'transparent',
+                    'allowfullscreen'   : 'true'
+                    }
+                });
+
+                return false;
+            });
+        {% endif %}
+        
+        {% if app.request.get('moveTo') == 'review' %}
+            scrollToElement('#profile_review_heading', '1000', -30);
+        {% endif %}
+        
+        {% if userDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
+            var shopUserLatesrItemSlider = $("#latest-item-slider");
+            shopUserLatesrItemSlider.owlCarousel({
+                items : 1,
+                itemsCustom:[[320, 1]],
+                navigation: true,
+                pagination:false,
+                responsiveRefreshRate : 100,
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                lazyLoad: true,
+                scrollPerPage: true,
+            });
+        {% endif %}
+    });
+
+    {% if allowProfileEdit %}
+        function editWelcomeMessage()
+        {
+            blockPage();
+            $.ajax({
+                type: "GET",
+                url : '{{ path('ajax_edit_welcome_message') }}',
+                data : {},
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.htmlContent.length) {
+                    $('#profileEditModal').html(response.htmlContent);
+                    $('#profileEditModal').foundation('reveal', 'open');
+                } else if (response.error.length) {
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    scrollToElement('#profile_main_div', '1000', -150);
+                } else if (response.redirectToUrl.length) {
+                    window.location.href = response.redirectToUrl;
+                }
+            });
+        }
+
+        function editContactDetails()
+        {
+            blockPage();
+            $.ajax({
+                type: "GET",
+                url : '{{ path('ajax_edit_contact_details') }}',
+                data : {},
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.htmlContent.length) {
+                    $('#profileEditModal').html(response.htmlContent);
+                    $('#profileEditModal').foundation('reveal', 'open');
+                } else if (response.error.length) {
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    scrollToElement('#profile_main_div', '1000', -150);
+                } else if (response.redirectToUrl.length) {
+                    window.location.href = response.redirectToUrl;
+                }
+            });
+        }
+
+        function editSocialProfiles()
+        {
+            blockPage();
+            $.ajax({
+                type: "GET",
+                url : '{{ path('ajax_edit_social_profiles') }}',
+                data : {},
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.htmlContent.length) {
+                    $('#profileEditModal').html(response.htmlContent);
+                    $('#profileEditModal').foundation('reveal', 'open');
+                } else if (response.error.length) {
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    scrollToElement('#profile_main_div', '1000', -150);
+                } else if (response.redirectToUrl.length) {
+                    window.location.href = response.redirectToUrl;
+                }
+            });
+        }
+
+        function editAboutUs()
+        {
+            blockPage();
+            $.ajax({
+                type: "GET",
+                url : '{{ path('ajax_edit_about_us') }}',
+                data : {},
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.htmlContent.length) {
+                    $('#profileEditModal').html(response.htmlContent);
+                    $('#profileEditModal').foundation('reveal', 'open');
+                } else if (response.error.length) {
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    scrollToElement('#profile_main_div', '1000', -150);
+                } else if (response.redirectToUrl.length) {
+                    window.location.href = response.redirectToUrl;
+                }
+            });
+        }
+
+        function editVideo()
+        {
+            blockPage();
+            $.ajax({
+                type: "GET",
+                url : '{{ path('ajax_edit_video') }}',
+                data : {},
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.htmlContent.length) {
+                    $('#profileEditModal').html(response.htmlContent);
+                    $('#profileEditModal').foundation('reveal', 'open');
+                } else if (response.error.length) {
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    scrollToElement('#profile_main_div', '1000', -150);
+                } else if (response.redirectToUrl.length) {
+                    window.location.href = response.redirectToUrl;
+                }
+            });
+        }
+
+        function editGallery()
+        {
+            blockPage();
+            $.ajax({
+                type: "GET",
+                url : '{{ path('ajax_edit_gallery') }}',
+                data : {},
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.htmlContent.length) {
+                    $('#profileEditModal').html(response.htmlContent);
+                    $('#profileEditModal').foundation('reveal', 'open');
+                } else if (response.error.length) {
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    scrollToElement('#profile_main_div', '1000', -150);
+                } else if (response.redirectToUrl.length) {
+                    window.location.href = response.redirectToUrl;
+                }
+            });
+        }
+
+        function editLocation()
+        {
+            blockPage();
+            $.ajax({
+                type: "GET",
+                url : '{{ path('ajax_edit_location') }}',
+                data : {},
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.htmlContent.length) {
+                    $('#profileEditLocationModal').html(response.htmlContent);
+                    $('#profileEditLocationModal').foundation('reveal', 'open');
+                } else if (response.error.length) {
+                    $('#profile_main_div').prepend(decorateMessage(response.error, 'alert'));
+                    scrollToElement('#profile_main_div', '1000', -150);
+                } else if (response.redirectToUrl.length) {
+                    window.location.href = response.redirectToUrl;
+                }
+            });
+        }
+
+        function changeBanner(bannerId)
+        {
+            blockElement('#shopBannerModal');
+            $.ajax({
+                type: "POST",
+                url : '{{ path('ajax_my_profile_change_banner') }}',
+                data : {'bannerId': bannerId, 'fromProfilePage': true},
+            })
+            .always(function(response) {
+                unblockElement('#shopBannerModal');
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.htmlContent.length) {
+                    $('#user_site_banner_div').html(response.htmlContent);
+                    $('#shopBannerModal').foundation('reveal', 'close');
+                }
+                if (response.error.length) {
+                    $(decorateMessage(response.error, 'alert')).insertBefore('#show_message_div');
+                    $('#shopBannerModal').foundation('reveal', 'close');
+                } else {
+                    $(decorateMessage("{{'Banner changed successfully.'|trans({}, 'frontend-my-profile')}}", 'success')).insertBefore('#show_message_div');
+                    $('#shopBannerModal').foundation('reveal', 'close');
+                }
+                scrollToElement('#user_site_banner_div', '1000', -150);
+            });
+        }
+    {% endif %}
+//]]>
+</script>

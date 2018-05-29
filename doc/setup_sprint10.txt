@@ -1,0 +1,39 @@
+1) update your code
+git pull origin master
+
+2) chown -R nginx:nginx PATH_TO_YOUR_PROJECT/friday-ad-new
+perform this step each time when you update your project using root user.
+
+3) Go to project root directory. 
+cd PATH_TO_YOUR_PROJECT/friday-ad-new
+
+4) run, composer update
+When you run above command it may ask you for database connection, define appropriate connection.
+
+5) sudo -u nginx php app/console doctrine:database:drop --force
+
+6) sudo -u nginx php app/console doctrine:database:create
+
+7) Load migration data.
+
+    [Take database from test server]
+    wget --http-user=fridayad --http-password=fr1day http://test.friday-ad.fiare.com/FridayadDB01012014.sql.bz2
+
+8) Extract database,
+    sudo -u nginx  tar xvzf FridayadDB01012014.sql.bz2
+
+9) Import database
+    mysql -h<host> -u <username> -p<password> <databasename> < FridayadDB01012014.sql
+
+10) sudo -u nginx php app/console assets:install web --symlink
+
+11) sudo -u nginx php app/console assetic:dump
+
+12) sudo -u nginx php app/console cache:clear --env=dev
+
+13) sudo -u nginx php app/console cache:clear --env=prod
+
+14) In case of any issue first try by clearing cache.
+
+
+

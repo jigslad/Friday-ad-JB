@@ -1,0 +1,89 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set keywordIdArray = {} %}
+{% if pagination.getNbResults() %}
+    {% for searchKeyword in pagination.getCurrentPageResults() %}
+        {% set keywordIdArray = keywordIdArray|merge({0 : searchKeyword.id}) %}
+    {% endfor %}
+    {% set categoryIds = fetch_repository('FaAdBundle:SearchKeywordCategory').getCategoryIdsByKeywordId(keywordIdArray) %}
+{% endif %}
+
+{% set keywordEditGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('search_keyword_edit_admin') %}
+  {% set keywordEditGrant = true %}
+{% endif %}
+
+{% set keywordUploadGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('search_keyword_upload_csv_admin') %}
+  {% set keywordUploadGrant = true %}
+{% endif %}
+
+{% set keywordImportGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('search_keyword_import_keywords_admin') %}
+  {% set keywordImportGrant = true %}
+{% endif %}
+
+{% set keywordProcessGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('search_keyword_process_keywords_admin') %}
+  {% set keywordProcessGrant = true %}
+{% endif %}
+
+{% set keywordDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('search_keyword_delete_admin') %}
+  {% set keywordDeleteGrant = true %}
+{% endif %}
+
+{% block content -%}
+    <div class="large-row">
+        {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew': false}) }}
+
+        <div class="row">
+            <div class="columns">
+                <div class="row right">
+                    <div class="large-12 columns">
+                        {% if keywordUploadGrant %}
+                            <a href="{{ path('search_keyword_upload_csv_admin') }}" class="tiny button">{{'Upload Csv'|trans}}</a>
+                        {% endif %}
+                        {% if keywordImportGrant %}
+                            {% if asset_exists('uploads/keyword/process/search_keywords.csv') or asset_exists('uploads/keyword/processing/search_keywords.csv') %}
+                                &nbsp;&nbsp;<a href="javascript:void(0);" class="disabled tiny button">{{'Import completed'|trans}}</a>
+                            {% elseif asset_exists('uploads/keyword/import/search_keywords.csv') %}
+                                &nbsp;&nbsp;<a href="javascript:void(0);" class="disabled tiny button">{{'Importing...'|trans}}</a>
+                            {% elseif asset_exists('uploads/keyword/search_keywords.csv') %}
+                                &nbsp;&nbsp;<a href="{{ path('search_keyword_import_keywords_admin') }}" class="tiny button">{{'Import keywords'|trans}}</a>
+                            {% else %}
+                                &nbsp;&nbsp;<a href="javascript:void(0);" class="disabled tiny button">{{'Import keywords'|trans}}</a>
+                            {% endif %}
+                        {% endif %}
+                        {% if keywordProcessGrant %}
+                            {% if asset_exists('uploads/keyword/processing/search_keywords.csv') %}
+                                &nbsp;&nbsp;<a href="javascript:void(0);" class="disabled tiny button">{{'Processing...'|trans}}</a>
+                            {% elseif asset_exists('uploads/keyword/processed/search_keywords.csv') %}
+                                &nbsp;&nbsp;<a href="javascript:void(0);" class="disabled tiny button">{{'Process completed'|trans}}</a>
+                            {% elseif asset_exists('uploads/keyword/process/search_keywords.csv') %}
+                                &nbsp;&nbsp;<a href="{{ path('search_keyword_process_keywords_admin') }}" class="tiny button">{{'Process keywords'|trans}}</a>
+                            {% else %}
+                                &nbsp;&nbsp;<a href="javascript:void(0);" class="disabled tiny button">{{'Process keywords'|trans}}</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% use "FaAdBundle:SearchKeywordAdmin:search.html.twig" %}
+        {{ block('search_html') }}
+
+        {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+        {{ include('FaAdBundle:SearchKeywordAdmin:list.html.twig', {'pagination': pagination}) }}
+
+        {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+{% set searchScript = block('search_script') is defined ? block('search_script') : '' %}
+    {{ searchScript }}
+{% endblock %}

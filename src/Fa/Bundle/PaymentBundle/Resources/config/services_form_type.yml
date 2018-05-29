@@ -1,0 +1,31 @@
+parameters:
+    fa_payment.form.type.delivery_method_option_admin.class: Fa\Bundle\PaymentBundle\Form\DeliveryMethodOptionAdminType
+    fa_payment.form.type.delivery_method_option_search_admin.class: Fa\Bundle\PaymentBundle\Form\DeliveryMethodOptionSearchAdminType
+    fa_payment.form.type.cyber_source_checkout.class: Fa\Bundle\PaymentBundle\Form\CyberSourceCheckoutType
+    fa_payment.form.type.paypal_checkout.class: Fa\Bundle\PaymentBundle\Form\PaypalCheckoutType
+    fa_payment.form.type.amazonpay_checkout.class: Fa\Bundle\PaymentBundle\Form\AmazonpayCheckoutType
+
+services:
+    fa_payment.form.type.delivery_method_option_admin:
+        class: '%fa_payment.form.type.delivery_method_option_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_payment_delivery_method_option_admin }
+
+    fa_payment.form.type.delivery_method_option_search_admin:
+        class: '%fa_payment.form.type.delivery_method_option_search_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_payment_delivery_method_option_search_admin }
+
+    fa_payment.form.type.cyber_source_checkout:
+        class: '%fa_payment.form.type.cyber_source_checkout.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_payment_cyber_source_checkout }
+
+    fa_payment.form.type.amazonpay_checkout:
+        class: '%fa_payment.form.type.amazonpay_checkout.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_payment_amazonpay_checkout }

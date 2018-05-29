@@ -1,0 +1,146 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'competition_id'}}) }}
+    <a class="close-reveal-modal" id="competition_close">&#215;</a>
+    <h5 class="modal-title">
+        {{'Your ad has been published'|trans({}, 'frontend-competition')|raw}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <img src="/bundles/fafrontend/images/win-a-week-in-spain.png" alt="" />
+                <div class="spain-text">
+                    {{'By placing an ad with us this month you\'re eligible to enter our competition to win a week away in a luxury Spanish villa! Just fill in the boxes below to complete your entry:'|trans({}, 'frontend-competition')|raw}}
+                </div>
+                <div class="mt30">
+                    <label>Date of birth</label>
+                    <div class="row birth-date">
+                        <div class="columns large-8">
+                            {{ form_widget(form.day) }}
+                        </div>
+                        <div class="columns large-8">
+                            {{ form_widget(form.month) }}
+                        </div>
+                        <div class="columns large-8 end">
+                            {{ form_widget(form.year) }}
+                        </div>
+                    </div>
+                    {{ form_errors(form.day) }}
+                    {% if not form.day.vars.errors|length %}
+                        {{ form_errors(form.month) }}
+                    {% endif %}
+                    {% if not form.day.vars.errors|length and not form.month.vars.errors|length %}
+                        {{ form_errors(form.year) }}
+                    {% endif %}
+                </div>
+                <div class="mt10 mb10">
+                    <h5>{{'I\'m interested in'|trans({}, 'frontend-competition')|raw}}:</h5>
+                </div>
+                <div class="label-inline white-checkbox interest-list">
+                    <ul class="clearfix">
+                        {% for child in attribute(form, 'interest') %}
+                            <li>
+                                {{ form_widget(child) }}
+                                <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {{ form_errors(form.interest) }}
+                </div>
+                <div class="mt15">
+                    {{'*By entering this competition you agree to receive relevant email communications from Friday-Ad.'|trans({}, 'frontend-competition')|raw}}
+                </div>
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-24 columns">
+                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+        bindCustomCheckboxEvent();
+        $('.fa-select').selectmenu(
+        {
+            change: function(event, ui) {
+                $('#'+$(this).attr('id')).trigger('change');
+                if ($('#fa_user_competition_day').val() && $('#fa_user_competition_month').val() && $('#fa_user_competition_year').val()) {
+                    $(this).parent().parent().nextAll('small.error').first().hide();
+                } else {
+                	$(this).parent().parent().nextAll('small.error').first().show();
+                }
+                $('#'+$(this).attr('id')+'-button').removeClass('error-bdr');
+            },
+            open: function(event, ui) {
+                //for fast click
+                $('.ui-menu li').addClass('needsclick');
+                $('.ui-selectmenu-menu').addClass('competition-select');
+            },
+            create: function(event, ui) {
+                //for fast click
+                if ($('#'+$(this).attr('id')).hasClass('error-bdr')) {
+                    $('#'+$(this).attr('id')+'-button').addClass('error-bdr');
+                }
+            }
+        });
+    });
+
+    $('form input[type="checkbox"]').click(function(e){
+        var interestCount = $('.interest-list input:checked').length;
+        if (interestCount) {
+            $(this).parent().parent().parent().nextAll('small.error').first().hide();
+        } else {
+            $(this).parent().parent().parent().nextAll('small.error').first().show();
+        }
+    });
+    
+    $("#competition_close").click(function(event) {
+        blockElement('#competitionModel');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{ path('leave_competition', {'transaction_id': transactionId}) }}",
+            data: $("#competition_id").serialize()
+        })
+        .always(function(response) {
+            unblockElement('#competitionModel');
+        })
+        .done(function(response) {
+            $('#competitionModel').foundation('reveal', 'close');
+        });
+    });
+    $("#competition_id").submit(function(event) {
+        blockElement('#competitionModel');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{ path('enter_in_competition', {'transaction_id': transactionId}) }}",
+            data: $("#competition_id").serialize()
+        })
+        .always(function(response) {
+            unblockElement('#competitionModel');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#competitionModel').html(response.htmlContent);
+            } else if (response.error.length) {
+            	$('.manage-item-tabs').prepend(decorateMessage(response.error.length, 'error'));
+            	scrollToElement('.manage-item-tabs', '1000', -150);
+            } else if (response.success.length) {
+                $('#competitionModel').foundation('reveal', 'close');
+                $('.manage-item-tabs').prepend(decorateMessage('{{'You have successfully entered the competition.'|trans({}, 'frontend-competition')}}', 'success'));
+                scrollToElement('.manage-item-tabs', '1000', -150);
+            }
+        });
+    });
+    
+//]]>
+</script>

@@ -1,0 +1,85 @@
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set configTypeWithCategory = [constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::AD_EXPIRATION_DAYS')] %}
+{% set configTypeWithLocation = [constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PAYPAL_COMMISION'), constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PRODUCT_INSERTION_FEE')] %}
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+             <table class="mb0">
+                 <thead>
+                     <tr>
+                         <th width="20%">
+                            {{ sortable_link('config_rule_admin', 'config__name', 'Config'|trans, sorter) }}
+                         </th>
+                         <th width="20%">
+                            {{ 'Category'|trans }}
+                         </th>
+                         <th width="20%">
+                            {{ 'Location Group'|trans }}
+                         </th>
+                         <th width="10%">
+                           {{ 'Value'|trans }}
+                         </th>
+                         <th width="20%">
+                           {{ 'Period (From - To)'|trans }}
+                         </th>
+                         <th width="10%"><i class="fa fa-gear"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for configRule in pagination.getCurrentPageResults() %}
+                          <tr class="gradeX">
+                              <td>{{ configRule.config_name }}</td>
+                              <td>
+                                  {% if configRule.category_id is not null %}
+                                      {{ categoryRepository.getCategoryPathArrayById(configRule.category_id)|join(' > ') }}
+                                  {% else %}
+                                      {% if configRule.config_id in configTypeWithCategory %}
+                                          {{ 'Global'|trans }}
+                                      {% endif %}
+                                  {% endif %}
+                              </td>
+                              <td>
+                                  {% if configRule.location_group_name is not null %}
+                                      {{ configRule.location_group_name }}
+                                  {% else %}
+                                      {% if configRule.config_id in configTypeWithLocation %}
+                                          {{ 'Global'|trans }}
+                                      {% endif %}
+                                  {% endif %}
+                              </td>
+                              <td style="word-break: break-all;">{{ configRule.value }}</td>
+                              <td>
+                                  {% if configRule.period_from is not null %}
+                                      {{ configRule.period_from | localizeddate('short', 'none', app.request.locale ) }}
+                                  {% endif %}
+                                  {% if configRule.period_to is not null %}
+                                      - {{ configRule.period_to | localizeddate('short', 'none', app.request.locale ) }}
+                                  {% endif %}
+                              </td>
+                              <td>
+                                  <button href="#" data-dropdown="drop{{ configRule.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                  <br />
+                                  <ul id="drop{{ configRule.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                      {% if configRuleEditGrant %}
+                                          <li><a href="{{ path('config_rule_edit_admin', {'id': configRule.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+                                      {% endif %}
+        
+                                      {% if configRuleDeleteGrant %}
+                                          <li><a href="{{ path('config_rule_delete_admin', {'id': configRule.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this entity?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+                                      {% endif %}
+                                  </ul>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="gradeX">
+                              <td colspan="6" align="center">{{ 'No records found'|trans({}, 'messages') }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+         </div>
+    </div>
+</div>

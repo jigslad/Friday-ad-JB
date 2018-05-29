@@ -1,0 +1,39 @@
+Installatiion
+=================
+
+1) clone the project, replace bitbucket url with your user, do it with root user
+
+git clone https://sagarlotiya@bitbucket.org/fridaymediagroup/friday-ad-new.git friday-ad-new
+
+2) Set global username and email
+
+git config --global user.name "Your Name"
+git config --global user.email you@example.com
+
+3) chown -R nginx:nginx PATH_TO_YOUR_PROJECT/friday-ad-new
+perform this step each time when you update your project using root user.
+
+4) Go to project root directory. 
+cd PATH_TO_YOUR_PROJECT/friday-ad-new
+
+5) run, composer update
+When you run above command it will ask you for database connection, define appropriate connection.
+
+6) sudo -u nginx php app/console doctrine:database:create
+
+7) sudo -u nginx php app/console doctrine:schema:update --force
+   sudo -u nginx php app/console doctrine:schema:update --force --em=history
+
+8) sudo -u nginx php app/console doctrine:fixtures:load
+
+9) sudo -u nginx php app/console assets:install web --symlink
+
+10) sudo -u nginx php app/console assetic:dump
+
+11) sudo -u nginx php app/console cache:clear --env=dev
+
+12) sudo -u nginx php app/console cache:clear --env=prod
+
+13) sudo -u nginx php app/console lexik:translations:import FaUserBundle, Import translation to database.
+
+14) In case of any issue first try by clearing cache.

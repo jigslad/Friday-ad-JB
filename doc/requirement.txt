@@ -1,0 +1,15 @@
+# install node, uglify-js uglifycss
+
+cd /usr/local/
+wget http://nodejs.org/dist/v0.10.31/node-v0.10.31-linux-x64.tar.gz
+gunzip -d  node-v0.10.31-linux-x64.tar.gz
+tar -xvf node-v0.10.31-linux-x64.tar
+mv node-v0.10.31-linux-x64 node
+
+cd /usr/local/bin/
+
+ln -s /usr/local/node/bin/node ./
+ln -s /usr/local/node/bin/npm ./
+
+./npm install -g uglify-js
+./npm install -g uglifycss

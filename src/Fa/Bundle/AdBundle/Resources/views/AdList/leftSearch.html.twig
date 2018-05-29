@@ -1,0 +1,187 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set searchParams = app.request.get('searchParams') %}
+{% set rootCategoryId = null%}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set adRepository = fetch_repository('FaAdBundle:Ad') %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set parentFullSlug = null %}
+{% set secondLevelParentFullSlug = null %}
+{% set getNoFollowLink = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(app.request.get('searchQueryString')) %}
+{% if searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+    {% set rootCategoryId = categoryRepository.getRootCategoryId(searchParams.item__category_id, container) %}
+    {% set categoryPath     = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
+    {% set categoryPathKeys = categoryPath|keys %}
+    {% if categoryPathKeys[0] is defined %}
+        {% set parentFullSlug = fetch_repository('FaEntityBundle:Category').getFullSlugById(categoryPathKeys[0], fetch_container_instance()) %}
+    {% endif %}
+    {% if categoryPathKeys[1] is defined %}
+        {% set secondLevelParentFullSlug = fetch_repository('FaEntityBundle:Category').getFullSlugById(categoryPathKeys[1], fetch_container_instance()) %}
+    {% endif %}
+{% endif %}
+{% set customized_url = app.request.get('customized_url')  %}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+{{ form_errors(form) }}
+    <dl class="accordion" data-accordion>
+        {% if isShopPage is defined and isShopPage %}
+            <dd class="accordion-navigation keep-shown">
+                <a href="#" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Keyword search'|trans({}, 'frontend-left-search')}}</h5></a>
+                <div class="content active keyword-search">
+                    {{ form_widget(attribute(form, 'keywords'), {'attr': {'class': 'white-field mb0'}}) }}
+                    <button type="submit" class="button secondary-btn-1 mb0">Keyword search</button>
+                </div>
+            </dd>
+        {% endif %}
+        {% set showInSearch = true %}
+        {% if searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+            {% set showInSearch = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'showPriceInSearchFilter', [searchParams.item__category_id, fetch_container_instance()]) %}
+        {% endif %}
+
+        {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+            <div id="left_cat_mobile">
+                {{ include('FaAdBundle:AdList:leftSearchCategoryLinksMobile.html.twig') }}
+            </div>
+        {% else %}
+            {{ include('FaAdBundle:AdList:leftSearchCategoryLinks.html.twig') }}
+        {% endif %}
+
+        {% if rootCategoryId is not null and rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID') %}
+            {{ include('FaAdBundle:AdList:leftSearchDimensionFilters.html.twig') }}
+        {% endif %}
+        <dd class="accordion-navigation keep-shown {% if not showInSearch %}hide{% endif %}">
+            <a href="#panel2a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</h5></a>
+            <div class="content active clearfix">
+              {% if attribute(form, 'item_property__rent_per_id') is defined %}
+                  <ul class="distance-search clearfix">
+                      <li class="col white-select">
+                          {{ form_widget(attribute(form, 'item_property__rent_per_id'), {'attr': {'class': 'fa-select-white'}}) }}
+                      </li>
+                  </ul>
+              {% endif %}
+              <ul class="budget-box clearfix">
+                  <li class="budget-field">
+                      <span>&pound;</span>{{ form_widget(form.item__price_from, {'attr': {'class': 'white-field'}}) }}
+                  </li>
+                  <li class="budget-to-caption">{{ 'to'|trans({}, 'frontend')}}</li>
+                  <li class="budget-field">
+                      <span>&pound;</span>{{ form_widget(form.item__price_to, {'attr': {'class': 'white-field'}}) }}
+                  </li>
+                  <li><button class="budget-go-btn" type="button"></button></li>
+              </ul>
+            </div>
+        </dd>
+
+        <dd class="accordion-navigation keep-shown">
+            <a href="#panel3a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</h5></a>
+            <div class="content active clearfix">
+              <ul class="distance-search clearfix">
+                  <li class="col white-select">
+                      {{ form_widget(form.item__distance, {'attr': {'class': 'fa-select-white'}}) }}
+                  </li>
+                  <li>
+                      <label>{{ 'from'|trans({}, 'frontend')}}</label>
+                  </li>
+              </ul>
+              <ul class="distance-search clearfix">
+                  <li class="col">
+                      <div>
+                          {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
+                           <a href="javascript:void(0);" rel="nofollow" id="fa_left_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                      </div>
+                  </li>
+                  <li>
+                      <button class="budget-go-btn" type="button" id="left_search_location_btn"></button>
+                  </li>
+              </ul>
+              {% if locationFacets is defined and locationFacets|length > 0 %}
+                  <div class="towns-list">
+                      <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
+                      <ul>
+                          {% for townId, count in locationFacets %}
+                              {% set queryParams = {'fa_left_search' : searchParams|merge({'item__location': townId, 'item__distance': 0 })} %}
+                              {% if customized_url|length and customized_url['target_url'] != '' %}
+                                  {% set listurl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl(queryParams['fa_left_search'], customized_url['target_url'], true) %}
+                              {% else %}
+                                  {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams['fa_left_search']) %}
+                              {% endif %}
+                              <li><a href="{{ listurl }}" {% if queryParams.fa_left_search.item__distance is defined and queryParams.fa_left_search.item__distance != 0 %} rel="nofollow" {% endif %} >{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Location', townId) }} ({{ count }})</a></li>
+                          {% endfor %}
+                      </ul>
+                  </div>
+              {% endif %}
+            </div>
+        </dd>
+
+        {% if isShopPage is not defined or (isShopPage is defined and not isShopPage) %}
+            {% if attribute(form, 'item__is_trade_ad') is defined %}
+                {% if searchParams.item__category_id is not defined or (searchParams.item__category_id is defined and searchParams.item__category_id is not null and (rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'))) %}
+                    {{ include('FaAdBundle:AdList:leftSearchSellerLinks.html.twig') }}
+                {% endif %}
+                {% do attribute(form, 'item__is_trade_ad').setRendered %}
+            {% endif %}
+        {% else %}
+            {% do attribute(form, 'item__is_trade_ad').setRendered %}
+        {% endif %}
+
+        {% if searchParams.item__category_id is defined and searchParams.item__category_id is not null and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID') %}
+            {{ include('FaAdBundle:AdList:leftSearchDimensionFilters.html.twig') }}
+        {% endif %}
+
+        <dd class="accordion-navigation keep-shown">
+            <div class="content active label-inline">
+                <ul class="white-checkbox search-type crawlable-checkbox" />
+                    <li>
+                        {% set itemsWithPhoto = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionFacetBySearchParams('id', searchParams|merge({'items_with_photo': 1}), {}, fetch_container_instance(), false, null, null, false, {}, true) %}
+                        {{ form_widget(attribute(form, 'items_with_photo')) }}
+                        <label class="mb0" for="{{ attribute(form, 'items_with_photo').vars.id }}">{{ attribute(form, 'items_with_photo').vars.label }}{% if itemsWithPhoto and itemsWithPhoto|length %} ({{ itemsWithPhoto|length }}){% endif %}</label>
+                        {% set queryParams = searchParams|merge({'items_with_photo': 1}) %}
+                        {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                        <a href="{{ listurl }}" rel="nofollow" class="crowable_checkbox_link" onclick="return false;">{{ attribute(form, 'items_with_photo').vars.label }}</a>
+                    </li>
+                </ul>
+            </div>
+        </dd>
+        
+        {% if isShopPage is not defined or (isShopPage is defined and not isShopPage) %}
+            <dd class="accordion-navigation keep-shown">
+                <div class="content active label-inline">
+                    <ul class="white-checkbox search-type crawlable-checkbox" />
+                        <li>
+                            {{ form_widget(attribute(form, 'expired_ads')) }}
+                            {{ form_label(attribute(form, 'expired_ads')) }}
+                            {% set queryParams = searchParams|merge({'expired_ads': 1}) %}
+                            {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                            <a href="{{ listurl }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} class="crowable_checkbox_link" onclick="return false;">{{ attribute(form, 'expired_ads').vars.label }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </dd>
+        {% else %}
+            {% do attribute(form, 'expired_ads').setRendered %}
+        {% endif %}
+    </dl>
+{{ form_end(form) }}
+<div id="left_search_dimension_modal" class="reveal-modal" data-reveal></div>
+<div id="removeSavedSearch" class="reveal-modal tiny" data-reveal>
+    <a class="close-reveal-modal" rel="nofollow" href="javascript:void(0);" onclick="cancleRemoveSearchAgentPopup();">&#215;</a>
+    <h5 class="modal-title">
+        {{'Stop search alert'|trans({}, 'frontend-my-saved-searches')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Are you sure you want to stop this search alert?'|trans({}, 'frontend-my-saved-searches')}}</h5>
+            </div>
+        </div>
+        <div class="mt20 remove-search-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#removeSavedSearch');removeSavedSearch();">{{'Ok'|trans({}, 'frontend-my-saved-searches')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="cancleRemoveSearchAgentPopup();">{{'Cancel'|trans({}, 'frontend-my-saved-searches')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

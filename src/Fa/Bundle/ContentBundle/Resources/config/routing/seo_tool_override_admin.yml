@@ -1,0 +1,25 @@
+seo_tool_override_admin:
+    path:     /
+    defaults: { _controller: "FaContentBundle:SeoToolOverrideAdmin:index" }
+
+seo_tool_override_new_admin:
+    path:     /new
+    defaults: { _controller: "FaContentBundle:SeoToolOverrideAdmin:new" }
+
+seo_tool_override_create_admin:
+    path:     /create
+    defaults: { _controller: "FaContentBundle:SeoToolOverrideAdmin:create" }
+    requirements: { methods: post }
+
+seo_tool_override_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaContentBundle:SeoToolOverrideAdmin:edit" }
+
+seo_tool_override_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaContentBundle:SeoToolOverrideAdmin:update" }
+    requirements: { methods: post|put }
+
+seo_tool_override_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaContentBundle:SeoToolOverrideAdmin:delete" }

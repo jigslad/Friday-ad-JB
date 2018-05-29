@@ -1,0 +1,141 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set adRepository         = fetch_repository('FaAdBundle:Ad') %}
+{% set adLocationRepository = fetch_repository('FaAdBundle:AdLocation') %}
+{% set adImageRepository = fetch_repository('FaAdBundle:AdImage') %}
+{% set adViewCounterRepository = fetch_repository('FaAdBundle:AdViewCounter') %}
+{% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
+{% set adModerateRepository = fetch_repository('FaAdBundle:AdModerate') %}
+{% set userCreditRepository = fetch_repository('FaUserBundle:UserCredit') %}
+{% set userCreditCount = userCreditRepository.getActiveCreditCountForUser(app.user.getId()) %}
+
+{% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
+{% set adUrl = ''%}
+
+{% if pagination.getNbResults() %}
+    {% set adCategoryIdArray    = adRepository.getAdCategoryIdArrayByAdId(adIdArray) %}
+    {% set adImageArray         = adImageRepository.getAdMainImageArrayByAdId(adIdArray) %}
+    {% set adViewCounterArray   = adViewCounterRepository.getAdViewCounterArrayByAdId(adIdArray) %}
+    {% set adPackageArray       = adUserPackageRepository.getAdPackageArrayByAdId(adIdArray, true) %}
+    {% set adModerateArray      = adModerateRepository.findResultsByAdIdsAndModerationResult(adIdArray, 'rejected') %}
+    {% set inModerationLiveAdIds = adModerateRepository.getInModerationStatusForLiveAdIds(adIdArray) %}
+{% endif %}
+
+<div class="posting-bg">
+    {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+    <div class="row d-board-main">
+        <div class="off-canvas-wrap" data-offcanvas>
+            <div class="inner-wrap">
+                {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                <div class="large-18 columns" id="db-right-part">
+                    <h1 class="db-title">{{'Manage ads (%ad_count%)'|trans({'%ad_count%': totalAdCount}, 'frontend-manage-my-ad')}}</h1>
+                    <h2 class="db-sub-title title-space2">You'll find everything you need to update, edit, track and generally manage your ads.</h2>
+                    {% if userCreditCount > 0 %}
+                        <div class="total-credits-remaining">
+                            {{'Total credits remaining:'|trans({}, 'frontend-manage-my-ad')}} <a href="{{ path('my_credits') }}">{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</a>
+                        </div>
+                    {% endif %}
+                    <ul class="tab-menu manage-item-tabs clearfix">
+                        <li {% if currentRoute == 'manage_my_ads_active' %} class="active" {% endif %}><a href="{{path('manage_my_ads_active')}}">{{ 'Active adverts'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a></li>
+                        <li {% if currentRoute == 'manage_my_ads_inactive' %} class="active" {% endif %}><a href="{{path('manage_my_ads_inactive')}}">{{ 'Inactive adverts'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a></li>
+                    </ul>
+                 
+                   <div class="manage-items-main">
+                       {% if pagination.getNbResults() %}
+                            {% for ad in pagination.getCurrentPageResults() %}
+                                {% set adId = ad.id %}
+                                {% set adCategoryId = null %}
+                                {% if adCategoryIdArray[adId] is defined %}
+                                    {% set adCategoryId = adCategoryIdArray[adId] %}
+                                {% endif %}
+                                {% if ad['status_id'] == adStatusLive %}
+                                    {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
+                                    {% set adUrl = adUrl|trim('/') %}
+                                {% endif %}
+
+                                {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+                            {% endfor %}
+                        {% else %}
+                            <div class="row">
+                                <div class="columns">
+                                    {% if app.request.attributes.get('type') == 'inactive' %}
+                                        {{ 'You currently have no inactive adverts.'|trans({}, 'frontend-manage-my-ad') }}
+                                    {% else %}
+                                        {{ 'You currently have no active adverts.'|trans({}, 'frontend-manage-my-ad') }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="pagination-centered">
+                            {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="markAdAsSoldOrExpireModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Was your advert successful?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-6 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsSoldOrExpireModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')}}');">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+                <div class="large-6 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsSoldOrExpireModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')}}');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsSoldOrExpireModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="markAdAsInactiveModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Are you sure that you want to permanently delete this advert?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsInactiveModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID')}}');">{{'Delete'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsInactiveModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="socialShareMobileModal" class="reveal-modal tiny" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Share this ad'|trans({}, 'frontend-manage-my-ad')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <div id="social_share_icon_div" class="dtl-social-icons manage-list-social-icons text-left"></div>
+            </div>
+        </div>
+    </div>
+</div>

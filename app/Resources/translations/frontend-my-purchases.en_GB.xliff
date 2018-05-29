@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="519fd0096b2355741ad7c6b4f17f9310d884a375" resname="Buyer will collect the item.">
+        <jms:reference-file line="93">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Buyer will collect the item.</source>
+        <target state="new">Buyer will collect the item.</target>
+      </trans-unit>
+      <trans-unit id="5540a19b4f3b25a312d34b89e629d6538aaf1e6f" resname="Delivey method">
+        <jms:reference-file line="65">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Delivey method</source>
+        <target state="new">Delivey method</target>
+      </trans-unit>
+      <trans-unit id="ecdda59aea5ee67d7d854c969ccf7f4f4b4a4c54" resname="Item">
+        <jms:reference-file line="43">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Item</source>
+        <target state="new">Item</target>
+      </trans-unit>
+      <trans-unit id="9dfa5c790784b6d74600184ffd0345aae3d5ce26" resname="My purchases">
+        <jms:reference-file line="4">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>My purchases</source>
+        <target state="new">My purchases</target>
+      </trans-unit>
+      <trans-unit id="7cd1d44b3c669cee4c26966b8db2380d1e04db61" resname="No records found.">
+        <jms:reference-file line="127">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>No records found.</source>
+        <target state="new">No records found.</target>
+      </trans-unit>
+      <trans-unit id="be42782d4ef499e09b91242343c62224928e663d" resname="Order no.">
+        <jms:reference-file line="42">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Order no.</source>
+        <target state="new">Order no.</target>
+      </trans-unit>
+      <trans-unit id="bb5d68da368f41f4c8d2b29a302d11a01398fea0" resname="Order placed">
+        <jms:reference-file line="53">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Order placed</source>
+        <target state="new">Order placed</target>
+      </trans-unit>
+      <trans-unit id="22edd6c1ad2ba007c781057f305f6b76724f5ba6" resname="Order status">
+        <jms:reference-file line="62">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Order status</source>
+        <target state="new">Order status</target>
+      </trans-unit>
+      <trans-unit id="59fcbee78c36c5bb5563d897ba31ce37d99ff1b5" resname="Post to">
+        <jms:reference-file line="79">views/MyOrders/myOrders.html.twig</jms:reference-file>
+        <jms:reference-file line="69">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Post to</source>
+        <target state="new">Post to</target>
+      </trans-unit>
+      <trans-unit id="5572774748cf9ee77766f5e41fec583e4bc18d9f" resname="Print receipt">
+        <jms:reference-file line="102">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Print receipt</source>
+        <target state="new">Print receipt</target>
+      </trans-unit>
+      <trans-unit id="6c4e94f10417cf4b0124f30fd22274288155668f" resname="Purchases">
+        <jms:reference-file line="21">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Purchases</source>
+        <target state="new">Purchases</target>
+      </trans-unit>
+      <trans-unit id="3b948130d47c54f32afea733f591b72c1876b147" resname="Send seller a message">
+        <jms:reference-file line="106">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <jms:reference-file line="113">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Send seller a message</source>
+        <target state="new">Send seller a message</target>
+      </trans-unit>
+      <trans-unit id="12c71f0ae42b5623ac368754893a7103510d333a" resname="Sold by">
+        <jms:reference-file line="55">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Sold by</source>
+        <target state="new">Sold by</target>
+      </trans-unit>
+      <trans-unit id="566891ab80257f558506498452e5123555c49fed" resname="Total price">
+        <jms:reference-file line="54">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>Total price</source>
+        <target state="new">Total price</target>
+      </trans-unit>
+      <trans-unit id="3da41a8e6348feb591503627d5ed72bc43ad6994" resname="View receipt">
+        <jms:reference-file line="101">views/MyPurchases/myPurchases.html.twig</jms:reference-file>
+        <source>View receipt</source>
+        <target state="new">View receipt</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

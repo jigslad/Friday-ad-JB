@@ -1,0 +1,66 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% set container = fetch_container_instance() %}
+{% set seoManager = container.get('fa.seo.manager') %}
+
+{% block meta_robots %}
+    {% if seoFields.meta_robots is defined %}
+        {{seoFields.meta_robots}}
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    {% if seoFields.page_title is defined %}
+        {{ seoManager.parseSeoString(seoFields.page_title, {'{location}': seoLocationName}) }}
+    {% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if seoFields.meta_description is defined %}
+        {{ seoManager.parseSeoString(seoFields.meta_description, {'{location}': seoLocationName}) }}
+    {% endif %}
+{% endblock %}
+
+{% block meta_keywords %}
+    {% if seoFields.meta_keywords is defined %}
+        {{ seoManager.parseSeoString(seoFields.meta_keywords, {'{location}': seoLocationName}) }}
+    {% endif %}
+{% endblock %}
+
+{% block canonical_url %}
+    {% if seoFields.canonical_url is defined %}
+        {{seoFields.canonical_url}}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+{% if seoFields.h1_tag is defined %}
+    <h1 class="simple-heading">{{ seoManager.parseSeoString(seoFields.h1_tag, {'{location}': seoLocationName}) }}</h1>
+{% endif %}
+
+<div class="testimonial-main">
+    <div class="banner-wrapper clearfix">
+        <div class="left-banner">
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+        </div>
+        <div class="row">
+            <div class="large-17 columns">
+                {{staticPage.getDescription()|raw}}
+            </div>
+            {% if staticPage.getAdditionalInfo() %}
+            <div class="large-7 columns">
+                <div class="staticpage-graybox">
+                    {{staticPage.getAdditionalInfo()|raw}}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="right-banner">
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

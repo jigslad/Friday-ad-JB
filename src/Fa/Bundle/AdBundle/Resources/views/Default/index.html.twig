@@ -1,0 +1,20 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% use "FaAdBundle:AdImage:showImageUploader.html.twig" %}
+
+{% block title %} Image Upload {% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('imageUploadStylesheets') }}
+{% endblock %}
+
+{% block body %}
+    {{ render(controller('FaAdBundle:AdImage:showImageUploader')) }}
+    {{ set_variables('imageUploadJavascriptBottom', {'loaded':'false'}) }}
+{% endblock %}
+
+{% block javascriptBottom %}
+    {{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+    {{ parent() }}
+    {{ block('imageUploadJavascriptBottom') }}
+{% endblock %}

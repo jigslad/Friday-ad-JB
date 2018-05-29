@@ -1,0 +1,73 @@
+1) sudo -u nginx php app/console doctrine:database:drop --force
+
+2) sudo -u nginx php app/console doctrine:database:create
+
+3) sudo -u nginx php app/console doctrine:schema:update --force
+
+4) sudo -u nginx php app/console doctrine:fixtures:load
+
+5) sudo -u nginx php app/console assets:install web --symlink
+
+6) sudo -u nginx php app/console assetic:dump
+
+7) sudo -u nginx php app/console cache:clear --env=dev
+
+8) sudo -u nginx php app/console cache:clear --env=prod
+
+9) Import translation to database
+
+   sudo -u nginx php app/console lexik:translations:import FaUserBundle
+   sudo -u nginx php app/console lexik:translations:import FaPromotionBundle
+   sudo -u nginx php app/console lexik:translations:import FaPaymentBundle
+   sudo -u nginx php app/console lexik:translations:import FaContentBundle
+   sudo -u nginx php app/console lexik:translations:import FaEntityBundle
+   sudo -u nginx php app/console lexik:translations:import FaAdBundle
+
+
+10) In case of any issue first try by clearing cache.
+
+11) Load migration data.
+
+    For local environment:
+    ======================
+
+    cd migration/
+
+    composer update
+    do it only first time.
+
+    [Take database from test server]
+    wget --http-user=fridayad --http-password=fr1day http://test.friday-ad.fiare.com/FridayAdsDB.tar.gz
+
+    OR 
+    [Take database from janak's pc]
+    wget http://jnj.fridayads.31.aum/FridayAdsDB.tar.gz
+
+    sudo -u nginx  tar xvzf FridayAdsDB.tar.gz
+
+    sudo -u nginx vi src/Fa/Migration.php, change following configuration as per your need
+
+    /** NEW DATABASE CONFIGURATION **/
+    const HOST_NEW     = 'locathost';
+    const USERNAME_NEW = 'fridayad';
+    const PASSWORD_NEW = 'fridayad';
+    const DATABASE_NEW = 'fridayad';
+
+    sudo -u nginx php import.php import:category
+    sudo -u nginx php import.php import:location
+    sudo -u nginx php import.php import:paa-fields
+    sudo -u nginx php import.php import:ad
+    sudo -u nginx php import.php import:location-groups
+    sudo -u nginx php import.php import:category-dimension
+
+    For test environment:
+    =====================
+
+    cd migration/
+
+    sudo -u nginx php import.php import:category
+    sudo -u nginx php import.php import:location
+    sudo -u nginx php import.php import:paa-fields
+    sudo -u nginx php import.php import:ad
+    sudo -u nginx php import.php import:location-groups
+    sudo -u nginx php import.php import:category-dimension

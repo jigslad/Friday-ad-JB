@@ -1,0 +1,57 @@
+{% if locations|length %}
+    <div class="row">
+        <div class="columns">
+            {% if blockName is defined %}
+                <h3>{{blockName}}</h3>
+            {% endif %}
+            <ul class="link-list">
+                <li>
+                    <div class="row">
+                        {% set columns = 4 %}
+                        {% set ctr = 0 %}
+                        {% set totalItems = locations|length %}
+                        {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                        {% set extraColumn = (totalItems % columns) %}
+                        {% set colCounter = {} %}
+                        {% for i in 0..columns-1 %}
+                            {% if loop.index0 < extraColumn %}
+                                {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                            {% else  %}
+                                {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for i in 0..columns-1 %}
+                            {% if (i % 2) == 0 %}<div class="large-12 columns">{% endif %}
+                            <div class="large-12 columns">
+                                {% for k in 0..colCounter[i]-1 %}
+                                    {% if locations[ctr] is defined %}
+                                        {% if route is not defined %}
+                                            {% if locations[ctr].getUrl() is defined and locations[ctr].getUrl() is not null and locations[ctr].getUrl() != '' %}
+                                                {% set locationHomePageUrl = container.get('fa_ad.manager.ad_routing').getLocationHomePageUrl(locations[ctr].getUrl()) %}
+                                                {% set locationName        = locations[ctr].getName() %}
+                                            {% elseif locations[ctr]['url'] is defined and locations[ctr]['url'] is not null and locations[ctr]['url'] != '' %}
+                                                {% set locationHomePageUrl = container.get('fa_ad.manager.ad_routing').getLocationHomePageUrl(locations[ctr]['url']) %}
+                                                {% set locationName        = locations[ctr]['name'] %}
+                                            {% endif %}
+                                        {% elseif route == 'show_all_towns_by_county' %}
+                                            {% if locations[ctr].getUrl() is defined and locations[ctr].getUrl() is not null and locations[ctr].getUrl() != '' %}
+                                                {% set locationHomePageUrl = path('show_all_towns_by_county', {'countySlug': locations[ctr].getUrl()}) %}
+                                                {% set locationName        = locations[ctr].getName() %}
+                                            {% elseif locations[ctr]['url'] is defined and locations[ctr]['url'] is not null and locations[ctr]['url'] != '' %}
+                                                {% set locationHomePageUrl = path('show_all_towns_by_county', {'countySlug': locations[ctr]['url']}) %}
+                                                {% set locationName        = locations[ctr]['name'] %}
+                                            {% endif %}
+                                        {% endif %}
+                                        <a href="{{locationHomePageUrl}}">{{locationName}}</a>
+                                    {% endif %}
+                                    {% set ctr = ctr + 1 %}
+                                {% endfor %}
+                            </div>
+                            {% if (i % 2) == 1 %}</div>{% endif %}
+                        {% endfor %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endif %}

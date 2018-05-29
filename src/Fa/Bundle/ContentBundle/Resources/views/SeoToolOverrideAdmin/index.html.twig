@@ -1,0 +1,33 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set entityRepository = fetch_repository('FaEntityBundle:Entity') %}
+{% set statusArray = entityRepository.getStatusArray(fetch_container_instance(), false) %}
+
+{% set seoToolOverrideEditGrant = false %}
+{% set seoToolOverrideDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('seo_tool_override_edit_admin') %}
+  {% set seoToolOverrideEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('seo_tool_override_delete_admin') %}
+  {% set seoToolOverrideDeleteGrant = true %}
+{% endif %}
+
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'seo_tool_override_new_admin'}) }}
+
+    {% use "FaContentBundle:SeoToolOverrideAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaContentBundle:SeoToolOverrideAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+{% set searchScript = block('search_script') is defined ? block('search_script') : '' %}
+    {{ searchScript }}
+{% endblock %}

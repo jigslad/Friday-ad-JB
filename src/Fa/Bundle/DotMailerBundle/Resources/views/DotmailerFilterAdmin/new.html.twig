@@ -1,0 +1,18 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+<div class="large-row">
+{% if entity is not defined %}
+    {{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+{% else %}
+    {{ include('FaAdminBundle:Default:addEditHeading.html.twig', {'heading': 'Edit marketing filter'|trans}) }}
+{% endif %}
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           {{ include('FaDotMailerBundle:DotmailerFilterAdmin:addEditForm.html.twig') }}
+       </div>
+   </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,81 @@
+FaPaymentBundle_cart:
+    resource: '@FaPaymentBundle/Resources/config/routing/cart.yml'
+    prefix:   /cart/
+    schemes:  [https]
+
+FaPaymentBundle_cart_admin:
+    resource: '@FaPaymentBundle/Resources/config/routing/cart_admin.yml'
+    prefix:   /admin/cart
+    schemes:  [https]
+
+FaPaymentBundle_checkout:
+    resource: '@FaPaymentBundle/Resources/config/routing/checkout.yml'
+    prefix:   /checkout/
+    schemes:  [https]
+
+FaPaymentBundle_checkout_admin:
+    resource: '@FaPaymentBundle/Resources/config/routing/checkout_admin.yml'
+    prefix:   /admin/checkout
+    schemes:  [https]
+    
+FaPaymentBundle_my_orders:
+    resource: '@FaPaymentBundle/Resources/config/routing/my_orders.yml'
+    prefix:   /my_orders/
+    schemes:  [https]
+
+paypal_checkout:
+    path:     /checkout/paypal/
+    defaults: { _controller: "FaPaymentBundle:PaypalCheckout:checkout" }
+
+cybersource_checkout:
+    path:     /checkout/cybersource/
+    defaults: { _controller: "FaPaymentBundle:CyberSourceCheckout:checkout" }
+
+checkout_payment_success:
+    path:     /checkout/payment_success/{cartCode}
+    defaults: { _controller: "FaPaymentBundle:Checkout:paymentSuccess" }
+
+checkout_payment_failure:
+    path:     /checkout/payment_failure/{cartCode}
+    defaults: { _controller: "FaPaymentBundle:Checkout:paymentFailure" }
+
+paypal_process_payment:
+    path:     /checkout/paypal/process_payment
+    defaults: { _controller: "FaPaymentBundle:PaypalCheckout:processPayment" }
+
+amazonpay_checkout:
+    path:     /amazonpay_checkout/
+    defaults: { _controller: "FaPaymentBundle:AmazonpayCheckout:checkout" }
+
+amazonpay_checkout_admin:
+    path:     /admin/amazonpay_checkout_admin/
+    defaults: { _controller: "FaPaymentBundle:AmazonpayCheckoutAdmin:checkout" }
+    
+amazonpay_process_payment:
+    path:     /amazon/process_payment
+    defaults: { _controller: "FaPaymentBundle:AmazonpayCheckout:processPayment" }    
+
+ajax_amazonpay_cart_details:
+    path:     /ajax/amazonpay_cart_details
+    defaults: { _controller: "FaPaymentBundle:AmazonpayCheckout:ajaxCartDetails" }
+
+amazonpay_payment_success:
+    path:     /amazon/payment_success/{cartCode}
+    defaults: { _controller: "FaPaymentBundle:Checkout:paymentSuccess" }
+
+ajax_amazonpay_cartdetails_admin:
+    path:     /admin/ajax/amazonpay_cartdetails_admin
+    defaults: { _controller: "FaPaymentBundle:AmazonpayCheckoutAdmin:ajaxCartDetails" }
+
+    
+cybersource_trail_subscription_checkout:
+    path:     /choose-profile/trail/cybersource
+    defaults: { _controller: "FaPaymentBundle:CyberSourceCheckout:checkout", trail: 1, subscription: 1}
+    
+cybersource_subscription_checkout:
+    path:     /choose-profile/cybersource
+    defaults: { _controller: "FaPaymentBundle:CyberSourceCheckout:checkout", subscription: 1}
+
+cybersource_delete_token:
+    path:     /cybersource/delete/{id}
+    defaults: { _controller: "FaPaymentBundle:CyberSourceCheckout:deleteToken" }

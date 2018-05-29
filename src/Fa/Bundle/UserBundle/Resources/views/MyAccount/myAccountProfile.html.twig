@@ -1,0 +1,92 @@
+{% set userPackageRepository = fetch_repository('FaUserBundle:UserPackage') %}
+{% set paymentTokenizationRepository = fetch_repository('FaPaymentBundle:PaymentTokenization') %}
+
+<dd class="accordion-navigation {% if not userAccountProfileForm.vars.valid or app.session.flashbag.has('user_account_profile_success') %}active{% endif %}">
+    <a href="#panel4b" class="section-head">
+        <span class="profile-icon">{{ 'Your profile'|trans({}, 'frontend-user-account-profile') }}</span>
+        <span>&nbsp;</span>
+    </a>
+    <div id="panel4b" class="content {% if not userAccountProfileForm.vars.valid or app.session.flashbag.has('user_account_profile_success') %}active{% endif %}">
+        {{ form_start(userAccountProfileForm, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'user_account_profile_success'}) }}
+            <div class="white-radio user-type label-inline">
+              {{ form_row(userAccountProfileForm.user_roles, {'attr': {'field-help': true}}) }}
+            </div>
+            <div class="business_seller_fields myacc-bz-category white-select" style="display:none;">
+                {{ form_row(userAccountProfileForm.business_category_id, {'attr': {'class':'fa-select-white'}}) }}
+            </div>
+            {% if shopPackageDetail is not null %}
+                <ul class="myacc-profile-dtl">
+                    <li><label>{{ 'Profile level'|trans({}, 'frontend-user-account-profile') }}:</label>{{ (shopPackageDetail.getPackage() ? shopPackageDetail.getPackage().getTitle() : '-' ) }}</li>
+                    {% if not shopPackageDetail.getPackage().getPrice() or (shopPackageDetail.getPackage().getPrice() and shopPackageDetail.getRemark() != 'choose-package-backend') %}
+                        <li><label>{{ 'Monthly cost'|trans({}, 'frontend-user-account-profile') }}:</label>{{ (shopPackageDetail.getPackage() ? format_currency(shopPackageDetail.getPackage().getPrice()) : '-' ) }}</li>
+                        {% if shopPackageDetail.getExpiresAt() and shopPackageDetail.getPayment() %}
+                            <li><label>{{ 'Next payment due'|trans({}, 'frontend-user-account-profile') }}:</label>{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userPackageRepository.getNextPaymentDueDateFromExpiresAt(shopPackageDetail.getExpiresAt(), container), container, null, null, 'd MMM YYYY']) }}</li>
+                        {% elseif shopPackageDetail.getExpiresAt() and not shopPackageDetail.getPayment() %}
+                            <li><label>{{ 'You have cancelled your upgraded profile package and will be converted to a basic profile at the end of the current subscription period on %expires-at%.'|trans({'%expires-at%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [shopPackageDetail.getExpiresAt(), container, null, null, 'd MMM YYYY'])}, 'frontend-user-account-profile') }}</label></li>
+                        {% endif %}
+                        {% if shopPackageDetail.getPayment() and  paymentTokens|length %}
+                            <li><label>{{ 'Payment source'|trans({}, 'frontend-user-account-profile') }}:</label></li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            {% endif %}
+            <div class="saved-payment-sources white-radio">
+                {% if shopPackageDetail is not null and shopPackageDetail.getPayment() and  paymentTokens|length %}
+                    {% set paymentValue = array_unserialize(shopPackageDetail.getPayment().getValue()) %}
+                    {% set paymentSource = null %}
+                    {% if paymentValue['subscriptionID'] is defined %}
+                        {% set token = paymentTokenizationRepository.getTokenBySubscriptionId(app.user.getId(), paymentValue['subscriptionID']) %}
+                        {% if token %}
+                            {% set paymentSource = token.getId() %}
+                        {% endif %}
+                    {% endif %}
+                    <ul class="choose-payment-method" id="payment_source_id">
+                        {% for choice in userAccountProfileForm.payment_source.vars.choices %}
+                            <li class="label-inline">
+                                <span class="custom-radio {% if paymentSource == choice.value %}checked{% endif %} "><input type="radio" value="{{ choice.value }}" {% if paymentSource == choice.value %}checked{% endif %} name="{{ userAccountProfileForm.payment_source.vars.full_name }}" id="{{ userAccountProfileForm.payment_source.vars.id }}_{{ choice.value }}" /></span>
+                                <label for="{{ userAccountProfileForm.payment_source.vars.id }}_{{ choice.value }}">{{ choice.label|raw }}</label>
+                                {% if loop.index == userAccountProfileForm.payment_source.vars.choices|length %}
+                                    {{ form_errors(userAccountProfileForm.payment_source) }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if userAccountProfileForm.payment_source is defined %}
+                    {% do attribute(userAccountProfileForm, 'payment_source').setRendered %}
+                {% endif %}
+
+                <div class="mt20 myacc-details">
+                    {{ form_widget(userAccountProfileForm.save_profile_changes, {'attr': {'class':'secondary-btn-1 button expand'}}) }}
+                    {% if shopPackageDetail is not null and shopPackageDetail.getPayment() and  paymentTokens|length %}
+                        <a href="javascript:void(0);" data-reveal-id="myAccountProfileCancelSubscriptionModal">{{ 'Cancel subscription'|trans({}, 'frontend-user-account-profile') }}</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div id="myAccountProfileCancelSubscriptionModal" class="reveal-modal tiny" data-reveal>
+                <a class="close-reveal-modal">&#215;</a>
+                <h5 class="modal-title">
+                    {{'Cancel subscription?'|trans({}, 'frontend-user-account-profile')}}
+                </h5>
+                <div class="modal-content remove-modal">
+                    <div class="row">
+                        <div class="columns">
+                            <h5>{{'Are you sure you want to cancel your upgraded profile package?'|trans({}, 'frontend-user-account-profile')}}</h5>
+                        </div>
+                    </div>
+                    <div class="mt20">
+                        <div class="row">
+                            <div class="columns large-12">
+                                <button type="button" class="button secondary-btn-4 thin-btn expand  mb0" onclick="javascript:closeRevealModel('#myAccountProfileCancelSubscriptionModal');">{{'Cancel'|trans({}, 'frontend-user-account-profile')}}</button>
+                            </div>
+                            <div class="columns large-12">
+                                <button type="button" class="button secondary-btn-1 thin-btn expand  mb0" onclick="closeRevealModel('#myAccountProfileCancelSubscriptionModal');window.location.href='{{ path('my_account_cancel_subscription') }}'">{{'Ok'|trans({}, 'frontend-user-account-profile')}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{ form_end(userAccountProfileForm) }}
+    </div>
+</dd>

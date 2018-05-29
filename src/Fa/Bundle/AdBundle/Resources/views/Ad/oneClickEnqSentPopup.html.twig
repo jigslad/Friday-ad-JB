@@ -1,0 +1,60 @@
+<div id="oneClickEnquireSentModal" class="reveal-modal tiny" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        <span class="one-click-icon"></span> {{'Still available?'|trans({}, 'frontend-show-ad')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                {% set contactLink = '<a id="get_in_touch_link" href="javascript:void(0)" onclick="getInTouch('~adId~');">get in touch</a>' %}
+                <p id="onclick_sent_success_message">
+                    {{ "Your enquiry got sent to the seller. You will receive an answer by email and in your %site_name% message inbox. In the meantime, feel free to %contactLink% with the seller if you have any further questions for them."|trans({'%site_name%': container.getParameter('service_name'), '%contactLink%': contactLink})|raw }}
+                </p>
+                <p id="onclick_sent_error_message">
+                    {{ "You have already enquired on this item. We'll let you know as soon as the seller has responded. If you have any other questions about the item, please feel free to %contactLink% with them."|trans({'%contactLink%': contactLink})|raw }}
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="columns">
+                <a class="secondary-btn-1 button expand mb0" href="javascript:void(0)" onclick="return closeRevealModel('#oneClickEnquireSentModal');">{{ 'Continue'|trans({}, 'frontend-show-ad') }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+function sendOneClickEnquiry()
+{
+    var adId = "{{ adId }}";
+    {% if get_variables('CatDetails') is not null and get_variables('CatDetails').catString is defined %}
+        {% set catText = get_variables('CatDetails').catString %}
+    {% endif %}
+    blockPage();
+    $.ajax({
+        type: "POST",
+        url: "{{path('send_one_click_enq_ajax')}}",
+        data: {'adId':adId}
+    })
+    .done(function(objResponse) {
+        if (!objResponse.response) {
+          $('#onclick_sent_success_message').hide();
+          $('#onclick_sent_error_message').show();
+        } else {
+          $('#onclick_sent_success_message').show();
+          $('#onclick_sent_error_message').hide();
+          ga('send', 'event', 'CTA', 'Send email (one-click)', '{{ adId }}-{{ userTypeText }}{{ catText }}');
+        }
+        $('#oneClickEnquireSentModal').foundation('reveal', 'open');
+        unblockPage();
+    });
+}
+
+function getInTouch(adId)
+{
+  $('#oneClickEnquireSentModal').foundation('reveal', 'close'); 
+  contactSeller(adId, 'Contact Seller Link One Click Enquire', '');
+}
+//]]>
+</script>

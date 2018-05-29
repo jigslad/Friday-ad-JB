@@ -1,0 +1,29 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+{% set headerImageEditGrant = false %}
+{% set headerImageDeleteGrant = false %}
+
+{% if fa_resource_authorization_manager.isGranted('header_image_edit_admin') %}
+  {% set headerImageEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('header_image_delete_admin') %}
+  {% set headerImageDeleteGrant = true %}
+{% endif %}
+
+{% block content -%}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'header_image_new_admin'}) }}
+
+    {% use "FaContentBundle:HeaderImageAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaContentBundle:HeaderImageAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

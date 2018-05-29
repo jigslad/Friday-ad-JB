@@ -1,0 +1,15 @@
+FaEntityBundle_category:
+    resource: '@FaEntityBundle/Resources/config/routing/category.yml'
+    prefix:   /category
+
+FaEntityBundle_entity:
+    resource: '@FaEntityBundle/Resources/config/routing/entity.yml'
+    prefix:   /entity
+
+FaEntityBundle_location:
+    resource: '@FaEntityBundle/Resources/config/routing/location.yml'
+    prefix:   /
+    
+FaEntityBundle_category_dimension:
+    resource: '@FaEntityBundle/Resources/config/routing/category_dimension.yml'
+    prefix:   /dimension

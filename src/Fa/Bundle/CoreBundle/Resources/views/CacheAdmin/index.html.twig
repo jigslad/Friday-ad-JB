@@ -1,0 +1,36 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+
+{% set cacheClearGrant = false %}
+{% set cacheGenerateGrant = false %}
+
+{% if fa_resource_authorization_manager.isGranted('cache_clear_admin') %}
+  {% set cacheClearGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('cache_generate_admin') %}
+  {% set cacheGenerateGrant = true %}
+{% endif %}
+
+{% block content %}
+    <div class="row">
+        <div class="columns">
+            <h1 class="left">{{'Cache management'}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="columns">
+            <div class="outline">
+                {% if cacheClearGrant %}
+                    <a href="{{ path('cache_clear_admin') }}" class="button add_user_btn" onClick="if (!confirm('Do you want to flush cache?')) { return false; }">{{ 'Flush cache'|trans}}</a>&nbsp;&nbsp;
+                {% endif %}
+                {% if cacheGenerateGrant %}
+                    <a href="{{ path('cache_generate_admin') }}" class="button add_user_btn">{{ 'Generate cache'|trans}}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    
+{% endblock %}

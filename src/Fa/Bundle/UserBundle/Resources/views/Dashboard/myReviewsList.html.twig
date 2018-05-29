@@ -1,0 +1,35 @@
+{% set pagination = myReviewsParameters['pagination'] %}
+{% set reviewFromSellerCount = myReviewsParameters['reviewFromSellerCount'] %}
+{% set reviewFromBuyerCount = myReviewsParameters['reviewFromBuyerCount'] %}
+{% set reviewLeftForOthersCount = myReviewsParameters['reviewLeftForOthersCount'] %}
+{% set reviewType = app.request.get('reviewType') %}
+{{ include('FaUserBundle:Review:reviewTabs.html.twig') }}
+<div class="tab-content">
+    <div class="row">
+        <div class="columns">
+            <div id="msg_div" style="display:none;"></div>
+        </div>
+    </div>
+
+    {% if pagination.getNbResults() %}
+        <div class="row ">
+            <div class="columns">
+                <div class="my-msg-main user-review">
+                    {% for review in pagination.getCurrentPageResults() %}
+                        {% if reviewType == 'left_for_others' %}
+                            {{ include('FaUserBundle:Review:leftReviewlist.html.twig', {'review' : review}) }}
+                        {% else %}
+                            {{ include('FaUserBundle:Review:list.html.twig', {'review' : review}) }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="row ">
+            <div class="columns">
+                <div><br>{{ "You don’t have any reviews yet. Leave a review next time you buy or sell something!"|trans({}, 'frontend-dashboard') }}</div>
+            </div>
+        </div>
+    {% endif %}
+</div>

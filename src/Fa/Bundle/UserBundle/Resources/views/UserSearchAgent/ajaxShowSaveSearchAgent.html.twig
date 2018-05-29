@@ -1,0 +1,44 @@
+{% set userGuid = '' %}
+{% if halfAccountUser is defined and halfAccountUser.guid %}
+    {% set userGuid = halfAccountUser.guid %}
+{% endif %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title save-search-title">{{'Alert set up'|trans({}, 'frontend-save-search')}}</h5>
+<div class="modal-content">
+    {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag')  and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
+        <div data-alert class="alert-box success radius">
+            <span class="alert-icon">&nbsp;</span>
+            {{'You have successfully logged in.'|trans({}, 'frontend')}}
+            <a href="javascript:void(0)" class="close">&times;</a>
+        </div>
+        {{ fetch_repository('FaUserBundle:User').removeUserCookies() }}
+    {% endif %}
+    <h5 id="saved_search_header">{{'Your search has been set up!'|trans({}, 'frontend-save-search')}}</h5>
+    <p>{{'Manage your <a href="%search_agent_link%">alerts and searches.</a>'|trans({'%search_agent_link%': path('list_search_agent', {'guid': (userGuid)})}, 'frontend-save-search')|raw}}</p>
+    <button class="secondary-btn-1 button expand" onclick="return $('#savedSearchAgentModal').foundation('reveal', 'close');">{{'Done'|trans({}, 'frontend-save-search')}}</button>
+</div>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        bindCustomRadioEvent();
+        bindCustomCheckboxEvent();
+    });
+    function updateSearchAgent(callFrom)
+    {
+        var gaLabel = 'Button Top Page';
+
+        if (callFrom != '' && callFrom == 'ListingBottom') {
+        	gaLabel = 'Unit Bottom Page';
+        }
+
+    	hideAlertMessage();
+        ga('send', 'event', 'Email Alerts', 'Search-results-signup', gaLabel);
+        $('#savedSearchAgentModal').foundation('reveal', 'close');
+        if ($(".alertButton")) {
+            $(".alertButton").each(function( index ) {
+            	$(this).attr("onclick", "removeSavedSearchConfirmation('{{userSearchAgent.getId()}}')");
+            });
+        }
+    }
+//]]>
+</script>

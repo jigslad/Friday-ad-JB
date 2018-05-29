@@ -1,0 +1,23 @@
+parameters:
+    fa.cyber.source.manager.class: Fa\Bundle\PaymentBundle\Manager\CyberSourceManager
+    fa.paypal.manager.class: Fa\Bundle\PaymentBundle\Manager\PaypalManager
+    fa.paypal.adaptive.manager.class: Fa\Bundle\PaymentBundle\Manager\PaypalAdaptiveManager
+    fa.amazonpay.manager.class: Fa\Bundle\PaymentBundle\Manager\AmazonPayManager
+
+services:
+    fa.cyber.source.manager:
+        class: '%fa.cyber.source.manager.class%'
+        arguments: ['@service_container']
+        
+    fa.paypal.manager:
+        class: '%fa.paypal.manager.class%'
+        arguments: ['@service_container']
+        
+    fa.paypal.adaptive.manager:
+        class: '%fa.paypal.adaptive.manager.class%'
+        arguments: ['@service_container']
+
+    fa.amazonpay.manager:
+        class: '%fa.amazonpay.manager.class%'
+        arguments: ['@service_container']
+

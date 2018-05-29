@@ -1,0 +1,95 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+
+{% block scripttop %}
+  <link href="{{ asset_url('facore/jstree/themes/default/style.min.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content -%}
+    <div class="row">
+        <div class="columns">
+            <h1>{{ heading }}</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="columns">
+            <div class="panel">
+              <div id="jstree_div">
+              </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+<script src="{{ asset_url('facore/jstree/jstree.min.js') }}"></script>
+<script>
+  $(function () {
+    $('#jstree_div').jstree({
+        "core" : {
+          'data' : {
+                'url' : '{{ path('resource_ajax_get_node') }}',
+                'data' : function (node) {
+                    return { 'id' : node.id };
+                }
+            },
+          "animation" : 0,
+          "check_callback" : true
+        },
+        "contextmenu": {
+          items: {
+            {% if fa_resource_authorization_manager.isGranted('resource_new') %}
+            "create": {
+              "label"  : '{{ 'Add child resource'|trans({}, 'messages') }}',
+              "action" : function (data) {
+                        var inst = $.jstree.reference(data.reference),
+                          obj = inst.get_node(data.reference);
+                          parent_id = obj.id;
+                          route = "{{ path('resource_new', { 'parent_id': "PARENT_ID" }) }}";
+                          route = route.replace("PARENT_ID", parent_id);
+                        $(location).attr("href", route);
+                      }
+            },
+            {% endif %}
+            {% if fa_resource_authorization_manager.isGranted('resource_edit') %}
+            "rename": {
+              "label"  : '{{ 'Edit resource'|trans({}, 'messages') }}',
+              "action" : function (data) {
+                        var inst = $.jstree.reference(data.reference),
+                          obj = inst.get_node(data.reference);
+                          id = obj.id;
+                          route = "{{ path('resource_edit', { 'id': "ID" }) }}";
+                          route = route.replace("ID", id);
+                        $(location).attr("href", route);
+                      }
+            },
+            {% endif %}
+            
+            {% if fa_resource_authorization_manager.isGranted('resource_delete') %}
+            "remove" : {
+              "separator_before"  : false,
+              "icon"        : false,
+              "separator_after" : false,
+              "_disabled"     : false, //(this.check("delete_node", data.reference, this.get_parent(data.reference), "")),
+              "label"       : '{{ 'Delete resource'|trans({}, 'messages') }}',
+              "action"      : function (data) {
+                if (confirm('{{ 'Do you want to proceed deleting this resource?'|trans({}, 'messages') }}'))
+                {
+                    var inst = $.jstree.reference(data.reference),
+                      obj = inst.get_node(data.reference);
+                      id = obj.id;
+                      route = "{{ path('resource_delete', { 'id': "ID" }) }}";
+                      route = route.replace("ID", id);
+                      $(location).attr("href", route);
+                }
+              }
+            }
+            {% endif %}
+          }
+        },
+        "plugins" : [ "wholerow", "contextmenu", "state", "dnd" ]
+    });
+  });
+</script>
+{% endblock %}

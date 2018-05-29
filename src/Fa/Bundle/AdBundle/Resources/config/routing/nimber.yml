@@ -1,0 +1,7 @@
+nimber_location:
+    path:     /nimber/{adId}/
+    defaults: { _controller: "FaAdBundle:Nimber:showNimberPricesuggestion" }
+    
+ajax_nimber_create_task:
+    path:     ajax/nimber_create_task/{adId}/
+    defaults: { _controller: "FaAdBundle:Nimber:ajaxNimberCreateTask" }

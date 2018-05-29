@@ -1,0 +1,5 @@
+{% set queryParams = app.request.query.all %}
+{% trans with {'%fieldLabel%': fieldLabel} %}%fieldLabel%{% endtrans %}
+
+&nbsp; <a href="{{ path(route, queryParams|merge({'sort_field': sortField, 'sort_ord': 'asc'})|merge(routeParams)) }}" {% if sortField == sorter.sort_field and 'asc' == sorter.sort_ord %}class="active"{% endif %}><i class="fi-arrow-up"></i></a>
+<a href="{{ path(route, queryParams|merge({'sort_field': sortField, 'sort_ord': 'desc'})|merge(routeParams)) }}" {% if sortField == sorter.sort_field and 'desc' == sorter.sort_ord %}class="active"{% endif %}><i class="fi-arrow-down"></i></a>

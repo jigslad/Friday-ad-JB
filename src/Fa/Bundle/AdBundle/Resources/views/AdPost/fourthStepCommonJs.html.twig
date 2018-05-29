@@ -1,0 +1,61 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    //GA Analytics code start
+    {% if (gaStr is defined and gaStr != '' and 'second_step' in refererUrl) %}
+        ga('send', 'event', 'PAA - Step 2', 'Next step', '{{gaStr}}');
+    {% elseif 'third_step' in refererUrl %}
+        ga('send', 'event', 'PAA - Step 3', 'Next step', 'logged in');
+    {% elseif 'third_step_registration' in refererUrl %}
+        ga('send', 'event', 'PAA - Step 3b', 'Next step', '');
+    {% elseif (gaStr is defined and gaStr != '') %}
+        ga('send', 'event', 'PAA - Step 4', 'Form error', '{{gaStr}}');
+    {% endif %}
+    //GA Analytics code end
+
+    function submitFormUsingAjax(backUrl)
+    {
+      var route = Routing.generate('ajax_edit_from_paa_fourth_step',{ 'url': backUrl });
+      blockPage();
+      $.ajax({
+          type: "GET",
+          url : route,
+      })
+      .done(function(response) {
+        $('#frmPAA').submit();
+      });
+    }
+
+    {% if not fetch_container_instance().get('fa.mobile.detect.manager').isMobile() and not fetch_container_instance().get('fa.mobile.detect.manager').isTablet() %}
+    window.onload = function () {
+      if (typeof history.pushState === "function") {
+          history.pushState("jibberish", null, null);
+          window.onpopstate = function () {
+              history.pushState('newjibberish', null, null);
+              // Handle the back (or forward) buttons here
+              // Will NOT handle refresh, use onbeforeunload for this.
+              var backUrl = "{{ path('ad_post_second_step', {'is_edit' : 1}) }}";
+              submitFormUsingAjax(backUrl);
+          };
+      }
+      else {
+          var ignoreHashChange = true;
+          window.onhashchange = function () {
+              if (!ignoreHashChange) {
+                  ignoreHashChange = true;
+                  window.location.hash = Math.random();
+                  // Detect and redirect change here
+                  // Works in older FF and IE9
+                  // * it does mess with your hash symbol (anchor?) pound sign
+                  // delimiter on the end of the URL
+                  var backUrl = "{{ path('ad_post_second_step', {'is_edit' : 1}) }}";
+                  submitFormUsingAjax(backUrl);
+              }
+              else {
+                  ignoreHashChange = false;   
+              }
+          };
+      }
+    }
+    {% endif %}
+//]]>
+</script>

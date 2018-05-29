@@ -1,0 +1,27 @@
+ajax_user_site_image_save:
+    path:     /ajax/save_image
+    defaults: { _controller: FaUserBundle:UserSiteImage:ajaxSaveUploadedImage }
+
+ajax_get_user_site_images:
+    path:     /ajax/get_image
+    defaults: { _controller: FaUserBundle:UserSiteImage:ajaxRenderUploadedImage }
+
+ajax_delete_user_site_images:
+    path:     /ajax/delete_image/{userSiteId}/{imageId}/{imageHash}
+    defaults: { _controller: FaUserBundle:UserSiteImage:ajaxDeleteImage }
+
+ajax_get_big_user_site_image:
+    path:     /ajax/get_big_image/{userSiteId}/{imageId}/{imageHash}
+    defaults: { _controller: FaUserBundle:UserSiteImage:ajaxGetBigImage }
+    
+ajax_crop_user_site_image:
+    path:     /ajax/crop_image/{userSiteId}/{imageId}/{imageHash}
+    defaults: { _controller: FaUserBundle:UserSiteImage:ajaxCropImage }
+    
+ajax_change_user_site_image_order:
+    path:     /ajax/change_image_order/{userSiteId}
+    defaults: { _controller: FaUserBundle:UserSiteImage:ajaxChangeUserSiteImageOrder }
+
+ajax_user_site_make_main_image:
+    path:     /ajax/make_main_image/{userSiteId}
+    defaults: { _controller: FaUserBundle:UserSiteImage:ajaxMakeMainImage }

@@ -1,0 +1,12 @@
+#content bundle should be last one as routing
+FaContentBundle_profile_page:
+    resource: '@FaContentBundle/Resources/config/routing/profile_page.yml'
+    prefix:   /
+
+FaContentBundle_banner:
+    resource: '@FaContentBundle/Resources/config/routing/banner.yml'
+    prefix:   /
+    
+FaContentBundle_landing_page:
+    resource: '@FaContentBundle/Resources/config/routing/landing_page.yml'
+    prefix:   /landing-page

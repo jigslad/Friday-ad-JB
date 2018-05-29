@@ -1,0 +1,62 @@
+<a class="close-reveal-modal">&#215;</a>
+{% set container = fetch_container_instance() %}
+{% set searchParams = app.request.get('searchParams') %}
+{% set dimensionId = app.request.get('dimensionId') %}
+{% set dimensionName = app.request.get('dimensionName') %}
+{% set dimensionField = app.request.get('dimensionField') %}
+{% set dimensionParams = searchParams %}
+{% set selectedValue = attribute(form, dimensionField).vars.data %}
+{% set getNoFollowLink = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(app.request.get('searchQueryString')) %}
+{% if (dimensionParams[dimensionField]) is defined %}
+    {% set dimensionParams = dimensionParams|merge({(dimensionField): ''}) %}
+{% endif %}
+<div id="{{ dimensionField }}_modal">
+    <h5 class="modal-title">{{ 'Showing %dimension%'|trans({'%dimension%':dimensionName}) }}</h5>
+    <div class="modal-content dimension-modal">
+        <div class="dimension-content">
+            <div class="clearfix">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                {{ form_errors(form) }}
+                    {% set dimensionFacetResult = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionFacetBySearchParams(dimensionField, dimensionParams, selectedValue, fetch_container_instance()) %}
+                    {% if dimensionFacetResult is defined and dimensionFacetResult|length > 0 %}
+                        {% set dimensionOptions = {} %}
+                        {% for choice in attribute(form, dimensionField).vars.choices %}
+                            {% if dimensionFacetResult[choice.value] is defined %}
+                                {% set dimensionOptions = dimensionOptions|merge({ 0 : choice }) %}
+                            {% endif %}
+                        {% endfor %}
+                        {% set totalChoices = dimensionOptions|length %}
+                        {% set totalColumns = 4 %}
+                        {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+                        {% set choiceCount = 0 %}
+                        {% for choice in dimensionOptions %}
+                            {% set activeClass = '' %}
+                            {% if choice.value == selectedValue %}
+                                {% set activeClass = 'bold' %}
+                            {% endif %}
+                            {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
+                            <ul class="seller-link dimension-list">
+                            {% endif %}
+                            {% set adCount = 0 %}
+                            {% if attribute(dimensionFacetResult, choice.value) is defined %}
+                                {% set adCount = attribute(dimensionFacetResult, choice.value) %}
+                            {% endif %}
+                            {% if adCount %}
+                                <li>
+                                    {% set queryParams = dimensionParams|merge({(dimensionField): (choice.value)}) %}
+                                    {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                                    <a href="{{ listurl }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} class="{{activeClass}}">{{ choice.label }} ({{ adCount }})</a>
+                                </li>
+                                {% set choiceCount = choiceCount + 1 %}
+                            {% endif %}
+                            {% if choiceCount == totalChoices or (choiceCount % choicesPerColumn) == 0 %}
+                            </ul>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% do attribute(form, dimensionField).setRendered %}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

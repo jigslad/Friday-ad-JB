@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="a6ed19196489554b1e24411aa9201852c49b1304" resname="%adCount% items found">
+        <jms:reference-file line="24">views/LandingPage/adsNearYou.html.twig</jms:reference-file>
+        <source>%adCount% items found</source>
+        <target state="new">%adCount% items found</target>
+      </trans-unit>
+      <trans-unit id="74558e601c4501d102d6d0d3d8781c5bca87d265" resname="Ads near you">
+        <jms:reference-file line="5">views/LandingPage/adsNearYou.html.twig</jms:reference-file>
+        <source>Ads near you</source>
+        <target state="new">Ads near you</target>
+      </trans-unit>
+      <trans-unit id="322444d3bb52c341f429ca0454f292dc242f315b" resname="Any">
+        <jms:reference-file line="53">views/LandingPage/carSearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="153">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="156">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="91">AdBundle/Form/LandingPagePropertySearchType.php</jms:reference-file>
+        <jms:reference-file line="122">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Any</source>
+        <target state="new">Any</target>
+      </trans-unit>
+      <trans-unit id="ae77fbfb8ccd82c4e71a7139efe89494b45cc390" resname="Any  model">
+        <jms:reference-file line="197">views/LandingPage/carSearchForm.html.twig</jms:reference-file>
+        <source>Any  model</source>
+        <target state="new">Any  model</target>
+      </trans-unit>
+      <trans-unit id="3e8ccfd0c4d731de3286ec57210d685ff7e272df" resname="Any colour">
+        <jms:reference-file line="152">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Any colour</source>
+        <target state="new">Any colour</target>
+      </trans-unit>
+      <trans-unit id="8b6de1314a98c021e85c2c46e36fcb76e209fdbd" resname="Any fuel">
+        <jms:reference-file line="162">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Any fuel</source>
+        <target state="new">Any fuel</target>
+      </trans-unit>
+      <trans-unit id="017b4a34dec75eec48dffe02c74bfca800141483" resname="Any make">
+        <jms:reference-file line="96">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Any make</source>
+        <target state="new">Any make</target>
+      </trans-unit>
+      <trans-unit id="49f806f4ec7cccd70654eb2087443da1af297016" resname="Any mileage">
+        <jms:reference-file line="132">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Any mileage</source>
+        <target state="new">Any mileage</target>
+      </trans-unit>
+      <trans-unit id="bf7be31c6888e955168238a3eede8131e73c0175" resname="Any transmission">
+        <jms:reference-file line="142">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Any transmission</source>
+        <target state="new">Any transmission</target>
+      </trans-unit>
+      <trans-unit id="d6b23a46b95caf6bf6223bc11903362888f5b37c" resname="Body Type">
+        <jms:reference-file line="121">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Body Type</source>
+        <target state="new">Body Type</target>
+      </trans-unit>
+      <trans-unit id="dfee02f99ddb069d8ac1b87a132d8552e5179006" resname="Browse used cars">
+        <jms:reference-file line="452">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>Browse used cars</source>
+        <target state="new">Browse used cars</target>
+      </trans-unit>
+      <trans-unit id="37639981e697a29890a0259bdd15f9544d8aa40f" resname="Browse used cars in %location%">
+        <jms:reference-file line="450">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>Browse used cars in %location%</source>
+        <target state="new">Browse used cars in %location%</target>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="19">views/LandingPage/adsNearYou.html.twig</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="f28563a477a994890a5c13b36a302433dcd73c8e" resname="Colour">
+        <jms:reference-file line="151">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Colour</source>
+        <target state="new">Colour</target>
+      </trans-unit>
+      <trans-unit id="76c71b39fa32e628e85ba2bc0d967071cca554b8" resname="Discover more">
+        <jms:reference-file line="322">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>Discover more</source>
+        <target state="new">Discover more</target>
+      </trans-unit>
+      <trans-unit id="4a33f80414f408e6e9834ac4dbd2c60480bb9281" resname="Discover...">
+        <jms:reference-file line="270">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>Discover...</source>
+        <target state="new">Discover...</target>
+      </trans-unit>
+      <trans-unit id="73d11520fb27d2e5ce547c35b73bf5d533ffb907" resname="Distance I'm happy to travel">
+        <jms:reference-file line="30">views/LandingPage/carSearchForm.html.twig</jms:reference-file>
+        <source>Distance I'm happy to travel</source>
+        <target state="new">Distance I'm happy to travel</target>
+      </trans-unit>
+      <trans-unit id="564c59e7449d5118026ca0aa1b6e5a01967ed2ba" resname="Explore...">
+        <jms:reference-file line="79">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>Explore...</source>
+        <target state="new">Explore...</target>
+      </trans-unit>
+      <trans-unit id="e1222bf9fcebd54166dc659b13109686cec7ebdf" resname="Fewer options">
+        <jms:reference-file line="156">views/LandingPage/carSearchForm.html.twig</jms:reference-file>
+        <source>Fewer options</source>
+        <target state="new">Fewer options</target>
+      </trans-unit>
+      <trans-unit id="ab53da046356e5e1a069c42a1c496b109aebdb08" resname="Find a car">
+        <jms:reference-file line="3">views/LandingPage/carSearchForm.html.twig</jms:reference-file>
+        <source>Find a car</source>
+        <target state="new">Find a car</target>
+      </trans-unit>
+      <trans-unit id="19fbef83aa0559be6c3d8630d3763357b99ca126" resname="Find a property">
+        <jms:reference-file line="7">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <source>Find a property</source>
+        <target state="new">Find a property</target>
+      </trans-unit>
+      <trans-unit id="9e9314f4142c4eff690a92aaeaf9ea598ab89cd7" resname="For rent">
+        <jms:reference-file line="18">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <source>For rent</source>
+        <target state="new">For rent</target>
+      </trans-unit>
+      <trans-unit id="8c2e0e1d55b890163a0578eee7d56dc9a8163f4e" resname="For sale">
+        <jms:reference-file line="17">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <source>For sale</source>
+        <target state="new">For sale</target>
+      </trans-unit>
+      <trans-unit id="3917cc63a2b1dae08f061c93f3c6f57fe65f10bd" resname="Fuel Type">
+        <jms:reference-file line="161">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Fuel Type</source>
+        <target state="new">Fuel Type</target>
+      </trans-unit>
+      <trans-unit id="26922c5d22c28256510b41b91d20fae2faa17a9f" resname="Horses &amp; equestion">
+        <jms:reference-file line="179">views/LandingPage/index.html.twig</jms:reference-file>
+        <source><![CDATA[Horses & equestion]]></source>
+        <target state="new"><![CDATA[Horses & equestion]]></target>
+      </trans-unit>
+      <trans-unit id="a3926e039fd753c472f6e172496fda0574369261" resname="Keyword">
+        <jms:reference-file line="171">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Keyword</source>
+        <target state="new">Keyword</target>
+      </trans-unit>
+      <trans-unit id="6c2a5d4247f4970f093f4c1a6e800c89421cd689" resname="Latest ads">
+        <jms:reference-file line="318">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>Latest ads</source>
+        <target state="new">Latest ads</target>
+      </trans-unit>
+      <trans-unit id="d1785848350904822062fb87ffddad57c1b0c63e" resname="Livestock">
+        <jms:reference-file line="230">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>Livestock</source>
+        <target state="new">Livestock</target>
+      </trans-unit>
+      <trans-unit id="a94431ee22f05f141107f9355ed3127d0f0c4d5a" resname="Make">
+        <jms:reference-file line="97">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Make</source>
+        <target state="new">Make</target>
+      </trans-unit>
+      <trans-unit id="f67a0513bccc19c52875407b75123ebc154b6f91" resname="Mileage">
+        <jms:reference-file line="131">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Mileage</source>
+        <target state="new">Mileage</target>
+      </trans-unit>
+      <trans-unit id="68c2cc7f0ceaa3e499ecb4db331feb4debbbcc23" resname="Model">
+        <jms:reference-file line="106">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Model</source>
+        <target state="new">Model</target>
+      </trans-unit>
+      <trans-unit id="491029d9cfbcf7e940c4d8508c1a051fcd4637b4" resname="More in motors">
+        <jms:reference-file line="399">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>More in motors</source>
+        <target state="new">More in motors</target>
+      </trans-unit>
+      <trans-unit id="86c0a35ec8834c720d47b19935543c81b4d7c9c0" resname="More options">
+        <jms:reference-file line="70">views/LandingPage/carSearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="156">views/LandingPage/carSearchForm.html.twig</jms:reference-file>
+        <source>More options</source>
+        <target state="new">More options</target>
+      </trans-unit>
+      <trans-unit id="5adbdd07e7a4b3d8cb2d190205a29f132375b2d8" resname="Most popular">
+        <jms:reference-file line="339">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>Most popular</source>
+        <target state="new">Most popular</target>
+      </trans-unit>
+      <trans-unit id="bee2d7bb1f1f69161797640c07d9ae09242c04e5" resname="My budget is from">
+        <jms:reference-file line="16">views/LandingPage/carSearchForm.html.twig</jms:reference-file>
+        <source>My budget is from</source>
+        <target state="new">My budget is from</target>
+      </trans-unit>
+      <trans-unit id="b0a98216a32426b9e66a4ac1eb6df2e96e1b495c" resname="Ok">
+        <jms:reference-file line="18">views/LandingPage/adsNearYou.html.twig</jms:reference-file>
+        <source>Ok</source>
+        <target state="new">Ok</target>
+      </trans-unit>
+      <trans-unit id="437548dce8619c0386a346c0cc23a2fca6748758" resname="Other vehicles">
+        <jms:reference-file line="119">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>Other vehicles</source>
+        <target state="new">Other vehicles</target>
+      </trans-unit>
+      <trans-unit id="b3602a9f1ba5289d3293eb2075b59f5ac50e73c0" resname="Other ways to shop...">
+        <jms:reference-file line="356">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>Other ways to shop...</source>
+        <target state="new">Other ways to shop...</target>
+      </trans-unit>
+      <trans-unit id="849c2d06850503cb2477fef99b5b1ef2aa04aa23" resname="Pets">
+        <jms:reference-file line="157">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>Pets</source>
+        <target state="new">Pets</target>
+      </trans-unit>
+      <trans-unit id="ad794a4da4d14b1900054f01f8d7ae0358e16cd8" resname="Property Type">
+        <jms:reference-file line="92">AdBundle/Form/LandingPagePropertySearchType.php</jms:reference-file>
+        <source>Property Type</source>
+        <target state="new">Property Type</target>
+      </trans-unit>
+      <trans-unit id="de8179db2dace093a2beefc099a3986d1a38ffb8" resname="Rent per">
+        <jms:reference-file line="127">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <jms:reference-file line="103">AdBundle/Form/LandingPagePropertySearchType.php</jms:reference-file>
+        <source>Rent per</source>
+        <target state="new">Rent per</target>
+      </trans-unit>
+      <trans-unit id="1ee6a0cbebef4a8b449a9a6250855d30fbe0f7a8" resname="Search cars">
+        <jms:reference-file line="125">views/LandingPage/carSearchForm.html.twig</jms:reference-file>
+        <source>Search cars</source>
+        <target state="new">Search cars</target>
+      </trans-unit>
+      <trans-unit id="457ad80814f17b61a8298167b5b1a2fa78ba0b8d" resname="See all %adCount% ads">
+        <jms:reference-file line="51">views/LandingPage/index.html.twig</jms:reference-file>
+        <source>See all %adCount% ads</source>
+        <target state="new">See all %adCount% ads</target>
+      </trans-unit>
+      <trans-unit id="5a91ccf929ee890eea317ea2bf2aaee64b10e8bf" resname="To share">
+        <jms:reference-file line="19">views/LandingPage/propertySearchForm.html.twig</jms:reference-file>
+        <source>To share</source>
+        <target state="new">To share</target>
+      </trans-unit>
+      <trans-unit id="ace17e480781eb5360d5a6487fb60a6b50aa02b9" resname="Transmission">
+        <jms:reference-file line="141">AdBundle/Form/LandingPageCarSearchType.php</jms:reference-file>
+        <source>Transmission</source>
+        <target state="new">Transmission</target>
+      </trans-unit>
+      <trans-unit id="3b1ea52fddea5cb5b84691de58f9818a6d658ce7" resname="change location">
+        <jms:reference-file line="13">views/LandingPage/adsNearYou.html.twig</jms:reference-file>
+        <source>change location</source>
+        <target state="new">change location</target>
+      </trans-unit>
+      <trans-unit id="6786caab2b73488fc1979ee8c7901cb851c8bd2b" resname="within 1 mile">
+        <jms:reference-file line="24">views/LandingPage/adsNearYou.html.twig</jms:reference-file>
+        <source>within 1 mile</source>
+        <target state="new">within 1 mile</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

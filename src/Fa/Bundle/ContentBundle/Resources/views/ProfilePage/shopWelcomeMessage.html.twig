@@ -1,0 +1,17 @@
+<h2 id="company_welcome_message_content">
+{% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['company_welcome_message'], 'hide','welcome_']) %}
+{% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
+{{ adDescWithReplacedPhoneAndEmail|raw }}
+</h2>
+{% if allowProfileEdit %}
+    {% if userDetail['company_welcome_message']|length %}
+        <div class="profile-edit clearfix">
+            <div class="right relative">
+                <a href="javascript:void(0);" onclick="return editWelcomeMessage();">Edit</a>
+                <div class="edit-tooltip">{{'Edit your welcome message'|trans({}, 'frontend-profile-page')}}</div>
+            </div>
+        </div>
+    {% else %}
+        <a href="javascript:void(0);" onclick="return editWelcomeMessage();">{{ '+ Add a welcome message'|trans({}, 'frontend-profile-page') }}</a>
+    {% endif %}
+{% endif %}

@@ -1,0 +1,23 @@
+parameters:
+    fa_ad_feed.form.type.ad_feed_mapping_admin.class: Fa\Bundle\AdFeedBundle\Form\AdFeedMappingAdminType
+    fa_ad_feed.form.type.ad_feed_mapping_search_admin.class: Fa\Bundle\AdFeedBundle\Form\AdFeedMappingSearchAdminType
+    fa_ad_feed.form.type.ad_feed_log_search_admin.class: Fa\Bundle\AdFeedBundle\Form\AdFeedLogSearchAdminType
+services:
+    fa_ad_feed.form.type.ad_feed_mapping_admin:
+        class: '%fa_ad_feed.form.type.ad_feed_mapping_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_adfeed_ad_feed_mapping_admin }
+
+    fa_ad_feed.form.type.ad_feed_mapping_search_admin:
+        class: '%fa_ad_feed.form.type.ad_feed_mapping_search_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_feed_ad_feed_mapping_search_admin }
+
+    fa_ad_feed.form.type.ad_feed_log_search_admin:
+        class: '%fa_ad_feed.form.type.ad_feed_log_search_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_feed_ad_feed_log_search_admin }                
+

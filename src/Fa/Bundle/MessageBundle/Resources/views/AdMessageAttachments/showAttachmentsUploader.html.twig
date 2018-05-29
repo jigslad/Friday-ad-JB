@@ -1,0 +1,204 @@
+{% block attachmentsUploadStylesheets %}
+    {% set attachmentsUploadStylesheetsVariables = get_variables('attachmentsUploadStylesheets') %}
+    {% if attachmentsUploadStylesheetsVariables.loaded is not defined %}
+        {{ set_variables('attachmentsUploadStylesheets', {'loaded':'true'}) }}
+        <link href="{{ asset_url('facore/css/jquery.guillotine.css') }}" rel="stylesheet">
+    {% endif %}
+{% endblock %}
+
+{% block attachmentsUploadHtml %}
+{% set container = fetch_container_instance() %}
+{% set showDragDropFlag = false %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% if not mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set showDragDropFlag = true %}
+{% endif %}
+{{ set_variables('MessageAttachmentsUpload', {'messageId':messageId, 'formName': formName, 'maxValue': maxValue, 'userId': userId, 'from': from}) }}
+    <div>
+        <div id="filelist"></div>
+    </div>
+    <div id="uploaded_attachments_div">
+        {{ include('FaMessageBundle:AdMessageAttachments:renderUploadedAttachments.html.twig', {'messageId': messageId}) }}
+    </div>
+
+{% endblock %}
+
+{% block attachmentsUploadJavascriptBottom %}
+    {% set container = fetch_container_instance() %}
+    {% set isAdminLoggedIn = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isAdminLoggedIn', [fetch_container_instance()]) %}
+    {% set attachmentsUploadJavascriptBottomVariables = get_variables('attachmentsUploadJavascriptBottom') %}
+    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    {% if attachmentsUploadJavascriptBottomVariables.loaded is defined and attachmentsUploadJavascriptBottomVariables.loaded == 'true' %}
+        {% set container = fetch_container_instance() %}
+        {% set variables = get_variables('MessageAttachmentsUpload') %}
+        {% set messageId = (variables.messageId is defined ? variables.messageId : 0) %}
+        {% set userId = (variables.userId is defined ? variables.userId : 0) %}
+        {% set formName = (variables.formName is defined ? variables.formName : null) %}
+        {% set maxValue = (variables.maxValue is defined ? variables.maxValue : null) %}
+        {% set from = (variables.from is defined ? variables.from : null) %}
+        {% set fileListId = '#filelist' %}
+        {% set moderationMsg = '' %}
+        {% if from == 'item_detail' %}
+            {% set fileListId = '#filelistItemDetail' %}
+            {% set moderationMsg = 'Uploads and edits may go through moderation before going live but this won\'t take long. Click done and refresh the page to see changes.'|trans({}, 'frontend-paa') %}
+        {% endif %}
+        {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+        {% javascripts filter='uglifyjs2' output='bundles/js/compiled/showAttachmentsUploader1.js'
+            'bundles/facore/js/jquery.guillotine.min.js'
+            'bundles/facore/js/plupload.full.min.js'
+            'bundles/fafrontend/js/vendor/jquery-ui.min.js'
+            'bundles/facore/js/jquery.ui.touch-punch.min.js'
+            'bundles/facore/js/jquery.imagedraghighlight.js'
+        %}
+        <script src="{{ static_asset_url(asset_url) }}?v=2"></script>
+        {% endjavascripts %}
+        <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function(){
+            initAttachmentUpload(true);
+            var mainDragDropUploader = setUpUploader('fa_message_message_ad_attachments', true, 'drag_drop_container');
+            mainDragDropUploader.init();
+            plupload.addI18n({
+                'File size error.' : "{{'Your files exceed the maximum capacity for one message.'|trans({}, 'frontend-paa')}}",
+                'File extension error.' : "{{'One or more of the files you attached are not supported.'|trans({}, 'frontend-paa')}}",
+                'Init error.' : "{{'Your browser does not have Flash, Silverlight or HTML5 support.'|trans({}, 'frontend-paa')}}"
+            });
+        });
+
+        function initAttachmentUpload(removeFileList)
+        {
+            if ($('.pickfiles').length > 0) {
+                $('.pickfiles').each(function(e) {
+                    var mainUploader = setUpUploader($(this).attr('id'), removeFileList, '');
+                    mainUploader.init();
+                });
+            } else if (removeFileList) {
+                $('{{ fileListId }}').html('');
+            }
+
+            if ($('#messageAttachmentsList').is(':visible')) {
+                $('#drag_drop_text').removeClass('drag-ins-vr').addClass('drag-ins-hr');
+            } else {
+                $('#drag_drop_text').removeClass('drag-ins-hr').addClass('drag-ins-vr');
+            }
+        }
+        function setUpUploader(id, removeFileList, dropElement)
+        {
+            var errorFlag = false;
+            var messageId = '{{messageId}}';
+            var userId = '{{userId}}';
+            var maxValue='{{maxValue}}';
+            var fa_message_attachments = new Array();
+            var isMultiSelect = true;
+            var isMobile = '{{ mobileDetectManager.isMobile() }}'
+            var isTablet = '{{ mobileDetectManager.isTablet() }}'
+            var uploader = new plupload.Uploader({
+                runtimes : 'html5,flash,silverlight,html4',
+                unique_names :true,
+                multi_selection : isMultiSelect,
+                multipart : true,
+                browse_button : id, // you can pass in id...
+                drop_element : dropElement,
+                url : '{{ path("ajax_message_attachments_save") }}',
+                multipart_params : {'fa_message_attachments[message_id]' :messageId, 'fa_message_attachments[user_id]' :userId, 'fa_message_attachments[maxValue]' : maxValue},
+                file_data_name : 'fa_message_attachments[fileData]',
+                flash_swf_url : '/facore/js/Moxie.swf',
+                silverlight_xap_url : '/facore/js/Moxie.xap',
+                dragdrop: true,
+
+                filters : {
+                    max_file_size : '5mb',
+                },
+
+                init: {
+                    PostInit: function() {
+                        if (removeFileList) {
+                            $('{{ fileListId }}').html('');
+                        }
+                    },
+                    FilesAdded: function(up, files, response) {
+                        errorFlag = false;
+                        uploader.start();
+                        blockPage();
+                    },
+                    FileUploaded: function(up, file, response) {
+                        var obj = $.parseJSON(response.response);
+                        if (obj.error.length) {
+                            errorFlag = true;
+                            $('{{ fileListId }}').html(decorateMessage(obj.error, 'alert'));
+                        }
+                    },
+                    UploadComplete: function(up, file) {
+                        if(errorFlag)  {
+                            $('{{ fileListId }}').html(decorateMessage('{{'One or more of the files you attached are not supported.'|trans({}, 'frontend-paa')}}', 'alert'));
+                        }
+                        $.unblockUI();
+                        uploader.splice();
+                        getAttachments();
+                    },
+                    BeforeChunkUpload: function(up, file, info) {
+                      alert(info.total);
+                    },
+                    Error: function(up, err) {
+                       msg = err.message;
+                       if (msg == 'Init error.') {
+                           msg = "{{'Your browser does not have Flash, Silverlight or HTML5 support.'|trans({}, 'frontend-paa')}}";
+                       }
+                       $('{{ fileListId }}').html(decorateMessage(msg, 'alert'));
+                    }
+                }
+            });
+            
+            return uploader;
+        }
+
+        function getAttachments(cache)
+        {
+            blockElement('#upload_attachments_main_div');
+            if (typeof cache == 'undefined') {
+                cache = false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url : '{{ path("ajax_get_message_attachments") }}',
+                data: { messageId: '{{messageId}}', 'cache': cache}
+            })
+            .always(function(response) {
+                unblockElement('#upload_attachments_main_div');
+            })
+            .done(function(response) {
+                $('#uploaded_attachments_div').html(response.attachments);
+                
+                initAttachmentUpload(false);
+                $('.upload-thumb-img').click(function(e){
+                    $('#upload_attachments_main_div').siblings('small.error').html('');
+                });
+            });
+        }
+
+        function deleteAttachment(url)
+        {
+            blockPage();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { maxValue: '{{maxValue}}', userId:'{{userId}}'}
+            })
+            .always(function(response) {
+              $.unblockUI();
+            })
+            .done(function(response) {
+                if (response.error.length) {
+                    $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                }
+                if (response.successMsg.length) {
+                    $('#uploaded_attachments_div').html(response.attachments);
+                    initAttachmentUpload(false);
+                }
+            });
+        }
+        //]]>
+        </script>
+    {% endif %}
+{% endblock %}

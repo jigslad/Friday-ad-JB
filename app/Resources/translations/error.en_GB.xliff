@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="ce9ca7e40699846cda78f8e244d00c8efe1a31b8" resname="This record can not be removed from database because it's reference exists in database.">
+        <jms:reference-file line="310">AdminBundle/Controller/CrudController.php</jms:reference-file>
+        <jms:reference-file line="371">ContentBundle/Controller/LandingPageAdminController.php</jms:reference-file>
+        <jms:reference-file line="294">AdBundle/Controller/AdAdminController.php</jms:reference-file>
+        <jms:reference-file line="192">UserBundle/Controller/UserConfigRuleAdminController.php</jms:reference-file>
+        <jms:reference-file line="276">EntityBundle/Controller/EntityAdminController.php</jms:reference-file>
+        <source>This record can not be removed from database because it's reference exists in database.</source>
+        <target state="new">This record can not be removed from database because it's reference exists in database.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

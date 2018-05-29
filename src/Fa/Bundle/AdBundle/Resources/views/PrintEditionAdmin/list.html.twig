@@ -1,0 +1,71 @@
+{% set entityRepository = fetch_repository('FaEntityBundle:Entity') %}
+{% set statusArray            = entityRepository.getStatusArray(fetch_container_instance()) %}
+
+{% set printEditionRuleRepository = fetch_repository('FaAdBundle:PrintEditionRule') %}
+
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+             <table class="mb0">
+                 <thead>
+                     <tr class="field-heading">
+                         <th width="25%">
+                            {{ sortable_link('print_edition_admin', 'print_edition__name', 'Name'|trans, sorter) }}
+                         </th>
+                         <th width="25%">
+                            {{ 'Location Groups'|trans }}
+                         </th>
+                         <th width="25%">
+                            {{ sortable_link('print_edition_admin', 'print_edition__status', 'Status'|trans, sorter) }}
+                         </th>
+                         <th width="25%"><i class="fa fa-gear"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% set printEditions = pagination.getCurrentPageResults() %}
+                          {% set printEditionIds = {} %}
+                          {% for printEdition in printEditions %}
+                              {% set printEditionIds = printEditionIds|merge({0 : printEdition.id}) %}
+                          {% endfor %}
+                          {% set locationGroupArray = printEditionRuleRepository.getLocationGroupsByPrintEditionId(printEditionIds) %}
+                          {% for printEdition in printEditions %}
+                          <tr class="gradeX">
+                              <td>
+                                  {{ printEdition.name }}
+                              </td>
+                              <td>
+                                  {% if locationGroupArray[printEdition.id] is defined %}
+                                      {{ locationGroupArray[printEdition.id]|join(', ') }}
+                                  {% endif %}
+                              </td>
+                              <td>
+                                {% if printEdition.status is not null %}
+                                    {{ statusArray[printEdition.status] }}
+                                {% endif %}
+                              </td>
+                              <td>
+                                  <button href="#" data-dropdown="drop{{ printEdition.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                  <br />
+                                  <ul id="drop{{ printEdition.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                      {% if printEditionEditGrant %}
+                                         <li><a href="{{ path('print_edition_edit_admin', {'id': printEdition.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans }}</a></li>
+                                      {% endif %}
+                                      {% if printEditionDeleteGrant %}
+                                         <li><a href="{{ path('print_edition_delete_admin', {'id': printEdition.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to delete this record?'|trans }}')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
+                                      {% endif %}
+                                  </ul>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="odd gradeX">
+                              <td colspan="5" align="center">{{ 'No records found'|trans }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+         </div>
+     </div>
+</div>

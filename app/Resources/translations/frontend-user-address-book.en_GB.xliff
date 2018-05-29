@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="d46fa3ca7d0f8d22170c7f198c21a897bb6130eb" resname="Add an address">
+        <jms:reference-file line="7">views/UserAddressBook/ajaxNewAddress.html.twig</jms:reference-file>
+        <jms:reference-file line="36">views/MyAccount/listAddress.html.twig</jms:reference-file>
+        <source>Add an address</source>
+        <target state="new">Add an address</target>
+      </trans-unit>
+      <trans-unit id="0a1d8aef33bd52d28b0b1ac316a048a70f484fa5" resname="Add this address">
+        <jms:reference-file line="144">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <source>Add this address</source>
+        <target state="new">Add this address</target>
+      </trans-unit>
+      <trans-unit id="af7acbebfec036d326b6ac62c96c0a13972dee47" resname="Address book">
+        <jms:reference-file line="3">views/MyAccount/myAddresses.html.twig</jms:reference-file>
+        <source>Address book</source>
+        <target state="new">Address book</target>
+      </trans-unit>
+      <trans-unit id="940621f1c77248fe70f26651a1ddaa16b27fdad1" resname="Address deleted successfully.">
+        <jms:reference-file line="322">views/MyAccount/myAccountJs.html.twig</jms:reference-file>
+        <source>Address deleted successfully.</source>
+        <target state="new">Address deleted successfully.</target>
+      </trans-unit>
+      <trans-unit id="d0f03f082df7a5f1828bdaf71257a0c17d249929" resname="Address edited successfully.">
+        <jms:reference-file line="67">views/UserAddressBook/ajaxNewAddress.html.twig</jms:reference-file>
+        <source>Address edited successfully.</source>
+        <target state="new">Address edited successfully.</target>
+      </trans-unit>
+      <trans-unit id="88d41938ac0d6e56921c2723aea452e2b318d43f" resname="Address line 2">
+        <jms:reference-file line="104">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <source>Address line 2</source>
+        <target state="new">Address line 2</target>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="25">views/MyAccount/myAddresses.html.twig</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="5301648dcf6b53cefc9ed52999aaa92d4603cae0" resname="Edit">
+        <jms:reference-file line="28">views/MyAccount/listAddress.html.twig</jms:reference-file>
+        <source>Edit</source>
+        <target state="new">Edit</target>
+      </trans-unit>
+      <trans-unit id="8fb827e568dee56224a5dc2365da38979c64eafb" resname="Edit an address">
+        <jms:reference-file line="5">views/UserAddressBook/ajaxNewAddress.html.twig</jms:reference-file>
+        <source>Edit an address</source>
+        <target state="new">Edit an address</target>
+      </trans-unit>
+      <trans-unit id="eeb692087d629b32f2f1820369d9756d60c5cba8" resname="Full name">
+        <jms:reference-file line="85">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <source>Full name</source>
+        <target state="new">Full name</target>
+      </trans-unit>
+      <trans-unit id="cbcf5311fa1d49a5a908bf395bd55976540bfc71" resname="House name/number">
+        <jms:reference-file line="95">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <source>House name/number</source>
+        <target state="new">House name/number</target>
+      </trans-unit>
+      <trans-unit id="3517461d85661581bd04836d8d94ff01b4951f04" resname="Invalid address.">
+        <jms:reference-file line="136">UserBundle/Controller/UserAddressBookController.php</jms:reference-file>
+        <jms:reference-file line="182">UserBundle/Controller/UserAddressBookController.php</jms:reference-file>
+        <source>Invalid address.</source>
+        <target state="new">Invalid address.</target>
+      </trans-unit>
+      <trans-unit id="a0c46d9aac6e89d240fc79cf28d6eb9459baaafa" resname="New address added successfully.">
+        <jms:reference-file line="69">views/UserAddressBook/ajaxNewAddress.html.twig</jms:reference-file>
+        <source>New address added successfully.</source>
+        <target state="new">New address added successfully.</target>
+      </trans-unit>
+      <trans-unit id="dc9fb4a1fa74323c94b8966450c21da7419253b4" resname="No matching address found, Please type your address.">
+        <jms:reference-file line="65">UserBundle/Controller/UserAddressBookController.php</jms:reference-file>
+        <jms:reference-file line="64">UserBundle/Controller/UserAddressBookAdminController.php</jms:reference-file>
+        <source>No matching address found, Please type your address.</source>
+        <target state="new">No matching address found, Please type your address.</target>
+      </trans-unit>
+      <trans-unit id="b0a98216a32426b9e66a4ac1eb6df2e96e1b495c" resname="Ok">
+        <jms:reference-file line="28">views/MyAccount/myAddresses.html.twig</jms:reference-file>
+        <source>Ok</source>
+        <target state="new">Ok</target>
+      </trans-unit>
+      <trans-unit id="52e7befca27fbf1263ef10f5b0b730dde7bd10f5" resname="Please enter post code.">
+        <jms:reference-file line="68">UserBundle/Controller/UserAddressBookController.php</jms:reference-file>
+        <jms:reference-file line="67">UserBundle/Controller/UserAddressBookAdminController.php</jms:reference-file>
+        <source>Please enter post code.</source>
+        <target state="new">Please enter post code.</target>
+      </trans-unit>
+      <trans-unit id="ef4d9e9996380a637ea62ef2e2abf57749783b5e" resname="Postcode">
+        <jms:reference-file line="113">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <source>Postcode</source>
+        <target state="new">Postcode</target>
+      </trans-unit>
+      <trans-unit id="e963907dac5cd5c017869b4c96c18021c9bd058b" resname="Remove">
+        <jms:reference-file line="29">views/MyAccount/listAddress.html.twig</jms:reference-file>
+        <source>Remove</source>
+        <target state="new">Remove</target>
+      </trans-unit>
+      <trans-unit id="cb67c6e90413d09e565f469c74baa24b08d12ddd" resname="Remove an address?">
+        <jms:reference-file line="14">views/MyAccount/myAddresses.html.twig</jms:reference-file>
+        <source>Remove an address?</source>
+        <target state="new">Remove an address?</target>
+      </trans-unit>
+      <trans-unit id="179359b39edbd0bf0cdf3bb6b7dfb4223f663af2" resname="Save changes">
+        <jms:reference-file line="142">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <source>Save changes</source>
+        <target state="new">Save changes</target>
+      </trans-unit>
+      <trans-unit id="b0bbe5fc91d3155c652d3c9c6ba4131732a383cc" resname="State/county">
+        <jms:reference-file line="134">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <source>State/county</source>
+        <target state="new">State/county</target>
+      </trans-unit>
+      <trans-unit id="1738e19355d76fa8fc4932aa0c9fec49e060e2fd" resname="These are addresses given by your customers when they have bought an item from you.">
+        <jms:reference-file line="7">views/MyAccount/myAddresses.html.twig</jms:reference-file>
+        <source>These are addresses given by your customers when they have bought an item from you.</source>
+        <target state="new">These are addresses given by your customers when they have bought an item from you.</target>
+      </trans-unit>
+      <trans-unit id="bf372845088f9887fa9621c5202bcca83e5b9d8a" resname="This will remove this address.">
+        <jms:reference-file line="19">views/MyAccount/myAddresses.html.twig</jms:reference-file>
+        <source>This will remove this address.</source>
+        <target state="new">This will remove this address.</target>
+      </trans-unit>
+      <trans-unit id="cc55bbe190859d77c3e0883e8aa064afd3a34ae2" resname="Town/city">
+        <jms:reference-file line="122">UserBundle/Form/UserAddressBookType.php</jms:reference-file>
+        <source>Town/city</source>
+        <target state="new">Town/city</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

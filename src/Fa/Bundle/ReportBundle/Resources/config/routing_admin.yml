@@ -1,0 +1,3 @@
+fa_report_admin:
+    resource: '@FaReportBundle/Resources/config/routing/report_admin.yml'
+    prefix:   /

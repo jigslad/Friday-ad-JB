@@ -1,0 +1,96 @@
+{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+{% set profileAdsUrl = fetch_container_instance().get('fa_ad.manager.ad_routing').getProfilePageAdsUrl(userId) %}
+{% set container = fetch_container_instance() %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set currentDevice = 'D' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'T' %}
+{% endif %}
+
+{% if pagination.getNbResults() %}
+    {% set container = fetch_container_instance() %}
+    {% set solrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::' %}
+    <div class="latest-shops-main">
+        <div class="clearfix">
+            <h3 class="left">{{'Our latest ads'|trans({}, 'frontend-profile-page')}}</h3>
+            <a href="{{ profileAdsUrl }}" class="right button secondary-btn-1 xs-thin-btn">{{'View all'|trans({}, 'frontend-profile-page')}}</a>
+        </div>
+    </div>
+    
+    <div class="latest-shop-list">
+        <div class="row">
+            {% set skipAd = false %}
+            {% for adCounter, ad in pagination.getCurrentPageResults() %}
+                {% if app.getUser() and app.getUser().getId() == userId and adCounter >= 8 and currentDevice != 'M' %}
+                    {% set skipAd = true %}
+                {% endif %}
+                {% if not skipAd %}
+                    {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(ad) %}
+                    {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(ad, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+                    {% set imageAltString = null %}
+                    {% if seoRule['image_alt'] is defined %}
+                        {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], ad]) %}
+                    {% endif %}
+                    <div class="large-8 columns end">
+                        <div class="latest-shop-box">
+                            <a href="{{ adUrl }}" class="tricky-link">
+                            	{% if attribute(ad, constant(solrMapping ~ 'TITLE')) is defined %}
+                                   {{trim_text(attribute(ad, constant(solrMapping ~ 'TITLE')), 50, null)|raw}}
+                                {% endif %}
+                            </a>
+                            <div class="latest-shop-img">
+                                {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, ad, '300X225', 1) %}
+                                {% if imagePath %}
+                                    <img src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                                {% else %}
+                                    <img src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
+                                {% endif %}
+                            </div>
+                            <div class="latest-shop-price">
+                                <h4>
+                                    {% if attribute(ad, constant(solrMapping ~ 'PRICE')) is defined  %}
+                                        <span>{{ format_currency(attribute(ad, constant(solrMapping ~ 'PRICE'))) }}</span>
+                                    {% endif %}
+                                    {% if attribute(ad, constant(solrMapping ~ 'TITLE')) is defined %}
+                                       {{trim_text(attribute(ad, constant(solrMapping ~ 'TITLE')), 50, null)|raw}}
+                                    {% endif %}
+                                </h4>
+                            </div>    
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            
+            {% if app.getUser() and app.getUser().getId() == userId %}
+                <div class="large-8 columns end">
+                    <div class="latest-place-ad">
+                        <a href="{{ path('ad_post_first_step') }}" class="tricky-link">&nbsp;</a>
+                        <div class="place-ad-text">{{ 'Place an ad'|trans({}, 'frontend-profile-page') }}</div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% elseif app.getUser() and app.getUser().getId() == userId %}
+    <div class="latest-shops-main">
+        <div class="clearfix">
+            <h3 class="left">{{'Our latest ads'|trans({}, 'frontend-profile-page')}}</h3>
+            <a href="{{ profileAdsUrl }}" class="right button secondary-btn-1 xs-thin-btn">{{'View all'|trans({}, 'frontend-profile-page')}}</a>
+        </div>
+    </div>
+    
+    <div class="latest-shop-list">
+        <div class="row">
+            {% if app.getUser() and app.getUser().getId() == userId %}
+                <div class="large-8 columns end">
+                    <div class="latest-place-ad">
+                        <a href="{{ path('ad_post_first_step') }}" class="tricky-link">&nbsp;</a>
+                        <div class="place-ad-text">{{ 'Place an ad'|trans({}, 'frontend-profile-page') }}</div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

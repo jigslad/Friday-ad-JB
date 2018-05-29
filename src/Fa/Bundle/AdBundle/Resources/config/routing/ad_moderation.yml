@@ -1,0 +1,11 @@
+ad_moderation_request:
+    path:     /request/{id}
+    defaults: { _controller: "FaAdBundle:AdModeration:request" }
+
+ad_moderation_response:
+    path:     /response
+    defaults: { _controller: "FaAdBundle:AdModeration:response" }
+
+ad_moderation_apply_changes_manually:
+    path:     /apply_changes_manually/{ad_id}
+    defaults: { _controller: "FaAdBundle:AdModeration:applyChangesManually" }

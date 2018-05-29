@@ -1,0 +1,36 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% block content -%}
+{% set backUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdminCancelUrl', [fetch_container_instance()]) %}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = {{ 'mandatory fields'|trans({}, 'messages') }}</p>
+           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+               {{ form_errors(form) }}
+               <p>{{ 'Please enter user email address to create add for that user or add a detached ad.'|trans }}</p>
+               <div class="row">
+                   <div class="large-6 columns">
+                       {{ form_widget(form.user__email, {'attr': {'class':'form-control', 'placeholder': 'Customer Email'}}) }}
+                       
+                   </div>
+                   <div class="large-6 columns">
+                        {{ form_widget(form.search, {'attr': {'class':'tiny button'}}) }}
+                        {% set userRole = userRepository.getUserRole(app.user.getId(), fetch_container_instance()) %}
+                        {% if userRole != constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_ADMIN_HIDE_SKIP_PAYMENT') %}
+                            &nbsp;{{ 'OR'|trans }}
+                            &nbsp;<button type="button" class="tiny button mb0" onclick="javascript:window.location='{{ path('ad_post_new_admin') }}'">{{ 'Add a detached Ad'|trans({}, 'messages') }}</button>
+                        {% endif %}
+                        &nbsp;&nbsp;<button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ backUrl }}'">{{ 'Back to ad list'|trans({}, 'messages') }}</button>
+                   </div>
+               </div>
+           {{ form_end(form) }}
+       </div>
+   </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="61" height="60" viewBox="-449 251 61 60" xml:space="preserve" enable-background="new -449 251 61 60">
+  <style type="text/css">
+    
+	.st0{fill:#EFEFEF;}
+	.st1{fill:none;stroke:#313133;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,4;}
+	.st2{fill:#313133;}
+
+  </style>
+  <title>
+    Motors-mobile
+  </title>
+  <desc>
+    Created with Sketch.
+  </desc>
+  <g id="Homepage" sketch:type="MSPage">
+    <g id="Home-Mobile-portrait" transform="translate(-90.000000, -419.000000)" sketch:type="MSArtboardGroup">
+      <g id="Hero" transform="translate(-320.000000, -182.000000)" sketch:type="MSLayerGroup">
+        <g id="What-will-you-discover_x3F_-Copy" transform="translate(320.000000, 580.000000)" sketch:type="MSShapeGroup">
+          <g id="categories" transform="translate(9.000000, 21.000000)">
+            <g id="Motors-mobile" transform="translate(81.367356, 0.000000)">
+              <g id="Motors-inactive">
+                <path id="Fill-1" class="st0" d="M-388.9 281c0-16.5-13.5-30-30-30s-30 13.5-30 30 13.5 30 30 30S-388.9 297.5-388.9 281z"/>
+                <path id="Stroke-6" class="st1" d="M-395 292.5c1.7-3.5 2.6-7.4 2.6-11.5 0-14.6-11.9-26.5-26.5-26.5s-26.5 11.9-26.5 26.5c0 11.4 7.2 21.1 17.4 24.9 2.9 1.1 5.9 1.6 9.1 1.6C-408.4 307.5-399.3 301.4-395 292.5z"/>
+                <path class="st2" d="M-407.6 275.9h-1.5v3h-0.4l-1.2-6.8c0 0-4.3-0.8-8.5-0.8 -4.3 0-8.5 0.8-8.5 0.8l-1.2 6.8h-0.4v-3h-1.5c-0.5 0-0.8 0.3-0.8 0.8v3c0 0.5 0.3 0.7 0.8 0.7l1.5 0.1h0.1l-0.1 0.8c-0.9 0-1.5 0.7-1.5 1.5v3.8c0 0.8 0.7 1.5 1.5 1.5v1.4c0 0.5 0.3 0.8 0.8 0.8h2.3c0.4 0 0.8-0.4 0.8-0.8v-1.4h12.3v1.4c0 0.5 0.3 0.8 0.8 0.8h2.3c0.4 0 0.8-0.4 0.8-0.8v-1.4c0.9 0 1.6-0.7 1.6-1.5v-3.8c0-0.8-0.7-1.5-1.5-1.5l-0.1-0.8h0.1l1.5-0.1c0.5 0 0.8-0.2 0.8-0.7v-3C-406.8 276.2-407.1 275.9-407.6 275.9zM-426.1 273.2c0 0 3.5-0.8 7-0.8s7 0.8 7 0.8l1.5 6.8h-17L-426.1 273.2zM-426.4 285.9c-0.8 0-1.5-0.7-1.5-1.5s0.7-1.5 1.5-1.5 1.5 0.7 1.5 1.5S-425.6 285.9-426.4 285.9zM-411.9 285.9c-0.8 0-1.5-0.7-1.5-1.5s0.7-1.5 1.5-1.5 1.5 0.7 1.5 1.5S-411.1 285.9-411.9 285.9z"/>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

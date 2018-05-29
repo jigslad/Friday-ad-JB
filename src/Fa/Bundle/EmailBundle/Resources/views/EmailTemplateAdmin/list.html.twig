@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+	            <thead>
+	               <tr>
+	                   <th>
+	                      {{ sortable_link('email_template_admin', 'email_template__name', 'Name'|trans, sorter) }}
+	                   </th>
+	                   <th>{{ 'Identifier'|trans({}, 'messages') }}</th>
+	                   <th>
+	                      {{ sortable_link('email_template_admin', 'email_template__subject', 'Subject'|trans, sorter) }}
+	                   </th>
+	                   <th>
+	                      {{ 'Status'|trans({}, 'messages') }}
+	                   </th>
+	                   <th><i class="fi-widget"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+	               </tr>
+	            </thead>
+	            <tbody>
+	               {% if pagination.getNbResults() %}
+	                    {% for emailTemplate in pagination.getCurrentPageResults() %}
+	                    <tr class="gradeX">
+	                        <td>{{ emailTemplate.name }}</td>
+	                        <td>{{ emailTemplate.identifier }}</td>
+	                        <td>{{ emailTemplate.subject }}</td>
+	                        <td>{{ statusArray[emailTemplate.status] }}</td>
+	                        <td>
+	                            <button href="#" data-dropdown="drop{{ emailTemplate.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+	                                <br />
+	                                <ul id="drop{{ emailTemplate.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+	                                     {% if emailTemplateEditGrant %}
+	                                       <li><a href="{{ path('email_template_edit_admin', {'id': emailTemplate.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+	                                     {% endif %}
+
+	                                     {% if emailTemplateDeleteGrant %}
+	                                       <li><a href="{{ path('email_template_delete_admin', {'id': emailTemplate.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this email template?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+	                                     {% endif %}
+
+	                                     {% if emailTemplatePreviewGrant %}
+	                                       <li><a href="{{ path('email_template_preview_admin', {'id': emailTemplate.id}) }}"><i class="fi-eye"></i> {{ 'Preview'|trans({}, 'messages') }}</a></li>
+	                                     {% endif %}
+
+	                                     {% if emailTemplateScheduleGrant %}
+                                           <li><a href="{{ path('email_template_schedule_admin', {'id': emailTemplate.id}) }}"><i class="fi-clock"></i> {{ 'Schedule'|trans({}, 'messages') }}</a></li>
+                                         {% endif %}
+	                                </ul>
+	                        </td>
+	                    </tr>
+	                    {% endfor %}
+	               {% else %}
+	                    <tr class="gradeX">
+	                        <td colspan="5" align="center">{{ 'No email template found'|trans({}, 'messages') }}</td>
+	                    </tr>
+	               {% endif %}
+	            </tbody>
+            </table>
+        </div>
+    </div>
+</div>

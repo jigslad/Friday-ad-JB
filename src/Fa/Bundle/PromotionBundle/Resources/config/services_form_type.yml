@@ -1,0 +1,58 @@
+parameters:
+    fa_promotion.form.type.shop_package_admin.class: Fa\Bundle\PromotionBundle\Form\ShopPackageAdminType
+    fa_promotion.form.type.package_admin.class: Fa\Bundle\PromotionBundle\Form\PackageAdminType
+    fa_promotion.form.type.package_search_admin.class: Fa\Bundle\PromotionBundle\Form\PackageSearchAdminType
+    fa_promotion.form.type.upsell_admin.class: Fa\Bundle\PromotionBundle\Form\UpsellAdminType
+    fa_promotion.form.type.profile_upsell_admin.class: Fa\Bundle\PromotionBundle\Form\ProfileUpsellAdminType
+    fa_promotion.form.type.upsell_search_admin.class: Fa\Bundle\PromotionBundle\Form\UpsellSearchAdminType
+    fa_promotion.form.type.package_discount_code_admin.class: Fa\Bundle\PromotionBundle\Form\PackageDiscountCodeAdminType
+    fa_promotion.form.type.package_discount_code_search_admin.class: Fa\Bundle\PromotionBundle\Form\PackageDiscountCodeSearchAdminType
+
+services:
+    fa_promotion.form.type.package_admin:
+        class: '%fa_promotion.form.type.package_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_promotion_package_admin }
+    
+    fa_promotion.form.type.shop_package_admin:
+        class: '%fa_promotion.form.type.shop_package_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_promotion_shop_package_admin }
+
+    fa_promotion.form.type.package_search_admin:
+        class: '%fa_promotion.form.type.package_search_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_promotion_package_search_admin }
+            
+    fa_promotion.form.type.upsell_admin:
+        class: '%fa_promotion.form.type.upsell_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_promotion_upsell_admin }
+
+    fa_promotion.form.type.profile_upsell_admin:
+        class: '%fa_promotion.form.type.profile_upsell_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_promotion_profile_upsell_admin }
+
+    fa_promotion.form.type.upsell_search_admin:
+        class: '%fa_promotion.form.type.upsell_search_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_promotion_upsell_search_admin }
+
+    fa_promotion.form.type.package_discount_code_type_admin:
+        class: '%fa_promotion.form.type.package_discount_code_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_promotion_package_discount_code_admin }
+            
+    fa_promotion.form.type.package_discount_code_search_admin:
+        class: '%fa_promotion.form.type.package_discount_code_search_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_promotion_package_discount_code_search_admin }

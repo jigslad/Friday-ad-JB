@@ -1,0 +1,70 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% block content %}
+    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'amazonpay_form_admin'}}) }}
+    <div class="text-center" style="margin-top:40px;">
+        <div id="addressBookWidgetDiv" style="width:400px; height:240px; display:inline-block;"></div>
+        <div id="walletWidgetDiv" style="width:400px; height:240px; display:inline-block;"></div>
+        <div style="clear:both;"></div>
+        {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 button-mar'}}) }}
+        <div id="ajax-loader" style="display:none;"><img src="images/ajax-loader.gif"/></div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    <script type='text/javascript'>
+        $('#fa_payment_amazonpay_checkout_save').click(function(){
+            blockPage();
+            $(this).attr('disabled', true);
+            $('#amazonpay_form_admin').submit();
+            return false;
+        });
+        window.onAmazonLoginReady = function () {
+            try {
+                amazon.Login.setClientId('{{amzconf['client_id']}}');
+                amazon.Login.setUseCookie(true);
+            } catch (err) {
+                alert(err);
+            }
+        };
+
+        window.onAmazonPaymentsReady = function () {
+            new OffAmazonPayments.Widgets.AddressBook({
+                sellerId: "{{amzconf['merchant_id']}}",
+                onOrderReferenceCreate: function (orderReference) {
+                    $.post("/admin/ajax/amazonpay_cartdetails_admin", {
+                        orderReferenceId: orderReference.getAmazonOrderReferenceId(),
+                        userId: '{{ cartUserId }}',
+                    }).done(function (data) {
+                    });
+                },
+                onAddressSelect: function (orderReference) {
+                    // If you want to prohibit shipping to certain countries, this is where you would handle that
+                },
+                design: {
+                    designMode: 'responsive'
+                },
+                onError: function (error) {
+                    // your error handling code
+                    //alert("AddressBook Widget error: " + error.getErrorCode() + ' - ' + error.getErrorMessage());
+                }
+            }).bind("addressBookWidgetDiv");
+
+            new OffAmazonPayments.Widgets.Wallet({
+                sellerId: "{{amzconf['merchant_id']}}",
+                onPaymentSelect: function (orderReference) {
+                },
+                design: {
+                    designMode: 'responsive'
+                },
+                onError: function (error) {
+                    // your error handling code
+                    //alert("Wallet Widget error: " + error.getErrorCode() + ' - ' + error.getErrorMessage());
+                }
+            }).bind("walletWidgetDiv");
+        };                    
+    </script>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% set adChangeCategoryGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('ad_post_change_ad_category_admin') %}
+    {% set adChangeCategoryGrant = true %}
+{% endif %}
+{% if adChangeCategoryGrant == true and fetch_repository('FaAdBundle:Ad').isAdCategoryChangableInEditMode(entity) %}
+    &nbsp;<a href="{{ path('ad_post_change_ad_category_admin', { 'ad_id' : entity.id, 'admin_ad_counter': app.request.get('admin_ad_counter', 0) }) }}" onclick="javascript:return confirm('Do you really want to change the category?')" style="text-decoration:underline">{{ 'Change'|trans }}</a>
+{% endif %}

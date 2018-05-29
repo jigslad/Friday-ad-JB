@@ -1,0 +1,55 @@
+security:
+    encoders:
+        Fa\Bundle\UserBundle\Entity\User:
+          id: fa_user.encoder.pbkdf2_password
+          #algorithm: sha512
+          #iterations: 100
+
+    providers:
+#        in_memory:
+#            memory: ~
+        main:
+            entity: { class: Fa\Bundle\UserBundle\Entity\User, property: username }
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+#        default:
+#            anonymous: ~
+
+        admin_secured_area:
+            pattern:    ^/admin(.*)
+            logout_on_user_change: true
+            simple_form:
+                authenticator: fa.user.authenticator
+                check_path: /admin/login_check
+                login_path: /admin/login
+            logout:
+                path:   /admin/logout
+                invalidate_session: false
+                success_handler: fa.user.logout.success.handler
+            anonymous: ~
+        main:
+            pattern:    ^/
+            logout_on_user_change: true
+            simple_form:
+                authenticator: fa.user.authenticator
+                check_path: /login_check
+                login_path: /login
+                default_target_path: /home
+                remember_me: true
+            logout:
+                path:   /logout
+                invalidate_session: false
+                success_handler: fa.user.logout.success.handler
+            remember_me:
+                secret:      7d5fdfd78af168011e6172e88b7dac4ji5h3h44l
+                lifetime: 691200 # 8 days in seconds
+                path:     /
+                domain:   ~
+                always_remember_me: true
+            anonymous: ~
+            #http_basic:
+            #    realm: "Secured Demo Area"

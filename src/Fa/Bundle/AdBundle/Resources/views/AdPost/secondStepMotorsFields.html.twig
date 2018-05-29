@@ -1,0 +1,174 @@
+{% set regNoDetailsFields = {0 : 'colour_id', 1 : 'body_type_id', 2 : 'reg_year', 3 : 'fuel_type_id', 4 : 'transmission_id', 5 : 'engine_size', 6 : 'no_of_doors', 7 : 'no_of_seats', 8: 'fuel_economy', 9 : '062mph', 10 : 'top_speed', 11 : 'ncap_rating', 12 : 'co2_emissions', 13 : 'colour_id_autocomplete'} %}
+{% set regNoDetailsHiddenFields = {0: 'fuel_economy', 1 : '062mph', 2 : 'top_speed', 3 : 'ncap_rating', 4 : 'co2_emissions'} %}
+{% set regNoDetailsOrderedFields = {} %}
+{% for key, field in orderedFields %}
+    {% if field in regNoDetailsFields %}
+        {% set regNoDetailsOrderedFields = regNoDetailsOrderedFields|merge({(key) : (field)}) %}
+    {% endif %}
+{% endfor %}
+
+{% for field in orderedFields %}
+    {% if field not in regNoDetailsFields and field != 'reg_no' %}
+        {% if attribute(form, field) is defined %}
+            {{ set_variables('formFields', {'lastField':field}) }}
+            {% if field == 'title' %}
+                <div class="paa-bdr-box">
+                    <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                    {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'eg. Little Tikes'|trans({}, 'frontend-paa-second-step'))}}) }}
+                    {% if attribute(form, field).vars.size %}
+                        <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-second-step') }}</div>
+                    {% endif %}
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            {% elseif field == 'has_reg_no' %}
+                <div id="reg_no_fields" class="paa-bdr-box">
+                        <h3 class="text-center">{{ attribute(form, 'has_reg_no').vars.label }}</h3>
+                        <div class="text-center label-inline reg-yes-no">
+                            {{ form_widget(attribute(form, 'has_reg_no')) }}
+                            {{ form_errors(attribute(form, 'has_reg_no')) }}
+                        </div>
+                    <div id="reg_no_field">
+                        {% if attribute(form, 'reg_no') is defined %}
+                            <div class="small-wrapper">
+                                <label for="fa_paa_second_step_motors_reg_no">{{ 'Enter it here'|trans({}, 'frontend-paa-second-step')}}:</label>
+                                {{ form_widget(attribute(form, 'reg_no')) }}
+                                {{ form_errors(attribute(form, 'reg_no')) }}
+                                <span class="error" id="reg_no_error_msg"></span>
+                                <button class="secondary-btn-1 expand mt10" id="lookup_vehicle" type="button">{{ 'Lookup Vehicle'|trans({}, 'frontend-paa-second-step')}}</button>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div id="carweb_category_msg_modal" class="reveal-modal tiny" data-reveal>
+                        <a class="close-reveal-modal">&#215;</a>
+                        <h5 class="modal-title">&nbsp;</h5>
+                    </div>
+                    
+                    <div id="reg_no_details_fields">
+                        {% if regNoDetailsOrderedFields|length %}
+                            {% if attribute(form, 'has_reg_no').vars.data == 1 %}
+                                {% if attribute(form, 'reg_no').vars.data is not null and attribute(form, 'reg_no').vars.errors|length < 1 %}
+                                    <h5 class="text-center" id="add_vehicle_msg">{{ 'Confirm your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                                {% else %}
+                                    <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                                {% endif %}
+                            {% else %}
+                                <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                            {% endif %}
+                            <div class="small-wrapper">
+                            {% for field in regNoDetailsOrderedFields %}
+                                {% if attribute(form, field) is defined %}
+                                    {% if field in regNoDetailsHiddenFields %}
+                                        {{ form_widget(attribute(form, field), {'attr': {'style':'display:none'}}) }}
+                                    {% elseif 'engine_size' in field %}
+                                        <label for="fa_paa_second_step_motors_engine_size">{{ attribute(form, field).vars.label }}{{fetch_repository('FaAdBundle:AdMotors').getUnitByField('engine_size', true)}}</label>
+                                        {{ form_widget(attribute(form, field)) }}
+                                        {{ form_errors(attribute(form, field)) }}
+                                    {% else %}
+                                        {{ form_row(attribute(form, field)) }}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <span id="reg_no_detail_ends"></span>
+            {% elseif field == 'description' %}
+                <div class="paa-bdr-box">
+                    <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                    {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                        <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
+                    {% endif %}
+                    {{ form_widget(attribute(form, field), {'attr': {'placeholder': ''}}) }}
+                    {% if attribute(form, field).vars.size %}
+                        <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-second-step') }}</div>
+                    {% endif %}
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            {% elseif field == 'price' %}
+                <div id="paa_price">
+                    <div class="paa-bdr-box bdr-none btm-pa-0">
+                        <h3 class="text-center" id="price_label">{{ attribute(form, field).vars.label }}</h3>
+                        <div class="paa-title-ins" id="price_suggestion"></div>
+                        <div id="paa_similar_adverts"></div>
+                    </div>
+                    <div class="small-wrapper">
+                        <div class="paa-enter-price clearfix">
+                            <div class="price-icon">&pound;</div>
+                            {{ form_widget(attribute(form, field)) }}
+                            {{ form_errors(attribute(form, field)) }}
+                        </div>
+                    </div>
+                </div>
+            {% elseif field == 'colour_id_autocomplete' %}
+                <div class="paa-bdr-box">
+                    <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                    <div class="relative">
+                        {{ form_widget(attribute(form, field)) }}
+                        <a href="javascript:void(0);" id="fa_paa_second_step_motors_colour_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                    </div>
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            {% elseif field == 'manufacturer_id_autocomplete' %}
+                <div class="paa-bdr-box">
+                    <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                    <div class="relative">
+                        {{ form_widget(attribute(form, field)) }}
+                        <a href="javascript:void(0);" id="fa_paa_second_step_motors_manufacturer_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                    </div>
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            {% elseif field == 'part_manufacturer_id_autocomplete' %}
+                <div class="paa-bdr-box">
+                    <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                    <div class="relative">
+                        {{ form_widget(attribute(form, field)) }}
+                        <a href="javascript:void(0);" id="fa_paa_second_step_motors_part_manufacturer_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                    </div>
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            {% elseif field == 'model' %}
+                <div class="paa-bdr-box">
+                    <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                    {{ form_widget(attribute(form, field)) }}
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            {% elseif field == 'make_id_autocomplete' %}
+                <div class="paa-bdr-box">
+                    <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                    <div class="relative">
+                        {{ form_widget(attribute(form, field)) }}
+                        <a href="javascript:void(0);" id="fa_paa_second_step_motors_make_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                    </div>
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            {% elseif field == 'model_id_autocomplete' %}
+                <div class="paa-bdr-box">
+                    <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                    <div class="relative">
+                        {{ form_widget(attribute(form, field)) }}
+                        <a href="javascript:void(0);" id="fa_paa_second_step_motors_model_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                    </div>
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            {% elseif field == 'part_of_vehicle_id_autocomplete' %}
+                <div class="paa-bdr-box">
+                    <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                    <div class="relative">
+                        {{ form_widget(attribute(form, field)) }}
+                        <a href="javascript:void(0);" id="fa_paa_second_step_motors_part_of_vehicle_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                    </div>
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            {% else %}
+                <div class="paa-bdr-box">
+                    <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                    <div class="small-wrapper">
+                        {{ form_widget(attribute(form, field)) }}
+                        {{ form_errors(attribute(form, field)) }}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endfor %}

@@ -1,0 +1,17 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+{% set entityLogRepository  = fetch_repository('FaTiReportBundle:FaEntityLog', 'ti_history') %}
+
+{% block content -%}
+    {{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+    {% use "FaTiReportBundle:FaEntityLogAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaTiReportBundle:FaEntityLogAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+{% endblock %}

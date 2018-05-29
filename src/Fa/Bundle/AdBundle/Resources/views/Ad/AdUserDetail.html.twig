@@ -1,0 +1,213 @@
+{% set currentRoute = app.request.get('_route') %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set userRole = userRepository.getUserRole(adDetail['user']['id'], container) %}
+{% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}
+    {% set isCompany = 1 %}
+{% elseif userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
+    {% set isCompany = 0 %}
+{% endif %}
+{% set profileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(adDetail['user']['id']) %}
+{% set profileAdsUrl = container.get('fa_ad.manager.ad_routing').getProfilePageAdsUrl(adDetail['user']['id']) %}
+{% if allowAdEdit %}
+    {{ set_variables('profileImageUploadStylesheets', {'loaded':'false'}) }}
+    {{ set_variables('fromProfilePageVariables', {'fromProfilePage':true}) }}
+    {{ render(controller('FaUserBundle:UserImage:showProfileImageUploader', {'userId': app.user.getId(), 'isCompany': isCompany})) }}
+    {{ set_variables('profileImageUploadJavascriptBottom', {'loaded':'false'}) }}
+{% endif %}
+<div class="pvt-seller-box">
+    <div class="pvt-seller-cap">
+        <span class="person-collection">
+            {% if adDetail['user']['user_role'] is defined %}
+                {% if (adDetail['user']['business_category_id'] is defined) %}
+                    {% set rootCatId = adDetail['user']['business_category_id'] %}
+                {% else %}
+                    {% set rootCatId = rootCategoryId %}
+                {% endif %}
+                {% set adRepository = fetch_repository('FaAdBundle:Ad') %}
+                {% set userRoles = adRepository.getLeftSearchLabelForUserType(rootCatId, true) %}
+                {{ userRoles[adDetail['user']['role_id']] }}
+            {% endif %}
+        </span>
+    </div>
+    {% set userCompanyLogo = null %}
+    {% set userLogo = null %}
+    {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}
+        {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adDetail['user']['company_logo'], adDetail['user']['id'], null, null, true, true, adDetail['user']['status_id'], adDetail['user']['user_name']]) %}
+    {% endif %}
+    {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
+        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adDetail['user']['image'], adDetail['user']['id'], null, null, true, false, adDetail['user']['status_id'], adDetail['user']['user_name']]) %}
+    {% endif %}
+
+    <div class="pvt-seller-img {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}bz-seller-img{% else %}seller-img-round{% endif %}">
+        <div class="pvt-seller-wrapper" id="left_profile_image_div">
+            {% if userCompanyLogo %}
+                {{userCompanyLogo|raw}}
+            {% elseif userLogo %}
+                {{userLogo|raw}}
+            {% endif %}
+        </div>
+        {% if allowAdEdit %}
+            <div class="profile-img-overlay"> </div>
+        {% endif %}
+        
+        {% if allowAdEdit and currentDevice == 'D' %}
+            {% set hasUserLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adDetail['user']['id'], false, true]) %}
+            <div class="profile-box" id="profile_change_btn_with_opt" {% if not hasUserLogo|length %}style="display:none;"{% endif %}>
+                <a href="javascript:void(0);" id="profile_change_btn_with_opt_anchor" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="photo-icon thin-btn dropdown needsclick"><label>{{'Edit image'|trans({}, 'frontend-my-profile')}}</label></a>
+                <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
+                    <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
+                    <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': isCompany}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
+                    <li><a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': isCompany}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                </ul>
+            </div>
+            <div class="profile-box" id="profile_change_btn_without_opt" {% if hasUserLogo|length %}style="display:none;"{% endif %}>
+                <a href="javascript:void(0);" id="pickProfileFile1" class="photo-icon thin-btn dropdown pickProfileFile needsclick"><label>{% if not isCompany %} {{'Add profile picture'|trans({}, 'frontend-my-profile')}} {% else %} {{'Change image'|trans({}, 'frontend-my-profile')}} {% endif %}</label></a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="pvt-seller-info">
+        {% if allowAdEdit and currentDevice != 'D' %}
+            {% set hasUserLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adDetail['user']['id'], false, true]) %}
+            <div class="mt10 mb10">
+                <div id="profile_change_btn_with_opt" {% if not hasUserLogo|length %}style="display:none;"{% endif %}>
+                    <a href="javascript:void(0);" id="profile_change_btn_with_opt_anchor" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="dropdown needsclick" >{{'Edit image'|trans({}, 'frontend-my-profile')}}</a>
+                    <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
+                        <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
+                        <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': isCompany}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
+                        <li><a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': isCompany}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                    </ul>
+                </div>
+                <div id="profile_change_btn_without_opt" {% if hasUserLogo|length %}style="display:none;"{% endif %}>
+                    <a href="javascript:void(0);" id="pickProfileFile1" class="dropdown pickProfileFile needsclick">{% if not isCompany %} {{'Add profile picture'|trans({}, 'frontend-my-profile')}} {% else %} {{'Change image'|trans({}, 'frontend-my-profile')}} {% endif %}</a>
+                </div>
+            </div>
+        {% endif %}
+        <h2 {% if isAdAdminPreview is defined and not isAdAdminPreview and isCompany is defined and isCompany == 1 %}oncopy="gaSendDealerNameCopyEvent('{{ adDetail['user']['user_name'] }}');"{% endif %}>
+            {{adDetail['user']['user_name']}}
+        </h2>
+        {% if adDetail['user']['user_rating'] is defined and adDetail['user']['user_rating'] > 0%}
+            {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': adDetail['user']['user_rating']}) }}
+        {% endif %}
+        
+        {% if (adDetail['user']['id'] is defined and adDetail['user']['business_category_id'] is defined) %}
+            {% set userUpsells = {} %}
+            {% if (adDetail['user']['upsells'] is defined) %}
+                {% for userUpsell in adDetail['user']['upsells'] %}
+                    {% set userUpsells = userUpsells|merge({0 : userUpsell.upsell_id}) %}
+                {% endfor %}
+            {% endif %}
+            {{ include('FaContentBundle:ProfilePage:showTrustedUserLogo.html.twig', {'userId':adDetail['user']['id'], 'businessCategoryId':adDetail['user']['business_category_id'], 'userUpsells':userUpsells}) }}
+        {% endif %}
+        {% if adDetail['user']['total_review'] is defined  and adDetail['user']['total_review'] > 0%}
+            {% if profileUrl %}
+                {% if is_preview is defined and is_preview == true %}
+                    <a href="javascript:void(0)">{{ '(%total_review%&nbsp;reviews)'|trans({'%total_review%': adDetail['user']['total_review']}, 'frontend-show-ad')|raw }}</a>
+                {% else %}
+                    <a href="{{ profileUrl~'?moveTo=review' }}">{{ '(%total_review%&nbsp;reviews)'|trans({'%total_review%': adDetail['user']['total_review']}, 'frontend-show-ad')|raw }}</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        <div class="seller-location">
+            {% if adDetail['user']['created_at'] is defined and adDetail['user']['created_at'] %}
+                <span class="posting-year">{{'Posting ads since %posting_date%'|trans({'%posting_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [adDetail['user']['created_at'], container, null, null, 'MMM Y']) }, 'frontend-show-ad')}}</span><br />
+            {% endif %}
+            {% if adDetail['user']['town_name'] is defined and adDetail['user']['town_name'] is not null%}
+                <b>{{adDetail['user']['town_name']}}</b>
+            {% endif %}
+            {% if adLatitude is defined and adLatitude and adLongitude is defined and adLongitude and cookieLatitude is defined and cookieLatitude and cookieLongitude is defined and cookieLongitude %}
+                {{'%miles_away% miles away'|trans({'%miles_away%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getDistance', [adLatitude, adLongitude, cookieLatitude, cookieLongitude]) }, 'frontend-show-ad')}}
+            {% endif %}
+        </div>
+
+        {% set adCompanyInfo = {} %}
+        {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
+            {% if adDetail['user']['company_address'] is defined and adDetail['user']['company_address'] is not null %}
+                {% set adCompanyInfo = adCompanyInfo|merge({'company_address': adDetail['user']['company_address']}) %}
+            {% endif %}
+        {% endif %}
+        {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID')} %}
+            {% if adDetail['user']['website_link'] is defined and adDetail['user']['website_link'] is not null %}
+                {% set adCompanyInfo = adCompanyInfo|merge({'website_link': adDetail['user']['website_link']}) %}
+            {% endif %}
+            {% if adDetail['user']['user_name'] is defined and adDetail['user']['user_name']|length %}
+			    {% set businessName = adDetail['user']['user_name'] %} 
+			{% endif %}
+        {% endif %}
+
+        {% if adCompanyInfo|length %}
+            <ul class="seller-cont-info">
+                {% if adCompanyInfo['company_address'] is defined %}
+                    <li class="address">{{ adCompanyInfo['company_address'] }}</li>
+                {% endif %}
+                {% if adCompanyInfo['telephone'] is defined %}
+                    <li class="phone">
+                        {{ adCompanyInfo['telephone']|join('<br />')|raw }}
+                    </li>
+                {% endif %}
+                {% if adCompanyInfo['website_link'] is defined %}
+                    {% set companyWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [adCompanyInfo['website_link']]) %}
+                    {#<li class="website"><a rel="nofollow" onclick="openUserWebsite('{{(adDetail['ad_id'] is defined ? adDetail['ad_id'] : adDetail['id'])}}', '{{ companyWebSite }}',{{businessName}})" href="javascript:void(0);">{{ adCompanyInfo['website_link'] }}</a></li>#}
+                {% endif %}
+            </ul>
+        {% endif %}
+
+        {% set isBusinessAdPage = false %}
+        {% if adDetail['user']['role_id'] is defined %}
+            {% if adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+                {% set isBusinessAdPage = true %}
+                {% set profileLabel = 'Visit profile'|trans({}, 'frontend-show-ad') %}
+                {% if adDetail['user']['business_category_id'] is defined and adDetail['user']['business_category_id'] is not null and ((solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'HAS_PROFILE_EXPOSURE')) is defined and attribute(adDetail, constant(solrMapping ~ 'HAS_PROFILE_EXPOSURE'))) or currentRoute == 'show_draft_ad') %}
+                    {% if adDetail['user']['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')}  %}
+                        {% set profileLabel = 'Visit shop'|trans({}, 'frontend-show-ad') %}
+                    {% elseif adDetail['user']['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID')}  %}
+                        {% set profileLabel = 'Visit dealership'|trans({}, 'frontend-show-ad') %}
+                    {% elseif adDetail['user']['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')}  %}
+                        {% set profileLabel = 'Visit agency'|trans({}, 'frontend-show-ad') %}
+                    {% endif %}
+                {% endif %}
+
+                {% if currentRoute == 'show_draft_ad' %}
+                    <a href="javascript:void(0);" class="secondary-btn-1 button expand not-hover">{{ profileLabel }}</a>
+                {% else %}
+                    {% if profileUrl %}
+                        <a href="{{ profileUrl }}" class="secondary-btn-1 button expand">{{ profileLabel }}</a>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                {% set profileLabel = "See seller's profile"|trans({}, 'frontend-show-ad') %}
+                {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')}  %}
+                    {% set profileLabel = 'Visit profile'|trans({}, 'frontend-show-ad') %}
+                {% endif %}
+                {% if currentRoute == 'show_draft_ad'%}
+                    <a href="javascript:void(0);" class="secondary-btn-1 button expand not-hover" rel="nofollow">{{ profileLabel }}</a>
+                {% else %}
+                    {% if profileUrl %}
+                        <a href="{{ profileUrl }}" class="secondary-btn-1 button expand" rel="nofollow">{{ profileLabel }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        
+        {% if adCompanyInfo['website_link'] is defined %}
+		{% set websiteLabel = 'Visit Website'|trans({}, 'frontend-show-ad') %}		
+		<a rel="nofollow" onclick="openUserWebsite('{{(adDetail['ad_id'] is defined ? adDetail['ad_id'] : adDetail['id'])}}', '{{ companyWebSite }}','{{businessName}}')" href="javascript:void(0);" class="website-btn-1 button expand"><span class="website-icon"></span>{{ websiteLabel }}</a>
+	    {% endif %}
+
+        {% set otherItemLabel = "See seller's other items"|trans({}, 'frontend-show-ad') %}
+        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+            {% if userRoles|length %}
+                {% set otherItemLabel = "See %userrole%'s other vacancies"|trans({'%userrole%': userRoles[adDetail['user']['role_id']]|lower}, 'frontend-show-ad') %}
+            {% else %}
+                {% set otherItemLabel = "See other vacancies"|trans({}, 'frontend-show-ad') %}
+            {% endif %}
+        {% endif %}
+        {% if profileAdsUrl %}
+            {% if is_preview is defined and is_preview == true %}
+                <a href="javascript:void(0)" {% if not isBusinessAdPage %}rel="nofollow"{% endif %}>{{ otherItemLabel }}</a>
+            {% else %}
+                <a href="{{ profileAdsUrl }}" {% if not isBusinessAdPage %}rel="nofollow"{% endif %}>{{ otherItemLabel }}</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

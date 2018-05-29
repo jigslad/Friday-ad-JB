@@ -1,0 +1,111 @@
+{% set container = fetch_container_instance() %}
+{% set adReportDailyRepository = fetch_repository('FaReportBundle:AdReportDaily', 'history') %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set reportFieldsArray = staticCall('Fa\\Bundle\\ReportBundle\\Repository\\AdReportDailyRepository', 'getAdReportFields') %}
+{% set reportSortFieldsArray = staticCall('Fa\\Bundle\\ReportBundle\\Repository\\AdReportDailyRepository', 'getAdReportSortFields') %}
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+{% set adIdArray = {} %}
+{% if 'published_print_revenue_gross' in searchParams['report_columns'] or 'published_print_revenue_net' in searchParams['report_columns'] or 'print_insert_date' in searchParams['report_columns'] or 'print_edition_ids' in searchParams['report_columns'] %}
+    {% if pagination.getNbResults() %}
+        {% for adReport in pagination.getCurrentPageResults() %}
+            {% set adIdArray = adIdArray|merge({0 : adReport.ad_id}) %}
+        {% endfor %}
+        {% set adPrintDatesEditionArray = adReportDailyRepository.getAdPrintInsertDatesByAdIds(adIdArray, searchParams, sorter, container) %}
+        {% set adPrintDates = adPrintDatesEditionArray.0 %}
+        {% set adPrintEditions = adPrintDatesEditionArray.1 %}
+    {% endif %}
+{% endif %}
+<div class="row">
+    <div class="columns">
+        <div class="table-fix-col">
+            <div class="fa-scroller2">
+                {% if searchParams['report_columns'] is defined %}
+                    <table class="fixed-table fatable">
+                        <thead>
+                            <tr>
+                                {% for key, value in searchParams['report_columns'] %}
+                                    <th width="100">
+                                        {% if value in reportSortFieldsArray %}
+                                            {{ sortable_link('fa_report_ad', value, reportFieldsArray[value], sorter) }}
+                                        {% else %}
+                                            {{ reportFieldsArray[value] }}
+                                        {% endif %}
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if pagination.getNbResults() %}
+                                {% for adReport in pagination.getCurrentPageResults() %}
+                                    {% set adReportDetail = adReportDailyRepository.formatAdReportRaw(adReport, container, (loop.index + ((page-1) * 20))) %}
+                                    <tr>
+                                        {% for key, value in searchParams['report_columns'] %}
+                                            <td>
+                                                {% if value == 'print_edition_ids' and adPrintDates[adReport['ad_id']][adReport['id']] is defined and adPrintEditions[adReport['ad_id']][adReport['id']] is defined %}
+                                                    {% set printEditions = {} %}
+                                                    {% for adPrintInsertDate in adPrintDates[adReport['ad_id']][adReport['id']] %}
+                                                        {% set printEditions = printEditions|merge(adPrintEditions[adReport['ad_id']][adReport['id']][adPrintInsertDate] is defined ? adPrintEditions[adReport['ad_id']][adReport['id']][adPrintInsertDate] : {}) %}
+                                                    {% endfor %}
+                                                    {% set printEditions = array_unique(printEditions) %}
+                                                    {% for printEditionId in printEditions %}
+                                                        {{ entityCacheManager.getEntityNameById('FaAdBundle:PrintEdition', printEditionId) }} {{ (loop.index < printEditions|length ?',':'') }}
+                                                    {% endfor %}
+                                                {% elseif adReportDetail[value] is defined %}
+                                                    {% if value == 'total_ads' %}
+                                                        {{ pagination.getNbResults() }}
+                                                    {% else %}
+                                                        {{ adReportDetail[value] }}
+                                                    {% endif %}
+                                                {% elseif value == 'published_print_revenue_gross' or value == 'published_print_revenue_net' %}
+                                                    {% set publishedPrintRevenueGross = 0 %}
+                                                    {% if not adReport['skip_payment_reason'] %}
+                                                        {% set printRevenuePerEdition = 0 %}
+                                                        {% set totalPrintEditions = adReport['print_edition_ids']|split(',') %}
+                                                        {% if adReport['duration_print'] > 0 and totalPrintEditions|length > 0 and adPrintDates[adReport['ad_id']][adReport['id']] is defined %}
+                                                            {% set printRevenuePerEdition = adReport['print_revenue_gross']/(totalPrintEditions|length * adReport['duration_print']) %}
+                                                            {% set weekDuration = (adPrintDates[adReport['ad_id']][adReport['id']]|length > adReport['duration_print'] ? adReport['duration_print'] : adPrintDates[adReport['ad_id']][adReport['id']]|length) %}
+                                                            {% if adPrintDates[adReport['ad_id']][adReport['id']]|length > adReport['duration_print'] %}
+                                                                {% if 'print_edition_id' in searchParams|keys %}
+                                                                    {% set publishedPrintRevenueGross = (printRevenuePerEdition * weekDuration) %}
+                                                                {% elseif 'print_edition_id' not in searchParams|keys %}
+                                                                    {% set publishedPrintRevenueGross = (printRevenuePerEdition * printEditions|length * weekDuration) %}
+                                                                {% endif %}
+                                                            {% else %}
+                                                                {% for adPrintInsertDate in adPrintDates[adReport['ad_id']][adReport['id']] %}
+                                                                    {% set printEditions = (adPrintEditions[adReport['ad_id']][adReport['id']][adPrintInsertDate] is defined ? adPrintEditions[adReport['ad_id']][adReport['id']][adPrintInsertDate] : {}) %}
+                                                                    {% if 'print_edition_id' in searchParams|keys %}
+                                                                        {% set publishedPrintRevenueGross = publishedPrintRevenueGross + printRevenuePerEdition %}
+                                                                    {% elseif 'print_edition_id' not in searchParams|keys %}
+                                                                        {% set publishedPrintRevenueGross = publishedPrintRevenueGross + (printRevenuePerEdition * printEditions|length) %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% if value == 'published_print_revenue_gross' %}
+                                                        {{ format_currency(publishedPrintRevenueGross) }}
+                                                    {% elseif value == 'published_print_revenue_net' %}
+                                                        {% set publishedPrintRevenueNet = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getNetAmountFromGrossAmount', [publishedPrintRevenueGross, container]) %}
+                                                        {{ format_currency(publishedPrintRevenueNet) }}
+                                                    {% endif %}
+                                                {% elseif value == 'print_insert_date' and adPrintDates[adReport['ad_id']][adReport['id']] is defined %}
+                                                    {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [adPrintDates[adReport['ad_id']][adReport['id']]|last, fetch_container_instance()]) }}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </th>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="{{searchParams['report_columns']|length}}" align="center">{{ 'No Data Found'|trans }}</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

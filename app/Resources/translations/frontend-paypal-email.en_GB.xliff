@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="52354fbe4801a5674828c7a6d7657a92341b9ad3" resname="Paypal account">
+        <jms:reference-file line="3">views/MyAccount/myPaypalAccount.html.twig</jms:reference-file>
+        <source>Paypal account</source>
+        <target state="new">Paypal account</target>
+      </trans-unit>
+      <trans-unit id="2212cca8fce79536dff77418e75d5cf7a496e619" resname="Paypal email address">
+        <jms:reference-file line="9">views/MyAccount/myPaypalAccount.html.twig</jms:reference-file>
+        <source>Paypal email address</source>
+        <target state="new">Paypal email address</target>
+      </trans-unit>
+      <trans-unit id="a7c29d61c09dbd7bd213bba055bbd41a4a5ae4d9" resname="Paypal email updated successfully.">
+        <jms:reference-file line="374">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>Paypal email updated successfully.</source>
+        <target state="new">Paypal email updated successfully.</target>
+      </trans-unit>
+      <trans-unit id="abce85e04851d020c77388478b1e69b3ee83149a" resname="Please enter paypal email address.">
+        <jms:reference-file line="379">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>Please enter paypal email address.</source>
+        <target state="new">Please enter paypal email address.</target>
+      </trans-unit>
+      <trans-unit id="6ac6aa23ec346c834d819f15a9a25c34b00d5dce" resname="Please enter paypal verified email address.">
+        <jms:reference-file line="376">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>Please enter paypal verified email address.</source>
+        <target state="new">Please enter paypal verified email address.</target>
+      </trans-unit>
+      <trans-unit id="179359b39edbd0bf0cdf3bb6b7dfb4223f663af2" resname="Save changes">
+        <jms:reference-file line="15">views/MyAccount/myPaypalAccount.html.twig</jms:reference-file>
+        <source>Save changes</source>
+        <target state="new">Save changes</target>
+      </trans-unit>
+      <trans-unit id="25958c753d702432bc67561a97d19d8903e77046" resname="This is the account that will receive funds when you accept payment through Paypal.">
+        <jms:reference-file line="7">views/MyAccount/myPaypalAccount.html.twig</jms:reference-file>
+        <source>This is the account that will receive funds when you accept payment through Paypal.</source>
+        <target state="new">This is the account that will receive funds when you accept payment through Paypal.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

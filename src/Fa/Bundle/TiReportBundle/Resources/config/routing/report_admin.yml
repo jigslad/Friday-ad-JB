@@ -1,0 +1,139 @@
+fa_ti_report_user:
+    path:     /reports/user_report
+    defaults: { _controller: FaTiReportBundle:UserReportAdmin:index }
+    
+fa_ti_report_ad:
+    path:     /reports/ad_report
+    defaults: { _controller: FaTiReportBundle:AdReportAdmin:index }
+    
+fa_ti_report_ad_export_to_csv:
+    path:     /reports/ad_report_export_to_csv
+    defaults: { _controller: FaTiReportBundle:AdReportAdmin:exportAdReportToCsv }
+    
+ajax_fa_ti_report_ad_csv_list:
+    path:     /ajax/reports/ad_report_csv_list
+    defaults: { _controller: FaTiReportBundle:AdReportAdmin:ajaxListAdReportCsv }
+    
+ajax_fa_ti_report_ad_csv_delete:
+    path:     /ajax/reports/ad_report_csv_delete
+    defaults: { _controller: FaTiReportBundle:AdReportAdmin:ajaxDeleteAdReportCsv }
+    
+fa_ti_report_ad_download_csv:
+    path:     /reports/ad_report_download_csv/{fileName}
+    defaults: { _controller: FaTiReportBundle:AdReportAdmin:downloadAdReportCsv }
+
+fa_ti_report_user_export_to_csv:
+    path:     /reports/user_report_export_to_csv
+    defaults: { _controller: FaTiReportBundle:UserReportAdmin:exportToCSV }
+
+ajax_fa_ti_report_user_csv_list:
+    path:     /ajax/reports/user_report_csv_list
+    defaults: { _controller: FaTiReportBundle:UserReportAdmin:ajaxListUserReportCsv }
+
+fa_ti_report_user_download_csv:
+    path:     /reports/user_report_download_csv/{fileName}
+    defaults: { _controller: FaTiReportBundle:UserReportAdmin:downloadUserReportCsv }
+
+ajax_fa_ti_report_user_csv_delete:
+    path:     /ajax/reports/user_report_csv_delete
+    defaults: { _controller: FaTiReportBundle:UserReportAdmin:ajaxDeleteUserReportCsv }
+
+fa_ti_report_ad_enquiry:
+    path:     /reports/ad_enquiry_report
+    defaults: { _controller: FaTiReportBundle:AdEnquiryReportAdmin:index }
+
+fa_ti_report_ad_enquiry_export_to_csv:
+    path:     /reports/ad_enquiry_report_export_to_csv
+    defaults: { _controller: FaTiReportBundle:AdEnquiryReportAdmin:exportAdEnquiryReportToCsv }
+
+ajax_fa_ti_report_ad_enquiry_csv_list:
+    path:     /ajax/reports/ad_enquiry_report_csv_list
+    defaults: { _controller: FaTiReportBundle:AdEnquiryReportAdmin:ajaxListAdEnquiryReportCsv }
+
+ajax_fa_ti_report_ad_enquiry_csv_delete:
+    path:     /ajax/reports/ad_enquiry_report_csv_delete
+    defaults: { _controller: FaTiReportBundle:AdEnquiryReportAdmin:ajaxDeleteAdEnquiryReportCsv }
+
+fa_ti_report_ad_enquiry_download_csv:
+    path:     /reports/ad_enquiry_report_download_csv/{fileName}
+    defaults: { _controller: FaTiReportBundle:AdEnquiryReportAdmin:downloadAdEnquiryReportCsv }
+
+fa_ti_report_profile_package_revenue:
+    path:     /reports/profile_package_revenue_report
+    defaults: { _controller: FaTiReportBundle:ProfilePackageRevenueReportAdmin:index }
+    
+fa_ti_report_profile_package_revenue_export_to_csv:
+    path:     /reports/profile_package_revenue_report_export_to_csv
+    defaults: { _controller: FaTiReportBundle:ProfilePackageRevenueReportAdmin:exportToCSV }
+
+ajax_fa_ti_report_profile_package_revenue_csv_list:
+    path:     /ajax/reports/profile_package_revenue_report_csv_list
+    defaults: { _controller: FaTiReportBundle:ProfilePackageRevenueReportAdmin:ajaxListPPRReportCsv }
+
+fa_ti_report_profile_package_revenue_download_csv:
+    path:     /reports/profile_package_revenue_report_download_csv/{fileName}
+    defaults: { _controller: FaTiReportBundle:ProfilePackageRevenueReportAdmin:downloadPPRReportCsv }
+
+ajax_fa_ti_report_profile_package_revenue_csv_delete:
+    path:     /ajax/reports/profile_package_revenue_report_csv_delete
+    defaults: { _controller: FaTiReportBundle:ProfilePackageRevenueReportAdmin:ajaxDeletePPRReportCsv }
+    
+fa_ti_report_automated_email:
+    path:     /reports/automated_email_report
+    defaults: { _controller: FaTiReportBundle:AutomatedEmailReportAdmin:index }
+    
+fa_ti_report_automated_email_export_to_csv:
+    path:     /reports/automated_email_report_export_to_csv
+    defaults: { _controller: FaTiReportBundle:AutomatedEmailReportAdmin:exportAutomatedEmailReportToCsv }
+    
+ajax_fa_ti_report_automated_email_csv_list:
+    path:     /ajax/reports/automated_email_report_csv_list
+    defaults: { _controller: FaTiReportBundle:AutomatedEmailReportAdmin:ajaxListAutomatedEmailReportCsv }
+    
+ajax_fa_ti_report_automated_email_csv_delete:
+    path:     /ajax/reports/automated_email_report_csv_delete
+    defaults: { _controller: FaTiReportBundle:AutomatedEmailReportAdmin:ajaxDeleteAutomatedEmailReportCsv }
+    
+fa_ti_report_automated_email_download_csv:
+    path:     /reports/automated_email_report_download_csv/{fileName}
+    defaults: { _controller: FaTiReportBundle:AutomatedEmailReportAdmin:downloadAutomatedEmailReportCsv }
+
+fa_ti_report_user_profile:
+    path:     /reports/user_profile_report
+    defaults: { _controller: FaTiReportBundle:UserProfileReportAdmin:index }
+    
+fa_ti_report_user_profile_export_to_csv:
+    path:     /reports/user_profile_report_export_to_csv
+    defaults: { _controller: FaTiReportBundle:UserProfileReportAdmin:exportToCSV }
+
+ajax_fa_ti_report_user_profile_csv_list:
+    path:     /ajax/reports/user_profile_report_csv_list
+    defaults: { _controller: FaTiReportBundle:UserProfileReportAdmin:ajaxListUserProfileReportCsv }
+
+fa_ti_report_user_profile_download_csv:
+    path:     /reports/user_profile_report_download_csv/{fileName}
+    defaults: { _controller: FaTiReportBundle:UserProfileReportAdmin:downloadUserProfileReportCsv }
+
+ajax_fa_ti_report_user_profile_csv_delete:
+    path:     /ajax/reports/user_profile_report_csv_delete
+    defaults: { _controller: FaTiReportBundle:UserProfileReportAdmin:ajaxDeleteUserProfileReportCsv }
+
+fa_ti_ad_feed_click_report:
+    path:     /reports/ad_feed_click_report
+    defaults: { _controller: FaTiReportBundle:AdFeedClickReportAdmin:index }
+
+fa_ti_report_ad_feed_click_export_to_csv:
+    path:     /reports/ad_feed_click_report_export_to_csv
+    defaults: { _controller: FaTiReportBundle:AdFeedClickReportAdmin:exportAdFeedClickReportToCsv }
+
+ajax_fa_ti_report_ad_feed_click_csv_list:
+    path:     /ajax/reports/ad_feed_click_report_csv_list
+    defaults: { _controller: FaTiReportBundle:AdFeedClickReportAdmin:ajaxListAdFeedClickReportCsv }
+
+ajax_fa_ti_report_ad_feed_click_csv_delete:
+    path:     /ajax/reports/ad_feed_click_report_csv_delete
+    defaults: { _controller: FaTiReportBundle:AdFeedClickReportAdmin:ajaxDeleteAdFeedClickReportCsv }
+
+fa_ti_report_ad_feed_click_download_csv:
+    path:     /reports/ad_feed_click_report_download_csv/{fileName}
+    defaults: { _controller: FaTiReportBundle:AdFeedClickReportAdmin:downloadAdFeedClickReportCsv }

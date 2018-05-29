@@ -1,0 +1,61 @@
+{% set daysOfWeekArray = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getDaysOfWeekArray', [fetch_container_instance()]) %}
+{% set timeOfDayArray  = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getTimeWithIntervalArray', [15]) %}
+{% set printDeadlineRuleRepository = fetch_repository('FaAdBundle:PrintDeadlineRule') %}
+
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+             <table class="mb0">
+                 <thead>
+                     <tr>
+                         <th width="40%">
+                            {{ 'Deadline'|trans }}
+                         </th>
+                         <th width="30%">
+                            {{ 'Location Groups'|trans }}
+                         </th>
+                         <th width="30%"><i class="fa fa-gear"></i>{{ 'Action'|trans({}, 'messages') }}</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% set printDeadlines = pagination.getCurrentPageResults() %}
+                          {% set printDeadlineIds = {} %}
+                          {% for printDeadline in printDeadlines %}
+                              {% set printDeadlineIds = printDeadlineIds|merge({0 : printDeadline.id}) %}
+                          {% endfor %}
+                          {% set locationGroupArray = printDeadlineRuleRepository.getLocationGroupsByPrintDeadlineId(printDeadlineIds) %}
+                          {% for printDeadline in printDeadlines %}
+                          <tr class="odd gradeX">
+                              <td>
+                                  {{ daysOfWeekArray[printDeadline.day_of_week] }} {{ 'at'|trans }} {{ timeOfDayArray[printDeadline.time_of_day] }}
+                              </td>
+                              <td>
+                                  {{ locationGroupArray[printDeadline.id]|join(', ') }}
+                              </td>
+                              <td>
+                                  <button href="#" data-dropdown="drop{{ printDeadline.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                  <br />
+                                  <ul id="drop{{ printDeadline.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+		                               {% if printDeadlineEditGrant %}
+		                                   <li><a href="{{ path('print_deadline_edit_admin', {'id': printDeadline.id}) }}"><i class="fi-pencil"></i>{{ 'Edit'|trans }}</a></li>
+		                               {% endif %}
+		                               
+		                               {% if printDeadlineDeleteGrant %}
+		                                   <li><a href="{{ path('print_deadline_delete_admin', {'id': printDeadline.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to delete this record?'|trans }}')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
+		                               {% endif %}
+		                           </ul>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="odd gradeX">
+                              <td colspan="3" align="center">{{ 'No records found'|trans }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+         </div>
+     </div>
+</div>

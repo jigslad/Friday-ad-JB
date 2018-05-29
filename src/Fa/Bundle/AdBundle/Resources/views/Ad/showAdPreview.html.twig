@@ -1,0 +1,477 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% use "FaAdBundle:AdImage:renderImageSlider.html.twig" %}
+{% use "FaCoreBundle:GoogleMap:renderLocationUsingCustomMarker.html.twig" %}
+{% set container = fetch_container_instance() %}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set rootCategoryId = categoryRepository.getRootCategoryId(adDetail['category_id'], container) %}
+{% set adCategoryId = adDetail['category_id'] %}
+{% set secondLevelCategoryId = categoryRepository.getCategoryIdByLevel(adDetail['category_id'], 1, container) %}
+{% set adImages = {} %}
+{% set isAdPreview = true %}
+{% set isFinance = false %}
+{% set allowAdEdit = false %}
+{% if adDetail['images'] is defined %}
+    {% set adImages = adDetail['images'] %}
+{% endif %}
+{% set adId = ad.getId() %}
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+{% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+{% if app.user %}
+    {% set userId = app.user.getId() %}
+{% else %}
+    {% set userId = app.session.getId() %}
+{% endif %}
+{% set adFavoriteRepository = fetch_repository('FaAdBundle:AdFavorite') %}
+{% set adFavoriteAdIds = adFavoriteRepository.getFavoriteAdByUserId(userId, container) %}
+
+{% block scripttop %}
+    {{ block('image_slider_css') }}
+{% endblock %}
+
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set currentDevice = 'D' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'T' %}
+{% endif %}
+
+{% set youtubeVideoUrl = null %}
+{% if ad.getYoutubeVideoUrl() %}
+    {% set youtubeVideoUrl = ad.getYoutubeVideoUrl() %}
+{% endif %}
+
+{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
+    {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
+    {% set adProperty = adPropertyRepository.findOneBy({'ad': adId}) %}
+    {% set metaData = {} %}
+    {% if adProperty and adProperty.getMetaData() is not null %}
+        {% set metaData = array_unserialize(adProperty.getMetaData()) %}
+    {% endif %}
+{% endif %}
+{% set imageAltString = null %}
+
+{% block body %}
+{{ set_variables('userAdDetail', {'is_private_phone_number':adDetail['user']['is_private_phone_number'], 'phone':adDetail['user']['phone'], 'privacy_number':adDetail['privacy_number']}) }}
+{% set latitude = null %}
+{% set longitude = null %}
+{% if adDetail['latitude'] is defined and adDetail['longitude'] is defined %}
+    {% set latitude = adDetail['latitude'] %}
+    {% set longitude = adDetail['longitude'] %}
+    {% set mapHeight = '400px' %}
+    {% set mapWidth =  '709px' %}
+    {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'tabId': 'adDetailMainTabs', 'mapContentId': 'map_panel'}) }}
+{% endif %}
+
+<style>
+    .f-topbar-fixed footer{margin-bottom:100px}
+</style>
+
+<div class="breadcrumb-area hide-for-small-only">
+    <div class="row">
+        <div class="columns">
+            <div class="breadcrumb">
+                   <ul class="clearfix">
+                       <li class="hide-for-small-only breadcrumb-full">
+                        <a href="{{ container.getParameter('base_url') }}">{{'Home'|trans({}, 'frontend-preview-ad')}}</a>
+                        {% if adDetail['category_id'] is defined and adDetail['category_id'] %}
+                            {% set categoryPath = categoryRepository.getCategoryPathArrayById(adDetail['category_id'], false, container) %}
+
+                            {% for categoryId,categoryName in categoryPath %}
+                                {% set catLinkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
+                                {% set catListUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(catLinkParam) %}
+                                <a href="{{ catListUrl }}">{{ categoryName }}</a>
+                            {% endfor %}
+                        {% endif %}
+                        <span>{{adDetail['title']}}</span>
+                    </li>
+                   </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="details-wrapper">
+    <div class="draft-item sticky">
+        <nav data-topbar>
+            <div class="row">
+                <div class="large-16 columns">
+                    <h2>{{'Your Free Ad so far...'|trans({}, 'frontend-preview-ad')}}</h2>
+                </div>
+                <div class="large-8 columns">
+                    <span class="draft-slogan">
+                        <span class="hide-for-small-only">{{'This is a draft of your advert'|trans({}, 'frontend-preview-ad')}}</span>
+                        <span class="show-for-small-only">{{'draft'|trans({}, 'frontend-preview-ad')}}</span>
+                    </span>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="relative">
+        <div class="row">
+            <div class="columns">
+                <div class="row">
+                    <div class="large-16 columns">
+                        <p class="listed-date show-for-small-only">
+                        {% if adDetail['created_at'] is defined %}
+                            <span class="ago-icon">ago</span>{{ adDetail['created_at']|time_ago_in_words }}
+                        {% endif %}
+                        </p>
+                        {% set noImage = 0 %}
+                        {% if adDetail['images'] is defined and adDetail['images']|length > 0 %}
+                            {% set imagePath = '/' ~ adDetail['images'][0]['path'] ~ '/' ~ adId ~ '_' ~ adDetail['images'][0]['hash'] ~ '_300X225.jpg' %}
+                        {% else %}
+                            {% set imagePath = asset_url('fafrontend/images/no-image.svg') %}
+                            {% set noImage = 1 %}
+                        {% endif %}
+                        {% if rootCategoryId in {0:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), } %}
+                            <div class="detail-thumb-img">
+                                <div class="dtl-thumb{% if noImage == 1 %} img-placeholder{% endif %}"><img src="{{ imagePath }}" alt="no-image" /></div>
+                            </div>
+                        {% endif %}
+                        <h1 class="detail-head">{{adDetail['title']}}</h1>
+                        {% if adDetail['personalized_title'] is defined and adDetail['personalized_title'] %}
+                            <h2 class="detail-sub-head hide-for-small-only">"{{adDetail['personalized_title']}}"</h2>
+                        {% endif %}
+
+                        {% if adDetail['ad_locality_name'] is defined and adDetail['ad_locality_name'] %}
+                           <div class="detail-location"><b>{{ adDetail['ad_locality_name'] }}</b></div>
+                        {% elseif adDetail['ad_town_name'] is defined and adDetail['ad_town_name'] %}
+                           <div class="detail-location"><b>{{ adDetail['ad_town_name'] }}</b></div>
+                        {% endif %}
+                        <div class="clearfix"></div>
+                        {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and adDetail['user']['company_welcome_message'] is defined and adDetail['user']['company_welcome_message'] is not null %}
+                            <h2 class="services-desc">{{ adDetail['user']['company_welcome_message']|replace({"\\n": "<br />"})|raw }}</h2>
+                        {% endif %}
+                        {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and adDetail['price'] is defined and adDetail['price'] %}
+                            <div class="clearfix">
+                                <b class="item-price show-for-small-only left {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') or metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}classes-tution-price{% endif %}">{{ format_currency(adDetail['price'])}}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'frontend-preview-ad')}}</span>{% endif %}{% if metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', metaData['rent_per_id']) }}</span>{% endif %}</b>
+                            </div>
+                        {% endif %}
+                        {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') %}
+                            {% set adCommunityRepository = fetch_repository('FaAdBundle:AdCommunity') %}
+                            {% set adCommunity = adCommunityRepository.findOneBy({'ad': adId}) %}
+                            {% set metaData = {} %}
+                            {% if adCommunity and adCommunity.getMetaData() is not null %}
+                                {% set metaData = array_unserialize(adCommunity.getMetaData()) %}
+                            {% endif %}
+                            {% if metaData['event_start'] is defined %}
+                                {% set metaData = metaData|merge({'event_start': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getTimeStampFromStartDate', [metaData['event_start']])}) %}
+                                {% if metaData['event_end'] is defined %}
+                                    {% set metaData = metaData|merge({'event_end': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getTimeStampFromStartDate', [metaData['event_end']])}) %}
+                                {% endif %}
+                                {% set eventStartDate = adCommunityRepository.getEventDateForListing(metaData['event_start'], (metaData['event_end'] is defined ? metaData['event_end'] : null), container) %}
+                                <div class="clearfix">
+                                    <span class="whats-on item-preview-on show-for-small-only">{{ eventStartDate }}</span>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if rootCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
+                            <div class="seller-mob-desc show-for-small-only">
+                                <div id="ad_desc_mob">
+                                    {% if adDetail['description'] is defined %}
+                                        <p>{{adDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw}}</p>
+                                    {% endif %}
+                                </div>
+                                <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-preview-ad') }}</a>
+                                <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-preview-ad') }}</a>
+                            </div>
+                        {% endif %}
+
+                        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') and adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null %}
+                            <b class="show-for-small-only">{{'About Us'|trans({}, 'frontend-preview-ad')}}</b>
+                            <div class="seller-mob-desc show-for-small-only">
+                                <div id="user_about_us_desc_mob">
+                                    <p>{{ adDetail['user']['about_us']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}</p>
+                                </div>
+                                <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-preview-ad') }}</a>
+                                <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-preview-ad') }}</a>
+                            </div>
+                        {% endif %}
+                        
+                        {% set adDetailAndDimensionFields = adDetail %}
+                        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                            {% set adJobsRepository = fetch_repository('FaAdBundle:AdJobs') %}
+                            {% set adJob = adJobsRepository.findOneBy({'ad': adId}) %}
+                            {% set adJobDetail = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adJobDetail = adJobDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% set metaData = {} %}
+                            {% set additionalJobReqIds = {} %}
+                            {% set additionalJobBenefitIds = {} %}
+                            {% if adJob and adJob.getMetaData() is not null %}
+                                {% set metaData = array_unserialize(adJob.getMetaData()) %}
+                                {% if metaData['additional_job_requirements_id'] is defined %}
+                                    {% set additionalJobReqIds = metaData['additional_job_requirements_id']|split(',') %}
+                                {% endif %}
+                                {% if metaData['additional_benefits_id'] is defined %}
+                                    {% set additionalJobBenefitIds = metaData['additional_benefits_id']|split(',') %}
+                                {% endif %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdJobDetailTabs.html.twig') }}
+                        {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') %}
+                            {% set adServiceRepository = fetch_repository('FaAdBundle:AdServices') %}
+                            {% set adService = adServiceRepository.findOneBy({'ad': adId}) %}
+                            {% set adServiceDetail = {} %}
+                            {% set servicesOfferedIds = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adServiceDetail = adServiceDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adService and adService.getServicesOfferedId() is not null %}
+                                {% set servicesOfferedIds = adService.getServicesOfferedId()|split(',') %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdServiceDetailTabs.html.twig') }}
+                        {% endif %}
+                        <br />
+                        {{ include('FaAdBundle:Ad:showMapImages.html.twig', { 'googlemap_location_html': block('googlemap_location_html'), 'image_slider_html': block('image_slider_html'), 'extraParams': {'isSoldExpiredAdFlag': false, 'solrMapping': 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::', 'adFavoriteAdIds':adFavoriteAdIds }}) }}
+
+                        {% if adDetail['personalized_title'] is defined and adDetail['personalized_title'] %}
+                            <h2 class="detail-sub-head show-for-small-only">"{{adDetail['personalized_title']}}"</h2>
+                        {% endif %}
+
+                        
+
+                        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+                            {% set adForSaleDetail = {} %}
+                            {% set postagePayment = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adForSaleDetail = adForSaleDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adDetail['delivery_method_name'] is defined and adDetail['delivery_method_name'] %}
+                                {% set postagePayment = postagePayment|merge({'delivery_method': adDetail['delivery_method_name']}) %}
+                            {% endif %}
+                            {% if adDetail['payment_method'] is defined and adDetail['payment_method'] %}
+                                {% set postagePayment = postagePayment|merge({'payment_method': adDetail['payment_method']}) %}
+                            {% endif %}
+                            {% if postagePayment|length%}
+                                {% set adForSaleDetail = adForSaleDetail|merge({'postage_payment': postagePayment}) %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdForSaleDetailTabs.html.twig') }}
+                        {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID') %}
+                            {% set adCommunityDetail = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adCommunityDetail = adCommunityDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adDetail['price'] is defined and adDetail['price'] and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}
+                                {% set adCommunityDetail = adCommunityDetail|merge({'price': adDetail['price']}) %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdCommunityDetailTabs.html.twig') }}
+                        {% elseif secondLevelCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMERCIALVEHICLES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_ID')} %}
+                            {% set adMotorRepository = fetch_repository('FaAdBundle:AdMotors') %}
+                            {% set adMotor = adMotorRepository.findOneBy({'ad': adId}) %}
+                            {% set adMotorDetail = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adMotorDetail = adMotorDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adMotor and adMotor.getColourId() is not null %}
+                                {% set adMotorDetail = adMotorDetail|merge({'colour_id': adMotor.getColourId()}) %}
+                            {% endif %}
+                            {% if adMotor and adMotor.getFuelTypeId() is not null %}
+                                {% set adMotorDetail = adMotorDetail|merge({'fuel_type_id': adMotor.getFuelTypeId()}) %}
+                            {% endif %}
+                            {% set metaData = {} %}
+                            {% set featureIds = {} %}
+                            {% if adMotor and adMotor.getMetaData() is not null %}
+                                {% set metaData = array_unserialize(adMotor.getMetaData()) %}
+                                {% if metaData['features_id'] is defined %}
+                                    {% set featureIds = metaData['features_id']|split(',') %}
+                                {% endif %}
+                            {% endif %}
+                            {% set safetyFeatureIds = adMotorRepository.getSafetyFeature(featureIds) %}
+                            {% set otherFeatureIds = adMotorRepository.getOtherFeature(featureIds) %}
+                            {{ include('FaAdBundle:Ad:AdMotorDetailTabs.html.twig') }}
+                        {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
+                            {% set adPropertyDetail = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adPropertyDetail = adPropertyDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adProperty and adProperty.getNumberOfBedroomsId() is not null %}
+                                {% set adPropertyDetail = adPropertyDetail|merge({'number_of_bedrooms_id': adProperty.getNumberOfBedroomsId()}) %}
+                            {% endif %}
+                            {% if metaData['number_of_bathrooms_id'] is defined and metaData['number_of_bathrooms_id'] is not null %}
+                                {% set adPropertyDetail = adPropertyDetail|merge({'number_of_bathrooms_id': metaData['number_of_bathrooms_id'] }) %}
+                            {% endif %}
+                            {% if adDetail['type_id'] is defined and adDetail['type_id'] is not null %}
+                                {% set adPropertyDetail = adPropertyDetail|merge({'type_id': adDetail['type_id']}) %}
+                            {% endif %}
+                            {% set amenitiesIds = {} %}
+                            {% set billsIncludedIds = {} %}
+                            {% if adProperty and adProperty.getAmenitiesId() is not null %}
+                                {% set amenitiesIds = adProperty.getAmenitiesId()|split(',') %}
+                            {% endif %}
+                            {% if metaData['bills_included_in_rent_id'] is defined %}
+                                {% set billsIncludedIds = metaData['bills_included_in_rent_id']|split(',') %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdPropertyDetailTabs.html.twig') }}
+                        {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                            {% set adAdultRepository = fetch_repository('FaAdBundle:AdAdult') %}
+                            {% set adAdult = adAdultRepository.findOneBy({'ad': adId}) %}
+                            {% set adAdultDetail = {} %}
+                            {% set servicesIds = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adAdultDetail = adAdultDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adAdult and adAdult.getServicesId() is not null %}
+                                {% set servicesIds = adAdult.getServicesId()|split(',') %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdAdultDetailTabs.html.twig') }}
+                        {% elseif rootCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
+                            <div class="detail-tabpart-2" id="vif_tabs">
+                                <dl class="accordion" data-accordion="">
+                                    <dd class="accordion-navigation">
+                                        <div class="content active" id="basic_info_panel">
+                                            <div class="hide-for-small-only">
+                                                <div id="ad_desc">
+                                                    {% if adDetail['description'] is defined %}
+                                                        <p>{{adDetail['description']|replace({"\\n": "<br />"})|raw|nl2br }}</p>
+                                                    {% endif %}
+                                                </div>
+                                                <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-preview-ad') }}</a>
+                                                <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-preview-ad') }}</a>
+                                            </div>
+                                            {% if adDetail['detail'] is defined %}
+                                                <h5>{{'The details'|trans({}, 'frontend-preview-ad')}}</h5>
+                                                   <ul class="details-info">
+                                                       {% for fieldName, fieldValue in adDetail['detail'] %}
+                                                           <li class="clearfix">
+                                                               <div class="detail-text">{{fieldName}}</div>
+                                                               <div class="detail-text">{{fieldValue|join(',')}}</div>
+                                                           </li>
+                                                       {% endfor %}
+                                                   </ul>
+                                            {% endif %}
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        {% endif %}
+                        
+                        {% if currentDevice == 'M' and youtubeVideoUrl|length %}
+                            {% set youtubeVideoId = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getYouTubeVideoId', [youtubeVideoUrl]) %}
+                            <div>
+                                <iframe id="ytplayer" type="text/html" width="100%" height="200px" src="https://www.youtube.com/embed/{{youtubeVideoId}}" frameborder="0"></iframe>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="large-8 columns">
+                        <div class="detail-right-pane">
+                            <p class="listed-date hide-for-small-only">
+                            {% if adDetail['created_at'] is defined %}
+                               <span class="ago-icon">ago</span>{{ adDetail['created_at']|time_ago_in_words }}
+                            {% endif %}
+                            </p>
+                            <div class="details-price">
+                                {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and adDetail['price'] is defined and adDetail['price'] %}
+                                    <b class="item-price hide-for-small-only {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') or metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}classes-tution-price{% endif %}">{{ format_currency(adDetail['price'])}}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'frontend-preview-ad')}}</span>{% endif %}{% if metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', metaData['rent_per_id']) }}</span>{% endif %}</b>
+                                {% endif %}
+                                {% if metaData['event_start'] is defined %}
+                                    {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(metaData['event_start'], (metaData['event_end'] is defined ? metaData['event_end'] : null), container) %}
+                                    <div class="hide-for-small-only">
+                                        <span class="whats-on item-preview-on">{{ eventStartDate }}</span>
+                                    </div>
+                                {% endif %}
+                                <div class="hide-for-small-only">
+                                    {% if adDetail['delivery_method_name'] is defined and adDetail['delivery_method_name'] %}
+                                        <span class="person-collection">{{ adDetail['delivery_method_name'] }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="small-wrapper">
+                                    {% if adDetail['user'] is defined %}
+                                        <a href="javascript:void(0);" class="primary-btn-1 button expand not-hover {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and (adDetail['price'] is not defined or adDetail['price'] is null) %}mt10{% endif %}">
+                                        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                                            {{'Apply'|trans({}, 'frontend-preview-ad')}}
+                                        {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+                                            {{'Contact seller'|trans({}, 'frontend-preview-ad')}}
+                                        {% else %}
+                                            {{'Contact'|trans({}, 'frontend-preview-ad')}}
+                                        {% endif %}
+                                        <span class="contact-icon">contact</span></a>
+                                    {% endif %}
+                                    {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') and adDetail['payment_method_id'] is defined and adDetail['payment_method_id']  in {0: constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID'), 1: constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')} %}
+                                        <a href="javascript:void(0);" class="primary-btn-1 button expand not-hover">{{'Buy now with'|trans({}, 'frontend-preview-ad')}}<span class="paypal-icon">contact</span></a>
+                                    {% endif %}
+                                </div>
+
+                                {% if adDetail['user'] is defined %}
+                                    {{ include('FaAdBundle:Ad:AdUserDetail.html.twig', {'adLatitude': latitude, 'adLongitude': longitude, 'is_preview': true}) }}
+                                {% endif %}
+
+                                <div class="interested-item hide-for-small-only">
+                                    {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ANIMALS_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')} %}
+                                        <h3>{{'Got one like this?'|trans({}, 'frontend-preview-ad')}}</h3>
+                                        <a href="javascript:void(0);" class="secondary-btn-2 button expand not-hover">{{'Sell it here!'|trans({}, 'frontend-preview-ad')}}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if rootCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
+                                <div class="property-alert">
+                                    <div class="create-alert">
+                                        <h5 class="text-center">{{'Want us to send you an email when we receive more ads like this?'|trans({}, 'frontend-preview-ad')}}</h5>
+                                        <a href="javascript:void(0);" class="secondary-btn-1 button expand alert-btn not-hover">{{'Create Alert'|trans({}, 'frontend-preview-ad')}}</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="draft-buttons" id="ad_preview_bottom">
+            <div class="row">
+                <div class="large-12 columns">
+                    <a href="{{path('ad_post_fourth_step', {'is_edit': 1})}}" class="primary-btn-1 button expand border-btn">{{'Edit details'|trans({}, 'frontend-preview-ad')}}</a>
+                </div>
+                <div class="large-12 columns">
+                    <a href="{{path('ad_package_purchase', {'adId': app.request.get('adId')})}}" class="primary-btn-1 button expand"><span class="show-for-small-only">{{'Save & publish'|trans({}, 'frontend-preview-ad')}}</span><span class="hide-for-small-only">{{'Save and publish'|trans({}, 'frontend-preview-ad')}}</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('image_slider_js') }}
+    {{ block('googlemap_location_js') }}
+
+    {% set userAdDetail = get_variables('userAdDetail') %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    var adMotorEquilizerFlag = false;
+    $(document).ready(function(){
+        {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
+            $("#map_tab_anchor").click();
+        {% endif %}
+        handleReadMoreLess('user_about_us_desc_mob', 350);
+        //handleReadMoreLess('ad_desc', 350);
+        //handleReadMoreLess('ad_desc_mob', 250);
+        $('#vif_tabs .accordion-navigation a').click(function() {
+            $(this).find('i').toggleClass("fi-plus fi-minus");
+        });
+
+        {% if not adImages|length and not youtubeVideoUrl|length %}
+            $('#map_tab_anchor').click();
+        {% endif %}
+        $('#vif_tabs .accordion-navigation .content').each(function(){
+            if ($(this).hasClass('active')) {
+                $('#'+$(this).attr('id')+'_anchor').find('i').addClass('fi-minus').removeClass('fi-plus');
+            } else {
+                $('#'+$(this).attr('id')+'_anchor').find('i').addClass('fi-plus').removeClass('fi-minus');
+            }
+        });
+
+        $('#ad_motors_tabs').on('toggled', function (event, tab) {
+            if (tab.attr('id') == 'safety_features_panel' && !adMotorEquilizerFlag) {
+                $(document).foundation('equalizer', 'reflow');
+                adMotorEquilizerFlag = true;
+            }
+        });
+    });
+    //]]>
+    </script>
+{% endblock %}

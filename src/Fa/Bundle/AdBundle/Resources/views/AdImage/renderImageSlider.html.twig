@@ -1,0 +1,331 @@
+{% block image_slider_css %}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/imageSlider.css'
+        'bundles/facore/css/owl.carousel.css'
+        'bundles/facore/css/owl.theme.css'
+        'bundles/facore/css/jquery.fancybox.css'
+          %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}?v=3"/>
+    {% endstylesheets %}
+{% endblock %}
+{% block image_slider_html %}
+    {% set container = fetch_container_instance() %}
+    {% set imageAltString = null %}
+    {% set imageAltStringArr = {} %}
+    {% if seoRule['image_alt'] is defined %}
+        {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], adDetail]) %}
+    {% endif %}
+    {% set imgCount = 1 %}
+    {% set imageAltStringArr = imageAltStringArr|merge({('img_alt_'~imgCount): imageAltString})  %}
+    {% set imgCount = imgCount + 1 %}
+    {% for adImage in adImages %}
+        {% if loop.index > 1 and loop.index <= 8 %}
+            {% if seoRule['image_alt_'~loop.index] is defined and seoRule['image_alt_'~loop.index] is not null %}
+                {% set imageAltStringArr = imageAltStringArr|merge({('img_alt_'~imgCount): staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt_'~loop.index], adDetail])})  %}
+            {% else %}
+                {% set imageAltStringArr = imageAltStringArr|merge({('img_alt_'~imgCount): imageAltString})  %}
+            {% endif %}
+            {% set imgCount = imgCount + 1 %}
+        {% endif %}
+    {% endfor %}
+
+    {% if allowAdEdit is defined and allowAdEdit %}
+        {{ include('FaAdBundle:AdImage:editImagesPopup.html.twig') }}
+    {% endif %}
+    {% if adImages|length or (allowAdEdit is defined and allowAdEdit) %}
+        <div class="relative">
+            {% if currentDevice is defined and currentDevice != 'M' and not adImages|length  and allowAdEdit is defined and allowAdEdit %}
+                <div class="owl-carousel" id="big-image-slider">
+                    <div class="no-photo">
+                        <div class="no-photo-heading">{{ 'No photo?'|trans({}, 'frontend-show-ad') }}</div>
+                        <p>
+                            {{ 'Ads with at least one photo get a proven better response.'|trans({}, 'frontend-show-ad') }}
+                            {{ 'let users see what you’re selling!'|trans({}, 'frontend-show-ad') }}
+                        </p>
+                        <a id="add_photo_no_image_link" class="primary-btn-3 button thin-btn" href="javascript:void(0);">{{ 'Add photo'|trans({}, 'frontend-show-ad') }}</a>
+                    </div>
+                </div>
+            {% elseif adImages|length %}
+                <div class="details-img-icons clearfix">
+                    <a href="javascript:void(0);" onclick="showOriginalImage()" class="zoom-img hide-for-small">zoom image</a>
+                    {% if allowAdEdit is defined and allowAdEdit %}
+                        <a href="javascript:void(0);" onclick="showEditImagesPopup();" class="edit-item-img hide-for-small">edit image</a>
+                    {% endif %}
+                </div>
+                <div class="owl-carousel" id="big-image-slider">
+                    {% for adImage in adImages %}
+                        {% set adBigImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImage.path, adImage.hash, '800X600', adImage.aws, adImage.image_name]) %}
+                        {% set altString = imageAltStringArr['img_alt_'~((loop.index%8) == 0 ? 8 : (loop.index%8))] %}
+                        <div class="item">
+                            <img class="lazyOwl" id="big_image_{{loop.index}}" data-src="{{ adBigImageUrl }}" alt="{{ altString }}" />
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if allowAdEdit is defined and allowAdEdit %}
+                    <div class="text-right show-for-small-only clearfix mt5">
+                        <a href="javascript:void(0)" onclick="showEditImagesPopup();" class="edit-advert">{{'Edit images'|trans({}, 'frontend-show-ad')}}</a>
+                    </div>
+                {% endif %}
+                {% if (isFinance == true) %}
+                    <a href="javascript:clickFinance('{{ financeDetails['finance_url'] }}');" class="hide finance-btn">{{ financeDetails['finance_title'] }}</a>
+                    <div class="vif-overlay hide hide-for-small-only" id="financeOverlay">&nbsp;</div>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% if adImages|length > 1 or (adImages|length == 1 and allowAdEdit is defined and allowAdEdit) %}
+            <div class="owl-carousel hide-for-small-only {% if allowAdEdit is defined and allowAdEdit %}add-small-photo{% endif %}" id="small-image-slider">
+                {% for adImage in adImages %}
+                    {% set adSmallImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImage.path, adImage.hash, '300X225', adImage.aws, adImage.image_name]) %}
+                    {% set altString = imageAltStringArr['img_alt_'~((loop.index%8) == 0 ? 8 : (loop.index%8))] %}
+                    <div class="item"><img class="lazyOwl" data-src="{{ adSmallImageUrl }}" alt="{{ altString }}" /></div>
+                {% endfor %}
+            </div>
+            {% if allowAdEdit is defined and allowAdEdit %}
+                <div class="add-photo hide-for-small-only">
+                    <a id="add_a_photo_link" class="tricky-link" href="javascript:void(0);">{{ altString }}</a>
+                    <div class="add-photo-text">{{ 'Add a photo'|trans({}, 'frontend-show-ad') }}</div>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <br />
+        <div data-alert class="alert-box info radius">
+            <span class="alert-icon">&nbsp;</span> {{'No images found for ad.'}}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block image_slider_js %}
+    <script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset_url('facore/js/jquery.fancybox.pack.js') }}"></script>
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    var current;
+    var fancyboxHashArray = {};
+    var adImagesArray = new Array();
+    {% set imageZoomBannerVars = get_variables('imageZoomBannerVars') %}
+    var imageZoomBannerExist = "{{imageZoomBannerVars|length ? imageZoomBannerVars.imageZoomBannerExist : false}}";
+    {% for adImage in adImages %}
+        {% set adBigImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImage.path, adImage.hash, '', adImage.aws, adImage.image_name]) %}
+        adImagesArray['{{loop.index - 1}}'] = {href : '{{ adBigImageUrl }}', 'imageHash': '{{ adImage.hash }}', 'imageId': '{{loop.index}}'},
+    {% endfor %}
+    $(document).ready(function() {
+        var sync1 = $("#big-image-slider");
+        var sync2 = $("#small-image-slider");
+
+        sync1.owlCarousel({
+          singleItem : true,
+          slideSpeed : 1000,
+          navigation: true,
+          pagination:true,
+          navigationText: ['<img src="{{ asset_url('fafrontend/images/photo-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/photo-next.svg') }}" alt="" />'],
+          afterAction : syncPosition,
+          responsiveRefreshRate : 200,
+          lazyLoad: true,
+          afterInit:function() {
+              $("a.finance-btn, div#financeOverlay").removeClass('hide');
+          }
+        });
+
+        sync2.owlCarousel({
+          items : 5,
+          itemsDesktop      : [1920, {{ ((allowAdEdit is defined and allowAdEdit) ? 5 : 6) }}],
+          itemsDesktopSmall : [1280, {{ ((allowAdEdit is defined and allowAdEdit) ? 5 : 6) }}],
+          itemsTablet       : [1024,{{ ((allowAdEdit is defined and allowAdEdit) ? 4 : 5) }}],
+          itemsMobile       : [479,0],
+          navigation: true,
+          pagination:false,
+          responsiveRefreshRate : 100,
+          navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+          lazyLoad: true,
+          afterInit : function(el){
+            el.find(".owl-item").eq(0).addClass("active");
+          }
+        });
+
+        function syncPosition(el){
+          current = this.currentItem;
+          $("#small-image-slider")
+            .find(".owl-item")
+            .removeClass("active")
+            .eq(current)
+            .addClass("active")
+          if($("#small-image-slider").data("owlCarousel") !== undefined){
+            center(current)
+          }
+        }
+
+        $("#small-image-slider").on("click", ".owl-item", function(e){
+          e.preventDefault();
+          var number = $(this).data("owlItem");
+          sync1.trigger("owl.goTo",number);
+        });
+
+        function center(number){
+          var sync2visible = sync2.data("owlCarousel").owl.visibleItems;
+          var num = number;
+          var found = false;
+          for(var i in sync2visible){
+            if(num === sync2visible[i]){
+              var found = true;
+            }
+          }
+
+          if(found===false){
+            if(num>sync2visible[sync2visible.length-1]){
+              sync2.trigger("owl.goTo", num - sync2visible.length+2)
+            }else{
+              if(num - 1 === -1){
+                num = 0;
+              }
+              sync2.trigger("owl.goTo", num);
+            }
+          } else if(num === sync2visible[sync2visible.length-1]){
+            sync2.trigger("owl.goTo", sync2visible[1])
+          } else if(num === sync2visible[0]){
+            sync2.trigger("owl.goTo", num-1)
+          }
+
+        }
+    });
+    function showOriginalImage()
+    {
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_IN_IMAGE_ZOOM') %}
+        var url = Routing.generate('banner_ajax_get_banner_by_zone', { 'zoneId': '{{ zoneId }}', 'id': '{{ adId }}' });
+
+        if (parseInt(imageZoomBannerExist) == 1) {
+          blockPage();
+          $.ajax({
+            type: "POST",
+            url: url,
+            })
+            .always(function(response) {
+              unblockPage();
+            })
+            .done(function(response) {
+                $("body").append('<div class="zoom-img-banner" id="zoom_image_banner_id"></div>');
+                $('#zoom_image_banner_id').html(response.bannerCode);
+                renderFancyBox();
+                unblockPage();
+             });
+        } else {
+          renderFancyBox();
+        }
+        
+    }
+
+    function renderFancyBox()
+    {
+      var imagePadding = 65;
+      if (parseInt(imageZoomBannerExist) == 1) {
+        var imagePadding = 135;
+      }
+      $.fancybox(
+          adImagesArray,
+          {
+              index: current,
+              padding: 0,
+              margin: [145, 60, imagePadding, 60],
+              autoCenter: true,
+              helpers:
+              {
+                  overlay: {
+                      locked: false
+                  }
+              },
+              beforeShow: function(current, previous) {
+                  {% if allowAdEdit is defined and allowAdEdit %}
+                      /*if (fancyboxHashArray[this.index]) {
+                          imageHash = fancyboxHashArray[this.index];
+                      } else {
+                          imageHash = this.imageHash;
+                      }
+                      $('.fancybox-outer').append('<span id="rotate_main_image_anchor_'+(this.index+1)+'"><a href="javascript:rotateImage(\''+imageHash+'\', \'org\', \''+this.imageId+'\');" class="rotate-image" title="Click to rotate image">Rotate image</a></span>');*/
+                  {% endif %}
+                  if (!$('#sticky_item_information_fancybox_id').length) {
+                      $("body").append('<div class="details-top-banner" id="sticky_item_information_fancybox_id" style="top:0">'+$('#sticky_item_information_id').html()+'</div>');
+                  } else {
+                      $('#sticky_item_information_fancybox_id').show();
+                      if (parseInt(imageZoomBannerExist) == 1) {
+                        $('#zoom_image_banner_id').show();
+                      }
+                  }
+              },
+              beforeClose: function(current, previous) {
+                  $('#sticky_item_information_fancybox_id').hide();
+                  if (parseInt(imageZoomBannerExist) == 1) {
+                    $('#zoom_image_banner_id').hide();
+                  }
+              },
+          }
+      );
+    }
+
+    function clickFinance(financeUrl)
+    {
+         {% set catText = '' %}
+         {% if get_variables('CatDetails') is not null and get_variables('CatDetails').catString is defined %}
+             {% set catText = get_variables('CatDetails').catString %}
+         {% endif %}
+
+         ga('send', 'event', 'Ad details', '3rd party button', '{{ adId }}{{ catText }}');
+         window.open(financeUrl);
+    }
+
+    function rotateImage(imageHash, size, imageId)
+    {
+        var blockElementId = null;
+        if (size == '800X600') {
+            blockElementId = '#photo_panel';
+        } else if (size == 'org') {
+            blockElementId = '.fancybox-inner';
+        }
+        blockElement(blockElementId);
+        var imgParams = '';
+        $('.cropImg').each(function(e){
+            imgParams += $(this).attr('name')+ '=' +$(this).val() + '&'
+        });
+        imgParams = imgParams.slice(0,-1);
+
+        var url = Routing.generate('ajax_rotate_ad_image', { 'adId': '{{ adId }}', 'size': size, 'imageHash': imageHash });
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: imgParams
+        })
+        .always(function(response) {
+            unblockElement(blockElementId);
+        })
+        .done(function(response) {
+            if (response.error.length) {
+            }
+            if (response.successMsg.length) {
+                if (response.imageUrl.length) {
+                    if (size == '800X600') {
+                        $('#big_image_'+imageId).attr('src', response.imageUrl);
+                    } else {
+                        $('.fancybox-image').attr('src', response.imageUrl);
+                    }
+                    $('#rotate_image_anchor_'+imageId).html('<a href="javascript:rotateImage(\''+response.newHash+'\', \'800X600\', '+imageId+');" class="rotate-image" title="Click to rotate image">Rotate image</a>');
+                    $('#rotate_main_image_anchor_'+imageId).html('<a href="javascript:rotateImage(\''+response.newHash+'\', \''+size+'\', '+imageId+');" class="rotate-image" title="Click to rotate image">Rotate image</a>');
+                    fancyboxHashArray[response.ord] = response.newHash;
+                    adImagesArray = new Array();
+                    for (var i = 1; i <= response.adImagesArray.length; i++) {
+                        adImagesArray[i - 1] = {href : response.adImagesArray[i - 1].url, 'imageHash': response.adImagesArray[i - 1].hash, 'imageId': i};
+                    }
+                    if (size == 'org') {
+                        showOriginalImage();
+                    }
+                }
+            }
+        });
+    }
+
+    function showEditImagesPopup()
+    {
+    	$('#crop_big_image_div').html('');
+        $('#upload_image_div').show();
+        $('#editImagesModal').foundation('reveal', 'open');
+    }
+    //]]>
+    </script>
+{% endblock %}

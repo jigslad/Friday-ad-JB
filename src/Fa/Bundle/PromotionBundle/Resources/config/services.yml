@@ -1,0 +1,7 @@
+parameters:
+#    fa_promotion.example.class: Fa\Bundle\PromotionBundle\Example
+
+services:
+#    fa_promotion.example:
+#        class: %fa_promotion.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

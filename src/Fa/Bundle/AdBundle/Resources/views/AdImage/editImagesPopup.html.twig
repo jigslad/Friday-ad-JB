@@ -1,0 +1,45 @@
+{% set vertical =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId]) %}
+{% set paaFieldRules = fetch_repository('FaAdBundle:PaaFieldRule').getPaaFieldRuleArrayByCategoryAncestorForOneField(adCategoryId, 227, container) %}
+{% set adPaaFieldRule = {} %}
+{% if paaFieldRules.0 is defined %}
+    {% set adPaaFieldRule = paaFieldRules.0 %}
+{% endif %}
+<div id="editImagesModal" class="reveal-modal small remove-item-modal" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Upload and edit your photos'|trans({}, 'frontend-edit-photo')}}
+    </h5>
+    <div class="modal-content remove-modal pb0">
+        {{ include('FaAdBundle:AdPost:dragDropMessage.html.twig') }}
+        <div class="row">
+            <div class="columns">
+                <div id="upload_image_div">
+                    <h3>
+                        {% if adPaaFieldRule.label is defined and adPaaFieldRule.label is not null %}
+                            {{ adPaaFieldRule.label }}
+                        {% else %}
+                            {{ 'Images'|trans({}, 'frontend-edit-photo') }}<br />
+                        {% endif %}
+                    </h3>
+                    <div>
+                        <p class="mt10">
+                            {% if vertical is defined and vertical == 'jobs' %}
+                                <span id="paa_image_upload_tips">{{ 'Upload an image with the logo of your company. This will be used as the main image of your ad. You can add other images if you want to.'|trans({}, 'frontend-edit-photo')}}</span>
+                            {% else %}
+                                <span id="paa_image_upload_tips">{{ 'Add some images to your advert.'|trans({}, 'frontend-edit-photo')}}</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="mt20">
+                        {{ render(controller('FaAdBundle:AdImage:showImageUploader', {'adId': adId, 'from': 'item_detail', 'vertical': vertical, 'userId': (userId is defined ? userId : null), 'maxValue': (adPaaFieldRule.max_value is defined ? adPaaFieldRule.max_value : null) })) }}
+                        {{ set_variables('imageUploadJavascriptBottom', {'loaded':'false'}) }}
+                    </div>
+                    <div class="small-wrapper">
+                        <button type="button" onclick="javascript:closeRevealModel('#editImagesModal');" class="secondary-btn-1 button expand alert-btn">{{ 'Done'|trans({}, 'frontend-add-photo') }}</button>
+                    </div>
+                </div>
+                <div id="crop_big_image_div"></div>
+            </div>
+        </div>
+    </div>
+</div>

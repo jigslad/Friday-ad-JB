@@ -1,0 +1,124 @@
+parameters:
+    fa.ad.solrindex.class: Fa\Bundle\AdBundle\Solr\AdSolrIndex
+    fa.ad.solrsearch.class: Fa\Bundle\AdBundle\Search\AdSolrSearch
+    fa.ad_for_sale.solrsearch.class: Fa\Bundle\AdBundle\Search\AdForSaleSolrSearch
+    fa.ad_animals.solrsearch.class: Fa\Bundle\AdBundle\Search\AdAnimalsSolrSearch
+    fa.ad_community.solrsearch.class: Fa\Bundle\AdBundle\Search\AdCommunitySolrSearch
+    fa.ad_jobs.solrsearch.class: Fa\Bundle\AdBundle\Search\AdJobsSolrSearch
+    fa.ad_property.solrsearch.class: Fa\Bundle\AdBundle\Search\AdPropertySolrSearch
+    fa.ad_adult.solrsearch.class: Fa\Bundle\AdBundle\Search\AdAdultSolrSearch
+    fa.ad_services.solrsearch.class: Fa\Bundle\AdBundle\Search\AdServicesSolrSearch
+    fa.ad_motors.solrsearch.class: Fa\Bundle\AdBundle\Search\AdMotorsSolrSearch
+    fa.ad.view.counter.solrindex.class: Fa\Bundle\AdBundle\Solr\AdViewCounterSolrIndex
+    fa.ad_view_counter.solrsearch.class: Fa\Bundle\AdBundle\Search\AdViewCounterSolrSearch
+
+services:
+    _defaults: 
+        public: true
+    
+    fa.ad.solrindex:
+        class: '%fa.ad.solrindex.class%'
+
+    fa.ad.solrsearch:
+        class: '%fa.ad.solrsearch.class%'
+        arguments: ['@service_container']
+
+    fa.ad_for_sale.solrsearch:
+        class: '%fa.ad_for_sale.solrsearch.class%'
+        arguments: ['@service_container']
+
+    fa.ad_animals.solrsearch:
+        class: '%fa.ad_animals.solrsearch.class%'
+        arguments: ['@service_container']
+
+    fa.ad_community.solrsearch:
+        class: '%fa.ad_community.solrsearch.class%'
+        arguments: ['@service_container']
+
+    fa.ad_jobs.solrsearch:
+        class: '%fa.ad_jobs.solrsearch.class%'
+        arguments: ['@service_container']
+
+    fa.ad_property.solrsearch:
+        class: '%fa.ad_property.solrsearch.class%'
+        arguments: ['@service_container']
+
+    fa.ad_services.solrsearch:
+        class: '%fa.ad_services.solrsearch.class%'
+        arguments: ['@service_container']
+
+    fa.ad_motors.solrsearch:
+        class: '%fa.ad_motors.solrsearch.class%'
+        arguments: ['@service_container']
+
+    fa.ad.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:Ad]
+        
+    fa.paa_field.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:PaaField]
+
+    fa.paa_field_rule.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:PaaFieldRule]
+
+    fa.print_edition.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:PrintEdition]
+
+    fa.print_edition_rule.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:PrintEditionRule]
+
+    fa.print_deadline.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:PrintDeadline]
+
+    fa.print_deadline_rule.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:PrintDeadlineRule]
+
+    fa.ad_locations.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:AdLocation]
+
+    fa.ad_moderate.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:AdModerate]
+
+    fa.ad.view.counter.solrindex:
+        class: '%fa.ad.view.counter.solrindex.class%'
+
+    fa.ad_view_counter.solrsearch:
+        class: '%fa.ad_view_counter.solrsearch.class%'
+        arguments: ['@service_container']
+
+    fa.ad_user_package.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:AdUserPackage]
+
+    fa.ad_print.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:AdPrint]
+
+    fa.search_keyword.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:SearchKeyword]
+        
+    fa.ad_adult.solrsearch:
+        class: '%fa.ad_adult.solrsearch.class%'
+        arguments: ['@service_container']
+        

@@ -1,0 +1,195 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+
+        $( window ).on( "orientationchange", function( event ) {
+            if ($('#price_slider').length) {
+                setAndMoveSliderCaption('price_slider', 'lower', 'price_from');
+                setAndMoveSliderCaption('price_slider', 'upper', 'price_to');
+            }
+            setAndMoveSliderCaption('distance_slider', 'lower', 'distance');
+        });
+    
+        if ($('#price_slider').length) {
+            $('#price_slider').noUiSlider({
+                connect: true,
+                snap: true,
+                start: [ 0, 500000 ],
+                range: {
+                    'min': 0,
+                    '5%': 5,
+                    '10%': 10,
+                    '15%': 20,
+                    '20%': 50,
+                    '30%': 100,
+                    '40%': 250,
+                    '50%': 500,
+                    '60%': 1000,
+                    '70%': 2000,
+                    '80%': 5000,
+                    '90%': 10000,
+                    'max': 500000
+                },
+                format: wNumb({
+                    decimals: 0
+                })
+            });
+        }
+    
+        $('#distance_slider').noUiSlider({
+            start: [ 15 ],
+            range: {
+                'min': [0, 2],
+                '5%':  [2, 3],
+                '10%': [5, 5],
+                '20%': [20, 10],
+                '25%': [30, 20],
+                '35%': [50, 25],
+                '55%': [100, 50],
+                '85%': [200, 100000],
+                'max': 100000
+            },
+            connect: 'lower',
+            format: wNumb({
+                decimals: 0
+            })
+        });
+
+        $("#price_slider").on({
+            slide: function(){
+                setAndMoveSliderCaption('price_slider', 'lower', 'price_from', true);
+                setAndMoveSliderCaption('price_slider', 'upper', 'price_to', true);
+            }
+        });
+    
+        $("#distance_slider").on({
+            slide: function(){
+                setAndMoveSliderCaption('distance_slider', 'lower', 'distance', true);
+            }
+        });
+    
+        $('#search_preferences_link').click(function() {
+            $(this).toggleClass("expand-search collapse-search");
+            $('.search-sliders').toggle('medium');
+    
+            if($('.search-sliders').is(':visible')) {
+                if ($('#price_slider').length) {
+                    setAndMoveSliderCaption('price_slider', 'lower', 'price_from', false);
+                    setAndMoveSliderCaption('price_slider', 'upper', 'price_to', false);
+                }
+                setAndMoveSliderCaption('distance_slider', 'lower', 'distance', false);
+            }
+        });
+
+        $('#fa_top_search_item__category_id').change(function() {
+            setDistanceByCategoryId($(this).val(), false);
+        });
+
+        $('#price_slider').val([$('#fa_top_search_item__price_from').val(), $('#fa_top_search_item__price_to').val()]);
+        setDistanceByCategoryId('', true);
+
+        if ($('#price_slider').length) {
+            setAndMoveSliderCaption('price_slider', 'lower', 'price_from', false);
+            setAndMoveSliderCaption('price_slider', 'upper', 'price_to', false);
+        }
+        setAndMoveSliderCaption('distance_slider', 'lower', 'distance', false);
+
+        $('#reset_search').click(function() {
+            $('#fa_top_search_item__price_from').val('');
+            $('#fa_top_search_item__price_to').val('');
+            setDistanceByCategoryId($('#fa_top_search_item__category_id').val(), false);
+            $('form[name="fa_top_search"]').submit();
+        });
+    });
+    
+    function setDistanceByCategoryId(categoryId, isPopulate)
+    {
+        if (categoryId) {
+            var distanceVal = 15;
+            if (categoryId && categoryId == "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') }}") {
+                distanceVal = 30;
+            }
+    
+            $('#distance_slider').val([distanceVal]);
+            $('#fa_top_search_item__distance').val(distanceVal);
+            setAndMoveSliderCaption('distance_slider', 'lower', 'distance', false);
+        } else {
+            if (isPopulate) {
+                var distanceVal = $('#fa_top_search_item__distance').val();
+                $('#distance_slider').val([distanceVal]);
+                setAndMoveSliderCaption('distance_slider', 'lower', 'distance', false);
+            } else {
+                var distanceVal = 15;
+                $('#fa_top_search_item__distance').val(distanceVal);
+                $('#distance_slider').val([distanceVal]);
+                setAndMoveSliderCaption('distance_slider', 'lower', 'distance', false);
+            }
+        }
+    }
+
+    function setAndMoveSliderCaption(slider, handle, captionCotainer, setToField)
+    {
+        if (captionCotainer == 'distance') {
+            if ($('#'+slider).val() != 100000) {
+                $('#'+captionCotainer).html('Up to ' + $('#'+slider).val() + ' mile(s)');
+                $('#distance_slider .noUi-handle-lower').removeClass('noUi-handle-at-upper');
+            } else {
+                $('#'+captionCotainer).html('National');
+                $('#distance_slider .noUi-handle-lower').addClass('noUi-handle-at-upper');
+            }
+            
+            // set value to hidden
+            if (setToField) {
+                $('#fa_top_search_item__'+captionCotainer).val($('#'+slider).val());
+            }
+        } else {
+            var sliderValFromTo = $('#'+slider).val();
+            var handleVal = '';
+            if (handle == 'lower') {
+                handleVal = sliderValFromTo[0];
+                $('#'+captionCotainer).html('&pound;' + handleVal)
+                
+                // set value to hidden
+                if (setToField) {
+                    $('#fa_top_search_item__'+captionCotainer).val(handleVal);
+                }
+            } else if (handle == 'upper') {
+                handleVal = sliderValFromTo[1];
+                
+                if (handleVal == 500000) {
+                    $('#'+captionCotainer).html('No maximum');
+                } else {
+                    $('#'+captionCotainer).html('&pound;' + handleVal)
+                }
+                
+                // set value to hidden
+                if (setToField) {
+                    if (handleVal == 500000) {
+                        $('#fa_top_search_item__'+captionCotainer).val('');
+                    } else {
+                        $('#fa_top_search_item__'+captionCotainer).val(handleVal);
+                    }
+                }
+            }
+        }
+    }
+
+    $('#fa_top_search_item__location_autocomplete').keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            event.preventDefault();
+            $('#top_search_location_ok').click();
+        }
+     
+    });
+//]]>
+</script>
+
+{#{ include('FaCoreBundle::autoSuggestField.html.twig', {'field' : '#fa_top_search_item__location', 'jsonField' : '#fa_top_search_item__location_json', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'maximumSelectionSize': 1, 'selectOnBlur': 'true'}) }#}
+{% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_top_search_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
+{% else %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_top_search_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true', 'submitFormAfterSelect': 'fa_top_search'}) }}
+{% endif %}
+
+{{ include('FaCoreBundle::jqueryAutoSuggestKeywordFieldJs.html.twig', {'field' : '#fa_top_search_keywords', 'placeHolder': 'Looking for...'|trans({}, 'frontend-homepage'), 'route' : 'search_keyword_ajax_get_keywords_json', 'dropdownCssClass': 'keyword-choices category-choices'}) }}

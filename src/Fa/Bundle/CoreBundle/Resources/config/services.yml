@@ -1,0 +1,264 @@
+parameters:
+    fa.formmanager.class: Fa\Bundle\CoreBundle\Manager\FormManager
+    fa.solr.client.class: Fa\Bundle\CoreBundle\Solr\BootStrapSolr
+    fa.solr.client.ad:
+        hostname: localhost
+        port: 8983
+        path:  /solr/core0
+        login: ''
+        password: ''
+        timeout: 5
+    fa.solr.client.user:
+        hostname: localhost
+        port: 8983
+        path:  /solr/core1
+        login: ''
+        password: ''
+        timeout: 5
+    fa.redis.client.class: Fa\Bundle\CoreBundle\Cache\RedisCache
+    fa.resource.authorization.listener.class: Fa\Bundle\CoreBundle\EventListener\ResourceAuthorizationListener
+    fa.exception.listener.class: Fa\Bundle\CoreBundle\EventListener\ExceptionListener
+    fa.exception.listener.maintenance.class: Fa\Bundle\CoreBundle\EventListener\MaintenanceListener
+    fa.exception.manager.class: Fa\Bundle\CoreBundle\Manager\ExceptionManager
+    fa.message.manager.class: Fa\Bundle\CoreBundle\Manager\MessageManager
+    fa.deletemanager.class: Fa\Bundle\CoreBundle\Manager\DeleteManager
+    fa.resource.authorization.manager.class: Fa\Bundle\CoreBundle\Manager\ResourceAuthorizationManager
+    fa.cache.manager.class: Fa\Bundle\CoreBundle\Manager\CacheManager
+    fa.cache.key: friday-ad.co.uk
+    fa.entity.cache.manager.class: Fa\Bundle\CoreBundle\Manager\EntityCacheManager
+    fa.pagination.manager.class: Fa\Bundle\CoreBundle\Manager\PaginationManager
+    fa.twig.core_extension.class: Fa\Bundle\CoreBundle\Twig\CoreExtension
+    fa.redis.cache_provider.class: Fa\Bundle\CoreBundle\Cache\RedisCache
+    asm89.twig.cache_provider.class: Fa\Bundle\CoreBundle\Cache\RedisCacheAdapter
+    asm89.twig.cache_strategy.class: Fa\Bundle\CoreBundle\Cache\LifetimeCacheStrategy
+    asm89.twig.cache_extension.class: Asm89\Twig\CacheExtension\Extension
+    fa.paypal.account.verification.manager.class: Fa\Bundle\CoreBundle\Manager\PaypalAccountVerificationManager
+    fa.facebook.manager.class: Fa\Bundle\CoreBundle\Manager\FacebookManager
+    fa.seo.manager.class: Fa\Bundle\CoreBundle\Manager\SeoManager
+    fa.google.manager.class: Fa\Bundle\CoreBundle\Manager\GoogleManager
+    fa.mobile.detect.manager.class: Fa\Bundle\CoreBundle\Manager\MobileDetectManager
+    fa.query.cache.manager.class: Fa\Bundle\CoreBundle\Manager\QueryCacheManager
+    fa.snc.doctrine.redis.cache.class: Snc\RedisBundle\Doctrine\Cache\RedisCache
+    fa.paypal.mode: test
+    fa.paypal.test:
+        account_verification_url: https://svcs.sandbox.paypal.com/AdaptiveAccounts/GetVerifiedStatus
+        userid: amitl-facilitator_api1.aspl.in
+        password: 1380599865
+        signature: A3pgVejG13R7hYeXTa2mOBsaiScnA-Kdu8brgvyb9hriN35L6rdmSJvO
+        applicationid: APP-80W284485P519543T
+    fa.paypal.live:
+        account_verification_url: https://svcs.paypal.com/AdaptiveAccounts/GetVerifiedStatus
+        userid: amitl-facilitator_api1.aspl.in
+        password: 1380599865
+        signature: A3pgVejG13R7hYeXTa2mOBsaiScnA-Kdu8brgvyb9hriN35L6rdmSJvO
+        applicationid: APP-80W284485P519543T
+    fa.yac.manager.class: Fa\Bundle\CoreBundle\Manager\YacManager
+    fa.webcar.manager.class: Fa\Bundle\CoreBundle\Manager\CarwebManager
+    fa.core.twig.extension.pagerfanta: Fa\Bundle\CoreBundle\Twig\PagerfantaExtension
+    fa.bot.manager.class: Fa\Bundle\CoreBundle\Manager\BotManager
+
+services:
+    _defaults: 
+        public: true
+        
+    extension.listener:
+        class: Fa\Bundle\CoreBundle\EventListener\DoctrineExtensionListener
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
+        tags:
+            # translatable sets locale after router processing
+            - { name: kernel.event_listener, event: kernel.request, method: onLateKernelRequest, priority: -10 }
+            # loggable hooks user username if one is in security context
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    gedmo.listener.tree:
+        class: Gedmo\Tree\TreeListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
+
+    gedmo.listener.sluggable:
+        class: Gedmo\Sluggable\SluggableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
+
+    gedmo.listener.translatable:
+        class: Gedmo\Translatable\TranslatableListener
+        public: true
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
+            - [ setDefaultLocale, ['%locale%'] ]
+            - [ setTranslationFallback, [ true ] ]
+            
+    gedmo.listener.loggable:
+        class: Fa\Bundle\CoreBundle\Listener\LoggableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ '@annotation_reader' ] ]
+        arguments: ['@security.token_storage', '@service_container']
+            
+    fa.formmanager:
+        class: '%fa.formmanager.class%'
+        #factory_class:  'Fa\Bundle\CoreBundle\Factory\ObjectFactory'
+        #factory: getSingleton
+        #arguments:
+            #- '%fa.core.formmanager.class%'
+        calls:
+            - [setFormFactory, ['@form.factory']]
+            - [setRequest, ['@request_stack']]
+            - [setDoctrine, ['@doctrine']]
+
+    fa.solr.client.user:
+          class: '%fa.solr.client.class%'
+          arguments:
+              - '%fa.solr.client.user%'
+
+    fa.solr.client.ad:
+          class: '%fa.solr.client.class%'
+          arguments:
+              - '%fa.solr.client.ad%'
+
+    fa.redis.client:
+          class: '%fa.redis.client.class%'
+          arguments: ['@snc_redis.default']
+
+    fa.resource.authorization.listener:
+        class: '%fa.resource.authorization.listener.class%'
+        calls:
+            - [setResourceAuthorizationManager, ['@fa.resource.authorization.manager']]
+        tags:
+          - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    fa.resource.authorization.manager:
+        class: '%fa.resource.authorization.manager.class%'
+        calls:
+            - [setSecurityAuthorizationChecker, ['@security.authorization_checker']]
+            - [setDoctrine, ['@doctrine']]
+            - [setServiceContainer, ['@service_container']]
+
+    fa.exception.listener:
+        class: '%fa.exception.listener.class%'
+        arguments: ['@templating', '@kernel', '@service_container']
+        tags:
+          - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+          
+    fa.listener.maintenance:
+        class: '%fa.exception.listener.maintenance.class%'
+        arguments: ['@templating', '@kernel', '@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    fa.exception.manager:
+        class: '%fa.exception.manager.class%'
+        calls:
+            - [setRequest, ['@request_stack']]
+            - [setMonolog, ['@logger']]
+
+    fa.message.manager:
+        class: '%fa.message.manager.class%'
+        arguments: ['@session']
+
+    fa.deletemanager:
+        class: '%fa.deletemanager.class%'
+        calls:
+            - [setRequest, ['@request_stack']]
+            - [setDoctrine, ['@doctrine']]
+            
+    fa.cache.manager:
+        class: '%fa.cache.manager.class%'
+        arguments: ['%fa.cache.key%']
+        public: true
+        calls:
+            - [setCacheService, ['@fa.redis.client']]
+            - [setServiceContainer, ['@service_container']]
+            
+    fa.entity.cache.manager:
+        class: '%fa.entity.cache.manager.class%'
+        calls:
+            - [setCacheManager, ['@fa.cache.manager']]
+            - [setDoctrine, ['@doctrine']]
+            - [setContainer, ['@service_container']]
+
+    fa.pagination.manager:
+        class: '%fa.pagination.manager.class%'
+
+    fa.twig.core_extension:
+        class: '%fa.twig.core_extension.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: twig.extension }
+
+    fa.redis.cache_provider:
+        class: '%fa.redis.cache_provider.class%'
+        arguments: ['@snc_redis.default']
+        
+    asm89.twig.cache_provider:
+        class: '%asm89.twig.cache_provider.class%'
+        arguments: ['@service_container']
+        
+    asm89.twig.cache_strategy:
+        class: '%asm89.twig.cache_strategy.class%'
+        arguments: ['@asm89.twig.cache_provider']
+        
+    asm89.twig.cache_extension:
+        class: '%asm89.twig.cache_extension.class%'
+        arguments: ['@asm89.twig.cache_strategy']
+        tags:
+            - { name: twig.extension }
+
+    fa.paypal.account.verification.manager:
+        class: '%fa.paypal.account.verification.manager.class%'
+        arguments: ['@service_container']
+            
+    fa_core.doctrine.entity_listener_resolver:
+            class: Fa\Bundle\CoreBundle\Doctrine\EntityListenerResolver
+            arguments: [ '@service_container' ]
+            
+    fa.facebook.manager:
+        class: '%fa.facebook.manager.class%'
+        arguments: ['@service_container']
+        
+    fa.google.manager:
+        class: '%fa.google.manager.class%'
+        arguments: ['@service_container']
+        
+    fa.yac.manager:
+        class: '%fa.yac.manager.class%'
+        arguments: ['@service_container']
+
+    fa.webcar.manager:
+        class: '%fa.webcar.manager.class%'
+        arguments: ['@service_container']
+
+    fa.core.twig.extension.pagerfanta:
+        class: '%fa.core.twig.extension.pagerfanta%'
+        public: false
+        tags: [{ name: twig.extension, alias: default }]
+        arguments: ['@service_container', '@request_stack']
+        
+    fa.seo.manager:
+        class: '%fa.seo.manager.class%'
+        arguments: ['@service_container']
+        
+    fa.mobile.detect.manager:
+        class: '%fa.mobile.detect.manager.class%'
+
+    fa.snc.doctrine.redis.cache:
+        class: '%fa.snc.doctrine.redis.cache.class%'
+        calls:
+            - [setRedis, ['@snc_redis.doctrine']]
+
+    fa.query.cache.manager:
+       class: '%fa.query.cache.manager.class%'
+       arguments: ['@service_container']
+       calls:
+           - [setCacheService, ['@fa.snc.doctrine.redis.cache']]
+
+    fa.bot.manager:
+        class: '%fa.bot.manager.class%'

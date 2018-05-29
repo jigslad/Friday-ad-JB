@@ -1,0 +1,2 @@
+parameters:
+    fa.entity.cache: ['FaEntityBundle:Location', 'FaEntityBundle:Category', 'FaEntityBundle:Entity']

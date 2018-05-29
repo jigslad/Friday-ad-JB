@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="7b453c19229e07b68a331dff33addfe934f314f0" resname="Ad Expired">
+        <jms:reference-file line="33">views/MyFavourite/adDetail.html.twig</jms:reference-file>
+        <source>Ad Expired</source>
+        <target state="new">Ad Expired</target>
+      </trans-unit>
+      <trans-unit id="3312d2cd161088b7f1b622c12dbae9d6291134ac" resname="Ad Sold">
+        <jms:reference-file line="31">views/MyFavourite/adDetail.html.twig</jms:reference-file>
+        <source>Ad Sold</source>
+        <target state="new">Ad Sold</target>
+      </trans-unit>
+      <trans-unit id="520de05379c7f67146412d3bf92800bade258d4c" resname="Here is the adverts you markes as favourites so far. You can review or delete them from your favourites.">
+        <jms:reference-file line="11">views/MyFavourite/list.html.twig</jms:reference-file>
+        <source>Here is the adverts you markes as favourites so far. You can review or delete them from your favourites.</source>
+        <target state="new">Here is the adverts you markes as favourites so far. You can review or delete them from your favourites.</target>
+      </trans-unit>
+      <trans-unit id="2051e4674186986d26c3209de9b817351ce59eba" resname="My favourites">
+        <jms:reference-file line="10">views/MyFavourite/list.html.twig</jms:reference-file>
+        <jms:reference-file line="4">views/MyFavourite/index.html.twig</jms:reference-file>
+        <source>My favourites</source>
+        <target state="new">My favourites</target>
+      </trans-unit>
+      <trans-unit id="7cd1d44b3c669cee4c26966b8db2380d1e04db61" resname="No records found.">
+        <jms:reference-file line="13">views/Dashboard/myFavouritesList.html.twig</jms:reference-file>
+        <jms:reference-file line="9">views/Dashboard/mySavedSearchesList.html.twig</jms:reference-file>
+        <jms:reference-file line="20">views/MyFavourite/list.html.twig</jms:reference-file>
+        <source>No records found.</source>
+        <target state="new">No records found.</target>
+      </trans-unit>
+      <trans-unit id="a48eff5b368f8fbee9c08e0aee8b20a25e8bc2b1" resname="miles away">
+        <jms:reference-file line="87">views/MyFavourite/adDetail.html.twig</jms:reference-file>
+        <source>miles away</source>
+        <target state="new">miles away</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

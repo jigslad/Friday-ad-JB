@@ -1,0 +1,26 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.resource) }}
+                {{ form_row(form.resource_group) }}
+                {{ form_row(form.icon_class) }}
+                {{ form_row(form.is_menu) }}
+                {{ form_row(form.display_in_tree) }}
+
+                {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'resource', 'isSaveAndNew': false}) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

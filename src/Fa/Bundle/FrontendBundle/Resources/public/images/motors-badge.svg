@@ -1,0 +1,29 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="45" height="44" viewBox="-457 259 45 44" xml:space="preserve" enable-background="new -457 259 45 44">
+  <style type="text/css">
+    
+	.st0{fill:#313133;stroke:#FFFFFF;stroke-width:4;}
+	.st1{fill:#A8DC28;}
+
+  </style>
+  <title>
+    motors badge
+  </title>
+  <desc>
+    Created with Sketch.
+  </desc>
+  <g id="Homepage" sketch:type="MSPage">
+    <g id="Home---Big-desktop" transform="translate(-742.000000, -1236.000000)" sketch:type="MSArtboardGroup">
+      <g id="Group" transform="translate(-15.000000, -251.000000)" sketch:type="MSLayerGroup">
+        <g id="latest-in-Brighton" transform="translate(8.000000, 1334.000000)">
+          <g id="Ads" transform="translate(458.000000, 144.000000)">
+            <g id="motors-badge" transform="translate(291.000000, 11.000000)">
+              <path id="Fill-1" sketch:type="MSShapeGroup" class="st0" d="M-414.5 279c0-11-9-20-20-20s-20 9-20 20 9 20 20 20C-423.4 299-414.5 290-414.5 279z"/>
+              <path class="st1" d="M-422.5 273.6h-1.6v3.2h-0.4l-1.2-7.2c0 0-4.5-0.8-8.9-0.8 -4.5 0-8.9 0.8-8.9 0.8l-1.2 7.2h-0.4v-3.2h-1.6c-0.5 0-0.8 0.3-0.8 0.8v3.2c0 0.5 0.4 0.7 0.8 0.7l1.6 0.1h0.1l-0.1 0.8c-0.9 0-1.6 0.7-1.6 1.6v4c0 0.9 0.7 1.6 1.6 1.6v1.5c0 0.5 0.4 0.9 0.8 0.9h2.4c0.4 0 0.8-0.4 0.8-0.9v-1.5h13v1.5c0 0.5 0.4 0.9 0.8 0.9h2.4c0.4 0 0.8-0.4 0.8-0.9v-1.5c0.9 0 1.6-0.7 1.6-1.6v-4c0-0.9-0.7-1.6-1.6-1.6l-0.1-0.8h0.1l1.6-0.1c0.5 0 0.9-0.2 0.9-0.7v-3.2C-421.6 273.9-422 273.6-422.5 273.6zM-442 270.8c0 0 3.7-0.8 7.3-0.8 3.7 0 7.3 0.8 7.3 0.8l1.7 7.2h-17.9L-442 270.8zM-442.3 284.3c-0.8 0-1.6-0.7-1.6-1.6 0-0.9 0.7-1.6 1.6-1.6 0.9 0 1.6 0.7 1.6 1.6C-440.7 283.6-441.4 284.3-442.3 284.3zM-427 284.3c-0.9 0-1.6-0.7-1.6-1.6 0-0.9 0.7-1.6 1.6-1.6 0.9 0 1.6 0.7 1.6 1.6C-425.4 283.6-426.1 284.3-427 284.3z"/>
+              <g id="car" transform="translate(0.075775, 10.178238)"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

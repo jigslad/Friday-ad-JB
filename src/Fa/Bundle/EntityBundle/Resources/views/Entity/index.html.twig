@@ -1,0 +1,26 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set entityEditGrant = false %}
+{% set entityDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('entity_edit') %}
+  {% set entityEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('entity_delete') %}
+  {% set entityDeleteGrant = true %}
+{% endif %}
+
+{% block content -%}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'entity_new'}) }}
+
+    {% use "FaEntityBundle:Entity:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaEntityBundle:Entity:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+{% endblock %}

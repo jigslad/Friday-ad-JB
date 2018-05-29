@@ -1,0 +1,12 @@
+services:
+    fa_payment.entity_listener.transaction_detail:
+        class: Fa\Bundle\PaymentBundle\Listener\TransactionDetailListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+
+    fa_payment.entity_listener.delivery_method_option:
+        class: Fa\Bundle\PaymentBundle\Listener\DeliveryMethodOptionListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }

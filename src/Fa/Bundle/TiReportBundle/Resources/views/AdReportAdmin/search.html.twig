@@ -1,0 +1,331 @@
+{% block search_html %}
+<div class="row">
+      <div class="columns">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+               {{ form_errors(form) }}
+
+                <div class="row">
+                    <div class="large-3 columns {% if form.from_date.vars.errors|length %} error{% endif %}">
+                        <div class="relative">
+                            <span class="datepicker-icon event_start"></span>
+                            {{ form_widget(form.from_date, {'attr': {'placeholder': 'Date from'}}) }}
+                            {{ form_errors(form.from_date) }}
+                        </div>
+                    </div>
+                    <div class="large-3 columns {% if form.to_date.vars.errors|length %} error{% endif %}">
+                        <div class="relative">
+                            <span class="datepicker-icon event_start"></span>
+                            {{ form_widget(form.to_date, {'attr': {'placeholder': 'Date to'}}) }}
+                            {{ form_errors(form.to_date) }}
+                         </div>
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.date_filter_type) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.admin_user_email, {'attr': {'placeholder': 'Admin user email'}}) }}
+                        {{ form_errors(form.admin_user_email) }}
+                    </div>
+                </div>
+
+                <hr class="hr_margin">
+                
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.role_id, {'attr': {'class':'form-control', 'placeholder': 'Role Id'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.ad_id, {'attr': {'class':'form-control', 'placeholder': 'Advert Reference'}}) }}
+                    </div>
+                </div>
+            
+                <hr class="hr_margin">
+                
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.category_1, {'attr': {'class':'form-control', 'placeholder': 'Category 1'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.category_2, {'attr': {'class':'form-control', 'placeholder': 'Category 2'}}) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.category_3, {'attr': {'class':'form-control', 'placeholder': 'Category 3'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.category_4, {'attr': {'class':'form-control', 'placeholder': 'Category 4'}}) }}
+                    </div>
+                </div>
+                    
+                <hr class="hr_margin">
+                
+                <div class="search_box">
+                    <div class="row">
+                        <div class="large-3 columns" style="vertical-align:top;">
+                            {{ form_widget(form.county_id, {'attr': {'class':'form-control'}}) }}
+                        </div>
+                        <div class="large-3 columns">
+                            {{ form_widget(form.town_id, {'attr': {'class':'form-control'}}) }}
+                        </div>
+                        <div class="large-3 columns">
+                            {{ form_widget(form.print_edition_id, {'attr': {'class':'form-control', 'placeholder': 'Advert Reference'}}) }}
+                        </div>
+                        <div class="large-3 columns">
+                            {{ form_widget(form.paid_ads, {'attr': {'class':'form-control'}}) }}
+                            {{ form_label(form.paid_ads) }}<br />
+                            {{ form_widget(form.admin_ads, {'attr': {'class':'form-control'}}) }}
+                            {{ form_label(form.admin_ads) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <hr class="hr_margin">
+
+                <div class="row">
+                    <div class="large-12 columns {% if form.report_columns.vars.errors|length %} error{% endif %}">
+                        <h4>{{'Display columns'|trans}}</h4>
+                        
+                        <div class="row" id="ad_report_columns">
+                            {% set choicesIdArray = form.report_columns.vars.choices|keys %}
+                            {% set columns = 4 %}
+                            {% set ctr = 0 %}
+                            {% set totalItems = form.report_columns.vars.choices|length %}
+                            {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                            {% set extraColumn = (totalItems % columns) %}
+                            {% set colCounter = {} %}
+                            {% for i in 0..columns-1 %}
+                                {% if loop.index0 < extraColumn %}
+                                    {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                {% else  %}
+                                    {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                                {% endif %}
+                            {% endfor %}
+                            {% for i in 0..columns-1 %}
+                                <div class="large-3 columns">
+                                    <ul class="checkbox-list">
+                                        {% for k in 0..colCounter[i]-1 %}
+                                            {% if choicesIdArray[ctr] is defined %}
+                                                {% set choice = form.report_columns.vars.choices[ctr] %}
+                                                <li>
+                                                    <input type="checkbox" value="{{ choice.value }}" name="{{ form.report_columns.vars.full_name }}[]" id="{{ form.report_columns.vars.id }}_{{ choice.value }}" {% if searchParams['report_columns'] is defined and choice.value in searchParams['report_columns'] %}checked="checked"{% endif %} />
+                                                    <label for="{{ form.report_columns.vars.id }}_{{ choice.value }}">{{ choice.label|raw }}</label>
+                                                </li>
+    
+                                            {% endif %}
+                                            {% set ctr = ctr + 1 %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% do attribute(form, 'report_columns').setRendered %}
+                        {{ form_errors(form.report_columns) }}
+                    </div>
+                </div>
+
+                <hr class="hr_margin">
+                
+                <div class="row">
+                    <div class="large-6 columns">
+                        {{ form_widget(form.csv_name, {'attr': {'class':'form-control', 'placeholder': 'Search filter name'}}) }}
+                        {{ form_errors(form.csv_name) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.csv_email, {'attr': {'class':'form-control', 'placeholder': 'Email address (Csv file will be emailed once generated)'}}) }}
+                        {{ form_errors(form.csv_email) }}
+                    </div>
+                </div>
+                <hr class="hr_margin">
+
+                <div class="row">
+                    <div class="large-12 columns">
+                        {{ form_widget(form.search, {'attr': {'class':'small button'}}) }}
+                        {{ form_widget(form.reset, {'attr': {'class':'small button'}}) }}
+                        {% if adReportCsvList %}
+                            {{ form_widget(form.download_csv, {'attr': {'class':'small button'}}) }}
+                        {% else %}
+                            {% do attribute(form, 'download_csv').setRendered %}
+                        {% endif %}
+                    </div>
+                </div>
+
+            {{ form_end(form) }}
+       </div>
+  </div>
+  <div id="adReportCsvListModal" class="reveal-modal small" data-reveal></div>
+{% endblock %}
+
+{% block search_script -%}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $('.datepicker-icon').click(function(e){
+        $(this).next('input.fdatepicker').focus();
+    });
+    $('#fa_ti_item_report_reset').click(function(e){
+        window.location.href = "{{ path('fa_ti_report_ad') }}";
+    });
+    $('#fa_ti_item_report_download_csv').click(function(e){
+        showAdReportCsvList();
+    });
+    $(document).ready(function(){
+        enableDisableDisallowedFields();
+        $("#fa_ti_item_report_category_1").change(function(){
+            loadCategoryByLevel($(this).val(), 2)
+            loadCategoryByLevel('', 3)
+            loadCategoryByLevel('', 4)
+        });
+        
+        $("#fa_ti_item_report_category_2").change(function(){
+            loadCategoryByLevel($(this).val(), 3)
+            loadCategoryByLevel('', 4)
+        });
+        
+        $("#fa_ti_item_report_category_3").change(function(){
+            loadCategoryByLevel($(this).val(), 4)
+        });
+        
+        $("form[name='fa_ti_item_report']").submit(function()
+        {
+            var category4   = $("#fa_ti_item_report_category_4").val();
+            var category3   = $("#fa_ti_item_report_category_3").val();
+            var category2   = $("#fa_ti_item_report_category_2").val();
+            var category1   = $("#fa_ti_item_report_category_1").val();
+            var category_id = ''; 
+    
+            if (category4)
+                category_id = category4;
+            else if (category3)
+                category_id = category3;
+            else if (category2)
+                category_id = category2;
+            else if (category1)
+                category_id = category1;
+    
+            $("#fa_ti_item_report_category_id").val(category_id);
+    
+           return true;
+        });
+    });
+    
+    function loadCategoryByLevel(id, level)
+    {
+        var category_selector = $('#fa_ti_item_report_category_'+level);
+        category_selector.html('<option value="">Select Category '+level+'</option>');
+    
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: (level == 4) ? '{{ path("category_ajax_get_nested_node_json") }}' : '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    for (var i=0, total = data.length; i < total; i++) {
+                        category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                    }
+                }
+            });
+        }
+    }
+    
+    $("#fa_ti_item_report_county_id").change(function(){
+        var data = {
+            id: $(this).val()
+        };
+     
+        $.ajax({
+            type: 'post',
+            url: '{{ path("location_ajax_get_node_json") }}',
+            data: data,
+            success: function(data) {
+                var $town_selector = $('#fa_ti_item_report_town_id');
+
+                $town_selector.html('<option value="">Select Town</option>');
+
+                for (var i=0, total = data.length; i < total; i++) {
+                    $town_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                }
+            }
+        });
+    });
+    
+    $("#fa_ti_item_report_town_id").prepend('<option value="">{{ 'Select Town'|trans }}</option>');
+    
+    $('#ad_report_columns input[type=checkbox]').change(function() {
+        enableDisableDisallowedFields()
+    });
+    function showAdReportCsvList()
+    {
+        blockPage();
+        $.ajax({
+            type: "GET",
+            url : '{{ path('ajax_fa_ti_report_ad_csv_list') }}',
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#adReportCsvListModal').html(response.htmlContent);
+                $('#adReportCsvListModal').foundation('reveal', 'open');
+            }
+        });
+    }
+    
+    function deleteCsvFile(fileName)
+    {
+        blockElement('#adReportCsvListModal');
+        $.ajax({
+            type: "GET",
+            url : '{{ path('ajax_fa_ti_report_ad_csv_delete') }}',
+            data: {'fileName': fileName}
+        })
+        .always(function(response) {
+            unblockElement('#adReportCsvListModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#adReportCsvListModal').html(response.htmlContent);
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#cvs_list_ul');
+            }
+        });
+    }
+    
+    function enableDisableDisallowedFields()
+    {
+        {% set reportFieldsArray = staticCall('Fa\\Bundle\\ReportBundle\\Repository\\AdReportDailyRepository', 'getAdReportFields')|keys %}
+        {% set reportFieldsArray = unset_value_from_array(reportFieldsArray, 'total_ads') %}
+        var disallowedFieldsString = '{{reportFieldsArray|join(',')}}';
+        var disallowedFieldsArray  = disallowedFieldsString.split(',');
+        var flag = $('#fa_ti_item_report_report_columns_total_ads').is(':checked');
+        for(i = 0; i < disallowedFieldsArray.length; i++) {
+            var fieldValue = disallowedFieldsArray[i];
+            var inputId = 'fa_ti_item_report_report_columns_'+fieldValue;
+
+            if (flag == 0) {
+                  $('#'+inputId).attr("disabled", false);
+                  $('label[for="'+inputId+'"]').removeClass('disable-text');
+                  
+                  if ($('#ad_report_columns input:checked').length) {
+                      $('#fa_ti_item_report_report_columns_total_ads').attr("checked", false);
+                      $('#fa_ti_item_report_report_columns_total_ads').attr("disabled", true);
+                      $('label[for="fa_ti_item_report_report_columns_total_ads"]').addClass('disable-text');
+                  } else {
+                      $('#fa_ti_item_report_report_columns_total_ads').attr("disabled", false);
+                      $('label[for="fa_ti_item_report_report_columns_total_ads"]').removeClass('disable-text');
+                  }
+            } else if (flag == 1) {
+                  $('#'+inputId).attr("checked", false);
+                  $('#'+inputId).attr("disabled", true);
+                  $('label[for="'+inputId+'"]').addClass('disable-text');
+            }
+        }
+    }
+//]]>
+</script>
+{% endblock %}

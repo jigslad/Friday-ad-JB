@@ -1,0 +1,7 @@
+parameters:
+    fa.mail.manager.class: Fa\Bundle\EmailBundle\Manager\MailManager
+
+services:
+    fa.mail.manager:
+        class: '%fa.mail.manager.class%'
+        arguments: ['@mailer', '@service_container']

@@ -1,0 +1,42 @@
+services:
+    fa_user.entity_listener.user:
+        class: Fa\Bundle\UserBundle\Listener\UserListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_user.entity_listener.user_login:
+        class: Fa\Bundle\UserBundle\Listener\UserLoginListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: kernel.event_listener, event: security.interactive_login, method: onLogin }
+            
+    fa_user.entity_listener.user_config_rule:
+        class: Fa\Bundle\UserBundle\Listener\UserConfigRuleListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_user.entity_listener.user_site_view_counter:
+        class: Fa\Bundle\UserBundle\Listener\UserSiteViewCounterListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_user.entity_listener.role:
+        class: Fa\Bundle\UserBundle\Listener\RoleListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_user.entity_listener.user_review:
+        class: Fa\Bundle\UserBundle\Listener\UserReviewListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_user.entity_listener.user_site:
+        class: Fa\Bundle\UserBundle\Listener\UserSiteListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }

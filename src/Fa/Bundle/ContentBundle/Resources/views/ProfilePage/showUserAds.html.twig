@@ -1,0 +1,76 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block body %}
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+{% set userRole = userRepository.getUserRole(userDetail['id'], container) %}
+{% set profileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(userDetail['id']) %}
+<div class="other-profile">
+    <div class="row profile-list-main">
+        <div class="large-6 columns">
+            <a href="{{ profileUrl }}" class="shop-back-link">{{'Back to profile'|trans({}, 'frontend-profile-page')}}</a>
+            <div class="user-pro-pic {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}rounded{% endif %}">
+                <span>
+                    {% set userCompanyLogo = null %}
+                    {% set userLogo = null %}
+                    {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}
+                        {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['company_logo'], userDetail['id'], null, null, true, true, userDetail['status_id'], userDetail['user_name']]) %}
+                    {% endif %}
+                    {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
+                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['image'], userDetail['id'], null, null, true, false , userDetail['status_id'], userDetail['user_name']]) %}
+                    {% endif %}
+                    
+                    
+                    {% if userCompanyLogo %}
+                        {{userCompanyLogo|raw}}
+                    {% elseif userLogo %}
+                        {{userLogo|raw}}
+                    {% endif %}
+                </span>
+            </div>
+            <h2 class="pro-user-name">
+            {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}
+                {{ (userDetail['business_name'] ? "%business_name%'s ads"|trans({'%business_name%': userDetail['business_name']}, 'frontend-profile-show-ads') : '') }}
+            {% endif %}
+            {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
+                {{ (userDetail['first_name'] ? "%user_first_name%'s ads"|trans({'%user_first_name%': userDetail['first_name']}, 'frontend-profile-show-ads') : '') }}
+            {% endif %}
+            </h2>
+        </div>
+        <div class="large-18 columns">
+            <h2 class="profile-list-title">{{'%records% results found'|trans({'%records%': pagination.getNbResults()}, 'frontend-profile-page')}}</h2>
+            {% if pagination.getNbResults() %}
+                {% set adFavoriteRepository   = fetch_repository('FaAdBundle:AdFavorite') %}
+                {% set adRepository   = fetch_repository('FaAdBundle:Ad') %}
+                {% if app.user %}
+                    {% set userId = app.user.getId() %}
+                {% else %}
+                    {% set userId = app.session.getId() %}
+                {% endif %}
+                {% set adFavoriteAdIds = adFavoriteRepository.getFavoriteAdByUserId(userId, container) %}
+                
+                {% set adCounter = 0 %}
+                {% set adCount = 0 %}
+                {% for ad in pagination.getCurrentPageResults() %}
+                    {% set adCount = adCount + 1 %}
+                    {{ include('FaAdBundle:AdList:listDetail.html.twig', {'showAdUpsell': 0}) }}
+                {% endfor %}
+            {% else %}
+                <div data-alert class="alert-box success radius mt10">
+                    <span class="alert-icon">&nbsp;</span>
+                    {{'No ads available.'|trans({}, 'frontend-search-result')}}
+                    <a href="javascript:void(0)" class="close">&times;</a>
+                </div>
+            {% endif %}
+            <div class="pagination-centered">
+                {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 1, 'seoPager': true}) }}
+            </div>
+        </div>
+    </div>    
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaAdBundle:AdList:listJs.html.twig') }}
+{% endblock %}

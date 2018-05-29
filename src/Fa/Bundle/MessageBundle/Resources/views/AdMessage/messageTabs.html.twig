@@ -1,0 +1,16 @@
+{% set messageType = '' %}
+{% if currentRoute == 'dashboard_home' %}
+    {% set allMessagesRoute = path('dashboard_home', {'messageType': 'all' }) %}
+    {% set aboutYourAdMessagesRoute = path('dashboard_home', {'messageType': 'receiver' }) %}
+    {% set intrestedAdMessagesRoute = path('dashboard_home', {'messageType': 'sender' }) %}
+    {% set messageType = app.request.get('messageType') %}
+{% else %}
+    {% set allMessagesRoute = path('user_ad_message_all') %}
+    {% set aboutYourAdMessagesRoute = path('user_ad_message') %}
+    {% set intrestedAdMessagesRoute = path('user_interested_ad_message') %}
+{% endif %}
+<ul class="tab-menu my-msg-tabs clearfix" data-equalizer>
+    <li data-equalizer-watch {% if currentRoute == 'user_ad_message_all' or (currentRoute == 'dashboard_home' and (messageType == '' or messageType == 'all')) %} class="active" {% endif %}><a href="{{ allMessagesRoute }}">{{ 'All <br />messages'|trans({}, 'frontend-inbox')|raw }} <br />{% if totalMsgCount > 0 %}(<span id="unreadUserMsgCount_div">{{totalMsgCount}}</span>){% endif %}</a></li>
+    <li data-equalizer-watch {% if currentRoute == 'user_ad_message' or (currentRoute == 'dashboard_home' and messageType == 'receiver') %} class="active" {% endif %}><a href="{{ aboutYourAdMessagesRoute }}">{{ 'About <br />your ads'|trans({}, 'frontend-inbox')|raw }} <br />{% if unreadUserAdMsgCount > 0 %}(<span id="unreadUserMsgCount_div">{{unreadUserAdMsgCount}}</span>){% endif %}</a></li>
+    <li data-equalizer-watch {% if currentRoute == 'user_interested_ad_message' or (currentRoute == 'dashboard_home' and messageType == 'sender') %} class="active" {% endif %}><a href="{{ intrestedAdMessagesRoute }}">{{ "Ads you're <br />interested in"|trans({}, 'frontend-inbox')|raw }} <br />{% if unreadUserInterestedAdMsgCount > 0 %}(<span id="unreadUserInterestedMsgCount_div">{{unreadUserInterestedAdMsgCount}}</span>){% endif %}</a></li>
+</ul>

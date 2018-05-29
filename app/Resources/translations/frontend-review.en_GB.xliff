@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="c926bdd1726a435d59877ba3e4d271165747d163" resname="%responder_name% responded to this review">
+        <jms:reference-file line="62">views/ProfilePage/listUserReview.html.twig</jms:reference-file>
+        <jms:reference-file line="63">views/Review/leftReviewlist.html.twig</jms:reference-file>
+        <jms:reference-file line="81">views/Review/details.html.twig</jms:reference-file>
+        <jms:reference-file line="85">views/Review/list.html.twig</jms:reference-file>
+        <source>%responder_name% responded to this review</source>
+        <target state="new">%responder_name% responded to this review</target>
+      </trans-unit>
+      <trans-unit id="0d4d1f16af6636e0afd5d97b5e22a5604c76335b" resname="(%textCount% characters left)">
+        <jms:reference-file line="10">views/Review/leaveReviewForm.html.twig</jms:reference-file>
+        <source>(%textCount% characters left)</source>
+        <target state="new">(%textCount% characters left)</target>
+      </trans-unit>
+      <trans-unit id="322444d3bb52c341f429ca0454f292dc242f315b" resname="Any">
+        <jms:reference-file line="96">UserBundle/Form/UserReviewType.php</jms:reference-file>
+        <source>Any</source>
+        <target state="new">Any</target>
+      </trans-unit>
+      <trans-unit id="a54dff154a32736ac6d1b76c48df0424173e8be9" resname="From &lt;br /&gt;buyers">
+        <jms:reference-file line="13">views/Review/reviewTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="19">views/Review/reviewLeftForOthers.html.twig</jms:reference-file>
+        <source><![CDATA[From <br />buyers]]></source>
+        <target state="new"><![CDATA[From <br />buyers]]></target>
+      </trans-unit>
+      <trans-unit id="fc4a2fa1630a7992aa1a900a1cef4bfabeb0d38d" resname="From &lt;br /&gt;sellers">
+        <jms:reference-file line="14">views/Review/reviewTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="20">views/Review/reviewLeftForOthers.html.twig</jms:reference-file>
+        <source><![CDATA[From <br />sellers]]></source>
+        <target state="new"><![CDATA[From <br />sellers]]></target>
+      </trans-unit>
+      <trans-unit id="935dc45f20b439e5d71981347895ee373e457da7" resname="Leave a review">
+        <jms:reference-file line="5">views/Review/leaveReviewLink.html.twig</jms:reference-file>
+        <jms:reference-file line="3">views/Review/add.html.twig</jms:reference-file>
+        <source>Leave a review</source>
+        <target state="new">Leave a review</target>
+      </trans-unit>
+      <trans-unit id="0dd40f2ed46e8ed6df6050d572ed7ca471a89b05" resname="Leave a review for %user_name% about the item %ad_title%">
+        <jms:reference-file line="9">views/Review/add.html.twig</jms:reference-file>
+        <source>Leave a review for %user_name% about the item %ad_title%</source>
+        <target state="new">Leave a review for %user_name% about the item %ad_title%</target>
+      </trans-unit>
+      <trans-unit id="fec97b2c2e59f58fbc4928a16387961118a3c19b" resname="Left &lt;br /&gt;for others">
+        <jms:reference-file line="15">views/Review/reviewTabs.html.twig</jms:reference-file>
+        <jms:reference-file line="21">views/Review/reviewLeftForOthers.html.twig</jms:reference-file>
+        <source><![CDATA[Left <br />for others]]></source>
+        <target state="new"><![CDATA[Left <br />for others]]></target>
+      </trans-unit>
+      <trans-unit id="7ca5268683e327f9004d039bc17d7d852f732569" resname="Let other Friday-Ad users to know when someone is a good seller, leave a review about sellers you have bought from or sent messages to.">
+        <jms:reference-file line="19">views/Review/index.html.twig</jms:reference-file>
+        <jms:reference-file line="15">views/Review/reviewLeftForOthers.html.twig</jms:reference-file>
+        <source>Let other Friday-Ad users to know when someone is a good seller, leave a review about sellers you have bought from or sent messages to.</source>
+        <target state="new">Let other Friday-Ad users to know when someone is a good seller, leave a review about sellers you have bought from or sent messages to.</target>
+      </trans-unit>
+      <trans-unit id="dfa62803c580ca4433d1f8a937e8de4e46ea12ad" resname="No review exists.">
+        <jms:reference-file line="182">UserBundle/Controller/ReviewController.php</jms:reference-file>
+        <source>No review exists.</source>
+        <target state="new">No review exists.</target>
+      </trans-unit>
+      <trans-unit id="55b609deb99eb8eb54b6205bbd7276e574865dec" resname="Rate this %to_whom% ">
+        <jms:reference-file line="4">views/Review/leaveReviewForm.html.twig</jms:reference-file>
+        <source>Rate this %to_whom% </source>
+        <target state="new">Rate this %to_whom% </target>
+      </trans-unit>
+      <trans-unit id="6c2bb735a46a8ff307fe2e638d581295b2a49e09" resname="Reply">
+        <jms:reference-file line="87">UserBundle/Form/UserReviewResponseType.php</jms:reference-file>
+        <source>Reply</source>
+        <target state="new">Reply</target>
+      </trans-unit>
+      <trans-unit id="ee45c30326b750387589752c0f75e1dd87ddc7e4" resname="Report">
+        <jms:reference-file line="58">views/Review/details.html.twig</jms:reference-file>
+        <jms:reference-file line="59">views/Review/list.html.twig</jms:reference-file>
+        <source>Report</source>
+        <target state="new">Report</target>
+      </trans-unit>
+      <trans-unit id="05bd566011130459fe784acc9ca69a9041465757" resname="Respond">
+        <jms:reference-file line="90">UserBundle/Form/UserReviewResponseType.php</jms:reference-file>
+        <source>Respond</source>
+        <target state="new">Respond</target>
+      </trans-unit>
+      <trans-unit id="bb3b569c2c72445ad4c4605128c2df3d63ca4696" resname="Respond to this review">
+        <jms:reference-file line="53">views/Review/details.html.twig</jms:reference-file>
+        <jms:reference-file line="54">views/Review/list.html.twig</jms:reference-file>
+        <source>Respond to this review</source>
+        <target state="new">Respond to this review</target>
+      </trans-unit>
+      <trans-unit id="e29a79fe0c349724caeaa1762fa917f5543248ca" resname="Review">
+        <jms:reference-file line="5">views/Review/index.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/Review/reviewLeftForOthers.html.twig</jms:reference-file>
+        <source>Review</source>
+        <target state="new">Review</target>
+      </trans-unit>
+      <trans-unit id="8083a9b120a9acca6038a5e92206a55e61f4c0f6" resname="Review detail">
+        <jms:reference-file line="5">views/Review/show.html.twig</jms:reference-file>
+        <source>Review detail</source>
+        <target state="new">Review detail</target>
+      </trans-unit>
+      <trans-unit id="62a5cdf968fc3e9cfeb7105bc677febcf5528abd" resname="Review has been added successfully.">
+        <jms:reference-file line="120">UserBundle/Controller/ReviewController.php</jms:reference-file>
+        <source>Review has been added successfully.</source>
+        <target state="new">Review has been added successfully.</target>
+      </trans-unit>
+      <trans-unit id="68244212debcef79baa2854621535ae44fc8edc8" resname="Review has been responded successfully.">
+        <jms:reference-file line="154">UserBundle/Controller/ReviewController.php</jms:reference-file>
+        <source>Review has been responded successfully.</source>
+        <target state="new">Review has been responded successfully.</target>
+      </trans-unit>
+      <trans-unit id="accc5ebe5df6fa8b748272681fc5a5d3210ca5d1" resname="Review this advertiser">
+        <jms:reference-file line="39">views/Review/details.html.twig</jms:reference-file>
+        <jms:reference-file line="45">views/Review/list.html.twig</jms:reference-file>
+        <source>Review this advertiser</source>
+        <target state="new">Review this advertiser</target>
+      </trans-unit>
+      <trans-unit id="7a538ae6ab1512320b9b2dcb6c9d3067114e84bb" resname="Review this buyer">
+        <jms:reference-file line="35">views/Review/details.html.twig</jms:reference-file>
+        <jms:reference-file line="41">views/Review/list.html.twig</jms:reference-file>
+        <source>Review this buyer</source>
+        <target state="new">Review this buyer</target>
+      </trans-unit>
+      <trans-unit id="9bc2575c3930437e80555f78757b783c842e8e66" resname="Send">
+        <jms:reference-file line="108">UserBundle/Form/UserReviewType.php</jms:reference-file>
+        <source>Send</source>
+        <target state="new">Send</target>
+      </trans-unit>
+      <trans-unit id="5d118267976b379733083b46ff04f301868f124f" resname="Tell us more">
+        <jms:reference-file line="103">UserBundle/Form/UserReviewType.php</jms:reference-file>
+        <source>Tell us more</source>
+        <target state="new">Tell us more</target>
+      </trans-unit>
+      <trans-unit id="67e82068d50dfdfa72629bf9d83f6e6e06c4ee0f" resname="You have left review for %user_name%">
+        <jms:reference-file line="24">views/Review/leftReviewlist.html.twig</jms:reference-file>
+        <source>You have left review for %user_name%</source>
+        <target state="new">You have left review for %user_name%</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,630 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% set paaFieldRuleRepository = fetch_repository('FaAdBundle:PaaFieldRule') %}
+{% set regNoFieldCategoryIds = paaFieldRuleRepository.getRegNoFieldCategoryIds(fetch_container_instance()) %}
+
+{% block page_title %}
+    {{ 'What are you selling on Friday-Ad'|trans({}, 'frontend-paa-first-step') }}
+{% endblock %}
+
+{% set showRegNoFieldsFlag = false %}
+{% if (categoryPath is defined and categoryPath is not null) %}
+    {% set categoryIds = categoryPath|keys%}
+    {% if (categoryIds[1] is defined and categoryIds[1] is not null and categoryIds[1] in regNoFieldCategoryIds and (not app.request.query.get('categoryName'))) %}
+        {% set showRegNoFieldsFlag = true %}
+    {% endif %}
+{% endif %}
+
+{% set adultCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+{% set serviceCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') %}
+{% set communityCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID') %}
+{% set forSaleCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+
+{% if showRegNoFieldsFlag %}
+    {% set regNoDetailsOrderedFields = {13 : 'colour_id_autocomplete', 0 : 'colour_id', 1 : 'body_type_id', 2 : 'reg_year', 3 : 'fuel_type_id', 4 : 'transmission_id', 5 : 'engine_size', 6 : 'no_of_doors', 7 : 'no_of_seats', 8: 'fuel_economy', 9 : '062mph', 10 : 'top_speed', 11 : 'ncap_rating', 12 : 'co2_emissions', '14': 'colour_id_dimension_id'} %}
+    {% set regNoDetailsHiddenFields = {0: 'fuel_economy', 1 : '062mph', 2 : 'top_speed', 3 : 'ncap_rating', 4 : 'co2_emissions', 5: 'colour_id_dimension_id', 6: 'first_step_ordered_fields'} %}
+{% endif %}
+
+{% block body %}
+    <div class="posting-bg">
+        <div class="fad-sign-bdr">&nbsp;</div>
+        <div class="row paa-main paa-btm-space" {% if app.user and app.user.getRole() and app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}data-equalizer{% endif %}>
+            {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 1}) }}
+            <div id="middle-column" class="large-12 columns" data-equalizer-watch>
+                <h1 class="text-center paa-title">{{ 'What are you selling on Friday-Ad?'|trans({}, 'frontend-paa-first-step') }}</h1>
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                {{ form_errors(form) }}
+                <div class="big-wrapper">
+                    <h2 class="text-center" id="choose_cat_msg">{{ 'choose from all categories'|trans({}, 'frontend-paa-first-step') }}</h2>
+                    <h3 class="text-center mt10" id="redirect_msg" style="display:none">{{ 'please wait…'|trans({}, 'frontend-paa-first-step') }}</h3>
+                </div>
+                <div class="big-wrapper">
+                    <div class="choose-all-categories">
+                        {% set categories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
+                        {% for categoryId, categoryName in categories %}
+                            {% set catClass = 'cat-' ~ categoryName|lower|replace({' ' : ''}) %}
+                            <a href="javascript:void(0)" class="{{ catClass }} main_category" id="maincategory_{{ categoryId }}" onclick="changeMainCategory('{{ categoryId }}', '', '1');">{{ categoryName }}</a>
+                         {% endfor %}
+                    </div>
+                </div>
+                <div class="small-wrapper" id="main_div">
+                    <div id="motor_reg_fields">
+                        {% if showRegNoFieldsFlag %}
+                            <div id="reg_no_fields" class="paa-bdr-box">
+                                    {% if attribute(form, 'has_reg_no') is defined %}
+                                        <h3 class="text-center">{{ attribute(form, 'has_reg_no').vars.label }}</h3>
+                                        <div class="text-center label-inline reg-yes-no">
+                                            {{ form_widget(attribute(form, 'has_reg_no')) }}
+                                            {{ form_errors(attribute(form, 'has_reg_no')) }}
+                                        </div>
+                                    {% endif %}
+                                <div id="reg_no_field">
+                                    {% if attribute(form, 'reg_no') is defined %}
+                                        <div class="small-wrapper">
+                                            <label for="fa_paa_category_select_reg_no">{{ 'Enter it here'|trans({}, 'frontend-paa-second-step')}}:</label>
+                                            {{ form_widget(attribute(form, 'reg_no')) }}
+                                            {{ form_errors(attribute(form, 'reg_no')) }}
+                                            <span class="error" id="reg_no_error_msg"></span>
+                                            <button class="secondary-btn-1 expand mt10" id="lookup_vehicle" type="button">{{ 'Lookup Vehicle'|trans({}, 'frontend-paa-second-step')}}</button>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div id="reg_no_details_fields" style="display:none">
+                                    {% if regNoDetailsOrderedFields|length %}
+                                        {% if attribute(form, 'has_reg_no').vars.data == 1 %}
+                                            {% if attribute(form, 'reg_no').vars.data is not null and attribute(form, 'reg_no').vars.errors|length < 1 %}
+                                                <h5 class="text-center" id="add_vehicle_msg">{{ 'Confirm your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                                            {% else %}
+                                                <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                                            {% endif %}
+                                        {% else %}
+                                            <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                                        {% endif %}
+                                        <div id="reg_no_category_div"></div>
+                                        <div class="small-wrapper">
+                                        {% for field in regNoDetailsOrderedFields %}
+                                            {% if attribute(form, field) is defined %}
+                                                {% if field in regNoDetailsHiddenFields %}
+                                                    {{ form_widget(attribute(form, field), {'attr': {'style':'display:none'}}) }}
+                                                {% elseif 'engine_size' in field %}
+                                                    <label for="fa_paa_category_select_engine_size">{{ attribute(form, field).vars.label }}{{fetch_repository('FaAdBundle:AdMotors').getUnitByField('engine_size', true)}}</label>
+                                                    {{ form_widget(attribute(form, field)) }}
+                                                    {{ form_errors(attribute(form, field)) }}
+                                                {% else %}
+                                                    {{ form_row(attribute(form, field)) }}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% set totalLevel = fetch_repository('FaEntityBundle:Category').getMaxLevel(fetch_container_instance()) %}
+                    {{ set_variables('paa_category_select', {'totalLevel' : totalLevel }) }}
+                    {% if totalLevel %}
+                        <div id="category_choices_div" style="display:none">
+                            <div class="admin_cat_search list_style_none">
+                                {% for i in 1..totalLevel %}
+                                    <div id="category_choice_div_{{ i }}" class="category_choice_div">
+                                        {% set field = 'category_' ~ i %}
+                                        {{ form_widget(attribute(form, field)) }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+    </div>
+    <div class="small-wrapper">
+      {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand button disabled'}}) }}
+    </div>
+    <div class="big-wrapper">
+      <h2 class="text-center" id="or_msg">{{ 'OR'|trans({}, 'frontend-paa-first-step') }}</h2>
+      <h2 class="text-center subtitle">{{ 'Tell us what it is and we\'ll help you find the category'|trans({}, 'frontend-paa-first-step') }}</h2>
+      <div class="category-search" id="category_autocomplete_div">
+          <div class="disable-autocomplete"></div>
+          <div class="relative text-center">
+              <span id="field_arrow">
+                  <i class="fi-arrow-right large element-animation"></i>
+                  <i class="fi-arrow-down large element-animation"></i>
+              </span>
+              <span class="textbox-wrapper">
+                  {{ form_row(form.category_id_autocomplete) }}
+                  <a href="javascript:void(0);" id="fa_paa_category_select_category_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+              </span>
+          </div>
+      </div>
+    </div>
+   
+    {{ form_end(form) }}
+  </div>
+  {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {}) }}
+  </div>
+  </div>
+  {% if (objDraftAd is defined and objDraftAd is not null and not app.request.cookies.has('draft_ad_popup')) %}
+      {{ include('FaAdBundle:AdPost:draftAdPopup.html.twig') }}
+  {% endif %}
+  <div id="carweb_category_msg_modal" class="reveal-modal tiny" data-reveal>
+      <a class="close-reveal-modal">&#215;</a>
+      <h5 class="modal-title">&nbsp;</h5>
+  </div>
+{% endblock %}
+
+{% block scriptbottom %}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    var loadRegNofields = true;
+    var regNoFieldCategoryIds = [{{regNoFieldCategoryIds|join(',')}}];
+
+    {% set totalLevel = attribute(get_variables('paa_category_select'), 'totalLevel') %}
+    var totalLevel = '{{ totalLevel }}';
+    var lastLevel  = '';
+    var regLookupResult = '';
+    var autoCompleteCategoryName = '';
+
+    $(document).ready(function(){
+      bindCustomRadioEvent();
+      {% if (objDraftAd is defined and objDraftAd is not null and not app.request.cookies.has('draft_ad_popup')) %}
+        openDraftAdPopup();
+      {% endif %}
+        $('.category_choice_div').hide();
+        enableDisableNextBtn();
+       // showCategoryFieldArrow();
+        // Remove selected auto complete category when category changed from choice field
+        $('.category').change(function(e) {
+           //$('#fa_paa_category_select_colour_id_dimension_id').remove();
+           var fieldId   = $(this).attr('id');
+           var level     = fieldId.replace('fa_paa_category_select_category_', '');
+           var nextLevel = parseInt(level) + 1;
+
+           if (level == 2 && $.inArray( parseInt($(this).val()), regNoFieldCategoryIds) != -1) {
+               $("#category_choices_div").prependTo("#main_div");
+           } else if (level > 2 && $.inArray( parseInt($('#fa_paa_category_select_category_2').val()), regNoFieldCategoryIds) != -1) {
+               if ($('#reg_no_details_fields').is(':visible')) {
+                   $("#category_choices_div").appendTo("#reg_no_category_div");
+               } else {
+                    $("#category_choices_div").appendTo("#reg_no_fields");
+               }
+           } else {
+               $("#category_choices_div").prependTo("#main_div");
+           }
+
+           resetCategoryAutocompleteField();
+           loadCategoryByLevel($(this).val(), nextLevel);
+           if (level == 2 && $.inArray( parseInt($(this).val()), regNoFieldCategoryIds) != -1) {
+               $('#category_choice_div_' + nextLevel).hide();
+               getMotorsRegNoFields($(this).val(), loadRegNofields);
+           } else if (level == 2 && $.inArray( parseInt($(this).val()), regNoFieldCategoryIds) == -1) {
+               $('#motor_reg_fields').html('');
+               $(document).foundation('equalizer', 'reflow');
+           }
+
+           if ($('#reg_no_details_fields').is(':visible')) {
+               $("#category_choices_div").removeClass("mt30");
+           }
+           
+           if (!$('#reg_no_details_fields').is(':visible')) {
+               if ($('input[name="fa_paa_category_select[has_reg_no]"]:checked').val() == 0) {
+                   $("#category_choices_div").addClass("mt30");
+               } else {
+                   $("#category_choices_div").removeClass("mt30");
+               }
+           }
+
+         //GA Analytics code start
+           if (parseInt(level) > 1) {
+             
+             var categoryPath = getCategoryPath(level);
+             var eventLabel = categoryPath;
+
+             if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
+               eventLabel = eventLabel + ' - No';
+             }
+
+             ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
+           }
+           //GA Analytics code end
+        });
+
+        $("form[name='fa_paa_category_select']").submit(function() {
+            if ($('#fa_paa_category_select_save').hasClass('disabled')) {
+                return false;
+            }
+
+            // check for last level child category selected or not
+            var last_category_id = $("#fa_paa_category_select_category_" + lastLevel).val();
+            var autocomplete_category_id = $('#fa_paa_category_select_category_id').val();
+            var category_id = last_category_id ? last_category_id : autocomplete_category_id;
+
+            if (!category_id) {
+                return false;
+            }
+
+            // save selected category
+            $('#fa_paa_category_select_category_id').val(category_id);
+            
+          //GA Analytics code start
+            if (parseInt(lastLevel) > 1) {
+              
+              var categoryPath = getCategoryPath(lastLevel);
+              var eventLabel = categoryPath;
+
+              if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
+                eventLabel = eventLabel + ' - No';
+              }
+
+              ga('send', 'event', 'PAA - Step 1', 'Category icon Next step', eventLabel);
+            }
+            //GA Analytics code end
+
+            return true;
+        });
+
+        //Make categories selected
+        {% if (categoryPath is defined and categoryPath is not null and categoryPath|length > 0) %}
+            var catLevel = 1;
+            var catArray = new Array();
+            {% for key in categoryPath|keys %}
+                catArray[catLevel-1] = '{{  key }}';
+                catLevel++;
+            {% endfor %}
+            
+            catLevel = 1;
+            {% for key in categoryPath|keys %}
+              if (catLevel == 1) {
+                changeMainCategory('{{ key }}', catArray[1]);
+                if ($.inArray( parseInt(catArray[1]), regNoFieldCategoryIds) == -1) {
+                    $('#motor_reg_fields').html('');
+                    $(document).foundation('equalizer', 'reflow');
+                }
+              } else {
+                if (catLevel == 2 && $.inArray( parseInt(catArray[1]), regNoFieldCategoryIds) != -1 && '{{app.request.get('is_edit')}}' != '1') {
+                  loadCategoryByLevel('{{key}}', (catLevel + 1), catArray[catLevel]);
+                  $('#category_choice_div_' + (catLevel+1)).hide();
+                  getMotorsRegNoFields(catArray[1], false);
+                } else if (catArray[catLevel] !== 'undefined') {
+                  loadCategoryByLevel('{{key}}', (catLevel + 1), catArray[catLevel]);
+                }
+              }
+              catLevel++;
+            {% endfor %}
+         {% endif %}
+
+         {% if showRegNoFieldsFlag %}
+             showHideRegNoFieldsOnLoad($("input[name='fa_paa_category_select[has_reg_no]']:checked").val());
+             $("input[name='fa_paa_category_select[has_reg_no]']").change(function(){
+                 showHideRegNoFields($(this).val());
+             });
+             
+             $('#lookup_vehicle').click(function(){
+                 var regNo = $.trim($('#fa_paa_category_select_reg_no').val());
+                 var isSuccess = loadRegNoFieldDetailsByRegNo(regNo);
+
+                 //GA Analytics code start
+                 var categoryPath = getCategoryPath(lastLevel);
+                 if (isSuccess) {
+                   regLookupResult = ' - Lookup successful';
+                 } else {
+                   regLookupResult = ' - Lookup unsuccessful || '+regNo;
+                 }
+                 var eventLabel = categoryPath + regLookupResult;
+                 ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
+                 //GA Analytics code end
+             });
+             
+             $('#fa_paa_category_select_reg_no').on('focus', function(){
+                  $('#reg_error').remove();
+                  $('#fa_paa_category_select_reg_no').removeClass('error');
+                  $('#reg_no_error_msg').html('');
+                  $('#reg_no_error_msg').hide();
+             });
+    
+             $('#fa_paa_category_select_reg_no').keydown(function(e) {
+                 if (e.which === 13) {
+                     e.preventDefault();
+                     $('#lookup_vehicle').click();
+                     return false;
+                 }
+             });
+         {% endif %}
+    });
+
+    function showCategoryFieldArrow() {
+        $('#fa_paa_category_select_category_id_autocomplete').bind('focus', function(e){
+            $('#field_arrow').show();
+        });
+
+        if ($('#fa_paa_category_select_category_id_autocomplete').val() == '') {
+            $('#fa_paa_category_select_category_id_autocomplete').focus();
+        }
+    }
+
+    function hideCategoryFieldArrow() {
+        $('#fa_paa_category_select_category_id_autocomplete').blur();
+        $('#field_arrow').hide();
+    }
+    
+    function loadCategoryByLevel(id, level, selectCat)
+    {
+        var category_selector = $('#fa_paa_category_select_category_'+level);
+        var selectMsg         = (level == 1) ? "{{ 'Please select category'|trans({}, 'frontend-paa-first-step') }}" : "{{ 'Please select subcategory'|trans({}, 'frontend-paa-first-step') }}";
+        category_selector.html('<option value="">' + selectMsg + '</option>');
+
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                async: false,
+                success: function(data) {
+                    if (data.length > 0) {
+                        lastLevel = level;
+                        $('#category_choice_div_' + level).show();
+                        $(category_selector).show();
+                        for (var i=0, total = data.length; i < total; i++) {
+                            category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                        }
+
+                        if (selectCat !== undefined && selectCat != '') {
+                          $(category_selector).val(selectCat);
+                        }
+                    } else {
+                        lastLevel = parseInt(level) - 1;
+                    }
+                    $('.ui-selectmenu-button').removeClass('active');
+                    $('#fa_paa_category_select_category_'+level+'-button').addClass('active');
+                    resetAndHideCategoryChoiceFields(false);
+                }
+            });
+        } else {
+            lastLevel = parseInt(level) - 1;
+            if (level == 2 ) {
+                resetAndHideCategoryChoiceFields(true);
+            } else {
+                resetAndHideCategoryChoiceFields(false);
+            }
+        }
+
+        $(document).foundation('equalizer', 'reflow');
+    }
+
+    function resetAndHideCategoryChoiceFields(removeRegFields)
+    {
+        for (var l = (parseInt(lastLevel) + 1); l <= totalLevel; l++) {
+            $('#fa_paa_category_select_category_' + l).html('<option value="">{{ 'Please select subcategory'|trans({}, 'frontend-paa-first-step') }}</option>');
+            $('#category_choice_div_' + l).hide();
+        }
+
+        if (removeRegFields) {
+            $('#motor_reg_fields').html('');
+            $(document).foundation('equalizer', 'reflow');
+        }
+
+        enableDisableNextBtn();
+    }
+
+    function resetCategoryAutocompleteField()
+    {
+        $('#fa_paa_category_select_category_id_autocomplete').val('');
+        $('#fa_paa_category_select_category_id').val('');
+        $('#fa_paa_category_select_category_id_close').hide();
+        hideCategoryFieldArrow();
+    }
+
+    function changeMainCategory(categoryId, selectedValue, removeRegNo)
+    {
+        $("#category_choices_div").prependTo("#main_div");
+        
+        if ($('#maincategory_' + categoryId).hasClass('active')) {
+            $('.main_category').removeClass('active');
+            $('#fa_paa_category_select_category_1').val('');
+
+            $('#category_choices_div').hide();
+            loadCategoryByLevel('', 2);
+        } else {
+            //GA Analytics code start
+            var eventLabel = $('#maincategory_' + categoryId).html();
+            var winwidth = $(window).width();
+            var incrscroll = 0;
+            if(winwidth<400) {
+           		incrscroll = 80;
+           	} else if(winwidth>=400 && winwidth<=500) {
+           		incrscroll = 40;
+           	} 
+            ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
+            //GA Analytics code end
+            
+            $('.main_category').removeClass('active');
+            $('#maincategory_' + categoryId).addClass('active');
+            $('#fa_paa_category_select_category_1').val(categoryId);
+
+            $('#category_choices_div').show();
+            loadCategoryByLevel(categoryId, 2, selectedValue);
+            
+            // scroll down to sub-category selection drop down
+            $('html, body').animate({
+               	scrollTop: $('.choose-all-categories').offset().top + incrscroll                
+            }, 1000);
+        }
+
+        if (typeof removeRegNo != 'undefined' && removeRegNo == 1) {
+            $('#motor_reg_fields').html('');$(document).foundation('equalizer', 'reflow');
+        }
+        resetCategoryAutocompleteField();
+
+        //If FOR SALE category is selected then only show "Sell your items on Friday-Ad" otherwise show "Advertise on Friday-Ad".
+        if (categoryId == {{forSaleCategoryId}}) {
+            $('#paa_steps_title').html('{{ 'Sell your items on Friday-Ad'|trans({}, 'frontend-paa') }}')
+        } else {
+            $('#paa_steps_title').html('{{ 'Advertise on Friday-Ad'|trans({}, 'frontend-paa') }}')
+        }
+    }
+
+    function enableDisableNextBtn()
+    {
+        // check for last level child category selected or not
+        var last_category_id = $("#fa_paa_category_select_category_" + lastLevel).val();
+        var autocomplete_category_id = $('#fa_paa_category_select_category_id').val();
+        var category_id = last_category_id ? last_category_id : autocomplete_category_id;
+
+        if (category_id) {
+            $('#fa_paa_category_select_save').removeClass('disabled');
+        } else {
+            if (!$('#fa_paa_category_select_save').hasClass('disabled')) {
+                $('#fa_paa_category_select_save').addClass('disabled');
+            }
+        }
+    }
+
+    function appendAdultCategory(id, level)
+    {
+        var category_selector = $('#fa_paa_category_select_category_'+level);
+        var adultText = "{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', adultCategoryId) }}";
+        category_selector.append('<option value="' + id + '">' + adultText + '</option>');
+    }
+
+    function onSelectAutoSuggestCategory()
+    {
+        if($("#fa_paa_category_select_category_id_autocomplete").val().length > 0) {
+            //$('#fa_paa_category_select_colour_id_dimension_id').remove();
+            $('#motor_reg_fields').html('');
+            var selCatId = $('#fa_paa_category_select_category_id').val();
+            if (selCatId && selCatId.match(/^\d+$/)) {
+                $('#category_autocomplete_div').hide();
+                $('.choose-all-categories').hide();
+                $('#category_choices_div').hide();
+                $('#or_msg').hide();
+                $('#choose_cat_msg').hide();
+                $('#fa_paa_category_select_save').hide();
+                $('.disable-autocomplete').css('display', 'block');
+                $('#redirect_msg').show();
+                
+                $('.main_category').removeClass('active');
+                $('#fa_paa_category_select_category_1').val('');
+                loadCategoryByLevel('', 2);
+
+                //ga('send', 'event', 'PAA - Step 1', 'Start searching bar', '');
+                // submit the form after selection category from auto-complete
+                $('form[name="fa_paa_category_select"]').submit();
+            }
+        }
+    }
+
+    function onRemoveAutoSuggestCategory()
+    {
+        $('#fa_paa_category_select_category_id').val('');
+        resetAndHideCategoryChoiceFields(true);
+    }
+
+    function setStepSessionData(adId)
+    {
+      var url = Routing.generate('ad_post_set_step_session_data', { 'adId': adId});
+      location.href = url;
+    }
+
+    function openDraftAdPopup()
+    {
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url: "{{path('open_draft_ad_popup_ajax')}}",
+        })
+        .done(function(response) {
+            unblockPage();
+            $('#draftAdModal').foundation('reveal', 'open');
+        });
+    }
+
+    var isCategorySet = false;
+    function getMotorsRegNoFields(categoryId, loadRegNofields)
+    {
+        blockPage();
+        if (categoryId) {
+            var data = {
+                categoryId: categoryId
+            };
+
+            $.ajax({
+                type: 'post',
+                url: '{{ path("ad_post_ajax_mototrs_reg_no_fields") }}',
+                data: data,
+            })
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(data) {
+                if (!loadRegNofields) {
+                    var regNo = $('#fa_paa_category_select_reg_no').val();
+                    if ((regNo == '' || regNo == undefined) && '' != '{{app.request.query.get('regNo')}}') {
+                      regNo = "{{app.request.query.get('regNo')}}";
+                      isCategorySet = true;
+                    }
+                }
+                $('#motor_reg_fields').html(data);
+                $(document).foundation('equalizer', 'reflow');
+                if (!loadRegNofields && regNo) {
+                    $('#fa_paa_category_select_reg_no').val(regNo);
+                    $('#lookup_vehicle').trigger('click');
+                }
+            });
+        } else {
+            $('#motor_reg_fields').html('');
+            $(document).foundation('equalizer', 'reflow');
+        }
+    }
+
+    function moveCategoryDiv()
+    {
+        if ($('#reg_no_details_fields').is(':visible')) {
+            $("#category_choices_div").appendTo("#reg_no_category_div");
+            $("#category_choices_div").removeClass("mt30");
+        }
+        
+        if (!$('#reg_no_details_fields').is(':visible')) {
+            $("#category_choices_div").appendTo("#reg_no_fields");
+            if ($('input[name="fa_paa_category_select[has_reg_no]"]:checked').val() == 0) {
+                $("#category_choices_div").addClass("mt30");
+            }
+        }
+    }
+
+    function getCategoryPath(catLevel)
+    {
+      var categoryPath = $('.choose-all-categories > .active').html();
+
+      for (i=2;i<=catLevel;i++) {
+        if ($('#fa_paa_category_select_category_'+i+' option:selected').val() != '') {
+          categoryPath = categoryPath + ' - ' + $('#fa_paa_category_select_category_'+i+' option:selected').text();
+        }
+      }
+
+      return categoryPath;
+    }
+//]]>
+</script>
+
+{% if showRegNoFieldsFlag %}
+    {{ include('FaAdBundle:AdPost:firstStepRegNoJs.html.twig', {}) }}
+{% endif %}
+
+{% if (form.category_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_category_select_category_id', 'placeHolder': 'eg. Children clothes or wardrobe'|trans({}, 'frontend-paa-first-step'), 'route' : 'category_ajax_term_postad', 'dropdownCssClass': 'category-choices'}) }}
+{% endif %}
+
+{% if form.colour_id_autocomplete is defined and showRegNoFieldsFlag %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_category_select_colour_id', 'placeHolder': ((attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'colour_id_autocomplete').vars.attr.placeholder : 'Please type the colour'|trans({}, 'frontend-paa-second-step')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_category_select_colour_id_dimension_id'}) }}
+{% endif %}
+
+{% endblock %}
+
+{% block pushNotification %}
+    {% if not app.request.get('is_edit') %}
+        OneSignal.push(["sendTags", {'PAA_process': 'step_1'}]);
+    {% endif %}
+{% endblock %}

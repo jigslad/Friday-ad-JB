@@ -1,0 +1,6 @@
+FaAdFeedBundle_ad_feed_mapping_admin:
+    resource: '@FaAdFeedBundle/Resources/config/routing/ad_feed_mapping_admin.yml'
+    prefix:   /ad_feed_mapping
+FaAdFeedBundle_ad_feed_log_admin:
+    resource: '@FaAdFeedBundle/Resources/config/routing/ad_feed_admin.yml'
+    prefix:   /ad_feed_log

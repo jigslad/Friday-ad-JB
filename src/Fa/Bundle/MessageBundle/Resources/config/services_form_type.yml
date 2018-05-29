@@ -1,0 +1,42 @@
+services:
+    fa_message.form.type.message_ad:
+        class: Fa\Bundle\MessageBundle\Form\MessageAdType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_message_message_ad }
+            
+    fa_message.form.type.contact_seller:
+        class: Fa\Bundle\MessageBundle\Form\ContactSellerType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_message_contact_seller }
+
+    fa_message.form.type.notification_message_admin:
+        class: Fa\Bundle\MessageBundle\Form\NotificationMessageAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_message_notification_message_admin }
+
+    fa_message.form.type.notification_message_search_admin:
+        class: Fa\Bundle\MessageBundle\Form\NotificationMessageSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_message_notification_message_search_admin }
+
+    fa_message.form.type.message_user:
+        class: Fa\Bundle\MessageBundle\Form\MessageUserType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_message_message_user }
+            
+    fa_message.form.type.report_user:
+        class: Fa\Bundle\MessageBundle\Form\ReportUserType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_message_spammer_report_user }
+            
+    fa_message.form.type.message_attachments:
+        class: Fa\Bundle\MessageBundle\Form\MessageAttachmentsType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_message_attachments }

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{'Friday-Ad Admin'|trans}}</title>
+    {{ include(
+        'FaAdminBundle:Default:scriptTop.html.twig'
+    ) }}
+</head>
+
+<body>
+    {% block content %}{% endblock %}
+
+    {{ include(
+        'FaAdminBundle:Default:scriptBottom.html.twig'
+    ) }}
+
+    {% block js %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,180 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+
+{% block content -%}
+<div class="row">
+   <div class="columns">
+       <h1>{{ heading }}</h1>
+   </div>
+</div>
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <div class="panel-heading">
+                <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            </div>
+            {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_email_template_shcedule'}}) }}
+                {{ form_row(form.time) }}
+                {{ form_row(form.frequency) }}
+                <div id="one_time_fields" style="display:none;">
+                {{ form_row(form.date) }}
+                </div>
+                <div id="daily_fields" style="display:none;">
+                    <div class="row">
+	                    <div class="large-6 columns">
+	                        <div class="row">
+                                <div class="small-12 columns{% if form.daily_recur_day.vars.errors|length %} error{% endif %}">{{ form_label(form.daily_recur_day) }} <span class="required">*</span></div>
+	                            <div class="small-9 columns">
+	                                {{ form_widget(form.daily_recur_day, {'attr': {'autofocus': 'autofocus', 'style':'margin:0'}}) }}
+		                            {{ form_errors(form.daily_recur_day) }}
+	                            </div>
+	                            <div class="small-3 columns">
+	                                <b>{{'Days'|trans}}</b>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>   
+                </div>
+                <div id="weekly_fields" style="display:none;">
+                    <div class="row">
+                        <div class="large-6 columns">
+                            <div class="row">
+                                <div class="small-12 columns{% if form.weekly_recur_day.vars.errors|length %} error{% endif %}">{{ form_label(form.weekly_recur_day) }} <span class="required">*</span></div>
+                                <div class="small-9 columns">
+                                    {{ form_widget(form.weekly_recur_day, {'attr': {'autofocus': 'autofocus', 'style':'margin:0'}}) }}
+                                    {{ form_errors(form.weekly_recur_day) }}
+                                </div>
+                                <div class="small-3 columns">
+                                    <b>{{'Weeks on'|trans}}</b>:
+                                </div>
+                            </div>
+                        </div>
+                        <div class="large-6 columns">
+                            <div class="row">
+                                <div class="small-12 columns{% if form.weekly_days.vars.errors|length %} error{% endif %}">{{ form_label(form.weekly_days) }} <span class="required">*</span></div>
+                                <div class="small-12 columns">
+                                    {{ form_widget(form.weekly_days, {'attr': {'autofocus': 'autofocus', 'ul-class':'three_cols_li'}}) }}
+                                    {{ form_errors(form.weekly_days) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="monthly_fields" style="display:none;">
+                    <div class="row">
+                        <div class="large-6 columns">
+                            <div class="row">
+                                <div class="small-12 columns{% if form.months.vars.errors|length %} error{% endif %}">{{ form_label(form.months) }} <span class="required">*</span></div>
+                                <div class="small-9 columns">
+                                    {{ form_widget(form.months, {'attr': {'autofocus': 'autofocus', 'ul-class':'two_cols_li'}}) }}
+                                    {{ form_errors(form.months) }}
+                                </div>
+                                <div class="small-3 columns">
+                                    <b>{{'Days on'|trans}}</b>:
+                                </div>
+                            </div>
+                        </div>
+                        <div class="large-6 columns">
+                            <div class="row">
+                                <div class="small-12 columns{% if form.monthly_days.vars.errors|length %} error{% endif %}">{{ form_label(form.monthly_days) }} <span class="required">*</span></div>
+                                <div class="small-12 columns">
+                                    {{ form_widget(form.monthly_days, {'attr': {'autofocus': 'autofocus', 'ul-class':'six_cols_li'}}) }}
+                                    {{ form_errors(form.monthly_days) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="after_given_time_fields" style="display:none;">
+                    <div class="row">
+                        <div class="large-6 columns">
+                            <div class="row">
+                                <div class="small-12 columns{% if form.after_given_time.vars.errors|length %} error{% endif %}">{{ form_label(form.after_given_time) }} <span class="required">*</span></div>
+                                <div class="small-12 columns">
+                                    {% if form.after_given_time.vars.errors|length %}
+                                        {% set attrArray = {'attr': {'autofocus': 'autofocus', 'ul-class':'two_cols_li', 'style': 'margin:0'}} %}
+                                    {% else %}
+                                        {% set attrArray = {'attr': {'autofocus': 'autofocus', 'ul-class':'two_cols_li'}} %}
+                                    {% endif %}
+                                    {{ form_widget(form.after_given_time, attrArray) }}
+                                    {{ form_errors(form.after_given_time) }}
+                                    <span class="help-block">({{ 'eg. Hours = 2h, Minutes = 30m' }})</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="large-6 columns">
+                            <div class="row">
+                                <div class="small-12 columns{% if form.is_after_given_time_recurring.vars.errors|length %} error{% endif %}">{{ form_label(form.is_after_given_time_recurring) }} <span class="required">*</span></div>
+                                <div class="small-12 columns">
+                                    {{ form_widget(form.is_after_given_time_recurring, {'attr': {'autofocus': 'autofocus', 'style': 'margin:0;'}}) }}
+                                    {{ form_errors(form.is_after_given_time_recurring) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'email_template_admin', 'isSaveAndNew': false}) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $( document ).ready(function() {
+        showFrequencyfields();
+    });
+    
+    $('input[name="fa_email_template_email_template_schedule_admin[frequency]"]').bind("change", function() {
+        showFrequencyfields();
+    });
+    
+    function showFrequencyfields()
+    {
+        var frequency = $('input[name="fa_email_template_email_template_schedule_admin[frequency]"]:checked', '#fa_email_template_shcedule').val();
+        switch (frequency) {
+            case '{{ constant('Fa\\Bundle\\EmailBundle\\Repository\\EmailTemplateScheduleRepository::FREQUENCY_ONE_TIME') }}':
+                clearFields(['#daily_fields','#weekly_fields','#monthly_fields', '#after_given_time_fields']);
+                $('#daily_fields, #weekly_fields, #monthly_fields, #after_given_time_fields').hide();
+                $('#one_time_fields').show();
+                break;
+            case '{{ constant('Fa\\Bundle\\EmailBundle\\Repository\\EmailTemplateScheduleRepository::FREQUENCY_DAILY') }}':
+                clearFields(['#one_time_fields','#weekly_fields','#monthly_fields', '#after_given_time_fields']);
+                $('#one_time_fields, #weekly_fields, #monthly_fields, #after_given_time_fields').hide();
+                $('#daily_fields').show();
+                break;
+            case '{{ constant('Fa\\Bundle\\EmailBundle\\Repository\\EmailTemplateScheduleRepository::FREQUENCY_WEEKLY') }}':
+                clearFields(['#one_time_fields','#daily_fields','#monthly_fields', '#after_given_time_fields']);
+                $('#one_time_fields, #daily_fields, #monthly_fields, #after_given_time_fields').hide();
+                $('#weekly_fields').show();
+                break;
+            case '{{ constant('Fa\\Bundle\\EmailBundle\\Repository\\EmailTemplateScheduleRepository::FREQUENCY_MONTHLY') }}':
+                clearFields(['#one_time_fields','#daily_fields','#weekly_fields', '#after_given_time_fields']);
+                $('#one_time_fields, #daily_fields, #weekly_fields, #after_given_time_fields').hide();
+                $('#monthly_fields').show();
+                break;
+            case '{{ constant('Fa\\Bundle\\EmailBundle\\Repository\\EmailTemplateScheduleRepository::FREQUENCY_AFTER_GIVEN_TIME') }}':
+                clearFields(['#one_time_fields','#daily_fields','#weekly_fields', '#monthly_fields']);
+                $('#one_time_fields, #daily_fields, #weekly_fields, #monthly_fields').hide();
+                $('#after_given_time_fields').show();
+                break;
+        }
+    }
+    
+    function clearFields(divIdArray) 
+    {    
+        
+        for (key in divIdArray)
+        {
+            $(divIdArray[key]+' input[type="text"]').val('');
+            $(divIdArray[key]+' input[type="checkbox"]').attr('checked', false);
+            $(divIdArray[key]+' input[type="radio"]').attr('checked', false);
+        }
+        
+    }
+    //]]>
+    </script>
+{% endblock %}

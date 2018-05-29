@@ -1,0 +1,217 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        bindDatePickerEvent();
+        bindFloatFieldKeyupEvnet('fa_left_search_item__price_from');
+        bindFloatFieldKeyupEvnet('fa_left_search_item__price_to');
+        bindFloatFieldKeyupEvnet('fa_left_search_item_motors__boat_length_from');
+        bindFloatFieldKeyupEvnet('fa_left_search_item_motors__boat_length_to');
+        bindSeeMoreLinkEvents();
+
+        $('.date_period').change(function(e){
+            var datesContainer = $(this).parent().siblings('div.event-dates');
+            if($(this).val() == 'specific-dates') {
+                datesContainer.show();
+            } else {
+                datesContainer.find('input').each(function(e){
+                    $(this).val('');
+                });
+                datesContainer.hide();
+                setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_item__location').val()));
+            }
+        });
+
+        $(document).foundation({
+            accordion: {
+                multi_expand: true,
+                callback : function (accordion) {
+                    accordionCallback(accordion);
+                }
+            }
+        });
+
+        /*
+        $('.crowable_checkbox_link').click(function(event){
+            event.preventDefault();
+            $(this).find('input[type="checkbox"]').trigger('click');
+        });*/
+
+        $('#left_search .accordion-navigation .content').each(function(){
+            if (!$(this).parent().hasClass('keep-shown')) {
+                if ($(this).hasClass('active')) {
+                    $(this).siblings('a').find('i').addClass('fi-minus');
+                    $(this).siblings('a').find('i').removeClass('fi-plus');
+                } else {
+                    $(this).siblings('a').find('i').addClass('fi-plus');
+                    $(this).siblings('a').find('i').removeClass('fi-minus');
+                }
+            }
+        });
+
+        $('#left_search .accordion-navigation .clear_filter').click(function() {
+            var filterName = this.id.replace('_clear', '');
+            $('input[type="checkbox"][name="fa_left_search\['+filterName+'\]\[\]"]').removeAttr('checked');
+            $('input[type="checkbox"][name="fa_left_search\['+filterName+'\]\[\]"]').parent().removeClass('checked');
+
+            setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_item__location').val()));
+        });
+
+        $('.budget-go-btn, #left_search .accordion-navigation input[type="checkbox"]').click(function(e) {
+            setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_item__location').val()));
+        });
+
+        $('#fa_left_search_item__price_from, #fa_left_search_item__price_to, #fa_left_search_item__location_autocomplete').keyup(function(e) {
+            if (parseInt(e.keyCode) == 13) {
+                setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_item__location').val()));
+            }
+        });
+
+        /*
+        $("form[name='fa_left_search']").submit(function() {
+            $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+            return true;
+        });*/
+    });
+
+    function clearModalDimensionAllCheckboxes(filterName)
+    {
+        $('input[type="checkbox"][name="fa_left_search_dimension\['+filterName+'\]\[\]"]').removeAttr('checked');
+        $('input[type="checkbox"][name="fa_left_search_dimension\['+filterName+'\]\[\]"]').parent().removeClass('checked');
+    }
+
+    function closeDimensionModal()
+    {
+        $('#left_search_dimension_modal').foundation('reveal', 'close');
+    }
+
+    function closeDimensionModalAndSubmitForm()
+    {
+        closeDimensionModal();
+        $('form[name="fa_left_search_dimension"]').submit();
+    }
+
+    function setLocaionCookieByLeftSearchLocationChange(searchLocation)
+    {
+    	{% if isShopPage is defined and isShopPage %}
+    	    $('form[name="fa_left_search"]').submit()
+    	{% else %}
+    	    if (searchLocation && searchLocation != 2) {
+                $.ajax({
+                     type: "post",
+                     dataType: "json",
+                     url: "{{ path('fa_frontend_ajax_user_location') }}",
+                     data: {'location': searchLocation},
+                     success: function(data) {
+                         if (!$.isEmptyObject(data)) {
+                            $('form[name="fa_left_search"]').submit();
+                         } else {
+                             $('#header_search_editable_location_reveal_modal').foundation('reveal', 'open');
+                         }
+                     }
+                 });
+            } else {
+                document.cookie="location=;expires=Wed; 01 Jan 1970; path=/";
+                $('form[name="fa_left_search"]').submit()
+            }
+    	{% endif %}
+    }
+
+    function loadDimensionAllChoicesModal(dimensionId, dimensionName, dimensionField, dimensionSearchType, searchParams) {
+        if ($("#"+dimensionField+"_modal").length == 0) {
+            $.ajax({
+                type: "post",
+                url: "{{ path('ad_left_search_dimension_modal_ajax') }}",
+                data: {'dimensionId': dimensionId, 'dimensionName': dimensionName, 'dimensionField': dimensionField, 'searchParams' : searchParams, 'dimensionSearchType' : dimensionSearchType},
+                success: function(data) {
+                    $('#left_search_dimension_modal').html(data);
+                    bindCustomCheckboxEvent();
+                    $('#left_search_dimension_modal').foundation('reveal', 'open');
+                }
+            });
+        } else {
+            $('#left_search_dimension_modal').foundation('reveal', 'open');
+        }
+    }
+
+    function bindDatePickerEvent() {
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+        $('.fdatepicker_search').fdatepicker({
+            format: 'dd/mm/yyyy',
+            onRender: function (date) {
+                return date.valueOf() < now.valueOf() ? 'disabled' : '';
+            }
+        }).on('changeDate', function(ev){
+            //setLocaionCookieByLeftSearchLocationChange($.trim($('#fa_left_search_item__location').val()));
+        });
+
+        $('.datepicker-icon').click(function(e){
+            $(this).next('input.fdatepicker_search').focus();
+        });
+    }
+
+    function bindFloatFieldKeyupEvnet(field)
+    {
+        $('#'+field).keyup(function (e) {
+            var value = $(this).val().replace(/[^\d,.]+/g, '');
+            $(this).val(value);
+        });
+    }
+
+    function accordionCallback(accordion)
+    {
+        $(accordion).siblings('a').find('i').toggleClass("fi-plus fi-minus");
+        $(accordion).find('select.fa-select').selectmenu('refresh');
+
+        if ($(accordion).attr('id')  == 'panelBlock_seorule') {
+        	$(accordion).addClass("active");
+        	if ($('#list_seo_content').hasClass('list-seo-content')) {
+        		$('#list_seo_content').removeClass('list-seo-content');
+        		$(accordion).siblings('a').find('i').removeClass("fi-plus");
+        		$(accordion).siblings('a').find('i').addClass("fi-minus");
+        	} else {
+        		$('#list_seo_content').addClass('list-seo-content');
+        		$(accordion).siblings('a').find('i').removeClass("fi-minus");
+        		$(accordion).siblings('a').find('i').addClass("fi-plus");
+        	}
+        }
+    }
+
+    function loadChildrenCategories(searchParams)
+    {
+        $.ajax({
+            type: "post",
+            url: "{{ path('ad_left_search_load_children_categories_ajax') }}",
+            data: {'searchParams' : searchParams},
+            success: function(data) {
+                $('#left_cat_mobile').html(data);
+                bindSeeMoreLinkEvents(true);
+            }
+        });
+    }
+
+    function bindSeeMoreLinkEvents()
+    {
+        $('.see_more').click(function(e){
+            $(this).siblings('ul').children('li.more_result').removeClass('hide');
+            $(this).hide();
+            $(this).siblings('a.see_less').show();
+        });
+
+        $('.see_less').click(function(e){
+            $(this).siblings('ul').children('li.more_result').addClass('hide');
+            $(this).hide();
+            $(this).siblings('a.see_more').show();
+
+            $('html, body').animate({
+                scrollTop: $('a.see_more').offset().top- 150
+            }, 1000);
+        });
+    }
+
+//]]>
+</script>
+{#{ include('FaCoreBundle::autoSuggestField.html.twig', {'field' : '#fa_left_search_item__location', 'jsonField' : '#fa_left_search_item__location_json', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'maximumSelectionSize': 1, 'selectOnBlur': 'true'}) }#}
+{{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_left_search_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
+

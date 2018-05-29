@@ -1,0 +1,7 @@
+dotmailer_admin:
+    path:     /
+    defaults: { _controller: "FaDotMailerBundle:DotmailerAdmin:index" }
+
+dotmailer_list_admin:
+    path:     /list
+    defaults: { _controller: "FaDotMailerBundle:DotmailerAdmin:list" }

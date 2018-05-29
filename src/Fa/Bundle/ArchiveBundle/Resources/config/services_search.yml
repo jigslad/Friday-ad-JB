@@ -1,0 +1,5 @@
+services:
+    fa.archive_ad.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaArchiveBundle:ArchiveAd]

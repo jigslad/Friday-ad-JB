@@ -1,0 +1,20 @@
+testimonials_admin:
+    path:     /
+    defaults: { _controller: "FaUserBundle:TestimonialsAdmin:index" }
+
+testimonials_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaUserBundle:TestimonialsAdmin:edit" }
+
+testimonials_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaUserBundle:TestimonialsAdmin:update" }
+    requirements: { methods: post|put }
+
+testimonials_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaUserBundle:TestimonialsAdmin:delete" }
+
+ajax_testimonials_change_status:
+    path:     /ajax/change_status
+    defaults: { _controller: FaUserBundle:TestimonialsAdmin:ajaxChangeStatus }

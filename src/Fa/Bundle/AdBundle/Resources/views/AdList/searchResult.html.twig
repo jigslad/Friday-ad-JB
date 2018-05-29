@@ -1,0 +1,376 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set seoManager = container.get('fa.seo.manager') %}
+{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+{% set seoPageRule = {} %}
+{% set seoFields = {} %}
+{% set customized_url = app.request.get('customized_page')  %}
+
+
+{% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+    {% if customized_url|length %}
+        {% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForListResult(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE'), customized_url['target_url'], container) %}
+    {% else %}
+        {% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForListResult(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE'), searchParams.item__category_id, container) %}
+    {% endif %}
+{% endif %}
+{% if not seoPageRule|length %}
+    {% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForListResult(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE'), null, container) %}
+{% endif %}
+
+{% if (objSeoToolOverride|length) %}
+    {% set seoPageRule = seoPageRule|merge({'h1_tag': objSeoToolOverride.getH1Tag(), 'page_title': objSeoToolOverride.getPageTitle(), 'meta_description': objSeoToolOverride.getMetaDescription(), 'no_index': objSeoToolOverride.getNoIndex(), 'no_follow': objSeoToolOverride.getNoFollow(), 'canonical_url': objSeoToolOverride.getCanonicalUrl()}) %}
+{% endif %}
+
+{% if seoPageRule|length %}
+    {% set seoFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSeoFields', [seoPageRule]) %}
+{% endif %}
+
+{% if app.request.queryString or '/search' in app.request.uri %}
+    {% set isUrlIndexable = false %}
+{% else %}
+    {% set isUrlIndexable = fetch_repository('FaEntityBundle:CategoryDimension').isUrlIndexableBySearchParams(searchParams, container) %}
+{% endif %}
+
+{% block meta_robots %}
+    {% set metaRobotsArray = {} %}
+    {% if not pagination.getNbResults() %}
+        noindex, follow
+        {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {% elseif 'item__distance=0' not in app.request.queryString %}
+        {% if customized_url|length %}
+            {% if seoFields.meta_robots is defined %}
+                {{seoFields.meta_robots}}
+                {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+             {% else %}
+                index, follow
+                {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+            {% endif %}
+        {% else %}
+            {% if isUrlIndexable == false %}
+                noindex, follow
+                {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+            {% else %}
+                {% if seoFields.meta_robots is defined %}
+                    {{seoFields.meta_robots}}
+                    {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {{ set_variables('metaRobots', {'metaRobotsArray': metaRobotsArray}) }}
+{% endblock %}
+
+{% block page_title %}
+    {% if seoFields.page_title is defined %}
+        {{ seoManager.parseSeoStringForAdList(seoFields.page_title, searchParams, cookieLocationDetails) }}
+    {% elseif app.request.queryString %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+            {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}} | Friday-Ad
+        {% else %}
+            Friday-Ad
+        {% endif %}    
+    {% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if seoFields.meta_description is defined %}
+            {{ seoManager.parseSeoStringForAdList(seoFields.meta_description, searchParams, cookieLocationDetails) }}
+    {% elseif app.request.queryString %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+            {{'%resultCount% results in %category%'|trans({'%resultCount%': resultCount, '%category%': fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}, 'frontend-search-result')}}
+        {% else %}
+            {{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block meta_keywords %}
+    {% if seoFields.meta_keywords is defined %}
+        {{ seoManager.parseSeoStringForAdList(seoFields.meta_keywords, searchParams, cookieLocationDetails) }}
+    {% elseif app.request.queryString %}
+        no-keywords
+    {% endif %}
+{% endblock %}
+
+{% block canonical_url %}
+    {% set metaRobotsArray = get_variables('metaRobots').metaRobotsArray %}
+    {% if not metaRobotsArray|length or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] != 'noindex') or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] == 'index' and metaRobotsArray[1] is defined and metaRobotsArray[1] != 'nofollow') %}
+        {% if seoFields.canonical_url is defined %}
+            {% set seoCanonicalUrl = replace_case_insensitive('{Location}', app.request.get('location'), seoFields.canonical_url) %}
+            {{ seoManager.parseSeoStringForAdList(seoCanonicalUrl, searchParams, cookieLocationDetails) }}
+        {% else %}
+            {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block scripttop %}
+    {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
+        {% stylesheets filter='uglifycss' output='bundles/css/compiled/searchResult.css'
+            'bundles/facore/css/owl.carousel.css'
+            'bundles/facore/css/owl.theme.css'
+              %}
+            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
+        {% endstylesheets %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+{{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+<div class="banner-wrapper clearfix">
+    <div class="left-banner">
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+    </div>
+    <div class="row relative results-main banner-mid-column">
+        {% set uri = app.request.uri %}
+        {% set uriHash = md5(uri) %}
+        {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+            {% set leftSideCacheKey = uriHash~'_mobile' %}
+        {% else %}
+            {% set leftSideCacheKey = uriHash %}
+        {% endif %}
+        <div class="large-6 columns" id="left_search">
+            <div class="search-filters">
+                <a href="javascript:void(0);" rel="nofollow" class="search-close" onclick="return showLeftSearch(false);">search-close</a>
+                {% if isShopPage is not defined %}
+                    {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+                {% endif %}
+                    {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': locationFacets, 'facetResult': facetResult, 'searchQueryString': app.request.queryString, 'customized_url': customized_url, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {}} )) }}
+            </div>
+            <div class="reset-search clearfix">
+                {% if isShopPage is defined and isShopPage %}
+                    {% set profileAdsUrl = container.get('fa_ad.manager.ad_routing').getProfilePageAdsUrl(searchParams['item__user_id']) %}
+                    <a href="{{ profileAdsUrl }}" title="{{ 'Reset search'|trans({}, 'frontend-left-search') }}">{{ 'Reset search'|trans({}, 'frontend-left-search') }}</a>
+                {% else %}
+                    <a href="javascript:void(0)" rel="nofollow" id="reset_search" title="{{ 'Reset search'|trans({}, 'frontend-left-search') }}">{{ 'Reset search'|trans({}, 'frontend-left-search') }}</a>
+                {% endif %}
+            </div>
+
+            {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
+                {{ include('FaAdBundle:AdList:leftPopularSearchLinks.html.twig', {'mapFlag': 0}) }}
+                <br>
+            {% endif %}
+
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_FILTERBOX') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+        </div>
+
+        <div id="listingDiv" class="large-18 columns">
+            {% if not mobileDetectManager.isMobile() or not mobileDetectManager.isTablet() %}
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_ABOVE_RESULTS') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            {% endif %}
+
+            {{ include('FaAdBundle:AdList:businessExposureBlock.html.twig', {}) }}
+
+            {% set adCounter = 0 %}
+            {% set adCount = 0 %}
+            {% set bannerStatus = true %}
+            
+            {% if pagination.getNbResults() %}
+                {% if isShopPage is not defined %}
+                    {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+                {% endif %}
+                {% set adFavoriteRepository   = fetch_repository('FaAdBundle:AdFavorite') %}
+                {% set adRepository   = fetch_repository('FaAdBundle:Ad') %}
+                {% if app.user %}
+                    {% set userId = app.user.getId() %}
+                {% else %}
+                    {% set userId = app.session.getId() %}
+                {% endif %}
+                {% set adFavoriteAdIds = adFavoriteRepository.getFavoriteAdByUserId(userId, container) %}
+                {% if topAdResult is defined and topAdResult|length %}
+                    {% for ad in topAdResult %}
+                        {% set adCount = adCount + 1 %}
+                        {{ include('FaAdBundle:AdList:listDetail.html.twig', {'isTopAd': 1}) }}
+                    {% endfor %}
+                {% endif %}
+                
+                {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+                	 {% if (adCount >= 2) %}
+                	 	{% set bannerStatus = false %}	
+	                	{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
+	                	{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+	                  {% endif %}
+	             {% endif %} 
+                
+                {% for ad in pagination.getCurrentPageResults() %}
+                    {% set adCount = adCount + 1 %}
+                    {{ include('FaAdBundle:AdList:listDetail.html.twig') }}
+                    {% set adCounter = adCounter + 1 %}
+
+                    {% if pagination.getNbPages() == pagination.getCurrentPage() %}
+                        {% set toPage = pagination.getNbResults() %}
+                    {% else %}
+                        {% set toPage = pagination.getCurrentPage() * pagination.getMaxPerPage() %}
+                    {% endif %}
+                    {% set fromPage = 0 %}
+                    {% if pagination.getNbResults() %}
+                       {% set fromPage = ((pagination.getCurrentPage() - 1) * pagination.getMaxPerPage()) %}
+                    {% endif %}
+                    {% set totalAdsOnPage = (toPage - fromPage) %}
+
+                    {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+                    	 {% if (adCounter == 2 	and totalAdsOnPage > 2 and bannerStatus) %}
+		                	{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_ABOVE_RESULTS') %}
+		                	{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+		                  {% endif %}
+		             {% endif %}                    
+
+                    {% if not mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+                        {% if (adCounter == 5 and totalAdsOnPage > 5) or (totalAdsOnPage <= 5 and totalAdsOnPage == adCounter) %}
+                            <div class="mb20">
+                                {{ include('FaAdBundle:AdList:profileExposureBlock.html.twig', {}) }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if adCounter == 5 and pagination.getNbResults() > 5 %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_TOP') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                    {% endif %}
+
+                    {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+                        {% if (adCounter == 10 and totalAdsOnPage > 10) or (totalAdsOnPage <= 10 and totalAdsOnPage == adCounter) %}
+                            <div class="mb20">
+                                {{ include('FaAdBundle:AdList:profileExposureBlock.html.twig', {}) }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if adCounter == 10 and pagination.getNbResults() > 10 %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_IN_RESULTS_BOTTOM') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+                        {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_IN_RESULTS') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div data-alert class="alert-box success radius mt10">
+                    <span class="alert-icon">&nbsp;</span>
+                    {{'No ad found matching your criteria.'|trans({}, 'frontend-search-result')}}
+                    <a href="javascript:void(0)" rel="nofollow" class="close">&times;</a>
+                </div>
+            {% endif %}
+
+            <span id="createAlertBlockSpan">
+                {{ render(controller('FaAdBundle:AdList:createAlertBlock')) }}
+            </span>
+
+            {% if (adCounter > 3) %}
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_RESULTS') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_MOBILE_BELOW_RESULTS') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            {% endif %}
+
+            {% set locationUK = constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %}
+
+            <div class="pagination-centered">
+                {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 1, 'seoPager': true}) }}
+            </div>
+
+            {% if (pagination.haveToPaginate()) %}
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_DESKTOP') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_TABLET') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_MOBILE') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            {% endif %}
+
+            {% if searchParams is defined and (searchParams.expired_ads is not defined or (searchParams.expired_ads is defined and searchParams.expired_ads is null)) %}
+                
+                    {{ render(controller('FaAdBundle:AdList:showListingSeoBlocks', {'searchParams': searchAgentData, 'customized_url': customized_url, 'location': app.request.get('location'), 'seoPageRule': seoPageRule, 'orgRequest': app.request})) }}
+               
+            {% endif %}
+        </div>
+    </div>
+    <div class="right-banner">
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+    </div>
+</div>
+
+{% endblock %}
+
+{% set dimension4 = '' %}
+{% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
+{% if categoryPath|length %}
+   {% set dimension4 = categoryPath|join(':') %}
+{% endif %}
+{% endif %}
+
+{% block scriptbottom %}
+    {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
+        <script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
+    {% endif %}
+    {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
+    {{ include('FaAdBundle:AdList:listJs.html.twig') }}
+
+   <script language="javascript" type="text/javascript">
+    //<![CDATA[
+
+    $(document).on("click", '.unsaved-item', function(event) {
+        ga('send', 'event', 'Top Widget', 'Like');
+    });
+
+    $(document).on("click", '.saved-item', function(event) {
+        ga('send', 'event', 'Top Widget', 'Unlike');
+    });
+
+    $(window).scroll(function () {
+        if ($("#banner_placeholder_2_4").length)
+        {
+        	var rightBannerOffset = $(".right-banner").offset().top;
+            var rightBannerPos = rightBannerOffset - $(window).scrollTop();
+
+            if (rightBannerPos < 0) {
+                $("#banner_placeholder_2_4").addClass("fixed-banner");
+            } else if (rightBannerPos > 0) {
+                $("#banner_placeholder_2_4").removeClass("fixed-banner");
+            }
+
+            var footerOffset = $("#footer_tag").offset().top;
+            var footerPos = footerOffset - $(window).scrollTop();
+
+            if (parseInt(footerPos) <= 630) {
+            	$("#banner_placeholder_2_4").removeClass("fixed-banner");
+            }
+        }
+    });
+
+    function visitUserProfileOrAd(hrefUrl, eventCategory, eventAction, eventLabel)
+    {
+      ga('send', 'event', eventCategory, eventAction, eventLabel);
+      location.href = hrefUrl;
+    }
+    //]]>
+    </script>
+
+{% endblock %}
+
+{% block dimension2 %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+   {% if app.user.getId() is not defined or app.user.getId() is null %}
+    	ga('set', 'dimension9', 'not logged in');
+    {% else %}
+    	ga('set', 'dimension9', 'logged in');
+    {% endif %}
+    
+    ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Search_Results', 'dimension4' :'{{ dimension4 }}' {% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %} });
+//]]>
+</script>
+{% endblock %}

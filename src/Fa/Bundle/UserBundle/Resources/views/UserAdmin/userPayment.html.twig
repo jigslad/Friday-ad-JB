@@ -1,0 +1,137 @@
+{% set queryParams = app.request.query.all %}
+
+{% set adDetailGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('ad_detail_admin') %}
+  {% set adDetailGrant = true %}
+{% endif %}
+
+{% set paymentIdArray = {} %}
+{% if pagination.getNbResults() %}
+    {% for payment in pagination.getCurrentPageResults() %}
+        {% set paymentIdArray = paymentIdArray|merge({0 : payment.id}) %}
+    {% endfor %}
+
+    {% set paymentDetailArray  = fetch_repository('FaPaymentBundle:PaymentTransactionDetail').getPaymentTransactionDetailByPaymentId(paymentIdArray) %}
+    {% set packageArray  = fetch_repository('FaPromotionBundle:Package').getAllPackageArray() %}
+{% endif %}
+
+{% set paymentRepository  = fetch_repository('FaPaymentBundle:Payment') %}
+{% set containerInstance  = fetch_container_instance() %}
+
+{{ include('FaUserBundle:UserAdmin:userPaymentSearch.html.twig') }}
+<div style="margin-top:10px;">
+{{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination} ) }}
+</div>
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+                <thead>
+                    <tr class="field-heading">
+                        <th width="15%">
+                            {{ sortable_link('user_payment_list_admin', 'payment__id', 'Id'|trans, sorter, {'id': user.id}) }}
+                        </th>
+                        <th width="10%">
+                            {{ sortable_link('user_payment_list_admin', 'payment__amount', 'Amount'|trans, sorter, {'id': user.id}) }}
+                        </th>
+                        <th width="15%">
+                            {{ sortable_link('user_payment_list_admin', 'payment__payment_method', 'Payment method'|trans, sorter, {'id': user.id}) }}
+                        </th>
+                        <th width="15%">{{ 'Transaction Id'|trans }}</th>
+                        <th width="15%">
+                            {{ 'Is payment done by admin?'|trans }}
+                        </th>
+                        <th width="15%">
+                            {{ 'IP Address'|trans }}
+                        </th>
+                        <th width="15%">
+                            {{ sortable_link('user_ad_list_admin', 'payment__created_at', 'Created at'|trans, sorter, {'id': user.id}) }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pagination.getNbResults() %}
+                        {% for payment in pagination.getCurrentPageResults() %}
+                            {% set trClass = cycle(['odd', 'even'], loop.index0) %}
+                            <tr class="{{ trClass }}">
+                                <td>
+                                    <a href="javascript:void(0);" title="{{ 'Click to view payment detail.'|trans }}" onclick="return toggleTableTr('payment_detail_anchor_{{payment.id}}', 'payment_detail_tr_{{payment.id}}');" id="payment_detail_anchor_{{payment.id}}"><i class="fi-plus left"></i></a>&nbsp;{{ payment.id }}
+                                </td>
+                                <td>{{ format_currency(payment.amount) }}</td>
+                                <td>{{ payment.payment_method }}</td>
+                                <td>
+                                    {{ payment.cart_code }}
+                                </td>
+                                <td>
+                                    {{ payment.is_action_by_admin ? 'Yes' : 'No'}}
+                                </td>
+                                <td>
+                                    {% if (payment.payment_method == 'paypal' and paypalPaymentIds[payment.id] is defined) %}
+                                        {{ paypalPaymentIds[payment.id] }}
+                                    {% elseif (payment.payment_method == 'cybersource' and cyberSourcePaymentIds[payment.id] is defined) %}
+                                        {{ cyberSourcePaymentIds[payment.id] }}
+                                    {% endif %} 
+                                </td>
+                                <td>{{ payment.created_at | localizeddate('short', 'medium', app.request.locale ) }}</td>
+                            </tr>
+                            {% if paymentDetailArray[payment.id] is defined and paymentDetailArray[payment.id]|length %}
+                                <tr class="{{ trClass }}" style="display:none;" id="payment_detail_tr_{{payment.id}}">
+                                    <td colspan="6">
+                                        <table class="mb0">
+                                            <thead>
+                                                <tr class="field-heading">
+                                                    <th width="15%">
+                                                        {{ 'Amount'|trans }}
+                                                    </th>
+                                                    <th width="10%">
+                                                        {{ 'Ad id'|trans }}
+                                                    </th>
+                                                    <th width="15%">
+                                                        {{ 'Package name'|trans }}
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            {% for paymentTransaction in paymentDetailArray[payment.id] %}
+                                                <tr>
+                                                    <td>
+                                                        {{ format_currency(paymentTransaction['amount']) }}
+                                                    </td>
+                                                    <td>
+                                                        {% if adDetailGrant %}
+                                                            <a href="javascript:void(0);" onclick="openWindow('{{ path('ad_detail_admin', {'id': paymentTransaction['ad_id']}) }}', 'ad_detail', '1100', '800');">{{ paymentTransaction['ad_id'] }}</a>
+                                                        {% else %}
+                                                            {{ paymentTransaction['ad_id'] }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                    {% if paymentTransaction['package_id']|length %}
+                                                        {% if paymentTransaction['ti_package']|length %}
+                                                            {{ paymentTransaction['ti_package'] }}
+                                                        {% else %}
+                                                            {% for packageId in paymentTransaction['package_id'] %}
+                                                                {% if packageArray[packageId] is defined %}
+                                                                    {{ packageArray[packageId]['sub_title'] }}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr class="odd gradeX">
+                            <td colspan="6" align="center">{{ 'No payments found'|trans }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination} )}}

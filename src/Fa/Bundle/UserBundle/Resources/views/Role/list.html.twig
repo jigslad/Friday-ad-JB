@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+                <thead>
+                    <tr>
+                         <th>{{ sortable_link('role', 'role__name', 'Role Name'|trans, sorter) }}</th>
+                         <th width="14%"><i class="fi-widget"></i> Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pagination.getNbResults() %}
+                          {% for role in pagination.getCurrentPageResults() %}
+                              <tr class="gradeX">
+                                  <td>{{ role.name }}</td>
+                                  <td>
+                                    {% if role.name != 'ROLE_SUPER_ADMIN' and rolePermissionGrant %}
+                                        <button href="#" data-dropdown="drop{{ role.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                        <br />
+                                        <ul id="drop{{ role.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                            <li><a href="{{ path('roleresourcepermission_edit', {'id': role.id}) }}"><i class="fi-lock"></i> Permission</a></li>
+                                        </ul>
+                                    {% endif %}
+                                  </td>
+                              </tr>
+                          {% endfor %}
+                    {% else %}
+                          <tr class="gradeX">
+                              <td colspan="3" align="center">No roles found</td>
+                          </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

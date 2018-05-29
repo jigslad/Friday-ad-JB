@@ -1,0 +1,82 @@
+services:
+        
+    fa.entity.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEntityBundle:Entity]
+
+    fa.entity_ad_status.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEntityBundle:Entity]
+        shared: false
+        calls:
+            - [setAssociationName, ["status"]]
+            - [setRepositoryAlias, ["eas"]]
+
+    fa.entity_user_status.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEntityBundle:Entity]
+        shared: false
+        calls:
+            - [setAssociationName, ["status"]]
+            - [setRepositoryAlias, ["eus"]]
+
+    fa.location_country.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEntityBundle:Location]
+        shared: false
+        calls:
+            - [setAssociationName, ["location_country"]]
+            - [setRepositoryAlias, ["lc"]]
+
+    fa.location_domicile.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEntityBundle:Location]
+        shared: false
+        calls:
+            - [setAssociationName, ["location_domicile"]]
+            - [setRepositoryAlias, ["ld"]]
+
+    fa.location_town.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEntityBundle:Location]
+        shared: false
+        calls:
+            - [setAssociationName, ["location_town"]]
+            - [setRepositoryAlias, ["lt"]]
+
+    fa.category.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEntityBundle:Category]
+
+    fa.entity_ad_type.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEntityBundle:Entity]
+        shared: false
+        calls:
+            - [setAssociationName, ["type"]]
+            - [setRepositoryAlias, ["eat"]]
+
+    fa.category_dimension.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEntityBundle:CategoryDimension]
+        
+    fa.location_group.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEntityBundle:LocationGroup]
+        
+    fa.fa_entity_log.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaEntityBundle:FaEntityLog]
+        
+    

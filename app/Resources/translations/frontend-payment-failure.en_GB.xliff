@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="6f6696bd43ec61b671d30f21962ae99065c883bb" resname="Payment Failure">
+        <jms:reference-file line="11">views/CheckoutAdmin/paymentFailure.html.twig</jms:reference-file>
+        <jms:reference-file line="11">views/Checkout/paymentFailure.html.twig</jms:reference-file>
+        <source>Payment Failure</source>
+        <target state="new">Payment Failure</target>
+      </trans-unit>
+      <trans-unit id="9e7afc12979ebfb45bb3c48c20c67154ab301615" resname="Please contact our administrator.">
+        <jms:reference-file line="19">views/Checkout/paymentFailure.html.twig</jms:reference-file>
+        <source>Please contact our administrator.</source>
+        <target state="new">Please contact our administrator.</target>
+      </trans-unit>
+      <trans-unit id="e84118811eb6871abfc32efe768889f92749c3ca" resname="Something went wrong in payment!">
+        <jms:reference-file line="16">views/CheckoutAdmin/paymentFailure.html.twig</jms:reference-file>
+        <jms:reference-file line="16">views/Checkout/paymentFailure.html.twig</jms:reference-file>
+        <source>Something went wrong in payment!</source>
+        <target state="new">Something went wrong in payment!</target>
+      </trans-unit>
+      <trans-unit id="9c8d7ec11a2789d4ff10fcacbf310e3202bee501" resname="Transaction ID is">
+        <jms:reference-file line="17">views/CheckoutAdmin/paymentFailure.html.twig</jms:reference-file>
+        <source>Transaction ID is</source>
+        <target state="new">Transaction ID is</target>
+      </trans-unit>
+      <trans-unit id="ad775612991df67e4750231eb9b06f30e9e72f1a" resname="Your transaction ID is">
+        <jms:reference-file line="17">views/Checkout/paymentFailure.html.twig</jms:reference-file>
+        <source>Your transaction ID is</source>
+        <target state="new">Your transaction ID is</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

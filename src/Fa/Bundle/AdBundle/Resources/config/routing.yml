@@ -1,0 +1,59 @@
+FaAdBundle_ad_post:
+    resource: '@FaAdBundle/Resources/config/routing/ad_post.yml'
+    prefix:   /paa
+    
+FaAdBundle_ad_image:
+    resource: '@FaAdBundle/Resources/config/routing/ad_image.yml'
+    prefix:   /image
+
+FaAdBundle_ad_moderation:
+    resource: '@FaAdBundle/Resources/config/routing/ad_moderation.yml'
+    prefix:   /moderation
+    
+FaAdBundle_ad:
+    resource: '@FaAdBundle/Resources/config/routing/ad_api.yml'
+    prefix:   /ad
+    
+FaAdBundle_ad_print:
+    resource: '@FaAdBundle/Resources/config/routing/ad_print.yml'
+    prefix:   /ad_print
+    
+FaAdBundle_ad_package:
+    resource: '@FaAdBundle/Resources/config/routing/ad_package.yml'
+    prefix:   /package
+
+FaAdBundle_ad_list:
+    resource: '@FaAdBundle/Resources/config/routing/ad_list.yml'
+    prefix:   /list
+    
+FaAdBundle_ad_favorite:
+    resource: '@FaAdBundle/Resources/config/routing/ad_favorite.yml'
+    prefix:   /item_favorite
+    
+FaAdBundle_ad_report:
+    resource: '@FaAdBundle/Resources/config/routing/ad_report.yml'
+    prefix:   /item_report
+    
+FaAdBundle_ad_buy_now:
+    resource: '@FaAdBundle/Resources/config/routing/ad_buy_now.yml'
+    prefix:   /buy_now
+
+FaAdBundle_ad_edit:
+    resource: '@FaAdBundle/Resources/config/routing/ad_edit.yml'
+    prefix:   /ad_edit
+    
+FaAdBundle_similar_ad:
+    resource: '@FaAdBundle/Resources/config/routing/similar_ad.yml'
+    prefix:   /
+    
+FaAdBundle_nimber:
+    resource: '@FaAdBundle/Resources/config/routing/nimber.yml'
+    prefix:   /nimber
+
+FaAdBundle_search_keyword:
+    resource: '@FaAdBundle/Resources/config/routing/search_keyword.yml'
+    prefix:   /search_keyword
+    
+FaAdBundle_item:
+    resource: '@FaAdBundle/Resources/config/routing/item.yml'
+    prefix:   /item

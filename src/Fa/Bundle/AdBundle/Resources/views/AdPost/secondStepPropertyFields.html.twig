@@ -1,0 +1,84 @@
+{% set isRentPerRendered = false %}
+{% for field in orderedFields %}
+    {% if attribute(form, field) is defined %}
+        {{ set_variables('formFields', {'lastField':field}) }}
+        {% if field == 'title' %}
+            <div class="paa-bdr-box">
+                <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'eg. Flat for rent in Brighton'|trans({}, 'frontend-paa-second-step'))} }) }}
+                {% if attribute(form, field).vars.size %}
+                    <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-second-step') }}</div>
+                {% endif %}
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'description' %}
+            <div class="paa-bdr-box">
+                <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                    <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
+                {% else %}
+                    <div class="paa-title-ins">{{ 'Describe your property and let users know its main characteristics and details.'|trans({}, 'frontend-paa-second-step') }}</div>
+                {% endif %}
+                {{ form_widget(attribute(form, field), {'attr': {'placeholder': ''}}) }}
+                {% if attribute(form, field).vars.size %}
+                    <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-second-step') }}</div>
+                {% endif %}
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'price' or field == 'rent_per_id' %}
+            {% if isRentPerRendered == false %}
+                <div class="paa-bdr-box {% if attribute(form, 'rent_per_id') is defined %} btm-pa-0 {% endif %}">
+                    <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                    <div class="small-wrapper paa-enter-price clearfix">
+                        <div class="price-icon">&pound;</div>
+                        {{ form_widget(attribute(form, field)) }}
+                        {{ form_errors(attribute(form, field)) }}
+                        {% if attribute(form, 'rent_per_id') is defined %}
+                            <div id="rent_per_choice_div" style="display:none">
+                                {{ form_widget(attribute(form, 'rent_per_id')) }}
+                            </div>
+                            <div class="capsule-links rent_per-links">
+                                {% set selectedRentPerId = attribute(form, 'rent_per_id').vars.data %}
+                                {% for choice in attribute(form, 'rent_per_id').vars.choices %}
+                                    {% set activeClass = '' %}
+                                    {% if choice.value == selectedRentPerId %}
+                                        {% set activeClass = 'active' %}
+                                    {% endif %}
+                                    <a href="javascript:void(0)" class="rent_per_choice {{ activeClass }}" id="rent_per_choice_{{ choice.value }}">{{ choice.label }}</a>
+                                {% endfor %}
+                            </div>
+                            {{ form_errors(attribute(form, 'rent_per_id'), {'attr': {'class' : 'error center'}}) }}
+                            {% set isRentPerRendered = true %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% elseif field == 'ad_type_id' %}
+        <div class="paa-bdr-box">
+            <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+            <div id="ad_type_choice_div" style="display:none">
+                {{ form_widget(attribute(form, field)) }}
+            </div>
+            <div class="capsule-links ad-type-links capsule-width-none">
+                {% set selectedAdTypeId = attribute(form, field).vars.data %}
+                {% for choice in attribute(form, field).vars.choices %}
+                    {% set activeClass = '' %}
+                    {% if choice.value == selectedAdTypeId %}
+                        {% set activeClass = 'active' %}
+                    {% endif %}
+                    <a href="javascript:void(0)" class="ad_type_choice {{ activeClass }}" id="ad_type_choice_{{ choice.value }}">{{ choice.label }}</a>
+                {% endfor %}
+            </div>
+            {{ form_errors(attribute(form, field)) }}
+        </div>
+        {% else %}
+            <div class="paa-bdr-box">
+                <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
+                <div class="small-wrapper">
+                    {{ form_widget(attribute(form, field)) }}
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endfor %}

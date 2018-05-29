@@ -1,0 +1,34 @@
+{% set queryParams = app.request.query.all %}
+
+<form class="sorting_form clearfix">
+    <label>Sort By</label>
+      <select name="sort_field" id="sort_field" class="form-control"> 
+           {% for key,value in sortField %}
+               <option value="{{ key }}" {% if queryParams.sort_field is defined and queryParams.sort_field == key %}selected{% endif %}>{{ value }}</option>
+           {% endfor %}
+       </select>
+      <select name="sort_ord" id="sort_ord" class="form-control">
+        <option value="asc" {% if queryParams.sort_ord is defined and queryParams.sort_ord == 'asc' %}selected{% endif %}>Asc</option>
+        <option value="desc" {% if queryParams.sort_ord is defined and queryParams.sort_ord == 'desc' %}selected{% endif %}>Desc</option>
+       </select>
+    <input type="button" name="btn_sort" class="tiny button" value="Sort" onClick="doSorting()">
+</form>
+
+{% block scriptbottom -%}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    function doSorting()
+    {
+       url = location.href;
+       if (url.indexOf("&sort_field") >= 0)
+         url = url.substring(0, url.indexOf("&sort_field"));
+       if(url.indexOf("?") < 0)
+         url += '?';
+       
+       url = url+'&sort_field='+$('#sort_field').val()+'&sort_ord='+$('#sort_ord').val();
+       
+       location.href = url;
+    }
+    //]]>
+    </script>
+{% endblock %}

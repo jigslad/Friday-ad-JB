@@ -1,0 +1,67 @@
+<div class="detail-tabpart-2" id="vif_tabs">
+    <ul class="tabs hide-for-small-only" data-tab id="ad_property_tabs">
+        {% if additionalJobReqIds|length or additionalJobBenefitIds|length %}
+            <li class="tab-title active"><a href="#basic_info_panel" id="basic_info_panel_tab">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
+            <li class="tab-title"><a href="#more_details_panel" id="more_details_panel_tab">{{'More details'|trans({}, 'frontend-show-ad')}}</a></li>
+        {% endif %}
+    </ul>
+    <dl class="accordion" data-accordion="">
+        <dd class="accordion-navigation">
+            {% if additionalJobReqIds|length or additionalJobBenefitIds|length %}
+                <a href="#basic_info_panel" id="basic_info_panel_anchor" class="show-for-small-only">{{'The basics'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
+            {% endif %}
+            <div class="content active" id="basic_info_panel">
+                {% if adJobDetail['description'] is defined %}
+                        <div id="ad_desc">
+                            <p>{{adJobDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}</p>
+                        </div>
+                        <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-preview-ad') }}</a>
+                        <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-preview-ad') }}</a>
+                {% endif %}
+                {% if adDetailAndDimensionFields['detail'] is defined %}
+                    <ul class="details-info">
+                        {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
+                            <li class="clearfix">
+                                <div class="detail-text">{{fieldName}}</div>
+                                <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            
+            {% if additionalJobReqIds|length or additionalJobReqIds|length %}
+                <a href="#more_details_panel" class="show-for-small-only" id="more_details_panel_tab">{{'More details'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+                <div class="content" id="more_details_panel">
+                    {% if additionalJobReqIds|length %}
+                        <h5 class="safety-title">{{'Additional job requirements'|trans({}, 'frontend-show-ad')}}</h5>
+                        <div class="safety-features">
+                            <ul class="details-info">
+                                {% for additionalJobReqId in additionalJobReqIds %}
+                                    <li class="clearfix">
+                                        <div class="detail-text">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', additionalJobReqId) }}</div>
+                                        <div class="detail-text text-center"><span class="safety-fe-check"></span></div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    
+                    {% if additionalJobBenefitIds|length %}
+                        <h5 class="safety-title">{{'Additional benefits'|trans({}, 'frontend-show-ad')}}</h5>
+                        <div class="safety-features">
+                            <ul class="details-info">
+                                {% for additionalJobBenefitId in additionalJobBenefitIds %}
+                                    <li class="clearfix">
+                                        <div class="detail-text">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', additionalJobBenefitId) }}</div>
+                                        <div class="detail-text text-center"><span class="safety-fe-check"></span></div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </dd>
+    </dl>
+</div>

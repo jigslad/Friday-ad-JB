@@ -1,0 +1,325 @@
+{% extends 'FaFrontendBundle::simpleLayout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
+{% if (app.user.getId() is defined) %}
+    {% set userId = app.user.getId() %}
+{% else  %}
+    {% set userId = tempUserId %}
+{% endif %}
+{% use "FaUserBundle:UserImage:showProfileImageUploader.html.twig" %}
+{% block scripttop %}
+    {{ block('profileImageUploadStylesheets') }}
+    {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
+{% endblock %}
+{% set getProfileBigImageRoute = "ajax_get_profile_big_image_registration" %}
+{% set formName = 'user_registration' %}
+
+{% block title %}
+    {{'User registration'|trans({}, 'frontend-register')}}
+{% endblock %}
+
+{% block form_errors %}
+{% spaceless %}
+    {% if errors|length > 0 %}
+        <ul class="error_list">
+            {% for error in errors %}
+                <li>{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endspaceless %}
+{% endblock form_errors %}
+
+{% set socialMediaData = app.session.get('register_user_info') %}
+{% if socialMediaData['user_facebook_id'] is defined or socialMediaData['user_google_id'] is defined %}
+    {% if socialMediaData['user_facebook_id'] is defined %}
+        {% set socialSiteName = 'Facebook' %}
+    {% elseif socialMediaData['user_google_id'] is defined %}
+        {% set socialSiteName = 'Google' %}
+    {% endif %}
+{% endif %}
+
+{% set privateLogoLabel = 'Upload a profile image:'|trans({}, 'frontend-paa-register') %}
+{% set businessLogoLabel = 'Upload a logo image:'|trans({}, 'frontend-paa-register') %}
+
+{% block body %}
+<div class="simple-wrapper">
+    <h1 class="simple-heading">{{'Create an account'|trans({}, 'frontend-register')}}</h1>
+    <div class="clearfix">
+        <div class="login-left reg-process white-checkbox white-radio reg-form">
+            {% if socialSiteName is defined %}
+                <div class="confirm-fb show-for-small-only">
+                    <h2 class="titile-one">{{'These are the details we got from %socialSiteName%, please confirm or change them.'|trans({'%socialSiteName%': socialSiteName}, 'frontend-register')|raw}}</h2>
+                    <h5>{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-register')}}</h5>
+                </div>
+            {% endif %}
+            
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                {{ form_row(form.first_name) }}
+                {{ form_row(form.last_name) }}
+                {{ form_row(form.email) }}
+                {% if form.password is defined %}
+                    <div class="reg-pwd">
+                        {{ form_row(form.password) }}
+                        <div class="label-inline">
+                            {{ form_row(form.show_password) }}
+                        </div>
+                    </div>
+                {% endif %}
+                {{ form_row(form.phone) }}
+                <div class="hlight-box clearfix pvt-phone-num white-checkbox {% if form.is_private_phone_number.vars.errors|length %}mb0{% endif %}">
+                    {{ form_widget(form.is_private_phone_number) }}
+                    {{ form_label(form.is_private_phone_number) }}
+                    <a href="#" class="help-icon" data-reveal-id="privacyNumberModal">{{'Help'|trans({}, 'frontend-register')}}</a>
+                </div>
+                {{ form_errors(form.is_private_phone_number) }}
+                <div class="buyer-contact">
+                     <label>{{'I would like buyers to contact me by:'|trans({}, 'frontend-paa-register')}}</label>
+                     <div class="label-inline">
+                         {{ form_row(form.contact_through_phone) }}
+                         {{ form_row(form.contact_through_email) }}
+                     </div>
+                 </div>
+               
+                <div class="paa-role">
+                  {{ form_row(form.user_roles, {'attr': {'add-br': true}}) }}
+                </div>
+                <div class="paa-role">
+                  {% set logoLabel = privateLogoLabel %}
+                  {% if isCompany == 1 %}
+                    {% set logoLabel = businessLogoLabel %}
+                  {% endif %}
+                  <label class="required" id="logo_label">{{logoLabel}}</label>
+
+                  <div id="logo_uploader_div">
+                    {{ include('FaUserBundle:UserImage:registrationImageUploader.html.twig', {'userId': userId, 'isCompany': isCompany, 'profileImage': ''}) }}
+                  </div>
+                  <div class="clearfix">
+                        <div class="profile-logo-img">
+                            <div class="bz-profile-logo{% if isCompany == 0 %} rounded{% endif %}" id="profile_image_div">
+
+                            </div>
+                        </div>
+                        <div class="profile-logo-ins private-profile reg-profile-btn {% if isCompany == 1 %}bz-profile-btn{% endif %}">
+                            <div id="profile_change_btn_with_opt" {% if logoUploaded == 0 %}style="display:none;"{% endif %}>
+                                <a href="javascript:void(0);" data-dropdown="profile_image_upload" aria-controls="profile_image_upload" aria-expanded="false" class="primary-btn-2 button dropdown thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
+                                <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
+                                    <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
+                                    <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': userId, 'isCompany': isCompany}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
+                                    <li><a href="javascript:removeImage()">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                                </ul>
+                            </div>
+                            <div id="profile_change_btn_without_opt" {% if logoUploaded == 1 %}style="display:none;"{% endif %}>
+                                <a href="javascript:void(0);" id="pickProfileFile1" class="primary-btn-2 button pickProfileFile needsclick thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="business_seller_fields white-select" style="display:none;">
+                    {{ form_row(form.business_name) }}
+                    {{ form_row(form.business_category_id, {'attr': {'class':'fa-select-white'}}) }}
+                </div>
+                {{ form_widget(form.Register, {'attr': {'class':'primary-btn-1 button expand'}}) }}
+            {{ form_end(form) }}
+    
+             <div class="reg-here show-for-small-only">
+                <h2>{{'Already have an account?'|trans({}, 'frontend-register')}}</h2>
+                <a href="{{ path('login') }}" class="secondary-btn-1 button button">{{'Log In here'|trans({}, 'frontend-register')}}</a>
+            </div>
+        </div>
+        
+        <div class="login-right">
+            <a href="javascript:void(0)" class="primary-btn-1 button expand reg-email-btn show-for-small-only" id="register_with_email">{{ 'Register with email'|trans({}, 'frontend-register') }}</a>
+
+            {% if socialSiteName is defined %}
+                <div class="confirm-fb">
+                    <h2 class="titile-one">{{'These are the details we got from %socialSiteName%,<br /> please confirm or change them.'|trans({'%socialSiteName%': socialSiteName}, 'frontend-register')|raw}}</h2>
+                    <h5>{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-register')}}</h5>
+                </div>
+            {% else %}
+                <button type="reset" class="signup-fb-btn button expand" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"><span class="signup-fb-icon">&nbsp;</span>{{ 'Sign Up with Facebook'|trans({}, 'frontend') }}</button>
+                <button type="reset" class="signup-google-btn button expand" onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"><span class="signup-google-icon">&nbsp;</span>{{ 'Sign Up with Google'|trans({}, 'frontend') }}</button>
+
+                <span class="signup-ins">
+                    {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('FaAdBundle:AdPost:paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}
+                </span>
+            {% endif %}
+
+
+            <div class="reg-here mob-reg-here {% if socialSiteName is defined %}confirm-fb-reg{% endif %}">
+                <h2>{{'Already have an account?'|trans({}, 'frontend-register')}}</h2>
+                <a href="{{ path('login') }}" class="secondary-btn-1 button button">{{'Log in here'|trans({}, 'frontend-register')}}</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="privacyNumberModal" class="reveal-modal" data-reveal>
+    {% set privacyNumberBlock = staticPageRepository.getStaticBlockDetailArray('privacy-number-block', fetch_container_instance()) %}
+    <a class="close-reveal-modal">&#215;</a>
+    {% if privacyNumberBlock['title'] is defined %}
+        <h5 class="modal-title">{{privacyNumberBlock['title']}}</h5>
+    {% endif %}
+    <div class="modal-content">
+        {{privacyNumberBlock['description']|raw}}
+    </div>
+</div>
+<div id="cropProfileImageModal" class="reveal-modal small" data-reveal></div>
+{% endblock %}
+
+{% block scriptbottom %}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+{% javascripts filter='uglifyjs2' output='bundles/js/compiled/showProfileImageUploader.js'
+    'bundles/facore/js/plupload.full.min.js'
+    'bundles/fafrontend/js/jquery.Jcrop.min.js'
+    'bundles/facore/js/jquery.ui.touch-punch.min.js'
+%}
+<script src="{{ static_asset_url(asset_url) }}"></script>
+{% endjavascripts %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+
+    $(document).ready(function(){
+        showHideBusinessSellerFields();
+        enableDisableContactThroughPhone();
+        // untick show_password
+        if ($('#user_registration_show_password').is(':checked')) {
+            $('#user_registration_show_password').attr('checked', false);
+            $('#user_registration_show_password').closest('span').removeClass('checked');
+        }
+
+        $('#register_with_email').click(function() {
+            $('.login-right').hide();
+            $('.login-left').show();
+        });
+
+        $("input[name='user_registration[user_roles]']:radio").change(function() {
+            showHideBusinessSellerFields();
+        });
+
+        $("#user_registration_show_password").click(function() {
+            showHidePassword();
+        });
+        
+        {% if  app.request.getMethod() == 'POST' or socialSiteName is defined %}
+            if (screen.width < 700) {
+                $('.login-right').hide();
+                $('.login-left').show();
+            }
+        {% endif %}
+
+        function showHidePassword() {
+            if ($('#user_registration_show_password:checked').val()) {
+                $('#user_registration_password').attr('type', 'text');
+            } else {
+                $('#user_registration_password').attr('type', 'password');
+            }
+        }
+        
+        function showHideBusinessSellerFields() {
+            if ($("input[name='user_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+                $('#logo_label').html("{{businessLogoLabel}}");
+                $('.business_seller_fields').show();
+                $('.fa-select-white').selectmenu('refresh');
+                $('.profile-logo-ins').addClass('bz-profile-btn');
+                  $.ajax({
+                    type: "POST",
+                    url : '{{ path("ajax_get_user_image") }}',
+                    data: { userId: '{{userId}}', isCompany: '1'}
+                  })
+                 .done(function(response) {
+                    $('#profile_image_div').html(response.image);
+                 });
+                $('#profile_image_div').removeClass('rounded');
+            }
+            else {
+                $('#logo_label').html("{{privateLogoLabel}}");
+                $('.business_seller_fields').hide();
+                $('.profile-logo-ins').removeClass('bz-profile-btn');
+                  $.ajax({
+                    type: "POST",
+                    url : '{{ path("ajax_get_user_image") }}',
+                    data: { userId: '{{userId}}', isCompany: '0'}
+                  })
+                 .done(function(response) {
+                    $('#profile_image_div').html(response.image);
+                 });
+                $('#profile_image_div').addClass('rounded');
+            }
+        }
+
+        function enableDisableContactThroughPhone() {
+            $('#user_registration_phone').keyup(function() {
+                validatePhoneAndEnableDisableContactThroughPhone();
+            });
+            validatePhoneAndEnableDisableContactThroughPhone();
+        }
+
+        function validatePhoneAndEnableDisableContactThroughPhone() {
+            var phone = $.trim($('#user_registration_phone').val());
+            var phone = phone.replace(/\s/g, '');
+            var patt = new RegExp(/^\+?\d{7,11}$/);
+            if (patt.test(phone)) {
+                $('#user_registration_contact_through_phone').parent().removeClass('checkbox-disabled');
+                $('#user_registration_contact_through_phone').attr('disabled', false);
+
+                $('#user_registration_is_private_phone_number').parent().removeClass('checkbox-disabled');
+                $('#user_registration_is_private_phone_number').attr('disabled', false);
+            } else {
+                $('#user_registration_contact_through_phone').parent().addClass('checkbox-disabled');
+                $('#user_registration_contact_through_phone').attr('checked', false);
+                $('#user_registration_contact_through_phone').attr('disabled', 'disabled');
+                $('#user_registration_contact_through_phone').parent().removeClass('checked');
+
+                $('#user_registration_is_private_phone_number').parent().addClass('checkbox-disabled');
+                $('#user_registration_is_private_phone_number').attr('checked', false);
+                $('#user_registration_is_private_phone_number').attr('disabled', 'disabled');
+                $('#user_registration_is_private_phone_number').parent().removeClass('checked');
+            }
+        }
+   });
+
+    function removeImage()
+    {
+      var isCompany = 0;
+      if ($("input[name='user_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+        isCompany = 1;
+      }
+      $.ajax({
+        type: "POST",
+        url : '{{ path("ajax_remove_temp_user_image") }}',
+        data: { userId: '{{userId}}'},
+      })
+      .done(function(response) {
+        if (isCompany == 1) {
+          $('#profile_image_div').html(response.businessUserLogo);
+        } else {
+          $('#profile_image_div').html(response.privateUserLogo);
+        }
+        $('#profile_image_upload').foundation('dropdown', 'close', $('#profile_image_upload'));
+        $('#profile_change_btn_with_opt').hide();
+        $('#profile_change_btn_without_opt').show();
+        $('#filelist').html('');
+        
+        if (response.error.length) {
+            $('#filelist').html(decorateMessage(response.error, 'alert'));
+        } else if (response.successMsg) {
+          $('#filelist').html(decorateMessage(response.successMsg, 'success'));}
+      });
+    }
+//]]>
+</script>
+{% endblock %}
+
+{% block dimension2 %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% if app.user.getId() is not defined or app.user.getId() is null %}
+    	ga('set', 'dimension9', 'not logged in');
+    {% else %}
+    	ga('set', 'dimension9', 'logged in');
+    {% endif %}
+    ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Login_Or_Register'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+//]]>
+</script>
+{% endblock %}

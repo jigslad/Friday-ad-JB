@@ -1,0 +1,71 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set userEditGrant = false %}
+{% set userDeleteGrant = false %}
+{% set loginAsUserGrant = false %}
+{% set userDetailGrant = false %}
+{% set userConfigRuleAddEditGrant = false %}
+{% set adPostAddGrant = false %}
+{% set userResetPasswordGrant = false %}
+{% set userChangeStatusGrant = false %}
+{% set userCreditGrant = false %}
+
+{% if fa_resource_authorization_manager.isGranted('user_edit_admin') %}
+  {% set userEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('user_delete_admin') %}
+  {% set userDeleteGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('login_as_user') %}
+  {% set loginAsUserGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('user_show_admin') %}
+  {% set userDetailGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('user_reset_password') %}
+  {% set userResetPasswordGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('user_change_status') %}
+  {% set userChangeStatusGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('user_config_rule_new_admin') and fa_resource_authorization_manager.isGranted('user_config_rule_edit_admin') and fa_resource_authorization_manager.isGranted('user_config_rule_add_edit_admin') %}
+  {% set userConfigRuleAddEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('ad_post_new_admin') %}
+  {% set adPostAddGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('user_credit_new_admin') %}
+  {% set userCreditGrant = true %}
+{% endif %}
+
+{% block content -%}
+    <div class="large-row">
+        {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'user_new_admin'}) }}
+
+        {% use "FaUserBundle:UserAdmin:search.html.twig" %}
+        {{ block('search_html') }}
+
+        {% if pagination %}
+
+        {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+        {{ include('FaUserBundle:UserAdmin:list.html.twig', {'pagination': pagination}) }}
+
+        {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

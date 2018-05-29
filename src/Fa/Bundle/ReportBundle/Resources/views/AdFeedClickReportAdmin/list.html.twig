@@ -1,0 +1,55 @@
+{% set container = fetch_container_instance() %}
+{% set adFeedClickReportRepository = fetch_repository('FaReportBundle:AdFeedClickReportDaily', 'history') %}
+{% set reportFieldsArray = staticCall('Fa\\Bundle\\ReportBundle\\Repository\\AdFeedClickReportDailyRepository', 'getAdFeedClickReportFields', {'container':container}) %}
+{% set reportSortFieldsArray = staticCall('Fa\\Bundle\\ReportBundle\\Repository\\AdFeedClickReportDailyRepository', 'getAdFeedClickReportSortFields') %}
+<div class="row">
+    <div class="columns">
+        <div class="table-fix-col">
+            <div class="fa-scroller2">
+                {% if searchParams['report_columns'] is defined %}
+                    <table class="fixed-table fatable">
+                        <thead>
+                            <tr>
+                                {% for key, value in searchParams['report_columns'] %}
+                                    <th width="100">
+                                        {% if value in reportSortFieldsArray %}
+                                            {{ sortable_link('fa_ad_feed_click_report', value, reportFieldsArray[value], sorter) }}
+                                        {% else %}
+                                            {{ reportFieldsArray[value] }}
+                                        {% endif %}
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if pagination.getNbResults() %}
+                                {% for adFeedClickReport in pagination.getCurrentPageResults() %}
+                                {% set adFeedClickReportDetail = adFeedClickReportRepository.formatAdFeedClickReportRaw(adFeedClickReport, container, (loop.index + ((page-1) * 20))) %}
+                                    <tr>
+                                        {% for key, value in searchParams['report_columns'] %}
+                                            <td>
+                                                {% if adFeedClickReportDetail[value] is defined %}
+                                                    {% if value == 'ad_feed_site_id' %}
+                                                        {{ adFeedSite[adFeedClickReportDetail[value]] }}
+                                                    {% else %}
+                                                        {{ adFeedClickReportDetail[value] }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="{{searchParams['report_columns']|length}}" align="center">{{ 'No Data Found'|trans }}</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,276 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% set container = fetch_container_instance() %}
+{% set seoManager = container.get('fa.seo.manager') %}
+{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+{% set seoPageRule = {} %}
+{% set seoFields = {} %}
+{% set customized_url = app.request.get('customized_page')  %}
+
+{% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+    {% if customized_url|length %}
+        {% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForListResult(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE'), customized_url['target_url'], container) %}
+    {% else %}
+        {% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForListResult(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE'), searchParams.item__category_id, container) %}
+    {% endif %}
+{% endif %}
+{% if not seoPageRule|length %}
+    {% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForListResult(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE'), null, container) %}
+{% endif %}
+
+{% if seoPageRule|length %}
+    {% set seoFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSeoFields', [seoPageRule]) %}
+{% endif %}
+
+{% if app.request.queryString or '/search' in app.request.uri %}
+    {% set isUrlIndexable = false %}
+{% else %}
+    {% set isUrlIndexable = fetch_repository('FaEntityBundle:CategoryDimension').isUrlIndexableBySearchParams(searchParams, container) %}
+{% endif %}
+
+{% block meta_robots %}
+    {% set metaRobotsArray = {} %}
+    {% if not pagination.getNbResults() %}
+        noindex, follow
+        {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {% elseif 'item__distance=0' not in app.request.queryString %}
+        {% if customized_url|length %}
+            {% if seoFields.meta_robots is defined %}
+                {{seoFields.meta_robots}}
+                {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+             {% else %}
+                index, follow
+                {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+            {% endif %}
+        {% else %}
+            {% if isUrlIndexable == false %}
+                noindex, follow
+                {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+            {% else %}
+                {% if seoFields.meta_robots is defined %}
+                    {{seoFields.meta_robots}}
+                    {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {{ set_variables('metaRobots', {'metaRobotsArray': metaRobotsArray}) }}
+{% endblock %}
+
+{% block page_title %}
+    {% if app.request.queryString %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+            {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}} | Friday-Ad
+        {% else %}
+            Friday-Ad
+        {% endif %}
+    {% else %}
+        {% if seoFields.page_title is defined %}
+            {{ seoManager.parseSeoStringForAdList(seoFields.page_title, searchParams, cookieLocationDetails) }}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if app.request.queryString %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+            {{'%resultCount% results in %category%'|trans({'%resultCount%': resultCount, '%category%': fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id)}, 'frontend-search-result')}}
+        {% else %}
+            {{'%resultCount% results'|trans({'%resultCount%': resultCount}, 'frontend-search-result')}}
+        {% endif %}
+    {% else %}
+        {% if seoFields.meta_description is defined %}
+            {{ seoManager.parseSeoStringForAdList(seoFields.meta_description, searchParams, cookieLocationDetails) }}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block meta_keywords %}
+    {% if app.request.queryString %}
+        no-keywords
+    {% else %}
+        {% if seoFields.meta_keywords is defined %}
+            {{ seoManager.parseSeoStringForAdList(seoFields.meta_keywords, searchParams, cookieLocationDetails) }}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block canonical_url %}
+    {% set metaRobotsArray = get_variables('metaRobots').metaRobotsArray %}
+    {% if not metaRobotsArray|length or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] != 'noindex') or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] == 'index' and metaRobotsArray[1] is defined and metaRobotsArray[1] != 'nofollow') %}
+        {% if seoFields.canonical_url is defined %}
+            {{ replace_case_insensitive('{Location}', app.request.get('location'), seoFields.canonical_url) }}
+        {% else %}
+            {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block scripttop %}
+    {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
+        {% stylesheets filter='uglifycss' output='bundles/css/compiled/searchResult.css'
+            'bundles/facore/css/owl.carousel.css'
+            'bundles/facore/css/owl.theme.css'
+              %}
+            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
+        {% endstylesheets %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+{% set container = fetch_container_instance() %}
+{{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
+<div class="row relative map-results-main">
+    <div class="large-6 columns" id="left_search">
+        <div class="search-filters">
+            <a href="javascript:void(0);" class="search-close" onclick="return showLeftSearch(false);">search-close</a>
+            {% if isShopPage is not defined %}
+                {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+            {% endif %}
+            {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': locationFacets, 'facetResult': facetResult, 'searchQueryString': app.request.queryString, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {}} )) }}
+            {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
+                {{ include('FaAdBundle:AdList:leftPopularSearchLinks.html.twig', {'mapFlag': 1}) }}
+            {% endif %}
+        </div>
+    </div>
+    <div id="listingDiv" class="large-18 columns">
+        <div class="map-result-main">
+            {% if resultCount > container.getParameter('fa.search.map.records.per.page') %}
+                <div data-alert class="alert-box success radius">
+                    <span class="alert-icon">&nbsp;</span>
+                    {{'Showing 1000 results near by you on map.'|trans({}, 'frontend-search-result')}}
+                    <a href="javascript:void(0)" class="close">&times;</a>
+                </div>
+            {% endif %}
+            {% if isShopPage is not defined %}
+                    {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+            {% endif %}
+            <div class="map-wrapper">
+                <h3>
+                    {% if keywords|length%}
+                        {{'%keywords% near you...'|trans({'%keywords%': keywords}, 'frontend-search-result')}}
+                    {% else %}
+                        {{'Search result'|trans({}, 'frontend-search-result')}}
+                    {% endif %}
+                </h3>
+                <div id="googlemaps" style="width:757px;height:545px;"></div>
+            </div>
+        </div>
+        {{ render(controller('FaAdBundle:AdList:showListingSeoBlocks', {'searchParams': searchAgentData, 'map': true, 'location': app.request.get('location'), 'seoPageRule': seoPageRule, 'orgRequest': app.request})) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
+    {{ include('FaAdBundle:AdList:listJs.html.twig') }}
+    {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mapSearchResult.js'
+        'bundles/facore/js/googleMapOms.js'
+        'bundles/facore/js/googleMapInfobox.js'
+        'bundles/facore/js/owl.carousel.min.js'
+    %}
+    <script src="{{ static_asset_url(asset_url) }}"></script>
+    {% endjavascripts %}
+    {% set container = fetch_container_instance() %}
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function(){
+            var gm = google.maps;
+            var map = new gm.Map(document.getElementById('googlemaps'), {
+                zoom:10,
+                zoomControl: false,
+                panControl:false,
+                streetViewControl: false,
+                mapTypeControl: false,
+                mapTypeId:google.maps.MapTypeId.ROADMAP
+            });
+
+            var iw = new InfoBox({
+                alignBottom: true,
+                pixelOffset: new google.maps.Size(-232, -23),
+                boxStyle: {
+                    width: "467px"
+                },
+                closeBoxMargin: "infobox-close",
+                closeBoxURL: "{{ asset_url('fafrontend/images/cross.svg') }}",
+                infoBoxClearance: new google.maps.Size(20, 20),
+                isHidden: false,
+                pane: "floatPane",
+                enableEventPropagation: false,
+                disableAutoPan: true
+            });
+            var oms = new OverlappingMarkerSpiderfier(map,
+              {markersWontMove: true, markersWontHide: true});
+
+            var getMapIcon = function() {
+              return new google.maps.MarkerImage("{{ asset_url('fafrontend/images/map-marker.png') }}", null, null, null, new google.maps.Size(15, 15));
+            }
+
+            oms.addListener('click', function(marker) {
+              iw.setContent('');
+              updateContent(marker, iw);
+              map.setCenter(marker.getPosition());
+              map.panBy(2, -50);
+              iw.open(map, marker);
+            });
+            oms.addListener('spiderfy', function(markers) {
+              for(var i = 0; i < markers.length; i ++) {
+                markers[i].setIcon(getMapIcon());
+              }
+              iw.close();
+            });
+            oms.addListener('unspiderfy', function(markers) {
+              for(var i = 0; i < markers.length; i ++) {
+                markers[i].setIcon(getMapIcon());
+              }
+            });
+            var bounds = new gm.LatLngBounds();
+            {% set adWithLatLng = false %}
+            {% if pagination.getNbResults() %}
+                {% for ad in pagination.getCurrentPageResults() %}
+                    {% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LATITUDE')) is defined and attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LONGITUDE')) is defined %}
+                        {% set adWithLatLng = true %}
+                        point =  new google.maps.LatLng(parseFloat({{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LATITUDE')).0}}), parseFloat({{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LONGITUDE')).0}}));
+                        bounds.extend(point);
+                        {% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) is defined %}
+                            title = '{{ attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) }}'
+                        {% else %}
+                            title = '{{ad.id}}'
+                        {% endif %}
+
+                        var marker = new gm.Marker({
+                            position: point,
+                            title: title,
+                            map: map,
+                            icon: getMapIcon(),
+                          });
+                          marker.id = {{ad.id}};
+                          oms.addMarker(marker);
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if adWithLatLng %}
+                map.fitBounds(bounds);
+            {% else %}
+                map.setCenter(new google.maps.LatLng(51.50, -0.12));
+            {% endif %}
+
+            function updateContent(marker, iw)
+            {
+                var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': marker.id });
+                $.ajax({
+                    type: "GET",
+                    url : route,
+                })
+                .done(function(response) {
+                    if (response.length) {
+                        marker.desc = response;
+                        iw.setContent(marker.desc);
+                    }
+                });
+            }
+
+        });
+      //]]>
+    </script>
+{% endblock %}

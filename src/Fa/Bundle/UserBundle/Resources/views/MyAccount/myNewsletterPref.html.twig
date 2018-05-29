@@ -1,0 +1,62 @@
+{% set newsletterTypeRepository = fetch_repository('FaDotMailerBundle:DotmailerNewsletterType') %}
+
+<dd class="accordion-navigation {% if not userNewsletterPrefForm.vars.valid or app.session.flashbag.has('newsletter_success') %}active{% endif %}">
+    <a href="#panel5b" class="section-head">
+        <span class="newsleter-pref-icon">{{ 'Newsletter preferences'|trans({}, 'frontend-newsletter-pref') }}</span>
+        <span>&nbsp;</span>
+    </a>
+    <div id="panel5b" class="content {% if not userNewsletterPrefForm.vars.valid or app.session.flashbag.has('newsletter_success') %}active{% endif %}">
+        {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'newsletter_success'}) }}
+        {{ form_start(userNewsletterPrefForm, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+        {{ form_errors(userNewsletterPrefForm) }}
+            {% if is_unsubscribe is defined %}
+                <h2>{{ 'Select the news, offers and promotions that you would like to receive from Friday-Ad.'|trans({}, 'frontend-newsletter-pref') }}</h2>
+            {% else %}
+                {{ 'Select the news, offers and promotions that you would like to receive from Friday-Ad.'|trans({}, 'frontend-newsletter-pref') }}
+            {% endif %}
+            <div class="newsletter-pref white-checkbox">
+                {{ form_row(userNewsletterPrefForm.dotmailer_newsletter_unsubscribe) }}
+            </div>
+            <div id="newsletter_categories">
+                {% set totalChoices = newsletterMainCategoryArray|length %}
+                {% set totalColumns = 3 %}
+                {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+                {% set choiceCount = 0 %}
+                <div class="newsletter-pref white-checkbox">
+                    <div class="clearfix fa-equalizer" id="newsletter_equalizer">
+                        {% for mainCatId in newsletterMainCategoryArray %}
+                            {% set child = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(mainCatId - 1)] %}
+                                <div class="large-8 columns">
+                                    {{ form_widget(child) }}
+                                    <label for="{{ child.vars.id }}">{{ child.vars.label|raw }}</label>
+                                    {% set childrenArray = newsletterTypeRepository.getChildrens(mainCatId, container)|keys %}
+                                    {% for subCatId in childrenArray %}
+                                        {% set subChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(subCatId - 1)] %}
+                                        {{ form_widget(subChild) }}
+                                        <label for="{{ subChild.vars.id }}">{{ subChild.vars.label|raw }}</label>
+                                    {% endfor %}
+                                </div>
+                                {% if mainCatId == 43 %}
+                                    <div class="large-8 columns end">
+                                    {% set nonMappedChildrenArray = newsletterTypeRepository.getNonMappedCategories(container)|keys %}
+                                    {% for nonMappedCatId in nonMappedChildrenArray %}
+                                        {% set nonMappedCatChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(nonMappedCatId - 1)] %}
+                                        {{ form_widget(nonMappedCatChild) }}
+                                        <label for="{{ nonMappedCatChild.vars.id }}">{{ nonMappedCatChild.vars.label|raw }}</label>
+                                    {% endfor %}
+                                    </div>
+                                {% endif %}
+                                {% set choiceCount = choiceCount + 1 %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% do userNewsletterPrefForm.dotmailer_newsletter_type_id.setRendered %}
+            </div>
+            <div class="newsletter-update">
+                <div class="myacc-details">
+                    {{ form_widget(userNewsletterPrefForm.update_newsletter_preferences, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
+                </div>
+            </div>
+        {{ form_end(userNewsletterPrefForm) }}
+    </div>
+</dd>

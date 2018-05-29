@@ -1,0 +1,98 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew': false}) }}
+    <div class="row">
+        <div class="columns mb10">
+            <b>{{ 'Number of emails'|trans }} : </b> {{ pagination.getNbResults() }} 
+        </div>
+    </div>
+    {{ include('FaDotMailerBundle:DotmailerAdmin:list_filters.html.twig') }}
+    <div id="filterForm">
+        {{ include('FaDotMailerBundle:DotmailerFilterAdmin:addEditForm.html.twig') }}
+    </div>
+    <div class="row" id="filter_suc_msg" style="display:none">
+        <div class="columns">
+            <div class="alert-box success radius">
+                <span class="alert-icon">&nbsp;</span>
+                {{ 'Filter has been created successfully.'|trans }}
+            </div>
+        </div>
+    </div>
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+    <div class="row">
+        <div class="columns">
+            <div class="outline">
+                <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+                <table class="mb0">
+                    <thead>
+                        <tr class="gradeX">
+                            <th width="20%">
+                                {{ 'Name'|trans }}
+                            </th>
+                            <th width="20%">
+                                {{ 'Email'|trans }}
+                            </th>
+                            <th width="20%">
+                                {{ 'User type'|trans }}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if pagination.getNbResults() %}
+                            {% set roles = fetch_repository('FaUserBundle:Role').getUserTypes() %}
+                            {% for dotmailer in pagination.getCurrentPageResults() %}
+                                <tr class="gradeX">
+                                    <td>{{ dotmailer.first_name }} {{ dotmailer.last_name }}</td>
+                                    <td>{{ dotmailer.email }}</td>
+                                    <td>
+                                        {% if dotmailer.role_id is not null %}
+                                            {{ roles[dotmailer.role_id] }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr class="gradeX">
+                                <td colspan="6" align="center">{{ 'No records found'|trans({}, 'messages') }}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        bindFilterFormSubmitEvent();
+    });
+    
+    function bindFilterFormSubmitEvent() {
+        $("form[name='fa_dotmailer_dotmailer_filter_admin']").submit(function(event) {
+            // Stop form from submitting normally
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{path('dotmailer_filter_create_admin')}}",
+                data: $('form[name="fa_dotmailer_dotmailer_filter_admin"]').serialize()
+            })
+            .done(function(response) {
+                if (response.htmlContent.length) {
+                    $('#filter_suc_msg').hide();
+                    $('#filterForm').html(response.htmlContent);
+                    bindFilterFormSubmitEvent();
+                }
+                if (response.success.length) {
+                    $('#filter_suc_msg').show();
+                    $('#filterForm').hide();
+                }
+            });
+        });
+    }
+//]]>
+</script>
+{% endblock %}

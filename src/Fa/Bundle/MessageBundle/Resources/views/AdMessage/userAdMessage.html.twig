@@ -1,0 +1,73 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% set currentRoute = app.request.attributes.get('_route') %}
+
+{% block title %}
+    {{'Inbox'|trans({}, 'frontend-inbox')}}
+{% endblock %}
+
+{% set container = fetch_container_instance() %}
+
+{% block body -%}
+<div class="posting-bg">
+    {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+    <div class="row d-board-main">
+        <div class="off-canvas-wrap" data-offcanvas>
+            <div class="inner-wrap">
+                {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                <div id="db-right-part" class="large-18 columns">
+                    <h1 class="db-title">{{'My Messages'|trans({}, 'frontend-inbox')}}</h1>
+                    <h2 class="db-sub-title">Keep up to date with messages about your ads and the ads you are interested in.</h2>
+
+                    {{ include('FaMessageBundle:AdMessage:messageTabs.html.twig') }}
+
+                    <div class="tab-content">
+                        <div class="row">
+                            <div class="columns">
+                                <div id="msg_div" style="display:none;"></div>
+                            </div>
+                        </div>
+
+                        {% if pagination.getNbResults() %}
+                            <div class="row ">
+                                <div class="columns">
+                                    <div class="my-msg-main">
+                            {% for arrayMessage in messageDetailArray %}
+                                {{ include('FaMessageBundle:AdMessage:messageDetail.html.twig') }}
+                            {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="row">
+                                <div class="columns">
+                                    {{ 'No records found.'|trans({}, 'frontend-inbox') }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {{ include('FaFrontendBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ include('FaMessageBundle:AdMessage:removeMessageModel.html.twig') }}
+
+{% endblock %}
+
+{% block scriptbottom %}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+{{ include('FaMessageBundle:AdMessage:messageJs.html.twig', {'page': 'listing'}) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    function downloadAttachment(messageId)
+    {
+        var route = Routing.generate('download_message_attachment', { 'messageId': messageId });
+        document.location = route;
+    }
+//]]>
+</script>
+{% endblock %}

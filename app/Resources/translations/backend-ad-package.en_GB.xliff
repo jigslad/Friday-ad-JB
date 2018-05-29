@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="98f556131db4287f048bc873e9fdb808061a0709" resname="Ad lives for %adExpiryDays% days">
+        <jms:reference-file line="74">views/AdPackageAdmin/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="55">views/AdPackageAdmin/showPurchaseAdPackage.html.twig</jms:reference-file>
+        <source>Ad lives for %adExpiryDays% days</source>
+        <target state="new">Ad lives for %adExpiryDays% days</target>
+      </trans-unit>
+      <trans-unit id="37b3330f582e7dd3f58fc2f463c915fd57ac7df7" resname="Assign package">
+        <jms:reference-file line="3">views/AdPackageAdmin/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="21">views/AdPackageAdmin/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>Assign package</source>
+        <target state="new">Assign package</target>
+      </trans-unit>
+      <trans-unit id="6b98b5b11feb10b057610be73780e8dd390b8053" resname="Assigned package">
+        <jms:reference-file line="3">views/AdPackageAdmin/showPurchaseAdPackage.html.twig</jms:reference-file>
+        <source>Assigned package</source>
+        <target state="new">Assigned package</target>
+      </trans-unit>
+      <trans-unit id="dd7c246c386c14165387b6b9bc362f98771effc9" resname="Currently assigned package to ad id: %adId%">
+        <jms:reference-file line="10">views/AdPackageAdmin/showPurchaseAdPackage.html.twig</jms:reference-file>
+        <source>Currently assigned package to ad id: %adId%</source>
+        <target state="new">Currently assigned package to ad id: %adId%</target>
+      </trans-unit>
+      <trans-unit id="75f527181b574f84568f33f67adc3b267a6fef9c" resname="Free">
+        <jms:reference-file line="31">views/AdPackageAdmin/showPurchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="53">views/UserPackage/choose.html.twig</jms:reference-file>
+        <jms:reference-file line="72">views/UserPackageAdmin/edit.html.twig</jms:reference-file>
+        <source>Free</source>
+        <target state="new">Free</target>
+      </trans-unit>
+      <trans-unit id="f8c24833126b7eeec8db511c2e9b1aeaa2e93063" resname="Hide details">
+        <jms:reference-file line="111">views/AdPackageAdmin/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="84">views/AdPackageAdmin/showPurchaseAdPackage.html.twig</jms:reference-file>
+        <source>Hide details</source>
+        <target state="new">Hide details</target>
+      </trans-unit>
+      <trans-unit id="cb03deaa670df01fc169ac4f41c516b6fa17c69b" resname="No ad packages found.">
+        <jms:reference-file line="82">views/AdPackageAdmin/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>No ad packages found.</source>
+        <target state="new">No ad packages found.</target>
+      </trans-unit>
+      <trans-unit id="823f6cce80cf1d820d2915a0e00f3bc50e10b7f5" resname="Place my ad">
+        <jms:reference-file line="85">views/AdPackageAdmin/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>Place my ad</source>
+        <target state="new">Place my ad</target>
+      </trans-unit>
+      <trans-unit id="6574a9904e56e98125098fa35b39cff57523d6f4" resname="Please add only one user's ad in cart.">
+        <jms:reference-file line="125">AdBundle/Controller/AdPackageAdminController.php</jms:reference-file>
+        <source>Please add only one user's ad in cart.</source>
+        <target state="new">Please add only one user's ad in cart.</target>
+      </trans-unit>
+      <trans-unit id="618cc9310371b400c710fd1312cc782345ee804f" resname="Please select atleast one ad package.">
+        <jms:reference-file line="114">AdBundle/Controller/AdPackageAdminController.php</jms:reference-file>
+        <source>Please select atleast one ad package.</source>
+        <target state="new">Please select atleast one ad package.</target>
+      </trans-unit>
+      <trans-unit id="447945a5e5418224ca03f0880512fc6a342514a6" resname="What's included?">
+        <jms:reference-file line="69">views/AdPackageAdmin/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="49">views/AdPackageAdmin/showPurchaseAdPackage.html.twig</jms:reference-file>
+        <source>What's included?</source>
+        <target state="new">What's included?</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

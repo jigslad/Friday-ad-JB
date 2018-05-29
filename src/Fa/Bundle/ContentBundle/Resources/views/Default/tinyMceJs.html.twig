@@ -1,0 +1,129 @@
+<script src="{{ asset_url('fafrontend/js/tinymce/tinymce.min.js') }}"></script>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+    tinyMCE.init({
+        relative_urls : false,
+        //remove_script_host : false,
+        //convert_urls : true,
+        selector: 'textarea.tinymce',
+        menubar: {% if menubar is defined %} {{ menubar}} {% else %} true {% endif %},
+        plugins: {% if plugins is defined %} "{{plugins}} paste" {% else %}'advlist autolink link image lists charmap print preview hr anchor pagebreak searchreplace visualblocks visualchars code fullscreen insertdatetime media nonbreaking save table contextmenu directionality template paste textcolor' {% endif %},
+        toolbar1: {% if toolbar1 is defined and toolbar1 == 'false' %} false {% elseif toolbar1 is defined %} "{{toolbar1}}" {% else %}"insertfile undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | link preview media image | bullist numlist outdent indent | forecolor backcolor" {% endif %}, 
+        toolbar2: {% if toolbar2 is defined and toolbar2 == 'false' %} false {% elseif toolbar2 is defined %} "{{toolbar2}}" {% else %}"styleselect formatselect fontselect fontsizeselect" {% endif %},
+        {% if custom_fontsize_formats is defined and custom_fontsize_formats %}
+            fontsize_formats: "{{ custom_fontsize_formats }}",
+        {% endif %}
+        {% if autoresizeOptions is defined and autoresizeOptions %}
+            {{ autoresizeOptions }}
+        {% endif %}
+        file_browser_callback: RoxyFileBrowser,
+        image_advtab: true,
+        statusbar: {% if statusbar is defined %} {{ statusbar }} {% else %} true {% endif %},
+        setup : function(ed) {
+            ed.on('keyup', (function(e) {
+                {% if charCounter is defined and charCounter == 'true' %}
+                    updateTinyMiceCharCounter($(this).attr('id'));
+                {% endif %}
+            }));
+            ed.on('loadContent', function (e) {
+                {% if charCounter is defined and charCounter == 'true' %}
+                    updateTinyMiceCharCounter($(this).attr('id'));
+                {% endif %}
+            });
+            ed.on('focus', (function(e) {
+                $('#'+$(e.target.id).selector).siblings('small.error').remove();
+                $('#'+$(e.target.id).selector).siblings(".mce-tinymce").removeClass("error-bdr");
+            }));
+            ed.on('blur', (function(e) {
+                var fieldId = $('#'+$(e.target.id).selector).attr('id');
+                {% if not_posting is not defined %}
+                    trimTinyMceContent(fieldId);
+                {%  endif %}
+            }));
+        },
+        //invalid_elements : 'a',
+        browser_spellcheck : true,
+        paste_auto_cleanup_on_paste: true,
+        paste_block_drop: true,
+        paste_remove_spans: true,
+        paste_remove_styles: true,
+        paste_remove_styles_if_webkit: true,
+        paste_strip_class_attributes: true,
+        paste_block_drop: true,
+        paste_preprocess : function(pl, o) {
+           $("<div></div>").attr('id','tmp_paste').appendTo('body');
+           $("#tmp_paste").html(o.content);
+           $("#tmp_paste").find("*").removeAttr("data-mce-style");
+           $("#tmp_paste").find("*").removeAttr("style");
+           $("#tmp_paste").find("*").not("br,p,b").each(function() {
+               $(this).replaceWith(this.innerHTML);
+           });
+           o.content = $("#tmp_paste").html();
+           $("#tmp_paste").remove();
+           o.content = o.content.replace(/<(?!\s*\/?(br|p)\b)[^>]+>/ig, '');
+        }
+    })
+});
+
+function RoxyFileBrowser(field_name, url, type, win) {
+    var roxyFileman = '/bundles/facontent/fileman/index.html?integration=tinymce4';
+    if (roxyFileman.indexOf("?") < 0) {
+       roxyFileman += "?type=" + type;   
+    }
+    else {
+        roxyFileman += "&type=" + type;
+    }
+    roxyFileman += '&input=' + field_name + '&value=' + document.getElementById(field_name).value;
+    tinyMCE.activeEditor.windowManager.open({
+        file: roxyFileman,
+        title: "{{'File Manager'}}",
+        width: 850, 
+        height: 500,
+        resizable: "yes",
+        plugins: "media",
+        inline: "yes",
+        close_previous: "no"  
+    }, 
+    {
+        window: win,
+        input: field_name
+    });
+  return false; 
+}
+
+function updateTinyMiceCharCounter(fieldId)
+{
+    var textCounterId = fieldId + '_textcounter';
+    var maxlimit      = $('#'+ fieldId).attr('maxlength') ? parseInt($('#'+ fieldId).attr('maxlength')) : 0;
+    var value         = tinyMCE.activeEditor.getContent();
+    value             = value.replace(/(<p>(&nbsp;)+<\/p>)/g, '');
+    value             = value.replace(/(<([^>]+)>)/ig, '');
+    //value             = value.replace(/(\r\n|\n|\r)/igm, '');
+    value             = decodeHtml(value);
+    //value             = value.replace(/\s/g, '');
+
+    if (maxlimit) {
+        if (value.length > maxlimit) {
+            //var val = value.substring(0, maxlimit);
+            //tinyMCE.activeEditor.setContent(tinyMCE.activeEditor.getContent());
+            $('#'+textCounterId).html('(0 characters left)');
+        } else {
+            $('#'+textCounterId).html('(' + (maxlimit - value.length) + ' characters left)');
+        }
+    }
+}
+
+function trimTinyMceContent(fieldId)
+{
+    var body = tinymce.get(fieldId).getBody();
+    var text = tinymce.trim(body.innerText || body.textContent);
+
+    if (text.length == 0) {
+        tinyMCE.get(fieldId).setContent('');
+    }
+}
+
+//]]>
+</script>
+    

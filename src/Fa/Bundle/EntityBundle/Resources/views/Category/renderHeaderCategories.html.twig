@@ -1,0 +1,202 @@
+{% set container = fetch_container_instance() %}
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% if isTablet %}
+    <a class="tab-cat-link" id="tab_cat_link">Categories</a>
+    {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu_tablet' (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %}
+    <div id="top_category_menu" class="real-tablet">
+    	<div class="row main-row">
+    		<div class="columns">
+    			<ul class="inside-top-category-menu">
+			         {% for categoryId, categoryArray in headerCategories %}
+			             {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
+		                 {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')
+                            or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID')
+                            or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ANIMALS_ID')
+                            or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')
+                            or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                            {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParam) %}
+                        {% else %}
+                            {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
+                        {% endif %}
+			             <li class="inside-top-category-menu">
+			                 <a href="{{ listurl }}" class="main_category inside-top-category-menu">{{categoryArray['name']}}</a>
+			                 {% if categoryArray['children'] is defined and categoryArray['children']|length %}
+                                {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
+                                    {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('motors', container, location_id) %}
+                                    {% set categoryArray  = append_to_array_by_index(categoryArray, {'10000': {'is_static': true, 'link_url' : (staticPageUrls['Classic cars']), 'link_text' : 'Classic Cars'}}, 'children') %}
+                                {% endif %}
+                                {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+                                    {% set freeToCollectorUrl = container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 'item__ad_type_id' : constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FREETOCOLLECTOR_ID'), 'item__location': location}) %}
+                                    {% set categoryArray  = append_to_array_by_index(categoryArray, {'10001': {'is_static': true, 'link_url' : (freeToCollectorUrl), 'link_text' : 'Free to Collector'}}, 'children') %}
+                                {% endif %}
+                                {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                                    {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('jobs', container, location_id) %}
+                                    {% set categoryArray  = append_to_array_by_index(categoryArray, {'10002': {'is_static': true, 'link_url' : (staticPageUrls['Part-time, Evening & Weekend']), 'link_text' : 'Part-time, Evening & Weekend', 'name' : 'Part-time, Evening & Weekend'}}, 'children') %}
+                                    {% set sortedCategoryArray = msort(categoryArray['children'], 'name') %}
+                                    {% set categoryArray  = replace_value_in_array(categoryArray, 'children', sortedCategoryArray) %}
+                                {% endif %}
+			                     <ul class="sub-cat-menu inside-top-category-menu">
+			                         <li class="inside-top-category-menu">
+			                             <div class="row inside-top-category-menu">
+			                                 {% set columns = 3 %}
+			                                 {% set ctr = 0 %}
+			                                 {% set totalItems = categoryArray['children']|length %}
+			                                 {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+			                                     {% set totalItems = totalItems + 1 %}
+			                                 {% endif %}
+			                                 {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+			                                 {% set extraColumn = (totalItems % columns) %}
+			                                 {% set colCounter = {} %}
+			                                 {% set staticTxtCnt = 0 %}
+			                                 {% for i in 0..columns-1 %}
+			                                     {% if loop.index0 < extraColumn %}
+			                                         {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+			                                     {% else  %}
+			                                         {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+			                                     {% endif %}
+			                                 {% endfor %}
+			                                 {% set subCategoryArray = categoryArray['children']|keys %}
+			                                 {% for i in 0..columns-1 %}
+			                                     <div class="large-8 columns inside-top-category-menu">
+                                                     {% for k in 0..colCounter[i]-1 %}
+                                                         {% if subCategoryArray[ctr] is defined %}
+                                                            {% if categoryArray['children'][subCategoryArray[ctr]]['is_static'] is defined and categoryArray['children'][subCategoryArray[ctr]]['is_static'] %}
+                                                                <a href="{{ categoryArray['children'][subCategoryArray[ctr]]['link_url'] }}" class="inside-top-category-menu">{{ categoryArray['children'][subCategoryArray[ctr]]['link_text'] }}</a>
+                                                            {% else %}
+                                                                {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['children'][subCategoryArray[ctr]]['full_slug']) %}
+                                                                <a href="{{ listurl1 }}" class="inside-top-category-menu">{{categoryArray['children'][subCategoryArray[ctr]]['name']}}</a>
+                                                            {% endif %}
+                                                         {% elseif staticTxtCnt == 0 and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                                            				<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Cams</a>
+                                            				{% set staticTxtCnt = 1 %}
+                                                         {% endif %}
+                                                         {% set ctr = ctr + 1 %}
+                                                     {% endfor %}
+                                                 </div>
+			                                 {% endfor %}
+			                             </div>
+			                         </li>
+			                     </ul>
+			                 {% endif %}
+			             </li>
+			         {% endfor %}
+			    </ul>
+    		</div>
+    	</div>
+    </div>
+    {% endcache %}
+    <script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        $('#tab_cat_link').click(function() {
+            if ($('#tab_cat_link').hasClass('active')) {
+                $('#tab_cat_link').removeClass('active');
+            } else {
+            	$('#tab_cat_link').addClass('active');
+            }
+            $("#top_category_menu").toggle();
+
+        });
+
+        $(document).click(function(e){
+            if(!$('.tab-cat-link').is(e.target) || !$('.tab-cat-link').has(e.target)) {
+                if (!($(e.target).hasClass('inside-top-category-menu'))) {
+                    $("#top_category_menu").hide();
+                    $('#tab_cat_link').removeClass('active');
+                }
+            }
+        });
+    });
+//]]>
+</script>
+{% elseif headerCategories|length %}
+ {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu' (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %}
+    <ul class="left hide-for-small-only real-desktop" id="top_category_menu">
+        {% for categoryId, categoryArray in headerCategories %}
+        {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
+        {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')
+            or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID')
+            or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ANIMALS_ID')
+            or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')
+            or categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+            {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParam) %}
+        {% else %}
+            {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
+        {% endif %}
+            <li class="has-dropdown">
+                <a href="{{ listurl }}" class="main_category">{{categoryArray['name']}}</a>
+                {% if categoryArray['children'] is defined and categoryArray['children']|length %}
+                    {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
+                        {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('motors', container, location_id) %}
+                        {% set categoryArray  = append_to_array_by_index(categoryArray, {'10000': {'is_static': true, 'link_url' : (staticPageUrls['Classic cars']), 'link_text' : 'Classic Cars'}}, 'children') %}
+                    {% endif %}
+                    {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+                        {% set freeToCollectorUrl = container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 'item__ad_type_id' : constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FREETOCOLLECTOR_ID'), 'item__location': location}) %}
+                        {% set categoryArray  = append_to_array_by_index(categoryArray, {'10001': {'is_static': true, 'link_url' : (freeToCollectorUrl), 'link_text' : 'Free to Collector'}}, 'children') %}
+                    {% endif %}
+                    {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                        {% set staticPageUrls = fetch_repository('FaContentBundle:SeoTool').getLandingPageStaticPageUrlArray('jobs', container, location_id) %}
+                        {% set categoryArray  = append_to_array_by_index(categoryArray, {'10002': {'is_static': true, 'link_url' : (staticPageUrls['Part-time, Evening & Weekend']), 'link_text' : 'Part-time, Evening & Weekend', 'name' : 'Part-time, Evening & Weekend'}}, 'children') %}
+                        {% set sortedCategoryArray = msort(categoryArray['children'], 'name') %}
+                        {% set categoryArray  = replace_value_in_array(categoryArray, 'children', sortedCategoryArray) %}
+                    {% endif %}
+                    <ul class="dropdown">
+                        <li>
+                            <div class="row">
+                                {% set columns = 4 %}
+                                {% set ctr = 0 %}
+                                {% set totalItems = categoryArray['children']|length %}
+                                {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                                	{% set totalItems = totalItems + 1 %}
+                                {% endif %}
+                                {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                                {% set extraColumn = (totalItems % columns) %}
+                                {% set colCounter = {} %}
+                                {% set staticTxtCnt = 0 %}
+                                {% for i in 0..columns-1 %}
+                                    {% if loop.index0 < extraColumn %}
+                                        {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                    {% else  %}
+                                        {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% set subCategoryArray = categoryArray['children']|keys %}
+                                {% for i in 0..columns-1 %}
+                                    <div class="large-6 columns">
+                                        {% for k in 0..colCounter[i]-1 %}
+                                            {% if subCategoryArray[ctr] is defined %}
+                                                {% if categoryArray['children'][subCategoryArray[ctr]]['is_static'] is defined and categoryArray['children'][subCategoryArray[ctr]]['is_static'] %}
+                                                    <a href="{{ categoryArray['children'][subCategoryArray[ctr]]['link_url'] }}">{{ categoryArray['children'][subCategoryArray[ctr]]['link_text'] }}</a>
+                                                {% else %}
+                                                    {% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %}
+                                                        {% set listurl1 = secondLevelCategoryArray['link_url'] %}
+                                                    {% else %}
+                                                        {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['children'][subCategoryArray[ctr]]['full_slug']) %}
+                                                    {% endif %}
+                                                    <a href="{{ listurl1 }}">{{categoryArray['children'][subCategoryArray[ctr]]['name']}}</a>
+                                                {% endif %}
+                                            {% elseif staticTxtCnt == 0 and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                                            	<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Cams</a>
+                                            	{% set staticTxtCnt = 1 %}
+                                            {% endif %}
+                                            {% set ctr = ctr + 1 %}
+                                        {% endfor %}
+                                  </div>
+                                {% endfor %}
+                                
+                            </div>
+                        </li>
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+  {% endcache %} 
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).foundation('topbar', 'reflow');
+//]]>
+</script>
+{% endif %}
+

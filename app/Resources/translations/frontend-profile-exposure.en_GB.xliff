@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="98e8782ae18a136a4d968cf780b221f7dccf2e22" resname="Featured business">
+        <jms:reference-file line="6">views/AdList/profileExposureBlock.html.twig</jms:reference-file>
+        <jms:reference-file line="3">views/AdList/businessExposureBlock.html.twig</jms:reference-file>
+        <source>Featured business</source>
+        <target state="new">Featured business</target>
+      </trans-unit>
+      <trans-unit id="b1169a42a8d2323db3d956f870f4db3633d857f5" resname="Visit agency">
+        <jms:reference-file line="28">views/AdList/profileExposureBlock.html.twig</jms:reference-file>
+        <source>Visit agency</source>
+        <target state="new">Visit agency</target>
+      </trans-unit>
+      <trans-unit id="c403429792e2eddfae0754266661ecb66440e264" resname="Visit dealership">
+        <jms:reference-file line="26">views/AdList/profileExposureBlock.html.twig</jms:reference-file>
+        <source>Visit dealership</source>
+        <target state="new">Visit dealership</target>
+      </trans-unit>
+      <trans-unit id="e36461d91e6135b29b116bc5a13663fe985634e5" resname="Visit profile">
+        <jms:reference-file line="21">views/AdList/profileExposureBlock.html.twig</jms:reference-file>
+        <source>Visit profile</source>
+        <target state="new">Visit profile</target>
+      </trans-unit>
+      <trans-unit id="68d15c77f8a736f6d13fbd5f658b80f795daed06" resname="Visit shop">
+        <jms:reference-file line="24">views/AdList/profileExposureBlock.html.twig</jms:reference-file>
+        <source>Visit shop</source>
+        <target state="new">Visit shop</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

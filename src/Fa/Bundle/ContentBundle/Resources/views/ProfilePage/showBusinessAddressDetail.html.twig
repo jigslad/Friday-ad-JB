@@ -1,0 +1,45 @@
+{% set userCompanyInfo = {} %}
+{% set telephoneInfo = {} %}
+{% if userDetail['company_address'] is defined and userDetail['company_address'] is not null %}
+    {% set userCompanyInfo = userCompanyInfo|merge({'company_address': userDetail['company_address']}) %}
+{% endif %}
+{% if userDetail['phone1'] is defined and userDetail['phone1'] is not null %}
+    {% set telephoneInfo = telephoneInfo|merge({0: userDetail['phone1']}) %}
+{% endif %}
+{% if userDetail['phone2'] is defined and userDetail['phone2'] is not null %}
+    {% set telephoneInfo = telephoneInfo|merge({1: userDetail['phone2']}) %}
+{% endif %}
+{% if userDetail['website_link'] is defined and userDetail['website_link'] is not null %}
+    {% set userCompanyInfo = userCompanyInfo|merge({'website_link': userDetail['website_link']}) %}
+{% endif %}
+{% if userDetail['user_name'] is defined and userDetail['user_name']|length %}
+    {% set businessName = userDetail['user_name'] %} 
+{% endif %}
+
+{% if userCompanyInfo|length %}
+    <ul class="seller-cont-info">
+        {% if userCompanyInfo['company_address'] is defined %}
+            <li class="address">{{ userCompanyInfo['company_address'] }}</li>
+        {% endif %}
+        {% if userCompanyInfo['website_link'] is defined  and websiteset is null%}
+            {% set companyWebSite  = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userCompanyInfo['website_link']]) %}
+            {% set websiteURL      = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'removeHttpsFromUrl', [userCompanyInfo['website_link']]) %}
+            {% set websiteURLArray = websiteURL|split('?') %}
+            {% set websiteURL      = websiteURLArray[0] %}
+            <li class="website"><b><a rel="nofollow" onclick="javascript:openBusinessWebsite('{{ businessName }}');" oncontextmenu="javascript:openBusinessWebsite('{{ businessName }}');" href="{{ companyWebSite }}" target="_blank">{{ websiteURL }}</a></b></li>
+        {% endif %}
+        {% if allowProfileEdit %}
+            <div class="profile-edit clearfix mb10">
+                <div class="right relative">
+                    <a href="javascript:void(0);" onclick="return editContactDetails();">Edit</a>
+                    <div class="edit-tooltip">{{'Edit your contact details'|trans({}, 'frontend-profile-page')}}</div>
+                </div>
+            </div>
+        {% endif %}
+    </ul>
+{% elseif allowProfileEdit %}
+    <ul class="seller-cont-info"></ul>
+    <div class="mb10">
+    <a href="javascript:void(0);" onclick="return editContactDetails();">{{'+ Add contact details'|trans({}, 'frontend-profile-page')}}</a>
+    </div>
+{% endif %}

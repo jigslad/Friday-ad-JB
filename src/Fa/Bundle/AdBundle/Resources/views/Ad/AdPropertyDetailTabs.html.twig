@@ -1,0 +1,188 @@
+<div class="detail-tabpart-2" id="vif_tabs">
+    <ul class="tabs hide-for-small-only" data-tab id="ad_property_tabs">
+        {% if adDetailAndDimensionFields['more_details'] is defined or amenitiesIds|length or billsIncludedIds|length %}
+            <li class="tab-title active"><a href="#basic_info_panel" id="basic_info_panel_tab">{{'The basics'|trans({}, 'frontend-show-ad')}}</a></li>
+            <li class="tab-title"><a href="#more_details_panel" id="more_details_panel_tab">{{'More details'|trans({}, 'frontend-show-ad')}}</a></li>
+        {% endif %}
+    </ul>
+    <dl class="accordion" data-accordion="">
+        <dd class="accordion-navigation">
+            {% if adDetailAndDimensionFields['more_details'] is defined or amenitiesIds|length or billsIncludedIds|length %}
+                <a href="#basic_info_panel" id="basic_info_panel_anchor" class="show-for-small-only">{{'The basics'|trans({}, 'frontend-show-ad')}} <i class="fi-plus right"></i></a>
+            {% endif %}
+            <div class="content active" id="basic_info_panel">
+                <div class="hide-for-small-only">
+                    <div id="ad_desc">
+                        {% if adPropertyDetail['description'] is defined %}
+                            {{ adPropertyDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}
+                        {% endif %}
+                    </div>
+                    <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend-show-ad') }}</a>
+                    <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend-show-ad') }}</a>
+                </div>
+                <h5 class="hide-for-small-only">{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
+                
+                <div class="motor-info hide-for-small-only">
+                    <div class="info-row">
+                    	<div class="clearfix" data-equalizer>
+                            
+                            <div class="info-box" data-equalizer-watch>
+                                <label>{{'Ad type'|trans({}, 'frontend-show-ad')}}</label>
+                                <span class="motor-info-icon info-item-type"></span>
+                                <span class="info-dtl">
+                                    {% if adPropertyDetail['type_id'] is defined %}
+                                        {{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', adPropertyDetail['type_id']) }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            <div class="info-box" data-equalizer-watch>
+                                <label>{{'No of bedrooms'|trans({}, 'frontend-show-ad')}}</label>
+                                <span class="motor-info-icon info-bedroom"></span>
+                                <span class="info-dtl">
+                                    {% if adPropertyDetail['number_of_bedrooms_id'] is defined %}
+                                        {% if isAdPreview is defined and isAdPreview == true %}
+                                            {{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', adPropertyDetail['number_of_bedrooms_id']) }}
+                                        {% else %}
+                                            {{ adRepository.getAdDetailLinks('NUMBER_OF_BEDROOMS_ID', solrMapping, solrMapping~'NUMBER_OF_BEDROOMS_ID', 'FaEntityBundle:Entity', '', adDetail, container, entityCacheManager, categoryPath|keys)|raw }}
+                                        {% endif %}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            <div class="info-box" data-equalizer-watch>
+                                <label>{{'No of bathrooms'|trans({}, 'frontend-show-ad')}}</label>
+                                <span class="motor-info-icon info-bathroom"></span>
+                                <span class="info-dtl">
+                                    {% if adPropertyDetail['number_of_bathrooms_id'] is defined %}
+                                        {{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', adPropertyDetail['number_of_bathrooms_id']) }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </span>
+                            </div>
+                            {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_FOR_SALE_ID') %}
+                                <div class="info-box" data-equalizer-watch>
+                                    <label>{{'Date available'|trans({}, 'frontend-show-ad')}}</label>
+                                    <span class="motor-info-icon info-year"></span>
+                                    <span class="info-dtl">
+                                        {% if metaData['date_available'] is defined %}
+                                            {{ metaData['date_available'] }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            {% endif %}
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                {% if adDetailAndDimensionFields['detail'] is defined or adPropertyDetail['type_id'] is defined or adPropertyDetail['number_of_bedrooms_id'] is defined or adPropertyDetail['number_of_bathrooms_id'] is defined %}
+                    <ul class="details-info prop-detail-info">
+                        <li class="clearfix show-for-small-only">
+                            <div class="detail-text">{{'Ad type'|trans({}, 'frontend-show-ad')}}</div>
+                            <div class="detail-text">
+                                {% if adPropertyDetail['type_id'] is defined %}
+                                    {{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', adPropertyDetail['type_id']) }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </div>
+                        </li>
+                        <li class="clearfix show-for-small-only">
+                            <div class="detail-text">{{'No of bedrooms'|trans({}, 'frontend-show-ad')}}</div>
+                            <div class="detail-text">
+                                {% if adPropertyDetail['number_of_bedrooms_id'] is defined %}
+                                    {{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', adPropertyDetail['number_of_bedrooms_id']) }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </div>
+                        </li>
+                        <li class="clearfix show-for-small-only">
+                            <div class="detail-text">{{'No of bathrooms'|trans({}, 'frontend-show-ad')}}</div>
+                            <div class="detail-text">
+                                {% if adPropertyDetail['number_of_bathrooms_id'] is defined %}
+                                    {{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', adPropertyDetail['number_of_bathrooms_id']) }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_FOR_SALE_ID') %}
+                            <li class="clearfix show-for-small-only">
+                                 <div class="detail-text">{{'Date available'|trans({}, 'frontend-show-ad')}}</div>
+                                 <div class="detail-text">
+                                    {% if metaData['date_available'] is defined %}
+                                        {{ metaData['date_available'] }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
+                            <li class="clearfix">
+                                <div class="detail-text">{{fieldName}}</div>
+                                <div class="detail-text">{{fieldValue|join(',')|raw}}</div>
+                            </li>
+                        {% endfor %}
+                     </ul>
+                 {% endif %}
+            </div>
+             
+            {% if adDetailAndDimensionFields['more_details'] is defined or amenitiesIds|length or billsIncludedIds|length %}
+                <a href="#more_details_panel" class="show-for-small-only">{{'More details'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
+                <div class="content" id="more_details_panel">
+                    {% if amenitiesIds|length %}
+                        <h5 class="safety-title">{{'Amenities'|trans({}, 'frontend-show-ad')}}</h5>
+                        <div class="safety-features">
+                            <ul class="details-info">
+                                {% for amenityId in amenitiesIds %}
+                                    <li class="clearfix">
+                                        <div class="detail-text">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', amenityId) }}</div>
+                                        <div class="detail-text text-center"><span class="safety-fe-check"></span></div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    
+                    {% if billsIncludedIds|length %}
+                        <h5 class="safety-title">{{'Bills included'|trans({}, 'frontend-show-ad')}}</h5>
+                        <div class="safety-features">
+                            <ul class="details-info">
+                                {% for billsIncludedId in billsIncludedIds %}
+                                    <li class="clearfix">
+                                        <div class="detail-text">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', billsIncludedId) }}</div>
+                                        <div class="detail-text text-center"><span class="safety-fe-check"></span></div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    
+                    {% if adDetailAndDimensionFields['more_details'] is defined %}
+                        <h5 class="safety-title">{{'Extra information'|trans({}, 'frontend-show-ad')}}</h5>
+                        <div class="safety-features">
+                            <ul class="details-info">
+                                 {% for fieldName, fieldValue in adDetailAndDimensionFields['more_details'] %}
+                                     <li class="clearfix">
+                                         <div class="detail-text">{{fieldName}}</div>
+                                         <div class="detail-text">{{fieldValue}}</div>
+                                     </li>
+                                 {% endfor %}
+                             </ul>
+                         </div>
+                     {% endif %}
+                </div>
+            {% endif %}
+        </dd>
+    </dl>
+</div>

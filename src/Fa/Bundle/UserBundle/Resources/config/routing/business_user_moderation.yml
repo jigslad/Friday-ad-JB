@@ -1,0 +1,3 @@
+business_user_moderation_response:
+    path:     /response
+    defaults: { _controller: "FaUserBundle:BusinessUserModeration:response" }

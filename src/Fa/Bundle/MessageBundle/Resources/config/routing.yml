@@ -1,0 +1,19 @@
+FaMessageBundle_inbox:
+    resource: '@FaMessageBundle/Resources/config/routing/inbox.yml'
+    prefix:   /
+
+FaMessageBundle_contact_moderation:
+    resource: '@FaMessageBundle/Resources/config/routing/contact_moderation.yml'
+    prefix:   /contact/moderation
+
+FaMessageBundle_contact_seller:
+    resource: '@FaMessageBundle/Resources/config/routing/contact_seller.yml'
+    prefix:   /contact-seller
+
+FaMessageBundle_contact_user:
+    resource: '@FaMessageBundle/Resources/config/routing/contact_user.yml'
+    prefix:   /contact-user
+
+FaMessageBundle_attachments:
+    resource: '@FaMessageBundle/Resources/config/routing/message_attachments.yml'
+    prefix:   /

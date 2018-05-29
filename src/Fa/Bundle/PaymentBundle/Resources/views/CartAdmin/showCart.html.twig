@@ -1,0 +1,210 @@
+{% extends popup == 'true' ? 'FaAdminBundle::popupLayout.html.twig' : 'FaAdminBundle::layout.html.twig' %}
+{% block page_title %}
+    {{'Basket'|trans({}, 'backend-cart')}}
+{% endblock %}
+
+{% block content %}
+    {{ include('FaPaymentBundle:CartAdmin:cart.html.twig') }}
+    <div id="removeDiscountcodeModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+        <a class="close-reveal-modal">&#215;</a>
+        <h5 class="modal-title">
+            {{'Remove discount code?'|trans({}, 'frontend-manage-my-ad')}}
+        </h5>
+        <div class="modal-content remove-modal">
+            <div class="row">
+                <div class="columns">
+                    <h5>{{'Are you sure that you want to remove this discount code?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+                </div>
+            </div>
+            <div class="mt20 remove-item-btn">
+                <div class="row">
+                    <div class="large-6 columns">
+                        <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="removeDiscountCode();">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</button>
+                    </div>
+                    <div class="large-6 columns">
+                        <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#removeDiscountcodeModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scriptbottom %}
+
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+{% set container = fetch_container_instance() %}
+{% set amazonPayManager  = container.get('fa.amazonpay.manager') %}
+{% set amazonPayConfig  = amazonPayManager.getAmazonpayConfig() %}
+{% set amazonPayMode = container.getParameter('fa.amazon.mode') %}
+{% set amazonPayJs = container.getParameter('fa.amazon.'~amazonPayMode~'.url') %}
+{% set amazonpayUrl = path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_AMAZONPAY')}) %}
+<script type='text/javascript' src="{{amazonPayJs}}"></script>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    function removeCartItem(transactionId)
+    {
+        if (confirm('{{'Are you sure you want to remove selected item?'|trans({}, 'backend-cart')}}')) {
+            route = Routing.generate('remove_cart_item_admin', { 'transactionId': transactionId });
+            window.location.href = route;
+        } else {
+            return false;
+        }
+    }
+
+    $("#offline_payment").change(function(){
+        if ($('#offline_payment').is(':checked')) {
+            $('#skip_payment_form').attr('action', '{{path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_OFFLINE_PAYMENT')})}}');
+        } else {
+        	$('#skip_payment_form').attr('action', '{{path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_FREE')})}}');
+        }
+    });
+
+    $('#discount_code').focus(function(e){
+      if ($(this).hasClass('error')) {
+          $(this).nextAll('small.error').first().remove();
+          $(this).removeClass('error');
+      }
+  });
+  
+  function applyDiscountcode()
+  {
+      if ($('#discount_code').hasClass('error')) {
+          $('#discount_code').nextAll('small.error').first().remove();
+          $('#discount_code').removeClass('error');
+      }
+      blockPage();
+      $.ajax({
+          type: "GET",
+          url: "{{path('apply_package_code_admin')}}",
+          data: {'code': $('#discount_code').val()}
+      })
+      .always(function(response) {
+          unblockPage();
+      })
+      .done(function(response) {
+          hideAlertMessage();
+          if (response.error.length) {
+              $("#discount_code").addClass('error');
+              $('<small class="error">'+response.error+'</small>').insertAfter("#discount_code");
+          } else if (response.htmlContent.length) {
+              $('#cart_main_div').html(response.htmlContent);
+          }
+      });
+  }
+  
+  function removeDuscountcodeAlert()
+  {
+      $('#removeDiscountcodeModal').foundation('reveal', 'open');
+  }
+
+  function removeDiscountCode()
+  {
+      blockPage();
+      closeRevealModel('#removeDiscountcodeModal');
+      $.ajax({
+          type: "GET",
+          url: "{{path('remove_package_code_admin')}}"
+      })
+      .always(function(response) {
+          unblockPage();
+      })
+      .done(function(response) {
+          if (response.error.length) {
+              $(decorateMessage(response.error, 'alert')).insertAfter('#cart_main_div');
+          } else if (response.htmlContent.length) {
+              $('#cart_main_div').html(response.htmlContent);
+              if (response.code.length) {
+                  $('#discount_code').val(response.code);
+              }
+          }
+      });
+  }
+
+  function hideShowPromotionCodeSectionForMobile()
+  {
+      if ($('#discount_code_input_div').is(':visible')) {
+          $('#discount_code_input_div').hide();
+          $('#display_discount_applied_div').hide();
+          $('#promo_code_anchor_mobile').removeClass('up-arrow');
+          $('#promo_code_anchor_mobile').addClass('down-arrow');
+      } else {
+          $('#discount_code_input_div').show();
+          $('#display_discount_applied_div').show();
+          $('#promo_code_anchor_mobile').addClass('up-arrow');
+          $('#promo_code_anchor_mobile').removeClass('down-arrow');
+      }
+  }
+//]]>
+</script>
+<script type='text/javascript'>
+    var host = "amzn.github.io";
+    var amznscrptload = 'yes';
+    if ((host === window.location.host) && (window.location.protocol !== "https:"))
+        window.location.protocol = "https";
+
+    window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId('{{amazonPayConfig['client_id']}}');
+    };
+
+    window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId('{{amazonPayConfig['client_id']}}');
+        amazon.Login.setUseCookie(true);
+    };
+</script>
+    
+<script type='text/javascript'>
+    var authRequest;var amazonpath = "{{amazonpayUrl}}";
+    OffAmazonPayments.Button("AmazonPayButton", "{{amazonPayConfig['merchant_id']}}", {
+        type: "PwA",
+        color: "DarkGray",
+        size: "large",
+        authorization: function () {
+            loginOptions = { scope: "profile postal_code payments:widget payments:shipping_address", popup: true };
+            authRequest = amazon.Login.authorize(loginOptions, amazonpath);
+
+        },
+        onError: function (error) {
+            // something bad happened
+        }
+    });
+     function verifyLoggedIn() {
+        // if you want to display a message.
+        var msgElem = document.getElementById("login-state-msg");
+
+        var options = {
+            scope: "profile postal_code payments:widget payments:shipping_address",
+            popup: true,
+            interactive: 'never'
+        };
+
+        // check if we are logged in
+        authRequest = amazon.Login.authorize (options, function(response) {
+            // this code is executed ASYNCHRONOUSLY
+
+            if ( response.error ) {
+                // USER NOT LOGGED IN
+                console.log("verifyLoggedIn() - SESSION NOT ACTIVE - " + new Date());
+                msgElem.innerHTML = "NOT logged in yet. Click 'Amazon Pay' or Go to Login screen.";
+            } else {
+                // USER IS LOGGED IN
+                console.log("verifyLoggedIn() - SESSION ACTIVE - " + new Date());
+
+                // optionally, get the profile info
+                console.dir('access_token= ' + response.access_token);
+
+                amazon.Login.retrieveProfile(function (response) {
+                    // Display profile information.
+                    console.dir('CustomerId= ' + response.profile.CustomerId);
+                    console.dir('Name= ' + response.profile.Name);
+                    console.dir('PostalCode= ' + response.profile.PostalCode);
+                    console.dir('PrimaryEmail= ' + response.profile.PrimaryEmail);
+
+                    //alert("Hello " + response.profile.Name + "! Just click Pay!");
+                });
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,5 @@
+ajax_update_invoice_address:
+    path:   /ajax/update_invoice_address/{addressBookId}
+    defaults:  { _controller: FaUserBundle:UserAddressBook:ajaxUpdateInvoiceAddress }
+    options:
+        expose: true

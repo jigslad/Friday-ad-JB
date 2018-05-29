@@ -1,0 +1,27 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block body %}
+    <div class="row text-center error-page">
+        <div  class="bg-img500"></div>
+        <h1>Congratz! You’ve found the 500 Error page!</h1>
+        <h2 class="ptop_spac">Next, find something you really want from the search bar below or visit</h2>
+        <a href="{{ path('fa_frontend_homepage') }}" class="hp-link">Friday Ad homepage</a>
+        {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isErrorSearch': true } )) }}
+        {% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
+        {% set contactUsPage = staticPageRepository.findOneBy({'id': constant('Fa\\Bundle\\ContentBundle\\Repository\\StaticPageRepository::STATIC_PAGE_CONTACT_US_ID'), 'status': 1}) %}
+        <h2 class="black-text text-center mt30 mb20">If you're having an issue with the site,<br>please <a href="{{ path('location_home_page', {'location': contactUsPage.getSlug()}) }}">contact us</a> and we will do our best to fix it!</h2>
+    </div>
+{% endblock %}
+
+{% block dimension2 %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% if app.user.getId() is not defined or app.user.getId() is null %}
+    	ga('set', 'dimension9', 'not logged in');
+    {% else %}
+    	ga('set', 'dimension9', 'logged in');
+    {% endif %}
+    ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  '_500_page'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+//]]>
+</script>
+{% endblock %}

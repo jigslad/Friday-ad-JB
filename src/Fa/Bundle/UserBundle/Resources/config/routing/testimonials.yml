@@ -1,0 +1,7 @@
+testimonials:
+    path:     /
+    defaults: { _controller: "FaUserBundle:Testimonials:list" }
+    
+add_testimonial:
+    path:     /ajax/add/
+    defaults: { _controller: "FaUserBundle:Testimonials:ajaxAddTestimonial" }

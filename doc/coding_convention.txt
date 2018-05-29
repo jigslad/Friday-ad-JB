@@ -1,0 +1,57 @@
+1) Controller, Form, Routing file should be postfix admin If you are developing admin module.
+
+e.g. UserAdminCrontroller, UserAdminType, user_admin.yml
+
+2) Controller, Form, Routing file should not required any pre and postfix If you are developing front side module.
+
+e.g. UserController, UserType, user.yml
+
+3) Always create service of form.
+
+e.g. If you are creating form for admin side user create it should be like this way:
+
+fa_user.form.type.user_admin:
+        class: Fa\Bundle\UserBundle\Form\UserAdminType
+        arguments: ['@doctrine', '@security.encoder_factory']
+        tags:
+            - { name: form.type, alias: fa_user_user_admin }
+
+please note the service name and alias convention:
+
+name: bundlename.form.type.formname (e.g. fa_user.form.type.user_admin)
+alist:bundlename_formanme (e.g. fa_user_user_admin)
+
+In form's getName method use then same name that you have used in alias
+
+public function getName()
+{
+    return 'fa_user_user_admin';
+}
+
+4) In controller never create form object directly.
+
+e.g. new UserAdminType() - wrong method
+e.g. fa_user_user_admin - correct method
+
+e.g. $form = $formManager->createForm('fa_user_user_admin', $entity, $options);
+
+5) Create saperate file to define various services.
+
+e.g. services_search.yml (to define services related to search)
+e.g. services_form_type.yml (to define services related to form)
+
+6) Always use form theme for rendering form elements.
+
+7) routing file name should be _ saperated.
+
+8) Don't forget to put translation text.
+
+9) Caption / Message convention
+   - In listing "No records found" for zero result
+   - Button name for add record should be "Add New" for all listing instead of individual names like "Add New User", "Add New Rule".
+   - Caption name (listing title, sorting field title, Form field title) should be with first letter captial of each word.
+     e.g. "Print Edition", "Users", "PAA Field Rules", "Postage Options", "Print Edition Name", "Selete Status" 
+   - Delete record message should be common for all listing which is "Do you want to delete this record?"
+   - Add record success message should be common "Record has been added successfully."  
+   - Update record success message should be common "Record has been updated successfully."
+   - Delete record success message should be common "Record has been deleted successfully."

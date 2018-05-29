@@ -1,0 +1,6 @@
+services:
+    fa_message.message_listener.message:
+        class: Fa\Bundle\MessageBundle\Listener\MessageListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }

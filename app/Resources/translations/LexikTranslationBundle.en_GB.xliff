@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="07c4aaf05f807b2237cc67e905be820bad8d709a" resname="Add New">
+        <jms:reference-file line="18">views/Translation/grid.html.twig</jms:reference-file>
+        <source>Add New</source>
+        <target state="new">Add New</target>
+      </trans-unit>
+      <trans-unit id="9b10914d8b0a097ace7176e8973f5c3dee92bb44" resname="Domain">
+        <jms:reference-file line="47">Form/Type/TransUnitType.php</jms:reference-file>
+        <jms:reference-file line="45">views/Translation/grid.html.twig</jms:reference-file>
+        <source>Domain</source>
+        <target state="new">Domain</target>
+      </trans-unit>
+      <trans-unit id="ccfbfbf6fb2cb3b2717af588369b6826d3230c16" resname="Double click on Translation to edit it, ESC to cancel it.">
+        <jms:reference-file line="50">views/Translation/grid.html.twig</jms:reference-file>
+        <source>Double click on Translation to edit it, ESC to cancel it.</source>
+        <target state="new">Double click on Translation to edit it, ESC to cancel it.</target>
+      </trans-unit>
+      <trans-unit id="c5f6a8776dda4beb8482d2aca8bc9bbf4d3bbce0" resname="Error in updating translation.">
+        <jms:reference-file line="49">views/Translation/grid.html.twig</jms:reference-file>
+        <source>Error in updating translation.</source>
+        <target state="new">Error in updating translation.</target>
+      </trans-unit>
+      <trans-unit id="3f1bda202f3c1b5173cfb0b68fa23b13cb456642" resname="Invalidate cache">
+        <jms:reference-file line="43">views/Translation/grid.html.twig</jms:reference-file>
+        <source>Invalidate cache</source>
+        <target state="new">Invalidate cache</target>
+      </trans-unit>
+      <trans-unit id="c67dd20ee842986086a0a915ddc2a279490130ed" resname="Key">
+        <jms:reference-file line="38">Form/Type/TransUnitType.php</jms:reference-file>
+        <jms:reference-file line="46">views/Translation/grid.html.twig</jms:reference-file>
+        <source>Key</source>
+        <target state="new">Key</target>
+      </trans-unit>
+      <trans-unit id="efc007a393f66cdb14d57d385822a3d9e36ef873" resname="Save">
+        <jms:reference-file line="47">views/Translation/grid.html.twig</jms:reference-file>
+        <source>Save</source>
+        <target state="new">Save</target>
+      </trans-unit>
+      <trans-unit id="7744794753d56a4a9fec2ba5a34788a738e190d1" resname="Save and new">
+        <jms:reference-file line="76">Form/Type/TransUnitType.php</jms:reference-file>
+        <source>Save and new</source>
+        <target state="new">Save and new</target>
+      </trans-unit>
+      <trans-unit id="38bf10331b37792ab53558d6a87ef68a7cf01702" resname="Show/Hide Column">
+        <jms:reference-file line="42">views/Translation/grid.html.twig</jms:reference-file>
+        <source>Show/Hide Column</source>
+        <target state="new">Show/Hide Column</target>
+      </trans-unit>
+      <trans-unit id="2ef664fcfeaeb8e3445276556f98846e47b503b3" resname="Translation updated successfully.">
+        <jms:reference-file line="48">views/Translation/grid.html.twig</jms:reference-file>
+        <source>Translation updated successfully.</source>
+        <target state="new">Translation updated successfully.</target>
+      </trans-unit>
+      <trans-unit id="8ad8302d110b05d7e02330dac58628134fdcff02" resname="Translations">
+        <jms:reference-file line="58">Form/Type/TransUnitType.php</jms:reference-file>
+        <jms:reference-file line="12">views/Translation/grid.html.twig</jms:reference-file>
+        <source>Translations</source>
+        <target state="new">Translations</target>
+      </trans-unit>
+      <trans-unit id="d0c6927389fce341eec0caaf17e64c368ddda490" resname="translations.save_row">
+        <jms:reference-file line="44">views/Translation/grid.html.twig</jms:reference-file>
+        <source>translations.save_row</source>
+        <target state="new">translations.save_row</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

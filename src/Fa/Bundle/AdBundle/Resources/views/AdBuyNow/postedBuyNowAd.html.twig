@@ -1,0 +1,220 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% set container = fetch_container_instance() %}
+{% set categoryId = attribute(adDetail, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
+{% set rootCategoryId = attribute(adDetail, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+{% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+{% set solrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+{% set adPrice = adObj.getPrice() %}
+{% set adPostagePrice = adObj.getPostagePrice() %}
+{% set adDeliveryMethodId = adObj.getDeliveryMethodOption() ? adObj.getDeliveryMethodOption().getId() : null %}
+{% set userAddresses = fetch_repository('FaUserBundle:UserAddressBook').getAddressByUser(app.user ? app.user.getId() : 0) %}
+
+{% block page_title %}
+    {{'Review order'|trans({}, 'frontend-buy-now')}}
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'delivery_address_form'}}) }}
+        <h1 class="simple-heading">{{'Review order'|trans({}, 'frontend-buy-now')}}</h1>
+        <div class="white-bg">
+            <div class="small-wrapper">
+                <ul class="review-order">
+                    {% for choice in form.delivery_address.vars.choices %}
+                        <li>
+                            <div class="label-inline">
+                                <span class="custom-radio {% if form.delivery_address.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideDeliveryAddress();" type="radio" value="{{ choice.value }}" {% if form.delivery_address.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.delivery_address.vars.full_name }}" id="{{ form.delivery_address.vars.id }}_{{ choice.value }}" /></span>
+                                <label for="{{ form.delivery_address.vars.id }}_{{ choice.value }}">{{ choice.label|raw }}</label>
+                                {% if userAddresses[choice.value] is defined %}
+                                    <div class="review-address">
+                                        {{ userAddresses[choice.value]|join('<br />')|raw}}
+                                    </div>
+                                {% endif %}
+                                {% if loop.index == form.delivery_address.vars.choices|length %}
+                                    {{ form_errors(form.delivery_address) }}
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                    {% do attribute(form, 'delivery_address').setRendered %}
+                </ul>
+                <div id="delivery_address_detail" style="display:none">
+                    <div class="paa-bdr-box bdr-none">
+                        <div class="payment-row first-row">
+                            {{ form_row(form.street_address) }}
+                        </div>
+                        
+                        <div class="payment-row">
+                            {{ form_label(form.zip) }}
+                            <div class="postcode clearfix">
+                                {{ form_widget(form.zip) }}
+                                <button type="button" class="button secondary-btn-1 right" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
+                            </div>
+                            <small id="zip_error_div" class="error" style="display:none"></small>
+                            <span id="form_zip_error">{{ form_errors(form.zip) }}</span>
+                        </div>
+                        
+                        <div class="payment-row">
+                            {{ form_row(form.street_address_2) }}
+                        </div>
+                        
+                        <div class="payment-row">
+                            {{ form_row(form.town) }}
+                        </div>
+                        
+                        <div class="payment-row">
+                            {{ form_row(form.county) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="order-item">
+            <div class="item-wrapper">
+                <div class="clearfix">
+                    <div class="item-img">
+                        {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, adDetail, '300X225', 1) %}
+                        {% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+                        {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(adDetail, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+                        {% set imageAltString = null %}
+                        {% if seoRule['image_alt'] is defined %}
+                            {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], adDetail]) %}
+                        {% endif %}
+                        {% if imagePath %}
+                            <img src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                        {% else %}
+                            <img src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
+                        {% endif %}
+                    </div>
+                    <div class="order-info">
+                        <div class="row">
+                            <div class="large-18 columns">
+                                <h3>
+                                    {% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
+                                       {{trim_text(attribute(adDetail, constant(solrMapping ~ 'TITLE')), 70)|raw}}
+                                    {% endif %}
+                                </h3>
+                            </div>
+                            <div class="large-6 columns text-right">
+                                <h3>
+                                    {% if attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined %}
+                                        {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'PRICE'))) }}
+                                    {% endif %}
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="row postage">
+                            <div class="large-18 columns">
+                                Postage cost
+                            </div>
+                            <div class="large-6 columns text-right" id="buy_now_postage_price_div">
+                                {{ format_currency(adObj.getPostagePrice()) }}
+                            </div>
+                        </div>
+                        <div class="row postage-total">
+                            <div class="large-18 columns">
+                                <h3>{{'TOTAL'|trans({}, 'frontend-buy-now')}}</h3>
+                            </div>
+                            <div class="large-6 columns text-right">
+                                <h3 id="buy_now_total_price_div">
+                                    {{ format_currency(adPrice+adPostagePrice) }}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pb30">
+            <h2 class="text-center pb30 black-text">Continue to PayPal to complete your purchase</h2>
+            <div class="small-wrapper">
+                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        {% if app.request.getMethod() != 'POST' %}
+            {% if adDeliveryMethodId == constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::POSTED_OR_COLLECT_ID') %}
+                $("input:radio[name='fa_buy_now_delivery_address[delivery_address]']:eq(1)").attr('checked', true);
+                $("input:radio[name='fa_buy_now_delivery_address[delivery_address]']:eq(1)").trigger('click');
+            {% else %}
+                $("input:radio[name='fa_buy_now_delivery_address[delivery_address]']:eq(0)").attr('checked', true);
+                $("input:radio[name='fa_buy_now_delivery_address[delivery_address]']:eq(0)").trigger('click');
+            {% endif %}
+        {% endif %}
+        showHideDeliveryAddress();
+    });
+    
+    $('#fa_buy_now_delivery_address_save').click(function(){
+        $('#delivery_address_form').submit();
+        $(this).attr('disabled', true);
+        blockPage();
+    });
+    
+    function getUserAddress()
+    {
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url : '{{ path("ajax_get_user_address") }}',
+            data: { postCode: $('#fa_buy_now_delivery_address_zip').val()}
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            $('#form_zip_error').hide();
+            if (response.errorMsg.length) {
+                //clearForm($('#delivery_address_form'));
+                $('#zip_error_div').html(response.errorMsg);
+                $('#zip_error_div').show();
+            } else {
+                $('#zip_error_div').hide();
+                if (response.street_address && response.street_address.length) {
+                    $('#fa_buy_now_delivery_address_street_address').val(response.street_address);
+                    $('#fa_buy_now_delivery_address_street_address').focus();
+                }
+                if (response.street_address_2 && response.street_address_2.length) {
+                    $('#fa_buy_now_delivery_address_street_address_2').val(response.street_address_2);
+                    $('#fa_buy_now_delivery_address_street_address_2').focus();
+                }
+                if (response.town_name && response.town_name.length) {
+                    $('#fa_buy_now_delivery_address_town').val(response.town_name);
+                    $('#fa_buy_now_delivery_address_town').focus();
+                }
+                if (response.domicile_name && response.domicile_name.length) {
+                    $('#fa_buy_now_delivery_address_county').val(response.domicile_name);
+                    $('#fa_buy_now_delivery_address_county').focus();
+                }
+            }
+        });
+    }
+    
+    function showHideDeliveryAddress()
+    {
+        var deliveryAddress = $("input[name='fa_buy_now_delivery_address[delivery_address]']:checked").val();
+        $('#buy_now_postage_price_div').html('{{ format_currency(adPostagePrice) }}');
+        $('#buy_now_total_price_div').html('{{ format_currency(adPrice+adPostagePrice) }}');
+        $('#delivery_address_detail').hide();
+        if (deliveryAddress != 0) {
+            clearForm('#delivery_address_detail');
+        }
+        if (deliveryAddress == 0) {
+            $('#delivery_address_detail').show();
+        } else if (deliveryAddress == -1) {
+            $('#buy_now_postage_price_div').html('{{ format_currency(0) }}');
+            $('#buy_now_total_price_div').html('{{ format_currency(adPrice) }}');
+        }
+    }
+    //]]>
+    </script>
+{% endblock %}

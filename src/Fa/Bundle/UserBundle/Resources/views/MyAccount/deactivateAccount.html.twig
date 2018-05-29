@@ -1,0 +1,48 @@
+<dd class="accordion-navigation">
+    <a href="#panel7b" class="section-head">
+        <span class="deactivate-icon">{{ 'Deactivate account'|trans({}, 'frontend-deactivate-account') }}</span>
+        <span>&nbsp;</span>
+    </a>
+    <div id="panel7b" class="content">
+        {% set contactUsLink = '' %}
+        {% set staticPages = staticPageRepository.getStaticPageLinkArray(container) %}
+        {% if staticPages[constant('Fa\\Bundle\\ContentBundle\\Repository\\StaticPageRepository::STATIC_PAGE_CONTACT_US_ID')] is defined %}
+            {% set contactUsPageTitle = null %}
+            {% set contactUsPageSlug = staticPages[constant('Fa\\Bundle\\ContentBundle\\Repository\\StaticPageRepository::STATIC_PAGE_CONTACT_US_ID')] %}
+            {% if staticPages[contactUsPageSlug] is defined %}
+                {% set contactUsPageTitle = staticPages[contactUsPageSlug] %}
+            {% endif %}
+            {% set contactUsLink = '<a target="__blank" href="'~path('location_home_page', {'location': contactUsPageSlug})~'">'~contactUsPageTitle~'</a>' %}
+        {% endif %}
+        {{ "We would be sorry to see you go. If you're having a problem with your account please %contact_us% first and see if we can help."|trans({'%contact_us%': contactUsLink}, 'frontend-deactivate-account')|raw }}
+        <div class="mt10"><a href="javascript:void(0);" data-reveal-id="deactivateAccountModal">{{ 'Deactivate account'|trans({}, 'frontend-deactivate-account') }}</a></div>
+        <div id="deactivateAccountModal" class="reveal-modal small" data-reveal>
+            <a class="close-reveal-modal">&#215;</a>
+            <h5 class="modal-title">
+                {{'Deactivate account?'|trans({}, 'frontend-deactivate-account')}}
+            </h5>
+            <div class="modal-content remove-modal">
+                <div class="row">
+                    <div class="columns">
+                        <h5>{{'This will deactivate your account and you will no longer be able to log in. Any adverts you have will be removed from the site.'|trans({}, 'frontend-deactivate-account')}}</h5>
+                    </div>
+                </div>
+                <div class="mt20">
+                    <div class="row">
+                        <div class="columns large-12">
+                            <button type="button" class="button secondary-btn-4 thin-btn expand  mb0" onclick="javascript:closeRevealModel('#deactivateAccountModal');">{{'Cancel'|trans({}, 'frontend-deactivate-account')}}</button>
+                        </div>
+                        <div class="columns large-12">
+                            <button type="button" class="button secondary-btn-1 thin-btn expand  mb0" onclick="closeRevealModel('#deactivateAccountModal');window.location.href='{{ path('deactivate_account') }}'">{{'Ok'|trans({}, 'frontend-deactivate-account')}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</dd>
+<div class="row show-for-small-only text-center">
+    <div class="columns">
+        <a href="{{ path('logout') }}" class="secondary-btn-3 expand button mt10 mb0">{{'Sign Out'|trans({}, 'frontend-deactivate-account')}}</a>
+    </div>
+</div>

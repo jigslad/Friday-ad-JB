@@ -1,0 +1,369 @@
+fa_test_ok:
+    resource: '@AppBundle/Controller/'
+    type: annotation
+    
+fa_frontend_homepage:
+    path:     /
+    defaults: { _controller: FaFrontendBundle:Default:index }
+    
+fa_user_secure:
+    resource: '@FaUserBundle/Resources/config/secure_routing.yml'
+    host: '%fa.main.host%'
+    prefix:   /
+    schemes:  ['%fa.user.secure.schemes%']
+    
+FaUserBundle_my_account:
+    resource: '@FaUserBundle/Resources/config/routing/my_account.yml'
+    prefix:   /my_account/
+    schemes:  [https]
+
+ajax_add_new_address:
+    path:   /ajax/add_new_address
+    defaults:  { _controller: FaUserBundle:UserAddressBook:ajaxAddAddress }
+    schemes:  [https]
+
+ajax_edit_address:
+    path:   /ajax/edit_address/{addressBookId}
+    defaults:  { _controller: FaUserBundle:UserAddressBook:ajaxEditAddress }
+    schemes:  [https]
+    options:
+        expose: true
+
+ajax_delete_address:
+    path:   /ajax/delete_address/{addressBookId}
+    defaults:  { _controller: FaUserBundle:UserAddressBook:ajaxDeleteAddress }
+    schemes:  [https]
+    options:
+        expose: true
+
+fa_payment_secure:
+    resource: '@FaPaymentBundle/Resources/config/secure_routing.yml'
+    host: '%fa.main.host%'
+    prefix:   /
+    schemes:  ['%fa.payment.secure.schemes%']
+
+fa_user_secure_nonsecure:
+    resource: '@FaUserBundle/Resources/config/secure_nonsecure_routing.yml'
+    host: '%fa.main.host%'
+    prefix:   /
+    schemes:  [http|https]
+
+fa_entity_secure_nonsecure:
+    resource: '@FaEntityBundle/Resources/config/secure_nonsecure_routing.yml'
+    host: '%fa.main.host%'
+    prefix:   /
+    schemes:  [http|https]
+
+fa_frontend_secure_nonsecure:
+    resource: '@FaFrontendBundle/Resources/config/secure_nonsecure_routing.yml'
+    host: '%fa.main.host%'
+    prefix:   /
+    schemes:  [http|https]
+
+fa_admin_homepage:
+    path:     /admin
+    host: '%fa.main.host%'
+    defaults: { _controller: FaAdminBundle:Default:index }
+    schemes:  [http]
+    
+fa_frontend:
+    resource: '@FaFrontendBundle/Resources/config/routing.yml'
+    host: '%fa.main.host%'
+    prefix:   /
+    schemes:  [http]
+
+fa_admin:
+    resource: '@FaAdminBundle/Resources/config/routing.yml'
+    host: '%fa.main.host%'
+    prefix:   /admin
+    schemes:  [http]
+
+fos_js_routing:
+    resource: '@FOSJsRoutingBundle/Resources/config/routing/routing.xml'
+    host: '%fa.main.host%'
+    schemes:  [http|https]
+
+_errors:
+    resource: '@TwigBundle/Resources/config/routing/errors.xml'
+    prefix:   /_error
+    schemes:  [http]
+    
+_static_redirect:
+    resource: static_redirect_routing.yml
+    
+_ti_static_redirect:
+    resource: ti_static_redirect_routing.yml
+
+proceed_18_plus_ajax:
+    path: /ajax/proceed_18_plus/
+    defaults: { _controller: 'FaFrontendBundle:Default:proceed18PlusAjax'}
+    host: '%fa.main.host%'
+    
+archive_410_page:
+    path: /archive/
+    defaults: { _controller: 'FaAdBundle:Ad:showArchive410Page'}
+    host: '%fa.main.host%'
+    schemes:  [http]
+        
+ad_detail_page_by_id:
+    path: /{id}/
+    defaults: { _controller: 'FaAdBundle:Ad:showAdById'}
+    host: '%fa.main.host%'
+    schemes:  [http]
+    requirements:
+        ad_string: '([A-Za-z0-9_-]+)$'
+        id: '\d{5,}'
+    options:
+        expose: true
+
+ad_detail_page:
+    path: /{location}/{category_string}/{ad_string}-{id}/
+    defaults: { _controller: 'FaAdBundle:Ad:showAd'}
+    host: '%fa.main.host%'
+    schemes:  [http]
+    requirements:
+        ad_string: '([A-Za-z0-9_-]+)$'
+        id: '\d{5,}'
+        
+landing_page_category:
+    path:  /{category_string}/
+    defaults: { _controller: 'FaContentBundle:LandingPage:index' }
+    host: '%fa.main.host%'
+    schemes:  [http]
+    requirements:
+        category_string: '^(property|for-sale|animals|motors|jobs|adult)$'
+    options:
+        expose: true
+
+landing_page_category_location:
+    path:  /{category_string}/{location}/
+    defaults: { _controller: 'FaContentBundle:LandingPage:index'}
+    host: '%fa.main.host%'
+    schemes:  [http]
+    requirements:
+        category_string: '^(property|for-sale|animals|motors|jobs|adult)$'
+        location: '([A-Za-z0-9_-]+)$'
+    options:
+        expose: true
+
+old_business_page_redirect:
+    path:     /business-page/{page_string}
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectBusinessProfilePage' }
+    host: '%fa.main.host%'
+    schemes:  [http]
+    requirements:
+        page_string: '.+'
+    
+fa_motor_business_page:
+    path:     /dealer/{page_string}
+    host: '%fa.motor.host%'
+    schemes:  [http]
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectMotorBusinessProfilePage' }
+    
+fa_dealer_business_page:
+    path:     /dealer/{page_string}
+    host: '%fa.main.host%'
+    schemes:  [http]
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectMotorBusinessProfilePage' }
+    
+show_business_user_ads:
+    path:     /business/{profileNameSlug}/ads/
+    defaults: { _controller: 'FaAdBundle:AdList:searchResult'}
+    host: '%fa.main.host%'
+    schemes:  [http]
+        
+show_business_user_ads_page:
+    path:     /business/{profileNameSlug}/ads/page-{page}/
+    defaults: { _controller: 'FaAdBundle:AdList:searchResult'}
+    host: '%fa.main.host%'
+    schemes:  [http]
+    requirements:
+        page: '\d+'
+        
+show_business_user_ads_location:
+    path:     /business/{profileNameSlug}/ads/{location}/{page_string}/
+    defaults: { _controller: 'FaAdBundle:AdList:searchResult'}
+    host: '%fa.main.host%'
+    schemes:  [http]
+    requirements:
+        page_string: '.+'
+
+listing_page:
+    path: /{location}/{page_string}/
+    defaults: { _controller: 'FaAdBundle:AdList:searchResult'}
+    host: '%fa.main.host%'
+    schemes:  [http]
+    requirements:
+        location: '^(?:(?!admin\/)([A-Za-z0-9_-]+))'
+        page_string: '.+'
+
+location_home_page:
+    path: /{location}/
+    defaults: { _controller: 'FaFrontendBundle:Default:index'}
+    host: '%fa.main.host%'
+    schemes:  [http]
+    requirements:
+        location: '^(?:(?!admin\/)([A-Za-z0-9_-]+))'
+
+fa_motor_homepage:
+    path:     /
+    host: '%fa.motor.host%'
+    schemes:  [http]
+    defaults: { _controller: FaFrontendBundle:Default:motorHome }
+
+motor_listing_page:
+    path: /{location}/{page_string}
+    defaults: { _controller: 'FaAdBundle:AdList:searchResult'}
+    host: '%fa.motor.host%'
+    schemes:  [http]
+    requirements:
+        location: '^(?:(?!admin\/)([A-Za-z0-9_-]+))'
+        page_string: '.+'
+
+motor_location_home_page:
+    path: /{location}
+    defaults: { _controller: 'FaFrontendBundle:Default:motorLocation'}
+    host: '%fa.motor.host%'
+    schemes:  [http]
+    requirements:
+        location: '^(?:(?!admin\/)([A-Za-z0-9_-]+))'
+
+ti_show_private_profile_page:
+    path:     /profile/{profileNameSlug}-{userId}/
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectTiProfilePage' }
+    host: '%fa.tradeit.host%'
+    requirements:
+        profileNameSlug: '([A-Za-z0-9_-]+)$'
+    
+ti_show_business_profile_page:
+    path:     /business/{profileNameSlug}/
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectTiProfilePage' }
+    host: '%fa.tradeit.host%'
+
+ti_show_private_user_ads:
+    path:     /profile/{profileNameSlug}-{userId}/{pageString}/
+    defaults: { _controller: 'FaContentBundle:ProfilePage:showTiPrivateUserAds' }
+    host: '%fa.tradeit.host%'
+    requirements:
+        profileNameSlug: '([A-Za-z0-9_-]+)$'
+        pageString: '.+'
+        
+ti_show_business_user_ads:
+    path:     /business/{profileNameSlug}/ads/
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectTiShowBusinessUserAds'}
+    host: '%fa.tradeit.host%'
+    schemes:  [http]
+        
+ti_show_business_user_ads_page:
+    path:     /business/{profileNameSlug}/ads/page-{page}/
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectTiShowBusinessUserAdsPage'}
+    host: '%fa.tradeit.host%'
+    schemes:  [http]
+    requirements:
+        page: '\d+'
+        
+ti_show_business_user_ads_location:
+    path:     /business/{profileNameSlug}/ads/{location}/{page_string}/
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectTiShowBusinessUserAdsPageLocation'}
+    host: '%fa.tradeit.host%'
+    schemes:  [http]
+    requirements:
+        page_string: '.+'
+        
+ti_ad_detail_page_by_id:
+    path: /{id}/
+    defaults: { _controller: 'FaAdBundle:Ad:showTiAdById'}
+    host: '%fa.tradeit.host%'
+    schemes:  [http]
+    requirements:
+        ad_string: '([A-Za-z0-9_-]+)$'
+        id: '\d{5,}'
+    options:
+        expose: true
+        
+ti_ad_detail_page:
+    path: /{location}/{category_string}/{ad_string}-{id}/
+    defaults: { _controller: 'FaAdBundle:Ad:showTiAd'}
+    host: '%fa.tradeit.host%'
+    schemes:  [http]
+    requirements:
+        ad_string: '([A-Za-z0-9_-]+)$'
+        id: '\d{5,}'
+        
+trade_it_redirect_home:
+    path: /
+    defaults: { _controller: 'FaFrontendBundle:Default:tradeItHomeRedirect'}
+    host: '%fa.tradeit.host%'
+    schemes:  [http]
+    
+trade_it_redirect_without_slash:
+    path: /{tiPath}
+    defaults: { _controller: 'FaFrontendBundle:Default:tradeItRedirect'}
+    host: '%fa.tradeit.host%'
+    schemes:  [http|https]
+    requirements:
+        tiPath: '.+'
+        
+trade_it_redirect:
+    path: /{tiPath}/
+    defaults: { _controller: 'FaFrontendBundle:Default:tradeItRedirect'}
+    host: '%fa.tradeit.host%'
+    schemes:  [http|https]
+    requirements:
+        tiPath: '.+'
+        
+ti_old_business_page_redirect:
+    path:     /business-page/{page_string}
+    host: '%fa.tradeit.host%'
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectTiBusinessProfilePage' }
+    schemes:  [http]
+    requirements:
+        page_string: '.+'
+        
+ti_old_advertiser_redirect:
+    path:     /advertiser/{page_string}
+    host: '%fa.tradeit.host%'
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectTiBusinessProfilePage' }
+    schemes:  [http]
+    requirements:
+        page_string: '.+'
+    
+fa_ti_motor_business_page:
+    path:     /dealer/{page_string}
+    host: '%fa.ti.motor.host%'
+    schemes:  [http]
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectTiMotorBusinessProfilePage' }
+    
+fa_ti_dealer_business_page:
+    path:     /dealer/{page_string}
+    host: '%fa.tradeit.host%'
+    schemes:  [http]
+    defaults: { _controller: 'FaContentBundle:ProfilePage:redirectTiMotorBusinessProfilePage' }
+
+fa_ti_motor_homepage:
+    path:     /
+    host: '%fa.ti.motor.host%'
+    schemes:  [http]
+    defaults: { _controller: FaFrontendBundle:Default:motorTiHome }
+
+ti_motor_listing_page:
+    path: /{location}/{page_string}
+    defaults: { _controller: 'FaAdBundle:AdList:searchResult'}
+    host: '%fa.ti.motor.host%'
+    schemes:  [http]
+    requirements:
+        location: '^(?:(?!admin\/)([A-Za-z0-9_-]+))'
+        page_string: '.+'
+
+ti_motor_location_home_page:
+    path: /{location}
+    defaults: { _controller: 'FaFrontendBundle:Default:motorTiLocation'}
+    host: '%fa.ti.motor.host%'
+    schemes:  [http]
+    requirements:
+        location: '^(?:(?!admin\/)([A-Za-z0-9_-]+))'
+
+FaUserBundle_user_address_book_admin:
+    resource: '@FaUserBundle/Resources/config/routing/user_address_book_admin.yml'
+    prefix:   /admin/user_address_book
+    schemes:  [http|https]

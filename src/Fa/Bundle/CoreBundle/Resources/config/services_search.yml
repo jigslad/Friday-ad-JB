@@ -1,0 +1,84 @@
+parameters:
+    fa.solr.client.class: Fa\Bundle\CoreBundle\Solr\BootStrapSolr
+    fa.solr.client.ad:
+        hostname: localhost
+        port: 8983
+        path:  /solr/core0
+        login: ''
+        password: ''
+        timeout: 5
+    fa.solr.client.user:
+        hostname: localhost
+        port: 8983
+        path:  /solr/core1
+        login: ''
+        password: ''
+        timeout: 5
+    fa.solr.client.ad.view.counter:
+        hostname: localhost
+        port: 8983
+        path:  /solr/core2
+        login: ''
+        password: ''
+        timeout: 5
+    fa.solr.client.user.shop.detail:
+        hostname: localhost
+        port: 8983
+        path:  /solr/core3
+        login: ''
+        password: ''
+        timeout: 5
+    fa.searchfilters.manager.class: Fa\Bundle\CoreBundle\Manager\SearchFiltersManager
+    fa.sqlsearch.manager.class: Fa\Bundle\CoreBundle\Manager\SqlSearchManager
+    fa.solrsearch.manager.class: Fa\Bundle\CoreBundle\Manager\SolrSearchManager
+
+services:
+    _defaults: 
+        public: true
+    
+    fa.solr.client.user:
+        class: '%fa.solr.client.class%'
+        arguments:
+            - '%fa.solr.client.user%'
+
+    fa.solr.client.ad:
+        class: '%fa.solr.client.class%'
+        arguments:
+            - '%fa.solr.client.ad%'
+    
+    fa.solr.client.user.shop.detail:
+        class: '%fa.solr.client.class%'
+        arguments:
+            - '%fa.solr.client.user.shop.detail%'
+            
+    fa.solr.client.ad.view.counter:
+        class: '%fa.solr.client.class%'
+        arguments:
+            - '%fa.solr.client.ad.view.counter%'
+            
+    fa.searchfilters.manager:
+        class: '%fa.searchfilters.manager.class%'
+        arguments:
+            - '@request_stack'
+            - '@service_container'
+
+    fa.sqlsearch.manager:
+        class: '%fa.sqlsearch.manager.class%'
+        calls:
+            - [setDoctrine, ['@doctrine']]
+            - [setContainer, ['@service_container']]
+
+    fa.solrsearch.manager:
+        class: '%fa.solrsearch.manager.class%'
+        arguments: ['@service_container', '@fa_solr.logger']
+        
+    fa.config_rule.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaCoreBundle:ConfigRule]
+
+    fa.config.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaCoreBundle:Config]
+        

@@ -1,0 +1,55 @@
+{% extends layout %}
+{% set cacheClearGrant = false %}
+{% set transUpdateGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('lexik_translation_invalidate_cache') %}
+  {% set cacheClearGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('lexik_translation_update') %}
+  {% set transUpdateGrant = true %}
+{% endif %}
+
+{% block title %}{{ 'Translations'|trans({}, 'LexikTranslationBundle') }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="columns">
+            <h1 class="left">{{ heading }}</h1>
+            {% if fa_resource_authorization_manager.isGranted('lexik_translation_new') %} <a href="{{ path('lexik_translation_new') }}" class="right tiny button add_user_btn">{{ 'Add New'|trans({}, 'LexikTranslationBundle') }}</a> {% endif %}
+        </div>
+    </div>
+    
+    {% block data_grid %}
+        {% include 'LexikTranslationBundle:Translation:_ngGrid.html.twig' %}
+    {% endblock data_grid %}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ parent() }}
+    <script>
+        var translationCfg = {
+            locales: {{ locales | json_encode | raw }},
+            localeNames: {{ localeNames | json_encode | raw }},
+            inputType: '{{ inputType }}',
+            cacheClearGrant: '{{ cacheClearGrant }}',
+            transUpdateGrant: '{{ transUpdateGrant }}',
+            url: {
+                list: '{{ path('lexik_translation_list') }}',
+                update: '{{ path('lexik_translation_update', {'id': '-id-'}) }}',
+                invalidateCache: '{{ path('lexik_translation_invalidate_cache') }}'
+            },
+            label: {
+                hideCol: '{{ 'Show/Hide Column'|trans({}, 'LexikTranslationBundle') }}',
+                invalidateCache: '{{ 'Invalidate cache'|trans({}, 'LexikTranslationBundle') }}',
+                saveRow: '{{ 'translations.save_row'|trans({}, 'LexikTranslationBundle') }}',
+                domain: '{{ 'Domain'|trans({}, 'LexikTranslationBundle') }}',
+                key: '{{ 'Key'|trans({}, 'LexikTranslationBundle') }}',
+                save: '{{ 'Save'|trans({}, 'LexikTranslationBundle') }}',
+                successMsg: '{{ 'Translation updated successfully.'|trans({}, 'LexikTranslationBundle') }}',
+                errorMsg: '{{ 'Error in updating translation.'|trans({}, 'LexikTranslationBundle') }}',
+                tipMsg: '{{ 'Double click on Translation to edit it, ESC to cancel it.'|trans({}, 'LexikTranslationBundle') }}'
+            }
+        };
+    </script>
+    <script src="{{ asset_url('falexiktranslation/js/translation.js') }}"></script>
+{% endblock %}

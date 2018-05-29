@@ -1,0 +1,42 @@
+services:
+    fa_entity.entity_listener.entity:
+        class: Fa\Bundle\EntityBundle\Listener\EntityListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_entity.entity_listener.category:
+        class: Fa\Bundle\EntityBundle\Listener\CategoryListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+
+    fa_entity.entity_listener.category_dimension:
+        class: Fa\Bundle\EntityBundle\Listener\CategoryDimensionListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_entity.entity_listener.location:
+        class: Fa\Bundle\EntityBundle\Listener\LocationListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+
+    fa_entity.entity_listener.location_group:
+        class: Fa\Bundle\EntityBundle\Listener\LocationGroupListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+            
+    fa_entity.entity_listener.entity_log:
+        class: Fa\Bundle\EntityBundle\Listener\FaEntityLogListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }
+
+    fa_entity.entity_listener.category_recommended_slot:
+        class: Fa\Bundle\EntityBundle\Listener\CategoryRecommendedSlotListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }

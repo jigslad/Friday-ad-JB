@@ -1,0 +1,4 @@
+ajax_get_user_address_admin:
+    path:   /ajax/get_user_address
+    defaults:  { _controller: FaUserBundle:UserAddressBookAdmin:ajaxGetUserAddress }
+    

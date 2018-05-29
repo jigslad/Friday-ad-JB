@@ -1,0 +1,6 @@
+#intercom-container .intercom-launcher-frame, #intercom-container .intercom-launcher-frame:hover, #intercom-container .intercom-launcher-frame:focus, #intercom-container .intercom-launcher-frame:active {box-shadow: none !important; }
+#intercom-container .intercom-launcher {background: transparent !important; }
+#intercom-container .intercom-launcher-open-icon {background-image: url("../images/fridayad-helpIcone.png") !important;background-size:70px 70px !important;background-position: center !important; }
+#intercom-container .intercom-launcher-close-icon { background-color: #A8DC28;border-radius: 50%; }
+#pl_chk { display:none;}
+#subscribe-link { display:none;}

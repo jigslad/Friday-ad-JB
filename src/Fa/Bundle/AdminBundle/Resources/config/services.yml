@@ -1,0 +1,19 @@
+parameters:
+    fa.admin.listmanager.class: Fa\Bundle\AdminBundle\Manager\ListManager
+    fa.admin.view.foundation_pager.class: Fa\Bundle\AdminBundle\View\FoundationPagerView
+    fa.admin.listmanager.maxperpage: 10
+
+services:
+    fa.admin.listmanager:
+        class: '%fa.admin.listmanager.class%'
+        arguments:
+            - '@request_stack'
+            - '@session'
+            - '%fa.admin.listmanager.maxperpage%'
+            - '@service_container'
+
+    fa.admin.view.foundation_pager:
+        class: '%fa.admin.view.foundation_pager.class%'
+        public: false
+        tags:
+            - { name: pagerfanta.view, alias: foundation_pager_admin }

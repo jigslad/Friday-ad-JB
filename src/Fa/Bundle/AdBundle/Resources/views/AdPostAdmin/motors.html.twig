@@ -1,0 +1,648 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% use "FaAdBundle:AdImage:showImageUploaderAdmin.html.twig" %}
+
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set userRole = userRepository.getUserRole(app.user.getId(), fetch_container_instance()) %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('imageUploadStylesheets') }}
+{% endblock %}
+
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% if entity.id %}
+    {% if entity.user %}
+       {% set user   = entity.user %}
+       {% set userId = entity.user.id %}
+   {% else %}
+       {% set userId = 'no_user' %}
+       {% set user   = '' %}
+   {% endif %}
+   
+   {% set categoryId = entity.category.id %}
+{% else %}
+    {% set userId = form.user_id.vars.value %}
+    {% if app.request.get('user_id') %}
+        {% set userId = app.request.get('user_id') %}
+    {% endif %}
+    {% set user = fetch_repository('FaUserBundle:User').find(userId) %}
+    
+    {% set categoryId = form.category_id.vars.value %}
+    {% if app.request.get('category_id') %}
+        {% set categoryId = app.request.get('category_id') %}
+    {% endif %}
+{% endif %}
+
+{% set categoryPathArray = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance()) %}
+{% set categorykeys = categoryPathArray|keys %}
+{% set rootMotorsCategoryId = categorykeys|slice(1, 1)[0] %}
+{% set secondRootMotorsCategoryId = categorykeys|slice(2, 1)[0] %}
+
+{% block content %}
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = {{ 'mandatory fields'|trans({}, 'messages') }}</p>
+           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+               {{ form_errors(form) }}
+               <div class="row">
+                   <div class="large-12 columns mb15">
+                   <p style="font-size:20px;font-weight:bold">{{ 'Describe your item'|trans }}</p>
+                   {% if user %}
+                       <p>
+                           <b>{{ 'Seller'|trans }} : </b> {{ user.getFullName() }} ( {{ user.email }} )
+                       </p>
+                   {% endif %}
+                   {% if entity.id %}
+                       <p>
+                           <b>{{ 'Category'|trans }} : </b> {{ categoryRepository.getCategoryPathArrayById(categoryId)|join(' > ') }}
+                           {{ include('FaAdBundle:AdPostAdmin:adEditCategoryChangeLink.html.twig', {'entity': entity}) }}
+                       </p>
+                   {% else %}
+                       <p>
+                           <b>{{ 'Category'|trans }} : </b> {{ categoryRepository.getCategoryPathArrayById(categoryId)|join(' > ') }}
+                           &nbsp;<a href="{{ path('ad_post_new_admin', { 'user_id' : userId, 'admin_ad_counter': app.request.get('admin_ad_counter') }) }}" onclick="javascript:return confirm('Do you really want to change the category?')" style="text-decoration:underline">{{ 'Change'|trans }}</a>
+                       </p>
+                    {% endif %}
+                    
+                    {% if categoryId is not null %}
+                        {% set orderedFields = form.paa_ordered_fields.vars.value|split(',') %}
+                        {% set regNoDetailsFields = {} %}
+                        {% set regNoDetailsOrderedFields = {} %}
+                        {% set regNoDetailsHiddenFields = {} %}
+                        {% if rootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID') or rootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMERCIALVEHICLES_ID') %}
+                            {% set regNoDetailsFields = {0 : 'colour_id', 1 : 'body_type_id', 2 : 'reg_year', 3 : 'fuel_type_id', 4 : 'transmission_id', 5 : 'engine_size', 6 : 'no_of_doors', 7 : 'no_of_seats', 8: 'fuel_economy', 9 : '062mph', 10 : 'top_speed', 11 : 'ncap_rating', 12 : 'co2_emissions', 13 : 'colour_id_autocomplete'} %}
+                            {% set regNoDetailsHiddenFields = {0: 'fuel_economy', 1 : '062mph', 2 : 'top_speed', 3 : 'ncap_rating', 4 : 'co2_emissions'} %}
+                        {% elseif rootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID') %}
+                            {% set regNoDetailsFields = {0 : 'reg_year', 1 : 'engine_size', 2 : '062mph', 3 : 'top_speed'} %}
+                            {% set regNoDetailsHiddenFields = {0 : '062mph', 1 : 'top_speed'} %}
+                        {% endif %}
+
+                        {% if attribute(form, 'has_reg_no') is defined %}
+                        <div id="reg_no_fields" class="paa-bdr-box">
+                                <h5>{{ attribute(form, 'has_reg_no').vars.label }}</h5>
+                                <div class="label-inline reg-yes-no">
+                                    {{ form_widget(attribute(form, 'has_reg_no')) }}
+                                    {{ form_errors(attribute(form, 'has_reg_no')) }}
+                                </div>
+                            <div id="reg_no_field">
+                                {% if attribute(form, 'reg_no') is defined %}
+                                    <div>
+                                        <label for="fa_paa_motors_admin_reg_no">{{ 'Enter it here'|trans}}:</label>
+                                        {{ form_widget(attribute(form, 'reg_no')) }}
+                                        {{ form_errors(attribute(form, 'reg_no')) }}
+                                        <span class="error" id="reg_no_error_msg" style="display:none"></span>
+                                        <button class="secondary-btn-1 expand mt10" id="lookup_vehicle" type="button">{{ 'Lookup Vehicle'|trans}}</button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div id="carweb_category_msg_modal" class="reveal-modal tiny" data-reveal>
+                                <a class="close-reveal-modal">&#215;</a>
+                                <h5 class="modal-title">&nbsp;</h5>
+                            </div>
+                        </div>
+                        
+                        {% for key, field in orderedFields %}
+                            {% if field in regNoDetailsFields %}
+                                {% set regNoDetailsOrderedFields = regNoDetailsOrderedFields|merge({(key) : (field)}) %}
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <div id="reg_no_details_fields" class="mt15">
+                            {% if regNoDetailsOrderedFields|length %}
+                                {% if attribute(form, 'has_reg_no').vars.data == 1 %}
+                                    {% if attribute(form, 'reg_no').vars.data is not null and attribute(form, 'reg_no').vars.errors|length < 1 %}
+                                        <h5 class="text-center" id="add_vehicle_msg">{{ 'Confirm your vehicle details:'|trans }}</h5>
+                                    {% else %}
+                                        <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans }}</h5>
+                                    {% endif %}
+                                {% else %}
+                                    <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans }}</h5>
+                                {% endif %}
+                                <div>
+                                {% for field in regNoDetailsOrderedFields %}
+                                    {% if attribute(form, field) is defined %}
+                                        {% if field in regNoDetailsHiddenFields %}
+                                            {{ form_widget(attribute(form, field), {'attr': {'style':'display:none'}}) }}
+                                        {% elseif 'engine_size' in field %}
+                                            <label for="fa_paa_motors_admin_engine_size">{{ attribute(form, field).vars.label }}{{fetch_repository('FaAdBundle:AdMotors').getUnitByField('engine_size', true)}}</label>
+                                            {{ form_widget(attribute(form, field)) }}
+                                            {{ form_errors(attribute(form, field)) }}
+                                        {% else %}
+                                            {{ form_row(attribute(form, field)) }}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        
+                        {% for field in orderedFields %}
+                            {% if field not in regNoDetailsFields and field != 'has_reg_no' and field != 'reg_no' and attribute(form, field) is defined %}
+                                {% if field == 'title' or field == 'description' or field == 'personalized_title' %}
+                                    {{ form_label(attribute(form, field)) }}
+                                    {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'eg. Little Tikes')}}) }}
+                                    {% if attribute(form, field).vars.max_length %}
+                                        <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.max_length }, 'messages') }}</div>
+                                    {% endif %}
+                                    {{ form_errors(attribute(form, field)) }}
+                                {% elseif field == 'price' %}
+                                    <div id="paa_price">
+                                        {{ form_label(attribute(form, field)) }}
+                                        <div class="price-field">
+                                            <div class="price-icon">&pound;</div>
+                                            {{ form_widget(attribute(form, field)) }}
+                                            {{ form_errors(attribute(form, field)) }}
+                                        </div>
+                                    </div>
+                                {% elseif field == 'location_autocomplete' %}
+                                    {{ form_label(attribute(form, field)) }}
+                                    <div class="relative">
+                                        {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                                        <a href="javascript:void(0);" id="fa_paa_motors_admin_location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                    </div>
+                                    {{ form_errors(attribute(form, field)) }}
+                                {% elseif field == 'business_phone' %}
+                                    {{ include('FaAdBundle:AdPostAdmin:businessPhoneField.html.twig') }}
+                                {% elseif field == 'photo_error' %}
+                                    {{ include('FaAdBundle:AdPostAdmin:paaUploadImageAdmin.html.twig', {'vertical':'motors'}) }}
+                                {% elseif field == 'colour_id_autocomplete' %}
+                                    {{ form_label(attribute(form, field)) }}
+                                    <div class="relative">
+                                        {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                                        <a href="javascript:void(0);" id="fa_paa_motors_admin_colour_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                    </div>
+                                    {{ form_errors(attribute(form, field)) }}
+                                {% elseif field == 'manufacturer_id_autocomplete' %}
+                                    {{ form_label(attribute(form, field)) }}
+                                    <div class="relative">
+                                        {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                                        <a href="javascript:void(0);" id="fa_paa_motors_admin_manufacturer_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                    </div>
+                                    {{ form_errors(attribute(form, field)) }}
+                                {% elseif field == 'make_id_autocomplete' %}
+                                    {{ form_label(attribute(form, field)) }}
+                                    <div class="relative">
+                                        {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                                        <a href="javascript:void(0);" id="fa_paa_motors_admin_make_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                    </div>
+                                    {{ form_errors(attribute(form, field)) }}
+                                {% elseif field == 'model_id_autocomplete' %}
+                                    {{ form_label(attribute(form, field)) }}
+                                    <div class="relative">
+                                        {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                                        <a href="javascript:void(0);" id="fa_paa_motors_admin_model_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                    </div>
+                                    {{ form_errors(attribute(form, field)) }}
+                                {% elseif field == 'part_of_vehicle_id_autocomplete' %}
+                                    {{ form_label(attribute(form, field)) }}
+                                    <div class="relative">
+                                        {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                                        <a href="javascript:void(0);" id="fa_paa_motors_admin_part_of_vehicle_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                    </div>
+                                    {{ form_errors(attribute(form, field)) }}
+                                {% elseif field == 'part_manufacturer_id_autocomplete' %}
+                                    {{ form_label(attribute(form, field)) }}
+                                    <div class="relative">
+                                        {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                                        <a href="javascript:void(0);" id="fa_paa_motors_admin_part_manufacturer_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                    </div>
+                                    {{ form_errors(attribute(form, field)) }}
+                                {% elseif field == 'features_id' %}
+                                    {% set totalChoices = attribute(form, field).vars.choices|length %}
+                                    {% set totalColumns = 2 %}
+                                    {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+                                    {% set choiceCount = 0 %}
+                                    <h3>{{ form_label(attribute(form, field)) }}</h3>
+                                    <div class="row" style="margin-bottom:10px!important">
+                                        {% for child in attribute(form, field) %}
+                                            {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
+                                            <div class="large-6 columns">
+                                            {% endif %}
+                                                <div>
+                                                    {{ form_widget(child) }}
+                                                    <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                                                </div>
+                                                {% set choiceCount = choiceCount + 1 %}
+                                            {% if choiceCount == totalChoices or (choiceCount % choicesPerColumn) == 0 %}
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {% if 'engine_size' in field or 'boat_length' in field %}
+                                        <label for="fa_paa_motors_admin_engine_size">{{ attribute(form, field).vars.label }}{{fetch_repository('FaAdBundle:AdMotors').getUnitByField(field, true)}}</label>
+                                        {{ form_widget(attribute(form, field)) }}
+                                        {{ form_errors(attribute(form, field)) }}
+                                    {% else %}
+                                        {{ form_row(attribute(form, field)) }}
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if form.future_publish_at is defined %}
+                            {{ include('FaAdBundle:AdPostAdmin:paaFuturePublishAtAdmin.html.twig') }}
+                        {% endif %}
+                        {{ include('FaAdBundle:AdPostAdmin:detachedAdFields.html.twig') }}
+                    {% endif %}
+                    <br />
+                    <ul class="button-group text-center">
+                        {% if entity.id and entity.getStatus().getId() != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                            <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                        {% elseif entity.id and entity.getStatus().getId() == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                            <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                        {% elseif not entity.id %}
+                            <li>{{ form_widget(form.save, {'label': 'Save as draft'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                        {% else %}
+                            {% do attribute(form, 'save').setRendered %}
+                        {% endif %}
+
+                        {% if attribute(form, 'publish') is defined and entity.id and entity.getStatus().getId() == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                            {% do attribute(form, 'publish').setRendered %}
+                        {% endif %}
+
+                        {% if attribute(form, 'publish') is defined %}
+                            {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_ADMIN_HIDE_SKIP_PAYMENT') and userId == 'no_user' %}
+                                {% do attribute(form, 'publish').setRendered %}
+                            {% else %}
+                                <li>{{ form_widget(form.publish, {'label': 'Publish'|trans, 'attr': {'class':'tiny button mb0 save_data'}}) }}</li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if attribute(form, 'saveAndPreview') is defined %}
+                            <li>{{ form_widget(form.saveAndPreview, {'label': 'Save and preview'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                        {% endif %}
+
+                        {% if entity.id %}
+                            <li>
+                                {% if form.return_url.vars.value %}
+                                    {% set returnUrl = form.return_url.vars.value %}
+                                {% elseif app.request.get('return_url') %}
+                                    {% set returnUrl = app.request.get('return_url') %}
+                                {% else %}
+                                    {% set returnUrl = path('ad_admin') %}
+                                {% endif %}
+                                <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ returnUrl }}'">{{ 'Go back'|trans({}, 'messages') }}</button>
+                            </li>
+                        {% else %}
+                            <li>
+                                {% set returnUrl = '' %}
+                                {% if form.return_url.vars.value %}
+                                    {% set returnUrl = form.return_url.vars.value %}
+                                {% elseif app.request.get('return_url') %}
+                                    {% set returnUrl = app.request.get('return_url') %}
+                                {% endif %}
+                                {% if returnUrl %}
+                                    <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('ad_post_new_admin', {'user_id' : userId, 'return_url' : returnUrl }) }}'">{{ 'Go back'|trans({}, 'messages') }}</button>
+                                {% else %}
+                                    <button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('ad_post_new_admin', {'user_id' : userId }) }}'">{{ 'Go back'|trans({}, 'messages') }}</button>
+                                {% endif %} 
+                            </li>
+                        {% endif %}
+                   </ul>
+                   </div>
+               </div>
+           {{ form_end(form) }}
+       </div>
+   </div>
+</div>
+
+{% endblock %}
+
+{% block scriptbottom %}
+{{ parent() }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $('html, body').animate({
+            scrollTop: 0
+        }, 1);
+        updateCharCounter('fa_paa_motors_admin_personalized_title');
+        updateCharCounter('fa_paa_motors_admin_title');
+        loadModelsByMakeId();
+        showHideRegNoFieldsOnLoad($("input[name='fa_paa_motors_admin[has_reg_no]']:checked").val());
+
+        $('.textcounter').keyup(function(e){
+            updateCharCounter($(this).attr('id'));
+        });
+        
+        $("input[name='fa_paa_motors_admin[has_reg_no]']").change(function(){
+            showHideRegNoFields($(this).val());
+        });
+        
+        $('#lookup_vehicle').click(function(){
+            var regNo = $.trim($('#fa_paa_motors_admin_reg_no').val());
+            loadRegNoFieldDetailsByRegNo(regNo);
+        });
+        
+        $('#fa_paa_motors_admin_reg_no').on('focus', function(){
+             $('#reg_error').remove();
+             $('#fa_paa_motors_admin_reg_no').removeClass('error');
+             $('#reg_no_error_msg').html('');
+             $('#reg_no_error_msg').hide();
+        });
+
+        $('#fa_paa_motors_admin_reg_no').keydown(function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $('#lookup_vehicle').click();
+                return false;
+            }
+        });
+    });
+
+    function updateCharCounter(fieldId)
+    {
+        var textCounterId = fieldId + '_textcounter';
+        var maxLimit      = $('#'+fieldId).attr('maxlength') ? parseInt($('#'+fieldId).attr('maxlength')) : 0;
+        var value         = $('#'+fieldId).val();
+
+        if (maxLimit) {
+           if (value.length > maxLimit) {
+               $('#'+fieldId).val(value.substring(0, maxLimit));
+               $('#'+fieldId).html('(0 characters left)');
+               return false;
+           } else {
+               $('#'+textCounterId).html('(' + (maxLimit - value.length) + ' characters left)');
+           }
+       }
+    }
+    
+    function showHideRegNoFieldsOnLoad(hasRegNo) {
+        if (hasRegNo == 1) {
+           $('#reg_no_field').show();
+           $('#reg_no_error_msg').html('');
+           $('#reg_no_error_msg').hide();
+           {% if attribute(form, 'reg_no') is defined %}
+               {% if attribute(form, 'reg_no').vars.data is null or attribute(form, 'reg_no').vars.errors|length %}
+                   $('#reg_no_details_fields').hide();
+               {% else %}
+                   {% if app.request.get('is_cat_edit') %}
+                       loadRegNoFieldDetailsByRegNo($.trim($('#fa_paa_motors_admin_reg_no').val()));
+                   {% else %}
+                       $('#reg_no_details_fields').show();
+                   {% endif %}
+               {% endif %}
+           {% endif %}
+       } else {
+           $('#fa_paa_motors_admin_reg_no').val('');
+           $('#reg_no_field').hide();
+           $('#reg_no_details_fields').show();
+       }
+    }
+
+    function showHideRegNoFields(hasRegNo)
+    {
+       if (hasRegNo == 1) {
+           $('#reg_no_field').show();
+           $('#reg_no_details_fields').hide();
+           $('#reg_no_error_msg').html('');
+           $('#reg_no_error_msg').hide();
+       } else {
+           $('#fa_paa_motors_admin_reg_no').val('');
+           $('#fa_paa_motors_admin_reg_no').trigger('focus');
+           resetRegNoFields();
+           $('#reg_no_field').hide();
+           $('#reg_no_details_fields').show();
+       }
+       
+       $('#add_vehicle_msg').html('{{ "Add your vehicle details:"|trans}}');
+    }
+
+    function loadRegNoFieldDetailsByRegNo(regNo)
+    {
+        if (regNo) {
+            {% if entity.id %}
+                var category_id = "{{ entity.category.id }}";
+            {% else %}
+                var category_id = "{{ app.request.get('category_id') }}";
+            {% endif %}
+
+            $('#lookup_vehicle').html('{{ "Loading..."|trans({}, 'frontend-paa')}}');
+            var route = Routing.generate('ad_vrm_lookup_ajax', { 'vrm': regNo });
+            $.ajax({
+                type: 'post',
+                url: route,
+                data: {'category_id': category_id},
+                success: function(data) {
+                    if (!$.isEmptyObject(data)) {
+                         var regNoFieldsData = data.reg_no_data;
+                         Object.keys(regNoFieldsData).forEach(function(field) {
+                             $('#fa_paa_motors_admin_'+field).val(regNoFieldsData[field]);
+                         });
+                         $('#add_vehicle_msg').html('{{ "Confirm your vehicle details:"|trans}}');
+                         $('#reg_no_details_fields').show();
+                         checkCategoryWithCarWeb(regNo, regNoFieldsData);
+                    } else {
+                        resetRegNoFields();
+                        $('#reg_no_details_fields').hide();
+                        $('#fa_paa_motors_admin_reg_no').addClass('error');
+                        $('#reg_no_error_msg').html('{{ "Please enter correct registration number."|trans}}');
+                        $('#reg_no_error_msg').show();
+                    }
+                    $('#lookup_vehicle').html('{{ "Lookup Vehicle"|trans}}');
+                }
+            });
+        } else {
+            resetRegNoFields();
+            $('#fa_paa_motors_admin_reg_no').addClass('error');
+            $('#reg_no_error_msg').html('{{ "Please enter registration number."|trans}}');
+            $('#reg_no_error_msg').show();
+            $('#reg_no_details_fields').hide();
+        }
+    }
+
+    function resetRegNoFields()
+    {
+        var regNoDetailsFields = ['colour_id', 'body_type_id', 'reg_year', 'fuel_type_id', 'transmission_id', 'engine_size', 'no_of_doors', 'no_of_seats', 'fuel_economy', '062mph', 'top_speed', 'ncap_rating', 'co2_emissions', 'colour_id_autocomplete']
+        regNoDetailsFields.forEach(function(field, index) {
+            $('#fa_paa_motors_admin_'+field).val('');
+        });
+    }
+    
+    function loadModelsByMakeId(makeId)
+    {
+        {% if rootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID') %}
+        var selectedModelId = $('#fa_paa_motors_admin_model_id').val();
+
+        if (!makeId) {
+            makeId = $('#fa_paa_motors_admin_make_id').val();
+        }
+
+        if (makeId) {
+            var data = {
+                parent_id: makeId
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("entity_ajax_get_options_by_partent_json") }}',
+                data: data,
+                success: function(data) {
+                    if (data.length > 0) {
+                        $('#fa_paa_motors_admin_model_id').html('<option value="">{{ 'Select model'|trans }}</option>');
+                        for (var i=0, total = data.length; i < total; i++) {
+                            if (selectedModelId == data[i].id) {
+                                $('#fa_paa_motors_admin_model_id').append('<option value="' + data[i].id + '" selected="selected">' + data[i].text + '</option>');
+                            } else {
+                                $('#fa_paa_motors_admin_model_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                            }
+                        }
+                    } else {
+                        $('#fa_paa_motors_admin_model_id').html('<option value="">{{ 'Select model'|trans }}</option>');
+                    }
+                }
+            });
+        } else {
+            $('#fa_paa_motors_admin_model_id').html('<option value="">{{ 'Select model'|trans }}</option>');
+        }
+        {% endif %}
+    }
+    
+    function checkCategoryWithCarWeb(regNo, regNoFieldsData)
+    {
+        var showMsg = false;
+        var userId  = "{{ app.request.get('user_id')}}";
+        var adminAdCounter  = "{{ app.request.get('admin_ad_counter')}}";
+        var carsId       = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID') }}";
+        var comVehicleId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMERCIALVEHICLES_ID') }}";
+        var motorbikesId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID') }}";
+        msg = '<div id="carweb_category_msg" class="modal-content">'+"{{'Are you sure your vehicle is %MAKE-MODEL%? It seems that it is registered as %CARWEB-MAKE-MODEL%.'|trans({'%MAKE-MODEL%' : 'MAKE-MODEL', '%CARWEB-MAKE-MODEL%' : 'CARWEB-MAKE-MODEL'}, 'messages') }}";
+
+        {% if entity.id is null %}
+            msg += '<div class="veh-lookup"><a href="javascript:void(0)" id="close_carweb_category_msg">'+"{{ 'Continue without changing'|trans({}, 'messages')}}"+'</a><a href="CHANGE-CATEGORY-ROUTE" id="change_to_carweb_category">'+"{{ 'Change to %CARWEB-MAKE-MODEL%'|trans({'%CARWEB-MAKE-MODEL%': 'CARWEB-MAKEMODEL-CHANGED'}, 'messages') }}"+'</a></div>';
+            msg += '</div>';
+        {% endif %}
+
+        $('#carweb_category_msg').remove();
+        if (regNoFieldsData['vehicle_cat_id'] == carsId || regNoFieldsData['vehicle_cat_id'] == comVehicleId) {
+            if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
+                if (regNoFieldsData['model_id'] && regNoFieldsData['cw_model_id'] && regNoFieldsData['model_id'] != regNoFieldsData['cw_model_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_admin_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_model_id'], 'r_no' : regNo, 'user_id': userId, 'admin_ad_counter': adminAdCounter});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['make']+' '+regNoFieldsData['model']+' ('+regNoFieldsData['vehicle_cat']+') </b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')');
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+
+                    showMsg = true;
+                }
+            } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
+                if (regNoFieldsData['model_id'] && regNoFieldsData['cw_motorbike_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_admin_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_motorbike_id'], 'r_no' : regNo, 'user_id': userId, 'admin_ad_counter': adminAdCounter});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['make']+' '+regNoFieldsData['model']+' ('+regNoFieldsData['vehicle_cat']+')</b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_motorbike']);
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+                    
+                    showMsg = true;
+                }
+            }
+        } else if (regNoFieldsData['vehicle_cat_id'] == motorbikesId) {
+            if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
+                if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_model_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_admin_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_model_id'], 'r_no' : regNo, 'user_id': userId, 'admin_ad_counter': adminAdCounter});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')');
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+                    
+                    showMsg = true;
+                }
+            } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
+                if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_motorbike_id'] && regNoFieldsData['motorbike_id'] != regNoFieldsData['cw_motorbike_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_admin_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_motorbike_id'], 'r_no' : regNo, 'user_id': userId, 'admin_ad_counter': adminAdCounter});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_motorbike']);
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+                    
+                    showMsg = true;
+                }
+            }
+        }
+
+        // if selected main category and carwen main category is different then reset select and auto-complete fields because of different entity id options.
+        if (regNoFieldsData['vehicle_cat_id'] != regNoFieldsData['cw_vehicle_cat_id']) {
+            resetCarWebFieldsDueToCategoryMismatch(regNoFieldsData);
+        }
+            
+        if (showMsg) {
+            $('#carweb_category_msg_modal').append(msg);
+            $('#carweb_category_msg_modal').foundation('reveal', 'open');
+            $('#close_carweb_category_msg').click(function(e){
+                $('#carweb_category_msg').remove();
+                $('.close-reveal-modal').trigger('click');
+            });
+            
+            $('#change_to_carweb_category').click(function(e){
+                $('#carweb_category_msg').remove();
+                $('.close-reveal-modal').trigger('click');
+            });
+        }
+    }
+    
+    function resetCarWebFieldsDueToCategoryMismatch(regNoFieldsData)
+    {
+        Object.keys(regNoFieldsData).forEach(function(field) {
+            var fieldValue = regNoFieldsData[field];
+            if ($('#fa_paa_motors_admin_'+field).is("select")) {
+               if (field != 'reg_year') {
+                   $('#fa_paa_motors_admin_'+field).val('');
+               }
+            }
+            $('#fa_paa_motors_admin_colour_id').val('');
+            $('#fa_paa_motors_admin_colour_id_autocomplete').val('');
+        });
+    }
+//]]>
+</script>
+{% if categoryDimensionId is defined and categoryDimensionId %}
+    {{ include('FaAdBundle:AdPostAdmin:autoPopulateBrandJs.html.twig', {'categoryDimensionId' : categoryDimensionId, 'form_name': form.vars.name }) }}
+{% endif %}
+
+{% if (form.make_id_autocomplete) is defined %}
+    {% if secondRootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_ID') %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_motors_admin_make_id', 'placeHolder': ((attribute(form, 'make_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'make_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'make_id_autocomplete').vars.attr.placeholder : 'Please type the make'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_motors_admin_make_id_dimension_id', 'dropdownCssClass': 'white-choices', 'child_field' : '#fa_paa_motors_admin_model_id'}) }}
+    {% else %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_motors_admin_make_id', 'placeHolder': ((attribute(form, 'make_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'make_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'make_id_autocomplete').vars.attr.placeholder : 'Please type the make'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_motors_admin_make_id_dimension_id', 'dropdownCssClass': 'white-choices'}) }}
+    {% endif %}
+{% endif %}
+
+{% if (form.model_id_autocomplete) is defined %}
+    {% if secondRootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_ID') %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_motors_admin_model_id', 'placeHolder': ((attribute(form, 'model_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'model_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'model_id_autocomplete').vars.attr.placeholder : 'Please type the model of above selected make'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_motors_admin_model_id_dimension_id', 'dropdownCssClass': 'white-choices', 'parent_field' : '#fa_paa_motors_admin_make_id'}) }}
+    {% else %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_motors_admin_model_id', 'placeHolder': ((attribute(form, 'model_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'model_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'model_id_autocomplete').vars.attr.placeholder : 'Please type the model of above selected make'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_motors_admin_model_id_dimension_id', 'dropdownCssClass': 'white-choices'}) }}
+    {% endif %}
+{% endif %}
+
+{% if (form.colour_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_motors_admin_colour_id', 'placeHolder': ((attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'colour_id_autocomplete').vars.attr.placeholder : 'Please type the colour'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_motors_admin_colour_id_dimension_id', 'dropdownCssClass': 'white-choices'}) }}
+{% endif %}
+
+{% if (form.manufacturer_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_motors_admin_manufacturer_id', 'placeHolder': ((attribute(form, 'manufacturer_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'manufacturer_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'manufacturer_id_autocomplete').vars.attr.placeholder : 'Please type the manufacturer'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_motors_admin_manufacturer_id_dimension_id', 'dropdownCssClass': 'white-choices'}) }}
+{% endif %}
+
+{% if (form.part_of_vehicle_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_motors_admin_part_of_vehicle_id', 'placeHolder': ((attribute(form, 'part_of_vehicle_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'part_of_vehicle_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'part_of_vehicle_id_autocomplete').vars.attr.placeholder : 'Please type the part of vehicle'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_motors_admin_part_of_vehicle_id_dimension_id', 'dropdownCssClass': 'white-choices'}) }}
+{% endif %}
+
+{% if (form.part_manufacturer_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_motors_admin_part_manufacturer_id', 'placeHolder': ((attribute(form, 'part_manufacturer_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'part_manufacturer_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'part_manufacturer_id_autocomplete').vars.attr.placeholder : 'Please type the part manufacturer'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_motors_admin_part_manufacturer_id_dimension_id', 'dropdownCssClass': 'white-choices'}) }}
+{% endif %}
+
+{% if (form.location_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_motors_admin_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices'}) }}
+{% endif %}
+
+{% if form.future_publish_at is defined %}
+    {{ include('FaAdBundle:AdPostAdmin:paaFuturePublishAtAdminJS.html.twig', {"publishAtId": "fa_paa_motors_admin_future_publish_at"}) }}
+{% endif %}
+
+{{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+{{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+{{ block('imageUploadJavascriptBottom') }}
+{% endblock %}

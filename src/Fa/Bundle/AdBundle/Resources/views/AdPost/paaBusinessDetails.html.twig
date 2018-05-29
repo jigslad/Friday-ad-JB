@@ -1,0 +1,73 @@
+{% set container = fetch_container_instance() %}
+{% set user     = container.get('security.token_storage').getToken().getUser() %}
+{% set userSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'user' : user.id}) %}
+
+{% if container.get('session').has('paa_show_business_step') %}
+    <div class="change-category clearfix">
+        <div class="clearfix">
+            <div class="left">
+                <span>{{ 'Business details'|trans({}, 'frontend-paa-fourth-step') }}:</span>
+            </div>
+            <div class="right">
+                <a href="javascript:void(0)" title="{{ 'Show business details'|trans({}, 'frontend-paa-fourth-step') }}" id="show_business_details_link" >{{ 'Show'|trans({}, 'frontend-paa-fourth-step') }}</a> | 
+                <a href="{{ path('add_user_business_details') }}" title="{{ 'Change business details'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+            </div>
+        </div>
+        
+        <div id="business_details" style="display:none">
+            {% if user.businessName %}
+                <div class="bz-dtl-row"><label>{{ 'Company name'|trans({}, 'frontend-paa-fourth-step') }}:</label> {{ user.businessName }}</div>
+            {% endif %}
+            
+            {% if userSite %}
+                {% if userSite.path %}
+                    <div class="mb10"><label>{{ 'Company logo'|trans({}, 'frontend-paa-fourth-step') }}:</label></div>
+                    {% set logoUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserCompanyLogoUrl', [container, user.id, userSite.path]) %}
+                    <div class="bz-company-logo"><img alt="{{user.id}}.jpg" src="{{ logoUrl }}" /></div>
+                {% endif %}
+                
+                
+                {% if userSite.companyWelcomeMessage %}
+                    <div class="bz-dtl-row">
+                        <label>{{ 'Welcome message'|trans({}, 'frontend-paa-fourth-step') }}:</label><br />
+                        {{ userSite.companyWelcomeMessage|raw }}
+                    </div>
+                {% endif %}
+                
+                {% if userSite.aboutUs %}
+                    <div class="bz-dtl-row">
+                        <label>{{ 'About your business'|trans({}, 'frontend-paa-fourth-step') }}: </label>
+                        {{ userSite.aboutUs|raw }}
+                    </div>
+                {% endif %}
+                
+                {% if userSite.companyAddress %}
+                    <div class="bz-dtl-row">
+                        <label>{{ 'Company address'|trans({}, 'frontend-paa-fourth-step') }}:</label><br />
+                        {{ userSite.companyAddress }}
+                    </div>
+                {% endif %}
+                
+                {% if userSite.phone1 or userSite.phone2 %}
+                    <div class="bz-dtl-row">
+                        <label>{{ 'Telephone(s)'|trans({}, 'frontend-paa-fourth-step') }}:</label><br />
+                        {% if userSite.phone1 and userSite.phone2 %}
+                            {{ userSite.phone1 }} <br />
+                            {{ userSite.phone2 }}
+                        {% elseif userSite.phone1 %}
+                            {{ userSite.phone1 }}
+                        {% elseif userSite.phone2 %}
+                            {{ userSite.phone2 }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                
+                {% if userSite.websiteLink %}
+                    <div class="bz-dtl-row">
+                        <label>{{ 'Website link'|trans({}, 'frontend-paa-fourth-step') }} :</label> <a href="{{ userSite.websiteLink }}" target="_blank">{{ userSite.websiteLink }}</a>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

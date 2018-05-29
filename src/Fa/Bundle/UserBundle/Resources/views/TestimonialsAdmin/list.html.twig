@@ -1,0 +1,81 @@
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+             <table class="table table-striped table-bordered table-hover">
+                 <thead class="mb0">
+                     <tr>
+                         <th width="5%">
+                            {{ 'Id'|trans({}, 'messages') }}
+                         </th>
+                         <th width="5%">
+                            {{ 'User id'|trans({}, 'messages') }}
+                         </th>
+                         <th width="15%">
+                            {{ 'User name'|trans({}, 'messages') }}
+                         </th>
+                         <th width="15%">
+                            {{ 'User email'|trans({}, 'messages') }}
+                         </th>
+                         <th width="15%">
+                            {{ 'Published status'|trans({}, 'messages') }}
+                         </th>
+                         <th width="15%">
+                            {{ sortable_link('testimonials_admin', 'testimonials__created_at', ' Submission Date'|trans, sorter) }}
+                         </th>
+                         <th width="20%">
+                            {{ 'Comment'|trans({}, 'messages') }}
+                         </th>
+                         <th width="10%"><i class="fa fa-gear"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for testimonials in pagination.getCurrentPageResults() %}
+                          <tr class="gradeX">
+                              <td>{{ testimonials.id }}</td>
+                              <td>{{ testimonials.user.id }}</td>
+                              <td>{{ testimonials.userName }}</td>
+                              <td>{{ testimonials.userEmail }}</td>
+                              <td>
+                                  <span data-tooltip aria-haspopup="true" class="has-tip" title="{{ (testimonials.status) ? 'Click here to unpublish.'|trans({}, 'messages') : 'Click here to publish.'|trans({}, 'messages') }}">
+                                      <a href="javascript:void(0)" class="toggle-status" testimonials-id="{{ testimonials.id }}" testimonials-status="{{ (testimonials.status) ? 0 : 1 }}">
+                                          {{ statusArray[testimonials.status] }}
+                                      </a>
+                                  </span>
+                              </td>
+                              <td>{{ testimonials.createdAt |localizeddate('short', 'medium', app.request.locale ) }}</td>
+                              <td>
+                                  {% if testimonials.comment|length > 100 %}
+                                      <span data-tooltip aria-haspopup="true" class="has-tip" title="{{ testimonials.comment }}">
+                                          {{ testimonials.comment[:100] }}...
+                                      </span>
+                                  {% else %}
+                                      {{ testimonials.comment }}
+                                  {% endif %}
+                              </td>
+                              <td>
+                                  <button href="#" data-dropdown="drop{{ testimonials.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                  <br />
+                                  <ul id="drop{{ testimonials.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+	                                  {% if testimonialsEditGrant %}
+	                                      <li><a href="{{ path('testimonials_edit_admin', {'id': testimonials.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+	                                  {% endif %}
+
+	                                  {% if testimonialsDeleteGrant %}
+	                                      <li><a href="{{ path('testimonials_delete_admin', {'id': testimonials.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this record?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+	                                  {% endif %}
+                                  </ul>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="odd gradeX">
+                              <td colspan="4" align="center">{{ 'No record found'|trans({}, 'messages') }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+        </div>
+    </div>
+</div>

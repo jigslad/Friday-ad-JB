@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="17fec7d253efb88aaec351b11edc208086429514" resname="%days days ago">
+        <jms:reference-file line="100">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>%days days ago</source>
+        <target state="new">%days days ago</target>
+      </trans-unit>
+      <trans-unit id="9212e15f01ca59bf721bac8e30e153ce2b6ffce3" resname="%minutes minutes ago">
+        <jms:reference-file line="86">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>%minutes minutes ago</source>
+        <target state="new">%minutes minutes ago</target>
+      </trans-unit>
+      <trans-unit id="27bb80cd0b24b9f1ce4892b99f3bba9dadc76fa1" resname="1 day ago">
+        <jms:reference-file line="95">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>1 day ago</source>
+        <target state="new">1 day ago</target>
+      </trans-unit>
+      <trans-unit id="21d7014531329a0fabd514f2029dbcdcc5a92c45" resname="1 minute ago">
+        <jms:reference-file line="80">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <jms:reference-file line="83">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>1 minute ago</source>
+        <target state="new">1 minute ago</target>
+      </trans-unit>
+      <trans-unit id="f47e9ae6b5dbe632d353e4ecdaeb5785b59030db" resname="about %hours hours ago">
+        <jms:reference-file line="92">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>about %hours hours ago</source>
+        <target state="new">about %hours hours ago</target>
+      </trans-unit>
+      <trans-unit id="a0b22cce5cd1d0fdb33d54ab1369933b9b35b24a" resname="about 1 hour ago">
+        <jms:reference-file line="89">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>about 1 hour ago</source>
+        <target state="new">about 1 hour ago</target>
+      </trans-unit>
+      <trans-unit id="d9bf6fd6b6d5c433ae4318a5be528f360e9c2e99" resname="half a minute ago">
+        <jms:reference-file line="74">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>half a minute ago</source>
+        <target state="new">half a minute ago</target>
+      </trans-unit>
+      <trans-unit id="f818dd0b366d5fa7dcd5541b98e25a39d8f9f510" resname="in %days days">
+        <jms:reference-file line="148">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>in %days days</source>
+        <target state="new">in %days days</target>
+      </trans-unit>
+      <trans-unit id="ccaca5d5b26cb410e1015106ac46c446d9ef2148" resname="in %minutes minutes">
+        <jms:reference-file line="136">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>in %minutes minutes</source>
+        <target state="new">in %minutes minutes</target>
+      </trans-unit>
+      <trans-unit id="fc2039a238ce798ad77c85f8155d0bfbeb2ec4a7" resname="in 1 day">
+        <jms:reference-file line="145">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>in 1 day</source>
+        <target state="new">in 1 day</target>
+      </trans-unit>
+      <trans-unit id="2298b71681ba15946e2df94a706e5df7ea1be2d5" resname="in 1 minute">
+        <jms:reference-file line="130">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <jms:reference-file line="133">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>in 1 minute</source>
+        <target state="new">in 1 minute</target>
+      </trans-unit>
+      <trans-unit id="c8b5e4be255c379a10e10e349026e16ec7df2229" resname="in about %hours hours">
+        <jms:reference-file line="142">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>in about %hours hours</source>
+        <target state="new">in about %hours hours</target>
+      </trans-unit>
+      <trans-unit id="9e8c014fc4e74a7ad5d1dc73328934d6b444ae46" resname="in about 1 hour">
+        <jms:reference-file line="139">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>in about 1 hour</source>
+        <target state="new">in about 1 hour</target>
+      </trans-unit>
+      <trans-unit id="8c18f0621baad18f87b85d887099529634bbc93e" resname="in half a minute">
+        <jms:reference-file line="124">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>in half a minute</source>
+        <target state="new">in half a minute</target>
+      </trans-unit>
+      <trans-unit id="1712980cd5d3e5e2a4c0a1167a852686225bfa60" resname="in less than %seconds seconds">
+        <jms:reference-file line="115">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <jms:reference-file line="118">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <jms:reference-file line="121">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>in less than %seconds seconds</source>
+        <target state="new">in less than %seconds seconds</target>
+      </trans-unit>
+      <trans-unit id="40f25e544997d515de211e851a903036191a1685" resname="in less than a minute">
+        <jms:reference-file line="127">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <jms:reference-file line="133">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>in less than a minute</source>
+        <target state="new">in less than a minute</target>
+      </trans-unit>
+      <trans-unit id="bad665788a37c488970d82be777fcad65c7e3cc9" resname="less than %seconds seconds ago">
+        <jms:reference-file line="65">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <jms:reference-file line="68">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <jms:reference-file line="71">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>less than %seconds seconds ago</source>
+        <target state="new">less than %seconds seconds ago</target>
+      </trans-unit>
+      <trans-unit id="abff00c5e14af3204b29ada18692ccf79736e0a3" resname="less than a minute ago">
+        <jms:reference-file line="77">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <jms:reference-file line="83">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>less than a minute ago</source>
+        <target state="new">less than a minute ago</target>
+      </trans-unit>
+      <trans-unit id="fd3b10d36c29f5baf8ff223ee18450f6b70bde25" resname="{1} 1 month ago |]1,Inf[ %months months ago">
+        <jms:reference-file line="103">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>{1} 1 month ago |]1,Inf[ %months months ago</source>
+        <target state="new">{1} 1 month ago |]1,Inf[ %months months ago</target>
+      </trans-unit>
+      <trans-unit id="69eb68cb2ac8fcaf9b42ea4d69892f87a982d470" resname="{1} 1 year ago |]1,Inf[ %years years ago">
+        <jms:reference-file line="106">CoreBundle/Twig/FaTimeAgoExtension.php</jms:reference-file>
+        <source>{1} 1 year ago |]1,Inf[ %years years ago</source>
+        <target state="new">{1} 1 year ago |]1,Inf[ %years years ago</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

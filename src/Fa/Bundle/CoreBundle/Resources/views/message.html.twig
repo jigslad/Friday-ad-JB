@@ -1,0 +1,31 @@
+{% for flashMessage in app.session.flashbag.get('success') %}
+<div data-alert class="alert-box success radius">
+	<span class="alert-icon">&nbsp;</span>
+    {{ flashMessage|raw }}
+    <a href="javascript:void(0)" class="close">&times;</a>
+</div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('info') %}
+<div data-alert class="alert-box info radius">
+	<span class="alert-icon">&nbsp;</span>
+    {{ flashMessage|raw }}
+    <a href="javascript:void(0)" class="close">&times;</a>
+</div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('notice') %}
+<div data-alert class="alert-box warning radius">
+	<span class="alert-icon">&nbsp;</span>
+    {{ flashMessage|raw }}
+    <a href="javascript:void(0)" class="close">&times;</a>
+</div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('error') %}
+<div data-alert class="alert-box alert radius">
+	<span class="alert-icon">&nbsp;</span>
+    {{ flashMessage|raw }}
+    <a href="javascript:void(0)" class="close">&times;</a>
+</div>
+{% endfor %}

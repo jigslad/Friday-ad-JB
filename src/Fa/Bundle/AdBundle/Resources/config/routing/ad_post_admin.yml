@@ -1,0 +1,66 @@
+ad_post_new_admin:
+    path:     /{user_id}/new
+    defaults: { _controller: 'FaAdBundle:AdPostAdmin:new', 'user_id':no_user }
+    requirements:
+        user_id: '^(-?\d+|no_user)$'
+    options:
+        expose: true
+
+ad_post_new_from_category_admin:
+    path:     /{user_id}/{admin_ad_counter}/{category_id}/new
+    defaults: { _controller: 'FaAdBundle:AdPostAdmin:newFromCategory', 'user_id':no_user }
+    requirements:
+        user_id: '^(-?\d+|no_user)$'
+        admin_ad_counter: \d+
+    options:
+        expose: true
+
+ad_post_create_admin:
+    path:     /{user_id}/{admin_ad_counter}/{category_id}/create
+    defaults: { _controller: 'FaAdBundle:AdPostAdmin:create', 'user_id':no_user }
+    requirements:
+        user_id: '^(-?\d+|no_user)$'
+        admin_ad_counter: \d+
+    methods: 'POST'
+
+ad_post_search_user_admin:
+    path:    /search_user
+    defaults: { _controller: 'FaAdBundle:AdPostAdmin:searchUser' }
+
+ad_post_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: 'FaAdBundle:AdPostAdmin:edit' }
+
+ad_post_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: 'FaAdBundle:AdPostAdmin:update' }
+    requirements: { methods: post|put }
+
+ad_post_ajax_event_time_search_admin:
+    path:     /ajax/event_time/search/{term}
+    defaults: { _controller: 'FaAdBundle:AdPostAdmin:ajaxEventTimeSearch' }
+    options:
+        expose: true
+
+ad_post_admin_change_to_carweb_category:
+    path:     /{admin_ad_counter}/change_to_carweb_category
+    defaults: { _controller: 'FaAdBundle:AdPostAdmin:changeToCarWebCategory' }
+    requirements:
+        admin_ad_counter: \d+
+    options:
+        expose: true
+
+ad_post_change_ad_category_admin:
+    path:     /{ad_id}/{admin_ad_counter}/change_ad_category
+    defaults: { _controller: 'FaAdBundle:AdPostAdmin:changeAdCategory' }
+    requirements:
+        ad_id: '^(\d+)$'
+        admin_ad_counter: \d+
+    options:
+        expose: true
+        
+ad_post_ajax_auto_populate_brand_admin:
+    path:     /ajax/auto_populate_brand/{cd_id}/{ad_title}
+    defaults: { _controller: 'FaAdBundle:AdPostAdmin:ajaxAutoPopulateBrand' }
+    options:
+        expose: true

@@ -1,0 +1,148 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            <div class="row">
+                <div class="large-9 columns">
+                    {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                    <div class="row">
+                        <div class="large-8 columns{% if form.banner_zone.vars.errors|length %} error{% endif %}">
+                            <label>{{ 'Zone'|trans }} <span class="required">*</span>:</label>
+                            {{ form_widget(form.banner_zone) }}
+                            {{ form_errors(form.banner_zone) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-8 columns">
+                            {{ form_row(form.category_1) }}
+                            {{ form_row(form.category_2) }}
+                            {{ form_row(form.category_3) }}
+                            {{ form_row(form.category_4) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-8 columns{% if form.banner_pages.vars.errors|length %} error{% endif %}">
+                            <label>{{ 'Pages'|trans }} <span class="required">*</span>:</label>
+                            {{ form_widget(form.banner_pages) }}
+                            {{ form_errors(form.banner_pages) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-12 columns{% if form.code.vars.errors|length %} error{% endif %}">
+                            <label>{{ 'Code'|trans }} <span class="required">*</span>:</label>
+                            {{ form_widget(form.code) }}
+                            {{ form_errors(form.code) }}
+                        </div>
+                    </div>
+                    {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'banner_admin'}) }}
+                    {{ form_end(form) }}
+                </div>
+                <div class="large-3 columns">
+                    <b>{{ 'Variables available'|trans }}</b>
+                    <div style="overflow: auto; height: 380px;">
+                        {page_type}<br>
+                        {user_type}<br>
+                        {category}<br>
+                        {class}<br>
+                        {sub_class}<br>
+                        {sub_sub_class}<br>
+                        {user_location}<br>
+                        {county}<br>
+                        {edition_area}<br>
+                        {search_keyword}<br>
+                        {hashed_email}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}
+
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $("#fa_content_banner_admin_banner_zone").change(function() {
+            var zoneId = $(this).val()
+            if (zoneId != '') {
+            	var data = {id: $(this).val()};
+            	$.ajax({
+                    type: 'post',
+                    url: '{{ path("banner_ajax_get_pages_by_zone") }}',
+                    data: data,
+                    success: function(data) {
+                    	$('#fa_content_banner_admin_banner_pages option').remove();
+                        for (var i=0, total = data.length; i < total; i++) {
+                        	$('#fa_content_banner_admin_banner_pages').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                        }
+                        {% if selectedPagesArray is defined %}
+                            var selectedPages = [];
+                            var i =0;
+                            {% for key,value in selectedPagesArray %}
+                                selectedPages[i] = '{{ value }}';
+                                i++;
+                            {% endfor %}
+                            $("#fa_content_banner_admin_banner_pages").val(selectedPages);
+                        {% endif %}
+                    }
+                });
+            }
+        });
+
+        {% if selectedPagesArray is defined %}
+          if ($("#fa_content_banner_admin_banner_zone").val()) {
+            $("#fa_content_banner_admin_banner_zone").trigger("change");
+          }
+        {% endif %}
+
+        $("#fa_content_banner_admin_category_1").change(function(){
+            loadCategoryByLevel($(this).val(), 2);
+            loadCategoryByLevel('', 3);
+            loadCategoryByLevel('', 4);
+        });
+
+        $("#fa_content_banner_admin_category_2").change(function(){
+            loadCategoryByLevel($(this).val(), 3);
+            loadCategoryByLevel('', 4);
+        });
+
+        $("#fa_content_banner_admin_category_3").change(function(){
+            loadCategoryByLevel($(this).val(), 4);
+        });
+
+        $("#fa_content_banner_admin_page").change(function(){
+            hideShowSeofieldsByPage();
+        });
+        function loadCategoryByLevel(id, level)
+        {
+            var category_selector = $('#fa_content_banner_admin_category_'+level);
+            category_selector.html('<option value="">{{'Select category'|trans}} '+level+'</option>');
+
+            if (id) {
+                var data = {
+                    id: id
+                };
+                $.ajax({
+                    type: 'post',
+                    url: (level == 4) ? '{{ path("category_ajax_get_nested_node_json") }}' : '{{ path("category_ajax_get_node_json") }}',
+                    data: data,
+                    success: function(data) {
+                        for (var i=0, total = data.length; i < total; i++) {
+                            category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                        }
+                    }
+                });
+            }
+        }
+    });
+//]]>
+</script>
+{% endblock %}

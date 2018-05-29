@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="bfde90524313d881835c337a9b39be2e14a79509" resname="%step_count% steps to complete your ad">
+        <jms:reference-file line="33">views/AdPost/paaStepsList.html.twig</jms:reference-file>
+        <source>%step_count% steps to complete your ad</source>
+        <target state="new">%step_count% steps to complete your ad</target>
+      </trans-unit>
+      <trans-unit id="14588f1329916e7269990609ce63c6ad345d469e" resname="Add more details">
+        <jms:reference-file line="72">views/AdPost/paaStepsList.html.twig</jms:reference-file>
+        <jms:reference-file line="82">views/AdPost/paaStepsList.html.twig</jms:reference-file>
+        <source>Add more details</source>
+        <target state="new">Add more details</target>
+      </trans-unit>
+      <trans-unit id="e01ed8ffef21861f6e09d4c9d1f7e290915a71af" resname="Add some images to your advert.">
+        <jms:reference-file line="142">views/AdPostAdmin/community.html.twig</jms:reference-file>
+        <source>Add some images to your advert.</source>
+        <target state="new">Add some images to your advert.</target>
+      </trans-unit>
+      <trans-unit id="6854c38c73b5f47def50d1a74374bf5a4442f899" resname="Add your business details">
+        <jms:reference-file line="5">views/AdPost/userBusinessDetails.html.twig</jms:reference-file>
+        <source>Add your business details</source>
+        <target state="new">Add your business details</target>
+      </trans-unit>
+      <trans-unit id="5eb36efedc492cc57e68adf2b82fe077b82b9827" resname="Add your details">
+        <jms:reference-file line="77">views/AdPost/paaStepsList.html.twig</jms:reference-file>
+        <source>Add your details</source>
+        <target state="new">Add your details</target>
+      </trans-unit>
+      <trans-unit id="0a9289da1515ccee25746d648b9dd871c361125f" resname="Advertise on Friday-Ad">
+        <jms:reference-file line="30">views/AdPost/paaStepsList.html.twig</jms:reference-file>
+        <jms:reference-file line="196">views/AdPost/firstStep.html.twig</jms:reference-file>
+        <source>Advertise on Friday-Ad</source>
+        <target state="new">Advertise on Friday-Ad</target>
+      </trans-unit>
+      <trans-unit id="e1b46aab0caec09facb597d9e3827e0c934cef62" resname="Company logo has been uploaded successfully.">
+        <jms:reference-file line="112">views/UserImage/showProfileImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="114">views/UserImage/showImageUploader.html.twig</jms:reference-file>
+        <source>Company logo has been uploaded successfully.</source>
+        <target state="new">Company logo has been uploaded successfully.</target>
+      </trans-unit>
+      <trans-unit id="33acd98448c12b10f8e3f2cb5a3189ad558eef69" resname="Create and upload&lt;/b&gt;&lt;br /&gt;your own branded advert&lt;br /&gt;&lt;b&gt;for print">
+        <jms:reference-file line="91">views/AdPost/paaStepsList.html.twig</jms:reference-file>
+        <source><![CDATA[Create and upload</b><br />your own branded advert<br /><b>for print]]></source>
+        <target state="new"><![CDATA[Create and upload</b><br />your own branded advert<br /><b>for print]]></target>
+      </trans-unit>
+      <trans-unit id="a5bba81e12535ebfe2d548681b5567b860b193f5" resname="Describe your item">
+        <jms:reference-file line="5">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/secondStepCommunity.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/secondStepForSale.html.twig</jms:reference-file>
+        <jms:reference-file line="66">views/AdPost/paaStepsList.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/secondStepAnimals.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/secondStepJobs.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/secondStepServices.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/secondStepAdult.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/secondStepProperty.html.twig</jms:reference-file>
+        <source>Describe your item</source>
+        <target state="new">Describe your item</target>
+      </trans-unit>
+      <trans-unit id="b5a4a125a38688847a2a637bc1a4ecc2920a5de7" resname="Drag photo to change order">
+        <jms:reference-file line="28">views/AdImage/renderUploadedImage.html.twig</jms:reference-file>
+        <jms:reference-file line="19">views/UserSiteImage/renderUploadedUserSiteImage.html.twig</jms:reference-file>
+        <source>Drag photo to change order</source>
+        <target state="new">Drag photo to change order</target>
+      </trans-unit>
+      <trans-unit id="5301648dcf6b53cefc9ed52999aaa92d4603cae0" resname="Edit">
+        <jms:reference-file line="30">views/AdImage/renderUploadedImage.html.twig</jms:reference-file>
+        <jms:reference-file line="21">views/UserSiteImage/renderUploadedUserSiteImage.html.twig</jms:reference-file>
+        <source>Edit</source>
+        <target state="new">Edit</target>
+      </trans-unit>
+      <trans-unit id="ab68666c2078a8731177852300f7d1a693c4869f" resname="Give it a go!">
+        <jms:reference-file line="92">views/AdPost/paaStepsList.html.twig</jms:reference-file>
+        <source>Give it a go!</source>
+        <target state="new">Give it a go!</target>
+      </trans-unit>
+      <trans-unit id="e84712fbf4eee89d1d896d75da5b5b9ceca43eac" resname="Go back">
+        <jms:reference-file line="22">views/AdPost/fourthStepJobs.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/AdPost/thirdStepRegistration.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/AdPost/thirdStep.html.twig</jms:reference-file>
+        <jms:reference-file line="22">views/AdPost/fourthStepAnimals.html.twig</jms:reference-file>
+        <jms:reference-file line="19">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/AdPost/secondStepCommunity.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/AdPost/secondStepForSale.html.twig</jms:reference-file>
+        <jms:reference-file line="22">views/AdPost/fourthStepCommunity.html.twig</jms:reference-file>
+        <jms:reference-file line="22">views/AdPost/fourthStepServices.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/AdPost/secondStepAnimals.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/AdPost/secondStepJobs.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/AdPost/secondStepServices.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/AdPost/secondStepAdult.html.twig</jms:reference-file>
+        <jms:reference-file line="22">views/AdPost/fourthStepForSale.html.twig</jms:reference-file>
+        <jms:reference-file line="22">views/AdPost/fourthStepAdult.html.twig</jms:reference-file>
+        <jms:reference-file line="22">views/AdPost/fourthStepProperty.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/AdPost/secondStepProperty.html.twig</jms:reference-file>
+        <jms:reference-file line="22">views/AdPost/fourthStepMotors.html.twig</jms:reference-file>
+        <jms:reference-file line="33">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>Go back</source>
+        <target state="new">Go back</target>
+      </trans-unit>
+      <trans-unit id="527a85f8f7a45e756d72a0e3f9a3b568ce980b86" resname="Image files">
+        <jms:reference-file line="90">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <source>Image files</source>
+        <target state="new">Image files</target>
+      </trans-unit>
+      <trans-unit id="239f40fce7542001f0c0acaab30144d6cd472cd0" resname="Image has been already uploaded.">
+        <jms:reference-file line="92">views/UserImage/showProfileImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="95">views/UserImage/showImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="78">views/UserSiteBanner/showUserSiteBannerUploader.html.twig</jms:reference-file>
+        <source>Image has been already uploaded.</source>
+        <target state="new">Image has been already uploaded.</target>
+      </trans-unit>
+      <trans-unit id="caff126d7d322179f5f5b448c2a8671059d678f2" resname="Image type must be one of the jpg, jpeg, png, gif, bmp.">
+        <jms:reference-file line="43">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="136">views/UserImage/showProfileImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="37">views/UserImage/showImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="129">views/UserSiteImage/showUserSiteImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="117">views/UserSiteBanner/showUserSiteBannerUploader.html.twig</jms:reference-file>
+        <source>Image type must be one of the jpg, jpeg, png, gif, bmp.</source>
+        <target state="new">Image type must be one of the jpg, jpeg, png, gif, bmp.</target>
+      </trans-unit>
+      <trans-unit id="b04ba49f848624bb97ab094a2631d2ad74913498" resname="Loading...">
+        <jms:reference-file line="422">views/AdPostAdmin/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="242">views/AdEdit/motors.html.twig</jms:reference-file>
+        <jms:reference-file line="222">views/AdPost/secondStepMotors.html.twig</jms:reference-file>
+        <source>Loading...</source>
+        <target state="new">Loading...</target>
+      </trans-unit>
+      <trans-unit id="96ca509fadda065ab54a6df455e6bfaaee816ede" resname="Main photo">
+        <jms:reference-file line="13">views/AdImage/renderUploadedImage.html.twig</jms:reference-file>
+        <source>Main photo</source>
+        <target state="new">Main photo</target>
+      </trans-unit>
+      <trans-unit id="750aee3f42e08945dbbbfb23364621e7548d0259" resname="Original image reset successfully.">
+        <jms:reference-file line="376">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <source>Original image reset successfully.</source>
+        <target state="new">Original image reset successfully.</target>
+      </trans-unit>
+      <trans-unit id="98a33d7d9ad2b554f09269a6b5b7a70adfc64c58" resname="Photo(s) uploaded successfully.">
+        <jms:reference-file line="126">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <source>Photo(s) uploaded successfully.</source>
+        <target state="new">Photo(s) uploaded successfully.</target>
+      </trans-unit>
+      <trans-unit id="8fdbc0d181639c1a924d94bb65734fecc9780837" resname="Post an Ad Add more details">
+        <jms:reference-file line="5">views/AdPost/fourthStepJobs.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/fourthStepAnimals.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/fourthStepCommunity.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/fourthStepServices.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/fourthStepForSale.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/fourthStepAdult.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/fourthStepProperty.html.twig</jms:reference-file>
+        <jms:reference-file line="5">views/AdPost/fourthStepMotors.html.twig</jms:reference-file>
+        <source>Post an Ad Add more details</source>
+        <target state="new">Post an Ad Add more details</target>
+      </trans-unit>
+      <trans-unit id="6b111e7d463eb1c37f3849b4649f0746f83b9d73" resname="Problem in image upload.">
+        <jms:reference-file line="128">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <source>Problem in image upload.</source>
+        <target state="new">Problem in image upload.</target>
+      </trans-unit>
+      <trans-unit id="7fdbb0011afdb6ab0a1d4350a08c91cfabe6a155" resname="Sell your items on Friday-Ad">
+        <jms:reference-file line="28">views/AdPost/paaStepsList.html.twig</jms:reference-file>
+        <jms:reference-file line="194">views/AdPost/firstStep.html.twig</jms:reference-file>
+        <source>Sell your items on Friday-Ad</source>
+        <target state="new">Sell your items on Friday-Ad</target>
+      </trans-unit>
+      <trans-unit id="ae612acad5507c5a02d63b01968241aaf153cd1f" resname="The maximum image upload limit remains is ">
+        <jms:reference-file line="106">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <source>The maximum image upload limit remains is </source>
+        <target state="new">The maximum image upload limit remains is </target>
+      </trans-unit>
+      <trans-unit id="b050bc060bc41588cddb73381a44b37e7265588f" resname="The size of image should not be greater than %max_file_size%.">
+        <jms:reference-file line="42">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="134">views/UserImage/showProfileImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="36">views/UserImage/showImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="127">views/UserSiteImage/showUserSiteImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="115">views/UserSiteBanner/showUserSiteBannerUploader.html.twig</jms:reference-file>
+        <source>The size of image should not be greater than %max_file_size%.</source>
+        <target state="new">The size of image should not be greater than %max_file_size%.</target>
+      </trans-unit>
+      <trans-unit id="0684f3418e1e3d5e73e61bd7986b18f9f11e15d5" resname="Upload an image with the logo of your company. This will be used as the main image of your ad. You can add other images if you want to.">
+        <jms:reference-file line="98">views/AdPostAdmin/jobs.html.twig</jms:reference-file>
+        <jms:reference-file line="165">views/AdImage/showImageUploaderAdmin.html.twig</jms:reference-file>
+        <jms:reference-file line="178">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <source>Upload an image with the logo of your company. This will be used as the main image of your ad. You can add other images if you want to.</source>
+        <target state="new">Upload an image with the logo of your company. This will be used as the main image of your ad. You can add other images if you want to.</target>
+      </trans-unit>
+      <trans-unit id="f35dec5f750e7f6c44801279dfecc3fc80adacf9" resname="Upload image">
+        <jms:reference-file line="14">views/UserImage/renderUploadedImage.html.twig</jms:reference-file>
+        <source>Upload image</source>
+        <target state="new">Upload image</target>
+      </trans-unit>
+      <trans-unit id="db48c030755044f9e287df94c72f9053d7fbf6a6" resname="Uploading image please wait... ">
+        <jms:reference-file line="112">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="97">views/UserImage/showProfileImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="100">views/UserImage/showImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="83">views/UserSiteBanner/showUserSiteBannerUploader.html.twig</jms:reference-file>
+        <source>Uploading image please wait... </source>
+        <target state="new">Uploading image please wait... </target>
+      </trans-unit>
+      <trans-unit id="3f4d1b5098d90900576c61497c29e86148d643dc" resname="User image has been uploaded successfully.">
+        <jms:reference-file line="114">views/UserImage/showProfileImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="116">views/UserImage/showImageUploader.html.twig</jms:reference-file>
+        <source>User image has been uploaded successfully.</source>
+        <target state="new">User image has been uploaded successfully.</target>
+      </trans-unit>
+      <trans-unit id="a981b2ac7aeb78857bf145028b7a9eb8b8df4c8a" resname="What are you selling?">
+        <jms:reference-file line="61">views/AdPost/paaStepsList.html.twig</jms:reference-file>
+        <source>What are you selling?</source>
+        <target state="new">What are you selling?</target>
+      </trans-unit>
+      <trans-unit id="53298c3446c96aa58c90fb727c236ae2b822ac22" resname="Your browser does not have Flash, Silverlight or HTML5 support.">
+        <jms:reference-file line="44">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="137">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="132">views/UserImage/showProfileImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="38">views/UserImage/showImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="132">views/UserImage/showImageUploader.html.twig</jms:reference-file>
+        <jms:reference-file line="113">views/UserSiteBanner/showUserSiteBannerUploader.html.twig</jms:reference-file>
+        <source>Your browser does not have Flash, Silverlight or HTML5 support.</source>
+        <target state="new">Your browser does not have Flash, Silverlight or HTML5 support.</target>
+      </trans-unit>
+      <trans-unit id="226b95714dd63706b3e922b3bce9c3d8c2c18d01" resname="Your profile image will be used as the main photo of your ad. You can edit it or change it and add more images if you want to.">
+        <jms:reference-file line="163">views/AdImage/showImageUploaderAdmin.html.twig</jms:reference-file>
+        <jms:reference-file line="176">views/AdImage/showImageUploader.html.twig</jms:reference-file>
+        <source>Your profile image will be used as the main photo of your ad. You can edit it or change it and add more images if you want to.</source>
+        <target state="new">Your profile image will be used as the main photo of your ad. You can edit it or change it and add more images if you want to.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

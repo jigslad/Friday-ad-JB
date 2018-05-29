@@ -1,0 +1,26 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="24" height="29.3" viewBox="-746.3 672.3 24 29.3" xml:space="preserve" enable-background="new -746.3 672.3 24 29.3">
+  <style type="text/css">
+    
+	.st0{fill:#EFEFEF;}
+	.st1{fill:#A8DC28;}
+
+  </style>
+  <title>
+    property
+  </title>
+  <desc>
+    Created with Sketch Beta.
+  </desc>
+  <g id="PAA" sketch:type="MSPage">
+    <g id="menu-mobile" transform="translate(-16.000000, -191.000000)" sketch:type="MSArtboardGroup">
+      <g id="Menu-panel-1" transform="translate(557.000000, 96.000000)" sketch:type="MSShapeGroup">
+        <g id="Property-_x2B_-flat-icon" transform="translate(21.000000, 130.000000)">
+          <path class="st0" d="M-1307.5 639.7v25.8h8.3v-6.2h5.7v6.2h8.3v-25.8H-1307.5zM-1299.3 655.4h-5.7v-5.1h5.7V655.4zM-1299.3 647.6h-5.7v-5.1h5.7V647.6zM-1287.8 655.4h-5.7v-5.1h5.7V655.4zM-1287.8 647.6h-5.7v-5.1h5.7V647.6z"/>
+          <rect x="-1299.3" y="665.5" class="st0" width="5.7" height="1.1"/>
+        </g>
+      </g>
+    </g>
+  </g>
+  <rect x="-746.3" y="672.3" class="st1" width="24" height="0.8"/>
+  <rect x="-731" y="685.8" class="st1" width="4.7" height="4.1"/>
+</svg>

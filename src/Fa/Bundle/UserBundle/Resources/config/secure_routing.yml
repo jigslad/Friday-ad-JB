@@ -1,0 +1,14 @@
+login:
+    path:   /login/
+    defaults:  { _controller: FaUserBundle:Security:login }
+
+facebook_login:
+    path:   /facebook_login
+    defaults:  { _controller: FaUserBundle:Security:facebookLogin }
+
+google_login:
+    path:   /google_login
+    defaults:  { _controller: FaUserBundle:Security:googleLogin }
+
+login_check:
+    path:   /login_check

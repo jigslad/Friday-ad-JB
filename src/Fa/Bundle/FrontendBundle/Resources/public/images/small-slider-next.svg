@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20" height="19" xmlns="http://www.w3.org/2000/svg">
+ <!-- Generator: Sketch 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+ <title>carousel Previous</title>
+ <desc>Created with Sketch.</desc>
+ <g>
+  <title>Layer 1</title>
+  <g fill-rule="evenodd" fill="none" id="Ad-details">
+   <g transform="rotate(-180, 10.002, 9.5)" stroke-linejoin="round" stroke-linecap="round" stroke-width="3" stroke="#4A4A4A" id="Desktop-HD-Ad-details-21">
+    <g id="Similar-ads">
+     <g id="NEXT-+-PREV-2">
+      <g id="PREV">
+       <g id="carousel-Previous">
+        <path id="selected-5" d="m8.807846,1.756348l-6.639877,7.726318l6.666656,7.757568"/>
+        <path id="selected-9" d="m17.807846,1.756348l-6.639877,7.726318l6.666656,7.757568"/>
+       </g>
+      </g>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>

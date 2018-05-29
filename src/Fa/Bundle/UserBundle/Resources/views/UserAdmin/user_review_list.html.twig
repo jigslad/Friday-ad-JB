@@ -1,0 +1,115 @@
+{% if isChild is defined and isChild == true %}
+    <tr class="odd gradeX">
+        <td>
+            <div class="all_rvws">
+                {% if loopchild.last %}
+                <div>
+                {% else %}
+                <div class="rply_sprt">
+                    {% endif %}
+                    <div class="row">
+                        <div class="medium-9 columns">
+                            {% if review.report is not null %}
+                                <i class="fi-alert size-24" style="color:#ff0000"></i>&nbsp;
+                                <b>{{ review.reviewer.getFullName()}}</b>
+                                <i class="size-12">{{ 'reported to this review'|trans }}</i>
+                                {% if userReviewEditGrant %}
+                                    <div class="editable_textarea editable_report" id="review_{{review.id}}">{{ review.report }}</div>
+                                {% else %}
+                                    <div>{{ review.report }}</div>
+                                {% endif %}
+                            {% else %}
+                                <i class="fi-refresh size-24" style="color:#008000"></i>&nbsp;
+                                <b>{{ review.reviewer.getFullName()}}</b>
+                                <i class="size-12">{{ 'replied to this review'|trans }}</i>
+                                {% if userReviewEditGrant %}
+                                    <div class="editable_textarea editable_message" id="review_{{review.id}}">{{ review.message }}</div>
+                                {% else %}
+                                    <div>{{ review.message }}</div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="medium-3 columns size-13 text-right">
+                            {{ review.createdAt|localizeddate('short', 'medium', app.request.locale ) }}
+                            {% if review.status is not null %}
+                                {% if userReviewEditGrant %}
+                                    <div class="mt5 mb5 editable_select" id="review_{{review.id}}">{{ statusArray[review.status] }}</div>
+                                {% else %}
+                                    <div class="mt5 mb5">{{ statusArray[review.status] }}</div>
+                                {% endif %}
+                            {% endif %}
+                            {% if userReviewDeleteGrant %}
+                                <a href="{{ path('user_review_delete_admin', {'id': review.id}) }}" onclick="javascript:return confirm('Do you want to delete this review?')" style="text-decoration:underline">{{ 'Delete'|trans }}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+{% else %}
+    <tr class="odd gradeX">
+       {% if loop.first %}
+        <td>
+       {% else %}
+       <td class="rvw_sprt"> 
+       {% endif %}
+            <table class="mb0">
+                <tr>
+                    <td width="5%">
+                        <div class="user_icon"><i class="gray_color fi-torso size-48"></i></div>
+                    </td>
+                    <td width="75%">
+                        <div class="ml10">
+                            <div class="mb5 clearfix">
+                                {% if isLeftForOther is defined %}
+                                    <div class="left">{{ review.reviewer.getFullName()}} {{ 'left review for'|trans}} <b class="size-16">{{ review.user.getFullName()}}</b></div>
+                                {% else %}
+                                    <div class="left"><b class="size-16 left">{{ review.reviewer.getFullName()}}</b></div>
+                                {% endif %}
+                            </div>
+                            {% if review.ad is not null %}
+                                {% if isLeftForOther is defined %}
+                                    <div class="mb5"><a href="#">{{ review.ad.title }}</a></div>
+                                {% else %}
+                                    <div class="mb5">{{ 'Reviewed'|trans}} <a href="#">{{ review.ad.title }}</a></div>
+                                {% endif %}
+                            {% endif %}
+                            {% if review.rating is not null %}
+                                {% set percentage = ((review.rating / 5) * 100) %}
+                                <div class="rating_star">
+                                    <div class="star_img" title="{{ review.rating }} {{ 'out of'|trans }} 5"></div>
+                                    <div class="star_fill" style="width:{{ percentage }}%"></div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td width="20%" valign="top" align="right">
+                        <div class="ml10">
+                            <div class="mb5 clearfix">
+                                <div class="right size-13 text-right">
+                                    {{ review.createdAt|localizeddate('short', 'medium', app.request.locale ) }}
+                                    {% if review.status is not null %}
+                                        {% if userReviewEditGrant %}
+                                            <div class="mt5 mb5 editable_select" id="review_{{review.id}}">{{ statusArray[review.status] }}</div>
+                                        {% else %}
+                                            <div class="mt5 mb5">{{ statusArray[review.status] }}</div>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if userReviewDeleteGrant %}
+                                        <a href="{{ path('user_review_delete_admin', {'id': review.id}) }}" onclick="javascript:return confirm('Do you want to delete this review?')" style="text-decoration:underline">{{ 'Delete'|trans }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            {% if userReviewEditGrant %}
+                <div class="mt15 size-16 user_rvw_line editable_textarea editable_message" id="review_{{review.id}}">{{ review.message }}</div>
+            {% else %}
+                <div class="mt15 size-16 user_rvw_line">{{ review.message }}</div>
+            {% endif %}
+        </td>
+    </tr>
+{% endif %}

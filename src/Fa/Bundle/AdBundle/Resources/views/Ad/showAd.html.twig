@@ -1,0 +1,1436 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% use "FaAdBundle:AdImage:renderImageSlider.html.twig" %}
+{% use "FaCoreBundle:GoogleMap:renderLocationUsingCustomMarker.html.twig" %}
+{% use "FaAdBundle:Ad:AdDetailSimilarAds.html.twig" %}
+
+{% set isAdAdminPreview = false %}
+{% set seoFields = {} %}
+{% set adImages = {} %}
+{% set adId = adDetail.id %}
+{% set container = fetch_container_instance() %}
+{% set seoManager = container.get('fa.seo.manager') %}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+{% set paymentRepository = fetch_repository('FaPaymentBundle:Payment') %}
+{% set adRepository = fetch_repository('FaAdBundle:Ad') %}
+{% set entityRepository = fetch_repository('FaEntityBundle:Entity') %}
+
+{% set adCategoryId = attribute(adDetail, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
+{% set rootCategoryId = attribute(adDetail, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+{% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+{% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(adDetail, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_DETAIL_PAGE'), container) %}
+{% set solrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+{% set adDetailAndDimensionFields = adRepository.getAdDetailAndDimensionFields(adCategoryId, adDetail, container, false, [], true) %}
+{% set adFavoriteRepository   = fetch_repository('FaAdBundle:AdFavorite') %}
+{% set secondLevelCategoryId = null %}
+{% set adLocationName = null %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set currentDevice = 'D' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'T' %}
+{% endif %}
+{% if attribute(adDetail, 'a_parent_category_lvl_2_id_i') is defined %}
+    {% set secondLevelCategoryId = attribute(adDetail, 'a_parent_category_lvl_2_id_i') %}
+{% endif %}
+{% set youtubeVideoUrl = null %}
+{% if attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL')) is defined and attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL'))|length %}
+    {% set youtubeVideoUrl = attribute(adDetail, constant(solrMapping ~ 'YOUTUBE_VIDEO_URL')) %}
+{% endif %}
+
+{% set showBuyNowWithPaypal = false %}
+{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') and attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')) is defined and attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')) in {0: constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID'), 1: constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')} %}
+    {% set showBuyNowWithPaypal = true %}
+{% endif %}
+
+{% set isOneclickenqinfo = false %}
+{% set isOneclickenqbutton = false %}
+{% if app.user %}
+    {% set userId = app.user.getId() %}
+    {% set oneclickenqDetails = categoryRepository.getOneclickenqDetailForCategoryId(adCategoryId, container) %}
+    {% if (oneclickenqDetails is defined and oneclickenqDetails['is_oneclickenq_enabled'] == true) %}
+        {% if (app.getUser() and adDetail['user'] is defined and adDetail['user']["id"] != app.getUser().getId() and showBuyNowWithPaypal == false) %}
+            {% set isOneclickenqbutton = true %}
+            {%  if (not app.request.cookies.has('got_it_one_click_enq')) %}
+                {% set isOneclickenqinfo = true %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% else %}
+    {% set userId = app.session.getId() %}
+{% endif %}
+{% set adFavoriteAdIds = adFavoriteRepository.getFavoriteAdByUserId(userId, container) %}
+
+{% if seoPageRule|length %}
+    {% set seoFields = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSeoFields', [seoPageRule]) %}
+{% endif %}
+
+{% set isSoldExpiredAdFlag = false %}
+{% if attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')}  %}
+    {% set isSoldExpiredAdFlag = true %}
+{% endif %}
+
+{% set adTypeIds = entityRepository.getEntityIdsByFieldIdAndName('ad_type_id', 'wanted', container) %}
+
+{% if (adDetail['a_type_id_i'] is defined and adDetail['a_type_id_i'] in adTypeIds) %}
+    {% set isOneclickenqbutton = false %}
+    {% set isOneclickenqinfo = false %}
+{% endif %}
+
+{% if (isSoldExpiredAdFlag == true) %}
+    {% set isOneclickenqbutton = false %}
+    {% set isOneclickenqinfo = false %}
+{% endif %}
+
+{% if adDetail['user'] is defined and adDetail['user']['contact_through_email'] == false %}
+    {% set isOneclickenqbutton = false %}
+    {% set isOneclickenqinfo = false %}
+{% endif %}
+
+{% set showNimber = false %}
+{% if not app.request.cookies.has('nimber_task_'~adId) and attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') and attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')) is defined and attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')) in {0: constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::COLLECTION_ONLY_ID'), 1: constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::POSTED_OR_COLLECT_ID')} %}
+    {% set nimberOptions = categoryRepository.getNimberDetailForCategoryId(adCategoryId, container) %}
+    {% if nimberOptions['is_nimber_enabled'] is defined and nimberOptions['is_nimber_enabled'] %}
+        {% set showNimber = true %}
+    {% endif %}
+{% endif %}
+
+{% set isFinance = false %}
+{% set financeDetails = categoryRepository.getFinanceDetailForCategoryId(adCategoryId, container) %}
+{% if (financeDetails is defined and financeDetails['is_finance_enabled'] is defined and financeDetails['is_finance_enabled'] == true) %}
+    {% set isFinance = true %}
+{% endif %}
+
+{% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(adDetail, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+{% if attribute(adDetail, constant(solrMapping ~ 'PATH')) is defined %}
+    {% for index,path in attribute(adDetail, constant(solrMapping ~ 'PATH')) %}
+        {% if attribute(adDetail, constant(solrMapping ~ 'HASH'))[index] is defined and attribute(adDetail, constant(solrMapping ~ 'ORD'))[index] is defined %}
+            {% set aws = null %}
+            {% set image_name = null %}
+
+            {% if attribute(adDetail, constant(solrMapping ~ 'AWS'))[index] is defined %}
+                {% set aws = attribute(adDetail, constant(solrMapping ~ 'AWS'))[index] %}
+            {% endif %}
+
+            {% if attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] is defined %}
+                {% set image_name = attribute(adDetail, constant(solrMapping ~ 'IMAGE_NAME'))[index] %}
+            {% endif %}
+
+            {% set adImages = adImages|merge([{'path': path, 'hash': attribute(adDetail, constant(solrMapping ~ 'HASH'))[index], 'ord': attribute(adDetail, constant(solrMapping ~ 'ORD'))[index], 'aws' : aws, 'image_name': image_name }]) %}
+
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% set allowAdEdit = false %}
+{% if app.getUser() and adDetail['user'] is defined and adDetail['user']["id"] == app.getUser().getId() %}
+    {% set allowAdEdit = true %}
+    {% use "FaUserBundle:UserImage:showProfileImageUploader.html.twig" %}
+    {% use "FaAdBundle:AdImage:showImageUploader.html.twig" %}
+    {% set deleteRoute = "ajax_delete_user_image" %}
+    {% set getProfileBigImageRoute = "ajax_get_profile_big_image" %}
+    {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
+    {% set adPackageArray  = adUserPackageRepository.getAdPackageArrayByAdId({0: adId}) %}
+    
+    {% set locationGroupIds = fetch_repository('FaAdBundle:AdLocation').getLocationGroupIdForAd(adId, true) %}
+    {% set userRolesArray = {} %}
+    {% set activePackageArray = {} %}
+    {% if adDetail['user']['user_role'] is defined %}
+        {% set userRolesArray = {0: adDetail['user']['user_role']} %}
+    {% endif %}
+    
+    {% if adPackageArray[adId] is defined %}
+        {% set activePackageArray = {0: adPackageArray[adId]['package_id']} %}
+    {% endif %}
+    
+    {% set promotePackages = fetch_repository('FaPromotionBundle:PackageRule').getActivePackagesByCategoryId(adCategoryId, locationGroupIds, userRolesArray, activePackageArray, container) %}
+{% endif %}
+
+{% set userTypeText = null %}
+{% if adDetail['user']['role_id'] is defined %}
+    {% if adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+        {% set userTypeText = 'Business ad' %}
+    {% elseif adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
+        {% set userTypeText = 'Private ad' %}
+    {% endif %}
+{% endif %}
+    
+{% block facebook_meta %}
+    {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(adDetail) %}
+    <meta property="og:url" content="{{ adUrl }}" />
+    {% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
+        <meta property="og:title" content="{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}" />
+    {% endif %}
+    {% set adDescription = 'No description' %}
+    {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+    		{% set adDescription = attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) %}
+    		{% set adDescription = adDescription|striptags %}
+    {% endif %}
+    <meta property="og:description" content="{{adDescription|raw}}" />
+    {% set firstImageUrl = fetch_repository('FaAdBundle:AdImage').getImagePath(container, adDetail, '800X600', 1) %}
+    {% if firstImageUrl %}
+        {% set firstImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addProtocolToUrl', [firstImageUrl]) %}
+        {% set imageSize = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getImagesizeFromImageUrl', [firstImageUrl]) %}
+        {% set firstImageUrlSecure = firstImageUrl|replace({'http': 'https'}) %}
+        
+        <meta property="og:image" content="{{firstImageUrl}}" />
+        <meta property="og:image:secure_url" content="{{firstImageUrlSecure}}" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="{{ imageSize.0 is defined ? imageSize.0 : 800}}" />
+        <meta property="og:image:height" content="{{ imageSize.1 is defined ? imageSize.1 : 600}}" />
+    {% endif %}
+{% endblock %}
+
+{% block twitter_meta %}
+		<meta name="twitter:card" content="summary_large_image">
+    {% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
+    		<meta name="twitter:title" content="{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}">
+    {% endif %}
+    {% set adDescription = 'No description' %}
+    {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+    		{% set adDescription = attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) %}
+    		{% set adDescription = adDescription|striptags %}
+    {% endif %}
+    <meta name="twitter:description" content="{{adDescription|raw}}">
+    {% set firstImageUrl = fetch_repository('FaAdBundle:AdImage').getImagePath(container, adDetail, '800X600', 1) %}
+    {% if firstImageUrl %}
+        <meta name="twitter:image" content="{{firstImageUrl}}">
+    {% endif %}
+{% endblock %}
+
+{% block scripttop %}
+    {{ block('image_slider_css') }}
+    {% if allowAdEdit %}
+        {{ block('profileImageUploadStylesheets') }}
+        {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
+        {{ block('imageUploadStylesheets') }}
+    {% endif %}
+{% endblock %}
+
+{% block meta_robots %}
+    {% if seoFields.meta_robots is defined %}
+        {{seoFields.meta_robots}}
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    {% if seoFields.page_title is defined %}
+        {{ seoManager.parseAdDetailSeoString(seoFields.page_title, adDetail) }}
+    {% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if seoFields.meta_description is defined %}
+        {{ seoManager.parseAdDetailSeoString(seoFields.meta_description, adDetail) }}
+    {% endif %}
+{% endblock %}
+
+{% block meta_keywords %}
+    {% if seoFields.meta_keywords is defined %}
+        {{ seoManager.parseAdDetailSeoString(seoFields.meta_keywords, adDetail) }}
+    {% endif %}
+{% endblock %}
+{% set catString = null %}
+{% block body %}
+{% set imageZoomeZoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_IN_IMAGE_ZOOM') %}
+{% set imageZoomBannerExist = false %}
+{% if (imageZoomeZoneId in bannersArray|keys) %}
+    {% set imageZoomBannerExist = true %}
+{% endif %}
+{{ set_variables('imageZoomBannerVars', {'imageZoomBannerExist':imageZoomBannerExist}) }}
+{% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+    {% set orgAdDesc = attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) %}
+{% endif %}
+{% if currentDevice == 'D' or currentDevice == 'T' %}
+    <div class="details-top-banner" id="sticky_item_information_id" style="display:none">
+        <div class="row">
+            <div class="columns">
+                <div class="row">
+                    <div class="large-16 columns">
+                        <div class="clearfix">
+                            {% if app.session.has('back_to_search_url') %}
+                                <a href="{{app.session.get('back_to_search_url')}}" class="back-to-list">test</a>
+                            {% endif %}
+                            <div class="large-22 columns">
+                                {% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
+                                    <h3>{{ attribute(adDetail, constant(solrMapping ~ 'TITLE')) }}</h3>
+                                {% endif %}
+                                <div class="clearfix">
+                                    {% if (attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')) is defined and attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined) %}
+                                        <div class="detail-location"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0 ~ ',' ~ attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0) }}</a></div>
+                                    {% elseif attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined %}
+                                        <div class="detail-location"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></div>
+                                    {% else %}
+                                        <div class="detail-location">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')) }}</div>
+                                    {% endif %}
+                                    <div class="item-price">
+                                        {% if attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) > 0 and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID')%}
+                                            {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'PRICE'))) }} {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'messages')}}</span>{% endif %}{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID')) is defined %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID'))) }}</span>{% endif %}
+                                        {% endif %}
+                                        {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'EVENT_START')) is defined %}
+                                            {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(adDetail, constant(solrMapping ~ 'EVENT_START')), (attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) : null), container) %}
+                                            <span class="whats-on item-preview-on">{{ eventStartDate }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="large-8 columns">
+                        {% if not isSoldExpiredAdFlag and ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) or (adDetail['user'] is defined and showBuyNowWithPaypal)) %}
+                            <div class="clearfix {% if ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined)) and (adDetail['user'] is defined and showBuyNowWithPaypal) or (isOneclickenqbutton == true) %}double-buttons{% endif %}">
+                                {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
+                                    <a href="javascript:void(0);" onclick="return contactSeller('{{ adId }}', 'Contact Seller button');" id="fixed_contact_button_anchor" class="primary-btn-1 button cont-seller-btn{% if (isOneclickenqbutton == false) %} expand{% endif %}">
+                                        <span class="btn-txt">
+                                            {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                                                {{'Apply'|trans({}, 'frontend-show-ad')}}
+                                            {% else %}
+                                                {{'Contact'|trans({}, 'frontend-show-ad')}}
+                                            {% endif %}
+                                        </span>
+                                        {% if adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and adDetail['user']['contact_through_email'] == 1 %}
+                                            <span class="contact-icon">contact</span>
+                                        {% elseif adDetail['user'] is defined and not adDetail['user']['contact_through_phone'] and adDetail['user']['contact_through_email'] == 1 %}
+                                            <span class="contact-email-icon">contact</span>
+                                        {% elseif (adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and not adDetail['user']['contact_through_email']) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
+                                            <span class="contact-phone-icon">contact</span>
+                                        {% endif %}
+                                    </a>
+                                {% endif %}
+                                {% if adDetail['user'] is defined and showBuyNowWithPaypal %}
+                                        <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand paypal-btn"><span class="btn-txt">{{'Buy now'|trans({}, 'frontend-show-ad')}}</span><span class="paypal-icon">paypal</span></a>
+                                {% endif %}
+
+                                {% if (isOneclickenqbutton == true) %}
+                                    <a href="javascript:void(0)" class="primary-btn-2 button enquire-btn" onclick="return sendOneClickEnquiry();" >
+                                        <span class="btn-txt">{{'Still available?'|trans({}, 'frontend-show-ad')}}</span>
+                                        <span class="enquire-icon">{{'Still available?'|trans({}, 'frontend-show-ad')}}</span>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<div class="breadcrumb-area">
+    <div class="row">
+        <div class="columns">
+            <div class="breadcrumb details-breadcrumb">
+                <ul class="clearfix">
+                    {% if app.session.has('back_to_search_url') %}
+                        <li><a href="{{app.session.get('back_to_search_url')}}" class="back-link">{{'Back to search results'|trans({}, 'frontend-show-ad')}}</a></li>
+                    {% endif %}
+                    <li class="hide-for-small-only {% if not app.session.has('back_to_search_url') %}breadcrumb-full{% endif %}">
+                        <a href="{% if location_id and location_slug and location_id is not null and location_slug is not null and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %} {{ path('location_home_page', {'location': location_slug}) }} {% else %}{{ path('fa_frontend_homepage') }} {% endif %}">{{'Home'|trans({}, 'frontend-show-ad')}}</a>
+                        {% if adCategoryId is defined %}
+                            {% set categoryPath = categoryRepository.getCategoryPathArrayById(adCategoryId, false, container) %}
+                            {% set catString = null %}
+                            {% for categoryId,categoryName in categoryPath %}
+                                {% set catLinkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
+                                {% set catListUrl = container.get('fa_ad.manager.ad_routing').getListingUrl(catLinkParam) %}
+                                {% set catString = catString ~ '-' ~ categoryName %}
+                                <a href="{{ catListUrl }}">{{ categoryName }}</a>
+                            {% endfor %}
+                            {{ set_variables('CatDetails', {'catString':catString}) }}
+                        {% endif %}
+                        {% if attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
+                            <span>{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}</span>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_IN_HEADER') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_IN_HEADER_TABLET') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+        </div>
+    </div>
+</div>
+
+{% if isSoldExpiredAdFlag %}
+    <div class="details-expired-items">
+        {{ block('similar_ads_html') }}
+    </div>
+{% endif %}
+
+<div class="banner-wrapper clearfix">
+    <div class="left-banner">
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+    </div>
+    <div class="details-wrapper banner-mid-column">
+        <div class="relative">
+            <div class="row">
+                <div class="columns">
+                    <div class="row">
+                        <div class="large-16 columns">
+                            
+                            <div class="row show-for-small-only">
+                                <div class="small-14 columns">
+                                    <p class="listed-date">
+                                        {% if attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT')) is defined %}
+                                            <span class="ago-icon">ago</span>{{attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <div class="small-10 columns">
+                                    {% if allowAdEdit is defined and allowAdEdit %}
+                                        <a id ="edit_advert_link1" href="javascript:void(0);" class="edit-advert mt10">{{ 'Edit Advert'|trans({}, 'frontend-show-ad') }}</a>
+                                    {% endif %}                                
+                                </div>
+                            </div>
+                            
+                            {% set noImage = 0 %}
+                            {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, adDetail, '300X225', 1) %}
+                            {% if not imagePath %}
+                                {% set imagePath = asset_url('fafrontend/images/no-image.svg') %}
+                                {% set noImage = 1 %}
+                            {% endif %}
+                            {% if rootCategoryId in {2:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 3:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), } %}
+                            <div class="detail-thumb-img">
+                                <div class="dtl-thumb{% if noImage == 1 %} img-placeholder{% endif %}">
+                                    {% if noImage == 1 and allowAdEdit is defined and allowAdEdit %}
+                                        <span>No photo?</span>
+                                        <a class="primary-btn-3 button thin-btn" href="{{ path('ad_edit', {'id': adId, 'scrollTo': 'image'})}}">Add photo</a>
+                                    {% else %}
+                                        {% if noImage != 1 %}<a href="javascript:void(0);" onclick="showOriginalImage();">{% endif %}
+                                            <img src="{{ imagePath }}" alt="no-image" />
+                                        {% if noImage != 1 %}</a>{% endif %}
+                                        
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                            <h1 class="detail-head">
+                                {% if seoFields.h1_tag is defined %}
+                                    {{ seoManager.parseAdDetailSeoString(seoFields.h1_tag, adDetail) }}
+                                {% elseif attribute(adDetail, constant(solrMapping ~ 'TITLE')) is defined %}
+                                    {{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}
+                                {% endif %}
+                            </h1>
+
+                            {% if attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE')) is defined %}
+                                <h2 class="detail-sub-head hide-for-small-only">"{{attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE'))}}"</h2>
+                            {% endif %}
+                            
+                            {% if attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined  %}
+                            	{% set adLocationName = entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) %}
+                            {% endif %}
+                            
+                            <div class="row {% if rootCategoryId in {2:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 3:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), } %}location-with-image{% endif %}">
+                                <div class="large-12 medium-11 columns">
+                                    <div class="detail-location">
+                                        {% if (attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')) is defined and attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined) %}
+                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0 ~ ',' ~ attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0 }) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0) }}</a></b>
+                                        {% elseif attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined %}
+                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                        {% else %}
+                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="large-6 medium-6 columns hide-for-small-only">
+                                    {% if allowAdEdit is defined and allowAdEdit %}
+                                        <a id ="edit_advert_link2"  href="javascript:void(0)" class="edit-advert">{{ 'Edit Advert'|trans({}, 'frontend-show-ad') }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and adDetail['user']['company_welcome_message'] is defined and adDetail['user']['company_welcome_message'] is not null %}
+                                <h2 class="services-desc">{{ adDetail['user']['company_welcome_message']|replace({"\\n": "<br />"})|raw }}</h2>
+                            {% endif %}
+                            
+                            {% if allowAdEdit is defined and promotePackages[0] is defined and allowAdEdit and attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')} and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
+                                <div class="upgrade-box">
+                                    <div class="row">
+                                        <div class="large-16 columns">
+                                            <b>{{ 'Your ad type: %package_title%'|trans({'%package_title%': adPackageArray[adId]['title']}, 'frontend-show-ad') }}</b><br />
+                                            {{ 'Get a better response by upgrading to %next_package_text% for %next_package_price%'|trans({'%next_package_text%': promotePackages[0].getPackage().getTitle(), '%next_package_price%': format_currency(promotePackages[0].getPackage().getPrice())}, 'frontend-show-ad') }}
+                                        </div>
+                                        <div class="large-8 columns">
+                                            <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="clearfix">
+                                {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) > 0 %}
+                                    <div class="show-for-small-only left">
+                                        <b class="item-price show-for-small-only {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') or (rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID')) is defined) %}classes-tution-price{% endif %}">
+                                            {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'PRICE'))) }}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'messages')}}</span>{% endif %}{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID')) is defined %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', attribute(adDetail, constant(solrMapping ~ 'RENT_PER_ID'))) }}</span>{% endif %}
+                                        </b>
+                                        {% if attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE')) > 0 %}
+                                            <div class="item-postage show-for-small-only">
+                                                <b>+ {{ format_currency(attribute(adDetail, constant(solrMapping ~ 'POSTAGE_PRICE'))) }}</b> {{ 'postage'|trans({}, 'frontend-show-ad') }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                {% if attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')) is defined %}
+                                    <div class="show-for-small-only mob-delivery-method">
+                                        <span class="person-collection">
+                                            {{ entityCacheManager.getEntityNameById('FaPaymentBundle:DeliveryMethodOption', attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID'))) }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'EVENT_START')) is defined %}
+                                {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(adDetail, constant(solrMapping ~ 'EVENT_START')), (attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(adDetail, constant(solrMapping ~ 'EVENT_END')) : null), container) %}
+                                <div class="clearfix">
+                                    <span class="whats-on item-preview-on show-for-small-only">{{ eventStartDate }}</span>
+                                </div>
+                            {% endif %}
+                           
+                            {% set latitude = null %}
+                            {% set longitude = null %}
+                            {% if attribute(adDetail, constant(solrMapping ~ 'LATITUDE')) is defined and attribute(adDetail, constant(solrMapping ~ 'LONGITUDE')) is defined %}
+                                {% set latitude = attribute(adDetail, constant(solrMapping ~ 'LATITUDE')).0 %}
+                                {% set longitude = attribute(adDetail, constant(solrMapping ~ 'LONGITUDE')).0 %}
+                                {% set mapHeight = '400px' %}
+                                {% set mapWidth =  '709px' %}
+                                {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'tabId': 'adDetailMainTabs', 'mapContentId': 'map_panel'}) }}
+                            {% endif %}
+                            
+                            {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                                {% if attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')}  %}
+                                    {% set optHideOrRemove = 'remove' %}
+                                {% else %}
+                                    {% set optHideOrRemove = 'hide' %}
+                                {% endif %}
+                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove]) %}
+                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
+                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove])) %}
+                            {% endif %}
+
+                            {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                                {% set adJobDetail = {} %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                                    {% set adJobDetail = adJobDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                                {% endif %}
+                                {% set metaData = {} %}
+                                {% set additionalJobReqIds = {} %}
+                                {% set additionalJobBenefitIds = {} %}
+                                {% set featureIds = {} %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
+                                    {% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
+                                    {% if metaData['additional_job_requirements_id'] is defined %}
+                                        {% set additionalJobReqIds = metaData['additional_job_requirements_id']|split(',') %}
+                                    {% endif %}
+                                    {% if metaData['additional_benefits_id'] is defined %}
+                                        {% set additionalJobBenefitIds = metaData['additional_benefits_id']|split(',') %}
+                                    {% endif %}
+                                {% endif %}
+                                {{ include('FaAdBundle:Ad:AdJobDetailTabs.html.twig') }}
+                                <br />
+                            {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') %}
+                                {% set adServiceDetail = {} %}
+                                {% set servicesOfferedIds = {} %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                                    {% set adServiceDetail = adServiceDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                                {% endif %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'SERVICES_OFFERED_ID')) is defined %}
+                                    {% set servicesOfferedIds = attribute(adDetail, constant(solrMapping ~ 'SERVICES_OFFERED_ID')) %}
+                                {% endif %}
+                                {{ include('FaAdBundle:Ad:AdServiceDetailTabs.html.twig') }}
+                                <br />
+                            {% endif %}
+                            
+                            {{ include('FaAdBundle:Ad:showMapImages.html.twig', { 'googlemap_location_html': block('googlemap_location_html'), 'image_slider_html': block('image_slider_html'), 'allowAdEdit': allowAdEdit, 'imageZoomBannerExist': imageZoomBannerExist }) }}
+                            
+                            {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove]) %}
+                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
+                                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, optHideOrRemove])) %}
+                            {% endif %}
+
+                            {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+                                {% set adForSaleDetail = {} %}
+                                {% set postagePayment = {} %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                                    {% set adForSaleDetail = adForSaleDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                                {% endif %}
+                                {% if attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')) is defined %}
+                                    {% set postagePayment = postagePayment|merge({'delivery_method': entityCacheManager.getEntityNameById('FaPaymentBundle:DeliveryMethodOption', attribute(adDetail, constant(solrMapping ~ 'DELIVERY_METHOD_OPTION_ID')))}) %}
+                                {% endif %}
+                                {% if attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')) is defined %}
+                                    {% set postagePayment = postagePayment|merge({'payment_method': paymentRepository.getPaymentMethodNameById(attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')), container)}) %}
+                                {% endif %}
+                                {% if postagePayment|length%}
+                                    {% set adForSaleDetail = adForSaleDetail|merge({'postage_payment': postagePayment}) %}
+                                {% endif %}
+                                {{ include('FaAdBundle:Ad:AdForSaleDetailTabs.html.twig') }}
+                            {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID') %}
+                                {% set adCommunityDetail = {} %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                                    {% set adCommunityDetail = adCommunityDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                                {% endif %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) > 0 and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}
+                                    {% set adCommunityDetail = adCommunityDetail|merge({'price': attribute(adDetail, constant(solrMapping ~ 'PRICE'))}) %}
+                                {% endif %}
+                                {{ include('FaAdBundle:Ad:AdCommunityDetailTabs.html.twig') }}
+                            {% elseif secondLevelCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMERCIALVEHICLES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_AND_CARAVANS_ID')} %}
+                                {% set adMotorRepository = fetch_repository('FaAdBundle:AdMotors') %}
+                                {% set adMotorDetail = {} %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                                    {% set adMotorDetail = adMotorDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                                {% endif %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'COLOUR_ID')) is defined %}
+                                    {% set adMotorDetail = adMotorDetail|merge({'colour_id': attribute(adDetail, constant(solrMapping ~ 'COLOUR_ID'))}) %}
+                                {% endif %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'FUEL_TYPE_ID')) is defined %}
+                                    {% set adMotorDetail = adMotorDetail|merge({'fuel_type_id': attribute(adDetail, constant(solrMapping ~ 'FUEL_TYPE_ID'))}) %}
+                                {% endif %}
+                                {% set metaData = {} %}
+                                {% set featureIds = {} %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
+                                    {% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
+                                    {% if metaData['features_id'] is defined %}
+                                        {% set featureIds = metaData['features_id']|split(',') %}
+                                    {% endif %}
+                                {% endif %}
+
+                                {% set safetyFeatureIds = adMotorRepository.getSafetyFeature(featureIds) %}
+                                {% set otherFeatureIds = adMotorRepository.getOtherFeature(featureIds) %}
+                                {{ include('FaAdBundle:Ad:AdMotorDetailTabs.html.twig') }}
+                            {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
+                                {% set adPropertyDetail = {} %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                                    {% set adPropertyDetail = adPropertyDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                                {% endif %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BEDROOMS_ID')) is defined %}
+                                    {% set adPropertyDetail = adPropertyDetail|merge({'number_of_bedrooms_id': attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BEDROOMS_ID'))}) %}
+                                {% endif %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BATHROOMS_ID')) is defined %}
+                                    {% set adPropertyDetail = adPropertyDetail|merge({'number_of_bathrooms_id': attribute(adDetail, constant(solrMapping ~ 'NUMBER_OF_BATHROOMS_ID'))}) %}
+                                {% endif %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'TYPE_ID')) is defined %}
+                                    {% set adPropertyDetail = adPropertyDetail|merge({'type_id': attribute(adDetail, constant(solrMapping ~ 'TYPE_ID'))}) %}
+                                {% endif %}
+                                {% set metaData = {} %}
+                                {% set amenitiesIds = {} %}
+                                {% set billsIncludedIds = {} %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
+                                    {% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
+                                {% endif %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'AMENITIES_ID')) is defined %}
+                                    {% set amenitiesIds = attribute(adDetail, constant(solrMapping ~ 'AMENITIES_ID')) %}
+                                {% endif %}
+                                {% if metaData['bills_included_in_rent_id'] is defined %}
+                                    {% set billsIncludedIds = metaData['bills_included_in_rent_id']|split(',') %}
+                                {% endif %}
+                                {{ include('FaAdBundle:Ad:AdPropertyDetailTabs.html.twig') }}
+                            {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                                {% set adAdultDetail = {} %}
+                                {% set servicesIds = {} %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
+                                    {% set adAdultDetail = adAdultDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
+                                {% endif %}
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'SERVICES_ID')) is defined %}
+                                    {% set servicesIds = attribute(adDetail, constant(solrMapping ~ 'SERVICES_ID')) %}
+                                {% endif %}
+                                {{ include('FaAdBundle:Ad:AdAdultDetailTabs.html.twig') }}
+                            {% elseif rootCategoryId not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
+                                {{ include('FaAdBundle:Ad:AdDetailTabs.html.twig') }}
+                            {% endif %}
+                            <br />
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BELOW_DESCRIPTION_DESKTOP') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BELOW_DESCRIPTION_TABLET') %}
+                            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                        </div>
+                        {{ include('FaAdBundle:Ad:AdDetailRightPanel.html.twig') }}
+                    </div>
+                </div>
+            </div>
+            {% set contactBtnWidthClass = '' %}
+            {% set paypalBtnWidthClass = '' %}
+            {% set enqBtnWidthClass = '' %}
+            {% if (showBuyNowWithPaypal == false and isOneclickenqbutton == false) %}
+                {% set contactBtnWidthClass = 'large-24' %}
+                {% set paypalBtnWidthClass = '' %}
+                {% set enqBtnWidthClass = '' %}
+            {% elseif (showBuyNowWithPaypal == true and isOneclickenqbutton == false) %}
+                {% set contactBtnWidthClass = 'large-12' %}
+                {% set paypalBtnWidthClass = 'large-12' %}
+                {% set enqBtnWidthClass = '' %}
+            {% elseif (showBuyNowWithPaypal == false and isOneclickenqbutton == true) %}
+                {% set contactBtnWidthClass = 'large-12' %}
+                {% set paypalBtnWidthClass = '' %}
+                {% set enqBtnWidthClass = 'large-12' %}
+            {% endif %}
+                
+            {% if not isSoldExpiredAdFlag and ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) or (adDetail['user'] is defined and showBuyNowWithPaypal)) %}
+                <div class="dtl-bottom-btn show-for-small-only">
+                    <div class="row">
+                        {% if adDetail['user'] is defined and showBuyNowWithPaypal %}
+                            <div class="{{ paypalBtnWidthClass }} columns">
+                                <a href="{{ path('buy_now', {'adId': adId}) }}" class="primary-btn-1 button expand">{{'Buy now'|trans({}, 'frontend-show-ad')}}</a>
+                            </div>
+                        {% endif %}
+
+                        {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
+                            <div class="{{ contactBtnWidthClass }} columns">
+                                <a href="javascript:void(0);" id="contact_seller_btn_mob" onclick="return contactSeller('{{ adId }}', 'Contact Seller button');" class="primary-btn-1 button expand">
+                                    {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                                        {{'Apply'|trans({}, 'frontend-show-ad')}}
+                                    {% else %}
+                                        {{'Contact'|trans({}, 'frontend-show-ad')}}
+                                    {% endif %}
+                                    {% if adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and adDetail['user']['contact_through_email'] == 1 %}
+                                        <span class="contact-icon">contact</span>
+                                    {% elseif adDetail['user'] is defined and not adDetail['user']['contact_through_phone'] and adDetail['user']['contact_through_email'] == 1 %}
+                                        <span class="contact-email-icon">contact</span>
+                                    {% elseif (adDetail['user'] is defined and adDetail['user']['contact_through_phone'] == 1 and not adDetail['user']['contact_through_email']) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
+                                        <span class="contact-phone-icon">contact</span>
+                                    {% endif %}
+                                </a>
+                                
+                            </div>
+                        {% endif %}
+                        
+                        {% if (isOneclickenqbutton is defined and isOneclickenqbutton == true) %}
+                            <div class="{{ enqBtnWidthClass }} columns">
+                                <a href="javascript:void(0)" class="primary-btn-2 button expand show-avl-btn" onclick="return sendOneClickEnquiry();" >{{'Still available?'|trans({}, 'frontend-show-ad')}}</a>
+                            </div>
+                        {% endif %}
+                    
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if not isSoldExpiredAdFlag and similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
+            {{ block('similar_ads_html') }}
+        {% endif %}
+        
+        {% if currentDevice == 'M' and relatedBusinesses is defined and relatedBusinesses|length %}
+            {{ include('FaAdBundle:Ad:relatedBusinessesMobile.html.twig') }}
+        {% endif %}
+        
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_DESKTOP') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_TABLET') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_MOBILE') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+        
+        <div class="row">
+            <div class="columns">
+            {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+            	{{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
+            {% else %}            
+                {% cache 'addetail|page|seo'~adCategoryId 900 %}
+                    {{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
+                {% endcache %}
+            {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="right-banner">
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+    </div>
+</div>
+<div id="createAlertModal" class="reveal-modal small" data-reveal></div>
+<div id="createHalfAccountModal" class="reveal-modal small" data-reveal></div>
+    {% set isOneclickenqinfo = false %} <!-- FFR-2342 -->
+    {% if (isOneclickenqinfo is defined and isOneclickenqinfo == true) %}
+        {{ include('FaAdBundle:Ad:oneClickEnqInfoPopup.html.twig') }}
+    {% endif %}
+    {% if (isOneclickenqbutton is defined and isOneclickenqbutton == true) %}
+        {{ include('FaAdBundle:Ad:oneClickEnqSentPopup.html.twig') }}
+    {% endif %}
+{% endblock %}
+
+
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    {% if allowAdEdit %}
+        {{ set_variables('profileImageUploadJavascriptBottom', {'loaded':'true'}) }}
+        {{ block('profileImageUploadJavascriptBottom') }}
+        
+        {{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+        {{ block('imageUploadJavascriptBottom') }}
+    {% endif %}
+    {{ block('image_slider_js') }}
+    {{ block('similar_slider_js') }}
+    {{ block('googlemap_location_js') }}
+    {{ include('FaUserBundle:HalfAccount:halfAccountJs.html.twig') }}
+    {% set catText = null %}
+    {% if get_variables('CatDetails') is not null and get_variables('CatDetails').catString is defined %}
+        {% set catText = get_variables('CatDetails').catString %}
+    {% endif %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    var adMotorEquilizerFlag = false;
+    var gaCalledOnce = false;
+    var gaAfterCalledOnce = false;
+
+    $(window).scroll(function () {
+        {% if currentDevice == 'D' or currentDevice == 'T' %}
+            var contactBtnOffset = $("#contact_seller_btn").offset().top;
+            var contactBtnPos = contactBtnOffset - $(window).scrollTop();
+            if (contactBtnPos < -40) {
+                $("#sticky_item_information_id").show();
+            } else if (contactBtnPos > -40) {
+                $("#sticky_item_information_id").hide();
+            }
+        {% endif %}
+
+        if ($("#banner_placeholder_3_4").length)
+        {
+            var rightBannerOffset = $(".right-banner").offset().top;
+            var rightBannerPos = rightBannerOffset - $(window).scrollTop();
+
+            if (rightBannerPos < 0) {
+                $("#banner_placeholder_3_4").addClass("fixed-banner");
+            } else if (rightBannerPos > 0) {
+                $("#banner_placeholder_3_4").removeClass("fixed-banner");
+            }
+
+            var footerOffset = $("#footer_tag").offset().top;
+            var footerPos = footerOffset - $(window).scrollTop();
+
+            if (parseInt(footerPos) <= 700) {
+                $("#banner_placeholder_3_4").removeClass("fixed-banner");
+            }
+        }
+    });
+
+    
+    
+    $(document).ready(function(){
+        //$('#oneClickEnquireInfoModal').foundation('reveal', 'open'); // removed popup for one click enquire FFR-2342
+        {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
+            $("#map_tab_anchor").click();
+        {% endif %}
+        bindFormErrorEvents();
+        {% if app.user and app.request.cookies.has('ad_report_flag') and app.request.cookies.get('ad_report_flag') and app.request.cookies.get('ad_report_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.get('id') %}
+            {{ fetch_repository('FaUserBundle:User').removeUserCookies() }}
+            reportAd({{app.request.get('id')}});
+        {% endif %}
+        {% if app.user and app.request.cookies.has('contact_seller_flag') and app.request.cookies.get('contact_seller_flag') and app.request.cookies.get('contact_seller_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.get('id') %}
+            contactSeller({{app.request.get('id')}}, 'Contact Seller button');
+        {% endif %}
+        {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
+            createAlert({{app.request.get('id')}});
+        {% endif %}
+        handleReadMoreLess('user_about_us_desc_mob', 350);
+        //handleReadMoreLess('ad_desc', 350);
+        //handleReadMoreLess('ad_desc_mob', 250);
+        $('#vif_tabs .accordion-navigation a').click(function() {
+            $(this).find('i').toggleClass("fi-plus fi-minus");
+        });
+        $('#detail_seo_box .accordion-navigation a').click(function() {
+            $(this).find('i').toggleClass("fi-plus fi-minus");
+        });
+
+        $('#get_estimate_form_id').bind('submit', function(event){
+            blockElement('#nimber_div');
+            $('#fa_nimber_postcode_get_estimate_btn').text("{{'Calculating cost...'|trans({}, 'frontend-nimber')}}");
+            // Stop form from submitting normally
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{path('nimber_location', {'adId': adId })}}",
+                data: new FormData(this),
+                contentType: false,
+                processData:false,
+            })
+            .always(function(response) {
+                $('#fa_nimber_postcode_get_estimate_btn').text("{{'Get delivery estimate'|trans({}, 'frontend-nimber')}}");
+                unblockElement('#nimber_div');
+            })
+            .done(function(response) {
+                ga('send', 'event', 'CTA', 'Nimber Estimate', '{{ adId }}{{ catText }}');
+                if (response.error.length) {
+                    $("#fa_nimber_postcode_zip").addClass('error');
+                    $('<small class="error">'+response.error+'</small>').insertAfter("#fa_nimber_postcode_zip");
+                } else if (response.htmlContent.length) {
+                    $('#nimber_div').html(response.htmlContent);
+                }
+            });
+        });
+
+        $('#vif_tabs .accordion-navigation .content').each(function(){
+            if ($(this).hasClass('active')) {
+                $('#'+$(this).attr('id')+'_anchor').find('i').addClass('fi-minus').removeClass('fi-plus');
+            } else {
+                $('#'+$(this).attr('id')+'_anchor').find('i').addClass('fi-plus').removeClass('fi-minus');
+            }
+        });
+
+        $('#detail_seo_box .accordion-navigation .content').each(function(){
+            if ($(this).hasClass('active')) {
+                $(this).siblings('a').find('i').addClass('fi-minus');
+                $(this).siblings('a').find('i').removeClass('fi-plus');
+            } else {
+                $(this).siblings('a').find('i').addClass('fi-plus');
+                $(this).siblings('a').find('i').removeClass('fi-minus');
+            }
+        });
+        
+        $('#ad_motors_tabs').on('toggled', function (event, tab) {
+            if (tab.attr('id') == 'safety_features_panel' && !adMotorEquilizerFlag) {
+                $(document).foundation('equalizer', 'reflow');
+                adMotorEquilizerFlag = true;
+            }
+        });
+
+        {% if relatedBusinesses is defined and relatedBusinesses|length %}
+            var relatedBusinessesSlider = $("#related_businesses_slider");
+            relatedBusinessesSlider.owlCarousel({
+                items : 2,
+                itemsCustom:[[320, 2], [568, 2], [768, 1], [1024, 1], [1025, 2]],
+                navigation: true,
+                pagination:false,
+                responsiveRefreshRate : 100,
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                lazyLoad: true,
+                scrollPerPage: true,
+            });
+
+            var relatedBusinessesMobileSlider = $("#related_businesses_mobile_slider");
+            relatedBusinessesMobileSlider.owlCarousel({
+                items : 2,
+                itemsCustom:[[320, 2], [568, 2], [768, 2], [1024, 2]],
+                navigation: true,
+                pagination:false,
+                responsiveRefreshRate : 100,
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                lazyLoad: true,
+                scrollPerPage: true,
+            });
+        {% endif %}
+
+        {% if recommendedSlotArray is defined and recommendedSlotArray|length %}
+            var recommendedSlider = $("#recommended-slider");
+            recommendedSlider.owlCarousel({
+                items : 1,
+                itemsCustom:[[320, 1], [568, 1], [768, 2]],
+                navigation: true,
+                pagination:false,
+                responsiveRefreshRate : 100,
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                lazyLoad: true,
+                scrollPerPage: true,
+            });
+        {% endif %}
+    });
+
+    function reportAd(id)
+    {
+        {% if currentDevice == 'M' %}
+            scrollToElement('.detail-head', '1000');
+        {% endif %}
+        $("<div class='row text-center' id='ajax_img_loading'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Please wait... '|trans({}, 'frontend-show-ad') }}</div>").insertBefore('#adDetailMainTabs');
+        var route = Routing.generate('item_add_to_remote', { 'adId': id });
+        $.ajax({
+            async: false,
+            type: "POST",
+            url : route,
+            data : {'redirectUrl': '{{app.request.getUri()}}'},
+        })
+        .done(function(response) {
+            $('#ajax_img_loading').remove();
+            hideAlertMessage();
+            if (response.redirectToUrl.length) {
+                window.location.href = response.redirectToUrl;
+                return false;
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+            } else {
+                $(decorateMessage('{{'Ad reported successfully.'|trans({}, 'frontend-show-ad')}}', 'success')).insertBefore('#adDetailMainTabs');
+            }
+            {% if currentDevice != 'M' %}
+                scrollToElement('#adDetailMainTabs', '1000', -150);
+            {% endif %}
+        });
+    }
+
+    function addToFavorite(id)
+    {
+        var route = Routing.generate('ad_add_to_favorite', { 'adId': id });
+        $.ajax({
+            type: "POST",
+            url : route,
+            data : {'redirectUrl': '{{app.request.getUri()}}', type: 'detail'},
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.anchorHtml.length) {
+                $('#fav_'+id).html(response.anchorHtml);
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertAfter('#detail_'+id);
+            }
+            if (response.redirectToUrl.length) {
+                window.location.href = response.redirectToUrl;
+            }
+        });
+    }
+
+    function removeFromFavorite(id)
+    {
+        var route = Routing.generate('ad_remove_from_favorite', { 'adId': id });
+        $.ajax({
+            type: "POST",
+            url : route,
+            data : {type: 'detail'},
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.anchorHtml.length) {
+                $('#fav_'+id).html(response.anchorHtml);
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#listing_'+id);
+            }
+        });
+    }
+
+    function postSimilarAd(id)
+    {
+        var route = Routing.generate('ad_post_similar_ad', { 'adId': id });
+        $.ajax({
+            async: false,
+            type: "POST",
+            url : route,
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.redirectToUrl.length) {
+                window.location.href = response.redirectToUrl;
+                return false;
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertAfter('#post_similar_item');
+            }
+        });
+    }
+
+    function contactSeller(id, callFrom)
+    {
+        ga('send', 'event', 'CTA', callFrom, '{{ adId }}{{ catText }}');
+        {% if adImages|length %}
+            $.fancybox.close();
+        {% endif %}
+        blockPage();
+        var route = Routing.generate('contact_seller', { 'adId': id });
+        $.ajax({
+            type: "GET",
+            url : route,
+            data : {'redirectUrl': '{{app.request.getUri()}}'},
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.htmlContent.length) {
+                $('#contactSellerModal').html(response.htmlContent);
+                $('#contactSellerModal').foundation('reveal', 'open');
+            } else if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                scrollToElement('#adDetailMainTabs', '1000', -150);
+            } else if (response.redirectToUrl.length) {
+                window.location.href = response.redirectToUrl;
+            }
+        });
+    }
+
+    function nimberCreateTask()
+    {
+        blockPage();
+        $.ajax({
+            type: "GET",
+            url: "{{path('ajax_nimber_create_task', {'adId': adId })}}",
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.htmlContent.length) {
+                $('#nimberCreateTaskModal').html(response.htmlContent);
+                $('#nimberCreateTaskModal').foundation('reveal', 'open');
+                ga('send', 'event', 'CTA', 'Nimber Post', '{{ adId }}{{ catText }}');
+            } else if (response.error.length) {
+                if (response.error == 'no_cookie') {
+                    clearNimberCookies(true);
+                    $('#nimberCreateTaskModal').foundation('reveal', 'close');
+                } else {
+                    $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                    scrollToElement('#adDetailMainTabs', '1000', -150);
+                }
+            }
+        });
+    }
+
+    /*
+    $('#createAlertModal').bind('closed', function() {
+        //updateSearchAgent()
+        ga('send', 'event', 'Email Alert', ' Ad-details-signup', '');
+    });*/
+
+    function sendGaForOnOffAlert()
+    {
+        ga('send', 'event', 'Email Alert', 'Daily-email-alert-on-off-toggle', '{{ adId }}{{ catText }}');
+    }
+
+    function sendGaForCreateAnAlert()
+    {
+      {% if adId is defined and not app.request.cookies.has(adId~'_ad_detail_ga_tracking') %}
+        if (gaCalledOnce == false) {
+          ga('send', 'event', 'CTA', 'Ad-details-create-an-alert', '{{ adId }}');
+          gaCalledOnce = true;
+        }
+
+        $.ajax({
+          type: "post",
+          url: "{{ path('set_ad_detail_ga_cookie_ajax') }}",
+          data: {'ad_id':'{{ adId }}'},
+          success: function(data) {
+          }
+        });
+      {% endif %}
+    }
+
+    function sendGaForCreateAlert(callFrom)
+    {
+      {% if adId is defined and not app.request.cookies.has(adId~'_ad_detail_ga_tracking_after') %}
+      if (gaAfterCalledOnce == false) {
+        if (callFrom == 'loggedin') {
+          ga('send', 'event', 'Email Alerts', 'Ad-details-signup', '{{ adId }}');
+        } else {
+          ga('send', 'event', 'Email Alerts', 'Ad-details-signup', '{{ adId }}-popup');
+        }
+        gaAfterCalledOnce = true;
+      }
+
+      $.ajax({
+        type: "post",
+        url: "{{ path('set_ad_detail_ga__after_cookie_ajax') }}",
+        data: {'ad_id':'{{ adId }}'},
+        success: function(data) {
+        }
+      });
+    {% endif %}
+      
+    }
+
+    function createAlert(adId, userId)
+    {
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url : '{{ path('ajax_create_alert') }}',
+            data : {'redirectUrl': '{{app.request.getUri()}}', 'adId': adId, 'userId': userId},
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#createAlertModal').html(response.htmlContent);
+                $('#createAlertModal').foundation('reveal', 'open');
+            }
+            if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                scrollToElement('#adDetailMainTabs', '1000', -150);
+            }
+            if (response.redirectToUrl.length) {
+                window.location.href = response.redirectToUrl;
+                return false;
+            }
+            sendGaForCreateAlert('loggedin');
+        });
+    }
+
+    {% if showBuyNowWithPaypal %}
+        function buyNow(id)
+        {
+            blockPage();
+            var route = Routing.generate('ajax_buy_now', { 'adId': id });
+            $.ajax({
+                type: "POST",
+                url : route,
+            })
+
+            .always(function(response) {
+                unblockPage();
+            })
+            .done(function(response) {
+                hideAlertMessage();
+                if (response.error.length) {
+                    $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                    scrollToElement('#adDetailMainTabs', '1000', -150);
+                }
+                if (response.redirectToUrl.length) {
+                    window.location.href = response.redirectToUrl;
+                }
+                if (response.paypalRedirectUrl.length) {
+                    var dgFlowMini = new PAYPAL.apps.DGFlowMini({trigger: null});
+                    window.open(response.paypalRedirectUrl,'Payapl');
+                    window.close();
+                }
+            });
+        }
+    {% endif %}
+
+    $(document).on("click", '.save-item-btn', function(event) {
+        ga('send', 'event', 'Options', 'Save Ad', '{{ adId }}');
+        ga('send', 'event', 'Top Widget', 'Like');
+    })
+
+    $(document).on("click", '.saved-item-btn', function(event) {
+        ga('send', 'event', 'Top Widget', 'Unlike');
+    });
+
+    $('#photo-panel-id').on('click', function() {
+        ga('send', 'event', 'Tabs', 'Photos', '{{ adId }}');
+    });
+
+    $('#paypal-btn_btn_id').on('click', function() {
+        ga('send', 'event', 'CTA', 'Buy Now Pay Pal', '{{ adId }}{{ catText }}');
+    });
+
+    $('#basic_info_panel_tab').on('click', function() {
+        ga('send', 'event', 'Tabs', 'The basics', '{{ adId }}');
+    });
+
+    $('#about_us_panel').on('click', function() {
+        ga('send', 'event', 'Tabs', 'About Us', '{{ adId }}');
+    });
+
+    $('#aboutus-tab-id').on('click', function() {
+        ga('send', 'event', 'Tabs', 'About Us', '{{ adId }}');
+    });
+
+    $('#postage_payment_panel_tab').on('click', function() {
+        ga('send', 'event', 'Tabs', 'Postage & Payment', '{{ adId }}');
+    });
+
+    $('#dimension_panel_tab').on('click', function() {
+        ga('send', 'event', 'Tabs', 'Dimensions', '{{ adId }}');
+    });
+
+    $('more_details_panel_tab').on('click', function() {
+        ga('send', 'event', 'Tabs', 'More details', '{{ adId }}');
+    });
+
+    $('#performance_economy_panel_tab').on('click', function() {
+        ga('send', 'event', 'Tabs', 'Performance & economy', '{{ adId }}');
+    });
+
+    $('#safety_features_panel_tab').on('click', function() {
+        ga('send', 'event', 'Tabs', 'Safety & features', '{{ adId }}');
+    });
+
+    $('#features_panel_tab').on('click', function() {
+        ga('send', 'event', 'Tabs', 'Features', '{{ adId }}');
+    });
+
+    $('#map_tab_anchor').on('click', function() {
+        ga('send', 'event', 'Tabs', 'Map', '{{ adId }}');
+    });
+
+    $('#description-tab-id').on('click', function() {
+        ga('send', 'event', 'Tabs', 'Description', '{{ adId }}');
+    });
+
+    $('#aboutus-tab-id').on('click', function() {
+        ga('send', 'event', 'Tabs', 'About Us', '{{ adId }}');
+    });
+
+    $('#add-report-id').on('click', function() {
+        ga('send', 'event', 'Options', 'Report Ad', '{{ adId }}');
+    });
+
+    $('#dtl-fb-id').on('click', function() {
+        ga('send', 'event', 'Options', 'Facebook', '{{ adId }}');
+    });
+
+    $('#dtl-twi-id').on('click', function() {
+        ga('send', 'event', 'Options', 'Twitter', '{{ adId }}');
+    });
+
+    $('#dtl-gpl-id').on('click', function() {
+        ga('send', 'event', 'Options', 'G+', '{{ adId }}');
+    });
+
+    $('#dtl-pin-id').on('click', function() {
+    ga('send', 'event', 'Options', 'Pinterest', '{{ adId }}');
+    });
+
+    $('#dtl-eml-id').on('click', function() {
+    ga('send', 'event', 'Options', 'Email', '{{ adId }}');
+    });
+
+    $('#edit_advert_link1').on('click', function() {
+      ga('send', 'event', 'Ad details', 'edit advert', '{{ adId }}{{ catText }}');
+      location.href = "{{ path('ad_edit', {'id': adId})}}";
+    });
+
+    $('#edit_advert_link2').on('click', function() {
+      ga('send', 'event', 'Ad details', 'edit advert', '{{ adId }}{{ catText }}');
+      location.href = "{{ path('ad_edit', {'id': adId})}}";
+    });
+
+    $('#add_a_photo_link').on('click', function() {
+      ga('send', 'event', 'Ad details', 'add photo', '{{ adId }}{{ catText }}');
+      //location.href = "{{ path('ad_edit', {'id': adId, 'scrollTo': 'image'})}}";
+      showEditImagesPopup();
+    });
+
+    $('#add_photo_no_image_link').on('click', function() {
+      ga('send', 'event', 'Ad details', 'add photo', '{{ adId }}{{ catText }}');
+      //location.href = "{{ path('ad_edit', {'id': adId, 'scrollTo': 'image'})}}";
+      showEditImagesPopup();
+    });
+
+    $('#add_video_no_video_link').on('click', function() {
+      ga('send', 'event', 'Ad details', 'add video', '{{ adId }}{{ catText }}');
+      location.href = "{{ path('ad_edit', {'id': adId, 'scrollTo': 'video'})}}";
+    });
+
+    $('#upgrade_now_link').on('click', function() {
+      ga('send', 'event', 'Ad details', 'upgrade now', '{{ adId }}{{ catText }}');
+      location.href = "{{ path('ad_promote', {'adId': adId, 'type': 'promote'}) }}";
+    });
+
+    function socialShare(adId, windowUrl, windowTitle, windowWidth, windowHeight)
+    {
+        openWindow(windowUrl, windowTitle, windowWidth, windowHeight);
+        adEnquiryIncrement('social_share', adId);
+        if (windowTitle == 'fb-share') {
+            OneSignal.push(["sendTags", {'Facebook': 'share'}]);
+        } else if (windowTitle == 'twitter-share') {
+            OneSignal.push(["sendTags", {'Twitter': 'share'}]);
+        }
+    }
+
+    function openUserWebsite(adId, websiteUrl, businessName)
+    {
+        window.open(websiteUrl);
+        adEnquiryIncrement('web_link_click', adId);
+        ga('send', 'event', 'CTA', 'url click - ad details page', businessName); 
+    }
+
+    function clearNimberCookies(showMsg)
+    {
+        blockElement('#nimber_div');
+        $.ajax({
+            type: "GET",
+            url: "{{path('nimber_location', {'adId': adId })}}",
+            data: {'clear':'1'},
+        })
+        .always(function(response) {
+            unblockElement('#nimber_div');
+        })
+        .done(function(response) {
+            if (response.error.length) {
+                $("#fa_nimber_postcode_zip").addClass('error');
+                $('<small class="error">'+response.error+'</small>').insertAfter("#fa_nimber_postcode_zip");
+            } else if (response.htmlContent.length) {
+                $('#nimber_div').html(response.htmlContent);
+                if (showMsg) {
+                    setTimeout(function() {
+                        $("#fa_nimber_postcode_zip").addClass('error');
+                        $('<small class="error">{{"Please re-enter postcode."|trans({}, 'frontend-nimber')}}</small>').insertAfter("#fa_nimber_postcode_zip");
+                        scrollToElement('#nimber_div', '1000', -150);
+                    }, 1000);
+                }
+            }
+        });
+    }
+
+    $('#nimberLearnMoreModal').bind('open', function(){
+        ga('send', 'event', 'CTA', 'Nimber Estimate Learn', '{{ adId }}{{ catText }}');
+    });
+    function toggleContactNumberForDesc(index) {
+        $('#span_contact_number_full_desc_'+index).show();
+        $('#span_contact_number_part_desc_'+index).hide();
+        ga('send', 'event', 'CTA', 'Call Now (Description)', '{{ adId }}-{{userTypeText}}{{ catText }}');
+        adEnquiryIncrement('call_click', '{{adId}}');
+    }
+
+    {% if currentDevice == 'D' %}
+        $('#profile_change_btn_with_opt_anchor, #pickProfileFile1').hover(
+            function () {
+               $('.profile-img-overlay').show();
+            }, 
+            function () {
+                $('.profile-img-overlay').hide();
+            }
+       );
+    {% endif %}
+
+    function gaSendDealerNameCopyEvent(businessName)
+    {
+        ga('send', 'event', 'Options', 'Copy dealer name - Ad detail', businessName);
+    }
+
+    function gaSendForRecommendedSlot(url, domain) 
+    {
+        ga('send', 'event', 'Ad details', 'Recommended external ads', '{{ catText|trim('-') }}-'+domain);
+        window.open(url, '_blank');
+    }
+//]]>
+</script>
+{% endblock %}
+
+{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(adCategoryId, false, fetch_container_instance()) %}
+{% if adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+    {% if adDetail['user']['upsells'] is defined %}
+        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
+            {% set dimension5 = 'Dealer_Paid' %}
+        {% else %}
+            {% set dimension5 = 'Trade' %}
+        {% endif %}
+    {% else %}
+        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
+            {% set dimension5 = 'Dealer_Free' %}
+        {% else %}
+            {% set dimension5 = 'Trade' %}
+        {% endif %}
+    {% endif %}
+
+{% else %}
+    {% set dimension5 = 'Private' %}
+{% endif %}
+
+{% set dimension4 = '' %}
+{% if categoryPath|length %}
+    {% set dimension4 = categoryPath|join(':') %}
+{% endif %}
+
+{% block dimension2 %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+   {% if app.user.getId() is not defined or app.user.getId() is null %}
+    	ga('set', 'dimension9', 'not logged in');
+    {% else %}
+    	ga('set', 'dimension9', 'logged in');
+    {% endif %}
+    
+    {% if dimension5 == 'Private' %}
+        ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Ad_Details', 'dimension4': '{{ dimension4 }}', 'dimension5' : '{{dimension5}}'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %} });
+    {% else %}
+        ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Ad_Details', 'dimension3': '{{ adDetail['user']['user_name'] }}', 'dimension4': '{{ dimension4 }}', 'dimension5' : '{{dimension5}}'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %} });
+    {% endif %}
+//]]>
+</script>
+{% endblock %}
+
+
+

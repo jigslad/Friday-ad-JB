@@ -1,0 +1,25 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=no;target-densityDpi=medium-dpi" />
+    <link rel="stylesheet" type="text/css" href="{{ static_asset_url('/bundles/fafrontend/css/google-fonts.css') }}" />
+
+    <title>{{ 'Friday-Ad'|trans }}</title>
+    
+    
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/fa-main.css'
+        'bundles/fafrontend/css/style.css'
+        'bundles/fafrontend/css/responsive.css'
+          %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}?v=200"/>
+    {% endstylesheets %}
+</head>
+<body>
+    <div class="row text-center error-page">
+        <div  class="bg-img503"></div>
+            <h2 class="ptop_spac" style="text-align: center;" >Friday-Ad is currently undergoing some important maintenance work. Sorry for any inconvenience this has caused but we'll be back up and running very soon.</h2>
+    </div>
+
+</body>
+</html>

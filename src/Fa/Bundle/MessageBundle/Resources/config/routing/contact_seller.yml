@@ -1,0 +1,15 @@
+contact_seller:
+    path:   /{adId}
+    defaults:  { _controller: FaMessageBundle:ContactSeller:contactSeller }
+    options:
+        expose: true
+
+contact_buyer:
+    path:   /{adId}/{buyerId}
+    defaults:  { _controller: FaMessageBundle:ContactSeller:contactBuyer }
+    options:
+        expose: true
+        
+ajax_contact_seller_get_email_alert:
+    path:   /ajax/get_email_alerts/get_is_email_alert
+    defaults:  { _controller: FaMessageBundle:ContactSeller:ajaxGetEmailAlertByEmail }

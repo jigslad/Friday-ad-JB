@@ -1,0 +1,25 @@
+permission:
+    path:     /
+    defaults: { _controller: "FaUserBundle:Permission:index" }
+
+permission_new:
+    path:     /new
+    defaults: { _controller: "FaUserBundle:Permission:new" }
+
+permission_create:
+    path:     /create
+    defaults: { _controller: "FaUserBundle:Permission:create" }
+    requirements: { methods: post }
+
+permission_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "FaUserBundle:Permission:edit" }
+
+permission_update:
+    path:     /{id}/update
+    defaults: { _controller: "FaUserBundle:Permission:update" }
+    requirements: { methods: post|put }
+
+permission_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "FaUserBundle:Permission:delete" }

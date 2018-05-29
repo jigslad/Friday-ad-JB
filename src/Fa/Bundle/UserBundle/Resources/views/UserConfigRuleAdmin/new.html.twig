@@ -1,0 +1,44 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+{% set configTypeWithLocation = [constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PAYPAL_COMMISION'), constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PRODUCT_INSERTION_FEE')] %}
+{% set userRepository   = fetch_repository('FaUserBundle:User') %}
+{% set configRepository = fetch_repository('FaCoreBundle:Config') %}
+
+{% set userConfigRuleDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('user_config_rule_delete_admin') %}
+  {% set userConfigRuleDeleteGrant = true %}
+{% endif %}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+           {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+               {% set user   = userRepository.find(form.user.vars.value) %}
+               {% set config = configRepository.find(form.config.vars.value) %}
+               {% if user is not null %}
+                   <b>{{ 'Customer name'|trans }} : </b> {{ user.getFullName() }}
+                   <br />
+               {% endif %}
+               {% if config is not null %}
+                   <b>{{ 'Configuration'|trans }} : </b> {{ config.name }}
+                   <br /><br />
+               {% endif %}
+               {{ form_row(form.value) }}
+               {% set showPeriod  = 'none' %}
+               {% if config is not null and config.id in configTypeWithLocation %}
+                   {% set showPeriod = 'inline' %}
+               {% endif %}
+               <div id="periodDiv" style="display:{{ showPeriod }}">
+                   {{ form_row(form.period_from) }}
+                   {{ form_row(form.period_to) }}
+               </div>
+               {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'user_admin', 'isSaveAndNew': false, 'isDelete': true, 'deleteUrl': 'user_config_rule_delete_admin', 'deleteGrant': userConfigRuleDeleteGrant }) }}
+           {{ form_end(form) }}
+       </div>
+   </div>
+</div>
+{% endblock %}

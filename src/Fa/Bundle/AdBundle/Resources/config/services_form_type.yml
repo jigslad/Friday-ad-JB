@@ -1,0 +1,378 @@
+services:
+    fa_ad.form.type.paa_field_rule_admin:
+        class: Fa\Bundle\AdBundle\Form\PaaFieldRuleAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_ad_paa_field_rule_admin }
+
+    fa_ad.form.type.paa_field_rule_search_admin:
+        class: Fa\Bundle\AdBundle\Form\PaaFieldRuleAdminSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_paa_field_rule_search_admin }
+
+    fa_ad.form.type.print_edition_admin:
+        class: Fa\Bundle\AdBundle\Form\PrintEditionAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_print_edition_admin }
+
+    fa_ad.form.type.print_edition_search_admin:
+        class: Fa\Bundle\AdBundle\Form\PrintEditionAdminSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_print_edition_search_admin }
+
+    fa_ad.form.type.print_deadline_admin:
+        class: Fa\Bundle\AdBundle\Form\PrintDeadlineAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_print_deadline_admin }
+
+    fa_ad.form.type.print_deadline_search_admin:
+        class: Fa\Bundle\AdBundle\Form\PrintDeadlineAdminSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_print_deadline_search_admin }
+
+    fa_ad.form.type.ad_search_admin:
+        class: Fa\Bundle\AdBundle\Form\AdSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_ad_search_admin }
+            
+    fa_ad.form.type.ad_change_status_admin:
+        class: Fa\Bundle\AdBundle\Form\ChangeStatusAdminType
+        arguments: ['@doctrine', '@security.encoder_factory', '@request_stack', '@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_ad_change_status_admin }
+
+    fa_ad.form.type.ad_post_category_select_admin:
+        class: Fa\Bundle\AdBundle\Form\AdPostCategorySelectAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_category_select_admin }
+
+    fa_ad.form.type.ad_post_admin:
+        class: Fa\Bundle\AdBundle\Form\AdPostAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_admin }
+
+    fa_ad.form.type.ad_post_for_sale_admin:
+        class: Fa\Bundle\AdBundle\Form\AdPostForSaleAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_for_sale_admin }
+
+    fa_ad.form.type.user_search_admin:
+        class: Fa\Bundle\AdBundle\Form\AdUserSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_user_search_admin }
+
+    fa_ad.form.type.ad_image:
+        class: Fa\Bundle\AdBundle\Form\AdImageType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_paa_image }
+            
+    fa_ad.form.type.ad_login:
+        class: Fa\Bundle\AdBundle\Form\AdPostLoginType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_paa_login }
+            
+    fa_ad.form.type.ad_registration:
+        class: Fa\Bundle\AdBundle\Form\AdPostRegistrationType
+        arguments: ['@doctrine', '@security.encoder_factory', '@service_container']
+        tags:
+            - { name: form.type, alias: fa_paa_registration }
+
+    fa_ad.form.type.ad_post_category_select:
+        class: Fa\Bundle\AdBundle\Form\AdPostCategorySelectType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_category_select }
+
+    fa_ad.form.type.ad_post_second_step_for_sale:
+        class: Fa\Bundle\AdBundle\Form\AdPostSecondStepForSaleType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_second_step_for_sale }
+            
+    fa_ad.form.type.ad_post_fourth_step_for_sale:
+        class: Fa\Bundle\AdBundle\Form\AdPostFourthStepForSaleType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_fourth_step_for_sale }
+            
+    fa_ad.form.type.ad_top_search:
+        class: Fa\Bundle\AdBundle\Form\AdTopSearchType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_top_search }
+
+    fa_ad.form.type.ad_left_search:
+        class: Fa\Bundle\AdBundle\Form\AdLeftSearchType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_left_search }
+
+    fa_ad.form.type.ad_left_search_dimension:
+        class: Fa\Bundle\AdBundle\Form\AdLeftSearchDimensionType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_left_search_dimension }
+            
+    fa_ad.form.type.ad_post_second_step_animals:
+        class: Fa\Bundle\AdBundle\Form\AdPostSecondStepAnimalsType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_second_step_animals }
+
+    fa_ad.form.type.ad_post_fourth_step_animals:
+        class: Fa\Bundle\AdBundle\Form\AdPostFourthStepAnimalsType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_fourth_step_animals }
+
+    fa_ad.form.type.ad_post_animals_admin:
+        class: Fa\Bundle\AdBundle\Form\AdPostAnimalsAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_animals_admin }
+
+    fa_ad.form.type.ad_post_jobs_admin:
+        class: Fa\Bundle\AdBundle\Form\AdPostJobsAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_jobs_admin }
+
+    fa_ad.form.type.ad_post_second_step_motors:
+        class: Fa\Bundle\AdBundle\Form\AdPostSecondStepMotorsType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_second_step_motors }
+
+    fa_ad.form.type.ad_post_fourth_step_motors:
+        class: Fa\Bundle\AdBundle\Form\AdPostFourthStepMotorsType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_fourth_step_motors }
+
+    fa_ad.form.type.ad_post_second_step_jobs:
+        class: Fa\Bundle\AdBundle\Form\AdPostSecondStepJobsType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_second_step_jobs }
+
+    fa_ad.form.type.ad_post_fourth_step_jobs:
+        class: Fa\Bundle\AdBundle\Form\AdPostFourthStepJobsType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_fourth_step_jobs }
+
+    fa_ad.form.type.ad_post_second_step_community:
+        class: Fa\Bundle\AdBundle\Form\AdPostSecondStepCommunityType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_second_step_community }
+
+    fa_ad.form.type.ad_post_fourth_step_community:
+        class: Fa\Bundle\AdBundle\Form\AdPostFourthStepCommunityType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_fourth_step_community }
+
+    fa_ad.form.type.ad_post_motors_admin:
+        class: Fa\Bundle\AdBundle\Form\AdPostMotorsAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_motors_admin }
+
+    fa_ad.form.type.ad_post_community_admin:
+        class: Fa\Bundle\AdBundle\Form\AdPostCommunityAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_community_admin }
+            
+    fa_ad.form.type.ad_post_second_step_property:
+        class: Fa\Bundle\AdBundle\Form\AdPostSecondStepPropertyType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_second_step_property }
+
+    fa_ad.form.type.ad_post_fourth_step_property:
+        class: Fa\Bundle\AdBundle\Form\AdPostFourthStepPropertyType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_fourth_step_property }
+
+    fa_ad.form.type.ad_post_property_admin:
+        class: Fa\Bundle\AdBundle\Form\AdPostPropertyAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_property_admin }
+            
+    fa_ad.form.type.ad_post_second_step_services:
+        class: Fa\Bundle\AdBundle\Form\AdPostSecondStepServicesType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_second_step_services }
+
+    fa_ad.form.type.ad_post_fourth_step_services:
+        class: Fa\Bundle\AdBundle\Form\AdPostFourthStepServicesType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_fourth_step_services }
+
+    fa_ad.form.type.ad_post_services_admin:
+        class: Fa\Bundle\AdBundle\Form\AdPostServicesAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_services_admin }
+
+    fa_ad.form.type.ad_post_second_step_adult:
+        class: Fa\Bundle\AdBundle\Form\AdPostSecondStepAdultType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_second_step_adult }
+
+    fa_ad.form.type.ad_post_fourth_step_adult:
+        class: Fa\Bundle\AdBundle\Form\AdPostFourthStepAdultType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_fourth_step_adult }
+
+    fa_ad.form.type.ad_post_adult_admin:
+        class: Fa\Bundle\AdBundle\Form\AdPostAdultAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_adult_admin }
+            
+    fa_ad.form.type.fa_buy_now_delivery_address:
+        class: Fa\Bundle\AdBundle\Form\AdBuyNowDeliveryAddressType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_buy_now_delivery_address }
+
+    fa_ad.form.type.landing_page_car_search:
+        class: Fa\Bundle\AdBundle\Form\LandingPageCarSearchType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_landing_page_car_search }
+
+    fa_ad.form.type.landing_page_property_search:
+        class: Fa\Bundle\AdBundle\Form\LandingPagePropertySearchType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_landing_page_property_search }
+
+    fa_ad.form.type.landing_page_ads_near_you_search:
+        class: Fa\Bundle\AdBundle\Form\LandingPageAdsNearYouSearchType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_landing_page_ads_near_you_search }
+
+    fa_ad.form.type.ad_edit_for_sale:
+        class: Fa\Bundle\AdBundle\Form\AdEditForSaleType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_edit_for_sale }
+
+    fa_ad.form.type.ad_edit_motors:
+        class: Fa\Bundle\AdBundle\Form\AdEditMotorsType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_edit_motors }
+
+    fa_ad.form.type.ad_edit_animals:
+        class: Fa\Bundle\AdBundle\Form\AdEditAnimalsType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_edit_animals }
+
+    fa_ad.form.type.ad_edit_property:
+        class: Fa\Bundle\AdBundle\Form\AdEditPropertyType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_edit_property }
+
+    fa_ad.form.type.ad_edit_jobs:
+        class: Fa\Bundle\AdBundle\Form\AdEditJobsType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_edit_jobs }
+
+    fa_ad.form.type.ad_edit_community:
+        class: Fa\Bundle\AdBundle\Form\AdEditCommunityType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_edit_community }
+
+    fa_ad.form.type.ad_edit_adult:
+        class: Fa\Bundle\AdBundle\Form\AdEditAdultType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_edit_adult }
+
+    fa_ad.form.type.ad_edit_services:
+        class: Fa\Bundle\AdBundle\Form\AdEditServicesType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_paa_edit_services }
+
+    fa_ad.form.type.nimber_postcode:
+        class: Fa\Bundle\AdBundle\Form\NimberPostcodeType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_nimber_postcode }
+            
+    fa_ad.form.type.nimber_create_task:
+        class: Fa\Bundle\AdBundle\Form\NimberCreateTaskType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_nimber_create_task }
+
+    fa_ad.form.type.search_keyword_search_admin:
+        class: Fa\Bundle\AdBundle\Form\SearchKeywordSearchAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_ad_search_keyword_search_admin }
+
+    fa_ad.form.type.search_keyword_admin:
+        class: Fa\Bundle\AdBundle\Form\SearchKeywordAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_ad_search_keyword_admin }
+            
+#    fa_ad.form.type.nimber_postcode:
+#        class: Fa\Bundle\AdBundle\Form\NimberPostcodeType
+#        arguments: ['@service_container']
+#        tags:
+#            - { name: form.type, alias: fa_nimber_postcode }
+            
+#    fa_ad.form.type.nimber_create_task:
+#        class: Fa\Bundle\AdBundle\Form\NimberCreateTaskType
+#        arguments: ['@service_container']
+#        tags:
+#            - { name: form.type, alias: fa_nimber_create_task }
+
+    fa_ad.form.type.search_keyword_upload_csv_admin:
+        class: Fa\Bundle\AdBundle\Form\SearchKeywordUploadCsvAdminType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_ad_search_keyword_upload_csv_admin }
+            
+    fa_ad.form.type.landing_page_jobs_search:
+        class: Fa\Bundle\AdBundle\Form\LandingPageJobsSearchType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_landing_page_jobs_search }
+            
+    fa_ad.form.type.landing_page_adult_search:
+        class: Fa\Bundle\AdBundle\Form\LandingPageAdultSearchType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_landing_page_adult_search }

@@ -1,0 +1,182 @@
+{% block imageUploadStylesheets %}
+    {% set imageUploadStylesheetsVariables = get_variables('imageUploadStylesheets') %}
+    {% if imageUploadStylesheetsVariables.loaded is not defined %}
+        {{ set_variables('imageUploadStylesheets', {'loaded':'true'}) }}
+    {% endif %}
+{% endblock %}
+
+{% block imageUploadHtml %}
+{{ set_variables('userImageUpload', {'userId':userId, 'isCompany':isCompany}) }}
+<div>
+    <div>
+        <div id="filelist"></div>
+    </div>
+    <div id="uploaded_images_div" class="company-logo">
+        {{ include('FaUserBundle:UserImage:renderUploadedImage.html.twig', {'userId':userId, 'isCompany':isCompany}) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block imageUploadJavascriptBottom %}
+    {% set isAdminLoggedIn = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isAdminLoggedIn', [fetch_container_instance()]) %}
+    {% set imageUploadJavascriptBottomVariables = get_variables('imageUploadJavascriptBottom') %}
+    {% if imageUploadJavascriptBottomVariables.loaded is defined and imageUploadJavascriptBottomVariables.loaded == 'true' %}
+        {% set container = fetch_container_instance() %}
+        {% set variables = get_variables('userImageUpload') %}
+        {% set userId    = (variables.userId is defined ? variables.userId : 0) %}
+        {% set isCompany = (variables.isCompany is defined ? variables.isCompany : false) %}
+        {% set maxFileSize = (isCompany ? container.getParameter("fa.company.allow_size_in_mb")~' mb' : container.getParameter("fa.user.allow_size_in_mb")~' mb') %}
+        {% javascripts filter='uglifyjs2' output='bundles/js/compiled/userShowImageUploader.js'
+            'bundles/facore/js/plupload.full.min.js'
+            'bundles/fafrontend/js/vendor/jquery-ui.min.js'
+        %}
+        <script src="{{ static_asset_url(asset_url) }}"></script>
+        {% endjavascripts %}
+        <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function(){
+            initImageUpload(true);
+            plupload.addI18n({
+                'File size error.' : "{{'The size of image should not be greater than %max_file_size%.'|trans({'%max_file_size%' : (maxFileSize)}, 'frontend-paa')}}",
+                'File extension error.' : "{{'Image type must be one of the jpg, jpeg, png, gif.'|trans({}, 'frontend-paa')}}",
+                'Init error.' : "{{'Your browser does not have Flash, Silverlight or HTML5 support.'|trans({}, 'frontend-paa')}}"
+            });
+        });
+
+        function initImageUpload(removeFileList)
+        {
+            var mainUploader = setUpUploader('pickfile', removeFileList);
+            mainUploader.init();
+
+            if (removeFileList) {
+                //$('#filelist').html('');
+            }
+        }
+
+        function setUpUploader(id, removeFileList)
+        {
+            var errorFlag  = false;
+            var userId     = '{{userId}}';
+            var isCompany  = '{{isCompany}}';
+            var user_image = new Array();
+
+            if (isCompany) {
+                var allowMaxSize = '{{container.getParameter("fa.company.allow_size_in_mb")}}mb';
+            } else {
+                var allowMaxSize = '{{container.getParameter("fa.user.allow_size_in_mb")}}mb';
+            }
+            var uploader   = new plupload.Uploader({
+                runtimes : 'html5,flash,silverlight,html4',
+                unique_names :true,
+                multi_selection : false,
+                multipart : true,
+                browse_button : id, // you can pass in id...
+                url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_user_image_save_admin") }}' {% else %} '{{ path("ajax_user_image_save") }}' {% endif %},
+                multipart_params : {'fa_user_image[user_id]' : userId, 'fa_user_image[is_company]' : isCompany},
+                file_data_name : 'fa_user_image[fileData]',
+                flash_swf_url : '{{asset_url('facore/js/Moxie.swf')}}',
+                silverlight_xap_url : '{{ asset_url('facore/js/Moxie.xap')}}',
+
+                filters : {
+                    max_file_size : allowMaxSize,
+                    mime_types:
+                    [
+                        {title : '{{"Image files"|trans}}', extensions : "jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF"},
+                    ]
+                },
+
+                init: {
+                    PostInit: function() {
+                        if (removeFileList) {
+                            $('#filelist').html('');
+                        }
+                    },
+                    FilesAdded: function(up, files, response) {
+                        errorFlag = false;
+                        if(up.files.length > 1) {
+                            uploader.splice();
+                            $('#filelist').html('');
+                            $('#filelist').html(decorateMessage("{{ 'Image has been already uploaded.'|trans({}, 'frontend-paa') }}", 'alert'));
+                            return false;
+                        }
+                        else {
+                            uploader.start();
+                            $('#filelist').html("<div class='row'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Uploading image please wait... '|trans({}, 'frontend-paa') }}</div>");
+                            $('.save_data').attr('disabled', true);
+                        }
+                    },
+                    FileUploaded: function(up, file, response) {
+                        var obj = $.parseJSON(response.response);
+                        if (obj.error.length) {
+                            errorFlag = true;
+                            $('#filelist').html(decorateMessage(obj.error, 'alert'));
+                        }
+                    },
+                    UploadComplete: function(up, file) {
+                        if (!errorFlag) {
+                            if (isCompany) {
+                                $('#filelist').html(decorateMessage("{{'Company logo has been uploaded successfully.'|trans({}, 'frontend-paa') }}", 'success'));
+                            } else {
+                                $('#filelist').html(decorateMessage("{{'User image has been uploaded successfully.'|trans({}, 'frontend-paa') }}", 'success'));
+                            }
+                        } else {
+                            if (isCompany) {
+                                $('#filelist').html(decorateMessage('{{'Problem in company logo upload.'|trans}}', 'alert'));
+                            } else {
+                                $('#filelist').html(decorateMessage('{{'Problem in user image upload.'|trans}}', 'alert'));
+                            }
+                        }
+                        uploader.splice();
+                        getImage();
+                        $('.save_data').attr('disabled', false);
+                    },
+                    Error: function(up, err) {
+                       msg = err.message;
+                       if (msg == 'Init error.') {
+                           msg = "{{'Your browser does not have Flash, Silverlight or HTML5 support.'|trans({}, 'frontend-paa')}}";
+                       }
+                       $('#filelist').html(decorateMessage(msg, 'alert'));
+                    }
+                }
+            });
+            return uploader;
+        }
+
+        function getImage()
+        {
+            $.ajax({
+                type: "POST",
+                url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_get_user_image_admin") }}' {% else %} '{{ path("ajax_get_user_image") }}' {% endif %},
+                data: { userId: '{{userId}}', isCompany: '{{isCompany}}'}
+            })
+            .done(function(response) {
+                $('#uploaded_images_div').html(response.image);
+                initImageUpload(false);
+                $('.upload-thumb-img').click(function(e){
+                    $('#upload_image_div').siblings('small.error').html('');
+                });
+            });
+        }
+
+        function deleteImage(url)
+        {
+            $('.remove-logo-btn').unbind("click");
+            $.ajax({
+                type: "POST",
+                url: url,
+            })
+            .done(function(response) {
+                if (response.error.length) {
+                    $('#filelist').html(decorateMessage(response.error, 'alert'));
+                }
+                if (response.successMsg.length) {
+                    $('#filelist').html(decorateMessage(response.successMsg, 'success'));
+                    $('#uploaded_images_div').html(response.image);
+                    initImageUpload(false);
+                }
+            });
+        }
+        //]]>
+        </script>
+    {% endif %}
+{% endblock %}

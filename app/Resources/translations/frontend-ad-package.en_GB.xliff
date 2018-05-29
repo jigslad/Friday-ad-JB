@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="113308a7976557bf47fe704a1e9a6cd8abe76679" resname="&lt; Go back">
+        <jms:reference-file line="38">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="14">views/UserPackage/choose.html.twig</jms:reference-file>
+        <source><![CDATA[< Go back]]></source>
+        <target state="new"><![CDATA[< Go back]]></target>
+      </trans-unit>
+      <trans-unit id="98f556131db4287f048bc873e9fdb808061a0709" resname="Ad lives for %adExpiryDays% days">
+        <jms:reference-file line="93">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>Ad lives for %adExpiryDays% days</source>
+        <target state="new">Ad lives for %adExpiryDays% days</target>
+      </trans-unit>
+      <trans-unit id="78b7c9f6d6d7dfc01a2bb1d952d2bd0adbdfae98" resname="Choose">
+        <jms:reference-file line="83">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="64">views/AdPackageAdmin/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="64">views/UserPackage/choose.html.twig</jms:reference-file>
+        <jms:reference-file line="70">views/UserPackage/choose.html.twig</jms:reference-file>
+        <jms:reference-file line="93">views/UserPackageAdmin/edit.html.twig</jms:reference-file>
+        <jms:reference-file line="103">views/UserPackageAdmin/edit.html.twig</jms:reference-file>
+        <source>Choose</source>
+        <target state="new">Choose</target>
+      </trans-unit>
+      <trans-unit id="41917cab3991479880ba7eb69c831db084ef5eec" resname="Choose your profile">
+        <jms:reference-file line="9">views/UserPackage/choose.html.twig</jms:reference-file>
+        <source>Choose your profile</source>
+        <target state="new">Choose your profile</target>
+      </trans-unit>
+      <trans-unit id="770fbc1a9a8c12435cd8b6a01675a29c973931f4" resname="Downgrade">
+        <jms:reference-file line="96">views/UserPackageAdmin/edit.html.twig</jms:reference-file>
+        <source>Downgrade</source>
+        <target state="new">Downgrade</target>
+      </trans-unit>
+      <trans-unit id="75f527181b574f84568f33f67adc3b267a6fef9c" resname="Free">
+        <jms:reference-file line="63">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="44">views/AdPackageAdmin/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>Free</source>
+        <target state="new">Free</target>
+      </trans-unit>
+      <trans-unit id="f8c24833126b7eeec8db511c2e9b1aeaa2e93063" resname="Hide details">
+        <jms:reference-file line="126">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>Hide details</source>
+        <target state="new">Hide details</target>
+      </trans-unit>
+      <trans-unit id="cb03deaa670df01fc169ac4f41c516b6fa17c69b" resname="No ad packages found.">
+        <jms:reference-file line="101">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="83">views/UserPackage/choose.html.twig</jms:reference-file>
+        <source>No ad packages found.</source>
+        <target state="new">No ad packages found.</target>
+      </trans-unit>
+      <trans-unit id="823f6cce80cf1d820d2915a0e00f3bc50e10b7f5" resname="Place my ad">
+        <jms:reference-file line="104">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="86">views/UserPackage/choose.html.twig</jms:reference-file>
+        <source>Place my ad</source>
+        <target state="new">Place my ad</target>
+      </trans-unit>
+      <trans-unit id="618cc9310371b400c710fd1312cc782345ee804f" resname="Please select atleast one ad package.">
+        <jms:reference-file line="98">AdBundle/Controller/AdPackageController.php</jms:reference-file>
+        <jms:reference-file line="270">AdBundle/Controller/AdPackageController.php</jms:reference-file>
+        <source>Please select atleast one ad package.</source>
+        <target state="new">Please select atleast one ad package.</target>
+      </trans-unit>
+      <trans-unit id="1e3c92741f083d112978654d82065f7b47299c0d" resname="Please select valid print option.">
+        <jms:reference-file line="104">AdBundle/Controller/AdPackageController.php</jms:reference-file>
+        <jms:reference-file line="276">AdBundle/Controller/AdPackageController.php</jms:reference-file>
+        <jms:reference-file line="120">AdBundle/Controller/AdPackageAdminController.php</jms:reference-file>
+        <source>Please select valid print option.</source>
+        <target state="new">Please select valid print option.</target>
+      </trans-unit>
+      <trans-unit id="be19403cf50bf5829bb9c8813641a6bfd8a7a6cb" resname="Promote ad">
+        <jms:reference-file line="5">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>Promote ad</source>
+        <target state="new">Promote ad</target>
+      </trans-unit>
+      <trans-unit id="61dfd2393cadcf288382a3745507002ee56ba4f8" resname="Purchase package">
+        <jms:reference-file line="10">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>Purchase package</source>
+        <target state="new">Purchase package</target>
+      </trans-unit>
+      <trans-unit id="0165f7088a87c494db214706823267e37ced6eda" resname="Renew">
+        <jms:reference-file line="89">views/UserPackageAdmin/edit.html.twig</jms:reference-file>
+        <source>Renew</source>
+        <target state="new">Renew</target>
+      </trans-unit>
+      <trans-unit id="358fccefe4ad2e32b693e75c4a952081611123cf" resname="Repost ad">
+        <jms:reference-file line="7">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>Repost ad</source>
+        <target state="new">Repost ad</target>
+      </trans-unit>
+      <trans-unit id="a6f47e00e036c5589eb12e237894b37fb015d365" resname="Upgrade">
+        <jms:reference-file line="66">views/UserPackage/choose.html.twig</jms:reference-file>
+        <jms:reference-file line="98">views/UserPackageAdmin/edit.html.twig</jms:reference-file>
+        <source>Upgrade</source>
+        <target state="new">Upgrade</target>
+      </trans-unit>
+      <trans-unit id="447945a5e5418224ca03f0880512fc6a342514a6" resname="What's included?">
+        <jms:reference-file line="88">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>What's included?</source>
+        <target state="new">What's included?</target>
+      </trans-unit>
+      <trans-unit id="fd20290b79936254bc25fe4e68201317b764b02f" resname="You already have purchased package for ad %adId%.">
+        <jms:reference-file line="81">AdBundle/Controller/AdPackageController.php</jms:reference-file>
+        <source>You already have purchased package for ad %adId%.</source>
+        <target state="new">You already have purchased package for ad %adId%.</target>
+      </trans-unit>
+      <trans-unit id="359e4e8d16dac305c461de8e19eff0fe48fc832b" resname="You can not promote ad %adId%.">
+        <jms:reference-file line="223">AdBundle/Controller/AdPackageController.php</jms:reference-file>
+        <source>You can not promote ad %adId%.</source>
+        <target state="new">You can not promote ad %adId%.</target>
+      </trans-unit>
+      <trans-unit id="25247c376ca39f759fdaf371f21f93c695c54988" resname="You can not repost ad %adId%.">
+        <jms:reference-file line="216">AdBundle/Controller/AdPackageController.php</jms:reference-file>
+        <source>You can not repost ad %adId%.</source>
+        <target state="new">You can not repost ad %adId%.</target>
+      </trans-unit>
+      <trans-unit id="ed07ef1b1e69ca36ebf66e5bfa6ea1ccae274cdf" resname="Your ad type: Essential details">
+        <jms:reference-file line="35">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <source>Your ad type: Essential details</source>
+        <target state="new">Your ad type: Essential details</target>
+      </trans-unit>
+      <trans-unit id="6a76dc08710b6d31e0bccae94e8f3778ae7d7b63" resname="in print">
+        <jms:reference-file line="76">views/AdPackage/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="57">views/AdPackageAdmin/purchaseAdPackage.html.twig</jms:reference-file>
+        <jms:reference-file line="40">views/AdPackageAdmin/showPurchaseAdPackage.html.twig</jms:reference-file>
+        <source>in print</source>
+        <target state="new">in print</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

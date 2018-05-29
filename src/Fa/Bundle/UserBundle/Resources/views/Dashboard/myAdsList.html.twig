@@ -1,0 +1,84 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set adRepository         = fetch_repository('FaAdBundle:Ad') %}
+{% set adLocationRepository = fetch_repository('FaAdBundle:AdLocation') %}
+{% set adImageRepository = fetch_repository('FaAdBundle:AdImage') %}
+{% set adViewCounterRepository = fetch_repository('FaAdBundle:AdViewCounter') %}
+{% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
+{% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
+{% set adModerateRepository = fetch_repository('FaAdBundle:AdModerate') %}
+
+{% set adIdArray = {} %}
+{% if pagination.getNbResults() %}
+    {% for ad in pagination.getCurrentPageResults() %}
+        {% set adIdArray = adIdArray|merge({0 : ad.id}) %}
+    {% endfor %}
+
+    {% set adImageArray         = adImageRepository.getAdMainImageArrayByAdId(adIdArray) %}
+    {% set adViewCounterArray   = adViewCounterRepository.getAdViewCounterArrayByAdId(adIdArray) %}
+    {% set adPackageArray       = adUserPackageRepository.getAdPackageArrayByAdId(adIdArray, true) %}
+    {% set inModerationLiveAdIds = adModerateRepository.getInModerationStatusForLiveAdIds(adIdArray) %}
+{% endif %}
+
+       {% if pagination.getNbResults() %}
+            {% for ad in pagination.getCurrentPageResults() %}
+                {% set adId = ad.id %}
+                {% set adCategoryId = ad.cat_id %}
+                {% if ad['status_id'] == adStatusLive %}
+                    {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
+                    {% set adUrl = adUrl|trim('/') %}
+                {% endif %}
+                {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+            {% endfor %}
+        {% endif %}
+
+
+<div id="markAdAsSoldOrExpireModal" class="reveal-modal tiny" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Was your advert successful?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+            </div>
+        </div>
+        <div class="mt20">
+            <div class="row">
+                <div class="large-6 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAdAsSoldOrExpireModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')}}');">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+                <div class="large-6 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAdAsSoldOrExpireModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')}}');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="closeRemoveAdConfirmationBox('markAdAsSoldOrExpireModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="markAdAsInactiveModal" class="reveal-modal tiny" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Are you sure that you want to permanently delete this advert?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+            </div>
+        </div>
+        <div class="mt20">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="closeRevealModel('#markAdAsInactiveModal');changeAdStatus('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID')}}');">{{'Delete'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand mb0" onclick="closeRemoveAdConfirmationBox('markAdAsInactiveModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

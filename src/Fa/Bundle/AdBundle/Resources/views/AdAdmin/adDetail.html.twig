@@ -1,0 +1,322 @@
+{% extends 'FaAdminBundle::popupLayout.html.twig' %}
+{% use "FaAdBundle:AdImage:renderImageSlider.html.twig" %}
+{% use "FaCoreBundle:GoogleMap:renderLocationUsingCustomMarker.html.twig" %}
+{% set adImages = {} %}
+{% set isAdAdminPreview = true %}
+{% set isAdPreview = true %}
+{% if adDetail['images'] is defined %}
+    {% set adImages = adDetail['images'] %}
+{% endif %}
+{% set adId = ad.getId() %}
+{% set container = fetch_container_instance() %}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set rootCategoryId = categoryRepository.getRootCategoryId(adDetail['category_id'], container) %}
+{% set adCategoryId = adDetail['category_id'] %}
+{% set secondLevelCategoryId = categoryRepository.getCategoryIdByLevel(adDetail['category_id'], 1, container) %}
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+{% set isFinance = false %}
+{% set allowAdEdit = false %}
+{% if adDetail['images'] is defined %}
+    {% set adImageCount = adDetail['images']|length %}
+{% else %}
+    {% set adImageCount = 0 %}
+{% endif %}
+
+{% set showNimber = false %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set currentDevice = 'D' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'T' %}
+{% endif %}
+
+{% set imageAltString = null %}
+
+{% set youtubeVideoUrl = null %}
+{% if ad.getYoutubeVideoUrl() %}
+    {% set youtubeVideoUrl = ad.getYoutubeVideoUrl() %}
+{% endif %}
+
+{% block scripttop %}
+    {{ block('image_slider_css') }}
+{% endblock %}
+
+{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
+    {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
+    {% set adProperty = adPropertyRepository.findOneBy({'ad': adId}) %}
+    {% set metaData = {} %}
+    {% if adProperty and adProperty.getMetaData() is not null %}
+        {% set metaData = array_unserialize(adProperty.getMetaData()) %}
+    {% endif %}
+{% endif %}
+
+{% block content -%}
+<div class="large-row">
+    <div class="row">
+       <div class="columns">
+           <h1>{{'Detail of ad %adId% '|trans({'%adId%': ad.getId()})}}</h1>
+       </div>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="columns">
+            <div class="panel">
+                <div class="row detail-main">
+                    <div class="large-9 columns">
+                        <h3>{{adDetail['title']}}</h3>
+                        {% if adDetail['personalized_title'] is defined and adDetail['personalized_title'] in not null %}
+                            {{adDetail['personalized_title']}}
+                        {% endif %}
+                        <ul id="adDetailMainTabs" class="tabs tab-menu clearfix" data-tab>
+                            {% if adImages|length %}
+                                <li class="active"><a href="#photo_panel">{{'Photos'|trans}}</a></li>
+                            {% endif %}
+                            {% if youtubeVideoUrl|length %}
+                                <li {% if not adImages|length %} class="active" {% endif %}><a href="#video_panel" id="video-panel-id">{{'Video'|trans({}, 'frontend-show-ad')}}</a></li>
+                            {% endif %}
+                            <li><a href="#map_panel" id="map_tab_anchor">{{'Map'|trans}}</a></li>
+                        </ul>
+                        <div class="tabs-content">
+                            <div class="content {% if adImages|length %}active{% endif %}" id="photo_panel">
+                                {{ block('image_slider_html') }}
+                            </div>
+                            {% if youtubeVideoUrl|length %}
+                                {% set youtubeVideoId = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getYouTubeVideoId', [youtubeVideoUrl]) %}
+                                <div class="content {% if not adImages|length %}active{% endif %}" id="video_panel">
+                                    <iframe id="ytplayer" type="text/html" width="100%" height="400px" src="https://www.youtube.com/embed/{{youtubeVideoId}}" frameborder="0"></iframe>
+                                </div>
+                            {% endif %}
+                            <div class="content" id="map_panel">
+                                {% set latitude = null %}
+                                {% set longitude = null %}
+                                {% if adDetail['latitude'] is defined and adDetail['longitude'] is defined %}
+                                    {% set latitude = adDetail['latitude'] %}
+                                    {% set longitude = adDetail['longitude'] %}
+                                    {% set mapHeight = '400px' %}
+                                    {% set mapWidth =  '800px' %}
+                                    {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'tabId': 'adDetailMainTabs', 'mapContentId': 'map_panel'}) }}
+                                {% endif %}
+                                {{ block('googlemap_location_html') }}
+                            </div>
+                        </div>
+
+                        {% set adDetailAndDimensionFields = adDetail %}
+                        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+                            {% set adForSaleDetail = {} %}
+                            {% set postagePayment = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adForSaleDetail = adForSaleDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adDetail['delivery_method_name'] is defined and adDetail['delivery_method_name'] %}
+                                {% set postagePayment = postagePayment|merge({'delivery_method': adDetail['delivery_method_name']}) %}
+                            {% endif %}
+                            {% if adDetail['payment_method'] is defined and adDetail['payment_method'] %}
+                                {% set postagePayment = postagePayment|merge({'payment_method': adDetail['payment_method']}) %}
+                            {% endif %}
+                            {% if postagePayment|length%}
+                                {% set adForSaleDetail = adForSaleDetail|merge({'postage_payment': postagePayment}) %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdForSaleDetailTabs.html.twig') }}
+                        {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID') %}
+                            {% set adCommunityDetail = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adCommunityDetail = adCommunityDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adDetail['price'] is defined and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}
+                                {% set adCommunityDetail = adCommunityDetail|merge({'price': adDetail['price']}) %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdCommunityDetailTabs.html.twig') }}
+                        {% elseif secondLevelCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMERCIALVEHICLES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID')} %}
+                            {% set adMotorRepository = fetch_repository('FaAdBundle:AdMotors') %}
+                            {% set adMotor = adMotorRepository.findOneBy({'ad': adId}) %}
+                            {% set adMotorDetail = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adMotorDetail = adMotorDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adMotor and adMotor.getColourId() is not null %}
+                                {% set adMotorDetail = adMotorDetail|merge({'colour_id': adMotor.getColourId()}) %}
+                            {% endif %}
+                            {% if adMotor and adMotor.getFuelTypeId() is not null %}
+                                {% set adMotorDetail = adMotorDetail|merge({'fuel_type_id': adMotor.getFuelTypeId()}) %}
+                            {% endif %}
+                            {% set metaData = {} %}
+                            {% set featureIds = {} %}
+                            {% if adMotor and adMotor.getMetaData() is not null %}
+                                {% set metaData = array_unserialize(adMotor.getMetaData()) %}
+                                {% if metaData['features_id'] is defined %}
+                                    {% set featureIds = metaData['features_id']|split(',') %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% set safetyFeatureIds = adMotorRepository.getSafetyFeature(featureIds) %}
+                            {% set otherFeatureIds = adMotorRepository.getOtherFeature(featureIds) %}
+                            {{ include('FaAdBundle:Ad:AdMotorDetailTabs.html.twig') }}
+                        {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
+                            {% set adPropertyDetail = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adPropertyDetail = adPropertyDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adProperty and adProperty.getNumberOfBedroomsId() is not null %}
+                                {% set adPropertyDetail = adPropertyDetail|merge({'number_of_bedrooms_id': adProperty.getNumberOfBedroomsId()}) %}
+                            {% endif %}
+                            {% if metaData['number_of_bathrooms_id'] is defined and metaData['number_of_bathrooms_id'] is not null %}
+                                {% set adPropertyDetail = adPropertyDetail|merge({'number_of_bathrooms_id': metaData['number_of_bathrooms_id'] }) %}
+                            {% endif %}
+                            {% if adDetail['type_id'] is defined and adDetail['type_id'] is not null %}
+                                {% set adPropertyDetail = adPropertyDetail|merge({'type_id': adDetail['type_id']}) %}
+                            {% endif %}
+                            {% set amenitiesIds = {} %}
+                            {% set billsIncludedIds = {} %}
+                            {% if adProperty and adProperty.getAmenitiesId() is not null %}
+                                {% set amenitiesIds = adProperty.getAmenitiesId()|split(',') %}
+                            {% endif %}
+                            {% if metaData['bills_included_in_rent_id'] is defined %}
+                                {% set billsIncludedIds = metaData['bills_included_in_rent_id']|split(',') %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdPropertyDetailTabs.html.twig') }}
+                        {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                            {% set adJobsRepository = fetch_repository('FaAdBundle:AdJobs') %}
+                            {% set adJob = adJobsRepository.findOneBy({'ad': adId}) %}
+                            {% set adJobDetail = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adJobDetail = adJobDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% set metaData = {} %}
+                            {% set additionalJobReqIds = {} %}
+                            {% set additionalJobBenefitIds = {} %}
+                            {% if adJob and adJob.getMetaData() is not null %}
+                                {% set metaData = array_unserialize(adJob.getMetaData()) %}
+                                {% if metaData['additional_job_requirements_id'] is defined %}
+                                    {% set additionalJobReqIds = metaData['additional_job_requirements_id']|split(',') %}
+                                {% endif %}
+                                {% if metaData['additional_benefits_id'] is defined %}
+                                    {% set additionalJobBenefitIds = metaData['additional_benefits_id']|split(',') %}
+                                {% endif %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdJobDetailTabs.html.twig') }}
+                        {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') %}
+                            {% set adServiceRepository = fetch_repository('FaAdBundle:AdServices') %}
+                            {% set adService = adServiceRepository.findOneBy({'ad': adId}) %}
+                            {% set adServiceDetail = {} %}
+                            {% set servicesOfferedIds = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adServiceDetail = adServiceDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adService and adService.getServicesOfferedId() is not null %}
+                                {% set servicesOfferedIds = adService.getServicesOfferedId()|split(',') %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdServiceDetailTabs.html.twig') }}
+                        {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                            {% set adAdultRepository = fetch_repository('FaAdBundle:AdAdult') %}
+                            {% set adAdult = adAdultRepository.findOneBy({'ad': adId}) %}
+                            {% set adAdultDetail = {} %}
+                            {% set servicesIds = {} %}
+                            {% if adDetail['description'] is defined %}
+                                {% set adAdultDetail = adAdultDetail|merge({'description': adDetail['description']}) %}
+                            {% endif %}
+                            {% if adAdult and adAdult.getServicesId() is not null %}
+                                {% set servicesIds = adAdult.getServicesId()|split(',') %}
+                            {% endif %}
+                            {{ include('FaAdBundle:Ad:AdAdultDetailTabs.html.twig') }}
+                        {% else %}
+                            <div class="detail-tabpart-2" id="vif_tabs">
+                                <dl class="accordion" data-accordion>
+                                    <dd class="accordion-navigation">
+                                        <div class="content active" id="basic_info_panel">
+                                            <div id="ad_desc">
+                                                {% if adDetail['description'] is defined %}
+                                                    <p>{{adDetail['description']|replace({"\\n": "<br />"})|raw}}</p>
+                                                {% endif %}
+                                            </div>
+                                            <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'messages') }}</a>
+                                            <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'messages') }}</a>
+                                            {% if adDetail['detail'] is defined %}
+                                                <h5>{{'The details'|trans({}, 'messages')}}</h5>
+                                                   <ul class="details-info">
+                                                       {% for fieldName, fieldValue in adDetail['detail'] %}
+                                                           <li class="clearfix">
+                                                               <div class="detail-text">{{fieldName}}</div>
+                                                               <div class="detail-text">{{fieldValue|join(',')}}</div>
+                                                           </li>
+                                                       {% endfor %}
+                                                   </ul>
+                                            {% endif %}
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="large-3 columns text-center">
+                        {% if adDetail['published_at'] is defined and adDetail['published_at'] is not null %}
+                            <div class="listed-date">
+                                {{'Listed'|trans}}: {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [adDetail['published_at'], fetch_container_instance()]) }}
+                            </div>
+                        {% endif %}
+                        {% if adDetail['price'] is defined and adDetail['price'] and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') %}
+                            <div class="item-price {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') or metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}classes-tution-price{% endif %}">
+                                {{ format_currency(adDetail['price'])}}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CLASSES_AND_TUTION_ID') %}<span>{{'per hour'|trans({}, 'messages')}}</span>{% endif %}{% if metaData['rent_per_id'] is defined and metaData['rent_per_id'] is not null %}<span>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', metaData['rent_per_id']) }}</span>{% endif %}
+                            </div>
+                        {% endif %}
+                        {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') %}
+                            {% set adCommunityRepository = fetch_repository('FaAdBundle:AdCommunity') %}
+                            {% set adCommunity = adCommunityRepository.findOneBy({'ad': adId}) %}
+                            {% set metaData = {} %}
+                            {% if adCommunity.getMetaData() is not null %}
+                                {% set metaData = array_unserialize(adCommunity.getMetaData()) %}
+                            {% endif %}
+                            {% if metaData['event_start'] is defined %}
+                                {% set metaData = metaData|merge({'event_start': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getTimeStampFromStartDate', [metaData['event_start']])}) %}
+                                {% if metaData['event_end'] is defined %}
+                                    {% set metaData = metaData|merge({'event_end': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getTimeStampFromStartDate', [metaData['event_end']])}) %}
+                                {% endif %}
+                                {% set eventStartDate = adCommunityRepository.getEventDateForListing(metaData['event_start'], (metaData['event_end'] is defined ? metaData['event_end'] : null), container) %}
+                                <div class="clearfix">
+                                    <span class="whats-on">{{ eventStartDate }}</span>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        {% if adDetail['delivery_method_name'] is defined and adDetail['delivery_method_name'] %}
+                            <span class="person-collection">{{ adDetail['delivery_method_name'] }}</span>
+                        {% endif %}
+                        {% if adDetail['user'] is defined %}
+                            {{ include('FaAdBundle:Ad:AdUserDetail.html.twig', {'adLatitude': latitude, 'adLongitude': longitude}) }}
+                        {% endif %}
+                    </div>
+                </div>
+                <ul class="button-group text-center">
+                    <li><button type="reset" class="tiny button mb0" onclick="javascript:window.close();">{{ 'Close'|trans({}, 'messages') }}</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{fetch_container_instance().getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script>
+    {{ block('image_slider_js') }}
+    {{ block('googlemap_location_js') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function(){
+            $('#vif_tabs .accordion-navigation a').click(function() {
+                $(this).find('i').toggleClass("fi-plus fi-minus");
+            });
+
+            {% if not adImages|length and not youtubeVideoUrl|length %}
+                $('#map_tab_anchor').click();
+            {% endif %}
+
+            $('#vif_tabs .accordion-navigation .content').each(function(){
+                if ($(this).hasClass('active')) {
+                    $('#'+$(this).attr('id')+'_anchor').find('i').addClass('fi-minus').removeClass('fi-plus');
+                } else {
+                    $('#'+$(this).attr('id')+'_anchor').find('i').addClass('fi-plus').removeClass('fi-minus');
+                }
+            });
+        });
+    //]]>
+    </script>
+{% endblock %}

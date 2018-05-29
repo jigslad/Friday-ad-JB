@@ -1,0 +1,23 @@
+FaEntityBundle_category:
+    resource: '@FaEntityBundle/Resources/config/routing/category_admin.yml'
+    prefix:   /category
+    
+FaEntityBundle_location:
+    resource: '@FaEntityBundle/Resources/config/routing/location_admin.yml'
+    prefix:   /location
+    
+FaEntityBundle_entity:
+    resource: '@FaEntityBundle/Resources/config/routing/entity_admin.yml'
+    prefix:   /entity
+
+FaEntityBundle_dimension:
+    resource: '@FaEntityBundle/Resources/config/routing/dimension.yml'
+    prefix:   /dimension_value
+    
+FaEntityBundle_location_group:
+    resource: '@FaEntityBundle/Resources/config/routing/location_group_admin.yml'
+    prefix:   /location_group
+    
+FaEntityBundle_entity_log:
+    resource: '@FaEntityBundle/Resources/config/routing/entity_log_admin.yml'
+    prefix:   /entity_log

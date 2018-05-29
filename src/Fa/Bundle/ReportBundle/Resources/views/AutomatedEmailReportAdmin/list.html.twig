@@ -1,0 +1,51 @@
+{% set container = fetch_container_instance() %}
+{% set emailTemplateRepository = fetch_repository('FaEmailBundle:EmailTemplate') %}
+{% set automatedEmailReportDailyRepository = fetch_repository('FaReportBundle:AutomatedEmailReportDaily', 'history') %}
+{% set allEmailTemplates = emailTemplateRepository.getAllEmailTemplateIdentifierArray() %}
+{% set automatedEmailFields = automatedEmailReportDailyRepository.getAdReportFields() %}
+<div class="row">
+    <div class="columns">
+        <div class="table-fix-col">
+            <div class="fa-scroller2">
+                <table class="fixed-table fatable">
+                    <thead>
+                        <tr>
+                            {% for automatedEmailField, automatedEmailFieldName in automatedEmailFields %}
+                                <th width="50%">
+                                    {{automatedEmailFieldName}}
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if pagination.getNbResults() %}
+                            {% for automatedEmailReport in pagination.getCurrentPageResults() %}
+                                <tr>
+                                    {% for automatedEmailField, automatedEmailFieldName in automatedEmailFields %}
+                                        <td>
+                                            {% if automatedEmailField == 'identifier' %}
+                                                {% if allEmailTemplates[automatedEmailReport['identifier']] is defined  %}
+                                                    {{ allEmailTemplates[automatedEmailReport['identifier']] }}
+                                                {% else %}
+                                                    {{ allEmailTemplates[automatedEmailReport['identifier']] }}
+                                                {% endif %}
+                                            {% elseif automatedEmailReport[automatedEmailField] is defined %}
+                                                {{ automatedEmailReport[automatedEmailField] }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="2" align="center">{{ 'No Data Found'|trans }}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

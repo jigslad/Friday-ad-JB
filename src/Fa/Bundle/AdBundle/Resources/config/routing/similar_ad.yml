@@ -1,0 +1,7 @@
+get_similar_ad_result:
+    path:     /api/getSimilarAds/
+    defaults: { _controller: "FaAdBundle:SimilarAdApi:getSimilarAds" }
+
+get_trade_it_result:
+    path:     /api/trade-it/
+    defaults: { _controller: "FaAdBundle:TradeItAdApi:getAds" }

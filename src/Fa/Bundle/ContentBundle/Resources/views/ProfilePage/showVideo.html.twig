@@ -1,0 +1,27 @@
+{% if userDetail["youtube_video_url"] is defined and userDetail["youtube_video_url"] %}
+    <div class="shop-video">
+        <h5>{{'Video'|trans({}, 'frontend-profile-page')}}</h5>
+        <div class="shop-video-box">
+            {% set youtubeVideoId = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getYouTubeVideoId', [userDetail["youtube_video_url"]]) %}
+            {% set youtubeVideoImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getYouTubeViewImageUrl', [youtubeVideoId]) %}
+            <a id="shopVideo" href="http://www.youtube.com/v/{{ youtubeVideoId }}">
+                <img alt="" src="{{ youtubeVideoImageUrl }}">
+            </a>
+        </div>
+    </div>
+    {% if allowProfileEdit %}
+        <div class="profile-edit clearfix mt20">
+            <div class="right relative">
+                <a href="javascript:void(0);" onclick="return editVideo();">Edit</a>
+                <div class="edit-tooltip">{{'Edit your video'|trans({}, 'frontend-profile-page')}}</div>
+            </div>
+        </div>
+    {% endif %}
+{% elseif allowProfileEdit %}
+    <div class="shop-video">
+        <h5>{{'Video'|trans({}, 'frontend-profile-page')}}</h5>
+    </div>
+    <div class="mt10 mb10">
+        <a href="javascript:void(0);" onclick="return editVideo();">{{'+ Add a video'|trans({}, 'frontend-profile-page')}}</a>
+    </div>
+{% endif %}

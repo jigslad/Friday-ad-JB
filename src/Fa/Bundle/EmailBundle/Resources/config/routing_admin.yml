@@ -1,0 +1,3 @@
+FaEmailBundle_emailtemplate:
+    resource: '@FaEmailBundle/Resources/config/routing/email_template_admin.yml'
+    prefix:   /email_template

@@ -1,0 +1,59 @@
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).foundation({
+        accordion: {
+            multi_expand: true,
+            callback : function (accordion) {
+                accordionCallback(accordion);
+            }
+        }
+    });
+    $(document).ready(function(){
+        scrollToElement('#successMsgDiv', '1000', -150);
+        $('.textcounter').each(function(e){
+            updateCharCounter($(this).attr('id'));
+        });
+    });
+    $('#fa_user_user_private_profile_about_you').focus(function(e){
+        $(this).next('div').find('div small.error').remove();
+        $(this).removeClass('error');
+    });
+    $('.textcounter').keyup(function(e){
+        updateCharCounter($(this).attr('id'));
+    });
+    $('#my_profile .accordion-navigation .content').each(function(){
+        if ($(this).hasClass('active')) {
+            $(this).siblings('a').find('span:eq(1)').addClass('dark-arrow-up');
+            $(this).siblings('a').find('span:eq(1)').removeClass('dark-arrow-down');
+        } else {
+            $(this).siblings('a').find('span:eq(1)').addClass('dark-arrow-down');
+            $(this).siblings('a').find('span:eq(1)').removeClass('dark-arrow-up');
+        }
+    });
+    
+    function accordionCallback(accordion)
+    {
+        $(accordion).siblings('a').find('span:eq(1)').toggleClass("dark-arrow-down dark-arrow-up");
+        $(accordion).find('select.fa-select').selectmenu('refresh');
+        $(accordion).find('select.fa-select-white').selectmenu('refresh');
+    }
+    
+    function updateCharCounter(fieldId)
+    {
+        var textCounterId = fieldId + '_textcounter';
+        var maxLimit      = $('#'+fieldId).attr('maxlength') ? parseInt($('#'+fieldId).attr('maxlength')) : 0;
+        var value         = $('#'+fieldId).val();
+
+        if (maxLimit) {
+           if (value.length > maxLimit) {
+               $('#'+fieldId).val(value.substring(0, maxLimit));
+               $('#'+fieldId).html('(0 characters left)');
+               return false;
+           } else {
+               $('#'+textCounterId).html('(' + (maxLimit - value.length) + ' characters left)');
+           }
+       }
+    }
+//]]>
+</script>

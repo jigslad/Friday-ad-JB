@@ -1,0 +1,54 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    function bindStarRatingEvents(ratingFieldId, ratingTexContainerId)
+    {
+        var selectedRateId   = $('#'+ratingFieldId).val();
+        var selectedRateText = $('#'+ratingFieldId+' option[value="'+selectedRateId+'"]').text();
+        if (selectedRateId) {
+            $('#rate-'+selectedRateId).parent().addClass('rate-'+selectedRateId);
+
+            if (ratingTexContainerId) {
+                $('#'+ratingTexContainerId).html(selectedRateText);
+            }
+        }
+
+        $('.db-rating-stars a').hover(function(){
+            $(this).parent().removeClass("rate-1 rate-2 rate-3 rate-4 rate-5");
+            $(this).parent().addClass($(this).attr('id'));
+
+            if (ratingTexContainerId) {
+                var rateId   = $(this).attr('id').replace('rate-', '');
+                var rateText = $('#'+ratingFieldId+' option[value="'+rateId+'"]').text();
+                $('#'+ratingTexContainerId).html(rateText);
+            }
+        }, function() {
+            $(this).parent().removeClass("rate-1 rate-2 rate-3 rate-4 rate-5");
+            if (ratingTexContainerId) {
+                $('#'+ratingTexContainerId).html('');
+            }
+            var selectedRateId   = $('#'+ratingFieldId).val();
+            var selectedRateText = $('#'+ratingFieldId+' option[value="'+selectedRateId+'"]').text();
+            if (selectedRateId) {
+                $(this).parent().addClass('rate-'+selectedRateId);
+
+                if (ratingTexContainerId) {
+                    $('#'+ratingTexContainerId).html(selectedRateText);
+                }
+            }
+        });
+
+        $('.db-rating-stars a').click(function(){
+            $(this).parent().removeClass("rate-1 rate-2 rate-3 rate-4 rate-5");
+            $(this).parent().addClass($(this).attr('id'));
+
+            var rateId = $(this).attr('id').replace('rate-', '');
+            var rateText = $('#'+ratingFieldId+' option[value="'+rateId+'"]').text();
+
+            if (ratingTexContainerId) {
+                $('#'+ratingTexContainerId).html(rateText);
+            }
+            $('#'+ratingFieldId).val(rateId);
+        });
+    }
+//]]>
+</script>

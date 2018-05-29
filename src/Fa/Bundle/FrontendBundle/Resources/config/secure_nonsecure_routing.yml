@@ -1,0 +1,3 @@
+fa_frontend_ajax_user_location_by_postcode:
+    path:     /ajax/user_location_by_postcode
+    defaults: { _controller: FaFrontendBundle:Default:ajaxUserLocationByPostcode }

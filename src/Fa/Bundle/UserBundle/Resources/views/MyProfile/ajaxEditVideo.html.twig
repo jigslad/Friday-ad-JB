@@ -1,0 +1,80 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title">{{'Edit video'|trans({}, 'frontend-my-profile')}}</h5>
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'edit_video_id'}}) }}
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Video'|trans({}, 'frontend-my-profile')}}</h5>
+                <div class="mt5">{{'Videos are a great way to give visitors an introduction of your business. Add a youtube link below.'|trans({}, 'frontend-my-profile')}}</div>
+            </div>
+        </div>
+        <div class="row mt15">
+            <div class="columns">
+                {{ form_row(form.youtube_video_url) }}
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#profileEditModal');;">{{'Cancel'|trans({}, 'frontend-my-profile')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+    });
+    $("#edit_video_id").submit(function(event) {
+        blockElement('#profileEditModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{path('ajax_edit_video')}}",
+            data: $("#edit_video_id").serialize()
+        })
+        .always(function(response) {
+            unblockElement('#profileEditModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#profileEditModal').html(response.htmlContent);
+            } else {
+            	$('#business_video_div').html(response.successContent);
+                $("#shopVideo").unbind();
+                $("#shopVideo").click(function() {
+                    $.fancybox({
+                        'padding'       : 0,
+                        'autoScale'     : false,
+                        'transitionIn'  : 'none',
+                        'transitionOut' : 'none',
+                        'title'         : this.title,
+                        'width'         : 640,
+                        'height'        : 385,
+                        'href'          : this.href,
+                        'type'          : 'swf',
+                        'swf'           : {
+                            'wmode'             : 'transparent',
+                            'allowfullscreen'   : 'true'
+                        }
+                    });
+
+                    return false;
+                });
+                
+                $('#profileEditModal').foundation('reveal', 'close');
+                $('#business_video_div').notify('{{'Video edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
+                scrollToElement('#business_video_div', '1000', -150);
+            }
+        });
+    });
+//]]>
+</script>

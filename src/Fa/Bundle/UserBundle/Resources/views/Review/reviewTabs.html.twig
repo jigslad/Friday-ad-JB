@@ -1,0 +1,16 @@
+{% if currentRoute == 'dashboard_home' %}
+    {% set fromBuyersRoute = path('dashboard_home', {'reviewType': 'from_buyers' }) %}
+    {% set fromSellersRoute = path('dashboard_home', {'reviewType': 'from_sellers' }) %}
+    {% set leftForOthersRoute = path('dashboard_home', {'reviewType': 'left_for_others'}) %}
+    {% set reviewType = app.request.get('reviewType') %}
+{% else %}
+    {% set fromBuyersRoute = path('user_review_list', {'type':'from_buyers'}) %}
+    {% set fromSellersRoute = path('user_review_list', {'type':'from_sellers'}) %}
+    {% set leftForOthersRoute = path('user_review_left_for_others') %}
+    {% set reviewType = app.request.get('type') %}
+{% endif %}
+<ul class="tab-menu my-msg-tabs clearfix">
+    <li {% if reviewType == '' or reviewType == 'from_buyers' %} class="active" {% endif %}><a href="{{ fromBuyersRoute }}">{{ 'From <br />buyers'|trans({}, 'frontend-review')|raw }} <br />({{ reviewFromBuyerCount }})</a></li>
+    <li {% if reviewType == 'from_sellers' %} class="active" {% endif %}><a href="{{ fromSellersRoute }}">{{ 'From <br />sellers'|trans({}, 'frontend-review')|raw }} <br />({{ reviewFromSellerCount }})</a></li>
+    <li {% if reviewType == 'left_for_others' %} class="active" {% endif %}><a href="{{ leftForOthersRoute }}">{{ 'Left <br />for others'|trans({}, 'frontend-review')|raw }} <br />({{ reviewLeftForOthersCount }})</a></li>
+</ul>

@@ -1,0 +1,87 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'nimber_create_task_form_id'}}) }}
+<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+<h5 class="modal-title text-center">{{'Create a task'|trans({}, 'frontend-nimber')}}</h5>
+<div class="modal-content">
+    <div class="text-center">
+        <img src="{{ asset_url('fafrontend/images/delivered.png') }}" alt="" />
+    </div>
+    <p class="mt10">{{"Nimber is working with Friday-Ad to help you get items delivered that might otherwise be out of your search radius. Submit what you are considering buying and we'll match you with someone going your way."|trans({}, 'frontend-nimber')}}</p>
+    <p>{{"You don't pay 'til the item is delivered."|trans({}, 'frontend-nimber')}}</p>
+    <div class="hr-line"></div>
+    <div class="create-task-fields">
+        <ul class="clearfix name-fields">
+            <li>
+                {{ form_widget(form.first_name, {'attr':{'placeholder': 'First name'|trans({}, 'frontend-nimber')}}) }}
+                {{ form_errors(form.first_name) }}
+            </li>
+            <li>
+                {{ form_widget(form.last_name, {'attr':{'placeholder': 'Last name'|trans({}, 'frontend-nimber')}}) }}
+                {{ form_errors(form.last_name) }}
+            </li>
+        </ul>
+        {{ form_widget(form.email, {'attr':{'placeholder': 'Email address'|trans({}, 'frontend-nimber')}}) }}
+        {{ form_errors(form.email) }}
+        {{ form_widget(form.phone, {'attr':{'placeholder': 'Mobile number'|trans({}, 'frontend-nimber')}}) }}
+        {{ form_errors(form.phone) }}
+        <p class="text-center">{{'Needed to give you important delivery updates.'|trans({}, 'frontend-nimber')}}</p>
+        {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
+    </div>
+    <p class="text-center mb0 mt20 nimber-term">{{"By registering you accept Nimber's terms of use, and will receive communication."|trans({}, 'frontend-nimber')}}</p>
+</div>
+{{ form_end(form) }}
+
+{% set catString = null %}
+{% set categoryPath = categoryRepository.getCategoryPathArrayById(categoryId, false, container) %}
+{% for categoryId,categoryName in categoryPath %}
+    {% set catString = catString ~ '-' ~ categoryName %}
+{% endfor %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+    });
+    $("#nimber_create_task_form_id").submit(function(event) {
+        hideAlertMessage();
+        blockElement('#nimberCreateTaskModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{path('ajax_nimber_create_task', {'adId': adId })}}",
+            data: new FormData(this),
+            contentType: false,
+            processData:false,
+        })
+        .always(function(response) {
+            unblockElement('#nimberCreateTaskModal');
+        })
+        .done(function(response) {
+            ga('send', 'event', 'CTA', 'Nimber Submit', '{{ adId }}{{ catString }}');
+            if (response.htmlContent.length) {
+                $('#nimberCreateTaskModal').html(response.htmlContent);
+            } else if (response.nimberError.length) {
+                $(decorateMessage(response.nimberError, 'alert')).insertBefore('#fa_nimber_create_task_save');
+            } else if (response.error.length) {
+                $('#nimberCreateTaskModal').foundation('reveal', 'close');
+                if (response.error == 'no_cookie') {
+                    clearNimberCookies(true);
+                } else {
+                    $(decorateMessage(response.error, 'alert')).insertBefore('#adDetailMainTabs');
+                    scrollToElement('#adDetailMainTabs', '1000', -150);
+                }
+            } else {
+                $('#nimberCreateTaskModal').foundation('reveal', 'close');
+                var succMsg = "{{"Your task has been posted on Nimber - go and check it %task_id_link%. If you are new to Nimber, you'll get an email with a temporary password."|trans({}, 'frontend-contact-seller')|raw}}";
+                succMsg = succMsg.replace("%task_id_link%", '<a id="nimber_task_id_anchor" href="'+response.nimberTaskUrl+'" target="_blank">here</a>');
+                $(decorateMessage(succMsg, 'success')).insertBefore('#adDetailMainTabs');
+                scrollToElement('#adDetailMainTabs', '1000', -150);
+                $('#nimber_div').remove();
+                $('#nimber_task_id_anchor')[0].click();
+            }
+        });
+    });
+//]]>
+</script>

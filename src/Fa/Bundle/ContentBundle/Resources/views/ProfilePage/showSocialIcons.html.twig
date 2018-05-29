@@ -1,0 +1,57 @@
+{% if userDetail["facebook_url"] is defined and userDetail["facebook_url"] or
+ userDetail["google_url"] is defined and userDetail["google_url"] or
+ userDetail["twitter_url"] is defined and userDetail["twitter_url"] or
+ userDetail["pinterest_url"] is defined and userDetail["pinterest_url"] or
+ userDetail["instagram_url"] is defined and userDetail["instagram_url"] %}
+ 
+    <div class="shop-share">
+        <h5>{{'Find us on'|trans({}, 'frontend-profile-page')}}</h5>
+        {% if userDetail["facebook_url"] is defined and userDetail["facebook_url"] %}
+            {% set facebookUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail["facebook_url"]]) %}
+            <a onclick="socialShare('{{ facebookUrl }}', 'fb');" href="javascript:void(0);" class="shop-fb">{{'Facebook'|trans({}, 'frontend-profile-page')}}</a>
+        {% endif %}
+        {% if userDetail["twitter_url"] is defined and userDetail["twitter_url"] %}
+            {% set twitterUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail["twitter_url"]]) %}
+            <a onclick="socialShare('{{ twitterUrl }}', 'tw');" href="javascript:void(0);" class="shop-twi">{{'Twitter'|trans({}, 'frontend-profile-page')}}</a>
+        {% endif %}
+        {% if userDetail["google_url"] is defined and userDetail["google_url"] %}
+            {% set googleUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail["google_url"]]) %}
+            <a onclick="socialShare('{{ googleUrl }}', 'goo');" href="javascript:void(0);" class="shop-gpl">{{'Google Plus'|trans({}, 'frontend-profile-page')}}</a>
+        {% endif %}
+        {% if userDetail["pinterest_url"] is defined and userDetail["pinterest_url"] %}
+            {% set pinterestUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail["pinterest_url"]]) %}
+            <a onclick="socialShare('{{ pinterestUrl }}', 'pi');" href="javascript:void(0);" class="shop-pin">{{'Pinterest'|trans({}, 'frontend-profile-page')}}</a>
+        {% endif %}
+        {% if userDetail["instagram_url"] is defined and userDetail["instagram_url"] %}
+            {% set instagramUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail["instagram_url"]]) %}
+            <a onclick="socialShare('{{ instagramUrl }}', 'in');" href="javascript:void(0);" class="shop-insta">{{'Instagram'|trans({}, 'frontend-profile-page')}}</a>
+        {% endif %}
+    </div>
+    {% if allowProfileEdit %}
+        <div class="profile-edit clearfix mb10">
+            <div class="right relative">
+                <a href="javascript:void(0);" onclick="return editSocialProfiles();">Edit</a>
+                <div class="edit-tooltip">{{'Edit your social profiles'|trans({}, 'frontend-profile-page')}}</div>
+            </div>
+        </div>
+    {% endif %}
+{% elseif allowProfileEdit %}
+    <div class="shop-share">
+        <h5>{{'Find us on'|trans({}, 'frontend-profile-page')}}</h5>
+    </div>
+    <div class="mb10">
+        <a href="javascript:void(0);" onclick="return editSocialProfiles();">{{'+ Add social media profiles'|trans({}, 'frontend-profile-page')}}</a>
+    </div>
+{% endif %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        function socialShare(url, subField)
+        {
+          window.open(url);
+          updateUserSiteViewCounterField('{{ userDetail['id'] }}', 'profile_page_social_links_click_count', subField);
+        }
+    //]]>
+    </script>
+{% endblock %}

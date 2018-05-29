@@ -1,0 +1,30 @@
+<div class="nimber-box">
+    <div class="nimber-box-bdr">
+        <div class="clearfix">
+            <span class="nimber-logo">&nbsp;</span>
+            <div class="nimber-text">
+                {{'Get it picked up and then delivered to your door by people going your way.'|trans({}, 'frontend-nimber')}}
+                <a href="javascript:void(0);" data-reveal-id="nimberLearnMoreModal">{{'Learn more'|trans({}, 'frontend-nimber')}}</a>
+            </div>
+        </div>
+        <div class="nimber-price clearfix">
+            {% if priceSuggestion['price_suggestion'] is defined %}
+                <span class="price-digit">{{ format_currency(priceSuggestion['price_suggestion']) }}</span>
+            {% endif %}
+            {% if priceSuggestion['min_price'] is defined and priceSuggestion['max_price'] is defined %}
+            <span class="price-text">
+                {{'Our recommended job price'|trans({}, 'frontend-nimber')}}
+                <b>{{'Deliveries in this area'|trans({}, 'frontend-nimber')}}: {{ format_currency(priceSuggestion['min_price']) }} - {{ format_currency(priceSuggestion['max_price']) }}</b>
+            </span>
+            {% endif %}
+        
+            {% if priceSuggestion['price_suggestion'] is defined %}
+                <button type="button" class="secondary-btn-1 button mb0" onclick="return nimberCreateTask();">{{'Request delivery and get offers'|trans({}, 'frontend-nimber')}}</button>
+            {% endif %}
+        </div>
+        
+        <div class="nimber-payment-info">
+            {{'No payment required until delivery is completed.'|trans({}, 'frontend-nimber')}} <a href="javascript:void(0);" onclick="return clearNimberCookies(false);">{{'Get estimate for different postcode.'|trans({}, 'frontend-nimber')}}</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,266 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+
+            {{ form_start(form, {'attr': {'novalidate': '', 'id': 'fa_entity_location_group_admin_id'}}) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.type) }}
+                <div style="display:none;" id="related_print_edition_div">
+                    <div class="row">
+                        <div class="large-4 columns">
+                            {{ form_row(form.related_print_edition_select) }}
+                            <button type="button" name="addPrintEdition"  id="addPrintEdition">{{ 'Add selected print editions'|trans }}</button>
+                        </div>
+                        <div class="large-8 columns">
+                            {{ form_row(form.related_print_edition) }}
+                            <button type="button" name="removePrintEdition"  id="removePrintEdition">{{ 'Remove selected print editions'|trans }}</button>
+                            <button type="button" name="movePrintEditionUp" id="movePrintEditionUp" class="moveUpDownBtn">{{ 'Move up'|trans }}</button>
+                            <button type="button" name="movePrintEditionDown" id="movePrintEditionDown" class="moveUpDownBtn">{{ 'Move down'|trans }}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-12 columns">
+                        <b>{{'Note'|trans}}</b>: {{'You can add either domicile or towns of domicile.'|trans}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="large-6 columns">
+                        <div class="row">
+                            <div class="small-12 columns">{{ form_label(form.domicile_id) }}</div>
+                            <div class="small-9 columns">
+                                {{ form_widget(form.domicile_id, {'attr': {'autofocus': 'autofocus'}}) }}
+                                {{ form_errors(form.domicile_id) }}
+                                <span class="help-block">({{'Please select Group Type to load Domiciles. Click on Add button to add selected domicile.'|trans}})</span>
+                            </div>
+                            <div class="small-3 columns">
+                                <button type="button" class="tiny button mb0" id="domicile_id_btn">{{ 'Add'|trans({}, 'messages') }}</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="small-24 columns text-center">{{'OR'|trans}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="small-12 columns">{{ form_label(form.town_id) }}</div>
+                            <div class="small-9 columns">
+                                {{ form_widget(form.town_id, {'attr': {'autofocus': 'autofocus'}}) }}
+                                {{ form_errors(form.town_id) }}
+                                <span class="help-block">({{'Click on Add button to add selected towns.'|trans}})</span>
+                            </div>
+                            <div class="small-3 columns">
+                                <button type="button" class="tiny button mb0" id="town_id_btn">{{ 'Add'|trans({}, 'messages') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="large-6 columns{% if form.sel_domicile_town.vars.errors|length %} error{% endif %}">
+                        {{ form_label(form.sel_domicile_town) }} <span class="required">*</span>
+                        {{ form_widget(form.sel_domicile_town, {'attr': {'autofocus': 'autofocus', 'style': 'height:205px;margin:0;'}}) }}
+                        {{ form_errors(form.sel_domicile_town) }}
+                        <span class="help-block" style="margin-top:5px;">({{'Click on option to remove it.'|trans}})</span>
+                    </div>
+                </div>               
+                {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'location_group_admin'}) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script>
+    $(document).ready(function(){
+        $('#fa_entity_location_group_admin_sel_domicile_town option').prop('selected', false);
+        $('#fa_entity_location_group_admin_town_id option').prop('selected', false);
+        $('#fa_entity_location_group_admin_related_print_edition option').prop('selected', false);
+        $('#fa_entity_location_group_admin_related_print_edition_select option').prop('selected', false);
+        
+        $('#fa_entity_location_group_admin_id').submit(function( event ) {
+            $('#fa_entity_location_group_admin_sel_domicile_town option').prop('selected', true);
+            $('#fa_entity_location_group_admin_town_id option').prop('selected', true);
+            $('#fa_entity_location_group_admin_related_print_edition option').prop('selected', true);
+            $('#fa_entity_location_group_admin_related_print_edition_select option').prop('selected', true);
+        });
+        
+        $("#domicile_id_btn").click(function(){
+            addDomicileOptions();
+        });
+        
+        $("#town_id_btn").click(function(){
+            addTownOptions();
+        });
+        
+        showHidePrintEditions();
+        
+        $("#fa_entity_location_group_admin_sel_domicile_town").click(function(){
+            if ($(this).val()) {
+                /*
+                $('#fa_entity_location_group_admin_sel_domicile_town option:selected').each(function() {
+                    if (!$('#fa_entity_location_group_admin_town_id option:contains('+ $(this).text() +')').length) {
+                        var townValue = $(this).val().split('_');
+                        $('#fa_entity_location_group_admin_town_id').append('<option value="' + townValue[1] + '">' + $(this).text() + '</option>');
+                    }
+                });*/
+                $(this).find('option:selected').remove();
+                /*
+                var options = $('#fa_entity_location_group_admin_town_id option');
+                var arr = options.map(function(_, o) {
+                    return {
+                        t: $(o).text(),
+                        v: o.value
+                    };
+                }).get();
+                arr.sort(function(o1, o2) {
+                    return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0;
+                });
+                options.each(function(i, o) {
+                    console.log(i);
+                    o.value = arr[i].v;
+                    $(o).text(arr[i].t);
+                });
+                */
+            }
+        });
+        
+        function addTownOptions()
+        {
+            var townFlag = false;
+            var domicileId = parseInt($('#fa_entity_location_group_admin_domicile_id').val());
+            if (domicileId) {
+                $('#fa_entity_location_group_admin_sel_domicile_town option').each(function() {
+                    if(domicileId == $(this).val()) {
+                        alert('You can add either domicile or towns of domicile, please remove domicile of selected towns to add them.');
+                        townFlag = true;
+                        return false;
+                    }
+                });
+            }
+
+            if (!townFlag) {
+                $('#fa_entity_location_group_admin_town_id option:selected').each(function() {
+                    if($(this).val()) {
+                        if (!$("#fa_entity_location_group_admin_sel_domicile_town option[value='"+$('#fa_entity_location_group_admin_domicile_id').val()+'_'+$(this).val()+"']").length) {
+                            $('#fa_entity_location_group_admin_sel_domicile_town').append('<option value="'+$('#fa_entity_location_group_admin_domicile_id').val()+'_'+$(this).val()+'">'+$(this).text()+'</option>');
+                        }
+                    }
+                });
+            }
+        }
+        
+        function addDomicileOptions()
+        {
+            var domicileFlag = false;
+            var domicileId = parseInt($('#fa_entity_location_group_admin_domicile_id').val());
+            if (domicileId) {
+                var patt = new RegExp(""+domicileId+"_");
+                $('#fa_entity_location_group_admin_sel_domicile_town option').each(function() {
+                    if(patt.test($(this).val())) {
+                        alert('You can add either domicile or towns of domicile, please remove all towns to add selected domicile.');
+                        domicileFlag = true;
+                        return false;
+                    }
+                });
+            }
+
+            if (!domicileFlag) {
+                $('#fa_entity_location_group_admin_domicile_id option:selected').each(function() {
+                    if($(this).val()) {
+                        var patt = new RegExp(""+domicileId+"_");
+                        if(patt.test($(this).val())) {
+                            alert('You can add either domicile or towns of domicile.');
+                            return false;
+                        }
+                        if (!$("#fa_entity_location_group_admin_sel_domicile_town option[value='"+$(this).val()+"']").length) {
+                            $('#fa_entity_location_group_admin_sel_domicile_town').append('<option value="'+$(this).val()+'">'+$(this).text()+'</option>');
+                        }
+                    }
+                });
+            }
+        }
+        
+        $("#fa_entity_location_group_admin_type").change(function(){
+            $("#fa_entity_location_group_admin_town_id").html('');
+            loadDomicile();
+            showHidePrintEditions();
+        });
+        
+        $("#fa_entity_location_group_admin_domicile_id").change(function(){
+            loadTown();
+        });
+        
+        function showHidePrintEditions() {
+            if ($("#fa_entity_location_group_admin_type").val() == '{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationGroupRepository::PRINT_EDITION_GROUP_ID') }}') {
+                $('#related_print_edition_div').show();
+            } else {
+                $('#fa_entity_location_group_admin_related_print_edition option').prop('selected', false);
+                $('#related_print_edition_div').hide();
+            }
+        }
+        function loadTown() {
+            var data = {
+                    id: $('#fa_entity_location_group_admin_domicile_id').val(),
+                    locationGroupId: '{{ entity.id }}',
+                    locationGroupType: $('#fa_entity_location_group_admin_type').val(),
+                    locationField: 'town'
+                };
+             
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("location_group_ajax_get_node_json") }}',
+                    data: data,
+                    success: function(data) {
+                        var $town_selector = $('#fa_entity_location_group_admin_town_id');
+                        $town_selector.html('');
+                        for (var i=0, total = data.length; i < total; i++) {
+                            $town_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                        }
+                    }
+                });
+        }
+        
+        function loadDomicile() {
+            var data = {
+                id: '{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') }}',
+                locationGroupId: '{{ entity.id }}',
+                locationGroupType: $('#fa_entity_location_group_admin_type').val(),
+                locationField: 'domicile'
+            };
+         
+            $.ajax({
+                type: 'post',
+                url: '{{ path("location_group_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    var $town_selector = $('#fa_entity_location_group_admin_domicile_id');
+                    $town_selector.html('<option value="">{{"Select Domicile"}}</option>');
+                    for (var i=0, total = data.length; i < total; i++) {
+                        $town_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                    }
+                }
+            });        
+        }
+        
+        $('#addPrintEdition').click(function() {  
+            return !$('#fa_entity_location_group_admin_related_print_edition_select option:selected').remove().appendTo('#fa_entity_location_group_admin_related_print_edition');  
+        });  
+        $('#removePrintEdition').click(function() {  
+            return !$('#fa_entity_location_group_admin_related_print_edition option:selected').remove().appendTo('#fa_entity_location_group_admin_related_print_edition_select');  
+        });  
+        $('.moveUpDownBtn').click(function(){
+            var $op = $('#fa_entity_location_group_admin_related_print_edition option:selected'),
+                $this = $(this);
+            if($op.length){
+                ($this.attr('id') == 'movePrintEditionUp') ? 
+                    $op.first().prev().before($op) : 
+                    $op.last().next().after($op);
+            }
+        });
+    });
+    </script>
+{% endblock %}

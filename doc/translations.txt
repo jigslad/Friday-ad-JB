@@ -1,0 +1,62 @@
+1). For extracting i18n strings we need to use following things as mentioned:
+    
+    Need to install php extention php5-intl.
+    
+    In Twig template
+    {{ 'Your translation string'|trans({}, 'Domain name') }}
+    
+    'Your translation string' => this is the string you want to translate.
+    'Domain name' => this is the domain name we can have 4 domains as explained below:
+    messages => This will include all form labels etc.
+    validators => this will include all validation messages including form, yml messages etc.
+    success => All success flash messages 
+    error => All warning or error flash messages
+    
+    By default all form strings will be automatically extracted in i18n files. To specify domain in form use following option in form's function setDefaultOptions:
+    
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(
+            array(
+            'translation_domain' => 'validators',
+            )
+        );
+    }
+    
+    In controller
+    $this->get('translator')->trans('Symfony2 is great', $parameters, $domain = null, $locale = null);
+    
+    After doing this we have to run following command to extract strings from twig template, controller, forms:
+    php app/console translation:extract --bundle=FaUserBundle --output-format=xliff en
+    
+    en => this is the locale we wnat to extract translations we can specify more than one locales
+    To view in more detail use following command:
+    php app/console translation:extract --help
+    
+    After extracting we have to run following command to push our extracted translation into DB.
+    php app/console lexik:translations:import FaUserBundle
+    
+    For more details run following command
+    php app/console lexik:translations:import --help
+    
+    We can also export translation from DB to file
+    php app/console lexik:translations:export --help
+    
+2)  Points to note.
+    Do not write php variables in trans in controller or form. 
+    ex. $this->get('translator')->trans('Symfony2 is great'.$name); instead use $this->get('translator')->trans('Symfony2 is great %name%', array('%name%' => $name)); 
+    In twig do not pass blank string for domain name. 
+    ex. {{ 'You can add time and duration if you want'|trans({}, '') }} instead use {{ 'You can add time and duration if you want'|trans({}) }} 
+    For dynamic label in form need to put /** @Ignore */
+    ex. 
+    $fieldOptions   = array(
+                                  'required' => false,
+                                   /** @Ignore */
+                                  'label'    => $fieldLabel,
+                                  'mapped'   => false,
+                                  'attr'     => array(
+                                                    'class' => 'fdatepicker',
+                                                    'autocomplete' => 'off',
+                                                    'placeholder' => 'dd/mm/yyyy'
+                                                ),
+            );

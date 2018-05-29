@@ -1,0 +1,146 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% set allowProfileEdit = false %}
+{% set businessName = '' %}
+{% if userDetail['user_name'] is defined and userDetail['user_name']|length %}
+    {% set businessName = userDetail['user_name'] %} 
+{% endif %}
+
+{% block page_title %}
+    {% set businessLocationName = '' %}
+    {% set businessCategoryName = '' %}
+    {% if userDetail['town_name'] is defined and userDetail['town_name']|length %}
+        {% set businessLocationName = userDetail['town_name'] %}
+    {% endif %}
+    {% if userDetail['business_category_id'] is defined and userDetail['business_category_id'] %}
+        {% set businessCategoryName = fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', userDetail['business_category_id']) %}
+    {% endif %}
+    {% if businessName and (businessLocationName or businessCategoryName) %}
+        {{ businessName }} - {{ businessLocationName }} {{ businessCategoryName }} | Friday-Ad Business
+    {% elseif businessName %}
+        {{ businessName }} | Friday-Ad Business
+    {% elseif businessLocationName or businessCategoryName %}
+        {{ businessLocationName }} {{ businessCategoryName }} | Friday-Ad Business
+    {% else %}
+        Friday-Ad Business
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set profileAdsUrl = container.get('fa_ad.manager.ad_routing').getProfilePageAdsUrl(userDetail['id']) %}
+<div class="other-profile">
+    <div class="row">
+        <div class="large-6 columns" id="show_message_div">
+            <div class="user-pro-pic">
+                <span>
+                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['company_logo'], userDetail['id'], null, null, true, true, userDetail['status_id'], userDetail['user_name']]) %}
+                    {% if userLogo %}
+                        {{userLogo|raw}}
+                    {% endif %}
+                </span>
+            </div>
+            <h2 class="pro-user-name" oncopy="gaSendDealerNameCopyEvent('{{ businessName }}');">{{ (userDetail['user_name'] ? userDetail['user_name'] : '-') }}</h2>
+            {% if (userDetail and userDetail['user_rating'] is defined and userDetail['user_rating'] > 0) %}
+	            <div class="pro-rating"><span>{{'Rating'|trans({}, 'frontend-profile-page')}}:</span> {{ userDetail['user_rating'] }}</div>
+	            <div class="pro-rating-stars rating-white-stars">
+	                {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': userDetail['user_rating']}) }}
+	            </div>
+            {% endif %}
+
+            <div class="sold-n-reviews mt10">
+                <div class="row">
+                    {% if userDetail['sold_ad_count'] > 0 %}
+                        <div class="large-12 columns text-center">
+                            <span class="sold-icon">{{'Sold'|trans({}, 'frontend-profile-page')}}</span><br />
+                            {{'Items sold'|trans({}, 'frontend-profile-page')}}: <b>{{userDetail['sold_ad_count']}}</b>
+                        </div>
+                    {% endif %}
+                    <div class="{% if userDetail['sold_ad_count'] > 0 %}large-12{%else%}large-24{% endif %} columns text-center">
+                        <span class="review-sold-icon">Reviews</span><br />
+                        {{'Reviews'|trans({}, 'frontend-profile-page')}}: <b>{{ userDetail['total_review'] }}</b>
+                    </div>
+                </div>
+            </div>
+            {{ include('FaContentBundle:ProfilePage:showBusinessAddressDetail.html.twig') }}
+            {% if (userDetail['contact_through_email'] is defined and userDetail['contact_through_email'] == 1) or (userDetail['contact_through_phone'] is defined and userDetail['contact_through_phone'] == 1) %}
+                <button class="primary-btn-1 expand button uppercase mb10" name="profilepage_contactuser" id="profilepage_contactuser" type="button">{{'Contact us'|trans({}, 'frontend-profile-page')}}</button>
+            {% endif %}
+             {% if userDetail['website_link'] is defined and userDetail['website_link']|length %}
+                {% set websiteLabel = 'Visit website'|trans({}, 'frontend-profile-page') %}  
+                {% set profileWebSite = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addHttpToUrl', [userDetail['website_link']]) %}    
+                <a rel="nofollow" onclick="openUserWebsite('{{(userDetail['id'] ? userDetail['id'] : '-')}}', '{{ profileWebSite }}', '{{ userName }}')" href="javascript:void(0);" class="website-btn-1 button expand"><span class="website-icon"></span>{{ websiteLabel }}</a>
+            {% endif %}
+            <a href="{{ profileAdsUrl }}" class="secondary-btn-1 button expand">{{'View latest ads'|trans({}, 'frontend-profile-page')}}</a>
+        </div>
+        <div class="large-18 columns">
+            <h1 class="other-pro-title">{{"Hi, We are %profile_name%"|trans({'%profile_name%': (userDetail['user_name'] ? userDetail['user_name'] : '-')}, 'frontend-profile-page')}}{% if userDetail['town_name']|length %} {{'of'|trans({}, 'frontend-profile-page')}} {{ userDetail['town_name'] }} {% endif %}</h1>
+            <div class="other-pro-location">
+                {% if userDetail['town_name']|length %}
+                <b>{{ userDetail['town_name'] }},</b>
+                {% endif %}
+                {% if userDetail['domicile_name']|length %}
+                    {{ userDetail['domicile_name'] }},
+                    {{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')) }} -
+                {% endif %}
+                <i>{{'Member since'|trans({}, 'frontend-profile-page')}} {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [userDetail['created_at'], container, null, null, 'MMM Y']) }}</i>
+            </div>
+            {% if userDetail['company_welcome_message']|length %}
+                <h2>{{ userDetail['company_welcome_message']|raw }}</h2>
+            {% endif %}
+            
+            {% if userDetail['about_us']|length %}
+                <p>{{ userDetail['about_us']|raw }}</p>
+            {% endif %}
+            
+            {{ render(controller('FaContentBundle:ProfilePage:showUserReview', {'userId': userDetail['id'], 'reviewHeading':'Our reviews'|trans({}, 'frontend-profile-page') })) }}
+        </div>
+    </div>
+</div>
+<div id="profilePageContactUserModal" class="reveal-modal small" data-reveal></div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaContentBundle:ProfilePage:showUserReviewJs.html.twig') }}
+    {{ include('FaContentBundle:ProfilePage:profilePageContactUserJs.html.twig', {'msg_div_id': '#show_message_div', 'userId': (userDetail['id'] is defined ? staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'encryptDecrypt', ['profilepage', userDetail['id'], 'encrypt']) : null), 'profileUserId': (userDetail['id'] is defined ? userDetail['id'] : null) }) }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function(){
+            {% if app.request.get('moveTo') == 'review' %}
+                scrollToElement('#profile_review_heading', '1000', -30);
+            {% endif %}
+        });
+    //]]>
+    </script>
+{% endblock %}
+
+{% block dimension2 %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    {% if app.user.getId() is not defined or app.user.getId() is null %}
+    	ga('set', 'dimension9', 'not logged in');
+    {% else %}
+    	ga('set', 'dimension9', 'logged in');
+    {% endif %}
+    ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Business_Page'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+
+    function openBusinessWebsite(businessName)
+    {
+         ga('send', 'event', 'CTA', 'url click', businessName);
+    }
+
+    function gaSendDealerNameCopyEvent(businessName)
+    {
+        ga('send', 'event', 'Options', 'Copy dealer name - Business page', businessName);
+    }
+//]]>
+</script>
+<script>
+    function openUserWebsite(userId, websiteUrl, businessName)
+    {
+        window.open(websiteUrl);
+        updateUserSiteViewCounterField(userId, 'profile_page_website_url_click_count', '');
+        ga('send', 'event', 'CTA', 'url click - business page', businessName);
+    }
+ </script>
+{% endblock %}

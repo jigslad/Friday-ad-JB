@@ -1,0 +1,230 @@
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        setLocation();
+        changeLocation();
+    });
+
+    function setLocation() {
+        if (checkCookie('location')) {
+            //if ($.trim($('#fa_top_search_item__location_autocomplete').val())) {
+            //    $('#header_search_editable_location_span').html($('#fa_top_search_item__location_autocomplete').val());
+            //    $('#landingpage_search_editable_location_span').html($('#fa_top_search_item__location_autocomplete').val());
+            //} else {
+                var obj = $.parseJSON(decodeURIComponent(getCookie('location')));
+
+                var defLocationText = obj.location_text.replace(/\+/g, ' ');
+                var strLocatiion    = String(obj.location);
+                var defLocationId   = strLocatiion.replace(/\+/g, ' ');
+
+                $('#header_search_editable_location_span').html(defLocationText);
+                $('#fa_top_search_item__location').val(defLocationId);
+                $('#fa_top_search_item__location_autocomplete').val(defLocationText);
+                
+                $('#landingpage_search_editable_location_span').html(defLocationText);
+                $('#fa_landing_page_ads_near_you_search_item__location').val(defLocationId);
+                $('#fa_landing_page_ads_near_you_search_item__location_autocomplete').val(defLocationText);
+            //}
+        } else if (navigator.geolocation && !checkCookie('location_popup')) {
+            setCookie('location_popup', true, 365);
+            navigator.geolocation.getCurrentPosition(checkLocation, errorHandler);
+        }
+    }
+    
+    function errorHandler(err) {
+            if(err.code == 1) {
+               ga('send', 'event', 'location', 'deny');
+            }
+     }
+
+    function checkLocation(position) {
+     
+        var latitude  = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        var address      = position.coords.latitude+', '+position.coords.longitude;
+        var itemLocality ='';
+
+        geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'address': address}, function(results, status) {
+           if (status == google.maps.GeocoderStatus.OK) {
+             var arrAddress  = results[0].address_components;
+             $.each(arrAddress, function (i, address_component) {
+                 if (address_component.types == "postal_code") {
+                     $.ajax({
+                         type: "post",
+                         dataType: "json",
+                         url: "{{ path('fa_frontend_ajax_user_location_by_postcode') }}",
+                         data: {'post_code': address_component.long_name},
+                         success: function(data) {
+                             if (!$.isEmptyObject(data)) {
+                                 ga('send', 'event', 'location', 'allow');
+                                 setLocationInCookie(data);
+                             } else {
+                                if ($.trim($('#fa_top_search_item__location_autocomplete').val())) {
+                                    $('#header_search_editable_location_span').html($('#fa_top_search_item__location_autocomplete').val());
+                                }
+                             }
+                             
+                             return false;
+                         }
+                     });
+                 }
+             });
+           }
+       });
+    }
+
+    function setLocationInCookie(data) {
+        if (data) {
+            var defLocationText = data['location_text'];
+            var defLocationId   = data['location'];
+
+            $('#header_search_editable_location_span').html(defLocationText);
+            $('#fa_top_search_item__location').val(defLocationId);
+            $('#fa_top_search_item__location_autocomplete').val(defLocationText);
+        }
+        var location = {};
+        location['latitude']      = data['latitude'];
+        location['longitude']     = data['longitude'];
+        location['locality_id']   = data['locality_id'];
+        location['locality']      = data['locality'];
+        location['town_id']       = data['town_id'];
+        location['town']          = data['town'];
+        location['county']        = data['county'];
+        location['postcode']      = data['postcode'];
+        location['location']      = data['location'];
+        location['paa_county']    = data['county'];
+        location['slug']          = data['slug'];
+        location['location_text'] = data['location_text'];
+
+        location = JSON.stringify(location);
+
+        setCookie('location', location, 365);
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + encodeURIComponent(cvalue) + "; " + expires+"; path=/";
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+        }
+        return "";
+    }
+
+    function checkCookie(cname) {
+        var cookieValue = getCookie(cname);
+        if (cookieValue != "") {
+            return cookieValue;
+        } else {
+            return false;
+        }
+    }
+
+    function changeLocation() {
+        $('#header_search_editable_location_a').click(function(e) {
+            $('#header_search_editable_location_a').hide();
+            $('#header_search_editable_location_span').hide();
+            $('#top_search_location').show();
+            $('#in_text_span').hide();
+            if ($.trim($('#fa_top_search_item__location_autocomplete').val())) {
+                $('#fa_top_search_item__location_close').show();
+                $('#fa_top_search_item__location_autocomplete').select();
+            }
+        });
+
+        $('#top_search_location_cancel').click(function(e) {
+            $('#top_search_location').hide();
+            $('#in_text_span').show();
+            if (!$.trim($('#fa_top_search_item__location_autocomplete').val())) {
+                $('#header_search_editable_location_span').html('United Kingdom');
+            }
+            $('#header_search_editable_location_a').show();
+            $('#header_search_editable_location_span').show();
+            return false;
+        });
+        
+        $('#top_search_location_ok').click(function(e) {
+            return topSearchLocationOk('top_search_location_ok');
+        });
+
+        $('#top_search_location_homepage_ok').click(function(e) {
+            return topSearchLocationOk('top_search_location_homepage_ok');
+        });
+    }
+
+    function topSearchLocationOk(id) {
+    	if ($.trim($('#fa_top_search_item__location').val())) {
+            var searchLocation = $.trim($('#fa_top_search_item__location').val());
+        } else {
+            var searchLocation = $.trim($('#fa_top_search_item__location_autocomplete').val());
+        }
+
+        var topSearchKeywords   = $.trim($('#fa_top_search_keywords').val());
+        var topSearchCategoryId = $('#fa_top_search_item__category_id').val();
+
+        if (searchLocation) {
+            $.ajax({
+                 type: "post",
+                 dataType: "json",
+                 url: "{{ path('fa_frontend_ajax_user_location') }}",
+                 data: {'location': searchLocation},
+                 success: function(data) {
+                     if (!$.isEmptyObject(data)) {
+                         $('#header_search_editable_location_span').html(data.text);
+                         if (id == 'top_search_location_ok') {
+                        	 $('#fa_top_search_leafLevelCategoryId').val($('#fa_top_search_tmpLeafLevelCategoryId').val());
+                             $('form[name="fa_top_search"]').submit();
+                         } else if (id == 'top_search_location_homepage_ok') {
+                             if (!topSearchKeywords && !topSearchCategoryId) {
+                                 window.location = "{{ path('fa_frontend_homepage') }}";
+                             }
+                         } else {
+                             location.reload();
+                         }
+                     } else {
+                         $('#header_search_editable_location_reveal_modal').foundation('reveal', 'open');
+                     }
+                     $('#top_search_location').hide();
+                     $('#in_text_span').show();
+                     $('#header_search_editable_location_a').show();
+                     $('#header_search_editable_location_span').show();
+                 }
+             });
+        } else {
+            document.cookie="location=;expires=Wed; 01 Jan 1970; path=/";
+            if (id == 'top_search_location_ok') {
+                $('#header_search_editable_location_span').html('United Kingdom');
+                $('#top_search_location').hide();
+                $('#in_text_span').show();
+                $('#header_search_editable_location_a').show();
+                $('#header_search_editable_location_span').show();
+                $('#fa_top_search_leafLevelCategoryId').val($('#fa_top_search_tmpLeafLevelCategoryId').val());
+                $('form[name="fa_top_search"]').submit();
+            } else if (id == 'top_search_location_homepage_ok') {
+                if (!topSearchKeywords && !topSearchCategoryId) {
+                    window.location = "{{ path('fa_frontend_homepage') }}";
+                }
+                $('#header_search_editable_location_span').html('United Kingdom');
+                $('#top_search_location').hide();
+                $('#in_text_span').show();
+                $('#header_search_editable_location_a').show();
+                $('#header_search_editable_location_span').show();
+            } else {
+                location.reload();
+            }
+        }
+        return false;
+    }
+//]]>
+</script>
+{% endblock %}

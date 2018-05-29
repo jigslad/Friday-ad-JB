@@ -1,0 +1,67 @@
+<script src="{{ asset_url('facore/js/jquery.blockUI.min.js') }}"></script>
+<img src="{{ asset_url('facore/images/ajax_loader.gif') }}" style="display:none;" height="0px" width="0px">
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    function blockElement(id, message, width)
+    {
+        if (typeof width == 'undefined') {
+                width = '50%';
+        }
+        if (typeof message == 'undefined') {
+            message = '<img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\">{{'Please wait...'|trans({}, 'frontend')}}';
+        }
+        $(id).block({
+            message: '<h1>'+message+'</h1>',
+            css: {
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#efefef', 
+                'border-radius': '10px',
+                color: '#000',
+                width: width,
+            },
+            overlayCSS:  { 
+                backgroundColor: '#000', 
+                opacity:         0.3, 
+                cursor:          'wait' 
+            }, 
+        });
+    }
+    
+    function unblockElement(id)
+    {
+        $(id).unblock();
+    }
+    
+    function blockPage(message, width)
+    {
+        if (typeof width == 'undefined') {
+                width = '30%';
+        }
+        if (typeof message == 'undefined') {
+            message = '<img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\">{{'Please wait...'|trans({}, 'frontend')}}';
+        }
+        $.blockUI({
+            message: '<h1>'+message+'</h1>',
+            css: {
+                border: 'none', 
+                padding: '15px', 
+                backgroundColor: '#efefef', 
+                'border-radius': '10px',
+                color: '#000',
+                width: width,
+            },
+            overlayCSS:  { 
+                backgroundColor: '#000', 
+                opacity:         0.3, 
+                cursor:          'wait' 
+            }, 
+        });
+    }
+    
+    function unblockPage()
+    {
+        $.unblockUI();
+    }
+//]]>
+</script>

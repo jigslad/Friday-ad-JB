@@ -1,0 +1,7 @@
+forgot_password:
+    path:   /forgot_password
+    defaults:  { _controller: FaUserBundle:Security:ajaxForgotPassword }
+
+ajax_get_user_address:
+    path:   /ajax/get_user_address
+    defaults:  { _controller: FaUserBundle:UserAddressBook:ajaxGetUserAddress }

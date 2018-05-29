@@ -1,0 +1,41 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+<div class="row">
+    <div class="columns">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <div class="large-6 columns">
+                <label>{{ 'Filter name'|trans }} (required) - (Max. 20 characters)</label>
+                {{ form_widget(form.name) }}
+                {{ form_errors(form.name) }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="large-6 columns">
+                <label>{{ 'Comment'|trans }}</label>
+                {{ form_widget(form.comment) }}
+                {{ form_errors(form.comment) }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="large-6 columns">
+                {{ form_widget(form.is_24h_loop) }}
+                {{ form_label(form.is_24h_loop) }}
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="large-6 columns">
+                <ul class="button-group">
+                    <li>{{ form_widget(form.save, {'attr': {'class':'tiny button mt15'}}) }}</li>
+                    {% if entity is defined and entity.id %}
+                        <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('dotmailer_filter_admin') }}'">{{ 'Cancel'|trans({}, 'messages') }}</button></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>

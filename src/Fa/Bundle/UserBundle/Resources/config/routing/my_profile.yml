@@ -1,0 +1,31 @@
+my_profile:
+    path:     /
+    defaults: { _controller: FaUserBundle:MyProfile:myProfile }
+
+ajax_edit_welcome_message:
+    path:     /ajax/edit_welcome_message
+    defaults: { _controller: FaUserBundle:MyProfile:ajaxEditWelcomeMessage }
+
+ajax_edit_contact_details:
+    path:     /ajax/edit_contact_details
+    defaults: { _controller: FaUserBundle:MyProfile:ajaxEditContactDetails }
+
+ajax_edit_social_profiles:
+    path:     /ajax/edit_social_profiles
+    defaults: { _controller: FaUserBundle:MyProfile:ajaxEditSocialProfiles }
+    
+ajax_edit_about_us:
+    path:     /ajax/edit_about_us
+    defaults: { _controller: FaUserBundle:MyProfile:ajaxEditAboutUs }
+
+ajax_edit_video:
+    path:     /ajax/edit_video
+    defaults: { _controller: FaUserBundle:MyProfile:ajaxEditVideo }
+
+ajax_edit_gallery:
+    path:     /ajax/edit_gallery
+    defaults: { _controller: FaUserBundle:MyProfile:ajaxEditGallery }
+
+ajax_edit_location:
+    path:     /ajax/edit_location
+    defaults: { _controller: FaUserBundle:MyProfile:ajaxEditLocation }

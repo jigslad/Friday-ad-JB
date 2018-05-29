@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="1312ecb2d1f9e4f7f4cd2460d95a17e33fcb8016" resname="About &lt;br /&gt;your ads">
+        <jms:reference-file line="14">views/AdMessage/messageTabs.html.twig</jms:reference-file>
+        <source><![CDATA[About <br />your ads]]></source>
+        <target state="new"><![CDATA[About <br />your ads]]></target>
+      </trans-unit>
+      <trans-unit id="eb0ebebf28ba63361114d6983cb25af55039edcc" resname="Active adverts">
+        <jms:reference-file line="27">views/ManageMyAd/list.html.twig</jms:reference-file>
+        <source>Active adverts</source>
+        <target state="new">Active adverts</target>
+      </trans-unit>
+      <trans-unit id="5d2c0ab611b1ac6618b00f9af1c3f41066f0943b" resname="Ad marked as sold successfully.">
+        <jms:reference-file line="357">MessageBundle/Controller/AdMessageController.php</jms:reference-file>
+        <source>Ad marked as sold successfully.</source>
+        <target state="new">Ad marked as sold successfully.</target>
+      </trans-unit>
+      <trans-unit id="a760aecc3517f8c5ecc179f0d11ebc57678f98a9" resname="Ad sold!">
+        <jms:reference-file line="103">views/AdMessage/userAdMessageReply.html.twig</jms:reference-file>
+        <source>Ad sold!</source>
+        <target state="new">Ad sold!</target>
+      </trans-unit>
+      <trans-unit id="1298163b2853f40926dbe94288c4fad6ebb607fc" resname="Ads you're &lt;br /&gt;interested in">
+        <jms:reference-file line="15">views/AdMessage/messageTabs.html.twig</jms:reference-file>
+        <source><![CDATA[Ads you're <br />interested in]]></source>
+        <target state="new"><![CDATA[Ads you're <br />interested in]]></target>
+      </trans-unit>
+      <trans-unit id="50c58497dd9fff534e3662fdfbf9fddb84436a09" resname="All &lt;br /&gt;messages">
+        <jms:reference-file line="13">views/AdMessage/messageTabs.html.twig</jms:reference-file>
+        <source><![CDATA[All <br />messages]]></source>
+        <target state="new"><![CDATA[All <br />messages]]></target>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="118">views/AdMessage/userAdMessageReply.html.twig</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="2e02623966f9391facf6eaefc8b079ed5b630bee" resname="Continue">
+        <jms:reference-file line="115">views/AdMessage/userAdMessageReply.html.twig</jms:reference-file>
+        <source>Continue</source>
+        <target state="new">Continue</target>
+      </trans-unit>
+      <trans-unit id="2fe5b03f63ee47ecc071e6686224e73151357dc2" resname="Discussion about: &lt;b&gt;%adTitle%&lt;/b&gt;">
+        <jms:reference-file line="56">views/AdMessage/userAdMessageReply.html.twig</jms:reference-file>
+        <source><![CDATA[Discussion about: <b>%adTitle%</b>]]></source>
+        <target state="new"><![CDATA[Discussion about: <b>%adTitle%</b>]]></target>
+      </trans-unit>
+      <trans-unit id="17d4737af13ca73d4d0688b71beaabec721c09c9" resname="Inactive adverts">
+        <jms:reference-file line="28">views/ManageMyAd/list.html.twig</jms:reference-file>
+        <source>Inactive adverts</source>
+        <target state="new">Inactive adverts</target>
+      </trans-unit>
+      <trans-unit id="44caf74675ceb79ba5cc13bafa102509369c2b53" resname="Inbox">
+        <jms:reference-file line="5">views/AdMessage/userAdMessage.html.twig</jms:reference-file>
+        <source>Inbox</source>
+        <target state="new">Inbox</target>
+      </trans-unit>
+      <trans-unit id="49f188798f6d9c271156f64ab95bb31846919192" resname="Mark as sold">
+        <jms:reference-file line="62">views/AdMessage/userAdMessageReply.html.twig</jms:reference-file>
+        <source>Mark as sold</source>
+        <target state="new">Mark as sold</target>
+      </trans-unit>
+      <trans-unit id="f54fe9bc72caf97c0810763f9721cecabffe4b9a" resname="Message Reply">
+        <jms:reference-file line="4">views/AdMessage/userAdMessageReply.html.twig</jms:reference-file>
+        <source>Message Reply</source>
+        <target state="new">Message Reply</target>
+      </trans-unit>
+      <trans-unit id="869f309d60cde586222ff11665decb579ed252ed" resname="Message marked as read successfully.">
+        <jms:reference-file line="305">MessageBundle/Controller/AdMessageController.php</jms:reference-file>
+        <source>Message marked as read successfully.</source>
+        <target state="new">Message marked as read successfully.</target>
+      </trans-unit>
+      <trans-unit id="9d660876bfa662b4d4bba8e6e29c1a58b3aed962" resname="Message successfully sent.">
+        <jms:reference-file line="188">MessageBundle/Controller/AdMessageController.php</jms:reference-file>
+        <source>Message successfully sent.</source>
+        <target state="new">Message successfully sent.</target>
+      </trans-unit>
+      <trans-unit id="840f4fdaa490e66110c8c976be1c745dd5744cc1" resname="My Messages">
+        <jms:reference-file line="18">views/AdMessage/userAdMessage.html.twig</jms:reference-file>
+        <source>My Messages</source>
+        <target state="new">My Messages</target>
+      </trans-unit>
+      <trans-unit id="7cd1d44b3c669cee4c26966b8db2380d1e04db61" resname="No records found.">
+        <jms:reference-file line="43">views/AdMessage/userAdMessage.html.twig</jms:reference-file>
+        <source>No records found.</source>
+        <target state="new">No records found.</target>
+      </trans-unit>
+      <trans-unit id="d3193fe00a247476fbf83372fa63a8ac2eca7deb" resname="Please enter message.">
+        <jms:reference-file line="170">MessageBundle/Controller/AdMessageController.php</jms:reference-file>
+        <source>Please enter message.</source>
+        <target state="new">Please enter message.</target>
+      </trans-unit>
+      <trans-unit id="9a69555fd8c4e2a87763b641270d0ef3437b717f" resname="Problem in marking ad as sold.">
+        <jms:reference-file line="359">MessageBundle/Controller/AdMessageController.php</jms:reference-file>
+        <source>Problem in marking ad as sold.</source>
+        <target state="new">Problem in marking ad as sold.</target>
+      </trans-unit>
+      <trans-unit id="d561d4f17981b8619de81196b3930d0e1b98e874" resname="Problem in marking message as read.">
+        <jms:reference-file line="307">MessageBundle/Controller/AdMessageController.php</jms:reference-file>
+        <source>Problem in marking message as read.</source>
+        <target state="new">Problem in marking message as read.</target>
+      </trans-unit>
+      <trans-unit id="6c2bb735a46a8ff307fe2e638d581295b2a49e09" resname="Reply">
+        <jms:reference-file line="85">MessageBundle/Form/MessageAdType.php</jms:reference-file>
+        <source>Reply</source>
+        <target state="new">Reply</target>
+      </trans-unit>
+      <trans-unit id="e88b312ba6c4e1514e6a0c468b0ec3dd52b83833" resname="Reply Message">
+        <jms:reference-file line="81">MessageBundle/Form/MessageAdType.php</jms:reference-file>
+        <source>Reply Message</source>
+        <target state="new">Reply Message</target>
+      </trans-unit>
+      <trans-unit id="ee45c30326b750387589752c0f75e1dd87ddc7e4" resname="Report">
+        <jms:reference-file line="65">views/AdMessage/userAdMessageReply.html.twig</jms:reference-file>
+        <source>Report</source>
+        <target state="new">Report</target>
+      </trans-unit>
+      <trans-unit id="85ad11823f3b821a8075af057676fcbb62a75f27" resname="Sorry ad is no more active, so communication is disabled for this ad!">
+        <jms:reference-file line="89">views/AdMessage/userAdMessageReply.html.twig</jms:reference-file>
+        <source>Sorry ad is no more active, so communication is disabled for this ad!</source>
+        <target state="new">Sorry ad is no more active, so communication is disabled for this ad!</target>
+      </trans-unit>
+      <trans-unit id="cfe1babe2bb5a8bbd2f17d196fdc7ac31b19841c" resname="Sorry, receiver is not active!">
+        <jms:reference-file line="160">MessageBundle/Controller/AdMessageController.php</jms:reference-file>
+        <source>Sorry, receiver is not active!</source>
+        <target state="new">Sorry, receiver is not active!</target>
+      </trans-unit>
+      <trans-unit id="905cb326c779f0123e079bf8ccb223176a3cf32d" resname="You">
+        <jms:reference-file line="31">views/AdMessage/showReplyMessage.html.twig</jms:reference-file>
+        <source>You</source>
+        <target state="new">You</target>
+      </trans-unit>
+      <trans-unit id="411130fc6291d4698b8a8961edd3c8c6e5e88fcc" resname="You do not have permission to access this resource.">
+        <jms:reference-file line="112">MessageBundle/Controller/AdMessageController.php</jms:reference-file>
+        <jms:reference-file line="154">MessageBundle/Controller/AdMessageController.php</jms:reference-file>
+        <jms:reference-file line="297">MessageBundle/Controller/AdMessageController.php</jms:reference-file>
+        <jms:reference-file line="387">MessageBundle/Controller/AdMessageController.php</jms:reference-file>
+        <source>You do not have permission to access this resource.</source>
+        <target state="new">You do not have permission to access this resource.</target>
+      </trans-unit>
+      <trans-unit id="0d49fd7de637669edee8f01d7f2d6d8c8f0e5f6d" resname="You have marked this ad as sold.">
+        <jms:reference-file line="108">views/AdMessage/userAdMessageReply.html.twig</jms:reference-file>
+        <source>You have marked this ad as sold.</source>
+        <target state="new">You have marked this ad as sold.</target>
+      </trans-unit>
+      <trans-unit id="8b966d8b6b25713719da1cd618afa83691a07b3d" resname="Your conversation with %userName%">
+        <jms:reference-file line="52">views/AdMessage/userAdMessageReply.html.twig</jms:reference-file>
+        <source>Your conversation with %userName%</source>
+        <target state="new">Your conversation with %userName%</target>
+      </trans-unit>
+      <trans-unit id="3d4d43f2ddcb00fe5c31d8b82af00babab31ffe4" resname="wrote on">
+        <jms:reference-file line="31">views/AdMessage/showReplyMessage.html.twig</jms:reference-file>
+        <source>wrote on</source>
+        <target state="new">wrote on</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

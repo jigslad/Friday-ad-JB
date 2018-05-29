@@ -1,0 +1,171 @@
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+
+{% set userIdArray = {} %}
+{% if pagination.getNbResults() %}
+    {% for user in pagination.getCurrentPageResults() %}
+        {% set userIdArray = userIdArray|merge({0 : user.id}) %}
+    {% endfor %}
+
+    {% set statusIdArray    = userRepository.getStatusIdArrayByUserId(userIdArray) %}
+    {% set createdAtAdArray = userRepository.getCreatedAtAdArrayByUserId(userIdArray) %}
+    {% set expiresAtAdArray = userRepository.getExpiresAtAdArrayByUserId(userIdArray) %}
+    {% set totalAdArray     = userRepository.getTotalAdArrayByUserId(userIdArray) %}
+    {% set userDataArray    = userRepository.getUserDataArrayByUserId(userIdArray) %}
+    {% set isAdmin = false %}
+    {% if app.user and app.user.getRole() and app.user.getRole().getId()  == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_ADMIN_ID') %}
+        {% set isAdmin = true %}
+    {% endif %}
+{% endif %}
+
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+                 {% set sortField = {'user__id': 'User id'|trans, 'user__created_at': 'User created at'|trans, 'user__last_paa': 'Ad date placed'|trans, 'user__last_paa_expires_at': 'Ad date expires'|trans, 'user__total_ad': 'Number of ads'|trans}  %}
+                 {{ sortable_combo('user_admin', sortField) }}
+
+             <form method="post" name="frmChangeStatus" id="frmChangeStatus" action="{{ path('user_change_status', {'id': '0'}) }}">
+             <table class="mb0 user-list">
+                 <thead>
+                     <tr>
+                         <th width="8%">{{ 'Customer id'|trans }}</th>
+                         <th width="16%">{{ 'Customer name'|trans }}</th>
+                         <th width="10%">{{ 'Email'|trans }}</th>
+                         <th width="10%">{{ 'Location'|trans }}</th>
+                         <th width="5%">{{ 'Status'|trans }}</th>
+                         <th width="8%">{{ 'Created at'|trans }}</th>
+                         <th width="8%">{{ 'Ad date placed'|trans }}</th>
+                         <th width="10%">{{ 'Ad date expires'|trans }}</th>
+                         <th width="5%">{{ 'Number of ads'|trans }}</th>
+                         <th width="15%"><i class="fa fa-gear"></i> {{ 'Action'|trans }}</th>
+                         <th width="5%"><input type="checkbox" name="checkAll" id="checkAll" class="ma0"></th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for user in pagination.getCurrentPageResults() %}
+                          <tr class="odd">
+                              <td>
+                                <a href="{{ path('user_show_admin', {'id': user.id}) }}">
+                                    {% if isAdmin and (userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_ADMIN_ID') or userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SUPER_ADMIN_ID')) and app.user and app.user.getId() != user.id %}
+                                        -
+                                    {% else %}
+                                        {{ user.id }}
+                                    {% endif %}
+                                </a>
+                              </td>
+                              <td>
+                                {% if userDetailGrant %}
+                                    <a href="{{ path('user_show_admin', {'id': user.id}) }}">
+                                    {% if userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+                                        {{ userDataArray[user.id]['business_name'] }}
+                                    {% else %} 
+                                        {{ userDataArray[user.id]['first_name'] }}  {{ userDataArray[user.id]['last_name'] }}
+                                     {% endif %}
+                                    </a><br />
+                                {% else %}
+                                    {% if userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+                                        {{ userDataArray[user.id]['business_name'] }}
+                                    {% else %} 
+                                        {{ userDataArray[user.id]['first_name'] }}  {{ userDataArray[user.id]['last_name'] }}
+                                     {% endif %}
+                                {% endif %}
+                              </td>
+                              <td>{{ userDataArray[user.id]['email'] }}</td>
+                              <td>
+                                {{ userDataArray[user.id]['town'] }}
+                              </td>
+                              <td>
+                                    {% if statusIdArray[user.id] is defined and statusIdArray[user.id] is not null %}
+                                        {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', statusIdArray[user.id]) }}
+                                    {% endif %}
+                              </td>
+                              <td>{{ userDataArray[user.id]['created_at'] | localizeddate('short', 'medium', app.request.locale ) }}</td>
+                              <td>
+                                  {% if createdAtAdArray[user.id] is defined and createdAtAdArray[user.id] is not null %}
+                                      {{ createdAtAdArray[user.id] |localizeddate('short', 'medium', app.request.locale ) }}
+                                  {% endif %}
+                                  
+                              </td>
+                              <td>
+                                  {% if expiresAtAdArray[user.id] is defined and expiresAtAdArray[user.id] is not null %}
+                                      {{ expiresAtAdArray[user.id] |localizeddate('short', 'medium', app.request.locale ) }}
+                                  {% endif %}
+                              </td>
+                               <td>
+                                  {% if totalAdArray[user.id] is defined and totalAdArray[user.id] is not null %}
+                                      {{ totalAdArray[user.id] }}
+                                  {% else %}
+                                      0
+                                  {% endif %}
+                              </td>
+                              <td>
+                                  {% if isAdmin and (userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_ADMIN_ID') or userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SUPER_ADMIN_ID')) and app.user and app.user.getId() != user.id %}
+                                    -
+                                  {% else %}
+                                  <button data-dropdown="drop{{ user.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">{{ 'Select'|trans }}</button>
+                                  <ul id="drop{{ user.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                       {% if userEditGrant %}
+                                         <li><a href="{{ path('user_edit_admin', {'id': user.id}) }}"><i class="fi-pencil"></i> Edit</a></li>
+                                       {% endif %}
+                                       
+                                       {% if userDeleteGrant %}
+                                         <li><a href="{{ path('user_delete_admin', {'id': user.id}) }}" onclick="javascript:return confirm('Do you want to proceed deleting this user?')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
+                                       {% endif %}
+                                       
+                                       {% if loginAsUserGrant and statusIdArray[user.id] is defined and statusIdArray[user.id] is not null and statusIdArray[user.id] is defined and statusIdArray[user.id] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
+                                         <li><a href="/login_as_user/{{ user.id }}/{{ app.user.id }}/{{ md5(user.id~userDataArray[user.id]['username']~userDataArray[user.id]['password']) }}" target="__blank"><i class="fi-lock"></i>  {{ 'Login as user'|trans }}</a></li>
+                                       {% endif %}
+                                       
+                                       {% if userResetPasswordGrant %}
+                                         <li><a href="javascript:confirmResetPassword('{{ user.id }}');"><i class="fi-key"></i> {{ 'Reset Password'|trans }}</a></li>
+                                       {% endif %}
+                                       
+                                       {% if userChangeStatusGrant %}
+                                         <li><a href="{{ path('user_change_status', {'id': user.id}) }}"><i class="fi-loop"></i> {{ 'Change Status'|trans }}</a></li>
+                                       {% endif %}
+
+                                       {% if userConfigRuleAddEditGrant %}
+                                         <li><a href="{{ path('user_config_rule_add_edit_admin', {'user_id': user.id, 'config_id': constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PAYPAL_COMMISION')}) }}"><i class="fi-wrench"></i> {{ 'Set Paypal Commission'|trans }}</a></li>
+                                         <li><a href="{{ path('user_config_rule_add_edit_admin', {'user_id': user.id, 'config_id': constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PRODUCT_INSERTION_FEE')}) }}"><i class="fi-wrench"></i> {{ 'Set Product Insertion Fee'|trans }}</a></li>
+                                       {% endif %}
+                                       
+                                       {% if adPostAddGrant %}
+                                           <li><a href="{{ path('ad_post_new_admin', {'user_id': user.id}) }}"><i class="fi-plus"></i> {{ 'Create Ad'|trans }}</a></li>
+                                       {% endif %}
+                                       
+                                       {% if userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+                                            <li><a href="{{ path('user_package_admin', {'id': user.id}) }}"><i class="fi-loop"></i> {{ 'Assign package'|trans }}</a></li>
+                                       {% endif %}
+                                       {% if userCreditGrant %}
+                                            <li><a href="{{ path('user_credit_new_admin', {'userId': user.id}) }}"><i class="fi-dollar-bill"></i> {{ 'Add credits'|trans }}</a></li>
+                                       {% endif %}
+                                  </ul>
+                                  {% endif %}
+                              </td>
+                              <td><input type="checkbox" class="user_change_status" name="change_status_checkbox[]" value="{{ user.id }}"></td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="odd gradeX">
+                              <td colspan="6" align="center">{{ 'No records found'|trans }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+             <div class="change-status"><button type="button" value="Change status for selected users" id="user_change_status_button" class="tiny button mb0">{{ 'Change status for selected users'|trans({}, 'messages') }}</button></div>
+             </form>
+        </div>
+    </div>
+  </div>
+
+<script language="javascript" type="text/javascript">
+function confirmResetPassword(userId)
+{
+	var ans = confirm("{{ 'Do you want to proceed reset password for this user?'|trans }}");
+	
+	if (ans) {
+		var route = Routing.generate('user_send_reset_password_link', { 'id': userId });
+		location.href = route;
+	}
+}
+</script>

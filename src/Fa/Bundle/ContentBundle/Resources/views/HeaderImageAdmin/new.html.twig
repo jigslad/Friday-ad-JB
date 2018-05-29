@@ -1,0 +1,104 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+               {{ form_errors(form) }}
+               <div class="form-group{% if form.file.vars.errors|length %} has-error{% endif %}">
+                   {{ form_label(form.file) }}
+                   {{ form_widget(form.file) }}
+                   {{ form_errors(form.file) }}
+                   <span class="help-block">{{ 'Allowed image extensions are jpg, png, svg and gif.'|trans({}, 'messages') }}</span>
+                   <span class="help-block">{{ '<b>Dimensions for Image</b>:<br /><b>Large screen</b>: 2000px x 610px<br /><b>Medium screens</b>: 1151px x 610px<br /><b>Small screens</b>: 760px x 427px'|trans({}, 'messages')|raw }}</span>
+                   {% if entity.id %}
+                       <img src="{{shared_url(entity.getPath()~'/'~entity.getFileName())}}?{{ random(1000) }}" width="100px" /><br /><br />
+                   {% endif %}
+               </div>
+               <div class="form-group{% if form.phone_file.vars.errors|length %} has-error{% endif %}">
+                   {{ form_label(form.phone_file) }}
+                   {{ form_widget(form.phone_file) }}
+                   {{ form_errors(form.phone_file) }}
+                   <span class="help-block">{{ 'Allowed image extensions are jpg, png, svg and gif.'|trans({}, 'messages') }}</span>
+                   <span class="help-block">{{ '<b>Dimension for Image</b>: 428px x 613px'|trans({}, 'messages')|raw }}</span>
+                   {% if entity.id and entity.phonefilename != '' %}
+                   		<img src="{{shared_url(entity.getPath()~'/'~entity.getPhoneFileName())}}?{{ random(1000) }}" width="100px" />
+                   		<span>
+                       		<a href="{{ path('header_right_image_delete_admin', {'id': entity.id}) }}" onclick="javascript:return confirm('Do you want to proceed deleting this image?')"><i class="fi-trash"></i> Delete</a>
+                       	</span><br /><br />
+                   {% endif %}
+               </div>
+               <div class="form-group{% if form.right_hand_image_url.vars.errors|length %} has-error{% endif %}">
+                   {{ form_label(form.right_hand_image_url) }}
+                   {{ form_widget(form.right_hand_image_url) }}
+                   {{ form_errors(form.right_hand_image_url) }}
+               </div>
+                {{ form_row(form.override_image) }}
+                {{ form_row(form.screen_type) }}
+                {{ form_row(form.category) }}
+                {{ form_row(form.location_domicile) }}
+                <p class="text-center"><span id="load_towns_btn" class="fi-arrow-down size-36" style="cursor:pointer;vertical-align:middle;"></span> {{ 'Click arrow to load towns'|trans }}</p>
+                {% if entity.id %}
+                  {{ form_row(form.location_town,{'required':false}) }}
+                {% else %} 
+                  {{ form_row(form.location_town) }}
+                {% endif %}  
+               {% if entity.id %}
+                   {{ form_row(form.status) }}
+                   {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'header_image_admin', 'isSaveAndNew': false}) }}
+               {% else %}                                                    
+                   {{ form_row(form.status) }}
+                   {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'header_image_admin'}) }}
+               {% endif %}
+           {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scriptbottom -%}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        $("#load_towns_btn").click(function(){
+            loadTowns();
+        });
+        $("#fa_content_header_image_admin_location_town").click(function(){
+            var sel_locval = $('#fa_content_header_image_admin_location_town').val();
+
+        });
+    });
+    
+    function loadTowns()
+    {
+        var domicile_ids = $("#fa_content_header_image_admin_location_domicile").val();
+        $('#fa_content_header_image_admin_location_town').html('');
+        if (domicile_ids)
+        {
+            var data = {
+                id: domicile_ids
+            };
+    
+            $.ajax({
+                type: 'post',
+                url: '{{ path("location_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    var $town_selector = $('#fa_content_header_image_admin_location_town');
+         
+                    for (var i=0, total = data.length; i < total; i++) {
+                        $town_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                    }
+                }
+            });
+        }
+    }
+    //]]>
+    </script>
+{% endblock %}

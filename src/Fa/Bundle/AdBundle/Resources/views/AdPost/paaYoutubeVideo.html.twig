@@ -1,0 +1,27 @@
+<div class="paa-gray-box btm-pa-0" id="upload_video_div">
+    <h3 class="text-center" id="video_header">
+        {% if form.youtube_video_url.vars.label is defined and form.youtube_video_url.vars.label is not null %}
+            {{ form.youtube_video_url.vars.label }}
+        {% else %}
+            {{ 'YouTube video'|trans({}, 'frontend-paa-fourth-step') }}<br />
+        {% endif %}
+        {% if attribute(form, field).vars.required %}
+            <span class="black-text">({{ 'required'|trans({}, 'frontend-paa-fourth-step') }})</span>
+        {% else %}
+            <span class="black-text">({{ 'optional'|trans({}, 'frontend-paa-fourth-step') }})</span>
+        {% endif %}
+    </h3>
+    <div class="text-center">
+        <p class="mb0">
+            <span id="paa_image_upload_tips">{{ 'Add a review, demo or promo video to your ad.'|trans({}, 'frontend-paa-fourth-step')}}</span>
+            {% if form.youtube_video_url.vars.attr['field-help'] is defined and form.youtube_video_url.vars.attr['field-help'] is not null %}
+                &nbsp;
+                <div class="image-tooltip-wrapper"><span class="image-tooltip">{{ form.youtube_video_url.vars.attr['field-help']|raw }}</span><span class="info-icon">info</span></div>
+            {% endif %}
+        </p>
+    </div>
+    <div class="small-wrapper">
+        {{ form_widget(attribute(form, 'youtube_video_url'), {'attr': {'autocomplete': 'off','class': 'white-field youtube-icon', 'placeholder': ((attribute(form, 'youtube_video_url').vars.attr.placeholder is defined and attribute(form, 'youtube_video_url').vars.attr.placeholder is not null) ? attribute(form, 'youtube_video_url').vars.attr.placeholder : 'Youtube link'|trans({}, 'frontend-paa-fourth-step')) }}) }}
+        {{ form_errors(attribute(form, field)) }}
+    </div>
+</div>

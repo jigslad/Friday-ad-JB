@@ -1,0 +1,11 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $("#"+"{{publishAtId}}").change(function() {
+      if ($('#future_publish_at_note_span').hide() && $(this).val() != '') {
+        $('#future_publish_at_note_span').show()
+      } else {
+        $('#future_publish_at_note_span').hide()
+      }
+    });
+//]]>
+</script>

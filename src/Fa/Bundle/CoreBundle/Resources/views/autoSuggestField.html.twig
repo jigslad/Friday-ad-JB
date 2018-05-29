@@ -1,0 +1,117 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+$("{{ field }}").select2({
+	{% if dropdownCssClass is defined %} dropdownCssClass: '{{ dropdownCssClass }}', {% endif %}
+    cacheDataSource: [],
+    placeholder: "{{ placeHolder }}",
+    minimumInputLength: 2,
+    {% if isMultiple is not defined %} containerCssClass: 'single-select', {% endif %}
+    width: '100%',
+    {% if isSingle is defined %} allowClear: true, {% endif %}
+    {% if isSingle is not defined %} multiple: true, {% endif %}
+    {% if maximumSelectionSize is defined %} maximumSelectionSize: {{maximumSelectionSize }}, {% endif %}
+    {% if selectOnBlur is defined and selectOnBlur == 'true' %} 
+    selectOnBlur: true, 
+    createSearchChoice:function(term, data) {
+        if ($(data).filter(function() { return this.text.localeCompare(term) === 0;}).length === 0) {
+            return {id:term, text:term};
+        }
+    },
+    {% endif %}
+    query: function(query) {
+        self = this;
+        var key = query.term;
+        var cachedData = self.cacheDataSource[key];
+
+        if(cachedData) {
+            query.callback({results: cachedData.results});
+            return;
+        } else {
+            $.ajax({
+                url: Routing.generate('{{ route }}', { term: query.term }),
+                dataType: 'json',
+                type: 'GET',
+                data: {page_limit: 10, {% if dimension_field is defined %} cd_id: $('{{ dimension_field }}').val(),  {% endif %}},
+                success: function(data) {
+                    self.cacheDataSource[key] = data;
+                    query.callback({results: data.results});
+                }
+            })
+        }
+    },
+    formatResult: formatResult,
+    formatSelection: formatSelection,
+});
+
+{% if isSingle is not defined and isCustomEventBind is not defined %}
+$(document).ready(function(){
+    if ($("{{ '#s2id_' ~ field|replace({'#': ''}) }}" + ' .select2-choices li').size() > 1) {
+        $("{{ '#s2id_' ~ field|replace({'#': ''}) }}" + ' .select2-search-field').hide();
+    }
+
+    $("{{ field }}").on("select2-close", function(e) {
+        if ($.trim($("{{ field }}").val())) {
+            $("{{ '#s2id_' ~ field|replace({'#': ''}) }}" + ' .select2-search-field').hide();
+        } else {
+            $("{{ '#s2id_' ~ field|replace({'#': ''}) }}" + ' .select2-search-field').show();
+        }
+    });
+
+    $("{{ field }}").on("select2-removed", function(e) {
+        if ($.trim($("{{ field }}").val()) == '') {
+            $("{{ '#s2id_' ~ field|replace({'#': ''}) }}" + ' .select2-search-field').show();
+        }
+    });
+});
+{% endif %}
+
+{% if selectOnBlur is defined and selectOnBlur == 'true' %} 
+    $("{{ field }}").on("select2-loaded", function() {
+        $('.select2-results li:first').hide();
+        if ($('.select2-results li').size() == 1) {
+            $('.select2-results li').parent().parent().hide();
+        } else {
+            $('.select2-results li').parent().parent().show();
+        }
+    });
+{% endif %}
+
+if ($("{{ jsonField }}").val() != '') {
+    var data = jQuery.parseJSON($("{{ jsonField }}").val());
+    {% if isSingle is defined %} 
+        $('{{ field }}').select2('data', data[0]);
+    {% else %}
+        $('{{ field }}').select2('data', data);
+    {% endif %}
+}
+
+$("{{ field }}").on("select2-focus", function() {
+    $(this).siblings('small.error').html('');
+   
+    {% if field matches '/location/' %} 
+        $('#location_div').siblings('small.error').html('');
+    {% endif %}
+});
+
+function formatResult(node) {
+    if (node.id == node.text) {
+        $('.select2-results li:first').hide();
+        return;
+    }
+
+    if (node.text2) {
+        return node.text + '<div> in <span>' + node.text2 + '</span></div>';
+    }
+    return node.text;
+}
+
+function formatSelection(node) {
+    if (node.text2) {
+        return node.text + ' in ' + node.text2;
+    }
+    
+    return node.text;
+}
+
+//]]>
+</script>

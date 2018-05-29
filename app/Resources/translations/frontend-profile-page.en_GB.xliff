@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="36f717a16e1631fcd1fecaa0249b05cc6f8122e8" resname="%records% results found">
+        <jms:reference-file line="42">views/ProfilePage/showUserAds.html.twig</jms:reference-file>
+        <source>%records% results found</source>
+        <target state="new">%records% results found</target>
+      </trans-unit>
+      <trans-unit id="3ffb811f9be63cf3e71f2e2b71599ba2b7721405" resname="About us">
+        <jms:reference-file line="37">views/ProfilePage/showBusinessShopProfilePageMobile.html.twig</jms:reference-file>
+        <jms:reference-file line="82">views/ProfilePage/showBusinessShopProfilePageMobile.html.twig</jms:reference-file>
+        <jms:reference-file line="50">views/ProfilePage/showBusinessShopProfilePage.html.twig</jms:reference-file>
+        <jms:reference-file line="67">views/ProfilePage/showBusinessShopProfilePage.html.twig</jms:reference-file>
+        <source>About us</source>
+        <target state="new">About us</target>
+      </trans-unit>
+      <trans-unit id="ca6eccbf8231b304d0f927bfd73a4693ca8a1821" resname="Back to profile">
+        <jms:reference-file line="12">views/ProfilePage/showUserAds.html.twig</jms:reference-file>
+        <source>Back to profile</source>
+        <target state="new">Back to profile</target>
+      </trans-unit>
+      <trans-unit id="5e6ce5d5f8a4ab4ddaf7d4269ef1232a5bbc58d3" resname="Back to shop homepage">
+        <jms:reference-file line="14">views/ProfilePage/showShopUserAds.html.twig</jms:reference-file>
+        <jms:reference-file line="21">views/ProfilePage/showShopUserAds.html.twig</jms:reference-file>
+        <source>Back to shop homepage</source>
+        <target state="new">Back to shop homepage</target>
+      </trans-unit>
+      <trans-unit id="82da67b211249624f24f3c7db5642a5112c9446f" resname="Facebook">
+        <jms:reference-file line="9">views/ProfilePage/showSocialIcons.html.twig</jms:reference-file>
+        <source>Facebook</source>
+        <target state="new">Facebook</target>
+      </trans-unit>
+      <trans-unit id="dbb69a64aee9960dd3d84c93cef5ee64824abe3a" resname="Find us on">
+        <jms:reference-file line="6">views/ProfilePage/showSocialIcons.html.twig</jms:reference-file>
+        <source>Find us on</source>
+        <target state="new">Find us on</target>
+      </trans-unit>
+      <trans-unit id="8fdc7549333dc4b0ca64320d70039992f53e267b" resname="Google Plus">
+        <jms:reference-file line="17">views/ProfilePage/showSocialIcons.html.twig</jms:reference-file>
+        <source>Google Plus</source>
+        <target state="new">Google Plus</target>
+      </trans-unit>
+      <trans-unit id="590d5c8239aca034e205caafe5fc099959ab13d9" resname="Hi, I'm %profile_name%">
+        <jms:reference-file line="40">views/ProfilePage/showPrivateProfilePage.html.twig</jms:reference-file>
+        <source>Hi, I'm %profile_name%</source>
+        <target state="new">Hi, I'm %profile_name%</target>
+      </trans-unit>
+      <trans-unit id="560561e67a5b7efe4c861bd16c4b20f4274a9105" resname="Hi, We are %profile_name%">
+        <jms:reference-file line="41">views/ProfilePage/showBusinessProfilePage.html.twig</jms:reference-file>
+        <source>Hi, We are %profile_name%</source>
+        <target state="new">Hi, We are %profile_name%</target>
+      </trans-unit>
+      <trans-unit id="bee17a48f7328214b1831eebd602ebfa4d590239" resname="Items sold">
+        <jms:reference-file line="25">views/ProfilePage/shopHeader.html.twig</jms:reference-file>
+        <jms:reference-file line="28">views/ProfilePage/showBusinessProfilePage.html.twig</jms:reference-file>
+        <jms:reference-file line="28">views/ProfilePage/showPrivateProfilePage.html.twig</jms:reference-file>
+        <source>Items sold</source>
+        <target state="new">Items sold</target>
+      </trans-unit>
+      <trans-unit id="a85ec12a0820e8105911fcaddb3edafee2c86963" resname="Loading please wait... ">
+        <jms:reference-file line="5">views/ProfilePage/showUserReviewJs.html.twig</jms:reference-file>
+        <source>Loading please wait... </source>
+        <target state="new">Loading please wait... </target>
+      </trans-unit>
+      <trans-unit id="ab478f3efc840eebab919dff1b9512286f70c10c" resname="Map">
+        <jms:reference-file line="7">views/ProfilePage/showMap.html.twig</jms:reference-file>
+        <source>Map</source>
+        <target state="new">Map</target>
+      </trans-unit>
+      <trans-unit id="f425b08f6c1bd728672dfa58eb48d111e01751a1" resname="Member since">
+        <jms:reference-file line="50">views/ProfilePage/showBusinessProfilePage.html.twig</jms:reference-file>
+        <jms:reference-file line="11">views/ProfilePage/shopDetail.html.twig</jms:reference-file>
+        <jms:reference-file line="49">views/ProfilePage/showPrivateProfilePage.html.twig</jms:reference-file>
+        <source>Member since</source>
+        <target state="new">Member since</target>
+      </trans-unit>
+      <trans-unit id="a153d4bda2ea746620335f438af9b177f6e76494" resname="My reviews">
+        <jms:reference-file line="55">views/ProfilePage/showPrivateProfilePage.html.twig</jms:reference-file>
+        <source>My reviews</source>
+        <target state="new">My reviews</target>
+      </trans-unit>
+      <trans-unit id="30deda825723bc0784ce9e29a9879c5f244b2d5c" resname="Our latest ads">
+        <jms:reference-file line="8">views/ProfilePage/showShopUserLatestAds.html.twig</jms:reference-file>
+        <source>Our latest ads</source>
+        <target state="new">Our latest ads</target>
+      </trans-unit>
+      <trans-unit id="b442c88aad695649baa51cc4700763a404d460ff" resname="Our reviews">
+        <jms:reference-file line="56">views/ProfilePage/showBusinessShopProfilePageMobile.html.twig</jms:reference-file>
+        <jms:reference-file line="78">views/ProfilePage/showBusinessShopProfilePageMobile.html.twig</jms:reference-file>
+        <jms:reference-file line="60">views/ProfilePage/showBusinessProfilePage.html.twig</jms:reference-file>
+        <jms:reference-file line="55">views/ProfilePage/showBusinessShopProfilePage.html.twig</jms:reference-file>
+        <jms:reference-file line="63">views/ProfilePage/showBusinessShopProfilePage.html.twig</jms:reference-file>
+        <source>Our reviews</source>
+        <target state="new">Our reviews</target>
+      </trans-unit>
+      <trans-unit id="44ef3f997add24da8c42582ea6d5c891ffa6d051" resname="Photo Gallery">
+        <jms:reference-file line="3">views/ProfilePage/showShopGallery.html.twig</jms:reference-file>
+        <source>Photo Gallery</source>
+        <target state="new">Photo Gallery</target>
+      </trans-unit>
+      <trans-unit id="a45a7994973a234fae8e4759125b277f93838481" resname="Pinterest">
+        <jms:reference-file line="21">views/ProfilePage/showSocialIcons.html.twig</jms:reference-file>
+        <source>Pinterest</source>
+        <target state="new">Pinterest</target>
+      </trans-unit>
+      <trans-unit id="6437b7bf655854909262d5f53fbe3bc7a6665b48" resname="Rating">
+        <jms:reference-file line="19">views/ProfilePage/shopHeader.html.twig</jms:reference-file>
+        <jms:reference-file line="19">views/ProfilePage/showBusinessProfilePage.html.twig</jms:reference-file>
+        <jms:reference-file line="19">views/ProfilePage/showPrivateProfilePage.html.twig</jms:reference-file>
+        <source>Rating</source>
+        <target state="new">Rating</target>
+      </trans-unit>
+      <trans-unit id="32abdf99d470e368ff52f35bc0e2944650c9e6c1" resname="Read less">
+        <jms:reference-file line="43">views/ProfilePage/showBusinessShopProfilePageMobile.html.twig</jms:reference-file>
+        <source>Read less</source>
+        <target state="new">Read less</target>
+      </trans-unit>
+      <trans-unit id="ad086cf55b834c375e209972840f1342401d8c41" resname="Read more">
+        <jms:reference-file line="42">views/ProfilePage/showBusinessShopProfilePageMobile.html.twig</jms:reference-file>
+        <source>Read more</source>
+        <target state="new">Read more</target>
+      </trans-unit>
+      <trans-unit id="b83c4cdafef5813f0872892b666e2b04466198c4" resname="Reviews">
+        <jms:reference-file line="33">views/ProfilePage/shopHeader.html.twig</jms:reference-file>
+        <jms:reference-file line="34">views/ProfilePage/shopHeader.html.twig</jms:reference-file>
+        <jms:reference-file line="33">views/ProfilePage/showBusinessProfilePage.html.twig</jms:reference-file>
+        <jms:reference-file line="33">views/ProfilePage/showPrivateProfilePage.html.twig</jms:reference-file>
+        <source>Reviews</source>
+        <target state="new">Reviews</target>
+      </trans-unit>
+      <trans-unit id="e6560d9c298e72db56c00c64c9c0c9c6a63ca288" resname="Sold">
+        <jms:reference-file line="24">views/ProfilePage/shopHeader.html.twig</jms:reference-file>
+        <jms:reference-file line="27">views/ProfilePage/showBusinessProfilePage.html.twig</jms:reference-file>
+        <jms:reference-file line="27">views/ProfilePage/showPrivateProfilePage.html.twig</jms:reference-file>
+        <source>Sold</source>
+        <target state="new">Sold</target>
+      </trans-unit>
+      <trans-unit id="5392c950bdde4be7e5f5b8fdc6a1ca5f21e905cf" resname="Twitter">
+        <jms:reference-file line="13">views/ProfilePage/showSocialIcons.html.twig</jms:reference-file>
+        <source>Twitter</source>
+        <target state="new">Twitter</target>
+      </trans-unit>
+      <trans-unit id="68a191848a256ce52e4e5105b248e8e5cb6ef698" resname="User does not have any package assigned.">
+        <jms:reference-file line="210">ContentBundle/Controller/ProfilePageController.php</jms:reference-file>
+        <jms:reference-file line="219">AdBundle/Controller/AdListController.php</jms:reference-file>
+        <source>User does not have any package assigned.</source>
+        <target state="new">User does not have any package assigned.</target>
+      </trans-unit>
+      <trans-unit id="bc17c1f0179a888f2a7e8389f67d4f2cf5cf4531" resname="Video">
+        <jms:reference-file line="3">views/ProfilePage/showVideo.html.twig</jms:reference-file>
+        <source>Video</source>
+        <target state="new">Video</target>
+      </trans-unit>
+      <trans-unit id="931e1a4b152ad9d10b855bd058727fe6a05a903b" resname="View all">
+        <jms:reference-file line="9">views/ProfilePage/showShopUserLatestAds.html.twig</jms:reference-file>
+        <source>View all</source>
+        <target state="new">View all</target>
+      </trans-unit>
+      <trans-unit id="9d62c8c6d936caf6fdc453ab2f647eb2ce51dbcd" resname="View all our ads">
+        <jms:reference-file line="61">views/ProfilePage/showBusinessShopProfilePageMobile.html.twig</jms:reference-file>
+        <jms:reference-file line="68">views/ProfilePage/showBusinessShopProfilePageMobile.html.twig</jms:reference-file>
+        <source>View all our ads</source>
+        <target state="new">View all our ads</target>
+      </trans-unit>
+      <trans-unit id="5bf5bffacf1b3884beb6ac0a78a6a881c3158058" resname="View latest ads">
+        <jms:reference-file line="38">views/ProfilePage/showBusinessProfilePage.html.twig</jms:reference-file>
+        <jms:reference-file line="37">views/ProfilePage/showPrivateProfilePage.html.twig</jms:reference-file>
+        <source>View latest ads</source>
+        <target state="new">View latest ads</target>
+      </trans-unit>
+      <trans-unit id="e3c5fa8992af22fed085cd6a256d6a55dd3a028c" resname="View more">
+        <jms:reference-file line="76">views/ProfilePage/listUserReview.html.twig</jms:reference-file>
+        <jms:reference-file line="78">views/ProfilePage/listUserReview.html.twig</jms:reference-file>
+        <source>View more</source>
+        <target state="new">View more</target>
+      </trans-unit>
+      <trans-unit id="e00b80c2d6b2950577b740d9a0787312b8aebae3" resname="View on Google Maps">
+        <jms:reference-file line="11">views/ProfilePage/showMap.html.twig</jms:reference-file>
+        <source>View on Google Maps</source>
+        <target state="new">View on Google Maps</target>
+      </trans-unit>
+      <trans-unit id="24be61285e096fa817d4cdb0a0ed8294ea5bd2fb" resname="Views">
+        <jms:reference-file line="29">views/ProfilePage/shopHeader.html.twig</jms:reference-file>
+        <jms:reference-file line="30">views/ProfilePage/shopHeader.html.twig</jms:reference-file>
+        <source>Views</source>
+        <target state="new">Views</target>
+      </trans-unit>
+      <trans-unit id="de04fa0e29f9b35e24905d2e512bedc9bb6e09e4" resname="of">
+        <jms:reference-file line="41">views/ProfilePage/showBusinessProfilePage.html.twig</jms:reference-file>
+        <source>of</source>
+        <target state="new">of</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

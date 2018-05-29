@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="columns">
+        <h1 class="left">{{ 'Payment search'|trans }}</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="columns">
+          {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+             {{ form_errors(form) }}
+              <div class="row">
+                  <div class="large-4 columns">
+                      {{ form_widget(form.payment__id, {'attr': {'class':'form-control', 'placeholder': 'Payment Id'}}) }}
+                  </div>
+                  <div class="large-4 columns">
+                      {{ form_widget(form.payment__cart_code, {'attr': {'class':'form-control', 'placeholder': 'Transaction Id'}}) }}
+                  </div>
+                  <div class="large-4 columns">
+                      {{ form_widget(form.payment__payment_method, {'attr': {'class':'form-control', 'placeholder': 'Payment method'}}) }}
+                  </div>
+              </div>
+
+              <div class="row">
+                  <div class="large-6 columns">
+                      {{ form_widget(form.payment__created_at_from, {'attr': {'placeholder': 'Payment date from'}}) }}
+                  </div>
+                  <div class="large-6 columns">
+                      {{ form_widget(form.payment__created_at_to, {'attr': {'placeholder': 'Payment date to'}}) }}
+                  </div>
+              </div>
+          {{ form_end(form) }}
+     </div>
+</div>

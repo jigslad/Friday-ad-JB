@@ -1,0 +1,77 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title">
+    {% if userAddressBook.getId() %}
+        {{'Edit an address'|trans({}, 'frontend-user-address-book')}}
+    {% else %}
+        {{'Add an address'|trans({}, 'frontend-user-address-book')}}
+    {% endif %}
+</h5>
+<div class="modal-content">
+    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'user_address_id'}}) }}
+        {{ form_row(form.first_name) }}
+        {{ form_row(form.street_address) }}
+        <div class="payment-row">
+            {{ form_label(form.zip) }}
+            <div class="postcode clearfix">
+                {{ form_widget(form.zip) }}
+                <button type="button" class="button secondary-btn-1 right" onclick="return getUserAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
+            </div>
+            <small id="zip_error_div" class="error" style="display:none"></small>
+            <span id="form_zip_error">{{ form_errors(form.zip) }}</span>
+        </div>
+        {{ form_row(form.street_address_2) }}
+        {{ form_row(form.town) }}
+        {{ form_row(form.county) }}
+        {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand mb0'}}) }}
+    {{ form_end(form) }}
+</div>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+        bindCustomRadioEvent();
+        bindCustomCheckboxEvent();
+    });
+    $('#fa_user_user_address_book_zip').focus(function(e){
+        $('#zip_error_div').hide()
+    });
+    $("#user_address_id").submit(function(event) {
+        blockElement('#addressBookModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            
+            url: "{% if userAddressBook.getId() %} {{ path('ajax_edit_address', {'addressBookId': userAddressBook.getId()}) }} {% else %}{{ path('ajax_add_new_address') }}{% endif %}",
+            data: new FormData(this),
+            contentType: false,
+            processData:false,
+        })
+        .always(function(response) {
+            unblockElement('#contactSellerModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#addressBookModal').html(response.htmlContent);
+            } else if (response.error.length) {
+                $(decorateMessage(response.error, 'alert')).prependTo('#panel6b');
+                scrollToElement('#panel6b', '1000', -150);
+            } else {
+                if (response.listHtmlContent.length) {
+                    $('#address_book_main').html(response.listHtmlContent);
+                }
+                
+                $('#addressBookModal').foundation('reveal', 'close');
+                {% if userAddressBook.getId() %}
+                    $(decorateMessage('{{'Address edited successfully.'|trans({}, 'frontend-user-address-book')}}', 'success')).insertBefore('#address_book_main');
+                {% else %}
+                $(decorateMessage('{{'New address added successfully.'|trans({}, 'frontend-user-address-book')}}', 'success')).insertBefore('#address_book_main');
+                {% endif %}
+                scrollToElement('#panel6b', '1000', -150);
+                bindCustomRadioEvent();
+            }
+        });
+    });
+//]]>
+</script>

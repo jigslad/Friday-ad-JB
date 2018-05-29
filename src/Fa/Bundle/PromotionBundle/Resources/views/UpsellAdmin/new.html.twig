@@ -1,0 +1,107 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+
+            {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                {{ form_row(form.title) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.type) }}
+                <div id="value_div">
+                    {{ form_row(form.value) }}
+                </div>
+                <div id="extra_value_div">
+                    {{ form_row(form.value1) }}
+                </div>
+                {{ form_row(form.duration) }}
+                {{ form_row(form.status) }}
+
+                {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'upsell_admin'}) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        $('#fa_promotion_upsell_admin_type').change(function() {
+            changeValueLabel();
+        });
+        
+        changeValueLabel();
+    });
+    function changeValueLabel()
+    {
+        var upsellTypeId    = $('#fa_promotion_upsell_admin_type').val();
+        var label           = null;
+        var extraValue      = false;
+        var extraValueLabel = '{{ 'Extra Value'|trans }}';
+        if (upsellTypeId) {
+            switch(upsellTypeId) {
+                case '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_ID') }}':
+                    label = '{{ 'Max Free Photos'|trans }}';
+                    extraValue = true;
+                    extraValueLabel = '{{ 'Max Total Photos'|trans }}';
+                    break;
+                case '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_TYPE_AD_REFRESH_ID') }}':
+                    label = '{{ 'Interval (days)'|trans }}';
+                    break;
+                case '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_TYPE_SCREENING_QUESTIONS_ID') }}':
+                case '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_TYPE_ATTACH_DOCUMENTS_ID') }}':
+                    label = '{{ 'Max Number'|trans }}';
+                    break;
+                case '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_TYPE_PRINT_EDITIONS_ID') }}':
+                    label = '{{ 'Number Of Editions'|trans }}';
+                    break;
+                case '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_TYPE_DURATION_DEALS_ID') }}':
+                    label = '{{ 'Number of weeks'|trans }}';
+                    extraValue = true;
+                    extraValueLabel = '{{ '% discount'|trans }}';
+                    break;
+                case '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_TYPE_PAY_PER_LEAD_MODEL_ID') }}':
+                    label = '{{ '%currency% Amount Per Lead'|trans({'%currency%': currency_symbol()}, 'messages') }}';
+                    break;
+                case '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_TYPE_TOP_ADVERT_ID') }}':
+                    label = '{{ 'Max Top Ads Per Subcat'|trans }}';
+                    break;
+                case '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_TYPE_HOMEPAGE_FEATURE_ADVERT_ID') }}':
+                    label = '{{ 'Max Appearances Per Day'|trans }}';
+                    break;
+                case '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_TYPE_RECURRING_EVENTS_ID') }}':
+                    label = '{{ 'Number Of Occurences'|trans }}';
+                    break;
+                case '{{ constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_TYPE_EXPANDED_LOCATION_ID') }}':
+                    label = '{{ 'Miles'|trans }}';
+                    break;
+            }
+
+            $('label[for=fa_promotion_upsell_admin_value]').text(label);
+        }
+        
+        if (!label) {
+            $('#fa_promotion_upsell_admin_value').val('');
+            $('#value_div').hide();
+        } else {
+            $('#value_div').show();
+        }
+        if (extraValue) {
+            $('label[for=fa_promotion_upsell_admin_value1]').text(extraValueLabel);
+            $('#extra_value_div').show();
+        } else {
+            $('#fa_promotion_upsell_admin_value1').val('');
+            $('#extra_value_div').hide();
+        }
+    }
+    //]]>
+    </script>
+{% endblock %}

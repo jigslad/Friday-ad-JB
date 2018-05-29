@@ -1,0 +1,85 @@
+parameters:
+    fa.user.solrindex.class: Fa\Bundle\UserBundle\Solr\UserSolrIndex
+    fa.user.solrsearch.class: Fa\Bundle\UserBundle\Search\UserSolrSearch
+    fa.user.shop.detail.solrindex.class: Fa\Bundle\UserBundle\Solr\UserShopDetailSolrIndex
+    fa.user_shop_detail.solrsearch.class: Fa\Bundle\UserBundle\Search\UserShopDetailSolrSearch
+
+services:
+    _defaults: 
+        public: true
+
+    fa.user.solrindex:
+        class: '%fa.user.solrindex.class%'
+        
+    fa.user.shop.detail.solrindex:
+        class: '%fa.user.shop.detail.solrindex.class%'
+
+    fa.user.solrsearch:
+        class: '%fa.user.solrsearch.class%'
+        arguments: ['@service_container']
+
+    fa.user_shop_detail.solrsearch:
+        class: '%fa.user_shop_detail.solrsearch.class%'
+        arguments: ['@service_container']
+        
+    fa.role.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaUserBundle:Role]
+        shared: false
+
+    fa.role_default.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaUserBundle:Role]
+        shared: false
+        calls:
+            - [setAssociationName, ["role"]]
+            - [setRepositoryAlias, ["dr"]]
+
+    fa.user.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaUserBundle:User]
+
+    fa.user_site.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaUserBundle:UserSite]
+        
+    fa.user_statistics.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaUserBundle:UserStatistics]
+
+    fa.testimonials.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaUserBundle:Testimonials]
+        
+    fa_user.my_item_search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:Ad]
+        
+    fa.user_search_agent.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaUserBundle:UserSearchAgent]
+
+    fa.user_review.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaUserBundle:UserReview]
+    
+    fa.user_credit.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaUserBundle:UserCredit]
+        shared: false
+        
+    fa.user_package.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaUserBundle:UserPackage]
+        

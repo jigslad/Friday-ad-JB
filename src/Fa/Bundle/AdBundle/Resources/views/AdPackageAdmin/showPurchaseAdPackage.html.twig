@@ -1,0 +1,89 @@
+{% extends popup == 'true' ? 'FaAdminBundle::popupLayout.html.twig' : 'FaAdminBundle::layout.html.twig' %}
+{% block page_title %}
+    {{'Assigned package'|trans({}, 'backend-ad-package')}}
+{% endblock %}
+{% block content %}
+<div class="white-bg pkg-bdr">
+    <div class="row">
+        <div class="columns">
+            <div class="paa-pkg-main">
+                <h1 class="text-center">{{'Currently assigned package to ad id: %adId%'|trans({'%adId%':adId}, 'backend-ad-package')}}</h1>
+                    <div class="row single-pkg">
+                        {% set package = adUserPackage.getPackage() %}
+                        {% set adUserPackageValue = array_unserialize(adUserPackage.getValue()) %}
+                        {% set packageValues = array_unserialize(package.getValue()) %}
+
+                        <div class="large-3 columns">
+                            <div class="paa-pkg-bg">
+                                <div class="pkg-title {% if packageValues['title_class'] is defined %}{{packageValues['title_class']}}{% else %}pkg-gray-head{% endif %}">{{package.getLabel()}}</div>
+                                <div>
+                                    <div class="pkg-subtitle">
+                                        {{package.getTitle()}}
+                                    </div>
+                                    <div class="pkg-pricing">
+                                        <H4>
+                                            {% if adUserPackageValue['packagePrint'] is defined %}
+                                                {{format_currency(adUserPackageValue['packagePrint']['price'])}}
+                                            {% else %}
+                                                {% if adUserPackage.getPrice() > 0 %}
+                                                    {{format_currency(adUserPackage.getPrice())}}
+                                                {% else %}
+                                                    {{'Free'|trans({}, 'backend-ad-package')}}
+                                                {% endif %}
+                                            {% endif %}
+                                        </H4>
+                                        {% if adUserPackageValue['packagePrint']['duration'] is defined %}
+                                            <div class="weekly-pkg">
+                                                <span class="pkg-box">
+                                                    <label>
+                                                        {% set fullDuration = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getFullDurationFromShortForm', [adUserPackageValue['packagePrint']['duration']]) %}
+                                                        {{fullDuration}} {{'in print'|trans({}, 'frontend-ad-package')}}
+                                                    </label>
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="pkg-ins">
+                                        {{package.getSubTitle()}}
+                                        <div class="pkg-includes show-for-small-only">
+                                            <a href="javascript:void(0);" onclick="return showHidePackageUpsells({{package.getId()}})" id="package_upsell_show_anchor_{{package.getId()}}">{{"What's included?"|trans({}, 'backend-ad-package')}}</a>
+                                        </div>
+                                    </div>
+                                    <ul class="pkg-points" id="package_upsells_{{package.getId()}}">
+                                        {{strip_tags(package.getDescription(), '<li><b>')|raw}}
+                                        {#{% if adUserPackageValue['ad_expiry_days'] is defined %}
+                                            <li>{{'Ad lives for %adExpiryDays% days'|trans({'%adExpiryDays%':  adUserPackageValue['ad_expiry_days']}, 'backend-ad-package')}}</li>
+                                        {% endif %}#}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            {% if popup is defined and popup %}
+                <ul class="button-group text-center">
+                    <li><button type="reset" class="tiny button mb0" onclick="javascript:window.close();">{{ 'Close'|trans({}, 'messages') }}</button></li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+
+    function showHidePackageUpsells(packageId)
+    {
+        if ($('#package_upsells_'+packageId).is(':visible')) {
+            $('#package_upsells_'+packageId).slideUp();
+            $('#package_upsell_show_anchor_'+packageId).text("{{"What's included?"|e('js')|raw|trans({}, 'backend-ad-package')}}")
+        } else {
+            $('#package_upsells_'+packageId).slideDown();
+            $('#package_upsell_show_anchor_'+packageId).text("{{"Hide details"|trans({}, 'backend-ad-package')}}")
+        }
+    }
+//]]>
+</script>
+{% endblock %}

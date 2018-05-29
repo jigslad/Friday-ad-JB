@@ -1,0 +1,74 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title">
+    {{'Report user'|trans({}, 'frontend-contact-seller')}}
+</h5>
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'report_user_form_id'}}) }}
+<div class="modal-content">
+    <h5 class="tell-us-title">Tell us why:</h5>
+    {{ form_widget(form.reason) }}
+    {{ form_errors(form.reason) }}
+    {{ form_widget(form.comment, {'attr': {'style':'display:none'}}) }}
+    {{ form_errors(form.comment) }}
+    {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand'}}) }}
+</div>
+{{ form_end(form) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+        bindCustomRadioEvent();
+        bindCustomCheckboxEvent();
+        hideShowOtherOption();
+    });
+    $("#report_user_form_id").submit(function(event) {
+        hideAlertMessage();
+        blockElement('#reportUserModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        var route = Routing.generate('ajax_report_user', { 'replyId': '{{app.request.get('replyId')}}' });
+        $.ajax({
+            type: "POST",
+            url: route,
+            data: new FormData(this),
+            contentType: false,
+            processData:false,
+        })
+        .always(function(response) {
+            unblockElement('#reportUserModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#reportUserModal').html(response.htmlContent);
+            } else if (response.error.length) {
+                $('#reportUserModal').foundation('reveal', 'close');
+                $(decorateMessage(response.error, 'alert')).insertBefore('#message_box');
+                scrollToElement('#message_box', '1000', -150);
+            } else {
+                $('#reportUserModal').foundation('reveal', 'close');
+                $(decorateMessage('{{'User reported successfully.'|trans({}, 'frontend-contact-seller')}}', 'success')).insertBefore('#message_box');
+                scrollToElement('#message_box', '1000', -150);
+                $('#report_user_btn').hide();
+            }
+        });
+    });
+    
+    $('input[name="fa_message_spammer_report_user[reason]"]').change(function() {
+        hideShowOtherOption();
+    });
+    
+    function hideShowOtherOption()
+    {
+        var reasonId = $('input[name="fa_message_spammer_report_user[reason]"]:checked', '#report_user_form_id').val();
+        if (reasonId == '{{ constant('Fa\\Bundle\\MessageBundle\\Repository\\MessageRepository::REPORT_USER_REASON_OTHER') }}') {
+            $('#fa_message_spammer_report_user_comment').show();
+        } else {
+            $('#fa_message_spammer_report_user_comment').val('');
+            $('#fa_message_spammer_report_user_comment').removeClass('error');
+            $('#fa_message_spammer_report_user_comment').hide();
+            $('small').remove('.error');
+        }
+    }
+//]]>
+</script>

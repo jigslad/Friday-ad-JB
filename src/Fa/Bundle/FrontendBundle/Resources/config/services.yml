@@ -1,0 +1,9 @@
+parameters:
+    fa.view.foundation_google_pager.class: Fa\Bundle\FrontendBundle\View\FoundationGooglePagerView
+
+services:
+    fa.view.foundation_google_pager:
+        class: '%fa.view.foundation_google_pager.class%'
+        public: false
+        tags:
+            - { name: pagerfanta.view, alias: foundation_google_pager }

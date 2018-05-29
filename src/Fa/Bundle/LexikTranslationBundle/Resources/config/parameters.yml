@@ -1,0 +1,6 @@
+parameters:
+    lexik_translation.data_grid.formatter.class: Fa\Bundle\LexikTranslationBundle\Util\DataGrid\DataGridFormatter
+    lexik_translation.form.type.translation.class: Fa\Bundle\LexikTranslationBundle\Form\Type\TranslationType
+    lexik_translation.form.type.trans_unit.class: Fa\Bundle\LexikTranslationBundle\Form\Type\TransUnitType
+    lexik_translation.grid_input_type: textarea
+    lexik_translation.trans_unit.manager.class: Fa\Bundle\LexikTranslationBundle\Manager\FaTransUnitManager

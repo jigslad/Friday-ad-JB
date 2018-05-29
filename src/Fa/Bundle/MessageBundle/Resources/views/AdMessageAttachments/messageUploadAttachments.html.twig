@@ -1,0 +1,4 @@
+<div class="message-attachments" id="upload_attachments_div">
+    {{ render(controller('FaMessageBundle:AdMessageAttachments:showMessageAttachmentsUploader', {'messageId': null, 'formName': form.vars.name, 'maxValue': (form.photo_error.vars.attr.max_value is defined ? form.photo_error.vars.attr.max_value : null) })) }}
+    {{ set_variables('attachmentsUploadJavascriptBottom', {'loaded':'false'}) }}
+</div>

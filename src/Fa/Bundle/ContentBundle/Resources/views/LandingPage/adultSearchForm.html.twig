@@ -1,0 +1,161 @@
+{% block adultSearchForm_html %}
+{% set container = fetch_container_instance() %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set currentDevice = 'D' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'T' %}
+{% endif %}
+
+{% set adultSubCategories = categoryRepository.getChildrenKeyValueArrayByParentId(constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'), container) %}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'adult_form'}}) }}
+{{ form_errors(form) }}
+    <div class="adult-landing">
+        <div class="row">
+            <div class="columns">
+                <h3 class="homepage-title">{{ 'Find a service'|trans({}, 'frontend-landing-page') }}</h3>
+                <label>{{ 'Select category'|trans({}, 'frontend-landing-page') }}</label>
+                <div id="adult-categories" class="row popular-items ">
+                    {% for adultSubCategoryId, adultSubCategoryName in adultSubCategories %}
+                        {% if attribute(landingPageImages, adultSubCategoryId) is defined %}
+                            {% for imageInfo in attribute(landingPageImages, adultSubCategoryId) %}
+                                <div class="large-4 columns adult_choice" id="adult_choice_{{ adultSubCategoryId }}">
+                                    <div class="item-box">
+                                        <a class="tricky-link" href="javascript:void(0);">{{ adultSubCategoryName }}</a>
+                                        <div class="overlay"></div>
+                                        <div class="popular-graphic">
+                                            {% if imageInfo.overlay_file_name is defined %}
+                                                <img alt="{{ adultSubCategoryName }}" src="{{ shared_url(imageInfo.overlay_file_name) }}">
+                                            {% endif %}
+                                        </div>
+                                        {% if imageInfo.file_name is defined %}
+                                            <img alt="{{ adultSubCategoryName }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                
+                <div class="adult-fields">
+                    <div class="row" id="adult_fields_div" style="display:none;">
+                        <div class="large-8 columns">
+                            <div class="car-distance">
+                                <label>{{ 'Distance'|trans({}, 'frontend-landing-page') }}</label>
+                                <ul class="clearfix">
+                                    <li class="miles-col white-select">
+                                        {{ form_widget(form.item__distance) }}
+                                    </li>
+                                    <li class="from-col">{{ 'from'|trans({}, 'frontend-landing-page') }}</li>
+                                    <li class="location-col">
+                                        {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
+                                        <a href="javascript:void(0);" id="fa_landing_page_adult_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="large-8 columns">
+                            {% if form.item_adult__travel_arrangements_id is defined %}
+                                {{ form_label(form.item_adult__travel_arrangements_id) }}
+                                <div class="white-select">
+                                    {{ form_widget(form.item_adult__travel_arrangements_id) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="large-8 columns">
+                            {% if form.item_adult__independent_or_agency_id is defined %}
+                                {{ form_label(form.item_adult__independent_or_agency_id) }}
+                                <div class="white-select">
+                                    {{ form_widget(form.item_adult__independent_or_agency_id) }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="small-wrapper" id="adult_search_btn" style="display:none;">
+                        <button class="secondary-btn-1 expand button mb0 landing-search-btn" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}
+{% endblock %}
+
+{% block adultSearchForm_script %}
+{% set adultMassageId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_MASSAGE_ID') %}
+{% set escortServicesId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ESCORT_SERVICES_ID') %}
+{% set fetishAndRolePlayId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FETISH_AND_ROLE_PLAY_ID') %}
+
+{% set currentDevice = 'D' %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set currentDevice = 'T' %}
+{% endif %}
+
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $('.adult_choice').click(function(){
+            $('.adult_choice').removeClass('active');
+            $(this).addClass('active');
+
+            var choiceId    = $(this).attr('id');
+            var selectedId = choiceId.replace('adult_choice_', '');
+
+            if (selectedId == '{{adultMassageId}}' || selectedId == '{{escortServicesId}}' || selectedId == '{{fetishAndRolePlayId}}') {
+                $('#adult_fields_div').show();
+                
+                blockElement('#adult_landing_page_main_div');
+                $.ajax({
+                    type: "POST",
+                    url: "{{path('ajax_get_adult_searching_options')}}",
+                    data: {'categoryId': selectedId},
+                })
+                .always(function(response) {
+                    unblockElement('#adult_landing_page_main_div');
+                })
+                .done(function(response) {
+                    if (response.travel_options.length) {
+                        $("#fa_landing_page_adult_search_item_adult__travel_arrangements_id").empty().append(response.travel_options);
+                    }
+                    if (response.independent_options.length) {
+                    	$("#fa_landing_page_adult_search_item_adult__independent_or_agency_id").empty().append(response.independent_options);
+                    }
+                    $('.fa-select-white').selectmenu('refresh');
+                    
+                    {% if currentDevice == 'M'%}
+                        scrollToElement('.adult-fields', '1000');
+                    {% endif %}
+                    $('#adult_search_btn').show();
+                });
+            } else {
+                $('#fa_landing_page_adult_search_item__category_id').val(selectedId);
+                $('#fa_landing_page_adult_search_item__distance').val(15);
+                $('#fa_landing_page_adult_search_item_adult__travel_arrangements_id').val('');
+                $('#fa_landing_page_adult_search_item_adult__independent_or_agency_id').val('');
+                $('#adult_fields_div').hide();
+                $('#adult_search_btn').hide();
+                $('#adult_form').submit();
+            }
+            
+            $('#fa_landing_page_adult_search_item__category_id').val(selectedId);
+        });
+
+        setDefaultLocatonFromCookie();
+    });
+
+    function setDefaultLocatonFromCookie()
+    {
+        if (checkCookie('location')) {
+            var locationCookie = $.parseJSON(decodeURIComponent(getCookie('location')));
+            $('#fa_landing_page_adult_search_item__location').val(locationCookie.location);
+            $('#fa_landing_page_adult_search_item__location_autocomplete').val(locationCookie.location_text);
+        }
+    }
+//]]>
+</script>
+{{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_landing_page_adult_search_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
+{% endblock %}

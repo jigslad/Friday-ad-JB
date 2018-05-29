@@ -1,0 +1,188 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block field_errors %}
+{% spaceless %}
+    <span class="help-inline">
+        {% if errors|length > 0 %}
+            {% for error in errors %}
+                {{ error.messageTemplate|trans(error.messageParameters, 'validators') }}<br />
+            {% endfor %}
+        {% endif %}
+    </span>
+{% endspaceless %}
+{% endblock field_errors %}
+
+{% block form_row %}
+    {% if form.vars.block_prefixes.1 == 'checkbox' %}
+        {% set class = 'form-control' %}
+        {% if errors|length > 0 %}
+            {% set class = 'form-control error' %}
+        {% endif %}
+        {% if attr.class is defined %}
+            {% set class = attr.class ~ ' ' ~ class %}
+        {% endif %}
+        {{ form_widget(form, { 'attr': { 'class': class } }) }}
+        {{ form_label(form, label) }}
+        {{ form_errors(form, { 'attr': { 'class': 'error ' } }) }}
+    {% else %}
+        {{ form_label(form, label) }}
+        {% set class = 'form-control' %}
+        {% if errors|length > 0 %}
+            {% set class = 'form-control error' %}
+        {% endif %}
+        {% if attr.class is defined %}
+            {% set class = attr.class ~ ' ' ~ class %}
+        {% endif %}
+        {% if form.vars.block_prefixes.1 == 'text' and form.vars.block_prefixes.2 != 'textarea' %}
+            {{ form_widget(form, {}) }}
+        {% else %}
+            {{ form_widget(form, { 'attr': { 'class': class } }) }}
+        {% endif %}
+        {{ form_errors(form, {}) }}
+    {% endif %}
+{% endblock form_row %}
+
+
+{% block form_errors -%}
+    {% if errors|length > 0 -%}
+        {% if attr['global'] is defined and attr['global'] == 'true' %}
+            <div data-alert class="alert-box alert radius"><span class="alert-icon">&nbsp;</span>
+            {% for error in errors %}
+                {{ error.message }} <br />
+            {% endfor %}
+            <a href="javascript:hideAlertMessage()" class="close"></a></div>
+        {% else %}
+            {% set class='error' %}
+            {% if attr.class is defined %}
+                {% set class = attr.class|replace({'fa-select-white': '', 'fa-white-select': '', 'fa-select': '', 'white-field': ''})|trim ~ ' error' %}
+            {% endif %}
+            <small class="{{ class }}">
+            {%- for error in errors -%}
+                {{ error.message|raw }} <br />
+            {%- endfor -%}
+            </small>
+        {% endif %}
+    {%- endif %}
+{%- endblock form_errors %}
+
+{% block radio_widget -%}
+    {% if attr['class'] is defined and 'radio-capsule-btn' in attr['class'] %}
+        <span class="capsule-bg {% if checked %}active{% endif %}">
+            <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+            {% if form.vars.label is defined and form.vars.label is not null %}
+                {{ form.vars.label }}
+            {% endif %}
+        </span>
+    {% else %}
+        <span class="custom-radio {% if checked %}checked{% endif %}">
+            <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        </span>
+    {% endif %}
+{%- endblock radio_widget %}
+
+{% block checkbox_widget -%}
+    <span class="custom-checkbox {% if checked %}checked{% endif %}">
+        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+    </span>
+{%- endblock checkbox_widget %}
+
+{% block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif %}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif %}
+        {% if label is empty -%}
+            {%- if label_format is defined and label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain)|raw }}</label>
+    {%- endif %}
+{%- endblock form_label %}
+
+{% block form_widget_simple -%}
+    {% set type = type|default('text') -%}
+    {% set class = 'form-control' %}
+    {% if attr['class'] is defined %}
+        {% set class = class~' '~attr['class'] %}
+    {% endif %}
+    {% if errors|length > 0 %}
+        {% set class = class~' error' %}
+    {% endif %}
+    
+    <input type="{{ type }}" class="{{class}}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple %}
+
+{%- block choice_widget_expanded -%}
+    <div {{ block('widget_container_attributes') }}>
+    {%- for key, child in form %}
+        {% if attr['field-help'] is defined and key > 0 %}<br />{% endif %}
+        {% if attr['field-help'] is not defined and attr['add-br'] is defined and key > 0 %}<br />{% endif %}
+        {% if attr['class'] is defined and 'radio-capsule-btn' in attr['class'] %}
+            {{- form_widget(child, { 'attr': { 'class': attr['class'] }}) -}}
+        {% else %}
+            {{- form_widget(child) -}}
+            {{- form_label(child) -}}
+        {% endif %}
+    {% endfor -%}
+    {% if attr['field-help'] is defined %}
+        <a href="#" class="info-icon">Info</a>
+    {% endif %}
+    </div>
+{%- endblock choice_widget_expanded -%}
+
+{%- block choice_widget_collapsed -%}
+    {% set class = 'form-control' %}
+    {% if attr['class'] is defined %}
+        {% set class = class~' '~attr['class'] %}
+    {% endif %}
+    {% if errors|length > 0 %}
+        {% set class = class~' error-bdr' %}
+    {% endif %}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple -%}
+        {% set required = false %}
+    {%- endif -%}
+    <select class="{{class}}" {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {%- if placeholder is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder|trans({}, translation_domain) }}</option>
+        {%- endif -%}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {{- block('choice_widget_options') -}}
+            {%- if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+        {%- endif -%}
+        {%- set options = choices -%}
+        {{- block('choice_widget_options') -}}
+    </select>
+{%- endblock choice_widget_collapsed -%}
+
+{%- block number_widget -%}
+    {%- set type = type|default('number') -%}
+    {{ block('form_widget_simple') }}
+{%- endblock number_widget -%}
+
+{%- block tel_widget -%}
+    {%- set type = type|default('tel') -%}
+    {{ block('form_widget_simple') }}
+{%- endblock tel_widget -%}
+
+{%- block textarea_widget -%}
+    {% set class = 'form-control' %}
+    {% if attr['class'] is defined %}
+        {% set class = class~' '~attr['class'] %}
+    {% endif %}
+    {% if errors|length > 0 %}
+        {% set class = class~' error' %}
+    {% endif %}
+    <textarea class="{{class}}" {{ block('widget_attributes') }}>{{ value }}</textarea>
+{%- endblock textarea_widget -%}

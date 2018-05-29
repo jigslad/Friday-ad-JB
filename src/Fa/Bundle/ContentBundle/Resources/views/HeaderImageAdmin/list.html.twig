@@ -1,0 +1,96 @@
+{% set screenTypeArray = fetch_repository('FaContentBundle:HeaderImage').getScreenType() %}
+
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+            <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+            <table class="mb0">
+                <thead>
+                <tr>
+                    <th width="20%">
+                       {{ 'Image'|trans }}
+                    </th>
+                    <th width="20%">
+                       {{ 'RHS image'|trans }}
+                    </th>
+                    <th width="10%">
+                       {{ 'Location'|trans }}
+                    </th>
+                    <th width="10%">
+                       {{ 'Category'|trans }}
+                    </th>
+                    <th width="10%">
+                       {{ 'Screen type'|trans }}
+                    </th>
+                    <th width="10%">
+                       {{ sortable_link('header_image_admin', 'header_image__status', 'Status'|trans, sorter) }}
+                    </th>
+                    <th width="15%">
+                       {{ sortable_link('header_image_admin', 'header_image__created_at', 'Created at'|trans, sorter) }}
+                    </th>
+                    <th width="10%"><i class="fi-widget"></i> Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                     {% if pagination.getNbResults() %}
+                     {% for headerImage in pagination.getCurrentPageResults() %}
+                        <tr class="gradeX">
+                            <td>
+                                {% if headerImage.file_name %}
+                                    <img src="{{ shared_url(headerImage.path~'/'~headerImage.file_name) }}?{{ random(1000) }}" width="100px" />
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if headerImage.phone_file_name %}
+                                    <img src="{{ shared_url(headerImage.path~'/'~headerImage.phone_file_name) }}?{{ random(1000) }}" width="100px" />
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if headerImage.location_town is not null %}
+                                    {{ headerImage.location_town }} - 
+                                {% endif %}
+                                {% if headerImage.location_domicile is not null %}
+                                    {{ headerImage.location_domicile }} 
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if headerImage.category_name %}
+                                    {{ headerImage.category_name }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if headerImage.screen_type and screenTypeArray[headerImage.screen_type] is defined %}
+                                    {{ screenTypeArray[headerImage.screen_type] }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if headerImage.status is not null %}
+                                    {{ statusArray[headerImage.status] }}
+                                {% endif %}
+                            </td>
+                            <td>{{ headerImage.created_at | localizeddate('short', 'medium', app.request.locale ) }}</td>
+                            <td>
+                                 <button href="#" data-dropdown="drop{{ headerImage.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                 <br />
+                                 <ul id="drop{{ headerImage.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                  {% if headerImageEditGrant %}
+                                    <li><a href="{{ path('header_image_edit_admin', {'id': headerImage.id}) }}"><i class="fi-pencil"></i> Edit</a></li>
+                                  {% endif %}
+                                  
+                                  {% if headerImageDeleteGrant %}
+                                    <li><a href="{{ path('header_image_delete_admin', {'id': headerImage.id}) }}" onclick="javascript:return confirm('Do you want to proceed deleting this image?')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
+                                  {% endif %}
+                                  </ul>
+                            </td>
+                        </tr>
+                     {% endfor %}
+                     {% else %}
+                        <tr class="gradeX">
+                            <td colspan="5" align="center">{{ 'No records found'|trans }}</td>
+                        </tr>
+                     {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

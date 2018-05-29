@@ -1,0 +1,27 @@
+show_cart:
+    path:     /
+    defaults: { _controller: "FaPaymentBundle:Cart:showCart" }
+        
+remove_cart_item:
+    path:     /remove_item/{transactionId}
+    defaults: { _controller: "FaPaymentBundle:Cart:removeCartItem" }
+    options:
+        expose: true
+        
+apply_package_code:
+    path:     /ajax/apply_discount_code/
+    defaults: { _controller: "FaPaymentBundle:Cart:ajaxApplyPackageDiscountCode" }
+    
+remove_package_code:
+    path:     /ajax/remove_discount_code/
+    defaults: { _controller: "FaPaymentBundle:Cart:ajaxRemovePackageDiscountCode" }
+    
+remove_package_credit:
+    path:     /ajax/remove_credit/
+    defaults: { _controller: "FaPaymentBundle:Cart:ajaxRemovePackageCredit" }
+
+process_payment:
+    path:     /process/{paymentMethod}
+    defaults: { _controller: "FaPaymentBundle:Cart:processPayment" }
+    requirements:
+        paymentMethod:  cybersource|paypal|free|applepay|amazonpay

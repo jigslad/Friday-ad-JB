@@ -1,0 +1,73 @@
+{% spaceless %}
+{% if app.user %}
+    {% set userId = app.user.getId() %}
+{% else %}
+    {% set userId = app.session.getId() %}
+{% endif %}
+{% set container = fetch_container_instance() %}
+{% set categoryId = attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
+{% set rootCategoryId = attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+{% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+{% set solrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+{% set adFavoriteRepository   = fetch_repository('FaAdBundle:AdFavorite') %}
+{% set adFavoriteAdIds = adFavoriteRepository.getFavoriteAdByUserId(userId, container) %}
+{% set secondLevelCategoryId = null %}
+{% if attribute(ad, 'a_parent_category_lvl_2_id_i') is defined %}
+    {% set secondLevelCategoryId = attribute(ad, 'a_parent_category_lvl_2_id_i') %}
+{% endif %}
+{% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(ad) %}
+{% set ribbonClass = '' %}
+{% if attribute(ad, constant(solrMapping ~ 'IS_URGENT_AD')) is defined and attribute(ad, constant(solrMapping ~ 'IS_URGENT_AD')) %}
+    {% set ribbonClass = 'urgent' %}
+{% endif %}
+{% if attribute(ad, constant(solrMapping ~ 'IS_TOP_AD')) is defined and attribute(ad, constant(solrMapping ~ 'IS_TOP_AD')) %}
+    {% set ribbonClass = 'featured' %}
+{% endif %}
+{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+{% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(ad, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+{% set imageAltString = null %}
+{% if seoRule['image_alt'] is defined %}
+    {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], ad]) %}
+{% endif %}
+<div class="{{ ribbonClass }}">
+    <div class="featured-ribbon">featured</div>
+     <div class="urgent-ribbon">urgent</div>
+    <div class="listing">
+        <a class="tricky-link" href="{{adUrl}}">{{ imageAltString }}</a>
+        <div class="clearfix">
+            <div class="list-col-1">
+                {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, ad, '300X225', 1) %}
+                <div class="list-img {% if not imagePath %}list-placeholder{% endif %}">
+                    {% if imagePath %}
+                        <img src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                    {% else %}
+                        <img src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                    {% endif %}
+                </div>
+                <div class="clearfix">
+                    <span class="list-img-num">{% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ORD')) is defined %} {{ attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ORD'))|length }} {% else %} 0{% endif %}</span>
+                    <span id="fav_{{ad.id}}">{% if ad.id in adFavoriteAdIds %}<a href="javascript:void(0)" onclick="return removeFromFavorite({{ad.id}});" class="saved-item outside-tricky">FA</a>{% else %}<a href="javascript:void(0)" onclick="return addToFavorite({{ad.id}});" class="unsaved-item outside-tricky">FA</a>{% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="list-col-2">
+                <h3>{% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) is defined %}{{ trim_text(attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')), 60) }}{% endif %}</h3>
+                <div class="list-price">{% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::PRICE')) is defined and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') %}{{ format_currency(attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::PRICE'))) }}{% endif %}{% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(ad, constant(solrMapping ~ 'EVENT_START')) is defined %}{% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(ad, constant(solrMapping ~ 'EVENT_START')), (attribute(ad, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(ad, constant(solrMapping ~ 'EVENT_END')) : null), container) %}<span class="whats-on">{{ eventStartDate }}</span>{% endif %}</div>
+                <div class="list-distance hide-for-small-only">
+                    <div class="clearfix">
+                        {% if attribute(ad, 'away_from_location') is defined and attribute(ad, 'away_from_location') %}<div class="list-miles">{{ (attribute(ad, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}</div>{% endif %}
+                        <div class="list-hr-ago">{% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') and attribute(ad, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT')) is defined %}{{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::WEEKLY_REFRESH_PUBLISHED_AT'))|time_ago_in_words}}{% endif %}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="list-distance show-for-small-only">
+            <div class="clearfix">
+                <div class="list-miles">{% if attribute(ad, 'away_from_location') is defined %}{{ (attribute(ad, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}{% endif %}</div>
+                <div class="list-hr-ago">{% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') and attribute(ad, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT')) is defined %}{{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::WEEKLY_REFRESH_PUBLISHED_AT'))|time_ago_in_words}}{% endif %}</div>
+            </div>
+        </div>
+        <div class="map-arrow">&nbsp;</div>
+    </div>
+</div>
+{% endspaceless %}

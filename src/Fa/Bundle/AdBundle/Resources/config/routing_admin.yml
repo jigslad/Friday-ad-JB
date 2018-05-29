@@ -1,0 +1,31 @@
+FaAdBundle_paa_field_rule_admin:
+    resource: '@FaAdBundle/Resources/config/routing/paa_field_rule_admin.yml'
+    prefix:   /paa_field_rule
+
+FaAdBundle_print_edition_admin:
+    resource: '@FaAdBundle/Resources/config/routing/print_edition_admin.yml'
+    prefix:   /print_edition
+
+FaAdBundle_print_deadline_admin:
+    resource: '@FaAdBundle/Resources/config/routing/print_deadline_admin.yml'
+    prefix:   /print_deadline
+
+FaAdBundle_ad_admin:
+    resource: '@FaAdBundle/Resources/config/routing/ad_admin.yml'
+    prefix:   /ad
+
+FaAdBundle_ad_post_admin:
+    resource: '@FaAdBundle/Resources/config/routing/ad_post_admin.yml'
+    prefix:   /paa
+
+FaAdBundle_ad_image_admin:
+    resource: '@FaAdBundle/Resources/config/routing/ad_image_admin.yml'
+    prefix:   /paa_image
+    
+FaAdBundle_ad_package:
+    resource: '@FaAdBundle/Resources/config/routing/ad_package_admin.yml'
+    prefix:   /package
+
+FaAdBundle_search_keyword_admin:
+    resource: '@FaAdBundle/Resources/config/routing/search_keyword_admin.yml'
+    prefix:   /search_keyword

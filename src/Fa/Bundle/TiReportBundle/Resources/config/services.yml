@@ -1,0 +1,7 @@
+parameters:
+    fa.report.createdatafield.class: Fa\Bundle\ReportBundle\Resource\CreateDataField
+
+services:
+    fa.report.createdatafield.resource:
+        class: '%fa.report.createdatafield.class%'
+        arguments: ['@service_container']

@@ -1,0 +1,26 @@
+delivery_method_option_admin:
+    path:     /
+    defaults: { _controller: "FaPaymentBundle:DeliveryMethodOptionAdmin:index" }
+
+delivery_method_option_new_admin:
+    path:     /new
+    defaults: { _controller: "FaPaymentBundle:DeliveryMethodOptionAdmin:new" }
+
+delivery_method_option_create_admin:
+    path:     /create
+    defaults: { _controller: "FaPaymentBundle:DeliveryMethodOptionAdmin:create" }
+    requirements: { methods: post }
+
+delivery_method_option_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaPaymentBundle:DeliveryMethodOptionAdmin:edit" }
+
+delivery_method_option_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaPaymentBundle:DeliveryMethodOptionAdmin:update" }
+    requirements: { methods: post|put }
+
+delivery_method_option_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaPaymentBundle:DeliveryMethodOptionAdmin:delete" }
+    requirements: { methods: post|delete|get }

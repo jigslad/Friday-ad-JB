@@ -1,0 +1,11 @@
+{% set fbPixelCodeSnippet1 = fetch_repository('FaContentBundle:StaticPage').getStaticBlockDetailArray('fb-pixel-code-snippet-1' , fetch_container_instance()) %}
+{% if fbPixelCodeSnippet1['description'] is defined %}
+    {{fbPixelCodeSnippet1['description']|raw}}
+{% endif %}
+
+{% if currentRoute == 'manage_my_ads_active' and ga_transaction is defined and ga_transaction.PAYMENT_ID is defined %}
+    {% set fbPixelCodeSnippet2 = fetch_repository('FaContentBundle:StaticPage').getStaticBlockDetailArray('fb-pixel-code-snippet-2' , fetch_container_instance()) %}
+    {% if fbPixelCodeSnippet2['description'] is defined %}
+        {{fbPixelCodeSnippet2['description']|raw}}
+    {% endif %}
+{% endif %}

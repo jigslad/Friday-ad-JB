@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="columns">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+            {{ form_errors(form) }}
+
+            <div class="row">
+                <div class="large-8 columns">
+                    {{ form_widget(form.ad__id, {'attr': {'class':'form-control', 'placeholder': 'Advert Reference'}}) }}
+                </div>
+                <div class="large-8 columns">
+                    {{ form_widget(form.ad__title, {'attr': {'class':'form-control', 'placeholder': 'Advert Title'}}) }}
+                </div>
+                <div class="large-8 columns">
+                    {{ form_widget(form.entity_ad_type__id, {'attr': {'class':'form-control', 'placeholder': 'Ad type'}}) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-8 columns">
+                    {{ form_widget(form.entity_ad_status__id, {'attr': {'class':'form-control'}}) }}
+                </div>
+                <div class="large-16 columns">
+                    {{ form_widget(form.search, {'attr': {'class':'small button'}}) }}
+                </div>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>

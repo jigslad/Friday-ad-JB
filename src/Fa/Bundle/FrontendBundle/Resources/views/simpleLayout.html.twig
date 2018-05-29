@@ -1,0 +1,105 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=no;target-densityDpi=medium-dpi" />
+    <link rel="stylesheet" type="text/css" href="{{ static_asset_url('/bundles/fafrontend/css/google-fonts.css') }}" />
+    <title>{% block title %} {{'Friday Ad'|trans}} {% if block('page_title') is defined %} - {{block('page_title')|trim}} {% endif %} {% endblock %}</title>
+    
+    {% set currentRoute = app.request.attributes.get('_route') %}
+    {% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
+    {% set blockMetaDescription = block('meta_description') is defined ? block('meta_description')|trim : false %}
+    {% set blockMetaKeywords = block('meta_keywords') is defined ? block('meta_keywords')|trim : false %}
+    {% set blockMetaCanonicalUrl = block('canonical_url') is defined ? block('canonical_url')|trim : false %}
+    {% set blockFacebookMeta = block('facebook_meta') is defined ? block('facebook_meta')|trim : false %}
+    {% set blockDimension2 = block('dimension2') is defined ? block('dimension2')|trim : false %}
+    {% set container = fetch_container_instance() %}
+    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    {% set showTiLogo = false %}
+    {# {% if (app.user and app.user.getUserMasterSite()|lower == 'ti') or (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('ti_url')) %} #}
+    {% if (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('new_ti_url')) %}
+        {% set showTiLogo = true %}
+    {% endif %}
+    
+    {% if blockMetaRobots %}
+        <meta name="robots" content="{{blockMetaRobots}}" />
+    {% endif %}
+    {% if blockMetaDescription %}
+        <meta name="description" content="{{blockMetaDescription}}" />
+    {% endif %}
+    {% if blockMetaKeywords %}
+        <meta name="keywords" content="{{blockMetaKeywords}}" />
+    {% endif %}
+    {% if blockMetaCanonicalUrl %}
+        <link rel="canonical" href="{{blockMetaCanonicalUrl}}" />
+    {% endif %}
+    {% if blockFacebookMeta %}
+        {{blockFacebookMeta|raw}}
+    {% endif %}
+    
+    {{ include('FaFrontendBundle::scriptTop.html.twig') }}
+    {% block scripttop %}{% endblock %}
+    {% stylesheets filter='uglifycss' output='bundles/css/compiled/simpleLayout.css'
+        'bundles/fafrontend/css/style.css'
+        'bundles/fafrontend/css/responsive.css'
+          %}
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
+    {% endstylesheets %}
+    {% block blockGaCode%}
+        {{ include('FaFrontendBundle::gaCode.html.twig') }}
+    {% endblock %}
+    {% if blockDimension2 %}
+        {{ blockDimension2|raw }}
+    {% else %}
+        <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        	{% if app.user.getId() is not defined or app.user.getId() is null %}
+            	ga('set', 'dimension9', 'not logged in');
+            {% else %}
+            	ga('set', 'dimension9', 'logged in');
+            {% endif %}
+            ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Peripheral_Content'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+        //]]>
+        </script>
+    {% endif %}
+    
+    {% if mobileDetectManager.isMobile() or mobileDetectManager.isTablet() %}
+        {% if mobileDetectManager.isiOS() and not mobileDetectManager.isWindowsMobileOS() and not mobileDetectManager.isWindowsPhoneOS() %}
+            {{ include('FaFrontendBundle::iosMetaTags.html.twig') }}
+        {% elseif mobileDetectManager.isAndroidOS() and not mobileDetectManager.isWindowsMobileOS() and not mobileDetectManager.isWindowsPhoneOS() %}
+            {{ include('FaFrontendBundle::androidOsMetaTags.html.twig') }}
+        {% elseif mobileDetectManager.isWindowsMobileOS() or mobileDetectManager.isWindowsPhoneOS() %}
+            {{ include('FaFrontendBundle::windowsOsMetaTags.html.twig') }}
+        {% endif %}
+    {% endif %}
+    
+    <!-- FB pixel code snippet -->
+    {{ include('FaFrontendBundle::fbPixelCodeSnippet.html.twig') }}
+</head>
+<body>
+        {{ include('FaFrontendBundle::cookiePolicy.html.twig') }}
+
+        {{ include('FaFrontendBundle::simpleHeader.html.twig') }}
+        <div class="row top-msg">
+            <div class="columns">
+               {{ include('FaCoreBundle::message.html.twig') }}
+            </div>
+        </div>
+        <section>
+            {% block body %}{% endblock %}
+        </section>
+
+        {{ include('FaFrontendBundle::scriptBottom.html.twig') }}
+        {% block scriptbottom %}{% endblock %}
+
+        {{ include('FaFrontendBundle::simpleFooter.html.twig') }}
+
+        <script type="text/javascript">
+            $(document).foundation({
+              accordion: {
+                multi_expand: true,
+              }
+            });
+        </script>
+    </body>
+</html>

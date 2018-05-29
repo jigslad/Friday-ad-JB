@@ -1,0 +1,21 @@
+ad_admin:
+    path:     /
+    defaults: { _controller: "FaAdBundle:AdAdmin:index" }
+
+ad_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaAdBundle:AdAdmin:delete" }
+
+ad_change_status:
+    path:     /{id}/ad_change_status
+    defaults: { _controller: "FaAdBundle:AdAdmin:changeStatus" }
+    
+ad_detail_admin:
+    path:     /{id}/ad_detail
+    defaults: { _controller: "FaAdBundle:AdAdmin:adDetail" }
+
+ajax_print_dates_list_admin:
+    path:     /ajax/{id}/print_dates
+    defaults: { _controller: "FaAdBundle:AdAdmin:ajaxListAdPrintInsertDates" }
+    options:
+        expose: true

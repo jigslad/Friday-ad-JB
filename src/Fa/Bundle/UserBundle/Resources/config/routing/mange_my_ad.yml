@@ -1,0 +1,31 @@
+manage_my_ads_active:
+    path:     /manage_my_ads/active/
+    defaults: {  _controller: FaUserBundle:ManageMyAd:index, type: active }
+    requirements:
+        type:  'inactive'
+
+manage_my_ads_inactive:
+    path:     /manage_my_ads/inactive/
+    defaults: {  _controller: FaUserBundle:ManageMyAd:index, type: inactive }
+    requirements:
+        type:  'inactive'
+        
+ajax_manage_my_ads_change_status:
+    path:     /ajax/manage_my_ads/change_ad_status/
+    defaults: { _controller: FaUserBundle:ManageMyAd:ajaxChangeAdStatus }
+
+manage_my_ads_mark_as_sold:
+    path:     /manage_my_ads/mark_as_sold/{adId}
+    defaults: {  _controller: FaUserBundle:ManageMyAd:soldAd}
+
+manage_my_ads_refresh_ad:
+    path:     /manage_my_ads/refresh_ad/{adId}-{date}
+    defaults: {  _controller: FaUserBundle:ManageMyAd:refreshAd}
+
+manage_my_ads_social_share_popup:
+    path:     /manage_my_ads/social_share
+    defaults: {  _controller: FaUserBundle:ManageMyAd:socialShare}
+
+ajax_manage_my_ads_get_status:
+    path:     /ajax/manage_my_ads/get_status/
+    defaults: { _controller: FaUserBundle:ManageMyAd:ajaxGetStatus }

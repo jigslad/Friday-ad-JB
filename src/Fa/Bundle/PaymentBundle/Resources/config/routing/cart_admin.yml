@@ -1,0 +1,24 @@
+show_cart_admin:
+    path:     /
+    defaults: { _controller: "FaPaymentBundle:CartAdmin:showCart" }
+        
+remove_cart_item_admin:
+    path:     /remove_item/{transactionId}
+    defaults: { _controller: "FaPaymentBundle:CartAdmin:removeCartItem" }
+    options:
+        expose: true
+
+process_payment_admin:
+    path:     /process/{paymentMethod}
+    defaults: { _controller: "FaPaymentBundle:CartAdmin:processPayment" }
+    requirements:
+        paymentMethod:  cybersource|paypal|free|offline-payment|amazonpay
+
+apply_package_code_admin:
+    path:     /ajax/apply_discount_code_admin/
+    defaults: { _controller: "FaPaymentBundle:CartAdmin:ajaxApplyPackageDiscountCode" }
+    
+remove_package_code_admin:
+    path:     /ajax/remove_discount_code_admin/
+    defaults: { _controller: "FaPaymentBundle:CartAdmin:ajaxRemovePackageDiscountCode" }
+

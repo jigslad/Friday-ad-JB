@@ -1,0 +1,121 @@
+<dd class="accordion-navigation {% if not userCardForm.vars.valid or app.session.flashbag.has('card_success') %}active{% endif %}">
+    <a href="#panel2b" class="section-head">
+        <span class="payment-sources-icon">{{ 'Saved payment sources'|trans({}, 'frontend-payment-sources') }}</span>
+        <span>&nbsp;</span>
+    </a>
+    <div id="panel2b" class="content {% if not userCardForm.vars.valid or app.session.flashbag.has('card_success') %}active{% endif %}">
+        {{ include('FaUserBundle:MyAccount:myAccountMessage.html.twig', {'msgName': 'card_success'}) }}
+        <div class="saved-payment-sources">
+            {% if paymentTokens|length %}
+                <ul class="choose-payment-method">
+                    {% for paymentToken in paymentTokens %}
+                        <li class="label-inline">
+                            <label><span class="{{ paymentCyberSourceRepository.getCardTypeClass(paymentToken.getCardType()) }}">&nbsp;</span>***{{ paymentToken.getCardNumber() }}&nbsp;{{ paymentToken.getCardHolderName() }}</label>
+                            <a href="javascript:void(0);" onclick="javascript:removePaymentSource('{{ path('cybersource_delete_token', {'id': paymentToken.getId(), 'from': 'my_account'}) }}');">{{ 'Remove'|trans({}, 'frontend-payment-sources') }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {{ 'You do not have saved any payment sources.'|trans({}, 'frontend-payment-sources') }} <br /> 
+            {% endif %}
+            <a href="javascript:void(0)" onclick="javascript:showHideUserCard(true);" id="add_new_card_anchor">{{'Add new card'|trans({}, 'frontend-payment-sources')}}</a>
+            {{ form_start(userCardForm, {'attr': {'novalidate': '', 'id': 'user_card_form'}}) }}
+            <div class="payment">
+                <div id="card_detail" {% if userCardForm.vars.valid %}style="display:none;"{% endif %}>
+                    <h2>{{'Enter new card'|trans({}, 'frontend-payment-sources')}}:</h2>
+                    <div class="small-wrapper">
+                        <div class="paa-bdr-box bdr-none">
+                            <h3 class="text-center">{{'Billing details'|trans({},'frontend-cyber-source')}}</h3>
+                            <div class="payment-row first-row">
+                                {{ form_row(userCardForm.street_address, {'attr': {'class': 'white-field'}}) }}
+                            </div>
+                            <div class="payment-row">
+                                {{ form_label(userCardForm.zip) }}
+                                <div class="postcode clearfix">
+                                    {{ form_widget(userCardForm.zip, {'attr': {'class': 'white-field'}}) }}
+                                    <button type="button" class="button secondary-btn-1 right" onclick="return getUserCardAddress();">{{'Find address'|trans({},'frontend-cyber-source')}}</button>
+                                </div>
+                                <small id="card_zip_error_div" class="error" style="display:none"></small>
+                                <span id="form_zip_error">{{ form_errors(userCardForm.zip) }}</span>
+                            </div>
+                            
+                            <div class="payment-row">
+                                {{ form_row(userCardForm.street_address_2, {'attr': {'class': 'white-field'}}) }}
+                            </div>
+                            
+                            <div class="payment-row">
+                                {{ form_row(userCardForm.town, {'attr': {'class': 'white-field'}}) }}
+                            </div>
+                            
+                            <div class="payment-row">
+                                {{ form_row(userCardForm.county, {'attr': {'class': 'white-field'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="small-wrapper">
+                        <div class="paa-bdr-box bdr-none">
+                            <h3 class="text-center">{{'Card details'|trans({},'frontend-cyber-source')}}</h3>
+                            <div class="payment-cards">&nbsp;</div>
+
+                            <div class="payment-row">
+                                {{ form_label(userCardForm.card_holder_name) }}
+                                {{ form_widget(userCardForm.card_holder_name, {'attr': {'class': 'white-field'}}) }}
+                                {{ form_errors(userCardForm.card_holder_name) }}
+                            </div>
+                            
+                            <div class="payment-row card-num">
+                                {{ form_label(userCardForm.card_number) }}
+                                {{ form_widget(userCardForm.card_number, {'attr': {'class': 'white-field'}}) }}
+                                {{ form_errors(userCardForm.card_number) }}
+                            </div>
+                            
+                            <div class="payment-row white-select">
+                                {{ form_label(userCardForm.card_expity_month) }}
+                                <div class="expiry-date">
+                                    {{ form_widget(userCardForm.card_expity_month, {'attr': {'class': 'fa-select-white'}}) }}
+                                    {{ form_widget(userCardForm.card_expity_year, {'attr': {'class': 'fa-select-white'}}) }}
+                                </div>
+                                {{ form_errors(userCardForm.card_expity_month) }}
+                                {{ form_errors(userCardForm.card_expity_year) }}
+                            </div>
+                            
+                            <div class="payment-row security-code">
+                                {{ form_label(userCardForm.card_security_code) }}
+                                {{ form_widget(userCardForm.card_security_code, {'attr': {'class': 'white-field'}}) }}
+                                <div class="sec-code-icon">{{'Security code'|trans({},'frontend-cyber-source')}}</div>
+                                {{ form_errors(userCardForm.card_security_code) }}
+                            </div>
+                            {{ form_widget(userCardForm.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                            {{ form_widget(userCardForm.cancel, {'attr': {'class':'primary-btn-3 expand thin-btn', 'onclick': 'showHideUserCard(false);'}}) }}
+                        </div>
+                   </div>
+               </div>
+            </div>
+            {{ form_end(userCardForm) }}
+        </div>
+        
+        <div id="paymentSourceDeleteModal" class="reveal-modal tiny" data-reveal>
+            <a class="close-reveal-modal">&#215;</a>
+            <h5 class="modal-title">
+                {{'Remove payment source?'|trans({}, 'frontend-payment-sources')}}
+            </h5>
+            <div class="modal-content remove-modal">
+                <div class="row">
+                    <div class="columns">
+                        <h5>{{'This will remove your payment source.'|trans({}, 'frontend-payment-sources')}}</h5>
+                    </div>
+                </div>
+                <div class="mt20">
+                    <div class="row">
+                        <div class="columns large-12">
+                            <button type="button" class="button secondary-btn-4 thin-btn expand mb0" onclick="javascript:closeRevealModel('#paymentSourceDeleteModal');">{{'Cancel'|trans({}, 'frontend-payment-sources')}}</button>
+                        </div>
+                        <div class="columns large-12">
+                            <button type="button" class="button secondary-btn-1 thin-btn expand mb0" id="remove_payment_source_btn">{{'Ok'|trans({}, 'frontend-payment-sources')}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</dd>

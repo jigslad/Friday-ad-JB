@@ -1,0 +1,12 @@
+parameters:
+    fa_message.contact_moderation.request_build.class: Fa\Bundle\MessageBundle\Moderation\ContactModerationRequestBuild
+    fa_message_spammer.contact_moderation.request_build.class: Fa\Bundle\MessageBundle\Moderation\ContactModerationReportRequestBuild
+
+services:
+    fa_message.contact_moderation.request_build:
+        class: '%fa_message.contact_moderation.request_build.class%'
+        arguments: ['@service_container']
+
+    fa_message_spammer.contact_moderation.request_build:
+        class: '%fa_message_spammer.contact_moderation.request_build.class%'
+        arguments: ['@service_container']

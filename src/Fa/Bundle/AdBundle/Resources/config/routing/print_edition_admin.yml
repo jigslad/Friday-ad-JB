@@ -1,0 +1,27 @@
+print_edition_admin:
+    path:     /
+    defaults: { _controller: "FaAdBundle:PrintEditionAdmin:index" }
+
+print_edition_new_admin:
+    path:     /new
+    defaults: { _controller: "FaAdBundle:PrintEditionAdmin:new" }
+    options:
+        expose: true
+
+print_edition_create_admin:
+    path:     /create
+    defaults: { _controller: "FaAdBundle:PrintEditionAdmin:create" }
+    requirements: { methods: post }
+
+print_edition_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaAdBundle:PrintEditionAdmin:edit" }
+
+print_edition_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaAdBundle:PrintEditionAdmin:update" }
+    requirements: { methods: post|put }
+
+print_edition_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaAdBundle:PrintEditionAdmin:delete" }

@@ -1,0 +1,91 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% block title %}
+    {{'Edit ad'|trans({}, 'frontend-ad-edit')}}
+{% endblock %}
+
+{% set container = fetch_container_instance() %}
+{% set categoryId = ad.category.id %}
+{% set categoryName = 'Animals' %}
+
+{% use "FaAdBundle:AdImage:showImageUploader.html.twig" %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('imageUploadStylesheets') }}
+{% endblock %}
+
+{% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
+
+{% block body -%}
+    <div class="posting-bg">
+        {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+        <div class="row d-board-main">
+            <div class="off-canvas-wrap" data-offcanvas>
+                <div class="inner-wrap">
+                    {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                    <div id="db-middle-part" class="large-18 columns">
+                        <div id="middle-column">
+                            <a href="{{ path('manage_my_ads_active') }}" class="backto-my-items" title="{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}">{{ 'Back to Manage my ads'|trans({}, 'frontend-ad-edit') }}</a>
+                            <h1 class="text-center paa-title">{{ 'Edit your ad'|trans({}, 'frontend-ad-edit') }} </h1>
+                            <div class="big-wrapper">
+                                <div class="change-category clearfix">
+                                    <div class="cat-name-wrap">
+                                        <span>{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|join('<span class="seperator"></span>')|raw }}
+                                    </div>
+                                </div>
+                                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                                    {{ form_errors(form) }}
+                                    {% set orderedFields = form.paa_ordered_fields.vars.value|split(',') %}
+                                    {% if orderedFields|length  > 0 %}
+                                        {{ include('FaAdBundle:AdEdit:animalsFields.html.twig') }}
+                                    {% endif %}
+                                    <div class="small-wrapper">
+                                        {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand mt30'}}) }}
+                                    </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+{{ include('FaAdBundle:AdEdit:adEditCommonJs.html.twig') }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        updateCharCounter('fa_paa_edit_animals_title');
+        updateCharCounter('fa_paa_edit_animals_personalized_title');
+        bindElementToggleEvent('fa_paa_edit_animals');
+        bindLocationEvents('fa_paa_edit_animals');
+        bindCapsuleButtonEvent('fa_paa_edit_animals', 'ad_type_id', 'radio');
+        bindCapsuleButtonEvent('fa_paa_edit_animals', 'gender_id', 'checkbox');
+    });
+//]]>
+</script>
+{% if (form.breed_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_animals_breed_id', 'placeHolder': ((attribute(form, 'breed_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'breed_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'breed_id_autocomplete').vars.attr.placeholder : ''), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_animals_breed_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.species_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_animals_species_id', 'placeHolder': ((attribute(form, 'species_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'species_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'species_id_autocomplete').vars.attr.placeholder : ''), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_animals_species_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.colour_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_animals_colour_id', 'placeHolder': ((attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'colour_id_autocomplete').vars.attr.placeholder : 'eg. Pink or Blue or Multi coloured'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_edit_animals_colour_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.location_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_edit_animals_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans({}, 'frontend-ad-edit')), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}
+{% endif %}
+
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+{{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+{{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+{{ block('imageUploadJavascriptBottom') }}
+{{ block('googlemap_location_js') }}
+{% endblock %}

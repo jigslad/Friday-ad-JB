@@ -1,0 +1,71 @@
+FaUserBundle_user:
+    resource: '@FaUserBundle/Resources/config/routing/user.yml'
+    prefix:   /
+    
+FaUserBundle_user_address_book:
+    resource: '@FaUserBundle/Resources/config/routing/user_address_book.yml'
+    prefix:   /
+    
+FaUserBundle_user_search_agent:
+    resource: '@FaUserBundle/Resources/config/routing/user_search_agent.yml'
+    prefix:   /search_agent/
+    
+FaUserBundle_mange_my_ad:
+    resource: '@FaUserBundle/Resources/config/routing/mange_my_ad.yml'
+    prefix:   /
+    
+FaUserBundle_testimonials:
+    resource: '@FaUserBundle/Resources/config/routing/testimonials.yml'
+    prefix:   /testimonials/
+    
+FaUserBundle_user_package:
+    resource: '@FaUserBundle/Resources/config/routing/user_package.yml'
+    prefix:   /user/
+    
+FaUserBundle_user_image:
+    resource: '@FaUserBundle/Resources/config/routing/user_image.yml'
+    prefix:   /user_image
+
+FaUserBundle_dashboard:
+    resource: '@FaUserBundle/Resources/config/routing/dashboard.yml'
+    prefix:   /dashboard/
+    
+FaUserBundle_my_profile:
+    resource: '@FaUserBundle/Resources/config/routing/my_profile.yml'
+    prefix:   /my_profile/
+
+FaUserBundle_review:
+    resource: '@FaUserBundle/Resources/config/routing/review.yml'
+    prefix:   /review/
+
+FaUserBundle_my_favourite:
+    resource: '@FaUserBundle/Resources/config/routing/my_favourite.yml'
+    prefix:   /my_favourite/
+    
+FaUserBundle_user_site_image:
+    resource: '@FaUserBundle/Resources/config/routing/user_site_image.yml'
+    prefix:   /user_site_image/
+
+FaUserBundle_review_moderation:
+    resource: '@FaUserBundle/Resources/config/routing/review_moderation.yml'
+    prefix:   /review/moderation
+    
+FaUserBundle_user_site_banner:
+    resource: '@FaUserBundle/Resources/config/routing/user_site_banner.yml'
+    prefix:   /user_site_banner/
+
+FaUserBundle_user_half_account:
+    resource: '@FaUserBundle/Resources/config/routing/user_half_account.yml'
+    prefix:   /half_account
+    
+FaUserBundle_my_credits:
+    resource: '@FaUserBundle/Resources/config/routing/my_credits.yml'
+    prefix:   /my_credits/
+    
+FaUserBundle_competition:
+    resource: '@FaUserBundle/Resources/config/routing/competition.yml'
+    prefix:   /competition/
+    
+FaUserBundle_business_user_moderation:
+    resource: '@FaUserBundle/Resources/config/routing/business_user_moderation.yml'
+    prefix:   /review/business_user

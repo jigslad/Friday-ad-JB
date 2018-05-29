@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="1b5d14f433b3f97fb6d805216ff7901f57510a96" resname="Are you sure that you want to remove this saved search?">
+        <jms:reference-file line="84">views/UserSearchAgent/listSearchAgent.html.twig</jms:reference-file>
+        <source>Are you sure that you want to remove this saved search?</source>
+        <target state="new">Are you sure that you want to remove this saved search?</target>
+      </trans-unit>
+      <trans-unit id="fd5ff20a399671b089f192113f610ad08243494f" resname="Blank title">
+        <jms:reference-file line="103">views/UserSearchAgent/listSearchAgent.html.twig</jms:reference-file>
+        <source>Blank title</source>
+        <target state="new">Blank title</target>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="93">views/UserSearchAgent/listSearchAgent.html.twig</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="016110b88affc1e1436a21f580fd369007259277" resname="My saved searches">
+        <jms:reference-file line="4">views/UserSearchAgent/listSearchAgent.html.twig</jms:reference-file>
+        <source>My saved searches</source>
+        <target state="new">My saved searches</target>
+      </trans-unit>
+      <trans-unit id="9e627c7b1aec05bde6100fab0cc2e420875630ec" resname="New name">
+        <jms:reference-file line="58">views/UserSearchAgent/listSearchAgent.html.twig</jms:reference-file>
+        <source>New name</source>
+        <target state="new">New name</target>
+      </trans-unit>
+      <trans-unit id="b0a98216a32426b9e66a4ac1eb6df2e96e1b495c" resname="Ok">
+        <jms:reference-file line="90">views/UserSearchAgent/listSearchAgent.html.twig</jms:reference-file>
+        <jms:reference-file line="114">views/UserSearchAgent/listSearchAgent.html.twig</jms:reference-file>
+        <source>Ok</source>
+        <target state="new">Ok</target>
+      </trans-unit>
+      <trans-unit id="8c54027e8fc1fe1222e09e73531037aeb019ff04" resname="Problem in deleting saved search.">
+        <jms:reference-file line="333">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <source>Problem in deleting saved search.</source>
+        <target state="new">Problem in deleting saved search.</target>
+      </trans-unit>
+      <trans-unit id="f23696b655904b71b9aa0da79a332895a429970f" resname="Problem in editing saved search.">
+        <jms:reference-file line="376">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <source>Problem in editing saved search.</source>
+        <target state="new">Problem in editing saved search.</target>
+      </trans-unit>
+      <trans-unit id="e963907dac5cd5c017869b4c96c18021c9bd058b" resname="Remove">
+        <jms:reference-file line="27">views/UserSearchAgent/searchAgentDetail.html.twig</jms:reference-file>
+        <source>Remove</source>
+        <target state="new">Remove</target>
+      </trans-unit>
+      <trans-unit id="149fd082ea3c7950e67b0e338950cf52505fc18c" resname="Remove saved search">
+        <jms:reference-file line="79">views/UserSearchAgent/listSearchAgent.html.twig</jms:reference-file>
+        <source>Remove saved search</source>
+        <target state="new">Remove saved search</target>
+      </trans-unit>
+      <trans-unit id="d3f4cb898fbe0c7a7ac4f721438c4c26ad1a2513" resname="Rename">
+        <jms:reference-file line="26">views/UserSearchAgent/searchAgentDetail.html.twig</jms:reference-file>
+        <source>Rename</source>
+        <target state="new">Rename</target>
+      </trans-unit>
+      <trans-unit id="ae305dde31a5ace8cbc5c2ee028691583a70cf56" resname="Rename your saved search">
+        <jms:reference-file line="53">views/UserSearchAgent/listSearchAgent.html.twig</jms:reference-file>
+        <source>Rename your saved search</source>
+        <target state="new">Rename your saved search</target>
+      </trans-unit>
+      <trans-unit id="179359b39edbd0bf0cdf3bb6b7dfb4223f663af2" resname="Save changes">
+        <jms:reference-file line="68">views/UserSearchAgent/listSearchAgent.html.twig</jms:reference-file>
+        <source>Save changes</source>
+        <target state="new">Save changes</target>
+      </trans-unit>
+      <trans-unit id="aa6fc0520a26942f48a266182aabe7a3e04d42f1" resname="Saved search has been deleted successfully..">
+        <jms:reference-file line="327">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <source>Saved search has been deleted successfully..</source>
+        <target state="new">Saved search has been deleted successfully..</target>
+      </trans-unit>
+      <trans-unit id="b9484444a8c8e5c95d6cfa50c7121fddbae86f72" resname="Saved search has been renamed successfully..">
+        <jms:reference-file line="374">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <source>Saved search has been renamed successfully..</source>
+        <target state="new">Saved search has been renamed successfully..</target>
+      </trans-unit>
+      <trans-unit id="3cc658d6259b43621650a106f7cf429775b2f990" resname="Search now">
+        <jms:reference-file line="30">views/UserSearchAgent/searchAgentDetail.html.twig</jms:reference-file>
+        <source>Search now</source>
+        <target state="new">Search now</target>
+      </trans-unit>
+      <trans-unit id="11a837650dcd2d6b07d6bc4ecd223027734093f7" resname="Send me email alerts">
+        <jms:reference-file line="32">views/UserSearchAgent/searchAgentDetail.html.twig</jms:reference-file>
+        <source>Send me email alerts</source>
+        <target state="new">Send me email alerts</target>
+      </trans-unit>
+      <trans-unit id="a3c6f80a9fab742b13897847bc80d5bd8c2129aa" resname="Sorry saved search name can not be blank!!">
+        <jms:reference-file line="108">views/UserSearchAgent/listSearchAgent.html.twig</jms:reference-file>
+        <source>Sorry saved search name can not be blank!!</source>
+        <target state="new">Sorry saved search name can not be blank!!</target>
+      </trans-unit>
+      <trans-unit id="ce9ca7e40699846cda78f8e244d00c8efe1a31b8" resname="This record can not be removed from database because it's reference exists in database.">
+        <jms:reference-file line="330">UserBundle/Controller/UserSearchAgentController.php</jms:reference-file>
+        <source>This record can not be removed from database because it's reference exists in database.</source>
+        <target state="new">This record can not be removed from database because it's reference exists in database.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="6e157c5da4410b7e9de85f5c93026b9176e69064" resname="Create">
+        <jms:reference-file line="101">UserBundle/Form/UserHalfAccountType.php</jms:reference-file>
+        <source>Create</source>
+        <target state="new">Create</target>
+      </trans-unit>
+      <trans-unit id="df120e6736be950bfcc50fcc5923d07877c1256e" resname="Create email alert">
+        <jms:reference-file line="4">views/HalfAccount/create.html.twig</jms:reference-file>
+        <source>Create email alert</source>
+        <target state="new">Create email alert</target>
+      </trans-unit>
+      <trans-unit id="709a23220f2c3d64d1e1d6d18c4d5280f8d82fca" resname="Name">
+        <jms:reference-file line="90">UserBundle/Form/UserHalfAccountType.php</jms:reference-file>
+        <source>Name</source>
+        <target state="new">Name</target>
+      </trans-unit>
+      <trans-unit id="81fb33ba6bcab591c42623a347cbeaab3dd5411a" resname="Save this search">
+        <jms:reference-file line="6">views/HalfAccount/create.html.twig</jms:reference-file>
+        <source>Save this search</source>
+        <target state="new">Save this search</target>
+      </trans-unit>
+      <trans-unit id="3b911c5dd909aff68a5bebc7d7eeb8cae7c0e2f0" resname="You will recieve an alert if we find more ads that match this search.">
+        <jms:reference-file line="10">views/HalfAccount/create.html.twig</jms:reference-file>
+        <source>You will recieve an alert if we find more ads that match this search.</source>
+        <target state="new">You will recieve an alert if we find more ads that match this search.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

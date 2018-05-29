@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {% block title %}
+                {% trans %}Friday Ad{% endtrans %}
+            {% endblock %}
+        </title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset_url('facore/css/main.css') }}" type="text/css" media="all" />
+        {% endblock %}
+        {% block javascripts %}
+        {% endblock %}
+        <link rel="shortcut icon" href="{{ asset_url('facore/images/favicon.ico') }}" />
+    </head>
+    <body>
+        <div id="container">
+            <div id="header">
+                <div class="content">
+                    <h1><a href="">
+                        <img src="{{ asset_url('facore/images/logo.gif') }}" Friday Ad" />
+                    </a></h1>
+                    <div style="text-align:center">
+                    {% if app.user %}
+                        <a href="{{ path('logout') }}">Logout</a>
+                     {% else %}
+                        <a href="{{ path('login') }}">Login</a>&nbsp;
+                        <a href="{{ path('fa_user_register') }}">Register</a>
+                     {% endif %}
+                    </div>
+                </div>
+            </div>
+           <div id="content">
+               {% for flashMessage in app.session.flashbag.get('notice') %}
+                   <div class="flash_notice">
+                       {{ flashMessage }}
+                   </div>
+               {% endfor %}
+               
+               {% for flashMessage in app.session.flashbag.get('success') %}
+                   <div class="flash_notice">
+                       {{ flashMessage }}
+                   </div>
+               {% endfor %}
+
+               {% for flashMessage in app.session.flashbag.get('error') %}
+                   <div class="flash_error">
+                       {{ flashMessage }}
+                   </div>
+               {% endfor %}
+
+               <div class="content">
+                   {% block content %}
+                   {% endblock %}
+               </div>
+           </div>
+
+           <div id="footer">
+               
+           </div>
+       </div>
+   </body>
+</html>

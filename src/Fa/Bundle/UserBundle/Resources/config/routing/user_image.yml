@@ -1,0 +1,39 @@
+user_image_upload:
+    path:     /image_upload
+    defaults: { _controller: FaUserBundle:Default:index }
+
+ajax_user_image_save:
+    path:     /ajax/save_image
+    defaults: { _controller: FaUserBundle:UserImage:ajaxSaveUploadedImage }
+
+ajax_get_user_image:
+    path:     /ajax/get_image
+    defaults: { _controller: FaUserBundle:UserImage:ajaxRenderUploadedImage }
+
+ajax_delete_user_image:
+    path:     /ajax/delete_image/{userId}/{isCompany}
+    defaults: { _controller: FaUserBundle:UserImage:ajaxDeleteImage }
+    
+ajax_get_profile_big_image:
+    path:     /ajax/get_profile_big_image/{userId}/{isCompany}
+    defaults: { _controller: FaUserBundle:UserImage:ajaxGetProfileBigImage }
+    
+ajax_crop_profile_image:
+    path:     /ajax/crop_profile_image/{userId}/{isCompany}
+    defaults: { _controller: FaUserBundle:UserImage:ajaxCropProfileImage }
+
+ajax_render_user_image_uploader:
+    path:     /ajax/render_user_image_uploader/{userId}/{isCompany}
+    defaults: { _controller: FaUserBundle:UserImage:renderUserImageUploader }
+
+ajax_get_profile_big_image_registration:
+    path:     /ajax/get_profile_big_image_registration/{userId}/{isCompany}
+    defaults: { _controller: FaUserBundle:UserImage:ajaxGetProfileBigImageRegistration }
+
+ajax_crop_profile_image_registration:
+    path:     /ajax/crop_profile_image_registration/{userId}/{isCompany}
+    defaults: { _controller: FaUserBundle:UserImage:ajaxCropProfileImageRegistration }
+
+ajax_remove_temp_user_image:
+    path:     /ajax/remove_temp_user_image
+    defaults: { _controller: FaUserBundle:UserImage:ajaxRemoveTempUserImage }

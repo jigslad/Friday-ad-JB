@@ -1,0 +1,7 @@
+{% set container = fetch_container_instance() %}
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+{% set adRepository = fetch_repository('FaAdBundle:Ad') %}
+{% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+{% for ad in ads %}
+    {{ include('FaAdBundle:AdList:listDetail.html.twig', {'fromSimilarAdverts': 1}) }}
+{% endfor %}

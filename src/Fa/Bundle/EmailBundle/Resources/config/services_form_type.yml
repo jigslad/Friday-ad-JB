@@ -1,0 +1,30 @@
+parameters:
+    fa_email.form.type.email_template_search_admin.class: Fa\Bundle\EmailBundle\Form\EmailTemplateSearchAdminType
+    fa_email.form.type.email_template_admin.class: Fa\Bundle\EmailBundle\Form\EmailTemplateAdminType
+    fa_email.form.type.email_template_schedule_admin.class: Fa\Bundle\EmailBundle\Form\EmailTemplateScheduleAdminType
+    fa_email.form.type.email_template_params_admin.class: Fa\Bundle\EmailBundle\Form\EmailTemplateParamsAdminType
+
+services:
+    fa_email.form.type.email_template_search_admin:
+        class: '%fa_email.form.type.email_template_search_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_email_template_email_template_search_admin }
+            
+    fa_email.form.type.email_template_admin:
+        class: '%fa_email.form.type.email_template_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_email_template_email_template_admin }
+            
+    fa_email.form.type.email_template_schedule_admin:
+        class: '%fa_email.form.type.email_template_schedule_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_email_template_email_template_schedule_admin }
+
+    fa_email.form.type.email_template_params_admin:
+        class: '%fa_email.form.type.email_template_params_admin.class%'
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_email_template_email_template_params_admin }

@@ -1,0 +1,21 @@
+message_attachments_upload:
+    path:     /attachment_upload
+    defaults: { _controller: FaMessageBundle:Default:index }
+
+ajax_message_attachments_save:
+    path:     /ajax/save_attachments
+    defaults: { _controller: FaMessageBundle:AdMessageAttachments:ajaxSaveUploadedAttachments }
+
+ajax_get_message_attachments:
+    path:     /ajax/get_attachments
+    defaults: { _controller: FaMessageBundle:AdMessageAttachments:ajaxRenderUploadedAttachments }
+
+ajax_delete_message_attachments:
+    path:     /ajax/delete_attachments/{messageId}/{attachmentId}/{attachmentHash}
+    defaults: { _controller: FaMessageBundle:AdMessageAttachments:ajaxDeleteAttachment }
+
+ajax_download_message_attachments:
+    path:     /ajax/download_attachments
+    defaults: { _controller: FaMessageBundle:AdMessageAttachments:ajaxDownloadMessageAttachments }
+    options:
+        expose: true

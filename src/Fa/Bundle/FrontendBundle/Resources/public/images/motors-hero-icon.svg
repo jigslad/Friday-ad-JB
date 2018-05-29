@@ -1,0 +1,36 @@
+<svg xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0" y="0" width="56" height="56" viewBox="-371 208 56 56" xml:space="preserve" enable-background="new -371 208 56 56">
+  <style type="text/css">
+    
+	.st0{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,4;}
+	.st1{fill:#EFEFEF;}
+
+  </style>
+  <title>
+    Motors-hero-icon
+  </title>
+  <desc>
+    Created with Sketch.
+  </desc>
+  <g id="landing-page" sketch:type="MSPage">
+    <g id="Desktop---landing-Page-Motors" transform="translate(-691.000000, -182.000000)" sketch:type="MSArtboardGroup">
+      <g id="Hero" transform="translate(-280.000000, -200.000000)" sketch:type="MSLayerGroup">
+        <g id="p-_x2B_-for-sale-active-2-_x2B_-For-sale-_x2B_-Line" transform="translate(682.000000, 383.000000)" sketch:type="MSShapeGroup">
+          <g id="for-sale-active-2-_x2B_-For-sale" transform="translate(200.000000, 0.000000)">
+            <g id="Motors-hero-icon">
+              <g transform="translate(90.000000, 0.000000)">
+                <path id="Stroke-6" class="st0" d="M-319.9 246.6c1.7-3.5 2.6-7.4 2.6-11.5 0-14.6-11.9-26.5-26.5-26.5 -14.6 0-26.5 11.9-26.5 26.5 0 11.4 7.2 21.1 17.4 24.9 2.9 1.1 5.9 1.6 9.1 1.6C-333.3 261.6-324.2 255.5-319.9 246.6z"/>
+                <g id="sofa-2" transform="translate(9.721704, 13.834868)">
+                  <g id="Imported-EPS" transform="translate(0.224540, 0.717514)">
+                    <g id="Page-1">
+                      <path id="Fill-1" class="st1" d="M-342.9 219.4l-22.4 0 2-8.9c0 0 4.6-1 9.2-1 4.6 0 9.2 1 9.2 1L-342.9 219.4 -342.9 219.4zM-340.9 214l0 4h-0.5l-1.5-8.9c0 0-5.6-1-11.2-1 -5.6 0-11.2 1-11.2 1l-1.5 8.9h-0.5l0-4h-2c-0.6 0-1 0.4-1 1v4c0 0.6 0.4 0.9 1 0.9l2 0.1 0.2 0 -0.2 1c-1.1 0-2 0.9-2 2l0 4.9c0 1.1 0.9 2 2 2l0 1.9c0 0.6 0.5 1.1 1 1.1l3.1 0c0.6 0 1-0.5 1-1.1v-1.9l16.3 0v1.9c0 0.6 0.5 1.1 1 1.1l3.1 0c0.6 0 1-0.5 1-1.1v-1.9c1.1 0 2-0.9 2-2l0-4.9c0-1.1-0.9-2-2-2l-0.2-1h0.2l2-0.1c0.6 0 1.1-0.3 1.1-0.9v-4c0-0.6-0.4-1-1-1H-340.9zM-363.7 223.3c1.1 0 2 0.9 2 1.9 0 1.1-0.9 1.9-2 1.9 -1.1 0-2-0.9-2-1.9C-365.6 224.2-364.8 223.3-363.7 223.3zM-344.6 223.3c1.1 0 2 0.9 2 1.9 0 1.1-0.9 1.9-2 1.9 -1.1 0-2-0.9-2-1.9C-346.5 224.2-345.7 223.3-344.6 223.3z"/>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

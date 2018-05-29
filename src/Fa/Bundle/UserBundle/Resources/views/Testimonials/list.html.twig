@@ -1,0 +1,79 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block title %}
+    {{'Testimonials'|trans({}, 'frontend-testimonials')}}
+{% endblock %}
+
+{% set container = fetch_container_instance() %}
+
+{% block body -%}
+    <div class="testimonial-heading">
+       <h1 class="text-center">{{'Testimonials'|trans({}, 'frontend-testimonials')}}</h1>
+       <h2 class="text-center">{{'Here are the latest testimonials from people like you'|trans({}, 'frontend-testimonials')}}</h2>
+    </div>
+    <div class="testimonial-main">
+        <div class="row" id="testimonials_list_id">
+            <div class="large-17 columns">
+                {% if pagination.getNbResults() %}
+                    <ul class="testimonial-list">
+                        {% for testimonial in pagination.getCurrentPageResults() %}
+                            <li>
+                                <span class="testimonial-icon"></span>{{ testimonial['comment']|raw }}
+                                <h5>{% if testimonial['user_name'] %}{{testimonial['user_name']}}, {% endif%}{{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [testimonial['created_at'], container]) }}</h5>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    {{ 'No records found.'|trans({}, 'frontend-testimonials') }}
+                {% endif %}
+                <div class="pagination-centered">
+                    {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 0, 'seoPager': false}) }}
+                </div>
+           </div>
+           <div class="large-7 columns">
+               <div class="send-comment">
+                   <button class="primary-btn-2 button expand" onclick="return addTestimonial();">{{'Send us your comment'|trans({}, 'frontend-testimonials')}}</button>
+               </div>
+           </div>
+        </div>
+    </div>
+    <div id="addTestimonialModal" class="reveal-modal small" data-reveal></div>
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        {% if app.user and app.request.cookies.has('add_testimonial_flag') and app.request.cookies.has('add_testimonial_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.cookies.get('add_testimonial_flag') %}
+            addTestimonial();
+        {% endif %}
+    });
+
+    function addTestimonial()
+    {
+        blockPage();
+        $.ajax({
+            type: "GET",
+            url : '{{ path('add_testimonial') }}',
+            data : {'redirectUrl': '{{app.request.getUri()}}'},
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            hideAlertMessage();
+            if (response.htmlContent.length) {
+                $('#addTestimonialModal').html(response.htmlContent);
+                $('#addTestimonialModal').foundation('reveal', 'open');
+            } else if (response.error.length) {
+                $('#testimonials_list_id').prepend(decorateMessage(response.error, 'alert'));
+                scrollToElement('#testimonials_list_id', '1000', -150);
+            } else if (response.redirectToUrl.length) {
+                window.location.href = response.redirectToUrl;
+            }
+        });
+    }
+    //]]>
+    </script>
+{% endblock %}

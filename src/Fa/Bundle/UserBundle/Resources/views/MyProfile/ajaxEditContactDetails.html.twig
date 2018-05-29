@@ -1,0 +1,86 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title">{{'Edit contact details'|trans({}, 'frontend-my-profile')}}</h5>
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'edit_contact_details_id'}}) }}
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <div>
+                    {{ form_label(form.company_address) }}
+                    <div class="company-address">
+                        <span></span>
+                        {{ form_widget(form.company_address, {'attr': {'placeholder': 'eg. King House 101 Sunshine Road, Burgess Hill, West Sussesx, NH22 8LN'|trans({}, 'frontend-my-profile')}}) }}
+                        {{ form_errors(form.company_address) }}
+                    </div>
+                </div>
+                
+                <div class="mt30 profile-telephone">
+                    <label>{{'Telephone(s)'|trans({}, 'frontend-my-profile')}}</label>
+                    {% if form.phone1.vars.errors|length %}
+                        {{ form_errors(form.phone1) }}
+                    {% elseif form.phone2.vars.errors|length %}
+                        {{ form_errors(form.phone2) }}
+                    {% endif %}
+                    <div class="field-300 telephone-icon">
+                        <span></span>
+                        {{ form_widget(form.phone1, {'attr': {'placeholder': 'Telephone 1'|trans({}, 'frontend-my-profile')}}) }}
+                    </div>
+                    <div class="field-300 telephone-icon">
+                        <span></span>
+                        {{ form_widget(form.phone2, {'attr': {'placeholder': 'Telephone 2'|trans({}, 'frontend-my-profile')}}) }}
+                    </div>
+                </div>
+                
+                <div class="mt30">
+                    {{ form_label(form.website_link) }}
+                    <div class="company-website">
+                        <span></span>
+                        {{ form_widget(form.website_link, {'attr': {'placeholder': 'eg. http://www.yourwebsitename.co.uk'|trans({}, 'frontend-my-profile')}}) }}
+                        {{ form_errors(form.website_link) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#profileEditModal');;">{{'Cancel'|trans({}, 'frontend-my-profile')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+    });
+    $("#edit_contact_details_id").submit(function(event) {
+        blockElement('#profileEditModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{path('ajax_edit_contact_details')}}",
+            data: $("#edit_contact_details_id").serialize()
+        })
+        .always(function(response) {
+            unblockElement('#profileEditModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#profileEditModal').html(response.htmlContent);
+            } else {
+                $('#business_address_detail_div').html(response.successContent);
+                $('#profileEditModal').foundation('reveal', 'close');
+                $('#business_address_detail_div').notify('{{'Contact details edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
+                scrollToElement('#business_address_detail_div', '1000', -150);
+            }
+        });
+    });
+//]]>
+</script>

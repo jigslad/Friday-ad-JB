@@ -1,0 +1,70 @@
+imports:
+    - { resource: config.yml }
+
+#framework:
+#    validation:
+#        cache: apc
+
+#doctrine:
+#    orm:
+#        metadata_cache_driver: apc
+#        result_cache_driver: apc
+#        query_cache_driver: apc
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: error
+            handler:      nested
+        nested:
+            type:  stream
+            path:  '%kernel.logs_dir%/%kernel.environment%.log'
+            level: debug
+        console:
+            type:  console
+
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                driver:   '%database_driver%'
+                host:     '%database_host%'
+                port:     '%database_port%'
+                dbname:   '%database_name%'
+                user:     '%database_user%'
+                password: '%database_password%'
+                charset:  UTF8
+                # if using pdo_sqlite as your database driver, add the path in parameters.yml
+                # e.g. database_path: '%kernel.root_dir%/data/data.db3'
+                # path:     '%database_path%'
+                slaves:
+                    # a collection of named slave connections (e.g. slave1, slave2)
+                    slave1:
+                        host:     '%database_host_slave1%'
+                        port:     '%database_port_slave1%'
+                        dbname:   '%database_name_slave1%'
+                        user:     '%database_user_slave1%'
+                        password: '%database_password_slave1%'
+                        charset:  UTF8
+            history:
+                driver:   '%database_driver_history%'
+                host:     '%database_host_history%'
+                port:     '%database_port_history%'
+                dbname:   '%database_name_history%'
+                user:     '%database_user_history%'
+                password: '%database_password_history%'
+                charset:  UTF8
+                # if using pdo_sqlite as your database driver, add the path in parameters.yml
+                # e.g. database_path: '%kernel.root_dir%/data/data.db3'
+                # path:     '%database_path%'
+                slaves:
+                    # a collection of named slave connections (e.g. slave1, slave2)
+                    slave1:
+                        host:     '%database_host_history_slave1%'
+                        port:     '%database_port_history_slave1%'
+                        dbname:   '%database_name_history_slave1%'
+                        user:     '%database_user_history_slave1%'
+                        password: '%database_password_history_slave1%'
+                        charset:  UTF8

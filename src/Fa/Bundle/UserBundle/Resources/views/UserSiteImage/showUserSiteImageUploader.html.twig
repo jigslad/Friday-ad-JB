@@ -1,0 +1,360 @@
+{% block userSiteImageUploadStylesheets %}
+    {{ set_variables('userSiteImageUploadStylesheets', {'loaded':'true'}) }}
+    {% if not get_variables('userSiteBannerUpload')|length %}
+        <link href="{{ asset_url('facore/css/jquery.guillotine.css') }}" rel="stylesheet">
+    {% endif %}
+{% endblock %}
+
+{% block userSiteImageUploadHtml %}
+{{ set_variables('UserSiteImageUpload', {'userSiteId':userSiteId}) }}
+<div>
+    <div id="userSiteFilelist"></div>
+    <input type="hidden" name="userSiteMaxFileRemain" id="userSiteMaxFileRemain" value="{{imageLimitRemaining}}" />
+</div>
+<div id="user_site_uploaded_images_div">
+    {{ include('FaUserBundle:UserSiteImage:renderUploadedUserSiteImage.html.twig', {'userSiteId': userSiteId}) }}
+</div>
+<div id="user_site_crop_big_image_div"></div>
+{% endblock %}
+
+{% block userSiteImageUploadJavascriptBottom %}
+    {% set container = fetch_container_instance() %}
+    {% set isAdminLoggedIn = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isAdminLoggedIn', [fetch_container_instance()]) %}
+    {% set userSiteImageUploadJavascriptBottomVariables = get_variables('userSiteImageUploadJavascriptBottom') %}
+    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    {% if userSiteImageUploadJavascriptBottomVariables.loaded is defined and userSiteImageUploadJavascriptBottomVariables.loaded == 'true' %}
+        {% set container = fetch_container_instance() %}
+        {% set variables = get_variables('UserSiteImageUpload') %}
+        {% set userSiteId = (variables.userSiteId is defined ? variables.userSiteId : 0) %}
+        {% set maxFileSize = container.getParameter("fa.image.user.site.allow_size_in_mb")~' mb' %}
+        {% if not get_variables('userSiteBannerUpload')|length %}
+            {% javascripts filter='uglifyjs2' output='bundles/js/compiled/showUserSiteImageUploader.js'
+                'bundles/facore/js/jquery.guillotine.min.js'
+                'bundles/facore/js/plupload.full.min.js'
+            %}
+            <script src="{{ static_asset_url(asset_url) }}"></script>
+            {% endjavascripts %}
+        {% endif %}
+        <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function(){
+            initUserSiteImageUpload(true);
+            makeUserSiteImagesSortable();
+        });
+
+        function initUserSiteImageUpload(removeuserSiteFilelist)
+        {
+            if ($('.pickfiles').length > 0) {
+                $('.pickfiles').each(function(e) {
+                    var mainUploader = setUpUserSiteImageUploader($(this).attr('id'), removeuserSiteFilelist);
+                    mainUploader.init();
+                });
+            } else if (removeuserSiteFilelist) {
+                $('#userSiteFilelist').html('');
+            }
+        }
+        function setUpUserSiteImageUploader(id, removeuserSiteFilelist)
+        {
+            var errorFlag = false;
+            var imageLimitRemaining = 0;
+            var userSiteId = '{{userSiteId}}';
+            var isMultiSelect = true;
+            var isMobile = '{{ mobileDetectManager.isMobile() }}'
+            var isTablet = '{{ mobileDetectManager.isTablet() }}'
+            if (isMobile || isTablet)
+                isMultiSelect = false;
+            var uploader = new plupload.Uploader({
+                runtimes : 'html5,flash,silverlight,html4',
+                unique_names :true,
+                multi_selection : isMultiSelect,
+                multipart : true,
+                browse_button : id, // you can pass in id...
+                url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_user_site_image_save_admin") }}' {% else %} '{{ path("ajax_user_site_image_save") }}' {% endif %},
+                multipart_params : {'fa_user_user_site_image[userSiteId]' :userSiteId},
+                file_data_name : 'fa_user_user_site_image[fileData]',
+                flash_swf_url : '{{asset_url('facore/js/Moxie.swf')}}',
+                silverlight_xap_url : '{{ asset_url('facore/js/Moxie.xap')}}',
+
+                filters : {
+                    max_file_size : '{{container.getParameter("fa.image.user.site.allow_size_in_mb")}}mb',
+                    mime_types:
+                    [
+                        {title : '{{"Image files"|trans({}, 'frontend-my-profile')}}', extensions : "jpg,jpeg,png,bmp,gif,JPG,JPEG,PNG,BMP,GIF"},
+                    ]
+                },
+
+                init: {
+                    PostInit: function() {
+                        if (removeuserSiteFilelist)
+                            $('#userSiteFilelist').html('');
+                    },
+                    FilesAdded: function(up, files, response) {
+                        errorFlag = false;
+                        imageLimitRemaining = $("#userSiteMaxFileRemain").val();
+                        if(up.files.length > parseInt($("#userSiteMaxFileRemain").val()))
+                        {
+                            uploader.splice();
+                            $('#userSiteFilelist').html('');
+                            $('#userSiteFilelist').html(decorateMessage("{{ 'The maximum image upload limit remains is '|trans({}, 'frontend-my-profile') }}" + $("#userSiteMaxFileRemain").val(), 'alert'));
+                            return false;
+                        }
+                        else
+                        {
+                            uploader.start();
+                            $('#userSiteFilelist').html("<div class='row'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Uploading image please wait... '|trans({}, 'frontend-my-profile') }}</div>");
+                            $('.save_data').attr('disabled', true);
+                         }
+                    },
+                    FileUploaded: function(up, file, response) {
+                        var obj = $.parseJSON(response.response);
+                        if (obj.error.length) {
+                            errorFlag = true;
+                            $('#userSiteFilelist').html(decorateMessage(obj.error, 'alert'));
+                        }
+                        $('#userSiteMaxFileRemain').val(obj.imageLimitRemaining);
+                    },
+                    UploadComplete: function(up, file) {
+                        if (!errorFlag && imageLimitRemaining != $('#userSiteMaxFileRemain').val()) {
+                            $('#userSiteFilelist').html(decorateMessage(up.files.length+ " {{'Photo(s) uploaded successfully.'|trans({}, 'frontend-my-profile') }}", 'success'));
+                        } else if(errorFlag)  {
+                            $('#userSiteFilelist').html(decorateMessage('{{'Problem in image upload.'|trans({}, 'frontend-my-profile')}}', 'alert'));
+                        }
+                        uploader.splice();
+                        getUserSiteImages();
+                        $('.save_data').attr('disabled', false);
+                    },
+                    Error: function(up, err) {
+                       msg = err.message;
+                       if (msg == 'Init error.') {
+                           msg = "{{'Your browser does not have Flash, Silverlight or HTML5 support.'|trans({}, 'frontend-my-profile')}}";
+                       } else if (msg == 'File size error.') {
+                           msg = "{{'The size of image should not be greater than %max_file_size%.'|trans({'%max_file_size%' : (maxFileSize)}, 'frontend-paa')}}";
+                       } else if (msg == 'File extension error.') {
+                           msg = "{{'Image type must be one of the jpg, jpeg, png, gif, bmp.'|trans({}, 'frontend-paa')}}";
+                       }
+                       $('#userSiteFilelist').html(decorateMessage(msg, 'alert'));
+                    }
+                }
+            });
+            return uploader;
+        }
+
+        function getUserSiteImages(cache)
+        {
+            blockElement('#user_site_uploaded_images_div');
+            if (typeof cache == 'undefined') {
+                cache = false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_get_user_site_images_admin") }}' {% else %} '{{ path("ajax_get_user_site_images") }}' {% endif %},
+                data: { userSiteId: '{{userSiteId}}', 'cache': cache}
+            })
+            .always(function(response) {
+                unblockElement('#user_site_uploaded_images_div');
+            })
+            .done(function(response) {
+                $('#user_site_uploaded_images_div').html(response.images);
+                makeUserSiteImagesSortable();
+                initUserSiteImageUpload(false);
+                $('.upload-thumb-img').click(function(e){
+                    $('#user_site_uploaded_images_div').siblings('small.error').html('');
+                });
+            });
+        }
+
+        function deleteUserSiteImage(url)
+        {
+            blockElement('#user_site_uploaded_images_div');
+            $.ajax({
+                type: "POST",
+                url: url,
+            })
+            .always(function(response) {
+                unblockElement('#user_site_uploaded_images_div');
+            })
+            .done(function(response) {
+                if (response.error.length) {
+                    $('#userSiteFilelist').html(decorateMessage(response.error, 'alert'));
+                }
+                if (response.successMsg.length) {
+                    $('#userSiteFilelist').html(decorateMessage(response.successMsg, 'success'));
+                    $('#user_site_uploaded_images_div').html(response.images);
+                    $('#userSiteMaxFileRemain').val(response.imageLimitRemaining);
+                    makeUserSiteImagesSortable();
+                    initUserSiteImageUpload(false);
+                }
+            });
+        }
+
+        function getUserSiteOriginalImage(url)
+        {
+            blockElement('#user_site_uploaded_images_div');
+            $.ajax({
+                type: "POST",
+                url: url,
+                async: false,
+                cache: false,
+            })
+            .always(function(response) {
+                unblockElement('#user_site_uploaded_images_div');
+            })
+            .done(function(response) {
+                if (response.error.length) {
+                    $('#userSiteFilelist').html(decorateMessage(response.error, 'alert'));
+                }
+                if (response.image.length) {
+                    $('#user_site_crop_big_image_div').html(response.image);
+                    $('#user_site_uploaded_images_div').hide();
+                    $( "#user_site_crop_big_image" ).load(function() {
+                        $('#crop_image').show();
+                        var picture = $('#user_site_crop_big_image');
+                        picture.guillotine({
+                          width: 800,
+                          height: 600,
+                          zoomStep: 0.2,
+                          onChange: function(data, action){
+                            data.scale = parseFloat(data.scale.toFixed(4));
+                            for(var k in data) { $('#'+k).val(data[k]); }
+                          }
+                        });
+
+                        // Initialize plugin (with custom event)
+                        picture.guillotine({eventOnChange: 'guillotinechange'});
+                        picture.guillotine('fit');
+
+                        // Display inital data
+                        var data = picture.guillotine('getData');
+                        for(var k in data) { $('#'+k).val(data[k]); }
+                        // Bind button actions
+                        $('#rotate').click(function(){ picture.guillotine('rotateRight'); });
+                        $('#fit').click(function(){ picture.guillotine('fit'); });
+                        $('#zoom_in').click(function(){ picture.guillotine('zoomIn'); });
+                        $('#zoom_out').click(function(){ picture.guillotine('zoomOut'); });
+                        scrollToElement('#user_site_crop_big_image_div', '1000', -150);
+                    });
+
+                    $('#crop_close').click(function(){
+                        $('#user_site_crop_big_image_div').html('');
+                        $('#user_site_uploaded_images_div').show();
+                        getUserSiteImages(true);
+                        scrollToElement('#user_site_uploaded_images_div', '1000', -150);
+                    });
+                    $('#remove_img').click(function(){
+                        $('#user_site_crop_big_image_div').html('');
+                        $('#user_site_uploaded_images_div').show();
+                        scrollToElement('#user_site_uploaded_images_div', '1000', -150);
+                    });
+                    $('#make_main_photo').click(function(){
+                        $('#user_site_crop_big_image_div').html('');
+                        $('#user_site_uploaded_images_div').show();
+                        scrollToElement('#user_site_uploaded_images_div', '1000', -150);
+                    });
+                }
+            });
+        }
+
+        function cropUserSiteImage(url)
+        {
+            blockElement('#user_site_crop_big_image_div');
+            var imgParams = '';
+            $('.cropImg').each(function(e){
+                imgParams += $(this).attr('name')+ '=' +$(this).val() + '&'
+            });
+            imgParams = imgParams.slice(0,-1);
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: imgParams
+            })
+            .always(function(response) {
+                unblockElement('#user_site_crop_big_image_div');
+            })
+            .done(function(response) {
+                if (response.error.length) {
+                    $('#userSiteFilelist').html(decorateMessage(response.error, 'alert'));
+                    initUserSiteImageUpload(false);
+                }
+                if (response.successMsg.length) {
+                    $('#userSiteFilelist').html(decorateMessage(response.successMsg, 'success'));
+                    $('#user_site_crop_big_image_div').html('');
+                    $('#user_site_uploaded_images_div').show();
+                    getUserSiteImages();
+                }
+                scrollToElement('#user_site_uploaded_images_div', '1000', -150);
+            });
+        }
+
+        function makeUserSiteImagesSortable()
+        {
+            $('#userSiteImageList').sortable({
+                containment: 'parent',
+                items: "li:not(.ui-sortable-disabled)",
+                tolerance:"pointer"
+            });
+            $('#userSiteImageList').disableSelection();
+            $('#userSiteImageList').on("sortupdate", function(event, ui) {
+                var order = {};
+                var count = 0;
+
+                $('#userSiteImageList li').each( function(e) {
+                    order[$(this).attr('id')] = $(this).index() + 1;
+                    count = count + 1;
+                });
+
+                if (count > 0) {
+                    blockElement('#user_site_uploaded_images_div');
+                    $.ajax({
+                        url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_change_user_site_image_order_admin", {"userSiteId": userSiteId}) }}' {% else %} '{{ path("ajax_change_user_site_image_order", {"userSiteId": userSiteId}) }}' {% endif %},
+                        type: 'POST',
+                        data:  {'orders': JSON.stringify(order)},
+                        cache: false,
+                        success: function(response) {
+                            unblockElement('#user_site_uploaded_images_div');
+                            if (response.error.length) {
+                                $('#userSiteFilelist').html(decorateMessage(response.error, 'alert'));
+                                getUserSiteImages();
+                            }
+                            if (response.successMsg.length) {
+                                $('#userSiteFilelist').html(decorateMessage(response.successMsg, 'success'));
+                            }
+                        }
+                    });
+                } else {
+                    getUserSiteImages();
+                }
+            });
+        }
+
+        function makeUserSiteMainPhoto(imageId, imageOrd)
+        {
+            if (imageOrd > 1)
+            {
+                blockElement('#user_site_uploaded_images_div');
+                var imageNewOrd = 1;
+                $.ajax({
+                    url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_user_site_make_main_image_admin", {"userSiteId": userSiteId}) }}' {% else %} '{{ path("ajax_user_site_make_main_image", {"userSiteId": userSiteId}) }}' {% endif %},
+                    type: 'POST',
+                    data:  {'imageId': imageId, 'imageOrd': imageOrd, 'imageNewOrd' : imageNewOrd},
+                    cache: false,
+                    success: function(response) {
+                        unblockElement('#user_site_uploaded_images_div');
+                        if (response.error.length) {
+                            $('#userSiteFilelist').html(decorateMessage(response.error, 'alert'));
+                            getUserSiteImages();
+                        }
+                        if (response.successMsg.length) {
+                            $('#userSiteFilelist').html(decorateMessage(response.successMsg, 'success'));
+                            getUserSiteImages();
+                        }
+                        scrollToElement('#user_site_uploaded_images_div', '1000', -150);
+                    }
+                });
+            }
+        }
+        //]]>
+        </script>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2015-07-09T16:40:28Z" source-language="en" target-language="en_GB" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="88d41938ac0d6e56921c2723aea452e2b318d43f" resname="Address line 2">
+        <jms:reference-file line="89">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>Address line 2</source>
+        <target state="new">Address line 2</target>
+      </trans-unit>
+      <trans-unit id="77dfd2135f4db726c47299bb55be26f7f4525a46" resname="Cancel">
+        <jms:reference-file line="172">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>Cancel</source>
+        <target state="new">Cancel</target>
+      </trans-unit>
+      <trans-unit id="7853ef76b50d432e6a0483c5fae2b84ca276f004" resname="Card number (no dashes or spaces)">
+        <jms:reference-file line="138">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>Card number (no dashes or spaces)</source>
+        <target state="new">Card number (no dashes or spaces)</target>
+      </trans-unit>
+      <trans-unit id="7904cec68be19b432c8bd2b49162896900f979c8" resname="Cardholder name (as it appears on your card)">
+        <jms:reference-file line="129">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>Cardholder name (as it appears on your card)</source>
+        <target state="new">Cardholder name (as it appears on your card)</target>
+      </trans-unit>
+      <trans-unit id="6b440cd5068018a3303145563b2440098d7c3f0f" resname="Expiry date">
+        <jms:reference-file line="156">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>Expiry date</source>
+        <target state="new">Expiry date</target>
+      </trans-unit>
+      <trans-unit id="cbcf5311fa1d49a5a908bf395bd55976540bfc71" resname="House name/number">
+        <jms:reference-file line="80">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>House name/number</source>
+        <target state="new">House name/number</target>
+      </trans-unit>
+      <trans-unit id="082bc378cd60e17a38d99898b21955299c5b60c8" resname="Month">
+        <jms:reference-file line="157">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>Month</source>
+        <target state="new">Month</target>
+      </trans-unit>
+      <trans-unit id="055c3be8eec93d5965a50d6abd8c44e6e05ce5b4" resname="New card added successfully.">
+        <jms:reference-file line="239">UserBundle/Controller/MyAccountController.php</jms:reference-file>
+        <source>New card added successfully.</source>
+        <target state="new">New card added successfully.</target>
+      </trans-unit>
+      <trans-unit id="ee6772287efd23c6c54d2af00d25c671387f712f" resname="Payment source has been deleted successfully.">
+        <jms:reference-file line="304">PaymentBundle/Controller/CyberSourceCheckoutController.php</jms:reference-file>
+        <source>Payment source has been deleted successfully.</source>
+        <target state="new">Payment source has been deleted successfully.</target>
+      </trans-unit>
+      <trans-unit id="ef4d9e9996380a637ea62ef2e2abf57749783b5e" resname="Postcode">
+        <jms:reference-file line="98">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>Postcode</source>
+        <target state="new">Postcode</target>
+      </trans-unit>
+      <trans-unit id="90be2f46a45091c10881ddf425e1a06bf271d2ac" resname="Save this card">
+        <jms:reference-file line="171">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>Save this card</source>
+        <target state="new">Save this card</target>
+      </trans-unit>
+      <trans-unit id="a9bbfb3cdd5ba146bcc46026d0ebb63335274374" resname="Security code (3 digits on the back of the card)">
+        <jms:reference-file line="147">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>Security code (3 digits on the back of the card)</source>
+        <target state="new">Security code (3 digits on the back of the card)</target>
+      </trans-unit>
+      <trans-unit id="b0bbe5fc91d3155c652d3c9c6ba4131732a383cc" resname="State/county">
+        <jms:reference-file line="117">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>State/county</source>
+        <target state="new">State/county</target>
+      </trans-unit>
+      <trans-unit id="cc55bbe190859d77c3e0883e8aa064afd3a34ae2" resname="Town/city">
+        <jms:reference-file line="107">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>Town/city</source>
+        <target state="new">Town/city</target>
+      </trans-unit>
+      <trans-unit id="879e32326c5217968ac8e3a14e4a8a5214957264" resname="Year">
+        <jms:reference-file line="166">UserBundle/Form/UserCardType.php</jms:reference-file>
+        <source>Year</source>
+        <target state="new">Year</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

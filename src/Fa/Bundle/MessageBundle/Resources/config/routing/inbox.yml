@@ -1,0 +1,69 @@
+user_ad_message:
+    path:     /inbox/user_ad_message/
+    defaults: { _controller: FaMessageBundle:AdMessage:userAdMessage, type: receiver }
+    requirements:
+        type:  'receiver'
+    
+user_interested_ad_message:
+    path:     /inbox/user_interested_ad_message/
+    defaults: { _controller: FaMessageBundle:AdMessage:userAdMessage, type: sender }
+    requirements:
+        type:  'sender'
+    
+user_ad_message_reply:
+    path:     /inbox/reply/{type}/{replyId}/
+    defaults: { _controller: FaMessageBundle:AdMessage:userAdMessageReply }
+    requirements:
+        type:  'sender|receiver|all'
+
+user_ad_message_reply_email:
+    path:     /inbox/reply/email/{replyId}/
+    defaults: { _controller: FaMessageBundle:AdMessage:userAdMessageReplyEmail }
+
+ajax_user_ad_message_reply_save:
+    path:     /ajax/inbox/reply/save/
+    defaults: { _controller: FaMessageBundle:AdMessage:ajaxUserAdMessageReplySave }
+    
+download_message_attachment:
+    path:     /inbox/download_attachment/{messageId}
+    defaults: { _controller: FaMessageBundle:AdMessage:downloadMessageAttachment }
+    options:
+        expose: true
+
+user_ad_message_all:
+    path:     /inbox/user_ad_message_all/
+    defaults: { _controller: FaMessageBundle:AdMessage:userAdMessage, type: all }
+    requirements:
+        type:  'all'
+    options:
+        expose: true
+
+ajax_user_ad_message_mark_as_sold:
+    path:     /ajax/inbox/mark_as_sold/
+    defaults: { _controller: FaMessageBundle:AdMessage:ajaxUserAdMessageMarkAsSold }
+    
+ajax_show_user_messages:
+    path:     /ajax/inbox/show_messages/
+    defaults: { _controller: FaMessageBundle:AdMessage:ajaxShowUserMessages }
+    
+ajax_report_user:
+    path:     /ajax/report_user/{replyId}
+    defaults: { _controller: FaMessageBundle:AdMessage:ajaxReportUser }
+    options:
+        expose: true
+        
+ajax_delete_message:
+    path:     /inbox/delete_message/{messageId}/{userId}/{adId}
+    defaults: { _controller: FaMessageBundle:AdMessage:ajaxDeleteMessage }
+    options:
+        expose: true
+
+reply_one_click_enq_ajax:
+    path: /ajax/reply_one_click_enq/
+    defaults: { _controller: "FaMessageBundle:AdMessage:replyOneClickEnqAjax"}
+    
+ajax_mark_message_field:
+    path:     /inbox/mark_message
+    defaults: { _controller: FaMessageBundle:AdMessage:ajaxMarkMessageField }
+    options:
+        expose: true

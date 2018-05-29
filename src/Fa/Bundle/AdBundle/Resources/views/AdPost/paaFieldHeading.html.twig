@@ -1,0 +1,39 @@
+{% set showHideElement = 'none' %}
+<h3 class="text-center">
+    {% if attribute(form, field).vars.required %}
+        {% set showHideElement = 'block' %}
+        {% if label is defined and label %}
+            {{ label }}
+        {% else %}
+            {{ attribute(form, field).vars.label }}
+        {% endif %}
+        <span>({{ 'required'|trans({}, 'frontend-paa-fourth-step') }})</span>
+    {% else %}
+        {% set tabArrowClass = 'tab-down' %}
+        {% if validationFields is defined and validationFields|length %}
+            {% set keepOpenFlag = false %}
+            {% for validationField in validationFields %}
+                {% if keepOpenFlag == false and attribute(form, validationField) is defined and (attribute(form, validationField).vars.data|length or attribute(form, validationField).vars.errors|length) %}
+                    {% set showHideElement = 'block' %}
+                    {% set tabArrowClass = 'tab-up' %}
+                    {% set keepOpenFlag = true %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% if attribute(form, field).vars.data|length or attribute(form, field).vars.errors|length %}
+                {% set showHideElement = 'block' %}
+                {% set tabArrowClass = 'tab-up' %}
+            {% endif %}
+        {% endif %}
+        <a href="javascript:void(0)" class="{{ tabArrowClass }} element_toggle" id="element_toggle_{{ field }}">
+            {% if label is defined and label %}
+                {{ label }}
+            {% else %}
+                {{ attribute(form, field).vars.label }}
+            {% endif %}
+            <span>({{ 'optional'|trans({}, 'frontend-paa-fourth-step') }})</span>
+            <span class="paa-tab-arrow"></span>
+        </a>
+    {% endif %}
+</h3>
+{{ set_variables('fieldHeading', {('showHideElement' ~ (field)):showHideElement}) }}

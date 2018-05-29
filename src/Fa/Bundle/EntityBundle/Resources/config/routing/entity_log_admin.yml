@@ -1,0 +1,7 @@
+entity_log:
+    path:     /
+    defaults: { _controller: "FaEntityBundle:FaEntityLogAdmin:index" }
+
+entity_log_detail:
+    path:     /{id}/detail
+    defaults: { _controller: "FaEntityBundle:FaEntityLogAdmin:detail" }

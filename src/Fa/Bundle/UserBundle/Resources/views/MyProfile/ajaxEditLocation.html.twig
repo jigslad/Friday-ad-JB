@@ -1,0 +1,98 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+<a class="close-reveal-modal">&#215;</a>
+<h5 class="modal-title">{{'Edit location'|trans({}, 'frontend-my-profile')}}</h5>
+{{ form_start(form, {'attr': {'novalidate': '', 'id': 'edit_video_id'}}) }}
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Location'|trans({}, 'frontend-my-profile')}}</h5>
+                <div class="mt5">{{'If you would like to display the location of your business on a map, please add a postcode.'|trans({}, 'frontend-my-profile')}}</div>
+            </div>
+        </div>
+        <div class="row mt15">
+            <div class="columns">
+                {{ form_row(form.zip) }}
+            </div>
+        </div>
+        {% if form.show_map is defined %}
+            <div class="row">
+                <div class="columns label-inline">
+                    {{ form_row(form.show_map) }}
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#profileEditLocationModal');;">{{'Cancel'|trans({}, 'frontend-my-profile')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        bindFormErrorEvents();
+        bindCustomCheckboxEvent();
+    });
+    
+    $("#edit_video_id").submit(function(event) {
+        blockElement('#profileEditLocationModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{{path('ajax_edit_location')}}",
+            data: $("#edit_video_id").serialize()
+        })
+        .always(function(response) {
+            unblockElement('#profileEditLocationModal');
+        })
+        .done(function(response) {
+            if (response.htmlContent.length) {
+                $('#profileEditLocationModal').html(response.htmlContent);
+            } else {
+                $('#business_map_div').html(response.mapContent);
+                $('#business_location_div').html(response.successContent);
+
+                var showMap = true;
+                var userDetail = response.userDetail;
+                if ('show_map' in userDetail && !userDetail.show_map && 'business_category_id' in userDetail && [{{constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')}}, {{constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')}}].indexOf(userDetail.business_category_id)) {  
+                    showMap = false;
+                }
+                if (showMap && 'latitude' in userDetail && userDetail.latitude && 'longitude' in userDetail && userDetail.longitude) {
+                    var profileMapOptions={zoom:9,
+                            zoomControl: true,
+                            panControl:false,
+                            streetViewControl: false,
+                            mapTypeControl: false,
+                            mapTypeId:google.maps.MapTypeId.ROADMAP,
+                        };
+
+                    var profileObjMap = new google.maps.Map(document.getElementById('googlemaps'), profileMapOptions);
+                    var profileObjLatLng = new google.maps.LatLng(userDetail.latitude,userDetail.longitude);
+
+                    profileObjMap.setCenter(profileObjLatLng);
+                    profileObjMarker = new google.maps.Marker({
+                        position: profileObjLatLng,
+                        icon: '{{ asset_url('fafrontend/images/map-marker.png') }}',
+                        map: profileObjMap,
+                        draggable:false,
+                        animation:google.maps.Animation.DROP
+                    });
+                }
+                
+                $('#profileEditLocationModal').foundation('reveal', 'close');
+                $('#business_location_div').notify('{{'Location edited successfully.'|trans({}, 'frontend-my-profile')}}', { position:"top", className:"success" });
+                scrollToElement('#business_location_div', '1000', -150);
+            }
+        });
+    });
+//]]>
+</script>

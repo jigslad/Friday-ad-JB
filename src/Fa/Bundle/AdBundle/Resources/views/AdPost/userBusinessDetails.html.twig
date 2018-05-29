@@ -1,0 +1,134 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% block page_title %}
+    {{'Add your business details'|trans({}, 'frontend-paa')}}
+{% endblock %}
+
+{% use "FaUserBundle:UserImage:showImageUploader.html.twig" %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('imageUploadStylesheets') }}
+{% endblock %}
+
+{% block body %}
+    <div class="posting-bg">
+        <div class="fad-sign-bdr">&nbsp;</div>
+        <div class="row paa-main">
+            {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 3, 'isBusinessDetails' : true }) }}
+            <div id="middle-column" class="large-12 columns">
+                <h1 class="text-center pb30">{{ 'Add your business details'|trans({}, 'frontend-paa-third-step') }}</h1>
+                <h2 class="text-center">{{ 'Tell us a bit more about your business, if you want to.'|trans({}, 'frontend-paa-third-step') }}</h2>
+                <div class="big-wrapper">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        {{ form_errors(form) }}
+                        <div class="paa-bdr-box">
+                            <h3 class="text-center">{{ attribute(form, 'company_name').vars.label }}</h3>
+                            {{ form_widget(attribute(form, 'company_name'), {'attr': {'placeholder': 'Please type your company name'|trans({}, 'frontend-paa-third-step')} }) }}
+                            {% if attribute(form, 'company_name').vars.max_length %}
+                                <div class="paa-title-char" id="{{ attribute(form, 'company_name').vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, 'company_name').vars.max_length }, 'frontend-paa-third-step') }}</div>
+                            {% endif %}
+                            {{ form_errors(attribute(form, 'company_name')) }}
+                        </div>
+                        <div class="paa-bdr-box">
+                            <h3 class="text-center">{{ 'Company logo'|trans({}, 'frontend-paa-third-step') }}</h3>
+                            {% set container = fetch_container_instance() %}
+                            {% set user = container.get('security.token_storage').getToken().getUser() %}
+                            {{ render(controller('FaUserBundle:UserImage:showImageUploader', {'userId': user.id, 'isCompany': true })) }}
+                            {{ set_variables('imageUploadJavascriptBottom', {'loaded':'false'}) }}
+                        </div>
+                        <div class="paa-bdr-box">
+                            <h3 class="text-center">{{ attribute(form, 'company_welcome_message').vars.label }}</h3>
+                            <div class="paa-title-ins">
+                                {{ 'A short paragraph describing your company.'|trans({}, 'frontend-paa-third-step')}}<br />
+                                {{ 'You can go into details in the next field.'|trans({}, 'frontend-paa-third-step')}}
+                            </div>
+                            {{ form_widget(attribute(form, 'company_welcome_message'), {'attr': {'class' : 'mb0 textcounter', 'placeholder': 'eg. We provide home care and nursing serivces within Mid Sussex including Burgress Hill, Haywards Heath, Cuckfield, Hassocks and surrounding areas.'|trans({}, 'frontend-paa-third-step')} }) }}
+                            {% if attribute(form, 'company_welcome_message').vars.max_length %}
+                                <div class="paa-title-char" id="{{ attribute(form, 'company_welcome_message').vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, 'company_welcome_message').vars.max_length }, 'frontend-paa-third-step') }}</div>
+                            {% endif %}
+                            {{ form_errors(attribute(form, 'company_welcome_message')) }}
+                        </div>
+                        <div class="paa-bdr-box">
+                            <h3 class="text-center">{{ attribute(form, 'about_us').vars.label }}</h3>
+                            <div class="paa-title-ins">{{ 'Tell us everything about your business.'|trans({}, 'frontend-paa-third-step')}}</div>
+                            {{ form_widget(attribute(form, 'about_us'), {'attr': {'placeholder': 'Describe your business'|trans({}, 'frontend-paa-third-step')} }) }}
+                            {% if attribute(form, 'about_us').vars.max_length %}
+                                <div class="paa-title-char" id="{{ attribute(form, 'about_us').vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, 'about_us').vars.max_length }, 'frontend-paa-third-step') }}</div>
+                            {% endif %}
+                            {{ form_errors(attribute(form, 'about_us')) }}
+                        </div>
+                        <div class="paa-bdr-box">
+                            <h3 class="text-center">{{ attribute(form, 'company_address').vars.label }}</h3>
+                            <div class="company-address">
+                                <span></span>{{ form_widget(attribute(form, 'company_address'), {'attr': {'placeholder': 'eg. King House 101 Sunshine Road, Burgress Hill, West Sussex, NH22 8LN'|trans({}, 'frontend-paa-third-step')} }) }}
+                                {{ form_errors(attribute(form, 'company_address')) }}
+                            </div>
+                            
+                        </div>
+                        <div class="paa-bdr-box">
+                            <h3 class="text-center">{{ 'Telephone(s)'|trans({}, 'frontend-paa-third-step') }}</h3>
+                            <div class="small-wrapper">
+                                <div class="telephone-icon">
+                                    <span></span> 
+                                    {{ form_widget(attribute(form, 'phone1'), {'attr': {'placeholder': 'Telephone 1'|trans({}, 'frontend-paa-third-step')} }) }}
+                                    {{ form_errors(attribute(form, 'phone1')) }}
+                                </div>
+                                
+                                <div class="telephone-icon">
+                                    <span></span>
+                                    {{ form_widget(attribute(form, 'phone2'), {'attr': {'placeholder': 'Telephone 2'|trans({}, 'frontend-paa-third-step')} }) }}
+                                    {{ form_errors(attribute(form, 'phone2')) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="paa-bdr-box bdr-none">
+                            <h3 class="text-center">{{ attribute(form, 'website_link').vars.label }}</h3>
+                            <div class="company-website">
+                                <span></span>{{ form_widget(attribute(form, 'website_link'), {'attr': {'placeholder': 'eg. www.yourwebsitename.co.uk'|trans({}, 'frontend-paa-third-step')} }) }}
+                                {{ form_errors(attribute(form, 'website_link')) }}
+                            </div>
+                        </div>
+                        <div class="small-wrapper">
+                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+            {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-business-details-step'}) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function(){
+            updateCharCounter('user_site_company_welcome_message');
+            $('.textcounter').keyup(function(e){
+                updateCharCounter($(this).attr('id'));
+            });
+        });
+
+        function updateCharCounter(fieldId)
+        {
+            var textCounterId = fieldId + '_textcounter';
+            var maxLimit      = $('#'+fieldId).attr('maxlength') ? parseInt($('#'+fieldId).attr('maxlength')) : 0;
+            var value         = $('#'+fieldId).val();
+    
+            if (maxLimit) {
+               if (value.length > maxLimit) {
+                   $('#'+fieldId).val(value.substring(0, maxLimit));
+                   $('#'+fieldId).html('(0 characters left)');
+                   return false;
+               } else {
+                   $('#'+textCounterId).html('(' + (maxLimit - value.length) + ' characters left)');
+               }
+           }
+        }
+    //]]>
+    </script>
+    {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+    {{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+    {{ block('imageUploadJavascriptBottom') }}
+{% endblock %}
