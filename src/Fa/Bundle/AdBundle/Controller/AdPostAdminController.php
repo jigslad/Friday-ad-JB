@@ -31,6 +31,7 @@ use Fa\Bundle\UserBundle\Repository\UserRepository;
 use Fa\Bundle\AdBundle\Form\AdPostCategorySelectAdminType;
 use Fa\Bundle\AdBundle\Form\AdUserSearchType;
 use Fa\Bundle\AdBundle\Form\AdPostAdultAdminType;
+use Fa\Bundle\AdBundle\Form\AdPostForSaleAdminType;
 
 /**
  * This controller is used for ad post management.
@@ -129,9 +130,10 @@ class AdPostAdminController extends CoreController implements ResourceAuthorizat
         }
 
         $formName    = $this->getFormName($category_id);
+        $fqn = $this->getFQNForForms($formName);
         $entity      = new Ad();
         $formManager = $this->get('fa.formmanager');
-        $form        = $formManager->createForm($formName, $entity, array('action' => $this->generateUrl('ad_post_create_admin', array('user_id' => $user_id, 'admin_ad_counter' => $admin_ad_counter, 'category_id' => $category_id))));
+        $form        = $formManager->createForm($fqn, $entity, array('action' => $this->generateUrl('ad_post_create_admin', array('user_id' => $user_id, 'admin_ad_counter' => $admin_ad_counter, 'category_id' => $category_id))));
 
         if ($this->container->get('session')->has('reg_no')) {
             $form->get('reg_no')->setData($this->container->get('session')->get('reg_no'));
@@ -188,6 +190,7 @@ class AdPostAdminController extends CoreController implements ResourceAuthorizat
         }
 
         $formName    = $this->getFormName($category_id);
+        $fqn = $this->getFQNForForms($formName);
         $formData    = $request->get($formName);
         $formManager = $this->get('fa.formmanager');
         $entity      = new Ad();
@@ -195,8 +198,8 @@ class AdPostAdminController extends CoreController implements ResourceAuthorizat
                            'action' => $this->generateUrl('ad_post_create_admin', array('user_id' => $user_id, 'admin_ad_counter' => $admin_ad_counter, 'category_id' => $category_id)),
                            'method' => 'POST'
                        );
-
-        $form = $formManager->createForm($formName, $entity, $options);
+        
+        $form = $formManager->createForm($fqn, $entity, $options);
         if ($formManager->isValid($form)) {
             // save ad
             $adPostManager        = $this->get('fa_ad.manager.ad_post');
@@ -591,7 +594,8 @@ class AdPostAdminController extends CoreController implements ResourceAuthorizat
     {
         // getName() symfony form function is removed After symfony 3, so to handle dynamic forms we need create array
         $formClassArray = [
-            'fa_paa_adult_admin' => AdPostAdultAdminType::class
+            'fa_paa_adult_admin' => AdPostAdultAdminType::class,
+            'fa_paa_for_sale_admin' => AdPostForSaleAdminType::class
         ];
         $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
         return $formName;
