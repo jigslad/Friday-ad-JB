@@ -3,7 +3,8 @@
 namespace Fa\Bundle\CoreBundle\Manager;
 
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
-use Symfony\Component\Intl\ResourceBundle\Util\ArrayAccessibleResourceBundle;
+use Symfony\Component\Intl\Data\Util\ArrayAccessibleResourceBundle;
+// use Symfony\Component\Intl\ResourceBundle\Util\ArrayAccessibleResourceBundle;
 use Fa\Bundle\CoreBundle\Logger\SolrLogger;
 
 /**
@@ -374,7 +375,7 @@ class SolrSearchManager
     public function getSolrResponse($solrQuery = null)
     {
         $solrQuery = $solrQuery ? $solrQuery : $this->getSolrQuery();
-
+        
         return $solrQuery->getResponse();
     }
 

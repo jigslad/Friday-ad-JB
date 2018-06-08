@@ -478,7 +478,8 @@ class CommonManager
         $twig    = $container->get('twig');
 
         try {
-            $twig->parse($twig->tokenize($value));
+//             $twig->parse($twig->tokenize($value)); // Twig_Environment::tokenize() must be an instance of Twig_Source
+            $twig->parse($twig->tokenize(new \Twig_Source($value, \Twig_Token::STRING_TYPE)));
         } catch (\Twig_Error_Syntax $e) {
             $message = $e->getMessage();
         }

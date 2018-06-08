@@ -346,7 +346,6 @@ class FaEntityLogRepository extends LogEntryRepository
     {
         if ($entityLog) {
             $duplicateLogEntry = $this->findOneBy(array('objectId' => ($entityLog->getObjectId() - 1), 'objectClass' => $entityLog->getObjectClass(), 'md5' => $entityLog->getMd5(), 'status' => 1, 'username' => $entityLog->getUsername(), 'action' => 'remove'));
-            //var_dump($duplicateLogEntry);exit;
             if ($duplicateLogEntry) {
                 $this->createQueryBuilder(self::ALIAS)
                 ->update()
