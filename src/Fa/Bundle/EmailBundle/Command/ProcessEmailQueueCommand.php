@@ -204,7 +204,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->get('kernel')->getRootDir().'/console fa:process-email-queue '.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:process-email-queue '.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 

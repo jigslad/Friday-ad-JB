@@ -234,7 +234,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->get('kernel')->getRootDir().'/console fa:update:banner:cache '.' '.$input->getArgument('action').' '.$input->getArgument('page').' '.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:update:banner:cache '.' '.$input->getArgument('action').' '.$input->getArgument('page').' '.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 

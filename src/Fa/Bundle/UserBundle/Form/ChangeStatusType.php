@@ -133,7 +133,7 @@ class ChangeStatusType extends AbstractType
                     'multiple' => false,
                     'label' => 'Select status',
                     'placeholder' => 'Please select status',
-                    'choices'   => $this->getUserStatuses($user),
+                    'choices'   => array_flip($this->getUserStatuses($user)),
                 )
             );
         }

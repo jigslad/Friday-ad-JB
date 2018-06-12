@@ -30,6 +30,7 @@ use Fa\Bundle\ContentBundle\Form\StaticBlockAdminType;
 use Fa\Bundle\ContentBundle\Form\StaticPageAdminType;
 use Fa\Bundle\ContentBundle\Form\HomePopularImageAdminType;
 use Fa\Bundle\ContentBundle\Form\SeoToolOverrideAdminType;
+use Fa\Bundle\UserBundle\Form\UserConfigRuleAdminType;
 
 /**
  * This controller is used for basic crud management.
@@ -351,7 +352,8 @@ abstract class CrudController extends CoreController
             'fa_content_static_block_admin' => StaticBlockAdminType::class,
             'fa_content_static_page_admin' => StaticPageAdminType::class,
             'fa_content_home_popular_image_admin' => HomePopularImageAdminType::class,
-            'fa_content_seo_tool_override_admin' => SeoToolOverrideAdminType::class
+            'fa_content_seo_tool_override_admin' => SeoToolOverrideAdminType::class,
+            'fa_user_user_config_rule_admin' => UserConfigRuleAdminType::class
         ];
         $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
         return $formName;

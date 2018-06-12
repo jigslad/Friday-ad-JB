@@ -113,7 +113,7 @@ EOF
                 $entityManager->flush($dotmailerFilter);
                 if ($masterId) {
                     $output->writeln('Failed filter re-processed: '.$dotmailerFilter->getId(), true);
-                    exec('nohup'.' '.$this->getContainer()->getParameter('fa.php.path').' '.$this->getContainer()->get('kernel')->getRootDir().'/console fa:dotmailer:export-filter-result --filterId='.$dotmailerFilter->getId().' --masterId='.$masterId.' --criteria=\''.$dotmailerFilter->getFilters().'\' >/dev/null &');
+                    exec('nohup'.' '.$this->getContainer()->getParameter('fa.php.path').' bin/console fa:dotmailer:export-filter-result --filterId='.$dotmailerFilter->getId().' --masterId='.$masterId.' --criteria=\''.$dotmailerFilter->getFilters().'\' >/dev/null &');
                 }
             }
         }
@@ -161,7 +161,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->get('kernel')->getRootDir().'/console fa:dotmailer:export-failed-filter '.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:dotmailer:export-failed-filter '.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 

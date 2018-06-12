@@ -91,7 +91,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->get('kernel')->getRootDir().'/console fa:process-email-queue --email_identifier="ad_is_expired"';
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:process-email-queue --email_identifier="ad_is_expired"';
             $output->writeln($command, true);
             passthru($command, $returnVar);
 
@@ -189,7 +189,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->get('kernel')->getRootDir().'/console fa:update:ad-expire-alert '.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:update:ad-expire-alert '.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 

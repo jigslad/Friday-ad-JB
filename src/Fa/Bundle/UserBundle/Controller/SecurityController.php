@@ -238,7 +238,7 @@ class SecurityController extends ThirdPartyLoginController
                 //set admin_id in session
                 $this->get('session')->set('logged_in_admin_id', $admin_id);
                 //now dispatch the login event
-                $request = $this->get("request");
+                $request = $this->container->get('request_stack')->getCurrentRequest();// $this->get("request");
                 $event = new InteractiveLoginEvent($request, $token);
                 $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
 

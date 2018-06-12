@@ -125,7 +125,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->get('kernel')->getRootDir().'/console fa:update:user-ad-shop-detail'.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:update:user-ad-shop-detail'.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
         }
@@ -170,7 +170,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->get('kernel')->getRootDir().'/console fa:update:all-user-shop-detail-solr-index'.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:update:all-user-shop-detail-solr-index'.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 

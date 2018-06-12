@@ -32,6 +32,7 @@ use Fa\Bundle\AdBundle\Form\AdPostCategorySelectAdminType;
 use Fa\Bundle\AdBundle\Form\AdUserSearchType;
 use Fa\Bundle\AdBundle\Form\AdPostAdultAdminType;
 use Fa\Bundle\AdBundle\Form\AdPostForSaleAdminType;
+use Fa\Bundle\AdBundle\Form\AdPostServicesAdminType;
 
 /**
  * This controller is used for ad post management.
@@ -595,7 +596,8 @@ class AdPostAdminController extends CoreController implements ResourceAuthorizat
         // getName() symfony form function is removed After symfony 3, so to handle dynamic forms we need create array
         $formClassArray = [
             'fa_paa_adult_admin' => AdPostAdultAdminType::class,
-            'fa_paa_for_sale_admin' => AdPostForSaleAdminType::class
+            'fa_paa_for_sale_admin' => AdPostForSaleAdminType::class,
+            'fa_paa_services_admin' => AdPostServicesAdminType::class
         ];
         $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
         return $formName;

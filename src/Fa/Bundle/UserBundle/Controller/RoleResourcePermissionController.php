@@ -22,6 +22,7 @@ use Fa\Bundle\UserBundle\Entity\RoleResourcePermission;
 use Fa\Bundle\UserBundle\Form\RoleResourcePermissionType;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
  * This controller is used for admin side role resource management.
@@ -60,7 +61,7 @@ class RoleResourcePermissionController extends CoreController implements Resourc
      */
     public function editAction($id)
     {
-        CommonManager::setAdminBackUrl($this->get('request'), $this->container);
+        CommonManager::setAdminBackUrl($this->container->get('request_stack')->getCurrentRequest(), $this->container);
         $em     = $this->getDoctrine()->getManager();
         $entity = new RoleResourcePermission();
         $objResourceRepo = $em->getRepository('FaUserBundle:Resource');
@@ -72,7 +73,7 @@ class RoleResourcePermissionController extends CoreController implements Resourc
                   );
         // initialize form manager service
         $formManager = $this->get('fa.formmanager');
-        $form = $formManager->createForm(new RoleResourcePermissionType(), $entity, $options);
+        $form = $formManager->createForm(RoleResourcePermissionType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -125,6 +126,6 @@ class RoleResourcePermissionController extends CoreController implements Resourc
      */
     protected function addFormFields($form)
     {
-        $form->add('save', 'submit');
+        $form->add('save', SubmitType::class);
     }
 }
