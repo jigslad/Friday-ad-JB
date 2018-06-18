@@ -32,8 +32,11 @@ use Fa\Bundle\AdBundle\Entity\AdForSale;
 use Fa\Bundle\AdBundle\Entity\AdLocation;
 use Fa\Bundle\EntityBundle\Repository\LocationRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 /**
  * AdPostFourthStepAdultType form.
@@ -92,6 +95,12 @@ class AdPostFourthStepAdultType extends AdPostType
         $form->add('fourth_step_ordered_fields', HiddenType::class, array('data' => implode(',', $fourthStepData)));
 
         //$form->add('photo_error', 'text');
+        
+        if ($form->has('payment_method_id')) {
+            $form->add('paypal_email', EmailType::class, array('label' => 'Paypal email address'))
+                    ->add('paypal_first_name', TextType::class, array('label' => 'Paypal first name', 'mapped' => false))
+                    ->add('paypal_last_name', TextType::class, array('label' => 'Paypal last name','mapped' => false));
+        }
 
         // Ad specific phone number field for business user.
         //$this->addBusinessAdField($form, $ad);
@@ -141,6 +150,87 @@ class AdPostFourthStepAdultType extends AdPostType
         $this->validateAdImageLimit($form);
         $this->validateBusinessAdField($form, $ad);
         $this->validateYoutubeField($form, $ad);
+        $this->validateAdultRates($form, $ad);
+        if ($form->has('payment_method_id')) {
+            $this->validatePaypalEmail($form, $ad);
+        }
+    }
+    
+    /**
+     * Callbak method for postSubmit form event.
+     *
+     * @param object $event event instance.
+     */
+    public function postSubmit(FormEvent $event)
+    {
+        $ad   = $event->getData();
+        $form = $event->getForm();
+        
+        if ($form->has('payment_method_id')) {
+            $paymentMethodId = $form->get('payment_method_id')->getData();
+            $paypalEmail     = $form->get('paypal_email')->getData();
+            $paypalFirstName = $form->get('paypal_first_name')->getData();
+            $paypalLastName  = $form->get('paypal_last_name')->getData();
+            
+            // save paypal email address.
+            if ($form->isValid() && $paypalEmail && $paypalFirstName && $paypalLastName && in_array($paymentMethodId, array(PaymentRepository::PAYMENT_METHOD_PAYPAL_ID, PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID))) {
+                if (is_object($ad) && $ad->getId()) {
+                    $adId = $ad->getId();
+                } else {
+                    $adId = $this->container->get('session')->get('ad_id');
+                }
+                
+                $adObj = $this->em->getRepository('FaAdBundle:Ad')->find($adId);
+                if ($adObj) {
+                    $userObj = $adObj->getUser();
+                    $userObj->setPaypalEmail($paypalEmail);
+                    $userObj->setPaypalFirstName($paypalFirstName);
+                    $userObj->setPaypalLastName($paypalLastName);
+                    $userObj->setIsPaypalVefiried(1);
+                    $this->em->persist($userObj);
+                    $this->em->flush($userObj);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Validate paypal email address.
+     *
+     * @param object $form Form instance.
+     * @param object $ad   Ad instance.
+     */
+    protected function validatePaypalEmail($form, $ad)
+    {
+        if (is_object($ad) && $ad->getId()) {
+            $adId = $ad->getId();
+        } else {
+            $adId = $this->container->get('session')->get('ad_id');
+        }
+        
+        $adObj = $this->em->getRepository('FaAdBundle:Ad')->find($adId);
+        
+        if ($adObj && $adObj->getUser()) {
+            $paymentMethodId = $form->get('payment_method_id')->getData();
+            $paypalEmail     = $form->get('paypal_email')->getData();
+            $paypalFirstName = $form->get('paypal_first_name')->getData();
+            $paypalLastName = $form->get('paypal_last_name')->getData();
+            
+            if (in_array($paymentMethodId, array(PaymentRepository::PAYMENT_METHOD_PAYPAL_ID, PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID))) {
+                if (!$paypalEmail || !$paypalFirstName || !$paypalLastName) {
+                    $form->get('paypal_email')->addError(new FormError("Paypal account is not verified."));
+                    $form->get('paypal_first_name')->addError(new FormError("Paypal account is not verified."));
+                    $form->get('paypal_last_name')->addError(new FormError("Paypal account is not verified."));
+                } elseif ($paypalEmail && $paypalFirstName && $paypalLastName) {
+                    $isPaypalVerifiedEmail = $this->container->get('fa.paypal.account.verification.manager')->verifyPaypalAccountByEmail($paypalEmail, 'NAME', $paypalFirstName, $paypalLastName);
+                    if (!$isPaypalVerifiedEmail) {
+                        $form->get('paypal_email')->addError(new FormError("Paypal account is not verified."));
+                        $form->get('paypal_first_name')->addError(new FormError("Paypal account is not verified."));
+                        $form->get('paypal_last_name')->addError(new FormError("Paypal account is not verified."));
+                    }
+                }
+            }
+        }
     }
 
     /**

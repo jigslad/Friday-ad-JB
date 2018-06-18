@@ -86,6 +86,19 @@ class AdLocation
      * @Gedmo\Versioned
      */
     private $location_town;
+    
+    /**
+     * @var \Fa\Bundle\EntityBundle\Entity\Location
+     *
+     * @ORM\ManyToOne(targetEntity="Fa\Bundle\EntityBundle\Entity\Location")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="area_id", referencedColumnName="id", onDelete="CASCADE")
+     * })
+     * @Gedmo\Versioned
+     */
+    private $location_area;
+    
+    
 
     /**
      * @var \Fa\Bundle\EntityBundle\Entity\Locality
@@ -447,4 +460,30 @@ class AdLocation
     {
         return $this->locality;
     }
+    
+    /**
+     * Set locationArea
+     *
+     * @param \Fa\Bundle\EntityBundle\Entity\Location $locationArea
+     *
+     * @return AdLocation
+     */
+    public function setLocationArea(\Fa\Bundle\EntityBundle\Entity\Location $locationArea= null)
+    {
+    	$this->location_area = $locationArea;
+    	
+    	return $this;
+    }
+    
+    /**
+     * Get LocationArea
+     *
+     * @return \Fa\Bundle\EntityBundle\Entity\Location
+     */
+    public function getLocationArea()
+    {
+    	return $this->location_area;
+    }
+   
+       
 }

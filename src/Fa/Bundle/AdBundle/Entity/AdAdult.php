@@ -71,6 +71,14 @@ class AdAdult
      * @Gedmo\Versioned
      */
     private $meta_data;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender_id", type="string", length=10, nullable=true)
+     * @Gedmo\Versioned
+     */
+    private $gender_id;
 
 
     /**
@@ -209,4 +217,28 @@ class AdAdult
     {
         return $this->travel_arrangements_id;
     }
+    
+    /**
+     * set gender id
+     *
+     * @param string $gender_id
+     *
+     * @return AdAdult
+     */
+    public function setGenderId($gender_id)
+    {
+    	$this->gender_id = $gender_id;
+    	return $this;
+    }
+    
+    /**
+     * get gender id
+     *
+     * @return string
+     */
+    public function getGenderId()
+    {
+    	return $this->gender_id;
+    }
+    
 }

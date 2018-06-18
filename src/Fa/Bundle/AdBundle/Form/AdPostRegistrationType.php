@@ -117,7 +117,6 @@ class AdPostRegistrationType extends RegistrationType
             array(
                 'label' => $emailAlertLabel,
                 'value' => true,
-                'data' => true,
             )
         )
         ->add(
@@ -127,7 +126,19 @@ class AdPostRegistrationType extends RegistrationType
                 'label' => $thirdPartyEmailAlertLabel,
                 'value' => true,
             )
-        );
+        )
+        ->add('is_terms_agreed', CheckboxType::class, array(
+            'required' => true,
+            'mapped' => false,
+            'constraints' => array(
+                'constraints' => new NotBlank(array(
+                    'groups' => array(
+                        'registration'
+                    ),
+                    'message' => $this->translator->trans("You must accept Friday-Ad's terms and conditions in order to register.", array(), 'validators')
+                ))
+            )
+        ));
         $sessionUserData = $this->container->get('session')->get('paa_user_info');
         if (isset($sessionUserData['user_facebook_id']) || isset($sessionUserData['user_google_id'])) {
             $builder->remove('password');

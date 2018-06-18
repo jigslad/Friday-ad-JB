@@ -165,6 +165,7 @@ class AdLeftSearchType extends AbstractType
     {
         $form->add('item__location', HiddenType::class);
         $form->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false));
+        $form->add('item__area', HiddenType::class);
     }
 
     /**

@@ -179,6 +179,7 @@ class AdPostAdultAdminType extends AdPostAdminType
         $this->validateFutureAdPostFields($form, $ad);
         $this->validateBusinessAdField($form, $ad);
         $this->validateYoutubeField($form);
+        $this->validateAdultRates($form, $ad);
     }
 
     /**
