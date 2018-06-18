@@ -92,7 +92,6 @@ class PaaFieldRuleAdminController extends CrudController implements ResourceAuth
         $queryBuilder->andWhere($queryBuilder->getRootAlias().'.category != '.CategoryRepository::PHONE_AND_CAM_CHAT_ID);
         $query = $queryBuilder->getQuery();
 
-        //echo $query->getSQL();exit;
         // initialize pagination manager service and prepare listing with pagination based of data
         $page = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page'] : 1;
         $this->get('fa.pagination.manager')->init($query, $page);

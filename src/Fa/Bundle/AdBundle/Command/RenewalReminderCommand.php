@@ -118,7 +118,7 @@ EOF
     {
         $qb          = $this->getAdQueryBuilder($searchParam);
         $step        = 100;
-        $offset      = 0;//$input->getOption('offset');
+        $offset      = ($input->getOption('offset'))?$input->getOption('offset'):0;
 
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);

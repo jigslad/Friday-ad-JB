@@ -52,9 +52,9 @@ class CleanS3ImageFromLocalCommand extends ContainerAwareCommand
     {
         $managerRegistry = $this->getContainer()->get('doctrine');
         $this->em = $this->getContainer()->get('doctrine')->getManager();
-        $this->em->getConnection()->getConfiguration()->setSQLLogger(new EchoSQLLogger());
-        $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
-        $managerRegistry->resetEntityManager();
+        //$this->em->getConnection()->getConfiguration()->setSQLLogger(new EchoSQLLogger());
+        //$this->em->getConnection()->getConfiguration()->setSQLLogger(null);
+        //$managerRegistry->resetEntityManager();
 
         echo "Command Started At: ".date('Y-m-d H:i:s', time())."\n";
 

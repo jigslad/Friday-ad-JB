@@ -61,8 +61,6 @@ class AdListController extends CoreController
         $bindSearchParams = array();
         $searchParams     = $request->get('searchParams');
 
-        //echo '<pre>';print_r($searchParams);die;
-
         if ($searchParams && count($searchParams)) {
             foreach ($form->all() as $field) {
                 if (isset($searchParams[$field->getName()])) {
@@ -104,7 +102,7 @@ class AdListController extends CoreController
     {
         //$requestlocation = ($request->cookies->get('location')!='')?$request->cookies->get('location'):($request->get('location')!=''?$request->get('location'):($request->attributes->get('location')?$request->attributes->get('location'):'uk'));
         $requestlocation = $request->get('location');
-        //echo '<pre>';print_r($request);die;
+        
         // Redirect to page 1 if page exceed more than 250.
         if ($request->get('page') && $request->get('page') > 250) {
             $url = str_replace('page-'.$request->get('page'), 'page-1', $request->getUri());
@@ -192,7 +190,7 @@ class AdListController extends CoreController
 
             // check if location is exist and not uk.
             $cookieValue = '';
-            if ($requestlocation != null && $requestlocation != 'uk' && (!isset($cookieLocationDetails['slug']) || $cookieLocationDetails['slug'] != $requestlocation)) {
+            if ($requestlocation != null && $requestlocation != 'uk' && (!isset($cookieLocationDetails['slug']) || $cookieLocationDetails['slug'] != $requestlocation || $requestlocation == LocationRepository::LONDON_TXT)) {
                 $cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($requestlocation, $this->container, true);
                 if (count($cookieValue) && count($cookieValue) !== count(array_intersect($cookieValue, $cookieLocationDetails))) {
                     $response = new Response();
@@ -201,6 +199,8 @@ class AdListController extends CoreController
                     $response->headers->clearCookie('location');
                     $response->headers->setCookie(new Cookie('location', $cookieValue, time() + (365*24*60*60*1000), '/', null, false, false));
                     $response->sendHeaders();
+                } else {
+                    $cookieValue = json_encode($cookieValue);
                 }
             } elseif ($requestlocation != null && $requestlocation == 'uk') {
                 $response = new Response();
@@ -217,9 +217,21 @@ class AdListController extends CoreController
 
         // get location from cookie
         if (isset($cookieValue) && $cookieValue) {
+            if(is_array($cookieValue)) {
+                $cookieValue = json_encode($cookieValue);
+            }
             $cookieLocationDetails = json_decode($cookieValue, true);
         } else {
             $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
+        }
+        
+        //check view alert tip for location area
+        $areaToolTipFlag = false;
+        if(!$request->cookies->has('frontend_area_alert_tooltip') && $requestlocation != null && strtolower($requestlocation) == LocationRepository::LONDON_TXT) {
+            $response = new Response();
+            $response->headers->setCookie(new Cookie('frontend_area_alert_tooltip', $requestlocation, time() + (365*24*60*60*1000), '/', null, false, false));
+            $response->sendHeaders();
+            $areaToolTipFlag = true;
         }
 
         $mapFlag = $request->get('map', false);
@@ -264,6 +276,10 @@ class AdListController extends CoreController
         $locationFacets = array();
         if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
             $locationFacets =  get_object_vars($facetResult['a_l_town_id_txt']);
+            
+            if(isset($facetResult['a_l_area_id_txt']) && !empty(get_object_vars($facetResult['a_l_area_id_txt']))) {
+                $locationFacets = $locationFacets + get_object_vars($facetResult['a_l_area_id_txt']);
+            }
 
             if (isset($locationFacets[$data['search']['item__location']])) {
                 unset($locationFacets[$data['search']['item__location']]);
@@ -282,6 +298,49 @@ class AdListController extends CoreController
         if (isset($data['search']['item__category_id'])) {
             $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($data['search']['item__category_id'], $this->container);
         }
+        
+        //Get Recommmended Slots
+        $getRecommendedSlots = array();
+        $getRecommendedSlots = $this->getRecommendedSlot($data, $keywords, $page, $mapFlag, $request, $rootCategoryId);
+        
+        //if(!empty($getRecommendedSlots)) { shuffle($getRecommendedSlots); }
+        $getRecommendedSrchSlotWise = array();$getRecommendedSrchSlots=array();
+        if(!empty($getRecommendedSlots)) {
+            foreach ($getRecommendedSlots as $getRecommendedSlot) {
+                $getRecommendedSrchSlots[$getRecommendedSlot['creative_group']][] = $getRecommendedSlot;
+            }
+        }
+        
+        $recommendedSlotArr = array();
+        $recommendedSlotOrder = array();
+        if(!empty($getRecommendedSrchSlots)) {
+            for($arj=1;$arj<=5;$arj++) {
+                if(isset($getRecommendedSrchSlots[$arj])) {
+                    $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
+                    $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
+                    if(isset($_COOKIE['recommended_slot_'.$arj])) {
+                        if(isset($getRecommendedSrchSlots[$arj][1]) && $_COOKIE['recommended_slot_'.$arj] == $getRecommendedSrchSlots[$arj][0]['creative_ord']) {
+                            $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][1];
+                            $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][1]['creative_ord'];
+                        } elseif(isset($getRecommendedSrchSlots[$arj][2])) {
+                            if($_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][1]['creative_ord'] || $_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][0]['creative_ord']) {
+                                $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][2];
+                                $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][2]['creative_ord'];
+                            } elseif($_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][2]) {
+                                $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
+                                $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
+                            }
+                        }
+                    }
+                    setcookie('recommended_slot_'.$arj, $recommendedSlotOrder[$arj]);
+                }
+                
+            }
+        }
+        
+        if(!empty($recommendedSlotArr)) {
+            $getRecommendedSrchSlotWise = $recommendedSlotArr;
+        }
         $parameters = array(
             'pagination'             => $pagination,
             'resultCount'            => $resultCount,
@@ -296,6 +355,8 @@ class AdListController extends CoreController
             //'nextMiles'              => $nextMiles,
             'objSeoToolOverride'     => $objSeoToolOverride,
             'rootCategoryId'         => $rootCategoryId,
+            'areaToolTipFlag'		 => $areaToolTipFlag,
+            'recommendedSlotResult'  => $getRecommendedSrchSlotWise,
         );
 
         // for business user ads page
@@ -365,7 +426,7 @@ class AdListController extends CoreController
         if (isset($rootCategoryId) && $rootCategoryId == CategoryRepository::ADULT_ID) {
         	$objResponse = CommonManager::setCacheControlHeaders();
         }
-//echo 'paremeters==<pre>';print_r($parameters);die;
+
         return $this->render('FaAdBundle:AdList:'.$templateName.'.html.twig', $parameters, $objResponse);
     }
 
@@ -601,7 +662,7 @@ class AdListController extends CoreController
                     $town         = $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Location', $localityTown[1]);
                     $locationText = $locality.','.$town;
                 }
-
+                
                 if (!$locationText) {
                     if ($searchParams['item__location'] == LocationRepository::COUNTY_ID) {
                         $locationText = null;
@@ -611,7 +672,6 @@ class AdListController extends CoreController
                             $locationText = $this->getRepository('FaEntityBundle:Locality')->getLocationTextByLocation($searchParams['item__location'], $this->container);
                         }
                     }
-
                     //$searchParams['item__location'] = $locationText;
                 }
             }
@@ -636,7 +696,7 @@ class AdListController extends CoreController
             }
             $form->submit($bindSearchParams);
         }
-//echo 'paremeters==<pre>';print_r($searchParams);die;
+
         $parameters = array('form' => $form->createView(), 'locationFacets' => $request->get('locationFacets'), 'facetResult' => $request->get('facetResult', 'facetResult'), 'basicParams' => $basicParams, 'isShopPage' => $isShopPage, 'cookieLocationDetails' => $request->get('cookieLocationDetails'));
         
         return $this->render('FaAdBundle:AdList:leftSearch.html.twig', $parameters);
@@ -774,7 +834,8 @@ class AdListController extends CoreController
         $data['facet_fields'] = array(
                                     AdSolrFieldMapping::TOWN_ID     => array('limit' => 5, 'min_count' => 1),
                                     AdSolrFieldMapping::CATEGORY_ID => array('min_count' => 1),
-                                    AdSolrFieldMapping::ROOT_CATEGORY_ID => array('min_count' => 1)
+                                    AdSolrFieldMapping::ROOT_CATEGORY_ID => array('min_count' => 1),
+                                    AdSolrFieldMapping::AREA_ID		=> array('limit' => 5, 'min_count' => 1)
                                 );
 
         // Add dimension filters facets
@@ -809,7 +870,7 @@ class AdListController extends CoreController
         if (isset($data['search']['item__location']) && $data['search']['item__location']) {
             $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
         }
-	//$data['query_filters']['item']['is_blocked_ad'] = 0;
+	     //$data['query_filters']['item']['is_blocked_ad'] = 0;
         // remove adult results when there is no category selected
         if (!isset($data['search']['item__category_id']) && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location'))) {
             $data['static_filters'] = ' AND -'.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID;
@@ -1023,6 +1084,7 @@ class AdListController extends CoreController
             $data['facet_fields'] = array(
                 AdSolrFieldMapping::DOMICILE_ID => array('limit' => $blocks[AdSolrFieldMapping::DOMICILE_ID]['facet_limit'], 'min_count' => 1),
                 AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
+                AdSolrFieldMapping::AREA_ID		=> array('limit' => 9, 'min_count' => 1),
             );
         } else {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
@@ -1034,10 +1096,12 @@ class AdListController extends CoreController
                 $data['facet_fields'] = array(
                     AdSolrFieldMapping::DOMICILE_ID => array('limit' => 9, 'min_count' => 1),
                     AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
+                    AdSolrFieldMapping::AREA_ID		=> array('limit' => 9, 'min_count' => 1),
                 );
             } else {
                 $data['facet_fields'] = array(
                     AdSolrFieldMapping::TOWN_ID => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
+                    AdSolrFieldMapping::AREA_ID		=> array('limit' => 9, 'min_count' => 1),
                 );
             }
         }
@@ -1066,6 +1130,10 @@ class AdListController extends CoreController
                 }
                 if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
                     $blocks[$solrFieldName]['facet'] = get_object_vars($facetResult[$solrFieldName]);
+                    //get Location Areas
+                    if($solrFieldName == AdSolrFieldMapping::TOWN_ID && isset($facetResult[AdSolrFieldMapping::AREA_ID]) && !empty($facetResult[AdSolrFieldMapping::AREA_ID])) {
+                        $blocks[$solrFieldName]['facet'] = $blocks[$solrFieldName]['facet'] + get_object_vars($facetResult[AdSolrFieldMapping::AREA_ID]);
+                    }
                 }
             }
         }
@@ -2033,19 +2101,19 @@ class AdListController extends CoreController
         return new JsonResponse();
     }
 
-    public function getAppendableStaticFilters($searchParams) {
+    public function getAppendableStaticFilters($searchParams) 
+    {
     	$appendQueryFilters = '';
     	if(isset($searchParams['search']['item_motors__colour_id']) && $searchParams['search']['item_motors__colour_id']) {
             if (count($searchParams['search']['item_motors__colour_id'])) {
-            	$itemMotorsColourIds = $searchParams['search']['item_motors__colour_id'];
-            	$appendQueryFilters .= ' AND (';
-            	//$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
-            	foreach($itemMotorsColourIds as $itemMotorsColourId) {
-            		$appendQueryFilters .= "(a_m_colour_id_i : (".$itemMotorsColourId.")) OR ";
-            	}
-            	$appendQueryFilters = rtrim($appendQueryFilters," OR ");
-            	$appendQueryFilters .= ')';
-
+                $itemMotorsColourIds = $searchParams['search']['item_motors__colour_id'];
+                $appendQueryFilters .= ' AND (';
+                //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+                foreach($itemMotorsColourIds as $itemMotorsColourId) {
+                    $appendQueryFilters .= "(a_m_colour_id_i : (".$itemMotorsColourId.")) OR ";
+                }
+                $appendQueryFilters = rtrim($appendQueryFilters," OR ");
+                $appendQueryFilters .= ')';
             }    	
         }
 
@@ -2055,24 +2123,23 @@ class AdListController extends CoreController
             	$appendQueryFilters .= ' AND (';
             	//$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
             	foreach($itemMotorsBodyTypeIds as $itemMotorsBodyTypeId) {
-            		$appendQueryFilters .= "(a_m_body_type_id_i : (".$itemMotorsBodyTypeId.")) OR ";
+            	    $appendQueryFilters .= "(a_m_body_type_id_i : (".$itemMotorsBodyTypeId.")) OR ";
             	}
             	$appendQueryFilters = rtrim($appendQueryFilters," OR ");
             	$appendQueryFilters .= ')';
-
             }    	
         }
 
         if(isset($searchParams['search']['item_motors__fuel_type_id']) && $searchParams['search']['item_motors__fuel_type_id']) {
             if (count($searchParams['search']['item_motors__fuel_type_id'])) {
-            	$itemMotorsFuelTypeIds = $searchParams['search']['item_motors__fuel_type_id'];
-            	$appendQueryFilters .= ' AND (';
-            	//$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
-            	foreach($itemMotorsFuelTypeIds as $itemMotorsFuelTypeId) {
-            		$appendQueryFilters .= "(a_m_fuel_type_id_i : (".$itemMotorsFuelTypeId.")) OR ";
-            	}
-            	$appendQueryFilters = rtrim($appendQueryFilters," OR ");
-            	$appendQueryFilters .= ')';
+                $itemMotorsFuelTypeIds = $searchParams['search']['item_motors__fuel_type_id'];
+                $appendQueryFilters .= ' AND (';
+                //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
+                foreach($itemMotorsFuelTypeIds as $itemMotorsFuelTypeId) {
+                    $appendQueryFilters .= "(a_m_fuel_type_id_i : (".$itemMotorsFuelTypeId.")) OR ";
+                }
+                $appendQueryFilters = rtrim($appendQueryFilters," OR ");
+                $appendQueryFilters .= ')';
 
             }    	
         }
@@ -2134,5 +2201,26 @@ class AdListController extends CoreController
         }
         
         return $appendQueryFilters; 
+    }
+    
+    /**
+     * Find recommended slots.
+     *
+     * @param array   $data           Search parameters.
+     * @param string  $keywords       Keywords.
+     * @param array   $page           Page.
+     * @param boolean $mapFlag        Boolean flag for map.
+     * @param Request $request        Request object.
+     * @param integer $rootCategoryId Root category id.
+     *
+     * @return array
+     */
+    private function getRecommendedSlot($data, $keywords = null, $page = 1, $mapFlag = false, $request, $rootCategoryId)
+    {
+        $recommendeSlotResult = array();
+        if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
+            $recommendeSlotResult = $this->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotSearchlistArrayByCategoryId($data['search']['item__category_id'], $this->container);
+        }
+        return $recommendeSlotResult;
     }
 }

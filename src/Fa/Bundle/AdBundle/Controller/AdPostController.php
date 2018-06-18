@@ -97,6 +97,12 @@ class AdPostController extends ThirdPartyLoginController
             if ($form->isValid()) {
                 if ($form->get('category_id')->getData()) {
                     $firstStepData['category_id'] = $form->get('category_id')->getData();
+                    //check old category and new choosed category are same or not
+                    $getOldFirstStepData = $this->getStepSessionData('first');
+                    //if not same remove the fourth step session data bcz of getting old category fields at fourth step
+                    if(isset($getOldFirstStepData['category_id']) && $getOldFirstStepData['category_id'] != $firstStepData['category_id']) {
+                        $this->container->get('session')->remove('paa_fourth_step_data');
+                    }
 
                     $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(array('id' => $form->get('category_id')->getData()));
                     if ($category) {
@@ -856,6 +862,22 @@ class AdPostController extends ThirdPartyLoginController
                         $fourthStepData['location_text'] = $fourthStepData['location_autocomplete'];
                     }
 
+                    // Bind fourth step data from session
+                    $form->submit($fourthStepData);
+                }
+            } elseif (!empty($this->getStepSessionData('fourth'))) {
+                $fourthStepData = $this->getStepSessionData('fourth');
+                
+                // Remove fourth step data from session
+                $this->container->get('session')->remove('paa_fourth_step_data');
+                
+                if (count($fourthStepData)) {
+                    $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName);
+                    $fourthStepData = $fourthStepData + array('_token' => $csrfToken);
+                    
+                    if (isset($fourthStepData['location_autocomplete']) && $fourthStepData['location_autocomplete']) {
+                        $fourthStepData['location_text'] = $fourthStepData['location_autocomplete'];
+                    }
                     // Bind fourth step data from session
                     $form->submit($fourthStepData);
                 }
@@ -1671,5 +1693,41 @@ class AdPostController extends ThirdPartyLoginController
             'co2_emissions',
             'first_step_ordered_fields',
         );
+    }
+    
+    /**
+     * This action is used to change the Adult Escort Category to Gay Male Escort Category when gender is Male and My service id is Men.
+     *
+     * @param Request $request A Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function changeAdultCategoryFourthStepAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $response = new Response();
+            $em       = $this->getEntityManager();
+            //change Category From Escort Service to Gay Male Escort Category
+            $firstSessionData = unserialize($this->container->get('session')->get('paa_first_step_data'));
+            //updating Session Category
+            if(isset($firstSessionData['category_id']) && !empty($firstSessionData)) {
+                $categoryObj = $this->getRepository('FaEntityBundle:Category')->getCategorybyName(CategoryRepository::GAY_MALE_ESCORT_NAME);
+                if(!empty($categoryObj)) {
+                    //update Ad Category in DB
+                    $ad = $this->getRepository('FaAdBundle:Ad')->find($this->container->get('session')->get('ad_id'));
+                    if(!empty($ad)) {
+                        $ad->setCategory($this->getEntityManager()->getReference('FaEntityBundle:Category', $categoryObj['id']));
+                        $em->persist($ad);
+                        $em->flush();
+                        $firstSessionData['category_id'] = $categoryObj['id'];
+                        $firstSessionData['category_id_autocomplete'] = $categoryObj['name'];
+                        //Set first step data into session
+                        $this->setStepSessionData($firstSessionData, 'first');
+                        return new JsonResponse(array('response' => TRUE));
+                    }
+                }
+            }
+        }
+        return new JsonResponse(array('response' => FALSE));
     }
 }

@@ -165,7 +165,7 @@ EOF
             }
 
 
-            $searchParam['ad']['is_blocked_ad'] = 0;
+//             $searchParam['ad']['is_blocked_ad'] = 0;
 
             if (isset($offset)) {
                 $this->updateSolrIndexWithOffset($solrClient, $searchParam, $input, $output);

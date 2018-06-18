@@ -598,7 +598,7 @@ class AdController extends CoreController
         $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'));
 
         $blocks = $this->getAdDetailSeoBlockParams($categoryId, $parentCategoryIds, $seoPageRule, $adlocationId);
-	
+        
         if (count($blocks)) {
             foreach ($blocks as $solrFieldName => $block) {
                 // initialize solr search manager service and fetch data based of above prepared search options
@@ -608,7 +608,7 @@ class AdController extends CoreController
                 // fetch result set from solr
                 $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
                 $facetResult = array_map("get_object_vars", get_object_vars($facetResult));
-
+                
                 if ($rootCategoryId == CategoryRepository::JOBS_ID && isset($facetResult[$solrFieldName]) && !count($facetResult[$solrFieldName])) {
                     $seoSearchParams['item__category_id'] = $parentCategoryIds[0];
                     $data = array();
@@ -653,7 +653,11 @@ class AdController extends CoreController
                     }
 
                     if ((isset($blocks[$solrFieldName]['facet']) && is_array($blocks[$solrFieldName]['facet']) && count($blocks[$solrFieldName]['facet']) == 0) || !isset($blocks[$solrFieldName]['facet'])) {
-                        $blocks[$solrFieldName]['facet'] = $facetResult[$solrFieldName];
+                    	$blocks[$solrFieldName]['facet'] = $facetResult[$solrFieldName];
+                    	//add location areas
+                    	if(isset($facetResult[AdSolrFieldMapping::AREA_ID]) && !empty($facetResult[AdSolrFieldMapping::AREA_ID])) {
+                    		$blocks[$solrFieldName]['facet'] = $blocks[$solrFieldName]['facet'] + $facetResult[AdSolrFieldMapping::AREA_ID];
+                    	}
                     }
                 }
             }
@@ -892,7 +896,11 @@ class AdController extends CoreController
             AdSolrFieldMapping::TOWN_ID => array(
                 'limit' => 10,
                 'min_count' => 1,
-            )
+            ),
+        	AdSolrFieldMapping::AREA_ID => array(
+        		'limit' => 10,
+        		'min_count' => 1,
+        	)
         );
         $blocks[AdSolrFieldMapping::TOWN_ID] = array(
             'heading' => $this->get('translator')->trans('Top Locations', array(), 'frontend-ad-detail-seo-block'),
@@ -1041,5 +1049,25 @@ class AdController extends CoreController
             $isSet = TRUE;
         }
         return new JsonResponse(array('is_set' => $isSet));
+    }
+    
+    /**
+     * This action is used for create user half account.
+     *
+     * @param Request $request A Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function ajaxEighteenPlusWarnningModelAction(Request $request)
+    {
+    	if ($request->isXmlHttpRequest()) {
+    		$response   = new Response();
+    		$cookieName = $request->get('ad_id').'_ad_detail_ga_tracking_after';
+    		
+    		$parameters['for_third_party_link'] = true; 
+    		$htmlContent = $this->renderView('FaFrontendBundle::adultWarnningPopup.html.twig', $parameters);
+    		return new JsonResponse(array('success' => true, 'htmlContent' => $htmlContent));
+    	}
+    	return new Response();
     }
 }

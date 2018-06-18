@@ -40,6 +40,7 @@ class UpdateInactiveUserAdsCommand extends ContainerAwareCommand
         ->setDescription("Update inactive user ads.")
         ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit of script execution', null)
         ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
+        ->addOption('user_id', null, InputOption::VALUE_OPTIONAL, 'User id', 0)
         ->setHelp(
             <<<EOF
 Cron: To be setup to run at mid-night.
@@ -88,9 +89,9 @@ EOF
     {
         $idsNotFound = array();
         $idsFound    = array();
-        $qb          = $this->getAdQueryBuilder();
+        $qb          = $this->getAdQueryBuilder(FALSE, $input);
         $step        = 100;
-        $offset      = 0;
+        $offset      = $input->getOption('offset');
         $em          = $this->getContainer()->get('doctrine')->getManager();
 
         $qb->setFirstResult($offset);
@@ -99,7 +100,7 @@ EOF
         $objAds = $qb->getQuery()->execute();
         foreach ($objAds as $objAd) {
             $objAd->setIsBlockedAd(1);
-            //$this->em->getRepository('FaAdBundle:Ad')->deleteAdFromSolrByUserId($objAd->getUser()->getId(), $this->getContainer());
+            $this->em->getRepository('FaAdBundle:Ad')->deleteAdFromSolrByAdId($objAd->getId(), $this->getContainer());
             $this->em->persist($objAd);
             $this->em->flush();
             $output->writeln('Inactivation process is completed for ad id: '.$objAd->getId(), true);
@@ -116,7 +117,7 @@ EOF
      */
     protected function updateAdStatus($input, $output)
     {
-        $qb        = $this->getAdQueryBuilder(TRUE);
+        $qb        = $this->getAdQueryBuilder(TRUE, $input);
         $count     = $qb->getQuery()->getSingleScalarResult();
         $step      = 100;
         $stat_time = time();
@@ -166,8 +167,9 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE)
+    protected function getAdQueryBuilder($onlyCount = FALSE, $input)
     {
+        $userId = intval($input->getOption('user_id'));
         $adRepository  = $this->em->getRepository('FaAdBundle:Ad');
         $qb = $adRepository->getBaseQueryBuilder();
 
@@ -177,9 +179,12 @@ EOF
 
         $qb->innerJoin(AdRepository::ALIAS.'.user', UserRepository::ALIAS, 'WITH', AdRepository::ALIAS.'.user = '.UserRepository::ALIAS.'.id')
            ->where(UserRepository::ALIAS.'.status <> :userStatus')
-           ->setParameter('userStatus', EntityRepository::USER_STATUS_ACTIVE_ID)
-           ->andWhere(AdRepository::ALIAS.'.is_blocked_ad <> 1');
-
+           ->setParameter('userStatus', EntityRepository::USER_STATUS_ACTIVE_ID);
+        
+        if (!empty($userId)) {
+            $qb->andWhere(UserRepository::ALIAS.'.id = :userId')
+               ->setParameter('userId', $userId);
+        }
         return $qb;
     }
 }

@@ -127,23 +127,31 @@ EOF
 
         $ads = $qb->getQuery()->getResult();
 
+        //hard coded user_emails in FFR-3227
+        $neglectUserEmailArr = array('1danamia696@yahoo.com',  '2danamia696@yahoo.com',  'aj_gani+5@me.com',  'aj_gani+6@me.com',  'aj_gani+7@me.com',  'aj_gani+8@me.com',  'contact@pleasuregirls.com',  'contact+1@pleasuregirls.com',  'danamia696@yahoo.com',  'aj_gani+1@me.com',  'incalls@gmail.com',  'info@oasisparlour.co.uk',  'kentladies@gmail.com',  'londonbranch@ph.com',  'patriciamartinez@hotmail.co.uk',  'pleassurehoneys+1@yahoo.com',  'pleassurehoneys+2@yahoo.com',  'pleassurehoneys+4@yahoo.com',  'pleassurehoneys+5@yahoo.com',  'pleassurehoneys+6@yahoo.com',  'pureescorts1+3@gmail.com',  'pureescorts1+5@gmail.com',  'shah02@hotmail.co.uk',  'walkin@hotmail.co.uk','surreyescorts@gmail.com','berkshireescorts@gmail.com','greaterlondon@gmail.com','gatwickescorts@gmail.com','contact+2@happyescorts.com','');
+
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
         foreach ($ads as $ad) {
-            $user = ($ad->getUser() ? $ad->getUser() : null);
-            $ad->setWeeklyRefreshAt(time());
-            $entityManager->persist($ad);
-            $entityManager->flush($ad);
-            $user_id = $user ? $user : null;
-            if (!$ad->getIsFeedAd()) {
-                $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_refreshed', $ad->getId(), $user_id);
-            }
+            $userEmail = $ad->getUser()->getEmail();
+            if(!in_array($userEmail, $neglectUserEmailArr)) {
+                $user = ($ad->getUser() ? $ad->getUser() : null);
+                $ad->setWeeklyRefreshAt(time());
+                $entityManager->persist($ad);
+                $entityManager->flush($ad);
+                $user_id = $user ? $user : null;
+           
+                if (!$ad->getIsFeedAd()) {
+                    $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_refreshed', $ad->getId(), $user_id);
+                }
 
-            //send email only if ad has user and status is active and not feed ad.
-            if (!$ad->getIsFeedAd() && $user && CommonManager::checkSendEmailToUser($user_id, $this->getContainer())) {
-                //$this->em->getRepository('FaAdBundle:Ad')->sendRefreshAdEmail($ad, 'confirmation_of_ad_refreshing', null, $this->getContainer());
-                $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('confirmation_of_ad_refreshing', $user, $ad, $this->getContainer());
+                //send email only if ad has user and status is active and not feed ad.
+                if (!$ad->getIsFeedAd() && $user && CommonManager::checkSendEmailToUser($user_id, $this->getContainer())) {
+                    //$this->em->getRepository('FaAdBundle:Ad')->sendRefreshAdEmail($ad, 'confirmation_of_ad_refreshing', null, $this->getContainer());
+                    $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('confirmation_of_ad_refreshing', $user, $ad, $this->getContainer());
+                }
+                $output->writeln('Refresh date is updated for ad id: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
             }
-            $output->writeln('Refresh date is updated for ad id: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
+            
         }
 
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);

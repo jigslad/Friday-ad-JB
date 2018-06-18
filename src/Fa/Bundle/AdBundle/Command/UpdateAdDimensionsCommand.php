@@ -26,7 +26,7 @@ use Fa\Bundle\AdBundle\lib\Migration\Jobs;
 use Fa\Bundle\AdBundle\lib\Migration\Car;
 use Fa\Bundle\AdBundle\lib\Migration\Caravan;
 use Fa\Bundle\AdBundle\lib\Migration\Motorbikes;
-use Fa\Bundle\AdBundle\lib\Migration\Fa\Bundle\AdBundle\lib\Migration;
+
 
 /**
  * This command is used to update dimensionads.
