@@ -96,10 +96,16 @@
                    $('#'+choiceId).addClass('active');
                }
                $('#'+formName+'_'+field).val(selectedId);
-           } else if (fieldType == 'radio') {
-               $('.'+fieldChoice).removeClass('active');
-               $('#'+choiceId).addClass('active');
-               $("input[name='"+formName+"["+field+"]'][value='"+selectedId+"']").attr('checked', true);
+           } else if (fieldType == 'radio') { 
+               $("input[name='"+formName+"["+field+"]']").attr('checked', false);
+               
+				if(!$( '#'+choiceId ).hasClass( "active" )) { 
+					$('.'+fieldChoice).removeClass('active');
+                    $('#'+choiceId).addClass('active');
+                    $("input[name='"+formName+"["+field+"]'][value='"+selectedId+"']").prop('checked', true);
+           		} else {
+           			$('.'+fieldChoice).removeClass('active');
+               	}
            } else if (fieldType == 'checkbox') {
                if ($(this).hasClass('active')) {
                    $(this).removeClass('active');

@@ -18,6 +18,9 @@
 {% endblock %}
 
 {% block body %}
+<style>
+.buyer-contact .label-inline label { margin-right:0px !important; }
+</style>
     <div class="posting-bg">
         <div class="fad-sign-bdr">&nbsp;</div>
         <div class="row paa-main">
@@ -103,6 +106,16 @@
                             </div>
                             <div class="label-inline mb10">
                                 {{ form_row(form.is_third_party_email_alert_enabled) }}
+                            </div>
+                            <div class="label-inline regchkbox-label mb10" style="display:inline-flex">
+                                {{ form_widget(form.is_terms_agreed) }}
+                                <label class="form-control">I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a></label><br>
+                                
+                            </div>
+                            <div>{{ form_errors(attribute(form, 'is_terms_agreed')) }}</div>
+
+                            <div class="mt20 mb20" style="color: #a4a4a4;">
+                                We will use your data to help us create your account. Please take a look at our <a href="/privacy-policy/" target="_blank">Privacy Policy</a> for more information about how we use your data.
                             </div>
                             {{ form_widget(form.Register, {'attr': {'class':'primary-btn-1 button expand'}}) }}
                         {{ form_end(form) }}

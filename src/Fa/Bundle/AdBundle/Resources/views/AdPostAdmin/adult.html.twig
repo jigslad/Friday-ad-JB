@@ -4,6 +4,7 @@
 
 {% set userRepository = fetch_repository('FaUserBundle:User') %}
 {% set userRole = userRepository.getUserRole(app.user.getId(), fetch_container_instance()) %}
+{% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -78,10 +79,38 @@
                                     <a href="javascript:void(0);" id="fa_paa_adult_admin_location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                                 </div>
                                 {{ form_errors(attribute(form, field)) }}
+                                
+                                 {# For Area Postal Code  #}
+                                    {% set isLocationArea = locationRepository.checkLocationIsArea(attribute(form, 'location').vars.value, attribute(form, 'area').vars.value, fetch_container_instance()) %}
+                                    {% if attribute(form, 'area_autocomplete').vars.errors|length  or isLocationArea %}
+                                        {% set showHideAreaField = 'inline' %}
+                                    {% elseif attribute(form, 'area_autocomplete').vars.value != '' %}
+                                    	{% set showHideAreaField = 'inline' %}
+                                    {% else %}
+                                    	{% set showHideAreaField = 'none' %}
+                                    {% endif %} 
+                                    <div id="location_area_div" style="display:{{ showHideAreaField }};">
+                                        <div class="row">
+                                            <div class="large-12 columns mb10">
+                                                <label for="fa_paa_adult_admin_area_autocomplete">Type your postcode to find your area:</label>
+                                                <div class="relative">
+                                                    {{ form_widget(attribute(form, 'area_autocomplete'), {'attr': {'placeholder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : ' ') }}) }}
+                                                    <a href="javascript:void(0);" id="fa_paa_services_admin_area_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                                </div>
+                                                {{ form_errors(attribute(form, 'area_autocomplete'), {'attr' : {'class' : '' }}) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                
                             {% elseif field == 'business_phone' %}
                                 {{ include('FaAdBundle:AdPostAdmin:businessPhoneField.html.twig') }}
                             {% elseif field == 'photo_error' %}
                                 {{ include('FaAdBundle:AdPostAdmin:paaUploadImageAdmin.html.twig', {'vertical':'adult'}) }}
+                            {% elseif field == 'rates_id' %}
+                                <div class="relative">
+                            	 	{{ include('FaAdBundle:AdPostAdmin:editPaaFieldRates.html.twig') }} 
+                            	 	
+                                </div>  
                             {% else %}
                                 {{ form_row(attribute(form, field)) }}
                             {% endif %}
@@ -192,6 +221,7 @@
 </script>
 {% if (form.location_autocomplete) is defined %}
     {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_adult_admin_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices'}) }}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_adult_admin_area', 'placeHolder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : 'ex: SE2'|trans), 'route' : 'area_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices', 'townIdForArea': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TOWN_ID') }) }}
 {% endif %}
 
 {% if categoryDimensionId is defined and categoryDimensionId %}

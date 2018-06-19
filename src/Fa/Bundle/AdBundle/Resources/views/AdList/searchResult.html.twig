@@ -2,10 +2,21 @@
 {% set container = fetch_container_instance() %}
 {% set seoManager = container.get('fa.seo.manager') %}
 {% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
 {% set seoPageRule = {} %}
 {% set seoFields = {} %}
 {% set customized_url = app.request.get('customized_page')  %}
+{% set catSrchString = null %}
+{% set recommendedSlotsCount = recommendedSlotResult|length %}
+{% if recommendedSlotsCount > 0 %}
+    {% set displayRecommendedSlot = 1 %}
+{% else %}
+    {% set displayRecommendedSlot = 0 %}
+{% endif %}
 
+{% set totalAdCount = (pagination.getNbResults())?(pagination.getNbResults()|length):0 %}
+{% set businessExposureUsersCount = (businessExposureUsersDetails is defined )?(businessExposureUsersDetails|length) :0%}
+{% set topAdCount = (topAdResult is defined)?topAdResult|length:0 %}
 
 {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
     {% if customized_url|length %}
@@ -14,6 +25,7 @@
         {% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForListResult(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE'), searchParams.item__category_id, container) %}
     {% endif %}
 {% endif %}
+
 {% if not seoPageRule|length %}
     {% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForListResult(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE'), null, container) %}
 {% endif %}
@@ -120,6 +132,13 @@
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+    {% set categorySrchPath = categoryRepository.getCategoryPathArrayById(searchParams.item__category_id, false, container) %}
+    {% for categoryId,categoryName in categorySrchPath %}
+        {% set catSrchString = catSrchString ~ '-' ~ categoryName %}
+    {% endfor %}
+    {{ set_variables('SrchCatDetails', {'catSrchString':catSrchString}) }}
+{% endif %}
 <div class="banner-wrapper clearfix">
     <div class="left-banner">
         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
@@ -160,9 +179,20 @@
         </div>
 
         <div id="listingDiv" class="large-18 columns">
-            {% if not mobileDetectManager.isMobile() or not mobileDetectManager.isTablet() %}
+            {#{% if not mobileDetectManager.isMobile() or not mobileDetectManager.isTablet() %}
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_ABOVE_RESULTS') %}
                 {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            {% endif %}#}
+            {% if pagination.getNbResults() %}
+                {% if isShopPage is not defined %}
+                    {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+                {% endif %}
+            {% endif %}
+
+            {% set slotallocated = [] %}
+            {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 and totalAdCount > 0 and (recommendedSlotResult[1] is defined and recommendedSlotResult[1]|length >0) %}
+                {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 1 }) }}
+                {% set slotallocated = slotallocated|merge([1]) %}
             {% endif %}
 
             {{ include('FaAdBundle:AdList:businessExposureBlock.html.twig', {}) }}
@@ -172,9 +202,6 @@
             {% set bannerStatus = true %}
             
             {% if pagination.getNbResults() %}
-                {% if isShopPage is not defined %}
-                    {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
-                {% endif %}
                 {% set adFavoriteRepository   = fetch_repository('FaAdBundle:AdFavorite') %}
                 {% set adRepository   = fetch_repository('FaAdBundle:Ad') %}
                 {% if app.user %}
@@ -183,13 +210,19 @@
                     {% set userId = app.session.getId() %}
                 {% endif %}
                 {% set adFavoriteAdIds = adFavoriteRepository.getFavoriteAdByUserId(userId, container) %}
+
                 {% if topAdResult is defined and topAdResult|length %}
                     {% for ad in topAdResult %}
                         {% set adCount = adCount + 1 %}
                         {{ include('FaAdBundle:AdList:listDetail.html.twig', {'isTopAd': 1}) }}
                     {% endfor %}
                 {% endif %}
-                
+
+                {% if displayRecommendedSlot==1 and recommendedSlotsCount > 1 and totalAdCount > 0 and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0)%}
+                    {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 2 }) }}
+                    {% set slotallocated = slotallocated|merge([2]) %}
+                {% endif %}
+
                 {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
                 	 {% if (adCount >= 2) %}
                 	 	{% set bannerStatus = false %}	
@@ -197,9 +230,23 @@
 	                	{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
 	                  {% endif %}
 	             {% endif %} 
-                
+                {% set slotAdCount = 0 %}
                 {% for ad in pagination.getCurrentPageResults() %}
                     {% set adCount = adCount + 1 %}
+                    {% set slotAdCount = slotAdCount + 1 %}
+                    {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 %}
+                        {% if slotAdCount== 5  and (recommendedSlotResult[3] is defined and recommendedSlotResult[3]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 3 }) }}
+                            {% set slotallocated = slotallocated|merge([3]) %}
+                        {% elseif slotAdCount== 14  and (recommendedSlotResult[4] is defined and recommendedSlotResult[4]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 4 }) }}
+                            {% set slotallocated = slotallocated|merge([4]) %}
+                        {% elseif slotAdCount== 19  and (recommendedSlotResult[5] is defined and recommendedSlotResult[5]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 5 }) }}
+                            {% set slotallocated = slotallocated|merge([5]) %}
+                        {% endif %}
+                    {% endif %}
+
                     {{ include('FaAdBundle:AdList:listDetail.html.twig') }}
                     {% set adCounter = adCounter + 1 %}
 
@@ -252,6 +299,17 @@
                         {% endif %}
                     {% endif %}
                 {% endfor %}
+
+                {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 %}
+                    {% for recommendedSlotSingle in recommendedSlotResult %}
+                      {% if recommendedSlotSingle['creative_group'] not in slotallocated %}
+                        {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': recommendedSlotSingle['creative_group'] }) }}
+                        {% set slotallocated = slotallocated|merge([recommendedSlotSingle['creative_group']]) %}
+                      {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+            
             {% else %}
                 <div data-alert class="alert-box success radius mt10">
                     <span class="alert-icon">&nbsp;</span>
@@ -259,6 +317,9 @@
                     <a href="javascript:void(0)" rel="nofollow" class="close">&times;</a>
                 </div>
             {% endif %}
+
+            
+
 
             <span id="createAlertBlockSpan">
                 {{ render(controller('FaAdBundle:AdList:createAlertBlock')) }}
@@ -319,6 +380,12 @@
     {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
     {{ include('FaAdBundle:AdList:listJs.html.twig') }}
 
+    {% set catSrchText = null %}
+    {% if get_variables('SrchCatDetails') is not null and get_variables('SrchCatDetails').catSrchString is defined %}
+        {% set catSrchText = get_variables('SrchCatDetails').catSrchString %}
+    {% endif %}
+
+
    <script language="javascript" type="text/javascript">
     //<![CDATA[
 
@@ -356,6 +423,13 @@
       ga('send', 'event', eventCategory, eventAction, eventLabel);
       location.href = hrefUrl;
     }
+
+    function gaSendForRecommendedSlotSearch(url, domain) 
+    {
+        ga('send', 'event', 'Search List Page', 'Recommended external ads', '{{ catSrchText|trim('-') }}-'+domain);
+        window.open(url, '_blank');
+    }
+
     //]]>
     </script>
 

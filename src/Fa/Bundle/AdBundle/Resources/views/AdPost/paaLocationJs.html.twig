@@ -4,10 +4,14 @@
     {
         $('#change_location_link').click(function(){
             $('#location_field_div').show();
+            if($('#'+formName+'_area_autocomplete').val()) {
+            	$('#location_area_div').show();
+            }
         });
 
         $('#find_on_map').click(function(){
-            var locationVal = $('#'+formName+'_location_autocomplete').val();
+        	var locationVal = $('#'+formName+'_location_autocomplete').val();
+            
             if (locationVal && locationVal != 'United Kingdom') {
                 $('#location_map_div').show();
                 showAddress(locationVal);

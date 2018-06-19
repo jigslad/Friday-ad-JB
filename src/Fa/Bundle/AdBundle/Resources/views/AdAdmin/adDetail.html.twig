@@ -11,6 +11,7 @@
 {% set container = fetch_container_instance() %}
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
 {% set rootCategoryId = categoryRepository.getRootCategoryId(adDetail['category_id'], container) %}
+{% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
 {% set adCategoryId = adDetail['category_id'] %}
 {% set secondLevelCategoryId = categoryRepository.getCategoryIdByLevel(adDetail['category_id'], 1, container) %}
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
@@ -209,9 +210,48 @@
                             {{ include('FaAdBundle:Ad:AdServiceDetailTabs.html.twig') }}
                         {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                             {% set adAdultRepository = fetch_repository('FaAdBundle:AdAdult') %}
+                            {% set adEntityRepository = fetch_repository('FaEntityBundle:Entity') %}
                             {% set adAdult = adAdultRepository.findOneBy({'ad': adId}) %}
                             {% set adAdultDetail = {} %}
                             {% set servicesIds = {} %}
+                            {% set metaData = {} %}
+                            
+                            {% if adAdult and adAdult.getMetaData() is not null %}
+                                {% set metaData = array_unserialize(adAdult.getMetaData()) %}
+                                {% if metaData['my_service_id'] is defined %}
+                                	{% set myServiceIsFor = [] %} 
+                                	{% set serviceStr = metaData['my_service_id']|split(',') %}
+                                	{% set serviceStrArr = '' %}
+                                	{% set i = 0 %}
+                                	{% set serviceLabel = (adDetail['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR')] is defined)?constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR'):'Service is for' %}
+                                	{% for key, serviceRecord in serviceStr %}  
+                                		{% set serviceObj = adEntityRepository.findOneBy({'id': serviceRecord}) %}
+                                		{% if serviceObj is not null %} 
+                                			{% if i > 0 %} {% set serviceStrArr = serviceStrArr ~ ',' %} {% endif %}
+                                		    {% set serviceStrArr = serviceStrArr ~ serviceObj.getName() %}
+                                		{% endif %}
+                                		{% set i = i+1 %}
+                                	{% endfor %}
+                                {% endif %}
+                                
+                                {% if metaData['rates_id'] is defined %}
+                                	{% if metaData['rates_id']['incall'] is defined %}
+                                		{% set adultInCallRates =  metaData['rates_id']['incall'] %}
+                                	{% endif %}
+                                	{% if metaData['rates_id']['outcall'] is defined %}
+                                	    {% set adultOutCallRates =  metaData['rates_id']['outcall'] %}
+                                	{% endif %}
+                                {% endif %}
+                                
+                            {% endif %}
+                            
+                            {% if adAdult and adAdult.getTravelArrangementsId() is not null %}
+                            	{% set adPreviewTravelAgent = adAdult.getTravelArrangementsId() %}
+                            {% endif %} 
+                             {% if adAdult and adAdult.getIndependentOrAgencyId() is not null %}
+                            	{% set adPreviewIndependentOrAgencyId = adAdult.getIndependentOrAgencyId() %}
+                            {% endif %}
+                            
                             {% if adDetail['description'] is defined %}
                                 {% set adAdultDetail = adAdultDetail|merge({'description': adDetail['description']}) %}
                             {% endif %}

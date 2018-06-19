@@ -10,14 +10,14 @@
                 {% set gaEventLabel     = businessExposureUsersDetail['user_name'] ~ ' - ' ~ profilePosition %}
                 <a href='javascript:visitUserProfileOrAd("{{ userProfileUrl }}", "Click Ad position", "{{ gaEventAction }}", "{{ gaEventLabel }}");' class="tricky-link">{{ businessExposureUsersDetail['user_name']|raw }}</a>
                 <div class="row">
-                    <div class="large-5 columns">
+                    <div class="small-8 large-5 columns featured-bus-left">
                         <div class="featured-bz-listimg">
                             {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [container, businessExposureUsersDetail['company_logo'], businessExposureUsersDetail['user_id'], null, null, true, true, businessExposureUsersDetail['status_id'], businessExposureUsersDetail['user_name']]) %}
                             {{ userCompanyLogo|raw }}
                         </div>
                     </div>
 
-                    <div class="large-19 columns">
+                    <div class="large-19 columnsmall-15 large-19 columns featured-bus-rights">
                         <h3 class="outside-tricky"><a href='javascript:visitUserProfileOrAd("{{ userProfileUrl }}", "Click Ad position", "{{ gaEventAction }}", "{{ gaEventLabel }}");'>{{ businessExposureUsersDetail['user_name']|raw }}</a></h3>
                         <div class="profile-desc">
                             {% if businessExposureUsersDetail['company_welcome_message'] is defined and businessExposureUsersDetail['company_welcome_message']|length > 0 %}

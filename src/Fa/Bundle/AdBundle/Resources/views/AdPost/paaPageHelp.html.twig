@@ -9,8 +9,10 @@
             {% if paaBlockSlug is defined and (paaBlockSlug == 'paa-for-sale-fourth-step' or paaBlockSlug == 'paa-login-third-step' or paaBlockSlug == 'paa-registration-third-step') %}
                 {% set twoLineClass = 'two-line' %}
             {% endif %}
-            <h4 class="{{ twoLineClass }}">{{paaBlock['title']|raw}}</h4>
-            {{paaBlock['description']|raw}}
+            {% if (hideRightSideTxt is defined and hideRightSideTxt != 'hide') or (hideRightSideTxt is not defined ) %}
+            	<h4 class="{{ twoLineClass }}">{{paaBlock['title']|raw}}</h4>
+            	{{paaBlock['description']|raw}}
+           	{% endif %}
         {% endif %}
     </div>
 </div>

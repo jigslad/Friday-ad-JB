@@ -156,7 +156,15 @@
                         {% if attribute(ad, constant(solrMapping ~ 'LOCALITY_ID')) is defined %}
                             <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', attribute(ad, constant(solrMapping ~ 'LOCALITY_ID')).0) }}</b>
                         {% elseif attribute(ad, constant(solrMapping ~ 'TOWN_ID')) is defined %}
-                            <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(ad, constant(solrMapping ~ 'TOWN_ID')).0) }}</b>
+                        	{% if attribute(ad, constant(solrMapping ~ 'AREA_ID')) is defined  %}
+                            	{% if attribute(ad, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) is defined and attribute(ad, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) %}
+                            		<b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(ad, constant(solrMapping ~ 'AREA_ID')).0) }}</b>
+                            	{% else %}
+                            		<b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(ad, constant(solrMapping ~ 'AREA_ID')).0) ~ ', ' ~ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(ad, constant(solrMapping ~ 'TOWN_ID')).0) }}</b>
+                            	{% endif %}
+                            {% else %}
+                        		<b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(ad, constant(solrMapping ~ 'TOWN_ID')).0) }}</b>
+                        	{% endif %}
                         {% endif %}
                         {% if attribute(ad, 'away_from_location') is defined %}
                             <span class="away-from-location">{{ (attribute(ad, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}</span>

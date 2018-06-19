@@ -1,4 +1,6 @@
 {% set paaFieldRepository = fetch_repository('FaAdBundle:PaaField') %}
+{% set adAdultRepository = fetch_repository('FaAdBundle:AdAdult') %}
+{% set solrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
 <div class="detail-tabpart-2" id="vif_tabs">
     <ul class="tabs hide-for-small-only" data-tab id="ad_property_tabs">
         {% if (adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null) %}
@@ -8,7 +10,8 @@
             <li class="tab-title"><a href="#about_us_panel" id="aboutus-tab-id">{{'About Us'|trans({}, 'frontend-show-ad')}}</a></li>
         {% endif %}
     </ul>
-    <dl class="accordion {% if servicesIds|length == 0 %}hide-for-small-only{% endif %}" data-accordion="">
+    {# <dl class="accordion {% if servicesIds|length == 0 %}hide-for-small-only{% endif %}" data-accordion=""> #}
+    <dl class="accordion" data-accordion="">
         <dd class="accordion-navigation">
             <div class="content active" id="basic_info_panel">
                 {% if adAdultDetail['description'] is defined %}
@@ -21,6 +24,113 @@
                     </div>
                 {% endif %}
                 
+                
+                 <h5 class="detail-label-adult">{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
+		             <div class="motor-info">
+                        <div class="info-row flexy-box">
+                        	<div class="clearfix parent_box" data-equalizer> 
+                        		{% if adDetailAndDimensionFields['detail']['Gender'] is defined and adDetailAndDimensionFields['detail']['Gender'] != '' %}
+                                    <div class="info-box child_box" data-equalizer-watch>
+                                        <div class="flexy-outer-div">
+                                        	<label class="flexy-label">{{ 'Gender'|trans({}, 'frontend-show-ad')}}</label>
+                                    	</div>
+                                        <span class="motor-info-icon adult-{{ adDetailAndDimensionFields['detail']['Gender']|lower }}"></span>
+                                        <span class="info-dtl">
+                                            {{ adDetailAndDimensionFields['detail']['Gender'] }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if (adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::MY_SERVICE_IS_FOR')] is defined and adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::MY_SERVICE_IS_FOR')] != '') or  (adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR')] is defined and adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR')] != '') or (serviceStrArr is defined) %}
+                                    {% set serviceIsFor = (serviceStrArr is defined?serviceStrArr:(adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR')] is defined?adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR')]:adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::MY_SERVICE_IS_FOR')])) %}
+                                    {% set serviceLabel = (serviceLabel is defined?serviceLabel:(adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR')] is defined?constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR'):'Service is for')) %}
+                                    {% set amendString = adAdultRepository.getAdultAmendString(serviceIsFor) %}
+                                    <div class="info-box child_box" data-equalizer-watch>
+                                    	<div class="flexy-outer-div">
+                                        	<label class="flexy-label">{{ serviceLabel }}</label>
+                                    	</div>
+                                        <span class="motor-info-icon service-for-{{ (amendString|lower == 'men' or amendString|lower == 'male'?'men':(amendString|lower == 'women'?"women":"couples")) }}"></span>
+                                        <span class="info-dtl">
+                                        	{{ amendString }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if (adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::TRAVEL_ARRANGEMENTS')] is defined and adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::TRAVEL_ARRANGEMENTS')] != '') or (adPreviewTravelAgent is defined) %}
+                                    {% set adAdultTravelId = (adPreviewTravelAgent is defined)?adPreviewTravelAgent: attribute(adDetail, constant('Fa\\Bundle\\AdBundle\\Solr\\AdAdultSolrFieldMapping::TRAVEL_ARRANGEMENTS_ID'))  %}
+                                    {% set travelArrangementName =  entityCacheManager.getEntityNameById('FaEntityBundle:Entity', adAdultTravelId) %}
+                                    <div class="info-box child_box" data-equalizer-watch>
+                                        <div class="flexy-outer-div">
+                                        	<label class="flexy-label">{{ 'Travel Arrangement'|trans({}, 'frontend-show-ad')}}</label>
+                                    	</div>
+                                        <span class="motor-info-icon travel-arrangement-{{ travelArrangementName|lower }}"></span>
+                                        <span class="info-dtl">
+                                        	{% if travelArrangementName == 'Either' %}
+                                        		{{ 'In-call and Out-call'|trans({}, 'frontend-show-ad')}}
+                                        	{% else %}
+                                                {{ travelArrangementName }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                 {% endif %}
+                                 
+                                {% if (adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::INDEPENDENT_OR_AGENCY')] is defined and adDetailAndDimensionFields['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::INDEPENDENT_OR_AGENCY')] != '') or (adPreviewIndependentOrAgencyId is defined) %}
+                                    {% set adAdultTypeId = (adPreviewIndependentOrAgencyId is defined)?adPreviewIndependentOrAgencyId:attribute(adDetail, constant('Fa\\Bundle\\AdBundle\\Solr\\AdAdultSolrFieldMapping::INDEPENDENT_OR_AGENCY_ID'))  %}
+                                    {% set adultTypeName =  entityCacheManager.getEntityNameById('FaEntityBundle:Entity', adAdultTypeId) %}
+                                    <div class="info-box child_box" data-equalizer-watch>
+                                        <div class="flexy-outer-div">
+                                        	<label class="flexy-label">{{ 'Type'|trans({}, 'frontend-show-ad')}}</label>
+                                    	</div>
+                                        <span class="motor-info-icon adult-{{ adultTypeName|lower }}"></span>
+                                        <span class="info-dtl">
+                                            {{ adultTypeName }}
+                                        </span>
+                                    </div>
+                                 {% endif %}
+                                
+                            </div>
+                        </div>                            
+                    </div> 
+               {% if adDetailAndDimensionFields['detail'] is defined %} 
+                    <ul class="details-info">
+                        {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
+                        	{% if fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::TRAVEL_ARRANGEMENTS') and fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::INDEPENDENT_OR_AGENCY') and fieldName != 'Gender' and fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::MY_SERVICE_IS_FOR') and fieldName != 'Gender' and fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR') %}
+                                <li class="clearfix">
+                                    <div class="detail-text">{{fieldName}}</div>
+                                    <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if adDetailAndDimensionFields['payment_method_id'] is defined and adDetailAndDimensionFields['payment_method_id'] != '' %}
+                        	<li class="clearfix">
+                                    <div class="detail-text">{{ 'Payment Method'|trans({}, 'frontend-show-ad')}}</div>
+                                    <div class="detail-text">
+                                    	{% if adDetailAndDimensionFields['payment_method_id'] == '4' %}
+                                    		{{ 'Bank Transfer'|trans({}, 'frontend-show-ad')}}
+                                    	{% else %}
+                                    		{{ 'Paypal'|trans({}, 'frontend-show-ad')}}
+                                    	{% endif %}
+                                    </div>
+                                </li>
+                        {% endif %}
+                        
+                        {% if attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')) is defined %}
+                    		<li class="clearfix">
+                                    <div class="detail-text">{{ 'Payment Method'|trans({}, 'frontend-show-ad')}}</div>
+                                    <div class="detail-text">
+                                    	{% if attribute(adDetail, constant(solrMapping ~ 'PAYMENT_METHOD_OPTION_ID')) == '4' %}
+                                    		{{ 'Bank Transfer'|trans({}, 'frontend-show-ad')}}
+                                    	{% else %}
+                                    		{{ 'Paypal'|trans({}, 'frontend-show-ad')}}
+                                    	{% endif %}
+                                    </div>
+                                </li>
+                    	{% endif %}
+                        
+                    </ul>
+                {% endif %} 
+                    
                 {% if servicesIds|length %}
                     {% set paaFieldsLabel = paaFieldRepository.getDimensionPaaFieldsWithLabel(adCategoryId, container) %}
                     <h5 class="safety-title">
@@ -31,7 +141,24 @@
                         {% endif %}
                     </h5>
                     <div class="safety-features mb20">
-                        <ul class="details-info">
+                    {#  DeskTop and Tablet View  #}
+                        <table class="responsive-card-table hide-for-medium-down adult_services_box">
+                            <tbody>
+                            	<tr></tr>
+                                <tr>
+                                	{% set cnt = 0 %}
+                                	{% for servicesId in servicesIds %}
+                                		{% set cnt = cnt + 1 %}
+                                        <td class="in-out-detail-text-f">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', servicesId) }}</td>
+                                    	<td class="in-out-detail-text-f"><span class="safety-fe-check"></span></td>
+                                    	{{ (cnt%2 == '0')?'</tr><tr>':'' }}	
+                                	      
+                                	{% endfor %}
+                                </tr>                                                            
+                            </tbody>
+                        </table>
+                    {#  Mobile View  #}
+                        <ul class="details-info show-for-medium-down">
                             {% for servicesId in servicesIds %}
                                 <li class="clearfix">
                                     <div class="detail-text">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Entity', servicesId) }}</div>
@@ -41,17 +168,55 @@
                         </ul>
                     </div>
                 {% endif %}
-                    
-                {% if adDetailAndDimensionFields['detail'] is defined %}
-                    <ul class="details-info">
-                        {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
-                            <li class="clearfix">
-                                <div class="detail-text">{{fieldName}}</div>
-                                <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                
+                
+                {% if adultInCallRates is defined or adultOutCallRates is defined %} 
+                <h5 class="safety-title">Rates</h5>
+                <div class="in-out-calls-block">
+                	{% if adultInCallRates is defined and travelArrangementName is defined and (travelArrangementName|lower == 'in-call' or travelArrangementName|lower == 'either')  %}
+                        <div class="in-out-calls-subblock">
+                            <div class="in-out-calls-text"><span colspan="4"><span class="safety-fe-incall m-r-10"></span><span>In-calls</span></span></div>
+                            <table class="responsive-card-table boder-rates"  style="table-layout: fixed!important;">
+                                <tbody>                            
+                                    <tr class="hide-for-small-only hide-for-medium-down hide-block">
+                                    	{% set strInCallContent = '<tr>' %}
+                                    	{% for fieldName, fieldValue in adultInCallRates %}
+                                    	{% set fieldLabel = entityCacheManager.getEntityNameById('FaEntityBundle:Entity', fieldName) %}
+                                    	{% set fieldValue = (fieldValue != '')?"&pound;"~fieldValue:'-' %}
+                                          <td class="in-out-detail-text-f">{{ fieldLabel }}</td>
+                                          {% set strInCallContent = strInCallContent~'<td data-label="'~fieldLabel~'" class="in-out-detail-text-l"><span>'~fieldValue~'</span></td>' %}
+                                          {% endfor %}
+                                          {% set strInCallContent = strInCallContent~'</tr>' %}
+                                    </tr>
+                                    {{ strInCallContent|raw }}
+                                </tbody>
+                            </table>
+                        </div>
+                	<br>
+            	    {% endif %}
+                	{% if adultOutCallRates is defined and travelArrangementName is defined and (travelArrangementName|lower == 'out-call' or travelArrangementName|lower == 'either')  %}
+                        <div class="in-out-calls-subblock">
+                            <div class="in-out-calls-text"><span colspan="4"><span class="safety-fe-outcall m-r-10"></span><span>Out-calls</span></span></div>
+                            <table class="responsive-card-table boder-rates"  style="table-layout: fixed!important;">
+                                <tbody>                            
+                                    <tr class="hide-for-small-only hide-for-medium-down hide-block">
+                                    	{% set strOutCallContent = '<tr>' %}
+                                    	{% for fieldName, fieldValue in adultOutCallRates %}
+                                        	{% set fieldLabel = entityCacheManager.getEntityNameById('FaEntityBundle:Entity', fieldName) %}
+                                        	{% set fieldValue = (fieldValue != '')?"&pound;"~fieldValue:'-' %}
+                                              <td class="in-out-detail-text-f">{{ fieldLabel }}</td>
+                                              {% set strOutCallContent = strOutCallContent~'<td data-label="'~fieldLabel~'" class="in-out-detail-text-l"><span>'~fieldValue~'</span></td>' %}
+                                          {% endfor %}
+                                          {% set strOutCallContent = strOutCallContent~'</tr>' %}
+                                    </tr>
+                                    {{ strOutCallContent|raw }}
+                                </tbody>
+                            </table> 
+                        </div>
+                    {% endif %}
+                </div>
                 {% endif %}
+                                
             </div>
             
             {% if adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null %}

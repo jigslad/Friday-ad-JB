@@ -23,9 +23,11 @@
                 <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
                 <h1 class="text-center">{{ 'Almost there!'|trans({}, 'frontend-paa-fourth-step') }}</h1>
                 <h2 class="text-center subtitle paa-title">{{ 'Add some photos and a few more details if you want to.'|trans({}, 'frontend-paa-fourth-step') }}</h2>
-
+				
+				{% set hideRightSideTxt = '' %}
                 {% if ad and ad.id %}
                     {% set categoryId = ad.category.id %}
+                    {% set hideRightSideTxt = (ad.category.name == 'Adult Contacts' or  ad.category.name == 'Adult Industry Jobs'?'hide':'') %}
                     {% set adAdultDetails = fetch_repository('FaAdBundle:AdAdult').findByAdId(ad.id) %}
                     {% set adAdult = adAdultDetails[0] %}
                     {% set adAdultMetaData = array_unserialize(adAdult.meta_data) %}
@@ -33,7 +35,7 @@
                     <div class="big-wrapper">
                         {{ include('FaAdBundle:AdPost:fourthStepAdultShowSecondStepFieldsData.html.twig') }}
                         {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'frmPAA'}}) }}
-                            {{ form_errors(form) }}
+                        {# {{ form_errors(form) }} #}
                             {{ include('FaAdBundle:AdPost:fourthStepAdultFields.html.twig') }}
                             <div class="small-wrapper">
                                 {{ form_widget(form.preview, {'attr': {'class':'secondary-btn-2 expand'}}) }}
@@ -42,8 +44,30 @@
                         {{ form_end(form) }}
                     </div>
                 {% endif %}
-            </div>
-            {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-adult-fourth-step'}) }}
+            </div> 
+                {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-adult-fourth-step', 'hideRightSideTxt': hideRightSideTxt}) }}                
+                
+                <div id="change_category_for_adult_reveal_modal" class="reveal-modal tiny" data-reveal>
+                	<a class="close-reveal-modal">&#215;</a>
+                    <h5 class="modal-title">
+                        {{'Placing a male escort ad?'|trans({}, 'frontend-invalid-location')}}
+                    </h5>
+                    <div class="modal-content remove-modal">
+                        <div class="row">
+                            <div class="columns">
+                                {{ "We have a dedicated category for male escorts. Click below to change the category of your ad to 'Gay Male Escorts'"|trans({}, 'frontend-invalid-location') }}<br /><br />                                
+                            </div>
+                        </div>
+                    
+                        <div class="invalid-loc-btns">
+                            <div class="row">
+                                <div class="large-24 columns text-center">
+                                    <button type="button" class="button secondary-btn-1"  onclick='changeCategoryForAdult();'>{{'Change Category'|trans({}, 'frontend-invalid-location')}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>        
+                </div>               
         </div>
     </div>
 {% endblock %}
@@ -56,11 +80,88 @@
 {{ include('FaAdBundle:AdPost:fourthStepCommonJs.html.twig') }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-   $(document).ready(function(){
+   $(document).ready(function(){ 
        handleReadMoreLess('paa_desc', 220);
        updateCharCounter('fa_paa_fourth_step_adult_personalized_title');
+       bindCapsuleButtonEvent('position_preference_id', 'radio');
+       bindCapsuleButtonEvent('experience_id', 'radio');
        bindLocationEvents('fa_paa_fourth_step_adult');
+       showPaypalSection(true);
+       showRateSection();
 
+       $('#frmPAA').on('submit', function () {
+    	   var categoryId = '{{ ad.category.id }}';
+    	   var genderTxt 	  = $('#fa_paa_fourth_step_adult_gender_id option:selected').text();
+    	   var myServicelength = $("input[name='fa_paa_fourth_step_adult[my_service_id][]']:checked").length;
+    	   if(categoryId == '{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ESCORT_SERVICES_ID')}}' && !$("#change_category_for_adult_reveal_modal").hasClass('editNtRevealPopup')) {
+       			if(myServicelength == '1' && $("#fa_paa_fourth_step_adult_my_service_id_0").is(':checked') && genderTxt == 'Male') {
+       				$("#change_category_for_adult_reveal_modal").foundation('reveal', 'open');
+       				return false;
+           		}
+       			return true;
+       		}
+    	});
+
+       $('#verify_paypal_email_button').on( "click", function() {
+           showPaypalSection(true);
+      	});
+
+       $('#fa_paa_fourth_step_adult_travel_arrangements_id').on( "change", function() {
+           showRateSection();           
+      	});
+
+       $('#fa_paa_fourth_step_adult_gender_id').on( "change", function() {
+           getGayMaleEscortPopup();           
+      	});
+
+       $("input[name='fa_paa_fourth_step_adult[my_service_id][]']").on( "change", function() {
+    	   getGayMaleEscortPopup();           
+      	});
+     	
+       $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').focus(function(e){
+           $(this).removeClass('error');
+           $("#paypal_text_id").prev('small').remove();
+           $('#paypal_email_verify_status').hide();
+       });
+
+       $("input[name='fa_paa_fourth_step_adult[payment_method_id]']").click(function(e) {
+    	   var checkSelected = $(this).parents('.active').length;
+           $('#payment_method_choice_div .capsule-bg').removeClass('active');
+           if(checkSelected == '0') {
+               $(this).parent().addClass('active');
+               showPaypalSection(false, $(this).val());               
+           } else {
+        	   $("input[name='fa_paa_fourth_step_adult[payment_method_id]']").attr('checked', false);
+        	   $('#paypal_section_id').hide();
+               $("#paypal_text_id").prev('small').remove();
+               $('#paypal_email_verify_status').hide();
+               $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').removeClass('error');
+           }
+       });
+
+       $('.custom-checkbox, .custom-radio ').click(function(e){
+    	   $('#'+$(this).attr('id')).trigger('change');
+           $(this).nextAll('small.error').first().remove();
+           $(this).parent().nextAll('small.error').first().remove();
+           $('#'+$(this).attr('id')+'-button').removeClass('error-bdr');
+       });
+
+       $('.rates_text_in_call').keyup(function(e){ 
+           	var fieldName = $(this).attr('name').split('[');
+           	var errorField = fieldName[1].replace(']', '');
+       		if($.isNumeric($(this).val()) || $(this).val() == '') {
+       			$('#in-calls-subblock .'+errorField).remove();
+       		}
+       });
+
+       $('.rates_text_out_call').keyup(function(e){  
+           	var fieldName = $(this).attr('name').split('[');
+          	var errorField = fieldName[1].replace(']', '');
+      		if($.isNumeric($(this).val()) || $(this).val() == '') {
+      			$('#out-calls-subblock .'+errorField).remove();
+      		}
+       });
+   	
        {% set formFields = get_variables('formFields') %}
        {% if formFields['lastField'] is defined %}
            if ($('#element_'+ '{{ formFields['lastField'] }}').hasClass('paa-bdr-box')) {
@@ -106,6 +207,174 @@
         });
     });
 
+   function showRateSection() { 
+	   var travelArrangementTxt = $("#fa_paa_fourth_step_adult_travel_arrangements_id option:selected").text();
+	   var tarvalArrVal = travelArrangementTxt.split(" ");
+		
+       if(tarvalArrVal.indexOf('In-call') > -1) { 
+			$("#element_rates_id").show();
+			$(".in-out-calls-block").show();
+			$("#in-calls-subblock").show();
+			$("#out-calls-subblock").hide();
+       } else if((tarvalArrVal.indexOf('Out-call') > -1)) {
+    	    $("#element_rates_id").show();
+    	    $(".in-out-calls-block").show();
+			$("#in-calls-subblock").hide();
+			$("#out-calls-subblock").show();
+       } else if((tarvalArrVal.indexOf('Either') > -1)) {
+    	    $("#element_rates_id").show();
+    	    $(".in-out-calls-block").show();
+			$("#in-calls-subblock").show();
+			$("#out-calls-subblock").show();
+       } else { 
+    	    $("#element_rates_id").hide();
+    	    $(".in-out-calls-block").hide();
+   			$("#in-calls-subblock").hide();
+   			$("#out-calls-subblock").hide();
+       }
+	}
+
+   
+   function getGayMaleEscortPopup() {
+		var genderTxt 	  = $('#fa_paa_fourth_step_adult_gender_id option:selected').text();
+		var myServicelength = $("input[name='fa_paa_fourth_step_adult[my_service_id][]']:checked").length;
+		var serviceForMen = '';
+		var categoryId = '{{ ad.category.id }}';
+		var retData = true;	
+		
+		//check is it Escort Service
+		if(categoryId == '{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ESCORT_SERVICES_ID')}}') { 
+    		$("input[name='fa_paa_fourth_step_adult[my_service_id][]']:checked").each(function() {  
+        		if($("label[for="+$(this).attr('id')+"").text() == 'Men') {  
+        			serviceForMen = $("label[for="+$(this).attr('id')+"").text();
+        			if(genderTxt == 'Male' && serviceForMen == 'Men' && myServicelength == '1') { 
+        				 if( !$("#change_category_for_adult_reveal_modal").hasClass('revealPopup') ) {
+                			$("#change_category_for_adult_reveal_modal").foundation('reveal', 'open');
+                			$("#change_category_for_adult_reveal_modal").addClass('revealPopup');
+                			return false; 
+        				 }
+            		}        			          			
+            	}              	  			  			
+    		});
+		}
+	}
+
+   function changeCategoryForAdult() {
+	   blockPage();
+       $.ajax({
+           type: "POST",
+           url: "{{path('ad_post_change_adult_category_fourth_step')}}",
+       })
+       .done(function(response) {
+           unblockPage();
+           location.reload();
+       });	
+   }
+
+   function showPaypalSection(showMessage, paymentMethodId)
+   {
+       if (!paymentMethodId) {
+           paymentMethodId = $("input[name='fa_paa_fourth_step_adult[payment_method_id]']:checked").val();
+       }
+
+       if ($.inArray(paymentMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')}}']) != '-1') {
+
+           blockElement('#adult_paypal_block');
+           $.ajax({
+               type: "POST",
+               url : '{{ path('ajax_get_paypal_commission') }}',
+               data: {town_id: $('#fa_paa_fourth_step_adult_location').val(), 'paypal_email': $('#fa_paa_fourth_step_adult_paypal_email').val(), 'paypal_first_name': $('#fa_paa_fourth_step_adult_paypal_first_name').val(), 'paypal_last_name': $('#fa_paa_fourth_step_adult_paypal_last_name').val()},
+               cache: false,
+           })
+           .always(function(response) {
+               unblockElement('#adult_paypal_block');
+           })
+           .done(function(data) {
+               $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through Paypal.'|trans({}, 'frontend-paa-fourth-step')}}');
+               if (showMessage) {
+                   $("#paypal_text_id").prev('small').remove();
+               }
+               paypalCommission      = data.paypalCommission;
+               isPaypalVerifiedEmail = data.isPaypalVerifiedEmail;
+               if (paypalCommission > 0) {
+                   $('#paypal_text_id').show();
+               } else {
+                   $('#paypal_text_id').hide();
+               }
+               if ($("input[name='fa_paa_fourth_step_adult[payment_method_id]']").is(':checked')) {
+                   $('#paypal_email_verify_status').removeClass('error-icon success-icon');
+    
+                   if ($.inArray(paymentMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')}}']) != '-1') {
+                      $('#paypal_section_id').show();
+                      $('#paypal_text_id').html($('#paypal_text_id').html().replace('%paypal_commission%', paypalCommission+'%'));
+                      
+                      if (isPaypalVerifiedEmail) {
+                          $('#paypal_email_verify_status').addClass('success-icon');
+                          $('#paypal_email_verify_status').show('inline-block');
+                          $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').removeClass('error');
+                      } else {
+                          $('#paypal_email_verify_status').addClass('error-icon');
+                          if ($('#fa_paa_fourth_step_adult_paypal_email').is(':visible') && $('#fa_paa_fourth_step_adult_paypal_email').val().length) {
+                              if (showMessage) {
+                                  $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').addClass('error');
+                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                  $('#paypal_email_verify_status').show('inline-block');
+                              }
+                          } else {
+                              if (showMessage) {
+                                  $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').addClass('error');
+                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                  $('#paypal_email_verify_status').show('inline-block');
+                              }
+                          }
+                      }
+                   } else {
+                       $('#paypal_section_id').hide();
+                       $("#paypal_text_id").prev('small').remove();
+                       $('#paypal_email_verify_status').hide();
+                       $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').removeClass('error');
+                   }
+               } else {
+                   $('#paypal_section_id').hide();
+               }
+           });
+       } else {
+           $('#paypal_section_id').hide();
+           $("#paypal_text_id").prev('small').remove();
+           $('#paypal_email_verify_status').hide();
+           $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').removeClass('error');
+       }
+   }
+
+   function bindCapsuleButtonEvent(field, fieldType)
+   {	
+       var fieldChoice = field.replace('_id', '') + '_choice';
+       $('.'+fieldChoice).click(function(){
+           var choiceId    = $(this).attr('id');
+           var selectedId = choiceId.replace(fieldChoice+'_', '');
+           
+           if (fieldType == 'drop-down') { 
+               if ($('#'+choiceId).hasClass('active')) {
+                   $('.'+fieldChoice).removeClass('active');
+                   selectedId = '';
+               } else {
+                   $('.'+fieldChoice).removeClass('active');
+                   $('#'+choiceId).addClass('active');
+               }
+               $('#fa_paa_fourth_step_adult_'+field).val(selectedId);
+           } else if (fieldType == 'radio') { 
+               $("input[name='fa_paa_fourth_step_adult["+field+"]']").attr('checked', false);
+               if(!$( '#'+choiceId ).hasClass( "active" )) { 
+            	   $('.'+fieldChoice).removeClass('active');
+                   $('#'+choiceId).addClass('active');
+                   $("input[name='fa_paa_fourth_step_adult["+field+"]'][value='"+selectedId+"']").prop('checked', true);
+               } else { 
+          			$('.'+fieldChoice).removeClass('active');
+              }
+           }
+       });
+    }
+
     function updateCharCounter(fieldId)
     {
         var textCounterId = fieldId + '_textcounter';
@@ -126,6 +395,7 @@
 </script>
 {% if (form.location_autocomplete) is defined %}
     {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_adult_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_adult_area', 'placeHolder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : 'ex: SE2'|trans), 'route' : 'area_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices', 'townIdForArea': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TOWN_ID') }) }}
 {% endif %}
 
 {{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}

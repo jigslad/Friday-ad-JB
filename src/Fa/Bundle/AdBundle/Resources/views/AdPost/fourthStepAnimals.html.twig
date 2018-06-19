@@ -167,6 +167,7 @@
 
 {% if (form.location_autocomplete) is defined %}
     {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_animals_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans({}, 'frontend-paa-fourth-step')), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_animals_area', 'placeHolder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : 'ex: SE2'|trans), 'route' : 'area_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices', 'townIdForArea': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TOWN_ID') }) }}
 {% endif %}
 
 {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'autoresize', 'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar1' : 'bold italic underline, bullist numlist', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}

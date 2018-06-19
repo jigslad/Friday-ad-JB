@@ -173,7 +173,7 @@
     {% if firstImageUrl %}
         {% set firstImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addProtocolToUrl', [firstImageUrl]) %}
         {% set imageSize = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getImagesizeFromImageUrl', [firstImageUrl]) %}
-        {% set firstImageUrlSecure = firstImageUrl|replace({'http': 'https'}) %}
+        {% set firstImageUrlSecure = firstImageUrl %}
         
         <meta property="og:image" content="{{firstImageUrl}}" />
         <meta property="og:image:secure_url" content="{{firstImageUrlSecure}}" />
@@ -261,7 +261,15 @@
                                     {% if (attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')) is defined and attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined) %}
                                         <div class="detail-location"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0 ~ ',' ~ attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0) }}</a></div>
                                     {% elseif attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined %}
-                                        <div class="detail-location"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></div>
+                                        {% if attribute(adDetail, constant(solrMapping ~ 'AREA_ID')) is defined  %}
+                                        	{% if attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) is defined and attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) %}
+                                        		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) }}</a></b>
+                                        	{% else %}
+                                        		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) ~ ', ' ~ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                        	{% endif %}
+                                        {% else %}
+                                    		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                    	{% endif %}
                                     {% else %}
                                         <div class="detail-location">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID')) }}</div>
                                     {% endif %}
@@ -429,7 +437,15 @@
                                         {% if (attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')) is defined and attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined) %}
                                             <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0 ~ ',' ~ attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0 }) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', attribute(adDetail, constant(solrMapping ~ 'LOCALITY_ID')).0) }}</a></b>
                                         {% elseif attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined %}
-                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                        	{% if attribute(adDetail, constant(solrMapping ~ 'AREA_ID')) is defined  %}
+                                            	{% if attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) is defined and attribute(adDetail, constant(solrMapping ~ 'IS_SPECIAL_AREA_LOCATION')) %}
+                                            		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) }}</a></b>
+                                            	{% else %}
+                                            		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'AREA_ID')).0) ~ ', ' ~ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                            	{% endif %}
+                                            {% else %}
+                                        		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                    	    {% endif %}
                                         {% else %}
                                             <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
                                         {% endif %}
@@ -629,6 +645,16 @@
                             {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                 {% set adAdultDetail = {} %}
                                 {% set servicesIds = {} %}
+                                {% set metaData = {} %}                                
+                                {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
+                                	{% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
+                                	{% if metaData['rates_id']['incall'] is defined %}
+                                        {% set adultInCallRates = metaData['rates_id']['incall'] %}
+                                    {% endif %}
+                                    {% if metaData['rates_id']['outcall'] is defined %}
+                                        {% set adultOutCallRates = metaData['rates_id']['outcall'] %}
+                                    {% endif %}                                	
+                                {% endif %}
                                 {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
                                     {% set adAdultDetail = adAdultDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
                                 {% endif %}

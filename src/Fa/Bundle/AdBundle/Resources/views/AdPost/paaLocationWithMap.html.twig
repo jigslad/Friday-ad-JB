@@ -3,6 +3,7 @@
 {% if is_edit is defined and is_edit is not null %}
     {% set formName = 'fa_paa_edit_'~categoryName|replace({' ':'_'})|lower %}
 {% endif %}
+{% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
 <div class="paa-gray-box" id="location_div">
     <h3 class="text-center">
@@ -41,6 +42,26 @@
             </div>
         </div>
     </div>
+    
+    {% set isLocationArea = locationRepository.checkLocationIsArea(attribute(form, 'location').vars.value, attribute(form, 'area').vars.value, fetch_container_instance()) %}
+	{% if attribute(form, 'area_autocomplete').vars.errors|length or isLocationArea %}
+    {% set showHideAreaField = 'inline' %}
+	{% else %}
+	{% set showHideAreaField = 'none' %}
+	{% endif %}
+	<div id="location_area_div" style="display:{{ showHideAreaField }}">
+    	<div class="row">
+        	<div class="small-wrapper">
+            	<p class="paa-area-title">Type your postcode to find your area:</p>
+            	<div class="relative">
+                	{{ form_widget(attribute(form, 'area_autocomplete'), {'attr': {'placeholder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : ' ') }}) }}
+                	<a href="javascript:void(0);" id="{{ formName }}_area_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+            	</div>
+            	{{ form_errors(attribute(form, 'area_autocomplete'), {'attr' : {'class' : '' }}) }}
+        	</div>
+    	</div>
+</div>
+
     <div id="location_map_div" class="map-box">
          {% set geolocation = attribute(form, 'location_lat_lng').vars.value|split(', ') %}
          {% if geolocation[0] is defined and geolocation[1] is defined %}

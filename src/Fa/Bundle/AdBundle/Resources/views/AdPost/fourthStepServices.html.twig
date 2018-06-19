@@ -156,6 +156,7 @@
 </script>
 {% if (form.location_autocomplete) is defined %}
     {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_services_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_services_area', 'placeHolder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : 'ex: SE2'|trans), 'route' : 'area_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices', 'townIdForArea': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TOWN_ID') }) }}
 {% endif %}
 
 {{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}

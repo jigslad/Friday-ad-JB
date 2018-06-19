@@ -19,8 +19,8 @@
                     {% set keepOpenFlag = true %}
                 {% endif %}
             {% endfor %}
-        {% else %}
-            {% if attribute(form, field).vars.data|length or attribute(form, field).vars.errors|length %}
+        {% else %} 
+            {% if attribute(form, field).vars.data|length or attribute(form, field).vars.errors|length %} 
                 {% set showHideElement = 'block' %}
                 {% set tabArrowClass = 'tab-up' %}
             {% endif %}
@@ -31,7 +31,7 @@
             {% else %}
                 {{ attribute(form, field).vars.label }}
             {% endif %}
-            <span>({{ 'optional'|trans({}, 'frontend-paa-fourth-step') }})</span>
+            <span>({{ field != 'rates_id'?'optional'|trans({}, 'frontend-paa-fourth-step'):'please add your basic rates' }})</span>
             <span class="paa-tab-arrow"></span>
         </a>
     {% endif %}

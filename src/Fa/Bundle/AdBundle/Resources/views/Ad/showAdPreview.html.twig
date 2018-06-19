@@ -138,7 +138,13 @@
                         {% if adDetail['ad_locality_name'] is defined and adDetail['ad_locality_name'] %}
                            <div class="detail-location"><b>{{ adDetail['ad_locality_name'] }}</b></div>
                         {% elseif adDetail['ad_town_name'] is defined and adDetail['ad_town_name'] %}
-                           <div class="detail-location"><b>{{ adDetail['ad_town_name'] }}</b></div>
+                        	{% if adDetail['area_id'] is defined and adDetail['is_special_area'] and adDetail['area_id'] != '' %}
+                        		<div class="detail-location"><b>{{ adDetail['area_name'] }}</b></div>
+                        	{% elseif adDetail['area_id'] is defined and adDetail['area_id'] != '' %}
+                        		<div class="detail-location"><b>{{ adDetail['area_name'] ~ ', ' ~ adDetail['ad_town_name'] }}</b></div>
+                        	{% else %}
+                        		<div class="detail-location"><b>{{ adDetail['ad_town_name'] }}</b></div>
+                        	{% endif %}
                         {% endif %}
                         <div class="clearfix"></div>
                         {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and adDetail['user']['company_welcome_message'] is defined and adDetail['user']['company_welcome_message'] is not null %}
@@ -308,9 +314,47 @@
                             {{ include('FaAdBundle:Ad:AdPropertyDetailTabs.html.twig') }}
                         {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                             {% set adAdultRepository = fetch_repository('FaAdBundle:AdAdult') %}
+                            {% set adEntityRepository = fetch_repository('FaEntityBundle:Entity') %}
                             {% set adAdult = adAdultRepository.findOneBy({'ad': adId}) %}
                             {% set adAdultDetail = {} %}
                             {% set servicesIds = {} %}
+                            {% set metaData = {} %}
+                            {% if adAdult and adAdult.getMetaData() is not null %}
+                                {% set metaData = array_unserialize(adAdult.getMetaData()) %}
+                                {% if metaData['my_service_id'] is defined %}
+                                	{% set myServiceIsFor = [] %} 
+                                	{% set serviceStr = metaData['my_service_id']|split(',') %}
+                                    {% set serviceStrArr = '' %}
+                                    {% set i = 0 %}
+                                	{% set serviceLabel = (adDetail['detail'][constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR')] is defined)?constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR'):'Service is for' %}
+                                	{% for key, serviceRecord in serviceStr %}  
+                                        {% set serviceObj = adEntityRepository.findOneBy({'id': serviceRecord}) %}
+                                		{% if serviceObj is not null %} 
+                                			{% if i > 0 %} {% set serviceStrArr = serviceStrArr ~ ',' %} {% endif %}
+                                		    {% set serviceStrArr = serviceStrArr ~ serviceObj.getName() %}
+                                		{% endif %}
+                                		{% set i = i+1 %}
+                                	{% endfor %}
+                                {% endif %}
+                              
+                                {% if metaData['rates_id'] is defined %}
+                                	{% if metaData['rates_id']['incall'] is defined %} 
+                                		{% set adultInCallRates =  metaData['rates_id']['incall'] %}
+                                	{% endif %}
+                                	{% if metaData['rates_id']['outcall'] is defined %} 
+                                	    {% set adultOutCallRates =  metaData['rates_id']['outcall'] %}
+                                	{% endif %}
+                                {% endif %}
+                                
+                            {% endif %}
+                                                        
+                            {% if adAdult and adAdult.getTravelArrangementsId() is not null %}
+                            	{% set adPreviewTravelAgent = adAdult.getTravelArrangementsId() %}
+                            {% endif %}                            
+                            {% if adAdult and adAdult.getIndependentOrAgencyId() is not null %}
+                            	{% set adPreviewIndependentOrAgencyId = adAdult.getIndependentOrAgencyId() %}
+                            {% endif %}
+                            
                             {% if adDetail['description'] is defined %}
                                 {% set adAdultDetail = adAdultDetail|merge({'description': adDetail['description']}) %}
                             {% endif %}

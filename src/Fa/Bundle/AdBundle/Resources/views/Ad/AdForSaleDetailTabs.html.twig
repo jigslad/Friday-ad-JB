@@ -61,7 +61,7 @@
                         </ul>
                     {% endif %}
                     
-                    {% if showNimber %}
+                    {% if showNimber is defined %}
                         <div id="nimber_div">
                             {{ render(controller('FaAdBundle:Nimber:showNimberPricesuggestion', {'adId': adId})) }}
                         </div>

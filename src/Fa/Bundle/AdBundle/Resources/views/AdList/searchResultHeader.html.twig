@@ -101,4 +101,15 @@
         </div>
     </div>
 </div>
+{% if areaToolTipFlag is defined and areaToolTipFlag %}
+<div class="row top-msg">
+	<div class="columns">
+		<div data-alert="" class="alert-box info radius area-tooltip-alert">
+		<span class="alert-icon">&nbsp;</span>
+		<b>London Areas: </b> See ads that are closer to you by setting your location to a specific area of London (e.g. Camden Town or Westminster) or using your postcode.
+		<a href="javascript:void(0)" class="close">×</a>
+		</div>
+	</div>
+</div>
+{% endif %}
 {{ set_variables('searchResult', {'searchAgentData': searchAgentData}) }}
