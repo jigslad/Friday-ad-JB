@@ -509,6 +509,7 @@ class AdImageManager
 
             $image->setLocal(0);
             $em->persist($image);
+            $em->flush();
         }
     }
 }

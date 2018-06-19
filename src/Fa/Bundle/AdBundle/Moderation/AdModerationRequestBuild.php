@@ -304,13 +304,19 @@ class AdModerationRequestBuild
                 $postalcodeVal = $this->container->get('doctrine')->getManager()->getRepository('FaEntityBundle:Postcode')->getPostCodTextByLatLong($adModerateLocation['latitude'], $adModerateLocation['longitude']);
             }
         }
+        
+        $adLocation = $this->container->get('doctrine')->getManager()->getRepository('FaAdBundle:AdLocation')->getLatestLocation($ad->getId());
+        
         if(!empty($adModerateLocation)) {
-        	$this->moderationRequest[AdModerationFieldMappingInterface::AD_POSTCODE] = $postalcodeVal;
+        	
+        	if($adLocation->getLocationArea() && $adLocation->getPostcode()) {
+        		$this->moderationRequest[AdModerationFieldMappingInterface::AD_POSTCODE] = $adLocation->getPostcode();
+        	} else {
+        		$this->moderationRequest[AdModerationFieldMappingInterface::AD_POSTCODE] = $postalcodeVal;
+        	}
         	$this->moderationRequest[AdModerationFieldMappingInterface::AD_TOWN] = $this->container->get('doctrine')->getManager()->getRepository('FaEntityBundle:Location')->getNameById($adModerateLocation['town_id']);
         } 
         else {
-        	$adLocation = $this->container->get('doctrine')->getManager()->getRepository('FaAdBundle:AdLocation')->getLatestLocation($ad->getId());
-
 	        if ($adLocation) {
 	            //post code
 	            if ($adLocation->getPostcode()) {

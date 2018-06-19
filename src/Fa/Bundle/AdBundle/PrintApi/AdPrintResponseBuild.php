@@ -102,10 +102,8 @@ class AdPrintResponseBuild
             $this->printApiResponse[AdPrintFieldMappingInterface::POSTCODE] = $postcode;
         } else {
             $location = $em->getRepository('FaAdBundle:AdLocation')->getLatestLocation($ad->getId());
-
             $this->printApiResponse[AdPrintFieldMappingInterface::TOWN] = (!empty($location) && !empty($location->getLocationTown())) ? $entityCacheManager->getEntityNameById('FaEntityBundle:Location', $location->getLocationTown()->getId()) : null;
-
-            $this->printApiResponse[AdPrintFieldMappingInterface::POSTCODE] = ($location->getPostcode() ? $location->getPostcode() : null);
+            $this->printApiResponse[AdPrintFieldMappingInterface::POSTCODE] = !empty($location) ? $location->getPostcode() : null;
         }
 
         $this->printApiResponse[AdPrintFieldMappingInterface::ADREF] = ($ad->getId() ? $ad->getId() : null);

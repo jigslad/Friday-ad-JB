@@ -85,3 +85,7 @@ open_draft_ad_popup_ajax:
 ad_post_ajax_mototrs_reg_no_fields:
     path:     /ajax/ad_post_ajax_mototrs_reg_no_fields
     defaults: { _controller: "FaAdBundle:AdPost:ajaxFirstStepMotorsRegNoFields" }
+    
+ad_post_change_adult_category_fourth_step:
+    path:     /change_adult_category_fourth_step
+    defaults: { _controller: "FaAdBundle:AdPost:changeAdultCategoryFourthStep" }

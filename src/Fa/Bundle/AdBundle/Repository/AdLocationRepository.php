@@ -91,22 +91,38 @@ class AdLocationRepository extends EntityRepository
         }
 
         $locations = $this->findBy(array('ad' => $ad->getId()));
-
+        $mainTownId = '';
+        
         foreach ($locations as $location) {
             $document = $this->addField($document, AdSolrFieldMapping::POSTCODE, $location->getPostcode());
             $document = $this->addField($document, AdSolrFieldMapping::DOMICILE_ID, ($location->getLocationDomicile() ? $location->getLocationDomicile()->getId() : null));
             $document = $this->addField($document, AdSolrFieldMapping::TOWN_ID, ($location->getLocationTown() ? $location->getLocationTown()->getId() : null));
-            $document = $this->addField($document, AdSolrFieldMapping::MAIN_TOWN_ID, ($location->getLocationTown() ? $location->getLocationTown()->getId() : null));
             $document = $this->addField($document, AdSolrFieldMapping::LATITUDE, $location->getLatitude());
             $document = $this->addField($document, AdSolrFieldMapping::LONGITUDE, $location->getLongitude());
             $document = $this->addField($document, AdSolrFieldMapping::LOCALITY_ID, ($location->getLocality() ? $location->getLocality()->getId() : null));
-
-            if ($location->getLatitude() && $location->getLongitude()) {
-                $document = $this->addField($document, AdSolrFieldMapping::STORE, $location->getLatitude().','.$location->getLongitude());
+            //for Location Area 
+            if($location->getLocationArea()) {
+            	$document = $this->addField($document, AdSolrFieldMapping::AREA_ID, $location->getLocationArea()->getId());
+            	if( $location->getLocationArea()->getIsSpecialArea() ) {  
+            		$document = $this->addField($document, AdSolrFieldMapping::IS_SPECIAL_AREA_LOCATION, '1');
+            	} else { 
+            		$document = $this->addField($document, AdSolrFieldMapping::IS_SPECIAL_AREA_LOCATION, '0');
+            	}
             }
+            
+            if (($location->getLatitude() && $location->getLongitude())) {
+            	$document = $this->addField($document, AdSolrFieldMapping::STORE, $location->getLatitude().','.$location->getLongitude());
+            }
+            
+            /* Issuing with multiple Town record along with same Advert Id bcz of MAIN_TOWN_ID is string type "i" adding condition and make it as string */
+            $mainTownId = ($location->getLocationTown() ? $location->getLocationTown()->getId() : null);
         }
+        
+	        if($mainTownId != '') { 
+	        	$document = $this->addField($document, AdSolrFieldMapping::MAIN_TOWN_ID, $mainTownId);
+	        }
 
-        return $document;
+	        return $document;
     }
 
     /**
@@ -160,6 +176,7 @@ class AdLocationRepository extends EntityRepository
                     if ($adIdAsKeyWithZipFlag) {
                         $resultArray[$arrayKey]['postcode'] = $location->getPostcode();
                     }
+                    $resultArray[$arrayKey]['area_id'] = $location->getLocationArea() ? $location->getLocationArea()->getId() : null;
                 }
             }
         }
@@ -212,6 +229,15 @@ class AdLocationRepository extends EntityRepository
                     } else {
                         $object->setLocality(null);
                     }
+                }
+                
+                if ($field == 'area_id') {
+                	if ($value) {
+                		$area = $this->_em->getRepository('FaEntityBundle:Location')->findOneBy(array('id' => $value));
+                		$object->setLocationArea($area);
+                	} else {
+                		$object->setLocationArea(null);
+                	}
                 }
             }
 
@@ -444,9 +470,9 @@ class AdLocationRepository extends EntityRepository
                 $adLocationData[]['postcode']    = $adLocation->getPostcode();
                 $adLocationData[]['latitude']    = $adLocation->getLatitude();
                 $adLocationData[]['longitude']   = $adLocation->getLongitude();
+                $adLocationData[]['area_id']  	 = $adLocation->getLocationArea() ? $adLocation->getLocationArea()->getId() : null;
             }
         }
-
         return $adLocationData;
     }
     

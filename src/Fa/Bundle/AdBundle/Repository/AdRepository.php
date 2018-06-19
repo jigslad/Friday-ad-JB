@@ -884,9 +884,10 @@ class AdRepository extends EntityRepository
     public function getAdDetailArray($adId, $container, $seoFlag = false)
     {
         $query = $this->getBaseQueryBuilder()
-        ->select(self::ALIAS.'.id as ad_id', self::ALIAS.'.privacy_number', self::ALIAS.'.qty', self::ALIAS.'.is_new', self::ALIAS.'.payment_method_id', UserRepository::ALIAS.'.id as user_id', self::ALIAS.'.title', self::ALIAS.'.description', self::ALIAS.'.personalized_title', self::ALIAS.'.price', self::ALIAS.'.published_at', self::ALIAS.'.created_at', CategoryRepository::ALIAS.'.id as category_id', AdLocationRepository::ALIAS.'.latitude', AdLocationRepository::ALIAS.'.longitude', DeliveryMethodOptionRepository::ALIAS.'.name as delivery_method_name', LocationRepository::ALIAS.'t.name as ad_town_name', LocalityRepository::ALIAS.'.name as ad_locality_name', BaseEntityRepository::ALIAS.'.id as type_id')
+        ->select(self::ALIAS.'.id as ad_id', self::ALIAS.'.privacy_number', self::ALIAS.'.qty', self::ALIAS.'.is_new', self::ALIAS.'.payment_method_id', UserRepository::ALIAS.'.id as user_id', self::ALIAS.'.title', self::ALIAS.'.description', self::ALIAS.'.personalized_title', self::ALIAS.'.price', self::ALIAS.'.published_at', self::ALIAS.'.created_at', CategoryRepository::ALIAS.'.id as category_id', AdLocationRepository::ALIAS.'.latitude', AdLocationRepository::ALIAS.'.longitude', DeliveryMethodOptionRepository::ALIAS.'.name as delivery_method_name', LocationRepository::ALIAS.'t.name as ad_town_name', LocalityRepository::ALIAS.'.name as ad_locality_name', BaseEntityRepository::ALIAS.'.id as type_id', LocationRepository::ALIAS.'la.id as area_id',  LocationRepository::ALIAS.'la.is_special_area as is_special_area',  LocationRepository::ALIAS.'la.name as area_name')
         ->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS)
         ->leftJoin(AdLocationRepository::ALIAS.'.location_town', LocationRepository::ALIAS.'t')
+        ->leftJoin(AdLocationRepository::ALIAS.'.location_area', LocationRepository::ALIAS.'la')
         ->leftJoin(AdLocationRepository::ALIAS.'.locality', LocalityRepository::ALIAS)
         ->innerJoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
         ->leftJoin(self::ALIAS.'.user', UserRepository::ALIAS)
@@ -930,7 +931,7 @@ class AdRepository extends EntityRepository
                 );
             }
         }
-
+       
         //ad dimensions
         if (isset($adDetail['category_id']) && $adDetail['category_id']) {
             $dimensionArray = $this->getAdDimensionByCategoryIdAndAdId($adDetail['category_id'], $adId, $categoryPath, $adDetail, $container, $seoFlag);
@@ -1411,7 +1412,7 @@ class AdRepository extends EntityRepository
      * @return array
      */
     private function getSolrFieldValues($parentCategories, $adSolrObj, $adDetailFields, $indexableFields, $metaDataValues, $adDetailTabFields, $unitForFields, $solrMapping, $seoFlag, $container, $anchorTagFlag)
-    {
+    {	
         $parentCategoryIds          = array_keys($parentCategories);
         $parentCategoryNames        = array_values($parentCategories);
         $secondLevelCategoryId      = (isset($parentCategoryIds[1]) ? $parentCategoryIds[1] : null);
@@ -1439,9 +1440,9 @@ class AdRepository extends EntityRepository
             'MANUFACTURER_ID',
             'COLOUR_ID'
         );
-
-        if (isset($parentCategoryIds[0]) && $parentCategoryIds[0] == CategoryRepository::ANIMALS_ID && isset($parentCategoryIds[2]) && $parentCategoryIds[2] != CategoryRepository::HORSES) {
-            $genderKey = array_search('GENDER_ID', $anchorTagFields);
+        
+        if ((isset($parentCategoryIds[0]) && (($parentCategoryIds[0] == CategoryRepository::ANIMALS_ID && isset($parentCategoryIds[2]) && $parentCategoryIds[2] != CategoryRepository::HORSES) || $parentCategoryIds[0] == CategoryRepository::ADULT_ID) )) {
+        	$genderKey = array_search('GENDER_ID', $anchorTagFields);
             unset($anchorTagFields[$genderKey]);
         }
 
@@ -1466,7 +1467,7 @@ class AdRepository extends EntityRepository
             if (isset($unitForFields[$adDetailField])) {
                 $unit = ' '.$unitForFields[$adDetailField];
             }
-
+		
             //check if it is separate field else check in meta data fields.
             if (in_array($adDetailField, $indexableFields) && defined($solrMappingField) && isset($adSolrObj[constant($solrMappingField)])) {
                 if ($repositoryName) {
@@ -1556,7 +1557,7 @@ class AdRepository extends EntityRepository
                         $adDetailAndDimensionFields[$key][$adDetailFieldLabel] = $fieldValue.$unit;
                     }
                 }
-            } elseif (array_key_exists($adDetailField, $metaDataValues)) {
+            } elseif (array_key_exists($adDetailField, $metaDataValues) && $adDetailField != 'RATES_ID') {
                 if ($repositoryName) {
                     $fieldValues = explode(',', $metaDataValues[$adDetailField]);
                     if (count($fieldValues) > 1) {
@@ -2160,6 +2161,7 @@ class AdRepository extends EntityRepository
             } elseif ($adUser && !$adUser->getIsPrivatePhoneNumber() && $ad->getPrivacyNumber()) {
                 //remove yac number
                 $ad->setPrivacyNumber(null);
+                $ad->setUsePrivacyNumber(null);
                 $this->_em->persist($ad);
                 $this->_em->flush($ad);
             } else {
@@ -3323,15 +3325,17 @@ class AdRepository extends EntityRepository
                             }
                             break;
                     }
-                } else {
-                    $value = $this->_em->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($field, $adCategoryTableObj, $metaData, $container, $className, false);
+                } else { 
+                	$value = $this->_em->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($field, $adCategoryTableObj, $metaData, $container, $className, false);
+                    
                 }
-                if ($value && !is_numeric($value)) {
+                if ($value && !is_numeric($value)) { 
                     $keywordSearch[] = $value;
+                    
                 }
             }
         }
-
+	
         return $keywordSearch;
     }
 
@@ -4262,6 +4266,50 @@ class AdRepository extends EntityRepository
             }
 
             $container->get('fa.mail.manager')->send($userObj->getEmail(), 'add_a_photo', $parameters, CommonManager::getCurrentCulture($container));
+        }
+    }
+    
+    /**
+     * Delete ad from solr by Advert id.
+     *
+     * @param integer $adId
+     * @param object  $container
+     */
+    public function deleteAdFromSolrByAdId($adId, $container)
+    {
+        if ($adId) {
+            $solrClient = $container->get('fa.solr.client.ad');
+            if (!$solrClient->ping()) {
+                return false;
+            }
+            
+            $solr = $solrClient->connect();
+            
+            $solr->deleteByQuery('id:"'.$adId.'"');
+            $solr->commit(true);
+        }
+    }
+
+    /**
+     * Update ad status by ad.
+     *
+     * @param integer $ad
+     * @param integer $container
+     *
+     */
+    public function updateAdStatusInSolrByAd($ad, $container)
+    {
+        if ($ad) {
+            $solrClient = $container->get('fa.solr.client.ad');
+            if (!$solrClient->ping()) {
+                return false;
+            }
+            
+            $solr = $solrClient->connect();
+            $adSolrIndex = $container->get('fa.ad.solrindex');
+            $adSolrIndex->update($solrClient, $ad, $container, true);
+            
+            $solr->commit(true);
         }
     }
 }

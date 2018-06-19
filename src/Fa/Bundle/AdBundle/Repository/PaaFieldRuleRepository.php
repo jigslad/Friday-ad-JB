@@ -67,7 +67,7 @@ class PaaFieldRuleRepository extends EntityRepository
         } else {
             $queryBuilder->addOrderBy(self::ALIAS.'.'.$ordBy, 'asc');
         }
-
+        
         return $queryBuilder;
     }
 
@@ -198,7 +198,7 @@ class PaaFieldRuleRepository extends EntityRepository
     {
         $paaFieldRules = $this->getPaaFieldRulesArrayByCategoryId($categoryId, $container, $step, $ordBy);
 
-        if (isset($paaFieldRules[$categoryId]) && count($paaFieldRules[$categoryId])) {
+        if (isset($paaFieldRules[$categoryId]) && count($paaFieldRules[$categoryId])) { 
             return $paaFieldRules[$categoryId];
         } else {
             $categoryPath = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container);
@@ -227,7 +227,7 @@ class PaaFieldRuleRepository extends EntityRepository
             $cacheKey    = $this->getTableName().'|'.__FUNCTION__.'|'.$categoryId.'_'.$step.'_'.$ordBy.'_'.$culture;
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
-            if ($cachedValue !== false) {
+            if ($cachedValue !== false) { 
                 return $cachedValue;
             }
         }

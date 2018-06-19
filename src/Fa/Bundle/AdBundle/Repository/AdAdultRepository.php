@@ -98,6 +98,29 @@ class AdAdultRepository extends EntityRepository
         $metaData = ($adAdult && $adAdult->getMetaData() ? unserialize($adAdult->getMetaData()) : null);
         if ($metaData && count($metaData)) {
             $document = $this->addField($document, AdAdultSolrFieldMapping::META_DATA, $adAdult->getMetaData());
+            
+            /*  Adding new dimensions in Solr     */
+            if(isset($metaData['my_service_id'])) {
+            	$myServicesIds = explode(',', $metaData['my_service_id']);
+            	$solrFieldForMap = ( $ad->getCategory()->getId() != CategoryRepository::ADULT_CONTACTS_ID?AdAdultSolrFieldMapping::MY_SERVICE_IS_FOR_ID:AdAdultSolrFieldMapping::LOOKING_FOR_ID);
+            	if (count($myServicesIds)) {
+            		foreach ($myServicesIds as $serviceId) {
+            			$document = $this->addField($document, $solrFieldForMap, $serviceId);
+            		}
+            	}
+            }
+            if(isset($metaData['job_type_id']) && $metaData['job_type_id'] != '') {
+            	$document = $this->addField($document, AdAdultSolrFieldMapping::JOB_TYPE_ID, $metaData['job_type_id']);
+            }
+            if(isset($metaData['experience_id']) && $metaData['experience_id'] != '') {
+            	$document = $this->addField($document, AdAdultSolrFieldMapping::EXPERIENCE_ID, $metaData['experience_id']);
+            }
+            if(isset($metaData['ethnicity_id']) && $metaData['ethnicity_id'] != '') {
+            	$document = $this->addField($document, AdAdultSolrFieldMapping::ETHNICITY_ID, $metaData['ethnicity_id']);
+            }
+            if(isset($metaData['position_preference_id']) && $metaData['position_preference_id'] != '') {
+            	$document = $this->addField($document, AdAdultSolrFieldMapping::POSITION_PREFERENCE_ID, $metaData['position_preference_id']);
+            }           
         }
 
         // add services.
@@ -112,6 +135,8 @@ class AdAdultRepository extends EntityRepository
             $document = $this->addField($document, AdAdultSolrFieldMapping::TRAVEL_ARRANGEMENTS_ID, $adAdult->getTravelArrangementsId());
 
             $document = $this->addField($document, AdAdultSolrFieldMapping::INDEPENDENT_OR_AGENCY_ID, $adAdult->getIndependentOrAgencyId());
+            
+            $document = $this->addField($document, AdAdultSolrFieldMapping::GENDER_ID, $adAdult->getGenderId());
         }
 
         // update keyword search fields.
@@ -207,6 +232,13 @@ class AdAdultRepository extends EntityRepository
             'services_id',
             'travel_arrangements_id',
             'independent_or_agency_id',
+        	'gender_id',
+        	'ethnicity_id',
+        	'my_service_id',
+        	'experience_id',
+        	'rates_id',
+        	'job_type_id',
+        	'position_preference_id'
         );
     }
 
@@ -217,7 +249,14 @@ class AdAdultRepository extends EntityRepository
      */
     public function getNotIndexedFields()
     {
-        return array();
+        return array(
+        		'ethnicity_id',
+        		'my_service_id',
+        		'experience_id',
+        		'rates_id',
+        		'job_type_id',
+        		'position_preference_id'
+        );
     }
 
     /**
@@ -231,6 +270,7 @@ class AdAdultRepository extends EntityRepository
             'services_id',
             'travel_arrangements_id',
             'independent_or_agency_id',
+        	'gender_id'
         );
     }
 
@@ -420,4 +460,39 @@ class AdAdultRepository extends EntityRepository
 
         return $userDetails;
     }
+    
+    /**
+     * Amend Adult Service string
+     * @param array $data    Array Data to amend the string
+     *
+     * @return string
+     */
+    public function getAdultAmendString($serviceData)
+    { 	
+    	$str = '';
+    	$i = 1;
+    	
+    	if(is_array($serviceData)) {
+    		$serviceData= implode(',', array_values($serviceData));
+    	}
+    	
+    	if( $serviceData!= '') {
+    		$data = explode(',', $serviceData);
+    		$count = count($data);
+    		foreach($data as $val) {
+    			$str .= $val;
+    			if(($count == '2' && $i < '2') || ($count == '3' and $i == '2')) {
+    				$str .= ' and ';
+    			} elseif ($i == '1' && $count == '3') {
+    				$str .= ',';
+    			}
+    			$i++;
+    		}
+    		
+    	}
+    	
+    	return $str;
+    }
+    
+    
 }

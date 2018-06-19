@@ -115,17 +115,19 @@ class AdRoutingManager
         if (!$fromCommandLine) {
             $cookieLocationDetails = json_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('location'), true);
         }
-//echo '<pre>';print_r($search_params);print_r($cookieLocationDetails);die;
+
         if (isset($search_params['item__location']) && $search_params['item__location'] == 2) {
             $location = 'uk';
        // } elseif (is_array($cookieLocationDetails) && isset($search_params['item__location']) && isset($cookieLocationDetails['location'])) {
             //$location = $cookieLocationDetails['slug'];
         } elseif (is_array($cookieLocationDetails) && isset($search_params['item__location']) && isset($cookieLocationDetails['location']) && ($cookieLocationDetails['location']==$search_params['item__location'])) {
             $location = $cookieLocationDetails['slug'];
+        }elseif (is_array($cookieLocationDetails) && isset($search_params['item__location']) && isset($cookieLocationDetails['location']) && ($cookieLocationDetails['location']==$search_params['item__location'])  && (isset($search_params['item__area']) && isset($cookieLocationDetails['location_area']) && $cookieLocationDetails['location_area']==$search_params['item__area'])) {
+            $location = $cookieLocationDetails['slug'];
         } else {
             $location = $this->getLocation($search_params);
         }
-//echo 'location==='.$location;die;
+
         if (isset($search_params['item__user_id']) && $search_params['item__user_id'] != '') {
             $shopUserId = $search_params['item__user_id'];
             unset($search_params['item__user_id']);
@@ -134,6 +136,9 @@ class AdRoutingManager
 
         if (isset($search_params['tmpLeafLevelCategoryId'])) {
             unset($search_params['tmpLeafLevelCategoryId']);
+        }
+        if (isset($search_params['item__area'])) {
+            unset($search_params['item__area']);
         }
       
         // create url for no category selected
@@ -197,6 +202,10 @@ class AdRoutingManager
         // unset variables for clean url
         unset($search_params['item__category_id']);
         unset($search_params['item__location']);
+        
+        if (isset($search_params['item__area'])) {
+            unset($search_params['item__area']);
+        }
 
         if (isset($search_params['item__location_autocomplete'])) {
             unset($search_params['item__location_autocomplete']);
@@ -345,7 +354,7 @@ class AdRoutingManager
                 'page_string' => $pageString,
             ), true).'?'.rawurldecode($query);
         }
-//echo 'url=='.$url;
+
         return rtrim($url, '?');
     }
 
@@ -403,6 +412,9 @@ class AdRoutingManager
                     }
                 }
             }
+        }
+        if ((isset($search_params['item__area']) && $search_params['item__area'] != '')) {
+            $location = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($search_params['item__area'], $this->container);
         }
 
         return $location = $location != '' ? $location : 'uk';
@@ -549,22 +561,24 @@ class AdRoutingManager
 
         if ($ad && get_class($ad) == 'SolrObject') {
             //check for location.
-            if (!empty($ad[AdSolrFieldMapping::TOWN_ID])) {
-                $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($ad[AdSolrFieldMapping::TOWN_ID][0], $this->container);
+            if (!empty($ad[AdSolrFieldMapping::AREA_ID]) && isset($ad[AdSolrFieldMapping::IS_SPECIAL_AREA_LOCATION]) && $ad[AdSolrFieldMapping::IS_SPECIAL_AREA_LOCATION]) {
+                $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($ad[AdSolrFieldMapping::AREA_ID][0], $this->container);
+            }elseif (count($ad[AdSolrFieldMapping::TOWN_ID])) {
+                $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($ad[AdSolrFieldMapping::TOWN_ID][0], $this->container);
             } elseif (!empty($ad[AdSolrFieldMapping::DOMICILE_ID])) {
-                $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($ad[AdSolrFieldMapping::DOMICILE_ID][0], $this->container);
+                $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($ad[AdSolrFieldMapping::DOMICILE_ID][0], $this->container);
             }
         } else if ($adId && $locationId) {
-            $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($locationId, $this->container);
+            $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($locationId, $this->container);
         } else if ($ad) {
             //check for location.
             $domicileTownArray = $this->em->getRepository('FaAdBundle:AdLocation')->getIdArrayByAdId($ad->getId());
             if (isset($domicileTownArray[$ad->getId()])) {
                 $domicileTownArray = explode(',', $domicileTownArray[$ad->getId()]);
                 if (isset($domicileTownArray[1])) {
-                    $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($domicileTownArray[1], $this->container);
+                    $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($domicileTownArray[1], $this->container);
                 } else {
-                    $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($domicileTownArray[0], $this->container);
+                    $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($domicileTownArray[0], $this->container);
                 }
             }
         }

@@ -182,7 +182,7 @@ class AdModerateRepository extends EntityRepository
                         $this->sendAdRejectedEmail($ad, $moderationResult, $container);
                     } catch (\Exception $e) {
                     }
-                } elseif (isset($moderationResult['ModerationResult']) && $moderationResult['ModerationResult'] == self::MODERATION_RESULT_SCAM) {
+                } elseif (isset($moderationResult['ModerationResult']) && strtolower($moderationResult['ModerationResult']) == self::MODERATION_RESULT_SCAM) {
                     $ad->setStatus($this->_em->getReference('FaEntityBundle:Entity', BaseEntityRepository::AD_STATUS_REJECTED_ID));
                     $this->_em->persist($ad);
                     $this->_em->flush($ad);
@@ -202,6 +202,21 @@ class AdModerateRepository extends EntityRepository
                     $this->_em->getRepository('FaAdBundle:Ad')->blockUnblockAdByUserId($ad->getUser()->getId(), 1);
                     $this->_em->getRepository('FaAdBundle:Ad')->deleteAdFromSolrByUserId($ad->getUser()->getId(), $container);
                 } */
+            } else {
+                $archiveAd = $this->_em->getRepository('FaArchiveBundle:ArchiveAd')->findOneBy(array('ad_main' => $adRef));
+                if ($archiveAd && isset($moderationResult['ModerationResult']) && strtolower($moderationResult['ModerationResult']) == self::MODERATION_RESULT_SCAM) {
+                    $userId = $archiveAd->getUserId();
+                    $user = $this->_em->getRepository('FaUserBundle:User')->find($userId);
+                    if ($user) {
+                        $userStatus = $this->_em->getRepository('FaEntityBundle:Entity')->find(BaseEntityRepository::USER_STATUS_BLOCKED);
+                        $user->setStatus($userStatus);
+                        $this->_em->persist($user);
+                        $this->_em->flush($user);
+
+                        $this->_em->getRepository('FaAdBundle:Ad')->blockUnblockAdByUserId($user->getId(), 1);
+                        $this->_em->getRepository('FaAdBundle:Ad')->deleteAdFromSolrByUserId($user->getId(), $container);
+                    }
+                }
             }
         }
 
