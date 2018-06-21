@@ -1,0 +1,99 @@
+<div class="row">
+    <div class="columns">
+        <div class="outline">
+          <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+        	<div style="float:left; width:100%; margin-bottom: 15px;">
+                <ul class="button-group text-left">
+                	<li>
+                    	<a href="{{ path('fa_solr_pending_ad_report', {'status':'pending'}) }}">
+                    		<button id="action_pending" name="action_pending" class="tiny button mb0" style="background-color: #c60f13;">Action Pending</button>
+                		</a>
+                	</li>
+                	<li>
+                		<a href="{{ path('fa_solr_pending_ad_report', {'status':'success'}) }}">
+                			<button id="action_success" name="action_success" class="tiny button mb0">Action Taken</button>
+            			</a>
+                	</li>
+                </ul>
+            </div>
+            <table class="mb0">
+                 <thead>
+                    <tr>
+                        <th width="15%">
+                            {{ sortable_link('fa_solr_pending_ad_report', 'ad__id', 'Advert Id'|trans, sorter) }}
+                        </th>
+                        <th width="15%">
+                            {{ sortable_link('fa_solr_pending_ad_report', 'user__id', 'User Id'|trans, sorter) }}
+                        </th>
+                        <th width="15%">
+                          {{ sortable_link('fa_solr_pending_ad_report', 'user__email', 'Email'|trans, sorter) }}
+                        </th>
+                        <th width="10%">
+                            {{ sortable_link('fa_solr_pending_ad_report', 'user__status', 'User Status'|trans, sorter) }}
+                        </th>
+                        <th width="15%">
+                            {{ sortable_link('fa_solr_pending_ad_report', 'ad__status', 'Advert Status'|trans, sorter) }}
+                        </th>
+                        <th width="15%">
+                            {{ sortable_link('fa_solr_pending_ad_report', 'status', 'Advert Solr Status'|trans, sorter) }}
+                        </th>
+                        <th width="15%">
+                            {{ 'Action'|trans({}, 'messages') }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pagination.getNbResults() %}
+                        {% for inActiveUser in pagination.getCurrentPageResults() %}
+                            <tr class="gradeX">
+                                <td>{{ inActiveUser.adId }}</td>
+                                <td>{{ inActiveUser.userId }}</td>
+                                <td>{{ inActiveUser.email }}</td>
+                               	<td>
+                               		{% if inActiveUser.userStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_INACTIVE_ID') %}
+                               	        {{ 'InActive'|trans({}, 'messages') }}
+                               	    {% elseif inActiveUser.userStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_BLOCKED') %}
+                               	    	{{ 'Blocked'|trans({}, 'messages') }}
+                           	    	{% elseif inActiveUser.userStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
+                               	    	{{ 'Active'|trans({}, 'messages') }}
+                           	        {% endif %}
+                               	</td>
+                               	<td>
+                               		{% if inActiveUser.adStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
+                               	        {{ 'Live'|trans({}, 'messages') }}
+                               	    {% elseif inActiveUser.adStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
+                               	    	{{ 'Expired'|trans({}, 'messages') }}
+                           	    	{% elseif inActiveUser.adStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
+                               	    	{{ 'Sold'|trans({}, 'messages') }}
+                           	    	{% elseif inActiveUser.adStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_REJECTED_ID') %}
+                               	    	{{ 'Rejected'|trans({}, 'messages') }}
+                           	    	{% elseif inActiveUser.adStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID') %}
+                               	    	{{ 'InActive'|trans({}, 'messages') }}
+                           	        {% endif %}
+                               	</td>
+                               	<td>
+                               	    {% if inActiveUser.userStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') and (inActiveUser.adStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') or inActiveUser.adStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or inActiveUser.adStatus == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')) %}
+                               	        {{ 'Not In Solr'|trans({}, 'messages') }}
+                               	    {% else %}
+                               	    	{{ 'Exist In Solr'|trans({}, 'messages') }}
+                           	        {% endif %}
+                               	</td>   
+                               	<td> 
+                               		{% if inActiveUser.status == constant('Fa\\Bundle\\AdBundle\\Entity\\InActiveUserSolrAds::ACTION_NOT_TAKEN') %}
+                               	        {{ 'Action Pending'|trans({}, 'messages') }}
+                               	    {% elseif inActiveUser.status == constant('Fa\\Bundle\\AdBundle\\Entity\\InActiveUserSolrAds::ACTION_TAKEN') %}
+                               	    	{{ 'Action Taken'|trans({}, 'messages') }}
+                           	        {% endif %}
+                               	</td>                             
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr class="odd gradeX">
+                            <td colspan="5" align="center">{{ 'No result found'|trans({}, 'messages') }}</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

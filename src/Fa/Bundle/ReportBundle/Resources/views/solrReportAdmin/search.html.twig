@@ -1,0 +1,40 @@
+{% block search_html %}
+<div class="row">
+      <div class="columns">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+               {{ form_errors(form) }}
+                <div class="row">
+                    <div class="large-3 columns">
+                        {{ form_widget(form.ad__id, {'attr': {'class':'form-control', 'placeholder': 'Advert Reference'}}) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__id, {'attr': {'class':'form-control', 'placeholder': 'User Reference'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                        {{ form_widget(form.user__email, {'attr': {'class':'form-control', 'placeholder': 'Customer Email'}}) }}
+                    </div>
+                   
+                </div>
+                {{ form_widget(form.status, {'value' : getStatus}) }}
+                <div class="row">
+                    <div class="large-6 columns">
+
+                        {{ form_widget(form.user__status, {'attr': {'class':'form-control'}}) }}
+                    </div>
+                    <div class="large-6 columns">
+                       {{ form_widget(form.ad__status, {'attr': {'class':'form-control', 'placeholder': 'Ad status'}}) }}
+                    </div>
+                </div>
+
+                <hr class="hr_margin">
+                
+                <div class="row">
+                    <div class="large-9 columns">&nbsp;</div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.search, {'attr': {'class':'small button right'}}) }}
+                    </div>
+                </div>
+            {{ form_end(form) }}
+       </div>
+  </div>
+{% endblock %}

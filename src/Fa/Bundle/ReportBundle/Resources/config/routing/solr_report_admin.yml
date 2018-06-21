@@ -1,0 +1,3 @@
+fa_solr_pending_ad_report:
+    path:     /reports/solr_pending_ad
+    defaults: { _controller: FaReportBundle:SolrReportAdmin:index }

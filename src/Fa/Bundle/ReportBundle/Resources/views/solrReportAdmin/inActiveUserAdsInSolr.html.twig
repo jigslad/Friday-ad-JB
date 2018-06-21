@@ -1,0 +1,24 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+{% set getStatus = reqStatus %}
+
+{% block content %}
+	<div class="row">
+	    <div class="columns">
+	        <h1 class="left">{{ heading }}</h1>
+	    </div>
+    </div>
+    {% use "FaReportBundle:solrReportAdmin:search.html.twig" %}
+    {{ block('search_html') }} 
+    {% if pagination %}
+	    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+	    {{ include('FaReportBundle:solrReportAdmin:list.html.twig', {'pagination': pagination}) }}
+
+	    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+	{% endif %}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}
