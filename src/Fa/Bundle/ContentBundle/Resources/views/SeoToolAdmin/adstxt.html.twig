@@ -1,0 +1,37 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set entityRepository = fetch_repository('FaEntityBundle:Entity') %}
+{% set statusArray = entityRepository.getStatusArray(fetch_container_instance(), false) %}
+
+{% set seoToolEditGrant = false %}
+{% set seoToolDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('seo_tool_edit_admin') %}
+  {% set seoToolEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('seo_tool_delete_admin') %}
+  {% set seoToolDeleteGrant = true %}
+{% endif %}
+
+{% block content %}
+	<div class="row">
+	    <div class="columns">
+	        <h1 class="left">{{ heading }}</h1>
+	    </div>
+	</div>
+	<div>
+		<form method="post" action="{{path('ads_txt')}}" name="ads_txt_form" id="ads_txt_form">
+		<div class="row">
+			<div class="columns">
+				File content : <textarea class="form-control" id="file_text" name="file_text" cols="40" rows="40" style="height:auto">{{content}}</textarea>
+			</div>
+		</div>
+		<div class="row">
+			<div class="columns text-center">
+				<input type="submit" value="Save" name="save" class="tiny button"/>
+			</div>
+		</div>
+		</form>
+	</div>
+{% endblock %}

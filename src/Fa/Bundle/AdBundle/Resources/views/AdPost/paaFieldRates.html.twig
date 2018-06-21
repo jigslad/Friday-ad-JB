@@ -1,0 +1,53 @@
+
+{% set adultRatesDimensionId = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionIdByNameAndCategory(ad.category.id, 'Rates', fetch_container_instance()) %}
+{% set adultRatesOptions = fetch_repository('FaEntityBundle:Entity').getEntityArrayByType(adultRatesDimensionId, fetch_container_instance(), true, 'id', 'textCollection') %}
+{% set incallOptionLabel = '' %}
+{% set incallOptionAttr = '' %}
+{% set outcallOptionLabel = '' %}
+{% set outcallOptionAttr = '' %}
+{% set errorInCallOptVal = '' %}
+{% set errorOutCallOptVal = '' %}
+
+{% for key,ratesOption in adultRatesOptions %} 
+	{% if 'incall' in ratesOption %}
+		{% set incallOptionLabel = incallOptionLabel ~ '<td class="in-out-detail-text-f">' ~ ratesOption|replace({'_incall': ''}) ~ '</td>'  %}
+		{% set incallOptionAttr  =  incallOptionAttr ~ '<td data-label="'~ ratesOption|replace({'_incall': ''}) ~'" class="in-out-detail-text-l rate-required-label"><span class="rates-pound-symbl">&pound;</span><span class="rates-fld">' ~ form_widget(attribute(form, ratesOption|replace({' ': ''})), {'attr': {'class': 'rates_text_in_call'}}) ~ '</span></td>'   %}
+		{% set errorInCallOptVal = errorInCallOptVal ~ form_errors(attribute(form, ratesOption|replace({' ': ''})), {'attr': {'class': ratesOption|replace({' ': ''})}}) %}
+	{% elseif 'outcall' in ratesOption %} 
+		{% set outcallOptionLabel = outcallOptionLabel ~ '<td class="in-out-detail-text-f">' ~ ratesOption|replace({'_outcall': ''}) ~ '</td>'  %}
+		{% set outcallOptionAttr  = outcallOptionAttr ~ '<td data-label="'~ ratesOption|replace({'_outcall': ''}) ~'" class="in-out-detail-text-l rate-required-label"><span class="rates-pound-symbl">&pound;</span><span class="rates-fld">' ~ form_widget(attribute(form, ratesOption|replace({' ': ''})), {'attr': {'class': 'rates_text_out_call'}}) ~ '</span></td>'   %}
+		{% set errorOutCallOptVal = errorOutCallOptVal  ~ form_errors(attribute(form, ratesOption|replace({' ': ''})), {'attr': {'class': ratesOption|replace({' ': ''})}}) %}
+	{% endif %}
+		
+{% endfor %}
+
+
+<div class="in-out-calls-subblock" id="in-calls-subblock">
+    <div class="in-out-calls-text"><span colspan="4"><span class="safety-fe-incall m-r-10"></span><span>In-calls</span></span></div>
+    <table class="responsive-card-table boder-rates" style="table-layout: fixed!important;">
+        <tbody>
+            <tr class="hide-for-small-only hide-for-medium-down hide-block"> 
+        		{{ incallOptionLabel|raw }}		
+        	</tr>    	
+        	<tr >  
+        		{{ incallOptionAttr|raw }}     
+        	</tr>                                                                                                                                 
+        </tbody>
+	</table>
+	<div class="rates-error">{{ errorInCallOptVal|raw }}</div>
+</div>
+<br>
+<div class="in-out-calls-subblock" id="out-calls-subblock">
+    <div class="in-out-calls-text"><span colspan="4"><span class="safety-fe-outcall m-r-10"></span><span>Out-calls</span></span></div>
+    <table class="responsive-card-table boder-rates" style="table-layout: fixed!important;">
+        <tbody>
+            <tr class="hide-for-small-only hide-for-medium-down hide-block"> 
+        		{{ outcallOptionLabel|raw }}		
+        	</tr>
+        	<tr>  
+        		{{ outcallOptionAttr|raw }}     
+        	</tr>                                                                                                                                  
+        </tbody>
+    </table>
+    <div class="rates-error">{{ errorOutCallOptVal|raw }}</div> 
+</div>  

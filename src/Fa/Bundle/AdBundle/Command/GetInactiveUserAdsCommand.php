@@ -22,6 +22,7 @@ use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Fa\Bundle\UserBundle\Repository\UserRepository;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 // use Symfony\Component\Validator\Constraints\False;
+
 /**
  * Main purpose of this cron is to generate solr syncing reports and ensure 100% syncing of DB data to solr
  * This command is used to get all inactive users adverts from solr if any present in solr 
@@ -116,7 +117,15 @@ EOF
             $dataFlag = FALSE;
             // Here we are checking advert is in solr or not
             $advertId = $objAd['adId'];
-            $solrQuery->setQuery("id:$advertId");
+            $advertActive = EntityRepository::AD_STATUS_LIVE_ID;
+            $advertExpired = EntityRepository::AD_STATUS_EXPIRED_ID;
+            $advertSold = EntityRepository::AD_STATUS_SOLD_ID;
+            $advertStatus = '';
+            // checking adverts active status
+            if ($userStatus == EntityRepository::USER_STATUS_ACTIVE_ID) {
+                $advertStatus = " AND (a_status_id_i:$advertActive or a_status_id_i:$advertExpired or a_status_id_i:$advertSold)";
+            }
+            $solrQuery->setQuery("id:$advertId$advertStatus");
             $solrQuery->addField('id')->addField('a_user_id_i');
             $result = $solrClient->connect()->query($solrQuery);
             $resObj = $result->getResponse();
@@ -124,7 +133,7 @@ EOF
             if (isset($resObj['response']['docs'])) {
                 if ($userStatus == EntityRepository::USER_STATUS_ACTIVE_ID) {
                     // Active user adverts which are in live status should be in solr,
-                    // if we found active adverts which are not solr then we are putting those adverts info in below table
+                    // if we found active/expired/sold adverts which are not solr then we are putting those adverts info in below table
                     if (empty($resObj['response']['docs'])) {
                         $dataFlag = TRUE;
                     }
@@ -189,7 +198,7 @@ EOF
                 $commandOptions .= ' --offset='.$low;
             }
 
-            $memoryLimit = '';
+            $memoryLimit = ' -d memory_limit=100M';
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
@@ -251,8 +260,7 @@ EOF
         
         if ($userStatus == EntityRepository::USER_STATUS_ACTIVE_ID) {
             // for active users we consider only live adverts only. 
-            $qb->andWhere(AdRepository::ALIAS.'.status = :adStatus')
-                ->setParameter('adStatus', EntityRepository::AD_STATUS_LIVE_ID);
+            $qb->andWhere(AdRepository::ALIAS.'.status IN ('.EntityRepository::AD_STATUS_LIVE_ID.','.EntityRepository::AD_STATUS_EXPIRED_ID.','.EntityRepository::AD_STATUS_SOLD_ID.')');
         }else {
             if (!empty($adStatus)) {
                 $qb->andWhere(AdRepository::ALIAS.'.status = :adStatus')

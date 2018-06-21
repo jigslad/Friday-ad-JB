@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Fa\Bundle\AdBundle\Repository\AdRepository;
+use Fa\Bundle\AdBundle\Repository\AdImageRepository;
 use Gedmo\Sluggable\Util\Urlizer;
 
 /**
