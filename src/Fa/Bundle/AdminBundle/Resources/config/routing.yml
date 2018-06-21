@@ -64,3 +64,9 @@ fa_ad_feed_admin:
 fa_ti_report_admin:
     resource: '@FaTiReportBundle/Resources/config/routing_admin.yml'
     prefix:   /
+    
+fa_solr_pending_ad_report_admin:
+    resource: "@FaReportBundle/Resources/config/routing_admin.yml"
+    prefix:   /
+    
+    

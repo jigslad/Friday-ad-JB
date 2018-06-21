@@ -125,6 +125,10 @@ class EntityRepository extends BaseEntityRepository
     const MON_TO_FRI_END_TIME = 759; // date(Gi) returns 759 for 7:59 AM
     const MON_TO_FRI_START_TIME_1 = 800; // date(Gi) returns 800 for 8 AM
     const MON_TO_FRI_END_TIME_1 = 1959; // date(Gi) returns 1959 for 7:59 PM
+    const MY_SERVICE_IS_FOR = 'My service is for';
+    const TRAVEL_ARRANGEMENTS = 'Travel arrangements';
+    const INDEPENDENT_OR_AGENCY = 'Independent or Agency';
+    const LOOKING_FOR 	= 'Looking for';
 
 
     /**
@@ -275,7 +279,7 @@ class EntityRepository extends BaseEntityRepository
      *
      * @return array
      */
-    public function getEntityArrayByType($type, $container = null, $withSort = true, $sortBy = 'name')
+    public function getEntityArrayByType($type, $container = null, $withSort = true, $sortBy = 'name', $fieldType = '')
     {
         if ($container) {
             $culture     = CommonManager::getCurrentCulture($container);
@@ -300,6 +304,11 @@ class EntityRepository extends BaseEntityRepository
 
         foreach ($entities as $entity) {
             $entityArray[$entity->getId()] = $entity->getName();
+            if($fieldType === 'textCollection') {
+                $entityArray[$entity->getId()] = $entity->getName()."_".$entity->getOptionalVal();
+            } else {
+                $entityArray[$entity->getId()] = $entity->getName();
+            }
         }
 
         if ($container) {

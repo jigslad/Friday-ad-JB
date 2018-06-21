@@ -181,7 +181,7 @@ button, .button{border-radius:2px;text-align:center;padding:17px 20px 22px 20px;
 .primary-btn-1:focus, .primary-btn-1:hover{background:#2ab6e0 !important;border:1px solid #2ab6e0 !important;color:#fff}
 .primary-btn-1.not-hover{background:#31C5F2!important;border:1px solid #2ab6e0!important;cursor:default}
 
-.border-btn, .border-btn:hover, .border-btn:focus{background:transparent;color:#31C5F2;}
+.border-btn, .border-btn:hover, .border-btn:focus{background:transparent;/* color:#31C5F2; */}
 
 .primary-btn-2{background:#a8dc28;border:1px solid #9bcc21;}
 .primary-btn-2:focus, .primary-btn-2:hover{background:#9bcc21;border:1px solid #9bcc21;color:#fff}
@@ -954,7 +954,7 @@ li.step-complete .step-num, li.step-complete .step-text{opacity:0.25}
 #contactSellerModal input.error{margin-bottom:0}
 #contactSellerModal textarea{height:129px}
 #contactSellerModal .receive-alert, #profilePageContactUserModal .receive-alert{margin:0;list-style:none}
-#contactSellerModal .receive-alert li, #profilePageContactUserModal .receive-alert li{margin-bottom:4px}
+#contactSellerModal .receive-alert li, #profilePageContactUserModal .receive-alert li{margin-bottom:8px}
 #contactSellerModal .receive-alert label, #profilePageContactUserModal .receive-alert label{display:inline-block;font-weight:400;margin:0 0 0 5px;font-family: 'Asap', sans-serif;}
 #contactSellerModal .receive-alert label{width:90%;vertical-align:top}
 #contactSellerModal .secondary-btn-1{margin:25px 0 0 0}
@@ -2583,72 +2583,49 @@ a.basket-icon{background:url(/bundles/fafrontend/images/basket.svg) no-repeat 7p
 #AmazonPayButton img { width: 100%; }
 .pkg-grey-head { background-color:#a7a7a7;height:40px}.primary-btn-grey{background: #a7a7a7;border-color: #a7a7a7;}
 .available-payment-options { width:100%;height:47px;background:url('/bundles/fafrontend/images/payment-options.png') no-repeat center center;}
-.available-payment-adult-options { width:100%;height:47px;background:url('/bundles/fafrontend/images/payment-options-adult.png') no-repeat center center;}
+
 .avail-payment-box {width:100%;margin:20px auto 0px; } 
 .avail-payment-box .p-b-20 {padding-bottom:20px }
 .available-payment-options-mob {width:100%;height:153px;background:url('/bundles/fafrontend/images/payment-options-mobile.png') no-repeat center center;margin-bottom: 70px;}
-.available-payment-adult-options-mob {width:100%;height:153px;background:url('/bundles/fafrontend/images/payment-options-mobile-adult.png') no-repeat center center;margin-bottom: 70px;}
+
 .button-mar { margin-top:20px;margin-bottom:30px;}
-.amazon-info-icon { position: absolute;right: -29px;bottom: 18px;width: 20px;height: 19px;background: url('/bundles/fafrontend/images/info-icon.svg'); }
+.amazon-info-icon { position: absolute;right: -15px;bottom: 18px;width: 20px;height: 19px;background: url('/bundles/fafrontend/images/info-icon.svg'); }
 
 /*  Custom PAA and Ad Detail Page */
 .custom-checkbox-main {width: 330px}
 .custom-checkbox-main #fa_paa_fourth_step_adult_my_service_id{width: 100%;float: left;}
-.custom-checkbox-main .custom-checkbox{width: 10%;float: left;}
-.custom-checkbox-main .custom-checkbox{width: 10%;float: left;}
+
+.custom-checkbox-main .custom-checkbox{width: 20px;float: left;}
 .custom-checkbox-main label{width: 21%;float: left; text-align:left;}
 .adult-incall-icon{width: 30px;height: 22px;float:left;background:url(/bundles/fafrontend/images/incall.svg) no-repeat}
 .adult-outcall-icon{width: 30px;height: 22px;float:left;background:url(/bundles/fafrontend/images/outcall.svg) no-repeat}
-#element_my_service_id{height: 143px;}
+#element_my_service_id{height: 140px;}
 .safety-fe-incall{width:26px;height:25px;display:inline-block;vertical-align:middle;background:url('/bundles/fafrontend/images/incall.svg') no-repeat;}
 .safety-fe-outcall{width:26px;height:25px;display:inline-block;vertical-align:middle;background:url('/bundles/fafrontend/images/outcall.svg') no-repeat;}
-.adult_services_box tbody tr td{
-     max-width: 25%;
-     width: 25%; }
-                        
-.responsive-card-table {
-    border-collapse: collapse;
-    width: 100%;
-    border-top: 0px;
-    margin-bottom: 0px; 
-    border:0px; 
-}
 
-.boder-rates { border:1px solid #ddd; margin-bottom:15px; }
-.responsive-card-table tbody tr td{
-    border-right: 1px solid #fff; }
-    
-.responsive-card-table tbody tr td:last-child{
-    border-right: 0px solid #ddd; }
-    
-.responsive-card-table tbody  {
-    margin-top: 10px; }
-    
-.responsive-card-table table tr.odd,  .responsive-card-table table tr:nth-of-type(n){
-    background: #FBFBFB; }
-    
-.responsive-card-table table tr.even, .responsive-card-table table tr.alt, table tr:nth-of-type(2n) {
-    background: #EFEFEF; }
-    
-.in-out-calls-text {
-    font-size: 14px;
-    font-weight: 700;
-    color: #313133;
-    line-height: 16px;
-    border: 1px solid #d4d4d4; 
-    padding: 5px 10px; }
-    
-.m-r-10 {
-    margin-right: 10px; }
-    
-.in-out-detail-text-f {
-    color: #a4a4a4;
-    font-weight: 700;
-    text-align: center; }
-    
-.in-out-detail-text-l {
-    text-align: center; }
+.adult_services_box tbody tr td{ max-width: 25%; width: 25%; }                        
 
+table.responsive-card-table { border-collapse: collapse; width: 100%; border: solid 1px #ddd; margin-bottom: 0px; }
+.responsive-card-table .boder-rates { border:1px solid #ddd; margin-bottom:15px; }
+.responsive-card-table tbody tr td{ border-right: 1px solid #fff; }
+.responsive-card-table tbody tr td:last-child{ border-right: 0px solid #ddd; } 
+.responsive-card-table tbody tr td input {background: #FFFFFF;}   
+.responsive-card-table tbody  { margin-top: 10px; }
+table.responsive-card-table tr.odd, table.responsive-card-table tr:nth-of-type(n){ background: #FBFBFB !important; }    
+table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.responsive-card-table tr:nth-of-type(2n) { background: #EFEFEF !important; }
+.in-out-calls-text { font-size: 14px; font-weight: 700; color: #313133; line-height: 16px; border: 1px solid #d4d4d4; padding: 5px 10px; }
+.responsive-card-table .m-r-10 { margin-right: 10px; }    
+.responsive-card-table .in-out-detail-text-f { color: #a4a4a4; font-weight: 700; text-align: center; }    
+.responsive-card-table .in-out-detail-text-l { text-align: center; }
+.responsive-card-table .in-out-detail-text-f p { margin:0px; }
+.responsive-card-table .in-out-detail-text-l .rates-pound-symbl {float: left; width: 10%;}
+.responsive-card-table .in-out-detail-text-l .rates-fld {float: right; width: 80%;}
+.responsive-card-table .in-out-detail-text-l { text-align: center; }
+.responsive-card-table .in-out-detail-text-l input[type="text"] { padding-left: 5px!important; }
+.responsive-card-table .in-out-calls-block{ display:block; }
+.responsive-card-table .in-out-calls-subblock{ width: 100%; }
+.responsive-card-table .in-out-detail-text-l .currency_rate{ display: inline-flex; width: 100%; }
+.responsive-card-table .rates-pound-symbl{ line-height: 38px; margin-right: 5px; }
 
 /****** Adult Icons *****/
 .adult-male{background:url(/bundles/fafrontend/images/male.png) no-repeat}
@@ -2658,8 +2635,8 @@ a.basket-icon{background:url(/bundles/fafrontend/images/basket.svg) no-repeat 7p
 .service-for-male, .service-for-men {background:url(/bundles/fafrontend/images/service-for-men.png) no-repeat}
 .service-for-women{background:url(/bundles/fafrontend/images/service-for-women.png) no-repeat}
 .service-for-couples{background:url(/bundles/fafrontend/images/service-for-couples.png) no-repeat}
-.travel-arrangement-in-call{background:url(/bundles/fafrontend/images/travel-incall.png) no-repeat}
-.travel-arrangement-out-call{background:url(/bundles/fafrontend/images/travel-outcall.png) no-repeat}
+.travel-arrangement-in-call{background:url(/bundles/fafrontend/images/travel-incall.svg) no-repeat}
+.travel-arrangement-out-call{background:url(/bundles/fafrontend/images/travel-outcall.svg) no-repeat}
 .travel-arrangement-either{background:url(/bundles/fafrontend/images/in-out-call.png) no-repeat}
 .adult-independent{background:url(/bundles/fafrontend/images/independent.png) no-repeat}
 .adult-agency{background:url(/bundles/fafrontend/images/agency.png) no-repeat}
@@ -2670,3 +2647,46 @@ a.basket-icon{background:url(/bundles/fafrontend/images/basket.svg) no-repeat 7p
 .manage-item-list .live-status-edit, .manage-item-list .moderation-status {width: 90%;}
 #business_about_us_div a, #business_about_us_div a:focus { color: #92c01f !important; }
 #business_about_us_div a:hover { color: #31c5f2 !important; }
+
+.rates-error span.error, .rates-error small.error { padding:0.3rem 0.5em !important; text-align: center; margin-bottom:0px !important; }
+.flexy-box .parent_box {display:table; table-layout:fixed; width:100%; background: #EFEFEF; text-align: center; }
+.flexy-box .child_box { display:table-cell; float:none; width: 100%; border-right: 1px solid #ffffff; padding: 10px 0; height: 153px; float: none; }
+.flexy-box .child_box:last-child{ border-right: 0px solid #ffffff; } 
+#adult_top_label h5 {margin: 0px 0px 30px 0px;}
+.paa-bdr-box-btm-hd { border-bottom: 0px!important;  }
+.custom-checkbox-main label { font-weight: normal; } 
+.paa-bdr-lbl h3 a span { color: #313133;  }
+.paa-bdr-lbl h3 a:hover span { color: #a8dc28;  }
+
+/***** Adult Custom Modal Box Css  */
+#change_category_for_adult_reveal_modal .modal-title {
+    background: #efedea !important;
+    border-bottom: 1px solid #e3e3e3 !important;
+}
+#change_category_for_adult_reveal_modal .modal-content .columns {
+	font-size:14px !important; 
+	color:#555;
+	}
+.in-mod-tooltip {position: absolute !important; right: 5px; bottom: 1px;}
+.live-status-edit{background:#70ca0d}
+.manage-item-list .live-status-edit, .manage-item-list .moderation-status {width: 90%;}
+#business_about_us_div a, #business_about_us_div a:focus { color: #92c01f !important; }
+#business_about_us_div a:hover { color: #31c5f2 !important; }
+.mt0 { margin-top:0px !important}
+.buyer-contact .label-inline label { margin-right:0px !important; }
+@media only screen and (min-width: 760px) {
+    .recommended-div.listing .list-col-1 { width:140px; }
+}
+@media only screen and (max-width: 759px) and (min-width: 320px){
+    .recommended-div.listing:after { background:none !important; }
+    .recommended-div.listing .list-col-2 h5 {margin-top: 10px;}
+    .recommended-div.listing .recommendedtxt { font-size: 13px; }
+}
+.recommended-div.listing .recommendedtxt { position: absolute;right: 20px;top: 10px;color: #999;}
+
+/* Location Area Changes  */
+.paa-area-title { margin: 12px 0 10px 0; }
+.alert-box.info.area-tooltip-alert { font-weight: normal !important; }
+#contactSellerModal .receive-alert li label, #profilePageContactUserModal .receive-alert li label { line-height:20px !important;padding-top:2px !important}
+.available-payment-adult-options { width:100%;height:47px;background:url('/bundles/fafrontend/images/payment-options-adult.png') no-repeat center center;}
+.available-payment-adult-options-mob {width:100%;height:153px;background:url('/bundles/fafrontend/images/payment-options-mobile-adult.png') no-repeat center center;margin-bottom: 70px;}

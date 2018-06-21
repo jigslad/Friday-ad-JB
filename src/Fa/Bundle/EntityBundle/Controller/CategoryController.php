@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Fa\Bundle\EntityBundle\Entity\Category;
 use Symfony\Component\Console\Command\Command;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Doctrine\ORM\Query;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 
 /**
  * This controller is used for admin side category management.
@@ -64,9 +66,19 @@ class CategoryController extends CoreController
      *
      * @return Response A Response object.
      */
-    public function renderHeaderCategoriesAction(Request $request, $is_tablet = 0, $is_mobile = 0, $location = null)
-    {
-        $locationDetails = CommonManager::getLocationDetailFromParamsOrCookie($location, $request, $this->container);
+    public function renderHeaderCategoriesAction(Request $request, $is_tablet = 0, $is_mobile = 0, $location = null, $searchParams = [])
+    { 
+    	$thirdPartyAdultModalBox = false;
+    	if (isset($searchParams['item__category_id'])) {
+    		$rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($searchParams['item__category_id'], $this->container);
+    		if($rootCategoryId == CategoryRepository::ADULT_ID) {
+    			$thirdPartyAdultModalBox = true;
+    		}
+    	}
+    	
+    	
+    	
+    	$locationDetails = CommonManager::getLocationDetailFromParamsOrCookie($location, $request, $this->container);
         //echo '<pre>'; print_r($locationDetails);die;
         if(!empty($locationDetails)) {
             if($locationDetails['location']!='') {
@@ -102,7 +114,8 @@ class CategoryController extends CoreController
             $parameters['location_id'] = 'uk';
             $parameters['location'] = $this->getRepository('FaEntityBundle:Location')->getIdBySlug('uk');
         } 
-
+        $parameters['thirdPartyAdultModalBox'] = $thirdPartyAdultModalBox;
+        
 
         if ($is_mobile) {
             ini_set('xdebug.max_nesting_level', 120);

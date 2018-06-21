@@ -135,11 +135,15 @@ class UserImageType extends AbstractType
             if ($isCompany) {
                 $imageObj->setPath($imagePath);
             } else {
-                $imageObj->setImage($imagePath);
+                if ($imageObj) {
+                    $imageObj->setImage($imagePath);
+                }
             }
             //$imageObj->setAws(0);
-            $this->em->persist($imageObj);
-            $this->em->flush($imageObj);
+            if ($imageObj) {
+                $this->em->persist($imageObj);
+                $this->em->flush($imageObj);
+            }
 
             $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
             $orgImageName = $uploadedFile->getClientOriginalName();

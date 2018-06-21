@@ -43,7 +43,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Fa\Bundle\CoreBundle\Form\Type\JsChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
-// use Symfony\Component\Validator\Constraints\Null;
+use Symfony\Component\Validator\Constraints\IsNull;
 
 /**
  * AdPostType form.

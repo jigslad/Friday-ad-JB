@@ -286,6 +286,13 @@ class Category
     private $has_recommended_slot = false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="has_recommended_slot_searchlist", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $has_recommended_slot_searchlist = false;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -1063,5 +1070,30 @@ class Category
     public function getHasRecommendedSlot()
     {
         return $this->has_recommended_slot;
+    }
+
+
+    /**
+     * Set has_recommended_slot_searchlist.
+     *
+     * @param boolean $has_recommended_slot_searchlist
+     * @return Category
+     */
+
+    public function setHasRecommendedSlotSearchlist($has_recommended_slot_searchlist)
+    {
+        $this->has_recommended_slot_searchlist = $has_recommended_slot_searchlist;
+
+        return $this;
+    }
+
+    /**
+     * Get has_recommended_slot_searchlist.
+     *
+     * @return boolean
+     */
+    public function getHasRecommendedSlotSearchlist()
+    {
+        return $this->has_recommended_slot_searchlist;
     }
 }

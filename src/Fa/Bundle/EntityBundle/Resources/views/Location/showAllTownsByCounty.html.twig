@@ -10,7 +10,12 @@
 
 
 {% block body -%}
-        {% set towns = locationRepository.findBy({'parent': countyId}, {'name': 'ASC'}) %}
+		{# check county if belongs to greater London will get London areas those having atleast one advert  #}
+		{% if countyId == constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_GREATER_LONDON_ID') %}
+            {% set towns = locationRepository.getTownByCounty(countyId, container) %}
+        {% else %}
+        	{% set towns = locationRepository.findBy({'parent': countyId}, {'name': 'ASC'}) %}
+        {% endif %}
         {% set townIds = {} %}
         {% set townLocalityArray = {} %}
         {% if towns|length %}
@@ -39,8 +44,7 @@
                 {{ 'Select your local area below or view all ads from %county_link% or go to %locations_link%'|trans({'%county_link%': '<a href="'~locationHomePageUrl~'">'~countyInfo['county']~'</a>', '%locations_link%': locationLink}, 'frontend-location')|raw }} 
                 </div>
             </div>
-            
-            {{ include('FaEntityBundle:Location:renderLocations.html.twig', {'locations': townLocalityArray, 'blockName': 'Towns in %county_name%'|trans({'%county_name%': countyInfo['county']}, 'frontend-location')}) }}
+               {{ include('FaEntityBundle:Location:renderLocations.html.twig', {'locations': townLocalityArray, 'blockName': 'Towns in %county_name%'|trans({'%county_name%': countyInfo['county']}, 'frontend-location')}) }}
         </div>
         {% endif %}
     

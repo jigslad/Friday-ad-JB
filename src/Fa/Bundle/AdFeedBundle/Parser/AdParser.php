@@ -40,6 +40,7 @@ use Fa\Bundle\AdBundle\Repository\AdUserPackageRepository;
 use Fa\Bundle\AdBundle\Repository\AdUserPackageUpsellRepository;
 use Fa\Bundle\AdBundle\Entity\AdUserPackage;
 use Fa\Bundle\AdBundle\Entity\AdUserPackageUpsell;
+use Fa\Bundle\EntityBundle\Repository\LocationRepository;
 
 /**
  * Ad parser.
@@ -799,6 +800,25 @@ abstract class AdParser
 
         if (isset($this->advert['location']['town_id']) && $this->advert['location']['town_id']) {
             $ad_location->setLocationTown($this->em->getReference('FaEntityBundle:Location', $this->advert['location']['town_id']));
+            //check for location area
+            if($this->advert['location']['town_id'] == LocationRepository::LONDON_TOWN_ID) {
+            	//check post Code is exist
+            	if (isset($this->advert['location']['postcode']) && $this->advert['location']['postcode'] != '') {
+            		$getPostalCode = explode(" ", $this->advert['location']['postcode']);
+            		$getArea = $this->em->getRepository('FaEntityBundle:LocationPostal')->getAreasByPostCode($getPostalCode[0]);
+            		if(!empty($getArea)) {
+            			if(count($getArea) == '1') {
+            				$ad_location->setLocationArea($this->em->getReference('FaEntityBundle:Location', $getArea[0]['id']));
+            			} elseif (count($getArea) > '1') { 
+            				//get the nearest area for this location
+            				$getNearestAreaObj = $this->em->getRepository('FaEntityBundle:Location')->getNearestAreaByPostLatLong($this->advert['location']['postcode'], $this->advert['location']['town_id']);
+            				if(!empty($getNearestAreaObj) && $getNearestAreaObj->getLvl() == 4 ) {
+            					$ad_location->setLocationArea($getNearestAreaObj);
+            				}
+            			}
+            		}
+            	}
+            }
         } else {
             $ad_location->setLocationTown(null);
         }
@@ -1074,13 +1094,18 @@ abstract class AdParser
                 $this->advert['location']['longitude']   = isset($locationArray['longitude']) && $locationArray['longitude'] ? $locationArray['longitude'] : null;
                 $this->advert['location']['locality_id'] = isset($locationArray['locality_id']) && $locationArray['locality_id'] ? $locationArray['locality_id'] : null;
                 $this->advert['location']['county_id']   = isset($locationArray['county_id']) && $locationArray['county_id'] ? $locationArray['county_id'] : null;
-                $this->advert['location']['postcode']    = isset($locationArray['postcode']) && $locationArray['postcode'] ? $locationArray['postcode'] : null;
+                
+                if(isset($locationArray['town_id']) && ($locationArray['town_id'] == LocationRepository::LONDON_TOWN_ID || (isset($locationArray['lvl']) && $locationArray['lvl'] == 4))) {
+                	$this->advert['location']['postcode']    = isset($adArray['Advertiser']['Postcode']) && $adArray['Advertiser']['Postcode'] ? $adArray['Advertiser']['Postcode'] : null;
+                } else {
+                	$this->advert['location']['postcode']    = isset($locationArray['postcode']) && $locationArray['postcode'] ? $locationArray['postcode'] : null;
+                }
                 $this->advert['location']['countrycode'] = 'GB';
             } else {
                 $this->setRejectAd();
                 $this->setRejectedReason('Location data not found');
             }
-
+            
         } else {
             $this->setRejectAd();
             $this->setRejectedReason('Location data not found');

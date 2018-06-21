@@ -296,6 +296,31 @@ class AdSolrSearch extends SolrSearch
             }
         }
     }
+    
+    /**
+     * Add area id filter to solr query.
+     *
+     * @param integer $id Location id.
+     */
+    protected function addAreaIdFilter($id = null)
+    {
+    	if ($id) {
+    		if (!is_array($id)) {
+    			$id = array($id);
+    		}
+    		
+    		if (defined($this->getSolrFieldMappingClass().'::AREA_ID')) {
+    			$id = array_filter($id);
+    			if (count($id)) {
+    				$query = constant($this->getSolrFieldMappingClass().'::AREA_ID').':'.implode(' OR '.constant($this->getSolrFieldMappingClass().'::AREA_ID').':', $id);
+    				$query = ' AND ('.$query.')';
+    				
+    				$this->query .= $query;
+    			}
+    		}
+    	}
+    }
+    
 
     /**
      * Add is top ad filter to solr query.
@@ -329,8 +354,8 @@ class AdSolrSearch extends SolrSearch
      * @param string $location
      */
     protected function addLocationFilter($location = null)
-    {
-        $locationData = explode('|', $location);
+    {	
+    	$locationData = explode('|', $location);
         $location     = $locationData[0];
 
         if (isset($locationData[1]) && $locationData[1]) {
@@ -353,11 +378,10 @@ class AdSolrSearch extends SolrSearch
             $countyId    = null;
             $locality    = null;
             $localityId  = null;
-
-            if (!count($postCode) || $postCode['town_id'] == null || $postCode['town_id'] == 0) {
-                if (preg_match('/^\d+$/', $location)) {
+            if (!count($postCode) || $postCode['town_id'] == null || $postCode['town_id'] == 0) { 
+            	if (preg_match('/^\d+$/', $location)) {
                     $town = $this->getEntityManager()->getRepository('FaEntityBundle:Location')->getTownInfoArrayById($location, $this->getContainer());
-                } else if (preg_match('/^([\d]+,[\d]+)$/', $location)) {
+                } else if (preg_match('/^([\d]+,[\d]+)$/', $location)) { 
                     $localityTown = explode(',', $location);
                     $localityId = $localityTown[0];
                     $townId     = $localityTown[1];
@@ -365,11 +389,11 @@ class AdSolrSearch extends SolrSearch
                         $locality  = $this->getEntityManager()->getRepository('FaEntityBundle:Locality')->getLocalityInfoArrayById($localityId, $this->getContainer());
                         $town = $this->getEntityManager()->getRepository('FaEntityBundle:Location')->getTownInfoArrayById($townId, $this->getContainer());
                     }
-                } else {
+                } else { 
                     $town = $this->getEntityManager()->getRepository('FaEntityBundle:Location')->getTownInfoArrayById($location, $this->getContainer(), 'name');
                 }
             }
-
+            
             if (!$town) {
                 if (preg_match('/^\d+$/', $location)) {
                     $county = $this->getEntityManager()->getRepository('FaEntityBundle:Location')->getCountyInfoArrayById($location, $this->getContainer());
@@ -389,7 +413,7 @@ class AdSolrSearch extends SolrSearch
                     }
                 }
             }
-
+		
             if (count($postCode)) {
                 $latitude  = $postCode['latitude'];
                 $longitude = $postCode['longitude'];
@@ -420,7 +444,7 @@ class AdSolrSearch extends SolrSearch
             } elseif ($countyId) {
                 $this->addCountyIdFilter($countyId);
             }
-
+            
             if ($latitude && $longitude) {
                 $this->geoDistQuery['sfield'] = 'store';
                 $this->geoDistQuery['pt'] = $latitude.','.$longitude;

@@ -97,6 +97,7 @@ class YacManager
                         <f_expireDate>'.$expireDate.'</f_expireDate>
                         <f_info>'.$info.'</f_info>
                     </request>';
+            echo $xmlBody;
             $xmlResponse = $this->getYacResponse($xmlBody);
             $xml         = new \SimpleXMLElement($xmlResponse);
             $yacStatus   = $xml->f_status->__toString();

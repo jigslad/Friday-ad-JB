@@ -125,6 +125,13 @@ class Entity
      * @ORM\Column(name="ord", type="smallint", nullable=true)
      */
     private $ord;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="optional_val", type="string", length=20, nullable=true)
+     */
+    private $optional_val;
 
     /**
      * Constructor
@@ -454,5 +461,28 @@ class Entity
     public function getParentId()
     {
         return $this->parent_id;
+    }
+    
+    /**
+     * Set optional_val
+     *
+     * @param string $optional_val
+     * @return Entity
+     */
+    public function setOptionalVal($optional_val)
+    {
+    	$this->optional_val = $optional_val;
+    	
+    	return $this;
+    }
+    
+    /**
+     * Get optional_val
+     *
+     * @return string
+     */
+    public function getOptionalVal()
+    {
+    	return $this->optional_val;
     }
 }

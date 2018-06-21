@@ -375,7 +375,7 @@ class AdFeedReaderManager
      */
     public function downloadWightbayFile($type, $modifiedSince, $siteID)
     {
-        $url = 'http://www.wightbay.com/api/friday-ad/?apiToken=9dc6648bbd7eb88580a127702bf83e66&page=1';
+        $url = 'https://www.wightbay.com/api/friday-ad/?apiToken=9dc6648bbd7eb88580a127702bf83e66&page=1';
 
         echo "\n"."=================================================================================================="."\n";
         echo "Fetching data from:"."\n";
@@ -405,7 +405,7 @@ class AdFeedReaderManager
 
                 $j++;
 
-                $url = 'http://www.wightbay.com/api/friday-ad/?apiToken=9dc6648bbd7eb88580a127702bf83e66&page='.$j;
+                $url = 'https://www.wightbay.com/api/friday-ad/?apiToken=9dc6648bbd7eb88580a127702bf83e66&page='.$j;
                 //$url = 'http://api.fmgfeedaggregation.com/api/v2/adverts?appkey='.$this->container->getParameter('fa.feed.api.id').'&modifiedSince='.$modifiedSince.'&siteId='.$siteID.'&advertType='.$type.'&limit=1000&offset='.$low;
 
                 echo "\n"."=================================================================================================="."\n";

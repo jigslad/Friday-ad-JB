@@ -271,7 +271,7 @@ class SeoManager
         $seoReplaceArray    = array();
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $seoLocationName    = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', LocationRepository::COUNTY_ID);
-
+       	
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['locality']) && $cookieLocationDetails['locality']) {
             $seoLocationName = $cookieLocationDetails['locality'];
             if ($this->em->getRepository('FaEntityBundle:Locality')->isDuplicateName($cookieLocationDetails['locality'], $this->container)
@@ -281,13 +281,14 @@ class SeoManager
         } elseif (is_array($cookieLocationDetails) && isset($cookieLocationDetails['county']) && $cookieLocationDetails['county']) {
             $seoLocationName = $cookieLocationDetails['county'];
         } elseif (is_array($cookieLocationDetails) && isset($cookieLocationDetails['town']) && $cookieLocationDetails['town']) {
-            $seoLocationName = $cookieLocationDetails['town'];
+            //check location is belongs to area or special area
+        	$seoLocationName = $this->em->getRepository('FaEntityBundle:Location')->getTownLocationNameForSeo($cookieLocationDetails['town'], $this->container);
             if ($this->em->getRepository('FaEntityBundle:Location')->isDuplicateName($cookieLocationDetails['town'], $this->container)
                 && isset($cookieLocationDetails['paa_county']) && $cookieLocationDetails['paa_county']) {
                 $seoLocationName .= ', '.$cookieLocationDetails['paa_county'];
             }
         }
-
+    
         $seoReplaceArray['{location}'] = ($seoLocationName == 'United Kingdom' ? 'UK' : $seoLocationName);
         if (count($searchParams) && isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
             $seoReplaceArray['{category}'] = $entityCacheManager->getEntityNameById('FaEntityBundle:Category', $searchParams['item__category_id']);

@@ -29,3 +29,10 @@ seo_tool_upload_csv:
     defaults:  { _controller: FaContentBundle:SeoToolAdmin:uploadCsv }
     options:
         expose: true
+
+ads_txt:
+    path:   /ads_txt
+    defaults:  { _controller: FaContentBundle:SeoToolAdmin:adsTxt }
+    options:
+        expose: true
+        

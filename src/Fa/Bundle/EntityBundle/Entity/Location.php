@@ -144,6 +144,20 @@ class Location
      * @ORM\Column(name="url", type="string", length=150, nullable=true)
      */
     private $url;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_special_area", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $is_special_area;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="redirect_url", type="string", length=150, nullable=true)
+     */
+    private $redirect_url;
 
 
     /**
@@ -529,5 +543,51 @@ class Location
     public function getRegionId()
     {
         return $this->region_id;
+    }
+
+    /**
+     * Set redirect_url
+     *
+     * @param string $redirect_url
+     * @return Location
+     */
+    public function setRedirectUrl($redirect_url)
+    {
+        $this->redirect_url = $redirect_url;
+
+        return $this;
+    }
+
+    /**
+     * Get redirect_url
+     *
+     * @return string
+     */
+    public function getRedirectUrl()
+    {
+        return $this->redirect_url;
+    }
+    
+    /**
+     * Set is_special_area
+     *
+     * @param boolean $status
+     * @return Location
+     */
+    public function setIsSpecialArea($is_special_area)
+    {
+    	$this->is_special_area = $is_special_area;
+    	
+    	return $this;
+    }
+    
+    /**
+     * Get is_special_area
+     *
+     * @return Location
+     */
+    public function getIsSpecialArea()
+    {
+    	return $this->is_special_area;
     }
 }

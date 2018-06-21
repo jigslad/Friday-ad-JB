@@ -61,6 +61,76 @@ class AdAdultSolrSearch extends SolrSearch
     {
         $this->addDimensionIdFilter('INDEPENDENT_OR_AGENCY_ID', $id);
     }
+    
+    /**
+     * Add gender_id filter to solr query.
+     *
+     * @param integer $id Amenities id.
+     */
+    protected function addGenderIdFilter($id = null)
+    {
+    	$this->addDimensionIdFilter('GENDER_ID', $id);
+    }
+    
+    /**
+     * Add my_service_id filter to solr query.
+     *
+     * @param integer $id Amenities id.
+     */
+    protected function addMyServiceIsForIdFilter($id = null)
+    {
+    	$this->addDimensionIdFilter('MY_SERVICE_IS_FOR_ID', $id);
+    }
+    
+    /**
+     * Add job_type_id filter to solr query.
+     *
+     * @param integer $id Amenities id.
+     */
+    protected function addJobTypeIdFilter($id = null)
+    {
+    	$this->addDimensionIdFilter('JOB_TYPE_ID', $id);
+    }
+    
+    /**
+     * Add experience_id filter to solr query.
+     *
+     * @param integer $id Amenities id.
+     */
+    protected function addExperienceIdFilter($id = null)
+    {
+    	$this->addDimensionIdFilter('EXPERIENCE_ID', $id);
+    }
+    
+    /**
+     * Add position_preference_id filter to solr query.
+     *
+     * @param integer $id Amenities id.
+     */
+    protected function addPositionPreferenceIdFilter($id = null)
+    {
+    	$this->addDimensionIdFilter('POSITION_PREFERENCE_ID', $id);
+    }
+    
+    /**
+     * Add ethnicity_id filter to solr query.
+     *
+     * @param integer $id Amenities id.
+     */
+    protected function addEthnicityIdFilter($id = null)
+    {
+    	$this->addDimensionIdFilter('ETHNICITY_ID', $id);
+    }
+    
+    /**
+     * Add my_service_id filter to solr query.
+     *
+     * @param integer $id Amenities id.
+     */
+    protected function addLookingForIdFilter($id = null)
+    {
+    	$this->addDimensionIdFilter('LOOKING_FOR_ID', $id);
+    }
 
     /**
      * Add has user logo filter to solr query.

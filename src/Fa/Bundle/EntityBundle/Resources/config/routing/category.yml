@@ -19,3 +19,8 @@ category_ajax_get_category_name_by_id:
     defaults: { _controller: "FaEntityBundle:Category:ajaxGetCategoryNameById" }
     options:
         expose: true
+
+eighteen_plus_warnning_model_ajax:
+    path: /ajax/eighteen_plus_warnning_model
+    defaults: { _controller: "FaAdBundle:Ad:ajaxEighteenPlusWarnningModel"}
+    

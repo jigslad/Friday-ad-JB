@@ -277,10 +277,12 @@ class CategoryDimensionRepository extends BaseEntityRepository
             if ($dimensionField == 'category_make') {
                 $facetField = 'Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping::CATEGORY_MAKE_ID';
             }
-
-            if (defined($facetField)) {
+            
+            if (defined($facetField)) { 
                 $data       = array();
                 $keywords   = null;
+                
+                
 
                 if (isset($searchParams['keywords']) && $searchParams['keywords']) {
                     $keywords = $searchParams['keywords'];
@@ -336,7 +338,7 @@ class CategoryDimensionRepository extends BaseEntityRepository
 
                 // Facets for given dimension
                 $data['facet_fields'][constant($facetField)] = array('min_count' => 1);
-
+                
                 // initialize solr search manager service and fetch data based of above prepared search options
                 $container->get('fa.solrsearch.manager')->init('ad', $keywords, $data, 1, 1, 0, true);
                 $facetResult = $container->get('fa.solrsearch.manager')->getSolrResponseFacetFields();
@@ -447,7 +449,8 @@ class CategoryDimensionRepository extends BaseEntityRepository
                        ->andWhere(self::ALIAS.'.category IN (:category_id)')
                        ->setParameter('category_id', $categorieIds)
                        ->andWhere(self::ALIAS.'.is_searchable=1')
-                       ->orderBy(self::ALIAS.'.category', 'asc');
+                       ->addOrderBy(self::ALIAS.'.category', 'asc')
+                       ->addOrderBy(self::ALIAS.'.ord', 'asc');
 
             $dimensions = $qb->getQuery()->getArrayResult();
 

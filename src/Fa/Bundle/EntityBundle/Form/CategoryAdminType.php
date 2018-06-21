@@ -23,12 +23,14 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\EntityBundle\Entity\CategoryRecommendedSlot;
 use Symfony\Component\Validator\Constraints\Url;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 /**
  * Category admin type form.
@@ -83,6 +85,7 @@ class CategoryAdminType extends AbstractType
         $recommendedSlotArray = array();
         if ($builder->getData()->getId()) {
             $recommendedSlotArray = $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotArrayByCategoryId($builder->getData()->getId(), $this->container);
+            $recommendedSlotSearchArray = $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotSearchlistArrayByCategoryId($builder->getData()->getId(), $this->container);
         }
         $builder
             ->add('name')
@@ -123,6 +126,7 @@ class CategoryAdminType extends AbstractType
                 )
             )
             ->add('has_recommended_slot', CheckboxType::class, array('label' => 'Has recommended slots?', 'required' => false))
+            ->add('has_recommended_slot_searchlist', CheckboxType::class, array('label' => 'Has recommended slots for search list page?', 'required' => false))
             ->add('is_oneclickenq_enabled', CheckboxType::class, array('label' => 'Enable One click enquire', 'required' => false))
             ->add('save', SubmitType::class)
             ->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
@@ -134,6 +138,44 @@ class CategoryAdminType extends AbstractType
             $builder->add('recommended_slot_user_id_'.$i, TextType::class, array('mapped' => false, 'label' => 'User id', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['user_id'] : '') ));
             $builder->add('recommended_slot_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['url'] : '') ));
         }
+        
+        //recommended slots
+        $st = 0;$i=1;
+        for ($k = 1; $k <= 5; $k++) {
+            for ($j = 1; $j <= 3; $j++) {
+                if(!empty($recommendedSlotSearchArray)) {
+                    if($recommendedSlotSearchArray[$st]['creative_group']== $k && $recommendedSlotSearchArray[$st]['creative_ord']==$j && count($recommendedSlotSearchArray)>$st) {
+                        $builder->add('recommended_slot_searchlist_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Title', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['title'] : '') ));
+                        $builder->add('recommended_slot_searchlist_sub_title_'.$i, TextareaType::class, array('attr' => array('rows' => 5), 'mapped' => false, 'label' => 'Sub title', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['sub_title'] : '') ));
+                        $builder->add('recommended_slot_searchlist_slot_file_'.$i, FileType::class, array('mapped' => false, 'label' => 'Image'));
+                        $builder->add('recommended_slot_searchlist_slot_filename_'.$i, HiddenType::class, array('mapped' => false, 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['slot_filename'] : '')));
+                        $builder->add('recommended_slot_searchlist_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['url'] : '') ));
+                        $builder->add('recommended_slot_searchlist_creative_group_'.$i, HiddenType::class, array('mapped' => false,'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['creative_group'] : '')));
+                        $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false,'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['creative_ord'] : '')));
+                        if(count($recommendedSlotSearchArray)-1 > $st) { $st++; }
+                    } else {
+                        $builder->add('recommended_slot_searchlist_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Title' ));
+                        $builder->add('recommended_slot_searchlist_sub_title_'.$i, TextareaType::class, array('attr' => array('rows' => 5), 'mapped' => false, 'label' => 'Sub title' ));
+                        $builder->add('recommended_slot_searchlist_slot_file_'.$i, FileType::class, array('mapped' => false, 'label' => 'Image'));
+                        $builder->add('recommended_slot_searchlist_slot_filename_'.$i, HiddenType::class, array('mapped' => false, ));
+                        $builder->add('recommended_slot_searchlist_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url'));
+                        $builder->add('recommended_slot_searchlist_creative_group_'.$i, HiddenType::class, array('mapped' => false));
+                        $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false));
+                    }
+                } else {
+                    $builder->add('recommended_slot_searchlist_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Title' ));
+                    $builder->add('recommended_slot_searchlist_sub_title_'.$i, TextareaType::class, array('attr' => array('rows' => 5), 'mapped' => false, 'label' => 'Sub title' ));
+                    $builder->add('recommended_slot_searchlist_slot_file_'.$i, FileType::class, array('mapped' => false, 'label' => 'Image'));
+                    $builder->add('recommended_slot_searchlist_slot_filename_'.$i, HiddenType::class, array('mapped' => false, ));
+                    $builder->add('recommended_slot_searchlist_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url'));
+                    $builder->add('recommended_slot_searchlist_creative_group_'.$i, HiddenType::class, array('mapped' => false));
+                    $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false));
+                }
+                $i++;
+            }
+            
+        }
+        
         $builder->addEventListener(FormEvents::SUBMIT, array($this, 'onSubmit'))
         ->addEventListener(FormEvents::POST_SUBMIT, array($this, 'onPostSubmit'));
     }
@@ -206,6 +248,7 @@ class CategoryAdminType extends AbstractType
         $financeTitle     = $form->get('finance_title')->getData();
         $financeUrl       = $form->get('finance_url')->getData();
         $hasRecommendedSlot = $form->get('has_recommended_slot')->getData();
+        $hasRecommendedSlotSearchlist = $form->get('has_recommended_slot_searchlist')->getData();
 
         //removed post code validation
         if ($isNimberEnabled && !$nimberSize) {
@@ -252,6 +295,34 @@ class CategoryAdminType extends AbstractType
                 $form->get('has_recommended_slot')->addError(new FormError('Please enter atleast one recommended slot.'));
             }
         }
+        
+        if ($hasRecommendedSlotSearchlist) {
+            $oneSelectRecommendedSlotSearchlistFlag = true;
+            $recommendedSlotSearchlistError = array();
+            for ($i = 1; $i <=15; $i++) {
+                if ($form->get('recommended_slot_searchlist_title_'.$i)->getData() || $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
+                    $oneSelectRecommendedSlotSearchlistFlag = false;
+                    $recommendedSlotSearchlistError[] = $i;
+                }
+                if (!$oneSelectRecommendedSlotSearchlistFlag && in_array($i, $recommendedSlotSearchlistError)) {
+                    if (!$form->get('recommended_slot_searchlist_title_'.$i)->getData()) {
+                        $form->get('recommended_slot_searchlist_title_'.$i)->addError(new FormError('Please enter title.'));
+                    }
+                    if (!$form->get('recommended_slot_searchlist_sub_title_'.$i)->getData()) {
+                        $form->get('recommended_slot_searchlist_sub_title_'.$i)->addError(new FormError('Please enter sub title.'));
+                    }
+                    if ((!$form->get('recommended_slot_searchlist_slot_file_'.$i)->getData()) && (!$form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData())) {
+                        $form->get('recommended_slot_searchlist_slot_file_'.$i)->addError(new FormError('Please upload slot image.'));
+                    }
+                    if (!$form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
+                        $form->get('recommended_slot_searchlist_url_'.$i)->addError(new FormError('Please enter url.'));
+                    }
+                }
+            }
+            if ($oneSelectRecommendedSlotSearchlistFlag) {
+                $form->get('has_recommended_slot_searchlist')->addError(new FormError('Please enter atleast one recommended slot for search list page.'));
+            }
+        }
     }
 
     /**
@@ -264,9 +335,11 @@ class CategoryAdminType extends AbstractType
         $category = $event->getData();
         $form    = $event->getForm();
         $hasRecommendedSlot = $form->get('has_recommended_slot')->getData();
+        $hasRecommendedSlotSearchlist = $form->get('has_recommended_slot_searchlist')->getData();
 
         if ($form->isValid()) {
             $insertRecommendedSlotFlag = true;
+            $insertRecommendedSlotSearchlistFlag = true;
             //remove category recommended slots
             if ($category->getId()) {
                 $recommendedSlotArray = $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotArrayByCategoryId($category->getId(), $this->container);
@@ -286,10 +359,35 @@ class CategoryAdminType extends AbstractType
                     $insertRecommendedSlotFlag = false;
                 }
                 if ($insertRecommendedSlotFlag || !$hasRecommendedSlot) {
-                    $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->removeRecordsByCategoryId($category->getId());
+                    $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->removeSlotsByCategoryId($category->getId());
                     $culture = CommonManager::getCurrentCulture($this->container);
                     CommonManager::removeCachePattern($this->container, $this->container->get('doctrine')->getManager()->getClassMetadata('FaEntityBundle:CategoryRecommendedSlot')->getTableName().'|getCategoryRecommendedSlotArrayByCategoryId|*');
                     CommonManager::removeCachePattern($this->container, $this->container->get('doctrine')->getManager()->getClassMetadata('FaEntityBundle:CategoryRecommendedSlot')->getTableName().'|getAdDetailCategoryRecommendedSlotArrayByCategoryId|*');
+                    
+                    $recommendedSlotSearchlistArray = $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotSearchlistArrayByCategoryId($category->getId(), $this->container);
+                    $recommendedSlotSearchlistFromArray = array();
+                    for ($i = 1; $i <=15; $i++) {
+                        if ($form->get('recommended_slot_searchlist_title_'.$i)->getData() && $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() && ($form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData()) && $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
+                            $recommendedSlotSearchlistFromArray[] = array(
+                                'title' => $form->get('recommended_slot_searchlist_title_'.$i)->getData(),
+                                'sub_title' => $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData(),
+                                'slot_filename' => $form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData(),
+                                'url' => $form->get('recommended_slot_searchlist_url_'.$i)->getData(),
+                                'creative_group' => $form->get('recommended_slot_searchlist_creative_group_'.$i)->getData(),
+                                'creative_ord' => $form->get('recommended_slot_searchlist_creative_ord_'.$i)->getData(),
+                            );
+                        }
+                    }
+                    
+                    if (md5(serialize($recommendedSlotSearchlistArray)) == md5(serialize($recommendedSlotSearchlistFromArray))) {
+                        $insertRecommendedSlotSearchlistFlag = false;
+                    }
+                    if ($insertRecommendedSlotSearchlistFlag || !$hasRecommendedSlotSearchlist) {
+                        $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->removeSlotsSearchlistByCategoryId($category->getId());
+                        $culture = CommonManager::getCurrentCulture($this->container);
+                        CommonManager::removeCachePattern($this->container, $this->container->get('doctrine')->getManager()->getClassMetadata('FaEntityBundle:CategoryRecommendedSlot')->getTableName().'|getCategoryRecommendedSlotSearchlistArrayByCategoryId|*');
+                        CommonManager::removeCachePattern($this->container, $this->container->get('doctrine')->getManager()->getClassMetadata('FaEntityBundle:CategoryRecommendedSlot')->getTableName().'|getAdDetailCategoryRecommendedSlotSearchlistArrayByCategoryId|*');
+                    }
                 }
             }
 
@@ -303,6 +401,36 @@ class CategoryAdminType extends AbstractType
                         $recommendedSlot->setSubTitle($form->get('recommended_slot_sub_title_'.$i)->getData());
                         $recommendedSlot->setUserId($form->get('recommended_slot_user_id_'.$i)->getData());
                         $recommendedSlot->setUrl($form->get('recommended_slot_url_'.$i)->getData());
+                        $this->em->persist($recommendedSlot);
+                    }
+                }
+                $this->em->flush();
+            }
+            if ($hasRecommendedSlotSearchlist && $insertRecommendedSlotSearchlistFlag) {
+                for ($i = 1; $i <=15; $i++) {
+                    if ($form->get('recommended_slot_searchlist_title_'.$i)->getData() && $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() && ($form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData()) && $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
+                        $recommendedSlot = new CategoryRecommendedSlot();
+                        $recommendedSlot->setCategory($category);
+                        $recommendedSlot->setTitle($form->get('recommended_slot_searchlist_title_'.$i)->getData());
+                        $recommendedSlot->setSubTitle($form->get('recommended_slot_searchlist_sub_title_'.$i)->getData());
+                        $recommendedSlot->setIsSearchlist(1);
+                        $slotFile     = $form->get('recommended_slot_searchlist_slot_file_'.$i)->getData();
+                        $slotFileName = null;
+                        if ($slotFile !== null) {
+                            $slotFileName = uniqid().'.'.$slotFile->guessExtension();
+                            $recommendedSlot->setSlotFile($slotFile);
+                            $recommendedSlot->getSlotFile()->move($recommendedSlot->getUploadRootDir(), $slotFileName);
+                            $recommendedSlot->setSlotFilename($slotFileName);
+                        } else {
+                            $existslotFileName = null;
+                            $existslotFileName     = $form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData();
+                            if($existslotFileName !== null) {
+                                $recommendedSlot->setSlotFilename($existslotFileName);
+                            }
+                        }
+                        $recommendedSlot->setUrl($form->get('recommended_slot_searchlist_url_'.$i)->getData());
+                        $recommendedSlot->setCreativeGroup($form->get('recommended_slot_searchlist_creative_group_'.$i)->getData());
+                        $recommendedSlot->setCreativeOrd($form->get('recommended_slot_searchlist_creative_ord_'.$i)->getData());
                         $this->em->persist($recommendedSlot);
                     }
                 }

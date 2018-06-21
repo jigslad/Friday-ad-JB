@@ -204,7 +204,7 @@
             {{ include('FaFrontendBundle::adultWarnningPopup.html.twig') }}
         {% endif %}
 
-        {{ include('FaFrontendBundle::userTypeChangePopup.html.twig') }}
+        
         {% if (currentRoute == 'location_home_page' and app.request.get('static_page') and app.request.get('location') in {0: 'contact-us', 1: 'stay-safe-help', 2: 'watch-out-for-online-scams', 3: 'protect-yourself-from-scam-emails',4: 'buying-and-selling-safely',5: 'buying-safely',6: 'selling-safely',7: 'finding-a-job-safely',8: 'reporting-problems-to-the-police',9: 'buying-a-bicycle',10: 'buying-a-car',11: 'buying-pets',12:'property-and-travel',13: 'faqs'} ) or currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'facebook_paa_login', 4: 'ad_post_third_step_registration', 5: 'ad_post_fourth_step', 6: 'show_draft_ad', 7: 'ad_package_purchase', 8: 'show_cart', 9: 'cybersource_checkout', 10: 'dashboard_home', 11: 'manage_my_ads_active', 12: 'user_ad_message_all', 13: 'user_review_list', 14: 'my_profile', 15: 'my_orders', 16: 'my_favourite', 17: 'my_purchases', 18: 'my_account'} %}
             {{ include('FaFrontendBundle::liveChatJs.html.twig') }}
         {% endif %}

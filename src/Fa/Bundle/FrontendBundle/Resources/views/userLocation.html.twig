@@ -168,7 +168,8 @@
         } else {
             var searchLocation = $.trim($('#fa_top_search_item__location_autocomplete').val());
         }
-
+        
+		var topLocationArea = $.trim($('#fa_top_search_item__area').val());
         var topSearchKeywords   = $.trim($('#fa_top_search_keywords').val());
         var topSearchCategoryId = $('#fa_top_search_item__category_id').val();
 
@@ -177,7 +178,7 @@
                  type: "post",
                  dataType: "json",
                  url: "{{ path('fa_frontend_ajax_user_location') }}",
-                 data: {'location': searchLocation},
+                 data: {'location': searchLocation, 'location_area': topLocationArea},
                  success: function(data) {
                      if (!$.isEmptyObject(data)) {
                          $('#header_search_editable_location_span').html(data.text);

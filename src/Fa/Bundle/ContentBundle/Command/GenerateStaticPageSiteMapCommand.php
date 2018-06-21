@@ -86,7 +86,7 @@ EOF
             foreach ($staticPages as $staticPage) {
                 $siteMapXml .= $this->generateUrlTag($this->generateUrl('location_home_page', array('location' => $staticPage['slug'])));
             }
-            $siteMapXml .= $this->generateUrlTag('http://blog.friday-ad.co.uk/');
+            $siteMapXml .= $this->generateUrlTag('https://blog.friday-ad.co.uk/');
 
             $siteMapXml .= '</urlset>';
             gzwrite($fhandle, $siteMapXml);

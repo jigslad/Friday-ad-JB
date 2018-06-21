@@ -138,6 +138,24 @@ class RegistrationType extends AbstractType
                 'constraints' => array('constraints' => new NotBlank(array('groups' => array('registration'), 'message' => $this->translator->trans('Please enter password.', array(), 'validators')))),
             )
         )
+        ->add('is_third_party_email_alert_enabled', CheckboxType::class, array(
+            'label' => false,
+        ))
+        ->add('is_email_alert_enabled', CheckboxType::class, array(
+            'label' => false,
+        ))
+        ->add('is_terms_agreed', CheckboxType::class, array(
+            'required' => true,
+            'mapped' => false,
+            'constraints' => array(
+                'constraints' => new NotBlank(array(
+                    'groups' => array(
+                        'registration'
+                    ),
+                    'message' => $this->translator->trans("You must accept Friday-Ad's terms and conditions in order to register.", array(), 'validators')
+                ))
+            )
+        ))
         ->add(
             'show_password',
             CheckboxType::class,
@@ -203,6 +221,10 @@ class RegistrationType extends AbstractType
 
         if ($form->get('is_private_phone_number')->getData() && $form->get('phone')->getData() && substr($form->get('phone')->getData(), 0, 3) == UserRepository::YAC_PRIACY_NUM_PREFIX) {
             $form->get('is_private_phone_number')->addError(new FormError($this->translator->trans(' Please enter a different telephone numbers. We are unable to allocate privacy numbers to 070 numbers.', array(), 'validators')));
+        }
+        
+        if ($form->get('is_terms_agreed')->getData() && !trim($form->get('is_terms_agreed')->getData())) {
+            $form->get('is_terms_agreed')->addError(new FormError($this->translator->trans("You must accept Friday-Ad's terms and conditions in order to register.", array(), 'validators')));
         }
 
         if ($form->get('user_roles')->getData()

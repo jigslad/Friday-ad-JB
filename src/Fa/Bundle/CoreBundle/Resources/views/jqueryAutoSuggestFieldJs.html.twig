@@ -3,10 +3,14 @@
 //<![CDATA[
 $(function() {
     var cache = {};
+    var townId = null;
     $("{{ field }}"+'_autocomplete').autocomplete({
         minLength: 2,
         source: function( request, response ) {
             var term = request.term;
+            {% if townIdForArea is defined %}
+            	townId = {{ townIdForArea }};
+        	{% endif %}
             {% if parent_field is not defined %}
                 if ( term in cache ) {
                     response( cache[ term ] );
@@ -24,7 +28,7 @@ $(function() {
                 {% if parent_field is defined %}
                 data: {page_limit: 10, {% if dimension_field is defined %} cd_id: $('{{ dimension_field }}').val() {% endif %}, 'parent_id': $("{{ parent_field }}").val()},
                 {% else %}
-                data: {page_limit: 10, {% if dimension_field is defined %} cd_id: $('{{ dimension_field }}').val(),  {% endif %}},
+                data: { townId: townId, page_limit: 10, {% if dimension_field is defined %} cd_id: $('{{ dimension_field }}').val(),  {% endif %}},
                 {% endif %}
                 success: function(data) {
                     var result = $.map(data['results'], function(item) {
@@ -32,7 +36,9 @@ $(function() {
                             label: item.text,
                             id: item.id,
                             text2: item.text2 ? item.text2 : '',
-                            index: item.index
+                            index: item.index,
+                            area_id: item.area_id ? item.area_id : '',
+                            locationBy: item.locationBy ? item.locationBy : ''
                         };
                     });
                     cache[ term ] = result;
@@ -40,22 +46,56 @@ $(function() {
                 }
             });
         },
-        select: function( event, ui ) {
+        select: function( event, ui ) { 
           if ('{{ field }}' == '#fa_paa_category_select_category_id') {
             var eventLabel = $("{{ field }}"+'_autocomplete').val() + ' - ' + ui.item.value + ' - ' + ui.item.index;
             autoCompleteCategoryName = ui.item.value + ' - ' + ui.item.index;
             ga('send', 'event', 'PAA - Step 1', 'Select searching bar', eventLabel);
           }
-            {% if 'location' in field %}
+          
+          {% if 'location' in field or 'area' in field %}  
                 setTimeout(function(){
                     $("{{ field }}").val(ui.item.id);
-                    {% if submitFormAfterSelect is defined and submitFormAfterSelect is not null %}
+                    
+                    {% if submitFormAfterSelect is defined and submitFormAfterSelect is not null %}   
                         {% if submitFormAfterSelect == 'fa_top_search' %}
                             $('#fa_top_search_leafLevelCategoryId').val($('#fa_top_search_tmpLeafLevelCategoryId').val());
                         {% endif %}
+						
+                        var areaId = "{{ field }}".replace('_location', "_area");
+                        if('{{ field }}' == '#fa_top_search_item__location' && ui.item.area_id != '') {                         	
+                    		$(areaId).val(ui.item.area_id);
+                        }
+					
                         $('#{{ submitFormAfterSelect }}').submit();
-                    {% else %}
-                        bindShowMapOnChangeLocationEvent();
+                    {% else %}  
+                        {% if 'area' in field %}  
+                        	if(ui.item.area_id != '') { 
+                        		$('{{ field }}').val(ui.item.area_id);                        		
+                        	}
+                        	bindShowMapOnChangeAreasEvent('{{ field }}');
+                        {% else %}
+                        //for Top Search
+                        	if(('{{ field }}' == '#fa_top_search_item__location' || '{{ field }}' == '#fa_left_search_item__location') && ui.item.area_id != '') {
+								var areaId = "{{ field }}".replace('_location', "_area");
+                        		$(areaId).val(ui.item.area_id);
+                           	} else { 
+                            	//check the location is London
+                            	$("#location_area_div").hide();
+                            	var locationVal = $('{{ field }}').val();
+                            	if(locationVal === '{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TOWN_ID') }}' && ui.item.area_id == '') {
+    								$("#location_area_div").show();
+                                } else if(ui.item.area_id == '') {
+                                	var areaId = "{{ field }}".replace('_location', "_area");
+                                	var areaAutotxt = "{{ field }}".replace('_location', "_area_autocomplete");
+                                	$(areaAutotxt).val('');
+                                	$(areaId).val('');
+                                	$("#location_area_div").hide();
+                                }
+                           	}
+
+                        	bindShowMapOnChangeLocationEvent();
+                    	{% endif %}
                     {% endif %}
                 }, 500);
             {% else %}
@@ -79,6 +119,13 @@ $(function() {
                 $("{{ field }}"+'_close').show();
             }
 
+            {% if 'location' in field %}
+            	var areaId = "{{ field }}".replace('_location', "_area");
+            	var areaTxt = "{{ field }}".replace('_location', "_area_autocomplete");
+            	$(areaId).val('');
+            	$(areaTxt).val('');
+            {% endif %}
+			
             var ans = ($("{{ field }}"+'_autocomplete').val() in cache);
             if ('{{ field }}' == '#fa_paa_category_select_category_id' && ans == false) {
                 if ($("{{ field }}"+'_autocomplete').val().length == 2) {
@@ -97,15 +144,22 @@ $(function() {
                 onSelectAutoSuggestCategory();
             {% endif %}
         },
-        close: function( event, ui ) {
+        close: function( event, ui ) { 
             {% if displayOnlyTown is defined %}
                 $("{{ field }}"+'_autocomplete').val($("{{ field }}"+'_autocomplete').val().split(',', 1));
             {% endif %}
         },
         focus: function( event, ui ) {
-            {% if 'location' in field %}
-                setTimeout(function(){
+            {% if 'location' in field or 'area' in field %}
+                setTimeout(function(){ 
                     $("{{ field }}").val(ui.item.id);
+                	var areaId = "{{ field }}".replace('_location', "_area");
+
+                	if(ui.item.area_id != '') {
+                        $(areaId).val(ui.item.area_id);
+                    } else {
+                    	$(areaId).val('');
+                    }
                 }, 500);
             {% else %}
                 $("{{ field }}").val(ui.item.id);
@@ -120,11 +174,12 @@ $(function() {
         {% endif %}
     }).autocomplete('instance')._renderItem = function( ul, item ) {
          var label = item.label;
+         var locationBy = item.locationBy;
          if (item.text2) {
             label = label + '<div> in <span>'+ item.text2 +'</span> </div>';
          }
 
-         return $("<li>").append(label).appendTo( ul );
+         return $("<li data-custom-text='location_"+locationBy+"_text' >").append(label).appendTo( ul );
     };
 });
 
@@ -136,6 +191,8 @@ $(document).ready(function(){
     $("{{ field }}"+'_close').click(function() {
         $("{{ field }}"+'_autocomplete').val('');
         $("{{ field }}").val('');
+        $("#fa_top_search_item__area").val('');
+        $("#fa_left_search_item__area").val('');
         $(this).hide();
         {% if 'make_id' in field %}
             loadModelsByMakeId();
@@ -143,6 +200,8 @@ $(document).ready(function(){
 
         {% if 'location' in field %}
             bindShowMapOnChangeLocationEvent();
+            $("div[id*=location_area_div] input[type=text]").val("");
+            $("#location_area_div").hide();
         {% endif %}
 
         {% if child_field is defined %}
@@ -157,6 +216,15 @@ $(document).ready(function(){
     });
 
     $("{{ field }}"+'_autocomplete').keyup(function() {
+    	$('#fa_top_search_item__area').val('');
+    	$("#fa_left_search_item__area").val('');
+        {% if field == '#fa_paa_fourth_step_adult_location' %}
+        	$('#'+$(this).attr('id')).trigger('change');
+            $(this).nextAll('small.error').first().remove();
+            $(this).parent().nextAll('small.error').first().remove();
+            $('#'+$(this).attr('id')+'-button').removeClass('error-bdr');
+    	{% endif %}
+    	
         if ($(this).val().length < 1) {
             $("{{ field }}"+'_close').hide();
             $("{{ field }}").val("");
@@ -176,6 +244,26 @@ $(document).ready(function(){
     $("{{ field }}"+'_autocomplete').blur(function() {
         if ($("{{ field }}"+'_autocomplete').val().length == 0) {
             $("{{ field }}"+'_close').hide();
+        } else if($("{{ field }}"+'_autocomplete').val().length > 4) {
+        	 {% if 'location' in field and 'paa' in field %}
+				//check location is related to area;
+				var locVal = $("{{ field }}"+'_autocomplete').val();
+				$.ajax({
+					url: "{{ path('fa_frontend_ajax_user_location_by_postcode') }}",
+	                dataType: 'json',
+	                type: 'post',
+                    data: {post_code: locVal}
+                })
+                .done(function(data) { 
+                	if (!$.isEmptyObject(data)) { 
+                     	if(locVal == '{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TXT') }}' || data.location  == '{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TOWN_ID') }}' || data.lvl  == 4 ) {
+							$('#location_area_div').show();
+                     	} else {
+                        	$('#location_area_div').hide();
+                        }
+                    }
+                });
+        	 {% endif %}
         }
     });
     
@@ -189,6 +277,17 @@ $(document).ready(function(){
 function bindShowMapOnChangeLocationEvent()
 {
    $('#find_on_map').trigger('click');
+}
+
+function bindShowMapOnChangeAreasEvent(formName) {
+	var locationVal = $(formName+'_autocomplete').val();
+    if (locationVal && locationVal != '') {
+        $('#location_map_div').show();
+        showAddress(locationVal);
+    } else {
+    	 $('#location_map_div').hide();
+    }
+    return false;
 }
 //]]>
 </script>

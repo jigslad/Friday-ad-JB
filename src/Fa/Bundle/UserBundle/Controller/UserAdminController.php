@@ -758,7 +758,9 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
                     }
                     //update solr indexing for A,S,E ads in background if user status is active.
                     if ($entity->getStatus() && $entity->getStatus()->getId() == EntityRepository::USER_STATUS_ACTIVE_ID) {
-                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index add --user_id="'.$entity->getId().'" --status="A,S,E" >/dev/null &');
+                        $command = $this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --user_id="'.$entity->getId().'" --status="A,S,E" >/dev/null &';
+                        passthru($command, $returnVar);
+                        //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index add --user_id="'.$entity->getId().'" --status="A,S,E" >/dev/null &');
                     }
                     $this->getEntityManager()->getConnection()->commit();
                 }

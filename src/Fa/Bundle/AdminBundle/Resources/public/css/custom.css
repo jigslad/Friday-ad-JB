@@ -540,7 +540,48 @@ label{display:inline-block}
 .avail-payment-box .p-b-20 {padding-bottom:20px }
 .available-payment-options-mob {width:100%;height:153px;background:url('/bundles/fafrontend/images/payment-options-mobile.png') no-repeat center center;margin-bottom: 70px;}
 .button-mar { margin-top:20px;margin-bottom:30px;}
-.amazon-info-icon { position: absolute;right: -29px;bottom: 18px;width: 20px;height: 19px;background: url('/bundles/fafrontend/images/info-icon.svg'); }
+
+
+/****** Adult Icons *****/
+.adult-male{background:url(/bundles/fafrontend/images/male.png) no-repeat}
+.adult-female{background:url(/bundles/fafrontend/images/female.png) no-repeat}
+.adult-transexual{background:url(/bundles/fafrontend/images/transexual.png) no-repeat}
+.adult-agency{background:url(/bundles/fafrontend/images/agency.png) no-repeat}
+.service-for-male, .service-for-men {background:url(/bundles/fafrontend/images/service-for-men.png) no-repeat}
+.service-for-women{background:url(/bundles/fafrontend/images/service-for-women.png) no-repeat}
+.service-for-couples{background:url(/bundles/fafrontend/images/service-for-couples.png) no-repeat}
+.travel-arrangement-in-call{background:url(/bundles/fafrontend/images/travel-incall.svg) no-repeat}
+.travel-arrangement-out-call{background:url(/bundles/fafrontend/images/travel-outcall.svg) no-repeat}
+.travel-arrangement-either{background:url(/bundles/fafrontend/images/in-out-call.png) no-repeat}
+.adult-independent{background:url(/bundles/fafrontend/images/independent.png) no-repeat}
+.adult-agency{background:url(/bundles/fafrontend/images/agency.png) no-repeat}
+/****** End Adult Icons ***/
+.flexy-box .parent_box {display:table; table-layout:fixed; width:100%; background: #EFEFEF; text-align: center; }
+.flexy-box .child_box { display:table-cell; float:none; width: 100%; border-right: 1px solid #ffffff; padding: 10px 0; height: 153px; float: none; }
+.flexy-box .child_box:last-child{ border-right: 0px solid #ffffff; }
+table.responsive-card-table { border-collapse: collapse; width: 100%; border: solid 1px #ddd; margin-bottom: 0px; }
+.responsive-card-table .boder-rates { border:1px solid #ddd; margin-bottom:15px; }
+.responsive-card-table tbody tr td{ border-right: 1px solid #fff; }
+.responsive-card-table tbody tr td:last-child{ border-right: 0px solid #ddd; } 
+.responsive-card-table tbody tr td input {background: #FFFFFF;}   
+.responsive-card-table tbody  { margin-top: 10px; }
+table.responsive-card-table tr.odd, table.responsive-card-table tr:nth-of-type(n){ background: #FBFBFB !important; }    
+table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.responsive-card-table tr:nth-of-type(2n) { background: #EFEFEF !important; }
+.in-out-calls-text { font-size: 14px; font-weight: 700; color: #313133; line-height: 16px; border: 1px solid #d4d4d4; padding: 5px 10px; }
+.responsive-card-table .m-r-10 { margin-right: 10px; }    
+.responsive-card-table .in-out-detail-text-f { color: #a4a4a4; font-weight: 700; text-align: center; }    
+.responsive-card-table .in-out-detail-text-l { text-align: center; }
+.responsive-card-table .in-out-detail-text-f p { margin:0px; }
+.responsive-card-table .in-out-detail-text-l .rates-pound-symbl {float: left; width: 10%;}
+.responsive-card-table .in-out-detail-text-l .rates-fld {float: right; width: 80%;}
+.responsive-card-table .in-out-detail-text-l { text-align: center; }
+.responsive-card-table .in-out-detail-text-l input[type="text"] { padding-left: 5px!important; }
+.responsive-card-table .in-out-calls-block{ display:block; }
+.responsive-card-table .in-out-calls-subblock{ width: 100%; }
+.responsive-card-table .in-out-detail-text-l .currency_rate{ display: inline-flex; width: 100%; }
+.responsive-card-table .rates-pound-symbl{ line-height: 38px; margin-right: 5px; }
+.amazon-info-icon { position: absolute;right: -15px;bottom: 18px;width: 20px;height: 19px;background: url('/bundles/fafrontend/images/info-icon.svg'); }
+
 .available-payment-adult-options { width:100%;height:47px;background:url('/bundles/fafrontend/images/payment-options-adult.png') no-repeat center center;}
 .available-payment-adult-options-mob {width:100%;height:153px;background:url('/bundles/fafrontend/images/payment-options-mobile-adult.png') no-repeat center center;margin-bottom: 70px;}
 .image-tooltip-wrapper{position:relative;display:inline-block}

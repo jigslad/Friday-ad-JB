@@ -35,3 +35,12 @@ town_ajax_find_town_only_by_term:
     defaults: { _controller: "FaEntityBundle:Location:ajaxGetTownsOnlyByTerm" }
     options:
         expose: true
+        
+area_ajax_find_town_by_term:
+    path:     /location/ajax/find_area/{term}/
+    defaults: { _controller: "FaEntityBundle:Location:ajaxGetAreasByTownAndTerm" }
+    options:
+        expose: true
+        
+    
+        

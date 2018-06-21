@@ -114,6 +114,13 @@ class CategoryDimension
      * @ORM\OneToMany(targetEntity="Fa\Bundle\EntityBundle\Entity\CategoryDimensionTranslation", mappedBy="object", cascade={"persist","remove"})
      */
     private $translations;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ord", type="smallint", length=4)
+     */
+    private $ord;
 
     /**
      * Constructor.
@@ -320,5 +327,28 @@ class CategoryDimension
     {
         $this->search_type = $search_type;
         return $this;
+    }
+    
+    /**
+     * Set ord
+     *
+     * @param integer $ord
+     * @return \Fa\Bundle\EntityBundle\Entity\CategoryDimension
+     */
+    public function setOrd($ord)
+    {
+    	$this->ord = $ord;
+    	
+    	return $this;
+    }
+    
+    /**
+     * Get ord
+     *
+     * @return integer
+     */
+    public function getOrd()
+    {
+    	return $this->ord;
     }
 }

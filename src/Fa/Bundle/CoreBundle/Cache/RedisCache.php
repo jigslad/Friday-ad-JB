@@ -153,8 +153,18 @@ class RedisCache extends BaseCache
         if (!is_array($key)) {
             $key = array($key);
         }
-
-        return $this->redis->delete($key);
+        
+        $countKey = count($key);
+        if ($countKey > 50000){
+            $chunk = array_chunk($key, 50000);
+            $countChunk = count($chunk);
+            for ($i = 0; $i < $countChunk - 1; $i++) {
+                $this->redis->delete($chunk[$i]);
+            }
+            return $this->redis->delete($chunk[$countChunk-1]);
+        }else {
+            return $this->redis->delete($key);
+        }
     }
 
     /**

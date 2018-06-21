@@ -179,6 +179,7 @@ EOF
         $data['select_fields'] = array('ad' => array('id'));
         $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
         $data['query_filters']['item']['category_id'] = $rootCategoryId;
+        $data['static_filters'] = ' AND -a_track_back_url_s:[* TO *]';
 
         // initialize solr search manager service and fetch data based of above prepared search options
         $this->getContainer()->get('fa.solrsearch.manager')->init('ad', '', $data);
@@ -213,6 +214,7 @@ EOF
             $data['select_fields'] = array('ad' => array('id', 'title', 'CATEGORY_ID', 'TOWN_ID', 'DOMICILE_ID'));
             $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
             $data['query_filters']['item']['category_id'] = $rootCategoryId;
+            $data['static_filters'] = ' AND -a_track_back_url_s:[* TO *]';
 
             // initialize solr search manager service and fetch data based of above prepared search options
             $this->getContainer()->get('fa.solrsearch.manager')->init('ad', '', $data, $page, $this->limit);

@@ -41,7 +41,7 @@ class ConfigRepository extends EntityRepository
     const DEFAULT_PRECEDING_PERIOD_TO_CHECK_VIEWS = 30;
     const DEFAULT_VAT_AMOUNT  = 20;
     const DEFAULT_NUMBER_OF_BUSINESSPAGE_SLOTS = 3;
-    const LIVE_CAMS_URL = 'https://live.friday-ad.co.uk/live-sex-chats/?ft=1&mletter=ECS55&queryid=1';
+    const LIVE_CAMS_URL = 'https://bongacams.com/track?c=587700';
 
 
     public function getRuleArray()

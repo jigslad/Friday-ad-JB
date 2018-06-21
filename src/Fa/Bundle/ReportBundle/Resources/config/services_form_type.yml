@@ -52,3 +52,10 @@ services:
         arguments: ['@service_container']
         tags:
             - { name: form.type, alias: fa_police_report }
+            
+    fa_report.form.type.solr_report_search_admin:
+        class: Fa\Bundle\ReportBundle\Form\SolrReportSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_solr_report }
+            

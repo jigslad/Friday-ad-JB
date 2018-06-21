@@ -307,8 +307,8 @@ class ContactSellerController extends CoreController
      */
     public function ajaxGetEmailAlertByEmailAction(Request $request)
     {
-        $isEmailAlertEnabled = 1;
-        $isThirdPartyEmailAlertEnabled = 1;
+        $isEmailAlertEnabled = 0;
+        $isThirdPartyEmailAlertEnabled = 0;
         $email = $request->get('emailAddress');
 
         if ($request->isXmlHttpRequest() && $email) {

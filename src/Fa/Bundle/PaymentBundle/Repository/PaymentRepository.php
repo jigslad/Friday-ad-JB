@@ -49,6 +49,8 @@ class PaymentRepository extends EntityRepository
     const PAYMENT_METHOD_CASH_ON_COLLECTION_ID = 1;
     const PAYMENT_METHOD_PAYPAL_ID             = 2;
     const PAYMENT_METHOD_PAYPAL_OR_CASH_ID     = 3;
+    const PAYMENT_METHOD_BANK_TRANSFER     	   = 4;
+    
     const VAT = 20;
     const CURRENCY = 'GBP';
 
@@ -549,15 +551,23 @@ class PaymentRepository extends EntityRepository
      *
      * @return array
      */
-    public function getPaymentMethodOptionsArray($container)
-    {
+    public function getPaymentMethodOptionsArray($container, $categoryId = null)
+    {	
         $translator  = CommonManager::getTranslator($container);
-        $optionArray = array(
-            self::PAYMENT_METHOD_CASH_ON_COLLECTION_ID  => $translator->trans('Cash on collection'),
-            self::PAYMENT_METHOD_PAYPAL_ID              => $translator->trans('Paypal'),
-            self::PAYMENT_METHOD_PAYPAL_OR_CASH_ID      => $translator->trans('Paypal or cash')
-        );
-
+        $optionArray = []; 
+        
+        if( is_null($categoryId) || $categoryId != CategoryRepository::PHONE_AND_CAM_CHAT_ID) { 
+	        $optionArray = array(
+	            self::PAYMENT_METHOD_CASH_ON_COLLECTION_ID  => $translator->trans('Cash on collection'),
+	            self::PAYMENT_METHOD_PAYPAL_ID              => $translator->trans('Paypal'),
+	            self::PAYMENT_METHOD_PAYPAL_OR_CASH_ID      => $translator->trans('Paypal or cash')
+	        );
+        } elseif ( $categoryId == CategoryRepository::PHONE_AND_CAM_CHAT_ID ) {        	
+        	$optionArray = array(
+        			self::PAYMENT_METHOD_BANK_TRANSFER			=> $translator->trans('Bank Transfer'),
+        			self::PAYMENT_METHOD_PAYPAL_ID              => $translator->trans('Paypal')
+        	);
+        }
         return $optionArray;
     }
 

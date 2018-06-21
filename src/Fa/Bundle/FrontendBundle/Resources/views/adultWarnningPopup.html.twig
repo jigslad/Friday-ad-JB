@@ -13,12 +13,21 @@
         </ul>
         <div class="proceed-buttons">
             <div class="row">
-                <div class="large-12 columns">
-                    <button type="button" class="primary-btn-3 button expand" onclick="takeMeBack();">{{'Take me back!'|trans({}, 'frontend-adult-warnning')}}</button>
-                </div>
-                <div class="large-12 columns">
-                    <button type="button" class="primary-btn-2 button expand" onclick="proceed18Plus();"><span>{{'Proceed'|trans({}, 'frontend-adult-warnning')}} <b>-</b></span> {{'I am over 18'|trans({}, 'frontend-adult-warnning')|raw}}</button>
-                </div>
+                {% if for_third_party_link is not defined %}
+                    <div class="large-12 columns">
+                        <button type="button" class="primary-btn-3 button expand" onclick="takeMeBack();">{{'Take me back!'|trans({}, 'frontend-adult-warnning')}}</button>
+                    </div>
+                    <div class="large-12 columns">
+                        <button type="button" class="primary-btn-2 button expand" onclick="proceed18Plus();"><span>{{'Proceed'|trans({}, 'frontend-adult-warnning')}} <b>-</b></span> {{'I am over 18'|trans({}, 'frontend-adult-warnning')|raw}}</button>
+                    </div>
+                {% elseif for_third_party_link is defined and for_third_party_link  %}
+                	 <div class="large-12 columns">
+                        <button type="button" class="primary-btn-3 button expand" onclick="closeCheckAgeModalBox();">{{'Take me back!'|trans({}, 'frontend-adult-warnning')}}</button>
+                    </div>
+                    <div class="large-12 columns">
+                        <button type="button" class="primary-btn-2 button expand" onclick="proceed18PlusForThirdParty();"><span>{{'Proceed'|trans({}, 'frontend-adult-warnning')}} <b>-</b></span> {{'I am over 18'|trans({}, 'frontend-adult-warnning')|raw}}</button>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -39,9 +48,22 @@ function proceed18Plus()
         closeRevealModel('#eighteenPlusWarnningModel');
     });
 }
+
 function takeMeBack()
 {
 	location.href = "{{ path('fa_frontend_homepage') }}";
 }
+
+function proceed18PlusForThirdParty()
+{
+	$('body').removeClass('transbox');
+    closeRevealModel('#eighteenPlusWarnningModel');
+    window.open("{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}", '_blank');
+}
+
+function closeCheckAgeModalBox() {
+	closeRevealModel('#eighteenPlusWarnningModel');
+}
+
 //]]>
 </script>

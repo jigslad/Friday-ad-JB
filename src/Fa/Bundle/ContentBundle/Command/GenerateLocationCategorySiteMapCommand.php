@@ -222,8 +222,7 @@ EOF
         if ($categoryId) {
             $data['query_filters']['item']['category_id'] = $categoryId;
         }
-        $data['facet_fields'] = array('a_l_main_town_id_i' => array('limit' => '5000', 'min_count' => 1),'a_l_domicile_id_txt' => array('limit' => '5000', 'min_count' => 1));
-
+        $data['facet_fields'] = array('a_l_main_town_id_i' => array('limit' => '5000', 'min_count' => 1),'a_l_domicile_id_txt' => array('limit' => '5000', 'min_count' => 1),'a_l_area_id_txt' => array('limit' => '5000', 'min_count' => 1));
         // initialize solr search manager service and fetch data based of above prepared search options
         $this->getContainer()->get('fa.solrsearch.manager')->init('ad', '', $data);
         $solrResponse = $this->getContainer()->get('fa.solrsearch.manager')->getSolrResponse();
@@ -232,14 +231,16 @@ EOF
         $result = $this->getContainer()->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
         $countyTownArray = array();
 
-
         if (isset($result['a_l_domicile_id_txt'])) {
             $countyTownArray = array_merge($countyTownArray, array_keys(get_object_vars($result['a_l_domicile_id_txt'])));
         }
         if (isset($result['a_l_main_town_id_i'])) {
             $countyTownArray = array_merge($countyTownArray, array_keys(get_object_vars($result['a_l_main_town_id_i'])));
         }
-
+        if (isset($result['a_l_area_id_txt'])) {
+        	$countyTownArray = array_merge($countyTownArray, array_keys(get_object_vars($result['a_l_area_id_txt'])));
+        }
+        
         return $countyTownArray;
     }
 

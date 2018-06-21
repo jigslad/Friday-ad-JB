@@ -163,4 +163,7 @@ interface AdSolrFieldMapping
     const TRACK_BACK_URL  = 'a_track_back_url_s';
     const AD_SOURCE       = 'a_ad_source_s';
     const IS_FEED_AD      = 'a_is_feed_ad_b';
+    
+    const AREA_ID 					= 'a_l_area_id_txt';
+    const IS_SPECIAL_AREA_LOCATION 	= 'a_is_special_area_location_b';
 }

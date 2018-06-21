@@ -119,6 +119,24 @@
                     {{ form_row(form.business_name) }}
                     {{ form_row(form.business_category_id, {'attr': {'class':'fa-select-white'}}) }}
                 </div>
+
+                <div class="label-inline regchkbox-label" style="display:inline-flex">
+                    {{ form_widget(form.is_email_alert_enabled) }}
+                    <label>I'd like to receive news, offers and promotions from Friday-Ad</label>
+                </div>
+                <div class="label-inline regchkbox-label" style="display:inline-flex">
+                    {{ form_widget(form.is_third_party_email_alert_enabled) }}
+                    <label>I'd like to receive offers and promotions from third parties</label>
+                </div>
+                <div class="label-inline regchkbox-label" style="display:inline-flex">
+                    {{ form_widget(form.is_terms_agreed) }}
+                    <label class="form-control">I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a></label><br>
+                    
+                </div>
+                <div>{{ form_errors(attribute(form, 'is_terms_agreed')) }}</div>
+                <div class="mt20 mb20" style="color: #a4a4a4;">
+                    We will use your data to help us create your account. Please take a look at our <a href="/privacy-policy/" target="_blank">Privacy Policy</a> for more information about how we use your data.
+                </div>
                 {{ form_widget(form.Register, {'attr': {'class':'primary-btn-1 button expand'}}) }}
             {{ form_end(form) }}
     

@@ -133,8 +133,7 @@ class ContactSellerType extends AbstractType
                 array(
                     'label' => $emailAlertLabel,
                     'mapped' => false,
-                    'value' => 1,
-                    'data' => true,//($loggedInUser ? $loggedInUser->getIsEmailAlertEnabled() : true)
+                    'data' => ($loggedInUser ? $loggedInUser->getIsEmailAlertEnabled() : false),
                 )
             )
             ->add(
@@ -143,7 +142,6 @@ class ContactSellerType extends AbstractType
                 array(
                     'label' => $thirdPartyEmailAlertLabel,
                     'mapped' => false,
-                    'value' => 1,
                     'data' => ($loggedInUser ? $loggedInUser->getIsThirdPartyEmailAlertEnabled() : false)
                 )
             )
@@ -153,8 +151,8 @@ class ContactSellerType extends AbstractType
                 array(
                     'label' => 'Receive email alerts for adverts like this',
                     'mapped' => false,
-                    'value' => 1,
-                    'data' => true,
+                    'value' => 0,
+                    'data' => false,
                 )
             )
             ->add('save', SubmitType::class, array('label' => 'Send'));

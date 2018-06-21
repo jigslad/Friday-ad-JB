@@ -12,6 +12,8 @@
 namespace Fa\Bundle\EntityBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * This table is used to store information about seo tool popular keywords.
@@ -66,7 +68,7 @@ class CategoryRecommendedSlot
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_id", type="integer", length=10, nullable=false)
+     * @ORM\Column(name="user_id", type="integer", length=10, nullable=true)
      */
     private $user_id;
 
@@ -79,6 +81,39 @@ class CategoryRecommendedSlot
      * })
      */
     private $category;
+
+    /**
+    * @Assert\File(maxSize="2M", mimeTypes={"image/jpeg", "image/png", "image/gif", "image/svg+xml"}, groups={"new", "edit"})
+    */
+    private $slot_file;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="slot_filename", type="string", length=250, nullable=true)
+     */
+    private $slot_filename;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_searchlist", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $is_searchlist = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="creative_group", type="string", length=250, nullable=true)
+     */
+    private $creative_group;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="creative_ord", type="integer", length=2, nullable=true)
+     */
+    private $creative_ord;
 
     /**
      * Constructor.
@@ -244,5 +279,161 @@ class CategoryRecommendedSlot
     public function getUserId()
     {
         return $this->user_id;
+    }
+
+    /**
+     * Set slot_file.
+     *
+     * @param UploadedFile $slot_file
+     * @return CategoryRecommendedSlot
+     */
+    public function setSlotFile(UploadedFile $slot_file = null)
+    {
+        $this->slot_file = $slot_file;
+
+        return $this;
+    }
+
+    /**
+     * Get slot_file.
+     *
+     * @return UploadedFile
+     */
+    public function getSlotFile()
+    {
+        return $this->slot_file;
+    }
+
+    /**
+    * Get upload file directory.
+    *
+    * @return string
+    */
+    public function getUploadDir()
+    {
+        return 'uploads/category_recommended_slots';
+    }
+
+    /**
+     * Get upload file root directory.
+     *
+     * @return string
+     */
+    public function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    /**
+     * Get upload file web path.
+     *
+     * @return string
+     */
+    public function getWebPath()
+    {
+        return null === $this->getSlotFileName() ? null : $this->getUploadDir().'/'.$this->getSlotFileName();
+    }
+
+    /**
+     * Get upload file web absolute path.
+     *
+     * @return string
+     */
+    public function getAbsolutePath()
+    {
+        return null === $this->getSlotFileName() ? null : $this->getUploadRootDir().'/'.$this->getSlotFileName();
+    }
+
+    /**
+     * Set slot_filename
+     *
+     * @param string $slot_filename
+     * @return CategoryRecommendedSlot
+     */
+    public function setSlotFilename($slot_filename)
+    {
+        $this->slot_filename = $slot_filename;
+
+        return $this;
+    }
+
+    /**
+     * Get slot_filename
+     *
+     * @return string
+     */
+    public function getSlotFilename()
+    {
+        return $this->slot_filename;
+    }
+
+    /**
+     * Set is_searchlist.
+     *
+     * @param boolean $is_searchlist
+     * @return CategoryRecommendedSlot
+     */
+
+    public function setIsSearchlist($is_searchlist)
+    {
+        $this->is_searchlist = $is_searchlist;
+
+        return $this;
+    }
+
+    /**
+     * Get is_searchlist.
+     *
+     * @return boolean
+     */
+    public function getIsSearchlist()
+    {
+        return $this->is_searchlist;
+    }
+
+    /**
+     * Set creative_group.
+     *
+     * @param string $creative_group
+     * @return CategoryRecommendedSlot
+     */
+    public function setCreativeGroup($creative_group)
+    {
+        $this->creative_group = $creative_group;
+
+        return $this;
+    }
+
+    /**
+     * Get creative_group.
+     *
+     * @return string
+     */
+    public function getCreativeGroup()
+    {
+        return $this->creative_group;
+    }
+
+    /**
+     * Set creative_ord.
+     *
+     * @param integer $creative_ord
+     * @return CategoryRecommendedSlot
+     */
+    public function setCreativeOrd($creative_ord)
+    {
+        $this->creative_ord = $creative_ord;
+
+        return $this;
+    }
+
+    /**
+     * Get creative_ord.
+     *
+     * @return integer
+     */
+    public function getCreativeOrd()
+    {
+        return $this->creative_ord;
     }
 }

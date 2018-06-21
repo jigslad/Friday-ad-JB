@@ -657,13 +657,13 @@ class DefaultController extends ThirdPartyLoginController
         $response = new Response();
 
         if ($request->isXmlHttpRequest() && $request->get('location') != null) {
-            $cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($request->get('location'), $this->container);
+            $cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($request->get('location'), $this->container, false, $request->get('location_area'));
             $locationByValue = $this->getRepository('FaEntityBundle:Location')->getArrayByTownId($request->get('location'), $this->container);
             if (!empty($cookieValue)) {
                 $location['id']   = $cookieValue['location'];
                 $location['text'] = $cookieValue['location_text'];
                 $location['slug'] = $cookieValue['slug'];
-
+                $location['area'] = $cookieValue['location_area'];
                 $cookieValue = json_encode($cookieValue);
 
                 $response->headers->clearCookie('location');
@@ -674,6 +674,7 @@ class DefaultController extends ThirdPartyLoginController
                 $location['id']   = $locationByValue['location'] = $request->get('location');
                 $location['text'] = $locationByValue['location_text'];
                 $location['slug'] = $locationByValue['slug'];
+                $location['area'] = null;
 
                 $cookieValue = json_encode($locationByValue);
 
@@ -685,6 +686,7 @@ class DefaultController extends ThirdPartyLoginController
                 $location['id']   = 'uk';
                 $location['text'] = 'uk';
                 $location['slug'] = 'uk';
+                $location['area'] = null;
                 $response->headers->clearCookie('location');
                 $response->setContent(json_encode($location));
             } else {

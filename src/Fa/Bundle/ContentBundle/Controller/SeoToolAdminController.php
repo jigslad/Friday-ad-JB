@@ -92,6 +92,29 @@ class SeoToolAdminController extends CrudController implements ResourceAuthoriza
         return $this->render('FaContentBundle:SeoToolAdmin:index.html.twig', $parameters);
     }
 
+    public function adsTxtAction(Request $request)
+    {
+        
+        $errorMsg         = '';
+        $content = '';
+        $adsTxtFile          = $this->container->get('kernel')->getRootDir().'/../web/ads.txt';
+
+        if ($request->ismethod('post')) {
+            $filePostContent = $request->get('file_text');
+            file_put_contents($adsTxtFile, "");
+            file_put_contents($adsTxtFile, $filePostContent);
+            return $this->handleMessage($this->get('translator')->trans('Ads txt was successfully updated.', array(), 'success'),'ads_txt');
+        } 
+        $content = file_get_contents($adsTxtFile);
+
+        $parameters = array(
+            'heading'    => $this->get('translator')->trans('Ads Txt'),
+            'content'     => $content,
+        );
+
+        return $this->render('FaContentBundle:SeoToolAdmin:adstxt.html.twig', $parameters);
+    }
+
     public function uploadCsvAction(Request $request)
     {
         $csvColumnsArray = array();

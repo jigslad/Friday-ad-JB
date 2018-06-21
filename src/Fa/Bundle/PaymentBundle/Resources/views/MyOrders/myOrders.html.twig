@@ -115,10 +115,10 @@
                             <div class="purchase-link-list">
                                 {% if paymentDetail['user_status_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::USER_STATUS_ACTIVE_ID') %}
                                     {{ include('FaUserBundle:Review:leaveReviewLink.html.twig', {'reviewDetails' : paymentDetail, 'to_whom' : 'buyer'}) }}<br />
-                                    {% if objMessage.getId() == 1 %}
+                                    {% if objMessage.getId() is defined and  objMessage.getId() == 1 %}
                                         <a href="javascript:void(0);" onclick="return contactUser('{{orderId}}', '{{ paymentDetail['ad_id'] }}', '{{ paymentDetail['seller_id'] }}', '{{ paymentDetail['user_id'] }}');">Send buyer a message</a>
-                                    {% else %}
-                                        {% if objMessage.getReceiver().getId() == app.user.getId() %}
+                                    {% elseif objMessage.getId() is defined  %}
+                                        {% if objMessage.getReceiver().getId() is defined and objMessage.getReceiver().getId() == app.user.getId() %}
                                             {% set messageType = 'receiver' %}
                                         {% else %}
                                             {% set messageType = 'sender' %}

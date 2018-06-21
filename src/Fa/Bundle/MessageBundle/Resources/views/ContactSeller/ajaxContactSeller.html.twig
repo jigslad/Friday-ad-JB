@@ -7,6 +7,10 @@
 {% set categoryPath = categoryRepository.getCategoryPathArrayById(ad.getCategory().getId(), false, container) %}
 {% set userTypeText = null %}
 {% set catString = ad.getId() %}
+
+{% set emailAlertStyle = 'block' %}
+{% set thirdpartyEmailAlertStyle = 'block' %}
+
 {% if adUser %}
     {% if adUser.getRole() and adUser.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
         {% set userTypeText = 'Business ad' %}
@@ -14,6 +18,12 @@
         {% set userTypeText = 'Private ad' %}
     {% endif %}
 {% endif %}
+
+{% if app.user %}
+    {% set emailAlertStyle = app.user.getIsEmailAlertEnabled()?'none':'block' %}
+    {% set thirdpartyEmailAlertStyle = app.user.getIsThirdPartyEmailAlertEnabled()?'none':'block' %}
+{% endif %}
+
 {% set catString = catString ~'-' ~ userTypeText %}
 {% for categoryId,categoryName in categoryPath %}
     {% set catString = catString ~ '-' ~ categoryName %}
@@ -98,10 +108,10 @@
         {% endif %}
         {% if adUser and adUser.getContactThroughEmail() %}
             <p>{{'Want to find out a bit more about advert? Send a message.'|trans({}, 'frontend-contact-seller')}}</p>
-            {{ form_row(form.sender_first_name) }}
+            {{ form_row(form.sender_first_name, {'attr':{'tabindex': 1}}) }}
 
             {% if form.sender_email is defined %}
-                {{ form_row(form.sender_email) }}
+                {{ form_row(form.sender_email, {'attr':{'tabindex': 2}}) }}
             {% endif %}
 
             {% if rootCategoryId == jobCategoryId %}
@@ -117,29 +127,29 @@
                 {% if form.text_message.vars.errors|length %}
                     {% set attrArray = {'attr':{'class': ' error'}} %}
                 {% endif %}
-                {{ form_widget(form.text_message, attrArray) }}
+                {{ form_widget(form.text_message, attrArray, {'attr':{'tabindex': 3}}) }}
                 {{ form_errors(form.text_message) }}
             {% else %}
-                {{ form_row(form.text_message) }}
+                {{ form_row(form.text_message, {'attr':{'tabindex': 3}}) }}
                 {{ form_widget(form.attachment, {'attr':{'style':'display:none'}}) }}
             {% endif %}
 
             <ul class="receive-alert">
                 <li>
-                    {{ form_widget(form.search_agent) }}
+                    {{ form_widget(form.search_agent, {'attr':{'tabindex': 4}}) }}
                     {{ form_label(form.search_agent) }}
                 </li>
-                <li>
-                    {{ form_widget(form.email_alert) }}
+                <li id="form_contact_seller_email_alert" style="display:{{emailAlertStyle}}">
+                    {{ form_widget(form.email_alert, {'attr':{'tabindex': 5}}) }}
                     {{ form_label(form.email_alert) }}
                 </li>
-                <li>
-                    {{ form_widget(form.third_party_email_alert) }}
+                <li id="form_contact_seller_third_partyemail_alert" style="display:{{thirdpartyEmailAlertStyle}}">
+                    {{ form_widget(form.third_party_email_alert, {'attr':{'tabindex': 6}}) }}
                     {{ form_label(form.third_party_email_alert) }}
                 </li>
             </ul>
 
-            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand'}}) }}
+            {{ form_widget(form.save, {'attr': {'class':'secondary-btn-1 button expand','tabindex': 7}}) }}
         {% else %}
             {% for fieldName, fieldValue in form.children %}
                 {% do attribute(form, fieldName).setRendered %}
@@ -152,12 +162,17 @@
 {% endif %}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-    $(document).ready(function() {
+    $(document).ready(function(){
         bindFormErrorEvents();
         bindCustomRadioEvent();
         bindCustomCheckboxEvent();
         tickUntickEmailAndThirdPartyAlertCheckbox();
+        if($('.error').length == 0){
+            //showorhideEmailAndThirdPartyAlertOption();
+        }
+        
     });
+    
     var deadlockRetry = 0;
     var resetEmailalertFlag = true;
     $("#contact_seller_id").submit(function(event) {
@@ -207,6 +222,7 @@
         });
     });
 
+
     // add multiple select / deselect functionality
     $("#fa_message_contact_seller_third_party_email_alert").change(function () {
     	if ($('#fa_message_contact_seller_third_party_email_alert').parent().hasClass('checked')) {
@@ -240,7 +256,18 @@
             $('#fa_message_contact_seller_email_alert').attr('checked', false);
         }
     }
-    
+    function showorhideEmailAndThirdPartyAlertOption() {
+        if ($('#form_contact_seller_third_partyemail_alert span').hasClass('checked')) {
+            $('#form_contact_seller_third_partyemail_alert').hide();
+        } else {
+            $('#form_contact_seller_third_partyemail_alert').show();
+        }
+        if ($('#form_contact_seller_email_alert span').hasClass('checked')) {
+            $('#form_contact_seller_email_alert').hide();
+        } else {
+            $('#form_contact_seller_email_alert').show();
+        }
+    }
     function sleep(milliseconds) {
       var start = new Date().getTime();
       for (var i = 0; i < 1e7; i++) {

@@ -121,6 +121,14 @@ class CategoryRepository extends NestedTreeRepository
     const FETISH_AND_ROLE_PLAY_ID = 4286;
     const PHONE_AND_CAM_CHAT_ID = 4287;
     const ADULT_TOP_LOCATION_AT_DETAIL_BY_DISTANCE = 50;
+    
+    const GAY_MALE_ESCORT_NAME = 'Gay Male Escorts';
+    const ADULT_CONTACTS_ID = 3412;
+    
+    //For Distance
+    const MOTORS_DISTANCE = 30;
+    const OTHERS_DISTANCE = 15;
+    const AREA_DISTANCE_DIVISION = 3;
 
     private $categoryCountArray = array();
 
@@ -2157,5 +2165,24 @@ class CategoryRepository extends NestedTreeRepository
         }
 
         return $oneclickenqDetails;
+    }
+    
+    /**
+     * Get category array by text.
+     *
+     * @param string $term
+     *
+     * @return multitype:multitype:string NULL
+     */
+    public function getCategorybyName($name = '')
+    {
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id,'.self::ALIAS.'.name')
+        ->andWhere(self::ALIAS.'.name = :name')
+        ->setParameter('name', $name)
+        ->setMaxResults(1);
+        
+        $objResources = $query->getQuery()->getOneOrNullResult();
+        return $objResources;
     }
 }

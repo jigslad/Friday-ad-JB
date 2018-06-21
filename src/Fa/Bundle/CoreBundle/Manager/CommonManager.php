@@ -2000,7 +2000,7 @@ class CommonManager
         $viedoImgUrl = null;
 
         if ($videoId) {
-            $viedoImgUrl = 'http://img.youtube.com/vi/'.$videoId.'/0.jpg';
+            $viedoImgUrl = 'https://img.youtube.com/vi/'.$videoId.'/0.jpg';
         }
 
         return $viedoImgUrl;
@@ -2390,10 +2390,10 @@ HTML;
             if (!$locationId) {
                 $locationId = $em->getRepository('FaEntityBundle:Locality')->getColumnBySlug('id', $location, $container);
             }
-
+            
             if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
                 $locationDetails = $em->getRepository('FaEntityBundle:Location')->getCookieValue($location, $container, true);
-
+                
                 if (!isset($locationDetails['location'])) {
                     $locationDetails = json_decode($request->cookies->get('location'), true);
                 }
@@ -2888,7 +2888,7 @@ HTML;
      *
      * @return Ambigous <string, mixed>
      */
-    public static function addProtocolToUrl($url, $replacewith="http")
+    public static function addProtocolToUrl($url, $replacewith="https")
     {
         if (!preg_match("~^(?:ht)tps?://~i", $url)) {
             $url = str_replace('//', $replacewith.'://', $url);

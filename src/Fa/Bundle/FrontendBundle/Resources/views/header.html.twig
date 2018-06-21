@@ -109,11 +109,11 @@
                         <!-- Right Nav Section -->
                        <div class="tablet-menu">
                             {% if mobileDetectManager.isTablet() %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null)})) }}
+                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                             {% elseif mobileDetectManager.isMobile() %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null)})) }}
+                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                             {% else %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null)})) }}
+                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                             {% endif %}
                         </div>
                         <ul class="show-for-small-only login-menu">

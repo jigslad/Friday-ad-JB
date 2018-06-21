@@ -4,7 +4,7 @@
         <div class="shop-video-box">
             {% set youtubeVideoId = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getYouTubeVideoId', [userDetail["youtube_video_url"]]) %}
             {% set youtubeVideoImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getYouTubeViewImageUrl', [youtubeVideoId]) %}
-            <a id="shopVideo" href="http://www.youtube.com/v/{{ youtubeVideoId }}">
+            <a id="shopVideo" href="https://www.youtube.com/v/{{ youtubeVideoId }}">
                 <img alt="" src="{{ youtubeVideoImageUrl }}">
             </a>
         </div>

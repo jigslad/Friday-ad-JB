@@ -32,4 +32,18 @@ interface AdAdultSolrFieldMapping extends AdSolrFieldMapping
     const TRAVEL_ARRANGEMENTS_ID = 'a_a_travel_arrangements_id_i';
 
     const INDEPENDENT_OR_AGENCY_ID = 'a_a_independent_or_agency_id_i';
+    
+    const GENDER_ID = 'a_a_gender_id_i';
+    
+    const LOOKING_FOR_ID = 'a_a_looking_for_id_txt';
+    
+    const JOB_TYPE_ID = 'a_a_job_type_id_i';
+    
+    const MY_SERVICE_IS_FOR_ID = 'a_a_my_service_is_for_id_txt';
+    
+    const ETHNICITY_ID = 'a_a_ethnicity_id_i';
+    
+    const EXPERIENCE_ID = 'a_a_experience_id_i';
+    
+    const POSITION_PREFERENCE_ID = 'a_a_position_preference_id_i';
 }

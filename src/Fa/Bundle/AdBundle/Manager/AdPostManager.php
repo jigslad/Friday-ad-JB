@@ -27,7 +27,7 @@ use Fa\Bundle\AdBundle\Repository\AdUserPackageRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentTransactionRepository;
 use Fa\Bundle\AdBundle\Repository\AdRepository;
-// use Symfony\Component\Validator\Constraints\Null;
+use Symfony\Component\Validator\Constraints\IsNull;
 
 /**
  * Ad post manager.
