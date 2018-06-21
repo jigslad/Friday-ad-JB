@@ -652,7 +652,7 @@ ti_redirect_region-w-uk-bristol-daewoo-tacuma:
   path: /region-w-uk-bristol/used-cars/daewoo-tacuma-N-i2
   defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
-        path: http://'%fa.main.host%'/bristol/motors/cars/daewoo/
+        path: https://'%fa.main.host%'/bristol/motors/cars/daewoo/
         permanent: true
   host: '%fa.ti.motor.host%'
 
@@ -660,7 +660,7 @@ ti_redirect_region-w-uk-bristol-renault-megane:
   path: /region-w-uk-bristol/used-cars/renault-megane-N-hg
   defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
-        path: http://'%fa.main.host%'/bristol/motors/cars/renault/megane/
+        path: https://'%fa.main.host%'/bristol/motors/cars/renault/megane/
         permanent: true
   host: '%fa.ti.motor.host%'
 
@@ -668,7 +668,7 @@ ti_redirect_region-w-uk-bristol-renault-maseratti:
   path: /region-w-uk-bristol/used-cars-for-sale/maseratti-N-1z140po
   defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
-        path: http://'%fa.main.host%'/bristol/motors/cars/
+        path: https://'%fa.main.host%'/bristol/motors/cars/
         permanent: true
   host: '%fa.ti.motor.host%'
 

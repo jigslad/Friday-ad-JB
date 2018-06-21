@@ -308,7 +308,7 @@ redirect_videos-and-n-tyres:
   path: /video/s-and-n-tyres-motor-racing-video/
   defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
-        path: http://blog.friday-ad.co.uk/
+        path: https://blog.friday-ad.co.uk/
         permanent: true
   host: '%fa.main.host%'
 
@@ -316,7 +316,7 @@ redirect_VideoCompetition:
   path: /VideoCompetition.asp/
   defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
-        path: http://blog.friday-ad.co.uk/competitions/
+        path: https://blog.friday-ad.co.uk/competitions/
         permanent: true
   host: '%fa.main.host%'
 
@@ -324,7 +324,7 @@ redirect_win-shopping-vouchers:
   path: /win-shopping-vouchers/
   defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
-        path: http://blog.friday-ad.co.uk/competitions/
+        path: https://blog.friday-ad.co.uk/competitions/
         permanent: true
   host: '%fa.main.host%'
   
@@ -332,7 +332,7 @@ redirect_Christmas:
   path: /ChristmasWishesEntry.asp/
   defaults:
         _controller: FrameworkBundle:Redirect:urlRedirect
-        path: http://blog.friday-ad.co.uk/competitions/
+        path: https://blog.friday-ad.co.uk/competitions/
         permanent: true
   host: '%fa.main.host%'
   
