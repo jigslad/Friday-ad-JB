@@ -25,6 +25,10 @@ use Fa\Bundle\CoreBundle\Form\EventListener\AddDatePickerFieldSubscriber;
 use Symfony\Component\Form\FormError;
 use Fa\Bundle\AdBundle\Repository\InActiveUserSolrAdsRepository;
 use Fa\Bundle\CoreBundle\Form\EventListener\AddAutoSuggestFieldSubscriber;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
 /**
@@ -70,17 +74,17 @@ class SolrReportSearchAdminType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder 
-        ->add('user__id', 'text', array('required' => false))
-        ->add('ad__id', 'text', array('required' => false))
-        ->add('user__email', 'text', array('required' => false)) 
-        ->add('status', 'hidden')      
+        ->add('user__id', TextType::class, array('required' => false))
+        ->add('ad__id', TextType::class, array('required' => false))
+        ->add('user__email', TextType::class, array('required' => false)) 
+        ->add('status', HiddenType::class)      
         ->add(
             'ad__status',
-            'entity',
+            EntityType::class,
             array(
                 'class' => 'FaEntityBundle:Entity',
                 'choice_label' => 'name',
-                'empty_value' => 'Ad status',
+                'placeholder' => 'Ad status',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder(EntityRepository::ALIAS)
                     ->where(EntityRepository::ALIAS.'.category_dimension = '.EntityRepository::AD_STATUS_ID)
@@ -90,11 +94,11 @@ class SolrReportSearchAdminType extends AbstractType
         )
         ->add(
             'user__status',
-            'entity',
+            EntityType::class,
             array(
                 'class' => 'FaEntityBundle:Entity',
                 'choice_label' => 'name',
-                'empty_value' => 'User status',
+                'placeholder' => 'User status',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder(EntityRepository::ALIAS)
                     ->where(EntityRepository::ALIAS.'.category_dimension = '.EntityRepository::USER_STATUS_ID)
@@ -102,7 +106,7 @@ class SolrReportSearchAdminType extends AbstractType
                 }
             )
         )
-        ->add('search', 'submit', array(
+        ->add('search', SubmitType::class, array(
             'label' => 'Search'
         ));
     }
@@ -113,6 +117,11 @@ class SolrReportSearchAdminType extends AbstractType
      * @return string
      */
     public function getName()
+    {
+        return 'fa_solr_report';
+    }
+    
+    public function getBlockPrefix()
     {
         return 'fa_solr_report';
     }

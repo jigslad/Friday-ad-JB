@@ -20,5 +20,6 @@
 {% endblock %}
 
 {% block scriptbottom %}
-    {{ block('search_script') }}
+{% set searchScript = block('search_script') is defined ? block('search_script') : '' %}
+    {{ searchScript }}
 {% endblock %}

@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\PromotionBundle\Entity\Package;
-use Fa\Bundle\PromotionBundle\Form\ShopPackageType;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
 use Fa\Bundle\PromotionBundle\Repository\PackageRepository;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
@@ -47,7 +46,7 @@ class SolrReportAdminController extends CoreController implements ResourceAuthor
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
         $formManager = $this->get('fa.formmanager');
-        $form = $formManager->createForm('fa_solr_report', null, array(
+        $form = $formManager->createForm(SolrReportSearchAdminType::class, null, array(
             'action' => $this->generateUrl('fa_solr_pending_ad_report'),
             'method' => 'GET'
         ));

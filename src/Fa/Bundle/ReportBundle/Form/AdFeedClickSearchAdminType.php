@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormError;
 use Fa\Bundle\CoreBundle\Form\EventListener\AddDatePickerFieldSubscriber;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\Validator\Constraints\Regex;
-// use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Fa\Bundle\ReportBundle\Repository\AdFeedClickReportDailyRepository;
 use Symfony\Component\Validator\Constraints\Email;
 use Fa\Bundle\CoreBundle\Validator\Constraints\CustomEmail;
@@ -156,7 +156,7 @@ class AdFeedClickSearchAdminType extends AbstractType
      * (non-PHPdoc)
      * @see \Symfony\Component\Form\AbstractType::setDefaultOptions()
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function setDefaultOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(
