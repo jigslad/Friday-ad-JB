@@ -187,11 +187,11 @@ parameters:
         - 800X600
     fa.user.site.image.dir: uploads/usersite
     fa.social.share.url: 'https://api.addthis.com/oexchange/0.8/forward'
-    fa.dotmailer.api.username: apiuser-674eb67b9866@apiconnector.com
-    fa.dotmailer.api.password: fridayad123
+    fa.dotmailer.api.username: apiuser-9af973c9a0ea@apiconnector.com
+    fa.dotmailer.api.password: 9bdmCH2PqsGyDr
     fa.dotmailer.api.url: 'https://api.dotmailer.com'
     fa.dotmailer.api.version: v2
-    fa.dotmailer.master.addressbook.id: 547817
+    fa.dotmailer.master.addressbook.id: 192541
     fa.review.moderation.api.version: v1
     fa.review.moderation.api.appKey: iL0UCJtAwwq8nVjvUJoVkM9CjFhyycLp
     fa.review.moderation.api.url: 'http://staging.api.fmgcontentmoderator.com/api'
