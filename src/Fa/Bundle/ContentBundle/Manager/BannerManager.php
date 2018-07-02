@@ -256,7 +256,9 @@ class BannerManager
                           RoleRepository::ROLE_SELLER_ID          => 'private',
                           RoleRepository::ROLE_BUSINESS_SELLER_ID => 'dealer',
                          );
-
-        return $userTypeArray[$roleId];
+        if(in_array($roleId, $userTypeArray)) {
+            return $userTypeArray[$roleId];
+        }
+        
     }
 }

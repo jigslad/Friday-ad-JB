@@ -541,7 +541,6 @@ label{display:inline-block}
 .available-payment-options-mob {width:100%;height:153px;background:url('/bundles/fafrontend/images/payment-options-mobile.png') no-repeat center center;margin-bottom: 70px;}
 .button-mar { margin-top:20px;margin-bottom:30px;}
 
-
 /****** Adult Icons *****/
 .adult-male{background:url(/bundles/fafrontend/images/male.png) no-repeat}
 .adult-female{background:url(/bundles/fafrontend/images/female.png) no-repeat}
@@ -581,7 +580,6 @@ table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.r
 .responsive-card-table .in-out-detail-text-l .currency_rate{ display: inline-flex; width: 100%; }
 .responsive-card-table .rates-pound-symbl{ line-height: 38px; margin-right: 5px; }
 .amazon-info-icon { position: absolute;right: -15px;bottom: 18px;width: 20px;height: 19px;background: url('/bundles/fafrontend/images/info-icon.svg'); }
-
 .available-payment-adult-options { width:100%;height:47px;background:url('/bundles/fafrontend/images/payment-options-adult.png') no-repeat center center;}
 .available-payment-adult-options-mob {width:100%;height:153px;background:url('/bundles/fafrontend/images/payment-options-mobile-adult.png') no-repeat center center;margin-bottom: 70px;}
 .image-tooltip-wrapper{position:relative;display:inline-block}
@@ -589,3 +587,5 @@ table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.r
 .image-tooltip:after{left:50%;bottom:-15px;content:" ";height:0;width:0;position:absolute;pointer-events:none;margin-left:-9px;border-style:solid;border-width:7px;border-color:#b3b3b3 transparent transparent transparent}
 .image-tooltip-wrapper:hover .image-tooltip{visibility:visible;opacity:1}
 #amazon-tooltip .image-tooltip {left: 190px !important;bottom: 44px !important; }
+
+

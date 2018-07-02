@@ -97,7 +97,7 @@ class SeoToolAdminController extends CrudController implements ResourceAuthoriza
         
         $errorMsg         = '';
         $content = '';
-        $adsTxtFile          = $this->container->get('kernel')->getRootDir().'/../web/ads.txt';
+        $adsTxtFile          = $this->container->get('kernel')->getRootDir().'/../data/ads.txt';
 
         if ($request->ismethod('post')) {
             $filePostContent = $request->get('file_text');
