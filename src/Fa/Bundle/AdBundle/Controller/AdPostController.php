@@ -95,15 +95,16 @@ class AdPostController extends ThirdPartyLoginController
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                if ($form->get('category_id')->getData()) {
-                    $firstStepData['category_id'] = $form->get('category_id')->getData();
-                    //check old category and new choosed category are same or not
-                    $getOldFirstStepData = $this->getStepSessionData('first');
-                    //if not same remove the fourth step session data bcz of getting old category fields at fourth step
-                    if(isset($getOldFirstStepData['category_id']) && $getOldFirstStepData['category_id'] != $firstStepData['category_id']) {
-                        $this->container->get('session')->remove('paa_fourth_step_data');
-                    }
-
+                if ($form->get('category_id')->getData()) {  
+                	$firstStepData['category_id'] = $form->get('category_id')->getData();
+					
+                	//check old category and new choosed category are same or not
+                	$getOldFirstStepData = $this->getStepSessionData('first');
+                	//if not same remove the fourth step session data bcz of getting old category fields at fourth step
+                	if(isset($getOldFirstStepData['category_id']) && $getOldFirstStepData['category_id'] != $firstStepData['category_id']) {
+                		$this->container->get('session')->remove('paa_fourth_step_data');
+                	}
+                	
                     $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(array('id' => $form->get('category_id')->getData()));
                     if ($category) {
                         $firstStepData['category_id_autocomplete'] = $category->getName();
@@ -866,22 +867,23 @@ class AdPostController extends ThirdPartyLoginController
                     $form->submit($fourthStepData);
                 }
             } elseif (!empty($this->getStepSessionData('fourth'))) {
-                $fourthStepData = $this->getStepSessionData('fourth');
-                
-                // Remove fourth step data from session
-                $this->container->get('session')->remove('paa_fourth_step_data');
-                
-                if (count($fourthStepData)) {
-                    $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName);
-                    $fourthStepData = $fourthStepData + array('_token' => $csrfToken);
-                    
-                    if (isset($fourthStepData['location_autocomplete']) && $fourthStepData['location_autocomplete']) {
-                        $fourthStepData['location_text'] = $fourthStepData['location_autocomplete'];
-                    }
-                    // Bind fourth step data from session
-                    $form->submit($fourthStepData);
-                }
-            } else {
+            	$fourthStepData = $this->getStepSessionData('fourth');
+            	
+            	// Remove fourth step data from session
+            	$this->container->get('session')->remove('paa_fourth_step_data');
+            	
+            	if (count($fourthStepData)) {
+            		$csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName);
+            		$fourthStepData = $fourthStepData + array('_token' => $csrfToken);
+            		
+            		if (isset($fourthStepData['location_autocomplete']) && $fourthStepData['location_autocomplete']) {
+            			$fourthStepData['location_text'] = $fourthStepData['location_autocomplete'];
+            		}
+            		// Bind fourth step data from session
+            		$form->submit($fourthStepData);
+            		
+            	}
+            }else {            
                 // Remove fourth step data from session
                 $this->container->get('session')->remove('paa_fourth_step_data');
             }

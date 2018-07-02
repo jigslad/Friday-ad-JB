@@ -128,11 +128,11 @@ EOF
         $ads = $qb->getQuery()->getResult();
 
         //hard coded user_emails in FFR-3227
-        $neglectUserEmailArr = array('1danamia696@yahoo.com',  '2danamia696@yahoo.com',  'aj_gani+5@me.com',  'aj_gani+6@me.com',  'aj_gani+7@me.com',  'aj_gani+8@me.com',  'contact@pleasuregirls.com',  'contact+1@pleasuregirls.com',  'danamia696@yahoo.com',  'aj_gani+1@me.com',  'incalls@gmail.com',  'info@oasisparlour.co.uk',  'kentladies@gmail.com',  'londonbranch@ph.com',  'patriciamartinez@hotmail.co.uk',  'pleassurehoneys+1@yahoo.com',  'pleassurehoneys+2@yahoo.com',  'pleassurehoneys+4@yahoo.com',  'pleassurehoneys+5@yahoo.com',  'pleassurehoneys+6@yahoo.com',  'pureescorts1+3@gmail.com',  'pureescorts1+5@gmail.com',  'shah02@hotmail.co.uk',  'walkin@hotmail.co.uk','surreyescorts@gmail.com','berkshireescorts@gmail.com','greaterlondon@gmail.com','gatwickescorts@gmail.com','contact+2@happyescorts.com','');
+        $neglectUserEmailArr = array('1danamia696@yahoo.com',  '2danamia696@yahoo.com',  'aj_gani+5@me.com',  'aj_gani+6@me.com',  'aj_gani+7@me.com',  'aj_gani+8@me.com',  'contact@pleasuregirls.com',  'contact+1@pleasuregirls.com',  'danamia696@yahoo.com',  'aj_gani+1@me.com',  'incalls@gmail.com',  'info@oasisparlour.co.uk',  'kentladies@gmail.com',  'londonbranch@ph.com',  'patriciamartinez@hotmail.co.uk',  'pleassurehoneys+1@yahoo.com',  'pleassurehoneys+2@yahoo.com',  'pleassurehoneys+4@yahoo.com',  'pleassurehoneys+5@yahoo.com',  'pleassurehoneys+6@yahoo.com',  'pureescorts1+3@gmail.com',  'pureescorts1+5@gmail.com',  'shah02@hotmail.co.uk',  'walkin@hotmail.co.uk','surreyescorts@gmail.com','berkshireescorts@gmail.com','greaterlondon@gmail.com','gatwickescorts@gmail.com','contact+2@happyescorts.com','essexescorts@gmail.com','DUPLI#59test@test.co.uk','admin@kentladies.co.uk','bournemouth@gmail.com','essexoutcalls@gmail.com','info@kentladies.com','3danamia696@yahoo.com','4danamia696@yahoo.com','007escorts@gmail.com','hertfordshireescorts@gmail.com','buckinghamshireescorts@gmail.com','info@passionsouth.com','info@1passionsouth.com','julietwilliams21@hotmail.co.uk','brazilia.girls@yahoo.com');
 
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
         foreach ($ads as $ad) {
-            $userEmail = $ad->getUser()->getEmail();
+            $userEmail = ($ad->getUser())?$ad->getUser()->getEmail():null;
             if(!in_array($userEmail, $neglectUserEmailArr)) {
                 $user = ($ad->getUser() ? $ad->getUser() : null);
                 $ad->setWeeklyRefreshAt(time());

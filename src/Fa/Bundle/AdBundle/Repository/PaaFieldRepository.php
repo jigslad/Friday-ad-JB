@@ -165,7 +165,6 @@ class PaaFieldRepository extends EntityRepository
                 }
             }
         }
-
         return $allPaaFields;
     }
 

@@ -75,6 +75,13 @@ class PaaField
     /**
      * @var integer
      *
+     * @ORM\Column(name="is_mandatory_campaign", type="smallint", nullable=true)
+     */
+    private $is_mandatory_campaign;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="created_at", type="integer", length=10)
      */
     private $created_at;
@@ -234,6 +241,29 @@ class PaaField
     public function getIsIndex()
     {
         return $this->is_index;
+    }
+
+    /**
+     * Set is Mandatory Campaign
+     *
+     * @param boolean $isMandatoryCampaign
+     * @return PaaField
+     */
+    public function setIsMandatoryCampaign($isMandatoryCampaign)
+    {
+        $this->is_mandatory_campaign = $isMandatoryCampaign;
+
+        return $this;
+    }
+
+    /**
+     * Get is Mandatory Campaign
+     *
+     * @return boolean
+     */
+    public function getIsMandatoryCampaign()
+    {
+        return $this->is_mandatory_campaign;
     }
 
     /**

@@ -22,3 +22,9 @@ services:
         arguments: [ '@service_container' ]
         tags:
             -  { name: doctrine.entity_listener }
+
+    fa_ad.entity_listener.paa_lite_field_rule:
+        class: Fa\Bundle\AdBundle\Listener\PaaLiteFieldRuleListener
+        arguments: [ '@service_container' ]
+        tags:
+            -  { name: doctrine.entity_listener }

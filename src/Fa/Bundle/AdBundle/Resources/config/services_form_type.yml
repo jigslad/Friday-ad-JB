@@ -376,3 +376,52 @@ services:
         arguments: ['@service_container', '@request_stack']
         tags:
             - { name: form.type, alias: fa_landing_page_adult_search }
+
+    fa_ad.form.type.paa_lite_field_rule_admin:
+        class: Fa\Bundle\AdBundle\Form\PaaLiteFieldRuleAdminType
+        arguments: ['@service_container', "@request_stack"]
+        tags:
+            - { name: form.type, alias: fa_ad_paa_lite_field_rule_admin }
+
+    fa_ad.form.type.paa_lite_field_rule_search_admin:
+        class: Fa\Bundle\AdBundle\Form\PaaLiteFieldRuleAdminSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_paa_lite_field_rule_search_admin }
+
+    fa_ad.form.type.campaigns_admin:
+        class: Fa\Bundle\AdBundle\Form\CampaignsAdminType
+        arguments: ['@service_container', "@request_stack"]
+        tags:
+            - { name: form.type, alias: fa_ad_campaigns_admin }
+
+    fa_ad.form.type.campaigns_search_admin:
+        class: Fa\Bundle\AdBundle\Form\CampaignsAdminSearchType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_campaigns_search_admin }
+
+    fa_ad.form.type.paa_lite_form:
+        class: Fa\Bundle\AdBundle\Form\PaaLiteType
+        arguments: ['@service_container', "@request_stack"]
+        tags:
+            - { name: form.type, alias: fa_paa_lite }
+
+    fa_ad.form.type.paa_lite_common:
+        class: Fa\Bundle\AdBundle\Form\PaaLiteCommonType
+        arguments: ['@service_container', "@request_stack"]
+        tags:
+            - { name: form.type, alias: fa_paa_lite_common }
+
+    fa_ad.form.type.paa_lite_login:
+        class: Fa\Bundle\AdBundle\Form\PaaLiteLoginType
+        arguments: ['@service_container', "@request_stack"]
+        tags:
+            - { name: form.type, alias: fa_paa_lite_login }
+
+    fa_ad.form.type.paa_lite_register:
+        class: Fa\Bundle\AdBundle\Form\PaaLiteRegistrationType
+        arguments:  ['@doctrine', '@security.encoder_factory', '@service_container']
+        tags:
+            - { name: form.type, alias: fa_paa_lite_register }
+

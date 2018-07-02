@@ -297,27 +297,38 @@ class AdLocationRepository extends EntityRepository
             $townIds[] = $moderationValue['locations'][0]['town_id'];
             return $this->_em->getRepository('FaEntityBundle:LocationGroupLocation')->getLocationGroupIdByTownDomicile($townIds);
         } else {
-            $qb = $this->createQueryBuilder(self::ALIAS)
-            ->andWhere(self::ALIAS.'.ad = :adId')
-            ->setParameter('adId', $adId)
-            ->addOrderBy(self::ALIAS.'.id', 'DESC')
-            ->setMaxResults(1);
-
-            $adLocations = $qb->getQuery()->getResult();
-            if ($adLocations) {
-                foreach ($adLocations as $adLocation) {
-                    if ($adLocation->getLocationTown()) {
-                        $townIds[] = $adLocation->getLocationTown()->getId();
-                    }
-                }
-
-                return $this->_em->getRepository('FaEntityBundle:LocationGroupLocation')->getLocationGroupIdByTownDomicile($townIds);
-            } else {
-                return null;
-            }
+        	return $this->getLocationGroupByAdId($adId);
         }
     }
-
+    
+    /**
+     * Get Ad Location by ad id
+     *
+     * @param integer $adId advert Id .
+     *
+     * @return mixed
+     */
+    public function getLocationGroupByAdId($adId)
+    {
+    	$townIds = array();
+    	$qb = $this->createQueryBuilder(self::ALIAS)
+    	->andWhere(self::ALIAS.'.ad = :adId')
+    	->setParameter('adId', $adId)
+    	->addOrderBy(self::ALIAS.'.id', 'DESC')
+    	->setMaxResults(1);
+    	
+    	$adLocations = $qb->getQuery()->getResult();
+    	if ($adLocations) {
+    		foreach ($adLocations as $adLocation) {
+    			if ($adLocation->getLocationTown()) {
+    				$townIds[] = $adLocation->getLocationTown()->getId();
+    			}
+    		}    		
+    		return $this->_em->getRepository('FaEntityBundle:LocationGroupLocation')->getLocationGroupIdByTownDomicile($townIds);
+    	} else {
+    		return null;
+    	}
+    }
     /**
      * Set data on object from moderation.
      *

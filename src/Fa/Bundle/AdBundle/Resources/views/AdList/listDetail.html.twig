@@ -57,7 +57,7 @@
         {% set catString = catName %}
     {% endif %}
 {% endfor %}
-<div class="listing{{ isUrgentClass }}{{ isFeaturedClass }}">
+<div class="listing{{ isUrgentClass }}{{ isFeaturedClass }} {% if isLiveBasicAd is defined and isLiveBasicAd == 1 %} featured-upgrade-border {% endif %}">
     {% set updateCountOnFeedAdView = '' %}
     {% if fromSimilarAdverts is not defined and aff_icon_cls is not null %}
         {% set updateCountOnFeedAdView = 'onclick=javascript:updateCountOnFeedAdView(' ~ ad.id ~ ');' %}
@@ -179,9 +179,32 @@
                         <div class="fad-shop-icon hide-for-small-only">AD SHOP</div>
                     {% endif %}
                 </div>
+                
+                
             </div>
         </div>
     </div>
+    {% if isLiveBasicAd is defined and isLiveBasicAd == 1 %}
+        <div class="one-click-upsell parent text-right">
+            <div class="child">
+                <h3 class="list-title hide-mobile">Your ad could appear here</h3>
+                <h5 class="show-mobile">Your ad could appear here</h5>
+                <div class="clearfix"></div>
+                {% set categUpgTxtInfo = categoryRepository.find(rootCategoryId) %}
+                <div class="desc hide-mobile">
+                    {% if categUpgTxtInfo.FeaturedUpgradeInfo != 'NULL' %}
+                        {{ categUpgTxtInfo.FeaturedUpgradeInfo }}
+                    {% endif %}
+                </div>
+                <div class="upgrade-btn">
+                	<button class="button secondary-btn-1 upgradeToFeaturedBtn" data-reveal-id="upgrade-modal" onclick="return upgradeToFeaturedBtn('{{ ad.id }}', '{{ rootCategoryId }}');" >
+                		{{ (categUpgTxtInfo.FeaturedUpgradeBtnTxt is null)?'Upgrade':categUpgTxtInfo.FeaturedUpgradeBtnTxt  }}
+                	</button>
+                </div>
+            </div>
+    	</div>
+	 {% endif %}         
+    
     {% if (attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) is defined and not attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) and attribute(ad, constant(solrMapping ~ 'IS_TRADE_AD')) is defined and attribute(ad, constant(solrMapping ~ 'IS_TRADE_AD')) == 1 and rootCategoryId is defined and rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')) %}
         <div class="fad-shop-icon show-for-small-only fa-shop-icon-small">AD SHOP</div>
     {% endif %}

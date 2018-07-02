@@ -1,0 +1,454 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+<style>
+ul.ui-sortable ul { list-style-type:none !important; width:90% !important;margin:auto !important;}
+.ultitle { padding: 0px 15px;font-size: 16px;line-height: 40px;}
+.customerror { margin-top:-1rem !important}
+</style>
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            {{ form_start(form, {'attr': {'novalidate': '','id' : 'fa_ad_campaigns_admin'}}) }}
+                {{ form_errors(form) }}
+                {% set show = 'none' %}
+                {% if entity.id %}
+                  <div class="row">
+                    <div class="large-12 columns">
+                        <b>{{ 'Category'|trans }} : </b> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(entity.category.id)|join(' > ') }}
+                    </div>
+                  </div>
+               {% else %}
+                   <div class="row">
+                       <div class="columns">
+                           <div class="admin_cat_search list_style_none">
+                               {{ form_row(form.category_id) }}
+                           </div>
+                       </div>
+                   </div>
+                {% endif %}
+                {% if entity.id %}
+                  {% set bckHeaderImage = entity.getCampaignBackgroundFileName() %}
+                {% else %}
+                  {% set bckHeaderImage = 'null' %}
+                {% endif %}
+                {% if entity.id %}
+                    {% set category_id = entity.category.id %}
+                {% else %}
+                    {% set category_id = app.request.get('category_id') %}
+                    {% if category_id is null %}
+                       {% set category_id = form.category_id.vars.value %}
+                    {% endif %}
+                {% endif %}
+
+                {% if category_id %}
+                   {% set show = 'inline' %}
+                   {% set fieldStep = 0 %}
+                   <div class="row"><div class="large-12 columns">
+                    {{ form_label(form.campaign_name) }}  <span class="required">*</span>
+                    {{ form_widget(form.campaign_name) }}
+                    {{ form_errors(form.campaign_name) }}
+                    <span id="campaign_nameError" style="display:none" class="error customerror"></span>
+                   </div></div>
+                    <div class="row">
+                        <div class="large-6 columns">
+                          {{ form_label(form.page_title) }}  <span class="required">*</span>
+                          {{ form_widget(form.page_title) }}
+                          {{ form_errors(form.page_title) }}
+                          <span id="page_titleError" style="display:none" class="error customerror"></span>
+                        </div>
+                        <div class="large-6 columns">
+                          {{ form_row(form.page_title_color) }}
+                        </div>
+                    </div>
+
+                    <div class="row"><div class="large-12 columns">
+                        {{ form_label(form.intro_text) }}  <span class="required">*</span>
+                        {{ form_widget(form.intro_text) }}
+                        {{ form_errors(form.intro_text) }}
+                        <span id="intro_textError" style="display:none" class="error"></span>
+                    </div></div>
+
+                    {{ form_row(form.seo_page_title) }}
+                    {{ form_row(form.seo_page_description) }}
+                    {{ form_row(form.seo_page_keywords) }}
+                    <div class="row"><div class="large-12 columns">
+                        {{ form_label(form.slug) }}  <span class="required">*</span>
+                        {{ form_widget(form.slug) }}
+                        {{ form_errors(form.slug) }}
+                        <span id="slugError" style="display:none" class="error customerror"></span>
+                    </div></div>
+                    <div class="row">
+                        <div class="large-6 columns">
+                        {{ form_label(form.background_file) }}  <span class="required">*</span>
+                        {{ form_widget(form.background_file) }}
+                        {{ form_errors(form.background_file) }}
+                        <span id="background_fileError" style="display:none" class="error customerror"></span>
+                        </div>
+                        <div class="large-6 columns">
+                         {% if entity.id %}
+                           <img src="{{shared_url(entity.getUploadDir()~'/'~entity.getCampaignBackgroundFileName())}}?{{ random(1000) }}" width="100px" /><br /><br />
+                       {% endif %}
+                        </div>
+                    </div>
+                    
+                    <ul id="paa_lite_field_rule_sortable" class="fa-sortable">
+                        <li class="ui-state-default ultitle">Fields included</li>
+                        <li class="ui-state-default ultitle" id="fields_disabled_li">Fields not included</li>
+                        <li id="default_flds_included" title="Fields included">&nbsp;</li>
+                        <li id="default_flds_not_included" title="Fields not included">&nbsp;</li>
+                        {% if entity.id %}
+                           {% set paaliteFieldRules = fetch_repository('FaAdBundle:PaaLiteFieldRule').getPaaLiteFieldRulesByCampaignId(entity.id, category_id, 'ord') %}
+
+                            {% if paaliteFieldRules|length > 0 %}
+                              {% for paaliteFieldRule in paaliteFieldRules %}
+                                  {% set field = paaliteFieldRule.getPaaLiteField().getField() %}
+                                  {% set isAddedFld = paaliteFieldRule.getIsAdded() %}
+                                  {% if isAddedFld is defined and isAddedFld ==1 %}
+                                    {% set titData = 'Fields included' %}
+                                  {% else %}
+                                    {% set titData = 'Fields not included' %}
+                                  {% endif %}
+                                
+                                 <li id="{{ field~'_ord' }}" class="ui-state-default" title="{{titData}}">
+                                 {{ include('FaAdBundle:PaaLiteFieldRuleAdmin:paalite_fields_list.html.twig', {'field': field}) }}
+                                 </li>
+                              {% endfor %}
+                              {% else %}
+                                {% set paaliteFieldsData = fetch_repository('FaAdBundle:PaaField').getPaaFieldsByCategoryAncestor(category_id, false, 'bothWithNullLast') %}
+                                {% for paaliteFieldData in paaliteFieldsData %}
+                                  {% if paaliteFieldData['is_rule'] is defined and paaliteFieldData['is_rule'] == true %}
+                                     {% set paaliteFieldRule = paaliteFieldData['data'] %}
+                                     {% set paaliteField = paaliteFieldRule.getPaaField() %}
+                                  {% else %}
+                                     {% set paaliteField = paaliteFieldData['data'] %}
+                                  {% endif %}
+                                  {% set field = paaliteField.getField() %}
+                                  {% set isCampaignManFld = paaliteField.getIsMandatoryCampaign() %}
+
+                                  {% if isCampaignManFld is defined and isCampaignManFld ==1 %}
+                                    {% set titData = 'Fields included' %}
+                                  {% else %}
+                                    {% set titData = 'Fields not included' %}
+                                  {% endif %}
+                                  <li id="{{ field~'_ord' }}" class="ui-state-default" title="{{titData}}">
+                                    {{ include('FaAdBundle:PaaLiteFieldRuleAdmin:paalite_fields_list.html.twig', {'field': paaliteField.getField()}) }}
+                                  </li>
+                                {% endfor %}
+                            {% endif %}
+                        {% else %}
+                           {% set paaliteFieldsData = fetch_repository('FaAdBundle:PaaField').getPaaFieldsByCategoryAncestor(category_id, false, 'bothWithNullLast') %}
+                           {% for paaliteFieldData in paaliteFieldsData %}
+                                {% if paaliteFieldData['is_rule'] is defined and paaliteFieldData['is_rule'] == true %}
+                                   {% set paaliteFieldRule = paaliteFieldData['data'] %}
+                                   {% set paaliteField = paaliteFieldRule.getPaaField() %}
+                                {% else %}
+                                   {% set paaliteField = paaliteFieldData['data'] %}
+                                {% endif %}
+                                {% set field = paaliteField.getField() %}
+                                {% set isCampaignManFld = paaliteField.getIsMandatoryCampaign() %}
+
+                                {% if isCampaignManFld is defined and isCampaignManFld ==1 %}
+                                  {% set titData = 'Fields included' %}
+                                {% else %}
+                                  {% set titData = 'Fields not included' %}
+                                {% endif %}
+                               <li id="{{ field~'_ord' }}" class="ui-state-default" title="{{titData}}">
+                               {{ include('FaAdBundle:PaaLiteFieldRuleAdmin:paalite_fields_list.html.twig', {'field': paaliteField.getField()}) }}
+                               </li>
+                           {% endfor %}
+
+
+                       {% endif %}
+                   </ul>
+                    {{ form_row(form.form_fill_times) }}
+                    {{ form_row(form.discount_code) }}
+                    <div class="row"><div class="large-12 columns">
+                        {{ form_label(form.campaign_status) }}  <span class="required">*</span>
+                        {{ form_widget(form.campaign_status) }}
+                        {{ form_errors(form.campaign_status) }}
+                        <span id="campaign_statusError" style="display:none" class="error customerror"></span>
+                    </div></div>
+                {% endif %}
+                       <div style="display:{{ show }}"> 
+                           {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'paa_lite_field_rule_admin'}) }}
+                      </div>
+                   
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scriptbottom %}
+<script src="{{ asset_url('fafrontend/js/vendor/jquery-ui.min.js') }}"></script>
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        var topLevel = $('li:not([title])');
+        // for each of those...
+        topLevel.each(function() {
+          var li = $(this),
+              // ... we get its text ...
+              title = li.text(),
+              // ... and other li elements with the corresponding title
+              children = $('li[title="' + title + '"]');
+
+          // if there are any...
+          if (children.length > 0) {
+            // ... create an empty list ...
+            var ul = $('<ul></ul>');
+            // ... fill it and ...
+            children.appendTo(ul);
+            // ... append it to the original li element
+            ul.appendTo(li);
+          }
+        });
+        
+        $('li[title="Fields included"]').each(function() {
+            var id = $(this).attr("id");
+            if(id != 'default_flds_included' && id!= 'default_flds_not_included')
+            {
+              var isadded_elem = id.replace('ord', 'is_added');
+              $('#fa_ad_campaigns_admin_'+isadded_elem).val(1);
+            }
+        });
+        
+        /*$("#fa_ad_campaigns_admin").validate({
+            messages: {
+                campaign_name: {required: "Please specify campaign name.", },
+            },
+            errorPlacement: function (error, element) {
+                element.focus(function () {
+                    $("span.error").html(error);
+                }).blur(function () {
+                    $("span.error").html('');
+                });
+            }
+        });*/
+
+        $("#fa_ad_campaigns_admin").bind("submit", function(event) { 
+          var isFormValid = validateForm();
+          if(isFormValid) {
+            var paa_order = 1;
+            $('li[title="Fields included"]').each(function() {
+                var id = $(this).attr("id");
+                if(id != 'default_flds_included' && id!= 'default_flds_not_included')
+                {
+                  $('#fa_ad_campaigns_admin_'+id).val(paa_order);
+                  paa_order++;
+                }
+            });
+            $('li[title="Fields not included"]').each(function() {
+                var id = $(this).attr("id");
+                if(id != 'default_flds_included' && id!= 'default_flds_not_included')
+                {
+                  $('#fa_ad_campaigns_admin_'+id).val(paa_order);
+                  paa_order++;
+                }
+            });
+          } else {
+              event.stopPropagation();
+              event.preventDefault(); 
+              return false;
+          }
+           
+
+        });
+
+        $("#fa_ad_campaigns_admin_category_id").on("change", function(e) { 
+            var category_id = e.val;
+            var route = Routing.generate('campaigns_new_admin');
+            if (category_id != '') {
+                route = Routing.generate('campaigns_new_from_category_admin', { 'category_id': category_id });
+            }
+
+            window.location.replace(route);
+        });
+
+        $("#paa_lite_field_rule_sortable").sortable({
+            items: "li:not(.ui-state-disabled)",
+            placeholder: "ui-state-highlight",
+            containment: "#paa_lite_field_rule_sortable",
+            dropOnEmpty: true,
+            stop : function(event, ui){
+                var sortIdArray = $(this).sortable('toArray');
+                for (var i =0; i < sortIdArray.length; i++) {
+                    $('#fa_ad_campaigns_admin_'+sortIdArray[i]).val(i+1);
+                }
+            },
+            update: function( event, ui ) {
+                var id = ui.item.attr("id");
+                var titleAttr = ui.item.attr("title");
+                var siblingsTitle = ui.item.siblings().attr("title");
+                var listTag = $('#'+id).prevAll( "li.ui-state-disabled" ).text();
+                var stepCat = listTag.split(/\s+/).slice(0,3).join(" ").trim();
+                var txtboxId = id.replace('ord', 'step');
+                var isadded_elem = id.replace('ord', 'is_added');
+                var itemname = id.replace('_ord', '');
+                
+                if(typeof titleAttr == 'undefined' || typeof siblingsTitle == 'undefined') {
+                    alert(itemname + ' cannot be moved here');
+                    return false;
+                } else if(titleAttr == 'Fields not included' && siblingsTitle == 'Fields included') {
+                  $('#fa_ad_campaigns_admin_'+isadded_elem).val(1);
+                } else if(titleAttr == 'Fields included' && siblingsTitle == 'Fields not included') {
+                  if(itemname!='title' && itemname!='location') {
+                    $('#fa_ad_campaigns_admin_'+isadded_elem).val(0);
+                  } else {
+                     alert(itemname + ' cannot be moved here');
+                     return false;
+                  }
+                }
+                if(stepCat == 'Step 2') {   
+                    $('#fa_ad_campaigns_admin_'+txtboxId).val(2);
+                } else if (stepCat == 'Step 4') { 
+                    $('#fa_ad_campaigns_admin_'+txtboxId).val(4);
+                } else if (stepCat == 'Fields not') { 
+                    $('#fa_ad_campaigns_admin_'+txtboxId).val('');
+                }
+              }
+        });
+
+
+    });
+
+    function checkCampaignSlug() {
+      var slug = $('#fa_ad_campaigns_admin_slug').val();
+      $.ajax({
+         type: "post",
+         dataType: 'json',
+         url: "{{ path('ajax_check_campaign_slug_exist') }}",
+         data: {'slug': slug},
+         success: function(response) {
+            {% if entity.id %}
+               if(response.campaigncount>1) { campaignSlugExists = true; }
+            {% else %}
+               if(response.campaigncount>=1) { campaignSlugExists = true; }
+            {% endif %}
+         }
+      });
+    } 
+    function validateForm(){
+      isFormValid = true;
+      var campaignSlugExists = false;
+      var campaign_name = $('#fa_ad_campaigns_admin_campaign_name').val();
+      var page_title = $('#fa_ad_campaigns_admin_page_title').val();
+      var intro_text = tinymce.editors[0].getContent();
+      var slug = $('#fa_ad_campaigns_admin_slug').val();
+      var background_file = $('#fa_ad_campaigns_admin_background_file').val();
+      var campaign_status = $('#fa_ad_campaigns_admin_campaign_status').val();
+      var extension = background_file.split('.').pop().toUpperCase();
+
+      if(campaign_name=='') {
+          $('#campaign_nameError').show();
+          $('#campaign_nameError').html('Please enter campaign name.');
+          $('#fa_ad_campaigns_admin_campaign_name').focus();
+          isFormValid = false;
+      } else {
+          $('#campaign_nameError').hide();
+          $('#campaign_nameError').html('');
+      }
+
+      if(page_title=='') {
+          $('#page_titleError').show();
+          $('#page_titleError').html('Please enter page title.');
+          $('#fa_ad_campaigns_admin_page_title').focus();
+          isFormValid = false;
+      } else {
+          $('#page_titleError').hide();
+          $('#page_titleError').html('');
+      }
+
+      if(intro_text=='') {
+          $('#intro_textError').show();
+          $('#intro_textError').html('Please enter intro text.');
+          $('#fa_ad_campaigns_admin_intro_text').focus();
+          isFormValid = false;
+      } else {
+          $('#intro_textError').hide();
+          $('#intro_textError').html('');
+      }
+      
+      if(slug=='') {
+          $('#slugError').show();
+          $('#slugError').html('Please enter slug.');
+          $('#fa_ad_campaigns_admin_slug').focus();
+          isFormValid = false;
+      } else {
+          if(slug) {
+            $.ajax({
+               type: "post",
+               dataType: 'json',
+               url: "{{ path('ajax_check_campaign_slug_exist') }}",
+               data: {'slug': slug},
+               success: function(response) {
+                  {% if entity.id %}
+                     if(response.campaigncount>1) { campaignSlugExists = true; }
+                  {% else %}
+                     if(response.campaigncount>=1) { campaignSlugExists = true; }
+                  {% endif %}
+               },
+               complete: function() {
+                   if(campaignSlugExists == true) {
+                      $('#slugError').show();
+                      $('#slugError').html('Campaign slug already exists in our system.');
+                      $('#fa_ad_campaigns_admin_slug').focus();
+                      isFormValid = false;
+                   } else {
+                      $('#slugError').hide();
+                      $('#slugError').html('');
+                   }
+               }
+            });
+          } else {
+            $('#slugError').hide();
+            $('#slugError').html('');
+          }
+      }
+
+      {% if entity.id %}
+        var bckHeaderImage = '{{entity.getCampaignBackgroundFileName()}}';
+      {% else %}
+        var bckHeaderImage = ''; 
+      {% endif %}
+        
+      if(background_file.length < 1 && bckHeaderImage=='') {
+          $('#background_fileError').show();
+          $('#background_fileError').html('Please enter header image.');
+          $('#fa_ad_campaigns_admin_background_file').focus();
+          isFormValid = false;
+      }
+      else if (background_file.length >= 1 && extension!="PNG" && extension!="JPG" && extension!="GIF" && extension!="JPEG"){
+        $('#background_fileError').show();
+        $('#background_fileError').html('invalid extension '+extension);
+        $('#fa_ad_campaigns_admin_background_file').focus();
+        isFormValid = false;
+      }
+      else {
+        $('#background_fileError').hide();
+        $('#background_fileError').html('');
+      }
+
+      if(campaign_status=='') {
+          $('#campaign_statusError').show();
+          $('#campaign_statusError').html('Please enter campaign status.');
+          $('#fa_ad_campaigns_admin_campaign_status').focus();
+          isFormValid = false;
+      } else {
+          $('#campaign_statusError').hide();
+          $('#campaign_statusError').html('');
+      }
+
+      return isFormValid;
+    }
+//]]>
+</script>
+{% if (form.category_id) is defined %}
+    {{ include('FaCoreBundle::autoSuggestField.html.twig', {'field' : '#fa_ad_campaigns_admin_category_id', 'jsonField' : '#fa_ad_campaigns_admin_category_id_json', 'placeHolder': 'Select category'|trans, 'route' : 'category_ajax_term_admin', 'maximumSelectionSize': 1 }) }}
+{% endif %}
+{{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'autoresizeOptions': 'autoresize_bottom_margin: 0, autoresize_min_height: 100, autoresize_max_height: 500,', 'toolbar2' : 'true', 'menubar' : 'false', 'statusbar': 'true', 'charCounter' : 'true' }) }}
+{% endblock %}

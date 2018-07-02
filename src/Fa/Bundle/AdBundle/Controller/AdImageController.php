@@ -107,24 +107,33 @@ class AdImageController extends CoreController
     {
         if (!$adId) {
             if ($request->get('is_admin')) {
+
                 if (!$this->container->get('session')->has('admin_ad_id_'.$admin_ad_counter)) {
                     $this->container->get('session')->set('admin_ad_id_'.$admin_ad_counter, CommonManager::generateHash());
                 }
 
                 $adId = $this->container->get('session')->get('admin_ad_id_'.$admin_ad_counter);
             } else {
-                if (!$this->container->get('session')->has('ad_id')) {
+                if (!$this->container->get('session')->has('paa_image_id') && $request->get('is_paalite')==1) {
+                    $this->container->get('session')->set('paa_image_id', CommonManager::generateHash());
+                } elseif (!$this->container->get('session')->has('ad_id')) {
                     $this->container->get('session')->set('ad_id', CommonManager::generateHash());
                 }
 
-                $adId = $this->container->get('session')->get('ad_id');
+                if($this->container->get('session')->has('paa_image_id') && $request->get('is_paalite')==1) {
+                    $adId = $this->container->get('session')->get('paa_image_id');
+                } else {
+                    $adId = $this->container->get('session')->get('ad_id');
+                }
+
             }
         }
-
         $adImgCount = $this->getRepository('FaAdBundle:AdImage')->getAdImageCount($adId);
 
         if ($request->get('is_admin')) {
             return $this->render('FaAdBundle:AdImage:showImageUploaderAdmin.html.twig', array('imageLimitRemaining' => (($maxValue ? $maxValue : $this->container->getParameter('fa.image.'.$vertical.'_upload_limit')) - $adImgCount), 'adId' => $adId, 'userId' => $userId, 'vertical' => $vertical, 'is_admin' => 1, 'adImgCount' => $adImgCount, 'formName' => $formName, 'maxValue' => $maxValue, 'from' => $from));
+        } elseif($request->get('is_paalite')) {
+            return $this->render('FaAdBundle:AdImage:showImageUploaderPaaLite.html.twig', array('imageLimitRemaining' => (($maxValue ? $maxValue : $this->container->getParameter('fa.image.'.$vertical.'_upload_limit')) - $adImgCount), 'adId' => $adId, 'userId' => $userId, 'vertical' => $vertical, 'adImgCount' => $adImgCount, 'formName' => $formName, 'maxValue' => $maxValue, 'from' => $from));
         } else {
             return $this->render('FaAdBundle:AdImage:showImageUploader.html.twig', array('imageLimitRemaining' => (($maxValue ? $maxValue : $this->container->getParameter('fa.image.'.$vertical.'_upload_limit')) - $adImgCount), 'adId' => $adId, 'userId' => $userId, 'vertical' => $vertical, 'adImgCount' => $adImgCount, 'formName' => $formName, 'maxValue' => $maxValue, 'from' => $from));
         }

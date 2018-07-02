@@ -1,0 +1,37 @@
+paa_lite_field_rule_admin:
+    path:     /
+    defaults: { _controller: "FaAdBundle:PaaLiteFieldRuleAdmin:index" }
+
+paa_lite_field_rule_new_admin:
+    path:     /new
+    defaults: { _controller: "FaAdBundle:PaaLiteFieldRuleAdmin:new" }
+    options:
+        expose: true
+
+paa_lite_field_rule_create_admin:
+    path:     /create
+    defaults: { _controller: "FaAdBundle:PaaLiteFieldRuleAdmin:create" }
+    requirements: { methods: post }
+
+paa_lite_field_rule_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaAdBundle:PaaLiteFieldRuleAdmin:edit" }
+
+paa_lite_field_rule_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaAdBundle:PaaLiteFieldRuleAdmin:update" }
+    requirements: { methods: post|put }
+
+paa_lite_field_rule_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaAdBundle:PaaLiteFieldRuleAdmin:delete" }
+    
+paa_lite_field_rule_new_from_category_admin:
+    path:     /{category_id}/new
+    defaults: { _controller: "FaAdBundle:PaaLiteFieldRuleAdmin:newFromCategory" }
+    options:
+        expose: true
+
+paa_lite_field_rule_show_admin:
+    path:     /{id}/show
+    defaults: { _controller: "FaAdBundle:PaaLiteFieldRuleAdmin:show" }

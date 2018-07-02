@@ -569,4 +569,24 @@ class AdUserPackageRepository extends BaseEntityRepository
         return $result;
     }
     
+    /**
+     * Find User purchased this package in past.
+     *
+     * @param integer $adId Ad Id.
+     * @param integer $adId Ad Id.
+     *
+     * @return mixed
+     */
+    public function getPackagePurchasedByUser($adId, $packageId)
+    {	
+    	$query = $this->getBaseQueryBuilder()
+    	->andWhere(self::ALIAS.'.ad_id = '.$adId)
+    	->andWhere(self::ALIAS.'.package = '.$packageId)
+    	->andWhere(self::ALIAS.'.status = '.self::STATUS_ACTIVE.' OR '.self::ALIAS.'.status = '.self::STATUS_INACTIVE)
+    	->orderBy(self::ALIAS.'.id', 'desc')
+    	->setMaxResults(1);
+    	
+    	return $query->getQuery()->getOneOrNullResult();
+    }
+    
 }

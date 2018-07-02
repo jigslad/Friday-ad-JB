@@ -34,6 +34,7 @@
                         <th width="120">{{ 'Advert reference'|trans }}</th>
                         <th width="120">{{ 'Category'|trans }}</th>
                         <th width="100">{{ 'Location'|trans }}</th>
+                        <th width="100">{{ 'Is Paa Lite'|trans }}</th>
                         <th width="100">{{ 'Status'|trans }}</th>
                         <th width="100">{{ 'Date placed'|trans }}</th>
                         <th width="100">{{ 'Date expires'|trans }}</th>
@@ -112,6 +113,9 @@
                                        {% endfor %}
 	                               {% endif %}
 	                           </td>
+                             <td>
+                                {% if ad.source == 'paa_lite' %} Yes {% else %} No {% endif %}
+                             </td>
 	                           <td>
 	                                {% if statusIdArray[ad.id] is defined and statusIdArray[ad.id] is not null %}
                                         {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', statusIdArray[ad.id]) }}

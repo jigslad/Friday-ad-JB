@@ -242,6 +242,7 @@ class AdController extends CoreController
     {
         $adId          = $request->get('id', 0);
         $prevRouteName = null;
+        $successPaymentModalbox = false;
         $refererUrl    = $request->server->get('HTTP_REFERER');
         if ($refererUrl) {
             $urlParams = parse_url($refererUrl);
@@ -273,6 +274,24 @@ class AdController extends CoreController
                     $this->container->get('session')->remove('back_to_search_url');
                 }
             }
+        }
+        
+        $transactionJsArr = [];
+        //check session for upgrade Payment has been done successfully
+        if ($this->container->get('session')->has('payment_success_for_upgrade') && $this->container->get('session')->has('payment_success_for_upgrade') != '') {
+        	$successPaymentModalbox 	= true;
+        	if( $this->container->get('session')->has('upgrade_payment_transaction_id') ) {
+        		$loggedinUser = $this->getLoggedInUser();
+        		if($loggedinUser) {
+        			$transcations	= $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($this->container->get('session')->get('upgrade_payment_transaction_id'), $loggedinUser, true);
+        			$transactionJsArr['getTranscationJs'] = CommonManager::getGaTranscationJs($transcations);
+        			$transactionJsArr['getItemJs']        = CommonManager::getGaItemJs($transcations);
+        			$transactionJsArr['ga_transaction']   = $transcations;
+        		}
+        	}
+        	$this->container->get('session')->remove('payment_success_for_upgrade');
+        	$this->container->get('session')->remove('upgrade_payment_success_redirect_url');
+        	$this->container->get('session')->remove('upgrade_payment_transaction_id');
         }
 
         // initialize search filter manager service and prepare filter data for searching
@@ -352,6 +371,8 @@ class AdController extends CoreController
             'location_id' => $cookieLocation['location'],
             'location_slug' => $cookieLocation['slug'],
             'similarAds' => $similarAds,
+        	'successPaymentModalbox' => $successPaymentModalbox,
+        	'paymentTransactionJs'	 => $transactionJsArr,
         );
 
         if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {

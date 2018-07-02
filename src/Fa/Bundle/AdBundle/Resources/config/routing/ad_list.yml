@@ -35,3 +35,21 @@ ad_left_search_load_children_categories_ajax:
 ad_update_feed_ad_view_count_ajax:
     path:     /update_fee_ad_view_count_ajax
     defaults: { _controller: "FaAdBundle:AdList:ajaxUpdateFeedAdViewCount" }
+
+upgrade_to_featured_ad:
+    path:   /upgrade_to_featured_ad/{adId}/{rootCategoryId}
+    defaults:  { _controller: "FaAdBundle:UpgradeAd:ajaxUpgradeToFeaturedAd" }
+    options:
+        expose: true
+        
+paypal_upgrade_to_featured_ad_ajax:
+    path:   /paypal_payment_process_for_upgrade
+    defaults:  { _controller: "FaAdBundle:UpgradeAd:ajaxPaypalPaymentProcessForUpgrade" }
+    options:
+        expose: true
+        
+amazon_upgrade_to_featured_ad:
+    path:   /amazon_payment_process_for_upgrade
+    defaults:  { _controller: "FaAdBundle:UpgradeAd:amazonPaymentProcessForUpgrade" }
+    options:
+        expose: true

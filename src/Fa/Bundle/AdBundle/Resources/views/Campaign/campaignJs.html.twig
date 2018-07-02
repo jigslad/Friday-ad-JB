@@ -1,0 +1,754 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+{% if (form.price) is defined %}
+var defaultPrice     = ($('#fa_paa_lite_common_price').val() == 0) ? '' : $('#fa_paa_lite_common_price').val();
+{% endif %}
+{% if (form.price_text) is defined %}
+  var defaultPriceText = $('#fa_paa_lite_common_price_text').val();
+{% endif %}
+{% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') and (form.price) is defined  and (form.price_text) is defined %}
+  handlePriceWithAdTypeForSale();
+{% endif %}
+{% if (form.ad_type_id) is defined %}
+	$('.ad_type_choice').click(function(){
+       var choiceId  = $(this).attr('id');
+       var adTypeId  = choiceId.replace('ad_type_choice_', '');
+
+       $('.ad_type_choice').removeClass('active');
+       $('#'+choiceId).addClass('active');
+       $("input[name='fa_paa_lite_common[ad_type_id]'][value='"+adTypeId+"']").trigger('click');
+       {% if (form.price) is defined and (form.price_text) is defined %}
+        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
+          handlePriceWithAdTypeForSale(adTypeId, 'true');
+        {% else %}
+           handlePriceWithAdType(adTypeId, 'true');
+        {% endif %}
+       {% endif %}
+   });
+{% endif %}
+
+$("input[name='fa_paa_lite_common[payment_method_id]']").click(function(e) {
+    $('#payment_method_choice_div .capsule-bg').removeClass('active');
+    $(this).parent().addClass('active');
+    showPaypalSection(true, $(this).val());
+});
+
+$("input[name='fa_paa_lite_common[delivery_method_option_id]']").click(function(e) {
+    $('#delivery_method_option_choice_div .capsule-bg').removeClass('active');
+    $(this).parent().addClass('active');
+    showPostagePrice($(this).val());
+});
+
+$(document).ready(function(){
+  {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
+      bindCapsuleButtonEvent('fa_paa_lite_common', 'ad_type_id', 'radio');
+      bindCapsuleButtonEvent('fa_paa_lite_common', 'rent_per_id', 'radio');
+      bindCapsuleButtonEvent('fa_paa_lite_common', 'furnishing_id', 'drop-down');
+      bindCapsuleButtonEvent('fa_paa_lite_common', 'smoking_allowed_id', 'drop-down');
+      bindCapsuleButtonEvent('fa_paa_lite_common', 'pets_allowed_id', 'drop-down');
+      bindCapsuleButtonEvent('fa_paa_lite_common', 'dss_tenants_allowed_id', 'drop-down');
+      bindCapsuleButtonEvent('fa_paa_lite_common', 'rooms_for_id', 'checkbox');
+      bindCapsuleButtonEvent('fa_paa_lite_common', 'room_size_id', 'drop-down');
+      bindCapsuleButtonEvent('fa_paa_lite_common', 'ownership_id', 'drop-down');
+      bindCapsuleButtonEvent('fa_paa_lite_common', 'lease_type_id', 'drop-down');
+      bindDatePickerEvent();
+  {% endif %}
+	{% if (form.has_reg_no) is defined %}
+		showHideRegNoFieldsOnLoad($("input[name='fa_paa_lite_common[has_reg_no]']:checked").val());
+        showHideRegNoFields(0);
+
+	 	$("input[name='fa_paa_lite_common[has_reg_no]']").change(function(){
+            showHideRegNoFields($(this).val());
+        });
+        
+        $('#lookup_vehicle').click(function(){
+            var regNo = $.trim($('#fa_paa_lite_common_reg_no').val());
+            loadRegNoFieldDetailsByRegNo(regNo);
+        });
+        
+        $('#fa_paa_lite_common_reg_no').on('focus', function(){
+             $('#reg_error').remove();
+             $('#fa_paa_lite_common_reg_no').removeClass('error');
+             $('#reg_no_error_msg').html('');
+             $('#reg_no_error_msg').hide();
+        });
+
+        $('#fa_paa_lite_common_reg_no').keydown(function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $('#lookup_vehicle').click();
+                return false;
+            }
+        });
+	{% endif %}
+
+  {% if (form.event_start_time) is defined %}
+      bindDatePickerEvent();
+      showHideEventEnd();
+      $('.datepicker-icon').click(function(e){
+          $(this).next('input.fdatepicker-paa').focus();
+      });
+  {% endif %}
+
+  $('.dimensions_unit_choice').click(function(){
+      var choiceId = $(this).attr('id');
+      var unitId   = choiceId.replace('dimensions_unit_choice_', '');
+
+      $('.dimensions_unit_choice').removeClass('active');
+      $('#'+choiceId).addClass('active');
+      $('#fa_paa_lite_common_dimensions_unit').val(unitId);
+
+      handleDimensionLabelByUnit(unitId);
+  });
+
+  $('.is_new_choice').click(function(){
+       var choiceId = $(this).attr('id');
+       var isNew    = choiceId.replace('is_new_choice_', '');
+
+       $('.is_new_choice').removeClass('active');
+       $('#'+choiceId).addClass('active');
+       $("input[name='fa_paa_lite_common[is_new]'][value='"+isNew+"']").attr('checked', true);
+   });
+
+  $('#fa_paa_lite_common_paypal_email, #fa_paa_lite_common_paypal_first_name, #fa_paa_lite_common_paypal_last_name').focus(function(e){
+      $(this).removeClass('error');
+      $("#paypal_text_id").prev('small').remove();
+      $('#paypal_email_verify_status').hide();
+  });
+
+  
+  $('#verify_paypal_email_button').on( "click", function() {
+      showPaypalSection(true);
+  });
+
+  $("#fa_paa_lite_common_qty").change(function(){
+       if ($(this).val()) {
+          if ($(this).val() == 0 || !$(this).val().match(/^([0-9]+)$/)) {
+              $(this).val(1);
+          }
+       } else {
+          $(this).val(1);
+       }
+  });
+
+  $('#fa_paa_lite_common_travel_arrangements_id').on( "change", function() {
+      showRateSection();           
+  });
+
+  $('.rates_text_in_call').keyup(function(e){ 
+    var fieldName = $(this).attr('name').split('[');
+    var errorField = fieldName[1].replace(']', '');
+    if($.isNumeric($(this).val()) || $(this).val() == '') {
+      $('#in-calls-subblock .'+errorField).remove();
+    }
+  });
+
+  $('.rates_text_out_call').keyup(function(e){  
+    var fieldName = $(this).attr('name').split('[');
+    var errorField = fieldName[1].replace(']', '');
+    if($.isNumeric($(this).val()) || $(this).val() == '') {
+      $('#out-calls-subblock .'+errorField).remove();
+    }
+  });
+
+  $('#fa_paa_lite_common_salary_type_id').change(function(){
+      hideShowSalaryBand();
+  });
+
+});
+
+ function bindCapsuleButtonEvent(formName, field, fieldType)
+    {
+       var fieldChoice = field.replace('_id', '') + '_choice';
+       $('.'+fieldChoice).click(function(){
+           var choiceId    = $(this).attr('id');
+           var selectedId = choiceId.replace(fieldChoice+'_', '');
+
+           if (fieldType == 'drop-down') {
+               if ($('#'+choiceId).hasClass('active')) {
+                   $('.'+fieldChoice).removeClass('active');
+                   selectedId = '';
+               } else {
+                   $('.'+fieldChoice).removeClass('active');
+                   $('#'+choiceId).addClass('active');
+               }
+               $('#'+formName+'_'+field).val(selectedId);
+           } else if (fieldType == 'radio') { 
+               $("input[name='"+formName+"["+field+"]']").attr('checked', false);
+               
+        if(!$( '#'+choiceId ).hasClass( "active" )) { 
+          $('.'+fieldChoice).removeClass('active');
+                    $('#'+choiceId).addClass('active');
+                    $("input[name='"+formName+"["+field+"]'][value='"+selectedId+"']").prop('checked', true);
+              } else {
+                $('.'+fieldChoice).removeClass('active');
+                }
+           } else if (fieldType == 'checkbox') {
+               if ($(this).hasClass('active')) {
+                   $(this).removeClass('active');
+               } else {
+                   $(this).addClass('active');
+               }
+               $("input[type='checkbox'][name='"+formName+"["+field+"][]'][value='"+selectedId+"']").trigger('click');
+           }
+       });
+    }
+    
+function bindDatePickerEvent() {
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+    $('.fdatepicker-paa').fdatepicker({
+        format: 'dd/mm/yyyy',
+        onRender: function (date) {
+            return date.valueOf() < now.valueOf() ? 'disabled' : '';
+        }
+    }).on('show', function(ev) {
+        $('.datepicker').css('width', ($(ev.target).width() + 28) +'px');
+    });
+    
+    $('.datepicker-icon').click(function(e){
+        $(this).next('input.fdatepicker-paa').focus();
+    });
+}
+
+function hideShowSalaryBand()
+{
+  if ($('#fa_paa_lite_common_salary_type_id').val() == '2454') {
+        $('#salary_band_id_div').show();
+        $('#fa_paa_lite_common_salary_band_id').selectmenu('refresh');
+    } else {
+        $('#fa_paa_lite_common_salary_band_id').val('');
+        $('#salary_band_id_div').hide();
+    }
+}
+
+function showHideEventEnd()
+{
+    if ($('#fa_paa_lite_common_include_end_time_0').is(':checked')) {
+        $('#event_end_block').show();
+    } else {
+        $('#event_end_block').hide();
+    }
+
+    $('#fa_paa_lite_common_include_end_time_0').click(function() {
+        if ($(this).is(':checked')) {
+            $('#event_end_block').show();
+        } else {
+            $('#event_end_block').hide();
+            $('#fa_paa_lite_common_event_end').val('');
+            $('#fa_paa_lite_common_event_end_time').val('');
+            $('#fa_paa_lite_common_event_end_time_autocomplete').val('');
+        }
+    });
+}
+
+function bindDatePickerEvent()
+{
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+ 
+    $('.fdatepicker-paa').fdatepicker({
+        format: 'dd/mm/yyyy',
+        onRender: function (date) {
+            return date.valueOf() < now.valueOf() ? 'disabled' : '';
+        }
+    }).on('show', function(ev) {
+        $('.datepicker').css('width', ($(ev.target).width() + 28) +'px');
+    });
+}
+
+function showRateSection(travelArrangementTxt) {
+    var travelArrangementTxt = $("#fa_paa_lite_common_travel_arrangements_id option:selected").text();
+    var tarvalArrVal = travelArrangementTxt.split(" ");
+    
+    if(tarvalArrVal.indexOf('In-call') > -1) { 
+      $("#element_rates_id").show();
+      $("#in-calls-subblock").show();
+      $("#out-calls-subblock").hide();
+    } else if((tarvalArrVal.indexOf('Out-call') > -1)) {
+      $("#element_rates_id").show();
+      $("#in-calls-subblock").hide();
+      $("#out-calls-subblock").show();
+    } else if((tarvalArrVal.indexOf('Either') > -1)) {
+      $("#element_rates_id").show();
+      $("#in-calls-subblock").show();
+      $("#out-calls-subblock").show();
+    } else { 
+      $("#element_rates_id").hide();
+      $("#in-calls-subblock").hide();
+      $("#out-calls-subblock").hide();
+    }
+  }
+
+
+function showPostagePrice(deliveryMethodId)
+{
+    if (!deliveryMethodId) {
+        deliveryMethodId = $("input[name='fa_paa_lite_common[delivery_method_option_id]']:checked").val();
+    }
+
+    if ($.inArray(deliveryMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::POSTED_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::POSTED_OR_COLLECT_ID')}}']) != '-1') {
+       $('#postage_section_id').show();
+    } else {
+        $('#fa_paa_lite_common_postage_price').val('');
+        $('#postage_section_id').hide();
+    }
+}
+
+function showPaypalSection(showMessage, paymentMethodId)
+    {
+       if (!paymentMethodId) {
+           paymentMethodId = $("input[name='fa_paa_lite_common[payment_method_id]']:checked").val();
+       }
+
+       if ($.inArray(paymentMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')}}']) != '-1') {
+           blockElement('#forsale_paypal_block');
+           $.ajax({
+               type: "POST",
+               url : '{{ path('ajax_get_paypal_commission') }}',
+               data: {town_id: $('#fa_paa_lite_common_location').val(), 'paypal_email': $('#fa_paa_lite_common_paypal_email').val(), 'paypal_first_name': $('#fa_paa_lite_common_paypal_first_name').val(), 'paypal_last_name': $('#fa_paa_lite_common_paypal_last_name').val()},
+               cache: false,
+           })
+           .always(function(response) {
+               unblockElement('#forsale_paypal_block');
+           })
+           .done(function(data) {
+               $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through Paypal.'|trans({}, 'frontend-paa-lite-common')}}');
+               if (showMessage) {
+                   $("#paypal_text_id").prev('small').remove();
+               }
+               paypalCommission      = data.paypalCommission;
+               isPaypalVerifiedEmail = data.isPaypalVerifiedEmail;
+               if (paypalCommission > 0) {
+                   $('#paypal_text_id').show();
+               } else {
+                   $('#paypal_text_id').hide();
+               }
+               if ($("input[name='fa_paa_lite_common[payment_method_id]']").is(':checked')) {
+                   $('#paypal_email_verify_status').removeClass('error-icon success-icon');
+                   if ($.inArray(paymentMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')}}']) != '-1') {
+                      $('#paypal_section_id').show();
+                      $('#paypal_text_id').html($('#paypal_text_id').html().replace('%paypal_commission%', paypalCommission+'%'));
+                      
+                      if (isPaypalVerifiedEmail) {
+                          $('#paypal_email_verify_status').addClass('success-icon');
+                          $('#paypal_email_verify_status').show('inline-block');
+                          $('#fa_paa_lite_common_paypal_email, #fa_paa_lite_common_paypal_first_name, #fa_paa_lite_common_paypal_last_name').removeClass('error');
+                      } else {
+                          $('#paypal_email_verify_status').addClass('error-icon');
+                          if ($('#fa_paa_lite_common_paypal_email').is(':visible') && $('#fa_paa_lite_common_paypal_email').val().length) {
+                              if (showMessage) {
+                                  $('#fa_paa_lite_common_paypal_email, #fa_paa_lite_common_paypal_first_name, #fa_paa_lite_common_paypal_last_name').addClass('error');
+                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-lite-common')}}</small>").insertBefore('#paypal_text_id');
+                                  $('#paypal_email_verify_status').show('inline-block');
+                              }
+                          } else {
+                              if (showMessage) {
+                                  $('#fa_paa_lite_common_paypal_email, #fa_paa_lite_common_paypal_first_name, #fa_paa_lite_common_paypal_last_name').addClass('error');
+                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-lite-common')}}</small>").insertBefore('#paypal_text_id');
+                                  $('#paypal_email_verify_status').show('inline-block');
+                              }
+                          }
+                      }
+                   } else {
+                       $('#paypal_section_id').hide();
+                       $("#paypal_text_id").prev('small').remove();
+                       $('#paypal_email_verify_status').hide();
+                       $('#fa_paa_lite_common_paypal_email, #fa_paa_lite_common_paypal_first_name, #fa_paa_lite_common_paypal_last_name').removeClass('error');
+                   }
+               } else {
+                   $('#paypal_section_id').hide();
+               }
+           });
+       } else {
+           $('#paypal_section_id').hide();
+           $("#paypal_text_id").prev('small').remove();
+           $('#paypal_email_verify_status').hide();
+           $('#fa_paa_lite_common_paypal_email, #fa_paa_lite_common_paypal_first_name, #fa_paa_lite_common_paypal_last_name').removeClass('error');
+       }
+    }
+
+
+function showHideRegNoFieldsOnLoad(hasRegNo) {
+    if (hasRegNo == 1) {
+       $('#reg_no_field').show();
+       $('#reg_no_error_msg').html('');
+       $('#reg_no_error_msg').hide();
+       {% if attribute(form, 'reg_no') is defined %}
+           {% if attribute(form, 'reg_no').vars.data is null or attribute(form, 'reg_no').vars.errors|length %}
+               $('#reg_no_details_fields').hide();
+           {% else %}
+               {% if app.request.get('is_cat_edit') %}
+                   loadRegNoFieldDetailsByRegNo($.trim($('#fa_paa_lite_common_reg_no').val()));
+               {% else %}
+                   $('#reg_no_details_fields').show();
+               {% endif %}
+           {% endif %}
+       {% endif %}
+   } else {
+       $('#fa_paa_lite_common_reg_no').val('');
+       $('#reg_no_field').hide();
+       $('#reg_no_details_fields').show();
+   }
+}
+
+function handlePriceWithAdTypeForSale(adTypeId, checkSimilarShowHideLink)
+    {
+        if (!adTypeId) {
+            adTypeId = $("input[name='fa_paa_lite_common[ad_type_id]']:checked").val();
+        }
+
+        var forsaleId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FORSALE_ID') }}";
+        var wantedId  = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_WANTED_ID') }}";
+        var swapId    = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_SWAPPING_ID') }}";
+        var freeId    = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FREETOCOLLECTOR_ID') }}";
+
+        if (adTypeId == wantedId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').show();
+            $('#price_suggestion').hide();
+            $('#paa_similar_adverts').hide();
+            $('#price_label').html("{{ 'What are you willing to pay?'|trans({}, 'frontend-paa-second-step') }}");
+            $('#fa_paa_lite_common_price').val(defaultPrice);
+            $('#fa_paa_lite_common_price_text').val('');
+            $('#paa_price .paa-bdr-box:first').addClass('paa-bdr-box-none');
+            $('div .btm-pa-0').removeClass('bdr-none');
+        } else if (adTypeId == swapId) {
+            $('#paa_price').hide();
+            $('#paa_price_text').show();
+            $('#price_label').html("{{ 'What would you like in exchange?'|trans({}, 'frontend-paa-second-step') }}");
+            $('#fa_paa_lite_common_price').val('');
+            $('#fa_paa_lite_common_price_text').val(defaultPriceText);
+            $('#paa_price .paa-bdr-box:first').addClass('paa-bdr-box-none');
+            $('div .btm-pa-0').removeClass('bdr-none');
+        } else if (adTypeId == freeId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').hide();
+            $('#price_suggestion').hide();
+            $('#paa_similar_adverts').hide();
+            $('#fa_paa_lite_common_price').val('0');
+            $('#fa_paa_lite_common_price_text').val('');
+            $('#paa_price .paa-bdr-box:first').removeClass('paa-bdr-box-none');
+            $('div .btm-pa-0').addClass('bdr-none');
+        } else if (adTypeId == forsaleId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').show();
+            $('#price_suggestion').show();
+            $('#paa_similar_adverts').show();
+            $('#price_label').html("{{ 'What\'s your price?'|trans({}, 'frontend-paa-second-step') }}");
+            $('#fa_paa_lite_common_price').val(defaultPrice);
+            $('#fa_paa_lite_common_price_text').val('');
+            $('#paa_price .paa-bdr-box:first').removeClass('paa-bdr-box-none');
+            $('div .btm-pa-0').removeClass('bdr-none');
+
+            $('#paa_price .paa-bdr-box:first').addClass('paa-box-none');
+        }
+    }
+
+function showHideRegNoFields(hasRegNo)
+{
+   if (hasRegNo == 1) {
+       $('#reg_no_field').show();
+       $('#reg_no_details_fields').hide();
+       $('#reg_no_error_msg').html('');
+       $('#reg_no_error_msg').hide();
+   } else {
+       $('#fa_paa_lite_common_reg_no').val('');
+       $('#fa_paa_lite_common_reg_no').trigger('focus');
+       resetRegNoFields();
+       $('#reg_no_field').hide();
+       $('#reg_no_details_fields').show();
+   }
+   
+   $('#add_vehicle_msg').html('{{ "Add your vehicle details:"|trans}}');
+}
+
+function loadRegNoFieldDetailsByRegNo(regNo)
+{
+    if (regNo) {
+        var category_id = "{{ app.request.get('category_id') }}";
+        
+
+        $('#lookup_vehicle').html('{{ "Loading..."|trans({}, 'frontend-paa-lite-common')}}');
+        var route = Routing.generate('ad_vrm_lookup_ajax', { 'vrm': regNo });
+        $.ajax({
+            type: 'post',
+            url: route,
+            data: {'category_id': category_id},
+            success: function(data) {
+                if (!$.isEmptyObject(data)) {
+                     var regNoFieldsData = data.reg_no_data;
+                     Object.keys(regNoFieldsData).forEach(function(field) {
+                         $('#fa_paa_lite_common_'+field).val(regNoFieldsData[field]);
+                     });
+                     $('#add_vehicle_msg').html('{{ "Confirm your vehicle details:"|trans}}');
+                     $('#reg_no_details_fields').show();
+                     checkCategoryWithCarWeb(regNo, regNoFieldsData);
+                } else {
+                    resetRegNoFields();
+                    $('#reg_no_details_fields').hide();
+                    $('#fa_paa_lite_common_reg_no').addClass('error');
+                    $('#reg_no_error_msg').html('{{ "Please enter correct registration number."|trans}}');
+                    $('#reg_no_error_msg').show();
+                }
+                $('#lookup_vehicle').html('{{ "Lookup Vehicle"|trans}}');
+            }
+        });
+    } else {
+        resetRegNoFields();
+        $('#fa_paa_lite_common_reg_no').addClass('error');
+        $('#reg_no_error_msg').html('{{ "Please enter registration number."|trans}}');
+        $('#reg_no_error_msg').show();
+        $('#reg_no_details_fields').hide();
+    }
+}
+
+function resetRegNoFields()
+{
+    var regNoDetailsFields = ['colour_id', 'body_type_id', 'reg_year', 'fuel_type_id', 'transmission_id', 'engine_size', 'no_of_doors', 'no_of_seats', 'fuel_economy', '062mph', 'top_speed', 'ncap_rating', 'co2_emissions', 'colour_id_autocomplete']
+    regNoDetailsFields.forEach(function(field, index) {
+        $('#fa_paa_lite_common_'+field).val('');
+    });
+}
+
+function checkCategoryWithCarWeb(regNo, regNoFieldsData)
+    {
+        var showMsg = false;
+        var userId  = "{{ app.request.get('user_id')}}";
+        var adminAdCounter  = "{{ app.request.get('admin_ad_counter')}}";
+        var carsId       = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID') }}";
+        var comVehicleId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMERCIALVEHICLES_ID') }}";
+        var motorbikesId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID') }}";
+        msg = '<div id="carweb_category_msg" class="modal-content">'+"{{'Are you sure your vehicle is %MAKE-MODEL%? It seems that it is registered as %CARWEB-MAKE-MODEL%.'|trans({'%MAKE-MODEL%' : 'MAKE-MODEL', '%CARWEB-MAKE-MODEL%' : 'CARWEB-MAKE-MODEL'}, 'messages') }}";
+
+        msg += '<div class="veh-lookup"><a href="javascript:void(0)" id="close_carweb_category_msg">'+"{{ 'Continue without changing'|trans({}, 'messages')}}"+'</a><a href="CHANGE-CATEGORY-ROUTE" id="change_to_carweb_category">'+"{{ 'Change to %CARWEB-MAKE-MODEL%'|trans({'%CARWEB-MAKE-MODEL%': 'CARWEB-MAKEMODEL-CHANGED'}, 'messages') }}"+'</a></div>';
+        msg += '</div>';
+        
+
+        $('#carweb_category_msg').remove();
+        if (regNoFieldsData['vehicle_cat_id'] == carsId || regNoFieldsData['vehicle_cat_id'] == comVehicleId) {
+            if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
+                if (regNoFieldsData['model_id'] && regNoFieldsData['cw_model_id'] && regNoFieldsData['model_id'] != regNoFieldsData['cw_model_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_admin_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_model_id'], 'r_no' : regNo, 'user_id': userId, 'admin_ad_counter': adminAdCounter});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['make']+' '+regNoFieldsData['model']+' ('+regNoFieldsData['vehicle_cat']+') </b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')');
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+
+                    showMsg = true;
+                }
+            } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
+                if (regNoFieldsData['model_id'] && regNoFieldsData['cw_motorbike_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_admin_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_motorbike_id'], 'r_no' : regNo, 'user_id': userId, 'admin_ad_counter': adminAdCounter});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['make']+' '+regNoFieldsData['model']+' ('+regNoFieldsData['vehicle_cat']+')</b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_motorbike']);
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+                    
+                    showMsg = true;
+                }
+            }
+        } else if (regNoFieldsData['vehicle_cat_id'] == motorbikesId) {
+            if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
+                if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_model_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_admin_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_model_id'], 'r_no' : regNo, 'user_id': userId, 'admin_ad_counter': adminAdCounter});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_make']+' '+regNoFieldsData['cw_model']+' ('+regNoFieldsData['cw_vehicle_cat']+')');
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+                    
+                    showMsg = true;
+                }
+            } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
+                if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_motorbike_id'] && regNoFieldsData['motorbike_id'] != regNoFieldsData['cw_motorbike_id']) {
+                    var changeCategoryRoute = Routing.generate('ad_post_admin_change_to_carweb_category', { 'category_id': regNoFieldsData['cw_motorbike_id'], 'r_no' : regNo, 'user_id': userId, 'admin_ad_counter': adminAdCounter});
+                    msg = msg.replace('MAKE-MODEL', '<b>'+regNoFieldsData['motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKE-MODEL', '<b>'+regNoFieldsData['cw_motorbike']+'</b>');
+                    msg = msg.replace('CARWEB-MAKEMODEL-CHANGED', regNoFieldsData['cw_motorbike']);
+                    msg = msg.replace('CHANGE-CATEGORY-ROUTE', changeCategoryRoute);
+                    
+                    showMsg = true;
+                }
+            }
+        }
+
+        // if selected main category and carwen main category is different then reset select and auto-complete fields because of different entity id options.
+        if (regNoFieldsData['vehicle_cat_id'] != regNoFieldsData['cw_vehicle_cat_id']) {
+            resetCarWebFieldsDueToCategoryMismatch(regNoFieldsData);
+        }
+            
+        if (showMsg) {
+            $('#carweb_category_msg_modal').append(msg);
+            $('#carweb_category_msg_modal').foundation('reveal', 'open');
+            $('#close_carweb_category_msg').click(function(e){
+                $('#carweb_category_msg').remove();
+                $('.close-reveal-modal').trigger('click');
+            });
+            
+            $('#change_to_carweb_category').click(function(e){
+                $('#carweb_category_msg').remove();
+                $('.close-reveal-modal').trigger('click');
+            });
+        }
+    }
+    
+    function resetCarWebFieldsDueToCategoryMismatch(regNoFieldsData)
+    {
+        Object.keys(regNoFieldsData).forEach(function(field) {
+            var fieldValue = regNoFieldsData[field];
+            if ($('#fa_paa_lite_common_'+field).is("select")) {
+               if (field != 'reg_year') {
+                   $('#fa_paa_lite_common_'+field).val('');
+               }
+            }
+            $('#fa_paa_lite_common_colour_id').val('');
+            $('#fa_paa_lite_common_colour_id_autocomplete').val('');
+        });
+    }
+    function handlePriceWithAdType(adTypeId)
+    {
+        if (!adTypeId) { 
+            adTypeId = $("input[name='fa_paa_lite_common[ad_type_id]']:checked").val();
+        }
+
+        var forsaleId = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FORSALE_ID') }}";
+        var wantedId  = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_WANTED_ID') }}";
+        var swapId    = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_SWAPPING_ID') }}";
+        var freeId    = "{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FREETOCOLLECTOR_ID') }}";
+
+        if (adTypeId == wantedId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').show();
+            $('#fa_paa_lite_common_price').val(defaultPrice);
+            $('#fa_paa_lite_common_price_text').val('');
+        } else if (adTypeId == swapId) {
+            $('#paa_price').hide();
+            $('#paa_price_text').show();
+            $('#fa_paa_lite_common_price').val('');
+            $('#fa_paa_lite_common_price_text').val(defaultPriceText);
+        } else if (adTypeId == freeId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').hide();
+            $('#fa_paa_lite_common_price').val('0');
+            $('#fa_paa_lite_common_price_text').val('');
+        } else if (adTypeId == forsaleId) {
+            $('#paa_price_text').hide();
+            $('#paa_price').show();
+            $('#fa_paa_lite_common_price').val(defaultPrice);
+            $('#fa_paa_lite_common_price_text').val('');
+        }
+    }
+    function handleDimensionLabelByUnit(unitId)
+    {
+        if (!unitId) {
+            unitId = $('#fa_paa_lite_common_dimensions_unit :checked').val();
+        }
+
+        if (unitId == 'cm') {
+            $('.dimensions_unit_label').html('('+ "{{ 'centimeters'|trans({}, 'frontend-ad-edit') }}" +')')
+        } else if (unitId == 'inch') {
+            $('.dimensions_unit_label').html('('+ "{{ 'inches'|trans({}, 'frontend-ad-edit') }}" +')')
+        }
+    }
+
+    function loadModelsByMakeId(makeId)
+    {
+        {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORBIKES_ID') %}
+        var selectedModelId = $('#fa_paa_lite_common_model_id').val();
+
+        if (!makeId) {
+            makeId = $('#fa_paa_lite_common_make_id').val();
+        }
+
+        if (makeId) {
+            var data = {
+                parent_id: makeId
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("entity_ajax_get_options_by_partent_json") }}',
+                data: data,
+                success: function(data) {
+                    if (data.length > 0) {
+                        $('#fa_paa_lite_common_model_id').html('<option value="">{{ 'Select model'|trans({}, 'frontend-ad-edit') }}</option>');
+                        for (var i=0, total = data.length; i < total; i++) {
+                            if (selectedModelId == data[i].id) {
+                                $('#fa_paa_lite_common_model_id').append('<option value="' + data[i].id + '" selected="selected">' + data[i].text + '</option>');
+                            } else {
+                                $('#fa_paa_lite_common_model_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                            }
+                        }
+                    } else {
+                        $('#fa_paa_lite_common_model_id').html('<option value="">{{ 'Select model'|trans({}, 'frontend-ad-edit') }}</option>');
+                    }
+                }
+            });
+        } else {
+            $('#fa_paa_lite_common_model_id').html('<option value="">{{ 'Select model'|trans({}, 'frontend-ad-edit') }}</option>');
+            $('#fa_paa_lite_common_model_id').selectmenu('refresh');
+        }
+        {% endif %}
+    }
+
+$(document).on("click", '.continue-btn', function(event) {
+  $('#upgradeSuccessPaymentModal').foundation('reveal', 'close');
+});
+  
+function getUserAddress()
+{
+    blockPage();
+    $.ajax({
+        type: "POST",
+        url : '{{ path("ajax_get_user_address") }}',
+        data: { postCode: $('#fa_payment_cyber_source_checkout_zip').val()}
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+        $('#form_zip_error').hide();
+        if (response.errorMsg.length) {
+            //clearForm($('#cyber_source_form'));
+            $('#zip_error_div').html(response.errorMsg);
+            $('#zip_error_div').show();
+        } else {
+            $('#zip_error_div').hide();
+            if (response.street_address && response.street_address.length) {
+                $('#fa_payment_cyber_source_checkout_street_address').val(response.street_address);
+                $('#fa_payment_cyber_source_checkout_street_address').focus();
+            }
+            if (response.street_address_2 && response.street_address_2.length) {
+                $('#fa_payment_cyber_source_checkout_street_address_2').val(response.street_address_2);
+                $('#fa_payment_cyber_source_checkout_street_address_2').focus();
+            }
+            if (response.town_name && response.town_name.length) {
+                $('#fa_payment_cyber_source_checkout_town').val(response.town_name);
+                $('#fa_payment_cyber_source_checkout_town').focus();
+            }
+            if (response.domicile_name && response.domicile_name.length) {
+                $('#fa_payment_cyber_source_checkout_county').val(response.domicile_name);
+                $('#fa_payment_cyber_source_checkout_county').focus();
+            }
+        }
+    });
+}
+
+function showHideCardDetail()
+{
+    var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();
+    if (paymentMethod == 0) {
+        $('#card_detail').show();
+        $('#card_detail_save').show();
+    } else {
+        $('#card_detail').hide();
+        $('#card_detail_save').hide();
+        $('.expiry-date').nextAll('small.error').first().remove();
+        $('.expiry-date').nextAll('small.error').first().remove();
+    }
+    $('#pay_now_btn').show();
+    bindFormErrorEvents();
+}
+
+//]]>
+</script>

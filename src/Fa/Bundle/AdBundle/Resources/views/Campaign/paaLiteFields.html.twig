@@ -1,0 +1,642 @@
+{% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
+{% set regNoDetailsFields = {0 : 'colour_id', 1 : 'body_type_id', 2 : 'reg_year', 3 : 'fuel_type_id', 4 : 'transmission_id', 5 : 'engine_size', 6 : 'no_of_doors', 7 : 'no_of_seats', 8: 'fuel_economy', 9 : '062mph', 10 : 'top_speed', 11 : 'ncap_rating', 12 : 'co2_emissions', 13 : 'colour_id_autocomplete'} %}
+{% set regNoDetailsHiddenFields = {0: 'fuel_economy', 1 : '062mph', 2 : 'top_speed', 3 : 'ncap_rating', 4 : 'co2_emissions'} %}
+{% set regNoDetailsOrderedFields = {} %}
+{% set isDimensionRendered = false %}
+{% set isNetProfitRendered = false %}
+{% set isTurnoverRendered = false %}
+{% set salaryRendered = false %}
+{% set isMotExpiryRendered = false %}
+{% set isRoadTaxExpiryRendered = false %}
+{% set isRentPerRendered = false %}
+{% set capsuleFields = {0 : 'furnishing_id', 1 : 'smoking_allowed_id', 2 : 'pets_allowed_id', 3 : 'dss_tenants_allowed_id', 4 : 'rooms_for_id', 5 : 'room_size_id', 6 : 'ownership_id', 7 : 'lease_type_id', 8: 'ad_type_id', 9:'is_new', 10:'experience_id',11:'position_preference_id', 12: 'equipment_provided_id'} %}
+
+{% for key, field in orderedFields %}
+    {% if field in regNoDetailsFields %}
+        {% set regNoDetailsOrderedFields = regNoDetailsOrderedFields|merge({(key) : (field)}) %}
+    {% endif %}
+{% endfor %}
+
+{% for field in orderedFields %}
+    {% set autocompleteFld = 0 %}
+    {% if '_autocomplete' in field %}
+        {% set autocompleteFld = 1 %}
+        {% set closeFld = field|replace({'_autocomplete':''}) %}
+    {% endif %}
+
+    {% if attribute(form, field) is defined %}
+        {{ set_variables('fields', {'lastField':field}) }}
+        {% if autocompleteFld == 1 %}
+            <div class="large-24 columns">
+                {% if field == 'location_autocomplete' %}
+                    {{ form_label(attribute(form, field)) }}<span class="asterick-color">*</span>
+                    <div class="relative">
+                        {{ form_widget(attribute(form, field), {'attr': {'class': 'white-field'}}) }}
+                        <a href="javascript:void(0);" id="fa_paa_lite_common_location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                    </div>
+                    {{ form_errors(attribute(form, field)) }}
+                    
+                    {# For Area Postal Code  #}
+                    {% set isLocationArea = locationRepository.checkLocationIsArea(attribute(form, 'location').vars.value, attribute(form, 'area').vars.value, fetch_container_instance()) %}
+                    {% if attribute(form, 'area_autocomplete').vars.errors|length  or isLocationArea %}
+                        {% set showHideAreaField = 'inline' %}
+                    {% elseif attribute(form, 'area_autocomplete').vars.value != '' %}
+                        {% set showHideAreaField = 'inline' %}
+                    {% else %}
+                        {% set showHideAreaField = 'none' %}
+                    {% endif %} 
+                    <div id="location_area_div" style="display:{{ showHideAreaField }};">
+                        <div class="row">
+                            <div class="large-12 columns mb10">
+                                <label for="fa_paa_lite_common_area_autocomplete">Type your postcode to find your area:</label>
+                                <div class="relative">
+                                    {{ form_widget(attribute(form, 'area_autocomplete'), {'attr': {'placeholder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : ' ') }}) }}
+                                    <a href="javascript:void(0);" id="fa_paa_lite_common_area_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                </div>
+                                {{ form_errors(attribute(form, 'area_autocomplete'), {'attr' : {'class' : '' }}) }}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    {{ form_label(attribute(form, field)) }}
+                    {% if attribute(form, field).vars.required %}
+                        <span class="asterick-color">*</span>
+                    {% endif %}
+                    <div class="relative">
+                        {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : '')}}) }}
+                        <a href="javascript:void(0);" id="fa_paa_lite_common_{{closeFld}}_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+
+                    </div>
+                    {{ form_errors(attribute(form, field)) }}
+                {% endif %}
+            </div>
+        {% elseif field == 'additional_job_requirements_id' or field == 'additional_benefits_id' or field== 'contract_type_id' %}
+            <div class="large-24 columns" id="{{field}}">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                <ul class="paa-features clearfix fa-equalizer" id="{{ field }}_equalizer">
+                    {% set selectedValues = attribute(form, field).vars.data %}
+                    {% for child in attribute(form, field) %}
+                        {% set activeClass = '' %}
+                        {% if child.vars.value in selectedValues %}
+                            {% set activeClass = 'active' %}
+                        {% endif %}
+                        <li class="{{ activeClass }}">
+                            {{ form_widget(child) }}
+                            <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                        </li>
+                    {% endfor %}
+                </ul>
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'title' or field == 'description' or field == 'personalized_title' %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'eg. Little Tikes'|trans({}, 'frontend-paa-lite-common'))}}) }}
+                {% if attribute(form, field).vars.max_length %}
+                    <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.max_length }, 'frontend-paa-lite-common') }}</div>
+                {% endif %}
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'has_reg_no' %}
+            <div id="reg_no_fields" class="large-24 columns">
+                    {{ form_label(attribute(form, field)) }}
+                    <div class="text-center label-inline reg-yes-no">
+                        {{ form_widget(attribute(form, 'has_reg_no')) }}
+                        {{ form_errors(attribute(form, 'has_reg_no')) }}
+                    </div>
+                <div id="reg_no_field">
+                    {% if attribute(form, 'reg_no') is defined %}
+                        <div>
+                            <label for="fa_paa_lite_common_reg_no">{{ 'Enter it here'|trans({}, 'frontend-paa-lite-common')}}:</label>
+                            {{ form_widget(attribute(form, 'reg_no')) }}
+                            {{ form_errors(attribute(form, 'reg_no')) }}
+                            <span class="error" id="reg_no_error_msg"></span>
+                            <button class="secondary-btn-1 expand mt10" id="lookup_vehicle" type="button">{{ 'Lookup Vehicle'|trans({}, 'frontend-paa-lite-common')}}</button>
+                        </div>
+                    {% endif %}
+                </div>
+                <div id="carweb_category_msg_modal" class="reveal-modal tiny" data-reveal>
+                    <a class="close-reveal-modal">&#215;</a>
+                    <h5 class="modal-title">&nbsp;</h5>
+                </div>
+                
+                <div id="reg_no_details_fields">
+                    {% if regNoDetailsOrderedFields|length %}
+                        {% if attribute(form, 'has_reg_no').vars.data == 1 %}
+                            {% if attribute(form, 'reg_no').vars.data is not null and attribute(form, 'reg_no').vars.errors|length < 1 %}
+                                <h5 class="text-center" id="add_vehicle_msg">{{ 'Confirm your vehicle details:'|trans({}, 'frontend-paa-lite-common') }}</h5>
+                            {% else %}
+                                <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-lite-common') }}</h5>
+                            {% endif %}
+                        {% else %}
+                            <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-lite-common') }}</h5>
+                        {% endif %}
+                        <div>
+                        {% for field in regNoDetailsOrderedFields %}
+                            {% if attribute(form, field) is defined %}
+                                {% if field in regNoDetailsHiddenFields %}
+                                    {{ form_widget(attribute(form, field), {'attr': {'style':'display:none'}}) }}
+                                {% elseif 'engine_size' in field %}
+                                    <label for="fa_paa_lite_common_engine_size">{{ form_label(attribute(form, field)) }}{{fetch_repository('FaAdBundle:AdMotors').getUnitByField('engine_size', true)}}</label>
+                                    {{ form_widget(attribute(form, field)) }}
+                                    {{ form_errors(attribute(form, field)) }}
+                                {% else %}
+                                    {{ form_row(attribute(form, field)) }}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <span id="reg_no_detail_ends"></span>
+            </div>  
+        {% elseif field == 'reg_no' %}
+        {% elseif field == 'features_id' %}
+            {% set totalChoices = attribute(form, field).vars.choices|length %}
+            {% set totalColumns = 2 %}
+            {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+            {% set choiceCount = 0 %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}            
+                {% for child in attribute(form, field) %}
+                    {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
+                    <div class="large-6 columns">
+                    {% endif %}
+                        <div>
+                            {{ form_widget(child) }}
+                            <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                        </div>
+                        {% set choiceCount = choiceCount + 1 %}
+                    {% if choiceCount == totalChoices or (choiceCount % choicesPerColumn) == 0 %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% elseif field == 'rent_per_id' %}
+            {% if isRentPerRendered == false %}
+                <div class="large-24 columns">
+                    {{ form_label(attribute(form, field)) }}
+                    {% if attribute(form, field).vars.required %}
+                        <span class="asterick-color">*</span>
+                    {% endif %}
+                    <div class="paa-enter-price clearfix">
+                        <div class="price-icon">£</div>
+                        {{ form_widget(attribute(form, field)) }}
+                        {{ form_errors(attribute(form, field)) }}
+                        {% if attribute(form, 'rent_per_id') is defined %}
+                            <div id="rent_per_choice_div" style="display:none">
+                                {{ form_widget(attribute(form, 'rent_per_id')) }}
+                            </div>
+                            <div class="capsule-links rent_per-links">
+                                {% set selectedRentPerId = attribute(form, 'rent_per_id').vars.data %}
+                                {% for choice in attribute(form, 'rent_per_id').vars.choices %}
+                                    {% set activeClass = '' %}
+                                    {% if choice.value == selectedRentPerId %}
+                                        {% set activeClass = 'active' %}
+                                    {% endif %}
+                                    <a href="javascript:void(0)" class="rent_per_choice {{ activeClass }}" id="rent_per_choice_{{ choice.value }}">{{ choice.label }}</a>
+                                {% endfor %}
+                            </div>
+                            {{ form_errors(attribute(form, 'rent_per_id'), {'attr': {'class' : 'error center'}}) }}
+                            {% set isRentPerRendered = true %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        {% elseif field == 'price' %}
+            <div class="large-24 columns" id="paa_price">
+                <label id="price_label">{{ attribute(form, field).vars.label }}</label>
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                <div class="paa-enter-price">
+                    <div class="price-icon">£</div>
+                     {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'Type price'|trans({}, 'frontend-paa-lite-common'))}}) }}
+                </div>
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'price_text' %}
+            <div class="large-24 columns" id="paa_price_text">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : '')}}) }}
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'deposit' %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                <div class="paa-enter-price">
+                    <div class="price-icon">£</div>
+                     {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'Type price'|trans({}, 'frontend-paa-lite-common'))}}) }}
+                </div>
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'date_available' %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                <div class="event-dates small-wrapper text-center">
+                   <div class="relative">
+                       <span class="datepicker-icon"></span>
+                       {{ form_widget(attribute(form, field), {'attr': {'class': 'fdatepicker-paa'}}) }}
+                       {{ form_errors(attribute(form, field)) }}
+                   </div>
+                </div>
+            </div>
+        {% elseif field == 'services_offered_id' or field == 'amenities_id' or field == 'bills_included_in_rent_id' or field == 'services_id' %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                <ul class="paa-features clearfix fa-equalizer" id="{{ field }}_equalizer">
+                    {% set selectedValues = attribute(form, field).vars.data %}
+                    {% for child in attribute(form, field) %}
+                        {% set activeClass = '' %}
+                        {% if child.vars.value in selectedValues %}
+                            {% set activeClass = 'active' %}
+                        {% endif %}
+                        <li class="{{ activeClass }}">
+                            {{ form_widget(child) }}
+                            <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% elseif field == 'net_profit_min' or field == 'net_profit_max' %}
+            {% if isNetProfitRendered == false %}
+                <div class="large-24 columns">
+                    {% if field == 'net_profit_min' %}
+                        {{ form_label(attribute(form, field)) }}
+                        {% if attribute(form, field).vars.required %}
+                            <span class="asterick-color">*</span>
+                        {% endif %}
+                        <div class="paa-enter-price">
+                            <div class="price-icon">£</div>
+                            {{ form_widget(attribute(form, 'net_profit_min'), {'attr': {'placeholder': ((attribute(form, 'net_profit_min').vars.attr.placeholder is defined and attribute(form, 'net_profit_min').vars.attr.placeholder is not null) ? attribute(form, 'net_profit_min').vars.attr.placeholder : 'Minimum'|trans) }}) }}
+                            {{ form_errors(attribute(form, 'net_profit_min')) }}
+                        </div>
+                    {% endif %}
+                    {% if field == 'net_profit_min' %}
+                        {{ form_label(attribute(form, field)) }}
+                        {% if attribute(form, field).vars.required %}
+                            <span class="asterick-color">*</span>
+                        {% endif %}
+                        <div class="paa-enter-price">
+                            <div class="price-icon">£</div>
+                            {{ form_widget(attribute(form, 'net_profit_max'), {'attr': {'placeholder': ((attribute(form, 'net_profit_max').vars.attr.placeholder is defined and attribute(form, 'net_profit_max').vars.attr.placeholder is not null) ? attribute(form, 'net_profit_max').vars.attr.placeholder : 'Maximum'|trans) }}) }}
+                            {{ form_errors(attribute(form, 'net_profit_max')) }}
+                        </div>
+                    {% endif %}
+                </div>
+                {% set isNetProfitRendered = true %}
+            {% endif %}
+        {% elseif field == 'turnover_min' or field == 'turnover_max' %}
+            {% if isTurnoverRendered == false %}
+                <div class="large-24 columns">
+                    <label>{{ 'Turnover'|trans }}</label>
+                    {% if field == 'turnover_min' %}
+                        <div class="paa-enter-price">
+                            <div class="price-icon">£</div>
+                            {{ form_widget(attribute(form, 'turnover_min'), {'attr': {'placeholder': ((attribute(form, 'turnover_min').vars.attr.placeholder is defined and attribute(form, 'turnover_min').vars.attr.placeholder is not null) ? attribute(form, 'turnover_min').vars.attr.placeholder : 'Minimum'|trans) }}) }}
+                            {{ form_errors(attribute(form, 'turnover_min')) }}
+                        </div>
+                    {% endif %}
+                    {% if field == 'turnover_max' %}
+                        <div class="paa-enter-price">
+                            <div class="price-icon">£</div>
+                            {{ form_widget(attribute(form, 'turnover_max'), {'attr': {'placeholder': ((attribute(form, 'turnover_max').vars.attr.placeholder is defined and attribute(form, 'turnover_max').vars.attr.placeholder is not null) ? attribute(form, 'turnover_max').vars.attr.placeholder : 'Maximum'|trans) }}) }}
+                            {{ form_errors(attribute(form, 'turnover_max')) }}
+                        </div>
+                    {% endif %}
+                </div>
+                {% set isTurnoverRendered = true %}
+            {% endif %}
+        {% elseif field == 'date_available' %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                <div class="relative">
+                    <span class="datepicker-icon"></span>
+                    {{ form_widget(attribute(form, field), {'attr': {'class': 'fdatepicker-paa'}}) }}
+                    {{ form_errors(attribute(form, field)) }}
+                </div>
+            </div>
+        {% elseif field == 'amenities_id' or field == 'bills_included_in_rent_id' or field == 'services_offered_id' %}
+            {% set totalChoices = attribute(form, field).vars.choices|length %}
+            {% set totalColumns = 2 %}
+            {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+            {% set choiceCount = 0 %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                {% for child in attribute(form, field) %}
+                    {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
+                    <div class="large-12 columns">
+                    {% endif %}
+                        <div>
+                            {{ form_widget(child) }}
+                            <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                        </div>
+                        {% set choiceCount = choiceCount + 1 %}
+                    {% if choiceCount == totalChoices or (choiceCount % choicesPerColumn) == 0 %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% elseif field == 'event_start' or field == 'event_start_time_autocomplete' or field == 'event_end' or field == 'event_end_time_autocomplete'  or field == 'include_end_time' %}
+            {% if eventRendered == false %}
+                <div class="large-24 columns">
+                    <label>{{ 'When?'|trans({}, 'frontend-paa-lite-common') }}</label>
+                    <div class="paa-title-ins">
+                        {{ 'Let users know starting date.'|trans({}, 'frontend-paa-lite-common') }}<br />
+                        {{ 'You can add time and duration if you want'|trans({}, 'frontend-paa-lite-common') }}
+                    </div>
+                    {% if attribute(form, 'event_start') is defined %}
+                        <div class="event-dates">
+                        <label>{{ 'Starts'|trans({}, 'frontend-paa-lite-common') }}</label>
+                        <div class="relative">
+                            <span class="datepicker-icon event_start"></span>
+                            {{ form_widget(attribute(form, 'event_start'), {'attr': {'placeholder': ((attribute(form, 'event_start').vars.attr.placeholder is defined and attribute(form, 'event_start').vars.attr.placeholder is not null) ? attribute(form, 'event_start').vars.attr.placeholder : 'dd/mm/yyyy'), 'class': 'fdatepicker-paa'}}) }}
+                            {{ form_errors(attribute(form, 'event_start')) }}
+                        </div>
+                        {% if attribute(form, 'event_start_time_autocomplete') is defined %}
+                            <div class="relative">
+                                {{ form_widget(attribute(form, 'event_start_time_autocomplete')) }}
+                                <a href="javascript:void(0);" id="fa_paa_lite_common_event_start_time_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                            </div>
+                            {{ form_errors(attribute(form, 'event_start_time_autocomplete')) }}
+                        {% endif %}
+                        {% if attribute(form, 'include_end_time') is defined %}
+                            <div class="label-inline">
+                            {{ form_widget(attribute(form, 'include_end_time')) }}
+                            {{ form_errors(attribute(form, 'include_end_time')) }}
+                            </div>
+                        {% endif %}
+                        </div>
+                    {% endif %}
+                    {% if attribute(form, 'event_end') is defined %}
+                        <div class="event-dates event-ends" id="event_end_block">
+                        <label>{{ 'End'|trans({}, 'frontend-paa-lite-common') }}</label>
+                        <div class="relative">
+                            <span class="datepicker-icon event_end"></span>
+                            {{ form_widget(attribute(form, 'event_end'), {'attr': {'placeholder': ((attribute(form, 'event_end').vars.attr.placeholder is defined and attribute(form, 'event_end').vars.attr.placeholder is not null) ? attribute(form, 'event_end').vars.attr.placeholder : 'dd/mm/yyyy'), 'class': 'fdatepicker-paa'}}) }}
+                            {{ form_errors(attribute(form, 'event_end')) }}
+                        </div>
+                        {% if attribute(form, 'event_end_time_autocomplete') is defined %}
+                            <div class="relative">
+                                {{ form_widget(attribute(form, 'event_end_time_autocomplete')) }}
+                                <a href="javascript:void(0);" id="fa_paa_lite_common_event_end_time_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                            </div>
+                            {{ form_errors(attribute(form, 'event_end_time_autocomplete')) }}
+                        {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+                {% set eventRendered = true %}
+            {% endif %}
+        {% elseif field == 'salary_type_id' or field == 'salary_band_id' or field == 'salary' %}
+           {% if salaryRendered == false %}
+                <div class="plarge-24 columns">
+                    {% if attribute(form, 'salary_type_id') is defined %}
+                        <div class="small-wrapper">
+                            {{ form_widget(attribute(form, 'salary_type_id')) }}
+                            {{ form_errors(attribute(form, 'salary_type_id')) }}
+                        </div>
+                    {% endif %}
+                    {% if attribute(form, 'salary_band_id') is defined %}
+                        <div class="small-wrapper" id="salary_band_id_div" style="display:none;">
+                            {{ form_widget(attribute(form, 'salary_band_id')) }}
+                            {{ form_errors(attribute(form, 'salary_band_id')) }}
+                        </div>
+                    {% endif %}
+                    {% if attribute(form, 'salary') is defined %}
+                        <div class="small-wrapper">
+                            {{ form_widget(attribute(form, 'salary'), {'attr': {'placeholder': ((attribute(form, 'salary').vars.attr.placeholder is defined and attribute(form, 'salary').vars.attr.placeholder is not null) ? attribute(form, 'salary').vars.attr.placeholder : 'Type specific salary amount')}}) }}
+                            {{ form_errors(attribute(form, 'salary')) }}
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+                {% set salaryRendered = true %}
+            {% endif %}
+        {% elseif field == 'dimensions_length' or field == 'dimensions_width' or field == 'dimensions_height' %}
+            {% if isDimensionRendered == false %}
+                <div class="large-24 columns">
+                <h3>{{ 'Dimensions'|trans }}</h3>
+                </div>
+                <div class="large-24 columns">
+                {{ form_row(attribute(form, 'dimensions_unit')) }}
+                </div>
+                <div class="large-24 columns">
+                    <label>{{ attribute(form, 'dimensions_length').vars.label }} <span class="dimensions_unit_label"></span></label>
+                    {{ form_widget(attribute(form, 'dimensions_length'), {'attr': {'placeholder': ((attribute(form, 'dimensions_length').vars.attr.placeholder is defined and attribute(form, 'dimensions_length').vars.attr.placeholder is not null) ? attribute(form, 'dimensions_length').vars.attr.placeholder : 'How long is it?'|trans) }}) }}
+                    {{ form_errors(attribute(form, 'dimensions_length')) }}
+                </div>
+                <div class="large-24 columns">
+                    <label>{{ attribute(form, 'dimensions_width').vars.label }} <span class="dimensions_unit_label"></span></label>
+                    {{ form_widget(attribute(form, 'dimensions_width'), {'attr': {'placeholder': ((attribute(form, 'dimensions_width').vars.attr.placeholder is defined and attribute(form, 'dimensions_width').vars.attr.placeholder is not null) ? attribute(form, 'dimensions_width').vars.attr.placeholder : 'How wide is it?'|trans) }}) }}
+                    {{ form_errors(attribute(form, 'dimensions_width')) }}
+                </div>
+                <div class="large-24 columns">
+                    <label>{{ attribute(form, 'dimensions_height').vars.label }} <span class="dimensions_unit_label"></span></label>
+                    {{ form_widget(attribute(form, 'dimensions_height'), {'attr': {'placeholder': ((attribute(form, 'dimensions_height').vars.attr.placeholder is defined and attribute(form, 'dimensions_height').vars.attr.placeholder is not null) ? attribute(form, 'dimensions_height').vars.attr.placeholder : 'How tall is it?'|trans) }}) }}
+                    {{ form_errors(attribute(form, 'dimensions_height')) }}
+                    {% set isDimensionRendered = true %}
+                </div>
+            {% endif %} 
+        {% elseif field == 'rates_id' %}
+            <div class="large-24 columns">
+                {{ include('FaAdBundle:AdPost:paaFieldRates.html.twig') }} 
+            </div>
+        {% elseif field in capsuleFields %}
+            <div class="large-24 columns">
+                {% set choiceField = field|replace({'_id':''})%}
+                {% set isMultiple = false %}
+                {% if attribute(form, field).vars.multiple == true %}
+                    {% set isMultiple = true %}
+                {% endif %}
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                <div id="{{choiceField}}_choice_div" style="display:none">
+                    {{ form_widget(attribute(form, field)) }}
+                </div>
+                <div class="capsule-links {{choiceField}}-links">
+                    {% set selectedId = attribute(form, field).vars.data %}
+                    {% for choice in attribute(form, field).vars.choices %}
+                        {% set activeClass = '' %}
+                        {% if isMultiple == true %}
+                            {% if choice.value in selectedId %}
+                                {% set activeClass = 'active' %}
+                            {% endif %}
+                        {% else %}
+                            {% if choice.value == selectedId %}
+                                {% set activeClass = 'active' %}
+                            {% endif %}
+                        {% endif %}
+                        <a href="javascript:void(0)" class="{{choiceField}}_choice {{ activeClass }}" id="{{choiceField}}_choice_{{ choice.value }}">{{ choice.label }}</a>
+                    {% endfor %}
+                </div>
+                {{ form_errors(attribute(form, field), {'attr': {'class' : 'error center'}}) }}
+            </div>
+        {% elseif field == 'delivery_method_option_id' %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                <div id="delivery_method_option_choice_div" class="radio-capsule delivery-method-links">
+                    {{ form_widget(attribute(form, field), {'attr': {'class' : 'radio-capsule-btn'}}) }}
+                </div>
+                 <div id="postage_section_id" {% if not form.postage_price.vars.errors|length %}style="display:none;"{% endif %}>
+                    <div class="delivery-ins">{{ 'If you like you can add a postage charge'|trans({}, 'frontend-paa-lite-common') }}</div>
+                    <div>
+                        <div class="paa-enter-price clearfix delivery-price">
+                            <div class="price-icon">&pound;</div>
+                            {{ form_widget(attribute(form, 'postage_price'), {'attr': {'class' : 'white-field'}}) }}
+                            {{ form_errors(attribute(form, 'postage_price')) }}
+                        </div>
+                    </div>
+                </div>
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'payment_method_id' %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                <div id="payment_method_choice_div" class="radio-capsule payment-method-links">
+                    {{ form_widget(attribute(form, field), {'attr': {'class' : 'radio-capsule-btn'}}) }}
+                </div>
+                <div class="paa-paypal-mail" id="paypal_section_id" {% if not form.paypal_email.vars.errors|length %}style="display:none;"{% endif %}>
+                    <p class="text-center mt20">{{'Please provide the first name, last name and the email address used for your Paypal account'|trans({}, 'frontend-paa-lite-common')}}</p>
+                    {% set paypalUserEmail = null %}
+                    {% set paypalFirstName = null %}
+                    {% set paypalLastName = null %}
+                    {% if app.user and app.user.getPaypalEmail() and app.request.getMethod() != 'POST' %}
+                        {% set paypalUserEmail = app.user.getPaypalEmail() %}
+                    {% elseif app.request.getMethod() == 'POST' %}
+                        {% set paypalUserEmail = app.request.get('fa_paa_lite_common_paypal_email') %}
+                    {% endif %}
+                    {% if app.user and app.user.getPaypalFirstName() and app.request.getMethod() != 'POST' %}
+                        {% set paypalFirstName = app.user.getPaypalFirstName() %}
+                    {% elseif app.request.getMethod() == 'POST' %}
+                        {% set paypalFirstName = app.request.get('fa_paa_lite_common_paypal_first_name') %}
+                    {% endif %}
+                    {% if app.user and app.user.getPaypalLastName() and app.request.getMethod() != 'POST' %}
+                        {% set paypalLastName = app.user.getPaypalLastName() %}
+                    {% elseif app.request.getMethod() == 'POST' %}
+                        {% set paypalLastName = app.request.get('fa_paa_lite_common_paypal_last_name')%}
+                    {% endif %}
+                    
+                    <label>{{'Paypal details'|trans({}, 'frontend-paa-lite-common')}}</label>
+                    {{ form_widget(attribute(form, 'paypal_first_name'), {'value': paypalFirstName, 'attr': {'class' : 'white-field', 'placeholder': 'Paypal first name'|trans({}, 'frontend-paa-lite-common')}}) }}
+                    {{ form_widget(attribute(form, 'paypal_last_name'), {'value': paypalLastName, 'attr': {'class' : 'white-field', 'placeholder': 'Paypal last name'|trans({}, 'frontend-paa-lite-common')}}) }}
+                    {{ form_widget(attribute(form, 'paypal_email'), {'value': paypalUserEmail, 'attr': {'class' : 'white-field', 'placeholder': 'Paypal email address'|trans({}, 'frontend-paa-lite-common')}}) }}
+                    <button type="button" class="secondary-btn-1 mb0" id="verify_paypal_email_button">{{'Verify'|trans({}, 'frontend-paa-lite-common')}}</button><span class="error-icon" id="paypal_email_verify_status" style="display:none;">error</span>
+                    {{ form_errors(attribute(form, 'paypal_email')) }}
+                    <div class="paypal-ins" id="paypal_text_id"></div>
+                </div>
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'photo_error' %}
+            <div class="large-24 columns" id="upload_image_fld">
+                <label>Add Images</label>
+                <span class="asterick-color">
+                {% if attribute(form, field).vars.required %}
+                    *
+                {% endif %}
+                </span>
+
+                <label for="fa_paa_lite_common_photo_error" class="upload-btn expand" id="drag_dop_anchor" style="width:100%">{{ 'Upload'|trans({}, 'frontend-paa-lite-common') }}</label>
+                
+                {{ form_widget(attribute(form, field),{'attr': {'class':'show-for-sr'}}) }}
+                {% set imageAdId = (app.session.get('paa_image_id')?app.session.get('paa_image_id'):null) %}
+                {{ render(controller('FaAdBundle:AdImage:showImageUploader', {'adId': imageAdId, 'vertical': vertical, 'is_paalite':1, 'formName': form.vars.name, 'maxValue': (form.photo_error.vars.attr.max_value is defined ? form.photo_error.vars.attr.max_value : null) })) }}
+                <span class="error" id="upload_image_error" style="display:none"></span>
+            </div>
+        {% elseif field == 'youtube_video_url' %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                {{ form_widget(attribute(form, 'youtube_video_url'), {'attr': {'autocomplete': 'off','class': 'white-field youtube-icon', 'placeholder': ((attribute(form, 'youtube_video_url').vars.attr.placeholder is defined and attribute(form, 'youtube_video_url').vars.attr.placeholder is not null) ? attribute(form, 'youtube_video_url').vars.attr.placeholder : 'Youtube link'|trans({}, 'frontend-paa-lite-common')) }}) }}
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif field == 'business_phone' %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'Type phone number'|trans({}, 'frontend-paa-lite-common'))}}) }}
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% elseif (field == 'mot_expiry_month' or field == 'mot_expiry_year') %}
+            {% if isMotExpiryRendered == false %}
+                <div class="large-24 columns">
+                    <div class="small-wrapper text-center">
+                           <div class="mot-month">
+                            {{ form_widget(attribute(form, 'mot_expiry_month')) }}
+                            {{ form_errors(attribute(form, 'mot_expiry_month')) }}
+                        </div>
+                        <div class="mot-year">
+                            {{ form_widget(attribute(form, 'mot_expiry_year')) }}
+                            {{ form_errors(attribute(form, 'mot_expiry_year')) }}
+                        </div>
+                    </div>
+                </div>
+                {% set isMotExpiryRendered = true %}
+            {% endif %}
+        {% elseif (field == 'road_tax_expiry_month' or field == 'road_tax_expiry_year') %}
+            {% if isRoadTaxExpiryRendered == false %}
+                <div class="large-24 columns">
+                    <div class="text-center">
+                        <div class="mot-month">
+                            {{ form_widget(attribute(form, 'road_tax_expiry_month')) }}
+                            {{ form_errors(attribute(form, 'road_tax_expiry_month')) }}
+                        </div>
+                        <div class="mot-year">
+                            {{ form_widget(attribute(form, 'road_tax_expiry_year')) }}
+                            {{ form_errors(attribute(form, 'road_tax_expiry_year')) }}
+                        </div>
+                    </div>
+                </div>
+                {% set isRoadTaxExpiryRendered = true %}
+            {% endif %}
+        {% else %}
+            <div class="large-24 columns">
+                {{ form_label(attribute(form, field)) }}
+                {% if attribute(form, field).vars.required %}
+                    <span class="asterick-color">*</span>
+                {% endif %}
+                {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : '')}}) }}
+                {{ form_errors(attribute(form, field)) }}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endfor %}

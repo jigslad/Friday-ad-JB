@@ -1,0 +1,32 @@
+<div class="columns">
+    <label for="fa_paa_lite_login_username" class="required">Email address</label>
+    <input class="form-control" id="fa_paa_lite_login_username" name="fa_paa_lite_login[username]" required="required" autocomplete="off" tabindex="1" type="email">
+    <div id="fa_paa_lite_login_user_type" autocomplete="off" onchange="showUserTypeField()" class="label-inline paa-user-type">                                
+        <span class="custom-radio checked">
+            <input id="fa_paa_lite_login_user_type_0" name="fa_paa_lite_login[user_type]" value="1" checked="checked" type="radio">
+        </span>
+        <label for="fa_paa_lite_login_user_type_0" class="required">I have an account</label>                                
+        <span class="custom-radio ">
+            <input id="fa_paa_lite_login_user_type_1" name="fa_paa_lite_login[user_type]" value="2" type="radio">
+        </span>
+        <label for="fa_paa_lite_login_user_type_1" class="required">I'm new to Friday-Ad</label>        
+    </div>
+</div>
+<div class="columns">
+    <div id="paa_password_field_div" class="relative paa-forgot-pwd">
+        <label for="fa_paa_lite_login_password" class="required">Password</label>
+        <input class="form-control" id="fa_paa_lite_login_password" name="fa_paa_lite_login[password]" required="required" tabindex="2" type="password">
+        <a href="/forgot_password" data-reveal-id="forgotPasswordModal" data-reveal-ajax="true">Forgot password?</a>
+        <div class="label-inline">
+            <span class="custom-checkbox ">
+                <input id="fa_paa_lite_login_show_password" name="fa_paa_lite_login[show_password]" class="form-control" value="1" type="checkbox">
+            </span>
+            <label for="fa_paa_lite_login_show_password">Show password</label>
+        </div>
+    </div>
+    <span class="error" id="login-error-span" style="display:none"></span>
+</div>
+<div class="columns" id="login-save-button-div">
+    <button type="button" id="fa_paa_lite_login_save" name="fa_paa_lite_login[save]" class="primary-btn-1 button expand">Next step: add more details</button>
+    <button type="button" id="fa_paa_lite_login_loading" class="primary-btn-1 button expand loading-in-button" style="display:none;"><img src="{{ asset_url('facore/images/ajax_loader.gif') }}" style="margin-right:15px">{{ 'Logging... '|trans({}, 'frontend-paa-lite-common') }}</button>
+</div>

@@ -1,0 +1,385 @@
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+           
+$(document).on("click", '.continue-btn', function(event) {
+	$('#upgradeSuccessPaymentModal').foundation('reveal', 'close');
+});
+
+{% if paymentTransactionJs['ga_transaction'] is defined and paymentTransactionJs['ga_transaction'].PAYMENT_ID is defined %}
+    ga('require', 'ecommerce');
+    
+    {% if paymentTransactionJs['getTranscationJs'] is defined %}
+        {{ paymentTransactionJs['getTranscationJs'] | raw }}
+    {% endif %}
+    
+    {% if paymentTransactionJs['getItemJs'] is defined %}
+        {{ paymentTransactionJs['getItemJs'] | raw }}
+    {% endif %}
+    
+    ga('ecommerce:send');
+    
+    $.ajax({
+        type: "POST",
+        url: "{{path('ajax_update_ga_status')}}",
+        data: {'id':'{{ paymentTransactionJs['ga_transaction'].PAYMENT_ID }}'},
+    })
+    .done(function(response) {
+    });
+
+{% endif %}
+	
+function upgradeToFeaturedBtn(id, rootCategoryId) {
+	blockPage();
+	ga('send', 'event', 'Search Results', 'Upgrade', 'Click');
+    var route = Routing.generate('upgrade_to_featured_ad', { 'adId': id, 'rootCategoryId': rootCategoryId});
+    $.ajax({
+        type: "GET",
+        url : route,
+        data : {'redirectUrl': '{{app.request.getUri()}}'},
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+    	$('#upgradeBasicAdToFeaturedModal').html(response.htmlContent);
+        $('#upgradeBasicAdToFeaturedModal').foundation('reveal', 'open');
+    });
+}
+
+function paypalPaymentProcess() {
+    blockElement('#upgradeBasicAdToFeaturedModal'); 
+    // Stop form from submitting normally
+    event.preventDefault();
+    var formData = $('#cyber_source_form').serializeArray();
+    
+    var redirect_url;
+
+    {% if paa_lite_redirect is defined and paa_lite_redirect==1 %}
+        redirect_url = 'paypal_add_to_cart_ajax';
+    {% else %}
+        redirect_url = 'paypal_upgrade_to_featured_ad_ajax';
+        ga('send', 'event', 'Search Results', 'Upgrade', 'Pay - Paypal'); 
+    {% endif %}
+
+    var route = Routing.generate(redirect_url);
+
+    $.ajax({
+        type: "POST",
+        url: route,
+        data: formData,
+    })
+    .always(function(response) {
+        unblockElement('#upgradeBasicAdToFeaturedModal');
+    })
+    .done(function(response) {
+    	if(response.htmlContent.success) {
+            window.location.href = "{{ path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')}) }}";
+        } else {
+			if(response.error && response.error != '') {
+				$("#post-all-errors").html('<small class="error">'+response.error+'<br></small>');
+				return false;
+			}                
+        }
+    });
+} 
+
+function getUserAddress()
+{
+    blockPage();
+    $.ajax({
+        type: "POST",
+        url : '{{ path("ajax_get_user_address") }}',
+        data: { postCode: $('#fa_payment_cyber_source_checkout_zip').val()}
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+        $('#form_zip_error').hide();
+        if (response.errorMsg.length) {
+            //clearForm($('#cyber_source_form'));
+            $('#zip_error_div').html(response.errorMsg);
+            $('#zip_error_div').show();
+        } else {
+            $('#zip_error_div').hide();
+            if (response.street_address && response.street_address.length) {
+                $('#fa_payment_cyber_source_checkout_street_address').val(response.street_address);
+                $('#fa_payment_cyber_source_checkout_street_address').focus();
+            }
+            if (response.street_address_2 && response.street_address_2.length) {
+                $('#fa_payment_cyber_source_checkout_street_address_2').val(response.street_address_2);
+                $('#fa_payment_cyber_source_checkout_street_address_2').focus();
+            }
+            if (response.town_name && response.town_name.length) {
+                $('#fa_payment_cyber_source_checkout_town').val(response.town_name);
+                $('#fa_payment_cyber_source_checkout_town').focus();
+            }
+            if (response.domicile_name && response.domicile_name.length) {
+                $('#fa_payment_cyber_source_checkout_county').val(response.domicile_name);
+                $('#fa_payment_cyber_source_checkout_county').focus();
+            }
+        }
+    });
+}
+
+function showHideCardDetail()
+{
+    var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();
+    if (paymentMethod == 0) {
+        $('#card_detail').show();
+        $('#card_detail_save').show();
+    } else {
+        $('#card_detail').hide();
+        $('#card_detail_save').hide();
+        $('.expiry-date').nextAll('small.error').first().remove();
+        $('.expiry-date').nextAll('small.error').first().remove();
+    }
+    $('#pay_now_btn').show();
+    bindFormErrorEvents();
+}
+
+
+{% set amazonPayManager  = container.get('fa.amazonpay.manager') %}
+{% set amazonPayConfig  = amazonPayManager.getAmazonpayConfig() %}
+{% set amazonPayMode = container.getParameter('fa.amazon.mode') %}
+{% set amazonPayJs = container.getParameter('fa.amazon.'~amazonPayMode~'.url') %}
+{% set amazonpayUrl = path('amazonpay_checkout') %}
+
+
+/*
+Copyright (C) 2016 Apple Inc. All Rights Reserved.
+See LICENSE.txt for this sample’s licensing information
+Abstract:
+The main client-side JS. Handles displaying the Apple Pay button and requesting a payment.
+*/
+
+function showApplePayButton() {
+    HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
+    const buttons = document.getElementsByClassName("apple-pay-button");
+    for (let button of buttons) {
+        button.className += " visible";
+    }
+}
+
+
+function getApplePaySession(url) {
+  return new Promise(function (resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/getApplePaySession');
+    xhr.onload = function () {
+      if (this.status >= 200 && this.status < 300) {
+        resolve(JSON.parse(xhr.response));
+      } else {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      }
+    };
+
+    xhr.onerror = function () {
+      reject({
+        status: this.status,
+        statusText: xhr.statusText
+      });
+    };
+
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify({url: url}));
+
+  });
+
+}
+
+
+ function verifyLoggedIn() {
+    // if you want to display a message.
+    var msgElem = document.getElementById("login-state-msg");
+
+    var options = {
+        scope: "profile postal_code payments:widget payments:shipping_address",
+        popup: true,
+        interactive: 'never'
+    };
+
+    // check if we are logged in
+    authRequest = amazon.Login.authorize (options, function(response) {
+        // this code is executed ASYNCHRONOUSLY
+
+        if ( response.error ) { 
+            // USER NOT LOGGED IN
+            console.log("verifyLoggedIn() - SESSION NOT ACTIVE - " + new Date());
+            msgElem.innerHTML = "NOT logged in yet. Click 'Amazon Pay' or Go to Login screen.";
+        } else {
+            // USER IS LOGGED IN
+            console.log("verifyLoggedIn() - SESSION ACTIVE - " + new Date());
+
+            // optionally, get the profile info
+            console.dir('access_token= ' + response.access_token);
+
+            amazon.Login.retrieveProfile(function (response) {
+                // Display profile information.
+                console.dir('CustomerId= ' + response.profile.CustomerId);
+                console.dir('Name= ' + response.profile.Name);
+                console.dir('PostalCode= ' + response.profile.PostalCode);
+                console.dir('PrimaryEmail= ' + response.profile.PrimaryEmail);
+
+                alert("Hello " + response.profile.Name + "! Just click Pay!");
+            });
+        }
+    });
+}
+
+/**
+* Apple Pay Logic
+* Our entry point for Apple Pay interactions.
+* Triggered when the Apple Pay button is pressed
+*/
+
+function applePayButtonClicked() { 
+	 blockElement('#upgradeBasicAdToFeaturedModal'); 
+     // Stop form from submitting normally
+     event.preventDefault();
+     var formData = $('#cyber_source_form').serializeArray();
+     var redirect_url;
+    {% if paa_lite_redirect is defined and paa_lite_redirect==1 %}
+        redirect_url = 'amazon_add_to_cart_ajax';
+    {% else %}
+        redirect_url = 'amazon_upgrade_to_featured_ad';
+        ga('send', 'event', 'Search Results', 'Upgrade', 'Pay - Amazon Pay'); 
+    {% endif %}
+     var route = Routing.generate(redirect_url);
+     $.ajax({
+         type: "POST",
+         url: route,
+         data: formData,
+     })
+     .always(function(response) {
+         unblockElement('#upgradeBasicAdToFeaturedModal');
+     })
+     .done(function(response) {
+	 	if(response.error && response.error != '') {
+			$("#post-all-errors").html('<small class="error">'+response.error+'<br></small>');
+			return false;
+		} else if(response.htmlContent.success) {
+     		const paymentRequest = {
+     	            countryCode: 'US',
+     	            currencyCode: 'USD',
+     	            shippingMethods: [
+     	                {
+     	                    label: 'Free Shipping',
+     	                    amount: '0.00',
+     	                    identifier: 'free',
+     	                    detail: 'Delivers in five business days',
+     	                },
+
+     	                {
+     	                    label: 'Express Shipping',
+     	                    amount: '5.00',
+     	                    identifier: 'express',
+     	                    detail: 'Delivers in two business days',
+     	                },
+     	            ],
+
+     	            lineItems: [
+     	                {
+     	                    label: 'Shipping',
+     	                    amount: '0.00',
+     	                }
+     	            ],
+     	            total: {
+     	                label: 'Apple Pay Example',
+     	                amount: '8.99',
+     	            },
+
+     	            supportedNetworks:[ 'amex', 'discover', 'masterCard', 'visa'],
+     	            merchantCapabilities: [ 'supports3DS' ],
+     	            requiredShippingContactFields: [ 'postalAddress', 'email' ],
+     	        };
+
+     	        /*const session = new ApplePaySession(1, paymentRequest);*/
+     	        /**
+     	        * Merchant Validation
+     	        * We call our merchant session endpoint, passing the URL to use
+     	        */
+
+     	        /*session.onvalidatemerchant = (event) => {
+     	            console.log("Validate merchant");
+     	            const validationURL = event.validationURL;
+
+     	            getApplePaySession(event.validationURL).then(function(response) {
+     	                console.log(response);
+     	                session.completeMerchantValidation(response);
+     	            });
+     	        };*/
+
+     	        /**
+     	        * Shipping Method Selection
+     	        * If the user changes their chosen shipping method we need to recalculate
+     	        * the total price. We can use the shipping method identifier to determine
+     	        * which method was selected.
+     	        */
+
+     	        /*session.onshippingmethodselected = (event) => {
+     	            const shippingCost = event.shippingMethod.identifier === 'free' ? '0.00' : '5.00';
+     	            const totalCost = event.shippingMethod.identifier === 'free' ? '8.99' : '13.99';
+
+     	            const lineItems = [
+     	                {
+     	                    label: 'Shipping',
+     	                    amount: shippingCost,
+     	                },
+
+     	            ];
+
+     	            const total = {
+     	                label: 'Apple Pay Example',
+     	                amount: totalCost,
+     	            };
+
+     	            session.completeShippingMethodSelection(ApplePaySession.STATUS_SUCCESS, total, lineItems);
+     	        };*/
+
+     	        /**
+     	        * Payment Authorization
+     	        * Here you receive the encrypted payment data. You would then send it
+     	        * on to your payment provider for processing, and return an appropriate
+     	        * status in session.completePayment()
+     	        */
+
+     	        /*session.onpaymentauthorized = (event) => {
+     	            // Send payment for processing...
+     	            const payment = event.payment;
+
+     	            // ...return a status and redirect to a confirmation page
+     	            session.completePayment(ApplePaySession.STATUS_SUCCESS);
+     	            window.location.href = "/checkout_payment_success";
+     	        }*/
+
+     	        // All our handlers are setup - start the Apple Pay payment
+     	        //session.begin();
+         } else {
+             alert("Something went wrong!");
+         }
+     });
+    
+}
+
+
+var authRequest;var amazonpath = "{{amazonpayUrl}}";
+OffAmazonPayments.Button("AmazonPayButton", "{{amazonPayConfig['merchant_id']}}", {
+    type: "PwA",
+    color: "DarkGray",
+    size: "large",
+    authorization: function () {
+        loginOptions = { scope: "profile postal_code payments:widget payments:shipping_address", popup: true };
+        authRequest = amazon.Login.authorize(loginOptions, amazonpath);
+
+    },
+    onError: function (error) {
+        // something bad happened
+    }
+});
+	
+//]]>
+</script>

@@ -1,0 +1,39 @@
+campaigns_admin:
+    path:     /
+    defaults: { _controller: "FaAdBundle:CampaignAdmin:index" }
+
+campaigns_new_admin:
+    path:     /new
+    defaults: { _controller: "FaAdBundle:CampaignAdmin:new" }
+    options:
+        expose: true
+
+campaigns_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaAdBundle:CampaignAdmin:edit" }
+
+campaigns_create_admin:
+    path:     /create
+    defaults: { _controller: "FaAdBundle:CampaignAdmin:create" }
+    requirements: { methods: post }
+
+campaigns_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaAdBundle:CampaignAdmin:update" }
+    requirements: { methods: post|put }
+
+campaigns_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaAdBundle:CampaignAdmin:delete" }
+
+campaigns_new_from_category_admin:
+    path:     /{category_id}/new
+    defaults: { _controller: "FaAdBundle:CampaignAdmin:newFromCategory" }
+    options:
+        expose: true
+
+ajax_check_campaign_slug_exist:
+    path:     /ajax/check_campaign_slug_exist
+    defaults: { _controller: FaAdBundle:CampaignAdmin:ajaxCheckCampaignSlugExist }
+    options:
+        expose: true

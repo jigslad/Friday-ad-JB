@@ -1,0 +1,487 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set packageIdArray = {} %}
+{% set printOptionCount = 0 %}
+{% set printDurationId = '' %}
+{% set packageId = '' %}
+
+{% if packages|length %}
+    {% for package in packages %}
+        {% set packageIdArray = packageIdArray|merge({0 : package.getPackage().getId()}) %}
+    {% endfor %}
+
+    {% set printPackageDuration = fetch_repository('FaPromotionBundle:PackagePrint').getPrintDurationForPackages(packageIdArray) %}
+    {% if printPackageDuration|length %}
+        {% set printEditions = fetch_repository('FaAdBundle:PrintEdition').getActivePrintEditionArray() %}
+        {% for printDuration in printPackageDuration %}
+            {% if printOptionCount < printDuration|length %}
+                {% set printOptionCount = printDuration|length %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+{% set isAdminPostedAd = false %}
+{% if adObj is defined and adObj['source'] == constant('Fa\\Bundle\\AdBundle\\Repository\\AdRepository::SOURCE_ADMIN') %}
+    {% set isAdminPostedAd = true %}
+{% endif %}
+
+{% set adRootCategoryId = null %}
+{% block body %}
+<a class="close-reveal-modal" style="display:{% if popup_title is defined %}none{% else %}block{% endif %}">&#215;</a> 
+
+<h5 class="modal-title">
+{% if popup_title is defined %} {{popup_title}} {% else %} Upgrade {% endif %}
+</h5>
+<div class="modal-content  remove-modal">
+    <div data-alert class="alert-box alert radius" style="display:none;" id="deadlock_error_main">
+        <span class="alert-icon">&nbsp;</span>
+        <span id="deadlock_error"></span>
+        <a href="javascript:void(0)" class="close">&times;</a>
+    </div>   
+{% if packages|length %}     
+    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }}  
+    <div class="row fa-equalizer" id="package_equalizer">
+        {% for package in packages %}
+            {% set packageValues = array_unserialize(package.getPackage().getValue()) %}
+            {% set packageActualPrice = 0 %}
+            {% set packagePrice = '' %}
+
+            {% if isAdminPostedAd %}
+                {% if printPackageDuration[package.getPackage().getId()][0]['admin_price'] is defined and printPackageDuration[package.getPackage().getId()][0]['admin_price'] is not null %}
+                    {% if printPackageDuration[package.getPackage().getId()][0]['admin_price'] > 0 %}
+                        {% set packageActualPrice = printPackageDuration[package.getPackage().getId()][0]['admin_price'] %}
+                    {% endif %}
+                {% elseif printPackageDuration[package.getPackage().getId()][0]['price'] is defined and printPackageDuration[package.getPackage().getId()][0]['price'] is not null %}
+                    {% if printPackageDuration[package.getPackage().getId()][0]['price'] > 0 %}
+                        {% set packageActualPrice = printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                    {% endif %}
+                {% elseif package.getPackage().getAdminPrice() is not null %}
+                    {% if package.getPackage().getAdminPrice() > 0 %}
+                        {% set packageActualPrice = package.getPackage().getAdminPrice() %}
+                    {% endif %}
+                {% elseif package.getPackage().getPrice() is not null %}
+                    {% if package.getPackage().getPrice() > 0 %}
+                        {% set packageActualPrice = package.getPackage().getPrice() %}
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                {% if printPackageDuration[package.getPackage().getId()][0]['price'] is defined and printPackageDuration[package.getPackage().getId()][0]['price'] is not null %}
+                    {% if printPackageDuration[package.getPackage().getId()][0]['price'] > 0 %}
+                        {% set packageActualPrice = printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                    {% endif %}
+                {% elseif package.getPackage().getPrice() is not null %}
+                    {% if package.getPackage().getPrice() > 0 %}
+                        {% set packageActualPrice = package.getPackage().getPrice() %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+            {% if packageActualPrice > 0 %}
+                {% set packagePrice = format_currency(packageActualPrice) %}
+            {% else %}
+                {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
+            {% endif %}
+            <div class="columns center">
+                <div class="paa-pkg-bg">
+                    <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
+                    {% set pkgBoxColorClass = 'pkg-green-head' %}
+                    {% set pkgButtonColorClass = '' %}
+                    {% if (locationGroupIds is defined and constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationGroupRepository::NON_PRINT_LOCATION_GROUP_ID') in locationGroupIds) %}
+                        {% set pkgBoxColorClass = 'pkg-blue-head' %}
+                        {% set pkgButtonColorClass = 'primary-btn-1' %}
+                    {% endif %}
+                    {% if packageActualPrice == 0 %}
+                        {% set pkgBoxColorClass = 'pkg-grey-head' %}
+                        {% set pkgButtonColorClass = 'primary-btn-grey' %}
+                    {% endif %}
+                    <div class="pkg-title {{ pkgBoxColorClass}}">{{package.getPackage().getLabel()}}</div>                        
+                    <div id="active_package_{{package.getPackage().getId()}}">
+                        <div class="pkg-subtitle">
+                            <div class="hide">
+                                <span class="custom-radio {% if selectedPackageId == package.getPackage().getId() %} checked {% endif %}">
+                                    <input type="radio" name="package_id" checked="checked" value="{{package.getPackage().getId()}}" {% if selectedPackageId == package.getPackage().getId() %} checked="checked" {% endif %} onclick="return highlightSelectedPackage('{{package.getPackage().getId()}}');" />
+                                </span>
+                            </div>
+                            {{package.getPackage().getTitle()}}
+                        </div>
+                        <div class="pkg-pricing {% if printPackageDuration[package.getPackage().getId()] is defined %}print-pkg{% elseif printPackageDuration is defined and printPackageDuration|length %}non-print-pkg{% endif %}">
+                            <div class="pkg-pricing-wrap{% if printPackageDuration|length and printOptionCount > 3 %} pkg-pricing-equalizer{% endif %}">
+                                <H4 id="package_price_{{package.getPackage().getId()}}">
+                                    {{packagePrice}} 
+                                </H4>
+                                {% if printPackageDuration[package.getPackage().getId()] is defined %}
+                                    <div class="weekly-pkg">
+                                        {% for printDuration in printPackageDuration[package.getPackage().getId()] %}
+                                            {% set printDurationPrice = 0 %}
+                                            {% set printFirstDurationPrice = 0 %}
+                                            {% if isAdminPostedAd %}
+                                                {% set printDurationPrice = printDuration['admin_price'] is not null ? printDuration['admin_price'] : printDuration['price'] %}
+                                                {% set printFirstDurationPrice = printPackageDuration[package.getPackage().getId()][0]['admin_price'] is not null ? printPackageDuration[package.getPackage().getId()][0]['admin_price'] : printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                                            {% else %}
+                                                {% set printDurationPrice = printDuration['price'] %}
+                                                {% set printFirstDurationPrice = printPackageDuration[package.getPackage().getId()][0]['price'] %}
+                                            {% endif %}
+                                            {% set printDurationId = printDuration['id'] %}
+                                            
+                                            
+                                            <span class="pkg-box">
+                                                <span class="custom-radio {% if loop.index == 1 %}checked{% endif %}">
+                                                    <input type="hidden" name="package_print_price_{{printDuration['id']}}" id="package_print_price_{{printDuration['id']}}" value="{{format_currency(printDurationPrice)}}" />
+                                                    <input type="radio" {% if loop.index == 1 %} checked="checked" {% endif %} name="package_print_id_{{package.getPackage().getId()}}" id="package_print_id_{{printDuration['id']}}" class="package_print_record" value="{{printDuration['id']}}" onclick="return updatePackagePrice({{package.getPackage().getId()}}, {{printDuration['id']}})" />
+                                                </span>
+                                                <label for="package_print_id_{{printDuration['id']}}">
+                                                    {% set fullDuration = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getFullDurationFromShortForm', [printDuration['duration']]) %}
+                                                    {{fullDuration}} {{'in print'|trans({}, 'frontend-ad-package')}} {% if loop.index != 1 %}(+{{format_currency(printDurationPrice - printFirstDurationPrice)}}){% endif %}
+                                                </label>
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                    <input type="hidden" name="package_print_edition_limit_{{ package.getPackage().getId() }}" id="package_print_edition_limit_{{ package.getPackage().getId() }}" value="{{ (printEditionLimits[package.getPackage().getId()] is defined ? printEditionLimits[package.getPackage().getId()] : 0) }}" />
+                                    {% if printEditionLimits[package.getPackage().getId()] is defined %}
+                                        <div class="edition-link">
+                                            <a href="javascript:void(0);" id="print_edition_show_anchor_{{ package.getPackage().getId() }}" onclick="hideShowPrintEditions({{ package.getPackage().getId() }})">
+                                                {% if printEditionLimits[package.getPackage().getId()] == 1 %}
+                                                    {{'Change your edition'|trans({}, 'frontend-ad-package')}}
+                                                {% elseif printEditionLimits[package.getPackage().getId()] > 1 %}
+                                                    {{'Change your editions'|trans({}, 'frontend-ad-package')}}
+                                                {% endif %}
+                                            </a>
+                                        </div>
+                                        <div class="pkg-error-msg" id="error_package_print_editions_{{ package.getPackage().getId() }}" style="display:none;">
+                                            <div class="alert-box alert radius" data-alert="">
+                                                <span class="alert-icon">&nbsp;</span>
+                                                {% if errorMsg is not null %}
+                                                    {{ errorMsg }}
+                                                {% else %}
+                                                    {{'Please choose all print editions for your package.'|trans({}, 'frontend-ad-package')}}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div id="package_print_editions_{{ package.getPackage().getId() }}" style="display:none;" class="edition-fields">
+                                            {% for editionCntr in 1..printEditionLimits[package.getPackage().getId()] %}
+                                                <select class="printSelect fa-select-white" name="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" id="print_editions_{{ package.getPackage().getId()~'_'~editionCntr }}" onchange="updateSelects({{ package.getPackage().getId() }})">
+                                                    <option value=''>{{'Select edition'|trans({}, 'frontend-ad-package')}}</option>
+                                                    {% set selectedFlag = false %}
+                                                    {% for editionId, editionName in printEditions %}
+                                                        <option value="{{ editionId }}" {% if selectedPackageId and selectedPackageId == package.getPackage().getId() and selectedPrintEditions[editionCntr] is defined and editionId == selectedPrintEditions[editionCntr] %}{% set selectedFlag = true %}selected="selected"{% elseif not selectedFlag and defaultSelectedPrintEditions[editionCntr] is defined and editionId == defaultSelectedPrintEditions[editionCntr] %}selected="selected"{% endif %}>{{ editionName }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                <input type="hidden" name="categoryId" value="{{ categoryId }}" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% set packageId = package.getPackage().getId() %}
+        {% endfor %}
+    </div>
+    
+    <div class="large-24 columns" >
+          {% set ccUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')}) %}
+          {% set appleUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_APPLEPAY')}) %}
+          {% set catPath = '' %}
+          
+           	<ul class="payment-buttons-block upgrade-payments">
+                <li>
+                	{% set paypalUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')}) %}
+                	<div class="modal-paypal-box" onclick="paypalPaymentProcess();"> </div>
+                </li>
+                <li>
+                	<div id="AmazonPayButton" onclick = "applePayButtonClicked();" ></div>
+                {# <div id="amazon-tooltip" class="image-tooltip-wrapper hide-for-small-only"><span class="image-tooltip">Amazon Pay allows you to pay for your ad on Friday-Ad using the card details stored on your Amazon account. Simply click and enter your Amazon login details.</span><span class="amazon-info-icon"></span></div> #}
+                </li>
+            </ul>
+            <ul id="payment_method_id" class="payment-card-option-block ml0">
+                {% for choice in form.payment_method.vars.choices %}
+                	<li>
+                    	<div class="label-inline white-radio mt10 mb10">
+                            <span class="custom-radio {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" /></span>
+                            <label for="{{ form.payment_method.vars.id }}_{{ choice.value }}">{{ choice.label|raw }}</label>
+                        </div>
+                	</li>
+                {% endfor %}
+                {% do attribute(form, 'payment_method').setRendered %}
+            </ul>            
+    </div>
+    <div id="payment-form">
+   	    {{ include('FaAdBundle:Ad:upgradePaymentForm.html.twig', {'form': form }) }}
+	</div>
+	<div id="card_detail_save" class="small-wrapper">
+            <div class="payment-row">
+                <div class="label-inline white-checkbox">
+                    {{ form_widget(form.is_save_credit_card) }}
+                    {{ form_label(form.is_save_credit_card) }}
+                    {{ form_errors(form.is_save_credit_card) }}
+                </div>
+            </div>
+   	    </div>
+   	    <div class="mt20 mb20 remove-item-btn">
+       		<div class="row">
+               	<div class="columns">
+                    <div id="pay_now_btn">
+                        {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand'}, 'label': 'Pay'}) }}
+                    </div>
+                </div>
+            </div>
+    	</div>	
+{{ form_end(form) }}
+{% endif %}
+</div>
+
+<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+<script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>
+<script language="javascript" type="text/javascript">
+    
+    var printPackageDurationArr = new Array();
+    var printPackageIdDurationArr = new Array();
+
+    {% if printPackageDuration is defined and printPackageDuration|length %}
+        {% for printDurationPackageId, packagePrintDuration in printPackageDuration %}
+            printPackageIdDurationArr['{{ printDurationPackageId }}'] = new Array(0)
+            {% for printDuration in packagePrintDuration %}
+                {% if printDuration['id'] is defined and printDuration['duration'] is defined %}
+                    printPackageDurationArr['{{ printDuration['id'] }}'] = {{ printDuration['duration']|replace({'w': ''}) }};
+                    printPackageIdDurationArr['{{ printDurationPackageId }}']['{{ printDuration['id'] }}'] = {{ printDuration['duration']|replace({'w': ''}) }};
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    
+    $(document).ready(function(){
+        bindFormErrorEvents();
+        bindCustomRadioEvent();
+        bindCustomCheckboxEvent();
+
+        if (!$('.credit_btn').length) {
+            $('.free-button-spacing').each(function() {
+                $(this).removeClass('free-button-spacing');
+            });
+        }
+        
+        highlightSelectedPackage();
+        {% if selectedPackageId and app.request.get('packagePrintId') %}
+           $('#package_print_id_'+{{app.request.get('packagePrintId')}}).attr('checked', 'checked');
+           $('#package_print_id_'+{{app.request.get('packagePrintId')}}).trigger('click');
+        {% endif %}
+        {% if (not printEditionSelectedFlag and selectedPackageId is defined) or (selectedPackageId) %}
+            hideShowPrintEditions({{ selectedPackageId }});
+            {% if not printEditionSelectedFlag and selectedPackageId is defined %}
+                $('#error_package_print_editions_'+{{selectedPackageId}}).show();
+                scrollToElement('#print_edition_show_anchor_'+{{selectedPackageId}});
+            {% endif %}
+        {% endif %}
+		//checked the default first saved payment
+		{% if form.payment_method.vars.choices|length > 1 %}
+			triggerFirstCheckBox();
+	    {% endif %}
+
+	    {% if (gaStr is defined and gaStr != '') %}
+            ga('send', 'event', 'Category PAA - Checkout', 'Form error', '{{gaStr}}');
+            triggerFirstCheckBox();
+        {% endif %}
+	    
+        showHideCardDetail();
+    });
+
+    function triggerFirstCheckBox() {
+    	$("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").attr('checked', true);
+	    $("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").trigger('click');
+	    return true;
+    }
+
+    function showHidePackageUpsells(packageId)
+    {
+        if ($('#package_upsells_'+packageId).is(':visible')) {
+            $('#package_upsells_'+packageId).slideUp();
+            $('#package_upsell_show_anchor_'+packageId).text("{{"What's included?"|e('js')|raw|trans({}, 'frontend-ad-package')}}")
+        } else {
+            $('#package_upsells_'+packageId).slideDown();
+            $('#package_upsell_show_anchor_'+packageId).text("{{"Hide details"|trans({}, 'frontend-ad-package')}}")
+        }
+    }
+
+    function highlightSelectedPackage(packageId)
+    {
+        if (!packageId) {
+            packageId = $("input[name=package_id]:checked").val();
+        }
+
+        $('.paa-pkg-bg div').removeClass('pkg-active');
+        if (packageId) {
+            $('#active_package_'+packageId).addClass('pkg-active');
+            $('#purchase_btn').removeClass('disabled');
+        }
+    }
+
+    function hideShowPrintEditions(packageId)
+    {
+        var printEditionLimit = $('#package_print_editions_'+packageId+' .printSelect').length;
+        if ($('#package_print_editions_'+packageId).is(':visible')) {
+            $('#package_print_editions_'+packageId).slideUp();
+            if (printEditionLimit == 1) {
+                $('#print_edition_show_anchor_'+packageId).text("{{"Change your edition"|trans({}, 'frontend-ad-package')}}")
+            } else if (printEditionLimit > 1) {
+                $('#print_edition_show_anchor_'+packageId).text("{{"Change your editions"|trans({}, 'frontend-ad-package')}}")
+            }
+        } else {
+            $('#package_print_editions_'+packageId).slideDown();
+            if (printEditionLimit == 1) {
+                $('#print_edition_show_anchor_'+packageId).text("{{"Hide edition"|trans({}, 'frontend-ad-package')}}")
+            } else if (printEditionLimit > 1) {
+                $('#print_edition_show_anchor_'+packageId).text("{{"Hide editions"|trans({}, 'frontend-ad-package')}}")
+            }
+        }
+        //$('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu('refresh');
+        setTimeout(function() { $('#package_equalizer').trigger('enable.equalizer'); }, 1000);
+        {% if printEditions is defined %}
+            updateSelects(packageId);
+        {% endif %}
+    }
+
+    function selectPackage(packageId, packagePrice)
+    {
+    	{% if privateUserAdParams is defined and privateUserAdParams|length and not privateUserAdParams.allowPrivateUserToPostAdFlag %}
+            if (packagePrice <= 0) {
+                $('#privateUserMaxAdPostLimitModal').foundation('reveal', 'open');
+                return false;
+            }
+        {% endif %}
+        $('.pkg-error-msg').hide();
+        if (!packageId) {
+            packageId = $("input[name=package_id]:checked").val();
+        }
+        var submitForm = true;
+        var printEditionLimit = $('#package_print_edition_limit_'+packageId).val();
+        blockPage();
+        $('input[name=package_id][value='+packageId+']').trigger('click');
+        $('#package_print_editions_'+packageId).show();
+        if (printEditionLimit == 1) {
+            $('#print_edition_show_anchor_'+packageId).text("{{"Hide edition"|trans({}, 'frontend-ad-package')}}")
+        } else if (printEditionLimit > 1) {
+            $('#print_edition_show_anchor_'+packageId).text("{{"Hide editions"|trans({}, 'frontend-ad-package')}}")
+        }
+        //$('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu('refresh');
+        setTimeout(function() { $('#package_equalizer').trigger('enable.equalizer'); }, 1000);
+        $('#package_print_editions_'+packageId+' .printSelect').each(
+            function (i, elem)
+            {
+                var $selected = $(elem).find("option:selected");
+                if (!$selected.val()) {
+                    $('#error_package_print_editions_'+packageId).show();
+                    scrollToElement('#print_edition_show_anchor_'+packageId);
+                    unblockPage();
+                    submitForm = false;
+                }
+            }
+        );
+
+        if (submitForm) {
+            $('#package_purchase_form').submit();
+        }
+    }
+    
+
+    {% if printEditions is defined %}
+        function updateSelects(packageId)
+        {
+            var selectElements = [];
+            var selectValueElements = [];
+            {% for editionId, editionName in printEditions %}
+                selectElements.push('{{editionId}}');
+                selectValueElements.push('{{editionName}}');
+            {% endfor %}
+            $('#package_print_editions_'+packageId+' .printSelect').each(
+    
+            function (i, elem)
+            {
+                var $selected = $(elem).find("option:selected");
+                var $opts = $("<div>")
+                $opts.append('<option value="">{{'Select edition'|trans({}, 'frontend-ad-package')}}</option>');
+                for (i = 0; i < selectElements.length; i++)
+                {
+                    var value = selectElements[i];
+                    var optionName = selectValueElements[i];
+                    if ($selected.val() == value || !$('#package_print_editions_'+packageId+' .printSelect option[value=' + value + ']:selected').length)
+                    {
+                        $opts.append('<option value="' + value + '">' + optionName + '</option>');
+                    }
+                }
+                $(elem).html($opts.html());
+                if ($selected.length)
+                {
+                    $(elem).val($selected.val());
+                }
+                else
+                {
+                    $('#package_print_editions_'+packageId+' .printSelect').not(this).find('option[value=' + $(elem).val() + ']').remove();
+                }
+            });
+    
+            //setTimeout(function() { $('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu('refresh'); }, 200);
+        }
+    {% endif %}
+ 
+    function updatePackagePrice(packageId, printDurationId)
+    {
+        if ($('#package_print_price_'+printDurationId).val() == '£0') {
+            $('#package_price_'+packageId).html('Free');
+        } else {
+            $('#package_price_'+packageId).html($('#package_print_price_'+printDurationId).val());
+        }
+
+        $('input[name=package_id][value='+packageId+']').trigger('click');
+    }
+
+    $("#cyber_source_form").submit(function(event) {  
+    	var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();
+    	if(typeof paymentMethod  === "undefined") {
+    		$("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").attr('checked', true);
+    	    $("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").trigger('click');
+            return false
+    	}
+
+        blockElement('#upgradeBasicAdToFeaturedModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+        {% if paa_lite_redirect is not defined %}
+            ga('send', 'event', 'Search Results', 'Upgrade', 'Pay - Cybersource'); 
+        {% endif %}
+        var packageId = '{{ packageId }}';
+        var printDurationId = '{{ printDurationId }}';
+        var printEditionId = $('#print_editions_'+packageId+'_1').val();   
+        var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();     
+        $.ajax({
+            type: "POST",
+            url: "{{app.request.getUri()}}",
+            data: new FormData(this),
+            contentType: false,
+            processData:false,
+        })
+        .done(function(response) {
+            if(response.error && response.error != '') {
+            	unblockElement('#upgradeBasicAdToFeaturedModal');
+            	$("#post-all-errors").html('<small class="error">'+response.error+'<br></small>');
+				return false;
+            } else if(response.htmlContent.success) { 
+            	window.location.href = response.htmlContent.redirectUrl;
+            } else {
+            	 unblockElement('#upgradeBasicAdToFeaturedModal');
+            	$('#payment-form').html(response.htmlContent);
+            	if (paymentMethod == 0) {
+                    $('#card_detail').show();
+                    $('#card_detail_save').show();
+                }
+            }
+            
+        });
+    });
+
+</script>
+
+{{ include('FaAdBundle:Ad:upgradeJs.html.twig') }}
+
+{% endblock %}

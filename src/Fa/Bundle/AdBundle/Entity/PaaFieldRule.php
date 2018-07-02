@@ -183,6 +183,13 @@ class PaaFieldRule
     private $placeholder_text;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="is_added", type="smallint", length=4, nullable=true)
+    */
+    private $is_added;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -653,5 +660,28 @@ class PaaFieldRule
     public function getPlaceholderText()
     {
         return $this->placeholder_text;
+    }
+
+    /**
+     * Set is_added
+     *
+     * @param integer $isAdded
+     * @return PaaFieldRule
+     */
+    public function setIsAdded($isAdded)
+    {
+        $this->is_added = $isAdded;
+
+        return $this;
+    }
+
+    /**
+     * Get step
+     *
+     * @return integer
+     */
+    public function getIsAdded()
+    {
+        return $this->is_added;
     }
 }

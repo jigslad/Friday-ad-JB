@@ -1,0 +1,55 @@
+paa-lite:
+    path:     /{campaign_name}/
+    defaults: { _controller: "FaAdBundle:Campaign:index" }
+
+facebook_paa_lite_login:
+    path:     /facebook/login
+    defaults: { _controller: "FaAdBundle:Campaign:facebookPaaLiteLogin" }
+    
+google_paa_lite_login:
+    path:     /google/login
+    defaults: { _controller: "FaAdBundle:Campaign:googlePaaLiteLogin" }
+
+facebook_paa_lite_register:
+    path:     /facebook/register
+    defaults: { _controller: "FaAdBundle:Campaign:facebookPaaLiteRegister" }
+    
+google_paa_lite_register:
+    path:     /google/register
+    defaults: { _controller: "FaAdBundle:Campaign:googlePaaLiteRegister" }
+
+paa_lite_login:
+    path:     ajax/paa_lite_login
+    defaults: { _controller: "FaAdBundle:Campaign:ajaxPaaLiteLogin" }
+    options:
+        expose: true
+
+paa_lite_registration:
+    path:     ajax/paa_lite_registration
+    defaults: { _controller: "FaAdBundle:Campaign:ajaxPaaLiteRegistration" }
+    options:
+        expose: true
+
+ajax_check_valid_user:
+    path:     /ajax/check_valid_user
+    defaults: { _controller: FaAdBundle:Campaign:ajaxCheckValidUser }
+    options:
+        expose: true
+
+ajax_add_to_cart:
+    path:   /ajax/add_to_cart
+    defaults:  { _controller: "FaAdBundle:Campaign:ajaxAddToCart" }
+    options:
+        expose: true
+
+paypal_add_to_cart_ajax:
+    path:   /ajax/paypal_add_to_cart
+    defaults:  { _controller: "FaAdBundle:Campaign:ajaxPaypalPaymentProcessAddToCart" }
+    options:
+        expose: true
+
+amazon_add_to_cart_ajax:
+    path:   /ajax/amazon_add_to_cart
+    defaults:  { _controller: "FaAdBundle:Campaign:amazonPaymentProcessAddToCart" }
+    options:
+        expose: true

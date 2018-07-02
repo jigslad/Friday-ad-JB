@@ -1,0 +1,67 @@
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set paaliteFieldRuleRepository = fetch_repository('FaAdBundle:PaaLiteFieldRule') %}
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <table class="mb0">
+                 <thead>
+                     <tr class="field-heading">
+                          <th width="25%">
+                            {{ 'Campaign Name'|trans }}
+                         </th>
+                         <th width="25%">
+                            {{ 'Form Title'|trans }}
+                         </th>
+                         <th width="25%">
+                            {{ 'Category'|trans }}
+                         </th> 
+                         <th width="15%">
+                            {{ 'Status'|trans }}
+                         </th>           
+                         <th width="10%"><i class="fa fa-gear"></i> Action</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for campaigns in pagination.getCurrentPageResults() %}                    
+                            <tr class="odd gradeX">
+                              <td>
+                                  {{ (campaigns.campaignName) }}
+                              </td>
+                              <td>
+                                  {{ (campaigns.pageTitle) }}
+                              </td>
+                              <td>
+                                {{ categoryRepository.getCategoryPathArrayById(campaigns.category_id)|join(' > ') }}
+
+                              </td>
+                              <td>
+                                {% set form_status = (campaigns.campaignStatus == 1) ? 'Active' : 'In-Active' %}
+                                  {{form_status}}
+                              </td>
+                             
+                              <td>
+                               <button href="#" data-dropdown="drop{{ campaigns.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">{{'Select'|trans}}</button>
+                               <br />
+                               <ul id="drop{{ campaigns.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                               {% if campaignsEditGrant %}
+                                 <li><a href="{{ path('campaigns_edit_admin', {'id': campaigns.id}) }}"><i class="fi-pencil"></i> {{'Edit'|trans}}</a></li>
+                               {% endif %}
+                                  <li><a href="/paa-lite/{{ campaigns.slug }}" target="_blank"><i class="fi-eye"></i> {{'View'|trans}}</a></li>
+                               {% if campaignsDeleteGrant and campaigns.is_not_deletable !=1 %}
+                                   <li><a href="{{ path('campaigns_delete_admin', {'id': campaigns.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to delete this record?'|trans }}')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
+                               {% endif %}
+                               </ul>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="odd gradeX">
+                              <td colspan="5" align="center">{{ 'No records found'|trans }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+         </div>
+     </div>
+</div>

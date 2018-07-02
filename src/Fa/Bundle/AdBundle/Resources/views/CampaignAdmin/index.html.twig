@@ -1,0 +1,41 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+{% set campaignsEditGrant = false %}
+{% set campaignsDeleteGrant = false %}
+{% set campaignsShowGrant = false %}
+
+{% if fa_resource_authorization_manager.isGranted('campaign_edit_admin') %}
+  {% set campaignsEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('campaign_delete_admin') %}
+  {% set campaignsDeleteGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('campaign_show_admin') %}
+  {% set campaignsShowGrant = true %}
+{% endif %}
+
+{% block content -%}
+<style>
+.paa-lite-search-box .columns {padding-right: .9375em !important; }
+</style>
+    <div class="row">
+      <div class="columns">
+          <h1 class="left">{{ heading }}</h1>
+          {% if isAddNew is not defined %}
+              {% if fa_resource_authorization_manager.isGranted('campaigns_new_admin') %} <a href="{{ path('campaigns_new_admin') }}" class="right tiny button add_user_btn">{{ 'Create Campaign'|trans({}, 'messages') }}</a> {% endif %}
+          {% endif %}
+      </div>
+    </div>
+    {% use "FaAdBundle:CampaignAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+    {{ include('FaAdBundle:CampaignAdmin:list.html.twig', {'pagination': pagination}) }}
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ block('search_script') }}
+{% endblock %}

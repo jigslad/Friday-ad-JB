@@ -187,8 +187,6 @@ abstract class AdPostAdminType extends AbstractType
                             $form->add($paaField['field'], JsChoiceType::class, $this->getPaaFieldOptions($paaFieldRule, $categoryId, $ad, $verticalObj));
                             $this->addOrderedField($paaField['field']);
                         } else {
-                            $form->add($paaField['field'], $this->getFormFieldType($paaField, TRUE), $this->getPaaFieldOptions($paaFieldRule, $categoryId, $ad, $verticalObj));
-                            $this->addOrderedField($paaField['field']);
                             if( $paaField['field'] != 'rates_id') {
                                 $form->add($paaField['field'], $this->getFormFieldType($paaField, TRUE), $this->getPaaFieldOptions($paaFieldRule, $categoryId, $ad, $verticalObj));
                                 $this->addOrderedField($paaField['field']);

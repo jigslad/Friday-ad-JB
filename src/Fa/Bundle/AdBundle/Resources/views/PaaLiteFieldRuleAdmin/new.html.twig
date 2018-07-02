@@ -1,0 +1,140 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+
+{% block scripttop %}
+    <link href="{{ asset_url('fafrontend/css/jquery-ui.min.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="large-row">
+    {{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+    <div class="row">
+       <div class="columns">
+           <div class="panel white-bg">
+               {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                   {{ form_errors(form) }}
+                   {% set show = 'none' %}
+                   {% if entity.id %}
+                      <div class="row">
+                        <div class="large-6 columns">
+                            <b>{{ 'Category'|trans }} : </b> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(entity.category.id)|join(' > ') }}
+                        </div>
+                        <div class="large-6 columns">
+                        	<p class="text-right"><span class="required">*</span> = {{ 'mandatory fields'|trans({}, 'messages') }}</p>
+                        </div>
+                      </div>
+                   {% else %}
+                       <div class="row">
+                           <div class="columns">
+                               <div class="admin_cat_search list_style_none">
+                                   {{ form_row(form.category_id) }}
+                               </div>
+                           </div>
+                       </div>
+                    {% endif %}
+    
+                    {% if entity.id %}
+                        {% set category_id = entity.category.id %}
+                    {% else %}
+                        {% set category_id = app.request.get('category_id') %}
+                        {% if category_id is null %}
+                           {% set category_id = form.category_id.vars.value %}
+                        {% endif %}
+                    {% endif %}
+    
+                    {% if category_id %}
+                       {% set show = 'inline' %}
+                       {% set fieldStep = 0 %}
+                       <ul id="paa_lite_field_rule_sortable" class="fa-sortable">
+                           {% if entity.id %}
+                               {% set paaliteFieldRules = fetch_repository('FaAdBundle:PaaLiteFieldRule').getPaaLiteFieldRulesByCategoryId(category_id, 'bothWithNullLast') %}
+                               {% for paaliteFieldRule in paaliteFieldRules %}
+                                   {% set field = paaliteFieldRule.getPaaLiteField().getField() %}
+                                   {% if paaliteFieldRule.getStep() != fieldStep %}
+                                       {% set fieldStep = paaliteFieldRule.getStep() %}
+                                       <li id="{{ field~'_ord' }}" class="ui-state-default ui-state-disabled">
+                                           {% if paaliteFieldRule.getStep() is null %}
+                                               {{ 'Fields not in use'|trans }}
+                                           {% else %}
+                                               {{ 'Step'|trans }} {{ paaliteFieldRule.getStep() }}
+                                           {% endif %}
+                                       </li>
+                                   {% endif %}
+                                   {{ include('FaAdBundle:PaaLiteFieldRuleAdmin:paalite_fields_list.html.twig', {'field': field}) }}
+                               {% endfor %}
+                           {% else %}
+                               {% set paaliteFieldsData = fetch_repository('FaAdBundle:PaaLiteField').getPaaLiteFieldsByCategoryAncestor(category_id, false, 'bothWithNullLast') %}
+                               {% for paaliteFieldData in paaliteFieldsData %}
+                                   {% if paaliteFieldData['is_rule'] is defined and paaliteFieldData['is_rule'] == true %}
+                                       {% set paaliteFieldRule = paaliteFieldData['data'] %}
+                                       {% set paaliteField = paaliteFieldRule.getPaaField() %}
+                                   {% else %}
+                                       {% set paaliteField = paaliteFieldData['data'] %}
+                                   {% endif %}
+                                   {{ include('FaAdBundle:PaaLiteFieldRuleAdmin:paalite_fields_list.html.twig', {'field': paaliteField.getField()}) }}
+                               {% endfor %}
+                           {% endif %}
+                       </ul>
+                   {% endif %}
+                   {% if entity.id %}
+                       {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'paa_lite_field_rule_admin', 'isSaveAndNew': false}) }}
+                   {% else %}
+                       <div style="display:{{ show }}"> 
+                           {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'paa_lite_field_rule_admin'}) }}
+                      </div>
+                   {% endif %}
+    
+               {{ form_end(form) }}
+           </div>
+       </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+    <script src="{{ asset_url('fafrontend/js/vendor/jquery-ui.min.js') }}"></script>
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        $("#fa_ad_paa_lite_field_rule_admin_category_id").on("change", function(e) { 
+            var category_id = e.val;
+            var route = Routing.generate('paa_lite_field_rule_new_admin');
+            if (category_id != '') {
+                route = Routing.generate('paa_lite_field_rule_new_from_category_admin', { 'category_id': category_id });
+            }
+
+            window.location.replace(route);
+        });
+        
+        $("#paa_lite_field_rule_sortable").sortable({
+            items: "li:not(.ui-state-disabled)",
+            placeholder: "ui-state-highlight",
+            stop : function(event, ui){
+                var sortIdArray = $(this).sortable('toArray');
+                for (var i =0; i < sortIdArray.length; i++) {
+                    $('#fa_ad_paa_lite_field_rule_admin_'+sortIdArray[i]).val(i+1);
+                }
+            },
+            update: function( event, ui ) {
+                var id = ui.item.attr("id");
+                var listTag = $('#'+id).prevAll( "li.ui-state-disabled" ).text();
+                var stepCat = listTag.split(/\s+/).slice(0,3).join(" ").trim();
+                var txtboxId = id.replace('ord', 'step');
+                
+                if(stepCat == 'Step 2') {	
+					$('#fa_ad_paa_lite_field_rule_admin_'+txtboxId).val(2);
+                } else if (stepCat == 'Step 4') { 
+                	$('#fa_ad_paa_lite_field_rule_admin_'+txtboxId).val(4);
+                } else if (stepCat == 'Fields not') { 
+                	$('#fa_ad_paa_lite_field_rule_admin_'+txtboxId).val('');
+                }
+              }
+        });
+    });
+    //]]>
+    </script>
+    {% if (form.category_id) is defined %}
+        {{ include('FaCoreBundle::autoSuggestField.html.twig', {'field' : '#fa_ad_paa_lite_field_rule_admin_category_id', 'jsonField' : '#fa_ad_paa_lite_field_rule_admin_category_id_json', 'placeHolder': 'Select category'|trans, 'route' : 'category_ajax_term_admin', 'maximumSelectionSize': 1 }) }}
+    {% endif %}
+    
+{% endblock %}

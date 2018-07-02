@@ -69,7 +69,7 @@ class AdAdminController extends CrudController implements ResourceAuthorizationC
         $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'), 'fa_ad_ad_search_admin');
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
-        $data['select_fields'] = array('ad' => array('id', 'price', 'created_at', 'future_publish_at'));
+        $data['select_fields'] = array('ad' => array('id', 'price', 'created_at', 'future_publish_at','source'));
 
         // initialize form manager service
         $formManager = $this->get('fa.formmanager');
@@ -81,6 +81,12 @@ class AdAdminController extends CrudController implements ResourceAuthorizationC
         $data = $this->handleRole($data);
 
         if ($data['search']) {
+            if(isset($data['search']['ad__source'])) {
+                if($data['search']['ad__source'][0]==1) {
+                    $data['static_filters'] = AdRepository::ALIAS.".source = 'paa_lite'";
+                }
+            }
+            
             $form->submit($data['search']);
         }
 

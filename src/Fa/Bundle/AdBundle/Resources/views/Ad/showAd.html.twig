@@ -463,17 +463,23 @@
                             {% endif %}
                             
                             {% if allowAdEdit is defined and promotePackages[0] is defined and allowAdEdit and attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')} and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
+                               {# get featured Top upsell from packages #}
+                              	{% set getTopUpsellPackagePrice = fetch_repository('FaPromotionBundle:Package').getPackageFeturedTopUpsellPrice(promotePackages) %}
                                 <div class="upgrade-box">
                                     <div class="row">
                                         <div class="large-16 columns">
                                             <b>{{ 'Your ad type: %package_title%'|trans({'%package_title%': adPackageArray[adId]['title']}, 'frontend-show-ad') }}</b><br />
-                                            {{ 'Get a better response by upgrading to %next_package_text% for %next_package_price%'|trans({'%next_package_text%': promotePackages[0].getPackage().getTitle(), '%next_package_price%': format_currency(promotePackages[0].getPackage().getPrice())}, 'frontend-show-ad') }}
+                                            {% if getTopUpsellPackagePrice['title'] is defined  %}
+                                                {{ 'Get a better response by upgrading to %next_package_text% for %next_package_price%'|trans({'%next_package_text%': getTopUpsellPackagePrice['title'], '%next_package_price%': format_currency(getTopUpsellPackagePrice['price'])}, 'frontend-show-ad') }}
+                                            {% endif %}
                                         </div>
                                         <div class="large-8 columns">
-                                            <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a>
+                                            {# <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a> #}
+                                             <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);" onclick="return upgradeToFeaturedBtn('{{ adId }}', '{{ rootCategoryId }}');">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a> 
                                         </div>
                                     </div>
                                 </div>
+                                <div id="upgradeBasicAdToFeaturedModal" class="reveal-modal tiny remove-item-modal upgrade-modal" data-reveal></div>
                             {% endif %}
                             
                             <div class="clearfix">
@@ -764,6 +770,10 @@
         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
     </div>
 </div>
+{% if successPaymentModalbox is defined and successPaymentModalbox %}
+    {#  Upgrade Success Modal Box   #}
+    {{ include('FaAdBundle:Ad:upgradeSuccessModalBox.html.twig') }}
+{% endif %}
 <div id="createAlertModal" class="reveal-modal small" data-reveal></div>
 <div id="createHalfAccountModal" class="reveal-modal small" data-reveal></div>
     {% set isOneclickenqinfo = false %} <!-- FFR-2342 -->
@@ -790,6 +800,7 @@
     {{ block('similar_slider_js') }}
     {{ block('googlemap_location_js') }}
     {{ include('FaUserBundle:HalfAccount:halfAccountJs.html.twig') }}
+    {{ include('FaAdBundle:Ad:upgradeJs.html.twig', {'paymentTransactionJs' : paymentTransactionJs }) }}
     {% set catText = null %}
     {% if get_variables('CatDetails') is not null and get_variables('CatDetails').catString is defined %}
         {% set catText = get_variables('CatDetails').catString %}
@@ -799,6 +810,14 @@
     var adMotorEquilizerFlag = false;
     var gaCalledOnce = false;
     var gaAfterCalledOnce = false;
+
+    {% if successPaymentModalbox is defined and successPaymentModalbox %}
+   		$('#upgradeSuccessPaymentModal').foundation('reveal', 'open');
+    {% endif %}
+
+    {% if allowAdEdit is defined and promotePackages[0] is defined and allowAdEdit and attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')} and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
+    	ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
+    {% endif %}
 
     $(window).scroll(function () {
         {% if currentDevice == 'D' or currentDevice == 'T' %}
@@ -1329,10 +1348,6 @@
       location.href = "{{ path('ad_edit', {'id': adId, 'scrollTo': 'video'})}}";
     });
 
-    $('#upgrade_now_link').on('click', function() {
-      ga('send', 'event', 'Ad details', 'upgrade now', '{{ adId }}{{ catText }}');
-      location.href = "{{ path('ad_promote', {'adId': adId, 'type': 'promote'}) }}";
-    });
 
     function socialShare(adId, windowUrl, windowTitle, windowWidth, windowHeight)
     {
@@ -1456,6 +1471,12 @@
     {% endif %}
 //]]>
 </script>
+{% endblock %}
+
+{% block pushNotification %}
+{% if paymentTransactionJs['ga_transaction'] is defined and paymentTransactionJs['ga_transaction'].PAYMENT_ID is defined %}
+        OneSignal.push(["sendTags", {'PAA_process': 'ad_placed'}]);
+    {% endif %}
 {% endblock %}
 
 

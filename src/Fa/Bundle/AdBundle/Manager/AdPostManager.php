@@ -15,6 +15,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Fa\Bundle\AdBundle\Entity\Ad;
 use Fa\Bundle\AdBundle\Entity\AdMain;
 use Fa\Bundle\AdBundle\Entity\AdForSale;
+use Fa\Bundle\AdBundle\Entity\AdUserPackage;
+use Fa\Bundle\AdBundle\Entity\AdUserPackageUpsell;
+use Fa\Bundle\AdBundle\Entity\PaaLiteEmailNotification;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\EntityBundle\Repository\LocationRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
@@ -24,6 +27,7 @@ use Fa\Bundle\PaymentBundle\Repository\DeliveryMethodOptionRepository;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\PromotionBundle\Repository\UpsellRepository;
 use Fa\Bundle\AdBundle\Repository\AdUserPackageRepository;
+use Fa\Bundle\AdBundle\Repository\PaaLiteEmailNotificationRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentTransactionRepository;
 use Fa\Bundle\AdBundle\Repository\AdRepository;
@@ -332,6 +336,463 @@ class AdPostManager
     }
 
     /**
+     *  Save paa lite ad data.
+     * @param array   $user        User data.
+     * @param array   $data        Ad data.
+     * @param integer $adId        Ad id.
+     * @param boolean $saveAllData Save all data or not.
+     * @param boolean $isAdmin     Save from admin or not.
+     *
+     * @return \Fa\Bundle\AdBundle\Entity\Ad
+     */
+    public function savePaaLiteAd($data, $campaign = null)
+    {   
+        
+        $this->setPaaLiteFieldRules($data['campaign_id']);
+
+        $user                     = $this->em->getReference('FaUserBundle:User', $data['user_id']);
+        
+        $category = $this->em->getReference('FaEntityBundle:Category', $data['category_id']);
+        $status   = $this->em->getReference('FaEntityBundle:Entity', $data['ad_status_id']);
+        $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($data['category_id'], $this->container);
+        $secondRootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getSecondRootCategoryId($data['category_id'], $this->container);
+
+        $isSaveImage = true;
+        $isNewAd     = true;
+        $previousCategoryId = null;
+       
+        $adMain = $this->saveAdMain();
+
+        // set class meta data
+        $metadata = $this->em->getClassMetaData('Fa\Bundle\AdBundle\Entity\Ad');
+        $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+
+        $ad = new Ad();
+        $ad->setId($adMain->getId());
+        $ad->setAdMain($adMain);
+        $ad->setCreationIp($this->request->getClientIp());
+        $ad->setModifyIp($this->request->getClientIp());
+
+        // set notification for draft ad
+        if ($user && !isset($data['future_publish_at'])) {
+            $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_incomplete', $ad->getId(), $user->getId(), strtotime('+10 minute'), true);
+        }
+
+        $ad->setUser($user);
+        $ad->setStatus($status);
+        $ad->setCategory($category);
+        $ad->setCampaign($campaign);
+        $ad->setSource('paa_lite');
+
+        // save postage price for for sale.
+        if (isset($data['postage_price']) && $data['postage_price'] && isset($data['delivery_method_option_id']) && (in_array($data['delivery_method_option_id'], array(DeliveryMethodOptionRepository::POSTED_ID, DeliveryMethodOptionRepository::POSTED_OR_COLLECT_ID)))) {
+            $ad->setPostagePrice($data['postage_price']);
+        } else {
+            $ad->setPostagePrice(0);
+        }
+
+        // Save ad is trade ad or not
+        if ($user) {
+            $userRoles = $this->em->getRepository('FaUserBundle:User')->getUserRolesArray($user);
+            if (count($userRoles)) {
+                if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $userRoles)) {
+                    $ad->setIsTradeAd(1);
+
+                    // Save ad specific phone number for business user.
+                    $businessPhone = null;
+                    if (isset($data['business_phone']) && $data['business_phone']) {
+                        $businessPhone = $data['business_phone'];
+                    }
+
+                    $ad->setBusinessPhone($businessPhone);
+                } elseif (in_array(RoleRepository::ROLE_SELLER, $userRoles)) {
+                    $ad->setIsTradeAd(0);
+                }
+            }
+        } else {
+            $ad->setIsTradeAd(null);
+        }
+
+        if (isset($data['ad_type_id']) && $data['ad_type_id']) {
+            $ad->setType($this->em->getReference('FaEntityBundle:Entity', $data['ad_type_id']));
+        }
+
+        // Save default title for cars, commericial veh. and motorsbike if title is blank.
+        if (in_array($secondRootCategoryId, array(CategoryRepository::CARS_ID, CategoryRepository::COMMERCIALVEHICLES_ID, CategoryRepository::MOTORBIKES_ID)) && (!isset($data['title']) || !$data['title'])) {
+            $categoryPathArray = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($data['category_id'], false, $this->container);
+            $data['title']     = null;
+            if (in_array($secondRootCategoryId, array(CategoryRepository::CARS_ID, CategoryRepository::COMMERCIALVEHICLES_ID))) {
+                $data['title'] = implode(' ', array_slice($categoryPathArray, -2, 2));
+                if (isset($data['reg_year']) && $data['reg_year']) {
+                    $data['title'] .= ' '.$data['reg_year'];
+                }
+            } elseif (in_array($secondRootCategoryId, array(CategoryRepository::MOTORBIKES_ID))) {
+                if (isset($data['make_id_autocomplete']) && $data['make_id_autocomplete']) {
+                    $data['title'] = $data['make_id_autocomplete'];
+                }
+
+                if (isset($data['model_id']) && $data['model_id']) {
+                    $data['title'] .= ' '.$this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Entity', $data['model_id']);
+                }
+
+                if (isset($data['reg_year']) && $data['reg_year']) {
+                    $data['title'] .= ' '.$data['reg_year'];
+                }
+            }
+
+            $data['title'] = trim($data['title']);
+        }
+
+        $this->setAdPaaFields($ad, $data);
+
+        // save qty for for sale if user does not have item qty upsell.
+        if ($user) {
+            if ($rootCategoryId == CategoryRepository::FOR_SALE_ID && isset($data['qty'])) {
+                $userUpsells = $this->em->getRepository('FaUserBundle:UserUpsell')->getUserUpsellArray($user->getId());
+                if (!in_array(UpsellRepository::SHOP_ITEM_QUANTITIES_ID, $userUpsells)) {
+                    $ad->setQty(1);
+                }
+            }
+        } else {
+            if ($rootCategoryId == CategoryRepository::FOR_SALE_ID) {
+                $ad->setQty(1);
+            }
+        }
+
+        // save phone for detached ad and remove phone when detached ad moved to normal ad if user assigned to ad.
+        // Save email in edit if exist
+        
+        if(!isset($data['payment_method_id'])) {
+            $ad->setPaymentMethodId(Null);
+        } else {
+            $ad->setPaymentMethodId($data['payment_method_id']);
+            if(in_array($data['payment_method_id'], array(PaymentRepository::PAYMENT_METHOD_PAYPAL_ID, PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID))) {
+                $this->setPaypalDetailsForUser($data);
+            }
+        }
+
+        $this->em->persist($ad);
+        $this->em->flush($ad);
+        $this->em->getRepository('FaAdBundle:AdIpAddress')->checkAndLogIpAddress($ad, $this->request->getClientIp());
+
+        $this->saveVerticalData($ad, $data, $previousCategoryId);
+
+        
+        $this->saveAdLocation($ad, $data);
+
+        if ($isSaveImage && (isset($data['photo_error']) && $data['photo_error']==1)) {
+            $this->saveAdImages($ad, false, $data);
+        }
+
+        // Update ad yac number.
+        $this->updateAdYacNumber($ad, $isNewAd);
+        $this->setAdUserFreePackage($ad,$category->getId(),$user);
+
+        if($this->container->get('session')->get('redirect_to_cart')==0) {
+            $paaLiteEmailNotification = new PaaLiteEmailNotification();
+            $paaLiteEmailNotification->setAd($ad);
+            $paaLiteEmailNotification->setUser($user);
+            $paaLiteEmailNotification->setCreatedAt(time());
+            $paaLiteEmailNotification->setIsAdConfirmationMailSent(0);
+            $paaLiteEmailNotification->setIsAdConfirmationNotificationSent(0);
+
+            $this->em->persist($paaLiteEmailNotification);
+            $this->em->flush($paaLiteEmailNotification);
+            //$this->container->get('session')->set('ad_id', $ad->getId());
+            $this->container->get('session')->set('show_ad_live_popup', 1);
+            $this->container->get('session')->set('paa_lite_ad_success', 1);
+        }
+        
+        return $ad;
+    }
+
+    protected function setPaypalDetailsForUser($data) {
+        $paymentMethodId = $data['payment_method_id'];
+        $paypalEmail     = $data['paypal_email'];
+        $paypalFirstName = $data['paypal_first_name'];
+        $paypalLastName  = $data['paypal_last_name'];
+
+        $userObj = $this->getLoggedInUser();
+        $userObj->setPaypalEmail($paypalEmail);
+        $userObj->setPaypalFirstName($paypalFirstName);
+        $userObj->setPaypalLastName($paypalLastName);
+        $userObj->setIsPaypalVefiried(1);
+        $this->em->persist($userObj);
+        $this->em->flush($userObj);
+            
+    }
+    protected function setAdUserFreePackage($ad, $categoryId,$user)
+    {
+        $packageIds = array(); $adPackageId = '';
+        $adId = $ad->getId();
+        $userId = $user->getId();
+        $systemUserRoles  = $this->em->getRepository('FaUserBundle:Role')->getRoleArrayByType('C', $this->container);
+        $userRole         = $this->em->getRepository('FaUserBundle:User')->getUserRole($userId, $this->container);
+        $userRolesArray[] = array_search($userRole, $systemUserRoles);
+        $locationGroupIds = $this->em->getRepository('FaAdBundle:AdLocation')->getLocationGroupIdForAd($adId, true);
+        $packages         = $this->em->getRepository('FaPromotionBundle:PackageRule')->getActivePackagesByCategoryId($categoryId, $locationGroupIds, $userRolesArray, array(), $this->container);
+        $categoryId = $ad->getCategory()->getId();
+
+        foreach ($packages as $package) {
+            $packageIds[] = array('id'=> $package->getPackage()->getId(),'price'=>$package->getPackage()->getPrice());
+        }
+        if(!empty($packageIds)) {
+            usort($packageIds, function($a, $b) {
+                return $a['price'] - $b['price'];
+            });
+            $adPackageId = $packageIds[0]['id'];
+
+            if($adPackageId!='' && $packageIds[0]['price']>0) {
+
+                $returnTxt = $this->addPackageToCart($adPackageId,$categoryId,$ad,$user);
+                if($returnTxt=='null') {
+                    $this->container->get('session')->set('redirect_to_cart', 1);
+                    $this->container->get('session')->set('cart_ad_id', $ad->getId());
+                    $this->container->get('session')->set('cart_package_id', $adPackageId);
+                    $adDraftStatus =  $this->em->getReference('FaEntityBundle:Entity', EntityRepository::AD_STATUS_DRAFT_ID);
+                    $ad->setStatus($adDraftStatus);
+                    $this->em->persist($ad);
+                    $this->em->flush($ad); 
+                } else {
+                    $this->container->get('session')->set('show_error_pop_up', 1);
+                    $this->container->get('session')->set('paa-lite-error',$returnTxt);
+                }
+                
+            } else {
+                $adUserPackage = new AdUserPackage();
+
+                // find & set package
+                $selpackage = $this->em->getRepository('FaPromotionBundle:Package')->find($adPackageId);
+                $adUserPackage->setPackage($selpackage);
+
+                // set ad
+                $adMain = $this->em->getRepository('FaAdBundle:AdMain')->find($adId);
+                $adUserPackage->setAdMain($adMain);
+                $adUserPackage->setAdId($adId);
+                $adUserPackage->setStatus(AdUserPackageRepository::STATUS_ACTIVE);
+                $adUserPackage->setStartedAt(time());
+                if ($selpackage->getDuration()) {
+                    $adUserPackage->setExpiresAt(CommonManager::getTimeFromDuration($selpackage->getDuration()));
+                } elseif ($ad) {
+                    $expirationDays = $this->em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($ad->getCategory()->getId());
+                    $adUserPackage->setExpiresAt(CommonManager::getTimeFromDuration($expirationDays.'d'));
+                }
+
+                // set user
+                if ($user) {
+                    $adUserPackage->setUser($user);
+                }
+
+                $adUserPackage->setPrice($selpackage->getPrice());
+                $adUserPackage->setDuration($selpackage->getDuration());
+                $this->em->persist($adUserPackage);
+                $this->em->flush();
+
+                foreach ($selpackage->getUpsells() as $upsell) {
+                    $this->addAdUserPackageUpsell($ad, $adUserPackage, $upsell);
+                }   
+
+                $adExpiryDays     = $this->em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $this->container);
+                $selectedPackagePrintId = null;$printEditionValues = array();
+                
+                $cart            = $this->em->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $this->container,false,false,false,true);
+                $cartDetails     = $this->em->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+                if ($cartDetails) {
+                    $adCartDetails   = $this->em->getRepository('FaPaymentBundle:Transaction')->getTransactionsByCartIdAndAdId($cart->getId(), $adId);
+                    if ($adCartDetails) {
+                        $adCartDetailValue = unserialize($adCartDetails[0]->getValue());
+                    }
+                }
+
+                $this->container->get('session')->set('paa_lite_card_code', $cart->getCartCode());
+                //get Package Detail
+                $selectedPackageObj = $this->em->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $adPackageId));
+                $selectedPackagePrint = null;
+                
+                $privateUserAdParams = $this->em->getRepository('FaAdBundle:Ad')->getPrivateUserPostAdParams($userId, $categoryId, $adId, $this->container);
+                
+                //check if cart is empty and package is free then process ad
+                $selectedPackage = $this->em->getRepository('FaPromotionBundle:Package')->find($adPackageId);
+                
+                //remove if same ad is in cart.
+                if (count($cartDetails) == 1 && $cartDetails[0]['ad_id'] == $adId) {
+                    unset($cartDetails[0]);
+                }
+        
+                $this->addAdPackage($adId, $adPackageId, $adExpiryDays, $cart, $selectedPackagePrintId, false, $printEditionValues, $privateUserAdParams);
+
+                $this->em->beginTransaction();
+
+                try {
+                    $cart->setPaymentMethod('free');
+                    $this->em->persist($cart);
+                    $this->em->flush($cart);
+                    $paymentId = $this->em->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), null, $this->container);
+                    $this->em->getConnection()->commit();
+                } catch (\Exception $e) {
+                    $this->em->getConnection()->rollback();
+                    CommonManager::sendErrorMail($this->container, 'Error: Problem in payment', $e->getMessage(), $e->getTraceAsString());
+                    $error = 'Problem in payment.';
+                } 
+
+            }
+
+            
+        }
+        
+
+    }
+
+    protected function addPackageToCart($adPackageId,$categoryId,$ad,$user) 
+    {
+
+        $adId = $ad->getId();
+        $userId   = ($user ? $user->getId() : null);
+        $error = 'null';
+       
+        //check if user has already purchased pkg or not
+        $adUserPackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getPurchasedAdPackage($adId);
+        if ($adUserPackage) {
+            $error = 'You already have purchased package for ad '.$adId;
+        }
+
+        $privateUserUrlParams = array();
+        $oldSelectedPrintEditions = array();
+        $selectedPrintEditions = array();
+        $defaultSelectedPrintEditions = array();
+        $selectedPackageId = $adPackageId;
+        $printEditionSelectedFlag = true;
+        $errorMsg         = null;
+        $adCartDetails = null;
+        $adCartDetailValue = array();
+        $isAdultAdvertPresent = 0;
+        /*$cart            = $this->em->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $this->container,false,false,false,true);
+        $cartDetails     = $this->em->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+        if ($cartDetails) {
+            $adCartDetails   = $this->em->getRepository('FaPaymentBundle:Transaction')->getTransactionsByCartIdAndAdId($cart->getId(), $adId);
+            if ($adCartDetails) {
+                $adCartDetailValue = unserialize($adCartDetails[0]->getValue());
+            }
+        }*/
+
+        $categoryId       = $ad->getCategory()->getId();
+        $adRootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+        if ($adRootCategoryId == CategoryRepository::ADULT_ID) {
+            $isAdultAdvertPresent = 1;
+        }
+        $privateUserAdParams = $this->em->getRepository('FaAdBundle:Ad')->getPrivateUserPostAdParams($userId, $categoryId, $adId, $this->container);
+        
+        $locationGroupIds = $this->em->getRepository('FaAdBundle:AdLocation')->getLocationGroupIdForAd($adId, true);
+        $adExpiryDays     = $this->em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $this->container);
+        $userCreditId = null;
+        $selectedPackagePrintId = null;
+
+        $selectedPackageObj = $this->em->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $selectedPackageId));
+        if ($selectedPackageObj && $selectedPackageObj->getPrice() <= 0 && isset($privateUserAdParams['allowPrivateUserToPostAdFlag']) && !$privateUserAdParams['allowPrivateUserToPostAdFlag']) {
+            $error = 'Sorry, maximum number of ad placements reached.';
+        }
+        //check for print edition
+        $printEditionValues = array();
+
+        $totalCredit = null;
+        //check for user credit
+        /*if ($userCreditId) {
+            $totalCredit = 1;
+            if ($selectedPackagePrintId) {
+                $selectedPackagePrintObj = $this->em->getRepository('FaPromotionBundle:PackagePrint')->findOneBy(array('id' => $selectedPackagePrintId));
+                $totalWeeks = (int) $selectedPackagePrintObj->getDuration();
+                $totalCredit = ceil(($totalWeeks / 4));
+            }
+            $userActiveCredits = $this->em->getRepository('FaUserBundle:UserCredit')->getActiveCreditForUserByCategory($userId, $adRootCategoryId, $cart->getId(), $adId);
+            if (count($userActiveCredits)) {
+                $activeShopPackageDetail = $this->em->getRepository('FaUserBundle:UserPackage')->getShopPackageDetailByUserIdForAdReport($userId);
+                $packageSrNoCredits = $this->em->getRepository('FaUserBundle:UserCredit')->getPackageWiseActiveCreditForUser($userActiveCredits);
+                $isValidUserCredit = ($selectedPackageObj->getPackageSrNo() && isset($userActiveCredits[$userCreditId]) && in_array($selectedPackageObj->getPackageSrNo(), $userActiveCredits[$userCreditId]['package_sr_no']) && $userActiveCredits[$userCreditId]['credit'] >= $totalCredit);
+                if (!$isValidUserCredit) {
+                    $error = 'Sorry you do not have enough credits.';
+                }
+            } else {
+                $error = 'Sorry you do not have enough credits.';
+            }
+        }*/
+
+        if ($printEditionSelectedFlag) {
+            // Remove session for redirec back to PAA steps.
+            $this->container->get('session')->remove('back_url_from_ad_package_page');
+                        
+            //$this->addAdPackage($adId, $selectedPackageId, $adExpiryDays, $cart, $selectedPackagePrintId, null, null, true, $printEditionValues, $userCreditId, $totalCredit, $privateUserAdParams);
+        }
+
+        return $error;
+        
+    }
+
+    public function addAdPackage($adId, $packageId, $adExpiryDays, $cart, $selectedPackagePrintId, $type = null, $activeAdUserPackageId = null, $addAdToModeration = false, $printEditionValues = array(), $userCreditId = null, $totalCredit = null, $privateUserAdParams = array())
+    {
+        $ad      = $this->em->getRepository('FaAdBundle:Ad')->find($adId);
+        $user    = $ad->getUser();
+        $package = $this->em->getRepository('FaPromotionBundle:Package')->find($packageId);
+
+        $this->em->getRepository('FaPaymentBundle:Cart')->addPackageToCart($user->getId(), $adId, $packageId, $this->container, true, $adExpiryDays, $selectedPackagePrintId, $type, $activeAdUserPackageId, $addAdToModeration, $cart, $printEditionValues, $userCreditId, $totalCredit, $privateUserAdParams);
+
+        //apply discount code if it is already applied for one ad
+        $loggedinUser = $user;
+        $cart = $this->em->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container,false,false,false,true);
+        $cartValue = unserialize($cart->getValue());
+        if ($cart->getDiscountAmount() > 0 && isset($cartValue['discount_values']) && count($cartValue['discount_values']) && isset($cartValue['discount_values']['code'])) {
+            $codeObj = $this->em->getRepository('FaPromotionBundle:PackageDiscountCode')->findOneBy(array('code' => $cartValue['discount_values']['code'], 'status' => 1));
+            $cartDetails  = $this->em->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+            $this->em->getRepository('FaPaymentBundle:TransactionDetail')->removeCodeFromAllItems($cartDetails);
+            $this->em->getRepository('FaPromotionBundle:PackageDiscountCode')->processDiscountCode($codeObj, $cart, $cartDetails, $loggedinUser, $this->container, false);
+        } else if ($cart->getDiscountAmount() <= 0 && isset($cartValue['discount_values']) && count($cartValue['discount_values']) && isset($cartValue['discount_values']['code'])) {
+            $cartDetails  = $this->em->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+            $this->em->getRepository('FaPaymentBundle:TransactionDetail')->removeCodeFromAllItems($cartDetails);
+        }
+    }
+
+    /**
+     * Add ad user package upsell
+     *
+     * @param object $ad
+     * @param object $adUserPackage
+     * @param object $upsell
+     */
+    protected function addAdUserPackageUpsell($ad, $adUserPackage, $upsell)
+    {
+        $adId = $ad->getId();
+        $adUserPackageUpsellObj = $this->em->getRepository('FaAdBundle:AdUserPackageUpsell')->findOneBy(array('ad_id' => $adId, 'ad_user_package' => $adUserPackage->getId(), 'status' => 1, 'upsell' => $upsell->getId()));
+        if (!$adUserPackageUpsellObj) {
+            $adUserPackageUpsell = new AdUserPackageUpsell();
+            $adUserPackageUpsell->setUpsell($upsell);
+
+            // set ad user package id.
+            if ($adUserPackage) {
+                $adUserPackageUpsell->setAdUserPackage($adUserPackage);
+            }
+
+            // set ad
+            $adMain = $this->em->getRepository('FaAdBundle:AdMain')->find($adId);
+            $adUserPackageUpsell->setAdMain($adMain);
+            $adUserPackageUpsell->setAdId($adId);
+
+            $adUserPackageUpsell->setValue($upsell->getValue());
+            $adUserPackageUpsell->setValue1($upsell->getValue1());
+            $adUserPackageUpsell->setDuration($upsell->getDuration());
+            $adUserPackageUpsell->setStatus(1);
+            $adUserPackageUpsell->setStartedAt(time());
+            if ($upsell->getDuration()) {
+                $adUserPackageUpsell->setExpiresAt(CommonManager::getTimeFromDuration($upsell->getDuration()));
+            } elseif ($ad) {
+                $expirationDays = $this->em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($ad->getCategory()->getId());
+                $adUserPackageUpsell->setExpiresAt(CommonManager::getTimeFromDuration($expirationDays.'d'));
+            }
+
+            $this->em->persist($adUserPackageUpsell);
+            $this->em->flush();
+        }
+    }
+
+    /**
      * Update YAC number for ad.
      *
      * @param object $ad Ad instance.
@@ -591,6 +1052,8 @@ class AdPostManager
     {
         if ($isAdmin) {
             $adTempId = $this->container->get('session')->get('admin_ad_id_'.(isset($data['admin_ad_counter']) ? $data['admin_ad_counter'] : ''));
+        } elseif($this->container->get('session')->has('paa_image_id')) {
+            $adTempId = $this->container->get('session')->get('paa_image_id');
         } else {
             $adTempId = $this->container->get('session')->get('ad_id');
         }
@@ -896,6 +1359,29 @@ class AdPostManager
     }
 
     /**
+     *  Set paa lite field rules array.
+     *
+     * @param integer $campaignId Campaign id.
+     */
+    private function setPaaLiteFieldRules($campaignId)
+    {
+        $fieldRules    = array();$paaFieldRules = array();
+        $paaFieldRules = $this->em->getRepository('FaAdBundle:PaaLiteFieldRule')->getAllPaaLiteFields($campaignId);
+
+        if (!empty($paaFieldRules)) {
+            foreach ($paaFieldRules[0] as $paaFieldRule) {
+                $paaField = $paaFieldRule['paa_lite_field'];
+                unset($paaFieldRule['paa_lite_field']);
+                $fieldRules[$paaField['field']] = $paaFieldRule;
+                $fieldRules[$paaField['field']]['category_dimension_id'] = $paaField['category_dimension_id'];
+                $fieldRules[$paaField['field']]['category_id'] = $categoryId;
+            }
+        }
+
+        $this->paaFieldRules = $fieldRules;
+    }
+
+    /**
      *  Set paa field rules array.
      *
      * @param integer $categoryId Category id.
@@ -984,8 +1470,25 @@ class AdPostManager
      */
     public function sendAdForModeration($ad, $data)
     {
-        
         $this->setPaaFieldRules($ad->getCategory()->getId());
+        $this->handleAdModerate($ad, $data);
+
+        // Do not send request for moderation for sold and expired ads.
+        if (!in_array($ad->getStatus()->getId(), $this->em->getRepository('FaAdBundle:Ad')->getRepostButtonInEditAdStatus())) {
+            $this->em->getRepository('FaAdBundle:AdModerate')->sendAdForModeration($ad, $this->container, true);
+        }
+        
+    }
+
+    /**
+     * Handle ad moderate.
+     *
+     * @param object $adId Ad object.
+     * @param array  $data Form data.
+     */
+    public function sendAdForModerationPaaLite($ad, $data)
+    {
+        $this->setPaaLiteFieldRules($ad->getCategory()->getId());
         $this->handleAdModerate($ad, $data);
 
         // Do not send request for moderation for sold and expired ads.

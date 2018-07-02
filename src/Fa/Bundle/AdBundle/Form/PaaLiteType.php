@@ -1,0 +1,1592 @@
+<?php
+
+/**
+ * This file is part of the fa bundle.
+ *
+ * @copyright Copyright (c) 2018, FMG
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Fa\Bundle\AdBundle\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Regex;
+use Fa\Bundle\CoreBundle\Form\Validator\FaRange;
+use Fa\Bundle\EntityBundle\Repository\EntityRepository;
+use Fa\Bundle\CoreBundle\Form\EventListener\AddDatePickerFieldSubscriber;
+use Fa\Bundle\CoreBundle\Form\EventListener\AddAutoSuggestFieldSubscriber;
+use Fa\Bundle\AdBundle\Entity\Ad;
+use Fa\Bundle\AdBundle\Entity\AdForSale;
+use Fa\Bundle\AdBundle\Entity\AdLocation;
+use Fa\Bundle\EntityBundle\Repository\LocationRepository;
+use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Fa\Bundle\AdBundle\Repository\PaaLiteFieldRuleRepository;
+use Fa\Bundle\PaymentBundle\Repository\DeliveryMethodOptionRepository;
+use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
+use Fa\Bundle\UserBundle\Repository\RoleRepository;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+
+
+/**
+ * PaaLiteType form.
+ *
+ * @author Rohini <rohini.subburam@fridaymediagroup.com>
+ * @copyright 2018 Friday Media Group Ltd
+ * @version 1.0
+ */
+class PaaLiteType extends AbstractType
+{
+
+    /**
+     * Container service class object.
+     *
+     * @var object
+     */
+    protected $container;
+
+    /**
+     * Entity manager.
+     *
+     * @var object
+     */
+    protected $em;
+
+    /**
+     * The request instance.
+     *
+     * @var Request
+     */
+    protected $request;
+
+    /**
+     * Ordered fields to display in template in order.
+     *
+     * @var array
+     */
+    protected $orderedFields = array();
+
+    /**
+     * Disabled PAA fields by PAA rule.
+     *
+     * @var array
+     */
+    protected $disabledFields = array();
+
+    /**
+     * Need to render category wise dimension in any step.
+     *
+     * @var boolean
+     */
+    protected $isRenderCategoryDimension = true;
+
+    /**
+     * Need to show field in which step in posting
+     *
+     * @var integer
+     */
+    protected $step = null;
+
+    /**
+     * This contains array of data which is in moderation.
+     *
+     * @var boolean
+     */
+    protected $moderationValue = array();
+
+    /**
+     * Translator.
+     *
+     * @var object
+     */
+    protected $translator;
+
+    /**
+     * Constructor.
+     *
+     * @param object $container
+     *            Container instance.
+     * @param RequestStack $requestStack
+     *            RequestStack instance.
+     */
+    public function __construct(ContainerInterface $container, RequestStack $requestStack)
+    {
+        $this->container = $container;
+        $this->em = $this->container->get('doctrine')->getManager();
+        $this->request = $requestStack->getCurrentRequest();
+        $this->translator = CommonManager::getTranslator($container);
+    }
+
+    /**
+     * Build form.
+     *
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {}
+
+    /**
+     * Get name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'fa_paa_lite';
+    }
+
+    /**
+     * Add campaign wise paa lite fields
+     *
+     * @param object $form
+     *            Form instance.
+     * @param integer $campaign_name
+     *            Selected campaign name.
+     * @param string $ad
+     *            Ad instance.
+     * @param $verticalObj $verticalObj
+     *            Vertical object.
+     */
+    protected function addCampaignPaaLiteFieldsForm($form, $campaign_name = null, $ad = null, $verticalObj = null)
+    {
+        
+        $paaFieldRules = array();$paaLiteFieldRules = array();
+        if ($campaign_name) {
+            $getCampaign = array();
+            $getCampaign = $this->em->getRepository('FaAdBundle:Campaigns')->getCampaignBySlug($campaign_name);
+            
+            if(!empty($getCampaign)) {
+                $paaLiteFieldRules = $this->em->getRepository('FaAdBundle:PaaLiteFieldRule')->getAllPaaLiteFields($getCampaign[0]->getId());
+            }
+
+            if (count($paaLiteFieldRules)) {
+
+                //$paaFieldRules = (array)$paaFieldRules;
+                // First: if field is defined in PAA field rules of parent category.
+                foreach ($paaLiteFieldRules as $paaFieldRule) {
+                    $paaField = $paaFieldRule->getPaaLiteField();
+                    // show only active fields from rule
+                    if ($paaFieldRule->getStatus()) {
+                        if ($paaField->getField() == 'location') {
+                            $this->addLocationAutoSuggestField($form, $ad, $paaFieldRule);
+                        } elseif ($this->getPaaFieldType($paaField) == 'autosuggest') {
+                            $this->addAutoSuggestField($form, $paaField->getLabel(), $paaField->getCategoryDimensionId(), $this->getPaaFieldOptions($paaFieldRule, $ad, $verticalObj), $verticalObj);
+                        } elseif ($this->getPaaFieldType($paaField) == 'datepicker') {
+                            $this->addDatePickerField($form, $paaField->getCategoryDimensionId(), $paaField->getLabel(), $verticalObj, $paaFieldRule->getLabel(), $paaFieldRule);
+                        } else
+                            if ($paaField->getField() == 'model_id') {
+                                $form->add($paaField->getField(), 'js_choice', $this->getPaaFieldOptions($paaFieldRule, $ad, $verticalObj));
+                                $this->addOrderedField($paaField->getField());
+                            } else { 
+                                if( $paaField->getField() != 'rates_id' && $paaField->getField() != 'payment_method_id') { 
+                                    $form->add($paaField->getField(), $this->getFormFieldType($paaField), $this->getPaaFieldOptions($paaFieldRule, $ad, $verticalObj));
+                                    $this->addOrderedField($paaField->getField());
+                                } elseif ( $paaField->getField() == 'rates_id' ) { 
+                                    $form->add($paaField->getField(), 'hidden', array('mapped' => false, 'data' => true, 'label'=>'Rates'));
+                                    $this->addRatesFields($form, $paaField, $verticalObj);
+                                    $this->addOrderedField($paaField->getField());      
+                                } elseif ( $paaField->getField() == 'payment_method_id' ) {
+                                    $this->addPaymentMethodFields($form, $paaField, $paaFieldRule, $verticalObj, $getCampaign[0]->getCategory()->getId(), $ad);                                    
+                                } 
+                            }
+                    } else {
+                        // Store disbaled fields to check for adding fields from remaining fields from category dimensions
+                        $this->addDisabledField($paaField->getField());
+                    }
+                }
+
+                // Second : Add Remaining category wise dimension fields which are not in rule by default
+                if ($this->isRenderCategoryDimension) {
+                    $this->addCategroyDimensionFieldsForm($form, $categoryId, $ad, $verticalObj);
+                }
+            }
+        }
+        
+    }
+    
+    /**
+     * Get form Payment Method fields.
+     *
+     * @param object $form
+     */
+    protected function addPaymentMethodFields($form, $paaField, $paaFieldRule, $verticalObj, $categoryId, $ad) {
+        $fieldOptions = [];
+        if ($this->getPaaFieldType($paaField) == 'radio' || $this->getPaaFieldType($paaField) == 'boolean') {
+            $fieldOptions['expanded'] = true;
+            $fieldOptions['multiple'] = false;
+            $fieldOptions['empty_value'] = false;
+        }
+        
+        if ($paaFieldRule->getIsRequired()) {
+            if ($paaField->getField() == 'price' || $paaField->getField() == 'price_text') {
+                $fieldOptions['required'] = false;
+            } else {
+                $fieldOptions['required'] = true;
+                $fieldOptions['constraints'] = new NotBlank(array(
+                        'message' => $paaFieldRule->getErrorText() ? $paaFieldRule->getErrorText() : $this->translator->trans('Value should not be blank.', array(), 'validators')
+                ));
+            }
+        } else {
+            $fieldOptions['required'] = false;
+        }
+        $fieldOptions['label']= $paaField->getLabel();
+        $fieldOptions['mapped']= false;
+        $fieldOptions['choices'] = $this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethodOptionsArray($this->container, $categoryId);
+        $fieldOptions['data'] = ($categoryId != CategoryRepository::PHONE_AND_CAM_CHAT_ID?PaymentRepository::PAYMENT_METHOD_CASH_ON_COLLECTION_ID:'');
+        $form->add($paaField->getField(), 'choice', $fieldOptions);
+        $this->addOrderedField('payment_method_id');
+        return true;
+    }
+    
+    /**
+     * Get form Rates fields.
+     *
+     * @param object $form
+     */
+    protected function addRatesFields($form, $paaField, $verticalObj) {
+        $entitySortBy = 'id';
+        $data = [];
+        $category_dimension_id = $paaField->getCategoryDimensionId();
+        $metaData = $this->getField('meta_data', $verticalObj) ? unserialize($this->getField('meta_data', $verticalObj)) : null;
+        $ratesData = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($category_dimension_id, $this->container, true, $entitySortBy, 'textCollection');
+        
+        
+        if( !empty ($ratesData) ) {
+            foreach ($ratesData as $rate=>$val) {
+                $label = explode('_', $val);  
+                if ( isset($metaData[$paaField->getField()][$label[1]][$rate]) ) {
+                    $data = trim($metaData[$paaField->getField()][$label[1]][$rate]);
+                }
+                
+                $fieldConstraints = new Regex(array(
+                        'pattern' => '/^[\d,\.]+$/',
+                        'message' => $label[0]. ' is invalid.'
+                ));
+                
+                
+                $form->add(str_replace(' ', '', $val), 'text', array('mapped' => false, 'label' => $label[0], 'data'=>$data, 'constraints' => $fieldConstraints, 'required'=>false));
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Get form field type.
+     *
+     * @param array $paaField
+     *            PAA field array.
+     */
+    protected function getFormFieldType($paaField = array())
+    {
+        if ($paaField->getFieldType() == 'text_int' || $paaField->getFieldType() == 'text_float') {
+            return 'number';
+        }
+
+        $fieldTypeArray = explode('_', $paaField->getFieldType());
+
+        return $fieldTypeArray[0];
+    }
+
+    /**
+     * Get form field type.
+     *
+     * @param array $paaField
+     *            PAA field array.
+     */
+    protected function getPaaFieldType($paaField = array())
+    {
+        $fieldTypeArray = explode('_', $paaField->getFieldType());
+
+        return (isset($fieldTypeArray[1]) && $fieldTypeArray[1]) ? $fieldTypeArray[1] : null;
+    }
+
+    /**
+     * Get form field options.
+     *
+     * @param array $paaFieldRule
+     *            PAA field rule array
+     * @param object $ad
+     *            Ad instance
+     * @param object $verticalObj
+     *            Vertical instance
+     */
+    protected function getPaaFieldOptions($paaFieldRule, $ad = null, $verticalObj = null)
+    {
+        $paaField = $paaFieldRule->getPaaLiteField();
+        $fieldType = $this->getFormFieldType($paaField);
+        $fieldOptions = array();
+        $fieldConstraints = array();
+
+        $fieldOptions['mapped'] = false;
+
+        if ($paaFieldRule->getLabel()) {
+            $fieldOptions['label'] = $paaFieldRule->getLabel();
+        }
+
+        if ($paaFieldRule->getHelpText()) {
+            $fieldOptions['attr']['field-help'] = $paaFieldRule->getHelpText();
+        }
+
+        if ($paaFieldRule->getPlaceholderText()) {
+            $fieldOptions['attr']['placeholder'] = $paaFieldRule->getPlaceholderText();
+        }
+
+        if ($paaFieldRule->getIsRequired()) {
+            if($paaField->getField()!='price' && $paaField->getField()!='price_text') {
+                $fieldOptions['required'] = true;
+                $fieldConstraints[] = new NotBlank(array(
+                    'message' => $paaFieldRule->getErrorText() ? $paaFieldRule->getErrorText() : $this->translator->trans('Value should not be blank.', array(), 'validators')
+                ));
+            } else {
+                $fieldOptions['required'] = true;
+            }
+        } else {
+            $fieldOptions['required'] = false;
+        }
+
+        if ($paaFieldRule->getMinValue() || $paaFieldRule->getMaxValue()) {
+            $lengthOptions = array();
+
+            if ($paaFieldRule->getMinValue()) {
+                $lengthOptions['min'] = $paaFieldRule->getMinValue();
+            }
+            if ($paaFieldRule->getMaxValue()) {
+                $lengthOptions['max'] = $paaFieldRule->getMaxValue();
+
+                if ($paaFieldRule->getMinMaxType() == PaaLiteFieldRuleRepository::MIN_MAX_TYPE_LENGTH) {
+                    $fieldOptions['attr']['maxlength'] = $paaFieldRule->getMaxValue();
+                    $fieldOptions['attr']['class'] = isset($fieldOptions['attr']['class']) ? $fieldOptions['attr']['class'] . ' textcounter ' : 'textcounter ';
+                }
+            }
+
+            if ($paaFieldRule->getMinMaxType() == PaaLiteFieldRuleRepository::MIN_MAX_TYPE_LENGTH) {
+                if ($this->getPaaFieldType($paaField) != 'tinymce') {
+                    $fieldConstraints[] = new Length($lengthOptions);
+                }
+            } else
+                if ($paaFieldRule->getMinMaxType() == PaaLiteFieldRuleRepository::MIN_MAX_TYPE_RANGE) {
+                    if ($paaFieldRule->getErrorText() && $paaField->getField() == 'photo_error') {
+                        $lengthOptions['minMessage'] = $paaFieldRule->getErrorText();
+                        $lengthOptions['maxMessage'] = $paaFieldRule->getErrorText();
+                    }
+
+                    $fieldConstraints[] = new FaRange($lengthOptions);
+                }
+        }
+
+        if ($this->getPaaFieldType($paaField) == 'int') {
+            $fieldConstraints[] = new Regex(array(
+                'pattern' => '/^[\d,]+$/',
+                'message' => $paaField->getLabel() . ' is invalid.'
+            ));
+        }
+
+        if ($this->getPaaFieldType($paaField) == 'float') {
+            if ($paaField->getField() != 'price' && $paaField->getField() != 'price_text') {
+                $fieldConstraints[] = new Regex(array(
+                    'pattern' => '/^[\d,\.]+$/',
+                    'message' => $paaField->getLabel() . ' is invalid.'
+                ));
+            }
+        }
+
+        if (count($fieldConstraints)) {
+            $fieldOptions['constraints'] = $fieldConstraints;
+        }
+
+        if ($this->getPaaFieldType($paaField) == 'tinymce') {
+            $fieldOptions['attr']['class'] = isset($fieldOptions['attr']['class']) ? $fieldOptions['attr']['class'] . ' tinymce ' : 'tinymce ';
+            $fieldOptions['attr']['rows'] = '5';
+        }
+
+        // category dimension
+        if ($paaField->getCategoryDimensionId() && $fieldType == 'choice' && $paaField->getField() != 'rates_id') { 
+            if ($this->getPaaFieldType($paaField) != 'range') {
+                $entitySortBy = 'name';
+                if (in_array($paaField->getField(), array('salary_band_id', 'travel_arrangements_id', 'independent_or_agency_id', 'gender_id', 'experience_id', 'position_preference_id'))) {
+                    $entitySortBy = 'id';
+                } elseif($paaField->getField()=='contract_type_id' || $paaField->getField() == 'my_service_id') {
+                    $entitySortBy = 'ord';
+                }
+                $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true, $entitySortBy);
+                if ($paaField->getField() == 'travel_arrangements_id') {
+                    $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->customFormatOptions($fieldOptions['choices'], 'paa');
+                }
+                $fieldOptions['empty_value'] = 'Select ' . $paaField->getLabel();
+                $fieldOptions['choice_translation_domain'] = false;
+            }
+        }
+        
+        if ($this->getPaaFieldType($paaField) == 'radio' || $this->getPaaFieldType($paaField) == 'boolean') {
+            $fieldOptions['expanded'] = true;
+            $fieldOptions['multiple'] = false;
+            $fieldOptions['empty_value'] = false;
+        } elseif ($this->getPaaFieldType($paaField) == 'checkbox') {
+            $fieldOptions['expanded'] = true;
+            $fieldOptions['multiple'] = true;
+        } elseif ($this->getPaaFieldType($paaField) == 'single' || $this->getPaaFieldType($paaField) == 'range') {
+            $fieldOptions['expanded'] = false;
+            $fieldOptions['multiple'] = false;
+            $fieldOptions['attr']['class'] = isset($fieldOptions['attr']['class']) ? $fieldOptions['attr']['class'] . ' fa-select' : 'fa-select';
+        } elseif ($this->getPaaFieldType($paaField) == 'multiple') {
+            $fieldOptions['expanded'] = false;
+            $fieldOptions['multiple'] = true;
+        }
+
+        if ($paaField->getField() == 'is_new') {
+            $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getIsNewOptionsArray($this->container);
+            $fieldOptions['data'] = '0';
+        } elseif ($this->getPaaFieldType($paaField) == 'boolean') {
+            $fieldOptions['choices'] = array(
+                '1' => 'Yes',
+                '0' => 'No'
+            );
+            $fieldOptions['data'] = '0';
+            $fieldOptions['empty_value'] = false;
+        } elseif ($paaField->getField() == 'ad_type_id') {
+            $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true, 'ord');
+            $fieldOptions['data'] = EntityRepository::AD_TYPE_FORSALE_ID;
+        } elseif ($paaField->getField() == 'delivery_method_option_id') {
+            $fieldOptions['choices'] = $this->em->getRepository('FaPaymentBundle:DeliveryMethodOption')->getDeliveryMethodOptionArray($this->container);
+            $fieldOptions['data'] = DeliveryMethodOptionRepository::COLLECTION_ONLY_ID;
+        } elseif ($paaField->getField() == 'payment_method_id') {
+            $fieldOptions['choices'] = $this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethodOptionsArray($this->container);
+            $fieldOptions['data'] = PaymentRepository::PAYMENT_METHOD_CASH_ON_COLLECTION_ID;
+        } elseif ($paaField->getField() == 'title' && $this->request->query->get('AdTitle')) {
+            $fieldOptions['data'] = ($this->request->query->get('AdTitle')!='')?str_replace('_', ' ', $this->request->query->get('AdTitle')):'';
+        } elseif (in_array($paaField->getField(), array('leg_id', 'waist_id', 'neck_id', 'size_id', 'age_range_id', 'age_id', 'condition_id'))) {
+            $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true, 'ord');
+        }  elseif ($paaField->getField() == 'include_end_time') {
+            $fieldOptions['choices'] = array('1' => 'Include end time');
+        } elseif (in_array($paaField->getField(), array('class_size_id', 'experience_level_id', 'availability_id', 'level_id'))) {
+            $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false);
+            $fieldOptions['empty_value'] = 'Select '.$paaField->getLabel();
+        } elseif (in_array($paaField->getField(), array('height_id', 'age_id'))) {
+            $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false);
+            $fieldOptions['empty_value'] = 'Select '.$paaField->getLabel();
+        } elseif ($this->getPaaFieldType($paaField) == 'range') {
+            if (in_array($paaField->getField(), array('mot_expiry_year', 'road_tax_expiry_year'))) {
+                $fieldOptions['choices']     = CommonManager::getYearChoices();
+                $fieldOptions['empty_value'] = 'Year';
+            } elseif (in_array($paaField->getField(), array('reg_year', 'year_built'))) {
+                $fieldOptions['choices']     = CommonManager::getRegYearChoices();
+                $fieldOptions['empty_value'] = 'Year';
+            } elseif (in_array($paaField->getField(), array('mot_expiry_month', 'road_tax_expiry_month'))) {
+                $fieldOptions['choices']     = CommonManager::getMonthChoices();
+                $fieldOptions['empty_value'] = 'Month';
+            }
+        } elseif (in_array($paaField->getField(), array('no_of_doors', 'no_of_seats'))) {
+            $fieldOptions['attr']['class'] = isset($fieldOptions['attr']['class']) ? $fieldOptions['attr']['class'].' door-no' : 'door-no';
+        } elseif (in_array($paaField->getField(), array('reg_year'))) {
+            $fieldOptions['attr']['class'] = isset($fieldOptions['attr']['class']) ? $fieldOptions['attr']['class'].' reg-year' : 'reg-year';
+        } elseif (in_array($paaField->getField(), array('tonnage_id', 'berth_id', 'condition_id', 'number_of_stalls_id'))) {
+            $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false);
+            $fieldOptions['empty_value'] = 'Select '.$paaField->getLabel();
+        } elseif (in_array($paaField->getField(), array('fuel_type_id'))) {
+            $fuelTypeChoices = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true);
+            $petrolKey       = array_search('Petrol', $fuelTypeChoices);
+
+            if ($petrolKey !== false) {
+                unset($fuelTypeChoices[$petrolKey]);
+                $fuelTypeChoices = array($petrolKey => 'Petrol') + $fuelTypeChoices;
+            }
+
+            $fieldOptions['choices'] = $fuelTypeChoices;
+        } elseif (in_array($paaField->getField(), array('rent_per_id'))) {
+            $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false);
+        } elseif (in_array($paaField->getField(), array('number_of_bedrooms_id', 'number_of_bathrooms_id', 'furnishing_id', 'smoking_allowed_id',
+            'pets_allowed_id', 'dss_tenants_allowed_id', 'number_of_rooms_in_property_id',
+            'number_of_rooms_available_id', 'rooms_for_id', 'room_size_id', 'ownership_id', 'lease_type_id'))) {
+            $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false);
+            $fieldOptions['empty_value'] = 'Select '.strtolower($paaField->getLabel());
+        }
+
+        if ($paaField->getField() == 'qty' && !$paaFieldRule->getDefaultValue()) {
+            $fieldOptions['data'] = 1;
+        }
+
+        if ($paaFieldRule->getDefaultValue()) {
+            $fieldOptions['data'] = $paaFieldRule->getDefaultValue();
+        }        
+        
+        // Set trim
+        if ($this->getFormFieldType($paaField) == 'text' || $this->getFormFieldType($paaField) == 'textarea') {
+            $fieldOptions['trim'] = true;
+        }
+
+        if ($paaField->getField() == 'deposit' && isset($fieldOptions['constraints']) && count($fieldOptions['constraints'])) {
+            $constraints = $fieldOptions['constraints'];
+            foreach ($fieldOptions['constraints'] as $key => $constraint) {
+                if (is_object($constraint) && get_class($constraint) == 'Symfony\Component\Validator\Constraints\Regex') {
+                    unset($constraints[$key]);
+                }
+            }
+
+            $fieldOptions['constraints'] = $constraints;
+        }
+
+        //for image uploaded count.
+        if ($paaField->getField() == 'photo_error') {
+            $adId = $this->container->get('session')->get('ad_id');
+
+            $adImgCount = $this->em->getRepository('FaAdBundle:AdImage')->getAdImageCount($adId);
+            $fieldOptions['data'] = $adImgCount;
+            $fieldOptions['attr']['max_value'] = $paaFieldRule->getMaxValue();
+            $fieldOptions['attr']['min_value'] = $paaFieldRule->getMinValue();
+        }
+        //echo "<pre>"; print_r($fieldOptions);
+        return $fieldOptions;
+    }
+
+    /**
+     * Add auto-suggest dimension fields.
+     *
+     * @param object $form
+     *            Form instance.
+     * @param string $fieldName
+     *            Field name.
+     * @param integer $dimensionId
+     *            Dimension id.
+     * @param array $paaFieldOptions
+     *            Paa field options.
+     * @param object $verticalObj
+     *            Vertical instance.
+     *
+     */
+    protected function addAutoSuggestField($form, $fieldName, $dimensionId = null, $paaFieldOptions = array(), $verticalObj = null)
+    {
+        $freeTextfield = str_replace(' ', '_', strtolower($fieldName));
+        if ($freeTextfield == 'event_start_time' || $freeTextfield == 'event_end_time') {
+            $field = str_replace(' ', '_', strtolower($fieldName));
+        } else {
+            $field = str_replace(' ', '_', strtolower($fieldName)) . '_id';
+        }
+
+        if (! in_array($field, $this->orderedFields) && ! in_array($field, $this->disabledFields) && ! in_array($field . '_autocomplete', $this->orderedFields) && ! in_array($field . '_autocomplete', $this->disabledFields)) {
+            // Edit ad
+            $selectedData = null;
+            if ($verticalObj) {
+                $metaData = $this->getField('meta_data', $verticalObj) ? unserialize($this->getField('meta_data', $verticalObj)) : null;
+                if (in_array($freeTextfield, $this->getNotIndexedVerticalFields()) && ($metaData && isset($metaData[$freeTextfield]))) {
+                    $selectedData = $metaData[$freeTextfield];
+                } elseif (in_array($field, $this->getNotIndexedVerticalFields()) && ($metaData && isset($metaData[$field]))) {
+                    $selectedData = $metaData[$field];
+                } else {
+                    $selectedData = $this->getField($field, $verticalObj);
+                }
+            }
+
+            // autocomplete hidden field for value
+            $form->add($field, 'hidden', array(
+                'mapped' => false,
+                'data' => $selectedData
+            ));
+
+            // autocomplete text field
+            $fieldOptions = array(
+                'required' => false,
+                'mapped' => false,
+                /**
+                 * @Ignore
+                 */
+                'label' => $fieldName
+            );
+
+            $fieldOptions = array_merge($fieldOptions, $paaFieldOptions);
+
+            if ($selectedData) {
+                $entityName = $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Entity', $selectedData);
+                if ($entityName && !in_array($field, array('event_start_time', 'event_end_time'))) {
+                    $fieldOptions['data'] = $entityName;
+                } else {
+                    $fieldOptions['data'] = $selectedData;
+                }
+            }
+
+            $form->add($field . '_autocomplete', 'text', $fieldOptions);
+            $this->addOrderedField($field . '_autocomplete');
+
+            // To store category dimension for auto-suggest field to fetch options from entity table
+            if ($dimensionId) {
+                $form->add($field . '_dimension_id', 'hidden', array(
+                    'data' => $dimensionId,
+                    'mapped' => false
+                ));
+            }
+        }
+    }
+
+    /**
+     * Add category dimension fields.
+     *
+     * @param object $form
+     *            Form instance.
+     * @param integer $dimensionId
+     *            Dimension id.
+     * @param string $dimensionName
+     *            Dimension name.
+     * @param object $verticalObj
+     *            Vertical instance.
+     * @param string $fieldLabel
+     *            Field label.
+     */
+    protected function addDatePickerField($form, $dimensionId, $dimensionName, $verticalObj = null, $fieldLabel = null, $paaFieldRule = null)
+    {
+        $dimensionField = str_replace(' ', '_', strtolower($dimensionName));
+        if (! in_array($dimensionField, $this->orderedFields) && ! in_array($dimensionField, $this->disabledFields)) {
+            $fieldOptions = array(
+                'required' => false,
+                /**
+                 * @Ignore
+                 */
+                'label' => $fieldLabel,
+                'mapped' => false,
+                'attr' => array(
+                    'class' => 'fdatepicker',
+                    'autocomplete' => 'off',
+                )
+            );
+
+            if ($paaFieldRule->getPlaceholderText()) {
+                $fieldOptions['attr']['placeholder'] = $paaFieldRule->getPlaceholderText();
+            }
+
+            // Edit ad
+            if ($verticalObj) {
+                if (in_array($dimensionField, $this->getNotIndexedVerticalFields())) {
+                    $metaData = $this->getField('meta_data', $verticalObj) ? unserialize($this->getField('meta_data', $verticalObj)) : null;
+                    if ($metaData && isset($metaData[$dimensionField])) {
+                        $fieldOptions['data'] = (is_numeric($metaData[$dimensionField]) ? (date('d/m/Y', $metaData[$dimensionField])) : $metaData[$dimensionField]);
+                    }
+                } else {
+                    $date = $this->getField($dimensionField, $verticalObj);
+                    $fieldOptions['data'] = (is_numeric($date) ? (date('d/m/Y', $date)) : $date);
+                }
+            }
+
+            $form->add($dimensionField, 'text', $fieldOptions);
+            $this->addOrderedField($dimensionField);
+        }
+    }
+
+    /**
+     * Add category dimension fields.
+     *
+     * @param object $form
+     *            Form instance.
+     * @param integer $dimensionId
+     *            Dimension id.
+     * @param string $dimensionName
+     *            Dimension name.
+     * @param object $verticalObj
+     *            Vertical instance.
+     */
+    protected function addCategroyDimensionTextNumberField($form, $dimensionField, $dimensionLabel, $verticalObj = null)
+    {
+        if (! in_array($dimensionField, $this->orderedFields) && ! in_array($dimensionField, $this->disabledFields)) {
+            $fieldOptions = array(
+                'required' => false,
+                'mapped' => false,
+                /**
+                 * @Ignore
+                 */
+                'label' => $dimensionLabel,
+                'constraints' => array(
+                    new Regex(array(
+                        'pattern' => '/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/',
+                        'message' => $dimensionLabel . ' is invalid.'
+                    ))
+                )
+            );
+
+            // Edit ad
+            if ($verticalObj) {
+                if (in_array($dimensionField, $this->getNotIndexedVerticalFields())) {
+                    $metaData = $this->getField('meta_data', $verticalObj) ? unserialize($this->getField('meta_data', $verticalObj)) : null;
+                    if ($metaData && isset($metaData[$dimensionField])) {
+                        $fieldOptions['data'] = $metaData[$dimensionField];
+                    }
+                } else {
+                    $fieldOptions['data'] = $this->getField($dimensionField, $verticalObj);
+                }
+            }
+
+            $form->add($dimensionField, 'text', $fieldOptions);
+            $this->addOrderedField($dimensionField);
+        }
+    }
+
+    /**
+     * Add category dimension fields.
+     *
+     * @param object $form
+     *            Form instance.
+     * @param integer $dimensionId
+     *            Dimension id.
+     * @param string $dimensionName
+     *            Dimension name.
+     * @param object $verticalObj
+     *            Vertical instance.
+     */
+    protected function addCategroyDimensionChoiceListField($form, $dimensionId, $dimensionName, $verticalObj = null)
+    {
+        $dimensionField = str_replace(array(
+            '(',
+            ')'
+        ), '', strtolower($dimensionName));
+        $dimensionField = str_replace(' ', '_', strtolower($dimensionField)) . '_id';
+
+        if (! in_array($dimensionField, $this->orderedFields) && ! in_array($dimensionField, $this->disabledFields)) {
+            $withSort = true;
+            if (in_array($dimensionField, array(
+                'leg_id',
+                'waist_id',
+                'neck_id',
+                'size_id',
+                'age_range_id',
+                'age_id'
+            ))) {
+                $withSort = false;
+            }
+
+            $fieldChoices = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($dimensionId, $this->container, $withSort);
+            $fieldOptions = array(
+                'required' => false,
+                'mapped' => false,
+                'expanded' => false,
+                'multiple' => false,
+                /**
+                 * @Ignore
+                 */
+                'empty_value' => $this->container->get('translator')->trans('Select %dimensionName%', array(
+                    '%dimensionName%' => $dimensionName
+                )),
+                /**
+                 * @Ignore
+                 */
+                'label' => $dimensionName,
+                'choices' => $fieldChoices,
+                'attr' => array(
+                    'class' => 'fa-select'
+                )
+            );
+
+            // Edit ad
+            if ($verticalObj) {
+                if (in_array($dimensionField, $this->getNotIndexedVerticalFields())) {
+                    $metaData = $this->getField('meta_data', $verticalObj) ? unserialize($this->getField('meta_data', $verticalObj)) : null;
+                    if ($metaData && isset($metaData[$dimensionField])) {
+                        $fieldOptions['data'] = $metaData[$dimensionField];
+                    }
+                } else {
+                    $fieldOptions['data'] = $this->getField($dimensionField, $verticalObj);
+                }
+            }
+
+            if (count($fieldChoices)) {
+                $form->add($dimensionField, 'choice', $fieldOptions);
+                $this->addOrderedField($dimensionField);
+            }
+        }
+    }
+
+    /**
+     * Set field data.
+     *
+     * @param string $field
+     *            Field name.
+     * @param string $fieldVal
+     *            Field value.
+     * @param object $object
+     *            Instance.
+     */
+    protected function setField($field, $fieldVal, $object)
+    {
+        $methodName = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
+        if (method_exists($object, $methodName) === true) {
+            call_user_func(array(
+                $object,
+                $methodName
+            ), $fieldVal);
+        }
+    }
+
+    /**
+     * Set field data.
+     *
+     * @param string $field
+     *            Field name.
+     * @param object $object
+     *            Instance.
+     *
+     * @return array
+     */
+    protected function getField($field, $object)
+    {
+        $fieldVal = null;
+        $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
+        if (method_exists($object, $methodName) === true) {
+            $fieldVal = call_user_func(array(
+                $object,
+                $methodName
+            ));
+        }
+
+        return $fieldVal;
+    }
+
+    /**
+     * Add auto-suggest location.
+     *
+     * @param object $form
+     *            Form instance.
+     * @param object $ad
+     *            Ad instacne.
+     */
+    protected function addLocationAutoSuggestField($form, $ad = null, $paaFieldRule = null)
+    {
+        $locationId = null;
+        $locationText = null;
+        $latlng = '55.37874009999999, -3.4612489999999525';
+        $areaText = null;
+        $areaId = null;
+
+        // Add: user postcode or town as default selection from logged in user
+        if (CommonManager::isAuth($this->container)) {
+            $user = $this->container->get('security.token_storage')
+                ->getToken()
+                ->getUser();
+            if ($user->getZip()) {
+                $postCode = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodByLocation($user->getZip());
+                if ($postCode) {
+                    $locationId = $user->getZip();
+                    $locationText = $user->getZip();
+                    $latlng = $postCode->getLatitude() . ', ' . $postCode->getLongitude();
+                }
+            } elseif ($user->getLocationTown()) {
+                $locationId = $user->getLocationTown()->getId();
+                $locationText = $this->em->getRepository('FaEntityBundle:Location')->getLocationNameWithParentNameById($locationId, $this->container);
+                $latlng = $user->getLocationTown()->getLatitude() . ', ' . $user->getLocationTown()->getLongitude();
+            }
+        }
+
+        // fetch from cookie if user has no location
+        if (! $locationId) {
+            $cookieLocation = $this->request->cookies->get('location');
+            if ($cookieLocation && $cookieLocation != CommonManager::COOKIE_DELETED) {
+                $cookieLocation = get_object_vars(json_decode($cookieLocation));
+                
+                if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
+                    $latlng = $cookieLocation['latitude'] . ', ' . $cookieLocation['longitude'];
+                }
+                if (isset($cookieLocation['town_id']) && $cookieLocation['town_id']) {
+                    //check location belongs to area
+                    $getArea = $this->em->getRepository('FaEntityBundle:Location')->find($cookieLocation['town_id']);
+                    if($getArea->getLvl() == '4') { 
+                        $areaId = $getArea->getId();
+                        $locationId = $getArea->getParent()->getId();
+                    } else {
+                        $locationId = $cookieLocation['town_id'];
+                    }
+                }
+                if (isset($cookieLocation['town']) && $cookieLocation['town']) {
+                    $locationText = $cookieLocation['town'];
+                }
+                if (isset($cookieLocation['paa_county']) && $cookieLocation['paa_county']) {
+                    $locationText .= ', ' . $cookieLocation['paa_county'];
+                }
+            }
+        }
+        
+        if($this->request->query->get('Location')) {
+            $getLocation = array();
+            $locationSlug = strtolower(str_replace('_', '-', $this->request->query->get('Location')));
+            $getLocation = $this->em->getRepository('FaEntityBundle:Location')->getLocationBySlug($locationSlug);
+            if(!empty($getLocation)) {
+                $locationId = $getLocation->getId();
+                $latlng = $getLocation->getLatitude()  . ', ' . $getLocation->getLongitude();
+                $locationText = $getLocation->getName();
+            }
+        }
+        // autocomplete hidden field for value
+        $form->add('location', 'hidden', array(
+            'mapped' => false,
+            'data' => $locationId
+        ));
+
+        // autocomplete text field
+        $fieldOptions = array(
+            'mapped' => false,
+            'label' => 'Location',
+            'constraints' => new NotBlank(array(
+                'message' => 'Location should not be blank.'
+            )),
+            'data' => $locationText,
+        );
+
+        if ($paaFieldRule->getPlaceholderText()) {
+            $fieldOptions['attr']['placeholder'] = $paaFieldRule->getPlaceholderText();
+        }
+
+        $form->add('location_autocomplete', 'text', $fieldOptions);
+        $form->add('location_lat_lng', 'hidden', array(
+            'data' => $latlng,
+            'mapped' => false
+        ));
+
+        $this->addLocationTxtField($form, $locationText);
+
+        $this->addOrderedField('location_autocomplete');
+
+        //Add Location Area
+        // autocomplete hidden field for value
+        $form->add('area', 'hidden', array(
+                'mapped' => false,
+                'data' => $areaId
+        ));
+        
+        // autocomplete text field for location Area
+        $fieldOptionsForArea = array(
+                'mapped' => false,
+                'label' => 'Location Area',
+                'data' => $areaText,
+                'attr' => array(
+                        'class' => 'white-field'
+                )
+        );
+        
+        $form->add('area_text', 'hidden', array(
+                'data' => $areaText,
+                'mapped' => false
+        ));
+        
+        $form->add('area_autocomplete', 'text', $fieldOptionsForArea);
+    }
+    
+     /**
+     * Add location_text field to form
+     *
+     * @param object $form form instance
+     * @param string $locationText
+     *
+     * @return void
+     */
+    private function addLocationTxtField($form, $locationText= null) {
+        
+        $form->add('location_text', 'hidden', array(
+                'data' => $locationText,
+                'mapped' => false
+        ));
+    }
+
+    /**
+     * Add location field validation.
+     *
+     * @param object $form
+     *            Form instance.
+     */
+    protected function validateAdLocation($form)
+    {
+        $locationText = null;
+        $location = ($form->get('location')->getData()?$form->get('location')->getData():($form->get('location_autocomplete')->getData()?$form->get('location_autocomplete')->getData():''));
+        if ($location) {
+            $postCode = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodByLocation($location);
+            $town = null;
+            $locality = null;
+
+            if (! $postCode || $postCode->getTownId() == null || $postCode->getTownId() == 0) {
+                if (preg_match('/^\d+$/', $location)) {
+                    $town = $this->em->getRepository('FaEntityBundle:Location')->getTownAndAreaById($location, $this->container);
+                    
+                } else
+                    if (preg_match('/^([\d]+,[\d]+)$/', $location)) { 
+                        $localityTown = explode(',', $location);
+                        $localityId = $localityTown[0];
+                        $townId = $localityTown[1];
+                        if ($localityId && $townId) {
+                            $town = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array(
+                                'id' => $townId,
+                                'lvl' => '3'
+                            ));
+                        }
+                    } else {
+                        $town = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array(
+                            'name' => $location,
+                            'lvl' => '3'
+                        ));
+                        if (! $town) {
+                            $locality = $this->em->getRepository('FaEntityBundle:Locality')->findOneBy(array(
+                                'name' => $location
+                            ));
+                        }
+                    }
+            }
+            
+            //for displaying the location name on form
+            if( !empty($town) ) {
+                $locationText = $town->getName();
+            } else if( !empty($locality) ) {
+                $locationText = $locality->getName();
+            } elseif( !empty($postCode) ) {
+                $locationText = $location;
+            }
+
+            if($locationText != '') {
+                $this->addLocationTxtField($form, $locationText);
+            }
+
+            if (! $postCode && ! $town && ! $locality) { 
+                $form->get('location_autocomplete')->addError(new FormError($this->translator->trans('Location is invalid.', array(), 'validators')));
+            }
+
+            //validate Area for London Location
+            if($postCode && $postCode->getId() != null) {
+                $town      = $this->em->getRepository('FaEntityBundle:Location')->find($postCode->getTownId());
+            }
+            
+            if($town) {
+                //check area is based on London Location
+                if($town && ($town->getId() == LocationRepository::LONDON_TOWN_ID || $town->getlvl() == 4)){
+                    $locationArea = $form->get('area')->getData();
+                    
+                    if($locationArea == null) {
+                        $form->get('area_autocomplete')->addError(new FormError($this->translator->trans('Area should not be blank.', array(), 'validators')));
+                    } else { 
+                        $area = null;
+                        if (preg_match('/^\d+$/', $locationArea)) {
+                            $area = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array('id'=>$locationArea, 'lvl'=>'4'));
+                        } /*else {  
+                            $area= $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array(
+                                    'name'  => $locationArea,
+                                    'lvl'   =>'4'
+                            ));
+                        }*/
+                        
+                        if ( !$area ) {
+                            $form->get('area_autocomplete')->addError(new FormError($this->translator->trans('Area is invalid.', array(), 'validators')));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Validate price based on ad type selected.
+     *
+     * @param object $form
+     *            Form instance.
+     */
+    protected function validatePrice($form)
+    {
+        if ($form->has('price') && $form->has('price_text') && $form->has('ad_type_id')) {
+            if ($form->get('price')->getData() == '' && $form->get('price_text')->getData() == '') {
+                if($form->get('ad_type_id')->getData() == EntityRepository::AD_TYPE_SWAPPING_ID) {
+                    $form->get('price_text')->addError(new FormError($this->translator->trans('Value should not be blank.', array(), 'validators')));
+                } else {
+                    $form->get('price')->addError(new FormError($this->translator->trans('Value should not be blank.', array(), 'validators')));
+                }
+            } else {
+                if($form->get('ad_type_id')->getData() == EntityRepository::AD_TYPE_SWAPPING_ID) {
+                    if (! preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price_text')->getData(), $matches)) {
+                        $form->get('price_text')->addError(new FormError($this->translator->trans('Price is invalid.', array(), 'validators')));
+                    }
+                } else {
+                    if (! preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData(), $matches)) {
+                        $form->get('price')->addError(new FormError($this->translator->trans('Price is invalid.', array(), 'validators')));
+                    }
+                }
+            }
+        } elseif ($form->has('price_text')) {
+            if ($form->get('price_text')->getData() == '') {
+                $form->get('price_text')->addError(new FormError($this->translator->trans('Value should not be blank.', array(), 'validators')));
+            } else {
+                if (! preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price_text')->getData(), $matches)) {
+                        $form->get('price_text')->addError(new FormError($this->translator->trans('Price is invalid.', array(), 'validators')));
+                    }
+            }
+        } else {
+            if ($form->get('price')->getData() == '') {
+                $form->get('price')->addError(new FormError($this->translator->trans('Value should not be blank.', array(), 'validators')));
+            } else {
+                if (! preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData(), $matches)) {
+                        $form->get('price')->addError(new FormError($this->translator->trans('Price is invalid.', array(), 'validators')));
+                    }
+            }
+        }
+    }
+
+    /**
+     * Validate ad image limits.
+     *
+     * @param object $form
+     *            Form instance.
+     * @param object $ad
+     *            Ad instance.
+     */
+    protected function validateAdImageLimit($form, $ad = null)
+    {
+        return true;
+
+        // Image validation : required one photo uploaded
+        if ($ad && $ad->getId()) {
+            $adId = $ad->getId();
+        } else {
+            $adId = $this->container->get('session')->get('ad_id');
+        }
+
+        $adImgCount = $this->em->getRepository('FaAdBundle:AdImage')->getAdImageCount($adId);
+        if ($adImgCount < 1) {
+            $form->get('photo_error')->addError(new FormError($this->translator->trans('Minimum 1 photo is required.', array(), 'validators')));
+        }
+    }
+
+    /**
+     * Add field to order array to render on template.
+     *
+     * @param string $field
+     *            Field.
+     */
+    protected function addOrderedField($field)
+    {
+        $this->orderedFields[] = $field;
+    }
+
+    /**
+     * Add field to disable fields array to NOT render on template.
+     *
+     * @param string $field
+     *            Field.
+     */
+    protected function addDisabledField($field)
+    {
+        $this->disabledFields[] = $field;
+    }
+
+    /**
+     * Get vertical object.
+     *
+     * @param object $ad
+     *            Ad instance.
+     *
+     * @return object
+     */
+    protected function getVerticalObject($ad = null)
+    {
+        if ($ad && $ad->getId()) {
+            return $this->getVerticalRepository()->findOneBy(array(
+                'ad' => $ad->getId()
+            ));
+        }
+
+        return null;
+    }
+
+    /**
+     * Get ad vertical fields.
+     *
+     * @return array
+     */
+    protected function getVerticalFields()
+    {
+        return $this->getVerticalRepository()->getAllFields();
+    }
+
+    /**
+     * Get ad not-inexed vertical fields.
+     *
+     * @return array
+     */
+    protected function getNotIndexedVerticalFields()
+    {
+        return $this->getVerticalRepository()->getNotIndexedFields();
+    }
+
+    /**
+     * Get ad vertical repository.
+     *
+     * @return object
+     */
+    protected function getVerticalRepository()
+    {
+        $firstStepData = $this->getAdPostStepData('first');
+        $categoryPath = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($firstStepData['category_id'], false, $this->container);
+        $categoryNames = array_values($categoryPath);
+        $repoName = 'FaAdBundle:Ad' . str_replace(' ', '', ucwords($categoryNames[0]));
+
+        return $this->em->getRepository($repoName);
+    }
+
+    /**
+     * Get ad post step wise data from session.
+     *
+     * @param string $step
+     *            Ad post step.
+     *
+     *            return array
+     */
+    protected function getAdPostStepData($step)
+    {
+        $stepData = array();
+
+        if ($this->container->get('session')->has('paa_' . $step . '_step_data')) {
+            $stepData = unserialize($this->container->get('session')->get('paa_' . $step . '_step_data'));
+        }
+
+        return $stepData;
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
+     * @see \Fa\Bundle\AdBundle\Form\AdPostAdminType::setModerationValue()
+     *
+     * @param array $values
+     */
+    protected function setModerationValue($value = array())
+    {
+        $this->moderationValue = $value;
+    }
+
+    /**
+     * Validate description.
+     *
+     * @param object $form
+     *            Form instance.
+     */
+    protected function validateDescription($form)
+    {
+        if ($form->has('description')) {
+            $fieldOptions = $form->get('description')
+                ->getConfig()
+                ->getOptions();
+            if (isset($fieldOptions['attr']) && isset($fieldOptions['attr']['maxlength']) && $fieldOptions['attr']['maxlength']) {
+                $description = $form->get('description')->getData();
+                $description = preg_replace('/<p>&nbsp;<\/p>/', '', $description);
+                $description = preg_replace('/<[^>]*>/i', '', $description);
+                $description = preg_replace('/\r|\n|\r\n/i', '', $description);
+
+                if ($form->get('description')->getData() && mb_strlen(html_entity_decode($description), 'UTF-8') > $fieldOptions['attr']['maxlength']) {
+                    $form->get('description')->addError(new FormError($this->translator->trans('This value is too long. It should have %maxlength% characters or less.', array(
+                        '%maxlength%' => $fieldOptions['attr']['maxlength']
+                    ), 'validators')));
+                }
+            }
+        }
+    }
+
+    /**
+     * Add business phone field.
+     *
+     * @param object $form
+     *            Form instance.
+     * @param object $ad
+     *            Ad instance
+     */
+    protected function addBusinessAdField($form, $ad = null)
+    {
+        if ($this->isBusinessUser()) {
+            $form->add('business_phone', 'tel', array(
+                'label' => 'Ad specific phone number',
+                'mapped' => false,
+                'required' => false,
+                'data' => ($ad && $ad->getBusinessPhone() ? $ad->getBusinessPhone() : null)
+            ));
+        }
+    }
+
+    /**
+     * Is business user.
+     *
+     * @return boolean
+     */
+    protected function isBusinessUser()
+    {
+        if (CommonManager::isAuth($this->container)) {
+            $user = $this->container->get('security.token_storage')
+                ->getToken()
+                ->getUser();
+            if ($user && ($user->getRole() && $user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Validate business ad field.
+     *
+     * @param object $form
+     *            Form instance.
+     *
+     */
+    protected function validateBusinessAdField($form)
+    {
+        if ($this->isBusinessUser()) {
+            if ($form->has('business_phone') && $form->get('business_phone')->getData()) {
+                if (! preg_match('/^\+?\d{7,11}$/', str_replace(' ', '', $form->get('business_phone')->getData()))) {
+                    $form->get('business_phone')->addError(new FormError($this->translator->trans('Please enter correct ad specific phone number. It should contain minimum 7 digit and maximum 11 digit.', array(), 'validators')));
+                }
+            }
+        }
+    }
+
+    /**
+     * Validate youtube ad field.
+     *
+     * @param object $form Form instance.
+     *
+     */
+    protected function validateYoutubeField($form)
+    {
+        $youtubeVideoUrl = trim($form->get('youtube_video_url')->getData());
+
+        // validate youtube video url.
+        if ($youtubeVideoUrl) {
+            $youtubeVideoId = CommonManager::getYouTubeVideoId($youtubeVideoUrl);
+            if (!$youtubeVideoId) {
+                $form->get('youtube_video_url')->addError(new \Symfony\Component\Form\FormError($this->translator->trans('Please enter valid youtube video url.', array(), 'validators')));
+            }
+        }
+    }
+    
+    /**
+     * Validate Adult Rates ad field.
+     *
+     * @param object $form
+     *            Form instance.
+     *
+     */
+    protected function validateAdultRates($form)
+    {   
+        if($form->has('travel_arrangements_id') && $form->get('travel_arrangements_id')->getData() != '') {
+            $getTravelArrangement = $this->em->getRepository('FaEntityBundle:Entity')->find((int) $form->get('travel_arrangements_id')->getData());
+            if(!empty($getTravelArrangement) && ($getTravelArrangement->getName() == 'In-call' || $getTravelArrangement->getName() == 'Either')) {
+                if ($form->has('1hour_incall') && $form->get('1hour_incall')->getData() == '' && $form->get('1hour_incall')->getData() <= '0') {
+                    $form->get('1hour_incall')->addError(new FormError($this->translator->trans('1 hr In-call rate is required', array(), 'validators')));
+                } 
+            }
+            
+            if(!empty($getTravelArrangement) && ($getTravelArrangement->getName() == 'Out-call' || $getTravelArrangement->getName() == 'Either')) {
+                if ($form->has('1hour_outcall') && $form->get('1hour_outcall')->getData() == '' && $form->get('1hour_outcall')->getData() <= '0') {
+                    $form->get('1hour_outcall')->addError(new FormError($this->translator->trans('1 hr Out-call rate is required', array(), 'validators')));
+                }
+            }
+        }
+    }
+
+    /**
+     * Validate reg no.
+     *
+     * @param object $form Form instance.
+     */
+    protected function validateRegNo($form)
+    {
+        if ($form->has('has_reg_no') && $form->get('has_reg_no')->getData() == 1) {
+            if ($form->get('reg_no')->getData()) {
+                $carWebData = $this->container->get('fa.webcar.manager')->findByVRM($form->get('reg_no')->getData());
+                if (isset($carWebData['error'])) {
+                    $form->get('reg_no')->addError(new FormError('Please enter correct registration number.'));
+                }
+            } else {
+                $form->get('reg_no')->addError(new FormError('Please enter registration number.'));
+            }
+        }
+    }
+
+    /**
+     * Validate paypal email address.
+     *
+     * @param object $form Form instance.
+     * @param object $ad   Ad instance.
+     */
+    protected function validatePaypalEmail($form, $ad)
+    {
+        $paymentMethodId = $form->get('payment_method_id')->getData();
+        $paypalEmail     = $form->get('paypal_email')->getData();
+        $paypalFirstName = $form->get('paypal_first_name')->getData();
+        $paypalLastName = $form->get('paypal_last_name')->getData();
+
+        if (in_array($paymentMethodId, array(PaymentRepository::PAYMENT_METHOD_PAYPAL_ID, PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID))) {
+            if (!$paypalEmail || !$paypalFirstName || !$paypalLastName) {
+                $form->get('paypal_email')->addError(new FormError("Paypal account is not verified."));
+                $form->get('paypal_first_name')->addError(new FormError("Paypal account is not verified."));
+                $form->get('paypal_last_name')->addError(new FormError("Paypal account is not verified."));
+            } elseif ($paypalEmail && $paypalFirstName && $paypalLastName) {
+                $isPaypalVerifiedEmail = $this->container->get('fa.paypal.account.verification.manager')->verifyPaypalAccountByEmail($paypalEmail, 'NAME', $paypalFirstName, $paypalLastName);
+                if (!$isPaypalVerifiedEmail) {
+                    $form->get('paypal_email')->addError(new FormError("Paypal account is not verified."));
+                    $form->get('paypal_first_name')->addError(new FormError("Paypal account is not verified."));
+                    $form->get('paypal_last_name')->addError(new FormError("Paypal account is not verified."));
+                }
+            }
+        }
+    }
+
+    /**
+     * Validate postage price.
+     *
+     * @param object $form Form instance.
+     */
+    protected function validatePostagePrice($form)
+    {
+        $deliveryMethodId = $form->get('delivery_method_option_id')->getData();
+        $postagePrice     = $form->get('postage_price')->getData();
+
+        if ($postagePrice && (!is_numeric($postagePrice) || (is_numeric($postagePrice) && $postagePrice < 0)) && in_array($deliveryMethodId, array(DeliveryMethodOptionRepository::POSTED_ID, DeliveryMethodOptionRepository::POSTED_OR_COLLECT_ID))) {
+            $form->get('postage_price')->addError(new FormError("Please enter valid postage price."));
+        }
+    }
+
+    /**
+     * Add date field validation.
+     *
+     * @param object $form Form instance.
+     */
+    protected function validateEventDate($form)
+    {
+        if (!$form->has('event_start')) {
+            return true;
+        }
+
+        $eventStart = $form->get('event_start')->getData();
+        $eventStartTime = $form->get('event_start_time')->getData();
+        $eventEnd   = $form->get('event_end')->getData();
+        $eventEndTime = $form->get('event_end_time')->getData();
+        $includeEndTime = $form->get('include_end_time')->getData();
+        $validStartDate = true;
+        $validEndDate = true;
+        $validStartTime = true;
+        $validEndTime = true;
+
+        if ($eventStart || $eventEnd || $eventStartTime || $eventEndTime) {
+            if ($eventStart) {
+                if (!preg_match('/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/', $eventStart)) {
+                    $form->get('event_start')->addError(new FormError('Event start date is invalid.'));
+                    $validStartDate = false;
+                } else {
+                    $date = explode('/', $eventStart);
+                    if (!checkdate($date[1], $date[0], $date[2])) {
+                        $form->get('event_start')->addError(new FormError('Event start date is invalid.'));
+                        $validStartDate = false;
+                    }
+                }
+            } else {
+                if ($eventStartTime) {
+                    $form->get('event_start')->addError(new FormError('Please enter event start date.'));
+                    $validStartDate = false;
+                }
+            }
+
+            if ($eventEnd) {
+                if (!preg_match('/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/', $eventEnd)) {
+                    $form->get('event_end')->addError(new FormError('Event end date is invalid.'));
+                    $validEndDate = false;
+                }  else {
+                    $date = explode('/', $eventEnd);
+                    if (!checkdate($date[1], $date[0], $date[2])) {
+                        $form->get('event_end')->addError(new FormError('Event end date is invalid.'));
+                        $validEndDate = false;
+                    }
+                }
+            } else {
+                if ($eventEndTime) {
+                    $form->get('event_end')->addError(new FormError('Please enter event end date.'));
+                    $validEndDate = false;
+                }
+            }
+
+            if ($eventStartTime) {
+                if (!preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', $eventStartTime)) {
+                    $form->get('event_start_time_autocomplete')->addError(new FormError('Event start time is invalid.'));
+                    $validStartTime = false;
+                }
+            }
+
+            if ($eventEndTime) {
+                if (!preg_match('/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', $eventEndTime)) {
+                    $form->get('event_end_time_autocomplete')->addError(new FormError('Event end time is invalid.'));
+                    $validEndTime = false;
+                }
+            }
+
+            if (!$includeEndTime && ($eventEnd || $eventEndTime)) {
+                $form->get('event_end_time_autocomplete')->addError(new FormError('You can not include end time.'));
+                $validEndTime = false;
+            }
+
+            if ($validStartDate && $validEndDate && $validStartTime && $validEndTime) {
+                $start = ($eventStart ? $eventStart : '').($eventStartTime ?' '.$eventStartTime: '');
+                $end   = ($eventEnd ? $eventEnd : '').($eventEndTime ?' '.$eventEndTime: '');
+
+                if ($start != '' && $end != '') {
+                    if (strtotime(str_replace('/', '-', $start)) >= strtotime(str_replace('/', '-', $end))) {
+                        $form->get('event_start')->addError(new FormError('Event start should be before event end.'));
+                    }
+                } else if ($start == '' && $end != '') {
+                    $form->get('event_start')->addError(new FormError('Please add event start.'));
+                } else if ($start != '' && $end == '') {
+                    if (strtotime(str_replace('/', '-', $start)) <= time()) {
+                        $form->get('event_start')->addError(new FormError('Event start should not be before current date and time.'));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Add date available field validation.
+     *
+     * @param object $form Form instance.
+     */
+    protected function validateDateAvailable($form)
+    {
+        if ($form->has('date_available') && $form->get('date_available')->getData()) {
+            $isDateAvailableValid = true;
+            if (!preg_match('/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/', $form->get('date_available')->getData())) {
+                $form->get('date_available')->addError(new FormError('Date available is invalid.'));
+                $isDateAvailableValid = false;
+            }
+
+            if ($isDateAvailableValid) {
+                $date = explode('/', $form->get('date_available')->getData());
+                if (!checkdate($date[1], $date[0], $date[2])) {
+                    $form->get('date_available')->addError(new FormError('Date available is invalid.'));
+                    $isDateAvailableValid = false;
+                }
+            }
+
+            if ($isDateAvailableValid) {
+                if (strtotime(str_replace('/', '-', $form->get('date_available')->getData())) < mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))) {
+                    $form->get('date_available')->addError(new FormError('Date available should not be less than today.'));
+                }
+            }
+        }
+    }
+
+    /**
+     * Validate deposit.
+     *
+     * @param object $form Form instance.
+     */
+    protected function validateDeposit($form)
+    {
+        if ($form->has('deposit') && $form->get('deposit')->getData()) {
+            if (!preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('deposit')->getData(), $matches)) {
+                $form->get('deposit')->addError(new FormError('Deposit is invalid.'));
+            }
+        }
+    }
+}

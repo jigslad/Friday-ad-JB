@@ -121,4 +121,18 @@ services:
     fa.ad_adult.solrsearch:
         class: '%fa.ad_adult.solrsearch.class%'
         arguments: ['@service_container']
-        
+
+    fa.paa_lite_field.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:PaaLiteField]
+
+    fa.paa_lite_field_rule.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:PaaLiteFieldRule]
+
+    fa.campaigns.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:Campaigns]

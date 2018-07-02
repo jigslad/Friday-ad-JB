@@ -1,0 +1,44 @@
+<div class="modal-content remove-modal">
+    <div class="row">
+        <div class="columns mb20">
+            <h1 class="text-center">Register</h1>
+        </div>
+        <form method="post" name="fa_paa_lite_register" id="fa_paa_lite_register">
+        <div class="columns">
+            <label for="fa_paa_lite_register_username" class="required">Email address</label>
+            <input class="form-control" id="fa_paa_lite_register_email" name="fa_paa_lite_register[email]" required="required" autocomplete="off" tabindex="1" type="email">
+            <div id="fa_paa_lite_register_user_type" autocomplete="off" onchange="showUserTypeRegField()" class="label-inline paa-user-type">                                
+                <span class="custom-radio checked">
+                    <input id="fa_paa_lite_register_user_type_0" name="fa_paa_lite_register[user_type]" value="1" type="radio">
+                </span>
+                <label for="fa_paa_lite_register_user_type_0" class="required">I have an account</label>                                
+                <span class="custom-radio ">
+                    <input id="fa_paa_lite_register_user_type_1" name="fa_paa_lite_register[user_type]" value="2" checked="checked"  type="radio">
+                </span>
+                <label for="fa_paa_lite_register_user_type_1" class="required">I'm new to Friday-Ad</label>   
+                <input id="fa_paa_lite_register_user_roles" name="fa_paa_lite_register[user_roles]" value="5" type="hidden">
+                <input id="fa_paa_lite_register_is_email_alert_enabled" name="fa_paa_lite_register[is_email_alert_enabled]" value="1" type="hidden">     
+            </div>
+            <span class="error" id="register-error-span" style="display:none"></span>
+        </div>
+        <div class="columns" id="register-save-button-div">
+            <button type="button" id="fa_paa_register_save" name="fa_paa_lite_register[save]" class="primary-btn-1 button expand">Sign up with email</button>
+            <button type="button" id="fa_paa_lite_register_loading" class="primary-btn-1 button expand loading-in-button" style="display:none;"><img src="{{ asset_url('facore/images/ajax_loader.gif') }}" style="margin-right:15px">{{ 'Registering... '|trans({}, 'frontend-paa-lite-common') }}</button>
+        </div>
+        </form>
+        <div class="columns"><div class="connect-text">Or connect with</div></div>
+        <div class="columns">
+            <div class="clearfix text-center">
+                {% if googleRegisterUrl %}
+                <button type="reset" class="fb-btn" onclick="javascript:fbLoginPopup('{{ facebookRegisterUrl }}');">{{ 'Login With FB'|trans({}, 'campaign') }}</button>
+            {% endif %}
+            {% if googleRegisterUrl %}
+                <button type="reset" class="gplus-btn" onclick="javascript:googleLoginPopup('{{ googleRegisterUrl }}');">{{ 'Login With Google'|trans({}, 'campaign') }}</button>
+            {% endif %}
+            </div>
+        </div>
+        <div class="columns">
+            <p class="post-info">We won't post anything <b>without your permission.</b></p>
+        </div>
+    </div>
+</div>

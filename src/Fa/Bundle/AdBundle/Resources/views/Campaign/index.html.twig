@@ -1,0 +1,916 @@
+{% set container = fetch_container_instance() %}
+{% if Campaign|length > 0 and Campaign is defined %}
+    {% set PageTitle = Campaign.getPageTitle() %}
+    {% set PageTitleColor = (Campaign.getPageTitleColor())?Campaign.getPageTitleColor():'Light' %}
+    {% set SeoPageTitle = Campaign.getSeoPageTitle() %}
+    {% set blockMetaDescription = Campaign.SeoPageDescription() %}
+    {% set blockMetaKeywords = Campaign.SeoPageKeywords() %}
+    {% set FormFillTimes = (Campaign.getFormFillTimes())?Campaign.getFormFillTimes():0 %}
+    {% set DiscountCode = Campaign.getDiscountCode() %}
+    {% set IntroText = Campaign.getIntroText() %}
+    {% set CampaignBackgroundFileName = Campaign.getCampaignBackgroundFileName() %}
+    {% set Category = Campaign.getCategory().getName() %}
+    {% set CategoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(Campaign.getCategory().getId())|join(' > ') %}
+    {% set categoryLvl = Campaign.getCategory().getLvl() %}
+{% else %}
+    {% set PageTitle = "Lorem ipsum dolor sit amet, consectetu adipiscing elit" %}
+    {% set PageTitleColor = 'Light' %}
+    {% set SeoPageTitle = '' %}
+    {% set blockMetaDescription = '' %}
+    {% set blockMetaKeywords = '' %}
+    {% set FormFillTimes = 0 %}
+    {% set DiscountCode = '' %}
+    {% set IntroText = 'Manage these enquiries with ease and speed via direct messages, email, text or call.' %}
+    {% set CampaignBackgroundFileName = 'campaignbanner.png' %}
+    {% set Category = '' %}
+    {% set CategoryPath = '' %}
+    {% set categoryLvl = 1 %}
+{% endif %}
+
+{% if PageTitleColor == 'Light' %}
+    {% set contentColor = '#FFFFFF' %}
+{% else %}
+    {% set contentColor = '#000000' %}
+{% endif %}
+
+{% extends 'FaFrontendBundle::campaignLayout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% block scripttop %}
+<link href="{{ asset_url('fafrontend/css/campaign.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+{% block page_title %}
+    {{SeoPageTitle}}
+{% endblock %}
+
+{% block meta_description %}
+   {{blockMetaDescription}}
+{% endblock %}
+
+{% block meta_keywords %}
+    {{blockMetaKeywords}}
+{% endblock %}
+
+{% block title %}
+   {{SeoPageTitle?SeoPageTitle:PageTitle}}
+{% endblock %}
+
+
+{% use "FaAdBundle:AdImage:showImageUploaderPaaLite.html.twig" %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ block('imageUploadStylesheets') }}
+{% endblock %}
+
+{% block body %}
+{% if Campaign|length > 0 and Campaign is defined %}
+{% if (CategoryPath is defined and CategoryPath is not null) %}
+    {% set categoryIds = CategoryPath|keys%}
+    {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+    {% set rootCategoryId = categoryRepository.getRootCategoryId(Campaign.getCategory().getId(), container) %}
+{% endif %}
+{% endif %}
+<style>
+.paa-lite-logo {position:absolute !important;}
+.paa-lite-form .ad_type_choice, .paa-lite-form .capsule-bg, .paa-lite-form .capsule-links a { margin-bottom: 8px;height:26px !important;line-height:26px !important }
+.paa-lite-form .capsule-links { margin:0px 0px 10px 0px !important; }
+.paa-lite-form .radio-capsule {  margin:0px !important;  }
+.paa-lite-form .delivery-method-links .capsule-bg { padding:0px 12px !important; }
+.paa-lite-form .payment-method-links .capsule-bg { padding:0px 9px !important; }
+.paa-lite-form .paa-lite-form .remove-small-wrapper .small-wrapper { width:auto !important }
+.paa-lite-form #upload_image_fld button a, .paa-lite-form #upload_image_fld label.upload-btn {font-family: 'Bree Serif',serif;font-size: 18px;line-height: 20px;color:#ffffff;font-weight: normal;text-align:center }
+.paa-lite-form .paa-features { margin:0px 0px 20px 0px !important;  }
+.paa-lite-form .upload-btn, .paa-lite-form .upload-btn:hover, .paa-lite-form .upload-btn:focus, .paa-lite-form .upload-btn:active { margin-bottom:20px;margin-top:0px; }
+.paa-lite-form ul.paa-features li { width:100% !important;height:40px !important; }
+.paa-lite-form .ui-selectmenu-button {width:100% !important; }
+.paa-lite-form label span { font-weight:normal;font-size:12px;color:#333 }
+.paa-lite-form label { display:inline-block }
+.asterick-color { color:#d9534f;font-weight:bold}
+.paa-lite-form #reg_no_field { margin:0px !important }
+.show-for-sr
+ {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  -webkit-clip-path: inset(50%);
+          clip-path: inset(50%);
+  border: 0; }
+ .paa-lite-form .paa-enter-price.delivery-price input[type="number"] { width:100% !important; }
+ .paa-lite-form .paa-paypal-mail { margin:0 auto 15px auto !important; }
+ .paa-lite-form .loading-in-button { height: 60px !important;padding-top: 15px !important;}
+ .paa-hero-full-screen ul li, .paa-hero-full-screen li  { list-style: inherit !important; }
+</style>
+<header class="relative">
+    <div>
+        <div class="top-header-logo">
+            <div class="row">
+                <div class="small-24 medium-24 large-20 large-push-2 columns">
+                    <div >
+                        <nav class="top-bar paa-lite-logo" id="top_bar_nav" data-topbar="">
+                            <ul class="title-area">
+                                <li class="name">
+                                    <h1>
+                                         <a href="/" class="logo "><img src="{{ asset_url('fafrontend/images/fad-logo.svg') }}" alt="Friday-Ad"></a>
+                                    </h1>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+    
+<section>
+<div class="paa-hero-full-screen" style="background:url('/uploads/campaigns/{{CampaignBackgroundFileName}}') center center no-repeat;background-size:cover">
+    <div class="hero-block">
+        <div class="row">
+            <div class="medium-12 large-10 large-push-2 columns">
+                <h1 style="color:{{contentColor}}">{{PageTitle}}</h1>
+                <div style="color:{{contentColor}}">{{IntroText|raw}}</div>
+            </div>
+            <div class="medium-11 medium-pull-1 large-8 large-pull-3 columns paa-lite-form">
+                <div class="row">
+                {% if Campaign|length > 0 and Campaign is defined %}
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate','id': 'fa_paa_lite_common'}}) }}
+                        {{ form_errors(form) }}
+                        
+                        {% set orderedFields = form.paa_lite_ordered_fields.vars.value|split(',') %}
+                     
+                        {% if orderedFields|length  > 0 %}
+                            {% set totalLevel = fetch_repository('FaEntityBundle:Category').getMaxLevel(fetch_container_instance()) %}
+                            {{ set_variables('paa_lite_category_select', {'totalLevel' : totalLevel }) }}
+                            {% if totalLevel %}
+                                <div class="large-24 columns">
+                                    <label> Category <span> {{ (CategoryPath|length >0)? ' : '~ CategoryPath :''}} </span> </label>
+
+                                    <div id="category_choices_div">
+                                        <div class="admin_cat_search list_style_none">
+                                            {% for i in 1..totalLevel %}
+                                                <div id="category_choice_div_{{ i }}" class="category_choice_div" style="display:none">
+                                                    {% set field = 'category_' ~ i %}
+                                                    {{ form_widget(attribute(form, field)) }}
+                                                    {{ form_errors(attribute(form, field)) }}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <span id="category_error_span" class="error" style="display:none"></span>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {{ include('FaAdBundle:Campaign:paaLiteFields.html.twig') }}
+                        {% endif %}
+                        
+                       
+                        <div class="large-24 columns mt10" id="paa-lite-form-save-button-div">
+                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                            <button type="button" id="fa_paa_lite_common_loading" class="primary-btn-1 button expand loading-in-button" style="display:none;"><img src="{{ asset_url('facore/images/ajax_loader.gif') }}" style="margin-right:15px">{{ 'Saving data... '|trans({}, 'frontend-paa-lite-common') }}</button>
+                        </div>
+                    {{ form_end(form) }}
+                {% else %}
+                    <div class="large-24 columns text-center"><label>This Campaign is not available now.</label></div> 
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="clearfix">
+<div id="login-modal" class="reveal-modal tiny remove-item-modal login-register-modal" data-reveal="">
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns mb20">
+                <h1 class="text-center">Login</h1>
+            </div>
+            <form method="post" name="fa_paa_lite_login" id="fa_paa_lite_login">
+                {{ include('FaAdBundle:Campaign:login.html.twig') }}
+            </form>
+            <div class="columns"><div class="connect-text">Or connect with</div></div>
+            <div class="columns">
+                <div class="clearfix text-center">
+                    {% if facebookLoginUrl %}
+                        <button type="reset" class="fb-btn" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');">{{ 'Login With FB'|trans({}, 'campaign') }}</button>
+                    {% endif %}
+                    {% if googleLoginUrl %}
+                        <button type="reset" class="gplus-btn" onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');">{{ 'Login With Google'|trans({}, 'campaign') }}</button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="columns">
+                <p class="post-info">We won't post anything <b>without your permission.</b></p>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<div id="register-modal" class="reveal-modal tiny remove-item-modal login-register-modal" data-reveal="">
+    {{ include('FaAdBundle:Campaign:register.html.twig') }}
+</div>
+<div id="adLlimit-modal" class="reveal-modal tiny remove-item-modal" data-reveal="">
+    {{ include('FaAdBundle:Campaign:adLimit.html.twig') }}
+</div>
+<div id="error-modal" class="reveal-modal tiny remove-item-modal" data-reveal="">
+    {{ include('FaAdBundle:Campaign:adError.html.twig') }}
+</div>
+<div id="adIsLive-modal" class="reveal-modal tiny remove-item-modal" data-reveal="" >
+    {{ include('FaAdBundle:Campaign:adIsLive.html.twig') }}  
+</div> 
+<div id="upgradeBasicAdToFeaturedModal" class="reveal-modal tiny remove-item-modal upgrade-modal" data-reveal></div>
+</section>
+{% endblock %}
+
+{% block scriptbottom %}
+
+{% if Campaign|length > 0 and Campaign is defined %}
+<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+{% if container.getParameter('fa.amazon.mode') == 'live' %}
+    {% set amazon_url_js = container.getParameter('fa.amazon.live.url') %}
+{% else %}
+    {% set amazon_url_js = container.getParameter('fa.amazon.test.url') %}
+{% endif %}
+<script>
+   var script = document.createElement('script');
+   script.type = "text/javascript";
+   script.src = "{{amazon_url_js}}";
+   document.getElementsByTagName('head')[0].appendChild(script);
+</script>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        {% set totalLevel = attribute(get_variables('paa_lite_category_select'), 'totalLevel') %}
+        var totalLevel = '{{ totalLevel }}';
+        var lastLevel  = '';
+        var lastCatLevel  = '';
+        var category_id = {{CategoryId}}; 
+        var catload = 0;
+        var catIdLevel = '{{categoryLvl}}';
+        var register_email_state = false;
+        var login_email_state = false;
+        var login_password_state = false;
+        var defLastCategory = {{isLastCategory}};
+
+        $('#fa_paa_lite_common_category_id').val(category_id);
+        
+       /* if($.cookie('fa_paa_lite_common_category_1')) {
+            loadDefCategoryByLevel(1, 1,$.cookie('fa_paa_lite_common_category_1'));
+            $('#fa_paa_lite_common_category_id').val($.cookie('fa_paa_lite_common_category_1'));
+        }
+
+        if($.cookie('fa_paa_lite_common_category_2')) {
+            loadCategoryByLevel($.cookie('fa_paa_lite_common_category_1'), 2,$.cookie('fa_paa_lite_common_category_2'));
+            $('#fa_paa_lite_common_category_id').val($.cookie('fa_paa_lite_common_category_2'));
+        }
+        if($.cookie('fa_paa_lite_common_category_3')) {
+            loadCategoryByLevel($.cookie('fa_paa_lite_common_category_2'), 3,$.cookie('fa_paa_lite_common_category_3'));
+            $('#fa_paa_lite_common_category_id').val($.cookie('fa_paa_lite_common_category_3'));
+        }
+        if($.cookie('fa_paa_lite_common_category_4')) {
+            loadCategoryByLevel($.cookie('fa_paa_lite_common_category_3'), 4,$.cookie('fa_paa_lite_common_category_4'));
+            $('#fa_paa_lite_common_category_id').val($.cookie('fa_paa_lite_common_category_4'));
+        }
+        if($.cookie('fa_paa_lite_common_category_5')) {
+            loadCategoryByLevel($.cookie('fa_paa_lite_common_category_4'), 5,$.cookie('fa_paa_lite_common_category_5'));
+            $('#fa_paa_lite_common_category_id').val($.cookie('fa_paa_lite_common_category_5'));
+        }
+        if($.cookie('fa_paa_lite_common_category_6')) {
+            loadCategoryByLevel($.cookie('fa_paa_lite_common_category_5'), 6,$.cookie('fa_paa_lite_common_category_6'));
+            $('#fa_paa_lite_common_category_id').val($.cookie('fa_paa_lite_common_category_6'));
+        }*/
+        
+        var loadedKey = 1;var lastLodedCatId = 1;
+        
+        {% for key,value in getCatLvlArrs %}
+            loadDefCategoryByLevel(lastLodedCatId, loadedKey,{{value}});
+            $.cookie('fa_paa_lite_common_category_'+  loadedKey,{{value}});
+            loadedKey = loadedKey+1;
+            lastLodedCatId = {{value}};
+        {% endfor %}
+
+        if(!$.cookie('fa_paa_lite_common_category_'+loadedKey)) {
+            loadCategoryByLevel(lastLodedCatId, loadedKey);
+        } else {
+            for(var i=loadedKey;i<=totalLevel;i++) {
+              if($.cookie('fa_paa_lite_common_category_'+i)) {
+                loadCategoryByLevel($.cookie('fa_paa_lite_common_category_'+(i-1)), i,$.cookie('fa_paa_lite_common_category_'+i));
+                $('#fa_paa_lite_common_category_id').val($.cookie('fa_paa_lite_common_category_'+i));
+              }
+            }
+        }
+        
+
+        lastCatLevel = loadedKey;
+        $('.category').change(function(e) {
+           var fieldId   = $(this).attr('id');
+           var level     = fieldId.replace('fa_paa_lite_common_category_', '');
+           var nextLevel = parseInt(level) + 1;
+
+           loadCategoryByLevel($(this).val(), nextLevel);
+           if($('#category_choice_div_'+nextLevel).css('display') == 'block')
+           {
+                lastCatLevel = nextLevel;
+           }
+           
+           category_id = $("#fa_paa_lite_common_category_" +  parseInt(level)).val();
+           $.cookie('fa_paa_lite_common_category_'+  parseInt(level),$(this).val());
+           $('#fa_paa_lite_common_category_id').val(category_id);
+        });
+
+        $('#fa_paa_lite_common').bind('submit', function(event){
+            {% if app.user %}
+               /* if(($("#fa_paa_lite_common_category_" +  parseInt(lastCatLevel)).val()=='') && ($("#fa_paa_lite_common_category_" +  parseInt(lastCatLevel)).is(":visible"))) {*/
+                if(($("#fa_paa_lite_common_category_" +  parseInt(lastCatLevel)).val()=='') && defLastCategory==0) {
+                    $('#category_error_span').show();
+                    $('#category_error_span').html('Please select subcategory');
+                    event.preventDefault(); 
+                    return false;
+                } else {
+                    /*if(!$("#fa_paa_lite_common_category_" +  parseInt(lastCatLevel)).is(":visible")) {
+                        $('#fa_paa_lite_common_category_id').val({{CategoryId}});
+                    }*/
+                    if(defLastCategory==1) {
+                        $('#fa_paa_lite_common_category_id').val({{CategoryId}});
+                    }
+                    $('#category_error_span').hide();
+                    $('#fa_paa_lite_common_loading').show();
+                    $('#fa_paa_lite_common_save').hide();
+                    $('#fa_paa_lite_common').submit();
+                }
+            {% else %} 
+                {% set showLoginPopUp = 1 %}
+                $('#login-modal').foundation('reveal', 'open');
+                event.preventDefault(); 
+                return false;
+            {% endif %}
+        });
+
+        if({{showLoginPopUp}}==1) {
+            $('#login-modal').foundation('reveal', 'open');
+        }
+
+        if({{showAddToCartPopUp}}==1) {
+            addToCart();
+        }
+        if({{showErrorPopUp}}==1) {
+            $('#error-modal').foundation('reveal', 'open');
+        }
+        if({{showAdLivePopUp}}==1) {
+            $('#adIsLive-modal').foundation('reveal', 'open');
+        }
+
+        if({{showAdLimitPopUp}}==1) {
+            $('#adLlimit-modal').foundation('reveal', 'open');
+        }
+        
+        $("#manage_my_ad_link").click(function() {
+            window.location.href = '/manage_my_ads/active/';
+        });
+
+        $("#manage_my_ad_limit_link").click(function() {
+            window.location.href = '/manage_my_ads/active/';
+        });
+
+        $("#manage_my_ad_error_link").click(function() {
+            location.reload();
+        });
+
+        $("#ad-limit-reveal-close").click(function() {
+            window.location.href = '/manage_my_ads/active/';
+        });
+
+        $("#ad-live-reveal-close").click(function() {
+            window.location.href = '/manage_my_ads/active/';
+        });
+
+        
+        if ($('#fa_paa_lite_login_show_password').is(':checked')) {
+            $('#fa_paa_lite_login_show_password').attr('checked', false);
+            $('#fa_paa_lite_login_show_password').closest('span').removeClass('checked');
+        }
+
+        $("#fa_paa_lite_login_show_password").click(function() {
+            showHidePassword();
+        });
+
+        /* Job Form */
+        {% if (form.additional_job_requirements_id) is defined %}
+            bindEqualizerEvent('additional_job_requirements_id_equalizer');
+        {% endif %}
+
+       /* $('#fa_paa_lite_login_password').on('blur', function(){
+            var route =  Routing.generate('paa_lite_login');
+            var email = $('#fa_paa_lite_login_username').val();
+            var password = $('#fa_paa_lite_login_password').val();
+            if (email == '') {
+                login_email_state = false;
+                return;
+            }
+            if (password == '') {
+                login_password_state = false;
+                return;
+            }
+            $.ajax({
+              url: route,
+              type: 'post',
+              data: {
+                'user_check' : 1,
+                'email' : email,
+                'password' : password,
+              },
+              success: function(response){
+                if (response.error.length) {
+                  login_email_state = false;
+                  $('#login-error-span').show();
+                  $('#login-error-span').html('Invalid email or user.');
+                } else {
+                    login_email_state = true;
+                    login_password_state = true;
+                    $('#login-error-span').hide();
+                }
+              }
+            });
+
+        });*/
+        /* Login Form */
+        $('#fa_paa_lite_login_save').on('click', function(event){
+            var route = '';
+            if($('#fa_paa_lite_login_user_type_0').attr('checked')) {
+                route = Routing.generate('paa_lite_login');
+            } else if ($('#fa_paa_lite_login_user_type_1').attr('checked')) {
+            	$('#fa_paa_lite_login_user_type_1').prop('disabled', true);
+                $('#login-modal').foundation('reveal', 'close');
+                $('#register-modal').foundation('reveal', 'open');
+                $('#fa_paa_lite_register_user_type_0').attr('checked', false);
+                $('#fa_paa_lite_register_user_type_1').attr('checked', true);
+                $('#fa_paa_lite_register_user_type_1').parent('.custom-radio').addClass('checked');
+                $('#fa_paa_lite_register_user_type_0').parent('.custom-radio').removeClass('checked');
+            }
+
+            var email = $('#fa_paa_lite_login_username').val();
+            var password = $('#fa_paa_lite_login_password').val();
+            if (email == '') {
+                login_email_state = false;
+            } else {
+                login_email_state = true;
+            }
+            if (password == '') {
+                login_password_state = false;
+            } else {
+                login_password_state = true;
+            }
+
+            if(route!='') {
+                $.ajax({
+                    url: route,
+                    type: 'post',
+                    data: {
+                        'email_user' : 1,
+                        'username' : email,
+                        'password': password,
+                    },
+                    success: function(response){
+                        if (response.error.length) {
+                            $('#login-error-span').show();
+                            $('#login-error-span').html(response.error);
+                            event.stopPropagation();
+                            event.preventDefault(); 
+                            return false;
+                        } else {
+                            $('#login-error-span').hide();
+                            $('#fa_paa_lite_login_loading').show();
+                            $('#fa_paa_lite_login_save').hide();
+          
+                            $.ajax({
+                                type: "POST",
+                                url : route,
+                                data : { 'username' : email, 'password': password },
+                                complete: function(response){
+                                    if(response.status==302) {
+                                        location.reload();
+                                    } else {
+                                        location.reload();
+                                    }
+                                    
+                                }
+                            });
+                        }
+                    }
+                });
+            } 
+        });
+        /*$('#fa_paa_lite_register_email').on('blur', function(){
+            var route = Routing.generate('paa_lite_registration');
+            var email = $('#fa_paa_lite_register_email').val();
+            $('#register-error-span').hide();
+            $('#register-error-span').html('');
+            if (email == '') {
+                register_email_state = false;
+            } else {
+                register_email_state = true;
+            }
+            $.ajax({
+              url: route,
+              type: 'post',
+              data: {
+                'email_check' : 1,
+                'email' : email,
+              },
+              success: function(response){
+                if (response.error.length) {
+                  register_email_state = false;
+                  $('#register-error-span').show();
+                  $('#register-error-span').html('An account with this email address already exists.');
+                } else {
+                    register_email_state = true;
+                    $('#register-error-span').hide();
+                    $('#register-error-span').html('');
+                }
+              }
+            });
+
+        });*/
+
+        $('#fa_paa_register_save').on('click', function(event){
+            var route = '';
+            var email = $('#fa_paa_lite_register_email').val();
+            $('#register-error-span').hide();
+            $('#register-error-span').html('');
+            if($('#fa_paa_lite_register_user_type_0').attr("checked")) {
+            	$('#fa_paa_lite_register_user_type_0').prop('disabled', true);
+                $('#register-modal').foundation('reveal', 'close');
+                $('#login-modal').foundation('reveal', 'open');
+                $('#fa_paa_lite_login_user_type_1').parent('.custom-radio').removeClass('checked');
+                $('#fa_paa_lite_login_user_type_0').parent('.custom-radio').addClass('checked');
+                $('#fa_paa_lite_login_user_type_0').attr('checked', true);
+                $('#fa_paa_lite_login_user_type_1').attr('checked', false);
+            } else if ($('#fa_paa_lite_register_user_type_1').attr("checked")) {
+                route = Routing.generate('paa_lite_registration');
+            }
+
+            if (email == '') {
+                register_email_state = false;
+            } else {
+                register_email_state = true;
+            }
+            if(route!='') {
+                $.ajax({
+                    url: route,
+                    type: 'post',
+                    data: {
+                        'email_check' : 1,
+                        'email' : email,
+                    },
+                    success: function(response){
+                        if (response.error.length) {
+                          register_email_state = false;
+                          $('#register-error-span').show();
+                          $('#register-error-span').html('An account with this email address already exists.');
+                        } else {
+                            register_email_state = true;
+                            $('#fa_paa_lite_register_loading').show();
+                            $('#fa_paa_register_save').hide();
+
+                            $.ajax({
+                                type: "POST",
+                                url : route,
+                                data: 'email=' + email,
+                                success: function(response){
+                                    /*if (response.error.length) {
+                                        $('#register-error-span').show();
+                                        $('#register-error-span').html(response.error);
+                                    } else if (response.redirectToUrl.length) {
+                                        $('#register-error-span').hide();
+                                        window.location.href = response.redirectToUrl;
+                                    }*/
+                                    location.reload();
+                                }
+                            });
+                        }
+                    }
+                });
+            } 
+        });
+
+    });
+
+    $(document).foundation({
+          'reveal': { close_on_background_click: false }
+    })
+
+    {% if paymentPaaLiteTransactionJs['ga_transaction'] is defined and paymentPaaLiteTransactionJs['ga_transaction'].PAYMENT_ID is defined %}
+        ga('require', 'ecommerce');
+        
+        {% if paymentPaaLiteTransactionJs['getTranscationJs'] is defined %}
+            {{ paymentPaaLiteTransactionJs['getTranscationJs'] | raw }}
+        {% endif %}
+        
+        {% if paymentPaaLiteTransactionJs['getItemJs'] is defined %}
+            {{ paymentPaaLiteTransactionJs['getItemJs'] | raw }}
+        {% endif %}
+        
+        ga('ecommerce:send');
+        
+        $.ajax({
+            type: "POST",
+            url: "{{path('ajax_update_ga_status')}}",
+            data: {'id':'{{ paymentPaaLiteTransactionJs['ga_transaction'].PAYMENT_ID }}'},
+        })
+        .done(function(response) {
+        });
+
+    {% endif %}
+
+    function showUserTypeField()
+    {
+        var userType = "";
+        var selected = $("input[type='radio'][name='fa_paa_lite_login[user_type]']:checked");
+        if (selected.length > 0) {
+            userType = selected.val();
+        }
+
+        if (userType == 2) {
+            /*$('#fa_paa_lite_login_password').val('');
+            $('#paa_password_field_div').hide();
+            $('#fa_paa_lite_login_save').text("{{'Sign up with email'|trans({}, 'frontend-paa-lite-login')}}");*/
+            $('#login-modal').foundation('reveal', 'close');
+            $('#register-modal').foundation('reveal', 'open');
+            $('#fa_paa_lite_register_user_type_0').parent('.custom-radio').removeClass('checked');
+            $('#fa_paa_lite_register_user_type_1').parent('.custom-radio').addClass('checked');
+            $('#fa_paa_lite_register_user_type_0').attr('checked', false);
+            $('#fa_paa_lite_register_user_type_1').attr('checked', true);
+            $('#fa_paa_lite_register_user_type_0').prop('disabled', false);
+            $('#fa_paa_lite_register_user_type_1').prop('disabled', true);
+        } else {
+            /*$('#paa_password_field_div').show();
+            $('#fa_paa_lite_login_save').text("{{'Next step: add more details'|trans({}, 'frontend-paa-lite-login')}}");*/
+            $('#register-modal').foundation('reveal', 'close');
+            $('#login-modal').foundation('reveal', 'open');
+            $('#fa_paa_lite_login_user_type_0').attr('checked', true);
+            $('#fa_paa_lite_login_user_type_1').attr('checked', false);
+            $('#fa_paa_lite_login_user_type_0').prop('disabled', true);
+            $('#fa_paa_lite_login_user_type_1').prop('disabled', false);
+            $('#fa_paa_lite_login_user_type_1').parent('.custom-radio').removeClass('checked');
+            $('#fa_paa_lite_login_user_type_0').parent('.custom-radio').addClass('checked');           
+        }
+    }
+
+    function showUserTypeRegField()
+    {
+        var userType = "";
+        var selected = $("input[type='radio'][name='fa_paa_lite_register[user_type]']:checked");
+        if (selected.length > 0) {
+            userType = selected.val();
+        }
+        
+        if (userType == 2) {
+            $('#login-modal').foundation('reveal', 'close');
+            $('#register-modal').foundation('reveal', 'open');
+            $('#fa_paa_lite_register_user_type_0').parent('.custom-radio').removeClass('checked');
+            $('#fa_paa_lite_register_user_type_1').parent('.custom-radio').addClass('checked');
+            $('#fa_paa_lite_register_user_type_0').attr('checked', false);
+            $('#fa_paa_lite_register_user_type_1').attr('checked', true);
+            $('#fa_paa_lite_register_user_type_1').prop('disabled', true);
+            $('#fa_paa_lite_register_user_type_0').prop('disabled', false);
+        } else {
+            $('#register-modal').foundation('reveal', 'close');
+            $('#login-modal').foundation('reveal', 'open');
+            $('#fa_paa_lite_login_user_type_1').parent('.custom-radio').removeClass('checked');
+            $('#fa_paa_lite_login_user_type_0').parent('.custom-radio').addClass('checked');
+            $('#fa_paa_lite_login_user_type_0').attr('checked', true);
+            $('#fa_paa_lite_login_user_type_1').attr('checked', false);
+            $('#fa_paa_lite_login_user_type_1').prop('disabled', false);
+            $('#fa_paa_lite_login_user_type_0').prop('disabled', true);
+        }
+    }
+   
+    function showHidePassword() {
+        if ($('#fa_paa_lite_login_show_password:checked').val()) {
+            $('#fa_paa_lite_login_password').attr('type', 'text');
+        } else {
+            $('#fa_paa_lite_login_password').attr('type', 'password');
+        }
+    }
+
+    /* Job Forms */
+    function bindEqualizerEvent(equalizerId)
+    {
+       $('#'+equalizerId).equalizer({
+           columns: '> li, div',
+           useHeight: 'height',
+           resizeable: true,
+           min: 0,
+           breakpoint: null,
+           disabled: 'breakpoint',
+           overflow: 'overflowed'
+       });
+    }
+
+    function loadDefCategoryByLevel(id, level, selectCat)
+    {
+        var category_selector = $('#fa_paa_lite_common_category_'+level);
+        var selectMsg         = (level == 1) ? "{{ 'Please select category'|trans({}, 'frontend-paa-lite-common') }}" : "{{ 'Please select subcategory'|trans({}, 'frontend-paa-lite-common') }}";
+        category_selector.html('<option value="">' + selectMsg + '</option>');
+        var selectedCatData = '';
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                async: false,
+                success: function(data) {
+                    if (data.length > 0) {
+                        lastLevel = level;
+                        $('#category_choice_div_' + level).show();
+                        $(category_selector).show();
+                        $('#fa_paa_lite_common_category_' + level).hide();
+                        for (var i=0, total = data.length; i < total; i++) {
+                            if (selectCat !== undefined && selectCat != '' && data[i].id==selectCat) {
+                              selectedCatData = 'selected';
+                            } else {
+                                selectedCatData = '';
+                            }
+                            category_selector.append('<option value="' + data[i].id + '" "'+selectedCatData+'">' + data[i].text + '</option>');
+                        }
+
+                        if (selectCat !== undefined && selectCat != '') {
+                          $(category_selector).val(selectCat);
+
+                        }
+                    } else {
+                        $('#fa_paa_lite_common_category_id').val(id);
+                        lastLevel = parseInt(level) - 1;
+                    }
+
+                    $('.ui-selectmenu-button').removeClass('active');
+                    $('#fa_paa_lite_common_category_'+level+'-button').addClass('active');
+                    $('#category_choice_div_'+level).css('display','none');
+                }
+            });
+        } 
+    }
+
+    function loadCategoryByLevel(id, level, selectCat)
+    {
+        var category_selector = $('#fa_paa_lite_common_category_'+level);
+        var selectMsg         = (level == 1) ? "{{ 'Please select category'|trans({}, 'frontend-paa-lite-common') }}" : "{{ 'Please select subcategory'|trans({}, 'frontend-paa-lite-common') }}";
+        category_selector.html('<option value="">' + selectMsg + '</option>');
+        var selectedCatData = '';
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                async: false,
+                success: function(data) {
+                    if (data.length > 0) {
+                        lastLevel = level;
+                        $('#category_choice_div_' + level).show();
+                        $(category_selector).show();
+                        $('#fa_paa_lite_common_category_' + level).hide();
+                        for (var i=0, total = data.length; i < total; i++) {
+                            if (selectCat !== undefined && selectCat != '' && data[i].id==selectCat) {
+                              selectedCatData = 'selected';
+                            } else {
+                                selectedCatData = '';
+                            }
+                            category_selector.append('<option value="' + data[i].id + '" "'+selectedCatData+'">' + data[i].text + '</option>');
+                        }
+
+                        if (selectCat !== undefined && selectCat != '') {
+                          $(category_selector).val(selectCat);
+
+                        }
+                    } else {
+                        $('#fa_paa_lite_common_category_id').val(id);
+                        lastLevel = parseInt(level) - 1;
+                    }
+                    $('.ui-selectmenu-button').removeClass('active');
+                    $('#fa_paa_lite_common_category_'+level+'-button').addClass('active');
+                    resetAndHideCategoryChoiceFields(false);
+                }
+            });
+        } else {
+            lastLevel = parseInt(level) - 1;
+            if (level == 2 ) {
+                resetAndHideCategoryChoiceFields(true);
+            } else {
+                resetAndHideCategoryChoiceFields(false);
+            }
+        }
+        $(document).foundation('equalizer', 'reflow');
+    }
+
+    function resetAndHideCategoryChoiceFields(removeRegFields)
+    {
+        var totalLevel = '{{ totalLevel }}';
+        for (var l = (parseInt(lastLevel) + 1); l <= totalLevel; l++) {
+            $('#fa_paa_lite_common_category_' + l).html('<option value="">{{ 'Please select subcategory'|trans({}, 'frontend-paa-lite-common') }}</option>');
+            $('#category_choice_div_' + l).hide();
+        }
+
+        if (removeRegFields) {
+            $('#motor_reg_fields').html('');
+            $(document).foundation('equalizer', 'reflow');
+        }
+    }
+
+    function addToCart(id, categoryId) {
+        blockPage();
+        var route = Routing.generate('ajax_add_to_cart');
+        $.ajax({
+            type: "GET",
+            url : route,
+            data : {'redirectUrl': '{{app.request.getUri()}}'},
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+            $('#upgradeBasicAdToFeaturedModal').html(response.htmlContent);
+            $('#upgradeBasicAdToFeaturedModal').foundation('reveal', 'open');
+        });
+    }
+
+//]]>
+</script>
+{{ include('FaAdBundle:Campaign:campaignJs.html.twig') }}
+
+{% if (form.brand_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_brand_id', 'placeHolder': ((attribute(form, 'brand_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'brand_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'brand_id_autocomplete').vars.attr.placeholder : 'eg. Little Tikes or Playskool'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_lite_common_brand_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.breed_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_breed_id', 'placeHolder': ((attribute(form, 'breed_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'breed_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'breed_id_autocomplete').vars.attr.placeholder : ''), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_lite_common_breed_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.species_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_species_id', 'placeHolder': ((attribute(form, 'species_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'species_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'species_id_autocomplete').vars.attr.placeholder : ''), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_lite_common_species_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.colour_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_colour_id', 'placeHolder': ((attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'colour_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'colour_id_autocomplete').vars.attr.placeholder : 'eg. Pink or Blue or Multi coloured'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_lite_common_colour_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.event_start_time) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_event_start_time', 'placeHolder': ((attribute(form, 'event_start_time').vars.attr.placeholder is defined and attribute(form, 'event_start_time').vars.attr.placeholder is not null) ? attribute(form, 'event_start_time').vars.attr.placeholder : 'Add a time'|trans({}, 'frontend-ad-edit')), 'route' : 'ad_post_ajax_event_time_search'}) }}
+{% endif %}
+
+{% if (form.event_end_time) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_event_end_time', 'placeHolder': ((attribute(form, 'event_end_time').vars.attr.placeholder is defined and attribute(form, 'event_end_time').vars.attr.placeholder is not null) ? attribute(form, 'event_end_time').vars.attr.placeholder : 'Add a time'|trans({}, 'frontend-ad-edit')), 'route' : 'ad_post_ajax_event_time_search'}) }}
+{% endif %}
+
+{% if (form.manufacturer_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_manufacturer_id', 'placeHolder': ((attribute(form, 'manufacturer_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'manufacturer_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'manufacturer_id_autocomplete').vars.attr.placeholder : 'Please type the manufacturer'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_lite_common_manufacturer_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.part_manufacturer_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_part_manufacturer_id', 'placeHolder': ((attribute(form, 'part_manufacturer_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'part_manufacturer_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'part_manufacturer_id_autocomplete').vars.attr.placeholder : 'Please type the part manufacturer'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_lite_common_part_manufacturer_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.make_id_autocomplete) is defined %}
+    {% if secondRootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_ID') %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_make_id', 'placeHolder': ((attribute(form, 'make_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'make_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'make_id_autocomplete').vars.attr.placeholder : 'Please type the make'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_lite_common_make_id_dimension_id', 'child_field' : '#fa_paa_lite_common_model_id'}) }}
+    {% else %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_make_id', 'placeHolder': ((attribute(form, 'make_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'make_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'make_id_autocomplete').vars.attr.placeholder : 'Please type the make'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_lite_common_make_id_dimension_id'}) }}
+    {% endif %}
+{% endif %}
+
+{% if (form.model_id_autocomplete) is defined %}
+    {% if secondRootMotorsCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORHOMES_ID') %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_model_id', 'placeHolder': ((attribute(form, 'model_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'model_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'model_id_autocomplete').vars.attr.placeholder : 'Please type the model of above selected make'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_lite_common_model_id_dimension_id', 'parent_field' : '#fa_paa_lite_common_make_id'}) }}
+    {% else %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_model_id', 'placeHolder': ((attribute(form, 'model_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'model_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'model_id_autocomplete').vars.attr.placeholder : 'Please type the model of above selected make'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_lite_common_model_id_dimension_id'}) }}
+    {% endif %}
+{% endif %}
+
+{% if (form.part_of_vehicle_id_autocomplete) is defined %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_part_of_vehicle_id', 'placeHolder': ((attribute(form, 'part_of_vehicle_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'part_of_vehicle_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'part_of_vehicle_id_autocomplete').vars.attr.placeholder : 'Please type the part of vehicle'|trans({}, 'frontend-ad-edit')), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_lite_common_part_of_vehicle_id_dimension_id'}) }}
+{% endif %}
+
+{% if (form.location_autocomplete) is defined %}   
+    {#{{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_location', 'placeHolder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : 'Type area'|trans), 'route' : 'area_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices', 'townIdForArea': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TOWN_ID') }) }}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}#}
+
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_location', 'placeHolder': ((attribute(form, 'location_autocomplete').vars.attr.placeholder is defined and attribute(form, 'location_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'location_autocomplete').vars.attr.placeholder : 'Type postal code or town'|trans), 'route' : 'town_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices' }) }}
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_lite_common_area', 'placeHolder': ((attribute(form, 'area_autocomplete').vars.attr.placeholder is defined and attribute(form, 'area_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'area_autocomplete').vars.attr.placeholder : 'ex: SE2'|trans), 'route' : 'area_ajax_find_town_by_term', 'dropdownCssClass': 'white-choices', 'townIdForArea': constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TOWN_ID') }) }}
+
+{% endif %}
+
+{{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
+{{ block('imageUploadJavascriptBottom') }}
+{% endif %}
+{% endblock %}

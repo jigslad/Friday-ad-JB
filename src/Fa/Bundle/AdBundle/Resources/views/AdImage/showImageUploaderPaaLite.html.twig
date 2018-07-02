@@ -1,0 +1,430 @@
+{% block imageUploadStylesheets %}
+    {% set imageUploadStylesheetsVariables = get_variables('imageUploadStylesheets') %}
+    {% if imageUploadStylesheetsVariables.loaded is not defined %}
+        {{ set_variables('imageUploadStylesheets', {'loaded':'true'}) }}
+        <link href="{{ asset_url('facore/css/jquery.guillotine.css') }}" rel="stylesheet">
+    {% endif %}
+{% endblock %}
+
+{% block imageUploadHtml %}
+{% set container = fetch_container_instance() %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set userId = (app.user)?app.user.Id:'' %}
+
+{{ set_variables('AdImageUpload', {'adId':adId, 'vertical': vertical, 'formName': formName, 'maxValue': maxValue, 'userId': userId, 'from': from}) }}
+
+{#<button type="button" id="drag_drop_text" class="upload-btn expand {% if adImgCount %}drag-ins-hr{% else %}drag-ins-vr{% endif %}"><a href="javascript:void(0);" id="drag_dop_anchor">Upload</a></button>#}
+
+<div id="upload_image_div" style="height:auto">
+    <div id="{% if from == 'item_detail' %}filelistItemDetail{% else %}filelist{% endif %}"></div>
+    <input type="hidden" name="maxfileremain" id="maxfileremain" value="{{imageLimitRemaining}}" />
+    <div id="uploaded_images_div" style="padding-top:{% if adId %}30px !important {% else %}0px !important{% endif %}">
+        {{ include('FaAdBundle:AdImage:renderUploadedImage.html.twig', {'adId': adId, 'vertical': vertical }) }}
+    </div>
+</div>
+
+<div id="crop_big_image_div"></div>
+{% endblock %}
+
+{% block imageUploadJavascriptBottom %}
+    {% set container = fetch_container_instance() %}
+    {% set isAdminLoggedIn = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isAdminLoggedIn', [fetch_container_instance()]) %}
+    {% set imageUploadJavascriptBottomVariables = get_variables('imageUploadJavascriptBottom') %}
+    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    {% if imageUploadJavascriptBottomVariables.loaded is defined and imageUploadJavascriptBottomVariables.loaded == 'true' %}
+        {% set container = fetch_container_instance() %}
+        {% set variables = get_variables('AdImageUpload') %}
+        {% set adId = (variables.adId is defined ? variables.adId : 0) %}
+        {% set userId = (variables.userId is defined ? variables.userId : 0) %}
+        {% set vertical = (variables.vertical is defined ? variables.vertical : null) %}
+        {% set formName = (variables.formName is defined ? variables.formName : null) %}
+        {% set maxValue = (variables.maxValue is defined ? variables.maxValue : null) %}
+        {% set from = (variables.from is defined ? variables.from : null) %}
+        {% set fileListId = '#filelist' %}
+        {% set moderationMsg = '' %}
+        {% if from == 'item_detail' %}
+            {% set fileListId = '#filelistItemDetail' %}
+            {% set moderationMsg = 'Uploads and edits may go through moderation before going live but this won\'t take long. Click done and refresh the page to see changes.'|trans({}, 'frontend-paa-lite-common') %}
+        {% endif %}
+        {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+        {% javascripts filter='uglifyjs2' output='bundles/js/compiled/showImageUploader1.js'
+            'bundles/facore/js/jquery.guillotine.min.js'
+            'bundles/facore/js/plupload.full.min.js'
+            'bundles/fafrontend/js/vendor/jquery-ui.min.js'
+            'bundles/facore/js/jquery.ui.touch-punch.min.js'
+            'bundles/facore/js/jquery.imagedraghighlight.js'
+        %}
+        <script src="{{ static_asset_url(asset_url) }}?v=2"></script>
+        {% endjavascripts %}
+        <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function(){
+            initImageUpload(true);
+            var mainDragDropUploader = setUpUploader('drag_dop_anchor', true, 'drag_drop_container');
+            mainDragDropUploader.init();
+            plupload.addI18n({
+                'File size error.' : "{{'The size of image should not be greater than %max_file_size%.'|trans({'%max_file_size%' : (container.getParameter("fa.image.allow_size_in_mb"))~' mb'}, 'frontend-paa-lite-common')}}",
+                'File extension error.' : "{{'Image type must be one of the jpg, jpeg, png, gif.'|trans({}, 'frontend-paa-lite-common')}}",
+                'Init error.' : "{{'Your browser does not have Flash, Silverlight or HTML5 support.'|trans({}, 'frontend-paa-lite-common')}}"
+            });
+            //$("#uploaded_images_div").empty();
+            $("#uploaded_images_div").css('padding-top','0px');
+            updateImageUploadTips();
+            
+        });
+
+        function initImageUpload(removeFileList)
+        {
+            if ($('.pickfiles').length > 0) {
+                $('.pickfiles').each(function(e) {
+                    var mainUploader = setUpUploader($(this).attr('id'), removeFileList, '');
+                    mainUploader.init();
+                });
+            } else if (removeFileList) {
+                $('{{ fileListId }}').html('');
+            }
+
+            if ($('#adImageList').is(':visible')) {
+                $('#drag_drop_text').removeClass('drag-ins-vr').addClass('drag-ins-hr');
+            } else {
+                $('#drag_drop_text').removeClass('drag-ins-hr').addClass('drag-ins-vr');
+            }
+
+        }
+        function setUpUploader(id, removeFileList, dropElement)
+        {
+            var errorFlag = false;
+            var imageLimitRemaining = 0;
+            var adId = '{{adId}}';
+            var userId = '{{userId}}';
+            var vertical='{{vertical}}';
+            var maxValue='{{maxValue}}';
+            var fa_paa_image =new Array();
+            var isMultiSelect = true;
+            var isMobile = '{{ mobileDetectManager.isMobile() }}'
+            var isTablet = '{{ mobileDetectManager.isTablet() }}'
+            //if (isMobile || isTablet)
+                //isMultiSelect = false;
+            var uploader = new plupload.Uploader({
+                runtimes : 'html5,flash,silverlight,html4',
+                unique_names :true,
+                multi_selection : isMultiSelect,
+                multipart : true,
+                browse_button : id, // you can pass in id...
+                drop_element : dropElement,
+                url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_ad_image_save_admin") }}' {% else %} '{{ path("ajax_ad_image_save") }}' {% endif %},
+                multipart_params : {'fa_paa_image[ad_id]' :adId, 'fa_paa_image[user_id]' :userId, 'fa_paa_image[vertical]' : vertical, 'fa_paa_image[maxValue]' : maxValue},
+                file_data_name : 'fa_paa_image[fileData]',
+                flash_swf_url : '/facore/js/Moxie.swf',
+                silverlight_xap_url : '/facore/js/Moxie.xap',
+                dragdrop: true,
+
+                filters : {
+                    max_file_size : '{{container.getParameter("fa.image.allow_size_in_mb")}}mb',
+                    mime_types:
+                    [
+                        {title : '{{"Image files"|trans({}, 'frontend-paa-lite-common')}}', extensions : "jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF"},
+                    ]
+                },
+
+                init: {
+                    PostInit: function() {
+                        if (removeFileList) {
+                            $('{{ fileListId }}').html('');
+                        }
+                    },
+                    FilesAdded: function(up, files, response) {
+                        errorFlag = false;
+                        imageLimitRemaining = $("#maxfileremain").val();
+                        if(up.files.length > parseInt($("#maxfileremain").val()))
+                        {
+                            uploader.splice();
+                            $('{{ fileListId }}').html('');
+                            $('{{ fileListId }}').html(decorateMessage("{{ 'The maximum image upload limit remains is '|trans({}, 'frontend-paa-lite-common') }}" + $("#maxfileremain").val(), 'alert'));
+                            return false;
+                        }
+                        else
+                        {
+                            uploader.start();
+                            $('{{ fileListId }}').html("<div class='row'><img src=\"{{ asset_url('facore/images/ajax_loader.gif') }}\"> {{ 'Uploading image please wait... '|trans({}, 'frontend-paa-lite-common') }}</div>");
+                            $('.save_data').attr('disabled', true);
+                         }
+                    },
+                    FileUploaded: function(up, file, response) {
+                        var obj = $.parseJSON(response.response);
+                        if (obj.error.length) {
+                            errorFlag = true;
+                            $('{{ fileListId }}').html(decorateMessage(obj.error, 'alert'));
+                        }
+                        $('#maxfileremain').val(obj.imageLimitRemaining);
+                        {% if (formName is defined and formName is not null) %} 
+                            $('#{{formName}}_photo_error').val(obj.adImgCount);
+                        {% endif %}
+                    },
+                    UploadComplete: function(up, file) {
+                        if (!errorFlag && imageLimitRemaining != $('#maxfileremain').val()) {
+                            $('{{ fileListId }}').html(decorateMessage(up.files.length+ " {{'Photo(s) uploaded successfully.'|trans({}, 'frontend-paa-lite-common') }} {{ moderationMsg }}", 'success'));
+                        } else if(errorFlag)  {
+                            $('{{ fileListId }}').html(decorateMessage('{{'Problem in image upload.'|trans({}, 'frontend-paa-lite-common')}}', 'alert'));
+                        }
+                        uploader.splice();
+                        getImages();
+                        $('.save_data').attr('disabled', false);
+                    },
+                    Error: function(up, err) {
+                       msg = err.message;
+                       if (msg == 'Init error.') {
+                           msg = "{{'Your browser does not have Flash, Silverlight or HTML5 support.'|trans({}, 'frontend-paa-lite-common')}}";
+                       }
+                       $('{{ fileListId }}').html(decorateMessage(msg, 'alert'));
+                    }
+                }
+            });
+            return uploader;
+        }
+
+        function getImages(cache)
+        {
+            blockElement('#upload_image_div');
+            if (typeof cache == 'undefined') {
+                cache = false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_get_ad_images_admin") }}' {% else %} '{{ path("ajax_get_ad_images") }}' {% endif %},
+                data: { adId: '{{adId}}', vertical: '{{vertical}}', 'cache': cache}
+            })
+            .always(function(response) {
+                unblockElement('#upload_image_div');
+            })
+            .done(function(response) {
+                $('#uploaded_images_div').html(response.images);
+                makeImagesSortable();
+                initImageUpload(false);
+                $('.upload-thumb-img').click(function(e){
+                    $('#upload_image_div').siblings('small.error').html('');
+                });
+                updateImageUploadTips();
+            });
+        }
+
+        function updateImageUploadTips()
+        {
+            {% if vertical == 'jobs' %}
+            if ($("#adImageList > li").length > 1)
+                $('#paa_image_upload_tips').html('{{"Your profile image will be used as the main photo of your ad. You can edit it or change it and add more images if you want to."|trans({}, "frontend-paa-lite-common")}}');
+            else
+                $('#paa_image_upload_tips').html('{{"Upload an image with the logo of your company. This will be used as the main image of your ad. You can add other images if you want to."|trans({}, "frontend-paa-lite-common") }}');
+            {% endif %}
+        }
+
+        function deleteImage(url)
+        {
+            blockElement('#upload_image_div');
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { maxValue: '{{maxValue}}', userId:'{{userId}}'}
+            })
+            .always(function(response) {
+                unblockElement('#upload_image_div');
+            })
+            .done(function(response) {
+                if (response.error.length) {
+                    $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                }
+                if (response.successMsg.length) {
+                    $('{{ fileListId }}').html(decorateMessage(response.successMsg, 'success'));
+                    $('#uploaded_images_div').html(response.images);
+                    $('#maxfileremain').val(response.imageLimitRemaining);
+                    {% if (formName is defined and formName is not null) %} 
+                        $('#{{formName}}_photo_error').val(response.adImgCount);
+                    {% endif %}
+                    makeImagesSortable();
+                    initImageUpload(false);
+                    updateImageUploadTips();
+                }
+            });
+        }
+
+        function getOriginalImage(url)
+        {
+            blockElement('#upload_image_div');
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { userId:'{{userId}}', 'from':'{{from}}'},
+                async: false,
+                cache: false,
+            })
+            .always(function(response) {
+                unblockElement('#upload_image_div');
+            })
+            .done(function(response) {
+                if (response.error.length) {
+                    $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                }
+                if (response.image.length) {
+                    $('#crop_big_image_div').html(response.image);
+                    $('#upload_image_div').hide();
+                    $( "#crop_big_image" ).load(function() {
+                        $('#crop_image').show();
+                        var picture = $('#crop_big_image');
+                        picture.guillotine({
+                          width: 800,
+                          height: 600,
+                          zoomStep: 0.2,
+                          onChange: function(data, action){
+                            data.scale = parseFloat(data.scale.toFixed(4));
+                            for(var k in data) { $('#'+k).val(data[k]); }
+                          }
+                        });
+
+                        // Initialize plugin (with custom event)
+                        picture.guillotine({eventOnChange: 'guillotinechange'});
+                        picture.guillotine('fit');
+
+                        // Display inital data
+                        var data = picture.guillotine('getData');
+                        for(var k in data) { $('#'+k).val(data[k]); }
+                        // Bind button actions
+                        $('#rotate').click(function(){ picture.guillotine('rotateRight'); });
+                        $('#fit').click(function(){ picture.guillotine('fit'); });
+                        $('#zoom_in').click(function(){ picture.guillotine('zoomIn'); });
+                        $('#zoom_out').click(function(){ picture.guillotine('zoomOut'); });
+                    });
+
+                    $('#crop_close').click(function(){
+                        $('#crop_big_image_div').html('');
+                        $('#upload_image_div').show();
+                        getImages(true);
+                    });
+                    $('#remove_img').click(function(){
+                        $('#crop_big_image_div').html('');
+                        $('#upload_image_div').show();
+                    });
+                    $('#make_main_photo').click(function(){
+                        $('#crop_big_image_div').html('');
+                        $('#upload_image_div').show();
+                    });
+                }
+            });
+        }
+
+        function cropImage(url)
+        {
+            blockElement('#crop_big_image_div');
+            var imgParams = '';
+            $('.cropImg').each(function(e){
+                imgParams += $(this).attr('name')+ '=' +$(this).val() + '&'
+            });
+            imgParams = imgParams.slice(0,-1);
+            imgParams = imgParams+'&userId={{userId}}'
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: imgParams
+            })
+            .always(function(response) {
+                unblockElement('#crop_big_image_div');
+            })
+            .done(function(response) {
+                if (response.error.length) {
+                    $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                    initImageUpload(false);
+                }
+                if (response.successMsg.length) {
+                    $('{{ fileListId }}').html(decorateMessage(response.successMsg+' {{ moderationMsg }}', 'success'));
+                    $('#crop_big_image_div').html('');
+                    $('#upload_image_div').show();
+                    getImages();
+                }
+            });
+        }
+
+        function makeImagesSortable()
+        {
+            $('#adImageList').sortable({
+                containment: 'parent',
+                items: "li:not(.ui-sortable-disabled)",
+                tolerance:"pointer"
+            });
+            $('#adImageList').disableSelection();
+            $('#adImageList').on("sortupdate", function(event, ui) {
+                var order = {};
+                var count = 0;
+
+                $('#adImageList li').each( function(e) {
+                    order[$(this).attr('id')] = $(this).index() + 1;
+                    count = count + 1;
+                });
+               
+                if (count > 0) {
+                    blockElement('#upload_image_div');
+                    $.ajax({
+                        url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_change_ad_image_order_admin", {"adId": adId}) }}' {% else %} '{{ path("ajax_change_ad_image_order", {"adId": adId}) }}' {% endif %},
+                        type: 'POST',
+                        data:  {'orders': JSON.stringify(order), userId:'{{userId}}'},
+                        cache: false,
+                        success: function(response) {
+                            unblockElement('#upload_image_div');
+                            if (response.error.length) {
+                                $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                                getImages();
+                            }
+                            if (response.successMsg.length) {
+                                $('{{ fileListId }}').html(decorateMessage(response.successMsg, 'success'));
+                            }
+                        }
+                    });
+                } else {
+                    getImages();
+                }
+            });
+        }
+
+        function makeMainPhoto(imageId, imageOrd)
+        {
+            if (imageOrd > 1)
+            {
+                blockElement('#upload_image_div');
+                var imageNewOrd = 1;
+                $.ajax({
+                    url : {% if isAdminLoggedIn and isAdminLoggedIn.id %} '{{ path("ajax_make_main_image_admin", {"adId": adId}) }}' {% else %} '{{ path("ajax_make_main_image", {"adId": adId}) }}' {% endif %},
+                    type: 'POST',
+                    data:  {'imageId': imageId, 'imageOrd': imageOrd, 'imageNewOrd' : imageNewOrd, userId:'{{userId}}'},
+                    cache: false,
+                    success: function(response) {
+                        unblockElement('#upload_image_div');
+                        if (response.error.length) {
+                            $('{{ fileListId }}').html(decorateMessage(response.error, 'alert'));
+                            getImages();
+                        }
+                        if (response.successMsg.length) {
+                            $('{{ fileListId }}').html(decorateMessage(response.successMsg, 'success'));
+                            getImages();
+                        }
+                    }
+                });
+            }
+        }
+
+        function resetImage(url)
+        {
+            $.ajax({
+                type: "POST",
+                url: url,
+            })
+            .done(function(response) {
+                if (response.orgImgUrl.length) {
+                    getOriginalImage(response.orgImgUrl);
+                    $('#reset_image_success_msg').html(decorateMessage('{{'Original image reset successfully.'|trans({}, 'frontend-paa-lite-common')}}', 'success'));
+                }
+            });
+        }
+        //]]>
+        </script>
+    {% endif %}
+{% endblock %}

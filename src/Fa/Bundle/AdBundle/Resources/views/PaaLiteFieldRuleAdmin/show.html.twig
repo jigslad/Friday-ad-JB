@@ -1,0 +1,118 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+
+{% block content %}
+<div class="large-row">
+    {{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+    <div class="row">
+       <div class="columns">
+           <div class="panel">
+               <div class="row">
+                <div class="large-12 columns mb15">
+                    <b>{{ 'Category'|trans }} : </b> {{ categoryRepository.getCategoryPathArrayById(categoryId)|join(' > ') }}
+                </div>
+               </div>
+               <table class="table table-striped table-bordered table-hover">
+               <thead>
+                   <tr class="field-heading">
+                       <th>
+                           {{ 'Field'|trans }} 
+                       </th>
+                       <th width="150">
+                           {{ 'Label'|trans }}
+                       </th>
+                       <th>
+                           {{ 'Show'|trans }}
+                       </th>
+                       <th>
+                           {{ 'Required'|trans }}
+                       </th>
+                       <th>
+                           {{ 'Recommened'|trans }}
+                       </th>
+                       <th width="200">
+                           {{ 'Help text'|trans }}
+                       </th>
+                       <th width="200">
+                           {{ 'Error text'|trans }}
+                       </th>
+                       <th>
+                           {{ 'Default value'|trans }}
+                       </th>
+                       <th width="50">
+                           {{ 'Minimum value'|trans }}
+                       </th>
+                       <th width="50">
+                           {{ 'Maximum value'|trans }}
+                       </th>
+                       <th width="50">
+                           {{ 'Stage'|trans }}
+                       </th>
+                       <th width="50">
+                           {{ 'Display order'|trans }}
+                       </th>
+                  </tr>
+               </thead>
+               <tbody>
+                   {% for paaliteFieldRule in paaLiteFieldRules %}
+                   <tr class="odd gradeX">
+                       <td>
+                           {{ paaliteFieldRule.paaliteField.label }}
+                       </td>
+                       <td class="textbox_150">
+                           {{ paaliteFieldRule.label }}
+                       </td>
+                       <td>
+                           {% if paaliteFieldRule.status %}
+                               {{ 'Yes'|trans }}
+                           {% else %}
+                               {{ 'No'|trans }}
+                           {% endif %}
+                       </td>
+                       <td>
+                           {% if paaliteFieldRule.isRequired %}
+                               {{ 'Yes'|trans }}
+                           {% else %}
+                               {{ 'No'|trans }}
+                           {% endif %} 
+                       </td>
+                       <td>
+                           {% if paaliteFieldRule.isRecommended %}
+                               {{ 'Yes'|trans }}
+                           {% else %}
+                               {{ 'No'|trans }}
+                           {% endif %}
+                       </td>
+                       <td class="textarea_200">
+                           {{ paaliteFieldRule.helpText }} 
+                       </td>
+                       <td class="textarea_200">
+                           {{ paaliteFieldRule.errorText }}
+                       </td>
+                       <td>
+                           {{ paaliteFieldRule.defaultValue }}
+                       </td>
+                       <td>
+                           {{ paaliteFieldRule.minValue }}
+                       </td>
+                       <td>
+                           {{ paaliteFieldRule.maxValue }}
+                       </td>
+                       <td>
+                           {{ paaliteFieldRule.step }}
+                       </td>
+                       <td>
+                           {{ paaliteFieldRule.ord }}
+                       </td>
+                   </tr>
+                   {% endfor %}
+               </tbody>
+               </table>
+               <ul class="button-group text-center">
+                   <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ path('paa_lite_field_rule_admin') }}'">{{ 'Back to listing'|trans({}, 'messages') }}</button></li>
+                </ul>
+           </div>
+       </div>
+    </div>
+</div>
+{% endblock %}

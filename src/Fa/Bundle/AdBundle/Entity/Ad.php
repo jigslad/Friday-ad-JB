@@ -386,6 +386,7 @@ class Ad
 
     /**
      * @ORM\OneToMany(targetEntity="Fa\Bundle\AdBundle\Entity\AdLocation", mappedBy="ad")
+     * @Gedmo\Versioned
      */
     private $ad_locations;
 
@@ -554,6 +555,16 @@ class Ad
      * @ORM\Column(name="ti_ad_id", type="integer", nullable=true)
      */
     private $ti_ad_id;
+
+    /**
+     * @var \Fa\Bundle\AdBundle\Entity\Campaigns
+     *
+     * @ORM\ManyToOne(targetEntity="Fa\Bundle\AdBundle\Entity\Campaigns")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="campaign_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * })
+     */
+    private $campaign;
 
     /**
      * Constructor
@@ -2323,5 +2334,28 @@ class Ad
     public function getTiAdId()
     {
         return $this->ti_ad_id;
+    }
+
+    /**
+     * Set campaign
+     *
+     * @param \Fa\Bundle\AdBundle\Entity\Campaigns $campaign
+     * @return Ad
+     */
+    public function setCampaign(\Fa\Bundle\AdBundle\Entity\Campaigns $campaign = null)
+    {
+        $this->campaign = $campaign;
+
+        return $this;
+    }
+
+    /**
+     * Get campaign
+     *
+     * @return \Fa\Bundle\AdBundle\Entity\Campaigns
+     */
+    public function getCampaign()
+    {
+        return $this->campaign;
     }
 }
