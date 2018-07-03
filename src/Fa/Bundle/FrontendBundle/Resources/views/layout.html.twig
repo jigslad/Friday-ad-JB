@@ -17,14 +17,8 @@
     {% set currentRoute = app.request.attributes.get('_route') %}
     {% set bannerRepository = fetch_repository('FaContentBundle:Banner') %}
     {% set bannersArray = bannerRepository.getBannersArrayByPage(currentRoute, container) %}
-    {% set blockDimension2 = false %}
-    {% if (block('dimension2') is defined) %}
-    {% set blockDimension2 = block('dimension2')|trim %}
-    {% endif %}
-    {% set pushNotification = false %}
-    {% if (block('pushNotification') is defined) %}
-    {% set pushNotification = block('pushNotification')|trim %}
-    {% endif %}
+    {% set blockDimension2 = block('dimension2') is defined ? block('dimension2')|trim : false %}
+    {% set pushNotification = block('pushNotification') is defined ? block('pushNotification')|trim : false %}
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
     {% set showAdultPopup = 0 %}
     {% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}

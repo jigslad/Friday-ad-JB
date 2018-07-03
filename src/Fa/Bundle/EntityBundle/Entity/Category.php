@@ -284,6 +284,27 @@ class Category
      * @ORM\Column(name="has_recommended_slot", type="boolean", nullable=true, options={"default" = 0})
      */
     private $has_recommended_slot = false;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_featured_upgrade_enabled", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $is_featured_upgrade_enabled;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="featured_upgrade_info", type="string", length=255, nullable=true)
+     */
+    private $featured_upgrade_info;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="featured_upgrade_btn_txt", type="text", length=25, nullable=true)
+     */
+    private $featured_upgrade_btn_txt;
 
     /**
      * @var boolean
@@ -1071,7 +1092,77 @@ class Category
     {
         return $this->has_recommended_slot;
     }
-
+    
+    /**
+     * Set is_featured_upgrade_enabled.
+     *
+     * @param string $is_featured_upgrade_enabled
+     * @return Category
+     */
+    public function setIsFeaturedUpgradeEnabled($is_featured_upgrade_enabled)
+    {
+    	$this->is_featured_upgrade_enabled= $is_featured_upgrade_enabled;
+    	
+    	return $this;
+    }
+    
+    /**
+     * Get is_featured_upgrade_enabled.
+     *
+     * @return string
+     */
+    public function getIsFeaturedUpgradeEnabled()
+    {
+    	return $this->is_featured_upgrade_enabled;
+    }
+    
+    /**
+     * Get Featured Upgrade stats/info.
+     *
+     * @return string
+     */
+    public function getFeaturedUpgradeInfo()
+    {
+    	return $this->featured_upgrade_info;
+    }
+    
+    /**
+     * Set Featured Upgrade stats/info.
+     *
+     * @param string $featured_upgrade_info
+     *
+     * @return Category
+     */
+    public function setFeaturedUpgradeInfo($featured_upgrade_info)
+    {
+    	$this->featured_upgrade_info = $featured_upgrade_info;
+    	
+    	return $this;
+    }
+    
+    /**
+     * Get finance url.
+     *
+     * @return string
+     */
+    public function getFeaturedUpgradeBtnTxt()
+    {
+    	return $this->featured_upgrade_btn_txt;
+    }
+    
+    /**
+     * Set Featured Upgrade Button Txt.
+     *
+     * @param string $featured_upgrade_btn_txt
+     *
+     * @return Category
+     */
+    public function setFeaturedUpgradeBtnTxt($featured_upgrade_btn_txt)
+    {
+    	$this->featured_upgrade_btn_txt = $featured_upgrade_btn_txt;
+    	
+    	return $this;
+    }
 
     /**
      * Set has_recommended_slot_searchlist.

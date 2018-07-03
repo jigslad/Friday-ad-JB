@@ -1,0 +1,182 @@
+<style type="text/css">
+    .top-header-logo {
+        position: absolute;width: 100%;
+        padding-top: 10px;
+    }
+    .paa-hero-full-screen {
+      height: 92vh;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+              flex-direction: column;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+      -webkit-justify-content: space-between;
+          -ms-flex-pack: justify;
+              justify-content: space-between;
+      background: center center no-repeat;
+      /*background: url("https://technext.github.io/vacayhome/images/banner.png") center center no-repeat;*/
+      /*background: url("https://media.gqindia.com/wp-content/uploads/2017/03/edited-02.jpg") center center no-repeat;*/
+      /*background: url("https://images.pexels.com/photos/378273/pexels-photo-378273.jpeg?w=1260&h=750&auto=compress&cs=tinysrgb") center center no-repeat;*/
+      background-size: cover;
+    }
+    .paa-hero-full-screen .hero-block {
+        position: relative;top: 100px;width: 100%;
+    }
+    .paa-hero-full-screen .hero-block h1 {
+        font-family: "Bree Serif";
+        line-height: 46px;
+        text-shadow: 0 1px 2px 0 rgba(0,0,0,0.5);
+        margin-bottom: 30px;
+    }
+    .paa-hero-full-screen .hero-block p, .paa-hero-full-screen .hero-block p.para {
+        font-family: "Asap";
+        line-height: 22px;
+    }
+    .paa-hero-full-screen .ul {
+        margin-left: 0px;
+    }
+    .paa-hero-full-screen .ul li {
+        list-style-type: none;
+        position: relative;
+        min-height: 60px;
+        padding: 0px 0px 25px 60px;
+        font-family: "Bree Serif";
+        color: #ffffff;
+        font-size: 16px;
+        line-height: 21px;
+    }
+    .paa-hero-full-screen .ul li .fa {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        font-size: 36px;
+        line-height: 40px;
+    }
+    .paa-lite-form {
+        border: 1px solid #E3E3E3;  
+        border-radius: 4px; 
+        background-color: #FFFFFF;
+        padding: 20px;
+        margin-bottom: 60px;
+    }
+    .paa-lite-form .upload-btn, .paa-lite-form .upload-btn:hover, .paa-lite-form .upload-btn:focus, .paa-lite-form .upload-btn:active {
+        border-radius: 2px;
+        background-color: #A8A8A8;
+        padding: 10px 20px 11px 20px;
+    }
+    .paa-lite-form .payment-method-links.capsule-links {
+        margin: 15px 0 15px;
+    }
+    .paa-lite-form .capsule-bg {
+        margin-bottom: 10px !important;
+        margin-right: 5px;
+        padding: 0 10px;
+    }
+    .paa-lite-form .paa-enter-price {
+        display: inline-flex;
+        width: 100%;
+        padding: 0px;
+    }
+    .paa-lite-form .paa-enter-price input[type="number"] {
+        width: 100%;
+    }
+    .paa-lite-form .capsule-links {
+        text-align: left;
+    }
+    .paa-lite-form .inline-list li {
+        margin-left: 0px;
+        margin-right: 10px;
+    }
+    .paa-lite-form .inline-list {
+        margin-right: 0px;
+        margin-left: 0
+    }
+    .paa-lite-form .adimg-thumb img {
+        max-height: 75px;
+        max-width: 95px;
+    }
+    .paa-lite-form .thumb-img-wrap {
+        padding: 0px;
+    }
+    .paa-lite-form .edit-img {
+        padding: 2px 15px 4px;
+        position: absolute;
+        left: 15px;
+        bottom: 10px;
+    }
+    .paa-lite-form .adimg-thumb {
+        width: 95px;
+        height: 70px;
+    }
+    .paa-lite-form .upload-thumb-img span, .paa-lite-form .upload-thumb-img:hover span {
+        background-size: 93px 75px;
+        width: 92px;
+        height: 75px;
+        background-color: #e3e3e3;
+        outline: 1px solid #e3e3e3;
+    }
+    .paa-lite-form #uploaded_images_div .main-photo {
+        width: 92px;
+        height: auto;
+        border: 0px;
+        left: 1px;
+        top: 3px;
+        font-size: 13px;
+    }
+    #adIsLive-modal .modal-content {
+        padding-top: 0px;
+    }
+    .login-register-modal .modal-content {
+        padding: 26px 5px !important;
+    }
+    .login-register-modal .paa-user-type label {
+        font-size: 12px;
+    }
+    .login-register-modal .paa-user-type {
+        padding: 5px 0 20px 0;
+    }
+    .fb-btn, .fb-btn:hover {
+        background: url(http://www.friday-ad.co.uk/bundles/fafrontend/images/fb-btn.svg) no-repeat;
+    }
+
+    .gplus-btn, .gplus-btn:hover {
+        background: url(http://www.friday-ad.co.uk/bundles/fafrontend/images/gplus-btn.svg) no-repeat;
+    }
+    .post-info {
+        font-size: 12px;
+    }
+    @media only screen and (min-width: 641px) and (max-width: 1151px) {
+        .paa-hero-full-screen {
+            height: 100vh;
+        }
+    }
+    @media only screen and (min-width: 320px) and (max-width: 640px) {
+        .paa-hero-full-screen {
+            height: 100vh;
+        }
+        .paa-hero-full-screen .hero-block {
+            top: 75px;
+        }
+        .paa-hero-full-screen .hero-block h1 {
+            font-size: 24px;
+            line-height: 30px;
+            margin-bottom: 15px;
+        }
+        .paa-hero-full-screen .paa-ul-list li {
+            min-height: 50px;
+            padding: 0px 0px 16px 50px;
+        }
+        .paa-hero-full-screen .paa-ul-list li .subtext {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 16px;
+        }
+        .reveal-modal {
+            top: 0 !important;
+        }
+    }
+</style>

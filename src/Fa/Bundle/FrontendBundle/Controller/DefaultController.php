@@ -664,6 +664,7 @@ class DefaultController extends ThirdPartyLoginController
                 $location['text'] = $cookieValue['location_text'];
                 $location['slug'] = $cookieValue['slug'];
                 $location['area'] = $cookieValue['location_area'];
+				
                 $cookieValue = json_encode($cookieValue);
 
                 $response->headers->clearCookie('location');

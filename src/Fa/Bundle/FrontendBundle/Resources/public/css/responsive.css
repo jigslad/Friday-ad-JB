@@ -81,6 +81,7 @@
     #createHalfAccountModal{width:340px}
     #messageUserModal{width:753px}
     .reveal-modal.tiny.remove-item-modal{width:340px}
+    .reveal-modal.tiny.remove-item-modal.upgrade-modal{width:420px}
     .top-links a.my-db-desktop{display:inline-block}
     .top-links a.my-db-tablet{display:none}
     .remove-item-btn button{margin-bottom:0}
@@ -414,6 +415,7 @@
   	.remove-item-btn .large-6{width:25%}
     .remove-item-btn .large-12{width:50%}
     .reveal-modal.tiny.remove-item-modal{width:340px}
+    .reveal-modal.tiny.remove-item-modal.upgrade-modal{width:420px}
     .edit-pro-banner .large-12, .bz-profile-title .large-12{width:50%}
     .upgrade-profile-btn{width:100%}
     .top-links a.my-db-desktop{display:none}
@@ -926,6 +928,7 @@
     .remove-item-btn .large-6{width:25%}
     .remove-item-btn .large-12{width:50%}
     .reveal-modal.tiny.remove-item-modal{width:340px}
+    .reveal-modal.tiny.remove-item-modal.upgrade-modal{width:420px}
     .edit-pro-banner .large-12, .bz-profile-title .large-12{width:50%}
     .bz-profile-title h2{font-size:16px}
     .upgrade-profile-btn{width:100%}
@@ -2754,4 +2757,20 @@
         white-space: pre;
         display: inline-block;
     }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 759px) {
+    .one-click-upsell.parent {
+        padding: 10px 20px;
+        width: 55%;
+    }
+    .upgrade-btn button {
+        padding: 8px 20px 10px 20px; margin-bottom: 0px;margin-top: 10px;
+    }
+    .hide-mobile {
+        display: none;
+    }
+    .show-mobile {
+        display: block;
+    }
 }

@@ -546,6 +546,41 @@ class LocationRepository extends BaseEntityRepository
     }
 
     /**
+     * Get categories by level.
+     *
+     * @param string $slug      Full slug.
+     * @param string $container Container interface.
+     *
+     * @return Collection
+     */
+    public function getLocationBySlug($slug, $container = null)
+    {
+        if ($container) {
+            $tableName   = $this->getEntityTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$slug;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->where(self::ALIAS.'.url = :url')
+        ->setParameter('url', $slug);
+
+        $objResources = $query->getQuery()->getResult();
+
+        if ($objResources) {
+            if ($container) {
+                CommonManager::setCacheVersion($container, $cacheKey, $objResources[0]);
+            }
+
+            return $objResources[0];
+        }
+    }
+
+    /**
      * Get town and county name from town id.
      *
      * @param string $location  Postcode or town name.
@@ -623,6 +658,7 @@ class LocationRepository extends BaseEntityRepository
             $townInfoArray['county_id'] = $town->getParent()->getId();
             $townInfoArray['county']    = $town->getParent()->getName();
             $townInfoArray['lvl']    	= $town->getLvl();
+            
             //if town is special than area behave as like town for SEO
             if(!$town->getIsSpecialArea()) {
                 $townInfoArray['slug']  = $town->getParent()->getUrl();

@@ -121,7 +121,6 @@ class CategoryRepository extends NestedTreeRepository
     const FETISH_AND_ROLE_PLAY_ID = 4286;
     const PHONE_AND_CAM_CHAT_ID = 4287;
     const ADULT_TOP_LOCATION_AT_DETAIL_BY_DISTANCE = 50;
-    
     const GAY_MALE_ESCORT_NAME = 'Gay Male Escorts';
     const ADULT_CONTACTS_ID = 3412;
     
@@ -1583,6 +1582,37 @@ class CategoryRepository extends NestedTreeRepository
     }
 
     /**
+     * Get id by name.
+     *
+     * @param string $name      Category slug.
+     * @param object  $container Container identifier.
+     *
+     * @return integer
+     */
+    public function getIdByName($name, $container = null)
+    {
+        if ($container) {
+            $tableName   = $this->getCategoryTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$name;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
+
+        $category = $this->findOneBy(array('name' => $name));
+
+        if ($category) {
+            if ($container) {
+                CommonManager::setCacheVersion($container, $cacheKey, $category->getId());
+            }
+
+            return $category->getId();
+        }
+    }
+
+    /**
      * Get subtitle categories.
      *
      * @return array
@@ -2176,13 +2206,13 @@ class CategoryRepository extends NestedTreeRepository
      */
     public function getCategorybyName($name = '')
     {
-        $query = $this->createQueryBuilder(self::ALIAS)
-        ->select(self::ALIAS.'.id,'.self::ALIAS.'.name')
-        ->andWhere(self::ALIAS.'.name = :name')
-        ->setParameter('name', $name)
-        ->setMaxResults(1);
-        
-        $objResources = $query->getQuery()->getOneOrNullResult();
-        return $objResources;
+    	$query = $this->createQueryBuilder(self::ALIAS)
+    	->select(self::ALIAS.'.id,'.self::ALIAS.'.name')
+	    	->andWhere(self::ALIAS.'.name = :name')
+	    	->setParameter('name', $name)
+	    	->setMaxResults(1);
+    	
+	    	$objResources = $query->getQuery()->getOneOrNullResult();
+    	return $objResources;
     }
 }

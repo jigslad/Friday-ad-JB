@@ -303,12 +303,11 @@ class EntityRepository extends BaseEntityRepository
         $entities = $queryBuilder->getQuery()->getResult();
 
         foreach ($entities as $entity) {
-            $entityArray[$entity->getId()] = $entity->getName();
-            if($fieldType === 'textCollection') {
-                $entityArray[$entity->getId()] = $entity->getName()."_".$entity->getOptionalVal();
-            } else {
-                $entityArray[$entity->getId()] = $entity->getName();
-            }
+        	if($fieldType === 'textCollection') {
+        		$entityArray[$entity->getId()] = $entity->getName()."_".$entity->getOptionalVal();
+        	} else {
+        		$entityArray[$entity->getId()] = $entity->getName();
+        	}
         }
 
         if ($container) {

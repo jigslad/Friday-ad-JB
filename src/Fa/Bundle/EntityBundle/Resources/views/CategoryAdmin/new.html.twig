@@ -34,6 +34,13 @@ li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3
                         </div>
                         {{ form_row(form.is_paa_disabled) }}
                         {{ form_row(form.is_oneclickenq_enabled) }}
+                        {% if form.is_featured_upgrade_enabled is defined %}
+                            {{ form_row(form.is_featured_upgrade_enabled) }}
+                            <div id="featured_upgrade_slot_fields_main_div" style="display:none;">
+                                {{ form_row(form.featured_upgrade_info) }}
+                                {{ form_row(form.featured_upgrade_btn_txt) }}
+                            </div>
+                        {% endif %}
                         <div>
                             {{ form_row(form.has_recommended_slot) }}
                             {{ form_row(form.has_recommended_slot_searchlist) }}
@@ -188,7 +195,12 @@ li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3
             hideShowRecommendedSlotFields();
         });
 
-        hideShowRecommendedSlotSearchlistFields();
+        hideShowFeaturedUpgrade();
+        $("#fa_entity_category_admin_is_featured_upgrade_enabled").change(function(){
+        	hideShowFeaturedUpgrade();
+        });
+        
+	hideShowRecommendedSlotSearchlistFields();
         $("#fa_entity_category_admin_has_recommended_slot_searchlist").click(function(){
             hideShowRecommendedSlotSearchlistFields();
         });
@@ -258,6 +270,16 @@ li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3
             $('#recommended_slot_fields_main_div').hide();
         }
     }
+
+    function hideShowFeaturedUpgrade() {
+    	var recommendedSlotFlag = $('#fa_entity_category_admin_is_featured_upgrade_enabled').is(':checked');
+        if (recommendedSlotFlag) {
+            $('#featured_upgrade_slot_fields_main_div').show();
+        } else {
+            $('#featured_upgrade_slot_fields_main_div').hide();
+        }    
+    }
+    
     
     function hideShowRecommendedSlotSearchlistFields()
     {
