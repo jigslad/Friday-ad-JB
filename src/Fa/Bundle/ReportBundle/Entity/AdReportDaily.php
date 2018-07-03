@@ -367,6 +367,13 @@ class AdReportDaily
     private $ip_addresses;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_paa_lite", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $is_paa_lite = false;
+
+    /**
      * Set created at value.
      *
      * @ORM\PrePersist()
@@ -1365,6 +1372,29 @@ class AdReportDaily
     public function getIsCreditUsed()
     {
         return $this->is_credit_used;
+    }
+
+     /**
+     * Set is_paa_lite.
+     *
+     * @param string $is_paa_lite
+     * @return AdReportDaily
+     */
+    public function setIsPaaLite($is_paa_lite)
+    {
+        $this->is_paa_lite = $is_paa_lite;
+
+        return $this;
+    }
+
+    /**
+     * Get is_paa_lite.
+     *
+     * @return string
+     */
+    public function getIsPaaLite()
+    {
+        return $this->is_paa_lite;
     }
 
     /**

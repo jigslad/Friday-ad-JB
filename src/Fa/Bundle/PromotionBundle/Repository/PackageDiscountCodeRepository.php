@@ -420,6 +420,49 @@ class PackageDiscountCodeRepository extends EntityRepository
     }
 
     /**
+    * Get Campaign By Id
+    */
+    public function getPackageDiscountCodeArrayByCategoryId($categoryId)
+    {
+        $retArray = array();
+        $results = $this->createQueryBuilder(self::ALIAS)
+        ->where(self::ALIAS.".category = :category_id")
+        ->setParameter('category_id', $categoryId)
+        ->getQuery()
+        ->getResult();
+        foreach ($results as $result) {
+            $retArray[$result->getid()] = $result->getCode();
+        }
+        return $retArray;
+    }
+
+
+    /**
+     * Get package discount valu array.
+     *
+     * @param object $codeObj
+     *
+     * @return array
+     */
+    public function PackageDiscountCode($codeObj)
+    {
+        $packageDiscountCodeArray = array();
+
+        $packageDiscountCodeArray['id'] = $codeObj->getid();
+        $packageDiscountCodeArray['category_id'] = ($codeObj->getCategory() ? $codeObj->getCategory()->getId() : null);
+        $packageDiscountCodeArray['code'] = $codeObj->getCode();
+        $packageDiscountCodeArray['discount_type'] = $codeObj->getDiscountType();
+        $packageDiscountCodeArray['discount_value'] = $codeObj->getDiscountValue();
+        $packageDiscountCodeArray['package_sr_no'] = $codeObj->getPackageSrNo();
+        $packageDiscountCodeArray['role_ids'] = $codeObj->getRoleIds();
+        $packageDiscountCodeArray['paid_user_only'] = $codeObj->getPaidUserOnly();
+        $packageDiscountCodeArray['expires_at'] = $codeObj->getExpiresAt();
+        $packageDiscountCodeArray['emails'] = $codeObj->getEmails();
+
+        return $packageDiscountCodeArray;
+    }
+
+    /**
      * Decrease limit by one.
      *
      * @param integer $totalRemainLimit

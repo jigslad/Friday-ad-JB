@@ -123,10 +123,11 @@ class CartRepository extends EntityRepository
      *
      * @return object
      */
-    public function getUserCart($userId = null, $container = null, $isBuyNow = false, $isShopPackagePurchase = false)
+
+    public function getUserCart($userId = null, $container = null, $isBuyNow = false, $isShopPackagePurchase = false, $forFeaturedAd= false, $forPaaLiteAd=false)
     {
         $cart = null;
-        if ($userId) {
+        if ($userId && !$forFeaturedAd && !$forPaaLiteAd) {
             $params['user_id']    = $userId;
             $params['status']     = '1';
             $params['is_buy_now'] = ($isBuyNow)?$isBuyNow:0;
@@ -142,7 +143,7 @@ class CartRepository extends EntityRepository
         if (!$cart) {
             $cart = new Cart();
             $cart->setStatus('1');
-            $cart->setCartCode(self::generateCartCode());
+            $cart->setCartCode(self::generateCartCode()); 
             $cart->setCurrency(CommonManager::getCurrencyCode($container));
             $cart->setUpdatedAt(time());
             $cart->setIsBuyNow($isBuyNow);
@@ -185,6 +186,7 @@ class CartRepository extends EntityRepository
         $packageRepository           = $this->_em->getRepository('FaPromotionBundle:Package');
         $cartObj                     = ($cart ? $cart : $this->getUserCart($userId, $container));
         $transactions                = $transactionRepository->getTransactionsByCartIdAndAdId($cartObj->getId(), $adId);
+
         $adObj                       = $adRepository->find($adId);
         $packageObj                  = $packageRepository->find($packageId);
         $userObj                     = ($adObj->getUser() ? $adObj->getUser() : null);
@@ -271,7 +273,7 @@ class CartRepository extends EntityRepository
 
         if ($cartObj && $adObj && $packageObj) {
             if ($transactions) {
-                foreach ($transactions as $transaction) {
+            	foreach ($transactions as $transaction) { 
                     $transactionDetailObj = $transactionDetailRepository->getTransactionDetailByPaymentFor($cartObj->getId(), $transaction->getId(), $adId, TransactionDetailRepository::PAYMENT_FOR_PACKAGE);
                     if ($transactionDetailObj) {
                         //update transaction detail value

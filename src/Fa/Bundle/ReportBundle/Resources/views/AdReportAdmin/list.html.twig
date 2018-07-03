@@ -50,6 +50,8 @@
                                                     {% for printEditionId in printEditions %}
                                                         {{ entityCacheManager.getEntityNameById('FaAdBundle:PrintEdition', printEditionId) }} {{ (loop.index < printEditions|length ?',':'') }}
                                                     {% endfor %}
+                                                {% elseif value== 'is_paa_lite' %}
+                                                    {% if adReportDetail[value]=='1' %} Yes {% else %} No {% endif %}
                                                 {% elseif adReportDetail[value] is defined %}
                                                     {% if value == 'total_ads' %}
                                                         {{ pagination.getNbResults() }}

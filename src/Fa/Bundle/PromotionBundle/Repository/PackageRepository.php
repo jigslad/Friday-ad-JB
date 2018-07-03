@@ -554,7 +554,8 @@ class PackageRepository extends EntityRepository
      * @return array
      */
     public function getPrintEditionLimitForPackages(array $packageIds)
-    {
+    {  
+    	$this->clear();
         // check for upsell
         $query = $this->createQueryBuilder(self::ALIAS)
         ->select(self::ALIAS, UpsellRepository::ALIAS)
@@ -569,8 +570,8 @@ class PackageRepository extends EntityRepository
         $printEditionPackages = $query->getQuery()->getResult();
 
         $printEditionLimits = array();
-        foreach ($printEditionPackages as $printEditionPackage) {
-            foreach ($printEditionPackage->getUpsells() as $packageUpsell) {
+        foreach ($printEditionPackages as $printEditionPackage) { 
+        	foreach ($printEditionPackage->getUpsells() as $packageUpsell) { 
                 if ($packageUpsell->getType() == UpsellRepository::UPSELL_TYPE_PRINT_EDITIONS_ID) {
                     $printEditionLimits[$printEditionPackage->getId()] = $packageUpsell->getValue();
                 }
@@ -709,4 +710,61 @@ class PackageRepository extends EntityRepository
 
         return $isValidForCredit;
     }
+    
+    /**
+     * Get featured top upsell for packages.
+     *
+     * @param integer $packageId of package
+     *
+     * @return array
+     */
+    public function getFeaturedTopUpsell($packageId = '')
+    {
+    	// check for upsell
+    	$query = $this->createQueryBuilder(self::ALIAS)
+    	->select(self::ALIAS, UpsellRepository::ALIAS)
+    	->innerJoin(self::ALIAS.'.upsells', UpsellRepository::ALIAS)
+    	->andWhere(UpsellRepository::ALIAS.'.type = :upsellType')
+    	->setParameter('upsellType', UpsellRepository::UPSELL_TYPE_TOP_ADVERT_ID)
+    	->setMaxResults(1);
+    	
+    	if ($packageId != '') {
+    		$query->andWhere(self::ALIAS.'.id = :packageId')
+    		->setParameter('packageId', $packageId);
+    	}
+    	$featuredUpsell = $query->getQuery()->getOneOrNullResult();    	
+    	return $featuredUpsell;
+    }
+    
+    /**
+     * Get featured top upsell for packages.
+     *
+     * @param integer $packageId of package
+     *
+     * @return array
+     */
+    public function getPackageFeturedTopUpsellPrice($packages = [])
+    {
+    	if(!empty($packages)) {
+    		$packageInfo = [];
+    		//loop through all show packages
+    		foreach ($packages as $package) {
+    			$availablePackageIds[] = $package->getPackage()->getId();
+    		}
+    		if(!empty($availablePackageIds)) {
+    			//array_shift($availablePackageIds); 	
+    			//var_dump($availablePackageIds); die;
+    			$packageId = $this->_em->getRepository('FaAdBundle:Ad')->getFeaturedAdForUpgrade($availablePackageIds);
+    			if(!empty($packageId)) {
+    				$packageResult = $this->find($packageId);
+    				if($packageResult) {
+    					$packageInfo['title'] = $packageResult->getTitle();
+    					$packageInfo['price'] = $packageResult->getPrice();
+    				}
+    			}
+    		}
+    		return $packageInfo;
+    	}
+    }
+    
 }

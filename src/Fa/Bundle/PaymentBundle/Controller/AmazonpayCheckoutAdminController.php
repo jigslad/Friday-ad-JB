@@ -176,7 +176,7 @@ class AmazonpayCheckoutAdminController extends CoreController implements Resourc
         $requestParameters['amazon_order_reference_id'] = $orderReferenceId;
         $retcartdetails = $this->get('fa.amazonpay.manager')->getAmazonCartDetails($requestParameters,$accessToken);
         $this->container->get('session')->set('amazon_order_reference_id',$orderReferenceId);
-        echo $retcartdetails;die;
+        return new Response();
     }
     /**
      * Check is valid cart.

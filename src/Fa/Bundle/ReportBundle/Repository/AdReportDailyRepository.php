@@ -181,6 +181,11 @@ class AdReportDailyRepository extends EntityRepository
             ->setParameter('admin_source', AdRepository::SOURCE_ADMIN);
         }
 
+        // filter for paa-lite ads only.
+        if (isset($searchParams['is_paa_lite']) && $searchParams['is_paa_lite']) {
+            $qb->andWhere(self::ALIAS.".source = 'paa_lite'");
+        }
+
         $adReportSortFields = self::getAdReportSortFields();
 
         if (isset($searchParams['from_date'])) {
@@ -259,6 +264,7 @@ class AdReportDailyRepository extends EntityRepository
         $adReportFields = array();
         //$adReportFields['id'] = 'Unique bit';
         //$adReportFields['total_ads'] = 'Total ads';
+        $adReportFields['is_paa_lite'] = 'Is Paa Lite';
         $adReportFields['ad_id'] = 'Original adref';
         $adReportFields['ti_ad_id'] = 'Old Trade-It adref';
         $adReportFields['ad_created_at'] = 'DateTime stamp ad placed';
@@ -304,7 +310,6 @@ class AdReportDailyRepository extends EntityRepository
         $adReportFields['phones'] = 'Phones';
         $adReportFields['is_credit_used'] = 'Credit used?';
         $adReportFields['ip_addresses'] = 'Ip Address';
-
         asort($adReportFields);
 
         return $adReportFields;

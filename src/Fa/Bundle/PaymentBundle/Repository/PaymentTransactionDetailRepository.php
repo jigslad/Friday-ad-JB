@@ -139,7 +139,7 @@ class PaymentTransactionDetailRepository extends EntityRepository
      *
      * @return mixed
      */
-    public function getTransactonDataForGoogleAnalytics($paymentId)
+    public function getTransactonDataForGoogleAnalytics($paymentId, $type = false)
     {
         $paymentDetailArray = array();
         $paymentDetails = $this->getBaseQueryBuilder()
@@ -180,6 +180,8 @@ class PaymentTransactionDetailRepository extends EntityRepository
 
                         if (isset($value['promoteRepostAdFlag']) && ( $value['promoteRepostAdFlag'] == 'repost' || $value['promoteRepostAdFlag'] == 'renew')) {
                             $cart_code = $cart_code.'-Renewal';
+                        } else if($type) {
+                        	$cart_code = $cart_code.'-Upgrade';
                         } else {
                             $cart_code = $cart_code.'-New';
                         }

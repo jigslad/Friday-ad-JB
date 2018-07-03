@@ -74,8 +74,9 @@ class CyberSourceCheckoutController extends CoreController
         $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => $request->get('subscription')));
         $gaStr       = '';
 
-        if ('POST' === $request->getMethod()) {
-            if ($cybersource3DSecureResponseFlag) {
+        if ('POST' === $request->getMethod() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId()) ) {
+        	
+        	if ($cybersource3DSecureResponseFlag) { 
                 $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
                 $cyberSourceData = $this->get('session')->get('cybersource_params_'.$loggedinUser->getId()) + array('_token' => $csrfToken);
                 if (array_key_exists('subscription', $cyberSourceData)) {
@@ -84,13 +85,21 @@ class CyberSourceCheckoutController extends CoreController
                 }
                 // Bind data from session
                 $form->submit($cyberSourceData);
+            } elseif ($this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) { 
+            	$csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
+            	$upgradeSourceData = $this->get('session')->get('upgrade_cybersource_params_'.$loggedinUser->getId()) + array('_token' => $csrfToken);
+            	$form->submit($upgradeSourceData);
             } else {
                 $form->handleRequest($request);
             }
 
-            if ($form->isValid()) {
+            if ($form->isValid() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId()) ) {
                 if (!$cybersource3DSecureResponseFlag) {
-                    $this->get('session')->set('cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
+                	if(isset($upgradeSourceData) && !empty($upgradeSourceData)) {
+                		$this->get('session')->set('cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $upgradeSourceData));
+                	} else {
+                		$this->get('session')->set('cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
+                	}
                 }
                 $cyberSourceManager  = $this->get('fa.cyber.source.manager');
                 if ($request->get('subscription')) {
@@ -102,7 +111,6 @@ class CyberSourceCheckoutController extends CoreController
                 $paymentMethod       = $form->get('payment_method')->getData();
                 $saveToken           = false;
                 $subscriptionId      = null;
-
                 if ($paymentMethod) {
                     $token = $this->getRepository('FaPaymentBundle:PaymentTokenization')->isValidUserToken($loggedinUser->getId(), $paymentMethod);
                     if (!$token) {
@@ -135,8 +143,10 @@ class CyberSourceCheckoutController extends CoreController
                         $cyberSourceReply = $cyberSourceManager->getCyberSourceReply($loggedinUser, $billTo, $cardInfo, $cart, $cartDetails, $saveToken, $recurringSubscriptionInfo, $allow_zero_amount, true);
                     }
                 }
-
-                //validate cyber source response
+                
+                //remove session for upgrade modal box
+                $this->container->get('session')->remove('upgrade_cybersource_params_'.$loggedinUser->getId());
+                
                 if ((!$cybersource3DSecureResponseFlag && $cyberSourceReply && property_exists($cyberSourceReply, 'reasonCode') && $cyberSourceReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_REASON_CODE) || ($cyberSourceReply && property_exists($cyberSourceReply, 'reasonCode') && $cyberSourceReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_REASON_CODE && property_exists($cyberSourceReply, "payerAuthValidateReply") && property_exists($cyberSourceReply->payerAuthValidateReply, "authenticationResult") && in_array($cyberSourceReply->payerAuthValidateReply->authenticationResult, array(0, 1)))) {
                     $cartValue = unserialize($cart->getValue());
                     if (!is_array($cartValue)) {

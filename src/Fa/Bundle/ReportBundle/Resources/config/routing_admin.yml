@@ -3,6 +3,6 @@ fa_report_admin:
     prefix:   /
     
 fa_solr_pending_ad_report_admin:
-    resource: "@FaReportBundle/Resources/config/routing/solr_report_admin.yml"
+    resource: '@FaReportBundle/Resources/config/routing/solr_report_admin.yml'
     prefix:   /
     

@@ -169,6 +169,7 @@ class Package
      *     @ORM\JoinColumn(name="upsell_id", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
+     * @Gedmo\Versioned
      */
     private $upsells;
 
