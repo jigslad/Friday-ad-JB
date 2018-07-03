@@ -154,6 +154,13 @@ class User implements UserInterface, \Serializable
     /**
      * @var boolean
      *
+     * @ORM\Column(name="via_Paa_Lite", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $via_Paa_Lite;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="PAA_reminder", type="boolean", nullable=true, options={"default" = 0})
      */
     private $PAA_reminder;
@@ -2822,5 +2829,28 @@ class User implements UserInterface, \Serializable
     public function getOldTiUserSlug()
     {
         return $this->old_ti_user_slug;
+    }
+
+    /**
+     * Set via Paa Lite 
+     *
+     * @param string $via_Paa_Lite
+     * @return User
+     */
+    public function setViaPaaLite ($via_Paa_Lite)
+    {
+        $this->via_Paa_Lite = $via_Paa_Lite;
+
+        return $this;
+    }
+
+    /**
+     * Get via Paa Lite 
+     *
+     * @return string
+     */
+    public function getViaPaaLite()
+    {
+        return $this->via_Paa_Lite;
     }
 }

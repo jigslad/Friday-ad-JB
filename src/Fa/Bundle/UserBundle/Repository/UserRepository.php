@@ -688,7 +688,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $parameters = $this->getRegistrationEmailParameters($user, $container);
         $template = 'welcome_to_your_account';
 
-        if ($user->getRoles() && count($user->getRoles()) && $user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
+       if ($user->getRoles() && count($user->getRoles()) && $user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
         	$categoryNames = $this->_em->getRepository('FaEntityBundle:Category')->getSubtitleCategories();
         	if ($categoryNames && count($categoryNames) && array_key_exists($user->getBusinessCategoryId(), $categoryNames)) {
         		$categoryName = $categoryNames[$user->getBusinessCategoryId()];

@@ -111,12 +111,26 @@ class ThirdPartyLoginController extends CoreController
                       $fbPictureArray = (array) $fbPictureArray['data'];
                       if (is_array($fbPictureArray) && isset($fbPictureArray['url'])) {
                        if ($redirectRoute == 'facebook_paa_login') {
-                        if (!$this->container->get('session')->has('tempUserIdAP')) {
-                         $tempUserId = CommonManager::generateHash();
-                         $this->container->get('session')->set('tempUserIdAP', $tempUserId);
-                        } else {
-                         $tempUserId = $this->container->get('session')->get('tempUserIdAP');
-                        }
+                            if (!$this->container->get('session')->has('tempUserIdAP')) {
+                             $tempUserId = CommonManager::generateHash();
+                             $this->container->get('session')->set('tempUserIdAP', $tempUserId);
+                            } else {
+                             $tempUserId = $this->container->get('session')->get('tempUserIdAP');
+                            }
+                       } elseif ($redirectRoute == 'facebook_paa_lite_login') {
+                            if (!$this->container->get('session')->has('tempUserIdAPL')) {
+                             $tempUserId = CommonManager::generateHash();
+                             $this->container->get('session')->set('tempUserIdAPL', $tempUserId);
+                            } else {
+                             $tempUserId = $this->container->get('session')->get('tempUserIdAPL');
+                            }
+                       } elseif ($redirectRoute == 'facebook_paa_lite_register') {
+                            if (!$this->container->get('session')->has('tempUserIdREGPL')) {
+                             $tempUserId = CommonManager::generateHash();
+                             $this->container->get('session')->set('tempUserIdREGPL', $tempUserId);
+                            } else {
+                             $tempUserId = $this->container->get('session')->get('tempUserIdREGPL');
+                            }
                        } else {
                         if (!$this->container->get('session')->has('tempUserIdREG')) {
                          $tempUserId = CommonManager::generateHash();
@@ -152,7 +166,7 @@ class ThirdPartyLoginController extends CoreController
                         'user_first_name' => $fbFieldArray['first_name'],
                         'user_last_name' => $fbFieldArray['last_name'],
                         'user_facebook_id' => $fbFieldArray['id'],
-                        'user_is_facebook_verified' => $fbFieldArray['verified'],
+                        'user_is_facebook_verified' => isset($fbFieldArray['verified'])?$fbFieldArray['verified']:'',
                     );
 
                     if ($getFbDetail) {
@@ -174,7 +188,7 @@ class ThirdPartyLoginController extends CoreController
                             $hasUserLogo  = CommonManager::getUserLogoByUserId($this->container, $fbUserObj->getId(), false, true);
                             if (!$hasUserLogo) {
                                 $userLogoTmpPath = $this->container->get('kernel')->getRootDir().'/../web/uploads/tmp';
-                                if (($fbUserObj->getId()) && ($this->container->get('session')->has('tempUserIdREG') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdREG').'.jpg')) || ($this->container->get('session')->has('tempUserIdAP') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdAP').'.jpg'))) {
+                                if ( ($fbUserObj->getId()) && (($this->container->get('session')->has('tempUserIdREG') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdREG').'.jpg')) || ($this->container->get('session')->has('tempUserIdREGPL') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdREGPL').'.jpg')) || ($this->container->get('session')->has('tempUserIdAP') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdAP').'.jpg')) || ($this->container->get('session')->has('tempUserIdAPL') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdAPL').'.jpg')))) {
                                     $this->moveUserLogo($fbUserObj);
                                 }
                             }
@@ -190,7 +204,9 @@ class ThirdPartyLoginController extends CoreController
                         $event = new InteractiveLoginEvent($request, $token);
                         $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
 
-                        if ($customLoginMsg) {
+                        if ($redirectRoute == 'facebook_paa_lite_login' || $redirectRoute == 'facebook_paa_lite_register') {
+                            return $this->redirect($this->generateUrl('paa-lite',array('campaign_name'=>$this->container->get('session')->get('campaign_name'))));
+                        } elseif ($customLoginMsg) {
                             return $this->handleMessage($customLoginMsg, ($redirectAfterLoginUrl ? $redirectAfterLoginUrl : $loginRedirectRoute));
                         } else {
                             if ($redirectAfterLoginUrl) {
@@ -222,7 +238,9 @@ class ThirdPartyLoginController extends CoreController
                             $event = new InteractiveLoginEvent($request, $token);
                             $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
 
-                            if ($customLoginMsg) {
+                            if ($redirectRoute == 'facebook_paa_lite_login' || $redirectRoute == 'facebook_paa_lite_register') {
+                                return $this->redirect($this->generateUrl('paa-lite',array('campaign_name'=>$this->container->get('session')->get('campaign_name'))));
+                            } elseif ($customLoginMsg) {
                                 return $this->handleMessage($customLoginMsg, ($redirectAfterLoginUrl ? $redirectAfterLoginUrl : $loginRedirectRoute));
                             } else {
                                 if ($redirectAfterLoginUrl) {
@@ -289,12 +307,26 @@ class ThirdPartyLoginController extends CoreController
 
                 //Fetch user logo from google account.
                 if ($googleFieldArray && isset($googleFieldArray['picture'])) {
-                    if ($redirectRoute == 'google_paa_login') {
+                    if ($redirectRoute == 'google_paa_lite_login') {
+                        if (!$this->container->get('session')->has('tempUserIdAPL')) {
+                         $tempUserId = CommonManager::generateHash();
+                         $this->container->get('session')->set('tempUserIdAPL', $tempUserId);
+                        } else {
+                         $tempUserId = $this->container->get('session')->get('tempUserIdAPL');
+                        }
+                    } elseif ($redirectRoute == 'google_paa_login') {
                         if (!$this->container->get('session')->has('tempUserIdAP')) {
                          $tempUserId = CommonManager::generateHash();
                          $this->container->get('session')->set('tempUserIdAP', $tempUserId);
                         } else {
                          $tempUserId = $this->container->get('session')->get('tempUserIdAP');
+                        }
+                    } elseif ($redirectRoute == 'google_paa_lite_register') {
+                        if (!$this->container->get('session')->has('tempUserIdREGPL')) {
+                            $tempUserId = CommonManager::generateHash();
+                            $this->container->get('session')->set('tempUserIdREGPL', $tempUserId);
+                        } else {
+                            $tempUserId = $this->container->get('session')->get('tempUserIdREGPL');
                         }
                     } else {
                         if (!$this->container->get('session')->has('tempUserIdREG')) {
@@ -350,7 +382,7 @@ class ThirdPartyLoginController extends CoreController
                         $hasUserLogo = CommonManager::getUserLogoByUserId($this->container, $googleUserObj->getId(), false, true);
                         if (!$hasUserLogo) {
                             $userLogoTmpPath = $this->container->get('kernel')->getRootDir().'/../web/uploads/tmp';
-                            if (($this->container->get('session')->has('tempUserIdREG') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdREG').'.jpg')) || ($this->container->get('session')->has('tempUserIdAP') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdAP').'.jpg'))) {
+                            if (($this->container->get('session')->has('tempUserIdREG') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdREG').'.jpg')) || ($this->container->get('session')->has('tempUserIdAP') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdAP').'.jpg'))  || ($this->container->get('session')->has('tempUserIdREGPL') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdREGPL').'.jpg')) || ($this->container->get('session')->has('tempUserIdAPL') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdAPL').'.jpg'))) {
                                 $this->moveUserLogo($googleUserObj);
                             }
                         }
@@ -363,8 +395,9 @@ class ThirdPartyLoginController extends CoreController
                         //now dispatch the login event
                         $event = new InteractiveLoginEvent($request, $token);
                         $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
-
-                        if ($customLoginMsg) {
+                        if ($redirectRoute == 'google_paa_lite_login' || $redirectRoute == 'google_paa_lite_register') {
+                            return $this->redirect($this->generateUrl('paa-lite',array('campaign_name'=>$this->container->get('session')->get('campaign_name'))));
+                        } elseif ($customLoginMsg) {
                             return $this->handleMessage($customLoginMsg, ($redirectAfterLoginUrl ? $redirectAfterLoginUrl : $loginRedirectRoute));
                         } else {
                             if ($redirectAfterLoginUrl) {
@@ -393,7 +426,9 @@ class ThirdPartyLoginController extends CoreController
                             $event = new InteractiveLoginEvent($request, $token);
                             $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
 
-                            if ($customLoginMsg) {
+                            if ($redirectRoute == 'google_paa_lite_login' || $redirectRoute == 'google_paa_lite_register') {
+                                return $this->redirect($this->generateUrl('paa-lite',array('campaign_name'=>$this->container->get('session')->get('campaign_name'))));
+                            } elseif ($customLoginMsg) {
                                 return $this->handleMessage($customLoginMsg, ($redirectAfterLoginUrl ? $redirectAfterLoginUrl : $loginRedirectRoute));
                             } else {
                                 if ($redirectAfterLoginUrl) {
@@ -499,8 +534,12 @@ class ThirdPartyLoginController extends CoreController
      $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
      if ($this->container->get('session')->has('tempUserIdREG')) {
         $orgImageName = $this->container->get('session')->get('tempUserIdREG');
+     } else if ($this->container->get('session')->has('tempUserIdREGPL')) {
+        $orgImageName = $this->container->get('session')->get('tempUserIdREGPL');
      } else if ($this->container->get('session')->has('tempUserIdAP')) {
         $orgImageName = $this->container->get('session')->get('tempUserIdAP');
+     } else if ($this->container->get('session')->has('tempUserIdAPL')) {
+        $orgImageName = $this->container->get('session')->get('tempUserIdAPL');
      }
      $isCompany    = false;
      $imageObj     = null;
