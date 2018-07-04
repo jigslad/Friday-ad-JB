@@ -169,7 +169,6 @@ class Package
      *     @ORM\JoinColumn(name="upsell_id", referencedColumnName="id", onDelete="CASCADE")
      *   }
      * )
-     * @Gedmo\Versioned
      */
     private $upsells;
 
@@ -252,7 +251,7 @@ class Package
     private $email_template;
 
     /**
-     * @var \Fa\Bundle\UserBundle\Entity\Category
+     * @var \Fa\Bundle\EntityBundle\Entity\Category
      *
      * @ORM\ManyToOne(targetEntity="Fa\Bundle\EntityBundle\Entity\Category")
      * @ORM\JoinColumns({
@@ -561,7 +560,7 @@ class Package
     /**
      * Add upsells
      *
-     * @param \Fa\Bundle\UserBundle\Entity\Upsell $upsells
+     * @param \Fa\Bundle\PromotionBundle\Entity\Upsell $upsells
      * @return Package
      */
     public function addUpsell(\Fa\Bundle\PromotionBundle\Entity\Upsell $upsells)
@@ -574,7 +573,7 @@ class Package
     /**
      * Remove upsells
      *
-     * @param \Fa\Bundle\UserBundle\Entity\Upsell $upsells
+     * @param \Fa\Bundle\PromotionBundle\Entity\Upsell $upsells
      */
     public function removeUpsell(\Fa\Bundle\PromotionBundle\Entity\Upsell $upsells)
     {
@@ -744,7 +743,7 @@ class Package
      *
      * @param string $value
      *
-     * @return Transaction
+     * @return string
      */
     public function setValue($value)
     {
@@ -766,7 +765,7 @@ class Package
     /**
      * Set Set email template
      *
-     * @param Fa\Bundle\EmailBundle\Entity\EmailTemplate $email_template
+     * @param \Fa\Bundle\EmailBundle\Entity\EmailTemplate $email_template
      * @return Package
      */
     public function setEmailTemplate(\Fa\Bundle\EmailBundle\Entity\EmailTemplate $email_template = null)
@@ -779,7 +778,7 @@ class Package
     /**
      * Get role
      *
-     * @return Fa\Bundle\EmailBundle\Entity\EmailTemplate
+     * @return \Fa\Bundle\EmailBundle\Entity\EmailTemplate
      */
     public function getEmailTemplate()
     {

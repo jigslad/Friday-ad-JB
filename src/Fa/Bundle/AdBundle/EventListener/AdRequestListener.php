@@ -54,7 +54,7 @@ class AdRequestListener
      * @return void|boolean
      */
     public function onKernelRequest(GetResponseEvent $event)
-    {
+    {	
         if (!$event->isMasterRequest()) {
             return;
         }
@@ -63,7 +63,7 @@ class AdRequestListener
 
         // check for session timeout for cart/process and checkout uri
         $uri = $event->getRequest()->getUri();
-
+        
         //redirect greate-london slug
         if (preg_match('/greate-london/', $uri)) {
             $locationUrl = str_replace('greate-london', 'greater-london', $uri);
@@ -342,7 +342,6 @@ class AdRequestListener
         } elseif ($currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page') {
             $queryParams  =  array();
             $searchParams = $request->query->all();
-
             $redirectString = $request->get('page_string');
 
             if ($currentRoute ==  'motor_listing_page') {
@@ -397,7 +396,7 @@ class AdRequestListener
 
             $redirectString = $request->get('page_string');
             $locationId = $this->getLocationId($request, $redirectString);
-
+            
             if (!$locationId) {
                 $request->attributes->set('not_found', 1);
             }
@@ -419,7 +418,7 @@ class AdRequestListener
                     $queryParams[$key] = $val;
                 }
             }
-
+            
             $request->attributes->set('finders', array_merge($queryParams, array('item__location' => $locationId)));
 
             $categoryText = $request->get('page_string');
@@ -627,7 +626,6 @@ class AdRequestListener
                         $event->setResponse($response);
                     }
                 }
-            }
         } else {
             return false;
         }

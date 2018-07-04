@@ -293,7 +293,7 @@ class Ad
     private $status;
 
     /**
-     * @var \Fa\Bundle\AdBundle\Entity\Entity
+     * @var \Fa\Bundle\EntityBundle\Entity\Entity
      *
      * @ORM\ManyToOne(targetEntity="Fa\Bundle\EntityBundle\Entity\Entity")
      * @ORM\JoinColumns({
@@ -386,7 +386,6 @@ class Ad
 
     /**
      * @ORM\OneToMany(targetEntity="Fa\Bundle\AdBundle\Entity\AdLocation", mappedBy="ad")
-     * @Gedmo\Versioned
      */
     private $ad_locations;
 
