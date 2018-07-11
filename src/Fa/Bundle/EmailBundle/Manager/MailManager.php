@@ -382,10 +382,12 @@ class MailManager
      */
     protected function renderTwig($text, $vars)
     {
-        $loader = new \Twig_Loader_Array(); // new \Twig_Loader_String(); symfony 3.4 this class is removed
+        /* $loader = new \Twig_Loader_Array(); // new \Twig_Loader_String(); symfony 3.4 this class is removed
         $twig   = new \Twig_Environment($loader);
-
-        $template = $twig->loadTemplate($text);
+        
+        $template = $twig->loadTemplate($text); */
+        
+        $template = $this->container->get('twig')->createTemplate($text);
 
         return $template->render($vars);
     }

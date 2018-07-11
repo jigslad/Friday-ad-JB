@@ -64,11 +64,11 @@ parameters:
     service_name: 'Friday Ad'
     fa.cache.key: dev.friday-ad.co.uk
     fa.facebook:
-        app_id: '663754490391576'
-        app_secret: 2b24347b0272c2e832ddb87ead1a85ee
+        app_id: '1920063958053200'
+        app_secret: 14b9afd3310476aac03ce0587bc22667
     fa.google:
-        client_id: 700259493382-9mdrmha8e2vsbgai2j0nt8milp1j2iol.apps.googleusercontent.com
-        client_secret: OPiSvJCMMVq0ZzIndIIS2p9h
+        client_id: 657534475086-8j5hsmls58aik0fm3iurnku5mhlorae7.apps.googleusercontent.com
+        client_secret: zT7H0D_7WG0-jAxXY21ZdgFN
     fa.image.allow_size_in_mb: 8
     fa.image.for_sale_upload_limit: 30
     fa.image.jobs_upload_limit: 30

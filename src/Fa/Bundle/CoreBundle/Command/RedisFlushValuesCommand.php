@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * This command is used to remove redis cache
@@ -87,8 +88,12 @@ EOF
         if ($this->input->getOption('no-interaction')) {
             return true;
         }
-
-        return $this->getHelper('dialog')->askConfirmation($this->output, '<question>Are you sure you wish to flush the whole database? (y/n)</question>', false);
+        
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion('Are you sure you wish to flush the whole database? (y/n)', false);
+        return $helper->ask($this->input, $this->output, $question);
+        // 'dialog' environment variable removed from symfony 3.4 
+//         return $this->getHelper('dialog')->askConfirmation($this->output, '<question>Are you sure you wish to flush the whole database? (y/n)</question>', false);
     }
 
     /**
