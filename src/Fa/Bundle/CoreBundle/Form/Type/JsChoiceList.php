@@ -41,6 +41,16 @@ class JsChoiceList implements ChoiceListInterface
     {
         return array();
     }
+    
+    public function getStructuredValues()
+    {
+        return array();
+    }
+    
+    public function getOriginalKeys()
+    {
+        return array();
+    }
 
     public function getValuesForChoices(array $choices)
     {

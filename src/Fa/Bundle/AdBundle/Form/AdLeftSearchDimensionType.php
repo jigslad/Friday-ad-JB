@@ -20,6 +20,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * This form is used for left search dimension see more modal.
@@ -101,7 +102,7 @@ class AdLeftSearchDimensionType extends AbstractType
         } else {
             $fieldChoices = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($dimensionId, $this->container);
         }
-        $fieldOptions = array(/** @Ignore */'label' => $dimensionName, 'choices' => $fieldChoices);
+        $fieldOptions = array(/** @Ignore */'label' => $dimensionName, 'choices' => array_flip($fieldChoices));
         if ($dimensionSearchType == 'choice_checkbox') {
             $fieldOptions['expanded'] = true;
             $fieldOptions['multiple'] = true;
@@ -110,7 +111,7 @@ class AdLeftSearchDimensionType extends AbstractType
             $fieldOptions['multiple'] = false;
         }
 
-        $form->add($dimensionField, 'choice', $fieldOptions);
+        $form->add($dimensionField, ChoiceType::class, $fieldOptions);
     }
 
     /**

@@ -1188,7 +1188,7 @@ class AdListController extends CoreController
                 if ($solrFieldName == 'a_m_make_id_i' && isset($seoSearchParams['item_motors__model_id'])) {
                     unset($seoSearchParams['item_motors__model_id']);
                 }
-                if (isset($facetResult[$solrFieldName]) && count($facetResult[$solrFieldName])) {
+                if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
                 	$blocks[$solrFieldName]['facet'] = get_object_vars($facetResult[$solrFieldName]);
                 	//get Location Areas
                 	if($solrFieldName == AdSolrFieldMapping::TOWN_ID && isset($facetResult[AdSolrFieldMapping::AREA_ID]) && !empty($facetResult[AdSolrFieldMapping::AREA_ID])) {

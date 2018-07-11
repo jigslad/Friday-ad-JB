@@ -111,7 +111,7 @@ class RegistrationType extends AbstractType
                 'multiple' => false,
                 'label' => 'Business category',
                 'placeholder' => 'Please select category',
-                'choices'   => $this->em->getRepository('FaEntityBundle:Category')->getCategoryByLevelArray(1),
+                'choices'   => array_flip($this->em->getRepository('FaEntityBundle:Category')->getCategoryByLevelArray(1)),
                 'choice_translation_domain' => false,
             )
         )

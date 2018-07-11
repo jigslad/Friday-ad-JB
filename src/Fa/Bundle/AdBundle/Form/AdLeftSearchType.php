@@ -97,7 +97,7 @@ class AdLeftSearchType extends AbstractType
             'item__distance',
             ChoiceType::class,
             array(
-                'choices' => $this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container),
+                'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
                 'data'    => 15,
                 'choice_translation_domain' => false,
             )

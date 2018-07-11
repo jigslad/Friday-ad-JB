@@ -188,7 +188,7 @@ class AdPostType extends AbstractType
                 $paaFieldRules = $this->em->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($categoryId, $this->container, $this->step);
             }
 
-            if (count($paaFieldRules)) {
+            if (!empty($paaFieldRules)) {
                 // First: if field is defined in PAA field rules of parent category.
                 foreach ($paaFieldRules as $paaFieldRule) {
                     $paaField = $paaFieldRule['paa_field'];

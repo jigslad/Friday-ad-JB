@@ -5,6 +5,7 @@ namespace Fa\Bundle\CoreBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Fa\Bundle\CoreBundle\Form\Type\JsChoiceList;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class JsChoiceType extends AbstractType
 {
@@ -18,7 +19,7 @@ class JsChoiceType extends AbstractType
 
     public function getParent()
     {
-        return 'choice';
+        return ChoiceType::class;
     }
 
     public function getName()

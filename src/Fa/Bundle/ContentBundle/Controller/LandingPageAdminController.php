@@ -203,8 +203,8 @@ class LandingPageAdminController extends CrudController implements ResourceAutho
             'action' => $this->generateUrl($this->getRouteName('create')),
             'method' => 'POST'
         );
-
-        $form = $formManager->createForm('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin', $entity, $options);
+        $fqn = $this->getFQNForForms('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin');
+        $form = $formManager->createForm($fqn, $entity, $options);
         if ($formManager->isValid($form)) {
             if (!$this->saveNewUsingForm) {
                 $formManager->save($entity);
