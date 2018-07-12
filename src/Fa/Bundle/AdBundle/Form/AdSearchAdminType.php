@@ -173,8 +173,8 @@ class AdSearchAdminType extends AbstractType
                  'choices'   => array('Paa-Lite Ad' => 1)
              )
          )
-         ->add('payment_transaction__payment__cart_code', 'text', array('required' => false))
-         ->add('search', 'submit');
+         ->add('payment_transaction__payment__cart_code', TextType::class, array('required' => false))
+         ->add('search', SubmitType::class);
     }
 
     /**
