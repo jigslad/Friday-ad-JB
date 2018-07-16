@@ -8,24 +8,33 @@
             <li><b>3.</b> {{'The content will not offend me.'|trans({}, 'frontend-adult-warnning')}}</li>
             <li><b>4.</b> {{'I will not use any images on the site outside of permissions.'|trans({}, 'frontend-adult-warnning')}}</li>
             <li><b>5.</b> {{'I will not permit any minor, or other person for who it is illegal, to access or view material that exists within this website.'|trans({}, 'frontend-adult-warnning')}}</li>
-            <li><b>6.</b> {{'I am accessing this website from a country or state where it is legal to enter adult websites or view sexually explicit or pornographic material'|trans({}, 'frontend-adult-warnning')}}</li>
-            <li class="proceed-ins"><p>{{'By clicking on "Proceed" below, I discharge all internet providers, owners and founders of Friday-Ad of any responsibility regarding the content and the usage of the content in this "Adult" category.'|trans({}, 'frontend-adult-warnning')}}</p></li>
+            <li><b>6.</b> {{'I am accessing this website from a country or state where it is legal to enter adult websites or view sexually explicit or pornographic material.'|trans({}, 'frontend-adult-warnning')}}</li>
+            <li><b>7.</b> {{'No sexual activities are implied or condoned by the creator(s) of this web site.'|trans({}, 'frontend-adult-warnning')}}</li>
+            <li><b>8.</b> {{'This site does not promote prostitution, human trafficking or any type of illegal sex work, nor is any content within this site an offer for prostitution or illegal sex work.'|trans({}, 'frontend-adult-warnning')}}
+            <li><b>9.</b> {{'Money exchanged is for companionship only and anything beyond that is a choice made between two consenting adults and not contracted for by the site or its creator(s).'|trans({}, 'frontend-adult-warnning')}}
+            {% if modification is not defined %} 
+            	<li class="proceed-ins"><p>{{'By clicking on "Proceed" below, I discharge all internet providers, owners and founders of Friday-Ad of any responsibility regarding the content and the usage of the content in this "Adult" category.'|trans({}, 'frontend-adult-warnning')}}</p></li>
+            {% endif %}
         </ul>
         <div class="proceed-buttons">
             <div class="row">
-                {% if for_third_party_link is not defined %}
+                {% if for_third_party_link is not defined and modification is not defined %}
                     <div class="large-12 columns">
                         <button type="button" class="primary-btn-3 button expand" onclick="takeMeBack();">{{'Take me back!'|trans({}, 'frontend-adult-warnning')}}</button>
                     </div>
                     <div class="large-12 columns">
                         <button type="button" class="primary-btn-2 button expand" onclick="proceed18Plus();"><span>{{'Proceed'|trans({}, 'frontend-adult-warnning')}} <b>-</b></span> {{'I am over 18'|trans({}, 'frontend-adult-warnning')|raw}}</button>
                     </div>
-                {% elseif for_third_party_link is defined and for_third_party_link  %}
+                {% elseif for_third_party_link is defined and for_third_party_link %}
                 	 <div class="large-12 columns">
                         <button type="button" class="primary-btn-3 button expand" onclick="closeCheckAgeModalBox();">{{'Take me back!'|trans({}, 'frontend-adult-warnning')}}</button>
                     </div>
                     <div class="large-12 columns">
                         <button type="button" class="primary-btn-2 button expand" onclick="proceed18PlusForThirdParty();"><span>{{'Proceed'|trans({}, 'frontend-adult-warnning')}} <b>-</b></span> {{'I am over 18'|trans({}, 'frontend-adult-warnning')|raw}}</button>
+                    </div>
+                {% elseif modification is defined and modification %}   
+                    <div class="medium-12 medium-push-6 large-12 large-push-6 columns">
+                        <button type="button" class="primary-btn-2 button expand" onclick="closeCheckAgeModalBox();">{{'OK'|trans({}, 'frontend-adult-warnning')}}</button>
                     </div>
                 {% endif %}
             </div>

@@ -684,7 +684,7 @@ class CampaignController extends ThirdPartyLoginController
                     $user,
                     null,
                     'main',
-                    $user->getRoles()
+                		($user->getRoles() ? $user->getRoles() : [])
                 );
                 $this->get("security.token_storage")->setToken($token);
                 $redirectToUrl = $request->getUri();

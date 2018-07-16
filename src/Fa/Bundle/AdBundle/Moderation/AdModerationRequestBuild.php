@@ -296,11 +296,12 @@ class AdModerationRequestBuild
     protected function buildAdLocationFieldArray(Ad $ad)
     {
         $adModerateLocation = array();
+        $postalcodeVal = null;
     	$adModerateData = $this->container->get('doctrine')->getManager()->getRepository('FaAdBundle:AdModerate')->getLatestLocation($ad->getId());
         if($adModerateData) {
             $unserializeModerationvalue = unserialize($adModerateData->getvalue());
             $adModerateLocation = $unserializeModerationvalue['locations'][0];
-            if($adModerateLocation['latitude']!='' && $adModerateLocation['latitude']!=0.00000000 && $adModerateLocation['longitude']!='' && $adModerateLocation['longitude']!=0.00000000) {
+            if(isset($adModerateLocation['latitude']) && $adModerateLocation['latitude']!='' && $adModerateLocation['latitude']!=0.00000000 && $adModerateLocation['longitude']!='' && $adModerateLocation['longitude']!=0.00000000) {
                 $postalcodeVal = $this->container->get('doctrine')->getManager()->getRepository('FaEntityBundle:Postcode')->getPostCodTextByLatLong($adModerateLocation['latitude'], $adModerateLocation['longitude']);
             }
         }
@@ -309,12 +310,16 @@ class AdModerationRequestBuild
         
         if(!empty($adModerateLocation)) {
         	
-        	if($adLocation->getLocationArea() && $adLocation->getPostcode()) {
+        	if(!is_null($adLocation->getLocationArea()) && $adLocation->getPostcode()) {
         		$this->moderationRequest[AdModerationFieldMappingInterface::AD_POSTCODE] = $adLocation->getPostcode();
         	} else {
         		$this->moderationRequest[AdModerationFieldMappingInterface::AD_POSTCODE] = $postalcodeVal;
+	}
+        	if(isset($adModerateLocation['town_id'])) {
+        		$this->moderationRequest[AdModerationFieldMappingInterface::AD_TOWN] = $this->container->get('doctrine')->getManager()->getRepository('FaEntityBundle:Location')->getNameById($adModerateLocation['town_id']);
+        	} else {
+        		$this->moderationRequest[AdModerationFieldMappingInterface::AD_TOWN] = null;
         	}
-        	$this->moderationRequest[AdModerationFieldMappingInterface::AD_TOWN] = $this->container->get('doctrine')->getManager()->getRepository('FaEntityBundle:Location')->getNameById($adModerateLocation['town_id']);
         } 
         else {
 	        if ($adLocation) {

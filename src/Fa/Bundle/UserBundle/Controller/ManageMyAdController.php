@@ -81,13 +81,10 @@ class ManageMyAdController extends CoreController
         if ($request->get('transaction_id')) {
             $this->get('session')->getFlashBag()->get('error');
             $transcations                   = $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($request->get('transaction_id'), $loggedinUser);
+            
             if($this->container->get('session')->has('paa_lite_card_code')) {
                 $this->container->get('session')->remove('paa_lite_card_code');
             }
-            /*$competitionObj = $this->getRepository('FaUserBundle:Competition')->findOneBy(array('user' => $loggedinUser->getId()));
-            if (!$competitionObj) {
-                $showCompetitionPopup = true;
-            }*/
             $parameters['getTranscationJs'] = CommonManager::getGaTranscationJs($transcations);
             $parameters['getItemJs']        = CommonManager::getGaItemJs($transcations);
             $parameters['ga_transaction']   = $transcations;

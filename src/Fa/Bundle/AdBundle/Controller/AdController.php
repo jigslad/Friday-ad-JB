@@ -1085,7 +1085,11 @@ class AdController extends CoreController
     		$response   = new Response();
     		$cookieName = $request->get('ad_id').'_ad_detail_ga_tracking_after';
     		
-    		$parameters['for_third_party_link'] = true; 
+    		if($request->get('popupModification') != null && $request->get('popupModification') == 1) {
+    			$parameters['modification'] = true;
+    		} else {
+    			$parameters['for_third_party_link'] = true; 
+    		}
     		$htmlContent = $this->renderView('FaFrontendBundle::adultWarnningPopup.html.twig', $parameters);
     		return new JsonResponse(array('success' => true, 'htmlContent' => $htmlContent));
     	}

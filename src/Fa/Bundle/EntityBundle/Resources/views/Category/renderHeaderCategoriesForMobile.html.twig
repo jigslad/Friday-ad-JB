@@ -4,7 +4,7 @@
 
 <dl class="accordion show-for-small-only" data-accordion>
     {% if headerCategories|length %}
-    {% cache 'header|menu|'~location_id~'front/header_menu_mobile' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0) 86400 %} 
+    {% cache 'header|menu|'~location_id~'front/header_menu_mobile' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0) 86400 %}
     <dd class="accordion-navigation">
         <a href="#cat-mob-menu">MENU</a>
         <div id="cat-mob-menu" class="content active">
@@ -88,11 +88,11 @@
                                     {% endfor %}
                                     {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                     	<li class="last-level">
-                                    	{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
-											<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Cams</a>
-										{% else %}
-											<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Live Cams</a>
-										{% endif %}
+                                    		{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
+                                        		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Cams</a>
+                                        	{% else %}
+                                        		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Live Cams</a>
+                            	            {% endif %}
                                 		</li>
                                      {% endif %}
                                     <li class="last-level">
@@ -143,7 +143,9 @@
     </dd>
 {% endif %}
 </dl>
+
 <div id="show-confirm-age-main"></div>
+
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).foundation('topbar', 'reflow');
@@ -184,11 +186,12 @@
 
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-function showAdultPopup()
+function showAdultPopup(modify = 0)
 { 
     $.ajax({
         type: "POST",
         url: "{{path('eighteen_plus_warnning_model_ajax')}}",
+        data: {'popupModification': modify}
     })
     .done(function(response) {
         if(response.success) {
@@ -202,6 +205,3 @@ function showAdultPopup()
 	
 }
 </script>
-
-
-

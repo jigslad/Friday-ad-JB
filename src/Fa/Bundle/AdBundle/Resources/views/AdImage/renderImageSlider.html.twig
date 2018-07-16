@@ -11,6 +11,7 @@
     {% set container = fetch_container_instance() %}
     {% set imageAltString = null %}
     {% set imageAltStringArr = {} %}
+    {% set altString = '' %}
     {% if seoRule['image_alt'] is defined %}
         {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], adDetail]) %}
     {% endif %}

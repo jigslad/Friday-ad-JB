@@ -3,7 +3,7 @@
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
 {% if isTablet %}
     <a class="tab-cat-link" id="tab_cat_link">Categories</a>
-    {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu_tablet' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %}
+{% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu_tablet' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %}
     <div id="top_category_menu" class="real-tablet">
     	<div class="row main-row">
     		<div class="columns">
@@ -69,10 +69,10 @@
                                                             {% endif %}
                                                          {% elseif staticTxtCnt == 0 and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                             				{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
-																<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Cams</a>
-															{% else %}
-																<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Live Cams</a>
-															{% endif %}
+                                                        		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Cams</a>
+                                                        	{% else %}
+                                                        		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Live Cams</a>
+                                            	            {% endif %}
                                             				{% set staticTxtCnt = 1 %}
                                                          {% endif %}
                                                          {% set ctr = ctr + 1 %}
@@ -89,8 +89,8 @@
     		</div>
     	</div>
     </div>
-    <div id="show-confirm-age-main"></div>
-    {% endcache %}
+      <div id="show-confirm-age-main"></div>
+{% endcache %}
     <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {
@@ -116,7 +116,7 @@
 //]]>
 </script>
 {% elseif headerCategories|length %}
- {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %}
+{% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %}
     <ul class="left hide-for-small-only real-desktop" id="top_category_menu">
         {% for categoryId, categoryArray in headerCategories %}
         {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
@@ -183,10 +183,10 @@
                                                 {% endif %}
                                             {% elseif staticTxtCnt == 0 and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                             	{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
-													<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Cams</a>
-												{% else %}
-													<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Live Cams</a>
-												{% endif %}
+                                            		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Cams</a>
+                                            	{% else %}
+                                            		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Live Cams</a>
+                                            	{% endif %}
                                             	{% set staticTxtCnt = 1 %}
                                             {% endif %}
                                             {% set ctr = ctr + 1 %}
@@ -202,20 +202,22 @@
         {% endfor %}
     </ul>
     <div id="show-confirm-age-main"></div>
-  {% endcache %} 
+{% endcache %}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).foundation('topbar', 'reflow');
 //]]>
 </script>
 {% endif %}
+
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-function showAdultPopup()
+function showAdultPopup(modify = 0)
 { 
     $.ajax({
         type: "POST",
         url: "{{path('eighteen_plus_warnning_model_ajax')}}",
+        data: {'popupModification': modify}
     })
     .done(function(response) {
         if(response.success) {
@@ -229,4 +231,3 @@ function showAdultPopup()
 	
 }
 </script>
-

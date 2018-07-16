@@ -205,6 +205,9 @@ class PaymentTransactionDetailRepository extends EntityRepository
                 $uniqueId = md5($cart_code.'_'.$paymentDetailArray[$paymentDetail['transaction_id']]['Name'].'_'.$paymentDetailArray[$paymentDetail['transaction_id']]['SKU'].'_'.$paymentDetailArray[$paymentDetail['transaction_id']]['Category']);
                 $paymentDetailArray[$paymentDetail['transaction_id']]['UniqueId'] = $uniqueId;
                 $paymentUniqueIds[] = $uniqueId;
+                if(isset($value['user_credit_id']) && isset($value['user_credit'])) {
+                	$paymentDetailArray[$paymentDetail['transaction_id']]['SKU'] = $paymentDetailArray[$paymentDetail['transaction_id']]['SKU']."-credit";
+                }
             }
 
             if (count($paymentUniqueIds)) {

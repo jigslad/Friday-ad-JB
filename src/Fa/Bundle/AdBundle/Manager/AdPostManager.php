@@ -1565,6 +1565,7 @@ class AdPostManager
             $locality    = null;
             $town        = null;
             $locationArea = isset($data['area']) ? $data['area'] : null;
+            $postalcodeVal = null;
 
             $postCode = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodByLocation($location);           
             if ($postCode && $postCode->getTownId()) {
@@ -1753,5 +1754,22 @@ class AdPostManager
             $adVerticalData[0]['meta_data'] = serialize($metaData);
         }
         return $adVerticalData;
+    }
+    
+    /**
+     *  Save ad data.
+     *
+     * @param array   $data        Ad data.
+     * @param integer $adId        Ad id.
+     * @param boolean $saveAllData Save all data or not.
+     * @param boolean $isAdmin     Save from admin or not.
+     *
+     * @return boolean
+     */
+    public function updateAdMissingLocation($ad, $data = []) {
+    	if(!empty($data)) {
+    		$this->saveAdLocation($ad, $data);
+    		return true;
+    	}
     }
 }

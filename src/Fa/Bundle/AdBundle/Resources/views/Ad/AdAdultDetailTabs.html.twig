@@ -216,7 +216,11 @@
                     {% endif %}
                 </div>
                 {% endif %}
-                                
+            	<div class="detail-text">
+            		<h5 class="detail-label-adult">
+            			<a href="javascript:void(0)" rel="nofollow" onclick="return showAdultPopup(1);"  title="Disclaimer">{{ 'Disclaimer'|trans({}, 'frontend-show-ad')}}</a>
+            		</h5>
+            	</div>
             </div>
             
             {% if adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null %}

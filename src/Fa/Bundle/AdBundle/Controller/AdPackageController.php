@@ -435,6 +435,14 @@ class AdPackageController extends CoreController
         if ($response !== true) {
             return $response;
         }
+        
+        //check User advert has location if not redirect to edit page
+        if(count($ad->getAdLocations()) == 0) {
+        	$redirectUrl = $request->getUri();
+        	$this->container->get('session')->set('choose_package_location_missing_'.$ad->getId(), $redirectUrl);
+        	$editPageUrl = $this->generateUrl('ad_edit', array('id' => $ad->getId()));
+        	return $this->redirect($editPageUrl);
+        }
 
         //get user roles.
         $systemUserRoles  = $this->getRepository('FaUserBundle:Role')->getRoleArrayByType('C', $this->container);
@@ -532,7 +540,7 @@ class AdPackageController extends CoreController
 
         $printEditionLimits = $this->getRepository('FaPromotionBundle:Package')->getPrintEditionLimitForPackages($packageIds);
 
-        if (count($printEditionLimits) && 'POST' !== $request->getMethod()) {
+        if (count($printEditionLimits) && 'POST' !== $request->getMethod()) { 
             $defaultSelectedPrintEditions = $this->getRepository('FaAdBundle:AdPrint')->getPrintEditionForAd(max($printEditionLimits), $adId, true, $locationGroupIds);
             $defaultSelectedPrintEditions = array_combine(range(1, count($defaultSelectedPrintEditions)), array_values($defaultSelectedPrintEditions));
             if (!$adCartDetails) {

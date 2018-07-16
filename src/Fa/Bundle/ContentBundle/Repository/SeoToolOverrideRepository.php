@@ -165,12 +165,15 @@ class SeoToolOverrideRepository extends EntityRepository
                     else { $dimensionUrl = array(); }
                 }
             }
+            
             $allCommoUrl = $url;
-            if (count($indexableKeyArray) && count($dimensionUrl)) {
+            if (count($indexableKeyArray) && count($dimensionUrl)) { 
                 $indexArrayStart = 0;
                 foreach ($indexableKeyArray as $indexableKey) {
-                    $catOrDimension[$indexableKey] = $dimensionUrl[$indexArrayStart];
-                    $indexArrayStart++;
+                	if(isset($dimensionUrl[$indexArrayStart])) {
+	                    $catOrDimension[$indexableKey] = $dimensionUrl[$indexArrayStart];
+                	}
+                	$indexArrayStart++;
                 }
             }
            

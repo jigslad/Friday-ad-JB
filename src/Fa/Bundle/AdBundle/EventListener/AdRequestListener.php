@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
 use Fa\Bundle\CoreBundle\Repository\ConfigRepository;
 use Entity\Category;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * This event listener is used for decide location based route
@@ -215,6 +216,8 @@ class AdRequestListener
         		$response = new RedirectResponse($locationUrl, 301);
         		$event->setResponse($response);
         	}
+        } else if (preg_match('/bristol\/celebrations-special-occasions\/20-years-old-male-prostitute-for-you-16359610/', $uri)) { 
+        	throw new HttpException(410);
         }
         
         

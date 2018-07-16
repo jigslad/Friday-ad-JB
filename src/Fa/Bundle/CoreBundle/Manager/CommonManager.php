@@ -2045,6 +2045,7 @@ HTML;
 
         if (isset($trans['items'])) {
             foreach ($trans['items'] as $item) {
+            	            	
                 $itemjs .=  <<<HTML
     ga('ecommerce:addItem',{
   'id': '{$trans['ID']}',

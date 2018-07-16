@@ -340,10 +340,10 @@ class AdLocationRepository extends EntityRepository
     {
         if (isset($element['id'])) {
             $object = $this->findOneBy(array('id' => $element['id']));
-        } else {
+        } elseif (isset($element['ad_id'])) {
             $object = $this->findOneBy(array('ad' => $element['ad_id']));
         }
-
+        
         if (!$object && $adId) {
             $object = $this->findOneBy(array('ad' => $adId));
         }

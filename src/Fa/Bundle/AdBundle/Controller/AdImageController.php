@@ -425,7 +425,11 @@ class AdImageController extends CoreController
                     $oldAwsUrl = CommonManager::getAdImageUrl($this->container, $adId, $adImgObj->getPath(), $adImgObj->getHash(), null, 1, $adImgObj->getImageName());
                 }
                 $OldOrgimage = $imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$oldHash.'.jpg';
-                $this->writeDataFromURL($oldAwsUrl, $OldOrgimage);
+                
+                if(isset($oldAwsUrl)) {
+                	$this->writeDataFromURL($oldAwsUrl, $OldOrgimage);
+                }
+                
             } else {
                 $OldOrgimage = $imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$oldHash.'.jpg';
             }

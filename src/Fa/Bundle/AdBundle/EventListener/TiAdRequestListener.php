@@ -102,6 +102,8 @@ class TiAdRequestListener
                         $url = $routeManager->getDetailUrl($feedAd->getAd());
                         $event->setResponse(new RedirectResponse($url, 301));
                     } else {
+                    	$urlString1 = null;
+                    	$urlString2 = null;
                         $checkPath =  explode('/', trim($params['path'], '/'));
                         if (count($checkPath) >= 3) {
                             $urlString1 = $checkPath[1];
