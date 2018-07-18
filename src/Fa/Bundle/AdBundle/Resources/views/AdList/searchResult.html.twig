@@ -209,7 +209,7 @@
                     {% set userId = app.session.getId() %}
                 {% endif %}
                 
-                {% if userLiveBasicAd is defined and userLiveBasicAd|length %}
+                {% if userLiveBasicAd is defined and userLiveBasicAd and userLiveBasicAd|length %}
                 	{% for ad in userLiveBasicAd %}
                         {{ include('FaAdBundle:AdList:listDetail.html.twig', {'isLiveBasicAd': 1, 'isTopAd': 1}) }}
                     {% endfor %}
@@ -412,7 +412,7 @@
 	
     
 
-    {% if userLiveBasicAd is defined and userLiveBasicAd|length %}
+    {% if userLiveBasicAd is defined and userLiveBasicAd and userLiveBasicAd|length %}
     	ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
     {% endif %}
 

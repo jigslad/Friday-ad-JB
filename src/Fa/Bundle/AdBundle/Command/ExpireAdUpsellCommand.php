@@ -112,7 +112,7 @@ EOF
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
         $qb            = $this->getAdUpsellQueryBuilder($searchParam);
         $step          = 100;
-        $offset        = 0;//$input->getOption('offset');
+        $offset        = $input->getOption('offset');
 
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);

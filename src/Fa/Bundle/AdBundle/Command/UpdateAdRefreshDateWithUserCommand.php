@@ -123,7 +123,7 @@ EOF
     {
         $qb          = $this->getAdQueryBuilder(FALSE,$input);
         $step        = 100;
-        $offset      = ($input->getOption('offset'))?$input->getOption('offset'):0;//$input->getOption('offset');
+        $offset      = $input->getOption('offset');
 
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);
@@ -144,9 +144,9 @@ EOF
             $ad->setWeeklyRefreshAt(time());
             $entityManager->persist($ad);
             $entityManager->flush($ad);
-            $userId = $user ? $user : null;
+            $userId = $user ? $user->getId(): null;
             if (!$ad->getIsFeedAd()) {
-                $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_refreshed', $ad->getId(), $user->getId());
+            	$this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_refreshed', $ad->getId(), $userId);
             }
 
             //send email only if ad has user and status is active and not feed ad.

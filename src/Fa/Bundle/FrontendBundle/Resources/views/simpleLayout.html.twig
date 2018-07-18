@@ -43,7 +43,7 @@
         'bundles/fafrontend/css/style.css'
         'bundles/fafrontend/css/responsive.css'
           %}
-        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
+        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}?v=3000"/>
     {% endstylesheets %}
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}

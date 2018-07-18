@@ -188,7 +188,7 @@ EOF
     protected function updateFeedAdAffiliateLogoWithOffset($input, $output)
     {
         $adRepository = $this->entityManager->getRepository('FaAdBundle:Ad');
-        $offset = 0;//$input->getOption('offset')
+        $offset = $input->getOption('offset');
         $ads = $this->getAdResult($offset, $this->limit);
         foreach ($ads as $ad) {
             try {

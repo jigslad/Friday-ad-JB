@@ -89,7 +89,7 @@ EOF
     protected function updateDimensionWithOffset($searchParam, $input, $output)
     {
         $step        = 20;
-        $offset      = 0;//$input->getOption('offset');
+        $offset      = $input->getOption('offset');
         $adFeeds     = $this->getFeedAdQueryBuilder($searchParam, $offset, $step);
         $em          = $this->getContainer()->get('doctrine')->getManager();
 

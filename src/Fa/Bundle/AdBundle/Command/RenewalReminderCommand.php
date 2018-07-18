@@ -132,7 +132,7 @@ EOF
             $user = ($ad->getUser() ? $ad->getUser() : null);
             $entityManager->persist($ad);
             $entityManager->flush($ad);
-            $user_id = $user ? $user : null;
+            $user_id = $user ? $user->getId() : null;
             if (!$ad->getIsFeedAd()) {
                 $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('renewal_reminder', $ad->getId(), $user_id);
             }

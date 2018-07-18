@@ -120,7 +120,7 @@ EOF
     {
         $qb          = $this->getAdQueryBuilder($searchParam);
         $step        = 100;
-        $offset      = 0;//$input->getOption('offset');
+        $offset      = $input->getOption('offset');
 
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);
@@ -138,7 +138,7 @@ EOF
                 $ad->setWeeklyRefreshAt(time());
                 $entityManager->persist($ad);
                 $entityManager->flush($ad);
-                $user_id = $user ? $user : null;
+                $user_id = $user ? $user->getId() : null;
            
                 if (!$ad->getIsFeedAd()) {
                     $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_refreshed', $ad->getId(), $user_id);

@@ -94,7 +94,7 @@ class CleanS3ImageFromLocalCommand extends ContainerAwareCommand
     {
         $qb          = $this->getAdQueryBuilder($last_updated, $ids);
         $step        = 500;
-        $offset      = 0;//$input->getOption('offset');
+        $offset      = $input->getOption('offset');
 
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);

@@ -89,7 +89,7 @@ EOF
     {
         $qb          = $this->getEmailQueueQueryBuilder($searchParam);
         $step        = 5;
-        $offset      = 0;//$input->getOption('offset');
+        $offset      = $input->getOption('offset');
 
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step)

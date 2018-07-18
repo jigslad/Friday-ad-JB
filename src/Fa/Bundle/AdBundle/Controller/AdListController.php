@@ -381,6 +381,8 @@ class AdListController extends CoreController
             //'nextMiles'              => $nextMiles,
             'objSeoToolOverride'     => $objSeoToolOverride,
             'rootCategoryId'         => $rootCategoryId,
+            'userLiveBasicAd'        => $this->getUserLiveBasicAd($data, null, $page, $mapFlag, $request, $rootCategoryId),
+            'successPaymentModalbox' => $successPaymentModalbox,
             'areaToolTipFlag'		 => $areaToolTipFlag,
             'recommendedSlotResult'  => $getRecommendedSrchSlotWise,
         	'paymentTransactionJs'	 => $transactionJsArr,
@@ -1045,12 +1047,12 @@ class AdListController extends CoreController
     		$user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
     		if(!empty($user)) {    			
     			if($rootCategoryId == 'null') {
-    				return true;
+    				return false;
     			}     			 
     			//check for this package category upgrade featured top is enabled
     			$isFeaturedTopisEnabledForCateg = $this->getRepository('FaAdBundle:Ad')->checkIsfeaturedUpgradeEnabledForCategory($rootCategoryId, $this->container);
     			if(empty($isFeaturedTopisEnabledForCateg)) {  
-    				return true;	//featured upgrade is not enable for this root category
+    				return false;	//featured upgrade is not enable for this root category
     			}     			
     			//get basic Live advert if exist
     			$getBasicAdResult = $this->getRepository('FaAdBundle:Ad')->getLastBasicPackageAdvertForUpgrade($rootCategoryId, $user->getId(), null, $this->container);

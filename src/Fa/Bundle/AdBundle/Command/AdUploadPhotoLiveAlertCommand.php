@@ -94,7 +94,7 @@ EOF
     {
         $qb          = $this->getAdQueryBuilder($searchParam);
         $step        = 10;
-        $offset      = 0;//$input->getOption('offset');
+        $offset      = $input->getOption('offset');
 
         $qb->groupBy(AdRepository::ALIAS.'.id');
         $qb->setFirstResult($offset);
