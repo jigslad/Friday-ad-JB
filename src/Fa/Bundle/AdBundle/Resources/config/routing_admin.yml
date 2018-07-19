@@ -29,3 +29,11 @@ FaAdBundle_ad_package:
 FaAdBundle_search_keyword_admin:
     resource: '@FaAdBundle/Resources/config/routing/search_keyword_admin.yml'
     prefix:   /search_keyword
+
+FaAdBundle_paa_lite_field_rule_admin:
+    resource: '@FaAdBundle/Resources/config/routing/paa_lite_field_rule_admin.yml'
+    prefix:   /paa_lite_field_rule_admin
+
+FaAdBundle_campaigns_admin:
+    resource: '@FaAdBundle/Resources/config/routing/campaigns_admin.yml'
+    prefix:   /paa-lite
