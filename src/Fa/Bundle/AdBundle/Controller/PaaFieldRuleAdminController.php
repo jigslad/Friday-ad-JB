@@ -21,6 +21,7 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\AdBundle\Form\PaaFieldRuleAdminSearchType;
+use Fa\Bundle\AdBundle\Form\PaaFieldRuleAdminType;
 
 /**
  * This controller is used for paa field rule crud management.
@@ -127,7 +128,8 @@ class PaaFieldRuleAdminController extends CrudController implements ResourceAuth
     {
         $entity      = $this->getEntity();
         $formManager = $this->get('fa.formmanager');
-        $form        = $formManager->createForm('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin', $entity, array('action' => $this->generateUrl($this->getRouteName('create'))));
+        $fqn = $this->getFQNForForms('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin');
+        $form        = $formManager->createForm($fqn, $entity, array('action' => $this->generateUrl($this->getRouteName('create'))));
 
         $parameters = array(
                            'entity'  => $entity,
@@ -195,5 +197,15 @@ class PaaFieldRuleAdminController extends CrudController implements ResourceAuth
                          );
 
         return $this->render($this->getBundleName().':'.$this->getControllerName().':show.html.twig', $parameters);
+    }
+    
+    public function getFQNForForms($formName)
+    {
+        // getName() symfony form function is removed After symfony 3, so to handle dynamic forms we need create array
+        $formClassArray = [
+            'fa_ad_paa_field_rule_admin' => PaaFieldRuleAdminType::class
+        ];
+        $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
+        return $formName;
     }
 }

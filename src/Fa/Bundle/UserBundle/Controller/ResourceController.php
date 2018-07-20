@@ -21,6 +21,7 @@ use Fa\Bundle\UserBundle\Form\ResourceType;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
  * This controller is used for resource management.
@@ -70,7 +71,7 @@ class ResourceController extends CoreController implements ResourceAuthorization
             'action' => $this->generateUrl('resource_create', array('parent_id' => $parent_id))
         );
 
-        $form = $formManager->createForm(new ResourceType(), $entity, $options);
+        $form = $formManager->createForm(ResourceType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -112,7 +113,7 @@ class ResourceController extends CoreController implements ResourceAuthorization
             'action' => $this->generateUrl('resource_create', array('parent_id' => $parent_id))
         );
 
-        $form = $formManager->createForm(new ResourceType(), $entity, $options);
+        $form = $formManager->createForm(ResourceType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -156,7 +157,7 @@ class ResourceController extends CoreController implements ResourceAuthorization
             'method' => 'PUT'
         );
 
-        $form = $formManager->createForm(new ResourceType(), $entity, $options);
+        $form = $formManager->createForm(ResourceType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -202,7 +203,7 @@ class ResourceController extends CoreController implements ResourceAuthorization
             'method' => 'PUT'
         );
 
-        $form = $formManager->createForm(new ResourceType(), $entity, $options);
+        $form = $formManager->createForm(ResourceType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -280,7 +281,7 @@ class ResourceController extends CoreController implements ResourceAuthorization
      */
     protected function addFormFields($form)
     {
-        $form->add('save', 'submit');
+        $form->add('save', SubmitType::class);
     }
 
     /**

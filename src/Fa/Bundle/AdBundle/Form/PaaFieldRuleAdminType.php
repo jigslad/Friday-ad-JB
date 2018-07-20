@@ -313,8 +313,7 @@ class PaaFieldRuleAdminType extends AbstractType
                     $fieldId = $fieldRule->getPaaField()->getId();
                     $field   = $fieldRule->getPaaField()->getField();
                     $label   = $fieldRule->getPaaField()->getLabel();
-
-                    $form->add($field, new PaaFieldAdminType($this->container, $fieldRule), array('mapped' => false, 'label' => /** @Ignore */$label, 'required' => false));
+                    $form->add($field, PaaFieldAdminType::class, array('mapped' => false, 'label' => /** @Ignore */$label, 'required' => false, 'paaFieldRule' => $fieldRule));
                 }
             } else {
                 $ord           = 1;
@@ -324,10 +323,10 @@ class PaaFieldRuleAdminType extends AbstractType
                         $fieldRule = $paaFieldData['data'];
                         $field = $fieldRule->getPaaField()->getField();
                         $label = $fieldRule->getPaaField()->getLabel();
-                        $form->add($field, new PaaFieldAdminType($this->container, $fieldRule), array('mapped' => false, 'label' => /** @Ignore */$label, 'required' => false));
+                        $form->add($field, PaaFieldAdminType::class, array('mapped' => false, 'label' => /** @Ignore */$label, 'required' => false, 'paaFieldRule' => $fieldRule));
                     } else {
                         $paaField = $paaFieldData['data'];
-                        $form->add($paaField->getField(), new PaaFieldAdminType($this->container, null, $paaField, $ord), array('mapped' => false, 'label' => /** @Ignore */$paaField->getLabel(), 'required' => false));
+                        $form->add($paaField->getField(), PaaFieldAdminType::class, array('mapped' => false, 'label' => /** @Ignore */$paaField->getLabel(), 'required' => false, 'paaFieldRule' => null, 'paaField' => $paaField, 'defaultOrd' => $ord));
                     }
 
                     $ord++;

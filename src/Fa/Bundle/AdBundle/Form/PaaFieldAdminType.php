@@ -24,6 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 /**
  * PaaFieldAdminType form.
@@ -85,13 +86,13 @@ class PaaFieldAdminType extends AbstractType
      * @param string             $paaField
      * @param string             $defaultOrd
      */
-    public function __construct(ContainerInterface $container, $paaFieldRule = null, $paaField = null, $defaultOrd = null)
+    public function __construct(ContainerInterface $container)
     {
         $this->container    = $container;
         $this->em           = $this->container->get('doctrine')->getManager();
-        $this->paaFieldRule = $paaFieldRule;
+        /* $this->paaFieldRule = $paaFieldRule;
         $this->paaField     = ($paaField ? $paaField : $this->paaFieldRule->getPaaField());
-        $this->defaultOrd   = $defaultOrd;
+        $this->defaultOrd   = $defaultOrd; */
         $this->translator   = CommonManager::getTranslator($container);
     }
 
@@ -103,6 +104,10 @@ class PaaFieldAdminType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->paaFieldRule = $options['paaFieldRule'];
+        $this->paaField = $options['paaField'] ? $options['paaField'] : $this->paaFieldRule->getPaaField();
+        $this->defaultOrd = $options['defaultOrd'];
+        
         $builder
             ->add(
                 'label',
@@ -162,22 +167,39 @@ class PaaFieldAdminType extends AbstractType
                     'data' => ($this->paaFieldRule && $this->paaFieldRule->getStep()) ? $this->paaFieldRule->getStep() : '',
                     'constraints' => array(new Regex(array('pattern' => '/^[0-9]+$/i', 'message' => $this->translator->trans('Stage should be integer.', array(), 'validators'))))
                 )
-            );
+            )
+            ->add('is_added', HiddenType::class);
 
             // allow admin to set default value
         if ($this->paaField->getCategoryDimensionId() && ($this->paaField->getFieldType() == 'choice_radio' || $this->paaField->getFieldType() == 'choice_single')) {
-                $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($this->paaField->getCategoryDimensionId(), $this->container);
-                $fieldOptions['empty_value'] = 'Select';
+                $fieldOptions['choices']     = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($this->paaField->getCategoryDimensionId(), $this->container));
+                $fieldOptions['placeholder'] = 'Select';
                 $fieldOptions['data']        = ($this->paaFieldRule && $this->paaFieldRule->getDefaultValue()) ? $this->paaFieldRule->getDefaultValue() : '';
                 $builder->add('default_value', ChoiceType::class, $fieldOptions);
         } elseif ($this->paaField->getFieldType() == 'choice_boolean') {
-                $fieldOptions['choices']     = array(1 => 'Yes', 0 => 'No');
-                $fieldOptions['empty_value'] = 'Select';
+                $fieldOptions['choices']     = array_flip(array(1 => 'Yes', 0 => 'No'));
+                $fieldOptions['placeholder'] = 'Select';
                 $fieldOptions['data']        = ($this->paaFieldRule && $this->paaFieldRule->getDefaultValue() != null) ? $this->paaFieldRule->getDefaultValue() : '';
                 $builder->add('default_value', ChoiceType::class, $fieldOptions);
         } else {
                 $builder->add('default_value', TextType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getDefaultValue()) ? $this->paaFieldRule->getDefaultValue() : ''));
         }
+    }
+    
+    /**
+     * Set default options.
+     *
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(
+            array(
+                'paaFieldRule' => null,
+                'paaField' => null,
+                'defaultOrd' => null
+            )
+            );
     }
 
     /**

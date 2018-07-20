@@ -142,11 +142,14 @@ class PaaFieldRepository extends EntityRepository
         $allPaaFields = array();
         $ruleFields   = array();
         $fieldRules   = $this->getEntityManager()->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesByCategoryAncestor($categoryId, $ordBy);
-        foreach ($fieldRules as $fieldRule) {
-            $fieldId                        = $fieldRule->getPaaField()->getId();
-            $allPaaFields[$fieldId]['is_rule'] = true;
-            $allPaaFields[$fieldId]['data']    = $fieldRule;
-            $ruleFields[$fieldRule->getPaaField()->getField()] = $fieldId;
+        
+        if (!empty($fieldRules)) {
+            foreach ($fieldRules as $fieldRule) {
+                $fieldId                        = $fieldRule->getPaaField()->getId();
+                $allPaaFields[$fieldId]['is_rule'] = true;
+                $allPaaFields[$fieldId]['data']    = $fieldRule;
+                $ruleFields[$fieldRule->getPaaField()->getField()] = $fieldId;
+            }
         }
 
         $paaFields = $this->getAllPaaFields($categoryId);

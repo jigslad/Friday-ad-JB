@@ -4,6 +4,12 @@ services:
         arguments: ['@service_container', '@request_stack']
         tags:
             - { name: form.type, alias: fa_ad_paa_field_rule_admin }
+            
+    fa_ad.form.type.paa_field_admin:
+        class: Fa\Bundle\AdBundle\Form\PaaFieldAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_paa_field_admin }
 
     fa_ad.form.type.paa_field_rule_search_admin:
         class: Fa\Bundle\AdBundle\Form\PaaFieldRuleAdminSearchType

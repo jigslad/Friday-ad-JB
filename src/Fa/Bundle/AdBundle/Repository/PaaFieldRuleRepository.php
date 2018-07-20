@@ -173,7 +173,7 @@ class PaaFieldRuleRepository extends EntityRepository
     {
         $paaFieldRules = $this->getPaaFieldRulesByCategoryId($categoryId, $ordBy);
 
-        if ($paaFieldRules && count($paaFieldRules)) {
+        if ($paaFieldRules && !empty($paaFieldRules)) {
             return $paaFieldRules;
         } else {
             $categoryObj = $this->_em->getRepository('FaEntityBundle:Category')->find($categoryId);

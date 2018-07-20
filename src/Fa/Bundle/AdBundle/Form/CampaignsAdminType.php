@@ -273,10 +273,10 @@ class CampaignsAdminType extends AbstractType
     {
         if ($categoryId) {
             //Edit
-            $form->add('discount_code', 'choice', array(
+            $form->add('discount_code', ChoiceType::class, array(
                 'label' => "Add a discount code if basic ads in this category are not free",
                 'required' =>false,
-                'choices' => array('0' => 'Select Discount Code') + $this->em->getRepository('FaPromotionBundle:PackageDiscountCode')->getPackageDiscountCodeArrayByCategoryId($categoryId)
+                'choices' => array_flip(array('0' => 'Select Discount Code') + $this->em->getRepository('FaPromotionBundle:PackageDiscountCode')->getPackageDiscountCodeArrayByCategoryId($categoryId))
             ));
 
             if ($campaign && $campaign->getId()) {
@@ -287,7 +287,7 @@ class CampaignsAdminType extends AbstractType
                     $field   = $fieldRule->getPaaLiteField()->getField();
                     $label   = $fieldRule->getPaaLiteField()->getLabel();
 
-                    $form->add($field, new PaaFieldAdminType($this->container, $fieldRule), array('mapped' => false, 'label' => /** @Ignore */$label, 'required' => false));
+                    $form->add($field, PaaFieldAdminType::class, array('mapped' => false, 'label' => /** @Ignore */$label, 'required' => false, 'paaFieldRule' => $fieldRule));
                 }
             } else {
                 $ord           = 1;
@@ -297,10 +297,10 @@ class CampaignsAdminType extends AbstractType
                         $fieldRule = $PaaLiteFieldData['data'];
                         $field = $fieldRule->getPaaField()->getField();
                         $label = $fieldRule->getPaaField()->getLabel();
-                        $form->add($field, new PaaFieldAdminType($this->container, $fieldRule), array('mapped' => false, 'label' => /** @Ignore */$label, 'required' => false));
+                        $form->add($field, PaaFieldAdminType::class, array('mapped' => false, 'label' => /** @Ignore */$label, 'required' => false, 'paaFieldRule' => $fieldRule));
                     } else {
                         $PaaLiteField = $PaaLiteFieldData['data'];
-                        $form->add($PaaLiteField->getField(), new PaaFieldAdminType($this->container, null, $PaaLiteField, $ord), array('mapped' => false, 'label' => /** @Ignore */$PaaLiteField->getLabel(), 'required' => false));
+                        $form->add($PaaLiteField->getField(), PaaFieldAdminType::class, array('mapped' => false, 'label' => /** @Ignore */$PaaLiteField->getLabel(), 'required' => false, 'paaFieldRule' => null, 'paaField' => $PaaLiteField, 'defaultOrd' => $ord));
                     }
 
                     $ord++;
