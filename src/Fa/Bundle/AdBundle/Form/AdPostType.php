@@ -209,7 +209,7 @@ class AdPostType extends AbstractType
                                     $form->add($paaField['field'], $this->getFormFieldType($paaField), $this->getPaaFieldOptions($paaFieldRule, $ad, $verticalObj));
                                     $this->addOrderedField($paaField['field']);
                                 } elseif ( $paaField['field'] == 'rates_id' ) {
-                                    $form->add($paaField['field'], 'hidden', array('mapped' => false, 'data' => true, 'label'=>'Rates'));
+                                    $form->add($paaField['field'], HiddenType::class, array('mapped' => false, 'data' => true, 'label'=>'Rates'));
                                     $this->addRatesFields($form, $paaField, $verticalObj);
                                     $this->addOrderedField($paaField['field']);
                                 } elseif ( $paaField['field'] == 'payment_method_id' ) {
@@ -260,9 +260,9 @@ class AdPostType extends AbstractType
 	    }
 	    $fieldOptions['label']= $paaField['label'];
 	    $fieldOptions['mapped']= false;
-	    $fieldOptions['choices'] = $this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethodOptionsArray($this->container, $categoryId);
+	    $fieldOptions['choices'] = array_flip($this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethodOptionsArray($this->container, $categoryId));
 	    $fieldOptions['data'] = (isset($ad) && $ad->getPaymentMethodId() != ''?$ad->getPaymentMethodId():($categoryId != CategoryRepository::PHONE_AND_CAM_CHAT_ID?PaymentRepository::PAYMENT_METHOD_CASH_ON_COLLECTION_ID:''));
-	    $form->add($paaField['field'], 'choice', $fieldOptions);
+	    $form->add($paaField['field'], ChoiceType::class, $fieldOptions);
 	    $this->addOrderedField($paaField['field']);
 	    return true;
     }
@@ -296,7 +296,7 @@ class AdPostType extends AbstractType
                 ));
                 
                 
-                $form->add(str_replace(' ', '', $val), 'text', array('mapped' => false, 'label' => $label[0], 'data'=>$data, 'constraints' => $fieldConstraints, 'required'=>false));
+                $form->add(str_replace(' ', '', $val), TextType::class, array('mapped' => false, 'label' => $label[0], 'data'=>$data, 'constraints' => $fieldConstraints, 'required'=>false));
             }
         }
         return true;
@@ -315,14 +315,13 @@ class AdPostType extends AbstractType
         }
 
         $fieldTypeArray = explode('_', $paaField['field_type']);
+        $formTypeArray = ['choice' => ChoiceType::class, 'text' => TextType::class, 'textarea' => TextareaType::class, 'integer' => NumberType::class];
         
         if ($classFlag) {
-            $formTypeArray = ['choice' => ChoiceType::class, 'text' => TextType::class, 'textarea' => TextareaType::class, 'integer' => NumberType::class];
             $formTypeName = isset($formTypeArray[$fieldTypeArray[0]]) ? $formTypeArray[$fieldTypeArray[0]] : $fieldTypeArray[0];
         }else {
-            $formTypeName = $fieldTypeArray[0];
+            $formTypeName = isset($formTypeArray[$fieldTypeArray[0]]) ? $formTypeArray[$fieldTypeArray[0]] : $fieldTypeArray[0];
         }
-
         return $formTypeName;
     }
 

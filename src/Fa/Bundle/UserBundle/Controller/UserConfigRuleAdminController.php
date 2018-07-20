@@ -19,6 +19,7 @@ use Fa\Bundle\AdminBundle\Controller\CrudController;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
 use Fa\Bundle\UserBundle\Entity\UserConfigRule;
 use Fa\Bundle\UserBundle\Repository\UserConfigRuleRepository;
+use Fa\Bundle\UserBundle\Form\UserConfigRuleAdminType;
 
 /**
  * This controller is used for entity management.
@@ -99,8 +100,8 @@ class UserConfigRuleAdminController extends CrudController implements ResourceAu
             'action' => $this->generateUrl($this->getRouteName('create')),
             'method' => 'POST'
         );
-
-        $form = $formManager->createForm('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin', $entity, $options);
+        $fqn = $this->getFQNForForms('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin');
+        $form = $formManager->createForm($fqn, $entity, $options);
         if ($formManager->isValid($form)) {
             if (!$this->saveNewUsingForm) {
                 $formManager->save($entity);
@@ -144,8 +145,9 @@ class UserConfigRuleAdminController extends CrudController implements ResourceAu
             'action' => $this->generateUrl($this->getRouteName('update'), array('id' => $entity->getId())),
             'method' => 'PUT'
         );
-
-        $form = $formManager->createForm('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin', $entity, $options);
+        
+        $fqn = $this->getFQNForForms('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin');
+        $form = $formManager->createForm($fqn, $entity, $options);
 
         if ($formManager->isValid($form)) {
             if (!$this->saveEditUsingForm) {
@@ -195,5 +197,15 @@ class UserConfigRuleAdminController extends CrudController implements ResourceAu
         }
 
         return parent::handleMessage($this->get('translator')->trans('Record has been deleted successfully.', array(), 'success'), 'user_admin');
+    }
+    
+    public function getFQNForForms($formName)
+    {
+        // getName() symfony form function is removed After symfony 3, so to handle dynamic forms we need create array
+        $formClassArray = [
+            'fa_user_user_config_rule_admin' => UserConfigRuleAdminType::class
+        ];
+        $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
+        return $formName;
     }
 }

@@ -109,7 +109,7 @@ class AddCategoryChoiceFieldSubscriber implements EventSubscriberInterface
         $this->totalLevel        = $totalLevel;
         $this->isAdultAppend     = $isAdultAppend;
 
-        if ($fieldOptions && count($fieldOptions)) {
+        if ($fieldOptions && !empty($fieldOptions)) {
             $this->fieldOptions = $fieldOptions;
         }
     }
