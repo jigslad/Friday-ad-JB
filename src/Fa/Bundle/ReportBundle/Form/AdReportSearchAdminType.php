@@ -175,6 +175,13 @@ class AdReportSearchAdminType extends AbstractType
                 )
             )
             ->add(
+                'is_paa_lite',
+                CheckboxType::class,
+                array(
+                    'label' => 'Only paa-lite ads'
+                )
+            )
+            ->add(
                 'admin_ads',
                 CheckboxType::class,
                 array(

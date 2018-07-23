@@ -20,6 +20,7 @@ use Fa\Bundle\EntityBundle\Form\LocationType;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
  * This controller is used for admin side location management.
@@ -66,7 +67,7 @@ class LocationAdminController extends CoreController implements ResourceAuthoriz
             'action' => $this->generateUrl('location_create', array('parent_id' => $parent_id))
         );
 
-        $form = $formManager->createForm(new LocationType(), $entity, $options);
+        $form = $formManager->createForm(LocationType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -107,7 +108,7 @@ class LocationAdminController extends CoreController implements ResourceAuthoriz
             'action' => $this->generateUrl('location_create', array('parent_id' => $parent_id))
         );
 
-        $form = $formManager->createForm(new LocationType(), $entity, $options);
+        $form = $formManager->createForm(LocationType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -150,7 +151,7 @@ class LocationAdminController extends CoreController implements ResourceAuthoriz
             'method' => 'PUT'
         );
 
-        $form = $formManager->createForm(new LocationType(), $entity, $options);
+        $form = $formManager->createForm(LocationType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -195,7 +196,7 @@ class LocationAdminController extends CoreController implements ResourceAuthoriz
             'method' => 'PUT'
         );
 
-        $form = $formManager->createForm(new LocationType(), $entity, $options);
+        $form = $formManager->createForm(LocationType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -296,7 +297,7 @@ class LocationAdminController extends CoreController implements ResourceAuthoriz
      */
     protected function addFormFields($form)
     {
-        $form->add('save', 'submit');
+        $form->add('save', SubmitType::class);
     }
 
     /**
