@@ -271,7 +271,7 @@ class CategoryAdminType extends AbstractType
         $financeTitle     = $form->get('finance_title')->getData();
         $financeUrl       = $form->get('finance_url')->getData();
         $hasRecommendedSlot = $form->get('has_recommended_slot')->getData();
-        if ($form->get('is_featured_upgrade_enabled')->getData()) { 
+        if ($form->has('is_featured_upgrade_enabled') && $form->get('is_featured_upgrade_enabled')->getData()) { 
         	if($form->get('featured_upgrade_info')->getData() == '') {
         		$event->getForm()->get('featured_upgrade_info')->addError(new \Symfony\Component\Form\FormError($this->translator->trans('Please enter category stats/info.', array(), 'validators')));
         	}
