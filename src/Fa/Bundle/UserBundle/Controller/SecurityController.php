@@ -53,6 +53,9 @@ class SecurityController extends ThirdPartyLoginController
             if (isset($urlParams['scheme']) && isset($urlParams['host']) && isset($urlParams['path'])) {
                 $routeRefererUrl    = str_replace(array($urlParams['scheme'].'://'.$urlParams['host'], $request->getBaseURL()), '', $urlParams['path']);
                 try {
+                	if(strpos($routeRefererUrl, "zendeskhelp.php") !== FALSE) {
+                		$routeRefererUrl = "/";
+                	}
                     $prevRouteName = $this->get('router')->match($routeRefererUrl)['_route'];
                 } catch (ResourceNotFoundException $e) {
                     $prevRouteName = null;

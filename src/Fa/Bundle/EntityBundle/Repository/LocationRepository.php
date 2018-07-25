@@ -37,7 +37,6 @@ class LocationRepository extends BaseEntityRepository
     const LONDON_TOWN_ID = 831;
     const LONDON_TXT = 'london';
     const COUNTY_GREATER_LONDON_ID = 830;
-    
 
     /**
      * prepareQueryBuilder.
@@ -147,7 +146,7 @@ class LocationRepository extends BaseEntityRepository
             ->orderBy(self::ALIAS.'.name', 'ASC')
             ->getQuery()
             ->getResult();
-
+            
         return $locations;
     }
 
@@ -437,6 +436,7 @@ class LocationRepository extends BaseEntityRepository
                 return $cachedValue;
             }
         }
+        
         $query = $this->createQueryBuilder(self::ALIAS)
                         ->where(self::ALIAS.'.url = :url')
                         ->setParameter('url', $slug)
@@ -646,7 +646,8 @@ class LocationRepository extends BaseEntityRepository
                         ->select(self::ALIAS)
                         ->where(self::ALIAS.'.'.$column.'= :location')
                         ->setParameter('location', $location)
-                        ->andWhere(self::ALIAS.'.lvl = 3 OR '.self::ALIAS.'.lvl = 4');
+                        ->andWhere(self::ALIAS.'.lvl = 3 OR '.self::ALIAS.'.lvl = 4')
+                        ->setMaxResults(1);
         
         $town = $query->getQuery()->getOneOrNullResult();
 
@@ -700,7 +701,8 @@ class LocationRepository extends BaseEntityRepository
                         ->select(self::ALIAS)
                         ->where(self::ALIAS.'.id = :location')
                         ->setParameter('location', $location)
-                        ->andWhere(self::ALIAS.'.lvl = 3 OR '.self::ALIAS.'.lvl = 4');
+                        ->andWhere(self::ALIAS.'.lvl = 3 OR '.self::ALIAS.'.lvl = 4')
+                        ->setMaxResults(1);
         
         return $query->getQuery()->getOneOrNullResult();
     }

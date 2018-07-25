@@ -2710,3 +2710,12 @@ table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.r
 .alert-box.info.area-tooltip-alert { font-weight: normal !important; }
 .available-payment-adult-options { width:100%;height:47px;background:url('/bundles/fafrontend/images/payment-options-adult.png') no-repeat center center;}
 .available-payment-adult-options-mob {width:100%;height:153px;background:url('/bundles/fafrontend/images/payment-options-mobile-adult.png') no-repeat center center;margin-bottom: 70px;}
+
+/* Zendesk help Changes */
+.custom_hc_widget_trigger { display: block; position: fixed; right: 10px; bottom: 10px; z-index:98; }
+.custom_hc_widget { position: fixed; right: 10px; bottom: 10px; width: 0px; opacity: 0; background-color: #ffffff; border-radius: 5px; overflow: hidden; transition: all 0.2s linear; z-index:99; }
+.custom_hc_widget.expanded { width: 320px; opacity: 1; border: 1px solid #efefef  ; }
+.chcw_header { position: relative; font-size: 18px; text-align: center; line-height: 24px; padding: 8px 0; background-color: #efefef; height: 40px; max-height: 40px;}
+.chcw_header a, .chcw_header a:hover, .chcw_header a:focus, .chcw_header a:active { position: absolute; top: 8px; right: 10px; font-size: 16px; text-decoration: none; color: #4a4a4a !important; }
+.chcw_header a img { margin-top: -3px; width: 21px; }
+.chcw_content { width: 100%; height: 460px; border: none; }

@@ -81,7 +81,7 @@ class CategoryAdminType extends AbstractType
      * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {	
         $recommendedSlotArray = array();
         if ($builder->getData()->getId()) {
             $recommendedSlotArray = $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotArrayByCategoryId($builder->getData()->getId(), $this->container);
@@ -161,10 +161,11 @@ class CategoryAdminType extends AbstractType
             $builder->add('recommended_slot_user_id_'.$i, TextType::class, array('mapped' => false, 'label' => 'User id', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['user_id'] : '') ));
             $builder->add('recommended_slot_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['url'] : '') ));
         }
-        
+
         //recommended slots
         $st = 0;$i=1;
         for ($k = 1; $k <= 5; $k++) {
+
             for ($j = 1; $j <= 3; $j++) {
                 if(!empty($recommendedSlotSearchArray)) {
                     if($recommendedSlotSearchArray[$st]['creative_group']== $k && $recommendedSlotSearchArray[$st]['creative_ord']==$j && count($recommendedSlotSearchArray)>$st) {
@@ -196,9 +197,9 @@ class CategoryAdminType extends AbstractType
                 }
                 $i++;
             }
-            
+           
         }
-        
+
         $builder->addEventListener(FormEvents::SUBMIT, array($this, 'onSubmit'))
         ->addEventListener(FormEvents::POST_SUBMIT, array($this, 'onPostSubmit'));
     }

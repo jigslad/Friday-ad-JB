@@ -167,8 +167,8 @@
                     <div class="columns">
                         <h1 class="text-center">{{'Pay now with'|trans({}, 'backend-cart')}}:</h1>
                         <div class="pay-now-box clearfix">
-                              <div class="credit-cards-box  small-24 medium-12 large-6 columns {% if (isAdultAdvertPresent == 1) %} credit-cards-box-center{% endif %}" onclick="window.location='{{path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')})}}'"> </div>
-                              {% if (isAdultAdvertPresent == 0) %}
+                              <div class="credit-cards-box  small-24 medium-12 large-6 columns {% if (isAdultAdvertPresent is defined and isAdultAdvertPresent == 1) %} credit-cards-box-center{% endif %}" onclick="window.location='{{path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')})}}'"> </div>
+                              {% if (isAdultAdvertPresent is defined and isAdultAdvertPresent == 0) %}
                                 <div class="small-24 medium-12 large-6 columns paypal-pad">
                                   {#<div class="pay-or-caption hide-for-small-only">{{'or'|trans({}, 'backend-cart')}}</div>#}
                                   <div class="paypal-box" onclick="window.location='{{path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')})}}'"> </div>

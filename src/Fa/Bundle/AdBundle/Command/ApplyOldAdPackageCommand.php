@@ -99,7 +99,7 @@ EOF
                         $selectedPackagePrintId    = null;
                         //check if user has already purchased pkg or not
                         $adUserPackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getPurchasedAdPackage($ad->getId());
-                        if ($adUserPackage) {
+                        if ($adUserPackage && $adUserPackage->getStatus() != 5 && $adUserPackage->getStatus() != 2) {
                             $isUserHasPurchasedPackage = true;
                         }
                         $categoryId = $ad->getCategory()->getId();

@@ -154,7 +154,7 @@
         {% endif %}
 
         {{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
-
+	
         {% if status_code == 200 %}
             {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}
                 <div class="row top-msg">
@@ -198,10 +198,6 @@
             {{ include('FaFrontendBundle::adultWarnningPopup.html.twig') }}
         {% endif %}
 
-        
-        {% if (currentRoute == 'location_home_page' and app.request.get('static_page') and app.request.get('location') in {0: 'contact-us', 1: 'stay-safe-help', 2: 'watch-out-for-online-scams', 3: 'protect-yourself-from-scam-emails',4: 'buying-and-selling-safely',5: 'buying-safely',6: 'selling-safely',7: 'finding-a-job-safely',8: 'reporting-problems-to-the-police',9: 'buying-a-bicycle',10: 'buying-a-car',11: 'buying-pets',12:'property-and-travel',13: 'faqs'} ) or currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'facebook_paa_login', 4: 'ad_post_third_step_registration', 5: 'ad_post_fourth_step', 6: 'show_draft_ad', 7: 'ad_package_purchase', 8: 'show_cart', 9: 'cybersource_checkout', 10: 'dashboard_home', 11: 'manage_my_ads_active', 12: 'user_ad_message_all', 13: 'user_review_list', 14: 'my_profile', 15: 'my_orders', 16: 'my_favourite', 17: 'my_purchases', 18: 'my_account'} %}
-            {{ include('FaFrontendBundle::liveChatJs.html.twig') }}
-        {% endif %}
         {{ include('FaFrontendBundle::pushNotificationsJs.html.twig') }}
 
         <script type="text/javascript">
@@ -280,6 +276,18 @@
                     $('body').removeClass('transbgtrade');
                 });
             </script>
+        {% endif %}
+        {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
+            {% set zendeskUrl = 'https://help.friday-ad.co.uk/hc/en-us/sections/360000265514-Placing-an-Advert' %}
+            {{ include('FaFrontendBundle::zendeskHelp.html.twig', {'url': zendeskUrl}) }}
+            
+        {% elseif (currentRoute  in {0: 'dashboard_home', 1: 'user_ad_message_all', 2: 'user_review_list', 3: 'my_profile',4: 'my_orders',5: 'my_favourite',6: 'list_search_agent',7: 'my_purchases',8: 'my_account'}) %}
+        	{% set zendeskUrl = 'https://help.friday-ad.co.uk/hc/en-us/sections/360000255873-My-Account' %}
+            {{ include('FaFrontendBundle::zendeskHelp.html.twig', {'url': zendeskUrl}) }}
+            
+        {% elseif (currentRoute  in {0: 'manage_my_ads_active'}) %}
+        	{% set zendeskUrl = 'https://help.friday-ad.co.uk/hc/en-us/sections/360000432234-Managing-your-Adverts' %}
+            {{ include('FaFrontendBundle::zendeskHelp.html.twig', {'url': zendeskUrl}) }}
         {% endif %}
     </body>
 </html>

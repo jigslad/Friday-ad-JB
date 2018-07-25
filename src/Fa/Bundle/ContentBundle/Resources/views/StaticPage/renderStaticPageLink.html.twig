@@ -9,6 +9,9 @@
             {% endif %}
             {% if staticPage['include_in_footer'] == 1 %}
                 <a href="{{ path('location_home_page', {'location': staticPage['slug']}) }}">{{staticPage['title']}}</a>
+                {% if staticPage['slug'] == 'about-us' %}
+                	<a href="https://help.friday-ad.co.uk/hc/en-us" target="__blank">{{ 'Help Centre'|trans }}</a>
+                {% endif %}
                 {% set staticPageCounter = staticPageCounter + 1 %}
             {% endif %}
         {% endif %}

@@ -368,13 +368,14 @@
 {% endif %}
 
 <div class="banner-wrapper clearfix">
-    <div class="left-banner">
-        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
-        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-    </div>
-    <div class="details-wrapper banner-mid-column">
-        <div class="relative">
-            <div class="row">
+    
+    <div class="row relative details-wrapper banner-mid-column">
+    	<div class="left-banner">
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+        </div>
+        <div class="">
+            <div class="">
                 <div class="columns">
                     <div class="row">
                         <div class="large-16 columns">
@@ -737,7 +738,7 @@
                 </div>
             {% endif %}
         </div>
-
+		<div class="clearfix"></div>
         {% if not isSoldExpiredAdFlag and similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
             {{ block('similar_ads_html') }}
         {% endif %}
@@ -764,10 +765,10 @@
             {% endif %}
             </div>
         </div>
-    </div>
-    <div class="right-banner">
-        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
-        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+        <div class="right-banner">
+            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_RIGHT') %}
+            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+        </div>
     </div>
 </div>
 {% if successPaymentModalbox is defined and successPaymentModalbox %}
@@ -821,13 +822,15 @@
 
     $(window).scroll(function () {
         {% if currentDevice == 'D' or currentDevice == 'T' %}
-            var contactBtnOffset = $("#contact_seller_btn").offset().top;
-            var contactBtnPos = contactBtnOffset - $(window).scrollTop();
-            if (contactBtnPos < -40) {
-                $("#sticky_item_information_id").show();
-            } else if (contactBtnPos > -40) {
-                $("#sticky_item_information_id").hide();
-            }
+        	if($("#contact_seller_btn").length) {
+                var contactBtnOffset = $("#contact_seller_btn").offset().top;
+                var contactBtnPos = contactBtnOffset - $(window).scrollTop();
+                if (contactBtnPos < -40) {
+                    $("#sticky_item_information_id").show();
+                } else if (contactBtnPos > -40) {
+                    $("#sticky_item_information_id").hide();
+                }
+        	}
         {% endif %}
 
         if ($("#banner_placeholder_3_4").length)
@@ -846,6 +849,25 @@
 
             if (parseInt(footerPos) <= 700) {
                 $("#banner_placeholder_3_4").removeClass("fixed-banner");
+            }
+        }
+		//left banner
+        if ($("#banner_placeholder_3_3").length)
+        {
+            var leftBannerOffset = $(".left-banner").offset().top;
+            var leftBannerPos = leftBannerOffset - $(window).scrollTop();
+
+            if (leftBannerPos < 0) {
+                $("#banner_placeholder_3_3").addClass("fixed-banner");
+            } else if (leftBannerPos > 0) {
+                $("#banner_placeholder_3_3").removeClass("fixed-banner");
+            }
+
+            var footerOffset = $("#footer_tag").offset().top;
+            var footerPos = footerOffset - $(window).scrollTop();
+
+            if (parseInt(footerPos) <= 700) {
+                $("#banner_placeholder_3_3").removeClass("fixed-banner");
             }
         }
     });

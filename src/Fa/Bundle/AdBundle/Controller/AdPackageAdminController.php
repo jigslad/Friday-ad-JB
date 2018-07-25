@@ -95,16 +95,19 @@ class AdPackageAdminController extends CoreController implements ResourceAuthori
 
         //check if user has already purchased pkg or not
         $adUserPackage = $this->getRepository('FaAdBundle:AdUserPackage')->getPurchasedAdPackage($adId);
+               
+ 
         if ($adUserPackage) {
-            $adUserPackageUpsell = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->getAdPackageUpsell($adId, $adUserPackage->getId());
-            $parameters = array(
-                'adUserPackage' => $adUserPackage,
-                'adUserPackageUpsell' => $adUserPackageUpsell,
-                'adId' => $adId,
-                'popup' => $popup,
-            );
-
-            return $this->render('FaAdBundle:AdPackageAdmin:showPurchaseAdPackage.html.twig', $parameters);
+        	if($adUserPackage->getStatus() != 5 && $adUserPackage->getStatus() != 2) {
+                $adUserPackageUpsell = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->getAdPackageUpsell($adId, $adUserPackage->getId());
+                $parameters = array(
+                    'adUserPackage' => $adUserPackage,
+                    'adUserPackageUpsell' => $adUserPackageUpsell,
+                    'adId' => $adId,
+                    'popup' => $popup,
+                );
+                return $this->render('FaAdBundle:AdPackageAdmin:showPurchaseAdPackage.html.twig', $parameters);
+            }
         }
 
         $oldSelectedPrintEditions = array();
