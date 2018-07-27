@@ -146,8 +146,8 @@
                                 {% if field == 'title' or field == 'description' or field == 'personalized_title' %}
                                     {{ form_label(attribute(form, field)) }}
                                     {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'eg. Little Tikes')}}) }}
-                                    {% if attribute(form, field).vars.size %}
-                                        <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'messages') }}</div>
+                                    {% if attribute(form, field).vars.attr.maxlength %}
+                                        <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'messages') }}</div>
                                     {% endif %}
                                     {{ form_errors(attribute(form, field)) }}
                                 {% elseif field == 'price' %}

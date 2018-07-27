@@ -14,8 +14,8 @@
                                 </div>
                             {% endif %}
                             {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'eg. Little Tikes'|trans({}, 'frontend-ad-edit'))}}) }}
-                            {% if attribute(form, field).vars.max_length %}
-                                <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.max_length }, 'frontend-ad-edit') }}</div>
+                            {% if attribute(form, field).vars.attr.maxlength %}
+                                <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-ad-edit') }}</div>
                             {% endif %}
                             {{ form_errors(attribute(form, field)) }}
                         </div>
@@ -29,8 +29,8 @@
                                 <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
                             {% endif %}
                             {{ form_widget(attribute(form, field), {'attr': {'placeholder': ''}}) }}
-                            {% if attribute(form, field).vars.max_length %}
-                                <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.max_length }, 'frontend-ad-edit') }}</div>
+                            {% if attribute(form, field).vars.attr.maxlength %}
+                                <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-ad-edit') }}</div>
                             {% endif %}
                             {{ form_errors(attribute(form, field)) }}
                         </div>
@@ -50,8 +50,8 @@
                                 <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
                             {% endif %}
                             {{ form_widget(attribute(form, field)) }}
-                            {% if attribute(form, field).vars.max_length %}
-                                <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.max_length }, 'frontend-ad-edit') }}</div>
+                            {% if attribute(form, field).vars.attr.maxlength %}
+                                <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-ad-edit') }}</div>
                             {% endif %}
                             {{ form_errors(attribute(form, field)) }}
                         </div>
@@ -144,8 +144,8 @@
                               </div>
                             </div>
                             {{ form_widget(attribute(form, field), {'attr': {'class': 'textcounter'}}) }}
-                            {% if attribute(form, field).vars.max_length %}
-                                <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.max_length }, 'frontend-ad-edit') }}</div>
+                            {% if attribute(form, field).vars.attr.maxlength %}
+                                <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-ad-edit') }}</div>
                             {% endif %}
                             {{ form_errors(attribute(form, field)) }}
                         </div>

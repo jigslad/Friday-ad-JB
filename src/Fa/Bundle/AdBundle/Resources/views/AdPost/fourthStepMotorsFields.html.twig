@@ -38,8 +38,8 @@
                     {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
                     <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
                         {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'Audi A3, 1.8 Sport 3dr hatchback'), 'value' : defaulTitle}}) }}
-                        {% if attribute(form, field).vars.size %}
-                            <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-fourth-step') }}</div>
+                        {% if attribute(form, field).vars.attr.maxlength %}
+                            <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-paa-fourth-step') }}</div>
                         {% endif %}
                         {{ form_errors(attribute(form, field)) }}
                     </div>
@@ -53,8 +53,8 @@
                             <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
                         {% endif %}
                         {{ form_widget(attribute(form, field), {'attr': {'placeholder': ''}}) }}
-                        {% if attribute(form, field).vars.size %}
-                            <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-fourth-step') }}</div>
+                        {% if attribute(form, field).vars.attr.maxlength %}
+                            <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-paa-fourth-step') }}</div>
                         {% endif %}
                         {{ form_errors(attribute(form, field)) }}
                     </div>
@@ -77,8 +77,8 @@
                           </div>
                         </div>
                         {{ form_widget(attribute(form, field), {'attr': {'class': 'textcounter','autocomplete': 'off'}}) }}
-                        {% if attribute(form, field).vars.size %}
-                            <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.size }, 'frontend-paa-fourth-step') }}</div>
+                        {% if attribute(form, field).vars.attr.maxlength %}
+                            <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-paa-fourth-step') }}</div>
                         {% endif %}
                         {{ form_errors(attribute(form, field)) }}
                     </div>

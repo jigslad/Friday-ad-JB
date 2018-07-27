@@ -6,8 +6,8 @@
 <div class="mt30">
     {{ form_label(form.message) }}
     {{ form_widget(form.message) }}
-    {% if form.message.vars.max_length %}
-        <div class="paa-title-char" id="{{ form.message.vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : form.message.vars.max_length }, 'frontend-review') }}</div>
+    {% if form.message.vars.attr.maxlength %}
+        <div class="paa-title-char" id="{{ form.message.vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : form.message.vars.attr.maxlength }, 'frontend-review') }}</div>
     {% endif %}
     {{ form_errors(form.message) }}
 </div>

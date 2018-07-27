@@ -25,8 +25,8 @@
                         <div class="paa-bdr-box">
                             <h3 class="text-center">{{ attribute(form, 'company_name').vars.label }}</h3>
                             {{ form_widget(attribute(form, 'company_name'), {'attr': {'placeholder': 'Please type your company name'|trans({}, 'frontend-paa-third-step')} }) }}
-                            {% if attribute(form, 'company_name').vars.max_length %}
-                                <div class="paa-title-char" id="{{ attribute(form, 'company_name').vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, 'company_name').vars.max_length }, 'frontend-paa-third-step') }}</div>
+                            {% if attribute(form, 'company_name').vars.attr.maxlength %}
+                                <div class="paa-title-char" id="{{ attribute(form, 'company_name').vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, 'company_name').vars.attr.maxlength }, 'frontend-paa-third-step') }}</div>
                             {% endif %}
                             {{ form_errors(attribute(form, 'company_name')) }}
                         </div>
@@ -44,8 +44,8 @@
                                 {{ 'You can go into details in the next field.'|trans({}, 'frontend-paa-third-step')}}
                             </div>
                             {{ form_widget(attribute(form, 'company_welcome_message'), {'attr': {'class' : 'mb0 textcounter', 'placeholder': 'eg. We provide home care and nursing serivces within Mid Sussex including Burgress Hill, Haywards Heath, Cuckfield, Hassocks and surrounding areas.'|trans({}, 'frontend-paa-third-step')} }) }}
-                            {% if attribute(form, 'company_welcome_message').vars.max_length %}
-                                <div class="paa-title-char" id="{{ attribute(form, 'company_welcome_message').vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, 'company_welcome_message').vars.max_length }, 'frontend-paa-third-step') }}</div>
+                            {% if attribute(form, 'company_welcome_message').vars.attr.maxlength %}
+                                <div class="paa-title-char" id="{{ attribute(form, 'company_welcome_message').vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, 'company_welcome_message').vars.attr.maxlength }, 'frontend-paa-third-step') }}</div>
                             {% endif %}
                             {{ form_errors(attribute(form, 'company_welcome_message')) }}
                         </div>
@@ -53,8 +53,8 @@
                             <h3 class="text-center">{{ attribute(form, 'about_us').vars.label }}</h3>
                             <div class="paa-title-ins">{{ 'Tell us everything about your business.'|trans({}, 'frontend-paa-third-step')}}</div>
                             {{ form_widget(attribute(form, 'about_us'), {'attr': {'placeholder': 'Describe your business'|trans({}, 'frontend-paa-third-step')} }) }}
-                            {% if attribute(form, 'about_us').vars.max_length %}
-                                <div class="paa-title-char" id="{{ attribute(form, 'about_us').vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, 'about_us').vars.max_length }, 'frontend-paa-third-step') }}</div>
+                            {% if attribute(form, 'about_us').vars.attr.maxlength %}
+                                <div class="paa-title-char" id="{{ attribute(form, 'about_us').vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, 'about_us').vars.attr.maxlength }, 'frontend-paa-third-step') }}</div>
                             {% endif %}
                             {{ form_errors(attribute(form, 'about_us')) }}
                         </div>
