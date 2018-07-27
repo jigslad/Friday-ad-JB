@@ -98,7 +98,7 @@ class AdPackageAdminController extends CoreController implements ResourceAuthori
                
  
         if ($adUserPackage) {
-        	if($adUserPackage->getStatus() != 5 && $adUserPackage->getStatus() != 2) {
+        	if($ad->getStatus()->getId()== EntityRepository::AD_STATUS_LIVE_ID) {
                 $adUserPackageUpsell = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->getAdPackageUpsell($adId, $adUserPackage->getId());
                 $parameters = array(
                     'adUserPackage' => $adUserPackage,
@@ -107,6 +107,9 @@ class AdPackageAdminController extends CoreController implements ResourceAuthori
                     'popup' => $popup,
                 );
                 return $this->render('FaAdBundle:AdPackageAdmin:showPurchaseAdPackage.html.twig', $parameters);
+            } else {
+            	//disabled user package if advert is not active FFR-3337
+            	$disabledAdUserPackage = $this->getRepository('FaAdBundle:AdUserPackage')->disabledAdUserPackage($adId, $ad->getStatus()->getId());
             }
         }
 

@@ -81,7 +81,7 @@ class AdPackageController extends CoreController
 
         //check if user has already purchased pkg or not
         $adUserPackage = $this->getRepository('FaAdBundle:AdUserPackage')->getPurchasedAdPackage($adId);
-        if ($adUserPackage && $adUserPackage->getStatus() != 5 && $adUserPackage->getStatus() != 2) {
+        if ($adUserPackage && $adUserPackage->getStatus() == 1) {
             return $this->handleMessage($this->get('translator')->trans('You already have purchased package for ad %adId%.', array('%adId%' => $adId), 'frontend-ad-package'), 'fa_frontend_homepage', array(), 'error');
         }
 

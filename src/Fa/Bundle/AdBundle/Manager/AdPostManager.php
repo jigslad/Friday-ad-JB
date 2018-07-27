@@ -652,7 +652,7 @@ class AdPostManager
        
         //check if user has already purchased pkg or not
         $adUserPackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getPurchasedAdPackage($adId);
-        if ($adUserPackage && $adUserPackage->getStatus() != 5 && $adUserPackage->getStatus() != 2) {
+        if ($adUserPackage && $adUserPackage->getStatus() == 1) {
             $error = 'You already have purchased package for ad '.$adId;
         }
 
