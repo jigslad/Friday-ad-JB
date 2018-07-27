@@ -36,6 +36,12 @@ use Fa\Bundle\PaymentBundle\Repository\DeliveryMethodOptionRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Fa\Bundle\CoreBundle\Form\Type\JsChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 /**
@@ -145,6 +151,11 @@ class PaaLiteType extends AbstractType
     {
         return 'fa_paa_lite';
     }
+    
+    public function getBlockPrefix()
+    {
+        return 'fa_paa_lite';
+    }
 
     /**
      * Add campaign wise paa lite fields
@@ -186,14 +197,14 @@ class PaaLiteType extends AbstractType
                             $this->addDatePickerField($form, $paaField->getCategoryDimensionId(), $paaField->getLabel(), $verticalObj, $paaFieldRule->getLabel(), $paaFieldRule);
                         } else
                             if ($paaField->getField() == 'model_id') {
-                                $form->add($paaField->getField(), 'js_choice', $this->getPaaFieldOptions($paaFieldRule, $ad, $verticalObj));
+                                $form->add($paaField->getField(), JsChoiceType::class, $this->getPaaFieldOptions($paaFieldRule, $ad, $verticalObj));
                                 $this->addOrderedField($paaField->getField());
                             } else { 
                                 if( $paaField->getField() != 'rates_id' && $paaField->getField() != 'payment_method_id') { 
-                                    $form->add($paaField->getField(), $this->getFormFieldType($paaField), $this->getPaaFieldOptions($paaFieldRule, $ad, $verticalObj));
+                                    $form->add($paaField->getField(), $this->getFormFieldType($paaField, TRUE), $this->getPaaFieldOptions($paaFieldRule, $ad, $verticalObj));
                                     $this->addOrderedField($paaField->getField());
                                 } elseif ( $paaField->getField() == 'rates_id' ) { 
-                                    $form->add($paaField->getField(), 'hidden', array('mapped' => false, 'data' => true, 'label'=>'Rates'));
+                                    $form->add($paaField->getField(), HiddenType::class, array('mapped' => false, 'data' => true, 'label'=>'Rates'));
                                     $this->addRatesFields($form, $paaField, $verticalObj);
                                     $this->addOrderedField($paaField->getField());      
                                 } elseif ( $paaField->getField() == 'payment_method_id' ) {
@@ -225,7 +236,7 @@ class PaaLiteType extends AbstractType
         if ($this->getPaaFieldType($paaField) == 'radio' || $this->getPaaFieldType($paaField) == 'boolean') {
             $fieldOptions['expanded'] = true;
             $fieldOptions['multiple'] = false;
-            $fieldOptions['empty_value'] = false;
+            $fieldOptions['placeholder'] = false;
         }
         
         if ($paaFieldRule->getIsRequired()) {
@@ -242,9 +253,9 @@ class PaaLiteType extends AbstractType
         }
         $fieldOptions['label']= $paaField->getLabel();
         $fieldOptions['mapped']= false;
-        $fieldOptions['choices'] = $this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethodOptionsArray($this->container, $categoryId);
+        $fieldOptions['choices'] = array_flip($this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethodOptionsArray($this->container, $categoryId));
         $fieldOptions['data'] = ($categoryId != CategoryRepository::PHONE_AND_CAM_CHAT_ID?PaymentRepository::PAYMENT_METHOD_CASH_ON_COLLECTION_ID:'');
-        $form->add($paaField->getField(), 'choice', $fieldOptions);
+        $form->add($paaField->getField(), ChoiceType::class, $fieldOptions);
         $this->addOrderedField('payment_method_id');
         return true;
     }
@@ -275,7 +286,7 @@ class PaaLiteType extends AbstractType
                 ));
                 
                 
-                $form->add(str_replace(' ', '', $val), 'text', array('mapped' => false, 'label' => $label[0], 'data'=>$data, 'constraints' => $fieldConstraints, 'required'=>false));
+                $form->add(str_replace(' ', '', $val), TextType::class, array('mapped' => false, 'label' => $label[0], 'data'=>$data, 'constraints' => $fieldConstraints, 'required'=>false));
             }
         }
         return true;
@@ -287,15 +298,23 @@ class PaaLiteType extends AbstractType
      * @param array $paaField
      *            PAA field array.
      */
-    protected function getFormFieldType($paaField = array())
+    protected function getFormFieldType($paaField = array(), $classFlag = FALSE)
     {
         if ($paaField->getFieldType() == 'text_int' || $paaField->getFieldType() == 'text_float') {
-            return 'number';
+            return NumberType::class;
         }
 
         $fieldTypeArray = explode('_', $paaField->getFieldType());
+        
+        $formTypeArray = ['choice' => ChoiceType::class, 'text' => TextType::class, 'textarea' => TextareaType::class, 'integer' => NumberType::class];
+        
+        if ($classFlag) {
+            $formTypeName = isset($formTypeArray[$fieldTypeArray[0]]) ? $formTypeArray[$fieldTypeArray[0]] : $fieldTypeArray[0];
+        }else {
+            $formTypeName = isset($formTypeArray[$fieldTypeArray[0]]) ? $formTypeArray[$fieldTypeArray[0]] : $fieldTypeArray[0];
+        }
 
-        return $fieldTypeArray[0];
+        return $formTypeName;
     }
 
     /**
@@ -419,11 +438,11 @@ class PaaLiteType extends AbstractType
                 } elseif($paaField->getField()=='contract_type_id' || $paaField->getField() == 'my_service_id') {
                     $entitySortBy = 'ord';
                 }
-                $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true, $entitySortBy);
+                $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true, $entitySortBy));
                 if ($paaField->getField() == 'travel_arrangements_id') {
-                    $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->customFormatOptions($fieldOptions['choices'], 'paa');
+                    $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->customFormatOptions($fieldOptions['choices'], 'paa'));
                 }
-                $fieldOptions['empty_value'] = 'Select ' . $paaField->getLabel();
+                $fieldOptions['placeholder'] = 'Select ' . $paaField->getLabel();
                 $fieldOptions['choice_translation_domain'] = false;
             }
         }
@@ -431,7 +450,7 @@ class PaaLiteType extends AbstractType
         if ($this->getPaaFieldType($paaField) == 'radio' || $this->getPaaFieldType($paaField) == 'boolean') {
             $fieldOptions['expanded'] = true;
             $fieldOptions['multiple'] = false;
-            $fieldOptions['empty_value'] = false;
+            $fieldOptions['placeholder'] = false;
         } elseif ($this->getPaaFieldType($paaField) == 'checkbox') {
             $fieldOptions['expanded'] = true;
             $fieldOptions['multiple'] = true;
@@ -445,54 +464,54 @@ class PaaLiteType extends AbstractType
         }
 
         if ($paaField->getField() == 'is_new') {
-            $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getIsNewOptionsArray($this->container);
+            $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getIsNewOptionsArray($this->container));
             $fieldOptions['data'] = '0';
         } elseif ($this->getPaaFieldType($paaField) == 'boolean') {
-            $fieldOptions['choices'] = array(
+            $fieldOptions['choices'] = array_flip(array(
                 '1' => 'Yes',
                 '0' => 'No'
-            );
+            ));
             $fieldOptions['data'] = '0';
-            $fieldOptions['empty_value'] = false;
+            $fieldOptions['placeholder'] = false;
         } elseif ($paaField->getField() == 'ad_type_id') {
-            $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true, 'ord');
+            $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true, 'ord'));
             $fieldOptions['data'] = EntityRepository::AD_TYPE_FORSALE_ID;
         } elseif ($paaField->getField() == 'delivery_method_option_id') {
-            $fieldOptions['choices'] = $this->em->getRepository('FaPaymentBundle:DeliveryMethodOption')->getDeliveryMethodOptionArray($this->container);
+            $fieldOptions['choices'] = array_flip($this->em->getRepository('FaPaymentBundle:DeliveryMethodOption')->getDeliveryMethodOptionArray($this->container));
             $fieldOptions['data'] = DeliveryMethodOptionRepository::COLLECTION_ONLY_ID;
         } elseif ($paaField->getField() == 'payment_method_id') {
-            $fieldOptions['choices'] = $this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethodOptionsArray($this->container);
+            $fieldOptions['choices'] = array_flip($this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethodOptionsArray($this->container));
             $fieldOptions['data'] = PaymentRepository::PAYMENT_METHOD_CASH_ON_COLLECTION_ID;
         } elseif ($paaField->getField() == 'title' && $this->request->query->get('AdTitle')) {
             $fieldOptions['data'] = ($this->request->query->get('AdTitle')!='')?str_replace('_', ' ', $this->request->query->get('AdTitle')):'';
         } elseif (in_array($paaField->getField(), array('leg_id', 'waist_id', 'neck_id', 'size_id', 'age_range_id', 'age_id', 'condition_id'))) {
-            $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true, 'ord');
+            $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true, 'ord'));
         }  elseif ($paaField->getField() == 'include_end_time') {
-            $fieldOptions['choices'] = array('1' => 'Include end time');
+            $fieldOptions['choices'] = array_flip(array('1' => 'Include end time'));
         } elseif (in_array($paaField->getField(), array('class_size_id', 'experience_level_id', 'availability_id', 'level_id'))) {
-            $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false);
-            $fieldOptions['empty_value'] = 'Select '.$paaField->getLabel();
+            $fieldOptions['choices']     = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false));
+            $fieldOptions['placeholder'] = 'Select '.$paaField->getLabel();
         } elseif (in_array($paaField->getField(), array('height_id', 'age_id'))) {
-            $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false);
-            $fieldOptions['empty_value'] = 'Select '.$paaField->getLabel();
+            $fieldOptions['choices']     = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false));
+            $fieldOptions['placeholder'] = 'Select '.$paaField->getLabel();
         } elseif ($this->getPaaFieldType($paaField) == 'range') {
             if (in_array($paaField->getField(), array('mot_expiry_year', 'road_tax_expiry_year'))) {
-                $fieldOptions['choices']     = CommonManager::getYearChoices();
-                $fieldOptions['empty_value'] = 'Year';
+                $fieldOptions['choices']     = array_flip(CommonManager::getYearChoices());
+                $fieldOptions['placeholder'] = 'Year';
             } elseif (in_array($paaField->getField(), array('reg_year', 'year_built'))) {
-                $fieldOptions['choices']     = CommonManager::getRegYearChoices();
-                $fieldOptions['empty_value'] = 'Year';
+                $fieldOptions['choices']     = array_flip(CommonManager::getRegYearChoices());
+                $fieldOptions['placeholder'] = 'Year';
             } elseif (in_array($paaField->getField(), array('mot_expiry_month', 'road_tax_expiry_month'))) {
-                $fieldOptions['choices']     = CommonManager::getMonthChoices();
-                $fieldOptions['empty_value'] = 'Month';
+                $fieldOptions['choices']     = array_flip(CommonManager::getMonthChoices());
+                $fieldOptions['placeholder'] = 'Month';
             }
         } elseif (in_array($paaField->getField(), array('no_of_doors', 'no_of_seats'))) {
             $fieldOptions['attr']['class'] = isset($fieldOptions['attr']['class']) ? $fieldOptions['attr']['class'].' door-no' : 'door-no';
         } elseif (in_array($paaField->getField(), array('reg_year'))) {
             $fieldOptions['attr']['class'] = isset($fieldOptions['attr']['class']) ? $fieldOptions['attr']['class'].' reg-year' : 'reg-year';
         } elseif (in_array($paaField->getField(), array('tonnage_id', 'berth_id', 'condition_id', 'number_of_stalls_id'))) {
-            $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false);
-            $fieldOptions['empty_value'] = 'Select '.$paaField->getLabel();
+            $fieldOptions['choices']     = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false));
+            $fieldOptions['placeholder'] = 'Select '.$paaField->getLabel();
         } elseif (in_array($paaField->getField(), array('fuel_type_id'))) {
             $fuelTypeChoices = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true);
             $petrolKey       = array_search('Petrol', $fuelTypeChoices);
@@ -502,14 +521,14 @@ class PaaLiteType extends AbstractType
                 $fuelTypeChoices = array($petrolKey => 'Petrol') + $fuelTypeChoices;
             }
 
-            $fieldOptions['choices'] = $fuelTypeChoices;
+            $fieldOptions['choices'] = array_flip($fuelTypeChoices);
         } elseif (in_array($paaField->getField(), array('rent_per_id'))) {
-            $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false);
+            $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false));
         } elseif (in_array($paaField->getField(), array('number_of_bedrooms_id', 'number_of_bathrooms_id', 'furnishing_id', 'smoking_allowed_id',
             'pets_allowed_id', 'dss_tenants_allowed_id', 'number_of_rooms_in_property_id',
             'number_of_rooms_available_id', 'rooms_for_id', 'room_size_id', 'ownership_id', 'lease_type_id'))) {
-            $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false);
-            $fieldOptions['empty_value'] = 'Select '.strtolower($paaField->getLabel());
+            $fieldOptions['choices']     = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, false));
+            $fieldOptions['placeholder'] = 'Select '.strtolower($paaField->getLabel());
         }
 
         if ($paaField->getField() == 'qty' && !$paaFieldRule->getDefaultValue()) {
@@ -588,7 +607,7 @@ class PaaLiteType extends AbstractType
             }
 
             // autocomplete hidden field for value
-            $form->add($field, 'hidden', array(
+            $form->add($field, HiddenType::class, array(
                 'mapped' => false,
                 'data' => $selectedData
             ));
@@ -614,12 +633,12 @@ class PaaLiteType extends AbstractType
                 }
             }
 
-            $form->add($field . '_autocomplete', 'text', $fieldOptions);
+            $form->add($field . '_autocomplete', TextType::class, $fieldOptions);
             $this->addOrderedField($field . '_autocomplete');
 
             // To store category dimension for auto-suggest field to fetch options from entity table
             if ($dimensionId) {
-                $form->add($field . '_dimension_id', 'hidden', array(
+                $form->add($field . '_dimension_id', HiddenType::class, array(
                     'data' => $dimensionId,
                     'mapped' => false
                 ));
@@ -675,7 +694,7 @@ class PaaLiteType extends AbstractType
                 }
             }
 
-            $form->add($dimensionField, 'text', $fieldOptions);
+            $form->add($dimensionField, TextType::class, $fieldOptions);
             $this->addOrderedField($dimensionField);
         }
     }
@@ -722,7 +741,7 @@ class PaaLiteType extends AbstractType
                 }
             }
 
-            $form->add($dimensionField, 'text', $fieldOptions);
+            $form->add($dimensionField, TextType::class, $fieldOptions);
             $this->addOrderedField($dimensionField);
         }
     }
@@ -769,14 +788,14 @@ class PaaLiteType extends AbstractType
                 /**
                  * @Ignore
                  */
-                'empty_value' => $this->container->get('translator')->trans('Select %dimensionName%', array(
+                'placeholder' => $this->container->get('translator')->trans('Select %dimensionName%', array(
                     '%dimensionName%' => $dimensionName
                 )),
                 /**
                  * @Ignore
                  */
                 'label' => $dimensionName,
-                'choices' => $fieldChoices,
+                'choices' => array_flip($fieldChoices),
                 'attr' => array(
                     'class' => 'fa-select'
                 )
@@ -795,7 +814,7 @@ class PaaLiteType extends AbstractType
             }
 
             if (count($fieldChoices)) {
-                $form->add($dimensionField, 'choice', $fieldOptions);
+                $form->add($dimensionField, ChoiceType::class, $fieldOptions);
                 $this->addOrderedField($dimensionField);
             }
         }
@@ -920,7 +939,7 @@ class PaaLiteType extends AbstractType
             }
         }
         // autocomplete hidden field for value
-        $form->add('location', 'hidden', array(
+        $form->add('location', HiddenType::class, array(
             'mapped' => false,
             'data' => $locationId
         ));
@@ -939,8 +958,8 @@ class PaaLiteType extends AbstractType
             $fieldOptions['attr']['placeholder'] = $paaFieldRule->getPlaceholderText();
         }
 
-        $form->add('location_autocomplete', 'text', $fieldOptions);
-        $form->add('location_lat_lng', 'hidden', array(
+        $form->add('location_autocomplete', TextType::class, $fieldOptions);
+        $form->add('location_lat_lng', HiddenType::class, array(
             'data' => $latlng,
             'mapped' => false
         ));
@@ -951,7 +970,7 @@ class PaaLiteType extends AbstractType
 
         //Add Location Area
         // autocomplete hidden field for value
-        $form->add('area', 'hidden', array(
+        $form->add('area', HiddenType::class, array(
                 'mapped' => false,
                 'data' => $areaId
         ));
@@ -966,12 +985,12 @@ class PaaLiteType extends AbstractType
                 )
         );
         
-        $form->add('area_text', 'hidden', array(
+        $form->add('area_text', HiddenType::class, array(
                 'data' => $areaText,
                 'mapped' => false
         ));
         
-        $form->add('area_autocomplete', 'text', $fieldOptionsForArea);
+        $form->add('area_autocomplete', TextType::class, $fieldOptionsForArea);
     }
     
      /**
@@ -984,7 +1003,7 @@ class PaaLiteType extends AbstractType
      */
     private function addLocationTxtField($form, $locationText= null) {
         
-        $form->add('location_text', 'hidden', array(
+        $form->add('location_text', HiddenType::class, array(
                 'data' => $locationText,
                 'mapped' => false
         ));

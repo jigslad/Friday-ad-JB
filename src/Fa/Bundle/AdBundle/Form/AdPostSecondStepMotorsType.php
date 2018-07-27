@@ -122,14 +122,14 @@ class AdPostSecondStepMotorsType extends AdPostSecondStepType
 
         if ($this->getPaaFieldType($paaField) == 'range') {
             if (in_array($paaField['field'], array('mot_expiry_year', 'road_tax_expiry_year'))) {
-                $fieldOptions['choices']     = CommonManager::getYearChoices();
-                $fieldOptions['empty_value'] = 'Year';
+                $fieldOptions['choices']     = array_flip(CommonManager::getYearChoices());
+                $fieldOptions['placeholder'] = 'Year';
             } elseif (in_array($paaField['field'], array('reg_year'))) {
-                $fieldOptions['choices']     = CommonManager::getRegYearChoices();
-                $fieldOptions['empty_value'] = 'Year';
+                $fieldOptions['choices']     = array_flip(CommonManager::getRegYearChoices());
+                $fieldOptions['placeholder'] = 'Year';
             } elseif (in_array($paaField['field'], array('mot_expiry_month', 'road_tax_expiry_month'))) {
-                $fieldOptions['choices']     = CommonManager::getMonthChoices();
-                $fieldOptions['empty_value'] = 'Month';
+                $fieldOptions['choices']     = array_flip(CommonManager::getMonthChoices());
+                $fieldOptions['placeholder'] = 'Month';
             }
         }
 
@@ -150,7 +150,7 @@ class AdPostSecondStepMotorsType extends AdPostSecondStepType
                 $fuelTypeChoices = array($petrolKey => 'Petrol') + $fuelTypeChoices;
             }
 
-            $fieldOptions['choices'] = $fuelTypeChoices;
+            $fieldOptions['choices'] = array_flip($fuelTypeChoices);
         }
 
         if ($defaultData) {

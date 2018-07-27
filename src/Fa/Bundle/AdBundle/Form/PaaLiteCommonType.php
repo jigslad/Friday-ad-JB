@@ -41,6 +41,12 @@ use Fa\Bundle\AdBundle\Repository\AdUserPackageRepository;
 use Fa\Bundle\AdBundle\Repository\AdUserPackageUpsellRepository;
 use Fa\Bundle\AdBundle\Entity\AdUserPackage;
 use Fa\Bundle\AdBundle\Entity\AdUserPackageUpsell;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
  * PaaLiteCommonType form.
@@ -97,14 +103,14 @@ class PaaLiteCommonType extends PaaLiteType
     {
         $this->campaign_name = isset($options['data']['campaign_name']) ? $options['data']['campaign_name'] : null;
 
-        $builder->add('category_id', 'hidden');
+        $builder->add('category_id', HiddenType::class);
         $this->addCategoryChoiceFields($builder,$this->campaign_name);
         if ($this->container->get('session')->has('paa_skip_login_step')) {
-            $builder->add('save', 'submit', array(
+            $builder->add('save', SubmitType::class, array(
                 'label' => 'Save my ad'
             ));
         } else {
-            $builder->add('save', 'submit', array(
+            $builder->add('save', SubmitType::class, array(
                 'label' => 'Save my ad'
             ));
         }
@@ -137,21 +143,21 @@ class PaaLiteCommonType extends PaaLiteType
         if (in_array('payment_method_id', $this->orderedFields)) {
             $form->add(
                     'paypal_email',
-                    'email',
+                    EmailType::class,
                     array(
                         'label' => 'Paypal email address',
                         'mapped' => false
                     )
                 )->add(
                     'paypal_first_name',
-                    'text',
+                    TextType::class,
                     array(
                         'label' => 'Paypal first name',
                         'mapped' => false
                     )
                 )->add(
                     'paypal_last_name',
-                    'text',
+                    TextType::class,
                     array(
                         'label' => 'Paypal last name',
                         'mapped' => false
@@ -160,25 +166,25 @@ class PaaLiteCommonType extends PaaLiteType
              //array_push($this->orderedFields,'paypal_email','paypal_first_name','paypal_last_name');
         }
         if (in_array('delivery_method_option_id', $this->orderedFields)) {
-            $form->add('postage_price','number');
+            $form->add('postage_price',NumberType::class);
             //array_push($this->orderedFields,'postage_price');
         }
         if (in_array('dimensions_length', $this->orderedFields)) {
             $form->add(
                 'dimensions_unit',
-                'choice',
+                ChoiceType::class,
                 array(
                     'mapped'   => false,
                     'expanded' => true,
                     'multiple' => false,
-                    'choices'  => $this->em->getRepository('FaEntityBundle:CategoryDimension')->getDimensionUnitOptionsArray($this->container),
+                    'choices'  => array_flip($this->em->getRepository('FaEntityBundle:CategoryDimension')->getDimensionUnitOptionsArray($this->container)),
                 )
             );
             //array_push($this->orderedFields,'dimensions_unit');
         }
 
         $paaLiteOrderedData = array_merge($this->orderedFields, $this->getPaaLiteOrderedFields());
-        $form->add('paa_lite_ordered_fields', 'hidden', array('data' => implode(',', $paaLiteOrderedData)));
+        $form->add('paa_lite_ordered_fields', HiddenType::class, array('data' => implode(',', $paaLiteOrderedData)));
 
     }
 
@@ -190,6 +196,11 @@ class PaaLiteCommonType extends PaaLiteType
      * @return string
      */
     public function getName()
+    {
+        return 'fa_paa_lite_common';
+    }
+    
+    public function getBlockPrefix()
     {
         return 'fa_paa_lite_common';
     }
@@ -368,12 +379,12 @@ class PaaLiteCommonType extends PaaLiteType
 
                 if ($i == 1) {
                     $optionArray = array(
-                        'empty_value' =>  'Please select category',
+                        'placeholder' =>  'Please select category',
                         'attr'        => array('class' => 'fa-select category category_'.$i),
                     );
                 } else {
                     $optionArray = array(
-                        'empty_value' => 'Please select subcategory',
+                        'placeholder' => 'Please select subcategory',
                         'attr'        => array('class' => 'fa-select category category_'.$i),
                     );
                 }

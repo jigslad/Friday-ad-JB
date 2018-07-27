@@ -115,8 +115,8 @@ class AdEditPropertyType extends AdEditType
         if (in_array($paaField['field'], array('number_of_bedrooms_id', 'number_of_bathrooms_id', 'furnishing_id', 'smoking_allowed_id',
             'pets_allowed_id', 'dss_tenants_allowed_id', 'number_of_rooms_in_property_id',
             'number_of_rooms_available_id', 'rooms_for_id', 'room_size_id', 'ownership_id', 'lease_type_id'))) {
-            $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, false);
-            $fieldOptions['empty_value'] = 'Select '.strtolower($paaFieldRule['label']);
+            $fieldOptions['choices']     = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, false));
+            $fieldOptions['placeholder'] = 'Select '.strtolower($paaFieldRule['label']);
         }
 
         if ($defaultData) {

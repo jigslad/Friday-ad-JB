@@ -215,8 +215,8 @@ class AdPostAnimalsAdminType extends AdPostAdminType
         }
 
         if (in_array($paaField['field'], array('height_id', 'age_id'))) {
-            $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, false);
-            $fieldOptions['empty_value'] = 'Select '.$paaField['label'];
+            $fieldOptions['choices']     = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, false));
+            $fieldOptions['placeholder'] = 'Select '.$paaField['label'];
         }
 
         if ($defaultData) {

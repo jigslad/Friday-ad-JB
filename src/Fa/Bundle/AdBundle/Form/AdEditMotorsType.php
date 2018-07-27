@@ -110,14 +110,14 @@ class AdEditMotorsType extends AdEditType
 
         if ($this->getPaaFieldType($paaField) == 'range') {
             if (in_array($paaField['field'], array('mot_expiry_year', 'road_tax_expiry_year'))) {
-                $fieldOptions['choices']     = CommonManager::getYearChoices();
-                $fieldOptions['empty_value'] = 'Year';
+                $fieldOptions['choices']     = array_flip(CommonManager::getYearChoices());
+                $fieldOptions['placeholder'] = 'Year';
             } elseif (in_array($paaField['field'], array('reg_year', 'year_built'))) {
-                $fieldOptions['choices']     = CommonManager::getRegYearChoices();
-                $fieldOptions['empty_value'] = 'Year';
+                $fieldOptions['choices']     = array_flip(CommonManager::getRegYearChoices());
+                $fieldOptions['placeholder'] = 'Year';
             } elseif (in_array($paaField['field'], array('mot_expiry_month', 'road_tax_expiry_month'))) {
-                $fieldOptions['choices']     = CommonManager::getMonthChoices();
-                $fieldOptions['empty_value'] = 'Month';
+                $fieldOptions['choices']     = array_flip(CommonManager::getMonthChoices());
+                $fieldOptions['placeholder'] = 'Month';
             }
         }
 
@@ -130,8 +130,8 @@ class AdEditMotorsType extends AdEditType
         }
 
         if (in_array($paaField['field'], array('tonnage_id', 'berth_id', 'condition_id', 'number_of_stalls_id'))) {
-            $fieldOptions['choices']     = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, false);
-            $fieldOptions['empty_value'] = 'Select '.$paaField['label'];
+            $fieldOptions['choices']     = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, false));
+            $fieldOptions['placeholder'] = 'Select '.$paaField['label'];
         }
 
         if (in_array($paaField['field'], array('fuel_type_id'))) {
@@ -143,7 +143,7 @@ class AdEditMotorsType extends AdEditType
                 $fuelTypeChoices = array($petrolKey => 'Petrol') + $fuelTypeChoices;
             }
 
-            $fieldOptions['choices'] = $fuelTypeChoices;
+            $fieldOptions['choices'] = array_flip($fuelTypeChoices);
         }
 
         if ($defaultData) {

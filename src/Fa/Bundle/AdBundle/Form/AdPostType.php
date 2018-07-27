@@ -206,7 +206,7 @@ class AdPostType extends AbstractType
                                 $this->addOrderedField($paaField['field']);
                             } else {
                                 if( $paaField['field'] != 'rates_id' && $paaField['field'] != 'payment_method_id') {
-                                    $form->add($paaField['field'], $this->getFormFieldType($paaField), $this->getPaaFieldOptions($paaFieldRule, $ad, $verticalObj));
+                                    $form->add($paaField['field'], $this->getFormFieldType($paaField, TRUE), $this->getPaaFieldOptions($paaFieldRule, $ad, $verticalObj));
                                     $this->addOrderedField($paaField['field']);
                                 } elseif ( $paaField['field'] == 'rates_id' ) {
                                     $form->add($paaField['field'], HiddenType::class, array('mapped' => false, 'data' => true, 'label'=>'Rates'));
@@ -243,7 +243,7 @@ class AdPostType extends AbstractType
 	    if ($this->getPaaFieldType($paaField) == 'radio' || $this->getPaaFieldType($paaField) == 'boolean') {
 	    	$fieldOptions['expanded'] = true;
 	    	$fieldOptions['multiple'] = false;
-	    	$fieldOptions['empty_value'] = false;
+	    	$fieldOptions['placeholder'] = false;
 	    }
 	    
 	    if ($paaFieldRule['is_required']) {

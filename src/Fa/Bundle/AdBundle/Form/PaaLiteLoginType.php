@@ -25,6 +25,11 @@ use Fa\Bundle\UserBundle\Repository\UserRepository;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\UserBundle\Encoder\Sha1PasswordEncoder;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 /**
  * PaaLiteLoginType form.
@@ -80,7 +85,7 @@ class PaaLiteLoginType extends AbstractType
         $builder
         ->add(
             'username',
-            'email',
+            EmailType::class,
             array(
                 'attr' => array('autocomplete' => 'off'),
                 'label' => 'Email address',
@@ -92,12 +97,12 @@ class PaaLiteLoginType extends AbstractType
         )
         ->add(
             'user_type',
-            'choice',
+            ChoiceType::class,
             array(
                 'attr' => array('autocomplete' => 'off'),
                 'expanded' => true,
                 'multiple' => false,
-                'choices'  => array('1' => 'I have an account', '2' => "I'm new to Friday-Ad"),
+                'choices'  => array_flip(array('1' => 'I have an account', '2' => "I'm new to Friday-Ad")),
                 'data'     => 1,
                 'constraints' => array(
                     new NotBlank(array('groups'   => array('olduser', 'newuser'), 'message' => $this->translator->trans('Please select user type.', array(), 'validators')))
@@ -106,7 +111,7 @@ class PaaLiteLoginType extends AbstractType
         )
         ->add(
             'password',
-            'password',
+            PasswordType::class,
             array(
                 'label' => 'Password',
                 'constraints' => array(
@@ -116,14 +121,14 @@ class PaaLiteLoginType extends AbstractType
         )
         ->add(
             'show_password',
-            'checkbox',
+            CheckboxType::class,
             array(
                 'required'  => false,
                 'mapped'    => false,
                 'label'     => 'Show password',
             )
         )
-        ->add('save', 'submit', array('label' => 'Next step: add more details'))
+        ->add('save', SubmitType::class, array('label' => 'Next step: add more details'))
         ->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmit'));
     }
 
@@ -218,6 +223,11 @@ class PaaLiteLoginType extends AbstractType
      * @return string
      */
     public function getName()
+    {
+        return 'fa_paa_lite_login';
+    }
+    
+    public function getBlockPrefix()
     {
         return 'fa_paa_lite_login';
     }

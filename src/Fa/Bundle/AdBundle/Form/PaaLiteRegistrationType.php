@@ -24,6 +24,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
  * PaaLiteRegistrationType form.
@@ -88,7 +89,7 @@ class PaaLiteRegistrationType extends RegistrationType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         
-        $builder->add('Register', 'submit', array('label' => 'Sign up with email'));
+        $builder->add('Register', SubmitType::class, array('label' => 'Sign up with email'));
         $sessionUserData = $this->container->get('session')->get('paa_lite_user_info');
         if (isset($sessionUserData['user_facebook_id']) || isset($sessionUserData['user_google_id'])) {
             $builder->remove('password');
@@ -134,6 +135,11 @@ class PaaLiteRegistrationType extends RegistrationType
      * @return string
      */
     public function getName()
+    {
+        return 'fa_paa_lite_register';
+    }
+    
+    public function getBlockPrefix()
     {
         return 'fa_paa_lite_register';
     }
