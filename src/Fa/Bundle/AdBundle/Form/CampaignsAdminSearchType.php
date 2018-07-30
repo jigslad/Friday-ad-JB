@@ -97,7 +97,7 @@ class CampaignsAdminSearchType extends AbstractType
             'choices' => array(
                 'Active' => 1, 
                 'In-Active' => 2),
-            'Search By Status'=>'empty_value'))
+            'placeholder'=>'Search By Status'))
         
         ->add('search', SubmitType::class, array(
             'label' => 'Search'

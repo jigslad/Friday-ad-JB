@@ -25,6 +25,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Fa\Bundle\PaymentBundle\Form\CyberSourceCheckoutType;
 
 /**
  * This controller is used for upgrading with package.
@@ -125,7 +126,7 @@ class UpgradeAdController extends CoreController
 						$selectedPrintEditions = $defaultSelectedPrintEditions;
 						//Payment gateway form
 						$formManager = $this->get('fa.formmanager');
-						$form        = $formManager->createForm('fa_payment_cyber_source_checkout', array('subscription' => null));
+						$form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => null));
 												
 						if ('POST' === $request->getMethod()) {  
 							$form->handleRequest($request);	

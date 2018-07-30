@@ -41,6 +41,12 @@ use Fa\Bundle\AdBundle\Form\PaaLiteRegistrationType;
 use Fa\Bundle\AdBundle\Entity\PaaLiteEmailNotification;
 use Fa\Bundle\AdBundle\Repository\PaaLiteEmailNotificationRepository;
 use Fa\Bundle\UserBundle\Encoder\Sha1PasswordEncoder;
+use Fa\Bundle\PaymentBundle\Form\CyberSourceCheckoutType;
+use Fa\Bundle\AdBundle\Form\PaaLiteCommonType;
+use Fa\Bundle\AdBundle\Form\AdPostCategorySelectType;
+use Fa\Bundle\AdBundle\Form\PaaLiteLoginType;
+use Fa\Bundle\UserBundle\Form\UserSiteType;
+
 /**
  * This controller is used for ad post management.
  *
@@ -84,7 +90,7 @@ class CampaignController extends ThirdPartyLoginController
         $campaign_name = ($request->get('campaign_name'))?$request->get('campaign_name'):($this->container->get('session')->get('campaign_name')?$this->container->get('session')->get('campaign_name'):'');
         $this->container->get('session')->set('campaign_name', $campaign_name);
         $formManager = $this->get('fa.formmanager');
-        $form          = $formManager->createForm('fa_paa_lite_common', array('campaign_name'=>$campaign_name), array('action' => $this->generateUrl('paa-lite',array('campaign_name'=>$campaign_name))));
+        $form          = $formManager->createForm(PaaLiteCommonType::class, array('campaign_name'=>$campaign_name), array('action' => $this->generateUrl('paa-lite',array('campaign_name'=>$campaign_name))));
         $dispatcher  = $this->container->get('event_dispatcher');
         $transactionJsArr = [];
 
@@ -277,7 +283,7 @@ class CampaignController extends ThirdPartyLoginController
                     $selectedPrintEditions = $defaultSelectedPrintEditions;
                     //Payment gateway form
                     $formManager = $this->get('fa.formmanager');
-                    $form        = $formManager->createForm('fa_payment_cyber_source_checkout', array('subscription' => null));
+                    $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => null));
                                             
                     if ('POST' === $request->getMethod()) {  
                         $form->handleRequest($request); 
@@ -612,7 +618,7 @@ class CampaignController extends ThirdPartyLoginController
     {
         $categoryId  = $request->get('categoryId');
         $formManager = $this->get('fa.formmanager');
-        $form        = $formManager->createForm('fa_paa_category_select', array('categoryId' => $categoryId));
+        $form        = $formManager->createForm(AdPostCategorySelectType::class, array('categoryId' => $categoryId));
 
         $parameters  = array(
             'form' => $form->createView(),
@@ -643,7 +649,7 @@ class CampaignController extends ThirdPartyLoginController
         
         if ($request->isXmlHttpRequest() && 'POST' === $request->getMethod()) {
             $formManager = $this->get('fa.formmanager');
-            $form          = $formManager->createForm('fa_paa_lite_login');
+            $form          = $formManager->createForm(PaaLiteLoginType::class);
             $form->handleRequest($request);
             $event = new FormEvent($form, $request);
             //$data = $request->get('fa_paa_lite_login');
@@ -750,7 +756,7 @@ class CampaignController extends ThirdPartyLoginController
            
 
             $formManager = $this->get('fa.formmanager');
-            $form          = $formManager->createForm('fa_paa_lite_register',$user);
+            $form          = $formManager->createForm(PaaLiteRegistrationType::class,$user);
             $dispatcher  = $this->container->get('event_dispatcher');
 
             if($user && !$error) {
@@ -950,7 +956,7 @@ class CampaignController extends ThirdPartyLoginController
         }
 
         $formManager = $this->get('fa.formmanager');
-        $form        = $formManager->createForm('user_site', $userSite, array('action' => $this->generateUrl('add_user_business_details')));
+        $form        = $formManager->createForm(UserSiteType::class, $userSite, array('action' => $this->generateUrl('add_user_business_details')));
 
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);

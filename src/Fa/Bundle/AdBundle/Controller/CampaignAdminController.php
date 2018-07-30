@@ -101,7 +101,7 @@ class CampaignAdminController extends CrudController implements ResourceAuthoriz
         $pagination = $this->get('fa.pagination.manager')->getPagination();
 
         $formManager = $this->get('fa.formmanager');
-        $form = $formManager->createForm('fa_ad_campaigns_search_admin', null, array(
+        $form = $formManager->createForm(CampaignsAdminSearchType::class, null, array(
             'action' => $this->generateUrl('campaigns_admin'),
             'method' => 'GET'
         ));
@@ -131,7 +131,7 @@ class CampaignAdminController extends CrudController implements ResourceAuthoriz
         
         $entity = new Campaigns();
 
-        $form = $formManager->createForm('fa_ad_campaigns_admin', $entity, array('action' => $this->generateUrl('campaigns_create_admin')));
+        $form = $formManager->createForm(CampaignsAdminType::class, $entity, array('action' => $this->generateUrl('campaigns_create_admin')));
 
         $this->unsetFormFields($form);
 
@@ -158,7 +158,8 @@ class CampaignAdminController extends CrudController implements ResourceAuthoriz
        
         $entity      = $this->getEntity();
         $formManager = $this->get('fa.formmanager');
-        $form        = $formManager->createForm('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin', $entity, array('action' => $this->generateUrl($this->getRouteName('create'))));
+        $fqn = $this->getFQNForForms('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin');
+        $form        = $formManager->createForm($fqn, $entity, array('action' => $this->generateUrl($this->getRouteName('create'))));
 
         $parameters = array(
                            'entity'  => $entity,
@@ -189,7 +190,7 @@ class CampaignAdminController extends CrudController implements ResourceAuthoriz
                       'method' => 'POST'
                     );
 
-        $form = $formManager->createForm('fa_ad_campaigns_admin', $entity, $options);
+        $form = $formManager->createForm(CampaignsAdminType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -227,7 +228,7 @@ class CampaignAdminController extends CrudController implements ResourceAuthoriz
                       'method' => 'PUT'
                     );
 
-        $form = $formManager->createForm('fa_ad_campaigns_admin', $entity, $options);
+        $form = $formManager->createForm(CampaignsAdminType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -268,7 +269,7 @@ class CampaignAdminController extends CrudController implements ResourceAuthoriz
             'method' => 'PUT'
         );
 
-        $form = $formManager->createForm('fa_ad_campaigns_admin', $entity, $options);
+        $form = $formManager->createForm(CampaignsAdminType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -334,5 +335,15 @@ class CampaignAdminController extends CrudController implements ResourceAuthoriz
         
 
         return parent::handleMessage($this->get('translator')->trans('Campaign was successfully deleted.', array(), 'success'),  'campaigns_admin');
+    }
+    
+    public function getFQNForForms($formName)
+    {
+        // getName() symfony form function is removed After symfony 3, so to handle dynamic forms we need create array
+        $formClassArray = [
+            'fa_ad_campaigns_admin' => CampaignsAdminType::class
+        ];
+        $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
+        return $formName;
     }
 }

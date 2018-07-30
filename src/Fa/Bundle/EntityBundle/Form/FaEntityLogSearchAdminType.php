@@ -77,7 +77,7 @@ class FaEntityLogSearchAdminType extends AbstractType
         ->add('fa_entity_log__objectClass', ChoiceType::class, array(
             'empty_data'  => null,
             'placeholder' => "Select Entity",
-            'choices' => array_flip($this->em->getRepository('FaEntityBundle:FaEntityLog')->getObjectClassOptionArray())
+            'choices' => $this->em->getRepository('FaEntityBundle:FaEntityLog')->getObjectClassOptionArray()
         ))
         ->add('fa_entity_log__username', TextType::class, array('required' => false))
         ->add('search', SubmitType::class, array('label' => 'Search'));

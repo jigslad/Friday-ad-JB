@@ -125,7 +125,8 @@ class HeaderImageAdminController extends CrudController implements ResourceAutho
             'method' => 'POST'
         );
 
-        $form = $formManager->createForm('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin', $entity, $options);
+        $fqn = $this->getFQNForForms('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin');
+        $form = $formManager->createForm($fqn, $entity, $options);
 
         if ($formManager->isValid($form)) {
             return $this->handleMessage($this->get('translator')->trans('%displayWord% was successfully added.', array('%displayWord%' => $this->getDisplayWord()), 'success'), ($form->get('saveAndNew')->isClicked() ? $this->getRouteName('new') : $this->getRouteName('')));

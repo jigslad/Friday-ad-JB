@@ -191,7 +191,7 @@ class CampaignsAdminType extends AbstractType
                     'choices' => array(
                         'Active'=>1, 
                         'In-Active'=>2),
-                    'Select Status'=>'empty_value'));
+                    'placeholder'=>'Select Status'));
        
             $builder->add('saveAndNew', SubmitType::class);
         }
