@@ -102,7 +102,7 @@ class AdPostLoginType extends AbstractType
                 'attr' => array('autocomplete' => 'off'),
                 'expanded' => true,
                 'multiple' => false,
-                'choices'  => array('1' => 'I have an account', '2' => "I'm new to Friday-Ad"),
+                'choices'  => array("I have an account" => '1', "I'm new to Friday-Ad" => '2'),
                 'data'     => 1,
                 'constraints' => array(
                     new NotBlank(array('groups'   => array('olduser', 'newuser'), 'message' => $this->translator->trans('Please select user type.', array(), 'validators')))

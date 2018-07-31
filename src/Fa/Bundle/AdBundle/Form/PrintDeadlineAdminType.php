@@ -77,7 +77,7 @@ class PrintDeadlineAdminType extends AbstractType
                 'day_of_week',
                 ChoiceType::class,
                 array(
-                    'choices' => CommonManager::getDaysOfWeekArray($this->container),
+                    'choices' => array_flip(CommonManager::getDaysOfWeekArray($this->container)),
                     'placeholder' => 'Select day of week',
                     'label'       => 'Day of week',
                 )
@@ -86,7 +86,7 @@ class PrintDeadlineAdminType extends AbstractType
                 'time_of_day',
                 ChoiceType::class,
                 array(
-                    'choices' => CommonManager::getTimeWithIntervalArray(15),
+                    'choices' => array_flip(CommonManager::getTimeWithIntervalArray(15)),
                     'placeholder' => 'Select time',
                     'label'       => 'Time',
                 )
@@ -206,7 +206,7 @@ class PrintDeadlineAdminType extends AbstractType
     private function addLocationGroupField($form, $selectedLocationGroupIds = null)
     {
         $fieldOptions = array(
-            'choices'     => $this->em->getRepository('FaEntityBundle:LocationGroup')->getLocationGroupsKeyValueArray(),
+            'choices'     => array_flip($this->em->getRepository('FaEntityBundle:LocationGroup')->getLocationGroupsKeyValueArray()),
             'placeholder' => 'Select Location Group',
             'label'       => 'Location Group',
             'multiple'    => true,
