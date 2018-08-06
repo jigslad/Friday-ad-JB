@@ -88,7 +88,7 @@ EOF
     {
         $records          = $this->getAdQueryBuilder(FALSE,$input);
         $step        = 100;
-        $offset      = $input->getOption('offset');
+        $offset      = 0;
         $container   = $this->getContainer();
 
         $entityManager = $this->getContainer()->get('doctrine')->getManager();

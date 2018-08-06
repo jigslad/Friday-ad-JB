@@ -114,7 +114,7 @@
                 {{ form_row(form.sender_email, {'attr':{'tabindex': 2}}) }}
             {% endif %}
 
-            {% if rootCategoryId == jobCategoryId %}
+            {# {% if rootCategoryId == jobCategoryId %}
                 <label class="inline-b">{{ 'Attach CV'|trans({}, 'frontend-contact-seller') }}</label> ({{'Optional'|trans({}, 'frontend-contact-seller')}})
                 <div id="attachment_div" class="attachment-textbox {% if form.attachment.vars.errors|length %}error{% endif %}">
                     <a href="javascript:void(0);" title="{{'Cancle attachment'|trans({}, 'frontend-contact-seller')}}" id="btn_delete_attachment" class="delete-attached"></a>
@@ -129,10 +129,10 @@
                 {% endif %}
                 {{ form_widget(form.text_message, attrArray, {'attr':{'tabindex': 3}}) }}
                 {{ form_errors(form.text_message) }}
-            {% else %}
+            {% else %} #}
                 {{ form_row(form.text_message, {'attr':{'tabindex': 3}}) }}
-                {{ form_widget(form.attachment, {'attr':{'style':'display:none'}}) }}
-            {% endif %}
+              {# {{ form_widget(form.attachment, {'attr':{'style':'display:none'}}) }}
+            {% endif %} #}
 
             <ul class="receive-alert">
                 <li>

@@ -99,7 +99,7 @@ class ContactSellerType extends AbstractType
                     'data' => ($loggedInUser ? $loggedInUser->getProfileName() : null)
                 )
             )
-            ->add(
+            /* ->add(
                 'attachment',
                 FileType::class,
                 array(
@@ -117,7 +117,7 @@ class ContactSellerType extends AbstractType
                         )
                     )
                 )
-            )
+            ) */
             ->add(
                 'text_message',
                 TextareaType::class,

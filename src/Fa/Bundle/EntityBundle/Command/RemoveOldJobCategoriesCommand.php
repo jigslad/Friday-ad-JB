@@ -92,7 +92,7 @@ EOF
     protected function removeJobCategoriesEntityOffset($input, $output)
     {
         $step        = 1;
-        $offset      = $input->getOption('offset');
+        $offset      = 0;
 
         $deleteManager = $this->getContainer()->get('fa.deletemanager');
         $oldJobCategories = $this->getCategoryResult($offset, $step);

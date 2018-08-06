@@ -130,7 +130,7 @@ EOF
     {
         $type = $input->getOption('type');
         $step        = 100;
-        $offset      = $input->getOption('offset');
+        $offset      = 0;
 
         $entities = $this->getEntityResult($type, $offset, $step);
 

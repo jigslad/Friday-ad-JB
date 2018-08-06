@@ -119,8 +119,8 @@ EOF
     protected function updateAdRefreshDateWithOffset($searchParam, $input, $output)
     {
         $qb          = $this->getAdQueryBuilder($searchParam);
-        $step        = 100;
-        $offset      = $input->getOption('offset');
+        $step        = 1000;
+        $offset      = 0;
 
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);
@@ -167,7 +167,7 @@ EOF
     protected function updateAdRefreshDate($searchParam, $input, $output)
     {
         $count     = $this->getAdCount($searchParam);
-        $step      = 100;
+        $step      = 1000;
         $stat_time = time();
 
         $output->writeln('SCRIPT START TIME '.date('d-m-Y H:i:s', $stat_time), true);

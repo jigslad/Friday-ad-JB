@@ -103,7 +103,7 @@ class ContactSellerController extends CoreController
                                     $message = $formManager->save($message);
                                     CommonManager::updateCacheCounter($this->container, 'ad_enquiry_email_send_link_'.strtotime(date('Y-m-d')).'_'.$adId);
 
-                                    $objUploader = $form->get('attachment')->getData();
+                                    $objUploader = $form->has('attachment') ? $form->get('attachment')->getData(): false;
                                     if ($objUploader) {
                                         $uploadDetailArray = $this->uploadAttachment($objUploader, $message);
                                         $message->setAttachmentPath($uploadDetailArray['attachmentPath']);
@@ -231,7 +231,7 @@ class ContactSellerController extends CoreController
                                 $message = $this->getRepository('FaMessageBundle:Message')->setMessageDetail($message, $parent, $ad, $objSeller, $objBuyer, $request->getClientIp());
                                 $message = $formManager->save($message);
 
-                                $objUploader = $form->get('attachment')->getData();
+                                $objUploader = $form->has('attachment') ? $form->get('attachment')->getData(): false;
                                 if ($objUploader) {
                                     $uploadDetailArray = $this->uploadAttachment($objUploader, $message);
                                     $message->setAttachmentPath($uploadDetailArray['attachmentPath']);

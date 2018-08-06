@@ -175,7 +175,7 @@ EOF
     protected function fixAdEntryWithOffset($input, $output)
     {
         $adRepository = $this->entityManager->getRepository('FaAdBundle:Ad');
-        $offset = $input->getOption('offset');
+        $offset = 0;
         $ads = $this->getAdResult($offset, $this->limit);
         foreach ($ads as $ad) {
             if ($this->is_url_exist('http://friday-ad.s3-website-eu-west-1.amazonaws.com/'.$ad['path'].'/'.$ad['image_name'].'_300X225.jpg')) {

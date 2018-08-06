@@ -207,7 +207,7 @@ EOF
     {
         $adReportDailyTableName   = $this->historyEntityManager->getClassMetadata('FaReportBundle:AdReportDaily')->getTableName();
         $adPrintInsertDateReportDailyTableName = $this->historyEntityManager->getClassMetadata('FaReportBundle:AdPrintInsertDateReportDaily')->getTableName();
-        $offset = $input->getOption('offset');
+        $offset = 0;
         $ads = $this->getAdResult($offset, $this->limit);
         foreach ($ads as $ad) {
             list($startDate, $endDate) = $this->getDateInTimeStamp($ad['created_at']);
