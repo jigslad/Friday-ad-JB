@@ -21,6 +21,7 @@ use Fa\Bundle\CoreBundle\Form\EventListener\AddDatePickerFieldSubscriber;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\Validator\Constraints\Regex;
 // use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Fa\Bundle\CoreBundle\Validator\Constraints\CustomEmail;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -141,7 +142,7 @@ class AutomatedEmailReportSearchAdminType extends AbstractType
      * (non-PHPdoc)
      * @see \Symfony\Component\Form\AbstractType::setDefaultOptions()
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function setDefaultOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             array(

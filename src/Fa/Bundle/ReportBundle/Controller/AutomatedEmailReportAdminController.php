@@ -44,7 +44,7 @@ class AutomatedEmailReportAdminController extends CoreController implements Reso
 
         // initialize form manager service
         $formManager    = $this->get('fa.formmanager');
-        $form           = $formManager->createForm(AutomatedEmailReportSearchAdminType::class, null, array('action' => $this->generateUrl('fa_report_automated_email'), 'method' => 'GET'));
+        $form           = $formManager->createForm(AutomatedEmailReportSearchAdminType::class, null, array('action' => $this->generateUrl('fa_report_automated_email'), 'method' => 'GET', 'allow_extra_fields' =>true));
         $pagination     = null;
         $data['search'] = array_filter($data['search']);
 

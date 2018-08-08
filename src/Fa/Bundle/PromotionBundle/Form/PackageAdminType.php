@@ -395,7 +395,7 @@ class PackageAdminType extends AbstractType
                     array(
                         'required' => false,
                         'mapped'   => false,
-                        'choices'  => $choices,
+                        'choices'  => array_flip($choices),
                         'data'     => isset($categoryPath[$i]) ? $categoryPath[$i] : null,
                     )
                 );
@@ -411,7 +411,7 @@ class PackageAdminType extends AbstractType
                     'required' => false,
                     'mapped' => false,
                     'multiple' => true,
-                    'choices' => $this->em->getRepository('FaEntityBundle:LocationGroup')->getLocationGroupsKeyValueArray(),
+                    'choices' => array_flip($this->em->getRepository('FaEntityBundle:LocationGroup')->getLocationGroupsKeyValueArray()),
                     'data'     => $locationGroupIds,
                 )
             );

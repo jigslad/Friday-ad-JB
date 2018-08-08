@@ -44,7 +44,7 @@ class AdReportAdminController extends CoreController implements ResourceAuthoriz
 
         // initialize form manager service
         $formManager    = $this->get('fa.formmanager');
-        $form           = $formManager->createForm(AdReportSearchAdminType::class, null, array('action' => $this->generateUrl('fa_report_ad'), 'method' => 'GET'));
+        $form           = $formManager->createForm(AdReportSearchAdminType::class, null, array('action' => $this->generateUrl('fa_report_ad'), 'method' => 'GET', 'allow_extra_fields' =>true));
         $pagination     = null;
         $data['search'] = array_filter($data['search']);
         $isCountQuery   = false;
