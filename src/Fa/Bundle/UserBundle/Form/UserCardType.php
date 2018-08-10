@@ -165,7 +165,7 @@ class UserCardType extends AbstractType
                 array(
                     'label' => 'Expiry date',
                     'placeholder'  => 'Month',
-                    'choices'  => CommonManager::getMonthChoices(),
+                    'choices'  => array_flip(CommonManager::getMonthChoices()),
                     'constraints' => array(new NotBlank(array('message' => $this->translator->trans('Please select expiry month.', array(), 'validators'))))
                 )
             )
@@ -174,7 +174,7 @@ class UserCardType extends AbstractType
                 ChoiceType::class,
                 array(
                     'placeholder'  => 'Year',
-                    'choices'  => $this->getYearRangeOptions(),
+                    'choices'  => array_flip($this->getYearRangeOptions()),
                     'constraints' => array(new NotBlank(array('message' => $this->translator->trans('Please select expiry year.', array(), 'validators'))))
                 )
             )
