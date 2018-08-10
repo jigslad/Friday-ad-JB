@@ -30,6 +30,14 @@ use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Fa\Bundle\UserBundle\Entity\UserSite;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Symfony\Component\Form\FormError;
+use Fa\Bundle\AdBundle\Form\AdEditForSaleType;
+use Fa\Bundle\AdBundle\Form\AdEditMotorsType;
+use Fa\Bundle\AdBundle\Form\AdEditJobsType;
+use Fa\Bundle\AdBundle\Form\AdEditServicesType;
+use Fa\Bundle\AdBundle\Form\AdEditPropertyType;
+use Fa\Bundle\AdBundle\Form\AdEditAnimalsType;
+use Fa\Bundle\AdBundle\Form\AdEditCommunityType;
+use Fa\Bundle\AdBundle\Form\AdEditAdultType;
 
 /**
  * This controller is used for ad edit.
@@ -123,6 +131,19 @@ class AdEditController extends CoreController
         if ($categoryName) {
             $formName = 'fa_paa_edit_'.$categoryName;
         }
+        
+        // getName() symfony form function is removed After symfony 3, so to handle dynamic forms we need create array
+        $formClassArray = [
+            'fa_paa_edit_for_sale' => AdEditForSaleType::class,
+            'fa_paa_edit_motors'   => AdEditMotorsType::class,
+            'fa_paa_edit_jobs'     => AdEditJobsType::class,
+            'fa_paa_edit_services' => AdEditServicesType::class,
+            'fa_paa_edit_property' => AdEditPropertyType::class,
+            'fa_paa_edit_animals'  => AdEditAnimalsType::class,
+            'fa_paa_edit_community'=> AdEditCommunityType::class,
+            'fa_paa_edit_adult'    => AdEditAdultType::class
+        ];
+        $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
 
         return $formName;
     }
