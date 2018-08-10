@@ -5,7 +5,7 @@
             <div class="paa-bdr-box">
                 <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
                 {{ form_widget(attribute(form, field), {'attr': {'placeholder': ((attribute(form, field).vars.attr.placeholder is defined and attribute(form, field).vars.attr.placeholder is not null) ? attribute(form, field).vars.attr.placeholder : 'eg. General construction works'|trans({}, 'frontend-paa-second-step'))} }) }}
-                {% if attribute(form, field).vars.attr.maxlength %}
+                {% if attribute(form, field).vars.attr.maxlength is defined and attribute(form, field).vars.attr.maxlength %}
                     <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-paa-second-step') }}</div>
                 {% endif %}
                 {{ form_errors(attribute(form, field)) }}
@@ -19,7 +19,7 @@
                     <div class="paa-title-ins">{{ 'Describe your service here.You can add details about your business in the next step.'|trans({}, 'frontend-paa-second-step') }}</div>
                 {% endif %}
                 {{ form_widget(attribute(form, field), {'attr': {'placeholder': ''}}) }}
-                {% if attribute(form, field).vars.attr.maxlength %}
+                {% if attribute(form, field).vars.attr.maxlength is defined and attribute(form, field).vars.attr.maxlength %}
                     <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-paa-second-step') }}</div>
                 {% endif %}
                 {{ form_errors(attribute(form, field)) }}

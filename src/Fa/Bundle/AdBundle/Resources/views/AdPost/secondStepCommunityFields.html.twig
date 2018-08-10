@@ -9,7 +9,7 @@
                     <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
                 {% endif %}
                 {{ form_widget(attribute(form, field)) }}
-                {% if attribute(form, field).vars.attr.maxlength %}
+                {% if attribute(form, field).vars.attr.maxlength is defined and attribute(form, field).vars.attr.maxlength %}
                     <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-paa-second-step') }}</div>
                 {% endif %}
                 {{ form_errors(attribute(form, field)) }}
@@ -21,7 +21,7 @@
                     <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
                 {% endif %}
                 {{ form_widget(attribute(form, field), {'attr': {'placeholder': ''}}) }}
-                {% if attribute(form, field).vars.attr.maxlength %}
+                {% if attribute(form, field).vars.attr.maxlength is defined and attribute(form, field).vars.attr.maxlength %}
                     <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-paa-second-step') }}</div>
                 {% endif %}
                 {{ form_errors(attribute(form, field)) }}
@@ -33,7 +33,7 @@
                     <div class="paa-title-ins">({{ attribute(attribute(form, field).vars.attr, 'field-help') }})</div>
                 {% endif %}
                 {{ form_widget(attribute(form, field)) }}
-                {% if attribute(form, field).vars.attr.maxlength %}
+                {% if attribute(form, field).vars.attr.maxlength is defined and attribute(form, field).vars.attr.maxlength %}
                     <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-paa-second-step') }}</div>
                 {% endif %}
                 {{ form_errors(attribute(form, field)) }}
