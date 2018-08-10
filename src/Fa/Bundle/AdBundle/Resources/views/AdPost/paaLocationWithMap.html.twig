@@ -1,7 +1,7 @@
 {% set field = 'location_autocomplete' %}
-{% set formName = 'fa_paa_fourth_step_'~categoryName|replace(' ', '_')|lower %}
+{% set formName = 'fa_paa_fourth_step_'~categoryName|replace({' ':'_'})|lower %}
 {% if is_edit is defined and is_edit is not null %}
-    {% set formName = 'fa_paa_edit_'~categoryName|replace(' ', '_')|lower %}
+    {% set formName = 'fa_paa_edit_'~categoryName|replace({' ':'_'})|lower %}
 {% endif %}
 {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}

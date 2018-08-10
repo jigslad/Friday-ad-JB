@@ -40,6 +40,7 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Fa\Bundle\CoreBundle\Form\Type\JsChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
@@ -315,12 +316,12 @@ class AdPostType extends AbstractType
         }
 
         $fieldTypeArray = explode('_', $paaField['field_type']);
-        $formTypeArray = ['choice' => ChoiceType::class, 'text' => TextType::class, 'textarea' => TextareaType::class, 'integer' => NumberType::class];
+        $formTypeArray = ['choice' => ChoiceType::class, 'text' => TextType::class, 'textarea' => TextareaType::class, 'integer' => NumberType::class, 'radio' => RadioType::class];
         
         if ($classFlag) {
             $formTypeName = isset($formTypeArray[$fieldTypeArray[0]]) ? $formTypeArray[$fieldTypeArray[0]] : $fieldTypeArray[0];
         }else {
-            $formTypeName = isset($formTypeArray[$fieldTypeArray[0]]) ? $formTypeArray[$fieldTypeArray[0]] : $fieldTypeArray[0];
+            $formTypeName = $fieldTypeArray[0];
         }
         return $formTypeName;
     }

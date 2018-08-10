@@ -311,7 +311,7 @@ class PaaLiteType extends AbstractType
         if ($classFlag) {
             $formTypeName = isset($formTypeArray[$fieldTypeArray[0]]) ? $formTypeArray[$fieldTypeArray[0]] : $fieldTypeArray[0];
         }else {
-            $formTypeName = isset($formTypeArray[$fieldTypeArray[0]]) ? $formTypeArray[$fieldTypeArray[0]] : $fieldTypeArray[0];
+            $formTypeName = $fieldTypeArray[0];
         }
 
         return $formTypeName;

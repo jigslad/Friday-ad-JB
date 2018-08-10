@@ -324,7 +324,9 @@ class AdPostController extends ThirdPartyLoginController
             // second step data from session if exist either category is same or changed in first step in edit mode
             $secondStepData = $this->getStepSessionData('second');
             if (count($secondStepData)) {
-                $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName);
+//                 $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName); 
+                $csrfToken      = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
+                
                 $secondStepData = $secondStepData + array('_token' => $csrfToken);
 
                 $formFields            = array();
