@@ -2077,7 +2077,7 @@ class AdRepository extends EntityRepository
 
         if ($changeRenewedAtFlag) {
             $object->setRenewedAt($currentTime);
-            if ($container && $container->isScopeActive('request')) {
+            if ($container && $container->get('request_stack')->getCurrentRequest()) {
                 $this->_em->getRepository('FaAdBundle:AdIpAddress')->checkAndLogIpAddress($object, $container->get('request_stack')->getCurrentRequest()->getClientIp());
             }
 
@@ -3482,7 +3482,7 @@ class AdRepository extends EntityRepository
             $this->_em->persist($objAd);
             $this->_em->flush($objAd);
             $return = true;
-            if ($container && $container->isScopeActive('request')) {
+            if ($container && $container->get('request_stack')->getCurrentRequest()) {
                 $this->_em->getRepository('FaAdBundle:AdIpAddress')->checkAndLogIpAddress($objAd, $container->get('request_stack')->getCurrentRequest()->getClientIp());
             }
 

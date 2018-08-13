@@ -56,7 +56,7 @@ class PaymentPaypalRepository extends EntityRepository
             }
             $paymentPaypal->setValue(serialize($paypalResponse));
         }
-        if (count($paypalResponse) && isset($paypalResponse['ipAddress'])) {
+        if (!empty($paypalResponse) && isset($paypalResponse['ipAddress'])) {
             $paymentPaypal->setIp($paypalResponse['ipAddress']);
         }
 
@@ -64,7 +64,7 @@ class PaymentPaypalRepository extends EntityRepository
         $this->_em->flush();
 
         //update user address book.
-        if (is_array($deliveryAddressInfo) && count($deliveryAddressInfo)) {
+        if (is_array($deliveryAddressInfo) && !empty($deliveryAddressInfo)) {
             $this->_em->getRepository('FaUserBundle:UserAddressBook')->addUserAddress($paymentObj->getUser(), $deliveryAddressInfo);
         }
 

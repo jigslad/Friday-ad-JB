@@ -56,7 +56,7 @@ class PaymentCyberSourceRepository extends EntityRepository
             $paymentCyberSource->setRequestToken($cyberSourceResponse->requestToken);
             $paymentCyberSource->setValue(serialize($cyberSourceResponse));
         }
-        if (count($billingInfo) && isset($billingInfo['ipAddress'])) {
+        if (!empty($billingInfo) && isset($billingInfo['ipAddress'])) {
             $paymentCyberSource->setIp($billingInfo['ipAddress']);
         }
 
@@ -64,7 +64,7 @@ class PaymentCyberSourceRepository extends EntityRepository
         $this->_em->flush();
 
         //update user address book.
-        if (is_array($userAddressInfo) && count($userAddressInfo)) {
+        if (is_array($userAddressInfo) && !empty($userAddressInfo)) {
             $this->_em->getRepository('FaUserBundle:UserAddressBook')->addUserAddress($paymentObj->getUser(), $userAddressInfo);
         }
         return $paymentCyberSource->getId();

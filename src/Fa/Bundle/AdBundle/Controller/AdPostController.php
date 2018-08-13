@@ -858,7 +858,7 @@ class AdPostController extends ThirdPartyLoginController
                 }
 
                 if (count($fourthStepData)) {
-                    $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName);
+                    $csrfToken      = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
                     $fourthStepData = $fourthStepData + array('_token' => $csrfToken);
 
                     if (isset($fourthStepData['location_autocomplete']) && $fourthStepData['location_autocomplete']) {
@@ -875,7 +875,7 @@ class AdPostController extends ThirdPartyLoginController
             	$this->container->get('session')->remove('paa_fourth_step_data');
             	
             	if (count($fourthStepData)) {
-            		$csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName);
+            	    $csrfToken      = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
             		$fourthStepData = $fourthStepData + array('_token' => $csrfToken);
             		
             		if (isset($fourthStepData['location_autocomplete']) && $fourthStepData['location_autocomplete']) {

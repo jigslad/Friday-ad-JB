@@ -111,7 +111,7 @@ class PaymentRepository extends EntityRepository
         $this->updatePaymentMethod($payment);
 
         $cartValue = unserialize($cart->getValue());
-        if ($payment->getDiscountAmount() > 0 && isset($cartValue['discount_values']) && count($cartValue['discount_values']) && isset($cartValue['discount_values']['id'])) {
+        if ($payment->getDiscountAmount() > 0 && isset($cartValue['discount_values']) && !empty($cartValue['discount_values']) && isset($cartValue['discount_values']['id'])) {
             $this->_em->getRepository('FaPromotionBundle:UserPackageDiscountCode')->addUserPackageDiscountCode($cartValue, $cart->getUser(), $payment, $cart);
         }
 
@@ -290,7 +290,7 @@ class PaymentRepository extends EntityRepository
             }
             
             $adUserPackages = $this->_em->getRepository('FaAdBundle:AdUserPackage')->findOneBy(array('ad_id'=>$transaction->getAd()->getId()));
-            $adUserPackageCount = count($adUserPackages);
+            $adUserPackageCount = !empty($adUserPackages) ? count($adUserPackages) : 0;
             // handle is_paid_ad and is_paid_before
             if ($transaction->getAmount() > 0 && $ad->getIsPaidAd() != 1) {
                 $ad->setIsPaidAd(1);
