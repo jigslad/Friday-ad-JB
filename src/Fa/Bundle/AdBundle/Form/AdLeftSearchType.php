@@ -185,7 +185,7 @@ class AdLeftSearchType extends AbstractType
                 'multiple' => false,
                 /** @Ignore */
                 'label'    => false,
-                'choices'  => array('' => 'Select', '0' => 'Private Seller', '1' => 'Business Seller')
+                'choices'  => array('Select' => '', 'Private Seller' => '0', 'Business Seller' => '1')
             )
         );
     }
@@ -273,7 +273,7 @@ class AdLeftSearchType extends AbstractType
                         $fieldOptions['multiple'] = true;
                     }
 
-                    $fieldOptions = $fieldOptions + array(/** @Ignore */'label' => $dimensionLabel, 'choices' => $fieldChoices);
+                    $fieldOptions = $fieldOptions + array(/** @Ignore */'label' => $dimensionLabel, 'choices' => array_flip($fieldChoices));
 
                     if ($dimensionField == 'ad_type_id') {
                         $dimensionField = 'item__'.$dimensionField;
@@ -296,10 +296,10 @@ class AdLeftSearchType extends AbstractType
 
                     // add date period field
                     if ($rootCategoryName == 'property') {
-                        $fieldOptions = array(/** @Ignore */'label' => false, 'choices' => CommonManager::getTimePeriodChoices('property', $this->container), 'attr' => array('class' => 'fa-select-white'));
+                        $fieldOptions = array(/** @Ignore */'label' => false, 'choices' => array_flip(CommonManager::getTimePeriodChoices('property', $this->container)), 'attr' => array('class' => 'fa-select-white'));
                         $form->add($dimensionFieldPrefix.'__'.$dimensionField.'_period', ChoiceType::class, $fieldOptions);
                     } elseif ($rootCategoryName == 'community') {
-                        $fieldOptions = array(/** @Ignore */'label' => false, 'choices' => CommonManager::getTimePeriodChoices('community', $this->container), 'attr' => array('class' => 'fa-select-white'));
+                        $fieldOptions = array(/** @Ignore */'label' => false, 'choices' => array_flip(CommonManager::getTimePeriodChoices('community', $this->container)), 'attr' => array('class' => 'fa-select-white'));
                         $form->add($dimensionFieldPrefix.'__'.$dimensionField.'_period', ChoiceType::class, $fieldOptions);
                     }
                 } elseif ($dimension['search_type'] == 'range_text') {

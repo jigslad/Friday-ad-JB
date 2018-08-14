@@ -85,7 +85,7 @@ class UserAddressBookType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Full name',
-                    'max_length' => 100,
+                    'attr'=>array('maxlength'=>'100'),
                     'constraints' => array(new NotBlank(array('message' => $this->translator->trans('Please enter full name.', array(), 'validators')))),
                     'data' => ($loggedinUser ? $loggedinUser->getFullName() : $builder->getForm()->getData()->getFirstName()),
                 )
@@ -95,7 +95,7 @@ class UserAddressBookType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'House name/number',
-                    'max_length' => 100,
+                    'attr'=>array('maxlength'=>'100'),
                     'constraints' => array(new NotBlank(array('message' => $this->translator->trans('Please enter house name/number.', array(), 'validators'))))
                 )
             )
@@ -104,7 +104,7 @@ class UserAddressBookType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Address line 2',
-                    'max_length' => 100,
+                    'attr'=>array('maxlength'=>'100'),
                     //'constraints' => array(new NotBlank(array('message' => 'Please enter address line 2.')))
                 )
             )
@@ -113,7 +113,7 @@ class UserAddressBookType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Postcode',
-                    'max_length' => 15,
+                    'attr'=>array('maxlength'=>'15'),
                     'constraints' => array(new NotBlank(array('message' => $this->translator->trans('Please enter postcode.', array(), 'validators'))))
                 )
             )
@@ -122,7 +122,7 @@ class UserAddressBookType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Town/city',
-                    'max_length' => 50,
+                    'attr'=>array('maxlength'=>'50'),
                     'constraints' => array(new NotBlank(array('message' => $this->translator->trans('Please enter town/city.', array(), 'validators')))),
                     'data' => (($builder->getForm()->getData()->getId() && $builder->getForm()->getData()->getTown()) ? $builder->getForm()->getData()->getTown() : null),
                 )
@@ -133,7 +133,7 @@ class UserAddressBookType extends AbstractType
                 array(
                     'required' => false,
                     'label' => 'State/county',
-                    'max_length' => 50,
+                    'attr'=>array('maxlength'=>'50'),
                     'data' => (($builder->getForm()->getData()->getId() && $builder->getForm()->getData()->getCounty()) ? $builder->getForm()->getData()->getCounty() : null),
                 )
             );

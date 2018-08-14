@@ -105,7 +105,7 @@ class UserBusinessProfileType extends AbstractType
         }
 
         $builder
-            ->add('user', new UserBusinessProfileUserDetailType($this->container))
+            ->add('user', UserBusinessProfileUserDetailType::class)
             ->add(
                 'company_welcome_message',
                 TextareaType::class,

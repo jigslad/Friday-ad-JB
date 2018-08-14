@@ -78,7 +78,7 @@ class UserBusinessProfileUserDetailType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'First name',
-                    'max_length' => 100,
+                    'attr'=>array('maxlength'=>'100'),
                     'constraints' => array(new Regex(array('pattern' => '/^[a-z0-9 _-]+$/i', 'groups' => array('user_business_profile'), 'message' => $this->translator->trans('First name cannot have special characters other than hyphen and underscore', array(), 'validators'))),new NotBlank(array( 'groups' => array('user_business_profile'),'message' => $this->translator->trans('Please enter first name.', array(), 'validators'))))
                 )
             )
@@ -87,7 +87,7 @@ class UserBusinessProfileUserDetailType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Last name',
-                    'max_length' => 100,
+                    'attr'=>array('maxlength'=>'100'),
                     'constraints' => array(new Regex(array('pattern' => '/^[a-z0-9 _-]+$/i', 'groups' => array('user_business_profile'), 'message' => $this->translator->trans('Last name cannot have special characters other than hyphen and underscore', array(), 'validators'))),new NotBlank(array( 'groups' => array('user_business_profile'),'message' => $this->translator->trans('Please enter last name.', array(), 'validators'))))
                 )
             )
@@ -96,7 +96,7 @@ class UserBusinessProfileUserDetailType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Business name',
-                    'max_length' => 100,
+                    'attr'=>array('maxlength'=>'100'),
                     'constraints' => array(new NotBlank(array( 'groups' => array('user_business_profile'),'message' => $this->translator->trans('Please enter business name.', array(), 'validators'))))
                 )
             );
