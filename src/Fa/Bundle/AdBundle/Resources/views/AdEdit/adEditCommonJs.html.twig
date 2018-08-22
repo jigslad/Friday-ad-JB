@@ -126,11 +126,13 @@
         $('#find_on_map').click(function(){
             var locationVal = $('#'+formName+'_location_autocomplete').val();
             if (locationVal && locationVal != 'United Kingdom') {
-                $('#location_map_div').show();
+            	 $('#location_map_div').addClass('show-location-mapfit');
+            	 $('#location_map_div').removeClass('hide-location-mapfit');
                 showAddress(locationVal);
             } else {
                 showAddress('United Kingdom');
-                $('#location_map_div').hide();
+                $('#location_map_div').removeClass('show-location-mapfit');
+                $('#location_map_div').addClass('hide-location-mapfit');
             }
             return false;
         });

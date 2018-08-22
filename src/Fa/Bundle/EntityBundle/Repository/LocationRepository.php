@@ -201,7 +201,7 @@ class LocationRepository extends BaseEntityRepository
 
         $townArray = array();
         foreach ($towns as $town) {
-            $townArray[] = array('id'=> $town->getId(), 'text' => $town->getName().', '.$town->getParent()->getName());
+        	$townArray[] = array('id'=> $town->getId(), 'text' => $town->getName().', '.$town->getParent()->getName(), 'latlong' => $town->getLatitude().', '.$town->getLongitude());
         }
 
         return $townArray;

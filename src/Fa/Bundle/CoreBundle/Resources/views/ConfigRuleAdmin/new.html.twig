@@ -74,6 +74,7 @@
     var topBusinessPage = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::TOP_BUSINESSPAGE') }}
     var serviceCategory = {{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') }}
     var adultCategory = {{ constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') }}
+    var mapFitApiKeyId = {{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::MAPFIT_API_KEY_ID') }}
     var category1Value = new Array();
     var category1Text = new Array();
 
@@ -141,13 +142,13 @@
     }
 
     function showHideFieldsByConfigOption(config)
-    {
+    { 
         if (config) {
             if (config == paypalCommision || config == productInsertionFee) {
                 $('#categoryDiv').hide();
                 $('#locationDiv').show();
                 $('#periodDiv').show();
-            } else if (config == listingTopAdSlots || config == periodBeforeCheckingViews || config == precedingPeriodToCheckViews || config == vatAmount || config == numberOfOrganicResults || config == clickEditVehicleAdvertsPackageId || config == adzunaMotorsFeedUserIds || config == dotmailerEnrollmentProgramId) {
+            } else if (config == listingTopAdSlots || config == periodBeforeCheckingViews || config == precedingPeriodToCheckViews || config == vatAmount || config == numberOfOrganicResults || config == clickEditVehicleAdvertsPackageId || config == adzunaMotorsFeedUserIds || config == dotmailerEnrollmentProgramId || config == mapFitApiKeyId) {
                 $('#categoryDiv').hide();
                 $('#locationDiv').hide();
                 $('#periodDiv').hide();

@@ -1,4 +1,5 @@
 {% block adsNearYou_html %}
+<link href="https://cdn.mapfit.com/v2-4/assets/css/mapfit.css" rel='stylesheet' />
 <div class="homepage-row {{ bgColour }}">
     <div class="row">
         <div class="columns">
@@ -24,7 +25,8 @@
                     <div class="near-items-found"><b>{{ '%adCount% items found'|trans({'%adCount%':(adsNearYou|length)}, 'frontend-landing-page')}}</b> ({{ 'within 1 mile'|trans({}, 'frontend-landing-page') }})</div>
                 </div>
                 <div class="map-wrapper">
-                    <div id="googlemaps" style="width:100%;height:498px;"></div>
+                    {# <div id="googlemaps" style="width:100%;height:498px;"></div> #}
+                    <div id="mapfit" style="width:100%;height:498px;"></div>
                 </div>
             </div>
         </div>
@@ -33,14 +35,14 @@
 {% endblock %}
 
 {% block adsNearYou_script %}
-    {% javascripts filter='uglifyjs2' output='bundles/js/compiled/adsNearYou.js'
+    {# {% javascripts filter='uglifyjs2' output='bundles/js/compiled/adsNearYou.js'
         'bundles/facore/js/googleMapOms.js'
         'bundles/facore/js/googleMapInfobox.js'
     %}
-    <script src="{{ static_asset_url(asset_url) }}"></script>
-    {% endjavascripts %}
+    <script src="{{ static_asset_url(asset_url) }}"></script>  
+    {% endjavascripts %} 
     {% set container = fetch_container_instance() %}
-    <script language="javascript" type="text/javascript">
+   <script language="javascript" type="text/javascript">
         //<![CDATA[
         $(document).ready(function(){
             changeLandingPageLocation();
@@ -132,7 +134,57 @@
                 map.setCenter(new google.maps.LatLng(51.50, -0.12));
             {% endif %}
         });
-        
+    //]]>
+</script> #}
+<script src="https://cdn.mapfit.com/v2-4/assets/js/tetragon.js"></script>
+<script src="https://cdn.mapfit.com/v2-4/assets/js/mapfit.js"></script>
+<script language="javascript" type="text/javascript">   
+//<![CDATA[
+	$(document).ready(function(){
+		changeLandingPageLocation();
+		{% if adsNearYou|length %}
+    		{% set adFavoriteRepository   = fetch_repository('FaAdBundle:AdFavorite') %}
+            {% if app.user %}
+                {% set userId = app.user.getId() %}
+            {% else %}
+                {% set userId = app.session.getId() %}
+            {% endif %}
+
+            {% set container = fetch_container_instance() %}
+            {% set adFavoriteAdIds = adFavoriteRepository.getFavoriteAdByUserId(userId, container) %}
+            let map = mapfit.MapView('mapfit', {theme: 'day'});
+           	var museums = mapfit.Layer();
+           	let myIcon = mapfit.divIcon({className:"", iconUrl: "{{ asset_url('fafrontend/images/map-marker.png') }}", html: '<img class="markerImg" src="{{ asset_url('fafrontend/images/map-marker.png') }}" />'})
+           	 var title = '';
+           	 
+            {% for ad in adsNearYou %}
+                {% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LATITUDE')) is defined and attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LONGITUDE')) is defined %}
+                    {% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) is defined %}
+                        title = '{{ attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) }}'
+                    {% else %}
+                        title = '{{ad.id}}'
+                    {% endif %}
+
+                    var placeInfo = mapfit.PlaceInfo();
+                    var moma = mapfit.Marker([parseFloat({{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LATITUDE')).0}}), parseFloat({{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LONGITUDE')).0}})]);
+                    placeInfo.setTitle('');
+                    placeInfo.setDescription('');
+                    moma.setPlaceInfo(placeInfo);
+
+                    moma.on('click', function () {
+              	    	updateContent('{{ad.id}}');
+              	     })
+                    
+                    moma.setIcon(myIcon);
+                    museums.add(moma);
+            	    map.addMarker(moma);
+					
+                {% endif %}
+            {% endfor %}
+                    map.addLayer(museums);
+             		map.setCenterWithLayer(museums, 90, 90); 
+		{% endif %}
+	});
         function addToFavorite(id)
         {
             var route = Routing.generate('ad_add_to_favorite', { 'adId': id });
@@ -244,17 +296,16 @@
             return false;
         }
         
-        function updateContent(marker, iw)
-        {
-            var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': marker.id });
+        function updateContent(adId) {	
+            var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': adId });
             $.ajax({
                 type: "GET",
                 url : route,
             })
             .done(function(response) {
                 if (response.length) {
-                    marker.desc = response;
-                    iw.setContent(marker.desc);
+               	 	var desc = response;
+               		$(".mapfit-popup-description").html(desc);
                 }
             });
         }

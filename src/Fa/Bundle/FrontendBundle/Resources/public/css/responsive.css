@@ -267,6 +267,7 @@
 	.map-wrapper #googlemaps{width:660px!important;}
 	#similar-item-slider .owl-item .item{width:262px;margin-right:18px}
 	#map_panel #googlemaps{width:627px!important;height:468px!important}
+	#map_panel #mapfit{width:627px!important;height:468px!important}
 	.dtl-user-links .large-12{width:50%}
 	.search-close{display:none}
 	#left_search{display:block!important}
@@ -753,6 +754,8 @@
     .map-wrapper .infoBox:hover{border:1px solid #a8dc28}
     #similar-item-slider .owl-item .item{width:239px;margin-right:15px}
     #map_panel #googlemaps{width:100%!important;height:370px!important}
+    #map_panel #mapfit{width:100%!important;height:370px!important}
+    .shop-map-wrapper #mapfit, .map-wrapper #mapfit {width:100%!important;}
     .simple-wrapper{width:680px;}
     .login-left{padding:24px 39px 25px 0}
     .login-right{padding:50px 0 25px 40px}
@@ -1365,6 +1368,8 @@
     #contactSellerModal .receive-alert label{width:88%;vertical-align:middle}
     .simple-header{padding:11.5px 0}
     #map_panel #googlemaps{width:100%!important;height:370px!important}
+    #map_panel #mapfit{width:100%!important;height:370px!important}
+    .shop-map-wrapper #mapfit, .map-wrapper #mapfit {width:100%!important;}
     .simple-wrapper{width:auto;padding:0 10px}
     .simple-heading{margin:20px 0 35px}
     .login-left{border:none;box-shadow:none}
@@ -2099,6 +2104,8 @@
     #contactSellerModal .receive-alert label{width:88%;vertical-align:middle}
     .simple-header{padding:11.5px 0}
     #map_panel #googlemaps{width:100%!important;height:370px!important}
+    #map_panel #mapfit{width:100%!important;height:370px!important}
+    .shop-map-wrapper #mapfit, .map-wrapper #mapfit {width:100%!important;}
     .simple-wrapper{width:auto;padding:0 10px}
     .simple-heading{margin:20px 0 35px}
     .login-left{border:none;box-shadow:none}
@@ -2569,9 +2576,22 @@
     .flexy-box .parent_box {display:table; table-layout:inherit; }
     .flexy-box .child_box { display:table; }
     #basic_info_panel .detail-label-adult { margin-top:0px; padding: 10px 0px;}
-     
+    #mapfit .mapfit-popup, #mapfit .mapfit-popUpContent, #mapfit .mapfit-popup-content-wrapper { width:254px !important; height:236px !important;}
+    #mapfit .mapfit-popup .listing {padding: 20px 0px !important;}
+    #mapfit .mapfit-popUpContent {padding: 11px 11px !important;}
+    #mapfit .mapfit-popup .list-col-1 {width: 100px !important;}
+    #mapfit .mapfit-popup .list-col-2 { width: 115px !important; padding: 0 0 0 10px !important;}
+    .map-wrapper .listing:after {right: -4px !important; }
+    #mapfit .mapfit-popup .list-col-2 h3 { min-height: 54px; overflow: hidden;}
+    #mapfit .mapfit-popup .list-col-2 .list-price { margin-top: -16px !important; }
+    #mapfit .mapfit-popup .list-distance {position: absolute !important; bottom: 62px !important; right: 13px !important;}
+    #mapfit .mapfit-popup .list-miles {float: right !important;}
+    #mapfit .mapfit-popup { bottom: 0 !important; left: -118px !important;}
 }
-
+@media only screen and (min-width: 560px) and (max-width: 767px) {
+	#mapfit .mapfit-popup, #mapfit .mapfit-popUpContent, #mapfit .mapfit-popup-content-wrapper { width:400px !important; height:236px !important;}
+    #mapfit .mapfit-popup {left: -175px !important;}
+}
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .miles-bg-image{background-size:91px 68px}
     .miles-bg-image .miles-numbers{line-height:14px;font-size:12px;width:65px;height:57px;top:3px;left:5px}
@@ -2603,6 +2623,7 @@
     .message-attachments{margin:0}
     .attach-files-btn{margin-right:7px}
     #db-right-part{padding-bottom:0}
+    .shop-map-wrapper #mapfit{width:100%!important;}
 }
 
 @media only screen and (min-width: 480px) {

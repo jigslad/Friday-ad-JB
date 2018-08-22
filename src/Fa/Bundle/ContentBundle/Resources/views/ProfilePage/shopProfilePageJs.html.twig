@@ -1,11 +1,27 @@
-{% javascripts filter='uglifyjs2' output='bundles/js/compiled/shopProfilePageJs_v1.js'
+{# {% javascripts filter='uglifyjs2' output='bundles/js/compiled/shopProfilePageJs_v1.js'
     'bundles/facore/js/googleMap.js'
+    'bundles/facore/js/jquery.fancybox.pack.js'
+    'bundles/facore/js/owl.carousel.min.js'
+    'bundles/facore/js/notify.min.js'
+%} #}
+{% javascripts filter='uglifyjs2' output='bundles/js/compiled/shopProfilePageJs_v1.js'
     'bundles/facore/js/jquery.fancybox.pack.js'
     'bundles/facore/js/owl.carousel.min.js'
     'bundles/facore/js/notify.min.js'
 %}
 <script src="{{ static_asset_url(asset_url) }}?v=1"></script>
 {% endjavascripts %}
+
+{% set mapFitkey = '' %}
+{% set mapFitConfig = fetch_repository('FaCoreBundle:ConfigRule').getActiveConfigRulesByCategoryId(constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::MAPFIT_API_KEY_ID'), null, 1) %}
+{% if mapFitConfig and mapFitConfig.0.value is defined %}
+	{% set mapFitkey = mapFitConfig.0.value %}
+{% endif %}
+<link href="https://cdn.mapfit.com/v2-4/assets/css/mapfit.css" rel='stylesheet' />
+<script src="https://cdn.mapfit.com/v2-4/assets/js/tetragon.js"></script>
+<script src="https://cdn.mapfit.com/v2-4/assets/js/mapfit.js"></script>
+{{ include('FaCoreBundle::mapFitJs.html.twig', {'key' : mapFitkey}) }}
+
 {{ include('FaContentBundle:ProfilePage:showUserReviewJs.html.twig') }}
 <script language="javascript" type="text/javascript">
     //<![CDATA[
@@ -31,7 +47,7 @@
             {% set showMap = false %}
         {% endif %}
         {% if showMap and userDetail["latitude"] is defined and userDetail["latitude"] and userDetail["longitude"] is defined and userDetail["longitude"] %}
-            initialize();
+            {# initialize(); #}
             showCustomMarker('{{userDetail["latitude"]}}', '{{userDetail["longitude"]}}', '{{ asset_url('fafrontend/images/map-marker.png') }}');
         {% endif %}
         {% if userSiteImages|length %}

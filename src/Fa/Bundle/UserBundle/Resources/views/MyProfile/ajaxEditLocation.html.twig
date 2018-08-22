@@ -58,16 +58,17 @@
             if (response.htmlContent.length) {
                 $('#profileEditLocationModal').html(response.htmlContent);
             } else {
-                $('#business_map_div').html(response.mapContent);
+                //$('#business_map_div').html(response.mapContent);
                 $('#business_location_div').html(response.successContent);
-
                 var showMap = true;
                 var userDetail = response.userDetail;
+                
                 if ('show_map' in userDetail && !userDetail.show_map && 'business_category_id' in userDetail && [{{constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')}}, {{constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')}}].indexOf(userDetail.business_category_id)) {  
                     showMap = false;
                 }
                 if (showMap && 'latitude' in userDetail && userDetail.latitude && 'longitude' in userDetail && userDetail.longitude) {
-                    var profileMapOptions={zoom:9,
+                	showCustomMarker(userDetail.latitude, userDetail.longitude, '{{ asset_url('fafrontend/images/map-marker.png') }}');
+                	{# var profileMapOptions={zoom:9,
                             zoomControl: true,
                             panControl:false,
                             streetViewControl: false,
@@ -75,7 +76,7 @@
                             mapTypeId:google.maps.MapTypeId.ROADMAP,
                         };
 
-                    var profileObjMap = new google.maps.Map(document.getElementById('googlemaps'), profileMapOptions);
+                     var profileObjMap = new google.maps.Map(document.getElementById('googlemaps'), profileMapOptions);
                     var profileObjLatLng = new google.maps.LatLng(userDetail.latitude,userDetail.longitude);
 
                     profileObjMap.setCenter(profileObjLatLng);
@@ -85,7 +86,7 @@
                         map: profileObjMap,
                         draggable:false,
                         animation:google.maps.Animation.DROP
-                    });
+                    }); #}
                 }
                 
                 $('#profileEditLocationModal').foundation('reveal', 'close');

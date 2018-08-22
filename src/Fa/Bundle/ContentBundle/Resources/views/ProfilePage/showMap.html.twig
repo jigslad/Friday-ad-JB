@@ -6,8 +6,9 @@
     <div class="shop-map clearfix">
         <h5>{{'Map'|trans({}, 'frontend-profile-page')}}</h5>
         <div class="shop-map-wrapper">
-            <div id="googlemaps" style="height:180px;width:250px"></div>
+            {# <div id="googlemaps" style="height:180px;width:250px"></div> #}
+            <div id="mapfit" style="height:180px;width:250px"></div>
         </div>
-        <a href="//maps.google.com/maps?z=12&t=m&q=loc:{{userDetail['latitude']}}+{{userDetail['longitude']}}" target="_blank" class="right" onclick="javascript:updateUserSiteViewCounterField('{{userDetail['id']}}', 'profile_page_map_click_count', '');" >{{'View on Google Maps'|trans({}, 'frontend-profile-page')}}</a>
+        {# <a href="//maps.google.com/maps?z=12&t=m&q=loc:{{userDetail['latitude']}}+{{userDetail['longitude']}}" target="_blank" class="right" onclick="javascript:updateUserSiteViewCounterField('{{userDetail['id']}}', 'profile_page_map_click_count', '');" >{{'View on Google Maps'|trans({}, 'frontend-profile-page')}}</a> #}
     </div>
 {% endif %}

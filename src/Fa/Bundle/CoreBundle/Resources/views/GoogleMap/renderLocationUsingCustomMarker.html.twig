@@ -1,6 +1,8 @@
 {% block googlemap_location_html %}
     {% if latitude is defined and latitude and longitude is defined and longitude %}
-        <div id="googlemaps" style="height:{{mapHeight}};width:{{mapWidth}}"></div>
+        {# <div id="googlemaps" style="height:{{mapHeight}};width:{{mapWidth}}"></div> #}
+        <link href="https://cdn.mapfit.com/v2-4/assets/css/mapfit.css" rel='stylesheet' />
+        <div id="mapfit" style="height:{{mapHeight}};width:{{mapWidth}}"></div>
     {% else %}
         <br />
         <div data-alert class="alert-box info radius">
@@ -13,8 +15,8 @@
     {% set adDetailMapVariables = get_variables('adDetailMap') %}
     {% if adDetailMapVariables['latitude'] is defined and adDetailMapVariables['longitude'] %}
         {% set container = fetch_container_instance() %}
-        <script src="{{ asset_url('facore/js/googleMap.js') }}?v=1"></script>
-        <script language="javascript" type="text/javascript">
+        {# <script src="{{ asset_url('facore/js/googleMap.js') }}?v=1"></script> #}
+        {# <script language="javascript" type="text/javascript">
         //<![CDATA[
         {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
         {% set allowDraggable = 0 %}
@@ -61,6 +63,46 @@
                     mapLoadedFalg = true;
                 {% endif %}
             {% endif %}
+        });
+        //]]>
+        </script> #}
+        
+        {% set mapFitkey = '' %}
+        {% set mapFitConfig = fetch_repository('FaCoreBundle:ConfigRule').getActiveConfigRulesByCategoryId(constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::MAPFIT_API_KEY_ID'), null, 1) %}
+        {% if mapFitConfig and mapFitConfig.0.value is defined %}
+        	{% set mapFitkey = mapFitConfig.0.value %}
+        {% endif %}
+        <script src="https://cdn.mapfit.com/v2-4/assets/js/tetragon.js"></script>
+        <script src="https://cdn.mapfit.com/v2-4/assets/js/mapfit.js"></script>
+        {{ include('FaCoreBundle::mapFitJs.html.twig', {'key' : mapFitkey}) }}
+        <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+        {% set allowDraggable = 0 %}
+        {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+            {% set allowDraggable = 0 %}
+        {% endif %}
+        var mapLoadedFalg = false;
+        $(document).ready(function(){ 
+        	 {% if adDetailMapVariables['mapOnLoad'] is defined and adDetailMapVariables['mapOnLoad'] == 'true' %}
+        	 	showMarker('{{adDetailMapVariables["latitude"]}}', '{{adDetailMapVariables["longitude"]}}');
+        	 {% else %}
+            	 $('#{{adDetailMapVariables["tabId"]}}').on('toggled', function (event, tab) {
+                     if (tab.attr('id') == '{{adDetailMapVariables["mapContentId"]}}' && !mapLoadedFalg) {
+                         $('#{{adDetailMapVariables["mapContentId"]}}').show();
+                         showCustomMarker('{{adDetailMapVariables["latitude"]}}', '{{adDetailMapVariables["longitude"]}}', '{{ asset_url('fafrontend/images/map-marker.png') }}');
+                         mapLoadedFalg = true;
+                     }
+                 });
+            	 {% if currentDevice == 'M' and allowAdEdit is defined and allowAdEdit %}
+                     {% set allowAdEdit = false %}
+                 {% endif %}
+                 {% if not adImages|length and not (allowAdEdit is defined and allowAdEdit) and not youtubeVideoUrl|length %}
+                     $('#{{adDetailMapVariables["mapContentId"]}}').show();
+                     showCustomMarker('{{adDetailMapVariables["latitude"]}}', '{{adDetailMapVariables["longitude"]}}', '{{ asset_url('fafrontend/images/map-marker.png') }}');
+                     mapLoadedFalg = true;
+                 {% endif %}
+             {% endif %}
         });
         //]]>
         </script>

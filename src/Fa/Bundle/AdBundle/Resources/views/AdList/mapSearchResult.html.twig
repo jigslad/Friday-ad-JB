@@ -119,6 +119,7 @@
 
 {% block body %}
 {% set container = fetch_container_instance() %}
+<link href="https://cdn.mapfit.com/v2-4/assets/css/mapfit.css" rel='stylesheet' />
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
 <div class="row relative map-results-main">
     <div class="large-6 columns" id="left_search">
@@ -153,7 +154,8 @@
                         {{'Search result'|trans({}, 'frontend-search-result')}}
                     {% endif %}
                 </h3>
-                <div id="googlemaps" style="width:757px;height:545px;"></div>
+                {# <div id="googlemaps" style="width:757px;height:545px;"></div> #}
+                <div id="mapfit" style="width:757px;height:545px;"></div>
             </div>
         </div>
         {{ render(controller('FaAdBundle:AdList:showListingSeoBlocks', {'searchParams': searchAgentData, 'map': true, 'location': app.request.get('location'), 'seoPageRule': seoPageRule, 'orgRequest': app.request})) }}
@@ -164,12 +166,21 @@
 {% block scriptbottom %}
     {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
     {{ include('FaAdBundle:AdList:listJs.html.twig') }}
+    <script src="https://cdn.mapfit.com/v2-4/assets/js/tetragon.js"></script>
+    <script src="https://cdn.mapfit.com/v2-4/assets/js/mapfit.js"></script>
+    
     {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mapSearchResult.js'
+        'bundles/facore/js/owl.carousel.min.js'
+    %}
+    <script src="{{ static_asset_url(asset_url) }}?v=50"></script>
+    {% endjavascripts %}
+    
+    {# {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mapSearchResult.js'
         'bundles/facore/js/googleMapOms.js'
         'bundles/facore/js/googleMapInfobox.js'
         'bundles/facore/js/owl.carousel.min.js'
     %}
-    <script src="{{ static_asset_url(asset_url) }}"></script>
+    <script src="{{ static_asset_url(asset_url) }}?v=40"></script>
     {% endjavascripts %}
     {% set container = fetch_container_instance() %}
     <script language="javascript" type="text/javascript">
@@ -272,5 +283,58 @@
 
         });
       //]]>
-    </script>
+    </script> #}
+    {% set container = fetch_container_instance() %}
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function(){
+        	 let map = mapfit.MapView('mapfit', {theme: 'day'});
+        	 var museums = mapfit.Layer();
+        	 let myIcon = mapfit.divIcon({className:"", iconUrl: "{{ asset_url('fafrontend/images/map-marker.png') }}", html: '<img class="markerImg" src="{{ asset_url('fafrontend/images/map-marker.png') }}" />'})
+        	 var title = '';
+             {% if pagination.getNbResults() %}
+                 {% for ad in pagination.getCurrentPageResults() %}
+                     {% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LATITUDE')) is defined and attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LONGITUDE')) is defined %}
+                         {% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) is defined %}
+                             title = '{{ attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) }}'
+                         {% else %}
+                             title = '{{ad.id}}'
+                         {% endif %}
+
+                         var placeInfo = mapfit.PlaceInfo();
+                         var moma = mapfit.Marker([parseFloat({{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LATITUDE')).0}}), parseFloat({{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LONGITUDE')).0}})]);
+                         placeInfo.setTitle('');
+                         placeInfo.setDescription('');
+
+                         moma.on('click', function () {
+                  	    	updateContent('{{ad.id}}');
+                  	     })
+                         
+                         moma.setPlaceInfo(placeInfo);
+                         moma.setIcon(myIcon);
+                         museums.add(moma);
+                 	     map.addMarker(moma);
+                         
+                     {% endif %}
+                 {% endfor %}
+                	map.addLayer(museums);
+             		map.setCenterWithLayer(museums, 90, 90); 
+             {% endif %}
+
+             function updateContent(adId) {	
+                 var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': adId });
+                 $.ajax({
+                     type: "GET",
+                     url : route,
+                 })
+                 .done(function(response) {
+                     if (response.length) {
+                    	 var desc = response;
+                    	 $(".mapfit-popup-description").html(desc);
+                     }
+                 });
+             }
+        });
+        //]]>
+      </script>
 {% endblock %}

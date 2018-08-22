@@ -2719,3 +2719,14 @@ table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.r
 .chcw_header a, .chcw_header a:hover, .chcw_header a:focus, .chcw_header a:active { position: absolute; top: 8px; right: 10px; font-size: 16px; text-decoration: none; color: #4a4a4a !important; }
 .chcw_header a img { margin-top: -3px; width: 21px; }
 .chcw_content { width: 100%; height: 460px; border: none; }
+
+/* Map fit Changes */
+.mapfit-popup-content-wrapper {width:100% !important;}
+.mapfit-popup-content { width:500px !important;}
+#mapfit { z-index:1 !important; }
+#mapfit .mapfit-popup {bottom: 0 !important; left: -215px !important; }
+#mapfit .mapfit-popUpContent { width:500px !important; height:236px !important;}
+#mapfit .mapfit-bottom .mapfit-logo { display:none !important; }
+#mapfit .mapfit-watermarkImg { display:none !important; }
+.hide-location-mapfit { visibility: hidden; height: 0px; margin-top: -20px;}
+.show-location-mapfit { visibility: visible; height: 141px; margin-top: 0px;}

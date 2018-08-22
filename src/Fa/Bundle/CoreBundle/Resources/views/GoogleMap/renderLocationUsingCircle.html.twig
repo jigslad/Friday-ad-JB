@@ -1,6 +1,8 @@
 {% block googlemap_location_html %}
     {% if latitude is defined and latitude and longitude is defined and longitude %}
-        <div id="googlemaps" style="height:{{mapHeight}};width:{{mapWidth}}"></div>
+        {# <div id="googlemaps" style="height:{{mapHeight}};width:{{mapWidth}}"></div> #}
+        <link href="https://cdn.mapfit.com/v2-4/assets/css/mapfit.css" rel='stylesheet' />
+        <div id="mapfit" style="height:{{mapHeight}};width:{{mapWidth}}"></div>
     {% else %}
         <br />
         <div data-alert class="alert-box info radius">
@@ -10,11 +12,16 @@
 {% endblock %}
 
 {% block googlemap_location_js %}
+	{% set mapFitkey = '' %}
     {% set adDetailMapVariables = get_variables('adDetailMap') %}
+    {% set mapFitConfig = fetch_repository('FaCoreBundle:ConfigRule').getActiveConfigRulesByCategoryId(constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::MAPFIT_API_KEY_ID'), null, 1) %}
+    {% if mapFitConfig and mapFitConfig.0.value is defined %}
+    	{% set mapFitkey = mapFitConfig.0.value %}
+    {% endif %}
     {% if adDetailMapVariables['latitude'] is defined and adDetailMapVariables['longitude'] %}
         {% set container = fetch_container_instance() %}
-        <script src="{{ asset_url('facore/js/googleMap.js') }}?v=1"></script>
-        <script language="javascript" type="text/javascript">
+        {# <script src="{{ asset_url('facore/js/googleMap.js') }}?v=1"></script> #}
+       {# <script language="javascript" type="text/javascript">
         //<![CDATA[
         var mapLoadedFalg = false;
         $(document).ready(function(){
@@ -54,6 +61,44 @@
                 {% endif %}
             {% endif %}
         });
+        //]]>
+        </script> #}
+        <script src="https://cdn.mapfit.com/v2-4/assets/js/tetragon.js"></script>
+        <script src="https://cdn.mapfit.com/v2-4/assets/js/mapfit.js"></script>
+        {{ include('FaCoreBundle::mapFitJs.html.twig', {'key' : mapFitkey}) }}
+        
+        <script language="javascript" type="text/javascript">
+        //<![CDATA[
+            var mapLoadedFalg = false;
+            $(document).ready(function(){ 
+            	{% if adDetailMapVariables['mapOnLoad'] is defined and adDetailMapVariables['mapOnLoad'] == 'true' %}
+                	 {% if adDetailMapVariables['locationField'] is defined and adDetailMapVariables['latlngField'] is defined %}
+                     	showMapForPaa('{{adDetailMapVariables["latitude"]}}', '{{adDetailMapVariables["longitude"]}}', '{{ adDetailMapVariables['locationField'] }}', '{{ adDetailMapVariables['latlngField'] }}');
+                     {% else %}
+                     	showMapForPaa('{{adDetailMapVariables["latitude"]}}', '{{adDetailMapVariables["longitude"]}}');
+                     {% endif %}
+                     {% if adDetailMapVariables['isShowMap'] is defined and adDetailMapVariables['isShowMap'] == 'false' %}
+                     	$('#location_map_div').removeClass('show-location-mapfit');
+                  		$('#location_map_div').addClass('hide-location-mapfit');
+                     {% else %}
+                         $('#location_map_div').addClass('show-location-mapfit');
+                         $('#location_map_div').removeClass('hide-location-mapfit');
+                     {% endif %}
+            	{% else %}
+            		$('#{{adDetailMapVariables["tabId"]}}').on('toggled', function (event, tab) {
+            			if (tab.attr('id') == '{{adDetailMapVariables["mapContentId"]}}' && !mapLoadedFalg) {
+                            $('#{{adDetailMapVariables["mapContentId"]}}').show();
+                            showMapForPaa('{{adDetailMapVariables["latitude"]}}', '{{adDetailMapVariables["longitude"]}}');
+                            mapLoadedFalg = true;
+                        }
+            		});
+                    {% if not adImages|length %}
+                        $('#{{adDetailMapVariables["mapContentId"]}}').show();
+                        showMapForPaa('{{adDetailMapVariables["latitude"]}}', '{{adDetailMapVariables["longitude"]}}');
+                        mapLoadedFalg = true;
+                    {% endif %}
+            	{% endif %}
+            });
         //]]>
         </script>
     {% endif %}

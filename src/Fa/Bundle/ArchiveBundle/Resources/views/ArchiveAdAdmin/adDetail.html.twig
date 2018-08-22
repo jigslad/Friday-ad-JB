@@ -169,7 +169,7 @@
 {% endblock %}
 
 {% block scriptbottom %}
-    <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{fetch_container_instance().getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script>
+    {# <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{fetch_container_instance().getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script> #}
     {{ block('image_slider_js') }}
     {{ block('googlemap_location_js') }}
     <script language="javascript" type="text/javascript">

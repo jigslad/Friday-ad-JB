@@ -67,7 +67,7 @@
                 <div class="list-hr-ago">{% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') and attribute(ad, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT')) is defined %}{{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::WEEKLY_REFRESH_PUBLISHED_AT'))|time_ago_in_words}}{% endif %}</div>
             </div>
         </div>
-        <div class="map-arrow">&nbsp;</div>
+        {# <div class="map-arrow">&nbsp;</div> #}
     </div>
 </div>
 {% endspaceless %}

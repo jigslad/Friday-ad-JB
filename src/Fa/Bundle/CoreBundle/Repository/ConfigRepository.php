@@ -32,6 +32,7 @@ class ConfigRepository extends EntityRepository
     const PRIVATE_USER_AD_POST_LIMIT = 14;
     const ADZUNA_MOTORS_FEED_USER_IDS = 15;
     const DOTMAILER_ENROLLMENT_PROGRAM_ID = 16;
+    const MAPFIT_API_KEY_ID = 17;
 
     const DEFAULT_LOW_ENQUIERY_LIMIT = 10;
     const DEFAULT_LOW_VIEW_LIMIT = 100;
@@ -63,6 +64,7 @@ class ConfigRepository extends EntityRepository
             self::PRIVATE_USER_AD_POST_LIMIT => 'Private user ad post limit',
             self::ADZUNA_MOTORS_FEED_USER_IDS => 'Adzuna motors feed user ids',
             self::DOTMAILER_ENROLLMENT_PROGRAM_ID => 'Dotmailer enrollment program id',
+        	self::MAPFIT_API_KEY_ID				  => 'MapFit Key',
         );
     }
 

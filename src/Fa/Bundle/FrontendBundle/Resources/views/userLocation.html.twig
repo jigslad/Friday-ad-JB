@@ -28,7 +28,7 @@
             //}
         } else if (navigator.geolocation && !checkCookie('location_popup')) {
             setCookie('location_popup', true, 365);
-            navigator.geolocation.getCurrentPosition(checkLocation, errorHandler);
+            {# navigator.geolocation.getCurrentPosition(checkLocation, errorHandler); #}
         }
     }
     
@@ -38,7 +38,7 @@
             }
      }
 
-    function checkLocation(position) {
+    {# function checkLocation(position) {
      
         var latitude  = position.coords.latitude;
         var longitude = position.coords.longitude;
@@ -73,7 +73,7 @@
              });
            }
        });
-    }
+    } #}
 
     function setLocationInCookie(data) {
         if (data) {
