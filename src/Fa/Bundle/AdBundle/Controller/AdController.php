@@ -384,7 +384,9 @@ class AdController extends CoreController
         $url          = $routeManager->getDetailUrl($adDetail[0]);
 
         $requestUri = parse_url($request->getUri());
-        $constructedUri = $requestUri['scheme'].'://'.$requestUri['host'].$requestUri['path'];
+        // For symfony 3.4, $this->router->generate() is not giving absolute url so below keep only $requestUri['path']
+//         $constructedUri = $requestUri['scheme'].'://'.$requestUri['host'].$requestUri['path'];
+        $constructedUri = $requestUri['path'];
 
         if ($constructedUri != $url) {
             if(isset($requestUri['query']))

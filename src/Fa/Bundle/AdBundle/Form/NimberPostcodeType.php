@@ -80,7 +80,7 @@ class NimberPostcodeType extends AbstractType
                 'zip',
                 TextType::class,
                 array(
-                    'max_length' => 15,
+                    'attr'=>array('maxlength'=>'15'),
                     'constraints' => array(new NotBlank(array('message' => $this->translator->trans('Please enter postcode.', array(), 'validators')))),
                     'data' => ($loggedInUser && $loggedInUser->getZip() ? $loggedInUser->getZip() : null),
                 )
