@@ -661,7 +661,7 @@ class LocationRepository extends BaseEntityRepository
             $townInfoArray['lvl']    	= $town->getLvl();
             
             //if town is special than area behave as like town for SEO
-            if(!$town->getIsSpecialArea()) {
+            if(!$town->getIsSpecialArea() && $town->getLvl()==4) {
                 $townInfoArray['slug']  = $town->getParent()->getUrl();
             } else {
                 $townInfoArray['slug']  = $town->getUrl();
