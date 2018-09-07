@@ -241,10 +241,11 @@ class AdApiResponseBuild
             $key = 0;
             foreach ($paaFields as $field => $label) {
                 $value = $this->container->get('doctrine')->getManager()->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($field, $object, $metaData, $this->container, $className);
-                if ($value != null) {
+                if ($value != null && !in_array($label,array_column($this->adApiResponse[AdFieldMappingInterface::ADDITIONAL_FIELDS],'fieldName'))) {
                     $this->adApiResponse[AdFieldMappingInterface::ADDITIONAL_FIELDS][] = array('fieldName' => $label, 'fieldValue' => $value);
                 }
             }
+
         }
         if ($typeId) {
             $this->adApiResponse[AdFieldMappingInterface::ADDITIONAL_FIELDS][] = array('fieldName' => 'Ad type', 'fieldValue' => $entityCacheManager->getEntityNameById('FaEntityBundle:Entity', $typeId));

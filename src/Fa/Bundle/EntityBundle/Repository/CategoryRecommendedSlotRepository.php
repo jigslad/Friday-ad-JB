@@ -167,7 +167,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                 $recommendedSlots = $this->createQueryBuilder(self::ALIAS)
                 ->andWhere(self::ALIAS.'.category = :categoryId')
                 ->andWhere(self::ALIAS.'.is_searchlist = 1')
-                ->setParameter('categoryId', $categoryid)
+                ->setParameter('categoryId', $categoryId)
                 ->orderBy(self::ALIAS.'.creative_group')
                 ->getQuery()
                 ->execute();
