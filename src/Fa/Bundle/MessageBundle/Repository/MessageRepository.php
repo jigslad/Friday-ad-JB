@@ -841,9 +841,16 @@ class MessageRepository extends EntityRepository
 
         // ad information
         $ad = $message->getAd();
-        $parameters['text_ad_title']       = $ad->getTitle();
-        $parameters['text_ad_category']    = $ad->getCategory()->getName();
-        $parameters['text_ad_description'] = $ad->getDescription();
+        if($ad) {
+            $parameters['text_ad_title']       = $ad->getTitle();
+            $parameters['text_ad_category']    = ($ad->getCategory())?$ad->getCategory()->getName():'';
+            $parameters['text_ad_description'] = $ad->getDescription();
+        } else {
+            $parameters['text_ad_title']       = '';
+            $parameters['text_ad_category']    = '';
+            $parameters['text_ad_description'] = '';
+        }
+        
 
         $parameters['url_ad_edit']         = $container->get('router')->generate('ad_edit', array('id' => $ad->getId()), true);
         if ($url = $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true)) {

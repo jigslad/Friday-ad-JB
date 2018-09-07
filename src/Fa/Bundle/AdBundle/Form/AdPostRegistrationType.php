@@ -92,8 +92,8 @@ class AdPostRegistrationType extends RegistrationType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $emailAlertLabel = 'I\'d like to receive news, offers and promotions from Friday-Ad';
-        $thirdPartyEmailAlertLabel = 'I\'d like to receive offers and promotions from third parties';
+        $emailAlertLabel = 'I\'d like to receive news, offers and promotions by email from Friday-Ad';
+        $thirdPartyEmailAlertLabel = 'I\'d like to receive offers and promotions by email on behalf of carefully chosen partners';
 
         $builder->add('Register', SubmitType::class, array('label' => 'Next step: add more details'));
         $builder->remove('business_category_id');

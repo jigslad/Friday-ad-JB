@@ -247,6 +247,7 @@ class AdAnimalsRepository extends EntityRepository
         $adListingFields['CATEGORY_ID|FaEntityBundle:Category'] = 'CATEGORY_ID';
         $adListingFields['AGE_ID|FaEntityBundle:Entity']        = 'AGE_ID';
         $adListingFields['BREED_ID|FaEntityBundle:Entity']      = 'BREED_ID';
+        $adListingFields['SPECIES_ID|FaEntityBundle:Entity']      = 'SPECIES_ID';
 
         return $adListingFields;
     }

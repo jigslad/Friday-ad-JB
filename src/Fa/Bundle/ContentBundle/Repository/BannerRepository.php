@@ -86,7 +86,7 @@ class BannerRepository extends EntityRepository
                     // fetch result set from solr
                     $adDetail = $solrSearchManager->getSolrResponseDocs($solrResponse);
                     if (count($adDetail)) {
-                        $categoryId = $adDetail[0][AdSolrFieldMapping::CATEGORY_ID];
+                        $categoryId = isset($adDetail[0][AdSolrFieldMapping::CATEGORY_ID])?$adDetail[0][AdSolrFieldMapping::CATEGORY_ID]:null;
                     }
                     break;
                 case BannerPageRepository::PAGE_LANDING_PAGE:

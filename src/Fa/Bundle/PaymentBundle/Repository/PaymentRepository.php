@@ -306,6 +306,9 @@ class PaymentRepository extends EntityRepository
                     $paaLiteEmailNotification->setIsAdConfirmationNotificationSent(0);
                     $this->_em->persist($paaLiteEmailNotification);
                     $this->_em->flush($paaLiteEmailNotification);
+
+                    $this->_em->getRepository('FaAdBundle:Ad')->sendCompleteAdvertEmail($user, $ad, $paaLiteEmailNotification, $container);
+                    $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('complete_advert', $ad->getId(), $user->getId(), strtotime('+10 minute'), true);
                 }
             }
             

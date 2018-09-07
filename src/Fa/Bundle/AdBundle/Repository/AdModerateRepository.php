@@ -105,11 +105,9 @@ class AdModerateRepository extends EntityRepository
                 $returnValueArray['ad_id'] = $adRef;
                 $ad = $adModerate->getAd();
                 $oldAdStatusId = ($ad && $ad->getStatus() ? $ad->getStatus()->getId() : null );
-                if(!is_null($ad->getUser()->getId())) {
-               		$returnValueArray['user_id'] = $ad->getUser()->getId();
-                } else {
-                	$returnValueArray['user_id'] = null;
-                }
+
+               	$returnValueArray['user_id'] = (!empty($ad->getUser())) ? $ad->getUser()->getId() : null;
+
                 if (isset($moderationResult['ModerationResultId'])) {
                     $adModerate->setModerationResultId($moderationResult['ModerationResultId']);
                 }

@@ -18,6 +18,10 @@
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
 
 {% block body -%}
+<style>
+.select2-container.custom_select { width:100% !important; }
+.custom_select_options.select2-drop.select2-with-searchbox { min-width:300px !important; }
+</style>
     <div class="posting-bg">
         {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
         <div class="row d-board-main">
@@ -64,6 +68,11 @@
         bindLocationEvents('fa_paa_edit_animals');
         bindCapsuleButtonEvent('fa_paa_edit_animals', 'ad_type_id', 'radio');
         bindCapsuleButtonEvent('fa_paa_edit_animals', 'gender_id', 'checkbox');
+
+        $('.custom_select').on("select2-focus", function(e) {
+          $('.custom_select_options .select2-search').show();
+       });
+
     });
 //]]>
 </script>

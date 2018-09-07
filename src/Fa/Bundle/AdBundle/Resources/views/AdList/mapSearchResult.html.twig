@@ -119,6 +119,15 @@
 
 {% block body %}
 {% set container = fetch_container_instance() %}
+<style> .mapfit-control { display:block; } 
+@media only screen and (max-width: 959px) and (min-width: 320px)
+{
+    .map-wrapper .listing {
+        border-top: 0px !important;
+        margin: 0 !important;
+    }
+}
+</style>
 <link href="https://cdn.mapfit.com/v2-4/assets/css/mapfit.css" rel='stylesheet' />
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
 <div class="row relative map-results-main">
@@ -292,34 +301,38 @@
         	 var museums = mapfit.Layer();
         	 let myIcon = mapfit.divIcon({className:"", iconUrl: "{{ asset_url('fafrontend/images/map-marker.png') }}", html: '<img class="markerImg" src="{{ asset_url('fafrontend/images/map-marker.png') }}" />'})
         	 var title = '';
-             {% if pagination.getNbResults() %}
-                 {% for ad in pagination.getCurrentPageResults() %}
-                     {% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LATITUDE')) is defined and attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LONGITUDE')) is defined %}
-                         {% if attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) is defined %}
-                             title = '{{ attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::TITLE')) }}'
-                         {% else %}
-                             title = '{{ad.id}}'
-                         {% endif %}
-
+        	 {% if pagination.getNbResults() %}
+        	 	var mapSearchList = {{ mapResult|json_encode|raw }};
+        	 	showMapLocation(mapSearchList);
+        	 {% endif %}
+        	 
+             function showMapLocation(mapLocation){ 
+                 $.each(mapLocation, function (i, item) {
+                	 if( typeof item.latitude !== 'undefined' && item.latitude != '' && typeof item.longitude !== 'undefined' && item.longitude != '' ) {
+                		 if( typeof item.title !== 'undefined' && item.title != '') {
+                			 title = item.title;
+                    	 } else {
+                    		 title = item.adId;
+                         }
+                         
                          var placeInfo = mapfit.PlaceInfo();
-                         var moma = mapfit.Marker([parseFloat({{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LATITUDE')).0}}), parseFloat({{attribute(ad, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::LONGITUDE')).0}})]);
+                         var marker = mapfit.Marker([parseFloat(item.latitude), parseFloat(item.longitude)]);
                          placeInfo.setTitle('');
                          placeInfo.setDescription('');
-
-                         moma.on('click', function () {
-                  	    	updateContent('{{ad.id}}');
+    
+                         marker.on('click', function () {
+                  	    	updateContent(item.adId);
                   	     })
                          
-                         moma.setPlaceInfo(placeInfo);
-                         moma.setIcon(myIcon);
-                         museums.add(moma);
-                 	     map.addMarker(moma);
-                         
-                     {% endif %}
-                 {% endfor %}
-                	map.addLayer(museums);
-             		map.setCenterWithLayer(museums, 90, 90); 
-             {% endif %}
+                         marker.setPlaceInfo(placeInfo);
+                         marker.setIcon(myIcon);
+                         museums.add(marker);
+                 	     map.addMarker(marker);
+                	 }
+                 });
+            		map.addLayer(museums);
+              		map.setCenterWithLayer(museums, 90, 90); 
+             }
 
              function updateContent(adId) {	
                  var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': adId });

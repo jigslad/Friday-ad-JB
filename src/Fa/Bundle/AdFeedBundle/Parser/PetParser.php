@@ -299,11 +299,11 @@ class PetParser extends AdParser
 
         if ($cat_name == 'aquatic') {
             return 734;
-        } elseif ($cat_name == 'bird') {
+        } elseif ($cat_name == 'bird' || $cat_name == 'birds') {
             return CategoryRepository::BIRDS;
-        } elseif ($cat_name == 'cat') {
+        } elseif ($cat_name == 'cat' || $cat_name == 'cats and kittens') {
             return CategoryRepository::CATS_AND_KITTENS;
-        } elseif ($cat_name == 'dog') {
+        } elseif ($cat_name == 'dog' || $cat_name == 'dogs and puppies') {
             return CategoryRepository::DOGS_AND_PUPPIES;
         } elseif ($cat_name == 'rabbit') {
             return CategoryRepository::RABBITS;

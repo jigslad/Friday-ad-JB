@@ -78,8 +78,8 @@ class ContactSellerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $emailAlertLabel = 'I\'d like to receive news, offers and promotions from Friday-Ad';
-        $thirdPartyEmailAlertLabel = 'I\'d like to receive offers and promotions from third parties';
+        $emailAlertLabel = 'I\'d like to receive news, offers and promotions by email from Friday-Ad';
+        $thirdPartyEmailAlertLabel = 'I\'d like to receive offers and promotions by email on behalf of carefully chosen partners';
 
         $rootCategoryId = $options['rootCategoryId'];
         /*if ($rootCategoryId) {
@@ -89,6 +89,7 @@ class ContactSellerType extends AbstractType
             $thirdPartyEmailAlertLabel = 'Receive emails from third parties related to '.$rootCategoryName;
         }*/
         $loggedInUser = (CommonManager::isAuth($this->container) ? CommonManager::getSecurityTokenStorage($this->container)->getToken()->getUser() : null);
+
         $builder
             ->add(
                 'sender_first_name',
@@ -96,7 +97,7 @@ class ContactSellerType extends AbstractType
                 array(
                     'label' => 'Name',
                     'constraints' => new NotBlank(array('message' => $this->translator->trans('Please enter name.', array(), 'validators'))),
-                    'data' => ($loggedInUser ? $loggedInUser->getProfileName() : null)
+                    'data' => ($loggedInUser ? $loggedInUser->getProfileName() : null),
                 )
             )
             /* ->add(

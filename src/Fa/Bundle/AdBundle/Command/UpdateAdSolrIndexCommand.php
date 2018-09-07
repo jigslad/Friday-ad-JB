@@ -16,6 +16,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Fa\Bundle\AdBundle\Repository\AdRepository;
+use Fa\Bundle\AdBundle\Repository\AdLocationRepository;
 
 /**
  * This command is used to add/update/delete solr index for ads.
@@ -42,6 +44,7 @@ class UpdateAdSolrIndexCommand extends ContainerAwareCommand
         ->addOption('category', null, InputOption::VALUE_OPTIONAL, 'Category name', null)
         ->addOption('update_type', null, InputOption::VALUE_OPTIONAL, 'Update type', null)
         ->addOption('user_id', null, InputOption::VALUE_OPTIONAL, 'User id', null)
+        ->addOption('town_id', null, InputOption::VALUE_OPTIONAL, 'Town id', null)
         ->addOption('last_days', null, InputOption::VALUE_OPTIONAL, 'add or update for last few days only', null)
         ->setHelp(
             <<<EOF
@@ -56,6 +59,7 @@ Command:
  - php app/console fa:update:ad-solr-index --status="A" --id="xxxx" update
  - php app/console fa:update:ad-solr-index --status="A" --id="xxxx" add
  - php app/console fa:update:ad-solr-index --id="xxxx" delete
+   php app/console fa:update:ad-solr-index --town_id="xxxx" update
    php app/console fa:update:ad-solr-index --category="For Sale" --status="A" add
 EOF
         );
@@ -91,6 +95,7 @@ EOF
         $update_type = $input->getOption('update_type');
         $lastDays = $input->getOption('last_days');
         $userId = $input->getOption('user_id');
+        $townId = $input->getOption('town_id');
 
         $categoryIds = array();
 
@@ -164,8 +169,13 @@ EOF
                 $searchParam['user']['id'] = $userId;
             }
 
+            $searchParam['ad']['town_id'] = '';
+            if($townId!='') {
+                $searchParam['ad']['town_id'] = $townId;
+            }
 
-//             $searchParam['ad']['is_blocked_ad'] = 0;
+
+            //$searchParam['ad']['is_blocked_ad'] = 0;
 
             if (isset($offset)) {
                 $this->updateSolrIndexWithOffset($solrClient, $searchParam, $input, $output);
@@ -299,11 +309,27 @@ EOF
     {
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
         $adRepository  = $entityManager->getRepository('FaAdBundle:Ad');
+        $townIds = ($searchParam['ad']['town_id'])?$searchParam['ad']['town_id']:'';
+
         $data                 = array();
         $data['query_filters'] = $searchParam;
         $data['query_sorter'] = array('ad' => array ('id' => 'asc'));
+
+
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($adRepository, $data);
+
+        $queryBuilder = $searchManager->getQueryBuilder();
+
+        if($townIds!='') {
+            $townId = explode(',',$townIds);
+            $queryBuilder->leftJoin('FaAdBundle:AdLocation', AdLocationRepository::ALIAS, 'WITH', AdLocationRepository::ALIAS.'.ad = '.AdRepository::ALIAS);
+            $queryBuilder->andWhere(AdLocationRepository::ALIAS.'.location_town IN (:ad_location_town_id)');
+            $queryBuilder->setParameter('ad_location_town_id', $townId);
+        }
+
+
+
         return $searchManager->getQueryBuilder();
     }
 

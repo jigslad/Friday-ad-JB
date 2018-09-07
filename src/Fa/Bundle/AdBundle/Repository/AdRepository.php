@@ -4478,4 +4478,58 @@ class AdRepository extends EntityRepository
         ->getQuery()->getSingleScalarResult();
         return $results;
     }
+
+    /**
+     * Send complete advert mail.
+     *
+     * @param object $user    User.
+     * @param object $ad    Ad.
+     * @param object $paaLiteEmailNotification paaLiteEmailNotification.
+     * @param object  $container Container identifier.
+     *
+     * @return integer
+     */
+    public function sendCompleteAdvertEmail($user, $ad, $paaLiteEmailNotification, $container = null)
+    {
+        $adPackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->findOneBy(array('ad_id'=>$ad->getId()));
+        $adPackagePrice = $adPackage->getPackage()->getPrice();
+        $entityCache =   $container->get('fa.entity.cache.manager');
+        $text_package_name = '';$text_lowest_category_package_price = '';$url_ad_upsell = '';
+        //send email only if ad has user and status is active and not feed ad.
+        if ($user && CommonManager::checkSendEmailToUser($user, $container)) {
+            $ads[] = array(
+                'text_ad_title' => $ad->getTitle(),
+                'text_ad_description' => $ad->getDescription(),
+                'text_ad_category' => $entityCache->getEntityNameById('FaEntityBundle:Category', $ad->getCategory()->getId()),
+                'url_ad_preview' => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
+                'url_ad_view' => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
+                'text_adref' => $ad->getId(),
+                'url_ad_main_photo' => $this->getMainImageThumbUrlFromAd($ad, $container),
+                'url_ad_edit' => $container->get('router')->generate('ad_edit', array('id' => $ad->getId()), true),
+                'text_package_name' => $text_package_name,
+                'text_lowest_category_package_price' => $text_lowest_category_package_price,
+                'url_ad_upsell' => $container->get('router')->generate('ad_promote', array('type' => 'promote', 'adId' => $ad->getId()), true),
+            );
+            
+            if (count($ads)) {
+                $parameters = array(
+                    'user_first_name' => $user->getFirstName()?$user->getFirstName():$user->getUserName(),
+                    'ads' => $ads,
+                    'show_upgrade_button' => ($adPackagePrice==0)?1:0,
+                    'total_ads' => (count($ads) - 1),
+                    'url_account_dashboard' => $container->get('router')->generate('dashboard_home', array(), true),
+                );
+
+                $container->get('fa.mail.manager')->send($user->getEmail(), 'complete_advert', $parameters, CommonManager::getCurrentCulture($container));
+                $paaLiteEmailNotification->setIsAdConfirmationMailSent(1);
+                //$output->writeln('Complete your Advert mail sent to User Id:'.($user ? $user->getId() : null), true);
+                //$this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('complete_advert', $ad->getId(), $user->getId());
+                //$paaLiteEmailNotification->setIsAdConfirmationNotificationSent(1);
+                $this->_em->persist($paaLiteEmailNotification);
+                $this->_em->flush($paaLiteEmailNotification);
+                //$output->writeln('Complete your Advert notification sent to User Id:'.($user ? $user->getId() : null), true);
+
+            }
+        }
+    }
 }

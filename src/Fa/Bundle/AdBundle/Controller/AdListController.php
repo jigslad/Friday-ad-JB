@@ -274,6 +274,15 @@ class AdListController extends CoreController
             }
         }
 
+
+        // fetch location from cookie.
+        $geoDistParams = array();
+        if($mapFlag) {
+            if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
+                $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+            }
+        }
+
         if ($request->attributes->get('customized_page')) {
             list($keywords, $data) = $this->handleCustomizedUrl($data, $request);
         }
@@ -308,11 +317,44 @@ class AdListController extends CoreController
             } 
             $locationFacets = array_slice(array_unique($locationFacets), 0, 5, true);
         }
-         
         // initialize pagination manager service and prepare listing with pagination based of solr result
         $this->get('fa.pagination.manager')->init($result, $page, $recordsPerPage, $resultCount);
         $pagination = $this->get('fa.pagination.manager')->getSolrPagination();
+        $mapResult = [];
+        //for map purpose iterating the advert result
+        if(!empty($pagination) && $mapFlag) {
+        	$mapData = (array) $pagination;
+        	$prevLatLongArr = array('latitude'=> 0, 'longitude'=>0);
+            $existingLatLongArr = array();
+        	foreach ($pagination as $advert) {
+        		$mapResult[$advert->id]['adId'] = $advert[AdSolrFieldMapping::ID];
+        		$mapResult[$advert->id]['title'] = $advert[AdSolrFieldMapping::TITLE];
 
+                $existingLatLongArr = array('latitude'=> $advert[AdSolrFieldMapping::LATITUDE][0], 'longitude'=>$advert[AdSolrFieldMapping::LONGITUDE][0]);
+
+                if($prevLatLongArr == $existingLatLongArr) {
+                    $latOffset  = rand(0,1000)/10000000;
+                    $longOffset = rand(0,1000)/10000000;
+                } else {
+                    $latOffset = 0;
+                    $longOffset = 0;
+                }
+                
+
+        		if(isset($advert[AdSolrFieldMapping::LATITUDE])) {
+
+        			$mapResult[$advert->id]['latitude'][0] = $advert[AdSolrFieldMapping::LATITUDE][0]+floatval($latOffset);
+                    //$mapResult[$advert->id]['latitude'] = $advert[AdSolrFieldMapping::LATITUDE];
+                    $prevLatLongArr['latitude'] = $advert[AdSolrFieldMapping::LATITUDE][0];
+        		}
+        		if(isset($advert[AdSolrFieldMapping::LONGITUDE])) {
+        			$mapResult[$advert->id]['longitude'][0] = $advert[AdSolrFieldMapping::LONGITUDE][0]+floatval($longOffset);
+        		    //$mapResult[$advert->id]['longitude'] = $advert[AdSolrFieldMapping::LONGITUDE];
+                    $prevLatLongArr['longitude'] = $advert[AdSolrFieldMapping::LONGITUDE][0];
+                }
+
+        	}
+        }
         // set search params in cookie.
         $this->setSearchParamsCookie($data);
         
@@ -338,7 +380,7 @@ class AdListController extends CoreController
         $recommendedSlotArr = array();
         $recommendedSlotOrder = array();
         if(!empty($getRecommendedSrchSlots)) { 
-            for($arj=1;$arj<=5;$arj++) {
+            for($arj=1;$arj<=6;$arj++) {
                 if(isset($getRecommendedSrchSlots[$arj])) {
                     $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
                     $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
@@ -365,7 +407,6 @@ class AdListController extends CoreController
         if(!empty($recommendedSlotArr)) {
             $getRecommendedSrchSlotWise = $recommendedSlotArr;
         }
-               
         
         $parameters = array(
             'pagination'             => $pagination,
@@ -386,6 +427,7 @@ class AdListController extends CoreController
             'areaToolTipFlag'		 => $areaToolTipFlag,
             'recommendedSlotResult'  => $getRecommendedSrchSlotWise,
         	'paymentTransactionJs'	 => $transactionJsArr,
+        	'mapResult'				 => $mapResult
         );
 
         // for business user ads page
@@ -1865,13 +1907,14 @@ class AdListController extends CoreController
 
         $businessExposureUserDetails = array();
         $topBusiness = $this->getRepository('FaCoreBundle:ConfigRule')->getTopBusiness($data['search']['item__category_id'], $this->container);
+        $viewedBusinessExposureUserIds = array_filter(explode(',', $request->cookies->get('business_exposure_user_ids_'.$rootCategoryId)));
+
         if ($topBusiness) {
             $businessExposureUserDetails = $this->getRepository('FaUserBundle:User')->getTopbusinessUserDetailForAdList($topBusiness, $this->container);
+            $viewedBusinessExposureUserIds[] = !empty($businessExposureUserDetails) ? $businessExposureUserDetails[0]['user_id']:'';
         }
         $businessExposureUsers       = array();
         if (count($businessExposureMiles)) {
-            $viewedBusinessExposureUserIds = array_filter(explode(',', $request->cookies->get('business_exposure_user_ids_'.$rootCategoryId)));
-
             foreach ($businessExposureMiles as $businessExposureMile) {
                 foreach ($this->getBusinessExposureUser($data, $businessExposureMile, $viewedBusinessExposureUserIds) as $businessExposureUser) {
                     $businessExposureUsers[] = $businessExposureUser;
@@ -1908,6 +1951,9 @@ class AdListController extends CoreController
                             'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
                         );
                     }
+                }
+                if($businessExposureUserDetails) {
+                    $businessExposureUserDetails = array_map("unserialize", array_unique(array_map("serialize", $businessExposureUserDetails)));;
                 }
             }
         }

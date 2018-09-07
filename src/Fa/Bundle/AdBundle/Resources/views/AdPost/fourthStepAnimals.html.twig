@@ -15,6 +15,10 @@
 {% use "FaAdBundle:AdPost:fourthStepCommonPushNotification.html.twig" %}
 
 {% block body %}
+<style>
+.select2-container.custom_select { width:100% !important; }
+.custom_select_options.select2-drop.select2-with-searchbox { min-width:300px !important; }
+</style>
     <div class="posting-bg">
         <div class="fad-sign-bdr">&nbsp;</div>
         <div class="row paa-main">
@@ -55,6 +59,11 @@
        handleReadMoreLess('paa_desc', 220);
        updateCharCounter('fa_paa_fourth_step_animals_personalized_title');
        bindLocationEvents('fa_paa_fourth_step_animals');
+
+
+       $('.custom_select').on("select2-focus", function(e) {
+          $('.custom_select_options .select2-search').show();
+       });
 
        {% set formFields = get_variables('formFields') %}
        {% if formFields['lastField'] is defined %}

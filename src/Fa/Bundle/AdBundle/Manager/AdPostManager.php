@@ -161,9 +161,9 @@ class AdPostManager
             $isNewAd     = true;
         } else {
             $ad                  = $this->em->getRepository('FaAdBundle:Ad')->find($adId);
-            $previousCategoryId  = $ad->getCategory()->getId();
-            $oldPhone            = $ad->getPhone();
-            $oldUsePrivacyNumber = $ad->getUsePrivacyNumber();
+            $previousCategoryId  = ($ad && $ad->getCategory())?$ad->getCategory()->getId():null;
+            $oldPhone            = ($ad)?$ad->getPhone():null;
+            $oldUsePrivacyNumber = ($ad)?$ad->getUsePrivacyNumber():null;
 
             $ad->setModifyIp($this->request->getClientIp());
 
@@ -498,6 +498,9 @@ class AdPostManager
 
             $this->em->persist($paaLiteEmailNotification);
             $this->em->flush($paaLiteEmailNotification);
+            
+            $this->em->getRepository('FaAdBundle:Ad')->sendCompleteAdvertEmail($user, $ad, $paaLiteEmailNotification, $this->container);
+            $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('complete_advert', $ad->getId(), $user->getId());
             //$this->container->get('session')->set('ad_id', $ad->getId());
             $this->container->get('session')->set('show_ad_live_popup', 1);
             $this->container->get('session')->set('paa_lite_ad_success', 1);
@@ -1209,7 +1212,7 @@ class AdPostManager
     }
 
     /**
-     * Set the step wise data to session.
+     * Set the step wise data to s.
      *
      * @param array  $data Step data array.
      * @param string $step Ad post step.

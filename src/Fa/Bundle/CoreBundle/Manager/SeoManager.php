@@ -264,7 +264,7 @@ class SeoManager
      *
      * @return string
      */
-    public function parseSeoStringForAdList($seoString, $searchParams, $cookieLocationDetails)
+    public function parseSeoStringForAdList($seoString, $searchParams, $cookieLocationDetails,$canonical_url=false)
     {
         $parentCategoryIds  = array();
         $categoryClassName  = null;
@@ -360,10 +360,13 @@ class SeoManager
                 }
             }
         }
-
+        
         $seoString = preg_replace(array('/(\s*,\s*){2,}/', '/^(\s*,\s*)+/', '/(\s*,\s*)+$/'), array(', ', '', ''), $seoString);
         $seoString = preg_replace(array('/(\s*-\s*){2,}/', '/^(\s*-\s*)+/', '/(\s*-\s*)+$/'), array(' - ', '', ''), $seoString);
-        $seoString = preg_replace('~/{2,}~', '/', $seoString);
+        
+        if(!$canonical_url) {
+            $seoString = preg_replace('~/{2,}~', '/', $seoString);
+        }
         $seoString = trim($seoString);
 
         return $seoString;

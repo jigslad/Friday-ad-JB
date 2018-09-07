@@ -52,7 +52,7 @@ class ArchiveAdRepository extends EntityRepository
     public function moveAdtoArchive($ad, $container = null)
     {
         // Get data from original tables
-        $categoryName   = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->getRootCategoryName($ad->getCategory()->getId(), $container, true);
+        $categoryName   = ($ad && $ad->getCategory())?$this->getEntityManager()->getRepository('FaEntityBundle:Category')->getRootCategoryName($ad->getCategory()->getId(), $container, true):'';
         $adData         = $this->getEntityManager()->getRepository('FaAdBundle:Ad')->getAdDataArray($ad);
         $adVerticalData = $this->getEntityManager()->getRepository('FaAdBundle:'.'Ad'.$categoryName)->getAdVerticalDataArray($ad->getId());
         $adLocationData = $this->getEntityManager()->getRepository('FaAdBundle:AdLocation')->getAdLocationDataArray($ad->getId());

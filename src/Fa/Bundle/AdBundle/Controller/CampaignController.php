@@ -591,7 +591,6 @@ class CampaignController extends ThirdPartyLoginController
      * @param integer $activeAdUserPackageId  Active ad user packge id.
      * @param boolean $addAdToModeration      Need to send ad for moderation or not.
      * @param array   $printEditionValues     Print edition array.
-     
      *
      * @return Response|RedirectResponse A Response object.
      */
@@ -814,6 +813,9 @@ class CampaignController extends ThirdPartyLoginController
 
                 $response = $this->redirect($redirectToUrl);
                 $dispatcher->dispatch(UserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+                $this->getRepository('FaUserBundle:User')->sendCompleteRegistrationEmail($user, $paaLiteEmailNotification, $this->container);
+                $this->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('complete_registration', null, $user->getId());
+
                 return  $response;
             } 
             else {

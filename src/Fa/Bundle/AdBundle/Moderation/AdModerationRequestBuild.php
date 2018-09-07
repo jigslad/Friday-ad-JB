@@ -310,11 +310,11 @@ class AdModerationRequestBuild
         
         if(!empty($adModerateLocation)) {
         	
-        	if(!is_null($adLocation->getLocationArea()) && $adLocation->getPostcode()) {
+        	if($adLocation && $adLocation->getLocationArea() && $adLocation->getPostcode()) {
         		$this->moderationRequest[AdModerationFieldMappingInterface::AD_POSTCODE] = $adLocation->getPostcode();
         	} else {
         		$this->moderationRequest[AdModerationFieldMappingInterface::AD_POSTCODE] = $postalcodeVal;
-	}
+	        }
         	if(isset($adModerateLocation['town_id'])) {
         		$this->moderationRequest[AdModerationFieldMappingInterface::AD_TOWN] = $this->container->get('doctrine')->getManager()->getRepository('FaEntityBundle:Location')->getNameById($adModerateLocation['town_id']);
         	} else {

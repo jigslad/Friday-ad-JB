@@ -58,7 +58,7 @@
             if (response.htmlContent.length) {
                 $('#profileEditLocationModal').html(response.htmlContent);
             } else {
-                //$('#business_map_div').html(response.mapContent);
+                $('#business_map_div').html(response.mapContent);
                 $('#business_location_div').html(response.successContent);
                 var showMap = true;
                 var userDetail = response.userDetail;
@@ -67,8 +67,9 @@
                     showMap = false;
                 }
                 if (showMap && 'latitude' in userDetail && userDetail.latitude && 'longitude' in userDetail && userDetail.longitude) {
+                    {# initialize();
                 	showCustomMarker(userDetail.latitude, userDetail.longitude, '{{ asset_url('fafrontend/images/map-marker.png') }}');
-                	{# var profileMapOptions={zoom:9,
+                	 var profileMapOptions={zoom:9,
                             zoomControl: true,
                             panControl:false,
                             streetViewControl: false,

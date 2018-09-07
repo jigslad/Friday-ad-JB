@@ -147,7 +147,6 @@ class UserRepository extends EntityRepository implements UserProviderInterface
                 $this->queryBuilder->setParameter('firstName', $firstName.'%');
             } else {
                 $this->queryBuilder->andWhere('MATCH_AGAINST ('.self::ALIAS.'.first_name', ':firstName) > 0.0');
-//                 $this->queryBuilder->andWhere('MATCH('.self::ALIAS.'.first_name) AGAINST (:firstName) > 0.0'); // new one
                 $this->queryBuilder->setParameter('firstName', $firstName);
             }
         }
@@ -166,7 +165,6 @@ class UserRepository extends EntityRepository implements UserProviderInterface
                 $this->queryBuilder->setParameter('lastName', $lastName.'%');
             } else {
                 $this->queryBuilder->andWhere('MATCH_AGAINST ('.self::ALIAS.'.last_name', ':lastName) > 0.0');
-//                 $this->queryBuilder->andWhere('MATCH ('.self::ALIAS.'.last_name) AGAINST(:lastName) > 0.0');
                 $this->queryBuilder->setParameter('lastName', $lastName);
             }
         }
@@ -1552,5 +1550,37 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         }
        
         return $userStatus;
+    }
+
+
+     /**
+     * Send complete registration mail.
+     *
+     * @param object $user    User.
+     * @param object $paaLiteEmailNotification paaLiteEmailNotification.
+     * @param object  $container Container identifier.
+     *
+     * @return integer
+     */
+    public function sendCompleteRegistrationEmail($user, $paaLiteEmailNotification, $container = null)
+    {
+        //send email only if user and status is active and send mail opted.
+        if ($user && CommonManager::checkSendEmailToUser($user, $container)) {
+            $encryption_key = $container->getParameter('reset_password_encryption_key');
+            $resetPasswordLink = $container->get('router')->generate('reset_password', array('id' => CommonManager::encryptDecrypt($encryption_key, $user->getId()), 'key' => $user->getEncryptedKey(), 'mail_time' => CommonManager::encryptDecrypt($encryption_key, time())), true);
+
+            $parameters = array(
+                'user_first_name' => $user->getFirstName()?$user->getFirstName():$user->getUserName(),
+                'url_password_reset' => $resetPasswordLink,
+                'url_account_dashboard' => $container->get('router')->generate('dashboard_home', array(), true),
+            );
+
+            $container->get('fa.mail.manager')->send($user->getEmail(), 'complete_registration', $parameters, CommonManager::getCurrentCulture($container));
+            $paaLiteEmailNotification->setIsRegisteredMailSent(1);
+            $this->_em->persist($paaLiteEmailNotification);
+            $this->_em->flush($paaLiteEmailNotification);
+            //$output->writeln('Complete Registration mail sent to User Id:'.($user ? $user->getId() : null), true);
+        }
+
     }
 }

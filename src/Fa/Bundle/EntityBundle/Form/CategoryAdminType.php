@@ -164,7 +164,7 @@ class CategoryAdminType extends AbstractType
 
         //recommended slots
         $st = 0;$i=1;
-        for ($k = 1; $k <= 5; $k++) {
+        for ($k = 1; $k <= 6; $k++) {
 
             for ($j = 1; $j <= 3; $j++) {
                 if(!empty($recommendedSlotSearchArray)) {
@@ -328,7 +328,7 @@ class CategoryAdminType extends AbstractType
         if ($hasRecommendedSlotSearchlist) {
             $oneSelectRecommendedSlotSearchlistFlag = true;
             $recommendedSlotSearchlistError = array();
-            for ($i = 1; $i <=15; $i++) {
+            for ($i = 1; $i <=18; $i++) {
                 if ($form->get('recommended_slot_searchlist_title_'.$i)->getData() || $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
                     $oneSelectRecommendedSlotSearchlistFlag = false;
                     $recommendedSlotSearchlistError[] = $i;
@@ -397,7 +397,7 @@ class CategoryAdminType extends AbstractType
 
                 $recommendedSlotSearchlistArray = $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotSearchlistArrayByCategoryId($category->getId(), $this->container);
                 $recommendedSlotSearchlistFromArray = array();
-                for ($i = 1; $i <=15; $i++) {
+                for ($i = 1; $i <=18; $i++) {
                     if ($form->get('recommended_slot_searchlist_title_'.$i)->getData() && $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() && ($form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData()) && $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
                         $recommendedSlotSearchlistFromArray[] = array(
                             'title' => $form->get('recommended_slot_searchlist_title_'.$i)->getData(),
@@ -439,7 +439,7 @@ class CategoryAdminType extends AbstractType
             }
 
             if ($hasRecommendedSlotSearchlist && $insertRecommendedSlotSearchlistFlag) {
-                for ($i = 1; $i <=15; $i++) {
+                for ($i = 1; $i <=18; $i++) {
                     if ($form->get('recommended_slot_searchlist_title_'.$i)->getData() && $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() && ($form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData()) && $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
                         $recommendedSlot = new CategoryRecommendedSlot();
                         $recommendedSlot->setCategory($category);

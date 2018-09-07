@@ -109,7 +109,7 @@
     {% if not metaRobotsArray|length or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] != 'noindex') or (metaRobotsArray|length and metaRobotsArray[0] is defined and metaRobotsArray[0] == 'index' and metaRobotsArray[1] is defined and metaRobotsArray[1] != 'nofollow') %}
         {% if seoFields.canonical_url is defined %}
             {% set seoCanonicalUrl = replace_case_insensitive('{Location}', app.request.get('location'), seoFields.canonical_url) %}
-            {{ seoManager.parseSeoStringForAdList(seoCanonicalUrl, searchParams, cookieLocationDetails) }}
+            {{ seoManager.parseSeoStringForAdList(seoCanonicalUrl, searchParams, cookieLocationDetails,true) }}
         {% else %}
             {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
         {% endif %}
@@ -245,12 +245,15 @@
                         {% if slotAdCount== 5  and (recommendedSlotResult[3] is defined and recommendedSlotResult[3]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 3 }) }}
                             {% set slotallocated = slotallocated|merge([3]) %}
-                        {% elseif slotAdCount== 14  and (recommendedSlotResult[4] is defined and recommendedSlotResult[4]|length >0) %}
+                        {% elseif slotAdCount== 11  and (recommendedSlotResult[4] is defined and recommendedSlotResult[4]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 4 }) }}
                             {% set slotallocated = slotallocated|merge([4]) %}
-                        {% elseif slotAdCount== 19  and (recommendedSlotResult[5] is defined and recommendedSlotResult[5]|length >0) %}
+                        {% elseif slotAdCount== 14  and (recommendedSlotResult[5] is defined and recommendedSlotResult[5]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 5 }) }}
                             {% set slotallocated = slotallocated|merge([5]) %}
+                        {% elseif slotAdCount== 19  and (recommendedSlotResult[6] is defined and recommendedSlotResult[6]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 6 }) }}
+                            {% set slotallocated = slotallocated|merge([6]) %}
                         {% endif %}
                     {% endif %}
 

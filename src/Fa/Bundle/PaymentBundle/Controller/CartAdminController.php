@@ -108,7 +108,10 @@ class CartAdminController extends CoreController implements ResourceAuthorizatio
     {
         $loggedinUser = $this->getLoggedInUser();
         $cart         = $this->isValidCart();
-        $transactions = $this->getRepository('FaPaymentBundle:Transaction')->getTransactionsByCartId($cart->getId());
+        $transactions = array();
+        if($cart) {
+            $transactions = $this->getRepository('FaPaymentBundle:Transaction')->getTransactionsByCartId($cart->getId());
+        }
         if (!$transactions) {
             return $this->handleMessage($this->get('translator')->trans('You do not have any item in your cart.', array(), 'backend-cart-payment'), 'fa_admin_homepage', array(), 'error');
         }

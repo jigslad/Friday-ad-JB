@@ -378,6 +378,7 @@ class AdSolrSearch extends SolrSearch
             $countyId    = null;
             $locality    = null;
             $localityId  = null;
+            $lvl 		 = null;
             if (!count($postCode) || $postCode['town_id'] == null || $postCode['town_id'] == 0) { 
             	if (preg_match('/^\d+$/', $location)) {
                     $town = $this->getEntityManager()->getRepository('FaEntityBundle:Location')->getTownInfoArrayById($location, $this->getContainer());
@@ -426,6 +427,7 @@ class AdSolrSearch extends SolrSearch
                 $latitude  = $town['latitude'];
                 $longitude = $town['longitude'];
                 $townId    = $town['town_id'];
+                $lvl	   = $town['lvl'];
             } elseif ($county && is_array($county) && count($county)) {
                 $latitude  = $county['latitude'];
                 $longitude = $county['longitude'];
@@ -439,9 +441,11 @@ class AdSolrSearch extends SolrSearch
                 $this->query .= ' AND {!bbox pt='.$pt.' sfield=store d='.$d.'}';
             } elseif ($localityId) {
                 $this->addLocalityIdFilter($localityId);
-            } elseif ($townId) {
+            } elseif ($townId && $lvl != '4') {
                 $this->addTownIdFilter($townId);
-            } elseif ($countyId) {
+            } elseif ($townId && $lvl == '4') {
+            	$this->addAreaIdFilter($townId);
+            }elseif ($countyId) {
                 $this->addCountyIdFilter($countyId);
             }
             
