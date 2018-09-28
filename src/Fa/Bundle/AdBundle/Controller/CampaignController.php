@@ -796,8 +796,20 @@ class CampaignController extends ThirdPartyLoginController
                 $paaLiteEmailNotification->setIsRegisteredMailSent(0);
                 $paaLiteEmailNotification->setIsRegisterationNotificationSent(0);
 
+
                 $this->container->get('doctrine')->getManager()->persist($paaLiteEmailNotification);
                 $this->container->get('doctrine')->getManager()->flush($paaLiteEmailNotification);
+
+
+                $sendRegEmail = $this->getRepository('FaUserBundle:User')->sendCompleteRegistrationEmail($user, $paaLiteEmailNotification, $this->container);
+                $sendRegNotification = $this->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('complete_registration', null, $user->getId());
+                $paaLiteEmailNotification->setIsRegisteredMailSent(1);
+                $paaLiteEmailNotification->setIsRegisterationNotificationSent(1);
+
+
+                $this->container->get('doctrine')->getManager()->persist($paaLiteEmailNotification);
+                $this->container->get('doctrine')->getManager()->flush($paaLiteEmailNotification);
+
 
                 $token = new UsernamePasswordToken(
                     $user,
@@ -813,9 +825,6 @@ class CampaignController extends ThirdPartyLoginController
 
                 $response = $this->redirect($redirectToUrl);
                 $dispatcher->dispatch(UserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
-                $this->getRepository('FaUserBundle:User')->sendCompleteRegistrationEmail($user, $paaLiteEmailNotification, $this->container);
-                $this->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('complete_registration', null, $user->getId());
-
                 return  $response;
             } 
             else {

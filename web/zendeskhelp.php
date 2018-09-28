@@ -114,7 +114,8 @@ if(isset($_GET['ajaxsearch'])) {
 	$a = str_replace("href=\"/zendeskhelp.php?url=http://www.theaa.com/car-data-checks/", "target=\"_blank\" href=\"http://www.theaa.com/car-data-checks/", $a);
 	$a = str_replace("href=\"/zendeskhelp.php?url=https://www.friday-ad.co.uk/login/", "target=\"_blank\" href=\"https://www.friday-ad.co.uk/login/", $a);
 	$a = str_replace("href=\"/zendeskhelp.php?url=http://www.friday-ad.co.uk/paa/first_step", "target=\"_blank\" href=\"http://www.friday-ad.co.uk/paa/first_step", $a);
-	
+    $a = str_replace("href=\"/zendeskhelp.php?url=https://www.friday-ad.co.uk", "target=\"_blank\" href=\"https://www.friday-ad.co.uk", $a);
+
 	echo $a;
 	
 if(isset($_GET['query'])) {

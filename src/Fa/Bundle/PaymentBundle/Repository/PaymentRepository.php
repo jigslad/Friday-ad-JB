@@ -484,7 +484,7 @@ class PaymentRepository extends EntityRepository
                     $printUpsellFlag = true;
                     $duration        = null;
 
-                    if (is_array($packagePrint) && count($packagePrint)) {
+                    if (is_array($packagePrint) && !empty($packagePrint)) {
                         $duration = $packagePrint['duration'];
                     }
 
@@ -701,7 +701,7 @@ class PaymentRepository extends EntityRepository
 
             $paymentMethod = array_filter($paymentMethod);
 
-            if (count($paymentMethod)) {
+            if (!empty($paymentMethod)) {
                 $this->queryBuilder->andWhere($this->getRepositoryAlias().'.payment_method IN (:payment_method)');
                 $this->queryBuilder->setParameter('payment_method', $paymentMethod);
             }

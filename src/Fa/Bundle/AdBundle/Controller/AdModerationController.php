@@ -84,7 +84,9 @@ class AdModerationController extends CoreController
             $this->getEntityManager()->beginTransaction();
 
             $response = json_decode($response, true);
-
+            
+            //logging the response
+            $this->container->get('ad_moderate_logger')->info('Content Moderation Response ('.json_encode($response)." )");
             $returnValueArray = $this->getRepository('FaAdBundle:AdModerate')->handleModerationResult($response, $this->container);
             $this->getEntityManager()->getConnection()->commit();
 
@@ -97,10 +99,12 @@ class AdModerationController extends CoreController
                 $this->getRepository('FaAdBundle:AdReport')->updateAdModerationStatus($response, $this->container);
 
             } catch (\Exception $e) {
+                $this->container->get('ad_moderate_logger')->info('Content Moderation Error  (Problem in nested ad moderation = '. $e->getMessage().' '.$e->getTraceAsString()." )");
                 CommonManager::sendErrorMail($this->container, 'Error: Problem in nested ad moderation', $e->getMessage(), $e->getTraceAsString());
             }
 
         } catch (\Exception $e) {
+            $this->container->get('ad_moderate_logger')->info('Content Moderation Error  (Problem in Ad Moderation = '. $e->getMessage().' '.$e->getTraceAsString()." )");
             CommonManager::sendErrorMail($this->container, 'Error: Problem in Ad Moderation', $e->getMessage(), $e->getTraceAsString());
             $this->getEntityManager()->getConnection()->rollback();
         }

@@ -60,3 +60,15 @@ services:
     fa_ad.ad.api.response_build:
         class: '%fa_ad.ad.api.response_build.class%'
         arguments: ['@service_container']
+        
+    ad_moderate_logger:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: [ad_moderate_logger]
+        calls:
+        - [pushHandler, ['@ad_moderate_handler']]
+
+    ad_moderate_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: ['%kernel.logs_dir%/%kernel.environment%.ad_moderate.log']     
+        
+           
