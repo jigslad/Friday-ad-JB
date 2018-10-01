@@ -97,7 +97,7 @@ class NimberCreateTaskType extends AbstractType
                 'first_name',
                 TextType::class,
                 array(
-                    'max_length' => 50,
+                    'attr'=>array('maxlength'=>'50'),
                     'constraints' => array(new NotBlank(array('message' => $this->translator->trans('Please enter first name.', array(), 'validators')))),
                     'data' => ($this->loggedInUser && $this->loggedInUser->getFirstName() ? $this->loggedInUser->getFirstName() : null),
                 )
@@ -106,7 +106,7 @@ class NimberCreateTaskType extends AbstractType
                 'last_name',
                 TextType::class,
                 array(
-                    'max_length' => 50,
+                    'attr'=>array('maxlength'=>'50'),
                     'constraints' => array(new NotBlank(array('message' => $this->translator->trans('Please enter last name.', array(), 'validators')))),
                     'data' => ($this->loggedInUser && $this->loggedInUser->getLastName() ? $this->loggedInUser->getLastName() : null),
                 )
@@ -115,7 +115,7 @@ class NimberCreateTaskType extends AbstractType
                 'email',
                 TextType::class,
                 array(
-                    'max_length' => 50,
+                    'attr'=>array('maxlength'=>'50'),
                     'constraints' => array(
                         new NotBlank(array('message' => $this->translator->trans('Please enter email.', array(), 'validators'))),
                         new CustomEmail(array('message' => $this->translator->trans('Please enter valid email.', array(), 'validators')))
@@ -127,7 +127,7 @@ class NimberCreateTaskType extends AbstractType
                 'phone',
                 TextType::class,
                 array(
-                    'max_length' => 15,
+                    'attr'=>array('maxlength'=>'15'),
                     'constraints' => array(
                         new NotBlank(array('message' => $this->translator->trans('Please enter phone.', array(), 'validators'))),
                         new Regex(array('pattern' => "/^\+\d{7,12}$/", 'message' => $this->translator->trans('Please enter valid phone (ex. +441234567890).', array(), 'validators'))),

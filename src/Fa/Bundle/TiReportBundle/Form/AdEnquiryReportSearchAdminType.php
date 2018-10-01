@@ -79,8 +79,8 @@ class AdEnquiryReportSearchAdminType extends AbstractType
         $builder
             ->addEventSubscriber(new AddDatePickerFieldSubscriber('from_date'))
             ->addEventSubscriber(new AddDatePickerFieldSubscriber('to_date'))
-            ->add('ad_id', TextType::class, array('required' => false, 'max_length' => '10'))
-            ->add('username', TextType::class, array('required' => false, 'max_length' => '255'))
+            ->add('ad_id', TextType::class, array('required' => false, 'attr'=>array('maxlength'=>'10')))
+            ->add('username', TextType::class, array('required' => false, 'attr'=>array('maxlength'=>'225')))
             ->add('category_id', HiddenType::class, array('data' => ''))
             ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 1))
             ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 2))

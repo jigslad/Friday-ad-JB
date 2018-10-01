@@ -77,7 +77,8 @@ class CyberSourceCheckoutController extends CoreController
         if ('POST' === $request->getMethod() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId()) ) {
         	
         	if ($cybersource3DSecureResponseFlag) { 
-                $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
+//                 $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
+                $csrfToken     = $this->get('security.csrf.token_manager')->getToken('fa_payment_cyber_source_checkout')->getValue();
                 $cyberSourceData = $this->get('session')->get('cybersource_params_'.$loggedinUser->getId()) + array('_token' => $csrfToken);
                 if (array_key_exists('subscription', $cyberSourceData)) {
                     $request->attributes->set('subscription', $cyberSourceData['subscription']);
@@ -86,7 +87,8 @@ class CyberSourceCheckoutController extends CoreController
                 // Bind data from session
                 $form->submit($cyberSourceData);
             } elseif ($this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) { 
-            	$csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
+//             	$csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
+            	$csrfToken     = $this->get('security.csrf.token_manager')->getToken('fa_payment_cyber_source_checkout')->getValue();
             	$upgradeSourceData = $this->get('session')->get('upgrade_cybersource_params_'.$loggedinUser->getId()) + array('_token' => $csrfToken);
             	$form->submit($upgradeSourceData);
             } else {

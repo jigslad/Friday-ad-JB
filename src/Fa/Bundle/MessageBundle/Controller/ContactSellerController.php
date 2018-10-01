@@ -79,7 +79,8 @@ class ContactSellerController extends CoreController
                                 $halfAccountData = array(
                                                        'email'      => $form->get('sender_email')->getData(),
                                                        'first_name' => $form->get('sender_first_name')->getData(),
-                                                       '_token'     => $this->container->get('form.csrf_provider')->generateCsrfToken('fa_user_half_account')
+                                    '_token'     => $this->get('security.csrf.token_manager')->getToken('fa_user_half_account')->getValue()
+//                                     $this->container->get('form.csrf_provider')->generateCsrfToken('fa_user_half_account')
                                                    );
 
                                 $halfAccountForm = $formManager->createForm(UserHalfAccountType::class, null, array('method' => 'POST'));

@@ -81,7 +81,7 @@ class AdBuyNowDeliveryAddressType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'House name/number',
-                    'max_length' => 100,
+                    'attr'=>array('maxlength'=>'100'),
                     'constraints' => array(new NotBlank(array('groups' => array('new_delivery_addr'), 'message' => $this->translator->trans('Please enter house name/number.', array(), 'validators'))))
                 )
             )
@@ -90,7 +90,7 @@ class AdBuyNowDeliveryAddressType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Address line 2',
-                    'max_length' => 100,
+                    'attr'=>array('maxlength'=>'100'),
                     'constraints' => array(new NotBlank(array('groups' => array('new_delivery_addr'), 'message' => $this->translator->trans('Please enter address line 2.', array(), 'validators'))))
                 )
             )
@@ -99,7 +99,7 @@ class AdBuyNowDeliveryAddressType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Postcode',
-                    'max_length' => 15,
+                    'attr'=>array('maxlength'=>'15'),
                     'constraints' => array(new NotBlank(array('groups' => array('new_delivery_addr'), 'message' => $this->translator->trans('Please enter postcode.', array(), 'validators'))))
                 )
             )
@@ -108,7 +108,7 @@ class AdBuyNowDeliveryAddressType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Town/city',
-                    'max_length' => 50,
+                    'attr'=>array('maxlength'=>'50'),
                     'constraints' => array(new NotBlank(array('groups' => array('new_delivery_addr'), 'message' => $this->translator->trans('Please enter town/city.', array(), 'validators'))))
                 )
             )
@@ -118,7 +118,7 @@ class AdBuyNowDeliveryAddressType extends AbstractType
                 array(
                     'required' => false,
                     'label' => 'State/county',
-                    'max_length' => 50,
+                    'attr'=>array('maxlength'=>'50'),
                 )
             )
             ->add(

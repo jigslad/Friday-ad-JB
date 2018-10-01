@@ -170,7 +170,7 @@ class AdPostForSaleAdminType extends AdPostAdminType
                     'mapped'   => false,
                     'expanded' => true,
                     'multiple' => false,
-                    'choices'  => $this->em->getRepository('FaEntityBundle:CategoryDimension')->getDimensionUnitOptionsArray($this->container),
+                    'choices'  => array_flip($this->em->getRepository('FaEntityBundle:CategoryDimension')->getDimensionUnitOptionsArray($this->container)),
                     'data'     => $dimensionUnit
                 )
             );
@@ -324,7 +324,7 @@ class AdPostForSaleAdminType extends AdPostAdminType
         }
 
         if (in_array($paaField['field'], array('leg_id', 'waist_id', 'neck_id', 'size_id', 'age_range_id', 'age_id', 'condition_id'))) {
-            $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, true, 'ord');
+            $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, true, 'ord'));
         }
 
         if ($paaField['field'] == 'qty' && !$defaultData) {

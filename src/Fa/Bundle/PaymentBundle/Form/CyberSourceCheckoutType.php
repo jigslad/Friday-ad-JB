@@ -92,7 +92,7 @@ class CyberSourceCheckoutType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'House name/number',
-                    'max_length' => 100,
+                    'attr'=>array('maxlength'=>'100'),
                     'constraints' => array(new NotBlank(array('groups' => array('new_card'), 'message' => $this->translator->trans('Please enter house name/number.', array(), 'validators'))))
                 )
             )
@@ -101,7 +101,7 @@ class CyberSourceCheckoutType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Address line 2',
-                    'max_length' => 100,
+                    'attr'=>array('maxlength'=>'100'),
                     //'constraints' => array(new NotBlank(array('groups' => array('new_card'), 'message' => 'Please enter address line 2.')))
                 )
             )
@@ -110,7 +110,7 @@ class CyberSourceCheckoutType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Postcode',
-                    'max_length' => 15,
+                    'attr'=>array('maxlength'=>'15'),
                     'constraints' => array(new NotBlank(array('groups' => array('new_card'), 'message' => $this->translator->trans('Please enter postcode.', array(), 'validators'))))
                 )
             )
@@ -119,7 +119,7 @@ class CyberSourceCheckoutType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Town/city',
-                    'max_length' => 50,
+                    'attr'=>array('maxlength'=>'50'),
                     'constraints' => array(new NotBlank(array('groups' => array('new_card'), 'message' => $this->translator->trans('Please enter town/city.', array(), 'validators'))))
                 )
             )
@@ -129,7 +129,7 @@ class CyberSourceCheckoutType extends AbstractType
                 array(
                     'required' => false,
                     'label' => 'County',
-                    'max_length' => 50,
+                    'attr'=>array('maxlength'=>'50'),
                 )
             )
             ->add(
@@ -152,7 +152,7 @@ class CyberSourceCheckoutType extends AbstractType
                 TextType::class,
                 array(
                     'label' => 'Cardholders name (as it appears on your card)',
-                    'max_length' => 150,
+                    'attr'=>array('maxlength'=>'150'),
                     'constraints' => array(new Regex(array('pattern' => '/^[a-z0-9 _-]+$/i','groups' => array('new_card'), 'message' => $this->translator->trans('Cardholders name cannot have special characters other than hyphen and underscore', array(), 'validators'))),new NotBlank(array('groups' => array('new_card'), 'message' => $this->translator->trans('Please enter cardholder name.', array(), 'validators'))))
                 )
             )
@@ -161,7 +161,7 @@ class CyberSourceCheckoutType extends AbstractType
                 TelType::class,
                 array(
                     'label' => 'Card number',
-                    'max_length' => 20,
+                    'attr'=>array('maxlength'=>'20'),
                     'attr' => array('pattern' => '[0-9]*'),
                     'constraints' => array(new NotBlank(array('groups' => array('new_card'), 'message' => $this->translator->trans('Please enter card number.', array(), 'validators'))))
                 )
@@ -171,7 +171,7 @@ class CyberSourceCheckoutType extends AbstractType
                 TelType::class,
                 array(
                     'label' => 'Security code (3 digits on the back of the card)',
-                    'max_length' => 3,
+                    'attr'=>array('maxlength'=>'3'),
                     'attr' => array('pattern' => '[0-9]*'),
                     'constraints' => array(new NotBlank(array('groups' => array('new_card'), 'message' => $this->translator->trans('Please enter security code.', array(), 'validators'))))
                 )

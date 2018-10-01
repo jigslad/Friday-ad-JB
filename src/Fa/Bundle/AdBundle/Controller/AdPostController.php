@@ -139,7 +139,8 @@ class AdPostController extends ThirdPartyLoginController
             if ($request->get('is_edit')) {
                 $firstStepData = $this->getStepSessionData('first');
                 if (count($firstStepData)) {
-                    $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_paa_category_select');
+//                     $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_paa_category_select');
+                    $csrfToken      = $this->get('security.csrf.token_manager')->getToken('fa_paa_category_select')->getValue();
                     $firstStepData = $firstStepData + array('_token' => $csrfToken);
                     if ($form->has('has_reg_no') && isset($firstStepData['first_step_ordered_fields']) && count(explode(',', $firstStepData['first_step_ordered_fields'])) && !isset($firstStepData['has_reg_no'])) {
                         $options = $form->get('has_reg_no')->getConfig()->getOptions();

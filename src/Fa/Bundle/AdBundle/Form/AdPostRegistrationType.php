@@ -107,7 +107,7 @@ class AdPostRegistrationType extends RegistrationType
                 'expanded'  => true,
                 'mapped'    => false,
                 'label'     => 'Account status',
-                'choices'   => RoleRepository::getCustomerRoles($this->container),
+                'choices'   => array_flip(RoleRepository::getCustomerRoles($this->container)),
                 'constraints' => new NotBlank(array('groups'   => array('registration'), 'message' => $this->translator->trans('Please select account status.', array(), 'validators')))
             )
         )
