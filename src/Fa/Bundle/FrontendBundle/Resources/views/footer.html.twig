@@ -1,9 +1,4 @@
 {% set container = fetch_container_instance() %}
-{% if container.getParameter('fa.amazon.mode') == 'live' %}
-    {% set amazon_url_js = container.getParameter('fa.amazon.live.url') %}
-{% else %}
-    {% set amazon_url_js = container.getParameter('fa.amazon.test.url') %}
-{% endif %}
 <footer id="footer_tag">
     {% if currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'facebook_paa_login', 4: 'ad_post_third_step_registration', 5: 'ad_post_fourth_step', 6: 'ad_edit', 7: 'ad_package_purchase', 8: 'show_cart'} %}
         <div class="row show-for-small-only">
@@ -54,15 +49,6 @@
 {{ include('FaFrontendBundle::userLocation.html.twig') }}
 
 {% block scriptbottom %}
-<script>
-if(typeof amznscrptload == 'undefined')
-{
-   var script = document.createElement('script');
-   script.type = "text/javascript";
-   script.src = "{{amazon_url_js}}";
-   document.getElementsByTagName('head')[0].appendChild(script);
-}
-</script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
 
@@ -75,15 +61,6 @@ if(typeof amznscrptload == 'undefined')
     });
 
     $('#logout-header-id, #mob-logout-header-id').on('click', function() {
-        if (!!$.cookie('amazon_Login_accessToken')) {
-            amazon.Login.logout();
-            document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-            $("#AmazonPayButton").show();
-            $("#addressBookWidgetDiv").hide();
-            $("#walletWidgetDiv").hide();
-            $("#access-token").val("");
-            $("#order-reference").val("");
-        }
         ga('send', 'event', 'Top Widget', 'Sign Out');
     });
 
