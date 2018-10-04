@@ -20,6 +20,7 @@ use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Fa\Bundle\EntityBundle\Form\EventListener\AddAutoSuggestFieldSubscriber;
+use Fa\Bundle\PromotionBundle\Validator\Constraints\FutureDate;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -196,6 +197,9 @@ class PackageDiscountCodeAdminType extends AbstractType
                     'required' => false,
                     'attr' => array('class' => 'fdatepicker'),
                     'data' => $expiresAt,
+                    'constraints' => array(
+                        new FutureDate()
+                    )
                 )
             )
             ->add(
