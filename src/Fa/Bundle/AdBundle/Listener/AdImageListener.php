@@ -53,7 +53,9 @@ class AdImageListener
     public function postPersist(AdImage $adImage, LifecycleEventArgs $event)
     {
         try {
-            $this->updateAdImageCounter($adImage->getAd());
+            if($adImage->getAd() instanceof Ad) {
+                $this->updateAdImageCounter($adImage->getAd());
+            }
         } catch (\Exception $e) {
         }
     }
