@@ -232,17 +232,6 @@
 
 {% if Campaign|length > 0 and Campaign is defined %}
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
-{% if container.getParameter('fa.amazon.mode') == 'live' %}
-    {% set amazon_url_js = container.getParameter('fa.amazon.live.url') %}
-{% else %}
-    {% set amazon_url_js = container.getParameter('fa.amazon.test.url') %}
-{% endif %}
-<script>
-   var script = document.createElement('script');
-   script.type = "text/javascript";
-   script.src = "{{amazon_url_js}}";
-   document.getElementsByTagName('head')[0].appendChild(script);
-</script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){

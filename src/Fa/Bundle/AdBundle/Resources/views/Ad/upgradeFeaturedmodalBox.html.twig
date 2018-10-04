@@ -29,7 +29,7 @@
 {% set adRootCategoryId = null %}
 {% block body %}
 <style>
-.upgrade-modal .payment-buttons-block { column-count: 2; margin-left: 0px!important; }
+.upgrade-modal .payment-buttons-block { column-count: 1; margin-left: 0px!important; }
 .upgrade-modal .payment-card-option-block { margin-left: 0px; }
 .upgrade-modal .payment-card-option-block li { border-top: 1px solid #e3e3e3; }
 .upgrade-modal .payment-card-option-block li .card-number { margin-right: 10px; }
@@ -37,7 +37,7 @@
 .upgrade-modal .input-block { width: 30%; margin-right: 10px; }
 .featured-upgrade-border { border: 1px dashed #999 !important; }
 #contactSellerModal .receive-alert li label, #profilePageContactUserModal .receive-alert li label { line-height:20px !important;padding-top:2px !important}
-.modal-paypal-box{background:#FFC439 url(/bundles/fafrontend/images/modal-paypal-payment.png) no-repeat center center;height:37px;margin-bottom: 23px;border:solid 1px #DC911D;border-radius:2px;cursor:pointer}
+.modal-paypal-box{background:#FFC439 url(/bundles/fafrontend/images/paypal-payment.png) no-repeat center center;height:37px;margin-bottom: 3px;border:solid 1px #DC911D;border-radius:2px;cursor:pointer}
 .upgrade-payments #AmazonPayButton { height: 46px;cursor: pointer;text-align:center;}
 .upgrade-payments #AmazonPayButton img { width: 100%; }
 .mt0 { margin-top:0px !important}
@@ -203,10 +203,6 @@
                 <li>
                 	{% set paypalUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')}) %}
                 	<div class="modal-paypal-box" onclick="paypalPaymentProcess();"> </div>
-                </li>
-                <li>
-                	<div id="AmazonPayButton" onclick = "applePayButtonClicked();" ></div>
-                {# <div id="amazon-tooltip" class="image-tooltip-wrapper hide-for-small-only"><span class="image-tooltip">Amazon Pay allows you to pay for your ad on Friday-Ad using the card details stored on your Amazon account. Simply click and enter your Amazon login details.</span><span class="amazon-info-icon"></span></div> #}
                 </li>
             </ul>
             <ul id="payment_method_id" class="payment-card-option-block ml0">

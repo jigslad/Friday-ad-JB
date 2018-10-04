@@ -161,6 +161,29 @@
          });
     }
 
+    var idClicked = '';var idFourthStepClicked = '';
+    $("button[type=submit], input[type=submit]").click(function(e){
+        var clickedId = $(this).attr('id');
+        var parentForm = $(this).parents("form").attr('name');
+        if(clickedId.match("^fa_paa_fourth_step_")) {
+            idFourthStepClicked = clickedId;
+            $('#'+idFourthStepClicked).attr('readonly', 'readonly');
+        } else {
+            idClicked = clickedId;
+            if(!$('#'+idClicked).hasClass('disabled')) {
+                $('#'+idClicked).attr('disabled', true);
+            }
+            $("form[name='"+parentForm+"']").submit();
+        }
+    });
+
+    
+    /*function loadSavingDataGif(formName) {
+        $('#form-save-button-div').html('<button type="button" class="primary-btn-1 expand loading-in-button"><img src="{{ asset_url('facontent/fileman/images/loading-dir.gif') }}" style="margin-right:15px">Saving data...</button>');
+        $('#'+formName+'_save').attr('disabled', true);
+        $("form[name='"+formName+"']").submit();
+    }*/
+
     var isOpened = {};
     function customSelectOpenCloseEvents(closeAllSelect)
     {

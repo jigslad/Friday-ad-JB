@@ -138,6 +138,7 @@ class AdPostController extends ThirdPartyLoginController
         } else {
             if ($request->get('is_edit')) {
                 $firstStepData = $this->getStepSessionData('first');
+                
                 if (count($firstStepData)) {
 //                     $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_paa_category_select');
                     $csrfToken      = $this->get('security.csrf.token_manager')->getToken('fa_paa_category_select')->getValue();
@@ -766,6 +767,7 @@ class AdPostController extends ThirdPartyLoginController
                 
                 $categoryName   = $this->getRootCategoryName($firstStepData['category_id']);
                 $fourthStepData = $request->get('fa_paa_fourth_step_'.$categoryName);
+
                 if (isset($fourthStepData['preview'])) {
                     $isPreview = true;
                 }
@@ -1707,32 +1709,34 @@ class AdPostController extends ThirdPartyLoginController
      *
      * @return Response A Response object.
      */
-    public function changeAdultCategoryFourthStepAction(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-            $response = new Response();
-            $em       = $this->getEntityManager();
-            //change Category From Escort Service to Gay Male Escort Category
-            $firstSessionData = unserialize($this->container->get('session')->get('paa_first_step_data'));
-            //updating Session Category
-            if(isset($firstSessionData['category_id']) && !empty($firstSessionData)) {
-                $categoryObj = $this->getRepository('FaEntityBundle:Category')->getCategorybyName(CategoryRepository::GAY_MALE_ESCORT_NAME);
-                if(!empty($categoryObj)) {
-                    //update Ad Category in DB
-                    $ad = $this->getRepository('FaAdBundle:Ad')->find($this->container->get('session')->get('ad_id'));
-                    if(!empty($ad)) {
-                        $ad->setCategory($this->getEntityManager()->getReference('FaEntityBundle:Category', $categoryObj['id']));
-                        $em->persist($ad);
-                        $em->flush();
-                        $firstSessionData['category_id'] = $categoryObj['id'];
-                        $firstSessionData['category_id_autocomplete'] = $categoryObj['name'];
-                        //Set first step data into session
-                        $this->setStepSessionData($firstSessionData, 'first');
-                        return new JsonResponse(array('response' => TRUE));
-                    }
-                }
-            }
-        }
-        return new JsonResponse(array('response' => FALSE));
+    public function changeAdultCategoryFourthStepAction(Request $request) {
+    	if ($request->isXmlHttpRequest()) {
+    		$response = new Response();
+    		$em       = $this->getEntityManager();
+    		//change Category From Escort Service to Gay Male Escort Category
+    		$firstSessionData = unserialize($this->container->get('session')->get('paa_first_step_data'));
+    		//updating Session Category
+    		if(isset($firstSessionData['category_id']) && !empty($firstSessionData)) {
+    			$categoryObj = $this->getRepository('FaEntityBundle:Category')->getCategorybyName(CategoryRepository::GAY_MALE_ESCORT_NAME);
+    			if(!empty($categoryObj)) {
+    				//update Ad Category in DB
+    				$ad = $this->getRepository('FaAdBundle:Ad')->find($this->container->get('session')->get('ad_id'));
+    				if(!empty($ad)) {
+    					$ad->setCategory($this->getEntityManager()->getReference('FaEntityBundle:Category', $categoryObj['id']));
+    					$em->persist($ad);
+    					$em->flush();
+		    			$firstSessionData['category_id'] = $categoryObj['id'];
+		    			$firstSessionData['category_id_autocomplete'] = $categoryObj['name'];
+		    			//Set first step data into session
+		    			$this->setStepSessionData($firstSessionData, 'first');
+		    			return new JsonResponse(array('response' => TRUE));
+    				}
+    			}
+    		}
+    		
+    	}
+    	
+    	
+    	return new JsonResponse(array('response' => FALSE));
     }
 }
