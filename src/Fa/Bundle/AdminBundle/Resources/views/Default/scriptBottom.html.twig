@@ -1,9 +1,4 @@
 {% set container = fetch_container_instance() %}
-{% if container.getParameter('fa.amazon.mode') == 'live' %}
-    {% set amazon_url_js = container.getParameter('fa.amazon.live.url') %}
-{% else %}
-    {% set amazon_url_js = container.getParameter('fa.amazon.test.url') %}
-{% endif %}
 <!-- Core Scripts - Include with every page -->
 {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mainAdmin.js'
 'bundles/faadmin/js/vendor/modernizr.js'
@@ -17,28 +12,6 @@
 %}
 <script src="{{ static_asset_url(asset_url) }}?v=2"></script>
 {% endjavascripts %}
-<script>
-if(typeof amznscrptload == 'undefined')
-{
-   var script = document.createElement('script');
-   script.type = "text/javascript";
-   script.src = "{{amazon_url_js}}";
-   document.getElementsByTagName('head')[0].appendChild(script);
-}
-</script>
-<script language="javascript" type="text/javascript">
-    $('#admin_header_logout, #admin_header_index_logout').on('click', function() {
-        if (!!$.cookie('amazon_Login_accessToken')) {
-            amazon.Login.logout();
-            document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-            $("#AmazonPayButton").show();
-            $("#addressBookWidgetDiv").hide();
-            $("#walletWidgetDiv").hide();
-            $("#access-token").val("");
-            $("#order-reference").val("");
-        }
-    });
-</script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $.ajax({
@@ -101,6 +74,17 @@ if(typeof amznscrptload == 'undefined')
         $('body').css('cursor', 'default');
     }
     
+    /*var idClicked = '';
+    $("button").click(function(e){
+        idClicked = $(this).attr('id');
+    });
+    
+    $("form").bind('submit',function(event){
+        if(!$('#'+idClicked).hasClass('disabled')) {
+            $('#'+idClicked).attr('disabled', true);
+        }
+    });*/
+
     // remove empty left menus
     $( document ).ready(function() {
         $("ul.off-canvas-list > li").each(function() {

@@ -129,9 +129,9 @@ class BannerRepository extends EntityRepository
                 ->setParameter('categoryId', $parentCategoryId)
                 ->getQuery()
                 ->getResult();
-                //if ($bannersArray && count($bannersArray) > 0) {
-                  //  break;
-                //}
+                if ($bannersArray && count($bannersArray) > 0) {
+                    break;
+                }
             }
         }
 

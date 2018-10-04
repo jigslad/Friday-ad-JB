@@ -253,8 +253,6 @@ class AdListController extends CoreController
         	$response->sendHeaders();
         	$areaToolTipFlag = true;
         }
-        
-        
 
         $mapFlag = $request->get('map', false);
         $data    = $this->setDefaultParameters($request, $mapFlag, 'finders', $cookieLocationDetails);
@@ -296,7 +294,22 @@ class AdListController extends CoreController
         $resultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
         $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
         $facetResult = get_object_vars($facetResult);
-
+        
+        $rootCategoryId = null;
+        if (isset($data['search']['item__category_id'])) {
+        	$rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($data['search']['item__category_id'], $this->container);
+        }
+        
+        //check facet count again in ticket FFR-3375
+        $locationFacets = array();
+        if(isset($data['search']['item__location'])) {
+        	$locationResult = $this->getRepository('FaEntityBundle:Location')->find($data['search']['item__location']);
+        }
+        
+        if ( !empty($facetResult) ) {
+        	$locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
+        }
+        
         /*$nextMiles              = 0;
         $expandMilesresultCount = 'XX';
         if (isset($data['search']['item__distance']) && $data['search']['item__distance'] < 200) {
@@ -304,14 +317,8 @@ class AdListController extends CoreController
             $expandMilesresultCount = $this->getExpandDistanceAdCount($request, $keywords, $data, $resultCount, $nextMiles);
         }*/
 	
-        $locationFacets = array();
+        
         if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
-            $locationFacets =  get_object_vars($facetResult['a_l_town_id_txt']);
-            
-            if(isset($facetResult['a_l_area_id_txt']) && !empty(get_object_vars($facetResult['a_l_area_id_txt']))) {
-            	$locationFacets = $locationFacets + get_object_vars($facetResult['a_l_area_id_txt']);
-            }
-
             if (isset($locationFacets[$data['search']['item__location']])) {
                 unset($locationFacets[$data['search']['item__location']]);
             } 
@@ -357,12 +364,6 @@ class AdListController extends CoreController
         }
         // set search params in cookie.
         $this->setSearchParamsCookie($data);
-        
-        $rootCategoryId = null;
-        if (isset($data['search']['item__category_id'])) {
-            $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($data['search']['item__category_id'], $this->container);
-        }
-
         //Get Recommmended Slots
         $getRecommendedSlots = array();
         $getRecommendedSlots = $this->getRecommendedSlot($data, $keywords, $page, $mapFlag, $request, $rootCategoryId);
@@ -376,7 +377,6 @@ class AdListController extends CoreController
               $getRecommendedSrchSlots[$getRecommendedSlot['creative_group']][] = $getRecommendedSlot;
             }
         }
-        
         $recommendedSlotArr = array();
         $recommendedSlotOrder = array();
         if(!empty($getRecommendedSrchSlots)) { 
@@ -498,6 +498,46 @@ class AdListController extends CoreController
             $objResponse = CommonManager::setCacheControlHeaders();
         }
         return $this->render('FaAdBundle:AdList:'.$templateName.'.html.twig', $parameters, $objResponse);
+    }
+    
+    
+    private function getLocationFacetForSearchResult($locationFacets, $data) {
+    	if(!empty($locationFacets) && !empty($data)) {
+    		$getCount = [];
+    		foreach ($locationFacets as $facetKey=>$facet) {
+    			if($facetKey == 'a_l_town_id_txt' || $facetKey == 'a_l_area_id_txt') {
+    				$facetResult = get_object_vars($facet);
+    				if(!empty($facetResult)) {
+    					foreach ($facetResult as $key=>$res) {
+	    					//get Facet Count for Nearby Town
+    						$getCount[$key] = $this->getFacetCountForNearbyTown($key, $data);
+    					}
+    				}
+    			}
+    		}
+    		return $getCount;
+    	}
+    }
+    
+    private function getFacetCountForNearbyTown($key, $data) { 
+    	$keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: null;
+    	if (isset($data['facet_fields']) && isset($data['facet_fields'])) {
+    		unset($data['facet_fields']);
+    	}
+    	if(isset($data['search']['item__distance'])) {
+    		$data['search']['item__distance'] = 0;
+    	}
+    	if(isset($data['query_filters']['item']['distance'])) {
+    		$data['query_filters']['item']['distance'] = 0;
+    		$data['query_filters']['item']['location'] = $key."|0";
+    	}
+    	$page               = 1;
+    	$recordsPerPage     = 2;
+    	$solrSearchManager = $this->get('fa.solrsearch.manager');
+    	$solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage, 0, true);
+    	$solrResponse = $solrSearchManager->getSolrResponse();
+    	$resultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+    	return $resultCount;
     }
 
     /**
@@ -2208,8 +2248,7 @@ class AdListController extends CoreController
         return new JsonResponse();
     }
 
-    public function getAppendableStaticFilters($searchParams) 
-	{
+    public function getAppendableStaticFilters($searchParams) {
         $appendQueryFilters = '';
         if(isset($searchParams['search']['item_motors__colour_id']) && $searchParams['search']['item_motors__colour_id']) {
             if (count($searchParams['search']['item_motors__colour_id'])) {

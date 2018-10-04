@@ -138,14 +138,6 @@ function showHideCardDetail()
     bindFormErrorEvents();
 }
 
-
-{% set amazonPayManager  = container.get('fa.amazonpay.manager') %}
-{% set amazonPayConfig  = amazonPayManager.getAmazonpayConfig() %}
-{% set amazonPayMode = container.getParameter('fa.amazon.mode') %}
-{% set amazonPayJs = container.getParameter('fa.amazon.'~amazonPayMode~'.url') %}
-{% set amazonpayUrl = path('amazonpay_checkout') %}
-
-
 /*
 Copyright (C) 2016 Apple Inc. All Rights Reserved.
 See LICENSE.txt for this sample’s licensing information
@@ -191,44 +183,6 @@ function getApplePaySession(url) {
 
 }
 
-
- function verifyLoggedIn() {
-    // if you want to display a message.
-    var msgElem = document.getElementById("login-state-msg");
-
-    var options = {
-        scope: "profile postal_code payments:widget payments:shipping_address",
-        popup: true,
-        interactive: 'never'
-    };
-
-    // check if we are logged in
-    authRequest = amazon.Login.authorize (options, function(response) {
-        // this code is executed ASYNCHRONOUSLY
-
-        if ( response.error ) { 
-            // USER NOT LOGGED IN
-            console.log("verifyLoggedIn() - SESSION NOT ACTIVE - " + new Date());
-            msgElem.innerHTML = "NOT logged in yet. Click 'Amazon Pay' or Go to Login screen.";
-        } else {
-            // USER IS LOGGED IN
-            console.log("verifyLoggedIn() - SESSION ACTIVE - " + new Date());
-
-            // optionally, get the profile info
-            console.dir('access_token= ' + response.access_token);
-
-            amazon.Login.retrieveProfile(function (response) {
-                // Display profile information.
-                console.dir('CustomerId= ' + response.profile.CustomerId);
-                console.dir('Name= ' + response.profile.Name);
-                console.dir('PostalCode= ' + response.profile.PostalCode);
-                console.dir('PrimaryEmail= ' + response.profile.PrimaryEmail);
-
-                alert("Hello " + response.profile.Name + "! Just click Pay!");
-            });
-        }
-    });
-}
 
 /**
 * Apple Pay Logic
@@ -364,22 +318,5 @@ function applePayButtonClicked() {
      });
     
 }
-
-
-var authRequest;var amazonpath = "{{amazonpayUrl}}";
-OffAmazonPayments.Button("AmazonPayButton", "{{amazonPayConfig['merchant_id']}}", {
-    type: "PwA",
-    color: "DarkGray",
-    size: "large",
-    authorization: function () {
-        loginOptions = { scope: "profile postal_code payments:widget payments:shipping_address", popup: true };
-        authRequest = amazon.Login.authorize(loginOptions, amazonpath);
-
-    },
-    onError: function (error) {
-        // something bad happened
-    }
-});
-	
 //]]>
 </script>

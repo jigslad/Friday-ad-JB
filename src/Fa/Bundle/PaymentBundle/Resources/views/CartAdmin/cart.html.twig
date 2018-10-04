@@ -7,11 +7,6 @@
 {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
     {% set currentDevice = 'T' %}
 {% endif %}
-{% set amazonPayManager  = container.get('fa.amazonpay.manager') %}
-{% set amazonPayConfig  = amazonPayManager.getAmazonpayConfig() %}
-{% set amazonPayMode = container.getParameter('fa.amazon.mode') %}
-{% set amazonPayJs = container.getParameter('fa.amazon.'~amazonPayMode~'.url') %}
-{% set amazonpayUrl = path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_AMAZONPAY')}) %}
 {% set isCreditUsed = false %}
 {% set totalVat = 0 %}
 {% set cartValue = array_unserialize(cart.getValue()) %}
@@ -172,9 +167,7 @@
                                 <div class="small-24 medium-12 large-6 columns paypal-pad">
                                   {#<div class="pay-or-caption hide-for-small-only">{{'or'|trans({}, 'backend-cart')}}</div>#}
                                   <div class="paypal-box" onclick="window.location='{{path('process_payment_admin', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')})}}'"> </div>
-                                  {#<div class="pay-or-caption hide-for-small-only amazon-or">{{'or'|trans({}, 'frontend-cart')}}</div>#}
-                                   <div id="AmazonPayButton"></div>
-                                   <div id="amazon-tooltip" class="image-tooltip-wrapper hide-for-small-only"><span class="image-tooltip">Amazon Pay allows you to pay for your ad on Friday-Ad using the card details stored on your Amazon account. Simply click and enter your Amazon login details.</span><span class="amazon-info-icon"></span></div>
+                                  {#<div class="pay-or-caption hide-for-small-only">{{'or'|trans({}, 'frontend-cart')}}</div>#}
                                 </div>
                                {% endif %}
                         </div>
@@ -215,74 +208,3 @@
             {% endif %}
         </div>
     </div>
-{% block scriptbottom %}
-<script type='text/javascript'>
-    var host = "amzn.github.io";
-    var amznscrptload = 'yes';
-    if ((host === window.location.host) && (window.location.protocol !== "https:"))
-        window.location.protocol = "https";
-
-    window.onAmazonLoginReady = function () {
-        amazon.Login.setClientId('{{amazonPayConfig['client_id']}}');
-    };
-
-    window.onAmazonLoginReady = function () {
-        amazon.Login.setClientId('{{amazonPayConfig['client_id']}}');
-        amazon.Login.setUseCookie(true);
-    };
-</script>
-
-<script type='text/javascript'>
-    var authRequest;var amazonpath = "{{amazonpayUrl}}";
-    OffAmazonPayments.Button("AmazonPayButton", "{{amazonPayConfig['merchant_id']}}", {
-        type: "PwA",
-        color: "DarkGray",
-        size: "large",
-        authorization: function () {
-            loginOptions = { scope: "profile postal_code payments:widget payments:shipping_address", popup: true };
-            authRequest = amazon.Login.authorize(loginOptions, amazonpath);
-
-        },
-        onError: function (error) {
-            // something bad happened
-        }
-    });
-     function verifyLoggedIn() {
-        // if you want to display a message.
-        var msgElem = document.getElementById("login-state-msg");
-
-        var options = {
-            scope: "profile postal_code payments:widget payments:shipping_address",
-            popup: true,
-            interactive: 'never'
-        };
-
-        // check if we are logged in
-        authRequest = amazon.Login.authorize (options, function(response) {
-            // this code is executed ASYNCHRONOUSLY
-
-            if ( response.error ) {
-                // USER NOT LOGGED IN
-                console.log("verifyLoggedIn() - SESSION NOT ACTIVE - " + new Date());
-                msgElem.innerHTML = "NOT logged in yet. Click 'Amazon Pay' or Go to Login screen.";
-            } else {
-                // USER IS LOGGED IN
-                console.log("verifyLoggedIn() - SESSION ACTIVE - " + new Date());
-
-                // optionally, get the profile info
-                console.dir('access_token= ' + response.access_token);
-
-                amazon.Login.retrieveProfile(function (response) {
-                    // Display profile information.
-                    console.dir('CustomerId= ' + response.profile.CustomerId);
-                    console.dir('Name= ' + response.profile.Name);
-                    console.dir('PostalCode= ' + response.profile.PostalCode);
-                    console.dir('PrimaryEmail= ' + response.profile.PrimaryEmail);
-
-                    //alert("Hello " + response.profile.Name + "! Just click Pay!");
-                });
-            }
-        });
-    }
-</script>
-{% endblock %}
