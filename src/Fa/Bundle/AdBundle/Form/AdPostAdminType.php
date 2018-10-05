@@ -379,7 +379,7 @@ abstract class AdPostAdminType extends AbstractType
                 }
                 $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, true, $entitySortBy));
                 if ($paaField['field'] == 'travel_arrangements_id') {
-                    $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->customFormatOptions($fieldOptions['choices'], 'paa'));
+                    $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->customFormatOptions($fieldOptions['choices'], 'paa');
                 }
                 $fieldOptions['placeholder'] = 'Select '.$paaField['label'];
             }
@@ -1408,7 +1408,7 @@ abstract class AdPostAdminType extends AbstractType
             }
             
             if(!empty($getTravelArrangement) && ($getTravelArrangement->getName() == 'Out-call' || $getTravelArrangement->getName() == 'Either')) {
-                if ($checkRateIsRequired && $form->has('1hour_outcall') && $form->get('1hour_outcall')->getData() == '' && $form->get('1hour_outcall')->getData() <= '0') { var_dump($checkRateIsRequired); die;
+                if ($checkRateIsRequired && $form->has('1hour_outcall') && $form->get('1hour_outcall')->getData() == '' && $form->get('1hour_outcall')->getData() <= '0') {
                 $form->get('1hour_outcall')->addError(new FormError($this->translator->trans('1 hr Out-call rate is required', array(), 'validators')));
                 }
             }
