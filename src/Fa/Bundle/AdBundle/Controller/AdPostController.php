@@ -326,9 +326,13 @@ class AdPostController extends ThirdPartyLoginController
             // second step data from session if exist either category is same or changed in first step in edit mode
             $secondStepData = $this->getStepSessionData('second');
             if (count($secondStepData)) {
-//                 $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName); 
-                $csrfToken      = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
-                
+                // in 2.7v $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName); 
+                $formToken = '_csrf/https-'.$form->getName();
+                $csrfToken      = $this->container->get('session')->get($formToken);
+                //# It is generating new token that's why i'm getting old _csrf token from session
+                // Note: Need to investigate more
+                // $csrfToken = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
+
                 $secondStepData = $secondStepData + array('_token' => $csrfToken);
 
                 $formFields            = array();
@@ -861,7 +865,11 @@ class AdPostController extends ThirdPartyLoginController
                 }
 
                 if (count($fourthStepData)) {
-                    $csrfToken      = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
+                    $formToken = '_csrf/https-'.$form->getName();
+                    $csrfToken      = $this->container->get('session')->get($formToken);
+                    //# It is generating new token that's why i'm getting old _csrf token from session
+                    // Note: Need to investigate more
+                    // $csrfToken = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
                     $fourthStepData = $fourthStepData + array('_token' => $csrfToken);
 
                     if (isset($fourthStepData['location_autocomplete']) && $fourthStepData['location_autocomplete']) {
