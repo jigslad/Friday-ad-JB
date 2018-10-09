@@ -143,7 +143,7 @@ $("#fa_user_user_search_admin_ad__nested_category").select2({
     width: '100%',
     multiple: true,
     ajax: {
-        url: Routing.generate('category_ajax_term_admin', { term: '1' }),
+        url: Routing.generate('category_ajax_term_admin', { id: '1' }),
         dataType: 'json',
         data: function (term, page) {
             return {
