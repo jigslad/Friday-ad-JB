@@ -844,7 +844,8 @@
 {% endif %}
 
 {% if location is defined and location is not null and adsNearYou is defined and adsNearYou|length %}
-    {{ block('adsNearYou_script') }}
+    {% set adsnearyouscript = block('adsnearyou_script') is defined ? block('adsnearyou_script') : '' %}
+    {{ adsnearyouscript }}
 {% endif %}
 
 <script language="javascript" type="text/javascript">

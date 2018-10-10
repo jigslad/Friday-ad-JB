@@ -210,7 +210,15 @@ class LandingPageAdminController extends CrudController implements ResourceAutho
                 $formManager->save($entity);
             }
 
-            return $this->handleMessage($this->get('translator')->trans('Record has been added successfully.', array(), 'success'), ($form->has('saveAndNew') &&  $form->get('saveAndNew')->isClicked() ? $this->getRouteName('new') : ($backUrl ? $backUrl :$this->getRouteName(''))));
+            $message = $this->get('translator')->trans('Record has been added successfully.', array(), 'success');
+
+            $redirectPath = $this->getRouteName('');
+            // Check if user clicked on save and new then open new form
+            if($form->has('saveAndNew') &&  $form->get('saveAndNew')->isClicked()) {
+                $redirectPath = $this->getRouteName('create');
+            }
+
+            return $this->handleMessage($message, $redirectPath);
         }
 
         $parameters = array(
@@ -314,8 +322,15 @@ class LandingPageAdminController extends CrudController implements ResourceAutho
             if (!$this->saveEditUsingForm) {
                 $this->getEntityManager()->flush();
             }
+            $message = $this->get('translator')->trans('Record has been updated successfully.', array(), 'success');
 
-            return $this->handleMessage($this->get('translator')->trans('Record has been updated successfully.', array(), 'success'), ($form->has('saveAndNew') && $form->get('saveAndNew')->isClicked() ? $this->getRouteName('new') : ($backUrl ? $backUrl :$this->getRouteName(''))));
+            $redirectPath = $this->getRouteName('');
+            // Check if user clicked on save and new then open new form
+            if($form->has('saveAndNew') &&  $form->get('saveAndNew')->isClicked()) {
+                $redirectPath = $this->getRouteName('create');
+            }
+
+            return $this->handleMessage($message, $redirectPath);
         }
 
         $parameters = array(

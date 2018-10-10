@@ -114,11 +114,12 @@
                         <div id="reg_no_details_fields" class="mt15">
                             {% if regNoDetailsOrderedFields|length %}
                                 {% if attribute(form, 'has_reg_no').vars.data == 1 %}
-                                    {% if attribute(form, 'reg_no').vars.data is not null and attribute(form, 'reg_no').vars.errors|length < 1 %}
+                                    {% if attribute(form, 'reg_no') is defined and attribute(form, 'reg_no').vars.data is not null and attribute(form, 'reg_no').vars.errors|length < 1 %}
                                         <h5 class="text-center" id="add_vehicle_msg">{{ 'Confirm your vehicle details:'|trans }}</h5>
                                     {% else %}
                                         <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans }}</h5>
                                     {% endif %}
+                                    
                                 {% else %}
                                     <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans }}</h5>
                                 {% endif %}
