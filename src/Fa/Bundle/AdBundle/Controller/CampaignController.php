@@ -850,7 +850,7 @@ class CampaignController extends ThirdPartyLoginController
         //$this->removeSession('tempUserIdREGPL');
 
         $campaign_name = $this->container->get('session')->get('campaign_name');
-        $redirectAfterLoginUrl = htmlspecialchars_decode($this->container->get('request')->cookies->get('frontend_redirect_after_login_path_info'));
+        $redirectAfterLoginUrl = htmlspecialchars_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('frontend_redirect_after_login_path_info'));
         $response = $this->processFacebook($request, 'facebook_paa_lite_login', 'paa-lite', true, null, false, $redirectAfterLoginUrl);
 
         if (is_array($response)) {
@@ -875,7 +875,7 @@ class CampaignController extends ThirdPartyLoginController
         //$this->removeSession('paa_lite_user_info');
         //$this->removeSession('tempUserIdAPL');
         //$this->removeSession('tempUserIdREGPL');
-        $redirectAfterLoginUrl = htmlspecialchars_decode($this->container->get('request')->cookies->get('frontend_redirect_after_login_path_info'));
+        $redirectAfterLoginUrl = htmlspecialchars_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('frontend_redirect_after_login_path_info'));
         $campaign_name = $this->container->get('session')->get('campaign_name');
         $response = $this->processGoogle($request, 'google_paa_lite_login', 'paa-lite', false, true, null, $redirectAfterLoginUrl);
         if (is_array($response)) {
@@ -904,7 +904,7 @@ class CampaignController extends ThirdPartyLoginController
         //$this->removeSession('tempUserIdREGPL');
 
         $campaign_name = $this->container->get('session')->get('campaign_name');
-        $redirectAfterLoginUrl = htmlspecialchars_decode($this->container->get('request')->cookies->get('frontend_redirect_after_login_path_info'));
+        $redirectAfterLoginUrl = htmlspecialchars_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('frontend_redirect_after_login_path_info'));
         $response = $this->processFacebook($request, 'facebook_paa_lite_register', 'paa-lite',  true, null, false, $redirectAfterLoginUrl);
 
         if (is_array($response)) {
@@ -933,7 +933,7 @@ class CampaignController extends ThirdPartyLoginController
         //$this->removeSession('tempUserIdREGPL');
 
         $campaign_name = $this->container->get('session')->get('campaign_name');
-        $redirectAfterLoginUrl = htmlspecialchars_decode($this->container->get('request')->cookies->get('frontend_redirect_after_login_path_info'));
+        $redirectAfterLoginUrl = htmlspecialchars_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('frontend_redirect_after_login_path_info'));
         $response = $this->processGoogle($request, 'google_paa_lite_register', 'paa-lite', false, true, null, $redirectAfterLoginUrl);
 
         if (is_array($response)) {

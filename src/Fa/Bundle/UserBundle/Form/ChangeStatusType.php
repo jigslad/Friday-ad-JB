@@ -23,6 +23,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * This is user change status form.
@@ -69,7 +70,7 @@ class ChangeStatusType extends AbstractType
     {
         /*$builder->add(
             'user_status',
-            'entity',
+            EntityType::class,
             array(
                 'class' => 'FaEntityBundle:Entity',
                 'choice_label' => 'name',
