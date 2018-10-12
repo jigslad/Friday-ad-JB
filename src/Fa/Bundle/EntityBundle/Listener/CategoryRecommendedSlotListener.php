@@ -14,7 +14,7 @@ namespace Fa\Bundle\EntityBundle\Listener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Fa\Bundle\EntityBundle\Entity\SeoToolPopularSearch;
+use Fa\Bundle\ContentBundle\Entity\SeoToolPopularSearch;
 use Fa\Bundle\EntityBundle\Entity\CategoryRecommendedSlot;
 
 /**

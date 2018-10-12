@@ -27,6 +27,7 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\CoreBundle\Manager\ThumbnailManager;
 use Fa\Bundle\UserBundle\Manager\UserImageManager;
+use Fa\Bundle\UserBundle\Entity\UserSite;
 
 /**
  * This controller is used for registration management.
