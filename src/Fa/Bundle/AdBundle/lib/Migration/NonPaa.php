@@ -53,7 +53,7 @@ class NonPaa
         if ($this->meta_text != "") {
             try {
                 $this->data = unserialize($this->meta_text);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return 0;
             }
         }

@@ -21,7 +21,7 @@ use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\PaymentBundle\Manager\CyberSourceManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Fa\Bundle\PaymentBundle\Repository\PaymentAmazonpayRepository;
+use Fa\Bundle\PaymentBundle\Repository\PaymentAmazonRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentCyberSourceRepository;
 use Fa\Bundle\PaymentBundle\Form\AmazonpayCheckoutType;
 /**
@@ -226,7 +226,7 @@ class AmazonpayCheckoutController extends CoreController
         $AmazonpayManager                  = $this->get('fa.Amazonpay.manager');
         $AmazonpayGetExpressCheckoutDetail = $AmazonpayManager->getExpressCheckoutDetailsResponse($AmazonpayToken);
 
-        if (($AmazonpayGetExpressCheckoutDetail['ACK'] && $AmazonpayGetExpressCheckoutDetail['ACK'] != PaymentAmazonpayRepository::SUCCESS_ACK) || (isset($AmazonpayGetExpressCheckoutDetail['PAYMENTREQUEST_0_ITEMAMT']) && $AmazonpayGetExpressCheckoutDetail['PAYMENTREQUEST_0_ITEMAMT'] != $cart->getAmount() && isset($AmazonpayGetExpressCheckoutDetail['PAYMENTREQUEST_0_TAXAMT']) && $AmazonpayGetExpressCheckoutDetail['PAYMENTREQUEST_0_TAXAMT'] != $totalVat)) {
+        if (($AmazonpayGetExpressCheckoutDetail['ACK'] && $AmazonpayGetExpressCheckoutDetail['ACK'] != PaymentAmazonRepository::SUCCESS_ACK) || (isset($AmazonpayGetExpressCheckoutDetail['PAYMENTREQUEST_0_ITEMAMT']) && $AmazonpayGetExpressCheckoutDetail['PAYMENTREQUEST_0_ITEMAMT'] != $cart->getAmount() && isset($AmazonpayGetExpressCheckoutDetail['PAYMENTREQUEST_0_TAXAMT']) && $AmazonpayGetExpressCheckoutDetail['PAYMENTREQUEST_0_TAXAMT'] != $totalVat)) {
             $this->container->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('In-valid Amazonpay token.', array(), 'frontend-Amazonpay'));
             return new RedirectResponse($this->container->get('router')->generate('show_cart'));
         }
@@ -234,7 +234,7 @@ class AmazonpayCheckoutController extends CoreController
         $AmazonpayDoExpCheckoutResponse = $AmazonpayManager->getDoExpressCheckoutPaymentResponse($AmazonpayToken, $payerId, $cart, $cartDetails);
 
         //complete Amazonpay payment.
-        if (isset($AmazonpayDoExpCheckoutResponse['TOKEN']) && $AmazonpayDoExpCheckoutResponse['TOKEN'] && isset($AmazonpayDoExpCheckoutResponse['ACK']) && $AmazonpayDoExpCheckoutResponse['ACK'] === PaymentAmazonpayRepository::SUCCESS_ACK) {
+        if (isset($AmazonpayDoExpCheckoutResponse['TOKEN']) && $AmazonpayDoExpCheckoutResponse['TOKEN'] && isset($AmazonpayDoExpCheckoutResponse['ACK']) && $AmazonpayDoExpCheckoutResponse['ACK'] === PaymentAmazonRepository::SUCCESS_ACK) {
             $AmazonpayDoExpCheckoutResponse['ipAddress'] = $request->getClientIp();
             $this->getEntityManager()->beginTransaction();
             try {

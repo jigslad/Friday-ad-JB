@@ -48,7 +48,7 @@ class Motorbikes
             try {
                 libxml_use_internal_errors(true);
                 $string = simplexml_load_string($this->meta_text);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return 0;
             }
 

@@ -14,6 +14,7 @@ namespace Fa\Bundle\PaymentBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
+use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 
 /**

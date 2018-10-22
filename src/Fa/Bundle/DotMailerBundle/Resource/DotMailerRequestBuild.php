@@ -13,7 +13,8 @@ namespace Fa\Bundle\DotMailerBundle\Resource;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Symfony\Component\Locale\Stub\DateFormat;
+// use Symfony\Component\Locale\Stub\DateFormat;
+use Symfony\Component\Intl\DateFormatter\DateFormat;
 
 /**
  * This controller is used for dot mailer integration.

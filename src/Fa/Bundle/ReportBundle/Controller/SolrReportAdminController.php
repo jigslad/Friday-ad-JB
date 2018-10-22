@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\PromotionBundle\Entity\Package;
-use Fa\Bundle\PromotionBundle\Form\ShopPackageType;
+// use Fa\Bundle\PromotionBundle\Form\ShopPackageType;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
 use Fa\Bundle\PromotionBundle\Repository\PackageRepository;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;

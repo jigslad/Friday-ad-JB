@@ -15,7 +15,8 @@ use Fa\Bundle\AdBundle\Entity\Ad;
 use Fa\Bundle\AdBundle\AdApi\AdFieldMappingInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Symfony\Component\Locale\Stub\DateFormat;
+// use Symfony\Component\Locale\Stub\DateFormat;
+use Symfony\Component\Intl\DateFormatter\DateFormat;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
 

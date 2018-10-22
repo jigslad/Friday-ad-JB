@@ -32,7 +32,7 @@ use Fa\Bundle\AdBundle\Entity\AdForSale;
 use Fa\Bundle\AdBundle\Entity\AdLocation;
 use Fa\Bundle\EntityBundle\Repository\LocationRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Fa\Bundle\EntityBundle\Repository\PaaFieldRuleRepository;
+// use Fa\Bundle\EntityBundle\Repository\PaaFieldRuleRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Fa\Bundle\AdBundle\Manager\AdImageManager;
 use Fa\Bundle\CoreBundle\Manager\ThumbnailManager;

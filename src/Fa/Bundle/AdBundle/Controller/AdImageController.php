@@ -527,7 +527,7 @@ class AdImageController extends CoreController
                     }
                     $this->getRepository('FaAdBundle:AdImage')->updateImageToSolr($ad, $this->container);
                     $successMsg = $this->get('translator')->trans('Photos have been reordered successfully.');
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $error = $this->get('translator')->trans('Problem in reordering photos.');
                 }
             }

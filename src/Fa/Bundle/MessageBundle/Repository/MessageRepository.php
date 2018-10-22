@@ -685,7 +685,7 @@ class MessageRepository extends EntityRepository
                                 }
                             }
                         }
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         if ($container) {
                             CommonManager::sendErrorMail($container, 'Error: Problem in touch point Enquiry: '.$message->getAd()->getId(), $e->getMessage(), $e->getTraceAsString());
                         }

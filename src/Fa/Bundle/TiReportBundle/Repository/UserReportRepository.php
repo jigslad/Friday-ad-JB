@@ -12,7 +12,7 @@
 namespace Fa\Bundle\TiReportBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Proxies\__CG__\Fa\Bundle\TiReportBundle\Entity\UserReportDaily;
+// use Proxies\__CG__\Fa\Bundle\TiReportBundle\Entity\UserReportDaily;
 use Fa\Bundle\TiReportBundle\Repository\UserReportDailyRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Entity;

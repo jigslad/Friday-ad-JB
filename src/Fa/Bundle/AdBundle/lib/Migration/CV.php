@@ -12,7 +12,7 @@
 namespace Fa\Bundle\AdBundle\lib\Migration;
 
 use Fa\Bundle\AdBundle\Entity\AdMotors;
-use Fa\Bundle\AdBundle\Entity\Fa\Bundle\AdBundle\Entity;
+// use Fa\Bundle\AdBundle\Entity\Fa\Bundle\AdBundle\Entity;
 
 /**
  * Fa\Bundle\AdBundle\lib\Migration
@@ -138,7 +138,7 @@ class CV
                 $string1 = preg_replace('/fieldValue="\/><\/TransMeta>/', 'fieldValue="" /></TransMeta>', $this->meta_text);
                 $string = simplexml_load_string($string1);
                 libxml_use_internal_errors(true);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return 0;
             }
 

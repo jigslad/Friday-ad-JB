@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\DotMailerBundle\Repository\DotmailerResponseRepository;
 use Fa\Bundle\DotMailerBundle\Repository\DotmailerRepository;
 

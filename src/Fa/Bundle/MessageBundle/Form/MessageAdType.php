@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Fa\Bundle\MessageBundle\Repository\EntityRepository;
+// use Fa\Bundle\MessageBundle\Repository\EntityRepository;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
