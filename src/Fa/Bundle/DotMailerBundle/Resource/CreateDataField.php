@@ -13,7 +13,8 @@ namespace Fa\Bundle\DotMailerBundle\Resource;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Symfony\Component\Locale\Stub\DateFormat;
+// use Symfony\Component\Locale\Stub\DateFormat;
+use Symfony\Component\Intl\DateFormatter\DateFormat;
 use Fa\Bundle\DotMailerBundle\Resource\DotMailerRequestBuild;
 use Fa\Bundle\DotMailerBundle\Resource\ResourceInterface;
 
@@ -88,7 +89,7 @@ class CreateDataField extends DotMailerRequestBuild implements ResourceInterface
             if ($this->getHttpcode() == '201') {
                 return true;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Send failure email
         }
 

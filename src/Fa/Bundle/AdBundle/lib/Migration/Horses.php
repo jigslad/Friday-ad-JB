@@ -48,7 +48,7 @@ class Horses
             try {
                 $string = simplexml_load_string($this->meta_text);
                 libxml_use_internal_errors(true);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return 0;
             }
 

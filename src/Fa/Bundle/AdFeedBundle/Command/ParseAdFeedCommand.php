@@ -196,7 +196,7 @@ class ParseAdFeedCommand extends ContainerAwareCommand
             $adSiteDownload = $this->em->getRepository('FaAdFeedBundle:AdFeedSiteDownload')->findOneBy(array('modified_since' => $modifiedSince, 'ad_feed_site' => $adFeedSite->getId(), 'status' => 'P'));
             return unserialize($adSiteDownload->getFiles());
         } else {
-            new Exception("Something invalid");
+            return \Exception("Something invalid");
         }
     }
 

@@ -20,7 +20,7 @@ use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Doctrine\ORM\Mapping\Entity;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\AdFeedBundle\lib\EzyAds;
-use Fa\Bundle\AdFeedBundle\lib\Fa\Bundle\AdFeedBundle\lib;
+// use Fa\Bundle\AdFeedBundle\lib\Fa\Bundle\AdFeedBundle\lib;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\EntityBundle\Entity\Category;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;

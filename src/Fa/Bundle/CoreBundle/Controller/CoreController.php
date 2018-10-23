@@ -51,7 +51,7 @@ class CoreController extends Controller
             foreach ($this->getUnsetFormFields() as $field) {
                 $form->remove($field);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
         }
     }
 

@@ -14,7 +14,7 @@ namespace Fa\Bundle\AdBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Fa\Bundle\AdBundle\Entity\PaaLiteFieldRule;
-use Fa\Bundle\AdBundle\Form\PaaLiteFieldRuleType;
+// use Fa\Bundle\AdBundle\Form\PaaLiteFieldRuleType;
 use Fa\Bundle\AdminBundle\Controller\CrudController;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;

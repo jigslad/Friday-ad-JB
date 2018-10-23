@@ -78,7 +78,7 @@ class UserPaymentSearchType extends AbstractType
                 'multiple' => false,
                 'label' => 'Payment method',
                 'placeholder' => 'Please select payment method',
-                'choices'   => $this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethods($this->container),
+                'choices'   => array_flip($this->em->getRepository('FaPaymentBundle:Payment')->getPaymentMethods($this->container)),
               )
         )
         ->addEventSubscriber(new AddDatePickerFieldSubscriber('payment__created_at_from'))

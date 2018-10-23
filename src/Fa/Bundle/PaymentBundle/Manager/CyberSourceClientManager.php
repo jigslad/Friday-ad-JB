@@ -76,7 +76,7 @@ class CyberSourceClientManager extends \SoapClient
     
             $request = $requestDOM->saveXML();
     
-        } catch (DOMException $e) {
+        } catch (\Exception $e) {
             die( 'Error adding UsernameToken: ' . $e->code);
         }
     

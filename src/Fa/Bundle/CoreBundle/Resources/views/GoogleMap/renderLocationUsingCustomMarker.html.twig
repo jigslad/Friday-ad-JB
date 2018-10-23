@@ -94,7 +94,7 @@
                          mapLoadedFalg = true;
                      }
                  });
-            	 {% if currentDevice == 'M' and allowAdEdit is defined and allowAdEdit %}
+            	 {% if currentDevice is defined and currentDevice == 'M' and allowAdEdit is defined and allowAdEdit %}
                      {% set allowAdEdit = false %}
                  {% endif %}
                  {% if not adImages|length and not (allowAdEdit is defined and allowAdEdit) and not youtubeVideoUrl|length %}

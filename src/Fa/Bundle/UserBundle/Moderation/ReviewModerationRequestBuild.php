@@ -15,7 +15,8 @@ use Fa\Bundle\UserBundle\Entity\UserReview;
 use Fa\Bundle\UserBundle\Moderation\ReviewModerationFieldMappingInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Symfony\Component\Locale\Stub\DateFormat;
+// use Symfony\Component\Locale\Stub\DateFormat;
+use Symfony\Component\Intl\DateFormatter\DateFormat;
 
 /**
  * This manager is used for review moderation.

@@ -189,7 +189,7 @@ snc_redis:
 lexik_translation:
     fallback_locale: en     # (required) default locale to use
     managed_locales: '%locale_enabled%'    # (required) locales that the bundle have to manage
-    base_layout: "FaLexikTranslationBundle::layout.html.twig" # layout used with the translation edition template
+    base_layout: 'FaLexikTranslationBundle::layout.html.twig' # layout used with the translation edition template
 
 services:
 #    _defaults: 

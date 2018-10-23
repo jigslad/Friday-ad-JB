@@ -52,7 +52,7 @@ class Property
             try {
                 $string = simplexml_load_string($this->meta_text);
                 libxml_use_internal_errors(false);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return 0;
             }
 

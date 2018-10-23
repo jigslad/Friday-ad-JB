@@ -19,6 +19,7 @@ use Fa\Bundle\UserBundle\Entity\Role;
 use Fa\Bundle\UserBundle\Form\RoleType;
 use Fa\Bundle\UserBundle\Form\RoleSearchType;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
  * This controller is used for admin side role management.
@@ -89,7 +90,7 @@ class RoleController extends CoreController implements ResourceAuthorizationCont
                       'method' => 'POST'
                     );
 
-        $form = $formManager->createForm(new RoleType(), $entity, $options);
+        $form = $formManager->createForm(RoleType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -123,7 +124,7 @@ class RoleController extends CoreController implements ResourceAuthorizationCont
 
         $entity = new Role();
 
-        $form = $formManager->createForm(new RoleType(), $entity, array('action' => $this->generateUrl('role_create')));
+        $form = $formManager->createForm(RoleType::class, $entity, array('action' => $this->generateUrl('role_create')));
 
         $this->unsetFormFields($form);
 
@@ -168,7 +169,7 @@ class RoleController extends CoreController implements ResourceAuthorizationCont
             'method' => 'PUT'
         );
 
-        $form = $formManager->createForm(new RoleType(), $entity, $options);
+        $form = $formManager->createForm(RoleType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -212,7 +213,7 @@ class RoleController extends CoreController implements ResourceAuthorizationCont
             'method' => 'PUT'
         );
 
-        $form = $formManager->createForm(new RoleType(), $entity, $options);
+        $form = $formManager->createForm(RoleType::class, $entity, $options);
 
         $this->unsetFormFields($form);
 
@@ -290,7 +291,7 @@ class RoleController extends CoreController implements ResourceAuthorizationCont
      */
     protected function addFormFields($form)
     {
-        $form->add('save', 'submit');
-        $form->add('saveAndNew', 'submit');
+        $form->add('save', SubmitType::class);
+        $form->add('saveAndNew', SubmitType::class);
     }
 }

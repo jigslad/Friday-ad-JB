@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Fa\Bundle\AdminBundle\Controller\CrudController;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Fa\Bundle\MessageBundle\Form\NotificationMessageSearchAdminType;;
+use Fa\Bundle\MessageBundle\Form\NotificationMessageSearchAdminType;
 
 /**
  * This controller is used for static page management.

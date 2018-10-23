@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Fa\Bundle\CoreBundle\Form\EventListener\AddAutoSuggestFieldSubscriber;
 use Fa\Bundle\EntityBundle\Form\EventListener\AddCategoryChoiceFieldSubscriber;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
-use Symfony\Component\Form\Extension\Core\ChoiceList\ObjectChoiceList;
+// use Symfony\Component\Form\Extension\Core\ChoiceList\ObjectChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 /**

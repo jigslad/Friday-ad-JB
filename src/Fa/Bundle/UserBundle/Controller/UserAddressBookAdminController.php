@@ -12,6 +12,7 @@
 namespace Fa\Bundle\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;

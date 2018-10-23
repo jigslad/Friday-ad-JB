@@ -12,7 +12,7 @@
 namespace Fa\Bundle\ReportBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Proxies\__CG__\Fa\Bundle\ReportBundle\Entity\UserReportDaily;
+// use Proxies\__CG__\Fa\Bundle\ReportBundle\Entity\UserReportDaily;
 use Fa\Bundle\ReportBundle\Repository\UserReportDailyRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Entity;

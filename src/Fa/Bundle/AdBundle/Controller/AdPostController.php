@@ -141,7 +141,9 @@ class AdPostController extends ThirdPartyLoginController
                 
                 if (count($firstStepData)) {
 //                     $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_paa_category_select');
-                    $csrfToken      = $this->get('security.csrf.token_manager')->getToken('fa_paa_category_select')->getValue();
+                    $formToken = '_csrf/https-'.'fa_paa_category_select';
+                    $csrfToken      = $this->container->get('session')->get($formToken);
+//                     $csrfToken      = $this->get('security.csrf.token_manager')->getToken('fa_paa_category_select')->getValue();
                     $firstStepData = $firstStepData + array('_token' => $csrfToken);
                     if ($form->has('has_reg_no') && isset($firstStepData['first_step_ordered_fields']) && count(explode(',', $firstStepData['first_step_ordered_fields'])) && !isset($firstStepData['has_reg_no'])) {
                         $options = $form->get('has_reg_no')->getConfig()->getOptions();
@@ -327,7 +329,7 @@ class AdPostController extends ThirdPartyLoginController
             $secondStepData = $this->getStepSessionData('second');
             if (count($secondStepData)) {
                 // in 2.7v $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName); 
-                $formToken = '_csrf/https-'.$form->getName();
+                $formToken = '_csrf/https-'.$formName;
                 $csrfToken      = $this->container->get('session')->get($formToken);
                 //# It is generating new token that's why i'm getting old _csrf token from session
                 // Note: Need to investigate more

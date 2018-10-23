@@ -868,7 +868,7 @@ class AdRepository extends EntityRepository
             // paa touchpoint entry for newsletter & dotmailer
             try {
                 $this->_em->getRepository('FaDotMailerBundle:Dotmailer')->doTouchPointEntry($object->getUser()->getId(), $object->getId(), DotmailerRepository::TOUCH_POINT_PAA, $container);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 if ($container) {
                     CommonManager::sendErrorMail($container, 'Error: Problem in touch point PAA: '.$object->getId(), $e->getMessage(), $e->getTraceAsString());
                 }

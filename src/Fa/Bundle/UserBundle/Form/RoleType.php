@@ -51,7 +51,7 @@ class RoleType extends AbstractType
                 ChoiceType::class,
                 array(
                     'placeholder' => 'Select Role Type',
-                    'choices'  => array('A' => 'Admin', 'C' => 'Customer', 'P' => 'Internal Use'),
+                    'choices'  => array_flip(array('A' => 'Admin', 'C' => 'Customer', 'P' => 'Internal Use')),
                     'constraints' => array(
                         new NotBlank(array('message' => 'Please select role type.')),
                     )

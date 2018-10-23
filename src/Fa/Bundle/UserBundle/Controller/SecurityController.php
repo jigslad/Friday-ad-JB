@@ -57,7 +57,7 @@ class SecurityController extends ThirdPartyLoginController
                 		$routeRefererUrl = "/";
                 	}
                     $prevRouteName = $this->get('router')->match($routeRefererUrl)['_route'];
-                } catch (ResourceNotFoundException $e) {
+                } catch (\Exception $e) {
                     $prevRouteName = null;
                 }
                 if ($prevRouteName && !in_array($prevRouteName, array('login', 'fa_user_register'))) {

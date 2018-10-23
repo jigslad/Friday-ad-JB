@@ -1,33 +1,34 @@
+# This file is auto-generated during the composer install
 parameters:
     database_driver: pdo_mysql
-    database_host: 192.168.102.66
+    database_host: localhost
     database_port: 3306
     database_name: fridayad_prod
-    database_user: fridayad
+    database_user: root
     database_password: '6Dje$c8H2lQ*Tz9l3'
     database_driver_slave1: pdo_mysql
-    database_host_slave1: 192.168.102.66
+    database_host_slave1: localhost
     database_port_slave1: 3306
     database_name_slave1: fridayad_prod
-    database_user_slave1: fridayad
+    database_user_slave1: root
     database_password_slave1: '6Dje$c8H2lQ*Tz9l3'
     database_driver_history: pdo_mysql
-    database_host_history: 192.168.102.66
+    database_host_history: localhost
     database_port_history: 3306
     database_name_history: fridayad_history
-    database_user_history: fridayad
+    database_user_history: root
     database_password_history: '6Dje$c8H2lQ*Tz9l3'
     database_driver_history_slave1: pdo_mysql
-    database_host_history_slave1: 192.168.102.66
+    database_host_history_slave1: localhost
     database_port_history_slave1: 3306
     database_name_history_slave1: fridayad_history
-    database_user_history_slave1: fridayad
+    database_user_history_slave1: root
     database_password_history_slave1: '6Dje$c8H2lQ*Tz9l3'
     mailer_transport: gmail
     mailer_host: smtp.gmail.com
     mailer_user: devappintegrations@fridaymediagroup.com
     mailer_password: 9yjd2ocstaLnMVemQ
-    mailer_sender_email: gaurav.aggarwal@fridaymediagroup.com
+    mailer_sender_email: vijay.namburi@fridaymediagroup.com
     locale: en_GB
     locale_enabled:
         - en_GB
@@ -39,42 +40,42 @@ parameters:
     reset_password_encryption_key: fridayAd
     profile_page_encryption_key: 'FAUserProfile@!#'
     fa.solr.client.ad:
-        hostname: 192.168.102.66
+        hostname: localhost
         port: 8983
         path: /solr/core0
         login: ''
         password: ''
         timeout: 5
     fa.solr.client.user:
-        hostname: 192.168.102.66
+        hostname: localhost
         port: 8983
         path: /solr/core1
         login: ''
         password: ''
         timeout: 5
     fa.solr.client.ad.view.counter:
-        hostname: 192.168.102.66
+        hostname: localhost
         port: 8983
         path: /solr/core2
         login: ''
         password: ''
         timeout: 5
     fa.solr.client.user.shop.detail:
-        hostname: 192.168.102.66
+        hostname: localhost
         port: 8983
         path: /solr/core3
         login: ''
         password: ''
         timeout: 5
-    base_url: 'https://fmti.friday-ad.co.uk'
+    base_url: 'https://fmtinew.friday-ad.co.uk'
     service_name: 'Friday Ad'
-    fa.cache.key: fmti.friday-ad.co.uk
+    fa.cache.key: fmtinew.friday-ad.co.uk
     fa.facebook:
         app_id: '819610618218809'
         app_secret: b761f4504ff6aabda6747b82d86cc7d6
     fa.google:
-        client_id: 657534475086-8j5hsmls58aik0fm3iurnku5mhlorae7.apps.googleusercontent.com
-        client_secret: zT7H0D_7WG0-jAxXY21ZdgFN
+        client_id: 657534475086-kc3flvu2vherucq7iuo4odr815qj4dfn.apps.googleusercontent.com
+        client_secret: 891qIa7yolMBRDZxqoFAazGi
     fa.image.allow_size_in_mb: 8
     fa.image.for_sale_upload_limit: 30
     fa.image.jobs_upload_limit: 30
@@ -105,13 +106,13 @@ parameters:
     fa.googlemap.api.key: AIzaSyCG_nZMaz62PiRqc8_3QiAP9IuwSSvABj4
     fa.feed.api.id: f8c1508
     fa.add.this.pubid: ra-54c34abe6fdc2e68
-    fa.static.url: //fmti.friday-ad.co.uk/bundles
-    fa.static.asset.url: //fmti.friday-ad.co.uk
+    fa.static.url: //fmtinew.friday-ad.co.uk/bundles
+    fa.static.asset.url: //fmtinew.friday-ad.co.uk
     fa.static.aws.url: 'https://images.dev.friday-ad.s3-eu-west-1.amazonaws.com'
-    fa.static.shared.url: //fmti.friday-ad.co.uk
+    fa.static.shared.url: //fmtinew.friday-ad.co.uk
     by_pass_payment: false
     by_pass_payment_admin: false
-    fa.error.email: lmpsymfonydevlog@fridaymediagroup.com
+    fa.error.email: vijay.namburi@fridaymediagroup.com
     fa.cyber.source.mode: test
     fa.cyber.source.test:
         merchant_id: fridayad_gbp_ecom
@@ -184,8 +185,8 @@ parameters:
     fa.company.image_size:
         - 200X150
     fa.php.path: php
-    fa.main.host: fmti.friday-ad.co.uk
-    fa.motor.host: motors.fmti.friday-ad.co.uk
+    fa.main.host: fmtinew.friday-ad.co.uk
+    fa.motor.host: motors.fmtinew.friday-ad.co.uk
     fa.image.user.site.allow_size_in_mb: 8
     fa.image.user.site.upload_limit: 8
     fa.image.user.site.thumb_size:
@@ -205,9 +206,9 @@ parameters:
     fa.url.scheme: https
     fa.user.site.banner.allow_size_in_mb: 8
     fa.user.site.banner.image.dir: uploads/usersitebanner
-    fa.feed.data.dir: fmti.friday-ad.co.uk/data/feed_data
-    redis_host: localhost
-    redis_read_host: localhost
+    fa.feed.data.dir: fmtinew.friday-ad.co.uk/data/feed_data
+    redis_host: localhost  #192.168.101.19:6379/4
+    redis_read_host: localhost  #192.168.101.19:6379/4
     fa.user.secure.schemes: https
     fa.payment.secure.schemes: https
     fa.support.email: support@friday-ad.co.uk
@@ -234,16 +235,16 @@ parameters:
     add_a_photo_encryption_key: '!@#ad-image-upload!@#'
     ti_base_url: 'http://fmti.trade-it.co.uk'
     database_driver_ti_history: pdo_mysql
-    database_host_ti_history: 192.168.102.66
+    database_host_ti_history: localhost
     database_port_ti_history: 3306
     database_name_ti_history: tradeit_history
-    database_user_ti_history: fridayad
+    database_user_ti_history: root
     database_password_ti_history: '6Dje$c8H2lQ*Tz9l3'
     database_driver_ti_history_slave1: pdo_mysql
-    database_host_ti_history_slave1: 192.168.102.66
+    database_host_ti_history_slave1: localhost
     database_port_ti_history_slave1: 3306
     database_name_ti_history_slave1: tradeit_history
-    database_user_ti_history_slave1: fridayad
+    database_user_ti_history_slave1: root
     database_password_ti_history_slave1: '6Dje$c8H2lQ*Tz9l3'
     fa.tradeit.host: fmti.trade-it.co.uk
     fa.ti.motor.host: fmti.motors.trade-it.co.uk
@@ -251,37 +252,37 @@ parameters:
     fa.business_user.moderation.site.id: 23
     fa.amazon.mode: test
     fa.amazon.test:
-        amazon_merchant_id: "A3VOTJER77O34W"
-        amazon_access_key: "AKIAIIK6O6Y5USKVVJQA"
-        amazon_secret_key: "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"
-        amazon_client_id: "amzn1.application-oa2-client.8cff2cc166c54c7ebbb65c0cb9588091"
-        amazon_client_secret: "ddc4903a907b05db095ff20160d4800bfc2747b63df862dda3f1bd00a6375456"
-        amazon_currency_code: "GBP"
-        amazon_region: "uk"
+        amazon_merchant_id: A3VOTJER77O34W
+        amazon_access_key: AKIAIIK6O6Y5USKVVJQA
+        amazon_secret_key: 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
+        amazon_client_id: amzn1.application-oa2-client.8cff2cc166c54c7ebbb65c0cb9588091
+        amazon_client_secret: ddc4903a907b05db095ff20160d4800bfc2747b63df862dda3f1bd00a6375456
+        amazon_currency_code: GBP
+        amazon_region: uk
         amazon_sandbox: true
-        amazon_application_name: "FRIDAY MEDIA GROUP LIMITED"
-        amazon_application_version: 1.0
+        amazon_application_name: 'FRIDAY MEDIA GROUP LIMITED'
+        amazon_application_version: !!float 1
         amazon_proxy_host: null
-        amazon_proxy_port: "-1"
+        amazon_proxy_port: '-1'
         amazon_proxy_username: null
         amazon_proxy_password: null
     fa.amazon.live:
-        amazon_merchant_id: "A3VOTJER77O34W"
-        amazon_access_key: "AKIAIIK6O6Y5USKVVJQA"
-        amazon_secret_key: "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"
-        amazon_client_id: "amzn1.application-oa2-client.5a8b07bbb6454ab597d6ff47ef611cb3"
-        amazon_client_secret: "dfa771018ecc7988fd631e4b245ae9cac16a6dc9de3ce3be7b22656daf7275d0"
-        amazon_currency_code: "GBP"
-        amazon_region: "uk"
+        amazon_merchant_id: A3VOTJER77O34W
+        amazon_access_key: AKIAIIK6O6Y5USKVVJQA
+        amazon_secret_key: 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
+        amazon_client_id: amzn1.application-oa2-client.5a8b07bbb6454ab597d6ff47ef611cb3
+        amazon_client_secret: dfa771018ecc7988fd631e4b245ae9cac16a6dc9de3ce3be7b22656daf7275d0
+        amazon_currency_code: GBP
+        amazon_region: uk
         amazon_sandbox: false
-        amazon_application_name: "FRIDAY MEDIA GROUP LIMITED"
-        amazon_application_version: 1.0
+        amazon_application_name: 'FRIDAY MEDIA GROUP LIMITED'
+        amazon_application_version: !!float 1
         amazon_proxy_host: null
-        amazon_proxy_port: "-1"
+        amazon_proxy_port: '-1'
         amazon_proxy_username: null
         amazon_proxy_password: null
-    fa.amazon.test.url: "https://static-eu.payments-amazon.com/OffAmazonPayments/uk/sandbox/lpa/js/Widgets.js"
-    fa.amazon.live.url: "https://static-eu.payments-amazon.com/OffAmazonPayments/uk/js/Widgets.js"
-    fa.amazon.test.store_name : "Friday-Ad Development Team"
-    fa.amazon.live.store_name : "Friday-Ad Team"
+    fa.amazon.test.url: 'https://static-eu.payments-amazon.com/OffAmazonPayments/uk/sandbox/lpa/js/Widgets.js'
+    fa.amazon.live.url: 'https://static-eu.payments-amazon.com/OffAmazonPayments/uk/js/Widgets.js'
+    fa.amazon.test.store_name: 'Friday-Ad Development Team'
+    fa.amazon.live.store_name: 'Friday-Ad Team'
     maintenance: false
