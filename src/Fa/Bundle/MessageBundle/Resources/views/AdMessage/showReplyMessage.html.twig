@@ -163,7 +163,9 @@
 {% endfor %}
 </div>
 
-{% block message_attachments_slider_js %}
+{% set message_attachments_slider_js = block('message_attachments_slider_js') is defined ? block('message_attachments_slider_js') : '' %}
+
+{{ message_attachments_slider_js }}
 <script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
 <script src="{{ asset_url('facore/js/jquery.fancybox.pack.js') }}"></script>
 <script language="javascript" type="text/javascript">
@@ -247,4 +249,3 @@
     }
 //]]>
 </script>
-{% endblock %}

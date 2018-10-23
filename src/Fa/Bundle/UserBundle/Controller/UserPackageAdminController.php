@@ -12,6 +12,9 @@
 namespace Fa\Bundle\UserBundle\Controller;
 
 use Fa\Bundle\CoreBundle\Controller\CoreController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Fa\Bundle\UserBundle\Form\ResetPasswordType;
 use Fa\Bundle\UserBundle\Event\FormEvent;
@@ -90,7 +93,7 @@ class UserPackageAdminController extends CoreController
         );
 
         $catFormBuilder = $this->createFormBuilder(null, $cat_options)
-        ->add('is_auto_renew', 'choice', array('label' => 'Auto-renew', 'data' => $is_auto_renew, 'choices'  => EntityRepository::getYesNoArray($this->container, false), 'mapped' => false));
+        ->add('is_auto_renew', ChoiceType::class, array('label' => 'Auto-renew', 'data' => $is_auto_renew, 'choices'  => EntityRepository::getYesNoArray($this->container, false), 'mapped' => false));
 
         $totalLevel   = 1;
         $categoryPath = array();
@@ -98,7 +101,7 @@ class UserPackageAdminController extends CoreController
             $catFormBuilder
             ->add(
                 'zip',
-                'text',
+                TextType::class,
                 array(
                     'mapped' => false,
                     'data' => $user->getZip(),
@@ -150,7 +153,7 @@ class UserPackageAdminController extends CoreController
                 }
             }
         }
-        $catFormBuilder->add('category_last_level', 'hidden', array('mapped' => false, 'data' => count($categoryPath)));
+        $catFormBuilder->add('category_last_level', HiddenType::class, array('mapped' => false, 'data' => count($categoryPath)));
         if ($totalLevel) {
             for ($i = 1; $i <= $totalLevel; $i++) {
                 if ($i == 1) {

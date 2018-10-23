@@ -421,7 +421,7 @@ class DashboardController extends CoreController
             // initialize solr search manager service and fetch data based of above prepared search options
             $solrSearchManager = $this->get('fa.solrsearch.manager');
             $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
-            if (!is_null($adIdsArray) && count($adIdsArray) && isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
+            if (!empty($adIdsArray) && isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
                 $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
             }

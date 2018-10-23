@@ -25,7 +25,7 @@ config_rule_delete_admin:
     defaults: { _controller: "FaCoreBundle:ConfigRuleAdmin:delete" }
 
 category_ajax_term_admin:
-    path:     /ajax/find/{id}
+    path:     /ajax/find
     defaults: { _controller: "FaCoreBundle:ConfigRuleAdmin:categoryAjax" }
     options:
         expose: true

@@ -202,7 +202,10 @@
 {{ include('FaUserBundle:Review:reviewJs.html.twig', {'success_url': app.request.getUri}) }}
 {{ include('FaCoreBundle::starRatingJs.html.twig') }}
 {{ include('FaMessageBundle:AdMessage:messageJs.html.twig', {'page': 'conversation'}) }}
-{{ block('message_attachments_slider_js') }}
+{#{{ block('message_attachments_slider_js') }}#}
+{% set message_attachments_slider_js = block('message_attachments_slider_js') is defined ? block('message_attachments_slider_js') : '' %}
+
+{{ message_attachments_slider_js }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     {% set adMessageVariables = get_variables('AdMessage') %}

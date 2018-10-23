@@ -126,7 +126,7 @@ class PackageRuleRepository extends EntityRepository
         }
 
         //add location group.
-        if (count($locationGroupIdArray)) {
+        if (!empty($locationGroupIdArray)) {
             $query->andWhere(self::ALIAS.'.location_group IN (:locationGroupId) OR '.self::ALIAS.'.location_group IS NULL')
                 ->setParameter('locationGroupId', $locationGroupIdArray);
         } else {
