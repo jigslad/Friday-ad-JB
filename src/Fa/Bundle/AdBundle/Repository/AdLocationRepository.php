@@ -93,14 +93,6 @@ class AdLocationRepository extends EntityRepository
         $locations = $this->findBy(array('ad' => $ad->getId()));
         $mainTownId = '';
         
-        if (empty($locations)) {
-            $document = $this->addField($document, AdSolrFieldMapping::TOWN_ID, 2);
-            $document = $this->addField($document, AdSolrFieldMapping::LATITUDE, "55.37874009999999");
-            $document = $this->addField($document, AdSolrFieldMapping::LONGITUDE, "-3.4612489999999525");
-            $document = $this->addField($document, AdSolrFieldMapping::STORE, "55.37874009999999,-3.4612489999999525");
-            return $document;
-        }
-        
         foreach ($locations as $location) {
             $document = $this->addField($document, AdSolrFieldMapping::POSTCODE, $location->getPostcode());
             $document = $this->addField($document, AdSolrFieldMapping::DOMICILE_ID, ($location->getLocationDomicile() ? $location->getLocationDomicile()->getId() : null));
