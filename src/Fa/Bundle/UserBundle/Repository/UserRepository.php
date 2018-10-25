@@ -146,7 +146,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
                 $this->queryBuilder->andWhere(self::ALIAS.'.first_name LIKE :firstName');
                 $this->queryBuilder->setParameter('firstName', $firstName.'%');
             } else {
-                $this->queryBuilder->andWhere('MATCH_AGAINST ('.self::ALIAS.'.first_name', ':firstName) > 0.0');
+                $this->queryBuilder->andWhere('MATCH_AGAINST ('.self::ALIAS.'.first_name, :firstName) > 0.0');
                 $this->queryBuilder->setParameter('firstName', $firstName);
             }
         }
@@ -164,7 +164,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
                 $this->queryBuilder->andWhere(self::ALIAS.'.last_name LIKE :lastName');
                 $this->queryBuilder->setParameter('lastName', $lastName.'%');
             } else {
-                $this->queryBuilder->andWhere('MATCH_AGAINST ('.self::ALIAS.'.last_name', ':lastName) > 0.0');
+                $this->queryBuilder->andWhere('MATCH_AGAINST ('.self::ALIAS.'.last_name, :lastName) > 0.0');
                 $this->queryBuilder->setParameter('lastName', $lastName);
             }
         }
