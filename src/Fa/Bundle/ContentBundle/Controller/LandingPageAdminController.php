@@ -354,8 +354,6 @@ class LandingPageAdminController extends CrudController implements ResourceAutho
      */
     public function deleteAction(Request $request, $id)
     {
-        $backUrl = CommonManager::getAdminBackUrl($this->container);
-
         // create array of landing page info images.
         $imagesArray       = array();
         $landingPageImages = $this->getRepository('FaContentBundle:LandingPageInfo')->findBy(array('landing_page' => $id));
@@ -373,8 +371,6 @@ class LandingPageAdminController extends CrudController implements ResourceAutho
             }
         }
 
-        CommonManager::setAdminBackUrl($request, $this->container);
-        $backUrl       = CommonManager::getAdminBackUrl($this->container);
         $deleteManager = $this->get('fa.deletemanager');
         $entity        = $this->getRepository($this->getBundleName().':'.$this->getEntityName())->find($id);
 
@@ -391,7 +387,7 @@ class LandingPageAdminController extends CrudController implements ResourceAutho
         } catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException $e) {
             return parent::handleMessage($this->get('translator')->trans("This record can not be removed from database because it's reference exists in database.", array(), 'error'), $this->getRouteName(''), array(), 'error');
         } catch (\Exception $e) {
-            return parent::handleException($e, 'error', $this->getRouteName(''));
+            return parent::handleException($e, 'error', $this->getRouteName('landing_page'));
         }
 
         // remove images of landing page info.
@@ -404,10 +400,9 @@ class LandingPageAdminController extends CrudController implements ResourceAutho
                 unlink($file);
             }
         }
-
-        return parent::handleMessage($this->get('translator')->trans('Record has been deleted successfully.', array(), 'success'), ($backUrl ? $backUrl : $this->getRouteName('')));
+        return parent::handleMessage($this->get('translator')->trans('Record has been deleted successfully.', array(), 'success'), $this->getRouteName(''));
     }
-    
+ 
     public function getFQNForForms($formName)
     {
         // getName() symfony form function is removed After symfony 3, so to handle dynamic forms we need create array
