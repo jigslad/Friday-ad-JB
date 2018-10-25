@@ -69,6 +69,18 @@
         <source>translations.save_row</source>
         <target state="new">translations.save_row</target>
       </trans-unit>
+      <trans-unit id="d0c6927389fce341eec0caaf17e64c368ddda490" resname="translations.page_title">
+        <source>translations.page_title</source>
+        <target state="new">Translations Page Title</target>
+      </trans-unit>
+      <trans-unit id="d0c6927389fce341eec0caaf17e64c368ddda490" resname="translations.key">
+        <source>translations.key</source>
+        <target state="new">Translations Key</target>
+      </trans-unit>
+      <trans-unit id="d0c6927389fce341eec0caaf17e64c368ddda490" resname="translations.domain">
+        <source>translations.domain</source>
+        <target state="new">Translations Domain</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

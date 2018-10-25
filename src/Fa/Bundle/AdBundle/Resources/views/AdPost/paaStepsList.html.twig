@@ -1,8 +1,11 @@
 {% set container = fetch_container_instance() %}
 {% set totalSteps = 4 %}
+{% set offloginStep = 0 %}
 {% if container.get('session').has('paa_skip_login_step') %}
-    {% set totalSteps = 3 %}
+    {% set offloginStep = 1 %}
+    {% set totalSteps = totalSteps-1 %}
 {% endif %}
+
 {% set rootCategoryId = '' %}
 {% set rootCategoryName = '' %}
 {% set forSaleCategoryId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
@@ -33,7 +36,13 @@
             {{ 'Advertise on Friday-Ad'|trans({}, 'frontend-paa') }}
         {% endif %}
         </h3>
-        <div class="step-to-complete"><span>{{ '%step_count% steps to complete your ad'|trans({'%step_count%' : (totalSteps - step + 1)}, 'frontend-paa') }}</span></div>
+        {% set stepremaining = (totalSteps-step+1) %}
+        {% set dispStepCount = stepremaining ~ ' steps' %}
+        {% if stepremaining == 0 %}
+            {% set stepremaining = 1  %}
+            {% set dispStepCount = stepremaining ~ ' step' %}
+        {% endif %}
+        <div class="step-to-complete"><span>{{ '%step_count%  left to complete your ad'|trans({'%step_count%' : dispStepCount}, 'frontend-paa') }}</span></div>
     </div>
     <ul class="step-nav">
         {% set step1Class = 'step-off' %}

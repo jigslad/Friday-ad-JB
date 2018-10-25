@@ -25,7 +25,7 @@
                         <div class="paa-bdr-box">
                             <h3 class="text-center">{{ attribute(form, 'company_name').vars.label }}</h3>
                             {{ form_widget(attribute(form, 'company_name'), {'attr': {'placeholder': 'Please type your company name'|trans({}, 'frontend-paa-third-step')} }) }}
-                            {% if attribute(form, 'company_name').vars.attr.maxlength %}
+                            {% if attribute(form, 'company_name').vars.attr.maxlength is defined and attribute(form, 'company_name').vars.attr.maxlength %}
                                 <div class="paa-title-char" id="{{ attribute(form, 'company_name').vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, 'company_name').vars.attr.maxlength }, 'frontend-paa-third-step') }}</div>
                             {% endif %}
                             {{ form_errors(attribute(form, 'company_name')) }}
