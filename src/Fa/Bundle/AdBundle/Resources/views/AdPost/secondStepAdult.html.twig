@@ -2,7 +2,7 @@
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
 
 {% block page_title %}
-    {{'Describe your item'|trans({}, 'frontend-paa')}}
+    {{'Create you advert'|trans({}, 'frontend-paa')}}
 {% endblock %}
 
 {% block body %}
@@ -12,7 +12,7 @@
             {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 2}) }}
             <div id="middle-column" class="large-12 columns">
                 <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
-                <h1 class="text-center paa-title">{{ 'Describe your item'|trans({}, 'frontend-paa-second-step') }} </h1>
+                <h1 class="text-center paa-title">{{ 'Create your advert'|trans({}, 'frontend-paa-second-step') }} </h1>
                 <div class="big-wrapper">
                     <div class="change-category clearfix">
                         <div class="left cat-name-wrap">

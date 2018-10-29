@@ -5,7 +5,7 @@
 {% set regNoFieldCategoryIds = paaFieldRuleRepository.getRegNoFieldCategoryIds(fetch_container_instance()) %}
 
 {% block page_title %}
-    {{ 'What are you selling on Friday-Ad'|trans({}, 'frontend-paa-first-step') }}
+    {{ 'What are you advertising'|trans({}, 'frontend-paa-first-step') }}
 {% endblock %}
 
 {% set showRegNoFieldsFlag = false %}
@@ -32,7 +32,7 @@
         <div class="row paa-main paa-btm-space" {% if app.user and app.user.getRole() and app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}data-equalizer{% endif %}>
             {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 1}) }}
             <div id="middle-column" class="large-12 columns" data-equalizer-watch>
-                <h1 class="text-center paa-title">{{ 'What are you selling on Friday-Ad?'|trans({}, 'frontend-paa-first-step') }}</h1>
+                <h1 class="text-center paa-title">{{ 'what are you advertising?'|trans({}, 'frontend-paa-first-step') }}</h1>
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                 {{ form_errors(form) }}
                 <div class="big-wrapper">
