@@ -87,7 +87,6 @@ class CreateAddressBook extends DotMailerRequestBuild implements ResourceInterfa
             $addressBooks = $this->container->get('fa.dotmailer.getaddressbook.resource');
             $addressBooks->setDataToSubmit(array('Id' => $id));
             if (!$addressBooks->getAddressBook()) {
-
                 $data['id']         = $id;
                 $data['Name']       = $name;
                 $data['Visibility'] = $visibility;
@@ -109,4 +108,3 @@ class CreateAddressBook extends DotMailerRequestBuild implements ResourceInterfa
         return false;
     }
 }
-

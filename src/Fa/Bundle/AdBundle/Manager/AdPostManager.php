@@ -109,7 +109,7 @@ class AdPostManager
      * @return \Fa\Bundle\AdBundle\Entity\Ad
      */
     public function saveAd($data, $adId = null, $saveAllData = false, $isAdmin = false)
-    {	
+    {
         $this->setPaaFieldRules($data['category_id']);
 
         $isAssignUserToDetachedAd = false;
@@ -289,8 +289,8 @@ class AdPostManager
             }
         }
         
-        if(!isset($data['payment_method_id'])) {
-        	$ad->setPaymentMethodId(Null);
+        if (!isset($data['payment_method_id'])) {
+            $ad->setPaymentMethodId(null);
         }
 
         $this->em->persist($ad);
@@ -300,8 +300,8 @@ class AdPostManager
 
 
         $this->saveVerticalData($ad, $data, $previousCategoryId, $isAdmin);
-		
-        if ($saveAllData) { 
+        
+        if ($saveAllData) {
             $this->saveAdLocation($ad, $data);
 
             if ($isSaveImage) {
@@ -346,8 +346,7 @@ class AdPostManager
      * @return \Fa\Bundle\AdBundle\Entity\Ad
      */
     public function savePaaLiteAd($data, $campaign = null)
-    {   
-        
+    {
         $this->setPaaLiteFieldRules($data['campaign_id']);
 
         $user                     = $this->em->getReference('FaUserBundle:User', $data['user_id']);
@@ -462,11 +461,11 @@ class AdPostManager
         // save phone for detached ad and remove phone when detached ad moved to normal ad if user assigned to ad.
         // Save email in edit if exist
         
-        if(!isset($data['payment_method_id'])) {
-            $ad->setPaymentMethodId(Null);
+        if (!isset($data['payment_method_id'])) {
+            $ad->setPaymentMethodId(null);
         } else {
             $ad->setPaymentMethodId($data['payment_method_id']);
-            if(in_array($data['payment_method_id'], array(PaymentRepository::PAYMENT_METHOD_PAYPAL_ID, PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID))) {
+            if (in_array($data['payment_method_id'], array(PaymentRepository::PAYMENT_METHOD_PAYPAL_ID, PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID))) {
                 $this->setPaypalDetailsForUser($data);
             }
         }
@@ -486,9 +485,9 @@ class AdPostManager
 
         // Update ad yac number.
         $this->updateAdYacNumber($ad, $isNewAd);
-        $this->setAdUserFreePackage($ad,$category->getId(),$user);
+        $this->setAdUserFreePackage($ad, $category->getId(), $user);
 
-        if($this->container->get('session')->get('redirect_to_cart')==0) {
+        if ($this->container->get('session')->get('redirect_to_cart')==0) {
             $paaLiteEmailNotification = new PaaLiteEmailNotification();
             $paaLiteEmailNotification->setAd($ad);
             $paaLiteEmailNotification->setUser($user);
@@ -509,7 +508,8 @@ class AdPostManager
         return $ad;
     }
 
-    protected function setPaypalDetailsForUser($data) {
+    protected function setPaypalDetailsForUser($data)
+    {
         $paymentMethodId = $data['payment_method_id'];
         $paypalEmail     = $data['paypal_email'];
         $paypalFirstName = $data['paypal_first_name'];
@@ -522,11 +522,11 @@ class AdPostManager
         $userObj->setIsPaypalVefiried(1);
         $this->em->persist($userObj);
         $this->em->flush($userObj);
-            
     }
-    protected function setAdUserFreePackage($ad, $categoryId,$user)
+    protected function setAdUserFreePackage($ad, $categoryId, $user)
     {
-        $packageIds = array(); $adPackageId = '';
+        $packageIds = array();
+        $adPackageId = '';
         $adId = $ad->getId();
         $userId = $user->getId();
         $systemUserRoles  = $this->em->getRepository('FaUserBundle:Role')->getRoleArrayByType('C', $this->container);
@@ -539,28 +539,26 @@ class AdPostManager
         foreach ($packages as $package) {
             $packageIds[] = array('id'=> $package->getPackage()->getId(),'price'=>$package->getPackage()->getPrice());
         }
-        if(!empty($packageIds)) {
-            usort($packageIds, function($a, $b) {
+        if (!empty($packageIds)) {
+            usort($packageIds, function ($a, $b) {
                 return $a['price'] - $b['price'];
             });
             $adPackageId = $packageIds[0]['id'];
 
-            if($adPackageId!='' && $packageIds[0]['price']>0) {
-
-                $returnTxt = $this->addPackageToCart($adPackageId,$categoryId,$ad,$user);
-                if($returnTxt=='null') {
+            if ($adPackageId!='' && $packageIds[0]['price']>0) {
+                $returnTxt = $this->addPackageToCart($adPackageId, $categoryId, $ad, $user);
+                if ($returnTxt=='null') {
                     $this->container->get('session')->set('redirect_to_cart', 1);
                     $this->container->get('session')->set('cart_ad_id', $ad->getId());
                     $this->container->get('session')->set('cart_package_id', $adPackageId);
                     $adDraftStatus =  $this->em->getReference('FaEntityBundle:Entity', EntityRepository::AD_STATUS_DRAFT_ID);
                     $ad->setStatus($adDraftStatus);
                     $this->em->persist($ad);
-                    $this->em->flush($ad); 
+                    $this->em->flush($ad);
                 } else {
                     $this->container->get('session')->set('show_error_pop_up', 1);
-                    $this->container->get('session')->set('paa-lite-error',$returnTxt);
+                    $this->container->get('session')->set('paa-lite-error', $returnTxt);
                 }
-                
             } else {
                 $adUserPackage = new AdUserPackage();
 
@@ -593,12 +591,13 @@ class AdPostManager
 
                 foreach ($selpackage->getUpsells() as $upsell) {
                     $this->addAdUserPackageUpsell($ad, $adUserPackage, $upsell);
-                }   
+                }
 
                 $adExpiryDays     = $this->em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $this->container);
-                $selectedPackagePrintId = null;$printEditionValues = array();
+                $selectedPackagePrintId = null;
+                $printEditionValues = array();
                 
-                $cart            = $this->em->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $this->container,false,false,false,true);
+                $cart            = $this->em->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $this->container, false, false, false, true);
                 $cartDetails     = $this->em->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
                 if ($cartDetails) {
                     $adCartDetails   = $this->em->getRepository('FaPaymentBundle:Transaction')->getTransactionsByCartIdAndAdId($cart->getId(), $adId);
@@ -636,19 +635,13 @@ class AdPostManager
                     $this->em->getConnection()->rollback();
                     CommonManager::sendErrorMail($this->container, 'Error: Problem in payment', $e->getMessage(), $e->getTraceAsString());
                     $error = 'Problem in payment.';
-                } 
-
+                }
             }
-
-            
         }
-        
-
     }
 
-    protected function addPackageToCart($adPackageId,$categoryId,$ad,$user) 
+    protected function addPackageToCart($adPackageId, $categoryId, $ad, $user)
     {
-
         $adId = $ad->getId();
         $userId   = ($user ? $user->getId() : null);
         $error = 'null';
@@ -727,7 +720,6 @@ class AdPostManager
         }
 
         return $error;
-        
     }
 
     public function addAdPackage($adId, $packageId, $adExpiryDays, $cart, $selectedPackagePrintId, $type = null, $activeAdUserPackageId = null, $addAdToModeration = false, $printEditionValues = array(), $userCreditId = null, $totalCredit = null, $privateUserAdParams = array())
@@ -740,14 +732,14 @@ class AdPostManager
 
         //apply discount code if it is already applied for one ad
         $loggedinUser = $user;
-        $cart = $this->em->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container,false,false,false,true);
+        $cart = $this->em->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container, false, false, false, true);
         $cartValue = unserialize($cart->getValue());
         if ($cart->getDiscountAmount() > 0 && isset($cartValue['discount_values']) && count($cartValue['discount_values']) && isset($cartValue['discount_values']['code'])) {
             $codeObj = $this->em->getRepository('FaPromotionBundle:PackageDiscountCode')->findOneBy(array('code' => $cartValue['discount_values']['code'], 'status' => 1));
             $cartDetails  = $this->em->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
             $this->em->getRepository('FaPaymentBundle:TransactionDetail')->removeCodeFromAllItems($cartDetails);
             $this->em->getRepository('FaPromotionBundle:PackageDiscountCode')->processDiscountCode($codeObj, $cart, $cartDetails, $loggedinUser, $this->container, false);
-        } else if ($cart->getDiscountAmount() <= 0 && isset($cartValue['discount_values']) && count($cartValue['discount_values']) && isset($cartValue['discount_values']['code'])) {
+        } elseif ($cart->getDiscountAmount() <= 0 && isset($cartValue['discount_values']) && count($cartValue['discount_values']) && isset($cartValue['discount_values']['code'])) {
             $cartDetails  = $this->em->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
             $this->em->getRepository('FaPaymentBundle:TransactionDetail')->removeCodeFromAllItems($cartDetails);
         }
@@ -809,7 +801,7 @@ class AdPostManager
                 } else {
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-yac-number setsold --ad_id='.$ad->getId().' >/dev/null &');
                 }
-            } elseif($ad->getUser()->getIsPrivatePhoneNumber() && $ad->getUser()->getPhone() && !$ad->getPrivacyNumber()) {
+            } elseif ($ad->getUser()->getIsPrivatePhoneNumber() && $ad->getUser()->getPhone() && !$ad->getPrivacyNumber()) {
                 exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-yac-number allocate --ad_id='.$ad->getId().' >/dev/null &');
             } else {
                 //Phone Number Edited & Use Privacy Number is set
@@ -913,7 +905,7 @@ class AdPostManager
      * @param array  $data Ad data.
      */
     protected function saveAdLocation($ad, $data = array())
-    {	
+    {
         $insertAdLocationFlag = true;
         $adLocationArray = $this->em->getRepository('FaAdBundle:AdLocation')->getAdLocationDataForLog($ad->getId());
         $adLocationFormArray = array();
@@ -938,8 +930,8 @@ class AdPostManager
             }
         } else {
             if (preg_match('/^\d+$/', $location)) {
-            	$town = $this->em->getRepository('FaEntityBundle:Location')->getTownAndAreaById($location, $this->container);
-            } else if (preg_match('/^([\d]+,[\d]+)$/', $location)) {
+                $town = $this->em->getRepository('FaEntityBundle:Location')->getTownAndAreaById($location, $this->container);
+            } elseif (preg_match('/^([\d]+,[\d]+)$/', $location)) {
                 $localityTown = explode(',', $location);
                 $localityId = $localityTown[0];
                 $townId     = $localityTown[1];
@@ -967,30 +959,28 @@ class AdPostManager
                 $longitude = $town->getLongitude();
             }
         }
-        if($latitude!='' && $latitude!=0.00000000 && $longitude!='' && $longitude!=0.00000000) {
+        if ($latitude!='' && $latitude!=0.00000000 && $longitude!='' && $longitude!=0.00000000) {
             $postalcodeVal = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodTextByLatLong($latitude, $longitude);
         }
         
         //get Location Area record
-        if($town) {
-        	//check area is based on London Location
-        	if($town && ($town->getId() == LocationRepository::LONDON_TOWN_ID || $town->getLvl() == 4)){
-        		if (preg_match('/^\d+$/', $locationArea)) {
-        			$area = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array('id'=>$locationArea, 'lvl'=>'4'));
-        			
-        		} else {
-        			$area = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array(
-        					'name' 	=> $locationArea,
-        					'lvl'	=>'4'
-        			));
-        		}
-        		
-        		if (!empty($area)) {
-        			$latitude  = $area->getLatitude();
-        			$longitude = $area->getLongitude();
-        		}
-        		
-        	}
+        if ($town) {
+            //check area is based on London Location
+            if ($town && ($town->getId() == LocationRepository::LONDON_TOWN_ID || $town->getLvl() == 4)) {
+                if (preg_match('/^\d+$/', $locationArea)) {
+                    $area = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array('id'=>$locationArea, 'lvl'=>'4'));
+                } else {
+                    $area = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array(
+                            'name' 	=> $locationArea,
+                            'lvl'	=>'4'
+                    ));
+                }
+                
+                if (!empty($area)) {
+                    $latitude  = $area->getLatitude();
+                    $longitude = $area->getLongitude();
+                }
+            }
         }
         
         $adLocationFormArray[]['country_id']  = ($town ? $town->getParent()->getParent()->getId() : null);
@@ -1016,33 +1006,32 @@ class AdPostManager
         if ($town && $insertAdLocationFlag) {
             $adLocation = new AdLocation();
             $adLocation->setAd($ad);
-            if(isset($area) && $area->getLvl() == '4') {
-            	$adLocation->setLocationTown($area->getParent());
-            	$adLocation->setLocationDomicile($area->getParent()->getParent());
-            	$adLocation->setLocationCountry($area->getParent()->getParent()->getParent());
-	            $adLocation->setPostcode($postcodeVal);
-	            $adLocation->setLatitude($latitude);
-	            $adLocation->setLongitude($longitude);
-	            $adLocation->setLocationArea($area);
+            if (isset($area) && $area->getLvl() == '4') {
+                $adLocation->setLocationTown($area->getParent());
+                $adLocation->setLocationDomicile($area->getParent()->getParent());
+                $adLocation->setLocationCountry($area->getParent()->getParent()->getParent());
+                $adLocation->setPostcode($postcodeVal);
+                $adLocation->setLatitude($latitude);
+                $adLocation->setLongitude($longitude);
+                $adLocation->setLocationArea($area);
             } else {
-            	$adLocation->setLocationTown($town);
-            	$adLocation->setLocationDomicile($town->getParent());
-            	$adLocation->setLocationCountry($town->getParent()->getParent());
-            	$adLocation->setPostcode($postcodeVal);
-            	$adLocation->setLatitude($latitude);
-            	$adLocation->setLongitude($longitude);
-            	$adLocation->setLocationArea(null);
+                $adLocation->setLocationTown($town);
+                $adLocation->setLocationDomicile($town->getParent());
+                $adLocation->setLocationCountry($town->getParent()->getParent());
+                $adLocation->setPostcode($postcodeVal);
+                $adLocation->setLatitude($latitude);
+                $adLocation->setLongitude($longitude);
+                $adLocation->setLocationArea(null);
             }
 
             if ($locality) {
                 $adLocation->setLocality($locality);
             }
-			
+            
             
             $this->em->persist($adLocation);
             $this->em->flush();
         }
-        
     }
 
     /**
@@ -1055,7 +1044,7 @@ class AdPostManager
     {
         if ($isAdmin) {
             $adTempId = $this->container->get('session')->get('admin_ad_id_'.(isset($data['admin_ad_counter']) ? $data['admin_ad_counter'] : ''));
-        } elseif($this->container->get('session')->has('paa_image_id')) {
+        } elseif ($this->container->get('session')->has('paa_image_id')) {
             $adTempId = $this->container->get('session')->get('paa_image_id');
         } else {
             $adTempId = $this->container->get('session')->get('ad_id');
@@ -1156,15 +1145,15 @@ class AdPostManager
                     }
                 }
                 
-                if (in_array($field, $this->getNotIndexedVerticalFields($categoryId))) { 
+                if (in_array($field, $this->getNotIndexedVerticalFields($categoryId))) {
                     if ($data[$field] !== null && $data[$field] !== false && $data[$field] !== '') {
                         if (in_array($field, array('dimensions_length', 'dimensions_width', 'dimensions_height')) && !$isDimension) {
                             $isDimension = true;
                         }
                         
-                        if (is_array($data[$field]) && $data[$field] != 'rates_id') { 
+                        if (is_array($data[$field]) && $data[$field] != 'rates_id') {
                             $metaData[$field] = implode(',', $data[$field]);
-                        } else { 
+                        } else {
                             if ($this->getFieldType($field) == 'text_float' || $this->getFieldType($field) == 'text_int') {
                                 $metaData[$field] = str_replace(',', '', $data[$field]);
                             } else {
@@ -1173,7 +1162,7 @@ class AdPostManager
                         }
                     }
                 } else {
-                	if (is_array($data[$field])) { 
+                    if (is_array($data[$field])) {
                         $this->setField($field, implode(',', $data[$field]), $verticalObj);
                     } else {
                         $this->setField($field, $data[$field], $verticalObj);
@@ -1183,28 +1172,28 @@ class AdPostManager
         }
 
         //check rate field is defined
-        if(isset($data['rates_id'])) {
-        	$ratesData= $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($this->getFieldCategoryDimenionId('rates_id'), $this->container, true, 'id', 'textCollection');
-        	$ratesRecord = [];
-        	if( !empty($ratesData) ) {
-        		foreach ($ratesData as $rate=>$val) {
-        			$rateType = explode('_', $val);  
-        			if($data[str_replace(' ', '', $val)] != '') {
-        				$ratesRecord[$rateType[1]][$rate] = $data[str_replace(' ', '', $val)];
-        			}
-        		}
-        	}
-        	
-        	if(!empty($ratesRecord)) { 
-        		$metaData['rates_id'] = $ratesRecord;
-        	} else {
-        		unset($metaData['rates_id']);
-        	}
+        if (isset($data['rates_id'])) {
+            $ratesData= $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($this->getFieldCategoryDimenionId('rates_id'), $this->container, true, 'id', 'textCollection');
+            $ratesRecord = [];
+            if (!empty($ratesData)) {
+                foreach ($ratesData as $rate=>$val) {
+                    $rateType = explode('_', $val);
+                    if ($data[str_replace(' ', '', $val)] != '') {
+                        $ratesRecord[$rateType[1]][$rate] = $data[str_replace(' ', '', $val)];
+                    }
+                }
+            }
+            
+            if (!empty($ratesRecord)) {
+                $metaData['rates_id'] = $ratesRecord;
+            } else {
+                unset($metaData['rates_id']);
+            }
         }
         
         if ($isDimension) {
             $metaData['dimensions_unit'] = $data['dimensions_unit'];
-        } 
+        }
         $this->setField('meta_data', serialize($metaData), $verticalObj);
 
         $this->em->persist($verticalObj);
@@ -1368,7 +1357,8 @@ class AdPostManager
      */
     private function setPaaLiteFieldRules($campaignId)
     {
-        $fieldRules    = array();$paaFieldRules = array();
+        $fieldRules    = array();
+        $paaFieldRules = array();
         $paaFieldRules = $this->em->getRepository('FaAdBundle:PaaLiteFieldRule')->getAllPaaLiteFields($campaignId);
 
         if (!empty($paaFieldRules)) {
@@ -1480,7 +1470,6 @@ class AdPostManager
         if (!in_array($ad->getStatus()->getId(), $this->em->getRepository('FaAdBundle:Ad')->getRepostButtonInEditAdStatus())) {
             $this->em->getRepository('FaAdBundle:AdModerate')->sendAdForModeration($ad, $this->container, true);
         }
-        
     }
 
     /**
@@ -1498,7 +1487,6 @@ class AdPostManager
         if (!in_array($ad->getStatus()->getId(), $this->em->getRepository('FaAdBundle:Ad')->getRepostButtonInEditAdStatus())) {
             $this->em->getRepository('FaAdBundle:AdModerate')->sendAdForModeration($ad, $this->container, true);
         }
-        
     }
 
     /**
@@ -1570,7 +1558,7 @@ class AdPostManager
             $locationArea = isset($data['area']) ? $data['area'] : null;
             $postalcodeVal = null;
 
-            $postCode = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodByLocation($location);           
+            $postCode = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodByLocation($location);
             if ($postCode && $postCode->getTownId()) {
                 $town      = $this->em->getRepository('FaEntityBundle:Location')->find($postCode->getTownId());
                 $postcodeVal  = $postCode->getPostCode();
@@ -1582,7 +1570,7 @@ class AdPostManager
             } else {
                 if (preg_match('/^\d+$/', $location)) {
                     $town = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array('id' => $location, 'lvl' => '3'));
-                } else if (preg_match('/^([\d]+,[\d]+)$/', $location)) {
+                } elseif (preg_match('/^([\d]+,[\d]+)$/', $location)) {
                     $localityTown = explode(',', $location);
                     $localityId = $localityTown[0];
                     $townId     = $localityTown[1];
@@ -1610,30 +1598,28 @@ class AdPostManager
                     $longitude = $town->getLongitude();
                 }
             }
-            if($latitude!='' && $latitude!=0.00000000 && $longitude!='' && $longitude!=0.00000000) {
+            if ($latitude!='' && $latitude!=0.00000000 && $longitude!='' && $longitude!=0.00000000) {
                 $postalcodeVal = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodTextByLatLong($latitude, $longitude);
             }
             
             //get Location Area record
-            if($town) {
-            	//check area is based on London Location
-            	if($town && ($town->getId() == LocationRepository::LONDON_TOWN_ID || $town->getLvl() == 4) ) {
-            		if (preg_match('/^\d+$/', $locationArea)) {
-            			$area = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array('id'=>$locationArea, 'lvl'=>'4'));
-            			
-            		} else {
-            			$area = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array(
-            					'name' 	=> $locationArea,
-            					'lvl'	=>'4'
-            			));
-            		}
-            		
-            		if (!empty($area)) {
-            			$latitude  = $area->getLatitude();
-            			$longitude = $area->getLongitude();
-            		}
-            		
-            	}
+            if ($town) {
+                //check area is based on London Location
+                if ($town && ($town->getId() == LocationRepository::LONDON_TOWN_ID || $town->getLvl() == 4)) {
+                    if (preg_match('/^\d+$/', $locationArea)) {
+                        $area = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array('id'=>$locationArea, 'lvl'=>'4'));
+                    } else {
+                        $area = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array(
+                                'name' 	=> $locationArea,
+                                'lvl'	=>'4'
+                        ));
+                    }
+                    
+                    if (!empty($area)) {
+                        $latitude  = $area->getLatitude();
+                        $longitude = $area->getLongitude();
+                    }
+                }
             }
             
             if ($town) {
@@ -1642,14 +1628,14 @@ class AdPostManager
                 $adLocationData[0]['latitude']    = $latitude;
                 $adLocationData[0]['longitude']   = $longitude;
                 
-                if(isset($area) && $area->getLvl() == '4') {
-                	$adLocationData[0]['town_id']     	= $area->getParent()->getId();
-                	$adLocationData[0]['domicile_id'] 	= $area->getParent()->getParent()->getId();
-                	$adLocationData[0]['area_id']		= $area->getId();
+                if (isset($area) && $area->getLvl() == '4') {
+                    $adLocationData[0]['town_id']     	= $area->getParent()->getId();
+                    $adLocationData[0]['domicile_id'] 	= $area->getParent()->getParent()->getId();
+                    $adLocationData[0]['area_id']		= $area->getId();
                 } else {
-                	$adLocationData[0]['town_id']     	= $town->getId();
-                	$adLocationData[0]['domicile_id'] 	= $town->getParent()->getId();
-                	$adLocationData[0]['area_id']		= null;
+                    $adLocationData[0]['town_id']     	= $town->getId();
+                    $adLocationData[0]['domicile_id'] 	= $town->getParent()->getId();
+                    $adLocationData[0]['area_id']		= null;
                 }
                 
                 if ($locality) {
@@ -1659,7 +1645,6 @@ class AdPostManager
                 }
             }
             $adLocationData[0]['postal_code'] = $postalcodeVal;
-
         }
         return $adLocationData;
     }
@@ -1730,23 +1715,23 @@ class AdPostManager
         }
         
         //check rate field is defined
-        if(isset($data['rates_id'])) {
-        	$ratesData= $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($this->getFieldCategoryDimenionId('rates_id'), $this->container, true, 'id', 'textCollection');
-        	$ratesRecord = [];
-        	if( !empty($ratesData) ) {
-        		foreach ($ratesData as $rate=>$val) {
-        			$rateType = explode('_', $val);
-        			if($data[str_replace(' ', '', $val)] != '')  {
-        				$ratesRecord[$rateType[1]][$rate] = $data[str_replace(' ', '', $val)];
-        			}
-        		}
-        	}
+        if (isset($data['rates_id'])) {
+            $ratesData= $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($this->getFieldCategoryDimenionId('rates_id'), $this->container, true, 'id', 'textCollection');
+            $ratesRecord = [];
+            if (!empty($ratesData)) {
+                foreach ($ratesData as $rate=>$val) {
+                    $rateType = explode('_', $val);
+                    if ($data[str_replace(' ', '', $val)] != '') {
+                        $ratesRecord[$rateType[1]][$rate] = $data[str_replace(' ', '', $val)];
+                    }
+                }
+            }
 
-        	if(!empty($ratesRecord)) {
-        		$metaData['rates_id'] = $ratesRecord;
-        	} else {
-        		unset($metaData['rates_id']);
-        	}
+            if (!empty($ratesRecord)) {
+                $metaData['rates_id'] = $ratesRecord;
+            } else {
+                unset($metaData['rates_id']);
+            }
         }
 
         if ($isDimension) {
@@ -1769,10 +1754,11 @@ class AdPostManager
      *
      * @return boolean
      */
-    public function updateAdMissingLocation($ad, $data = []) {
-    	if(!empty($data)) {
-    		$this->saveAdLocation($ad, $data);
-    		return true;
-    	}
+    public function updateAdMissingLocation($ad, $data = [])
+    {
+        if (!empty($data)) {
+            $this->saveAdLocation($ad, $data);
+            return true;
+        }
     }
 }

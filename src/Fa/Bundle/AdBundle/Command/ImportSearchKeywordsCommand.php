@@ -97,10 +97,11 @@ EOF
         $category = array();
         $row = $reader->getRow();
 
-        if ($offset > 0)
+        if ($offset > 0) {
             $reader->advanceTo($offset-1);
-        else
+        } else {
             $reader->advanceTo(1);
+        }
 
         while (($row = $reader->getRow()) && $reader->getLineNumber() != $offset + $batchSize) {
             $searchKeyword = $this->em->getRepository('FaAdBundle:SearchKeyword')->findOneBy(array('keyword' => $row['Search Term']));

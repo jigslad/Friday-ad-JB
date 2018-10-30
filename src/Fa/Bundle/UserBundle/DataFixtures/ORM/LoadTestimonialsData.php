@@ -91,7 +91,6 @@ class LoadTestimonialsData extends AbstractFixture implements OrderedFixtureInte
         $em->persist($testimonials4);
 
         $em->flush();
-
     }
 
     /**

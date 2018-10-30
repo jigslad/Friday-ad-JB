@@ -90,7 +90,7 @@ class ExceptionListener
                     $response->headers->setCookie(new Cookie('redirect_path_info', $event->getRequest()->getPathInfo(), time() + 3600 * 24 * 7));
                 }
                 $response->send();
-            } else if (!$this->securityContext->isGranted("IS_AUTHENTICATED_REMEMBERED") && !(strpos($event->getRequest()->getPathInfo(), '/admin/') !== false)) {
+            } elseif (!$this->securityContext->isGranted("IS_AUTHENTICATED_REMEMBERED") && !(strpos($event->getRequest()->getPathInfo(), '/admin/') !== false)) {
                 $this->container->get('session')->getFlashBag()->add('error', $exception->getMessage());
                 $response  = new RedirectResponse($this->container->get('router')->generate('login'));
                 if (!$event->getRequest()->isXmlHttpRequest()) {

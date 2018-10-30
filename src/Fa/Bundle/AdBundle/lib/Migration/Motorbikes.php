@@ -22,7 +22,6 @@ use Fa\Bundle\AdBundle\Entity\AdMotors;
  */
 class Motorbikes
 {
-
     private $meta_text;
 
     private $ad_id;
@@ -36,7 +35,6 @@ class Motorbikes
         $this->ad_id     = $ad_id;
         $this->em = $em;
         $this->init();
-
     }
 
     public function init()
@@ -115,7 +113,6 @@ class Motorbikes
 
     public function update()
     {
-
         $metaData = array();
 
         if (count($this->data) > 0) {
@@ -155,7 +152,6 @@ class Motorbikes
 
             $this->em->persist($motorbikeRepository);
             echo "Dimension updated for ".$motorbikeRepository->getAd()->getId()."\n";
-
         }
     }
 }

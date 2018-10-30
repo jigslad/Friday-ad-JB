@@ -121,7 +121,7 @@ EOF
      */
     protected function updateAdRefreshDateWithOffset($searchParam, $input, $output)
     {
-        $qb          = $this->getAdQueryBuilder(FALSE,$input);
+        $qb          = $this->getAdQueryBuilder(false, $input);
         $step        = 100;
         $offset      = 0;
 
@@ -146,7 +146,7 @@ EOF
             $entityManager->flush($ad);
             $userId = $user ? $user->getId(): null;
             if (!$ad->getIsFeedAd()) {
-            	$this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_refreshed', $ad->getId(), $userId);
+                $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_refreshed', $ad->getId(), $userId);
             }
 
             //send email only if ad has user and status is active and not feed ad.
@@ -173,7 +173,7 @@ EOF
      */
     protected function updateAdRefreshDate($searchParam, $input, $output)
     {
-        $qb        = $this->getAdQueryBuilder(TRUE, $input);
+        $qb        = $this->getAdQueryBuilder(true, $input);
         $count     = $qb->getQuery()->getSingleScalarResult();
         $step      = 100;
         $stat_time = time();
@@ -223,9 +223,8 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE, $input)
+    protected function getAdQueryBuilder($onlyCount = false, $input)
     {
-        
         $user_id        = $input->getOption('user_id');
         $offset         = $input->getOption('offset');
         $lastDays       = $input->getOption('last_days');
@@ -238,7 +237,7 @@ EOF
 
         if ($onlyCount) {
             $qb->select('COUNT('.AdRepository::ALIAS.'.id)');
-        }else {
+        } else {
             $qb->select(AdRepository::ALIAS);
         }
         $qb->innerJoin(AdRepository::ALIAS.'.user', UserRepository::ALIAS, 'WITH', AdRepository::ALIAS.'.user = '.UserRepository::ALIAS.'.id');
@@ -258,5 +257,5 @@ EOF
         $qb->orderBy(AdRepository::ALIAS.'.id');
 
         return $qb;
-    }   
+    }
 }

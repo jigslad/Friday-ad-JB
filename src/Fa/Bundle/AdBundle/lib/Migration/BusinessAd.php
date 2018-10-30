@@ -32,7 +32,6 @@ use Fa\Bundle\UserBundle\Encoder\Pbkdf2PasswordEncoder;
  */
 class BusinessAd
 {
-
     private $container;
 
     private $user;
@@ -100,7 +99,6 @@ class BusinessAd
                 if ($businessCategory['id'] == CategoryRepository::SERVICES_ID || $businessCategory['id'] == CategoryRepository::ADULT_ID) {
                     $userSiteObj->setProfileExposureCategoryId($Mappedcategory->getNewId());
                 }
-
             } else {
                 $cat_id = $this->getNonMappedCategoryId($this->data['PrimaryClass']);
                 if ($cat_id) {

@@ -174,7 +174,7 @@ class BannerManager
                             }
                         }
                     } elseif ($locationArray && isset($locationArray['town'])) {
-                            $townName = $locationArray['town'];
+                        $townName = $locationArray['town'];
                     }
                     $bannerCodeString = str_replace($bannerVariable, $townName, $bannerCodeString);
                 } elseif ($bannerVariable == '{county}') {
@@ -256,9 +256,8 @@ class BannerManager
                           RoleRepository::ROLE_SELLER_ID          => 'private',
                           RoleRepository::ROLE_BUSINESS_SELLER_ID => 'dealer',
                          );
-        if(in_array($roleId, $userTypeArray)) {
+        if (in_array($roleId, $userTypeArray)) {
             return $userTypeArray[$roleId];
         }
-        
     }
 }

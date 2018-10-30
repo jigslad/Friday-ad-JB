@@ -128,8 +128,7 @@ class EmailTemplateAdminType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array
-            (
+            array(
                 'data_class' => 'Fa\Bundle\EmailBundle\Entity\EmailTemplate'
             )
         );

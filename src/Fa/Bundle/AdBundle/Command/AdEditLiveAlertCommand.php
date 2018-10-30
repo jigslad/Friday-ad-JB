@@ -132,7 +132,6 @@ EOF
                     }
                 }
             } catch (\Exception $e) {
-
             }
         }
         $this->em->clear();
@@ -204,7 +203,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('ad' => array ('id' => 'asc'));
+        $data['query_sorter']  = array('ad' => array('id' => 'asc'));
         $data['static_filters'] = AdRepository::ALIAS.'.ad_edit_moderated_at > 0';
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');

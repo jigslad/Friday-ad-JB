@@ -50,7 +50,6 @@ class FaEntityLogListener
      */
     public function preRemove(FaEntityLog $entity, LifecycleEventArgs $event)
     {
-
     }
 
     /**
@@ -61,7 +60,6 @@ class FaEntityLogListener
      */
     public function postPersist(FaEntityLog $entity, LifecycleEventArgs $event)
     {
-
     }
 
     /**
@@ -72,7 +70,6 @@ class FaEntityLogListener
      */
     public function postUpdate(FaEntityLog $entity, LifecycleEventArgs $event)
     {
-
     }
 
     /**

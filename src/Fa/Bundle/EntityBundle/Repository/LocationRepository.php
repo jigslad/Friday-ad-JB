@@ -201,7 +201,7 @@ class LocationRepository extends BaseEntityRepository
 
         $townArray = array();
         foreach ($towns as $town) {
-        	$townArray[] = array('id'=> $town->getId(), 'text' => $town->getName().', '.$town->getParent()->getName(), 'latlong' => $town->getLatitude().', '.$town->getLongitude());
+            $townArray[] = array('id'=> $town->getId(), 'text' => $town->getName().', '.$town->getParent()->getName(), 'latlong' => $town->getLatitude().', '.$town->getLongitude());
         }
 
         return $townArray;
@@ -444,7 +444,7 @@ class LocationRepository extends BaseEntityRepository
                         ->setParameter('redirecturl', $slug);
 
         if ($lvl) {
-            $query->andWhere('lvl',$lvl);
+            $query->andWhere('lvl', $lvl);
         }
         $location = $query->getQuery()->getResult();
 
@@ -661,7 +661,7 @@ class LocationRepository extends BaseEntityRepository
             $townInfoArray['lvl']    	= $town->getLvl();
             
             //if town is special than area behave as like town for SEO
-            if(!$town->getIsSpecialArea() && $town->getLvl()==4) {
+            if (!$town->getIsSpecialArea() && $town->getLvl()==4) {
                 $townInfoArray['slug']  = $town->getParent()->getUrl();
             } else {
                 $townInfoArray['slug']  = $town->getUrl();
@@ -776,7 +776,7 @@ class LocationRepository extends BaseEntityRepository
         $countyInfoArray = array();
         $county = null;
         $objResources = null;
-        if($column=='url') {
+        if ($column=='url') {
             $query = $this->createQueryBuilder(self::ALIAS)
                             ->where(self::ALIAS . '.url = :url')
                             ->setParameter('url', $location)
@@ -826,14 +826,14 @@ class LocationRepository extends BaseEntityRepository
             $slugFlagValue = 'name';
         }
         
-        if($locationArea != null) {
+        if ($locationArea != null) {
             $location = $locationArea;
         }
 
-        if (!$postCode || (isset($postCode['town_id']) && ($postCode['town_id'] == null || $postCode['town_id'] == 0) )) {
+        if (!$postCode || (isset($postCode['town_id']) && ($postCode['town_id'] == null || $postCode['town_id'] == 0))) {
             if (preg_match('/^\d+$/', $location)) {
                 $town = $this->getTownInfoArrayById($location, $container);
-            } else if (preg_match('/^([\d]+,[\d]+)$/', $location)) {
+            } elseif (preg_match('/^([\d]+,[\d]+)$/', $location)) {
                 $localityTown = explode(',', $location);
                 $localityId = $localityTown[0];
                 $townId     = $localityTown[1];
@@ -1255,7 +1255,7 @@ class LocationRepository extends BaseEntityRepository
             ->setParameter('parent_id', $id)
             ->orderBy(self::ALIAS.'.name', 'ASC')
             ->getQuery()
-            ->getResult();        
+            ->getResult();
 
         foreach ($locations as $location) {
             $locationArray[$location->getId()] = $location->getName();
@@ -1275,18 +1275,19 @@ class LocationRepository extends BaseEntityRepository
      *
      * @return object
      */
-    public function getNearestAreaByPostLatLong($postCodeStr = null, $townId = null) {
-        if($postCodeStr) {
+    public function getNearestAreaByPostLatLong($postCodeStr = null, $townId = null)
+    {
+        if ($postCodeStr) {
             $nearAreaObj = null;
             $postCode = $this->_em->getRepository('FaEntityBundle:Postcode')->findOneBy(array('post_code' => $postCodeStr, 'town_id' => $townId));
-            if(!empty($postCode)) {
+            if (!empty($postCode)) {
                 $sql = 'SELECT  ( 3959 * acos( cos( radians('.$postCode->getLatitude().') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('.$postCode->getLongitude().') ) + sin( radians('.$postCode->getLatitude().') ) * sin( radians( latitude ) ) ) ) AS distance, id FROM fridayad_prod.location where lvl=4 HAVING distance < 5 ORDER BY distance LIMIT 0 , 1;';
                 
                 $stmt = $this->_em->getConnection()->prepare($sql);
                 $stmt->execute();
                 
                 $nearArea = $stmt->fetch();
-                if(!empty($nearArea)) {
+                if (!empty($nearArea)) {
                     $nearAreaObj = $this->find($nearArea['id']);
                 }
             }
@@ -1324,7 +1325,7 @@ class LocationRepository extends BaseEntityRepository
         ;
         $townResult = $qb->getQuery()->getOneOrNullResult();
         
-        if( !empty($townResult) &&  !$townResult->getIsSpecialArea() && $townResult->getLvl() == '4'){
+        if (!empty($townResult) &&  !$townResult->getIsSpecialArea() && $townResult->getLvl() == '4') {
             $locationName = $townResult->getName().", ".$townResult->getParent()->getName();
         } else {
             $locationName = $name;
@@ -1349,14 +1350,14 @@ class LocationRepository extends BaseEntityRepository
     {
         $isArea = false;
         
-        if( $location != '' && !preg_match('/^([\d]+,[\d]+)$/', $location) && $area == '') {
+        if ($location != '' && !preg_match('/^([\d]+,[\d]+)$/', $location) && $area == '') {
             //check town is area
             $isArea = $this->getIslocationArea($location, 'town');
-            if(!$isArea) {
+            if (!$isArea) {
                 //check postcode belongs to location area
                 $postCode = $this->_em->getRepository('FaEntityBundle:Postcode')->getPostCodByLocation($location);
                 
-                if(!empty( $postCode)) {
+                if (!empty($postCode)) {
                     $isArea = $this->getIslocationArea($postCode->getTownId(), 'postcode');
                 }
             }
@@ -1371,7 +1372,8 @@ class LocationRepository extends BaseEntityRepository
      * @param string $location  Name of location or Id.     *
      * @return boolean
      */
-    private function getIslocationArea($location = null, $type = '') {
+    private function getIslocationArea($location = null, $type = '')
+    {
         $area = false;
         $town = $this->getBaseQueryBuilder()
         ->where(self::ALIAS.'.name = :name')
@@ -1381,13 +1383,12 @@ class LocationRepository extends BaseEntityRepository
         ->setMaxResults(1)
         ->getQuery()->getOneOrNullResult();
         
-        if(!empty( $town )) {
-            if($type == 'postcode' && ($town->getId() == self::LONDON_TOWN_ID || $town->getParent()->getId() == self::LONDON_TOWN_ID) ) {
+        if (!empty($town)) {
+            if ($type == 'postcode' && ($town->getId() == self::LONDON_TOWN_ID || $town->getParent()->getId() == self::LONDON_TOWN_ID)) {
                 $area = true;
-            } elseif ( $type == 'town' && $town->getLvl() != 4 && ($town->getId() == self::LONDON_TOWN_ID || $town->getParent()->getId() == self::LONDON_TOWN_ID) ) {
+            } elseif ($type == 'town' && $town->getLvl() != 4 && ($town->getId() == self::LONDON_TOWN_ID || $town->getParent()->getId() == self::LONDON_TOWN_ID)) {
                 $area = true;
             }
-            
         }
         return $area;
     }
@@ -1420,7 +1421,7 @@ class LocationRepository extends BaseEntityRepository
      *
      * @return string
      */
-    private function getAdLocationFromSolr($locationId = null, $container = null) 
+    private function getAdLocationFromSolr($locationId = null, $container = null)
     {
         $data = array();
         $solrFieldName = AdSolrFieldMapping::DOMICILE_ID;

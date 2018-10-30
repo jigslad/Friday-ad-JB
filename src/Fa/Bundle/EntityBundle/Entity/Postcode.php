@@ -389,6 +389,4 @@ class Postcode
     {
         return $this->street;
     }
-
 }
-

@@ -148,8 +148,8 @@ class PackageRuleRepository extends EntityRepository
         }
 
         $packages =  $query->getQuery()->getResult();
-		
-        if (!count($packages) && $categoryId) { 
+        
+        if (!count($packages) && $categoryId) {
             $parentCategoryIds = array_keys($this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container));
             array_pop($parentCategoryIds);
             $parentCategoryIds = array_reverse($parentCategoryIds);
@@ -191,21 +191,21 @@ class PackageRuleRepository extends EntityRepository
         return $packageRuleArray;
     }
     
-    public function getPackageByCategoryId($packagesId = '') {
-    	if($packagesId != '') {
-    		$query = $this->createQueryBuilder(self::ALIAS)
-    		->select(self::ALIAS, PackageRepository::ALIAS)
-    		->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
-    		->andWhere(PackageRepository::ALIAS.'.status = 1')
-    		->andWhere(PackageRepository::ALIAS.'.package_for = :package_for')
-    		->setParameter('package_for', 'ad')
-    		->andWhere(PackageRepository::ALIAS.'.id = :packageId')
-    		->setParameter('packageId', $packagesId)
-    		->addGroupBy(PackageRepository::ALIAS.'.id');
-    		
-    		$packages =  $query->getQuery()->getResult();
-    		return $packages;
-    	}
+    public function getPackageByCategoryId($packagesId = '')
+    {
+        if ($packagesId != '') {
+            $query = $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS, PackageRepository::ALIAS)
+            ->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
+            ->andWhere(PackageRepository::ALIAS.'.status = 1')
+            ->andWhere(PackageRepository::ALIAS.'.package_for = :package_for')
+            ->setParameter('package_for', 'ad')
+            ->andWhere(PackageRepository::ALIAS.'.id = :packageId')
+            ->setParameter('packageId', $packagesId)
+            ->addGroupBy(PackageRepository::ALIAS.'.id');
+            
+            $packages =  $query->getQuery()->getResult();
+            return $packages;
+        }
     }
-    
 }

@@ -81,7 +81,7 @@ class AdFeedClickReportDaily
      */
     public function getAdId()
     {
-      return $this->ad_id;
+        return $this->ad_id;
     }
 
     /**
@@ -104,7 +104,7 @@ class AdFeedClickReportDaily
      */
     public function getAdFeedSiteId()
     {
-      return $this->ad_feed_site_id;
+        return $this->ad_feed_site_id;
     }
     
     /**
@@ -115,9 +115,9 @@ class AdFeedClickReportDaily
      */
     public function setAdFeedSiteId($adFeedSiteId)
     {
-      $this->ad_feed_site_id = $adFeedSiteId;
+        $this->ad_feed_site_id = $adFeedSiteId;
     
-      return $this;
+        return $this;
     }
 
     /**
@@ -127,7 +127,7 @@ class AdFeedClickReportDaily
      */
     public function getView()
     {
-      return $this->view;
+        return $this->view;
     }
     
     /**
@@ -150,7 +150,7 @@ class AdFeedClickReportDaily
      */
     public function getCreatedAt()
     {
-      return $this->created_at;
+        return $this->created_at;
     }
 
     /**

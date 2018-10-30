@@ -63,7 +63,7 @@ class AdApiController extends CoreController
      * @return Response|RedirectResponse A Response object.
      */
     public function getAdApiResultAction(Request $request)
-    {	
+    {
         $validResponse = $this->validateApiToken($request, ApiTokenRepository::AD_API_TYPE_ID);
         if ($validResponse) {
             return $validResponse;

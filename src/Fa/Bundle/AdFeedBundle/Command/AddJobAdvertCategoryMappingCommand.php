@@ -59,7 +59,8 @@ Actions:
 Command:
  - php app/console fa:add:new-job-advert-category-mapping --ref_site_id="9" --file_name="simply_sales_jobs_category_mapping.csv"
 EOF
-        );;
+        );
+        ;
     }
 
     /**
@@ -102,10 +103,11 @@ EOF
         $reader->setDelimiter(',');
         $reader->setHeaderLine(0);
         $row = $reader->getRow();
-        if ($offset > 0)
+        if ($offset > 0) {
             $reader->advanceTo($offset-1);
-        else
+        } else {
             $reader->advanceTo(1);
+        }
         while (($row = $reader->getRow()) && $reader->getLineNumber() != $offset + $step) {
             if (isset($row['feed_category']) && isset($row['fa_parent_category']) && isset($row['fa_leaf_category']) && isset($row['fa_leaf_category_lvl'])) {
                 $adFeedMapping = $adFeedMappingRepository->findOneBy(array('text' => $row['feed_category'], 'ref_site_id' => $refSiteId));
@@ -120,10 +122,10 @@ EOF
                             $adFeedMappingObj->setRefSiteId($refSiteId);
                             $this->entityManager->persist($adFeedMappingObj);
                             echo "Mapping inserted :".$row['fa_leaf_category']."\n";
-                        } elseif(!$childCatObj) {
+                        } elseif (!$childCatObj) {
                             echo "Mapping not inserted, Leaf Category not found:".$row['fa_leaf_category']."\n";
                         }
-                    } elseif(!$parentCatObj) {
+                    } elseif (!$parentCatObj) {
                         echo "Mapping not inserted, Parent Category not found:".$row['fa_parent_category']."\n";
                     }
                 }

@@ -22,7 +22,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdFeedSiteRepository extends EntityRepository
 {
-
     const ALIAS = 'af';
 
     /**

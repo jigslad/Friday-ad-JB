@@ -83,7 +83,6 @@ class CleanS3LocalImagesCommand extends ContainerAwareCommand
                     }
                 }
                 $last_id = $image->getId();
-
             } else {
                 $done = true;
             }

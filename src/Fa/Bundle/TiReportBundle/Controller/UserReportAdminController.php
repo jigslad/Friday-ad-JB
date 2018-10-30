@@ -90,18 +90,18 @@ class UserReportAdminController extends CoreController implements ResourceAuthor
                                             $isCategorySet = true;
                                             foreach ($categoryPath as $key => $value) {
                                                 switch ($counter) {
-                                                	case 1:
-                                                	    $resultArray[$values['user_id']]['category'] = $value;
-                                                	    break;
-                                                	case 2:
-                                                	    $resultArray[$values['user_id']]['class'] = $value;
-                                                	    break;
-                                                	case 3:
-                                                	    $resultArray[$values['user_id']]['subclass'] = $value;
-                                                	    break;
-                                                	case 4:
-                                                	    $resultArray[$values['user_id']]['sub_sub_class'] = $value;
-                                                	    break;
+                                                    case 1:
+                                                        $resultArray[$values['user_id']]['category'] = $value;
+                                                        break;
+                                                    case 2:
+                                                        $resultArray[$values['user_id']]['class'] = $value;
+                                                        break;
+                                                    case 3:
+                                                        $resultArray[$values['user_id']]['subclass'] = $value;
+                                                        break;
+                                                    case 4:
+                                                        $resultArray[$values['user_id']]['sub_sub_class'] = $value;
+                                                        break;
                                                 }
                                                 $counter++;
                                             }

@@ -131,7 +131,6 @@ EOF
             if ($buildRequest->sendRequest($moderationRequest)) {
                 $output->writeln('User sent for moderation: '.$user->getId(), true);
             }
-
         }
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);
     }

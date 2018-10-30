@@ -166,7 +166,7 @@ EOF
 
         $data                   = array();
         $data['query_filters']  = $searchParam;
-        $data['query_sorter']   = array('user' => array ('id' => 'asc'));
+        $data['query_sorter']   = array('user' => array('id' => 'asc'));
         $data['static_filters'] = UserRepository::ALIAS.'.guid IS NOT NULL';
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');

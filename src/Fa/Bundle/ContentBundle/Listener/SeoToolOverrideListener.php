@@ -115,4 +115,3 @@ class SeoToolOverrideListener
         CommonManager::removeCachePattern($this->container, $cacheKey);
     }
 }
-

@@ -98,7 +98,7 @@ class AdFavoriteListener
         //remove user ad favorite cache
         if ($user) {
             CommonManager::removeCache($this->container, $this->getTableName().'|getFavoriteAdByUserId|'.$user->getId().'_'.$culture);
-        } else if ($adFavorite->getSessionId()) {
+        } elseif ($adFavorite->getSessionId()) {
             //remove session ad favorite cache
             CommonManager::removeCache($this->container, $this->getTableName().'|getFavoriteAdByUserId|'.$adFavorite->getSessionId().'_'.$culture);
         }

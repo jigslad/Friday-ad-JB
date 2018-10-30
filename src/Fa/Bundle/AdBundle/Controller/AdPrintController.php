@@ -64,7 +64,7 @@ class AdPrintController extends CoreController
      * @return Response|RedirectResponse A Response object.
      */
     public function getAdPrintResultAction(Request $request)
-    {	
+    {
         $validResponse = $this->validateApiToken($request, ApiTokenRepository::PRINT_API_TYPE_ID);
         if ($validResponse) {
             return $validResponse;
@@ -76,7 +76,7 @@ class AdPrintController extends CoreController
         $limit         = ((isset($searchParam['Limit']) && $searchParam['Limit'] <= 100) ? $searchParam['Limit'] : 100);
         $page          = ((isset($searchParam['Page']) && $searchParam['Page'] > 0) ? $searchParam['Page'] : 1);
         $offset        = ($page - 1) * $limit;
-        $em            = $this->getEntityManager();        
+        $em            = $this->getEntityManager();
 
         $adPrintResult = $this->getRepository('FaAdBundle:AdPrint')->getAdPrintQueryBuilder($searchParam, $this->container)
             ->select(AdPrintRepository::ALIAS, AdRepository::ALIAS, PrintEditionRepository::ALIAS, CategoryRepository::ALIAS)
@@ -87,10 +87,10 @@ class AdPrintController extends CoreController
 
         $adIdsArray = array();
         
-        foreach ($adPrintResult as $adPrint) { 
-        	if ($adPrint->getAd()) {
-        		$adIdsArray[] = $adPrint->getAd()->getId();
-        	}
+        foreach ($adPrintResult as $adPrint) {
+            if ($adPrint->getAd()) {
+                $adIdsArray[] = $adPrint->getAd()->getId();
+            }
         }
                 
         $data = array();
@@ -106,24 +106,24 @@ class AdPrintController extends CoreController
         $adSolrObjs = array();
         
         foreach ($adSolrDocs as $adSolrDoc) {
-        	$adSolrObjs[$adSolrDoc[AdSolrFieldMapping::ID]] = $adSolrDoc;
+            $adSolrObjs[$adSolrDoc[AdSolrFieldMapping::ID]] = $adSolrDoc;
         }
         
         foreach ($adPrintResult as $adPrint) {
-        	$printAdArray[] = $buildResponse->init($adPrint, $adSolrObjs);
-        	$adPrint->setTmpPrintQueue(AdPrintRepository::PRINT_QUEUE_STATUS_SENT);
-        	$em->persist($adPrint);
+            $printAdArray[] = $buildResponse->init($adPrint, $adSolrObjs);
+            $adPrint->setTmpPrintQueue(AdPrintRepository::PRINT_QUEUE_STATUS_SENT);
+            $em->persist($adPrint);
         }
         
         $em->flush();
         $em->clear();
         $count = $this->getRepository('FaAdBundle:AdPrint')->getAdPrintQueryBuilder($searchParam, $this->container)
-        	->select('COUNT('.AdPrintRepository::ALIAS.'.id)')
-        	->getQuery()->getSingleScalarResult();
+            ->select('COUNT('.AdPrintRepository::ALIAS.'.id)')
+            ->getQuery()->getSingleScalarResult();
         
         $printApiArray = array(
             'CurrentPage' => $page,
-        	'TotalPages'  => ceil($count / $limit),
+            'TotalPages'  => ceil($count / $limit),
             'Adverts'     => $printAdArray,
         );
 

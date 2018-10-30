@@ -69,7 +69,6 @@ class RemoveExpiredNotificationsCommand extends ContainerAwareCommand
                 $this->em->flush();
 
                 $last_id = $notification->getId();
-
             } else {
                 $done = true;
             }

@@ -150,7 +150,8 @@ EOF
                 if (isset($result['slug'])) {
                     $cacheKey = 'EntityCacheManager'.'|'.'getEntitySlugById'.'|'.$entityClass.'_'.$result['id'];
                     CommonManager::setCacheVersion($this->getContainer(), $cacheKey, $result['slug']);
-                } if ($entityClass == 'FaEntityBundle:Category') {
+                }
+                if ($entityClass == 'FaEntityBundle:Category') {
                     $categoryPathArray = $repository->getCategoryPathArrayById1($result['id']);
                     $cacheKey          = 'category'.'|'.'getCategoryPathArrayById'.'|'.$result['id'].'__'.$culture;
                     CommonManager::setCacheVersion($this->getContainer(), $cacheKey, $categoryPathArray);

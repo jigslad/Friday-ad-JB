@@ -139,7 +139,7 @@ class AdFeedMapping
      */
     public function getRefSiteId()
     {
-    	return $this->ref_site_id;
+        return $this->ref_site_id;
     }
     
     /**
@@ -151,7 +151,7 @@ class AdFeedMapping
      */
     public function setRefSiteId($ref_site_id)
     {
-    	$this->ref_site_id = $ref_site_id;
-    	return $this;
+        $this->ref_site_id = $ref_site_id;
+        return $this;
     }
 }

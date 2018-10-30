@@ -112,7 +112,7 @@ class LivestockParser extends AdParser
         }
 
         if (!$feedAd && $adArray['EndDate'] != '0001-01-01T00:00:00Z') {
-        	return 'discard';
+            return 'discard';
         }
 
         if ($this->advert['user']['email'] == '' && $this->advert['set_user'] == true) {
@@ -174,11 +174,9 @@ class LivestockParser extends AdParser
             if (implode(',', $this->advert['rejected_reason']) != '') {
                 $feedAd->setRemark(implode(',', $this->advert['rejected_reason']));
             }
-        }
-        elseif (isset($this->advert['status']) && $this->advert['status'] == 'E') {
+        } elseif (isset($this->advert['status']) && $this->advert['status'] == 'E') {
             $feedAd->setStatus('E');
-        }
-        else {
+        } else {
             $feedAd->setStatus('A');
         }
 

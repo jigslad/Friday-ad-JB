@@ -420,7 +420,7 @@ class UserReport
      */
     public function getImage()
     {
-     return $this->image;
+        return $this->image;
     }
 
     /**
@@ -431,9 +431,9 @@ class UserReport
      */
     public function setImage($image)
     {
-     $this->image = $image;
+        $this->image = $image;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -443,7 +443,7 @@ class UserReport
      */
     public function getPath()
     {
-     return $this->path;
+        return $this->path;
     }
 
     /**
@@ -454,9 +454,9 @@ class UserReport
      */
     public function setPath($path)
     {
-     $this->path = $path;
+        $this->path = $path;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -467,9 +467,9 @@ class UserReport
      */
     public function setBannerPath($banner_path)
     {
-     $this->banner_path = $banner_path;
+        $this->banner_path = $banner_path;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -479,7 +479,7 @@ class UserReport
      */
     public function getBannerPath()
     {
-     return $this->banner_path;
+        return $this->banner_path;
     }
 
     /**
@@ -490,9 +490,9 @@ class UserReport
      */
     public function setCompanyWelcomeMessage($company_welcome_message)
     {
-     $this->company_welcome_message = $company_welcome_message;
+        $this->company_welcome_message = $company_welcome_message;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -502,7 +502,7 @@ class UserReport
      */
     public function getCompanyWelcomeMessage()
     {
-     return $this->company_welcome_message;
+        return $this->company_welcome_message;
     }
 
     /**
@@ -513,9 +513,9 @@ class UserReport
      */
     public function setCompanyAddress($company_address)
     {
-     $this->company_address = $company_address;
+        $this->company_address = $company_address;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -525,7 +525,7 @@ class UserReport
      */
     public function getCompanyAddress()
     {
-     return $this->company_address;
+        return $this->company_address;
     }
 
     /**
@@ -536,9 +536,9 @@ class UserReport
      */
     public function setPhone1($phone1)
     {
-     $this->phone1 = $phone1;
+        $this->phone1 = $phone1;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -548,7 +548,7 @@ class UserReport
      */
     public function getPhone1()
     {
-     return $this->phone1;
+        return $this->phone1;
     }
 
     /**
@@ -559,9 +559,9 @@ class UserReport
      */
     public function setPhone2($phone2)
     {
-     $this->phone2 = $phone2;
+        $this->phone2 = $phone2;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -571,7 +571,7 @@ class UserReport
      */
     public function getPhone2()
     {
-     return $this->phone2;
+        return $this->phone2;
     }
 
     /**
@@ -582,9 +582,9 @@ class UserReport
      */
     public function setWebsiteLink($website_link)
     {
-     $this->website_link = $website_link;
+        $this->website_link = $website_link;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -594,7 +594,7 @@ class UserReport
      */
     public function getWebsiteLink()
     {
-     return $this->website_link;
+        return $this->website_link;
     }
 
     /**
@@ -605,9 +605,9 @@ class UserReport
      */
     public function setAboutUs($aboutUs)
     {
-     $this->about_us = $aboutUs;
+        $this->about_us = $aboutUs;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -617,7 +617,7 @@ class UserReport
      */
     public function getAboutUs()
     {
-     return $this->about_us;
+        return $this->about_us;
     }
 
     /**
@@ -628,9 +628,9 @@ class UserReport
      */
     public function setAboutYou($aboutYou)
     {
-     $this->about_you = $aboutYou;
+        $this->about_you = $aboutYou;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -640,6 +640,6 @@ class UserReport
      */
     public function getAboutYou()
     {
-     return $this->about_you;
+        return $this->about_you;
     }
 }

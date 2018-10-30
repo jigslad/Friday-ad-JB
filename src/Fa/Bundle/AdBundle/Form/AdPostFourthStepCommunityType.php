@@ -184,7 +184,7 @@ class AdPostFourthStepCommunityType extends AdPostType
     {
         if ($form->has('price')) {
             if ($form->get('price')->getData() != '') {
-                if (!preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData() , $matches)) {
+                if (!preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData(), $matches)) {
                     $form->get('price')->addError(new FormError('Price is invalid.'));
                 }
             }

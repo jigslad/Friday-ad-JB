@@ -20,7 +20,6 @@ use Fa\Bundle\EntityBundle\Entity\Location;
 use Fa\Bundle\EntityBundle\Repository\LocationRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
 /**
  * Add town field subscriber.
  *

@@ -114,7 +114,6 @@ class NewsletterType extends AbstractType
         }
 
         $form->add('dotmailer_newsletter_type_id', ChoiceType::class, $fieldOptions);
-
     }
 
     /**
@@ -230,7 +229,8 @@ class NewsletterType extends AbstractType
                 exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:dotmailer:unsubscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
                 // remove contact from dotmailer.
                 exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:dotmailer:delete-contact --email='.$dotmailer->getEmail().' >/dev/null &');
-            } if ($dotmailer->getOptIn() == 1 && $user->getIsEmailAlertEnabled() != 1) {
+            }
+            if ($dotmailer->getOptIn() == 1 && $user->getIsEmailAlertEnabled() != 1) {
                 // opt in user
                 $user->setIsEmailAlertEnabled(1);
                 $this->em->persist($user);
@@ -257,16 +257,16 @@ class NewsletterType extends AbstractType
             $optedOut = array_diff($dotmailerNewsletterTypeId, $form->get('dotmailer_newsletter_type_id')->getData());
             if (is_array($optedOut) && count($optedOut) > 0) {
                 return $optedOut;
-            } else if ($dotmailerNewsletterTypeOptoutId) {
+            } elseif ($dotmailerNewsletterTypeOptoutId) {
                 $optedOut = array_diff($dotmailerNewsletterTypeOptoutId, $form->get('dotmailer_newsletter_type_id')->getData());
                 if (is_array($optedOut) && count($optedOut) > 0) {
                     return $optedOut;
                 }
             }
-        } else if ($form->get('dotmailer_newsletter_unsubscribe')->getData()) {
+        } elseif ($form->get('dotmailer_newsletter_unsubscribe')->getData()) {
             $newsletterType = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getKeyValueArray($this->container);
             return array_keys($newsletterType);
-        } else if ($form->get('dotmailer_newsletter_type_id')->getData() && $dotmailerNewsletterTypeOptoutId) {
+        } elseif ($form->get('dotmailer_newsletter_type_id')->getData() && $dotmailerNewsletterTypeOptoutId) {
             $optedOut = array_diff($dotmailerNewsletterTypeOptoutId, $form->get('dotmailer_newsletter_type_id')->getData());
             if (is_array($optedOut) && count($optedOut) > 0) {
                 return $optedOut;

@@ -22,7 +22,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-
 /**
  * This form is used for header search.
  *
@@ -83,7 +82,7 @@ class AdTopSearchType extends AbstractType
         ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
 
         if ($mobileDetectManager->isMobile()) {
-           $builder->add(
+            $builder->add(
                 'item__category_id',
                ChoiceType::class,
                 array(

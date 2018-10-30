@@ -86,9 +86,9 @@ EOF
      */
     protected function completeRegistrationEmailsWithOffset($input, $output)
     {
-        $records          = $this->getAdQueryBuilder(FALSE,$input);
+        $records          = $this->getAdQueryBuilder(false, $input);
         $step        = 100;
-        $offset      = 0; 
+        $offset      = 0;
         $container = $this->getContainer();
 
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
@@ -97,7 +97,9 @@ EOF
         foreach ($records as $record) {
             $user = $this->em->getRepository('FaUserBundle:User')->find($record['user_id']);
             $paaLiteEmailNotification = $this->em->getRepository('FaAdBundle:PaaLiteEmailNotification')->find($record['id']);
-            $text_package_name = '';$text_lowest_category_package_price = '';$url_ad_upsell = '';
+            $text_package_name = '';
+            $text_lowest_category_package_price = '';
+            $url_ad_upsell = '';
             //send email only if ad has user and status is active and not feed ad.
             if ($user && CommonManager::checkSendEmailToUser($user, $this->getContainer())) {
                 $encryption_key = $container->getParameter('reset_password_encryption_key');
@@ -114,9 +116,7 @@ EOF
                 $this->em->persist($paaLiteEmailNotification);
                 $this->em->flush($paaLiteEmailNotification);
                 $output->writeln('Complete Registration mail sent to User Id:'.($user ? $user->getId() : null), true);
-                
             }
-            
         }
     }
     
@@ -149,7 +149,7 @@ EOF
      */
     protected function completeRegistrationEmails($input, $output)
     {
-        $resultArr     = $this->getAdQueryBuilder(TRUE, $input);
+        $resultArr     = $this->getAdQueryBuilder(true, $input);
         $count  = $resultArr[0]['cnt'];
 
         $step      = 100;
@@ -200,11 +200,10 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE, $input)
+    protected function getAdQueryBuilder($onlyCount = false, $input)
     {
-        
-        if($onlyCount) {
-             $sql = 'SELECT count(id) as cnt ';
+        if ($onlyCount) {
+            $sql = 'SELECT count(id) as cnt ';
         } else {
             $sql = 'SELECT * ';
         }
@@ -215,5 +214,5 @@ EOF
         $stmt->execute();
         $arrResult = $stmt->fetchAll();
         return $arrResult;
-    }   
+    }
 }

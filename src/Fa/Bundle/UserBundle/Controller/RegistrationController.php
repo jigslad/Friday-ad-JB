@@ -170,9 +170,9 @@ class RegistrationController extends ThirdPartyLoginController
         if (is_array($response)) {
             $this->container->get('session')->set('register_user_info', $response);
             return $this->redirect($this->generateUrl('fa_user_register'));
-        } else if ($response == 'MISSINGDATA') {
+        } elseif ($response == 'MISSINGDATA') {
             return $this->handleMessage($this->get('translator')->trans('One of the fields required to connect to Facebook is missing.', array(), 'frontend-register'), 'fa_user_register', array(), 'error');
-        } else if ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
+        } elseif ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
             return $this->redirectToRoute('fa_user_register');
         } else {
             return $response;
@@ -195,9 +195,9 @@ class RegistrationController extends ThirdPartyLoginController
         if (is_array($response)) {
             $this->container->get('session')->set('register_user_info', $response);
             return $this->redirect($this->generateUrl('fa_user_register'));
-        } else if ($response == 'MISSINGDATA') {
+        } elseif ($response == 'MISSINGDATA') {
             return $this->handleMessage($this->get('translator')->trans('One of field is missing from Google (First Name, Last Name, Email).', array(), 'frontend-register'), 'fa_user_register', array(), 'error');
-        } else if ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
+        } elseif ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
             return $this->redirectToRoute('fa_user_register');
         } else {
             return $response;
@@ -206,47 +206,47 @@ class RegistrationController extends ThirdPartyLoginController
 
     public function moveUserLogo($user)
     {
-     $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
-     $orgImageName = $this->container->get('session')->get('tempUserIdREG');
-     $isCompany    = false;
-     $imageObj     = null;
-     $userId       = $user->getId();
+        $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
+        $orgImageName = $this->container->get('session')->get('tempUserIdREG');
+        $isCompany    = false;
+        $imageObj     = null;
+        $userId       = $user->getId();
 
-     $userRoleName = $this->getRepository('FaUserBundle:User')->getUserRole($userId, $this->container);
+        $userRoleName = $this->getRepository('FaUserBundle:User')->getUserRole($userId, $this->container);
 
-     if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER) {
-      $isCompany = true;
-     }
+        if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER) {
+            $isCompany = true;
+        }
 
-     if ($isCompany) {
-         $imagePath = $this->container->getParameter('fa.company.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
-         $imageObj  = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $userId));
-         CommonManager::createGroupDirectory($webPath.DIRECTORY_SEPARATOR.$this->container->getParameter('fa.company.image.dir'), $userId, 5000);
-     } else {
-         $imagePath = $this->container->getParameter('fa.user.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
-         $imageObj  = $user;
-         CommonManager::createGroupDirectory($webPath.DIRECTORY_SEPARATOR.$this->container->getParameter('fa.user.image.dir'), $userId, 5000);
-     }
+        if ($isCompany) {
+            $imagePath = $this->container->getParameter('fa.company.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
+            $imageObj  = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $userId));
+            CommonManager::createGroupDirectory($webPath.DIRECTORY_SEPARATOR.$this->container->getParameter('fa.company.image.dir'), $userId, 5000);
+        } else {
+            $imagePath = $this->container->getParameter('fa.user.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
+            $imageObj  = $user;
+            CommonManager::createGroupDirectory($webPath.DIRECTORY_SEPARATOR.$this->container->getParameter('fa.user.image.dir'), $userId, 5000);
+        }
 
-     // Check if user site entry not found then create first
-     if (!$imageObj && $isCompany) {
-      $imageObj = new UserSite();
-      $imageObj->setUser($user);
-     }
+        // Check if user site entry not found then create first
+        if (!$imageObj && $isCompany) {
+            $imageObj = new UserSite();
+            $imageObj->setUser($user);
+        }
 
-     if ($isCompany) {
-      $imageObj->setPath($imagePath);
-     } else {
-      $imageObj->setImage($imagePath);
-     }
+        if ($isCompany) {
+            $imageObj->setPath($imagePath);
+        } else {
+            $imageObj->setImage($imagePath);
+        }
 
-     if (file_exists($webPath.'/uploads/tmp/'.$orgImageName.'.jpg')) {
-         rename($webPath.'/uploads/tmp/'.$orgImageName.'.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'.jpg');
-         rename($webPath.'/uploads/tmp/'.$orgImageName.'_org.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg');
-         rename($webPath.'/uploads/tmp/'.$orgImageName.'_original.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg');
-     }
+        if (file_exists($webPath.'/uploads/tmp/'.$orgImageName.'.jpg')) {
+            rename($webPath.'/uploads/tmp/'.$orgImageName.'.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'.jpg');
+            rename($webPath.'/uploads/tmp/'.$orgImageName.'_org.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg');
+            rename($webPath.'/uploads/tmp/'.$orgImageName.'_original.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg');
+        }
 
-     $userImageManager = new UserImageManager($this->container, $userId, $imagePath, $isCompany);
-     $userImageManager->createThumbnail();
+        $userImageManager = new UserImageManager($this->container, $userId, $imagePath, $isCompany);
+        $userImageManager->createThumbnail();
     }
 }

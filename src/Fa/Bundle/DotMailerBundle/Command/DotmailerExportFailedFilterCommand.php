@@ -104,7 +104,6 @@ EOF
         $dotmailerFilters = $qb->getQuery()->getResult();
 
         if (count($dotmailerFilters) > 0) {
-
             foreach ($dotmailerFilters as $dotmailerFilter) {
                 $dotmailerFilter = $this->createAddressBook($dotmailerFilter);
                 $masterId = $dotmailerFilter->getAddressBookId();

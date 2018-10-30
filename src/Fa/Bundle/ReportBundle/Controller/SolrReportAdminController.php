@@ -24,6 +24,7 @@ use Fa\Bundle\AdBundle\Repository\InActiveUserSolrAdsRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Fa\Bundle\ReportBundle\Form\SolrReportSearchAdminType;
+
 /**
  * This is the controller for getting Solr report.
  *
@@ -42,7 +43,6 @@ class SolrReportAdminController extends CoreController implements ResourceAuthor
      */
     public function indexAction(Request $request)
     {
-    	
         $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:InActiveUserSolrAds'), $this->getRepositoryTable('FaAdBundle:InActiveUserSolrAds'), 'fa_solr_report');
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
@@ -52,7 +52,7 @@ class SolrReportAdminController extends CoreController implements ResourceAuthor
             'method' => 'GET'
         ));
 
-        if(($request->query->has('status') && $request->query->get('status') == 'success') or ($request->query->has('fa_solr_report') && $request->query->get('fa_solr_report')['status'] == 'success')) {
+        if (($request->query->has('status') && $request->query->get('status') == 'success') or ($request->query->has('fa_solr_report') && $request->query->get('fa_solr_report')['status'] == 'success')) {
             $reqStatus = 'success';
         } else {
             $reqStatus = 'pending';
@@ -62,22 +62,22 @@ class SolrReportAdminController extends CoreController implements ResourceAuthor
             $form->submit($data['search']);
         }
 
-        $query = $this->getRepository('FaAdBundle:InActiveUserSolrAds')->getInActiveUserAdsInSolr($request,$data['search'],$data['sorter']);
+        $query = $this->getRepository('FaAdBundle:InActiveUserSolrAds')->getInActiveUserAdsInSolr($request, $data['search'], $data['sorter']);
         
         // initialize pagination manager service and prepare listing with pagination based of data
         $page = ($request->query->has('page')) ? $request->query->get('page'): 1;
         $this->get('fa.pagination.manager')->init($query, $page, 10, 0, true);
         $pagination = $this->get('fa.pagination.manager')->getPagination();
 
-    	
-    	$parameters = array(
+        
+        $parameters = array(
             'heading'       => 'User & Ad Solr Report',
             'form'          => $form->createView(),
-    		'pagination'    => $pagination,
+            'pagination'    => $pagination,
             'reqStatus'     => $reqStatus,
             'sorter'        => $data['sorter']
-    	);
-    	
-    	return $this->render('FaReportBundle:solrReportAdmin:inActiveUserAdsInSolr.html.twig', $parameters);
+        );
+        
+        return $this->render('FaReportBundle:solrReportAdmin:inActiveUserAdsInSolr.html.twig', $parameters);
     }
 }

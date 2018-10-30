@@ -72,7 +72,7 @@ class LoadPaaFieldJobsData extends LoadPaaFieldData
                 'additional_benefits_id' => 'Additional job benefits'
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'title' => 2,
                 'contract_type_id' => 2,
                 'description' => 2,
@@ -130,11 +130,11 @@ class LoadPaaFieldJobsData extends LoadPaaFieldData
                     $catDimensionFields[$categoryId][$field]['category_dimension_id'] = $dimensionId;
                     $catDimensionFields[$categoryId][$field]['is_index']              = $isIndex;
                 } elseif ($field == 'additional_job_requirements_id' || $field == 'additional_benefits_id') {
-                        $catDimensionFields[$categoryId][$field]['field']                 = $field;
-                        $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;
-                        $catDimensionFields[$categoryId][$field]['field_type']            = 'choice_checkbox';
-                        $catDimensionFields[$categoryId][$field]['category_dimension_id'] = $dimensionId;
-                        $catDimensionFields[$categoryId][$field]['is_index']              = $isIndex;
+                    $catDimensionFields[$categoryId][$field]['field']                 = $field;
+                    $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;
+                    $catDimensionFields[$categoryId][$field]['field_type']            = 'choice_checkbox';
+                    $catDimensionFields[$categoryId][$field]['category_dimension_id'] = $dimensionId;
+                    $catDimensionFields[$categoryId][$field]['is_index']              = $isIndex;
                 } elseif ($field == 'education_level_id' || $field == 'years_experience_id' || $field == 'salary_type_id' || $field == 'contract_type_id') {
                     $catDimensionFields[$categoryId][$field]['field']                 = $field;
                     $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;

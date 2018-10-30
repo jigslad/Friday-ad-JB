@@ -69,7 +69,6 @@ class ReviewModerationRequestBuild
      */
     public function init(UserReview $userReview, $isForManualModeration = false)
     {
-
         $this->buildOtherParametersArray($userReview, $isForManualModeration);
 
         $this->buildBasicFieldArray($userReview);

@@ -134,7 +134,7 @@ class AdPropertySolrSearch extends SolrSearch
             $date = null;
             if ($period == 'week') {
                 $date = strtotime('1 week');
-            } else if ($period == 'month') {
+            } elseif ($period == 'month') {
                 $date = strtotime('1 month');
             }
 

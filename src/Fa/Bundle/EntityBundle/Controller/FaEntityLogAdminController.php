@@ -78,25 +78,25 @@ class FaEntityLogAdminController extends CoreController implements ResourceAutho
      */
     public function detailAction(Request $request, $id)
     {
-      CommonManager::setAdminBackUrl($request, $this->container);
-      // initialize form manager service
+        CommonManager::setAdminBackUrl($request, $this->container);
+        // initialize form manager service
 
-      $entity_log = $this->getRepository('FaEntityBundle:FaEntityLog')->find($id);
+        $entity_log = $this->getRepository('FaEntityBundle:FaEntityLog')->find($id);
 
-      try {
-        if (!$entity_log) {
-          throw $this->createNotFoundException($this->get('translator')->trans('Unable to find entity log entry.'));
+        try {
+            if (!$entity_log) {
+                throw $this->createNotFoundException($this->get('translator')->trans('Unable to find entity log entry.'));
+            }
+        } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
+            return parent::handleException($e, 'error', 'entity_log');
         }
-      } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
-        return parent::handleException($e, 'error', 'entity_log');
-      }
 
-      $parameters = array(
+        $parameters = array(
           'entity_log'  => $entity_log,
           'heading' => $this->get('translator')->trans('View Detail'),
       );
 
-      return $this->render('FaEntityBundle:FaEntityLogAdmin:detail.html.twig', $parameters);
+        return $this->render('FaEntityBundle:FaEntityLogAdmin:detail.html.twig', $parameters);
     }
 
     /**

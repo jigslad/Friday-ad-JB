@@ -78,7 +78,7 @@ class SeoToolOverrideRepository extends EntityRepository
      */
     protected function addBasicFieldsSearchFilter($keyword = null)
     {
-     $this->queryBuilder->andWhere(sprintf('%s.page_url LIKE \'%%%s%%\' OR %s.page_title LIKE \'%%%s%%\' OR %s.h1_tag LIKE \'%%%s%%\' OR %s.meta_description LIKE \'%%%s%%\'', $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword));
+        $this->queryBuilder->andWhere(sprintf('%s.page_url LIKE \'%%%s%%\' OR %s.page_title LIKE \'%%%s%%\' OR %s.h1_tag LIKE \'%%%s%%\' OR %s.meta_description LIKE \'%%%s%%\'', $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword));
     }
 
     /**
@@ -92,124 +92,140 @@ class SeoToolOverrideRepository extends EntityRepository
      */
     public function findSeoRuleByPageUrl($fullpageUrl, $searchParams, $container = null)
     {
-        $objSeoToolOverride = NULL;        
-        $splitpageUrl = explode('?',$fullpageUrl);$pageUrl = '';
+        $objSeoToolOverride = null;
+        $splitpageUrl = explode('?', $fullpageUrl);
+        $pageUrl = '';
         $pageUrl = $splitpageUrl[0];
 
         if ($pageUrl!== '') {
-            $objSeoToolOverride = $this->getSeoToolOverrideObj($pageUrl,$container);
+            $objSeoToolOverride = $this->getSeoToolOverrideObj($pageUrl, $container);
         }
         
-        if(!$objSeoToolOverride) {
-        if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
-            $indexableDimesionsArray = SeoToolRepository::getIndexableDimesionsArray();
-            $indexableKeyArray = array();
-            $categoryIndexableDimensions = array();
-            $dimensionFilters = $this->_em->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($searchParams['item__category_id'], $container);
-            $twigCoreService = $container->get('fa.twig.core_extension');
-            $rootCategoryName = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryName($searchParams['item__category_id'], $container);
+        if (!$objSeoToolOverride) {
+            if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+                $indexableDimesionsArray = SeoToolRepository::getIndexableDimesionsArray();
+                $indexableKeyArray = array();
+                $categoryIndexableDimensions = array();
+                $dimensionFilters = $this->_em->getRepository('FaEntityBundle:CategoryDimension')->getSearchableDimesionsArrayByCategoryId($searchParams['item__category_id'], $container);
+                $twigCoreService = $container->get('fa.twig.core_extension');
+                $rootCategoryName = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryName($searchParams['item__category_id'], $container);
 
-            foreach ($dimensionFilters as $dimensionId => $dimension) {
-                $dimensionName = $twigCoreService->getDimensionFieldNameFromName($dimension['name'], $rootCategoryName, $dimension['search_type']);
-                $dimensionNameRes = explode('__', $dimensionName);
-                $dimensionName = $dimensionNameRes[(count($dimensionNameRes) - 1)];
-                if ($dimension['is_index']) {
-                    $categoryIndexableDimensions[$dimensionName] = $dimensionName;
-                }
-            }
-            foreach ($searchParams as $searchParamKey => $searchParamValue) {
-                $searchParamKeyRes = explode('__', $searchParamKey);
-                $searchParamKey = $searchParamKeyRes[(count($searchParamKeyRes) - 1)];
-
-                if (array_key_exists($searchParamKey, $categoryIndexableDimensions)) {
-                    if ($searchParamKey == 'ad_type_id') {
-                        $searchParamKey = 'type_id';
-                    }
-                    $indexableKeyArray[] = $searchParamKey;
-                    $indexableValueArray[] = $searchParamValue;
-                }
-            }
-            $url = $this->_em->getRepository('FaEntityBundle:Category')->getFullSlugById($searchParams['item__category_id'], $container);
-            $parentFullSlug = $url;
-            $parentId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($searchParams['item__category_id'], $container);
-            $adTypeString = '{Ad-Type}';
-            $adTypeCategoryArr = array(CategoryRepository::FOR_SALE_ID,CategoryRepository::PROPERTY_ID,CategoryRepository::SERVICES_ID,CategoryRepository::ANIMALS_ID);
-            
-            if (count($indexableKeyArray)) {
-                $indexableKeyArray = array_unique($indexableKeyArray);
-                foreach ($indexableKeyArray as $indexableKey) {
-                    if (isset($indexableDimesionsArray[$indexableKey])) {
-                        if (in_array($parentId, $adTypeCategoryArr) && $indexableDimesionsArray[$indexableKey] == $adTypeString)
-                        {  $url .= ''; }
-                        else { $url .= '/'.$indexableDimesionsArray[$indexableKey]; }
+                foreach ($dimensionFilters as $dimensionId => $dimension) {
+                    $dimensionName = $twigCoreService->getDimensionFieldNameFromName($dimension['name'], $rootCategoryName, $dimension['search_type']);
+                    $dimensionNameRes = explode('__', $dimensionName);
+                    $dimensionName = $dimensionNameRes[(count($dimensionNameRes) - 1)];
+                    if ($dimension['is_index']) {
+                        $categoryIndexableDimensions[$dimensionName] = $dimensionName;
                     }
                 }
-            }
-            $catOrDimension = array();$firdimensionUrl=array();$remDimensionUrl = array();
-            $dimensionUrl = array();
-            if (in_array($parentId, $adTypeCategoryArr) && in_array('type_id',$indexableKeyArray)) {               
-                $splitParentFullSlug = explode('/',$parentFullSlug);
-                $resturl = preg_replace('/'.preg_quote($splitParentFullSlug[0], '/').'/', '', $url, 1);
-                $url = $splitParentFullSlug[0].'/'.$adTypeString.$resturl;
-                $newParentUrl = str_replace($splitParentFullSlug[0],'',$parentFullSlug);
-                $getDimensionSlug = explode($newParentUrl.'/',rtrim($pageUrl,'/'));
-                $splitPageUrl11 = explode('/',$pageUrl);
-                if(count($splitPageUrl11)>1) { $firdimensionUrl[] = $splitPageUrl11[1]; }
-                if(count($getDimensionSlug)>1) { $remDimensionUrl = explode('/',$getDimensionSlug[1]); }
-                else { $remDimensionUrl = array(); }
-                $dimensionUrl = array_merge($firdimensionUrl,$remDimensionUrl);               
-            } else { 
-                if(rtrim($parentFullSlug,'/') != rtrim($pageUrl,'/')) {
-                    $getDimensionSlug = explode($parentFullSlug.'/',rtrim($pageUrl,'/'));
-                    if(count($getDimensionSlug)>1) { $dimensionUrl = explode('/',$getDimensionSlug[1]); }
-                    else { $dimensionUrl = array(); }
+                foreach ($searchParams as $searchParamKey => $searchParamValue) {
+                    $searchParamKeyRes = explode('__', $searchParamKey);
+                    $searchParamKey = $searchParamKeyRes[(count($searchParamKeyRes) - 1)];
+
+                    if (array_key_exists($searchParamKey, $categoryIndexableDimensions)) {
+                        if ($searchParamKey == 'ad_type_id') {
+                            $searchParamKey = 'type_id';
+                        }
+                        $indexableKeyArray[] = $searchParamKey;
+                        $indexableValueArray[] = $searchParamValue;
+                    }
                 }
-            }
+                $url = $this->_em->getRepository('FaEntityBundle:Category')->getFullSlugById($searchParams['item__category_id'], $container);
+                $parentFullSlug = $url;
+                $parentId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($searchParams['item__category_id'], $container);
+                $adTypeString = '{Ad-Type}';
+                $adTypeCategoryArr = array(CategoryRepository::FOR_SALE_ID,CategoryRepository::PROPERTY_ID,CategoryRepository::SERVICES_ID,CategoryRepository::ANIMALS_ID);
             
-            $allCommoUrl = $url;
-            if (count($indexableKeyArray) && count($dimensionUrl)) { 
-                $indexArrayStart = 0;
-                foreach ($indexableKeyArray as $indexableKey) {
-                	if(isset($dimensionUrl[$indexArrayStart])) {
-	                    $catOrDimension[$indexableKey] = $dimensionUrl[$indexArrayStart];
-                	}
-                	$indexArrayStart++;
+                if (count($indexableKeyArray)) {
+                    $indexableKeyArray = array_unique($indexableKeyArray);
+                    foreach ($indexableKeyArray as $indexableKey) {
+                        if (isset($indexableDimesionsArray[$indexableKey])) {
+                            if (in_array($parentId, $adTypeCategoryArr) && $indexableDimesionsArray[$indexableKey] == $adTypeString) {
+                                $url .= '';
+                            } else {
+                                $url .= '/'.$indexableDimesionsArray[$indexableKey];
+                            }
+                        }
+                    }
                 }
-            }
+                $catOrDimension = array();
+                $firdimensionUrl=array();
+                $remDimensionUrl = array();
+                $dimensionUrl = array();
+                if (in_array($parentId, $adTypeCategoryArr) && in_array('type_id', $indexableKeyArray)) {
+                    $splitParentFullSlug = explode('/', $parentFullSlug);
+                    $resturl = preg_replace('/'.preg_quote($splitParentFullSlug[0], '/').'/', '', $url, 1);
+                    $url = $splitParentFullSlug[0].'/'.$adTypeString.$resturl;
+                    $newParentUrl = str_replace($splitParentFullSlug[0], '', $parentFullSlug);
+                    $getDimensionSlug = explode($newParentUrl.'/', rtrim($pageUrl, '/'));
+                    $splitPageUrl11 = explode('/', $pageUrl);
+                    if (count($splitPageUrl11)>1) {
+                        $firdimensionUrl[] = $splitPageUrl11[1];
+                    }
+                    if (count($getDimensionSlug)>1) {
+                        $remDimensionUrl = explode('/', $getDimensionSlug[1]);
+                    } else {
+                        $remDimensionUrl = array();
+                    }
+                    $dimensionUrl = array_merge($firdimensionUrl, $remDimensionUrl);
+                } else {
+                    if (rtrim($parentFullSlug, '/') != rtrim($pageUrl, '/')) {
+                        $getDimensionSlug = explode($parentFullSlug.'/', rtrim($pageUrl, '/'));
+                        if (count($getDimensionSlug)>1) {
+                            $dimensionUrl = explode('/', $getDimensionSlug[1]);
+                        } else {
+                            $dimensionUrl = array();
+                        }
+                    }
+                }
+            
+                $allCommoUrl = $url;
+                if (count($indexableKeyArray) && count($dimensionUrl)) {
+                    $indexArrayStart = 0;
+                    foreach ($indexableKeyArray as $indexableKey) {
+                        if (isset($dimensionUrl[$indexArrayStart])) {
+                            $catOrDimension[$indexableKey] = $dimensionUrl[$indexArrayStart];
+                        }
+                        $indexArrayStart++;
+                    }
+                }
            
-            if (count($catOrDimension)) {
-                foreach ($catOrDimension as $catOrDimensionKey=>$catOrDimensionValue) {
-                   $exacturl = str_replace($indexableDimesionsArray[$catOrDimensionKey],$catOrDimensionValue,$url);
-                   $objSeoToolOverride = $this->getSeoToolOverrideObj($exacturl,$container);
-                   if($objSeoToolOverride!='') break;
+                if (count($catOrDimension)) {
+                    foreach ($catOrDimension as $catOrDimensionKey=>$catOrDimensionValue) {
+                        $exacturl = str_replace($indexableDimesionsArray[$catOrDimensionKey], $catOrDimensionValue, $url);
+                        $objSeoToolOverride = $this->getSeoToolOverrideObj($exacturl, $container);
+                        if ($objSeoToolOverride!='') {
+                            break;
+                        }
+                    }
+                }
+                //echo $allCommoUrl;die;
+                /*echo "<hr>";
+                print_r($searchParams);
+                echo "<hr>";
+                print_r($categoryIndexableDimensions);
+                echo "<hr>";
+                print_r($indexableKeyArray);
+                echo "<hr>";
+                print_r($indexableDimesionsArray);
+                echo "<hr>";
+                echo $url;
+                */
+               
+                if (!$objSeoToolOverride) {
+                    $objSeoToolOverride = $this->getSeoToolOverrideObj($allCommoUrl, $container);
                 }
             }
-            //echo $allCommoUrl;die;
-            /*echo "<hr>";
-            print_r($searchParams);
-            echo "<hr>";
-            print_r($categoryIndexableDimensions);
-            echo "<hr>";
-            print_r($indexableKeyArray);
-            echo "<hr>";
-            print_r($indexableDimesionsArray);
-            echo "<hr>";
-            echo $url;
-            */
-               
-            if(!$objSeoToolOverride) {
-                $objSeoToolOverride = $this->getSeoToolOverrideObj($allCommoUrl,$container);
-            }
-        }
         }
         if (!$objSeoToolOverride) {
-            $objSeoToolOverride = $this->getSeoToolOverrideObj($fullpageUrl,$container);
+            $objSeoToolOverride = $this->getSeoToolOverrideObj($fullpageUrl, $container);
         }
         
         return $objSeoToolOverride;
     }
 
-    public function getSeoToolOverrideObj($url, $container = null) {
+    public function getSeoToolOverrideObj($url, $container = null)
+    {
         if (substr($url, (strlen($url)-1), 1) == '/') {
             $pageUrlWithoutSlash = substr($url, 0, strlen($url));
             $pageUrlWithSlash    = $url;
@@ -225,7 +241,7 @@ class SeoToolOverrideRepository extends EntityRepository
         if ($container) {
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
             if ($cachedValue !== false) {
-               // return $cachedValue;
+                // return $cachedValue;
             }
         }
 
@@ -236,7 +252,7 @@ class SeoToolOverrideRepository extends EntityRepository
               ->andWhere(self::ALIAS.'.status = 1');
  
         $objSeoToolOverride = $qb->getQuery()->getOneOrNullResult();
-        if($objSeoToolOverride!='') {
+        if ($objSeoToolOverride!='') {
             if ($container && $objSeoToolOverride) {
                 CommonManager::setCacheVersion($container, $cacheKey, $objSeoToolOverride, 86400);
             }
@@ -255,7 +271,7 @@ class SeoToolOverrideRepository extends EntityRepository
      */
     public function findSeoRuleByPageUrlOnly($pageUrl, $container = null)
     {
-        $objSeoToolOverride = NULL;
+        $objSeoToolOverride = null;
 
         if (substr($pageUrl, (strlen($pageUrl)-1), 1) == '/') {
             $pageUrlWithoutSlash = substr($pageUrl, 0, strlen($pageUrl));

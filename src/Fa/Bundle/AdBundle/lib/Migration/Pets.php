@@ -22,7 +22,6 @@ use Fa\Bundle\AdBundle\Entity\AdAnimals;
  */
 class Pets
 {
-
     private $meta_text;
 
     private $ad_id;
@@ -36,7 +35,6 @@ class Pets
         $this->ad_id     = $ad_id;
         $this->em = $em;
         $this->init();
-
     }
 
     private function getAnimalAgeId($string)

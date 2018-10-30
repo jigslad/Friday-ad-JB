@@ -21,7 +21,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
 /**
  * This form is used to search user's own ads.
  *
@@ -64,7 +63,7 @@ class ManageMyAdSearchType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-         $builder
+        $builder
              ->add('ad__id', TextType::class, array('required' => false))
              ->add('ad__title', TextType::class, array('required' => false))
              ->add(

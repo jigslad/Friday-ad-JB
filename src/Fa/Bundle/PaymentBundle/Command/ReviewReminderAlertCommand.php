@@ -53,12 +53,12 @@ EOF
         );
     }
 
- /**
-     * Execute.
-     *
-     * @param InputInterface  $input  InputInterface object.
-     * @param OutputInterface $output OutputInterface object.
-     */
+    /**
+        * Execute.
+        *
+        * @param InputInterface  $input  InputInterface object.
+        * @param OutputInterface $output OutputInterface object.
+        */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->em = $this->getContainer()->get('doctrine')->getManager();
@@ -78,12 +78,12 @@ EOF
         $last_id          = 0;
 
         while (!$done) {
-        	if ($input->getOption('order_id') > 0) {
-        		$orders = $this->getTestOrders($input->getOption('order_id'), $QUERY_BATCH_SIZE);
-        		$done = true;
-        	} else {
-        		$orders = $this->getClosedOrders($last_id, $QUERY_BATCH_SIZE, $closed_at);
-        	}
+            if ($input->getOption('order_id') > 0) {
+                $orders = $this->getTestOrders($input->getOption('order_id'), $QUERY_BATCH_SIZE);
+                $done = true;
+            } else {
+                $orders = $this->getClosedOrders($last_id, $QUERY_BATCH_SIZE, $closed_at);
+            }
             
             if ($orders) {
                 foreach ($orders as $order) {

@@ -198,7 +198,7 @@ class BannerAdminController extends CrudController implements ResourceAuthorizat
         }
     }
 
-    public function sortBannerPages ($a, $b)
+    public function sortBannerPages($a, $b)
     {
         return $a['text'] - $b['text'];
     }

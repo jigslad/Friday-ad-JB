@@ -118,7 +118,6 @@ EOF
                     $this->em->remove($ad);
                 }
                 echo 'Ad removed with -> '.$ad->getId()."\n";
-
             }
         }
         $em->flush();
@@ -184,7 +183,6 @@ EOF
         $stmt->execute();
         $ads = $stmt->fetchAll();
         return $ads;
-
     }
 
     /**

@@ -24,8 +24,9 @@ class CampaignsRepository extends EntityRepository
      *
      * @return Doctrine\ORM\QueryBuilder The query builder.
      */
-    public function getBaseQueryBuilder() {
-        return $this->createQueryBuilder ( self::ALIAS );
+    public function getBaseQueryBuilder()
+    {
+        return $this->createQueryBuilder(self::ALIAS);
     }
 
     public function getClassName()
@@ -125,7 +126,7 @@ class CampaignsRepository extends EntityRepository
     public function getCampaignNameById($campaignId)
     {
         $results = $this->createQueryBuilder(self::ALIAS)
-        ->where(self::ALIAS.'.id=',$campaignId)
+        ->where(self::ALIAS.'.id=', $campaignId)
         ->getQuery()
         ->getResult();
         return $results->getCampaignName();
@@ -137,7 +138,7 @@ class CampaignsRepository extends EntityRepository
     public function getCampaignById($campaignId)
     {
         $results = $this->createQueryBuilder(self::ALIAS)
-        ->where(self::ALIAS.'.id=',$campaignId)
+        ->where(self::ALIAS.'.id=', $campaignId)
         ->getQuery()
         ->getResult();
         return $results->getCampaign();
@@ -203,9 +204,8 @@ class CampaignsRepository extends EntityRepository
      *
      * @param object  $copiedcampaign     Campaign object.
      */
-    public function copyAndSave($copiedcampaign,$categoryId,$container=null)
+    public function copyAndSave($copiedcampaign, $categoryId, $container=null)
     {
-        
         $campaign = new Campaigns();
         //$campaign->setBackgroundFile($copiedcampaign->getBackgroundFile());
         //$campaign->setCampaignBackgroundFileName($copiedcampaign->getCampaignBackgroundFileName());
@@ -227,7 +227,7 @@ class CampaignsRepository extends EntityRepository
         $campaign->setCampaignStatus($copiedcampaign->getCampaignStatus());
         $this->_em->persist($campaign);
         $this->_em->flush($campaign);
-        $this->copyAndSavePaaLiteFieldRules($copiedcampaign->getId(), $category,$campaign);
+        $this->copyAndSavePaaLiteFieldRules($copiedcampaign->getId(), $category, $campaign);
         $container->get('session')->set('copyandsaved_data', 1);
         return $campaign->getId();
     }
@@ -235,10 +235,10 @@ class CampaignsRepository extends EntityRepository
     /**
      * Save paa field rule in create mode.
      *
-     * @param object  $copyCampaignId     
+     * @param object  $copyCampaignId
      * @param object  $category Select category instance.
      */
-    private function copyAndSavePaaLiteFieldRules($copyCampaignId, $category,$campaign)
+    private function copyAndSavePaaLiteFieldRules($copyCampaignId, $category, $campaign)
     {
         $paaLiteFields = $this->_em->getRepository('FaAdBundle:PaaField')->getAllPaaFields($category->getId());
         $paaLiteRuleIds = $this->_em->getRepository('FaAdBundle:PaaLiteFieldRule')->getPaaLiteFieldsByCampId($copyCampaignId);
@@ -248,8 +248,8 @@ class CampaignsRepository extends EntityRepository
             $PaaLiteFieldRule->setCategory($category);
             $PaaLiteFieldRule->setCampaign($campaign);
  
-            if(in_array($PaaLiteField->getId(), $paaLiteRuleIds)) {
-                $existingPaaFieldRule = $this->_em->getRepository('FaAdBundle:PaaLiteFieldRule')->getDetailByCampaignIdPaaField($PaaLiteField,$copyCampaignId);
+            if (in_array($PaaLiteField->getId(), $paaLiteRuleIds)) {
+                $existingPaaFieldRule = $this->_em->getRepository('FaAdBundle:PaaLiteFieldRule')->getDetailByCampaignIdPaaField($PaaLiteField, $copyCampaignId);
                 $newPaaLiteField = $existingPaaFieldRule[0];
                 $PaaLiteFieldRule->setIsAdded(1);
                 $PaaLiteFieldRule->setPaaLiteField($newPaaLiteField->getPaaLiteField());
@@ -278,9 +278,6 @@ class CampaignsRepository extends EntityRepository
             
             $this->_em->persist($PaaLiteFieldRule);
             $this->_em->flush();
-            
         }
     }
-
-    
 }

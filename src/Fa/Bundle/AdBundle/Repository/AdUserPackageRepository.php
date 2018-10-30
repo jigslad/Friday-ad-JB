@@ -137,7 +137,6 @@ class AdUserPackageRepository extends BaseEntityRepository
             }
 
             return $adUserPackage->getId();
-
         }
     }
 
@@ -578,15 +577,15 @@ class AdUserPackageRepository extends BaseEntityRepository
      * @return mixed
      */
     public function getPackagePurchasedByUser($adId, $packageId)
-    {	
-    	$query = $this->getBaseQueryBuilder()
-    	->andWhere(self::ALIAS.'.ad_id = '.$adId)
-    	->andWhere(self::ALIAS.'.package = '.$packageId)
-    	->andWhere(self::ALIAS.'.status = '.self::STATUS_ACTIVE.' OR '.self::ALIAS.'.status = '.self::STATUS_INACTIVE)
-    	->orderBy(self::ALIAS.'.id', 'desc')
-    	->setMaxResults(1);
-    	
-    	return $query->getQuery()->getOneOrNullResult();
+    {
+        $query = $this->getBaseQueryBuilder()
+        ->andWhere(self::ALIAS.'.ad_id = '.$adId)
+        ->andWhere(self::ALIAS.'.package = '.$packageId)
+        ->andWhere(self::ALIAS.'.status = '.self::STATUS_ACTIVE.' OR '.self::ALIAS.'.status = '.self::STATUS_INACTIVE)
+        ->orderBy(self::ALIAS.'.id', 'desc')
+        ->setMaxResults(1);
+        
+        return $query->getQuery()->getOneOrNullResult();
     }
     
     /**
@@ -597,22 +596,21 @@ class AdUserPackageRepository extends BaseEntityRepository
      * @return mixed
      */
     public function disabledAdUserPackage($adId = null, $adStatus = null)
-    {	
-    	if($adId) {
-	    	$adUserPackages = $this->_em->getRepository('FaAdBundle:AdUserPackage')->findBy(array('ad_id' => $adId, 'status' => 1));
-	    	if(!empty($adUserPackages)) {
-	    		foreach ($adUserPackages as $adPackage) {
-	    			if($adStatus && $adStatus == EntityRepository::AD_STATUS_EXPIRED_ID) {
-	    				$adPackage->setStatus(self::STATUS_EXPIRED);
-	    			} else {
-	    				$adPackage->setStatus(self::STATUS_INACTIVE);
-	    			}
-	    			$this->_em->persist($adPackage);
-	    			$this->_em->flush($adPackage);
-	    		}
-	    	}
-    	}
-    	return true;
+    {
+        if ($adId) {
+            $adUserPackages = $this->_em->getRepository('FaAdBundle:AdUserPackage')->findBy(array('ad_id' => $adId, 'status' => 1));
+            if (!empty($adUserPackages)) {
+                foreach ($adUserPackages as $adPackage) {
+                    if ($adStatus && $adStatus == EntityRepository::AD_STATUS_EXPIRED_ID) {
+                        $adPackage->setStatus(self::STATUS_EXPIRED);
+                    } else {
+                        $adPackage->setStatus(self::STATUS_INACTIVE);
+                    }
+                    $this->_em->persist($adPackage);
+                    $this->_em->flush($adPackage);
+                }
+            }
+        }
+        return true;
     }
-    
 }

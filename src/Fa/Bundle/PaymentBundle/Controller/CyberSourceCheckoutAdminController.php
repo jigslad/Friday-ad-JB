@@ -137,7 +137,7 @@ class CyberSourceCheckoutAdminController extends CoreController implements Resou
                         return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'backend-cyber-source'), 'checkout_payment_failure_admin', array('cartCode' => $cart->getCartCode()), 'error');
                     }
                     return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'backend-cyber-source'), 'checkout_payment_success_admin', array('cartCode' => $cart->getCartCode()), 'success');
-                } else if ($cyberSourceReply) {
+                } elseif ($cyberSourceReply) {
                     $this->container->get('session')->getFlashBag()->add('error', $cyberSourceManager->getError($cyberSourceReply->reasonCode));
                 }
             }

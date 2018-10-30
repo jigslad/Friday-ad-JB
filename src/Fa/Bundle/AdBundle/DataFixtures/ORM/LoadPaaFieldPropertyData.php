@@ -100,7 +100,7 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
                 'number_of_bathrooms_id' => 'Number of bathrooms',
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -112,13 +112,13 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
                 'amenities_id' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -136,7 +136,7 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->find(CategoryRepository::PROPERTY_FOR_RENT_ID);
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -169,7 +169,7 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
                 'pets_allowed_id' => 'Pets allowed?',
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -190,13 +190,13 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
                 'dss_tenants_allowed_id' => 4,
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -214,7 +214,7 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->find(CategoryRepository::PROPERTY_SHARE_ID);
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -252,7 +252,7 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
                 'room_size_id' => 'Room size'
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -277,13 +277,13 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
                 'room_size_id' => 4,
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -301,7 +301,7 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->find(CategoryRepository::PROPERTY_FOR_SALE_ID);
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -329,7 +329,7 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
                 'lease_type_id' => 'Lease type'
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -344,13 +344,13 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
                 'lease_type_id' => 4,
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -380,7 +380,7 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
                 $dimensionField = str_replace(array('(', ')', ',', '?', '|', '.', '/', '\\', '*', '+', '-', '"', "'"), '', $dimensionName);
                 $dimensionField = str_replace(' ', '_', strtolower($dimensionField));
 
-                if ($dimensionField == 'date_available' ) {
+                if ($dimensionField == 'date_available') {
                     $field                                                            = $dimensionField;
                     $catDimensionFields[$categoryId][$field]['field']                 = $dimensionField;
                     $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;
@@ -415,7 +415,7 @@ class LoadPaaFieldPropertyData extends LoadPaaFieldData
                     $catDimensionFields[$categoryId][$field]['field_type']            = 'choice_radio';
                     $catDimensionFields[$categoryId][$field]['category_dimension_id'] = $dimensionId;
                     $catDimensionFields[$categoryId][$field]['is_index']              = $isIndex;
-               } else {
+                } else {
                     $field = $dimensionField.'_id';
                     $catDimensionFields[$categoryId][$field]['field']                 = $field;
                     $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;

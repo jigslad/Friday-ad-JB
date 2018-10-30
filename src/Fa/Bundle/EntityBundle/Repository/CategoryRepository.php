@@ -155,7 +155,7 @@ class CategoryRepository extends NestedTreeRepository
         $query = $this->createQueryBuilder(self::ALIAS);
 
         if (!$id) {
-            $query->where(self::ALIAS.'.parent IS NULL OR '.self::ALIAS.'.parent = 0 AND '.self::ALIAS.'.status = 1' );
+            $query->where(self::ALIAS.'.parent IS NULL OR '.self::ALIAS.'.parent = 0 AND '.self::ALIAS.'.status = 1');
         } else {
             $query->where(self::ALIAS.'.parent = '.$id.' AND '.self::ALIAS.'.status = 1');
         }
@@ -386,24 +386,24 @@ class CategoryRepository extends NestedTreeRepository
      *
      * @return boolean
      */
-    public function getCategoryNoFollowLink( $queryString='',$withoutPhoto=false )
-    {	
-    	$followlinkDisplay = false;
-    	if($queryString!='') {
-    		$postData = explode('&',$queryString);
-    	}
-    	if( !empty( $postData) ) {
-    		foreach ( $postData as $key=>$val) {
-    		    if($withoutPhoto==true && ( preg_match( '/^item_motors__(.*)/', $val ) || preg_match( '/^item_animals__(.*)/', $val ) )) {
-    		    	$followlinkDisplay = true;
-    				return $followlinkDisplay;
-    		    }elseif($withoutPhoto==false && ( preg_match( '/^item_motors__(.*)/', $val ) || preg_match( '/^item_animals__(.*)/', $val ) || preg_match( '/^(.*)items_with_photo/', $val ) )) {
-    				$followlinkDisplay = true;
-    				return $followlinkDisplay;
-    			} 
-    		}
-    	}
-    	return $followlinkDisplay;
+    public function getCategoryNoFollowLink($queryString='', $withoutPhoto=false)
+    {
+        $followlinkDisplay = false;
+        if ($queryString!='') {
+            $postData = explode('&', $queryString);
+        }
+        if (!empty($postData)) {
+            foreach ($postData as $key=>$val) {
+                if ($withoutPhoto==true && (preg_match('/^item_motors__(.*)/', $val) || preg_match('/^item_animals__(.*)/', $val))) {
+                    $followlinkDisplay = true;
+                    return $followlinkDisplay;
+                } elseif ($withoutPhoto==false && (preg_match('/^item_motors__(.*)/', $val) || preg_match('/^item_animals__(.*)/', $val) || preg_match('/^(.*)items_with_photo/', $val))) {
+                    $followlinkDisplay = true;
+                    return $followlinkDisplay;
+                }
+            }
+        }
+        return $followlinkDisplay;
     }
 
     /**
@@ -746,16 +746,16 @@ class CategoryRepository extends NestedTreeRepository
 
         //Remove categories which is disabled to show in paa search category drop down.
         if ($categoryArray && count($categoryArray)) {
-          $paaDisabledCategories = $this->getPaaDisabledCategoryIds($container);
-          if ($paaDisabledCategories && count($paaDisabledCategories)) {
-          	foreach ($categoryArray as $key => $value) {
-          		if (!in_array($value['id'], $paaDisabledCategories)) {
-          			$categoryFinalArray[] = $categoryArray[$key];
-          		}
-          	}
-          } else {
-          	$categoryFinalArray = $categoryArray;
-          }
+            $paaDisabledCategories = $this->getPaaDisabledCategoryIds($container);
+            if ($paaDisabledCategories && count($paaDisabledCategories)) {
+                foreach ($categoryArray as $key => $value) {
+                    if (!in_array($value['id'], $paaDisabledCategories)) {
+                        $categoryFinalArray[] = $categoryArray[$key];
+                    }
+                }
+            } else {
+                $categoryFinalArray = $categoryArray;
+            }
         }
 
         return $categoryFinalArray;
@@ -925,7 +925,7 @@ class CategoryRepository extends NestedTreeRepository
                     usort(
                         $footerCategory['children'],
                         function ($a, $b) {
-                                return strcmp($a["category_name"], $b["category_name"]);
+                            return strcmp($a["category_name"], $b["category_name"]);
                         }
                     );
                     if (isset($otherCategoryArray[$categoryId]['children'])) {
@@ -1132,23 +1132,23 @@ class CategoryRepository extends NestedTreeRepository
                     }
                     $headerCategoryArray[$category['id']] = $categoryArray;
                     $categoryId1 = $category['id'];
-                } else if ($category['lvl'] == 2 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'])) {
+                } elseif ($category['lvl'] == 2 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'])) {
                     $headerCategoryArray[$categoryId1]['children'][$category['id']] = $categoryArray;
                     $categoryId2 = $category['id'];
                     asort($headerCategoryArray[$categoryId1]['children']);
-                } else if ($category['lvl'] == 3 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'])) {
+                } elseif ($category['lvl'] == 3 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'])) {
                     $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$category['id']] = $categoryArray;
                     $categoryId3 = $category['id'];
                     asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children']);
-                } else if ($category['lvl'] == 4 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'])) {
+                } elseif ($category['lvl'] == 4 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'])) {
                     $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$category['id']] = $categoryArray;
                     $categoryId4 = $category['id'];
                     asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children']);
-                } else if ($category['lvl'] == 5 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'])) {
+                } elseif ($category['lvl'] == 5 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'])) {
                     $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$category['id']] = $categoryArray;
                     $categoryId5 = $category['id'];
                     asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children']);
-                } else if ($category['lvl'] == 6 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children'])) {
+                } elseif ($category['lvl'] == 6 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children'])) {
                     $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children'][$category['id']] = $categoryArray;
                     $categoryId6 = $category['id'];
                     asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children']);
@@ -2016,35 +2016,35 @@ class CategoryRepository extends NestedTreeRepository
      */
     public function getPaaDisabledCategoryIds($container = null)
     {
-    	if ($container) {
-    		$tableName   = $this->getCategoryTableName();
-    		$cacheKey    = $tableName.'|'.__FUNCTION__;
-    		$cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+        if ($container) {
+            $tableName   = $this->getCategoryTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
-    		if ($cachedValue !== false) {
-    			return $cachedValue;
-    		}
-    	}
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        }
 
-    	$query = $this->createQueryBuilder(self::ALIAS)
-    	->select(self::ALIAS.'.id')
-    	->where(self::ALIAS.'.is_paa_disabled = :isPaaDisabled')
-    	->setParameter('isPaaDisabled', 1);
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id')
+        ->where(self::ALIAS.'.is_paa_disabled = :isPaaDisabled')
+        ->setParameter('isPaaDisabled', 1);
 
-    	$objCategories = $query->getQuery()->getArrayResult();
+        $objCategories = $query->getQuery()->getArrayResult();
 
-    	$paaDisabledCategories = array();
-    	if ($objCategories) {
-    		foreach ($objCategories as $value) {
-    			$paaDisabledCategories[] = $value['id'];
-    		}
+        $paaDisabledCategories = array();
+        if ($objCategories) {
+            foreach ($objCategories as $value) {
+                $paaDisabledCategories[] = $value['id'];
+            }
 
-    		if ($container) {
-    			CommonManager::setCacheVersion($container, $cacheKey, $paaDisabledCategories);
-    		}
+            if ($container) {
+                CommonManager::setCacheVersion($container, $cacheKey, $paaDisabledCategories);
+            }
 
-    		return $paaDisabledCategories;
-    	}
+            return $paaDisabledCategories;
+        }
     }
 
     /**
@@ -2088,7 +2088,7 @@ class CategoryRepository extends NestedTreeRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-             return $cachedValue;
+                return $cachedValue;
             }
         }
 
@@ -2206,13 +2206,13 @@ class CategoryRepository extends NestedTreeRepository
      */
     public function getCategorybyName($name = '')
     {
-    	$query = $this->createQueryBuilder(self::ALIAS)
-    	->select(self::ALIAS.'.id,'.self::ALIAS.'.name')
-	    	->andWhere(self::ALIAS.'.name = :name')
-	    	->setParameter('name', $name)
-	    	->setMaxResults(1);
-    	
-	    	$objResources = $query->getQuery()->getOneOrNullResult();
-    	return $objResources;
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id,'.self::ALIAS.'.name')
+            ->andWhere(self::ALIAS.'.name = :name')
+            ->setParameter('name', $name)
+            ->setMaxResults(1);
+        
+        $objResources = $query->getQuery()->getOneOrNullResult();
+        return $objResources;
     }
 }

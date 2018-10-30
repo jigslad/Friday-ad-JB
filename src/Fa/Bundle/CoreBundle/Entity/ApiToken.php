@@ -208,5 +208,4 @@ class ApiToken
     {
         return $this->type;
     }
-
 }

@@ -39,7 +39,6 @@ use Fa\Bundle\AdBundle\Form\AdPostPropertyAdminType;
 use Fa\Bundle\AdBundle\Form\AdPostAnimalsAdminType;
 use Fa\Bundle\AdBundle\Form\AdPostCommunityAdminType;
 
-
 /**
  * This controller is used for ad post management.
  *

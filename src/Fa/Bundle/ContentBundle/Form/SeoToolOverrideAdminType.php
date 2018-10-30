@@ -30,7 +30,6 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-
 /**
  * Seo tool admin type form.
  *
@@ -103,7 +102,7 @@ class SeoToolOverrideAdminType extends AbstractType
     {
         $form      = $event->getForm();
         $seoRule   = $event->getData();
-        $seoRuleId = NULL;
+        $seoRuleId = null;
 
         if ($seoRule && $seoRule->getId()) {
             $seoRuleId = $seoRule->getId();

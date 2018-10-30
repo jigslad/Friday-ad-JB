@@ -328,7 +328,6 @@ class AdImageManager
         try {
             $this->removeFromAmazoneS3($keepOriginal);
         } catch (\Exception $e) {
-
         }
     }
 
@@ -435,7 +434,7 @@ class AdImageManager
                 }
 
                 if ($this->container->getParameter('fa.aws_bucket') == 'friday-ad') {
-                  $result = $client->putObject(array(
+                    $result = $client->putObject(array(
                       'Bucket'     => $this->container->getParameter('fa.aws_bucket'),
                       'Key'        => $key,
                       'CacheControl' => 'max-age=21600',
@@ -446,7 +445,7 @@ class AdImageManager
                       )
                   ));
                 } else {
-                  $result = $client->putObject(array(
+                    $result = $client->putObject(array(
                       'Bucket'     => $this->container->getParameter('fa.aws_bucket'),
                       'Key'        => $key,
                       'CacheControl' => 'max-age=21600',

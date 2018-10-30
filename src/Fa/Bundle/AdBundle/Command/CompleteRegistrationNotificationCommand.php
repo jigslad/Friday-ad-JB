@@ -86,23 +86,22 @@ EOF
      */
     protected function completeRegistrationNotificationsWithOffset($input, $output)
     {
-        $records          = $this->getAdQueryBuilder(FALSE,$input);
+        $records          = $this->getAdQueryBuilder(false, $input);
         $step        = 100;
-        $offset      = 0; 
+        $offset      = 0;
         $container = $this->getContainer();
 
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
         $entityCache =   $container->get('fa.entity.cache.manager');
 
         foreach ($records as $record) {
-           $paaLiteEmailNotification = $this->em->getRepository('FaAdBundle:PaaLiteEmailNotification')->find($record['id']);
+            $paaLiteEmailNotification = $this->em->getRepository('FaAdBundle:PaaLiteEmailNotification')->find($record['id']);
             $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('complete_registration', $record['ad_id'], $record['user_id']);
 
             $paaLiteEmailNotification->setIsRegisterationNotificationSent(1);
             $this->em->persist($paaLiteEmailNotification);
             $this->em->flush($paaLiteEmailNotification);
             $output->writeln('Complete your Registration notification sent to User Id:'.($record['user_id'] ? $record['user_id'] : null), true);
-
         }
     }
     
@@ -115,7 +114,7 @@ EOF
      */
     protected function completeRegistrationNotifications($input, $output)
     {
-        $resultArr     = $this->getAdQueryBuilder(TRUE, $input);
+        $resultArr     = $this->getAdQueryBuilder(true, $input);
         $count  = $resultArr[0]['cnt'];
 
         $step      = 100;
@@ -166,10 +165,10 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE, $input)
+    protected function getAdQueryBuilder($onlyCount = false, $input)
     {
-        if($onlyCount) {
-             $sql = 'SELECT count(id) as cnt ';
+        if ($onlyCount) {
+            $sql = 'SELECT count(id) as cnt ';
         } else {
             $sql = 'SELECT * ';
         }
@@ -180,5 +179,5 @@ EOF
         $stmt->execute();
         $arrResult = $stmt->fetchAll();
         return $arrResult;
-    }   
+    }
 }

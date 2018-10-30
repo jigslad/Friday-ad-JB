@@ -130,9 +130,9 @@ class AdPrintResponseBuild
         $upsellArray = array();
         $upsells     = $em->getRepository('FaAdBundle:AdUserPackageUpsell')->getLatestAdPackageUpsell($ad->getId());
         if (count($upsells)) {
-        	foreach ($upsells as $upsellId => $upsellName) {
-        		$upsellArray[] = array('ID' => $upsellId, 'Name' => $upsellName);
-        	}
+            foreach ($upsells as $upsellId => $upsellName) {
+                $upsellArray[] = array('ID' => $upsellId, 'Name' => $upsellName);
+            }
         }
         $this->printApiResponse[AdPrintFieldMappingInterface::UPSELLS] = $upsellArray;
     }
@@ -187,8 +187,8 @@ class AdPrintResponseBuild
         if (isset($adSolrObjs[$ad->getId()])) {
             if (isset($adSolrObjs[$ad->getId()][AdSolrFieldMapping::ORD]) && count($adSolrObjs[$ad->getId()][AdSolrFieldMapping::ORD])) {
                 foreach ($adSolrObjs[$ad->getId()][AdSolrFieldMapping::ORD] as $index => $val) {
-		     $imageUrl = CommonManager::getAdImageUrl($this->container, $adSolrObjs[$ad->getId()][AdSolrFieldMapping::ID], (isset($adSolrObjs[$ad->getId()][AdSolrFieldMapping::PATH][$index]))?$adSolrObjs[$ad->getId()][AdSolrFieldMapping::PATH][$index]:'', (isset($adSolrObjs[$ad->getId()][AdSolrFieldMapping::HASH][$index]))?$adSolrObjs[$ad->getId()][AdSolrFieldMapping::HASH][$index]:'', '800X600', ((isset($adSolrObjs[$ad->getId()][AdSolrFieldMapping::AWS]) && ($adSolrObjs[$ad->getId()][AdSolrFieldMapping::AWS][$index])) ? $adSolrObjs[$ad->getId()][AdSolrFieldMapping::AWS][$index] : 0), (isset($adSolrObjs[$ad->getId()][AdSolrFieldMapping::IMAGE_NAME]) && isset($adSolrObjs[$ad->getId()][AdSolrFieldMapping::IMAGE_NAME][$index])) ? $adSolrObjs[$ad->getId()][AdSolrFieldMapping::IMAGE_NAME][$index] : null);
-		    if (!preg_match("~^(?:ht)tps?://~i", $imageUrl)) {
+                    $imageUrl = CommonManager::getAdImageUrl($this->container, $adSolrObjs[$ad->getId()][AdSolrFieldMapping::ID], (isset($adSolrObjs[$ad->getId()][AdSolrFieldMapping::PATH][$index]))?$adSolrObjs[$ad->getId()][AdSolrFieldMapping::PATH][$index]:'', (isset($adSolrObjs[$ad->getId()][AdSolrFieldMapping::HASH][$index]))?$adSolrObjs[$ad->getId()][AdSolrFieldMapping::HASH][$index]:'', '800X600', ((isset($adSolrObjs[$ad->getId()][AdSolrFieldMapping::AWS]) && ($adSolrObjs[$ad->getId()][AdSolrFieldMapping::AWS][$index])) ? $adSolrObjs[$ad->getId()][AdSolrFieldMapping::AWS][$index] : 0), (isset($adSolrObjs[$ad->getId()][AdSolrFieldMapping::IMAGE_NAME]) && isset($adSolrObjs[$ad->getId()][AdSolrFieldMapping::IMAGE_NAME][$index])) ? $adSolrObjs[$ad->getId()][AdSolrFieldMapping::IMAGE_NAME][$index] : null);
+                    if (!preg_match("~^(?:ht)tps?://~i", $imageUrl)) {
                         $imageUrl = str_replace('//', 'http://', $imageUrl);
                     }
                     $this->printApiResponse[AdPrintFieldMappingInterface::IMAGES][] = $imageUrl;

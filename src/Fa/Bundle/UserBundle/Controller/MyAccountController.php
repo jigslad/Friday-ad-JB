@@ -254,7 +254,7 @@ class MyAccountController extends ThirdPartyLoginController
 
                         $this->container->get('session')->getFlashBag()->add('card_success', $this->get('translator')->trans('New card added successfully.', array(), 'frontend-new-card'));
                     }
-                } else if ($cyberSourceReply) {
+                } elseif ($cyberSourceReply) {
                     $this->container->get('session')->getFlashBag()->add('error', $cyberSourceManager->getError($cyberSourceReply->reasonCode));
                 }
 

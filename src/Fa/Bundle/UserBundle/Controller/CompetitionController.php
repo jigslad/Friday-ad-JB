@@ -65,7 +65,6 @@ class CompetitionController extends CoreController
                             //save information
                             $competition = $formManager->save($competition);
                             $success = 'sucess';
-
                         } elseif ($request->isXmlHttpRequest()) {
                             $htmlContent = $this->renderView('FaUserBundle:Competition:ajaxEnterCompetitionPopup.html.twig', array('form' => $form->createView(), 'transactionId' => $transactionId));
                         }

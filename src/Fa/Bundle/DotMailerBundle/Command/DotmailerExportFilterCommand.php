@@ -89,10 +89,10 @@ EOF
 
         if ($ids) {
             $searchParam['dotmailer_filter'] = array('id' => $ids);
-        } else if ($is24hLoop) {
+        } elseif ($is24hLoop) {
             $searchParam['dotmailer_filter']['is_24h_loop'] =  $is24hLoop;
             $searchParam['dotmailer_filter']['status'] = DotmailerFilterRepository::STATUS_SUCCESS;
-        } else if (!$lastDays) {
+        } elseif (!$lastDays) {
             $lastDays = 1;
         }
 
@@ -129,7 +129,6 @@ EOF
         $dotmailerFilters = $qb->getQuery()->getResult();
 
         if (count($dotmailerFilters) > 0) {
-
             foreach ($dotmailerFilters as $dotmailerFilter) {
                 $dotmailerFilter = $this->createAddressBook($dotmailerFilter);
                 $masterId = $dotmailerFilter->getAddressBookId();

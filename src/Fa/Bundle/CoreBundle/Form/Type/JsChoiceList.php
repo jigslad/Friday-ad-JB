@@ -2,7 +2,7 @@
 
 namespace Fa\Bundle\CoreBundle\Form\Type;
 
-// use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceListInterface; // old 2.7 symfony 
+// use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceListInterface; // old 2.7 symfony
 use Symfony\Component\Form\ChoiceList\ChoiceListInterface;
 
 class JsChoiceList implements ChoiceListInterface

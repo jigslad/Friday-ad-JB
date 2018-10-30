@@ -92,8 +92,8 @@ class SearchKeywordAdminType extends AbstractType
              )
             ->add('save', SubmitType::class);
 
-            $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
-            $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmit'));
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
+        $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmit'));
     }
 
     /**

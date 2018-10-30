@@ -69,38 +69,37 @@ class CheckoutController extends CoreController
         $redirectUrl  = null;
 
         if ($this->container->get('session')->has('upgrade_payment_success_redirect_url') || $this->container->get('session')->has('payment_success_redirect_url') || $this->container->get('session')->has('paalite_payment_success_redirect_url')) {
-          
-          if(!$this->container->get('session')->has('paalite_payment_success_redirect_url') && $this->container->get('session')->has('upgrade_payment_success_redirect_url') && $this->container->get('session')->get('upgrade_payment_success_redirect_url') != '') {
-            $this->container->get('session')->set('payment_success_for_upgrade', $this->container->get('session')->get('upgrade_payment_success_redirect_url'));
-            $redirectUrl = $this->container->get('session')->get('upgrade_payment_success_redirect_url');
-          } elseif ($this->container->get('session')->has('paalite_payment_success_redirect_url') && $this->container->get('session')->get('paalite_payment_success_redirect_url') != '') {
-              $redirectUrl = $this->container->get('session')->get('paalite_payment_success_redirect_url');
-          } else {
-            $redirectUrl = $this->container->get('session')->get('payment_success_redirect_url');
-          }
+            if (!$this->container->get('session')->has('paalite_payment_success_redirect_url') && $this->container->get('session')->has('upgrade_payment_success_redirect_url') && $this->container->get('session')->get('upgrade_payment_success_redirect_url') != '') {
+                $this->container->get('session')->set('payment_success_for_upgrade', $this->container->get('session')->get('upgrade_payment_success_redirect_url'));
+                $redirectUrl = $this->container->get('session')->get('upgrade_payment_success_redirect_url');
+            } elseif ($this->container->get('session')->has('paalite_payment_success_redirect_url') && $this->container->get('session')->get('paalite_payment_success_redirect_url') != '') {
+                $redirectUrl = $this->container->get('session')->get('paalite_payment_success_redirect_url');
+            } else {
+                $redirectUrl = $this->container->get('session')->get('payment_success_redirect_url');
+            }
           
             $this->container->get('session')->remove('payment_success_redirect_url');
             if ($redirectUrl && $this->container->get('session')->has('upgrade_payment_success_redirect_url')) {
-              $this->container->get('session')->set('upgrade_payment_transaction_id', $cartCode);
-              return $this->redirect($redirectUrl);
+                $this->container->get('session')->set('upgrade_payment_transaction_id', $cartCode);
+                return $this->redirect($redirectUrl);
             } elseif ($redirectUrl && $this->container->get('session')->has('paalite_payment_success_redirect_url')) {
-              return $this->redirect($redirectUrl);
+                return $this->redirect($redirectUrl);
             } elseif ($redirectUrl) {
-            	if (preg_match("/\?/", $redirectUrl)) {
-            		$redirectUrl = $redirectUrl."&transaction_id=".$cartCode;
-            	} else {
-            		$redirectUrl = $redirectUrl."?transaction_id=".$cartCode;
-            	}
-            	
-            	$successMsg      = null;
-            	$flashBag        = $this->get('session')->getFlashBag();
-            	$successMsgArray = $flashBag->get('success');
-            	if (isset($successMsgArray[0])) {
-            		$successMsg = $successMsgArray[0].' ';
-            	}
-            	$this->removePaaSessions();
-            	$flashBag->set('success', $successMsg.$this->get('translator')->trans('Your transaction ID is %transaction_id%.', array('%transaction_id%' => $cartCode), 'frontend-payment-success'));
-            	return $this->redirect($redirectUrl);
+                if (preg_match("/\?/", $redirectUrl)) {
+                    $redirectUrl = $redirectUrl."&transaction_id=".$cartCode;
+                } else {
+                    $redirectUrl = $redirectUrl."?transaction_id=".$cartCode;
+                }
+                
+                $successMsg      = null;
+                $flashBag        = $this->get('session')->getFlashBag();
+                $successMsgArray = $flashBag->get('success');
+                if (isset($successMsgArray[0])) {
+                    $successMsg = $successMsgArray[0].' ';
+                }
+                $this->removePaaSessions();
+                $flashBag->set('success', $successMsg.$this->get('translator')->trans('Your transaction ID is %transaction_id%.', array('%transaction_id%' => $cartCode), 'frontend-payment-success'));
+                return $this->redirect($redirectUrl);
             }
         }
 
@@ -154,7 +153,7 @@ HTML;
 
         if (isset($trans['items'])) {
             foreach ($trans['items'] as $item) {
-                 $itemjs .=  <<<HTML
+                $itemjs .=  <<<HTML
     ga('ecommerce:addItem',{
   'id': '{$trans['ID']}',
   'name': '{$item['Name']}',

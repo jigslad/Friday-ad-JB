@@ -179,16 +179,16 @@ abstract class AdPostAdminType extends AbstractType
                     if ($paaFieldRule['status']) {
                         if ($paaField['field'] == 'location') {
                             $this->addLocationAutoSuggestField($form, $ad, $paaFieldRule);
-                        } else if ($this->getPaaFieldType($paaField) == 'autosuggest') {
+                        } elseif ($this->getPaaFieldType($paaField) == 'autosuggest') {
                             $this->addAutoSuggestField($form, $paaField['label'], $paaField['category_dimension_id'], $this->getPaaFieldOptions($paaFieldRule, $categoryId, $ad, $verticalObj), $verticalObj);
                         } elseif ($this->getPaaFieldType($paaField) == 'datepicker') {
                             $this->addDatePickerField($form, $paaField['category_dimension_id'], $paaField['label'], $verticalObj, $paaFieldRule['label'], $paaFieldRule);
-                        } else if ($paaField['field'] == 'model_id') {
+                        } elseif ($paaField['field'] == 'model_id') {
                             $form->add($paaField['field'], JsChoiceType::class, $this->getPaaFieldOptions($paaFieldRule, $categoryId, $ad, $verticalObj));
                             $this->addOrderedField($paaField['field']);
                         } else {
-                            if( $paaField['field'] != 'rates_id') {
-                                $form->add($paaField['field'], $this->getFormFieldType($paaField, TRUE), $this->getPaaFieldOptions($paaFieldRule, $categoryId, $ad, $verticalObj));
+                            if ($paaField['field'] != 'rates_id') {
+                                $form->add($paaField['field'], $this->getFormFieldType($paaField, true), $this->getPaaFieldOptions($paaFieldRule, $categoryId, $ad, $verticalObj));
                                 $this->addOrderedField($paaField['field']);
                             } else {
                                 $form->add($paaField['field'], HiddenType::class, array('mapped' => false, 'data' => true, 'label'=>'Rates'));
@@ -225,11 +225,11 @@ abstract class AdPostAdminType extends AbstractType
         $metaData = $this->getField('meta_data', $verticalObj) ? unserialize($this->getField('meta_data', $verticalObj)) : null;
         $ratesData = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($category_dimension_id, $this->container, true, $entitySortBy, 'textCollection');
         
-        if( !empty ($ratesData) ) {
+        if (!empty($ratesData)) {
             foreach ($ratesData as $rate=>$val) {
                 $label = explode('_', $val);
                 
-                if ( isset($metaData[$paaField['field']][$label[1]][$rate]) ) {
+                if (isset($metaData[$paaField['field']][$label[1]][$rate])) {
                     $data = trim($metaData[$paaField['field']][$label[1]][$rate]);
                 } else {
                     $data = [];
@@ -252,7 +252,7 @@ abstract class AdPostAdminType extends AbstractType
      *
      * @param array $paaField PAA field array.
      */
-    protected function getFormFieldType($paaField = array(), $classFlag = FALSE)
+    protected function getFormFieldType($paaField = array(), $classFlag = false)
     {
         if ($paaField['field_type'] == 'text_int' || $paaField['field_type'] == 'text_float') {
             return NumberType::class;
@@ -263,7 +263,7 @@ abstract class AdPostAdminType extends AbstractType
         if ($classFlag) {
             $formTypeArray = ['choice' => ChoiceType::class, 'text' => TextType::class, 'textarea' => TextareaType::class, 'integer' => NumberType::class];
             $formTypeName = isset($formTypeArray[$fieldTypeArray[0]]) ? $formTypeArray[$fieldTypeArray[0]] : $fieldTypeArray[0];
-        }else {
+        } else {
             $formTypeName = $fieldTypeArray[0];
         }
         
@@ -341,7 +341,7 @@ abstract class AdPostAdminType extends AbstractType
                 if ($this->getPaaFieldType($paaField) != 'tinymce') {
                     $fieldConstraints[] = new Length($lengthOptions);
                 }
-            } else if ($paaFieldRule['min_max_type'] == PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE) {
+            } elseif ($paaFieldRule['min_max_type'] == PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE) {
                 if ($paaFieldRule['error_text'] && $paaField['field'] == 'photo_error') {
                     $lengthOptions['minMessage'] = $paaFieldRule['error_text'];
                     $lengthOptions['maxMessage'] = $paaFieldRule['error_text'];
@@ -790,7 +790,7 @@ abstract class AdPostAdminType extends AbstractType
                         $adLocation = $this->em->getRepository('FaAdBundle:AdLocation')->setObjectFromModerationData($this->moderationValue['locations'][$key], $ad->getId());
                     }
                     
-                    if($adLocation->getLocationArea()) {
+                    if ($adLocation->getLocationArea()) {
                         $getArea = $this->em->getRepository('FaEntityBundle:Location')->find($adLocation->getLocationArea()->getId());
                         $areaId = $getArea->getId();
                         $areaText =  $getArea->getName().', '.$getArea->getParent()->getName();
@@ -881,7 +881,7 @@ abstract class AdPostAdminType extends AbstractType
             if (!$postCode || $postCode->getTownId() == null || $postCode->getTownId() == 0) {
                 if (preg_match('/^\d+$/', $location)) {
                     $town = $this->em->getRepository('FaEntityBundle:Location')->getTownAndAreaById($location, $this->container);
-                } else if (preg_match('/^([\d]+,[\d]+)$/', $location)) {
+                } elseif (preg_match('/^([\d]+,[\d]+)$/', $location)) {
                     $localityTown = explode(',', $location);
                     $localityId = $localityTown[0];
                     $townId     = $localityTown[1];
@@ -900,16 +900,16 @@ abstract class AdPostAdminType extends AbstractType
                 $form->get('location_autocomplete')->addError(new FormError($this->translator->trans('Location is invalid.', array(), 'validators')));
             }
             //validate Area for London Location
-            if($postCode && $postCode->getId() != null) {
+            if ($postCode && $postCode->getId() != null) {
                 $town      = $this->em->getRepository('FaEntityBundle:Location')->find($postCode->getTownId());
             }
             
-            if($town) {
+            if ($town) {
                 //check area is based on London Location
-                if($town && $town->getId() == LocationRepository::LONDON_TOWN_ID){
+                if ($town && $town->getId() == LocationRepository::LONDON_TOWN_ID) {
                     $locationArea = $form->get('area')->getData();
                     
-                    if($locationArea == null) {
+                    if ($locationArea == null) {
                         $form->get('area_autocomplete')->addError(new FormError($this->translator->trans('Area should not be blank.', array(), 'validators')));
                     } else {
                         $area = null;
@@ -917,7 +917,7 @@ abstract class AdPostAdminType extends AbstractType
                             $area = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array('id'=>$locationArea, 'lvl'=>'4'));
                         }
                         
-                        if ( !$area ) {
+                        if (!$area) {
                             $form->get('area_autocomplete')->addError(new FormError($this->translator->trans('Area is invalid.', array(), 'validators')));
                         }
                     }
@@ -937,7 +937,7 @@ abstract class AdPostAdminType extends AbstractType
             if ($form->get('price')->getData() == '') {
                 $form->get('price')->addError(new FormError($this->translator->trans('Value should not be blank.', array(), 'validators')));
             } else {
-                if (!preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData() , $matches)) {
+                if (!preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData(), $matches)) {
                     $form->get('price')->addError(new FormError($this->translator->trans('Price is invalid.', array(), 'validators')));
                 }
             }
@@ -1024,7 +1024,6 @@ abstract class AdPostAdminType extends AbstractType
     protected function getNotIndexedVerticalFields()
     {
         return $this->getVerticalRepository()->getNotIndexedFields();
-
     }
 
     /**
@@ -1393,23 +1392,23 @@ abstract class AdPostAdminType extends AbstractType
      */
     protected function validateAdultRates($form, $ad = null)
     {
-        if($ad && $ad->getId()) {
+        if ($ad && $ad->getId()) {
             $categoryId = $ad->getCategory()->getId();
-        } else{
+        } else {
             $categoryId = $form->get('category_id')->getData();
         }
-        if($form->has('travel_arrangements_id') && $form->get('travel_arrangements_id')->getData() != '') {
+        if ($form->has('travel_arrangements_id') && $form->get('travel_arrangements_id')->getData() != '') {
             $checkRateIsRequired = $this->em->getRepository('FaAdBundle:PaaField')->checkRateDimensionIsRequired($categoryId);
             $getTravelArrangement = $this->em->getRepository('FaEntityBundle:Entity')->find((int) $form->get('travel_arrangements_id')->getData());
-            if(!empty($getTravelArrangement) && ($getTravelArrangement->getName() == 'In-call' || $getTravelArrangement->getName() == 'Either')) {
+            if (!empty($getTravelArrangement) && ($getTravelArrangement->getName() == 'In-call' || $getTravelArrangement->getName() == 'Either')) {
                 if ($checkRateIsRequired && $form->has('1hour_incall') && $form->get('1hour_incall')->getData() == '' && $form->get('1hour_incall')->getData() <= '0') {
                     $form->get('1hour_incall')->addError(new FormError($this->translator->trans('1 hr In-call rate is required', array(), 'validators')));
                 }
             }
             
-            if(!empty($getTravelArrangement) && ($getTravelArrangement->getName() == 'Out-call' || $getTravelArrangement->getName() == 'Either')) {
+            if (!empty($getTravelArrangement) && ($getTravelArrangement->getName() == 'Out-call' || $getTravelArrangement->getName() == 'Either')) {
                 if ($checkRateIsRequired && $form->has('1hour_outcall') && $form->get('1hour_outcall')->getData() == '' && $form->get('1hour_outcall')->getData() <= '0') {
-                $form->get('1hour_outcall')->addError(new FormError($this->translator->trans('1 hr Out-call rate is required', array(), 'validators')));
+                    $form->get('1hour_outcall')->addError(new FormError($this->translator->trans('1 hr Out-call rate is required', array(), 'validators')));
                 }
             }
         }

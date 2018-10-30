@@ -227,8 +227,8 @@ class AdAdult
      */
     public function setGenderId($gender_id)
     {
-    	$this->gender_id = $gender_id;
-    	return $this;
+        $this->gender_id = $gender_id;
+        return $this;
     }
     
     /**
@@ -238,7 +238,6 @@ class AdAdult
      */
     public function getGenderId()
     {
-    	return $this->gender_id;
+        return $this->gender_id;
     }
-    
 }

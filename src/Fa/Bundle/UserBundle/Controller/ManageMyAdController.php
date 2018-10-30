@@ -82,7 +82,7 @@ class ManageMyAdController extends CoreController
             $this->get('session')->getFlashBag()->get('error');
             $transcations                   = $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($request->get('transaction_id'), $loggedinUser);
             
-            if($this->container->get('session')->has('paa_lite_card_code')) {
+            if ($this->container->get('session')->has('paa_lite_card_code')) {
                 $this->container->get('session')->remove('paa_lite_card_code');
             }
             $parameters['getTranscationJs'] = CommonManager::getGaTranscationJs($transcations);
@@ -144,11 +144,9 @@ class ManageMyAdController extends CoreController
             } else {
                 return $this->handleMessage($this->get('translator')->trans('You can not refresh this ad now.', array(), 'frontend-ad-edit'), 'manage_my_ads_active', array(), 'error');
             }
-
         } else {
             return $this->handleMessage($this->get('translator')->trans('You can not refresh this ad.', array(), 'frontend-ad-edit'), 'manage_my_ads_active', array(), 'error');
         }
-
     }
 
     /**
@@ -178,7 +176,6 @@ class ManageMyAdController extends CoreController
         } else {
             return $this->handleMessage($this->get('translator')->trans('You can not update this ad.', array(), 'frontend-ad-edit'), 'manage_my_ads_inactive', array(), 'error');
         }
-
     }
 
     /**
@@ -203,7 +200,7 @@ class ManageMyAdController extends CoreController
             $loggedinUser = $this->getLoggedInUser();
             $invalidNewStatus = false;
 
-            switch($oldStatusId) {
+            switch ($oldStatusId) {
                 case EntityRepository::AD_STATUS_LIVE_ID:
                     if (!in_array($newStatusId, array(EntityRepository::AD_STATUS_SOLD_ID, EntityRepository::AD_STATUS_EXPIRED_ID))) {
                         $invalidNewStatus = true;
@@ -227,7 +224,7 @@ class ManageMyAdController extends CoreController
                 $error          = $this->get('translator')->trans('Invalid status supplied.', array(), 'frontend-manage-my-ad');
                 $messageManager = $this->get('fa.message.manager');
                 $messageManager->setFlashMessage($error, 'error');
-            } elseif($invalidNewStatus === false) {
+            } elseif ($invalidNewStatus === false) {
                 //update ad status to sold
                 $ans = $this->getRepository('FaAdBundle:Ad')->changeAdStatus($adId, $newStatusId, $this->container);
 
@@ -325,5 +322,4 @@ class ManageMyAdController extends CoreController
 
         return new Response();
     }
-    
 }

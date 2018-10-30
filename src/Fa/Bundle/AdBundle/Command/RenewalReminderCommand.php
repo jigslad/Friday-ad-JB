@@ -78,7 +78,7 @@ EOF
                                  'status'         => \Fa\Bundle\EntityBundle\Repository\EntityRepository::AD_STATUS_EXPIRED_ID,
                                  'is_feed_ad'     => 0,
                              );
-        if($lastDays) {
+        if ($lastDays) {
             $date = date('Y-m-d', strtotime('-'.$lastDays.' days'));
             $searchParam['ad']['expires_at_from_to'] =  $date.'|'.$date;
         }
@@ -123,8 +123,8 @@ EOF
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);
 
-//echo '<pre>';print_r($searchParam);die;
-//echo $qb->getQuery()->getSql();die;
+        //echo '<pre>';print_r($searchParam);die;
+        //echo $qb->getQuery()->getSql();die;
         $ads = $qb->getQuery()->getResult();
 
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
@@ -143,7 +143,6 @@ EOF
                 $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('renewal_reminder', $user, $ad, $this->getContainer());
                 $output->writeln('Renewal Reminder for ad id: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
             }
-            
         }
 
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);
@@ -214,7 +213,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('ad' => array ('id' => 'asc'));
+        $data['query_sorter']  = array('ad' => array('id' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($adRepository, $data);

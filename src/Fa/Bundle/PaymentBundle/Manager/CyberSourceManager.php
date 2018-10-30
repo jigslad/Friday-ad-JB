@@ -140,12 +140,12 @@ class CyberSourceManager
 
             if ($payerAuthEnrollService && count($payerAuthValidateParams)) {
                 $paRes = $payerAuthValidateParams['PaRes'].$payerAuthValidateParams['MD'];
-                $paRes = str_replace(array("\n", "\r", "\t", " ", "\o", "\xOB"),'', $paRes); //Strips White space from PARes
+                $paRes = str_replace(array("\n", "\r", "\t", " ", "\o", "\xOB"), '', $paRes); //Strips White space from PARes
                 $payerAuthValidateService = new \stdClass();
                 $payerAuthValidateService->run = "true";
                 $payerAuthValidateService->signedPARes = $paRes;
                 $request->payerAuthValidateService = $payerAuthValidateService;
-            } elseif($payerAuthEnrollService) {
+            } elseif ($payerAuthEnrollService) {
                 $payerAuthEnrollService = new \stdClass();
                 $payerAuthEnrollService->run = "true";
                 $request->payerAuthEnrollService = $payerAuthEnrollService;
@@ -210,12 +210,12 @@ class CyberSourceManager
 
             if ($payerAuthEnrollService && count($payerAuthValidateParams)) {
                 $paRes = $payerAuthValidateParams['PaRes'].$payerAuthValidateParams['MD'];
-                $paRes = str_replace(array("\n", "\r", "\t", " ", "\o", "\xOB"),'', $paRes); //Strips White space from PARes
+                $paRes = str_replace(array("\n", "\r", "\t", " ", "\o", "\xOB"), '', $paRes); //Strips White space from PARes
                 $payerAuthValidateService = new \stdClass();
                 $payerAuthValidateService->run = "true";
                 $payerAuthValidateService->signedPARes = $paRes;
                 $request->payerAuthValidateService = $payerAuthValidateService;
-            } elseif($payerAuthEnrollService) {
+            } elseif ($payerAuthEnrollService) {
                 $payerAuthEnrollService = new \stdClass();
                 $payerAuthEnrollService->run = "true";
                 $request->payerAuthEnrollService = $payerAuthEnrollService;

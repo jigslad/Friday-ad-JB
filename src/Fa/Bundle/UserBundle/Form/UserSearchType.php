@@ -33,7 +33,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
 /**
  * This is user search form.
  *
@@ -148,9 +147,9 @@ class UserSearchType extends AbstractType
                 'choice_label' => 'name',
                 'placeholder' => 'Business Profile',
                 'query_builder' => function (PackageRepository $er) {
-                $pkgFor = "shop";
-                $status = "1";
-                return $er->createQueryBuilder(PackageRepository::ALIAS)
+                    $pkgFor = "shop";
+                    $status = "1";
+                    return $er->createQueryBuilder(PackageRepository::ALIAS)
                 ->where(PackageRepository::ALIAS.'.package_for = :pkgFor')
                 ->setParameter('pkgFor', 'shop')
                 ->andWhere(PackageRepository::ALIAS.'.status = :pkgStatus')
@@ -201,7 +200,7 @@ class UserSearchType extends AbstractType
 
         if (!$adDatePlacedTo) {
             $adDatePlacedTo = date('d/m/Y');
-        } else if (!$adDatePlacedFrom) {
+        } elseif (!$adDatePlacedFrom) {
             $adDatePlacedFrom = date('d/m/Y', strtotime("-6 month"));
         }
 

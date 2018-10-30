@@ -153,7 +153,6 @@ class ChangeStatusType extends AbstractType
         if ($form->isValid()) {
             //$user->setStatus($form->get('user_status')->getData());
         }
-
     }
 
     public function getUserStatuses($user)

@@ -135,7 +135,7 @@ class PagerfantaExtension extends \Twig_Extension
         $routeParams = $options['routeParams'];
         $pagePropertyPath = new PropertyPath($options['pageParameter']);
 
-        return function($page) use ($router, $routeName, $routeParams, $pagePropertyPath) {
+        return function ($page) use ($router, $routeName, $routeParams, $pagePropertyPath) {
             $propertyAccessor = PropertyAccess::createPropertyAccessor();
             $propertyAccessor->setValue($routeParams, $pagePropertyPath, $page);
 

@@ -28,7 +28,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class AdRouteListener
 {
-
     public $dimensionOrder = array();
 
     /**

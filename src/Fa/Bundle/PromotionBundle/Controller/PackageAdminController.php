@@ -126,7 +126,6 @@ class PackageAdminController extends CoreController implements ResourceAuthoriza
             $formManager->save($entity);
 
             return parent::handleMessage($this->get('translator')->trans('Package was successfully added.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'package_new_admin' : ($backUrl ? $backUrl : 'package_admin')));
-
         }
 
         $parameters = array(

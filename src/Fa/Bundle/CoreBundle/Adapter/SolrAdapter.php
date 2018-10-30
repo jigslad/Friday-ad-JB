@@ -74,14 +74,14 @@ class SolrAdapter implements AdapterInterface
         return count($this->result);
     }
 
-     /**
-     * Returns an slice of the results.
-     *
-     * @param integer $offset The offset.
-     * @param integer $length The length.
-     *
-     * @return array|\Traversable The slice.
-     */
+    /**
+    * Returns an slice of the results.
+    *
+    * @param integer $offset The offset.
+    * @param integer $length The length.
+    *
+    * @return array|\Traversable The slice.
+    */
     public function getSlice($offset, $length)
     {
         //NOTE: use offset always 0 because we are fetching max per page records only from solr

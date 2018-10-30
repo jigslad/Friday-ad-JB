@@ -30,7 +30,6 @@ use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
 /**
  * This is user admin form.
  *
@@ -118,7 +117,8 @@ class UserProfileReportSearchAdminType extends AbstractType
                     'expanded' => true,
                     'multiple' => true,
                     'mapped'   => false
-                ))
+                )
+            )
             ->add(
                 'rus_csv_name',
                 TextType::class,

@@ -275,9 +275,9 @@ class PaaFieldRepository extends EntityRepository
                 $fieldVal = '';
                 foreach ($values as $value) {
                     if ($isValue) {
-                       $fieldVal .= $entityCacheManager->getEntityNameById('FaEntityBundle:Entity', $value).', ';
+                        $fieldVal .= $entityCacheManager->getEntityNameById('FaEntityBundle:Entity', $value).', ';
                     } else {
-                       $fieldVal .= $value.',';
+                        $fieldVal .= $value.',';
                     }
                 }
                 $fieldVal = rtrim(trim($fieldVal), ',');
@@ -382,20 +382,21 @@ class PaaFieldRepository extends EntityRepository
      *
      * @return boolean
      */
-    public function checkRateDimensionIsRequired($categoryId = null) {
-    	$qb = $this->createQueryBuilder(self::ALIAS)
-	    	->select(self::ALIAS.'.id', PaaFieldRuleRepository::ALIAS.'.is_required')
-	    	->innerJoin('FaAdBundle:PaaFieldRule', PaaFieldRuleRepository::ALIAS, 'WITH', self::ALIAS.'.id = '.PaaFieldRuleRepository::ALIAS.'.paa_field');
-	    	$qb->andWhere(self::ALIAS.'.category = :categoryId');
-	    	$qb->setParameter('categoryId', $categoryId);
-	    	$qb->andWhere(self::ALIAS.'.label = :label');
-	    	$qb->setParameter('label', self::RATE_LABEL);
-	    	$qb->setMaxResults(1);
-	    $paaFieldRule= $qb->getQuery()->getOneOrNullResult();
-	    if(!empty($paaFieldRule) && $paaFieldRule['is_required'] == false) {
-	    	return 0;
-	    }else { 
-	    	return 1;
-	    }
+    public function checkRateDimensionIsRequired($categoryId = null)
+    {
+        $qb = $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS.'.id', PaaFieldRuleRepository::ALIAS.'.is_required')
+            ->innerJoin('FaAdBundle:PaaFieldRule', PaaFieldRuleRepository::ALIAS, 'WITH', self::ALIAS.'.id = '.PaaFieldRuleRepository::ALIAS.'.paa_field');
+        $qb->andWhere(self::ALIAS.'.category = :categoryId');
+        $qb->setParameter('categoryId', $categoryId);
+        $qb->andWhere(self::ALIAS.'.label = :label');
+        $qb->setParameter('label', self::RATE_LABEL);
+        $qb->setMaxResults(1);
+        $paaFieldRule= $qb->getQuery()->getOneOrNullResult();
+        if (!empty($paaFieldRule) && $paaFieldRule['is_required'] == false) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 }

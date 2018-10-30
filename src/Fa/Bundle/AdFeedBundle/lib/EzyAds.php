@@ -33,7 +33,6 @@ use Fa\Bundle\AdBundle\Solr\AdPropertySolrFieldMapping;
 
 class EzyAds extends Export
 {
-
     const CAR_FILE = 'EzAds.xml';
     const ONLY_CAR_FILE = 'EzAdsCars.xml';
     const GARDENING_FILE = 'EzAds_Gardening.xml';
@@ -135,7 +134,6 @@ class EzyAds extends Export
         $adMotorRepository = $this->em->getRepository('FaAdBundle:Ad');
 
         foreach ($ads as $ad) {
-
             $phone_number = $ad[AdSolrFieldMapping::PRIVACY_NUMBER] !== '' ? $ad[AdSolrFieldMapping::PRIVACY_NUMBER] : $ad[AdSolrFieldMapping::USER_PHONE_NUMBER];
             if ($phone_number == '') {
                 continue;
@@ -204,7 +202,6 @@ class EzyAds extends Export
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
 
         foreach ($ads as $ad) {
-
             $phone_number = $ad[AdSolrFieldMapping::PRIVACY_NUMBER] !== '' ? $ad[AdSolrFieldMapping::PRIVACY_NUMBER] : $ad[AdSolrFieldMapping::USER_PHONE_NUMBER];
             if ($phone_number == '') {
                 continue;
@@ -233,7 +230,7 @@ class EzyAds extends Export
             // age
             $age = null;
             if (isset($ad[AdAnimalsSolrFieldMapping::AGE_ID])) {
-               $age = $entityCacheManager->getEntityNameById('FaEntityBundle:Entity', $ad[AdAnimalsSolrFieldMapping::AGE_ID]);
+                $age = $entityCacheManager->getEntityNameById('FaEntityBundle:Entity', $ad[AdAnimalsSolrFieldMapping::AGE_ID]);
             }
 
             if ($age) {
@@ -245,7 +242,7 @@ class EzyAds extends Export
             // colour
             $colour = null;
             if (isset($ad[AdAnimalsSolrFieldMapping::COLOUR_ID])) {
-               $colour = $entityCacheManager->getEntityNameById('FaEntityBundle:Entity', $ad[AdAnimalsSolrFieldMapping::COLOUR_ID]);
+                $colour = $entityCacheManager->getEntityNameById('FaEntityBundle:Entity', $ad[AdAnimalsSolrFieldMapping::COLOUR_ID]);
             }
 
             if ($colour) {
@@ -272,13 +269,13 @@ class EzyAds extends Export
             // ad_type
             $ad_type = null;
             if (isset($ad[AdSolrFieldMapping::TYPE_ID])) {
-              $ad_type = $entityCacheManager->getEntityNameById('FaEntityBundle:Entity', $ad[AdSolrFieldMapping::TYPE_ID]);
+                $ad_type = $entityCacheManager->getEntityNameById('FaEntityBundle:Entity', $ad[AdSolrFieldMapping::TYPE_ID]);
             }
 
             if ($ad_type) {
-              $xmlWriter->startElement('adtype');
-              $xmlWriter->writeCdata($ad_type);
-              $xmlWriter->endElement();
+                $xmlWriter->startElement('adtype');
+                $xmlWriter->writeCdata($ad_type);
+                $xmlWriter->endElement();
             }
 
             $xmlWriter->endElement();
@@ -295,7 +292,6 @@ class EzyAds extends Export
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
 
         foreach ($ads as $ad) {
-
             $phone_number = $ad[AdSolrFieldMapping::PRIVACY_NUMBER] !== '' ? $ad[AdSolrFieldMapping::PRIVACY_NUMBER] : $ad[AdSolrFieldMapping::USER_PHONE_NUMBER];
             if ($phone_number == '') {
                 continue;
@@ -389,7 +385,7 @@ class EzyAds extends Export
                     }
 
                     if ($i == 3) {
-                       $property_type = $entityCacheManager->getEntityNameById('FaEntityBundle:Category', $ad['a_parent_category_lvl_'.$i.'_id_i']);
+                        $property_type = $entityCacheManager->getEntityNameById('FaEntityBundle:Category', $ad['a_parent_category_lvl_'.$i.'_id_i']);
                     }
                 }
             }

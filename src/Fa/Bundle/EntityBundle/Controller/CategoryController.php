@@ -35,8 +35,8 @@ class CategoryController extends CoreController
      *
      * @return Response A Response object.
      */
-	public function renderFooterCategoriesAction(Request $request, $location = null, $searchParams = [])
-    {	
+    public function renderFooterCategoriesAction(Request $request, $location = null, $searchParams = [])
+    {
         //$locationDetails = CommonManager::getLocationDetailFromParamsOrCookie($location, $request, $this->container);
         $locationDetails = array();
         if (!isset($locationDetails['location'])) {
@@ -67,23 +67,23 @@ class CategoryController extends CoreController
      * @return Response A Response object.
      */
     public function renderHeaderCategoriesAction(Request $request, $is_tablet = 0, $is_mobile = 0, $location = null, $searchParams = [])
-    { 
-    	$thirdPartyAdultModalBox = false;
-    	if (isset($searchParams['item__category_id'])) {
-    		$rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($searchParams['item__category_id'], $this->container);
-    		if($rootCategoryId == CategoryRepository::ADULT_ID) {
-    			$thirdPartyAdultModalBox = true;
-    		}
-    	}
-    	
-    	
-    	
-    	$locationDetails = CommonManager::getLocationDetailFromParamsOrCookie($location, $request, $this->container);
+    {
+        $thirdPartyAdultModalBox = false;
+        if (isset($searchParams['item__category_id'])) {
+            $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($searchParams['item__category_id'], $this->container);
+            if ($rootCategoryId == CategoryRepository::ADULT_ID) {
+                $thirdPartyAdultModalBox = true;
+            }
+        }
+        
+        
+        
+        $locationDetails = CommonManager::getLocationDetailFromParamsOrCookie($location, $request, $this->container);
         //echo '<pre>'; print_r($locationDetails);die;
-        if(!empty($locationDetails)) {
-            if($locationDetails['location']!='') {
-                $splitLocation = explode(',',$locationDetails['location']);
-                if(count($splitLocation)>1) {
+        if (!empty($locationDetails)) {
+            if ($locationDetails['location']!='') {
+                $splitLocation = explode(',', $locationDetails['location']);
+                if (count($splitLocation)>1) {
                     $locationDetails = $this->getRepository('FaEntityBundle:Location')->getArrayByTownId($locationDetails['town_id']);
                 }
             }
@@ -97,23 +97,23 @@ class CategoryController extends CoreController
             $locationDetails['locality_id'] = null;
             $locationDetails['slug'] = null;
         }
-       /* if(isset($locationDetails1)) {
-            $parameters = array('headerCategories' => $headerCategories, 'isTablet' => $is_tablet, 'isMobile' => $is_mobile, 'location_id' => $locationDetails1['location']);
-            $parameters['location'] = $locationDetails1['location'];
-            $parameters['location_id'] = $locationDetails1['slug'];
-        } else {*/
-            $parameters = array('headerCategories' => $headerCategories, 'isTablet' => $is_tablet, 'isMobile' => $is_mobile, 'location_id' => $locationDetails['location']);
-            $parameters['location'] = $locationDetails['location'];
-            $parameters['location_id'] = $locationDetails['slug'];
+        /* if(isset($locationDetails1)) {
+             $parameters = array('headerCategories' => $headerCategories, 'isTablet' => $is_tablet, 'isMobile' => $is_mobile, 'location_id' => $locationDetails1['location']);
+             $parameters['location'] = $locationDetails1['location'];
+             $parameters['location_id'] = $locationDetails1['slug'];
+         } else {*/
+        $parameters = array('headerCategories' => $headerCategories, 'isTablet' => $is_tablet, 'isMobile' => $is_mobile, 'location_id' => $locationDetails['location']);
+        $parameters['location'] = $locationDetails['location'];
+        $parameters['location_id'] = $locationDetails['slug'];
         //}
 
-       // $parameters['locality'] = $locationDetails['locality'];
+        // $parameters['locality'] = $locationDetails['locality'];
         //$parameters['locality_id'] = $locationDetails['locality_id'];
         // fetch location directly
         if (!$parameters['location_id']) {
             $parameters['location_id'] = 'uk';
             $parameters['location'] = $this->getRepository('FaEntityBundle:Location')->getIdBySlug('uk');
-        } 
+        }
         $parameters['thirdPartyAdultModalBox'] = $thirdPartyAdultModalBox;
         
 

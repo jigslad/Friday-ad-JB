@@ -27,7 +27,6 @@ use Fa\Bundle\AdBundle\lib\Migration\Car;
 use Fa\Bundle\AdBundle\lib\Migration\Caravan;
 use Fa\Bundle\AdBundle\lib\Migration\Motorbikes;
 
-
 /**
  * This command is used to update dimensionads.
  *
@@ -197,7 +196,6 @@ EOF
             if ($input->getOption('category') == "Motorhomes" || $input->getOption('category') == "Caravans" || $input->getOption('category') == "Static Caravans") {
                 $cv = new Caravan($ad['old_meta_xml'], $ad['id'], $em, $input->getOption('category'));
                 $cv->update();
-
             }
         }
 

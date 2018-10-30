@@ -233,12 +233,12 @@ EOF
                                 $isCategorySet = true;
                                 foreach ($categoryPath as $key => $value) {
                                     switch ($counter) {
-                                    	case 1:
-                                    	    $categoryDataArray[$values['user_id']]['category'] = $value;
-                                    	    break;
-                                    	case 2:
-                                    	    $categoryDataArray[$values['user_id']]['class'] = $value;
-                                    	    break;
+                                        case 1:
+                                            $categoryDataArray[$values['user_id']]['category'] = $value;
+                                            break;
+                                        case 2:
+                                            $categoryDataArray[$values['user_id']]['class'] = $value;
+                                            break;
                                     }
                                     $counter++;
                                 }
@@ -307,7 +307,7 @@ EOF
                 }
             }
 
-            $file = fopen($container->get('kernel')->getRootDir()."/../data/reports/profile_package_revenue/".$fileName,"a+");
+            $file = fopen($container->get('kernel')->getRootDir()."/../data/reports/profile_package_revenue/".$fileName, "a+");
             foreach ($results as $record) {
                 $processedRecord = CommonManager::getTiHistoryRepository($container, 'FaTiReportBundle:UserReport')->processRecordForPPR($record, $criteria, $container);
                 $recordValues   = array();
@@ -323,26 +323,26 @@ EOF
                         } else {
                             $recordValues[] = '';
                         }
-                    } else if (in_array($fieldName, $adCountsFields)) {
+                    } elseif (in_array($fieldName, $adCountsFields)) {
                         if ($currentUserId != '' && array_key_exists($currentUserId, $adCountsDataArray) && isset($adCountsDataArray[$currentUserId])) {
                             $recordValues[] = $adCountsDataArray[$currentUserId][$fieldName];
                         } else {
                             $recordValues[] = '';
                         }
-                    } else if (in_array($fieldName, $packageFields)) {
+                    } elseif (in_array($fieldName, $packageFields)) {
                         if (in_array($fieldName, $packageBasicFieldsArray)) {
                             if ($currentUserId != '' && array_key_exists($currentUserId, $packageDataArray) && isset($packageDataArray[$currentUserId])) {
                                 $recordValues[] = $packageDataArray[$currentUserId][$fieldName];
                             } else {
                                 $recordValues[] = '';
                             }
-                        } else if (in_array($fieldName, $packageRevenueFieldsArray)) {
-                                if ($currentUserId != '' && array_key_exists($currentUserId, $packageRevenueDataArray) && isset($packageRevenueDataArray[$currentUserId])) {
+                        } elseif (in_array($fieldName, $packageRevenueFieldsArray)) {
+                            if ($currentUserId != '' && array_key_exists($currentUserId, $packageRevenueDataArray) && isset($packageRevenueDataArray[$currentUserId])) {
                                 $recordValues[] = $packageRevenueDataArray[$currentUserId][$fieldName];
                             } else {
                                 $recordValues[] = '';
                             }
-                        } else if (in_array($fieldName, $packageCancelledFieldsArray)) {
+                        } elseif (in_array($fieldName, $packageCancelledFieldsArray)) {
                             if ($currentUserId != '' && array_key_exists($currentUserId, $packageCancelledDataArray) && isset($packageCancelledDataArray[$currentUserId])) {
                                 $recordValues[] = $packageCancelledDataArray[$currentUserId][$fieldName];
                             } else {
@@ -351,7 +351,7 @@ EOF
                         } else {
                             $recordValues[] = '';
                         }
-                    } else if (isset($processedRecord[$fieldName])) {
+                    } elseif (isset($processedRecord[$fieldName])) {
                         $recordValues[] = $processedRecord[$fieldName];
                     } else {
                         $recordValues[] = '';

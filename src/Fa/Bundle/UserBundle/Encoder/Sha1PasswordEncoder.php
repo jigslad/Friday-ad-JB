@@ -68,7 +68,7 @@ class Sha1PasswordEncoder extends BasePasswordEncoder
     public function isPasswordValid($encoded, $raw, $salt)
     {
         $params = explode("$", $encoded);
-        if(count($params) < self::HASH_SECTIONS) {
+        if (count($params) < self::HASH_SECTIONS) {
             return false;
         }
 

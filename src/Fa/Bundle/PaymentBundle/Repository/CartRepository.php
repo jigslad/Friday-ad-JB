@@ -143,7 +143,7 @@ class CartRepository extends EntityRepository
         if (!$cart) {
             $cart = new Cart();
             $cart->setStatus('1');
-            $cart->setCartCode(self::generateCartCode()); 
+            $cart->setCartCode(self::generateCartCode());
             $cart->setCurrency(CommonManager::getCurrencyCode($container));
             $cart->setUpdatedAt(time());
             $cart->setIsBuyNow($isBuyNow);
@@ -273,7 +273,7 @@ class CartRepository extends EntityRepository
 
         if ($cartObj && $adObj && $packageObj) {
             if ($transactions) {
-            	foreach ($transactions as $transaction) { 
+                foreach ($transactions as $transaction) {
                     $transactionDetailObj = $transactionDetailRepository->getTransactionDetailByPaymentFor($cartObj->getId(), $transaction->getId(), $adId, TransactionDetailRepository::PAYMENT_FOR_PACKAGE);
                     if ($transactionDetailObj) {
                         //update transaction detail value

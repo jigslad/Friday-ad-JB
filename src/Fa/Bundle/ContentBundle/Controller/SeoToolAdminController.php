@@ -94,7 +94,6 @@ class SeoToolAdminController extends CrudController implements ResourceAuthoriza
 
     public function adsTxtAction(Request $request)
     {
-        
         $errorMsg         = '';
         $content = '';
         $adsTxtFile          = $this->container->get('kernel')->getRootDir().'/../data/ads.txt';
@@ -103,8 +102,8 @@ class SeoToolAdminController extends CrudController implements ResourceAuthoriza
             $filePostContent = $request->get('file_text');
             file_put_contents($adsTxtFile, "");
             file_put_contents($adsTxtFile, $filePostContent);
-            return $this->handleMessage($this->get('translator')->trans('Ads txt was successfully updated.', array(), 'success'),'ads_txt');
-        } 
+            return $this->handleMessage($this->get('translator')->trans('Ads txt was successfully updated.', array(), 'success'), 'ads_txt');
+        }
         $content = file_get_contents($adsTxtFile);
 
         $parameters = array(
@@ -126,16 +125,15 @@ class SeoToolAdminController extends CrudController implements ResourceAuthoriza
                 $objUploadedFile  = $request->files->get('objCSVFilePopularSearch');
             }
             $fileOriginalName = $objUploadedFile->getClientOriginalName();
-            $fileExtension    = substr(strrchr($fileOriginalName,'.'),1);
+            $fileExtension    = substr(strrchr($fileOriginalName, '.'), 1);
             $tmpFilePath      = $webPath.DIRECTORY_SEPARATOR.$this->container->getParameter('fa.ad.image.tmp.dir');
 
             if ($fileExtension == 'csv') {
                 //upload file.
                 $objUploadedFile->move($tmpFilePath, $fileOriginalName);
-                $objFile    = fopen($tmpFilePath.'/'.$fileOriginalName,"r");
+                $objFile    = fopen($tmpFilePath.'/'.$fileOriginalName, "r");
                 $rowCounter = 0;
-                while(! feof($objFile))
-                {
+                while (! feof($objFile)) {
                     $rowArray = fgetcsv($objFile);
 
                     if ($rowCounter == 0) {

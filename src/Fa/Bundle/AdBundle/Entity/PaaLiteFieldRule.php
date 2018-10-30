@@ -533,12 +533,12 @@ class PaaLiteFieldRule
         return $this->paa_lite_field;
     }
 
-     /**
-     * Set paa_lite_field
-     *
-     * @param \Fa\Bundle\AdBundle\Entity\PaaField $PaaLiteField
-     * @return PaaLiteFieldRule
-     */
+    /**
+    * Set paa_lite_field
+    *
+    * @param \Fa\Bundle\AdBundle\Entity\PaaField $PaaLiteField
+    * @return PaaLiteFieldRule
+    */
     public function setPaaField(\Fa\Bundle\AdBundle\Entity\PaaField $PaaLiteField = null)
     {
         $this->paa_lite_field = $PaaLiteField;
@@ -739,5 +739,4 @@ class PaaLiteFieldRule
     {
         return $this->category;
     }
-
 }

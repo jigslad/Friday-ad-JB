@@ -130,7 +130,7 @@ class PaypalAdaptiveManager
         curl_setopt(
             $ch,
             CURLOPT_HTTPHEADER,
-            array (
+            array(
                 'X-PAYPAL-SECURITY-USERID: '.$this->userid,
                 'X-PAYPAL-SECURITY-PASSWORD : '.$this->password,
                 'X-PAYPAL-SECURITY-SIGNATURE : '.$this->signature,

@@ -24,7 +24,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
 /**
  * Dotmailer search type form.
  *
@@ -96,7 +95,7 @@ class DotmailerFilterSearchAdminType extends AbstractType
             'choice_value' => 'created_by',
             'placeholder'  => 'Created by',
             'query_builder' => function (DotmailerFilterRepository $er) {
-            return $er->createQueryBuilder(DotmailerFilterRepository::ALIAS)
+                return $er->createQueryBuilder(DotmailerFilterRepository::ALIAS)
                    ->orderBy(DotmailerFilterRepository::ALIAS.'.created_by', 'ASC')
                    ->groupBy(DotmailerFilterRepository::ALIAS.'.created_by');
             }

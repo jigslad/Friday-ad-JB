@@ -148,7 +148,7 @@ EOF
         $ids = array();
 
         foreach ($FeedAds as $FeedAd) {
-            if($FeedAd->getStatus()!='R') {
+            if ($FeedAd->getStatus()!='R') {
                 try {
                     $ad = $feedReader->updateAd($FeedAd, $force);
 

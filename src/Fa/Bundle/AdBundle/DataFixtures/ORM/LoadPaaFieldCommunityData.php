@@ -56,7 +56,6 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
             $this->addCommunityDimensionPaaFields($category);
 
             $this->addMainCategoryPaaFieldRules($category);
-
         }
 
         // Add paa field rules
@@ -72,7 +71,7 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
      */
     protected function addMainCategoryPaaFieldRules($category)
     {
-        $fieldRuleStatus = array (
+        $fieldRuleStatus = array(
             'is_new' => 0,
             'qty' => 0,
             'price_text' => 0,
@@ -92,20 +91,20 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
             'level_id' => 0,
         );
 
-        $fieldRuleStep = array (
+        $fieldRuleStep = array(
             'title' => 2,
             'description' => 2,
             'personalized_title' => 4,
             'location' => 4
         );
 
-        $fieldRuleMaxValue = array (
+        $fieldRuleMaxValue = array(
             'title' => 100,
             'description' => 2000,
             'personalized_title' => 140,
         );
 
-        $fieldRuleMinMaxType = array (
+        $fieldRuleMinMaxType = array(
             'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -123,8 +122,7 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => "What's On", 'lvl' => 2));
 
         if ($category) {
-
-            $fieldOrderRequired = array (
+            $fieldOrderRequired = array(
                 'event_start' => 2,
                 'event_start_time' => 3,
                 'include_end_time' => 4,
@@ -135,7 +133,7 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
                 'price' => 16
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -148,7 +146,7 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
                 'level_id' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'title' => 2,
                 'venue_name' => 2,
                 'event_start' => 2,
@@ -167,14 +165,14 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
                 'price' => "Price"
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'venue_name' => 100,
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'venue_name' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -193,14 +191,13 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => "Classes And Tuition", 'lvl' => 2));
 
         if ($category) {
-
-            $fieldOrderRequired = array (
+            $fieldOrderRequired = array(
                 'equipment_provided_id' => 12,
                 'availability_id' => 2,
                 'price' => 3
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -215,7 +212,7 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
                 'level_id' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'title' => 2,
                 'description' => 2,
                 'personalized_title' => 4,
@@ -231,13 +228,13 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
                 'price' => 'Price per hour'
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -255,14 +252,13 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => "Educational And Languages", 'lvl' => 3));
 
         if ($category) {
-
-            $fieldOrderRequired = array (
+            $fieldOrderRequired = array(
                 'equipment_provided_id' => 12,
                 'availability_id' => 2,
                 'price' => 3
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -277,7 +273,7 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
                 'experience_level_id' => 0,
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'title' => 2,
                 'description' => 2,
                 'personalized_title' => 4,
@@ -294,13 +290,13 @@ class LoadPaaFieldCommunityData extends LoadPaaFieldData
                 'price' => 'Price per hour'
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,

@@ -312,5 +312,4 @@ class PaaLiteEmailNotification
     {
         return $this->is_registration_notification_sent;
     }
-
 }

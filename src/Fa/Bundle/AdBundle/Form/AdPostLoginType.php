@@ -147,7 +147,7 @@ class AdPostLoginType extends AbstractType
                 $user = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('username' => $data['username']));
                 if (!$user) {
                     $form->addError(new FormError($this->translator->trans('Invalid email or password.', array(), 'validators')));
-                } else if ($user && (!$user->getStatus() || $user->getStatus()->getId() != EntityRepository::USER_STATUS_ACTIVE_ID)) {
+                } elseif ($user && (!$user->getStatus() || $user->getStatus()->getId() != EntityRepository::USER_STATUS_ACTIVE_ID)) {
                     $form->addError(new FormError($this->translator->trans('Your status is not active.', array(), 'validators')));
                 } else {
                     // encode the password

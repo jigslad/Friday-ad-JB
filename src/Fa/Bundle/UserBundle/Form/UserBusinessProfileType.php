@@ -211,50 +211,50 @@ class UserBusinessProfileType extends AbstractType
             }
        
 
-        if ($this->hasFreePackage) {
-            $user = $this->loggedInUser;
-            $locationText = trim($form->get('location_autocomplete')->getData());
-            $postCodeObj = null;
-            $townId = null;
+            if ($this->hasFreePackage) {
+                $user = $this->loggedInUser;
+                $locationText = trim($form->get('location_autocomplete')->getData());
+                $postCodeObj = null;
+                $townId = null;
 
-            if ($locationText) {
-                $postCodeObj = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodByLocation($locationText);
-                // if postcode then update zip, town, county
-                if ($postCodeObj) {
-                    $townObj = $this->em->getRepository('FaEntityBundle:Location')->find($postCodeObj->getTownId());
-                    $user->setZip($locationText);
-                    $user->setLocationTown($townObj);
-                    $user->setLocationDomicile($townObj->getParent());
-                    $user->setLocationCountry($this->em->getReference('FaEntityBundle:Location', LocationRepository::COUNTY_ID));
-                }
-                if (!$postCodeObj) {
-                    $townObj = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array('name' => $locationText, 'lvl' => 3));
-                    if ($townObj) {
-                        $townId = $townObj->getId();
+                if ($locationText) {
+                    $postCodeObj = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodByLocation($locationText);
+                    // if postcode then update zip, town, county
+                    if ($postCodeObj) {
+                        $townObj = $this->em->getRepository('FaEntityBundle:Location')->find($postCodeObj->getTownId());
+                        $user->setZip($locationText);
+                        $user->setLocationTown($townObj);
+                        $user->setLocationDomicile($townObj->getParent());
+                        $user->setLocationCountry($this->em->getReference('FaEntityBundle:Location', LocationRepository::COUNTY_ID));
+                    }
+                    if (!$postCodeObj) {
+                        $townObj = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array('name' => $locationText, 'lvl' => 3));
+                        if ($townObj) {
+                            $townId = $townObj->getId();
+                        }
+                    }
+
+                    // if town then update town, county
+                    if ($townId && $townObj) {
+                        $user->setZip(null);
+                        $user->setLocationTown($townObj);
+                        $user->setLocationDomicile($townObj->getParent());
+                        $user->setLocationCountry($this->em->getReference('FaEntityBundle:Location', LocationRepository::COUNTY_ID));
                     }
                 }
 
-                // if town then update town, county
-                if ($townId && $townObj) {
+                // if not post code or town then reset location info
+                if (!$postCodeObj && !$townId) {
                     $user->setZip(null);
-                    $user->setLocationTown($townObj);
-                    $user->setLocationDomicile($townObj->getParent());
-                    $user->setLocationCountry($this->em->getReference('FaEntityBundle:Location', LocationRepository::COUNTY_ID));
+                    $user->setLocationTown(null);
+                    $user->setLocationDomicile(null);
+                    $user->setLocationCountry(null);
                 }
-            }
 
-            // if not post code or town then reset location info
-            if (!$postCodeObj && !$townId) {
-                $user->setZip(null);
-                $user->setLocationTown(null);
-                $user->setLocationDomicile(null);
-                $user->setLocationCountry(null);
+                $this->em->persist($user);
+                $this->em->flush($user);
             }
-
-            $this->em->persist($user);
-            $this->em->flush($user);
         }
-      }
     }
 
     /**

@@ -48,7 +48,7 @@ class AdIpAddressRepository extends EntityRepository
      */
     public function checkAndLogIpAddress($objAd, $ipAddress)
     {
-        $objAdIpAddress = NULL;
+        $objAdIpAddress = null;
         if (strlen($ipAddress)) {
             $objAdIpAddress = $this->findOneBy(array('ad' => $objAd->getId(), 'ip_address' => $ipAddress));
 
@@ -103,7 +103,7 @@ class AdIpAddressRepository extends EntityRepository
      */
     public function deleteRecordsByAdIds($adIds)
     {
-        $result = FALSE;
+        $result = false;
         if (is_array($adIds)) {
             $qb = $this->getBaseQueryBuilder()
                        ->delete()

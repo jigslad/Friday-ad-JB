@@ -103,9 +103,9 @@ EOF
         $ids = array();
 
         foreach ($ads as $ad) {
-                $nonPaa  = new NonPaa($ad['old_meta_xml'], $ad['id'], $em);
-                $nonPaa->update();
-                $ids[] = $ad['id'];
+            $nonPaa  = new NonPaa($ad['old_meta_xml'], $ad['id'], $em);
+            $nonPaa->update();
+            $ids[] = $ad['id'];
         }
         $em->flush();
         $idString = implode(',', $ids);
@@ -184,7 +184,6 @@ EOF
         $qb->andWhere(AdRepository::ALIAS.'.update_type IN (:update_type)');
         $qb->setParameter('update_type', 'non-paa');
         return $qb;
-
     }
 
     /**

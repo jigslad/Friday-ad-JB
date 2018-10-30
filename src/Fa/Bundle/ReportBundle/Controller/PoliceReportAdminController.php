@@ -60,7 +60,7 @@ class PoliceReportAdminController extends CoreController implements ResourceAuth
                         return $this->redirectToRoute('fa_report_police');
                     }
                     $userId = $objSearchAd->getUser()->getId();
-                } else if ($data && isset($data['search']['email'])) { //Search by email
+                } elseif ($data && isset($data['search']['email'])) { //Search by email
                     $objUser = $this->getRepository('FaUserBundle:User')->findOneByEmail($data['search']['email']);
                     if (!$objUser) {
                         $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Sorry no user found.'), 'error');
@@ -89,29 +89,29 @@ class PoliceReportAdminController extends CoreController implements ResourceAuth
 
                 //Advert info
                 if ($data && isset($data['search']['include_ads'])) {
-                        if ($data && isset($data['search']['ad_id'])) { //Search by ad ref
-                            $objAds[] = $objSearchAd;
-                        } else if ($data && isset($data['search']['email'])) { //Search by email
-                            $objAds = $this->getRepository('FaAdBundle:Ad')->findByUser($userId);
-                        }
+                    if ($data && isset($data['search']['ad_id'])) { //Search by ad ref
+                        $objAds[] = $objSearchAd;
+                    } elseif ($data && isset($data['search']['email'])) { //Search by email
+                        $objAds = $this->getRepository('FaAdBundle:Ad')->findByUser($userId);
+                    }
 
 
-                        if ($objAds) {
-                            foreach ($objAds as $key => $objAd) {
-                                $categoryId     = $objAd->getCategory()->getId();
-                                $adImages       = $this->getAdImages($objAd);
-                                $categoryPath   = $this->getCategoryPath($categoryId);
-                                $adDimensions   = $this->getAdDimensions($objAd, $categoryId);
-                                $advertPackages = $this->getRepository('FaAdBundle:AdUserPackage')->getAdvertPackagePurchases($objAd->getId());
+                    if ($objAds) {
+                        foreach ($objAds as $key => $objAd) {
+                            $categoryId     = $objAd->getCategory()->getId();
+                            $adImages       = $this->getAdImages($objAd);
+                            $categoryPath   = $this->getCategoryPath($categoryId);
+                            $adDimensions   = $this->getAdDimensions($objAd, $categoryId);
+                            $advertPackages = $this->getRepository('FaAdBundle:AdUserPackage')->getAdvertPackagePurchases($objAd->getId());
 
-                                $activityParams['ad_id']          = $objAd->getId();
-                                $activityParams['report_columns'] = array('ad_created_at', 'ad_id', 'edited_at', 'expired_at', 'expires_at', 'is_edit', 'is_expired', 'is_renewed', 'renewed_at', 'status_id', 'ip_addresses');
-                                $activitySorter['sort_field']     = 'edited_at';
-                                $activitySorter['sort_ord']       = 'ASC';
-                                $activityQuery                    = $this->getHistoryRepository('FaReportBundle:AdReportDaily')->getAdReportQuery($activityParams, $activitySorter, $this->container, false);
-                                $advertActivityResult             = $activityQuery->execute();
+                            $activityParams['ad_id']          = $objAd->getId();
+                            $activityParams['report_columns'] = array('ad_created_at', 'ad_id', 'edited_at', 'expired_at', 'expires_at', 'is_edit', 'is_expired', 'is_renewed', 'renewed_at', 'status_id', 'ip_addresses');
+                            $activitySorter['sort_field']     = 'edited_at';
+                            $activitySorter['sort_ord']       = 'ASC';
+                            $activityQuery                    = $this->getHistoryRepository('FaReportBundle:AdReportDaily')->getAdReportQuery($activityParams, $activitySorter, $this->container, false);
+                            $advertActivityResult             = $activityQuery->execute();
 
-                                $reportData['user_adverts'][] = array(
+                            $reportData['user_adverts'][] = array(
                                                                     'id'            => $objAd->getId(),
                                                                     'title'         => $objAd->getTitle(),
                                                                     'description'   => $objAd->getDescription(),
@@ -122,15 +122,16 @@ class PoliceReportAdminController extends CoreController implements ResourceAuth
                                                                     'purchases'     => $advertPackages,
                                                                     'activities'    => $advertActivityResult,
                                 );
-                            }
                         }
+                    }
                 }
 
                 //Messages
                 if ($data && isset($data['search']['include_messages'])) {
                     if ($data && isset($data['search']['ad_id'])) { //Search by ad ref
                         $messagesArray = $this->getRepository('FaMessageBundle:Message')->getMessagesForPoliceReport($objSearchAd->getId(), 'ad');
-                    } if ($data && isset($data['search']['email'])) { //Search by email
+                    }
+                    if ($data && isset($data['search']['email'])) { //Search by email
                         $messagesArray = $this->getRepository('FaMessageBundle:Message')->getMessagesForPoliceReport($userId, 'user');
                     }
                     $reportData['user_messages'] = $messagesArray;

@@ -75,9 +75,8 @@ class CyberSourceClientManager extends \SoapClient
             $requestDOM->firstChild->insertBefore($node, $requestDOM->firstChild->firstChild);
     
             $request = $requestDOM->saveXML();
-    
         } catch (\Exception $e) {
-            die( 'Error adding UsernameToken: ' . $e->code);
+            die('Error adding UsernameToken: ' . $e->code);
         }
     
         return parent::__doRequest($request, $location, $action, $version);

@@ -132,7 +132,6 @@ EOF
             } else {
                 $output->writeln('Solr index removed for all users.', true);
             }
-
         }
     }
 

@@ -187,7 +187,7 @@ class PackageDiscountCodeRepository extends EntityRepository
                 $error = $container->get('translator')->trans('This code has expired.', array(), 'frontend-cart-payment');
             } elseif ($codeObj && $codeObj->getEmails() && !in_array($loggedinUser->getEmail(), array_map('trim', explode(',', $codeObj->getEmails())))) {
                 $error = $container->get('translator')->trans('Code not applicable.', array(), 'frontend-cart-payment');
-            } else if ($codeObj->getRoleIds() || $codeObj->getCategory() || $codeObj->getPackageSrNo()) {
+            } elseif ($codeObj->getRoleIds() || $codeObj->getCategory() || $codeObj->getPackageSrNo()) {
                 list($totalRemainLimit, $remainLimit, $error) = $this->validateDiscountCodeLimit($codeObj, $loggedinUser, $container);
                 if (!$error) {
                     $totalDiscountAmount = 0;
@@ -206,13 +206,13 @@ class PackageDiscountCodeRepository extends EntityRepository
                             if ($codeObj->getPaidUserOnly() && $userRoleId == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
                                 $userActivePackage = $this->_em->getRepository('FaUserBundle:UserPackage')->findOneBy(array('user' => $loggedinUser->getId(), 'status' => 'A'));
 
-                                if (!$userActivePackage || ($userActivePackage && !$userActivePackage->getPackage()) || ($userActivePackage && !$userActivePackage->getPackage() && $userActivePackage->getPackage()->getPrice() <=0) ) {
+                                if (!$userActivePackage || ($userActivePackage && !$userActivePackage->getPackage()) || ($userActivePackage && !$userActivePackage->getPackage() && $userActivePackage->getPackage()->getPrice() <=0)) {
                                     $codeAppliedFlag = false;
                                 } elseif (!$codeObj->getCategory() && !$codeObj->getPackageSrNo()) {
                                     //apply code to all ads in cart
                                     $this->_em->getRepository('FaPaymentBundle:TransactionDetail')->applyCodeToAllItems($codeObj, $cartDetails, $totalRemainLimit, $remainLimit);
                                 }
-                            } else if (!$codeObj->getCategory() && !$codeObj->getPackageSrNo()) {
+                            } elseif (!$codeObj->getCategory() && !$codeObj->getPackageSrNo()) {
                                 //apply code to all ads in cart
                                 $this->_em->getRepository('FaPaymentBundle:TransactionDetail')->applyCodeToAllItems($codeObj, $cartDetails, $totalRemainLimit, $remainLimit);
                             }
@@ -244,7 +244,7 @@ class PackageDiscountCodeRepository extends EntityRepository
                                 }
                             }
                         }
-                    } else if ($codeAppliedFlag && $codeObj->getPackageSrNo()) {
+                    } elseif ($codeAppliedFlag && $codeObj->getPackageSrNo()) {
                         foreach ($cartDetails as $cartDetail) {
                             $cartDetailValue = unserialize($cartDetail['value']);
                             foreach ($cartDetailValue['package'] as $adPackageId => $adPackageValue) {
@@ -348,7 +348,7 @@ class PackageDiscountCodeRepository extends EntityRepository
             // code monthly total limit checking per user
             if ($codeObj && $codeObj->getMonthlyUserLimit() && $codeMonthlyUserTotalLimit >= $codeObj->getMonthlyUserLimit()) {
                 $lastTimeCodeUsedObj = $this->_em->getRepository('FaPromotionBundle:UserPackageDiscountCode')->findOneBy(array('package_discount_code' => $codeObj->getId(), 'user' => $loggedinUser->getId()), array('created_at' => 'desc'));
-                $createdAtTo = date_create(date('Y-m-d', strtotime('+'.PackageDiscountCodeRepository::PACKAGE_DISCOUNT_CODE_REFRESH_DAYS.' days',$lastTimeCodeUsedObj->getCreatedAt())));
+                $createdAtTo = date_create(date('Y-m-d', strtotime('+'.PackageDiscountCodeRepository::PACKAGE_DISCOUNT_CODE_REFRESH_DAYS.' days', $lastTimeCodeUsedObj->getCreatedAt())));
                 $todaysDate  = date_create(date('Y-m-d', time()));
                 $dateDiff = date_diff($todaysDate, $createdAtTo);
                 $remainingDays = $dateDiff->format("%a") + 1;

@@ -470,9 +470,9 @@ class AdLocation
      */
     public function setLocationArea(\Fa\Bundle\EntityBundle\Entity\Location $locationArea= null)
     {
-    	$this->location_area = $locationArea;
-    	
-    	return $this;
+        $this->location_area = $locationArea;
+        
+        return $this;
     }
     
     /**
@@ -482,8 +482,6 @@ class AdLocation
      */
     public function getLocationArea()
     {
-    	return $this->location_area;
+        return $this->location_area;
     }
-   
-       
 }

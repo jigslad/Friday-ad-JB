@@ -174,7 +174,7 @@ class MessageRepository extends EntityRepository
      *
      * @return array
      */
-    public function getFullconversation($id, $messageReaderId = NULL)
+    public function getFullconversation($id, $messageReaderId = null)
     {
         /*
         $childNode = null;
@@ -240,7 +240,7 @@ class MessageRepository extends EntityRepository
             ->setParameter('message_ad_id', $message->getMessageAdId())
             ->orderBy(self::ALIAS.'.created_at', 'ASC');
 
-            if ($messageReaderId != NULL) {
+            if ($messageReaderId != null) {
                 $qb->andWhere(self::ALIAS.'.deleted_by_user1 <> :messageReaderId AND '.self::ALIAS.'.deleted_by_user2 <> :messageReaderId');
                 $qb->setParameter('messageReaderId', $messageReaderId);
             }
@@ -511,7 +511,7 @@ class MessageRepository extends EntityRepository
 
                         if (isset($moderationResult['moderationdecision']) && $moderationResult['moderationdecision'] == self::MODERATION_RESULT_OKEY) {
                             $message->setStatus(self::MODERATION_QUEUE_STATUS_OKAY);
-                        } else if (isset($moderationResult['moderationdecision']) && $moderationResult['moderationdecision'] == self::MODERATION_RESULT_REJECTED) {
+                        } elseif (isset($moderationResult['moderationdecision']) && $moderationResult['moderationdecision'] == self::MODERATION_RESULT_REJECTED) {
                             $message->setStatus(self::MODERATION_QUEUE_STATUS_REJECTED);
                         }
                     }
@@ -598,7 +598,7 @@ class MessageRepository extends EntityRepository
                         $attachmentPath   = $container->getParameter('fa.message.attachment.dir').'/'.CommonManager::getGroupDirNameById($message->getId());
                         $sessionId        = CommonManager::generateHash();
                         $totalAttachments = 0;
-                        foreach ($moderationResult['attachments'] As $key => $attachmentArray) {
+                        foreach ($moderationResult['attachments'] as $key => $attachmentArray) {
                             $hash             = CommonManager::generateHash();
                             $sessionId        = CommonManager::generateHash();
                             $fileOriginalName = $attachmentArray['Name'];
@@ -607,7 +607,7 @@ class MessageRepository extends EntityRepository
 
                             //Ignore if disallowed files are attached (e.g. exe, bat, sys etc.)
                             if (in_array($fileMimeType, $allowedMimeTypes)) {
-                                $fileExtension   = substr(strrchr($fileOriginalName,'.'),1);
+                                $fileExtension   = substr(strrchr($fileOriginalName, '.'), 1);
                                 $fileName        = $sessionId.'_'.$hash.'.'.$fileExtension;
                                 $destinationPath = $webPath.'/'.$attachmentPath.'/'.$fileName;
                                 CommonManager::downloadFileByUrl($attachmentArray['FileLocation'], $destinationPath);
@@ -631,17 +631,17 @@ class MessageRepository extends EntityRepository
                             }
                         }
 
-                        $messageObjectChnaged = FALSE;
+                        $messageObjectChnaged = false;
                         //If any disallowed mime types attachments ignored.
                         if ($totalAttachments < count($moderationResult['attachments'])) {
                             $message->setShowAttachmentsIgnoredMessage(1);
-                            $messageObjectChnaged = TRUE;
+                            $messageObjectChnaged = true;
                         }
 
                         //If all attachments are ignored due to disallowed mime types.
                         if ($totalAttachments == 0) {
                             $message->setHasAttachments(0);
-                            $messageObjectChnaged = TRUE;
+                            $messageObjectChnaged = true;
                         }
 
                         if ($messageObjectChnaged) {
@@ -722,8 +722,8 @@ class MessageRepository extends EntityRepository
         if ($message->getHasAttachments() > 0) {
             $objMessageAttachments = $this->_em->getRepository('FaMessageBundle:MessageAttachments')->getMessageAttachments($message->getId());
             if ($objMessageAttachments) {
-                foreach ($objMessageAttachments As $objMessageAttachment) {
-                    $fileExtension                                            = substr(strrchr($objMessageAttachment->getOriginalFileName(),'.'),1);
+                foreach ($objMessageAttachments as $objMessageAttachment) {
+                    $fileExtension                                            = substr(strrchr($objMessageAttachment->getOriginalFileName(), '.'), 1);
                     $fileName                                                 = $objMessageAttachment->getSessionId().'_'.$objMessageAttachment->getHash().'.'.$fileExtension;
                     $attachment[$objMessageAttachment->getOriginalFileName()] = $container->get('kernel')->getRootDir().'/../web/'.$objMessageAttachment->getPath().'/'.$fileName;
                 }
@@ -762,11 +762,11 @@ class MessageRepository extends EntityRepository
             $isSellerReviewd =  $this->_em->getRepository('FaUserBundle:UserReview')->isAdReviewable($ad->getId(), $receiver->getId(), $ad_user->getId(), $ad_user->getStatus()->getId(), true);
 
             if ($isBuyerReviewd) {
-                 $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('leave_review_for_buyer_after_contact', $ad->getId(), $ad_user->getId());
+                $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('leave_review_for_buyer_after_contact', $ad->getId(), $ad_user->getId());
             }
 
             if ($isSellerReviewd) {
-                 $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('leave_review_for_seller_after_contact', $ad->getId(), $receiver->getId());
+                $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('leave_review_for_seller_after_contact', $ad->getId(), $receiver->getId());
             }
         }
 
@@ -780,8 +780,8 @@ class MessageRepository extends EntityRepository
         if ($message->getHasAttachments() > 0) {
             $objMessageAttachments = $this->_em->getRepository('FaMessageBundle:MessageAttachments')->getMessageAttachments($message->getId());
             if ($objMessageAttachments) {
-                foreach ($objMessageAttachments As $objMessageAttachment) {
-                    $fileExtension                                            = substr(strrchr($objMessageAttachment->getOriginalFileName(),'.'),1);
+                foreach ($objMessageAttachments as $objMessageAttachment) {
+                    $fileExtension                                            = substr(strrchr($objMessageAttachment->getOriginalFileName(), '.'), 1);
                     $fileName                                                 = $objMessageAttachment->getSessionId().'_'.$objMessageAttachment->getHash().'.'.$fileExtension;
                     $attachment[$objMessageAttachment->getOriginalFileName()] = $container->get('kernel')->getRootDir().'/../web/'.$objMessageAttachment->getPath().'/'.$fileName;
                 }
@@ -841,7 +841,7 @@ class MessageRepository extends EntityRepository
 
         // ad information
         $ad = $message->getAd();
-        if($ad) {
+        if ($ad) {
             $parameters['text_ad_title']       = $ad->getTitle();
             $parameters['text_ad_category']    = ($ad->getCategory())?$ad->getCategory()->getName():'';
             $parameters['text_ad_description'] = $ad->getDescription();
@@ -1137,7 +1137,7 @@ class MessageRepository extends EntityRepository
     {
         if ($type == 'receiver') {
             $adAlias = AdRepository::ALIAS_R;
-        } else if ('sender') {
+        } elseif ('sender') {
             $adAlias = AdRepository::ALIAS_S;
         }
 
@@ -1149,10 +1149,10 @@ class MessageRepository extends EntityRepository
             $qb->andWhere($adAlias.'.user ='.$userId);
             $qb->groupBy($type.'.message_ad_id', $type.'.sender')
             ->andWhere($type.'.receiver = '.$userId);
-        } else if ($type == 'sender') {
+        } elseif ($type == 'sender') {
             $qb->andWhere($type.'.orginator_id ='.$userId);
             $qb->groupBy($type.'.message_ad_id');
-        } else if ($type == 'sender_all') {
+        } elseif ($type == 'sender_all') {
             $qb->andWhere($adAlias.'.user <>'.$userId);
             $qb->groupBy($type.'.message_ad_id', $type.'.receiver');
         }
@@ -1237,9 +1237,9 @@ class MessageRepository extends EntityRepository
             } else {
                 return $objMessage2;
             }
-        } else if ($objMessage1) {
+        } elseif ($objMessage1) {
             return $objMessage1;
-        } else if ($objMessage2) {
+        } elseif ($objMessage2) {
             return $objMessage2;
         } else {
             return null;
@@ -1293,15 +1293,15 @@ class MessageRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-/**
-     * Get user messages
-     *
-     * @param integer $userId       User id.
-     * @param string  $type         Type either receiver or sender.
-     * @param array   $searchParams Search parameters.
-     *
-     * @return QueryBuilder
-     */
+    /**
+         * Get user messages
+         *
+         * @param integer $userId       User id.
+         * @param string  $type         Type either receiver or sender.
+         * @param array   $searchParams Search parameters.
+         *
+         * @return QueryBuilder
+         */
     public function getUserMessageIdsQuery($userId, $type = "all")
     {
         $query = $this->createQueryBuilder(self::ALIAS)
@@ -1560,7 +1560,8 @@ class MessageRepository extends EntityRepository
                     '('.self::ALIAS.'.receiver = :userId1 AND '.self::ALIAS.'.sender = :userId2)'.
                 ')'.
                 'AND '.
-                    self::ALIAS.'.message_ad_id = :adId AND '.self::ALIAS.'.id <= :messageId AND '.self::ALIAS.'.status = 1')
+                    self::ALIAS.'.message_ad_id = :adId AND '.self::ALIAS.'.id <= :messageId AND '.self::ALIAS.'.status = 1'
+            )
             ->setParameter('userId1', $userId1)
             ->setParameter('userId2', $userId2)
             ->setParameter('adId', $objMessage->getMessageAdId())
@@ -1650,16 +1651,15 @@ class MessageRepository extends EntityRepository
             $objMessage = $query->getQuery()->getOneOrNullResult();
 
             if ($objMessage && count($objMessage) > 0) {
-                if ($objMessage->getOneclickenqReply() == 'No' || $objMessage->getOneclickenqReply() == NULL) {
-                    return TRUE;
-                }
-                else {
-                    return FALSE;
+                if ($objMessage->getOneclickenqReply() == 'No' || $objMessage->getOneclickenqReply() == null) {
+                    return true;
+                } else {
+                    return false;
                 }
             }
         }
 
-        return FALSE;
+        return false;
     }
 
     /**
@@ -1673,7 +1673,7 @@ class MessageRepository extends EntityRepository
      */
     public function updateMessageField($messageId, $fieldName, $fieldValue)
     {
-        $updateFlag = FALSE;
+        $updateFlag = false;
         if ($messageId) {
             $updateQuery = $this->createQueryBuilder(self::ALIAS)
             ->update()
@@ -1706,7 +1706,7 @@ class MessageRepository extends EntityRepository
             $query->where(self::ALIAS.'.sender = :senderId OR '.self::ALIAS.'.receiver = :receiverId')
                   ->setParameter('senderId', $id)
                   ->setParameter('receiverId', $id);
-        } else if ($searchBy == 'ad') {
+        } elseif ($searchBy == 'ad') {
             $query->where(self::ALIAS.'.ad = :adId')
                   ->setParameter('adId', $id);
         }

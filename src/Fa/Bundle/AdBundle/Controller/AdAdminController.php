@@ -81,8 +81,8 @@ class AdAdminController extends CrudController implements ResourceAuthorizationC
         $data = $this->handleRole($data);
 
         if ($data['search']) {
-            if(isset($data['search']['ad__source'])) {
-                if($data['search']['ad__source'][0]==1) {
+            if (isset($data['search']['ad__source'])) {
+                if ($data['search']['ad__source'][0]==1) {
                     $data['static_filters'] = AdRepository::ALIAS.".source = 'paa_lite'";
                 }
             }
@@ -207,7 +207,7 @@ class AdAdminController extends CrudController implements ResourceAuthorizationC
                 $currentTime = time();
                 if ($formData['ad_status'] == EntityRepository::AD_STATUS_SOLD_ID) {
                     $entity->setSoldAt($currentTime);
-                } else if ($formData['ad_status'] == EntityRepository::AD_STATUS_EXPIRED_ID) {
+                } elseif ($formData['ad_status'] == EntityRepository::AD_STATUS_EXPIRED_ID) {
                     $entity->setExpiresAt($currentTime);
                     // insert expire stat
                     $this->getRepository('FaAdBundle:AdStatistics')->insertExpiredStat($entity, $currentTime);

@@ -86,9 +86,9 @@ class UserPackageTrialNotificationCommand extends ContainerAwareCommand
                         $subscriptionId = null;
 
                         if (isset($values['cyber_source_response']->paySubscriptionCreateReply) && isset($values['cyber_source_response']->paySubscriptionCreateReply->subscriptionID) && $values['cyber_source_response']->paySubscriptionCreateReply->subscriptionID != '') {
-                        	$subscriptionId = $values['cyber_source_response']->paySubscriptionCreateReply->subscriptionID;
+                            $subscriptionId = $values['cyber_source_response']->paySubscriptionCreateReply->subscriptionID;
                         } elseif (isset($values['subscriptionID']) && $values['subscriptionID'] != '') {
-                        	$subscriptionId = $values['subscriptionID'];
+                            $subscriptionId = $values['subscriptionID'];
                         }
 
                         echo 'Trial is going to end notification sent to user -> '.$user->getId();
@@ -100,7 +100,6 @@ class UserPackageTrialNotificationCommand extends ContainerAwareCommand
                     }
                 }
                 $last_id = $userPackage->getId();
-
             } else {
                 $done = true;
             }

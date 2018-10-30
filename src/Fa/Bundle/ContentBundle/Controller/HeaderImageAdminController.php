@@ -174,8 +174,9 @@ class HeaderImageAdminController extends CrudController implements ResourceAutho
         if ($formManager->isValid($form)) {
             $messageManager = $this->get('fa.message.manager');
             $messageManager->setFlashMessage($this->get('translator')->trans('%displayword% was successfully updated.', array('%displayword%' => $this->getDisplayWord())), 'success');
-            if(empty($backUrl))
+            if (empty($backUrl)) {
                 $backUrl = $this->generateUrl('header_image_admin');
+            }
             return $this->redirect($backUrl);
         }
 
@@ -248,31 +249,31 @@ class HeaderImageAdminController extends CrudController implements ResourceAutho
      */
     public function deleteRightImageAction(Request $request, $id)
     {
-    	$backUrl       = CommonManager::getAdminBackUrl($this->container);
-    	$entity        = $this->getRepository($this->getBundleName().':'.$this->getEntityName())->find($id);
-    	$deleteManager = $this->get('fa.deletemanager');
-    	
-    	$oldPhoneFileName = $entity->getPhoneFileName();
-    	$phoneFile        = $entity->getPhoneFileAbsolutePath();
-    	
-    	// Count how many rules found with same image, delete image if only one rule found
-    	$data['query_filters'] = array('header_image' => array('phone_file_name' => $oldPhoneFileName));
-    	$this->get('fa.sqlsearch.manager')->init($this->getRepository($this->getBundleName().':'.$this->getEntityName()), $data);
-    	$imageCount = $this->get('fa.sqlsearch.manager')->getResultCount();
-    	
-    	//update field value
-    	$entity->setPhoneFileName(NULL);
-    	$this->getEntityManager()->persist($entity);
-    	$this->getEntityManager()->flush($entity);
-    	
-    	// Delete image from directory
-    	if ($imageCount <= 1) {
-    		if (file_exists($phoneFile)) {
-    			unlink($phoneFile);
-    		}
-    	}
-    	
-    	return parent::handleMessage($this->get('translator')->trans('Right-Hand-Side Image was successfully deleted.', array('%displayWord%' => $this->getDisplayWord()), 'success'), ($backUrl ? $backUrl : $this->getRouteName('')));
+        $backUrl       = CommonManager::getAdminBackUrl($this->container);
+        $entity        = $this->getRepository($this->getBundleName().':'.$this->getEntityName())->find($id);
+        $deleteManager = $this->get('fa.deletemanager');
+        
+        $oldPhoneFileName = $entity->getPhoneFileName();
+        $phoneFile        = $entity->getPhoneFileAbsolutePath();
+        
+        // Count how many rules found with same image, delete image if only one rule found
+        $data['query_filters'] = array('header_image' => array('phone_file_name' => $oldPhoneFileName));
+        $this->get('fa.sqlsearch.manager')->init($this->getRepository($this->getBundleName().':'.$this->getEntityName()), $data);
+        $imageCount = $this->get('fa.sqlsearch.manager')->getResultCount();
+        
+        //update field value
+        $entity->setPhoneFileName(null);
+        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush($entity);
+        
+        // Delete image from directory
+        if ($imageCount <= 1) {
+            if (file_exists($phoneFile)) {
+                unlink($phoneFile);
+            }
+        }
+        
+        return parent::handleMessage($this->get('translator')->trans('Right-Hand-Side Image was successfully deleted.', array('%displayWord%' => $this->getDisplayWord()), 'success'), ($backUrl ? $backUrl : $this->getRouteName('')));
     }
     
     /**
@@ -281,57 +282,57 @@ class HeaderImageAdminController extends CrudController implements ResourceAutho
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function deleteUnwantedImageAction(Request $request)
-    {	
-    	CommonManager::setAdminBackUrl($request, $this->container);
-    	
-    	// initialize search filter manager service and prepare filter data for searching
-    	$this->get('fa.searchfilters.manager')->init($this->getRepository('FaContentBundle:HeaderImage'), $this->getRepositoryTable('FaContentBundle:HeaderImage'), 'fa_content_header_image_search_admin');
-    	$data = $this->get('fa.searchfilters.manager')->getFiltersData();
-    	
-    	// initialize search manager service and fetch data based of filters
-    	$data['select_fields'] = array(
-    			'header_image'      => array('id', 'path', 'screen_type', 'status', 'file_name', 'phone_file_name', 'created_at'),
-    			'category'          => array('name as category_name'),
-    			'location_country'  => array('name as location_country'),
-    			'location_domicile' => array('name as location_domicile'),
-    			'location_town' => array('name as location_town'),
-    	);
-    	
-    	$data['query_joins'] = array(
-    			'header_image' => array(
-    					'location_country'  => array('type' => 'left'),
-    					'location_domicile' => array('type' => 'left'),
-    					'location_town'     => array('type' => 'left'),
-    					'category'     => array('type' => 'left'),
-    			)
-    	);
-    	
-    	
-    	$this->get('fa.sqlsearch.manager')->init($this->getRepository('FaContentBundle:HeaderImage'), $data);
-    	$query = $this->get('fa.sqlsearch.manager')->getQuery();
-    	
-    	// initialize pagination manager service and prepare listing with pagination based of data
-    	$page = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page'] : 1;
-    	$this->get('fa.pagination.manager')->init($query, $page);
-    	$pagination = $this->get('fa.pagination.manager')->getPagination();
-    	
-    	// initialize form manager service
-    	$formManager = $this->get('fa.formmanager');
-    	$form        = $formManager->createForm(HeaderImageAdminSearchType::class, null, array('action' => $this->generateUrl('header_image_admin'), 'method' => 'GET'));
-    	
-    	if ($data['search']) {
-    		$form->submit($data['search']);
-    	}
-    	
-    	$parameters = array(
-    			'statusArray' => EntityRepository::getStatusArray($this->container),
-    			'heading'     => 'Homepage Header Image',
-    			'form'        => $form->createView(),
-    			'pagination'  => $pagination,
-    			'sorter'      => $data['sorter'],
-    	);
-    	
-    	return $this->render('FaContentBundle:HeaderImageAdmin:index.html.twig', $parameters);
+    {
+        CommonManager::setAdminBackUrl($request, $this->container);
+        
+        // initialize search filter manager service and prepare filter data for searching
+        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaContentBundle:HeaderImage'), $this->getRepositoryTable('FaContentBundle:HeaderImage'), 'fa_content_header_image_search_admin');
+        $data = $this->get('fa.searchfilters.manager')->getFiltersData();
+        
+        // initialize search manager service and fetch data based of filters
+        $data['select_fields'] = array(
+                'header_image'      => array('id', 'path', 'screen_type', 'status', 'file_name', 'phone_file_name', 'created_at'),
+                'category'          => array('name as category_name'),
+                'location_country'  => array('name as location_country'),
+                'location_domicile' => array('name as location_domicile'),
+                'location_town' => array('name as location_town'),
+        );
+        
+        $data['query_joins'] = array(
+                'header_image' => array(
+                        'location_country'  => array('type' => 'left'),
+                        'location_domicile' => array('type' => 'left'),
+                        'location_town'     => array('type' => 'left'),
+                        'category'     => array('type' => 'left'),
+                )
+        );
+        
+        
+        $this->get('fa.sqlsearch.manager')->init($this->getRepository('FaContentBundle:HeaderImage'), $data);
+        $query = $this->get('fa.sqlsearch.manager')->getQuery();
+        
+        // initialize pagination manager service and prepare listing with pagination based of data
+        $page = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page'] : 1;
+        $this->get('fa.pagination.manager')->init($query, $page);
+        $pagination = $this->get('fa.pagination.manager')->getPagination();
+        
+        // initialize form manager service
+        $formManager = $this->get('fa.formmanager');
+        $form        = $formManager->createForm(HeaderImageAdminSearchType::class, null, array('action' => $this->generateUrl('header_image_admin'), 'method' => 'GET'));
+        
+        if ($data['search']) {
+            $form->submit($data['search']);
+        }
+        
+        $parameters = array(
+                'statusArray' => EntityRepository::getStatusArray($this->container),
+                'heading'     => 'Homepage Header Image',
+                'form'        => $form->createView(),
+                'pagination'  => $pagination,
+                'sorter'      => $data['sorter'],
+        );
+        
+        return $this->render('FaContentBundle:HeaderImageAdmin:index.html.twig', $parameters);
     }
     
     public function getFQNForForms($formName)
@@ -343,5 +344,4 @@ class HeaderImageAdminController extends CrudController implements ResourceAutho
         $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
         return $formName;
     }
-    
 }

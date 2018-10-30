@@ -57,7 +57,6 @@ class LocationPostal
      */
     public function __construct()
     {
-        
     }
 
     /**
@@ -92,7 +91,7 @@ class LocationPostal
      */
     public function setLocationId($location_id)
     {
-    	$this->location_id= $location_id;
+        $this->location_id= $location_id;
 
         return $this;
     }
@@ -104,7 +103,7 @@ class LocationPostal
      */
     public function getLocationId()
     {
-    	return $this->location_id;
+        return $this->location_id;
     }
 
     /**
@@ -116,7 +115,7 @@ class LocationPostal
      */
     public function setPostalCode($postal_code)
     {
-    	$this->postal_code= $postal_code;
+        $this->postal_code= $postal_code;
 
         return $this;
     }
@@ -128,7 +127,6 @@ class LocationPostal
      */
     public function getPostalCode()
     {
-    	return $this->postal_code;
+        return $this->postal_code;
     }
-
 }

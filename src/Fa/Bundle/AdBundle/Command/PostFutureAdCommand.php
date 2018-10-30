@@ -267,7 +267,7 @@ EOF
         return $query->getQuery()->getResult();
     }
 
-        /**
+    /**
      * Get date in time stamp
      *
      * @param string $date Date.

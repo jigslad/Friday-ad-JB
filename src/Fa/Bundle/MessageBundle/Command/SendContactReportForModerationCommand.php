@@ -127,7 +127,6 @@ EOF
                 $this->getContainer()->get('doctrine')->getManager()->persist($contactModerate);
                 $output->writeln('Message spammer has been sent for moderation for message id: '.$contactModerate->getId(), true);
             }
-
         }
 
         $this->getContainer()->get('doctrine')->getManager()->flush();

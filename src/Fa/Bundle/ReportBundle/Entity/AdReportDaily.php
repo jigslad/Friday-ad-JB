@@ -1374,12 +1374,12 @@ class AdReportDaily
         return $this->is_credit_used;
     }
 
-     /**
-     * Set is_paa_lite.
-     *
-     * @param string $is_paa_lite
-     * @return AdReportDaily
-     */
+    /**
+    * Set is_paa_lite.
+    *
+    * @param string $is_paa_lite
+    * @return AdReportDaily
+    */
     public function setIsPaaLite($is_paa_lite)
     {
         $this->is_paa_lite = $is_paa_lite;

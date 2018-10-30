@@ -282,7 +282,7 @@ class AdPostPropertyAdminType extends AdPostAdminType
             if ($form->get('price')->getData() == '') {
                 $form->get('price')->addError(new FormError($this->translator->trans('Value should not be blank.', array(), 'validators')));
             } else {
-                if (!preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData() , $matches)) {
+                if (!preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData(), $matches)) {
                     $form->get('price')->addError(new FormError($this->translator->trans('Price is invalid.', array(), 'validators')));
                 }
             }
@@ -312,7 +312,7 @@ class AdPostPropertyAdminType extends AdPostAdminType
             }
 
             if ($isDateAvailableValid) {
-                if (strtotime(str_replace('/', '-', $form->get('date_available')->getData())) < mktime(0, 0, 0, date("m")  , date("d")-1, date("Y"))) {
+                if (strtotime(str_replace('/', '-', $form->get('date_available')->getData())) < mktime(0, 0, 0, date("m"), date("d")-1, date("Y"))) {
                     $form->get('date_available')->addError(new FormError($this->translator->trans('Date available should not be less than today.', array(), 'validators')));
                 }
             }

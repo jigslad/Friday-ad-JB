@@ -89,7 +89,6 @@ EOF
         }
 
         //$ad       = $this->em->getRepository('FaAdBundle:Ad')->find($input->getOption('ad_id'));
-        
     }
     
     /**
@@ -102,7 +101,7 @@ EOF
     protected function updateYacNumberWithOffset($input, $output)
     {
         $action       = $input->getArgument('action');
-        $objQB  = $this->getMainQueryBuilder($input,$action,FALSE);
+        $objQB  = $this->getMainQueryBuilder($input, $action, false);
         $step   = 100;
         $offset      = $input->getOption('offset');
         $em          = $this->getContainer()->get('doctrine')->getManager();
@@ -122,16 +121,16 @@ EOF
         }
     }
 
-     /**
-     * update yac number
-     *
-     * @param object $input       Input object.
-     * @param object $output      Output object.
-     */
+    /**
+    * update yac number
+    *
+    * @param object $input       Input object.
+    * @param object $output      Output object.
+    */
     protected function updateYacNumber($input, $output)
     {
         $action       = $input->getArgument('action');
-        $objQB  = $this->getMainQueryBuilder($input,$action,TRUE);
+        $objQB  = $this->getMainQueryBuilder($input, $action, true);
         $count  = $objQB->getQuery()->getSingleScalarResult();
 
         $step      = 100;
@@ -180,7 +179,7 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getMainQueryBuilder($input, $action, $onlyCount = FALSE)
+    protected function getMainQueryBuilder($input, $action, $onlyCount = false)
     {
         $adId = intval($input->getOption('ad_id'));
         $startDate = strtotime($input->getOption('start_date'));
@@ -192,7 +191,7 @@ EOF
 
         if ($onlyCount) {
             $qb->select('COUNT('.AdRepository::ALIAS.'.id)');
-        }else {
+        } else {
             $qb->select(AdRepository::ALIAS.'.id AS ad_Ref', UserRepository::ALIAS.'.id AS userId', AdRepository::ALIAS.'.privacy_number AS privacy_number', UserRepository::ALIAS.'.is_private_phone_number  AS is_private_phone_number', UserRepository::ALIAS.'.email  AS email');
         }
         $qb->innerJoin(AdRepository::ALIAS.'.user', UserRepository::ALIAS, 'WITH', AdRepository::ALIAS.'.user = '.UserRepository::ALIAS.'.id');
@@ -201,7 +200,7 @@ EOF
         $qb->andWhere(AdRepository::ALIAS.'.status = :adStatus')->setParameter('adStatus', EntityRepository::AD_STATUS_LIVE_ID);
         //$qb->andWhere(AdRepository::ALIAS.'.use_privacy_number = 1');
         $qb->andWhere(UserRepository::ALIAS.'.is_private_phone_number = 1');
-        if($action=='allocate') {
+        if ($action=='allocate') {
             $qb->andWhere(AdRepository::ALIAS.'.privacy_number IS NULL');
         } else {
             $qb->andWhere(AdRepository::ALIAS.'.privacy_number IS not NULL');
@@ -209,7 +208,7 @@ EOF
         
         $qb->andWhere('('.AdRepository::ALIAS.'.phone IS Not NULL or '.UserRepository::ALIAS.'.phone IS Not NULL)');
         
-        if(!empty($adId)) {
+        if (!empty($adId)) {
             $qb->andWhere(AdRepository::ALIAS.'.id = '.$adId);
         }
         if (!empty($startDate) && !empty($endDate)) {
@@ -222,7 +221,6 @@ EOF
         $qb->orderBy(UserRepository::ALIAS.'.id');
 
         return $qb;
-
     }
     /**
      * Update ad yac number.
@@ -245,9 +243,9 @@ EOF
         }*/
         if ($ad->getPhone()) {
             $phone = $ad->getPhone();
-        } elseif($ad->getUser()) {
+        } elseif ($ad->getUser()) {
             $phone = $ad->getUser()->getPhone();
-        } 
+        }
 
 
         if ($action == 'allocate') {

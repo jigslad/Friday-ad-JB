@@ -74,7 +74,7 @@ EOF
             } else {
                 $output->writeln('Contact not found or already subscribed in dotmailer for id: '.$id, true);
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             CommonManager::sendErrorMail($this->getContainer(), 'Error: Subscribed contact from dotmailer => '.$id, $e->getMessage(), $e->getTraceAsString());
             $output->writeln($e->getMessage(), true);
         }

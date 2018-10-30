@@ -165,8 +165,7 @@ class UserAdminType extends AbstractType
             $builder->add(
                 'password',
                 RepeatedType::class,
-                array
-                (
+                array(
                     'type' => PasswordType::class,
                     'first_options' => array('label' => 'Password', 'attr' => array('autocomplete' => 'off')),
                     'second_options' => array('label' => 'Confirm Password', 'attr' => array('autocomplete' => 'off')),
@@ -399,8 +398,7 @@ class UserAdminType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array
-            (
+            array(
                 'data_class' => 'Fa\Bundle\UserBundle\Entity\User',
                 'validation_groups' => array('registration', 'create_user'),
                 //'constraints' => new UniqueEntity(array('groups'   => array('registration'), 'fields'  => 'email','message' => 'An account with this email address already exists.'))

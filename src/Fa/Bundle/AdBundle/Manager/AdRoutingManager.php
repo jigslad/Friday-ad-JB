@@ -95,7 +95,7 @@ class AdRoutingManager
      * @return boolean|string
      */
     public function getListingUrl($search_params, $page = null, $submitted = false, $categories = null, $fromCommandLine = false, $parentFullSlug = null, $secondLevelParentFullSlug = null)
-    {	
+    {
         $location    = null;
         $page_string = null;
         $user_slug = null;
@@ -118,10 +118,10 @@ class AdRoutingManager
 
         if (isset($search_params['item__location']) && $search_params['item__location'] == 2) {
             $location = 'uk';
-       // } elseif (is_array($cookieLocationDetails) && isset($search_params['item__location']) && isset($cookieLocationDetails['location'])) {
+        // } elseif (is_array($cookieLocationDetails) && isset($search_params['item__location']) && isset($cookieLocationDetails['location'])) {
             //$location = $cookieLocationDetails['slug'];
         } elseif (is_array($cookieLocationDetails) && isset($search_params['item__location']) && isset($cookieLocationDetails['location']) && ($cookieLocationDetails['location']==$search_params['item__location'])  && (isset($search_params['item__area']) && isset($cookieLocationDetails['location_area']) && $cookieLocationDetails['location_area']==$search_params['item__area'])) {
-        	$location = $cookieLocationDetails['slug'];
+            $location = $cookieLocationDetails['slug'];
         } else {
             $location = $this->getLocation($search_params);
         }
@@ -172,7 +172,7 @@ class AdRoutingManager
 
 
         //$category = $this->em->getRepository('FaEntityBundle:Category')->getCategoryArrayById($search_params['item__category_id'], $this->container);
-        $categoryId   = (isset($search_params['item__category_id']) ? $search_params['item__category_id'] : null );
+        $categoryId   = (isset($search_params['item__category_id']) ? $search_params['item__category_id'] : null);
 
         $parentId = null;
         if (isset($categories[0])) {
@@ -252,7 +252,7 @@ class AdRoutingManager
             $search_params = $this->getDimensionSlug($search_params, $orders);
         }*/
 
-        if (isset($secondLevelParentId) && ( ($secondLevelParentId == CategoryRepository::COMMERCIALVEHICLES_ID && ($secondLevelParentId != $categoryId)) || ($secondLevelParentId == CategoryRepository::CARS_ID && ($secondLevelParentId != $categoryId)))) {
+        if (isset($secondLevelParentId) && (($secondLevelParentId == CategoryRepository::COMMERCIALVEHICLES_ID && ($secondLevelParentId != $categoryId)) || ($secondLevelParentId == CategoryRepository::CARS_ID && ($secondLevelParentId != $categoryId)))) {
             $search_params = $this->getDimensionSlug($search_params, $orders, 1);
         } else {
             $search_params = $this->getDimensionSlug($search_params, $orders);
@@ -387,8 +387,8 @@ class AdRoutingManager
             if (preg_match('/^\d+$/', $search_params['item__location'])) {
                 $location = $this->em->getRepository('FaEntityBundle:Location')->getSlugById($search_params['item__location'], $this->container);
             } elseif (preg_match('/^([\d]+,[\d]+)$/', $search_params['item__location'])) {
-                    $localityTown = explode(',', $search_params['item__location']);
-                    $location     = $this->em->getRepository('FaEntityBundle:Locality')->getSlugByColumn('id', $localityTown[0], $this->container);
+                $localityTown = explode(',', $search_params['item__location']);
+                $location     = $this->em->getRepository('FaEntityBundle:Locality')->getSlugByColumn('id', $localityTown[0], $this->container);
             } else {
                 $search_params['item__location'] = trim(str_replace('+', ' ', $search_params['item__location']));
                 $location = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodTextByLocation($search_params['item__location'], $this->container, 1);
@@ -561,14 +561,14 @@ class AdRoutingManager
             //check for location.
             if (!empty($ad[AdSolrFieldMapping::AREA_ID]) && isset($ad[AdSolrFieldMapping::IS_SPECIAL_AREA_LOCATION]) && $ad[AdSolrFieldMapping::IS_SPECIAL_AREA_LOCATION]) {
                 $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($ad[AdSolrFieldMapping::AREA_ID][0], $this->container);
-            }elseif (!empty($ad[AdSolrFieldMapping::TOWN_ID])) {
+            } elseif (!empty($ad[AdSolrFieldMapping::TOWN_ID])) {
                 $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($ad[AdSolrFieldMapping::TOWN_ID][0], $this->container);
             } elseif (!empty($ad[AdSolrFieldMapping::DOMICILE_ID])) {
                 $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($ad[AdSolrFieldMapping::DOMICILE_ID][0], $this->container);
             }
-        } else if ($adId && $locationId) {
+        } elseif ($adId && $locationId) {
             $locationString = $this->em->getRepository('FaEntityBundle:Location')->getSlugForDetailAd($locationId, $this->container);
-        } else if ($ad) {
+        } elseif ($ad) {
             //check for location.
             $domicileTownArray = $this->em->getRepository('FaAdBundle:AdLocation')->getIdArrayByAdId($ad->getId());
             if (isset($domicileTownArray[$ad->getId()])) {
@@ -602,9 +602,9 @@ class AdRoutingManager
 
         if ($ad && get_class($ad) == 'SolrObject' && (int) $ad[AdSolrFieldMapping::CATEGORY_ID]) {
             $fullSlugArray  = explode('/', $this->em->getRepository('FaEntityBundle:Category')->getFullSlugById($ad[AdSolrFieldMapping::CATEGORY_ID], $this->container));
-        } else if ((int) $categoryId) {
+        } elseif ((int) $categoryId) {
             $fullSlugArray  = explode('/', $this->em->getRepository('FaEntityBundle:Category')->getFullSlugById($categoryId, $this->container));
-        } else if ($ad && $ad->getCategory() && $ad->getCategory()->getId()) {
+        } elseif ($ad && $ad->getCategory() && $ad->getCategory()->getId()) {
             $fullSlugArray  = explode('/', $this->em->getRepository('FaEntityBundle:Category')->getFullSlugById($ad->getCategory()->getId(), $this->container));
         }
 
@@ -632,9 +632,9 @@ class AdRoutingManager
 
         if ($ad && get_class($ad) == 'SolrObject' && strlen(trim($ad[AdSolrFieldMapping::TITLE]))) {
             $adString = Urlizer::urlize(CommonManager::trimTextByWords($ad[AdSolrFieldMapping::TITLE], 7, ''));
-        } else if ($adId && strlen(trim($adTitle))) {
+        } elseif ($adId && strlen(trim($adTitle))) {
             $adString = Urlizer::urlize(CommonManager::trimTextByWords($adTitle, 7, ''));
-        } else if ($ad && get_class($ad) != 'SolrObject' && strlen(trim($ad->getTitle()))) {
+        } elseif ($ad && get_class($ad) != 'SolrObject' && strlen(trim($ad->getTitle()))) {
             $adString = Urlizer::urlize(CommonManager::trimTextByWords($ad->getTitle(), 7, ''));
         }
 
@@ -656,7 +656,7 @@ class AdRoutingManager
     {
         if ($ad && get_class($ad) == 'SolrObject') {
             $adId = $ad[AdSolrFieldMapping::ID];
-        } else if ($ad) {
+        } elseif ($ad) {
             $adId = $ad->getId();
         }
 

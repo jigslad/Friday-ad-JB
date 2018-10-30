@@ -17,7 +17,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 
-
 /**
  * This command is used to clean ad image data
  *

@@ -25,7 +25,6 @@ use Fa\Bundle\CoreBundle\Manager\ResourceAuthorizationManager;
  */
 class ResourceAuthorizationListener
 {
-
     protected $resourceAuthorizationManager;
 
     /**

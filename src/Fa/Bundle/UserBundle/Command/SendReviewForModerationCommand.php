@@ -129,7 +129,6 @@ EOF
                 $userReview->setStatus(UserReviewRepository::MODERATION_QUEUE_STATUS_SENT);
                 $this->getContainer()->get('doctrine')->getManager()->persist($userReview);
             }
-
         }
 
         $this->getContainer()->get('doctrine')->getManager()->flush();
@@ -203,7 +202,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('user_review' => array ('created_at' => 'asc'));
+        $data['query_sorter']  = array('user_review' => array('created_at' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($userReviewRepository, $data);

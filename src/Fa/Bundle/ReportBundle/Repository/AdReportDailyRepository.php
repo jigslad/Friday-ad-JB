@@ -200,7 +200,7 @@ class AdReportDailyRepository extends EntityRepository
             $qb->andWhere('('.AdPrintInsertDateReportDailyRepository::ALIAS.'.print_insert_date BETWEEN '.$finalStartDate.' AND  '.$finalEndDate.')');
             $printPackageArray = CommonManager::getEntityRepository($container, 'FaPromotionBundle:Package')->getPrintPackagesArray();
             $qb->andWhere(self::ALIAS.'.package_id in ('.implode(',', $printPackageArray).')');
-        } else if (isset($searchParams['date_filter_type'])) {
+        } elseif (isset($searchParams['date_filter_type'])) {
             $qb->andWhere('('.self::ALIAS.'.'.$searchParams['date_filter_type'].' BETWEEN '.$finalStartDate.' AND  '.$finalEndDate.')');
         }
 

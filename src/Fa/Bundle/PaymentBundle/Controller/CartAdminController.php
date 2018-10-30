@@ -109,7 +109,7 @@ class CartAdminController extends CoreController implements ResourceAuthorizatio
         $loggedinUser = $this->getLoggedInUser();
         $cart         = $this->isValidCart();
         $transactions = array();
-        if($cart) {
+        if ($cart) {
             $transactions = $this->getRepository('FaPaymentBundle:Transaction')->getTransactionsByCartId($cart->getId());
         }
         if (!$transactions) {
@@ -176,7 +176,7 @@ class CartAdminController extends CoreController implements ResourceAuthorizatio
         } else {
             //redirect user to selected payment method.
             $route = $this->getRepository('FaPaymentBundle:Payment')->getPaymentMethodRoute($paymentMethod);
-            if($paymentMethod=='amazonpay' && $request->get('access_token')!='') {
+            if ($paymentMethod=='amazonpay' && $request->get('access_token')!='') {
                 $this->container->get('session')->set('amazon_access_token', $request->get('access_token'));
             }
             if (!$route) {
@@ -233,7 +233,6 @@ class CartAdminController extends CoreController implements ResourceAuthorizatio
                 $cartDetails  = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
                 $isAdultAdvertPresent = $this->isAdultAdvertPresent($cartDetails);
                 list($error, $codeAppliedFlag) = $this->getRepository('FaPromotionBundle:PackageDiscountCode')->processDiscountCode($codeObj, $cart, $cartDetails, $loggedinUser, $this->container);
-
             }
 
             if ($this->container->get('session')->get('popup')) {
@@ -299,7 +298,6 @@ class CartAdminController extends CoreController implements ResourceAuthorizatio
             }
 
             if (!$error) {
-               
                 $this->getRepository('FaPaymentBundle:Cart')->clear();
                 $this->getRepository('FaPaymentBundle:Transaction')->clear();
                 $cart        = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container);
@@ -335,11 +333,11 @@ class CartAdminController extends CoreController implements ResourceAuthorizatio
                 $objRootCategory = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($objCategory);
 
                 if ($objRootCategory && $objRootCategory->getId() == CategoryRepository::ADULT_ID) {
-                    return TRUE;
+                    return true;
                 }
             }
         }
 
-        return FALSE;
+        return false;
     }
 }

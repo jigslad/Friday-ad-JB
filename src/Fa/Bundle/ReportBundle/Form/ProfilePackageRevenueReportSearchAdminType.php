@@ -85,7 +85,8 @@ class ProfilePackageRevenueReportSearchAdminType extends AbstractType
                     'expanded' => true,
                     'multiple' => true,
                     'mapped'   => false
-                ))
+                )
+            )
             ->add(
                 'rus_csv_name',
                 TextType::class,

@@ -107,7 +107,6 @@ class AdImageController extends CoreController
     {
         if (!$adId) {
             if ($request->get('is_admin')) {
-
                 if (!$this->container->get('session')->has('admin_ad_id_'.$admin_ad_counter)) {
                     $this->container->get('session')->set('admin_ad_id_'.$admin_ad_counter, CommonManager::generateHash());
                 }
@@ -120,19 +119,18 @@ class AdImageController extends CoreController
                     $this->container->get('session')->set('ad_id', CommonManager::generateHash());
                 }
 
-                if($this->container->get('session')->has('paa_image_id') && $request->get('is_paalite')==1) {
+                if ($this->container->get('session')->has('paa_image_id') && $request->get('is_paalite')==1) {
                     $adId = $this->container->get('session')->get('paa_image_id');
                 } else {
                     $adId = $this->container->get('session')->get('ad_id');
                 }
-
             }
         }
         $adImgCount = $this->getRepository('FaAdBundle:AdImage')->getAdImageCount($adId);
 
         if ($request->get('is_admin')) {
             return $this->render('FaAdBundle:AdImage:showImageUploaderAdmin.html.twig', array('imageLimitRemaining' => (($maxValue ? $maxValue : $this->container->getParameter('fa.image.'.$vertical.'_upload_limit')) - $adImgCount), 'adId' => $adId, 'userId' => $userId, 'vertical' => $vertical, 'is_admin' => 1, 'adImgCount' => $adImgCount, 'formName' => $formName, 'maxValue' => $maxValue, 'from' => $from));
-        } elseif($request->get('is_paalite')) {
+        } elseif ($request->get('is_paalite')) {
             return $this->render('FaAdBundle:AdImage:showImageUploaderPaaLite.html.twig', array('imageLimitRemaining' => (($maxValue ? $maxValue : $this->container->getParameter('fa.image.'.$vertical.'_upload_limit')) - $adImgCount), 'adId' => $adId, 'userId' => $userId, 'vertical' => $vertical, 'adImgCount' => $adImgCount, 'formName' => $formName, 'maxValue' => $maxValue, 'from' => $from));
         } else {
             return $this->render('FaAdBundle:AdImage:showImageUploader.html.twig', array('imageLimitRemaining' => (($maxValue ? $maxValue : $this->container->getParameter('fa.image.'.$vertical.'_upload_limit')) - $adImgCount), 'adId' => $adId, 'userId' => $userId, 'vertical' => $vertical, 'adImgCount' => $adImgCount, 'formName' => $formName, 'maxValue' => $maxValue, 'from' => $from));
@@ -426,10 +424,9 @@ class AdImageController extends CoreController
                 }
                 $OldOrgimage = $imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$oldHash.'.jpg';
                 
-                if(isset($oldAwsUrl)) {
-                	$this->writeDataFromURL($oldAwsUrl, $OldOrgimage);
+                if (isset($oldAwsUrl)) {
+                    $this->writeDataFromURL($oldAwsUrl, $OldOrgimage);
                 }
-                
             } else {
                 $OldOrgimage = $imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$oldHash.'.jpg';
             }
@@ -741,7 +738,6 @@ class AdImageController extends CoreController
                     $OldOrgimage = $imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$oldHash.'_'.$d.'.jpg';
                     $this->writeDataFromURL($oldAwsUrl, $OldOrgimage);
                 }
-
             } else {
                 $OldOrgimage = $imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$oldHash.'.jpg';
             }
@@ -819,7 +815,8 @@ class AdImageController extends CoreController
     private function checkIsUserIsValidToUploadImage($userId)
     {
         if ($this->isAuth()) {
-            return $this->getSecurityTokenStorage()->getToken()->getUser();;
+            return $this->getSecurityTokenStorage()->getToken()->getUser();
+            ;
         }
         if ($userId) {
             $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('id' => $userId, 'status' => EntityRepository::USER_STATUS_ACTIVE_ID));
@@ -890,7 +887,7 @@ class AdImageController extends CoreController
                 } else {
                     $error = $this->get('translator')->trans('Please enter minimum %min_image%.', array('%min_image%' => $paaFieldRule[0]['min_value']));
                 }
-            } elseif(!$error) {
+            } elseif (!$error) {
                 if ($adImgHashForm == $adImgHash) {
                     $error = $this->get('translator')->trans('Please upload or change any images.');
                 } else {

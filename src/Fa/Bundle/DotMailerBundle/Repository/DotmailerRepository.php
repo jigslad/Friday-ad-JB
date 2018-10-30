@@ -208,7 +208,8 @@ class DotmailerRepository extends EntityRepository
         $this->queryBuilder->leftJoin('Fa\Bundle\EntityBundle\Entity\LocationGroupLocation', LocationGroupLocationRepository::ALIAS, 'WITH', $this->getRepositoryAlias().'.town_id = '.LocationGroupLocationRepository::ALIAS.'.location_town');
         $this->queryBuilder->andWhere('('.$this->getRepositoryAlias().'.print_edition_id IN(:print_edition_id) OR '.LocationGroupLocationRepository::ALIAS.'.location_group = :location_group_id)')
                            ->setParameter('print_edition_id', array_keys($printEditionArray))
-                           ->setParameter('location_group_id', LocationGroupRepository::NON_PRINT_LOCATION_GROUP_ID);;
+                           ->setParameter('location_group_id', LocationGroupRepository::NON_PRINT_LOCATION_GROUP_ID);
+        ;
     }
 
     /**
@@ -504,11 +505,11 @@ class DotmailerRepository extends EntityRepository
             $newsletterTypeIds[] = 48;
         }
 
-        if ($touchPoint == DotmailerRepository::TOUCH_POINT_PAA || ($touchPoint == DotmailerRepository::TOUCH_POINT_ENQUIRY && $isEmailAlertEnabled != 1) ) {
+        if ($touchPoint == DotmailerRepository::TOUCH_POINT_PAA || ($touchPoint == DotmailerRepository::TOUCH_POINT_ENQUIRY && $isEmailAlertEnabled != 1)) {
             if ($dotmailer->getDotmailerNewsletterTypeOptoutId()) {
                 $newsletterTypeIds = array_diff($newsletterTypeIds, $dotmailer->getDotmailerNewsletterTypeOptoutId());
             }
-        } else if ($touchPoint == DotmailerRepository::TOUCH_POINT_ENQUIRY && $isEmailAlertEnabled == 1) {
+        } elseif ($touchPoint == DotmailerRepository::TOUCH_POINT_ENQUIRY && $isEmailAlertEnabled == 1) {
             if ($dotmailer->getDotmailerNewsletterTypeOptoutId()) {
                 $modifiedOptedOutId = array_diff($dotmailer->getDotmailerNewsletterTypeOptoutId(), $newsletterTypeIds);
                 $modifiedOptedOutId = array_unique($modifiedOptedOutId);
@@ -562,7 +563,7 @@ class DotmailerRepository extends EntityRepository
             if ($printEditionId) {
                 $dotmailer->setPrintEditionId($printEditionId);
             }
-        } else if ($touchPoint == DotmailerRepository::TOUCH_POINT_ENQUIRY) {
+        } elseif ($touchPoint == DotmailerRepository::TOUCH_POINT_ENQUIRY) {
             $dotmailer->setEnquiryTownId($townId);
             $dotmailer->setEnquiryCountyId($countyId);
             $dotmailer->setLastEnquiryAt(time());
@@ -599,13 +600,13 @@ class DotmailerRepository extends EntityRepository
         $data[] = $container->get('fa.entity.cache.manager')->getEntityNameById('FaAdBundle:PrintEdition', $dotmailer->getPrintEditionId());
         $data[] = (isset($userTypes[$dotmailer->getRoleId()]) ? $userTypes[$dotmailer->getRoleId()] : null); //user type
         $data[] = $dotmailer->getPhone();
-        $data[] = ($dotmailer->getLastPaidAt()!='')?date('d M Y',$dotmailer->getLastPaidAt()):''; //date
-        $data[] = ($dotmailer->getLastPaaAt()!='')?date('d M Y',$dotmailer->getLastPaaAt()):'';// date
+        $data[] = ($dotmailer->getLastPaidAt()!='')?date('d M Y', $dotmailer->getLastPaidAt()):''; //date
+        $data[] = ($dotmailer->getLastPaaAt()!='')?date('d M Y', $dotmailer->getLastPaaAt()):'';// date
         $data[] = $dotmailer->getEnqPostcode(); // enquiry_postcode
         $data[] = $container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Location', $dotmailer->getEnquiryTownId());
         $data[] = $container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Location', $dotmailer->getEnquiryCountyId());
-        $data[] = ($dotmailer->getNewsletterSignupAt()!='')?date('d M Y',$dotmailer->getNewsletterSignupAt()):''; // date
-        $data[] = ($dotmailer->getLastEnquiryAt()!='')?date('d M Y',$dotmailer->getLastEnquiryAt()):''; // date
+        $data[] = ($dotmailer->getNewsletterSignupAt()!='')?date('d M Y', $dotmailer->getNewsletterSignupAt()):''; // date
+        $data[] = ($dotmailer->getLastEnquiryAt()!='')?date('d M Y', $dotmailer->getLastEnquiryAt()):''; // date
         $data[] = sha1(strtolower($dotmailer->getEmail())); // acxiom
         $data[] = ($dotmailer->getFadUser() ? 'Yes' : 'No'); // fad_user
         $data[] = ($dotmailer->getTiUser() ? 'Yes' : 'No');// ti_user
@@ -628,7 +629,6 @@ class DotmailerRepository extends EntityRepository
         }
 
         return $data;
-
     }
 
 
@@ -690,7 +690,6 @@ class DotmailerRepository extends EntityRepository
         }
 
         return $data;
-
     }
 
     /**
@@ -791,7 +790,9 @@ class DotmailerRepository extends EntityRepository
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt(
-            $ch, CURLOPT_HTTPHEADER, array(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
                 'Accept: application/json',
                 'Content-Type: application/json'
             )
@@ -799,7 +800,7 @@ class DotmailerRepository extends EntityRepository
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLAUTH_BASIC, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD,$username . ':' . $password);
+        curl_setopt($ch, CURLOPT_USERPWD, $username . ':' . $password);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
@@ -835,7 +836,9 @@ class DotmailerRepository extends EntityRepository
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt(
-            $ch, CURLOPT_HTTPHEADER, array(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
                 'Accept: application/json',
                 'Content-Type: application/json'
             )
@@ -843,9 +846,9 @@ class DotmailerRepository extends EntityRepository
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLAUTH_BASIC, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD,$username . ':' . $password);
+        curl_setopt($ch, CURLOPT_USERPWD, $username . ':' . $password);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode($content));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($content));
 
         $response = json_decode(curl_exec($ch), true);
 
@@ -884,7 +887,9 @@ class DotmailerRepository extends EntityRepository
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt(
-                $ch, CURLOPT_HTTPHEADER, array(
+                $ch,
+                CURLOPT_HTTPHEADER,
+                array(
                     'Accept: application/json',
                     'Content-Type: application/json'
                 )
@@ -892,9 +897,9 @@ class DotmailerRepository extends EntityRepository
             curl_setopt($ch, CURLOPT_VERBOSE, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLAUTH_BASIC, CURLAUTH_DIGEST);
-            curl_setopt($ch, CURLOPT_USERPWD,$username . ':' . $password);
+            curl_setopt($ch, CURLOPT_USERPWD, $username . ':' . $password);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-            curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode($content));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($content));
 
             $response = json_decode(curl_exec($ch), true);
 

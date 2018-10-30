@@ -53,9 +53,9 @@ class SecurityController extends ThirdPartyLoginController
             if (isset($urlParams['scheme']) && isset($urlParams['host']) && isset($urlParams['path'])) {
                 $routeRefererUrl    = str_replace(array($urlParams['scheme'].'://'.$urlParams['host'], $request->getBaseURL()), '', $urlParams['path']);
                 try {
-                	if(strpos($routeRefererUrl, "zendeskhelp.php") !== FALSE) {
-                		$routeRefererUrl = "/";
-                	}
+                    if (strpos($routeRefererUrl, "zendeskhelp.php") !== false) {
+                        $routeRefererUrl = "/";
+                    }
                     $prevRouteName = $this->get('router')->match($routeRefererUrl)['_route'];
                 } catch (\Exception $e) {
                     $prevRouteName = null;
@@ -115,8 +115,7 @@ class SecurityController extends ThirdPartyLoginController
 
         return $this->render(
             'FaUserBundle:Security:'.$template.'.html.twig',
-            array
-            (
+            array(
                 // last username entered by the user
                 'last_username' => (null === $session) ? '' : $session->get(Security::LAST_USERNAME),
                 'error'         => $error,
@@ -146,9 +145,9 @@ class SecurityController extends ThirdPartyLoginController
         if (is_array($response)) {
             $this->container->get('session')->set('register_user_info', $response);
             return $this->redirect($this->generateUrl('fa_user_register'));
-        } else if ($response == 'MISSINGDATA') {
+        } elseif ($response == 'MISSINGDATA') {
             return $this->handleMessage($this->get('translator')->trans('One of field is missing from Facebook (First Name, Last Name, Email).', array(), 'frontend-register'), 'login', array(), 'error');
-        } else if ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
+        } elseif ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
             return $this->redirectToRoute('login');
         } else {
             return $response;
@@ -176,9 +175,9 @@ class SecurityController extends ThirdPartyLoginController
         if (is_array($response)) {
             $this->container->get('session')->set('register_user_info', $response);
             return $this->redirect($this->generateUrl('fa_user_register'));
-        } else if ($response == 'MISSINGDATA') {
+        } elseif ($response == 'MISSINGDATA') {
             return $this->handleMessage($this->get('translator')->trans('One of field is missing from Google (First Name, Last Name, Email).', array(), 'frontend-register'), 'login', array(), 'error');
-        } else if ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
+        } elseif ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
             return $this->redirectToRoute('login');
         } else {
             return $response;
@@ -281,8 +280,8 @@ class SecurityController extends ThirdPartyLoginController
                     }
                 }
             } elseif ($request->isXmlHttpRequest()) {
-                    $htmlContent = $this->renderView('FaUserBundle:Security:ajaxForgotPassword.html.twig', array('form'   => $form->createView()));
-                    return new JsonResponse(array('success' => '', 'htmlContent' => $htmlContent));
+                $htmlContent = $this->renderView('FaUserBundle:Security:ajaxForgotPassword.html.twig', array('form'   => $form->createView()));
+                return new JsonResponse(array('success' => '', 'htmlContent' => $htmlContent));
             }
         }
         $parameters  = array(

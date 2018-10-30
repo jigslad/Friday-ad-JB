@@ -68,10 +68,10 @@ trait UploadFileManager
         $this->file = $file;
 
         // Check if we have an old image path
-    if (is_file($this->getAbsolutePath())) {
+        if (is_file($this->getAbsolutePath())) {
             // Store the old name to delete before the update
             $this->tempFile = $this->getAbsolutePath();
-    }
+        }
     }
 
     /**
@@ -140,4 +140,4 @@ trait UploadFileManager
     {
         return null === $this->getFileField() ? null : $this->getUploadRootDir().'/'.$this->getFileField();
     }
-    }
+}

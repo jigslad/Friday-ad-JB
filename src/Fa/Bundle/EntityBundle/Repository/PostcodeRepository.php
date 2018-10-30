@@ -185,9 +185,9 @@ class PostcodeRepository extends BaseEntityRepository
     {
         
 
-        //$qd = "SELECT `post_code`, (CASE WHEN (`latitude` - ".$latitude." ) > 0 THEN `latitude` - ".$latitude." ELSE (`latitude` - ".$latitude.") * -1 END) + (CASE WHEN (`longitude` - ".$longitude.") > 0 THEN `longitude` - ".$longitude." ELSE (`longitude` - ".$longitude.") * -1 END) AS latlondiff FROM `postcode` ORDER BY latlondiff ASC LIMIT 0,1";               
+        //$qd = "SELECT `post_code`, (CASE WHEN (`latitude` - ".$latitude." ) > 0 THEN `latitude` - ".$latitude." ELSE (`latitude` - ".$latitude.") * -1 END) + (CASE WHEN (`longitude` - ".$longitude.") > 0 THEN `longitude` - ".$longitude." ELSE (`longitude` - ".$longitude.") * -1 END) AS latlondiff FROM `postcode` ORDER BY latlondiff ASC LIMIT 0,1";
         $query = $this->_em->createQueryBuilder()->select("pc.post_code")->addSelect('((CASE WHEN (pc.latitude - '.$latitude.' ) > 0 THEN pc.latitude - '.$latitude.' ELSE (pc.latitude - '.$latitude.') * -1 END) + (CASE WHEN (pc.longitude - '.$longitude.') > 0 THEN pc.longitude - '.$longitude.' ELSE (pc.longitude - '.$longitude.') * -1 END)) as latlondiff')
-                ->from('FaEntityBundle:Postcode','pc')->orderBy('latlondiff','ASC')->setMaxResults(1)->setFirstResult(0);
+                ->from('FaEntityBundle:Postcode', 'pc')->orderBy('latlondiff', 'ASC')->setMaxResults(1)->setFirstResult(0);
         $results = $query->getQuery()->getResult();
         
         return $results[0]['post_code'];

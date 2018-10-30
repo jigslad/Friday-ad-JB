@@ -169,7 +169,7 @@ EOF
 
         $data                   = array();
         $data['query_filters']  = $searchParam;
-        $data['query_sorter']   = array('ad' => array ('id' => 'asc'));
+        $data['query_sorter']   = array('ad' => array('id' => 'asc'));
         $data['static_filters'] = AdRepository::ALIAS.'.renewed_at IS NOT NULL AND '.AdRepository::ALIAS.'.renewed_at > '.AdRepository::ALIAS.'.published_at';
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');

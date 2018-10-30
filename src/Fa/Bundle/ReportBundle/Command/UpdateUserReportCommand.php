@@ -291,7 +291,7 @@ EOF
             //$userIdsToBeInsertedInUserDailyTable = $nonUserReportUserIds;
             $userIdsToBeInsertedInUserDailyTable = array();
             $usersFromSiteViewCounterArray       = $this->getUsersFromUserSiteViewCounterTable($action, $date, $offset, $this->limit);
-            foreach ($usersFromSiteViewCounterArray As $usersFromSiteViewCounter) {
+            foreach ($usersFromSiteViewCounterArray as $usersFromSiteViewCounter) {
                 $userIdsToBeInsertedInUserDailyTable[] = $usersFromSiteViewCounter['user_id'];
             }
 

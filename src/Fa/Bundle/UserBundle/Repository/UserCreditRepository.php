@@ -289,4 +289,3 @@ class UserCreditRepository extends EntityRepository
         return (isset($packageName[$packageSrNo]) ? $packageName[$packageSrNo] : '-');
     }
 }
-

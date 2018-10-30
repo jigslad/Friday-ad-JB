@@ -74,7 +74,7 @@ EOF
         $lastDays = $input->getOption('last_days');
 
         $adids = null;
-        $adids = $this->em->getRepository('FaAdBundle:AdUserPackageUpsell')->getAdsByTypeValue('2',$lastDays,$reqids);
+        $adids = $this->em->getRepository('FaAdBundle:AdUserPackageUpsell')->getAdsByTypeValue('2', $lastDays, $reqids);
         
         $searchParam                        = array();
         $searchParam['entity_ad_status']    = array('id' => array(\Fa\Bundle\EntityBundle\Repository\EntityRepository::AD_STATUS_LIVE_ID));
@@ -133,7 +133,7 @@ EOF
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
         foreach ($ads as $ad) {
             $userEmail = ($ad->getUser())?$ad->getUser()->getEmail():null;
-            if(!in_array($userEmail, $neglectUserEmailArr)) {
+            if (!in_array($userEmail, $neglectUserEmailArr)) {
                 $user = ($ad->getUser() ? $ad->getUser() : null);
                 $ad->setWeeklyRefreshAt(time());
                 $entityManager->persist($ad);
@@ -151,7 +151,6 @@ EOF
                 }
                 $output->writeln('Refresh date is updated for ad id: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
             }
-            
         }
 
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);
@@ -223,7 +222,7 @@ EOF
         $data                  = array();
         //$data['select_fields'] = array('ad' => array('id', 'weekly_refresh_at'));
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('ad' => array ('id' => 'asc'));
+        $data['query_sorter']  = array('ad' => array('id' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($adRepository, $data);

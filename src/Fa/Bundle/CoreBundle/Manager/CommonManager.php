@@ -369,7 +369,7 @@ class CommonManager
         try {
             if (!empty($container->get('request_stack')->getCurrentRequest())) {
                 $locale = $container->get('request_stack')->getCurrentRequest()->getLocale();
-            }else {
+            } else {
                 $locale = $container->getParameter('locale');
             }
         } catch (\Exception $e) {
@@ -536,20 +536,20 @@ class CommonManager
             } elseif ($defaultEntityValue) {
                 $seoFieldArray['page_title'] = $defaultEntityValue;
             }
-			if($seoFieldArray['page_title']!='') { 
-				$seoFieldArray['page_title'] = str_replace(' in UK', '', $seoFieldArray['page_title']);
-			}
+            if ($seoFieldArray['page_title']!='') {
+                $seoFieldArray['page_title'] = str_replace(' in UK', '', $seoFieldArray['page_title']);
+            }
             //h1 tag
             if ($entity->getH1Tag()) {
                 $seoFieldArray['h1_tag'] = $entity->getH1Tag();
             } elseif ($defaultEntityValue) {
                 $seoFieldArray['h1_tag'] = $seoFieldArray['page_title'];
             }
-			
+            
             //meta description
             if ($entity->getMetaDescription()) {
                 $seoFieldArray['meta_description'] = $entity->getMetaDescription();
-                if($seoFieldArray['meta_description']!='') {
+                if ($seoFieldArray['meta_description']!='') {
                     $seoFieldArray['meta_description'] = str_replace(' in UK', '', $seoFieldArray['meta_description']);
                 }
             }
@@ -704,37 +704,37 @@ class CommonManager
         }
         
         //hard code the seo field
-        if(in_array($_SERVER['REQUEST_URI'], self::$SeoHardCodeForUrl)) {
-        	switch ($_SERVER['REQUEST_URI']) {
-        		case '/bristol/':
-        			$seoFieldArray['page_title'] = 'Trade It in Bristol | Friday-Ad';
-        			$seoFieldArray['meta_description'] = ' Buy & Sell your second hand & new items on Friday-Ad (formerly Trade It) for Free! Sell your items, cars, property to others in Bristol';
-        			break;
-        		case '/bristol/motors/cars/':
-        			$seoFieldArray['meta_description'] = 'Find Used Cars for Sale in Bristol with Friday-ad (formerly Trade It). Looking to sell your car? We make advertising easy with a few simple steps.';
-        			break;
-        		case '/bristol/for-sale/free-to-collector/':
-        			$seoFieldArray['meta_description'] = 'Find free stuff in Bristol with Friday-ad (formerly Trade It). There are thousands of items being give away on Friday-Ad and you can place an ad for free!';
-        			break;
-        		case '/swindon/':
-        			$seoFieldArray['meta_description'] = 'Buy & Sell your second hand & new items on Friday-Ad (formerly Trade It) for Free! Sell your items, cars, property to others in Swindon.';
-        			break;
-        		case '/bristol/animals/pets/cats-kittens/':
-        			$seoFieldArray['meta_description'] = 'Find Kittens and Cats in Bristol. There are thousands of beautiful kittens and other pets needing a new home on Friday-Ad (formerly Trade It).';
-        			break;
-        		case '/bristol/animals/pets/':
-        			$seoFieldArray['meta_description'] = 'Find Pets in Bristol, or find a home for your Pets with the Friday-Ad (formerly Trade It).';
-        			break;
-        		case '/gloucester/':
-        			$seoFieldArray['meta_description'] = 'Buy & Sell your second hand & new items on Friday-Ad (formerly Trade It) for Free! Sell your items, cars, property to others in Gloucester.';
-        			break;
-        		case '/bristol/animals/pets/dogs-puppies/':
-        			$seoFieldArray['meta_description'] = 'Dogs and Puppies in Bristol. Find your perfect puppy from private sellers and ethical breeders in the Friday-Ad (formerly Trade It) pets section.';
-        			break;
-        		case '/bristol/adult/':
-        			$seoFieldArray['meta_description'] = 'Find Adult Services in Bristol. There are thousands of adult services on Friday-Ad (formerly Trade It) and you can place an ad for free!';
-        			break;
-        	}
+        if (in_array($_SERVER['REQUEST_URI'], self::$SeoHardCodeForUrl)) {
+            switch ($_SERVER['REQUEST_URI']) {
+                case '/bristol/':
+                    $seoFieldArray['page_title'] = 'Trade It in Bristol | Friday-Ad';
+                    $seoFieldArray['meta_description'] = ' Buy & Sell your second hand & new items on Friday-Ad (formerly Trade It) for Free! Sell your items, cars, property to others in Bristol';
+                    break;
+                case '/bristol/motors/cars/':
+                    $seoFieldArray['meta_description'] = 'Find Used Cars for Sale in Bristol with Friday-ad (formerly Trade It). Looking to sell your car? We make advertising easy with a few simple steps.';
+                    break;
+                case '/bristol/for-sale/free-to-collector/':
+                    $seoFieldArray['meta_description'] = 'Find free stuff in Bristol with Friday-ad (formerly Trade It). There are thousands of items being give away on Friday-Ad and you can place an ad for free!';
+                    break;
+                case '/swindon/':
+                    $seoFieldArray['meta_description'] = 'Buy & Sell your second hand & new items on Friday-Ad (formerly Trade It) for Free! Sell your items, cars, property to others in Swindon.';
+                    break;
+                case '/bristol/animals/pets/cats-kittens/':
+                    $seoFieldArray['meta_description'] = 'Find Kittens and Cats in Bristol. There are thousands of beautiful kittens and other pets needing a new home on Friday-Ad (formerly Trade It).';
+                    break;
+                case '/bristol/animals/pets/':
+                    $seoFieldArray['meta_description'] = 'Find Pets in Bristol, or find a home for your Pets with the Friday-Ad (formerly Trade It).';
+                    break;
+                case '/gloucester/':
+                    $seoFieldArray['meta_description'] = 'Buy & Sell your second hand & new items on Friday-Ad (formerly Trade It) for Free! Sell your items, cars, property to others in Gloucester.';
+                    break;
+                case '/bristol/animals/pets/dogs-puppies/':
+                    $seoFieldArray['meta_description'] = 'Dogs and Puppies in Bristol. Find your perfect puppy from private sellers and ethical breeders in the Friday-Ad (formerly Trade It) pets section.';
+                    break;
+                case '/bristol/adult/':
+                    $seoFieldArray['meta_description'] = 'Find Adult Services in Bristol. There are thousands of adult services on Friday-Ad (formerly Trade It) and you can place an ad for free!';
+                    break;
+            }
         }
 
         return $seoFieldArray;
@@ -894,7 +894,7 @@ class CommonManager
 
         $userName .= ' - Friday-Ad';
 
-        $imagePath = NULL;
+        $imagePath = null;
 
         if ($userId) {
             if (!is_numeric($userId)) {
@@ -911,9 +911,9 @@ class CommonManager
                     }
 
                     if (!$imageWidth && !$imageHeight) {
-                     return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
+                        return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
                     } else {
-                     return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.($appendTime ? '?'.time() : null).'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
+                        return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.($appendTime ? '?'.time() : null).'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
                     }
                 }
             } else {
@@ -962,12 +962,12 @@ class CommonManager
     public static function getUserLogoByUserId($container, $userId, $appendTime = false, $getUrlOnly = false, $userName = null)
     {
         if (!is_numeric($userId)) {
-           $imagePath  = $container->get('kernel')->getRootDir().'/../web/uploads/tmp/'.$userId.'_org.jpg';
-           if (is_file($imagePath)) {
-               if ($getUrlOnly) {
-                   return $container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'_org.jpg'.($appendTime ? '?'.time() : null);
-               }
-           }
+            $imagePath  = $container->get('kernel')->getRootDir().'/../web/uploads/tmp/'.$userId.'_org.jpg';
+            if (is_file($imagePath)) {
+                if ($getUrlOnly) {
+                    return $container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'_org.jpg'.($appendTime ? '?'.time() : null);
+                }
+            }
         }
 
         $userStatus = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getUserStatus($userId, $container);
@@ -1031,11 +1031,11 @@ class CommonManager
             $digit = intval($durationValue);
             if (strpos($durationValue, 'm') !== false) {
                 $time = strtotime($plusMinus.$digit.' month', $time);
-            } else if (strpos($durationValue, 'w') !== false) {
+            } elseif (strpos($durationValue, 'w') !== false) {
                 $time = strtotime($plusMinus.$digit.' week', $time);
-            } else if (strpos($durationValue, 'd') !== false) {
+            } elseif (strpos($durationValue, 'd') !== false) {
                 $time = strtotime($plusMinus.$digit.' day', $time);
-            } else if (strpos($durationValue, 'min') !== false) {
+            } elseif (strpos($durationValue, 'min') !== false) {
                 $time = strtotime($plusMinus.$digit.' minutes', $time);
             }
         }
@@ -1106,7 +1106,7 @@ class CommonManager
     {
         $monthArray = self::getMonthChoices();
 
-        return (isset($monthArray[$month]) ? $monthArray[$month] :null );
+        return (isset($monthArray[$month]) ? $monthArray[$month] :null);
     }
 
     /**
@@ -1120,8 +1120,7 @@ class CommonManager
     public static function getCategoryClassNameById($rootCategoryId, $classNameFlag = false)
     {
         $className = null;
-        switch ($rootCategoryId)
-        {
+        switch ($rootCategoryId) {
             case CategoryRepository::FOR_SALE_ID:
                 $className = 'for_sale';
                 break;
@@ -1290,9 +1289,9 @@ class CommonManager
             $cookieLocation = get_object_vars(json_decode($cookieLocation));
             if (isset($cookieLocation['postcode']) && $cookieLocation['postcode']) {
                 $locationText = $cookieLocation['postcode'];
-            } else if (isset($cookieLocation['town']) && $cookieLocation['town']) {
+            } elseif (isset($cookieLocation['town']) && $cookieLocation['town']) {
                 $locationText = $cookieLocation['town'];
-            } else if (isset($cookieLocation['county']) && $cookieLocation['county']) {
+            } elseif (isset($cookieLocation['county']) && $cookieLocation['county']) {
                 $locationText = $cookieLocation['county'];
             }
         }
@@ -1481,7 +1480,7 @@ class CommonManager
      */
     public static function getMileageChoices()
     {
-        $mileage = array (
+        $mileage = array(
                        '0-25000'      => '0 - 25000',
                        '25001-50000'  => '25000 - 50000',
                        '50001-75000'  => '50000 - 75000',
@@ -1721,12 +1720,12 @@ class CommonManager
      */
     public static function getAdminCancelUrl($container)
     {
-     $session = $container->get('session');
-     if ($session->has('admin_cancel_url')) {
-      return $session->get('admin_cancel_url');
-     } else {
-      return null;
-     }
+        $session = $container->get('session');
+        if ($session->has('admin_cancel_url')) {
+            return $session->get('admin_cancel_url');
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -1736,7 +1735,7 @@ class CommonManager
      */
     public static function getBannerPageRoutes()
     {
-        $routesArray = array (
+        $routesArray = array(
                         BannerPageRepository::PAGE_HOME           => 'fa_frontend_homepage',
                         BannerPageRepository::PAGE_SEARCH_RESULTS => 'listing_page',
                         BannerPageRepository::PAGE_AD_DETAILS     => 'ad_detail_page',
@@ -2045,7 +2044,6 @@ HTML;
 
         if (isset($trans['items'])) {
             foreach ($trans['items'] as $item) {
-            	            	
                 $itemjs .=  <<<HTML
     ga('ecommerce:addItem',{
   'id': '{$trans['ID']}',
@@ -2174,7 +2172,7 @@ HTML;
                 asort($mapping, $sort_flags);
                 $sorted = array();
                 foreach ($mapping as $k => $v) {
-                    if($preserveKey) {
+                    if ($preserveKey) {
                         $sorted[$k] = $array[$k];
                     } else {
                         $sorted[] = $array[$k];
@@ -2488,20 +2486,18 @@ HTML;
      * @param string $invert
      * @return mixed|unknown
      */
-    public static function stripTagsContent($text, $tags = '', $invert = FALSE)
+    public static function stripTagsContent($text, $tags = '', $invert = false)
     {
         preg_match_all('/<(.+?)[\s]*\/?[\s]*>/si', trim($tags), $tags);
         $tags = array_unique($tags[1]);
 
-        if(is_array($tags) AND count($tags) > 0) {
-            if($invert == FALSE) {
+        if (is_array($tags) and count($tags) > 0) {
+            if ($invert == false) {
                 return preg_replace('@<(?!(?:'. implode('|', $tags) .')\b)(\w+)\b.*?>.*?</\1>@si', '', $text);
-            }
-            else {
+            } else {
                 return preg_replace('@<('. implode('|', $tags) .')\b.*?>.*?</\1>@si', '', $text);
             }
-        }
-        elseif($invert == FALSE) {
+        } elseif ($invert == false) {
             return preg_replace('@<(\w+)\b.*?>.*?</\1>@si', '', $text);
         }
         return $text;
@@ -2514,16 +2510,17 @@ HTML;
      * @param string $encoding
      * @return string
      */
-    public static function quoted_printable_encode($string, $encoding='UTF-8') {
+    public static function quoted_printable_encode($string, $encoding='UTF-8')
+    {
         // use this function with headers, not with the email body as it misses word wrapping
         $len = strlen($string);
         $result = '';
         $enc = false;
-        for($i=0;$i<$len;++$i) {
+        for ($i=0;$i<$len;++$i) {
             $c = $string[$i];
-            if (ctype_alpha($c))
+            if (ctype_alpha($c)) {
                 $result.=$c;
-            else if ($c==' ') {
+            } elseif ($c==' ') {
                 $result.='_';
                 $enc = true;
             } else {
@@ -2532,7 +2529,9 @@ HTML;
             }
         }
         //L: so spam agents won't mark your email with QP_EXCESS
-        if (!$enc) return $string;
+        if (!$enc) {
+            return $string;
+        }
         return '=?'.$encoding.'?q?'.$result.'?=';
     }
 
@@ -2661,8 +2660,7 @@ HTML;
     public static function insertBeforeArray(array &$array, $position, array $values)
     {
         // enforce existing position
-        if (!isset($array[$position]))
-        {
+        if (!isset($array[$position])) {
             throw new \Exception(strtr('Array position does not exist (:1)', [':1' => $position]));
         }
 
@@ -2670,19 +2668,17 @@ HTML;
         $offset = -1;
 
         // loop through array
-        foreach ($array as $key => $value)
-        {
+        foreach ($array as $key => $value) {
             // increase offset
             ++$offset;
 
             // break if key has been found
-            if ($key == $position)
-            {
+            if ($key == $position) {
                 break;
             }
         }
 
-        $array = array_slice($array, 0, $offset, TRUE) + $values + array_slice($array, $offset, NULL, TRUE);
+        $array = array_slice($array, 0, $offset, true) + $values + array_slice($array, $offset, null, true);
 
         return $array;
     }
@@ -2709,8 +2705,8 @@ HTML;
      *
      * @return string $string
      */
-    public static function getConvertNumberToWords($number, $dictionaryNo = 1) {
-
+    public static function getConvertNumberToWords($number, $dictionaryNo = 1)
+    {
         $hyphen      = '-';
         $conjunction = ' and ';
         $separator   = ', ';
@@ -2970,7 +2966,13 @@ HTML;
                     array_map(
                         'strtolower',
                         explode(
-                            '_', $scored)))));
+                            '_',
+                            $scored
+                        )
+                    )
+                )
+            )
+        );
     }
 
     /**
@@ -3016,11 +3018,11 @@ HTML;
             curl_setopt($ch, CURLOPT_URL, $pushNotificationParams['api_url']."/notifications");
             curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
                 'Authorization: Basic '.$pushNotificationParams['rest_api_key']));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            curl_setopt($ch, CURLOPT_HEADER, FALSE);
-            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
             $response = curl_exec($ch);
             curl_close($ch);
@@ -3029,7 +3031,6 @@ HTML;
         } catch (\Exception $e) {
             self::sendErrorMail($container, 'Error: Problem in push notification: '.$title, $e->getMessage(), $e->getTraceAsString());
         }
-
     }
 
     /**
@@ -3074,7 +3075,7 @@ HTML;
      */
     public static function arraySwapAssoc($key1, $key2, $array)
     {
-        $newArray = array ();
+        $newArray = array();
         foreach ($array as $key => $value) {
             if ($key == $key1) {
                 $newArray[$key2] = $array[$key2];
@@ -3096,7 +3097,7 @@ HTML;
      */
     public static function getMessageAttachmentUrl($container, $objMessageAttachment, $sharedUrl = false)
     {
-        $fileExtension = substr(strrchr($objMessageAttachment->getOriginalFileName(),'.'),1);
+        $fileExtension = substr(strrchr($objMessageAttachment->getOriginalFileName(), '.'), 1);
         $fileName      = $objMessageAttachment->getSessionId().'_'.$objMessageAttachment->getHash().'.'.$fileExtension;
         if ($sharedUrl) {
             //$attachmentUrl = $container->getParameter('fa.static.shared.url').'/'.$objMessageAttachment->getPath().'/'.$fileName;
@@ -3108,33 +3109,35 @@ HTML;
         return $attachmentUrl;
     }
 
-    public static function createZip($files = array(),$destination = '',$overwrite = false)
+    public static function createZip($files = array(), $destination = '', $overwrite = false)
     {
         //if the zip file already exists and overwrite is false, return false
-        if(file_exists($destination) && !$overwrite) { return false; }
+        if (file_exists($destination) && !$overwrite) {
+            return false;
+        }
         //vars
         $valid_files = array();
         //if files were passed in...
-        if(is_array($files)) {
+        if (is_array($files)) {
             //cycle through each file
-            foreach($files as $file) {
+            foreach ($files as $file) {
                 //make sure the file exists
-                if(file_exists($file)) {
+                if (file_exists($file)) {
                     $valid_files[] = $file;
                 }
             }
         }
         //if we have good files...
-        if(count($valid_files)) {
+        if (count($valid_files)) {
             //create the archive
             $zip = new \ZipArchive();
-            if($zip->open($destination,$overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true) {
+            if ($zip->open($destination, $overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true) {
                 return false;
             }
             //add the files
-            foreach($valid_files as $file) {
+            foreach ($valid_files as $file) {
                 //$zip->addFile($file,$file);
-                $zip->addFromString(basename($file),  file_get_contents($file));
+                $zip->addFromString(basename($file), file_get_contents($file));
             }
             //debug
             //echo 'The zip archive contains ',$zip->numFiles,' files with a status of ',$zip->status;
@@ -3144,9 +3147,7 @@ HTML;
 
             //check to make sure the file exists
             return file_exists($destination);
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -3194,8 +3195,8 @@ HTML;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $sourceUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $data = curl_exec ($ch);
-        curl_close ($ch);
+        $data = curl_exec($ch);
+        curl_close($ch);
 
         $file = fopen($destinationPath, "w+");
         fputs($file, $data);

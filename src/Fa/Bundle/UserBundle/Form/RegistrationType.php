@@ -303,7 +303,7 @@ class RegistrationType extends AbstractType
         return 'user_registration';
     }
     
-    public function getBlockPrefix() 
+    public function getBlockPrefix()
     {
         return 'user_registration';
     }

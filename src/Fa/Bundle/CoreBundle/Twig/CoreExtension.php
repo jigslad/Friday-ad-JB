@@ -83,7 +83,7 @@ class CoreExtension extends \Twig_Extension implements \Twig_Extension_InitRunti
                    new \Twig_SimpleFunction('fetch_repository', array($this, 'fetchRepository')),
                    new \Twig_SimpleFunction('trim_text', array($this, 'trimText')),
                    new \Twig_SimpleFunction('sortable_combo', array($this, 'getSortableCombo'), array('is_safe' => array('html', 'needs_environment' => true))),
-                   new \Twig_SimpleFunction('fetch_container_instance',  array($this, 'fetchContainer')),
+                   new \Twig_SimpleFunction('fetch_container_instance', array($this, 'fetchContainer')),
                    new \Twig_SimpleFunction('staticCall', array($this, 'staticCall')),
                    new \Twig_SimpleFunction('array_unserialize', array($this, 'arrayUnserialize')),
                    new \Twig_SimpleFunction('array_serialize', array($this, 'arraySerialize')),
@@ -610,7 +610,7 @@ class CoreExtension extends \Twig_Extension implements \Twig_Extension_InitRunti
      */
     public function hashHmac($algo, $data, $key)
     {
-        return hash_hmac($algo ,$data, $key);
+        return hash_hmac($algo, $data, $key);
     }
 
     /**

@@ -189,7 +189,7 @@ class UserSearchAgentRepository extends EntityRepository
         foreach ($searchParams as $key => $value) {
             if (strlen($key) >= 3 && substr($key, -3) != '_id' && is_array($searchParams[$key])) {
                 foreach ($searchParams[$key] as $key1 => $value1) {
-                    $label = substr($key, (strpos($key,'__')+2));
+                    $label = substr($key, (strpos($key, '__')+2));
                     $label = ucwords(str_replace('_', ' ', $label));
                     if (array_key_exists($label, $displayCriteriaArray)) {
                         $displayCriteriaArray[$label] = $displayCriteriaArray[$label].', '.$value1;
@@ -216,30 +216,30 @@ class UserSearchAgentRepository extends EntityRepository
         $criteria =  unserialize($searchAgent->getCriteria());
 
         //@TODO: url_ad_edit, url_ad_mark_sold, url_account_dashboard, url_turn_off_alert is still remaining
-         $editAdURL =  $container->get('router')->generate('fa_frontend_homepage');
+        $editAdURL =  $container->get('router')->generate('fa_frontend_homepage');
 
-         // create view more url and text alert criteria
-         $viewMoreUrl       = null;
-         $textAlertCriteria = null;
+        // create view more url and text alert criteria
+        $viewMoreUrl       = null;
+        $textAlertCriteria = null;
 
-         if (isset($criteria['search'])) {
-             $searchParams = array();
-             $searchParams = array_merge($searchParams, $criteria['search']);
-             $viewMoreUrl = $container->get('fa_ad.manager.ad_routing')->getListingUrl($searchParams, null, false, null, true);
+        if (isset($criteria['search'])) {
+            $searchParams = array();
+            $searchParams = array_merge($searchParams, $criteria['search']);
+            $viewMoreUrl = $container->get('fa_ad.manager.ad_routing')->getListingUrl($searchParams, null, false, null, true);
 
-             $displayCriteria = $this->getSearchAgentDisplayCriteriaArray($criteria['search'], $container);
-             if (is_array($displayCriteria)) {
-                 foreach ($displayCriteria as $key => $value) {
-                     $textAlertCriteria = $key.': '.$value.", ";
-                 }
-                 $textAlertCriteria = rtrim($textAlertCriteria, ', ');
-             }
-         }
+            $displayCriteria = $this->getSearchAgentDisplayCriteriaArray($criteria['search'], $container);
+            if (is_array($displayCriteria)) {
+                foreach ($displayCriteria as $key => $value) {
+                    $textAlertCriteria = $key.': '.$value.", ";
+                }
+                $textAlertCriteria = rtrim($textAlertCriteria, ', ');
+            }
+        }
 
-         $searchAgentNameForBody    = $searchAgent->getName();
-         $searchAgentNameForSubject = CommonManager::quoted_printable_encode($searchAgent->getName());
+        $searchAgentNameForBody    = $searchAgent->getName();
+        $searchAgentNameForSubject = CommonManager::quoted_printable_encode($searchAgent->getName());
 
-         $parameters = array(
+        $parameters = array(
              'user_first_name' => $user->getFirstName(),
              'user_last_name' => $user->getLastName(),
              'text_alert_name_for_subject' => $searchAgentNameForSubject,
@@ -251,15 +251,15 @@ class UserSearchAgentRepository extends EntityRepository
              'total_records' => count($ads),
          );
 
-         if ($user->getGuid()) {
-             $parameters['url_stop_alert'] = $container->get('router')->generate('list_search_agent', array("guid" => $user->getGuid()), true);
-             $parameters['url_edit_alert'] = $container->get('router')->generate('list_search_agent', array("guid" => $user->getGuid()), true);
-         } else {
-             $parameters['url_stop_alert'] = $container->get('router')->generate('list_search_agent', array(), true);
-             $parameters['url_edit_alert'] = $container->get('router')->generate('list_search_agent', array("userSearchAgentId" => $searchAgent->getId()), true);
-         }
+        if ($user->getGuid()) {
+            $parameters['url_stop_alert'] = $container->get('router')->generate('list_search_agent', array("guid" => $user->getGuid()), true);
+            $parameters['url_edit_alert'] = $container->get('router')->generate('list_search_agent', array("guid" => $user->getGuid()), true);
+        } else {
+            $parameters['url_stop_alert'] = $container->get('router')->generate('list_search_agent', array(), true);
+            $parameters['url_edit_alert'] = $container->get('router')->generate('list_search_agent', array("userSearchAgentId" => $searchAgent->getId()), true);
+        }
 
-         $container->get('fa.mail.manager')->send($user->getEmail(), 'email_alerts', $parameters, CommonManager::getCurrentCulture($container));
+        $container->get('fa.mail.manager')->send($user->getEmail(), 'email_alerts', $parameters, CommonManager::getCurrentCulture($container));
     }
 
     /**
@@ -302,7 +302,6 @@ class UserSearchAgentRepository extends EntityRepository
             if (isset($cookieLocation['location']) && $cookieLocation['location']) {
                 $searchParams['search']['item__location'] = $cookieLocation['location'];
             }
-
         } else {
             $searchAgentName .= ', United Kingdom';
             $searchParams['search']['item__location'] = LocationRepository::COUNTY_ID;

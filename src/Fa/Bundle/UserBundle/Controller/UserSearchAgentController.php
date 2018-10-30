@@ -291,13 +291,13 @@ class UserSearchAgentController extends CoreController
             //check for ad.
             if (!$ad || ($ad && $ad->getStatus()->getId() != EntityRepository::AD_STATUS_LIVE_ID)) {
                 $error = $this->get('translator')->trans('Unable to find Live Ad.', array(), 'frontend-create-alert');
-            } else if ($this->isAuth()) {
+            } elseif ($this->isAuth()) {
                 $loggedinUser    = $this->getLoggedInUser();
                 $userSearchAgent = $this->getRepository('FaUserBundle:UserSearchAgent')->saveUserSearch($ad, $loggedinUser, $this->container);
                 if ($request->isXmlHttpRequest()) {
                     $htmlContent = $this->renderView('FaUserBundle:UserSearchAgent:ajaxShowCreatedAlert.html.twig', array('userSearchAgent' => $userSearchAgent));
                 }
-            } else if ($userId) {
+            } elseif ($userId) {
                 $halfAccountUser = $this->getRepository('FaUserBundle:User')->find($userId);
                 if (!$halfAccountUser) {
                     $error = $this->get('translator')->trans('Unable to find user.', array(), 'frontend-create-alert');

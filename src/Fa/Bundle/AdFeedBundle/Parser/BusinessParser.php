@@ -21,6 +21,7 @@ use Fa\Bundle\UserBundle\Repository\UserRepository;
 use Fa\Bundle\AdBundle\Entity\Ad;
 use Gedmo\Sluggable\Util\Urlizer as Urlizer;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+
 /**
  * Business parser.
  *
@@ -182,7 +183,7 @@ class BusinessParser extends AdParser
         }
         $getUserStatus = EntityRepository::USER_STATUS_ACTIVE_ID;
 
-        if(!empty($user) && $this->advert['user']['email'] != '') {
+        if (!empty($user) && $this->advert['user']['email'] != '') {
             $getUserStatus = $this->em->getRepository('FaUserBundle:User')->getUserStatusByEmail($this->advert['user']['email']);
             $feedAd->setUser($user);
         }
@@ -198,7 +199,7 @@ class BusinessParser extends AdParser
             if (implode(',', $this->advert['rejected_reason']) != '') {
                 $feedAd->setRemark(implode(',', $this->advert['rejected_reason']));
             }
-        } elseif($getUserStatus != EntityRepository::USER_STATUS_ACTIVE_ID) {
+        } elseif ($getUserStatus != EntityRepository::USER_STATUS_ACTIVE_ID) {
             $feedAd->setRemark('User account is blocked/inactive');
             $feedAd->setStatus('R');
         } else {

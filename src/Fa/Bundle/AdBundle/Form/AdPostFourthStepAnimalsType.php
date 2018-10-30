@@ -74,11 +74,11 @@ class AdPostFourthStepAnimalsType extends AdPostType
         ->addEventListener(FormEvents::SUBMIT, array($this, 'onSubmit'));
     }
 
-     /**
-     * Callbak method for PRE_SET_DATA form event.
-     *
-     * @param object $event Event instance.
-     */
+    /**
+    * Callbak method for PRE_SET_DATA form event.
+    *
+    * @param object $event Event instance.
+    */
     public function preSetData(FormEvent $event)
     {
         $ad            = $event->getData();
@@ -150,7 +150,7 @@ class AdPostFourthStepAnimalsType extends AdPostType
      */
     public function getFourthStepFields()
     {
-       return array();
+        return array();
     }
 
     /**
@@ -175,7 +175,7 @@ class AdPostFourthStepAnimalsType extends AdPostType
             $fieldOptions['placeholder'] = 'Select '.$paaField['label'];
         }
 
-        if(in_array($paaField['field'], array('breed_id', 'species_id'))) {
+        if (in_array($paaField['field'], array('breed_id', 'species_id'))) {
             $fieldOptions['attr']['class'] = 'custom_select';
         }
 

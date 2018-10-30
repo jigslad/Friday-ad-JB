@@ -170,19 +170,19 @@ class PaaFieldAdminType extends AbstractType
             )
             ->add('is_added', HiddenType::class);
 
-            // allow admin to set default value
+        // allow admin to set default value
         if ($this->paaField->getCategoryDimensionId() && ($this->paaField->getFieldType() == 'choice_radio' || $this->paaField->getFieldType() == 'choice_single')) {
-                $fieldOptions['choices']     = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($this->paaField->getCategoryDimensionId(), $this->container));
-                $fieldOptions['placeholder'] = 'Select';
-                $fieldOptions['data']        = ($this->paaFieldRule && $this->paaFieldRule->getDefaultValue()) ? $this->paaFieldRule->getDefaultValue() : '';
-                $builder->add('default_value', ChoiceType::class, $fieldOptions);
+            $fieldOptions['choices']     = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($this->paaField->getCategoryDimensionId(), $this->container));
+            $fieldOptions['placeholder'] = 'Select';
+            $fieldOptions['data']        = ($this->paaFieldRule && $this->paaFieldRule->getDefaultValue()) ? $this->paaFieldRule->getDefaultValue() : '';
+            $builder->add('default_value', ChoiceType::class, $fieldOptions);
         } elseif ($this->paaField->getFieldType() == 'choice_boolean') {
-                $fieldOptions['choices']     = array_flip(array(1 => 'Yes', 0 => 'No'));
-                $fieldOptions['placeholder'] = 'Select';
-                $fieldOptions['data']        = ($this->paaFieldRule && $this->paaFieldRule->getDefaultValue() != null) ? $this->paaFieldRule->getDefaultValue() : '';
-                $builder->add('default_value', ChoiceType::class, $fieldOptions);
+            $fieldOptions['choices']     = array_flip(array(1 => 'Yes', 0 => 'No'));
+            $fieldOptions['placeholder'] = 'Select';
+            $fieldOptions['data']        = ($this->paaFieldRule && $this->paaFieldRule->getDefaultValue() != null) ? $this->paaFieldRule->getDefaultValue() : '';
+            $builder->add('default_value', ChoiceType::class, $fieldOptions);
         } else {
-                $builder->add('default_value', TextType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getDefaultValue()) ? $this->paaFieldRule->getDefaultValue() : ''));
+            $builder->add('default_value', TextType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getDefaultValue()) ? $this->paaFieldRule->getDefaultValue() : ''));
         }
     }
     

@@ -119,7 +119,7 @@ EOF
 
         $adFeedClickReportRepository = CommonManager::getTiHistoryRepository($container, 'FaTiReportBundle:AdFeedClickReportDaily');
         $qb                        = $adFeedClickReportRepository->getAdFeedClickReportDailyQuery($searchParam['search'], $searchParam['sort'], $this->getContainer());
-        if(!empty($searchParam['search']['ad_feed_site_id']) || isset($searchParam['search']['feed_report_type'])) {
+        if (!empty($searchParam['search']['ad_feed_site_id']) || isset($searchParam['search']['feed_report_type'])) {
             $qb->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Fa\Bundle\TiReportBundle\Walker\AdFeedClickReportSqlWalker');
             $qb->setHint("adFeedClickReportRemoveId.ad_feed_site_id", true);
         } else {
@@ -141,8 +141,8 @@ EOF
                 $adReportColumns = array();
 
                 foreach ($searchParam['search']['report_columns'] as $reportColumn) {
-                    if($reportColumn == 'ad_feed_site_id') {
-                      $adReportDetail[$reportColumn] = $feedSiteArray[$adReportDetail[$reportColumn]];
+                    if ($reportColumn == 'ad_feed_site_id') {
+                        $adReportDetail[$reportColumn] = $feedSiteArray[$adReportDetail[$reportColumn]];
                     }
                     $adReportColumns[] = (isset($adReportDetail[$reportColumn]) ? $adReportDetail[$reportColumn] : '-');
                 }
@@ -245,12 +245,12 @@ EOF
     protected function getAdFeedClickReportCount($searchParam)
     {
         $qb = CommonManager::getTiHistoryRepository($this->getContainer(), 'FaTiReportBundle:AdFeedClickReportDaily')->getAdFeedClickReportDailyQuery($searchParam['search'], $searchParam['sort'], $this->getContainer(), true);
-        if(!empty($searchParam['search']['ad_feed_site_id']) || isset($searchParam['search']['feed_report_type'])) {
-          $qb->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Fa\Bundle\TiReportBundle\Walker\AdFeedClickReportSqlWalker');
-          $qb->setHint("adFeedClickReportRemoveId.ad_feed_site_id", true);
+        if (!empty($searchParam['search']['ad_feed_site_id']) || isset($searchParam['search']['feed_report_type'])) {
+            $qb->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Fa\Bundle\TiReportBundle\Walker\AdFeedClickReportSqlWalker');
+            $qb->setHint("adFeedClickReportRemoveId.ad_feed_site_id", true);
         } else {
-          $qb->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Fa\Bundle\TiReportBundle\Walker\AdFeedClickReportSqlWalker');
-          $qb->setHint("adFeedClickReportRemoveId.ad_id", true);
+            $qb->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Fa\Bundle\TiReportBundle\Walker\AdFeedClickReportSqlWalker');
+            $qb->setHint("adFeedClickReportRemoveId.ad_id", true);
         }
 
         return $qb->getSingleScalarResult();

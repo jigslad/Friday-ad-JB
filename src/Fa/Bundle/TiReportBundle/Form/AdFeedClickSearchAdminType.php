@@ -93,7 +93,8 @@ class AdFeedClickSearchAdminType extends AbstractType
                     'multiple' => false,
                     'data' => 'all',
                     'label' => 'Report type',
-                ))
+                )
+            )
             ->add('search', SubmitType::class)
             ->add(
                 'reset',

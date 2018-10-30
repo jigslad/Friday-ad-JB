@@ -107,7 +107,6 @@ class EntityAdminController extends CoreController implements ResourceAuthorizat
             $formManager->save($entity);
 
             return parent::handleMessage($this->get('translator')->trans('Entity was successfully added.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'entity_new' : ($backUrl ? $backUrl : 'entity')));
-
         }
 
         $parameters = array(
@@ -277,7 +276,7 @@ class EntityAdminController extends CoreController implements ResourceAuthorizat
         } catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException $e) {
             return parent::handleMessage($this->get('translator')->trans("This record can not be removed from database because it's reference exists in database.", array(), 'error'), 'entity', array(), 'error');
         } catch (\Exception $e) {
-              return parent::handleException($e, 'error', 'entity');
+            return parent::handleException($e, 'error', 'entity');
         }
 
         return parent::handleMessage($this->get('translator')->trans('Entity was successfully deleted.', array(), 'success'), ($backUrl ? $backUrl : 'entity'));

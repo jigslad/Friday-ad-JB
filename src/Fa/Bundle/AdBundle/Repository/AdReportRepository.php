@@ -133,7 +133,7 @@ class AdReportRepository extends EntityRepository
         $adReport = new AdReport();
         $adReport->setAd($ad);
         if ($userId) {
-          $adReport->setUser($this->_em->getReference('FaUserBundle:User', $userId));
+            $adReport->setUser($this->_em->getReference('FaUserBundle:User', $userId));
         }
         $adReport->setAdModerateStatus(self::AD_MODERATE_STATUS_SENT);
         $adReport->setIp($ipAddress);
@@ -190,9 +190,9 @@ class AdReportRepository extends EntityRepository
                 if ($adModerate) {
                     if (isset($moderationResult['moderationresult']) && $moderationResult['moderationresult'] == AdModerateRepository::MODERATION_RESULT_OKEY) {
                         $adModerateStatus = self::AD_MODERATE_STATUS_SUCCESS;
-                    } else if (isset($moderationResult['moderationresult']) && in_array($moderationResult['moderationresult'], array(AdModerateRepository::MODERATION_RESULT_REJECTED, AdModerateRepository::MODERATION_RESULT_SCAM))) {
+                    } elseif (isset($moderationResult['moderationresult']) && in_array($moderationResult['moderationresult'], array(AdModerateRepository::MODERATION_RESULT_REJECTED, AdModerateRepository::MODERATION_RESULT_SCAM))) {
                         $adModerateStatus = self::AD_MODERATE_STATUS_FAILURE;
-                    } else if (isset($moderationResult['moderationresult']) && $moderationResult['moderationresult'] == AdModerateRepository::MODERATION_RESULT_MANUAL_MODERATION) {
+                    } elseif (isset($moderationResult['moderationresult']) && $moderationResult['moderationresult'] == AdModerateRepository::MODERATION_RESULT_MANUAL_MODERATION) {
                         $adModerateStatus = self::AD_MODERATE_STATUS_SENT;
                     }
                 }

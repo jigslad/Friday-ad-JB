@@ -160,9 +160,9 @@ class SeoToolOverride
      */
     public function setPageTitle($pageTitle)
     {
-     $this->page_title = $pageTitle;
+        $this->page_title = $pageTitle;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -172,7 +172,7 @@ class SeoToolOverride
      */
     public function getPageTitle()
     {
-     return $this->page_title;
+        return $this->page_title;
     }
 
     /**
@@ -184,9 +184,9 @@ class SeoToolOverride
      */
     public function setPageUrl($pageUrl)
     {
-     $this->page_url = $pageUrl;
+        $this->page_url = $pageUrl;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -196,7 +196,7 @@ class SeoToolOverride
      */
     public function getPageUrl()
     {
-     return $this->page_url;
+        return $this->page_url;
     }
 
     /**

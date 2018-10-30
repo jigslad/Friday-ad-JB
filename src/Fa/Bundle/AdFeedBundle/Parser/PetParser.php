@@ -117,7 +117,6 @@ class PetParser extends AdParser
                 } else {
                     $this->advert['animals']['meta_data']['breed'] = $adArray['Details']['Breed'];
                 }
-
             }
         }
 
@@ -131,7 +130,7 @@ class PetParser extends AdParser
         }
 
         if (!$feedAd && $adArray['EndDate'] != '0001-01-01T00:00:00Z') {
-        	return 'discard';
+            return 'discard';
         }
 
         if ($this->advert['user']['email'] == '' && $this->advert['set_user'] == true) {

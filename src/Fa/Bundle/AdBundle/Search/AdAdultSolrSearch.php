@@ -69,7 +69,7 @@ class AdAdultSolrSearch extends SolrSearch
      */
     protected function addGenderIdFilter($id = null)
     {
-    	$this->addDimensionIdFilter('GENDER_ID', $id);
+        $this->addDimensionIdFilter('GENDER_ID', $id);
     }
     
     /**
@@ -79,7 +79,7 @@ class AdAdultSolrSearch extends SolrSearch
      */
     protected function addMyServiceIsForIdFilter($id = null)
     {
-    	$this->addDimensionIdFilter('MY_SERVICE_IS_FOR_ID', $id);
+        $this->addDimensionIdFilter('MY_SERVICE_IS_FOR_ID', $id);
     }
     
     /**
@@ -89,7 +89,7 @@ class AdAdultSolrSearch extends SolrSearch
      */
     protected function addJobTypeIdFilter($id = null)
     {
-    	$this->addDimensionIdFilter('JOB_TYPE_ID', $id);
+        $this->addDimensionIdFilter('JOB_TYPE_ID', $id);
     }
     
     /**
@@ -99,7 +99,7 @@ class AdAdultSolrSearch extends SolrSearch
      */
     protected function addExperienceIdFilter($id = null)
     {
-    	$this->addDimensionIdFilter('EXPERIENCE_ID', $id);
+        $this->addDimensionIdFilter('EXPERIENCE_ID', $id);
     }
     
     /**
@@ -109,7 +109,7 @@ class AdAdultSolrSearch extends SolrSearch
      */
     protected function addPositionPreferenceIdFilter($id = null)
     {
-    	$this->addDimensionIdFilter('POSITION_PREFERENCE_ID', $id);
+        $this->addDimensionIdFilter('POSITION_PREFERENCE_ID', $id);
     }
     
     /**
@@ -119,7 +119,7 @@ class AdAdultSolrSearch extends SolrSearch
      */
     protected function addEthnicityIdFilter($id = null)
     {
-    	$this->addDimensionIdFilter('ETHNICITY_ID', $id);
+        $this->addDimensionIdFilter('ETHNICITY_ID', $id);
     }
     
     /**
@@ -129,7 +129,7 @@ class AdAdultSolrSearch extends SolrSearch
      */
     protected function addLookingForIdFilter($id = null)
     {
-    	$this->addDimensionIdFilter('LOOKING_FOR_ID', $id);
+        $this->addDimensionIdFilter('LOOKING_FOR_ID', $id);
     }
 
     /**

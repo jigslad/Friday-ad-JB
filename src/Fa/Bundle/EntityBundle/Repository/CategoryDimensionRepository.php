@@ -255,7 +255,7 @@ class CategoryDimensionRepository extends BaseEntityRepository
     {
         $categoryName = null;
         $dimensionFacetData = array();
-        $selected = (is_array($selected) ? $selected: array ($selected));
+        $selected = (is_array($selected) ? $selected: array($selected));
 
         if ($showWithoutCategory || (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) || $categoryId) {
             if (($pos = strpos($dimensionField, "__")) !== false) {
@@ -264,7 +264,7 @@ class CategoryDimensionRepository extends BaseEntityRepository
 
             if ((isset($searchParams['item__category_id']) && $searchParams['item__category_id'])) {
                 $categoryName = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->getRootCategoryName($searchParams['item__category_id'], $container, true);
-            } else if ($categoryId) {
+            } elseif ($categoryId) {
                 $categoryName = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->getRootCategoryName($categoryId, $container, true);
             }
             $solrMapping  = 'Fa\Bundle\AdBundle\Solr\Ad'.$categoryName.'SolrFieldMapping::';
@@ -278,7 +278,7 @@ class CategoryDimensionRepository extends BaseEntityRepository
                 $facetField = 'Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping::CATEGORY_MAKE_ID';
             }
             
-            if (defined($facetField)) { 
+            if (defined($facetField)) {
                 $data       = array();
                 $keywords   = null;
                 
@@ -305,7 +305,7 @@ class CategoryDimensionRepository extends BaseEntityRepository
                         (!isset($cookieLocationDetails['latitude']) || !$cookieLocationDetails['latitude']) &&
                         (!isset($cookieLocationDetails['longitude']) || !$cookieLocationDetails['longitude']) &&
                         (isset($data['query_sorter']['item']) && isset($data['query_sorter']['item']['geodist']))) {
-                            unset($data['query_sorter']['item']['geodist']);
+                        unset($data['query_sorter']['item']['geodist']);
                     }
                 }
 
@@ -894,9 +894,8 @@ class CategoryDimensionRepository extends BaseEntityRepository
         
         $dimensions = $this->getSearchableDimesionsArrayByCategoryId($categoryId, $container);
         foreach ($dimensions as $dimension) {
-            if(in_array($categoryId,$excludeCategoryIds)) {
-                if(in_array($dimension['name'], $excludeDimensionNames)) {
-
+            if (in_array($categoryId, $excludeCategoryIds)) {
+                if (in_array($dimension['name'], $excludeDimensionNames)) {
                 } else {
                     $searchableDimensionFieldArray[$dimension['id']] = $dimension;
                 }
@@ -907,5 +906,4 @@ class CategoryDimensionRepository extends BaseEntityRepository
         
         return $searchableDimensionFieldArray;
     }
-
 }

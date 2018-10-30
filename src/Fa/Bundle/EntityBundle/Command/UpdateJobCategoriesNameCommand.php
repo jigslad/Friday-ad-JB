@@ -56,7 +56,8 @@ Actions:
 Command:
  - php app/console fa:update:job-categories-name
 EOF
-        );;
+        );
+        ;
     }
 
     /**

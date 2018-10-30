@@ -70,16 +70,16 @@ class MessageSpammer
      */
     private $spammer;
 
-     /**
-      * Reporter.
-      *
-     * @var \Fa\Bundle\UserBundle\Entity\User
+    /**
+     * Reporter.
      *
-     * @ORM\ManyToOne(targetEntity="Fa\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="CASCADE")
-     * })
-     */
+    * @var \Fa\Bundle\UserBundle\Entity\User
+    *
+    * @ORM\ManyToOne(targetEntity="Fa\Bundle\UserBundle\Entity\User")
+    * @ORM\JoinColumns({
+    *   @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="CASCADE")
+    * })
+    */
     private $reporter;
 
     /**

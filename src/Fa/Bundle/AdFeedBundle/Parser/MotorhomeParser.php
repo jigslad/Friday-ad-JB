@@ -68,7 +68,7 @@ class MotorhomeParser extends AdParser
 
         if (isset($adArray['Details']['VehicleType']) && (strtolower($adArray['Details']['VehicleType']) == 'motorhomes' || strtolower($adArray['Details']['VehicleType']) == 'campervan' || strtolower($adArray['Details']['VehicleType']) == 'campervans' || strtolower($adArray['Details']['VehicleType']) == 'motorhome')) {
             $this->advert['category_id'] = 475;
-        } elseif (isset($adArray['Details']['VehicleType']) && (strtolower($adArray['Details']['VehicleType']) == 'touring caravans' || strtolower($adArray['Details']['VehicleType']) == 'caravan') ) {
+        } elseif (isset($adArray['Details']['VehicleType']) && (strtolower($adArray['Details']['VehicleType']) == 'touring caravans' || strtolower($adArray['Details']['VehicleType']) == 'caravan')) {
             $this->advert['category_id'] = 477;
         } elseif (isset($adArray['Details']['VehicleType']) && (strtolower($adArray['Details']['VehicleType']) == 'static Caravans' || strtolower($adArray['Details']['VehicleType']) == 'static')) {
             $this->advert['category_id'] = 478; // static
@@ -103,7 +103,7 @@ class MotorhomeParser extends AdParser
             $category_dimension_id = null;
             if (isset($adArray['Details']['VehicleType']) && (strtolower($adArray['Details']['VehicleType']) == 'motorhomes' || strtolower($adArray['Details']['VehicleType']) == 'campervan' || strtolower($adArray['Details']['VehicleType']) == 'campervans' || strtolower($adArray['Details']['VehicleType']) == 'motorhome')) {
                 $category_dimension_id = 250;
-            } elseif (isset($adArray['Details']['VehicleType']) && (strtolower($adArray['Details']['VehicleType']) == 'touring caravans' || strtolower($adArray['Details']['VehicleType']) == 'caravan') ) {
+            } elseif (isset($adArray['Details']['VehicleType']) && (strtolower($adArray['Details']['VehicleType']) == 'touring caravans' || strtolower($adArray['Details']['VehicleType']) == 'caravan')) {
                 $category_dimension_id = 128;
             } elseif (isset($adArray['Details']['VehicleType']) && (strtolower($adArray['Details']['VehicleType']) == 'static caravans' || strtolower($adArray['Details']['VehicleType']) == 'static')) {
                 $category_dimension_id = 252;
@@ -132,7 +132,6 @@ class MotorhomeParser extends AdParser
         }
 
         if (isset($adArray['Details']['Sleeps']) && $adArray['Details']['Sleeps'] != '') {
-
             $this->advert['motors']['berth_id'] = $this->getEntityId($adArray['Details']['Sleeps'], 130);
 
             if (!$this->advert['motors']['berth_id']) {
@@ -164,7 +163,7 @@ class MotorhomeParser extends AdParser
         }
 
         if (!$feedAd && $adArray['EndDate'] != '0001-01-01T00:00:00Z') {
-        	return 'discard';
+            return 'discard';
         }
 
         if ($this->advert['user']['email'] == '' && $this->advert['set_user'] == true) {
@@ -226,11 +225,9 @@ class MotorhomeParser extends AdParser
             if (implode(',', $this->advert['rejected_reason']) != '') {
                 $feedAd->setRemark(implode(',', $this->advert['rejected_reason']));
             }
-        }
-        elseif (isset($this->advert['status']) && $this->advert['status'] == 'E') {
-        	$feedAd->setStatus('E');
-        }
-        else {
+        } elseif (isset($this->advert['status']) && $this->advert['status'] == 'E') {
+            $feedAd->setStatus('E');
+        } else {
             $feedAd->setStatus('A');
         }
 

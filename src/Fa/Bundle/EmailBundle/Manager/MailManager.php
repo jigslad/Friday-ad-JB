@@ -102,7 +102,7 @@ class MailManager
             try {
                 $trackId = $this->historyEntityManager->getRepository('FaReportBundle:AutomatedEmailReportLog')->updateEmailLog($emailIdentifier, $to);
                 $date = strtotime(date('Y-m-d'));
-                $mailVars['pixel_track'] = '<img src="'.$this->container->get('router')->generate('pixel_track', array('gif' => CommonManager::encryptDecrypt('10101', $trackId)),true).'"></img>';
+                $mailVars['pixel_track'] = '<img src="'.$this->container->get('router')->generate('pixel_track', array('gif' => CommonManager::encryptDecrypt('10101', $trackId)), true).'"></img>';
                 $this->setTo($to);
                 $this->setFrom($from);
                 $this->setCc($cc);
@@ -113,7 +113,7 @@ class MailManager
                 $this->renderMail($emailIdentifier, $mailVars, $locale, $to);
                 $this->setAttachment($attachment);
 //                 $this->getMailer()->send($this->getMessage());
-                if(preg_match("~\b@fridaymediagroup\.com\b~",$to)) {
+                if (preg_match("~\b@fridaymediagroup\.com\b~", $to)) {
                     $this->getMailer()->send($this->getMessage());
                 }
             } catch (\Exception $e) {
@@ -330,7 +330,6 @@ class MailManager
             $mailVars['email_body'] = $this->renderTwig($emailTemplate->getBodyText(), $mailVars);
             $alternateBody          = $this->renderTwig($emailTemplateLayoutText, $mailVars);
             $this->setAlternateBody($alternateBody);
-
         } catch (\Exception $e) {
             CommonManager::sendErrorMail($this->container, 'Error: Mail manager render', $e->getMessage(), $e->getTraceAsString());
         }
@@ -384,7 +383,7 @@ class MailManager
     {
         /* $loader = new \Twig_Loader_Array(); // new \Twig_Loader_String(); symfony 3.4 this class is removed
         $twig   = new \Twig_Environment($loader);
-        
+
         $template = $twig->loadTemplate($text); */
         
         $template = $this->container->get('twig')->createTemplate($text);

@@ -12,6 +12,7 @@
 namespace Fa\Bundle\AdBundle\lib\Migration;
 
 use Fa\Bundle\AdBundle\Entity\AdMotors;
+
 // use Fa\Bundle\AdBundle\Entity\Fa\Bundle\AdBundle\Entity;
 
 /**
@@ -23,7 +24,6 @@ use Fa\Bundle\AdBundle\Entity\AdMotors;
  */
 class Caravan
 {
-
     private $meta_text;
 
     private $ad_id;
@@ -38,7 +38,6 @@ class Caravan
         $this->category  = $category;
         $this->em = $em;
         $this->init();
-
     }
 
     public function getBirthId($string)

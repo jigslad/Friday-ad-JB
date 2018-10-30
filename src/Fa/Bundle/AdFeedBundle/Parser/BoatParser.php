@@ -121,7 +121,7 @@ class BoatParser extends AdParser
         }
 
         if (!$feedAd && $adArray['EndDate'] != '0001-01-01T00:00:00Z') {
-        	return 'discard';
+            return 'discard';
         }
 
         if ($this->advert['user']['email'] == '' && $this->advert['set_user'] == true) {
@@ -183,11 +183,9 @@ class BoatParser extends AdParser
             if (implode(',', $this->advert['rejected_reason']) != '') {
                 $feedAd->setRemark(implode(',', $this->advert['rejected_reason']));
             }
-        }
-        elseif (isset($this->advert['status']) && $this->advert['status'] == 'E') {
+        } elseif (isset($this->advert['status']) && $this->advert['status'] == 'E') {
             $feedAd->setStatus('E');
-        }
-        else {
+        } else {
             $feedAd->setStatus('A');
         }
 
@@ -263,11 +261,11 @@ class BoatParser extends AdParser
         } elseif ($cat_name == 'commercial boats') {
             return 453;
         } elseif ($cat_name == 'small boats') {
-        	return 448;
+            return 448;
         } elseif ($cat_name == 'trailers') {
-        	return 455;
+            return 455;
         } elseif ($cat_name == 'engines') {
-        	return 486;
+            return 486;
         }
     }
 }

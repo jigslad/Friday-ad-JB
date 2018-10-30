@@ -57,7 +57,8 @@ Actions:
 Command:
  - php app/console fa:ban-user --file_name="Email_Ban_Rule_Values_241016_1.csv"
 EOF
-        );;
+        );
+        ;
     }
 
     /**
@@ -98,13 +99,14 @@ EOF
         $reader->setDelimiter(',');
         $reader->setHeaderLine(0);
         $row = $reader->getRow();
-        if ($offset > 0)
+        if ($offset > 0) {
             $reader->advanceTo($offset-1);
-        else
+        } else {
             $reader->advanceTo(1);
+        }
         while (($row = $reader->getRow()) && $reader->getLineNumber() != $offset + $step) {
             if (isset($row['email'])) {
-                if (preg_match("/@gmail\.co\.uk$/i", $row['email'], $matches) || preg_match("/@gmail\.com$/i", $row['email'], $matches)  || preg_match("/@googlemail\.com$/i", $row['email'], $matches) ) {
+                if (preg_match("/@gmail\.co\.uk$/i", $row['email'], $matches) || preg_match("/@gmail\.com$/i", $row['email'], $matches)  || preg_match("/@googlemail\.com$/i", $row['email'], $matches)) {
                     if (count($matches)) {
                         $email = str_replace($matches[0], '', $row['email']);
                         $email = str_replace('.', '', $email);
@@ -123,13 +125,13 @@ EOF
                             // inactive ad
                             $this->entityManager->getRepository('FaAdBundle:Ad')->blockUnblockAdByUserId($user['id'], 1);
                             $this->entityManager->getRepository('FaAdBundle:Ad')->deleteAdFromSolrByUserId($user['id'], $this->getContainer());
-                            $output->writeln('User banned :'.$user['id'] , true);
+                            $output->writeln('User banned :'.$user['id'], true);
                         }
                     }
 
                     $this->entityManager->flush();
                 } else {
-                    $output->writeln('User not banned :'.$row['email'] , true);
+                    $output->writeln('User not banned :'.$row['email'], true);
                 }
             }
         }

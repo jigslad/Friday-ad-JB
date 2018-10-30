@@ -100,7 +100,7 @@ class UserImageController extends CoreController
                 sleep(1);
 
                 return new Response();
-            } else if ($user) {
+            } elseif ($user) {
                 if ($this->isAdminLoggedIn()) {
                     if ($this->get('fa.resource.authorization.manager')->isGranted('ajax_user_image_save_admin')) {
                     } else {
@@ -169,9 +169,9 @@ class UserImageController extends CoreController
             $image = CommonManager::getUserLogo($this->container, null, $userId, null, null, true, $isCompany);
 
             if (!is_numeric($userId)) {
-             $imagePath = $this->container->get('kernel')->getRootDir().'/../web/uploads/tmp/'.$userId.'.jpg';
-             $image = CommonManager::getUserLogo($this->container, $imagePath, $userId, null, null, true, $isCompany);
-             return new JsonResponse(array('image' => $image));
+                $imagePath = $this->container->get('kernel')->getRootDir().'/../web/uploads/tmp/'.$userId.'.jpg';
+                $image = CommonManager::getUserLogo($this->container, $imagePath, $userId, null, null, true, $isCompany);
+                return new JsonResponse(array('image' => $image));
             }
             if ($profileImage) {
                 $imageObj = null;
@@ -469,12 +469,12 @@ class UserImageController extends CoreController
      */
     public function renderUserImageUploaderAction(Request $request)
     {
-     if ($request->isXmlHttpRequest()) {
-         $userId           = $request->get('userId');
-         $isCompany        = $request->get('isCompany');
-         $response['html'] =  $this->renderView('FaUserBundle:UserImage:registrationImageUploader.html.twig', array('userId' => $userId, 'isCompany' => $isCompany, 'profileImage' => true));
-         return new JsonResponse($response);
-     }
+        if ($request->isXmlHttpRequest()) {
+            $userId           = $request->get('userId');
+            $isCompany        = $request->get('isCompany');
+            $response['html'] =  $this->renderView('FaUserBundle:UserImage:registrationImageUploader.html.twig', array('userId' => $userId, 'isCompany' => $isCompany, 'profileImage' => true));
+            return new JsonResponse($response);
+        }
     }
 
     /**
@@ -486,25 +486,25 @@ class UserImageController extends CoreController
      */
     public function ajaxGetProfileBigImageRegistrationAction(Request $request)
     {
-     if ($request->isXmlHttpRequest()) {
-      $error        = '';
-      $htmlContent  = '';
-      $userId       = $request->get('userId');
-      $isCompany    = filter_var($request->get('isCompany'), FILTER_VALIDATE_BOOLEAN);
-      $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
-      $orgImagePath = $webPath.DIRECTORY_SEPARATOR.'uploads/tmp';
+        if ($request->isXmlHttpRequest()) {
+            $error        = '';
+            $htmlContent  = '';
+            $userId       = $request->get('userId');
+            $isCompany    = filter_var($request->get('isCompany'), FILTER_VALIDATE_BOOLEAN);
+            $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
+            $orgImagePath = $webPath.DIRECTORY_SEPARATOR.'uploads/tmp';
 
-       if (file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg')) {
-        $imageUrl    = CommonManager::getUserLogoByUserId($this->container, $userId, true, true);
-        $htmlContent = $this->renderView('FaUserBundle:UserImage:renderProfileBigImageRegistration.html.twig', array('userId' => $userId, 'isCompany' => $isCompany, 'imageUrl' => $imageUrl));
-       } else {
-        $error = $this->get('translator')->trans('Problem in loading image.');
-       }
+            if (file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg')) {
+                $imageUrl    = CommonManager::getUserLogoByUserId($this->container, $userId, true, true);
+                $htmlContent = $this->renderView('FaUserBundle:UserImage:renderProfileBigImageRegistration.html.twig', array('userId' => $userId, 'isCompany' => $isCompany, 'imageUrl' => $imageUrl));
+            } else {
+                $error = $this->get('translator')->trans('Problem in loading image.');
+            }
 
-       return new JsonResponse(array('error' => $error, 'htmlContent' => $htmlContent));
-     }
+            return new JsonResponse(array('error' => $error, 'htmlContent' => $htmlContent));
+        }
 
-     return new Response();
+        return new Response();
     }
 
     /**
@@ -516,31 +516,30 @@ class UserImageController extends CoreController
      */
     public function ajaxCropProfileImageRegistrationAction(Request $request)
     {
-     if ($request->isXmlHttpRequest()) {
-      $error        = '';
-      $image        = '';
-      $userId       = $request->get('userId');
-      $isCompany    = filter_var($request->get('isCompany'), FILTER_VALIDATE_BOOLEAN);
-      $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
-      $orgImagePath = $webPath.DIRECTORY_SEPARATOR.'uploads/tmp';
+        if ($request->isXmlHttpRequest()) {
+            $error        = '';
+            $image        = '';
+            $userId       = $request->get('userId');
+            $isCompany    = filter_var($request->get('isCompany'), FILTER_VALIDATE_BOOLEAN);
+            $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
+            $orgImagePath = $webPath.DIRECTORY_SEPARATOR.'uploads/tmp';
 
-       if (file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg')) {
-        exec('convert '.$orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg'.' -resize '.$request->get('profile_crop_real_w').'x'.$request->get('profile_crop_real_h').'^ -crop '.$request->get('profile_crop_w').'x'.$request->get('profile_crop_h').'+'.($request->get('profile_crop_x') < 0 ? 0 : $request->get('profile_crop_x')).'+'.($request->get('profile_crop_y') < 0 ? 0 : $request->get('profile_crop_y')).' '.$orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg');
+            if (file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg')) {
+                exec('convert '.$orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg'.' -resize '.$request->get('profile_crop_real_w').'x'.$request->get('profile_crop_real_h').'^ -crop '.$request->get('profile_crop_w').'x'.$request->get('profile_crop_h').'+'.($request->get('profile_crop_x') < 0 ? 0 : $request->get('profile_crop_x')).'+'.($request->get('profile_crop_y') < 0 ? 0 : $request->get('profile_crop_y')).' '.$orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg');
 
-        if ($isCompany) {
-          $image = CommonManager::getUserLogo($this->container, $orgImagePath, $userId, null, null, true, $isCompany);
-        } else {
-          $image = CommonManager::getUserLogo($this->container, $orgImagePath, $userId, null, null, true);
+                if ($isCompany) {
+                    $image = CommonManager::getUserLogo($this->container, $orgImagePath, $userId, null, null, true, $isCompany);
+                } else {
+                    $image = CommonManager::getUserLogo($this->container, $orgImagePath, $userId, null, null, true);
+                }
+            } else {
+                $error = $this->get('translator')->trans('Problem in loading image.');
+            }
+
+            return new JsonResponse(array('error' => $error, 'image' => $image));
         }
-       } else {
-        $error = $this->get('translator')->trans('Problem in loading image.');
-       }
 
-       return new JsonResponse(array('error' => $error, 'image' => $image));
-
-     }
-
-     return new Response();
+        return new Response();
     }
 
     /**
@@ -557,18 +556,18 @@ class UserImageController extends CoreController
         $privateUserLogo  = '';
         $businessUserLogo = '';
         if ($request->isXmlHttpRequest()) {
-           $userId           = $request->get('userId');
-           $webPath          = $this->container->get('kernel')->getRootDir().'/../web';
-           $privateUserLogo  = CommonManager::getUserLogo($this->container, '', null, null, null, true, false, null, null);
-           $businessUserLogo = CommonManager::getUserLogo($this->container, '', null, null, null, true, true, null, null);
-           if (file_exists($webPath.'/uploads/tmp/'.$userId.'.jpg')) {
-              unlink($webPath.'/uploads/tmp/'.$userId.'.jpg');
-              unlink($webPath.'/uploads/tmp/'.$userId.'_org.jpg');
-              unlink($webPath.'/uploads/tmp/'.$userId.'_original.jpg');
-              $successMsg = $this->get('translator')->trans('Logo has been removed successfully.');
-           } else {
-             $error = $this->get('translator')->trans('Problem in removing logo.');
-           }
+            $userId           = $request->get('userId');
+            $webPath          = $this->container->get('kernel')->getRootDir().'/../web';
+            $privateUserLogo  = CommonManager::getUserLogo($this->container, '', null, null, null, true, false, null, null);
+            $businessUserLogo = CommonManager::getUserLogo($this->container, '', null, null, null, true, true, null, null);
+            if (file_exists($webPath.'/uploads/tmp/'.$userId.'.jpg')) {
+                unlink($webPath.'/uploads/tmp/'.$userId.'.jpg');
+                unlink($webPath.'/uploads/tmp/'.$userId.'_org.jpg');
+                unlink($webPath.'/uploads/tmp/'.$userId.'_original.jpg');
+                $successMsg = $this->get('translator')->trans('Logo has been removed successfully.');
+            } else {
+                $error = $this->get('translator')->trans('Problem in removing logo.');
+            }
         }
 
         return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg, 'privateUserLogo' => $privateUserLogo, 'businessUserLogo' => $businessUserLogo));

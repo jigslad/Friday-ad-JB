@@ -102,7 +102,7 @@ class UserPackageAdminType extends AbstractType
     {
         $form = $event->getForm();
         
-        if ($form->isValid() && $form->get('isValidCatForm')->getData()) {                        
+        if ($form->isValid() && $form->get('isValidCatForm')->getData()) {
             $package_id = $form->get('package')->getData();
             $user_id    = $form->get('user_id')->getData();
             $user_id    = $form->get('user_id')->getData();

@@ -23,6 +23,5 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 // You DON'T have to make any changes to this file. For Roxy Fileman user configuration see conf.json file.
-define('BASE_PATH', dirname (__FILE__));
+define('BASE_PATH', dirname(__FILE__));
 date_default_timezone_set('UTC');
-?>

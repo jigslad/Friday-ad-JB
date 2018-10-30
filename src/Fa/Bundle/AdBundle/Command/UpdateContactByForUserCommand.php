@@ -186,7 +186,6 @@ EOF
         $qb->groupBy(AdContactRepository::ALIAS.'.user');
         $qb->orderBy(AdContactRepository::ALIAS.'.ad', 'DESC');
         return $qb;
-
     }
 
     /**

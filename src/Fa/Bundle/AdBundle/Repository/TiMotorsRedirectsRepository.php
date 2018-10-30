@@ -49,7 +49,7 @@ class TiMotorsRedirectsRepository extends EntityRepository
             }
         }
 
-          $qb = $this->createQueryBuilder(self::ALIAS)
+        $qb = $this->createQueryBuilder(self::ALIAS)
             ->where(self::ALIAS.'.nval = :nval')
             ->setParameter('nval', $nval)
             ->setMaxResults(1);

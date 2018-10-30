@@ -31,22 +31,18 @@ class SortableNullsWalker extends SqlWalker
     {
         $sql = parent::walkOrderByClause($orderByClause);
 
-        if ($nullFields = $this->getQuery()->getHint('SortableNullsWalker.fields'))
-        {
-            if (is_array($nullFields))
-            {
+        if ($nullFields = $this->getQuery()->getHint('SortableNullsWalker.fields')) {
+            if (is_array($nullFields)) {
                 // for mysql the nulls last is represented with - before the field name
-                foreach ($nullFields as $field => $sorting)
-                {
+                foreach ($nullFields as $field => $sorting) {
                     /**
                      * NULLs are considered lower than any non-NULL value,
                      * except if a – (minus) character is added before
                      * the column name and ASC is changed to DESC, or DESC to ASC;
                      * this minus-before-column-name feature seems undocumented.
                      */
-                    if ('NULLS LAST' === $sorting)
-                    {
-                        $sql = preg_replace_callback('/ORDER BY (.+)'.'('.$field.') (ASC|DESC)/i', function($matches) {
+                    if ('NULLS LAST' === $sorting) {
+                        $sql = preg_replace_callback('/ORDER BY (.+)'.'('.$field.') (ASC|DESC)/i', function ($matches) {
                             if ($matches[3] === 'ASC') {
                                 $order = 'DESC';
                             } elseif ($matches[3] === 'DESC') {

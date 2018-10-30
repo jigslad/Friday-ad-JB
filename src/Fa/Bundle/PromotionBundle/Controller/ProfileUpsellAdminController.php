@@ -162,7 +162,7 @@ class ProfileUpsellAdminController extends CrudController implements ResourceAut
                 throw $this->createNotFoundException($this->get('translator')->trans('Unable to find %bundleAlias%.', array('%bundleAlias%' => $this->getBundleAlias())));
             }
         } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
-                return parent::handleException($e, 'error', 'profile_upsell_admin');
+            return parent::handleException($e, 'error', 'profile_upsell_admin');
         }
 
         $options =  array(
@@ -222,8 +222,9 @@ class ProfileUpsellAdminController extends CrudController implements ResourceAut
             if ($form->get('saveAndNew')->isClicked()) {
                 $redirectURL = $this->generateUrl('profile_upsell_new_admin');
             } else {
-                if(empty($backUrl))
+                if (empty($backUrl)) {
                     $backUrl = $this->generateUrl('profile_upsell_admin');
+                }
                 $redirectURL = $backUrl;
             }
             return $this->redirect($redirectURL);

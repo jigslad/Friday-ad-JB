@@ -131,7 +131,7 @@ class CartController extends CoreController
         } else {
             //redirect user to selected payment method.
             $route = $this->getRepository('FaPaymentBundle:Payment')->getPaymentMethodRoute($paymentMethod);
-            if($paymentMethod=='amazonpay' && $request->get('access_token')!='') {
+            if ($paymentMethod=='amazonpay' && $request->get('access_token')!='') {
                 $this->container->get('session')->set('amazon_access_token', $request->get('access_token'));
             }
             if (!$route) {
@@ -203,7 +203,6 @@ class CartController extends CoreController
                 $cartDetails  = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
 
                 list($error, $codeAppliedFlag) = $this->getRepository('FaPromotionBundle:PackageDiscountCode')->processDiscountCode($codeObj, $cart, $cartDetails, $loggedinUser, $this->container);
-
             }
 
             if (!$error && $codeAppliedFlag) {
@@ -323,7 +322,7 @@ class CartController extends CoreController
                 $parameters = array(
                     'cart' => $cart,
                     'cartDetails' => $cartDetails,
-                	'isAdultAdvertPresent' => $isAdultAdvertPresent
+                    'isAdultAdvertPresent' => $isAdultAdvertPresent
                 );
                 $htmlContent = $this->renderView('FaPaymentBundle:Cart:cart.html.twig', $parameters);
             }
@@ -343,17 +342,17 @@ class CartController extends CoreController
      */
     public function isAdultAdvertPresent($cartDetails)
     {
-         if ($cartDetails && is_array($cartDetails)) {
-             foreach ($cartDetails as $key => $cartDetail) {
-                 $objCategory     = $this->getRepository('FaEntityBundle:Category')->find($cartDetail['category_id']);
-                 $objRootCategory = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($objCategory);
+        if ($cartDetails && is_array($cartDetails)) {
+            foreach ($cartDetails as $key => $cartDetail) {
+                $objCategory     = $this->getRepository('FaEntityBundle:Category')->find($cartDetail['category_id']);
+                $objRootCategory = $this->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($objCategory);
 
-                 if ($objRootCategory && $objRootCategory->getId() == CategoryRepository::ADULT_ID) {
-                     return TRUE;
-                 }
-             }
-         }
+                if ($objRootCategory && $objRootCategory->getId() == CategoryRepository::ADULT_ID) {
+                    return true;
+                }
+            }
+        }
 
-         return FALSE;
+        return false;
     }
 }

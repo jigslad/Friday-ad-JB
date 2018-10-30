@@ -33,7 +33,6 @@ use Fa\Bundle\AdBundle\Solr\AdPropertySolrFieldMapping;
 
 class Trovit extends Export
 {
-
     const JOB_FILE = 'TrovitJobXML.xml';
     const VEHICLE_FILE = 'TrovitVehicleXML.xml';
     const PRODUCT_FILE = 'TrovitProductsXML.xml';
@@ -167,7 +166,6 @@ class Trovit extends Export
             } catch (\Exception $e) {
                 echo 'Error occurred during subtask => '.$e->getMessage();
             }
-
         }
 
         $this->writeData($xmlWriter->flush(true), self::PRODUCT_FILE, FILE_APPEND, 'xml');
@@ -308,7 +306,6 @@ class Trovit extends Export
             } catch (\Exception $e) {
                 echo 'Error occurred during subtask => '.$e->getMessage();
             }
-
         }
 
         $this->writeData($xmlWriter->flush(true), self::HOME_FILE, FILE_APPEND, 'xml');
@@ -408,7 +405,6 @@ class Trovit extends Export
             } catch (\Exception $e) {
                 echo 'Error occurred during subtask => '.$e->getMessage();
             }
-
         }
 
         $this->writeData($xmlWriter->flush(true), self::JOB_FILE, FILE_APPEND, 'xml');
@@ -626,7 +622,6 @@ class Trovit extends Export
             } catch (\Exception $e) {
                 echo 'Error occurred during subtask => '.$e->getMessage();
             }
-
         }
 
         $this->writeData($xmlWriter->flush(true), self::VEHICLE_FILE, FILE_APPEND, 'xml');

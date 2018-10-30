@@ -90,7 +90,7 @@ class NimberManager
         curl_setopt(
             $ch,
             CURLOPT_HTTPHEADER,
-            array (
+            array(
                 'X-Partner-Token: '.$this->token,
                 'Content-Type: application/json',
             )
@@ -132,7 +132,7 @@ class NimberManager
         curl_setopt(
             $ch,
             CURLOPT_HTTPHEADER,
-            array (
+            array(
                 'X-Partner-Token: '.$this->token,
                 'Content-Type: application/json',
             )

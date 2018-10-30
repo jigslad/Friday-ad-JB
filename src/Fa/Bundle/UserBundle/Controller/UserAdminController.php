@@ -101,7 +101,6 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
         }
 
         if ($form->isValid()) {
-
             $this->get('fa.sqlsearch.manager')->init($this->getRepository('FaUserBundle:User'), $data);
             $queryBuilder = $this->get('fa.sqlsearch.manager')->getQueryBuilder();
             $queryBuilder->distinct(UserRepository::ALIAS.'.id');
@@ -168,7 +167,7 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
     {
         if (isset($data['search']['ad__created_at_from']) && $data['search']['ad__created_at_from'] && isset($data['search']['ad__created_at_to']) && !$data['search']['ad__created_at_to']) {
             $data['ad__created_at_to'] = date('d\m\Y', time());
-        } else if (isset($data['search']['ad__created_at_to']) && $data['search']['ad__created_at_to'] && isset($data['search']['ad__created_at_from']) && !$data['search']['ad__created_at_from']) {
+        } elseif (isset($data['search']['ad__created_at_to']) && $data['search']['ad__created_at_to'] && isset($data['search']['ad__created_at_from']) && !$data['search']['ad__created_at_from']) {
             $data['ad__created_at_from'] = date('d\m\y', strtotime("-2 month"));
         }
 
@@ -321,12 +320,11 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
                 $routeParams['user_id'] = $entity->getId();
                 $redirectURL = $this->generateUrl('ad_post_new_admin', $routeParams);
                 return $this->redirect($redirectURL);
-            } else if (isset($backUrl)) {
+            } elseif (isset($backUrl)) {
                 $redirectRoute = $backUrl;
             }
 
             return $this->handleMessage($this->get('translator')->trans($successMsg), $redirectRoute, $routeParams);
-
         }
 
         $role = $form->getData()->getRoles();
@@ -521,8 +519,9 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
             if ($form->get('save')->isClicked()) {
                 $messageManager = $this->get('fa.message.manager');
                 $messageManager->setFlashMessage($successMsg, 'success');
-                if(empty($backUrl))
-                  $backUrl = $this->generateUrl('user_admin').'?fa_user_user_search_admin[user__id]='.$entity->getId();
+                if (empty($backUrl)) {
+                    $backUrl = $this->generateUrl('user_admin').'?fa_user_user_search_admin[user__id]='.$entity->getId();
+                }
                 return $this->redirect($backUrl);
             } elseif ($form->get('saveAndNew')->isClicked()) {
                 $redirectRoute = 'user_new_admin';
@@ -695,7 +694,7 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
     {
         if (!empty($id) && strpos($id, ',') == true) {
             $userIds = explode(',', $id);
-        } else if (!is_array($id)) {
+        } elseif (!is_array($id)) {
             $userIds = array($id);
         }
 
@@ -779,7 +778,6 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
                 $this->get('fa.mail.manager')->send($entity->getEmail(), 'user_status_change', array('customer_name' => ucwords($entity->getFirstName().' '.$entity->getLastName()), 'current_status' => $entity->getStatus()->getName(), 'previous_status' => $previous_status), 'en_GB');
             } catch (\Exception $e) {
             }
-
         }
 
         $parameters = array(
@@ -969,7 +967,7 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
             foreach ($pagination->getCurrentPageResults() as $arrayPayment) {
                 if ($arrayPayment['payment_method'] == 'paypal') {
                     $paypalPaymentIds[$arrayPayment['id']] = $arrayPayment['id'];
-                } else if ($arrayPayment['payment_method'] == 'cybersource') {
+                } elseif ($arrayPayment['payment_method'] == 'cybersource') {
                     $cyberSourcePaymentIds[$arrayPayment['id']] = $arrayPayment['id'];
                 }
             }

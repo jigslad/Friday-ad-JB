@@ -303,11 +303,11 @@ class EntityRepository extends BaseEntityRepository
         $entities = $queryBuilder->getQuery()->getResult();
 
         foreach ($entities as $entity) {
-        	if($fieldType === 'textCollection') {
-        		$entityArray[$entity->getId()] = $entity->getName()."_".$entity->getOptionalVal();
-        	} else {
-        		$entityArray[$entity->getId()] = $entity->getName();
-        	}
+            if ($fieldType === 'textCollection') {
+                $entityArray[$entity->getId()] = $entity->getName()."_".$entity->getOptionalVal();
+            } else {
+                $entityArray[$entity->getId()] = $entity->getName();
+            }
         }
 
         if ($container) {
@@ -572,11 +572,11 @@ class EntityRepository extends BaseEntityRepository
                          ->getOneOrNullResult();
         
         //for plural breeds
-        if(empty($entity)) {
-       		if(substr($name, -1) == 's') {
-            	$name = substr($name, 0, -1);
+        if (empty($entity)) {
+            if (substr($name, -1) == 's') {
+                $name = substr($name, 0, -1);
                 $entity = $this->createQueryBuilder(self::ALIAS)
-                	->select(self::ALIAS.'.id')
+                    ->select(self::ALIAS.'.id')
                     ->andWhere(self::ALIAS.'.category_dimension = '.$categoryDimension)
                     ->andWhere(self::ALIAS.'.name = :name')
                     ->setParameter('name', $name)
@@ -717,17 +717,17 @@ class EntityRepository extends BaseEntityRepository
         $string = trim($string);
         $keywords = explode(" ", $string);
         foreach ($keywords as $keyword) {
-           $qb = $this->getBaseQueryBuilder()
+            $qb = $this->getBaseQueryBuilder()
             ->andWhere(self::ALIAS.'.category_dimension = :category_dimension')
             ->andWhere(self::ALIAS.'.name LIKE :term')
             ->setParameter('term', $keyword)
             ->setParameter('category_dimension', $categoryDimensionId)
             ->setMaxResults(1);
 
-           $entity = $qb->getQuery()->getOneOrNullResult();
-           if ($entity) {
-               return $entity;
-           }
+            $entity = $qb->getQuery()->getOneOrNullResult();
+            if ($entity) {
+                return $entity;
+            }
         }
 
         return null;
@@ -820,7 +820,7 @@ class EntityRepository extends BaseEntityRepository
 
     public function geUserStatusesForCombo($user)
     {
-       $q = $this->createQueryBuilder(self::ALIAS)
+        $q = $this->createQueryBuilder(self::ALIAS)
         ->select(self::ALIAS.'.id', self::ALIAS.'.name')
         ->where(self::ALIAS.'.category_dimension = '.self::USER_STATUS_ID)
         ->orderBy(self::ALIAS.'.name', 'ASC');
@@ -842,7 +842,6 @@ class EntityRepository extends BaseEntityRepository
      */
     public function customFormatOptions($options, $callFrom = 'paa', $entityName = null)
     {
-        
         $specialEntitiesInCall = array(
                                     self::ADULT_ESCORT_TRAVEL_ARRANGEMENTS_IN_CALL,
                                     self::ADULT_FETISH_TRAVEL_ARRANGEMENTS_IN_CALL,
@@ -864,7 +863,7 @@ class EntityRepository extends BaseEntityRepository
                                     self::ADULT_MASSAGE_TRAVEL_ARRANGEMENTS_EITHER
                                 );
 
-        $specialEntities = array_merge($specialEntitiesInCall, $specialEntitiesOutCall,$specialEntitiesEither);
+        $specialEntities = array_merge($specialEntitiesInCall, $specialEntitiesOutCall, $specialEntitiesEither);
 
         if (is_array($options) && count($options)) {
             foreach ($options as $entityId => $entityName) {
@@ -872,35 +871,35 @@ class EntityRepository extends BaseEntityRepository
                     if ($callFrom == 'paa') {
                         if (in_array($entityId, $specialEntitiesInCall)) {
                             $options[$entityId] = $entityName . ' (they travel)';
-                        } else if (in_array($entityId, $specialEntitiesOutCall)) {
+                        } elseif (in_array($entityId, $specialEntitiesOutCall)) {
                             $options[$entityId] = $entityName . ' (you travel)';
-                        } else if (in_array($entityId, $specialEntitiesEither)) {
+                        } elseif (in_array($entityId, $specialEntitiesEither)) {
                             $options[$entityId] = $entityName . ' (you/they travel)';
                         }
-                    } else if ($callFrom == 'for-endusers') {
+                    } elseif ($callFrom == 'for-endusers') {
                         if (in_array($entityId, $specialEntitiesInCall)) {
                             $options[$entityId] = $entityName . ' (you travel)';
-                        } else if (in_array($entityId, $specialEntitiesOutCall)) {
+                        } elseif (in_array($entityId, $specialEntitiesOutCall)) {
                             $options[$entityId] = $entityName . ' (they travel)';
-                        } else if (in_array($entityId, $specialEntitiesEither)) {
-                            $options[$entityId] = $entityName . ' (you/they travel)';    
+                        } elseif (in_array($entityId, $specialEntitiesEither)) {
+                            $options[$entityId] = $entityName . ' (you/they travel)';
                         }
                     }
-                } else if($entityName=='Either') {
-                	$options[$entityId] = $entityName . ' (you/they travel)';
+                } elseif ($entityName=='Either') {
+                    $options[$entityId] = $entityName . ' (you/they travel)';
                 }
             }
         } else {
             if (in_array($options, $specialEntities)) {
                 if (in_array($options, $specialEntitiesInCall)) {
                     $options = $entityName . ' (you travel)';
-                } else if (in_array($options, $specialEntitiesOutCall)) {
+                } elseif (in_array($options, $specialEntitiesOutCall)) {
                     $options = $entityName . ' (they travel)';
-                } else if (in_array($options, $specialEntitiesEither)) {
-                    $options = $entityName . ' (you/they travel)';   
+                } elseif (in_array($options, $specialEntitiesEither)) {
+                    $options = $entityName . ' (you/they travel)';
                 }
-            } else if($entityName=='Either') {
-                	$options = $entityName . ' (you/they travel)';
+            } elseif ($entityName=='Either') {
+                $options = $entityName . ' (you/they travel)';
             }
         }
 
@@ -923,7 +922,7 @@ class EntityRepository extends BaseEntityRepository
         $currentDay = intval(date('w'));
         $currentTime = intval(date('Gi'));
         
-        if($currentDay == $sunday || $currentDay == $saturday) {
+        if ($currentDay == $sunday || $currentDay == $saturday) {
             $morStartTime = self::SUN_SAT_START_TIME;
             $morEndTime = self::SUN_SAT_END_TIME;
             $dayStartTime = self::SUN_SAT_START_TIME_1;
@@ -932,14 +931,14 @@ class EntityRepository extends BaseEntityRepository
             if ($currentTime >= $morStartTime && $currentTime <= $morEndTime) {
                 $message['inModeration'] = $inMorningTimeMsg;
                 $message['liveEdit'] = $liveEditMorningMsg;
-            }elseif ($currentTime >= $dayStartTime && $currentTime <= $dayEndTime) {
+            } elseif ($currentTime >= $dayStartTime && $currentTime <= $dayEndTime) {
                 $message['inModeration'] = $inDayTimeMsg;
                 $message['liveEdit'] = $liveEditDayMsg;
-            }else {
+            } else {
                 $message['inModeration'] = $inNightTimeMsg;
                 $message['liveEdit'] = $liveEditNightMsg;
             }
-        }else {
+        } else {
             $morStartTime = self::MON_TO_FRI_START_TIME;
             $morEndTime = self::MON_TO_FRI_END_TIME;
             $dayStartTime = self::MON_TO_FRI_START_TIME_1;
@@ -948,10 +947,10 @@ class EntityRepository extends BaseEntityRepository
             if ($currentTime >= $morStartTime && $currentTime <= $morEndTime) {
                 $message['inModeration'] = $inMorningTimeMsg;
                 $message['liveEdit'] = $liveEditMorningMsg;
-            }elseif ($currentTime >= $dayStartTime && $currentTime <= $dayEndTime) {
+            } elseif ($currentTime >= $dayStartTime && $currentTime <= $dayEndTime) {
                 $message['inModeration'] = $inDayTimeMsg;
                 $message['liveEdit'] = $liveEditDayMsg;
-            }else {
+            } else {
                 $message['inModeration'] = $inNightTimeMsg;
                 $message['liveEdit'] = $liveEditNightMsg;
             }

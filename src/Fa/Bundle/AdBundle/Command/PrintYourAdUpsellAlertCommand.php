@@ -200,7 +200,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('ad_print' => array ('ad' => 'asc'));
+        $data['query_sorter']  = array('ad_print' => array('ad' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($adPrintRepository, $data);

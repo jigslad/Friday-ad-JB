@@ -92,7 +92,7 @@ EOF
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion('Are you sure you wish to flush the whole database? (y/n)', false);
         return $helper->ask($this->input, $this->output, $question);
-        // 'dialog' environment variable removed from symfony 3.4 
+        // 'dialog' environment variable removed from symfony 3.4
 //         return $this->getHelper('dialog')->askConfirmation($this->output, '<question>Are you sure you wish to flush the whole database? (y/n)</question>', false);
     }
 

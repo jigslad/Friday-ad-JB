@@ -124,7 +124,7 @@ class MessageAttachmentsRepository extends EntityRepository
      */
     public function removeMessageAttachment($attachmentIds)
     {
-        $deleteFlag         = FALSE;
+        $deleteFlag         = false;
         $attachmentIdsArray = array();
         if ($attachmentIds) {
             if (!is_array($attachmentIds)) {
@@ -152,7 +152,7 @@ class MessageAttachmentsRepository extends EntityRepository
      */
     public function updateMessageAttachment($sessionId, $messageId, $path)
     {
-        $updateFlag = FALSE;
+        $updateFlag = false;
         if ($sessionId && $messageId) {
             $updateQuery = $this->createQueryBuilder(self::ALIAS)
             ->update()

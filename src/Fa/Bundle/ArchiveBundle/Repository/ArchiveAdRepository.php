@@ -65,8 +65,7 @@ class ArchiveAdRepository extends EntityRepository
             $deleteManager = $container->get('fa.deletemanager');
             try {
                 $deleteManager->delete($archiveAd);
-            }catch (\Exception $e) {
-
+            } catch (\Exception $e) {
             }
         }
         $archiveAd = new ArchiveAd();
@@ -205,7 +204,7 @@ class ArchiveAdRepository extends EntityRepository
             if (isset($adDetail['category_id']) && $adDetail['category_id']) {
                 $categoryIds = array_keys($categoryPath);
 
-                $dimensionArray = $this->getAdDimensionByCategoryIdAndAdId($adDetail['category_id'], $adId, $archiveAd, (isset($categoryIds[0]) ? $categoryIds[0] : '') , $adDetail, $container);
+                $dimensionArray = $this->getAdDimensionByCategoryIdAndAdId($adDetail['category_id'], $adId, $archiveAd, (isset($categoryIds[0]) ? $categoryIds[0] : ''), $adDetail, $container);
                 if (count($dimensionArray)) {
                     $adDetail = $adDetail + $dimensionArray;
                 }
@@ -251,10 +250,11 @@ class ArchiveAdRepository extends EntityRepository
 
         if ($adVerticalDeta) {
             $metaData = array();
-            if(isset($adVerticalDeta['meta_data'])) {
-              $metaData = unserialize($adVerticalDeta['meta_data']);
-              if(!is_array($metaData))
-                $metaData = unserialize($metaData);
+            if (isset($adVerticalDeta['meta_data'])) {
+                $metaData = unserialize($adVerticalDeta['meta_data']);
+                if (!is_array($metaData)) {
+                    $metaData = unserialize($metaData);
+                }
             }
             //$metaData = (isset($adVerticalDeta['meta_data']) ? unserialize(unserialize($adVerticalDeta['meta_data'])) : array());
             $paaFields = $this->_em->getRepository('FaAdBundle:PaaField')->getDimensionPaaFieldsWithLabel($categoryId);

@@ -56,7 +56,8 @@ Actions:
 Command:
  - php app/console fa:insert:job-categories-redirects
 EOF
-        );;
+        );
+        ;
     }
 
     /**
@@ -98,9 +99,7 @@ EOF
                     }
                 }
             }
-
         }
-
     }
 
     /**

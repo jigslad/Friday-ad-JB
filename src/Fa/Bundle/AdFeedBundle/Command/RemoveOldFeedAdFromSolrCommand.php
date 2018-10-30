@@ -89,7 +89,7 @@ EOF
      */
     protected function updateAdStatusWithOffset($input, $output)
     {
-        $qb          = $this->getAdQueryBuilder(FALSE, $input);
+        $qb          = $this->getAdQueryBuilder(false, $input);
         $step        = 100;
         $offset      = $input->getOption('offset');
         $em          = $this->getContainer()->get('doctrine')->getManager();
@@ -107,17 +107,17 @@ EOF
                 $this->em->persist($objAd);
                 $this->em->flush();
                 $output->writeln('Removed feed advert Id: '.$objAd->getId(), true);
-            }else {
+            } else {
                 if (isset($feedAd['Message'])) {
                     $output->writeln('Some thing went wrong for trans Id: '.$transId, true);
-                }else {
-                    if(isset($feedAd['EndDate']) && ($feedAd['EndDate'] != '0001-01-01T00:00:00Z')) {
+                } else {
+                    if (isset($feedAd['EndDate']) && ($feedAd['EndDate'] != '0001-01-01T00:00:00Z')) {
                         $objAd->setStatus($this->em->getReference('FaEntityBundle:Entity', \Fa\Bundle\EntityBundle\Repository\EntityRepository::AD_STATUS_EXPIRED_ID));
                         $objAd->setExpiresAt(strtotime($feedAd['EndDate']));
                         $this->em->persist($objAd);
                         $this->em->flush();
                         $this->em->getRepository('FaAdBundle:Ad')->updateAdStatusInSolrByAd($objAd, $this->getContainer());
-                        $output->writeln('Updated feed advert Id: '.$objAd->getId(), true);  
+                        $output->writeln('Updated feed advert Id: '.$objAd->getId(), true);
                     }
                     // Feed Advert found. TODO Update expire date and status.
                 }
@@ -134,7 +134,7 @@ EOF
      */
     protected function updateAdStatus($input, $output)
     {
-        $qb        = $this->getAdQueryBuilder(TRUE, $input);
+        $qb        = $this->getAdQueryBuilder(true, $input);
         $count     = $qb->getQuery()->getSingleScalarResult();
         $step      = 100;
         $stat_time = time();
@@ -182,7 +182,7 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE, $input)
+    protected function getAdQueryBuilder($onlyCount = false, $input)
     {
         $transId = trim($input->getOption('trans_id'));
         $startDate = intval($input->getOption('start_date'));
@@ -193,7 +193,7 @@ EOF
         
         if ($onlyCount) {
             $qb->select('COUNT('.AdRepository::ALIAS.'.id)');
-        }else {
+        } else {
             $qb->select(AdRepository::ALIAS);
         }
         

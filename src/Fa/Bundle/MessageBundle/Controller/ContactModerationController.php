@@ -79,7 +79,6 @@ class ContactModerationController extends CoreController
             $this->getRepository('FaMessageBundle:Message')->handleModerationResult($response, $this->container);
 
             $this->getEntityManager()->getConnection()->commit();
-
         } catch (\Exception $e) {
             $this->getEntityManager()->getConnection()->rollback();
             CommonManager::sendErrorMail($this->container, 'Error: Problem in Contact Moderation', $e->getMessage(), $e->getTraceAsString());

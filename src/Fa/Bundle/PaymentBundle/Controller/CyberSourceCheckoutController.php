@@ -74,9 +74,8 @@ class CyberSourceCheckoutController extends CoreController
         $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => $request->get('subscription')));
         $gaStr       = '';
 
-        if ('POST' === $request->getMethod() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId()) ) {
-        	
-        	if ($cybersource3DSecureResponseFlag) { 
+        if ('POST' === $request->getMethod() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) {
+            if ($cybersource3DSecureResponseFlag) {
 //                 $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
                 $csrfToken     = $this->get('security.csrf.token_manager')->getToken('fa_payment_cyber_source_checkout')->getValue();
                 $cyberSourceData = $this->get('session')->get('cybersource_params_'.$loggedinUser->getId()) + array('_token' => $csrfToken);
@@ -86,22 +85,22 @@ class CyberSourceCheckoutController extends CoreController
                 }
                 // Bind data from session
                 $form->submit($cyberSourceData);
-            } elseif ($this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) { 
+            } elseif ($this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) {
 //             	$csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_payment_cyber_source_checkout');
-            	$csrfToken     = $this->get('security.csrf.token_manager')->getToken('fa_payment_cyber_source_checkout')->getValue();
-            	$upgradeSourceData = $this->get('session')->get('upgrade_cybersource_params_'.$loggedinUser->getId()) + array('_token' => $csrfToken);
-            	$form->submit($upgradeSourceData);
+                $csrfToken     = $this->get('security.csrf.token_manager')->getToken('fa_payment_cyber_source_checkout')->getValue();
+                $upgradeSourceData = $this->get('session')->get('upgrade_cybersource_params_'.$loggedinUser->getId()) + array('_token' => $csrfToken);
+                $form->submit($upgradeSourceData);
             } else {
                 $form->handleRequest($request);
             }
 
-            if ($form->isValid() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId()) ) {
+            if ($form->isValid() || $this->container->get('session')->has('upgrade_cybersource_params_'.$loggedinUser->getId())) {
                 if (!$cybersource3DSecureResponseFlag) {
-                	if(isset($upgradeSourceData) && !empty($upgradeSourceData)) {
-                		$this->get('session')->set('cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $upgradeSourceData));
-                	} else {
-                		$this->get('session')->set('cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
-                	}
+                    if (isset($upgradeSourceData) && !empty($upgradeSourceData)) {
+                        $this->get('session')->set('cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $upgradeSourceData));
+                    } else {
+                        $this->get('session')->set('cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
+                    }
                 }
                 $cyberSourceManager  = $this->get('fa.cyber.source.manager');
                 if ($request->get('subscription')) {
@@ -396,7 +395,7 @@ class CyberSourceCheckoutController extends CoreController
 
             if ($cyberSourceReply && $cyberSourceReply->reasonCode == PaymentCyberSourceRepository::SUCCESS_REASON_CODE) {
                 $deleteManager->delete($entity);
-            } else if ($cyberSourceReply) {
+            } elseif ($cyberSourceReply) {
                 return parent::handleMessage($cyberSourceManager->getError($cyberSourceReply->reasonCode), $redirectRoute, array(), 'error');
             }
         } catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException $e) {

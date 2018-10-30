@@ -31,7 +31,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
 /**
  * AdAdminType form.
  *
@@ -74,7 +73,7 @@ class AdSearchAdminType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-         $builder
+        $builder
         ->add('user__first_name', TextType::class, array('required' => false))
         ->add('user__last_name', TextType::class, array('required' => false))
         ->add('user__email', TextType::class, array('required' => false))

@@ -102,8 +102,8 @@ class TiAdRequestListener
                         $url = $routeManager->getDetailUrl($feedAd->getAd());
                         $event->setResponse(new RedirectResponse($url, 301));
                     } else {
-                    	$urlString1 = null;
-                    	$urlString2 = null;
+                        $urlString1 = null;
+                        $urlString2 = null;
                         $checkPath =  explode('/', trim($params['path'], '/'));
                         if (count($checkPath) >= 3) {
                             $urlString1 = $checkPath[1];
@@ -387,7 +387,7 @@ class TiAdRequestListener
 
                         if (count($data) > 0 && $event) {
                             if (!$request->attributes->get('customized_page')) {
-                                $request->attributes->set('page_string', strtok($data['source_url'],'?'));
+                                $request->attributes->set('page_string', strtok($data['source_url'], '?'));
                                 $request->attributes->set('customized_page', $data);
                                 $this->onKernelRequest($event);
                             }
@@ -588,7 +588,6 @@ class TiAdRequestListener
                             $url = $routeManager->getListingUrl($NewSearchParams, 1);
                             $event->setResponse(new RedirectResponse($url, 301));
                         } else {
-
                             if (preg_match("/-N-1z1|-N-1z0|-N-2m|-N-2o|-N-2t|-N-2y|-N-31|-N-g2/", $request->get('page_string'), $matches)) {
                                 $pageString = substr($request->get('page_string'), 0, strpos($request->get('page_string'), $matches[0])).$matches[0];
                                 $locationS   = $request->get('location');
@@ -603,7 +602,6 @@ class TiAdRequestListener
                                     if ($redirect == 'homepage') {
                                         $url = $this->container->get('router')->generate('fa_frontend_homepage', array(), true);
                                     } else {
-
                                         $url = $this->container->get('router')->generate('listing_page', array('location' => $locationS, 'page_string' => rtrim($redirect, '/')), true);
                                     }
                                     $response = new RedirectResponse($url, 301);
@@ -657,7 +655,6 @@ class TiAdRequestListener
                                     $response = new RedirectResponse($url, 301);
                                     $event->setResponse($response);
                                 }
-
                             }
                         }
                     }

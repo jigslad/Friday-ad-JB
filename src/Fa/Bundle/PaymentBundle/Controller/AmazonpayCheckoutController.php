@@ -24,6 +24,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Fa\Bundle\PaymentBundle\Repository\PaymentAmazonRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentCyberSourceRepository;
 use Fa\Bundle\PaymentBundle\Form\AmazonpayCheckoutType;
+
 /**
  * This controller is used for Amazonpay payment.
  *
@@ -76,7 +77,7 @@ class AmazonpayCheckoutController extends CoreController
         $amazonconfig = $amazonPayManager->getAmazonpayConfig();
 
         if ('POST' === $request->getMethod()) {
-            $amazonJsonResponse = $amazonPayManager->getAmazonOrderProcess($cart,$this->container);
+            $amazonJsonResponse = $amazonPayManager->getAmazonOrderProcess($cart, $this->container);
             $amazonResponse = json_decode($amazonJsonResponse);
             $amazon_token = $request->request->get('fa_payment_amazonpay_checkout')['_token'];
            
@@ -100,11 +101,10 @@ class AmazonpayCheckoutController extends CoreController
                     $paymentId = $this->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), null, $this->container);
                     $this->getEntityManager()->getConnection()->commit();
 
-                   try {
+                    try {
                         //send ads for moderation
                         $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
                         return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-amazonpay'), 'amazonpay_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
-                        
                     } catch (\Exception $e) {
                         CommonManager::sendErrorMail($this->container, 'Error: Problem in sending user subscription email', $e->getMessage(), $e->getTraceAsString());
                         return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-amazonpay'), 'amazonpay_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
@@ -115,9 +115,7 @@ class AmazonpayCheckoutController extends CoreController
                     return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'frontend-amazonpay'), 'checkout_payment_failure', array('cartCode' => $cart->getCartCode()), 'error');
                 }
                 return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'frontend-amazonpay'), 'amazonpay_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
-            	
             }
-            
         }
 
         $parameters = array(
@@ -135,31 +133,35 @@ class AmazonpayCheckoutController extends CoreController
 
     public function ajaxCartDetailsAction(Request $request)
     {
-        $loggedinUser = $this->getLoggedInUser();$requestParameters = array();
+        $loggedinUser = $this->getLoggedInUser();
+        $requestParameters = array();
         $orderReferenceId=$request->get('orderReferenceId');
-		$accessToken  = $this->container->get('session')->get('amazon_access_token');
+        $accessToken  = $this->container->get('session')->get('amazon_access_token');
         $cart = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container);
         $cartDetails       = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
         $amazonMode = $this->container->getParameter('fa.amazon.mode');
 
         // calculate vat.
-        $totalVat = 0;$totalAmt=0;$payableAmt=0;$sellerNote = '';
+        $totalVat = 0;
+        $totalAmt=0;
+        $payableAmt=0;
+        $sellerNote = '';
         foreach ($cartDetails as $itemNo => $cartDetail) {
             //$totalVat = $totalVat + $cartDetail['vat_amount'];
             $totalAmt = $totalAmt + $cartDetail['amount'];
             $cartDetValue = ($cartDetail['value']!='')?unserialize($cartDetail['value']):array();
-            if(!empty($cartDetValue)) {
-            	foreach($cartDetValue['package'] as $key=>$val){
-            		$packageInfo = $this->getRepository('FaPromotionBundle:Package')->findOneById($key);
-            		$sellerNote = $sellerNote.$packageInfo->getTitle().' for the advert '.$cartDetail['title'].', ';
-            	}
+            if (!empty($cartDetValue)) {
+                foreach ($cartDetValue['package'] as $key=>$val) {
+                    $packageInfo = $this->getRepository('FaPromotionBundle:Package')->findOneById($key);
+                    $sellerNote = $sellerNote.$packageInfo->getTitle().' for the advert '.$cartDetail['title'].', ';
+                }
             }
         }
 
         //$totalVat = round($totalVat, 2);
         $totalAmt = round($totalAmt, 2);
         $payableAmt = $totalAmt + $totalVat;
-        $sellerNote = rtrim($sellerNote,', ').' are the packages you have purchased';
+        $sellerNote = rtrim($sellerNote, ', ').' are the packages you have purchased';
 
         $requestParameters['amount']            = $payableAmt;
         $requestParameters['seller_note']       = $sellerNote;
@@ -168,8 +170,8 @@ class AmazonpayCheckoutController extends CoreController
         $requestParameters['custom_information']= '';
         $requestParameters['mws_auth_token']    = null; // only non-null if calling API on behalf of someone else
         $requestParameters['amazon_order_reference_id'] = $orderReferenceId;
-        $retcartdetails = $this->get('fa.amazonpay.manager')->getAmazonCartDetails($requestParameters,$accessToken);
-        $this->container->get('session')->set('amazon_order_reference_id',$orderReferenceId);
+        $retcartdetails = $this->get('fa.amazonpay.manager')->getAmazonCartDetails($requestParameters, $accessToken);
+        $this->container->get('session')->set('amazon_order_reference_id', $orderReferenceId);
         return new Response();
     }
 

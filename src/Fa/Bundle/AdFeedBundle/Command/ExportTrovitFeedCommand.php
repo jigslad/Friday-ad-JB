@@ -108,7 +108,6 @@ EOF
             $ads = $this->getAds($step, $offset, $category, false, $cat_a);
             $trovite = new Trovit($this->getContainer());
             $trovite->writeProductData($ads);
-
         } elseif ($category == 'Property') {
             $pcategories = $this->getTrovitPropertyTypes();
             $cat_a = array();

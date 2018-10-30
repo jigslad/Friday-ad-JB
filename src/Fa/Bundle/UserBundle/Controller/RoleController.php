@@ -100,7 +100,6 @@ class RoleController extends CoreController implements ResourceAuthorizationCont
             $formManager->save($entity);
 
             return parent::handleMessage('Role was successfully added.', ($form->get('saveAndNew')->isClicked() ? 'role_new' : 'role'));
-
         }
 
         $parameters = array(

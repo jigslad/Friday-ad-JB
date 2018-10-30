@@ -115,7 +115,6 @@ class ShopPackageAdminController extends CoreController implements ResourceAutho
             $formManager->save($entity);
 
             return parent::handleMessage($this->get('translator')->trans('Subscription was successfully added.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'shop_package_new_admin' : 'shop_package_admin'));
-
         }
 
         $parameters = array(
@@ -236,8 +235,9 @@ class ShopPackageAdminController extends CoreController implements ResourceAutho
             if ($form->get('saveAndNew')->isClicked()) {
                 $redirectURL = $this->generateUrl('shop_package_new_admin');
             } else {
-                if(empty($backUrl))
-                  $backUrl = $this->generateUrl('shop_package_admin');
+                if (empty($backUrl)) {
+                    $backUrl = $this->generateUrl('shop_package_admin');
+                }
 
                 $redirectURL = $backUrl;
             }

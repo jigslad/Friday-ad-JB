@@ -120,10 +120,10 @@ EOF
             } else {
                 if ($cat['0']['id']) {
                     if ($cat['0']['id'] == CategoryRepository::SERVICES_ID || $cat['0']['id'] == CategoryRepository::ADULT_ID) {
-                    	$user_update .= 'UPDATE user SET business_category_id = "'.$cat['0']['id'].'" WHERE id='.$user->getId().';'."\n";
-                    	$user_update .= 'UPDATE user_site SET profile_exposure_category_id = "'.$cat['1'].'" WHERE user_id='.$user->getId().';'."\n";
+                        $user_update .= 'UPDATE user SET business_category_id = "'.$cat['0']['id'].'" WHERE id='.$user->getId().';'."\n";
+                        $user_update .= 'UPDATE user_site SET profile_exposure_category_id = "'.$cat['1'].'" WHERE user_id='.$user->getId().';'."\n";
                     } else {
-                    	$user_update .= 'UPDATE user SET business_category_id = "'.$cat['0']['id'].'" WHERE id='.$user->getId().';'."\n";
+                        $user_update .= 'UPDATE user SET business_category_id = "'.$cat['0']['id'].'" WHERE id='.$user->getId().';'."\n";
                     }
                 }
             }
@@ -136,8 +136,8 @@ EOF
                     echo "Assign package to".$user->getId()."\n";
                     $this->assignPackageToUser($user, $package, 'migrated_package');
                 }
-            } else{
-                    echo "Already package is assigend to".$user->getId()."\n";
+            } else {
+                echo "Already package is assigend to".$user->getId()."\n";
             }
         }
 
@@ -222,7 +222,6 @@ EOF
         $qb->setParameter('role', RoleRepository::ROLE_BUSINESS_SELLER_ID);
         $qb->setParameter('update_type', 'business-ad');
         return $qb;
-
     }
 
     public function getLastetAdMainCategoryByUser($userId)

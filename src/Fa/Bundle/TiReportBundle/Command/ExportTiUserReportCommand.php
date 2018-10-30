@@ -406,19 +406,19 @@ EOF
                         } else {
                             $recordValues[] = '';
                         }
-                    } else if (in_array($fieldName, $editionFields)) {
+                    } elseif (in_array($fieldName, $editionFields)) {
                         if ($currentUserId != '' && array_key_exists($currentUserId, $editionDataArray) && isset($editionDataArray[$currentUserId])) {
                             $recordValues[] = $editionDataArray[$currentUserId][$fieldName];
                         } else {
                             $recordValues[] = '';
                         }
-                    } else if (in_array($fieldName, $packageFields)) {
+                    } elseif (in_array($fieldName, $packageFields)) {
                         if ($currentUserId != '' && array_key_exists($currentUserId, $packageDataArray) && isset($packageDataArray[$currentUserId])) {
                             $recordValues[] = $packageDataArray[$currentUserId][$fieldName];
                         } else {
                             $recordValues[] = '';
                         }
-                    } else if (isset($processedRecord[$fieldName])) {
+                    } elseif (isset($processedRecord[$fieldName])) {
                         $recordValues[] = $processedRecord[$fieldName];
                     } else {
                         $recordValues[] = '';

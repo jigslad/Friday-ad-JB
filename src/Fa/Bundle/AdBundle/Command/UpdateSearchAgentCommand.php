@@ -77,33 +77,33 @@ EOF
         }
     }
 
-/**
- *   *Ad Placed -> not available in FADR
-AdultOrChild -> not available in FADR
-AdvertFlags -> not available in FADR
-Advertiser -> not available in FADR
-Service History
- *
- */
+    /**
+     *   *Ad Placed -> not available in FADR
+    AdultOrChild -> not available in FADR
+    AdvertFlags -> not available in FADR
+    Advertiser -> not available in FADR
+    Service History
+     *
+     */
 
 
-/**
- Distance
- Category
- Section
- Search Term
- Private Or Trade
- Amenities
- Bathrooms
- Bedrooms
-Price
-Price Per Month
-Price Range
-Price Range Motoring
-Price Range Property For Rent
-Price Range Property For Sale
- *
- */
+    /**
+     Distance
+     Category
+     Section
+     Search Term
+     Private Or Trade
+     Amenities
+     Bathrooms
+     Bedrooms
+    Price
+    Price Per Month
+    Price Range
+    Price Range Motoring
+    Price Range Property For Rent
+    Price Range Property For Sale
+     *
+     */
     /**
 
 
@@ -200,7 +200,6 @@ Transmission
                                 $new_criteria['search']['item__category_id'] = $cat_id;
                                 $pcat = $this->getFirstLevelParent($new_criteria['search']['item__category_id']);
                                 $scat = $this->getSecondLevelParent($new_criteria['search']['item__category_id']);
-
                             } else {
                                 $new_criteria['search']['keywords'] = isset($new_criteria['search']['keywords']) ? $new_criteria['search']['keywords'].' '.$cat_id : $cat_id;
                             }
@@ -318,7 +317,7 @@ Transmission
                         }
 
                         if ($k == 'Condition') {
-                           // remaining
+                            // remaining
                         }
 
                         if ($k == 'Doors') {
@@ -400,7 +399,6 @@ Transmission
         } else {
             // echo $string."\n";
         }
-
     }
 
     //Dual Fuel, Unleaded, Leaded, LPG
@@ -419,7 +417,6 @@ Transmission
         } else {
             // echo $string."\n";
         }
-
     }
 
     private function getAmenities($string)
@@ -531,7 +528,6 @@ Transmission
                 }
             }
         }
-
     }
 
 
@@ -610,7 +606,6 @@ Transmission
 
     public function getCVTransmissionId($string)
     {
-
         $string = trim($string);
         $cType  = array();
 
@@ -728,7 +723,6 @@ Transmission
         $adRepository  = $entityManager->getRepository('FaUserBundle:UserSearchAgent');
         $qb = $adRepository->createQueryBuilder(UserSearchAgentRepository::ALIAS);
         return $qb;
-
     }
 
     /**

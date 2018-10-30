@@ -89,7 +89,7 @@ EOF
     {
         $idsNotFound = array();
         $idsFound    = array();
-        $qb          = $this->getAdQueryBuilder(FALSE, $input);
+        $qb          = $this->getAdQueryBuilder(false, $input);
         $step        = 100;
         $offset      = $input->getOption('offset');
         $em          = $this->getContainer()->get('doctrine')->getManager();
@@ -117,7 +117,7 @@ EOF
      */
     protected function updateAdStatus($input, $output)
     {
-        $qb        = $this->getAdQueryBuilder(TRUE, $input);
+        $qb        = $this->getAdQueryBuilder(true, $input);
         $count     = $qb->getQuery()->getSingleScalarResult();
         $step      = 100;
         $stat_time = time();
@@ -167,7 +167,7 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE, $input)
+    protected function getAdQueryBuilder($onlyCount = false, $input)
     {
         $userId = intval($input->getOption('user_id'));
         $adRepository  = $this->em->getRepository('FaAdBundle:Ad');

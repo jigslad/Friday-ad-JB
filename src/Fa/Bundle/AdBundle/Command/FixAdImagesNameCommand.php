@@ -76,11 +76,10 @@ class FixAdImagesNameCommand extends ContainerAwareCommand
                         $image->setAws(0);
                         $this->em->persist($image);
                     }
-                   echo 'Updated for -> '.$image->getId()."\n";
-                   $this->em->flush();
+                    echo 'Updated for -> '.$image->getId()."\n";
+                    $this->em->flush();
                 }
                 $last_id = $image->getId();
-
             } else {
                 $done = true;
             }

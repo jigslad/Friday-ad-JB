@@ -244,7 +244,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
                 $this->queryBuilder->innerJoin('FaUserBundle:UserCredit', UserCreditRepository::ALIAS, 'WITH', UserCreditRepository::ALIAS.'.user = '.self::ALIAS.'.id')
                     ->andWhere(UserCreditRepository::ALIAS.'.status = 1')
                     ->andWhere(UserCreditRepository::ALIAS.'.credit > 0');
-            } else if ($credit == 'U') {
+            } elseif ($credit == 'U') {
                 $this->queryBuilder->innerJoin('FaUserBundle:UserCreditUsed', UserCreditUsedRepository::ALIAS, 'WITH', UserCreditUsedRepository::ALIAS.'.user = '.self::ALIAS.'.id');
             }
         }
@@ -613,7 +613,6 @@ class UserRepository extends EntityRepository implements UserProviderInterface
      */
     public function getUserByUsername($username, $container = null)
     {
-
         $qb = $this->createQueryBuilder(self::ALIAS)
         ->andWhere(self::ALIAS.'.username = :username')
         ->setMaxResults(1)
@@ -688,12 +687,12 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $parameters = $this->getRegistrationEmailParameters($user, $container);
         $template = 'welcome_to_your_account';
 
-       if ($user->getRoles() && count($user->getRoles()) && $user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
-        	$categoryNames = $this->_em->getRepository('FaEntityBundle:Category')->getSubtitleCategories();
-        	if ($categoryNames && count($categoryNames) && array_key_exists($user->getBusinessCategoryId(), $categoryNames)) {
-        		$categoryName = $categoryNames[$user->getBusinessCategoryId()];
-        		$template     = 'welcome_to_your_account_business_'.$categoryName;
-        	}
+        if ($user->getRoles() && count($user->getRoles()) && $user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
+            $categoryNames = $this->_em->getRepository('FaEntityBundle:Category')->getSubtitleCategories();
+            if ($categoryNames && count($categoryNames) && array_key_exists($user->getBusinessCategoryId(), $categoryNames)) {
+                $categoryName = $categoryNames[$user->getBusinessCategoryId()];
+                $template     = 'welcome_to_your_account_business_'.$categoryName;
+            }
         }
 
         $container->get('fa.mail.manager')->send($user->getEmail(), $template, $parameters, CommonManager::getCurrentCulture($container));
@@ -710,29 +709,29 @@ class UserRepository extends EntityRepository implements UserProviderInterface
     public function getRegistrationEmailParameters($user, $container)
     {
         // user information.
-    		$parameters = array();
+        $parameters = array();
         $parameters['user_first_name']       = $user->getFirstName();
         $parameters['user_last_name']        = $user->getLastName();
         $parameters['user_email_address']    = $user->getEmail();
         $parameters['url_account_dashboard'] = '';
 
         if ($user->getRoles() && count($user->getRoles())) {
-        	if ($user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
-        		$parameters['category_name'] = $container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $user->getBusinessCategoryId());
-        		$objPackages = $this->_em->getRepository('FaPromotionBundle:Package')->getShopPackageByCategory($user->getBusinessCategoryId());
-        		if ($objPackages && count($objPackages)) {
-        			$i = 1;
-        			foreach ($objPackages as $objPackage) {
-        				$pkgNumber = CommonManager::getConvertNumberToWords($i, 2);
-        				if ($objPackage->getPrice()) {
-        					$parameters[$pkgNumber.'_package_price'] = CommonManager::formatCurrency($objPackage->getPrice(), $container);
-        				} else {
-        					$parameters[$pkgNumber.'_package_price'] = "Free";
-        				}
-        				$i++;
-        			}
-        		}
-        	}
+            if ($user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
+                $parameters['category_name'] = $container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $user->getBusinessCategoryId());
+                $objPackages = $this->_em->getRepository('FaPromotionBundle:Package')->getShopPackageByCategory($user->getBusinessCategoryId());
+                if ($objPackages && count($objPackages)) {
+                    $i = 1;
+                    foreach ($objPackages as $objPackage) {
+                        $pkgNumber = CommonManager::getConvertNumberToWords($i, 2);
+                        if ($objPackage->getPrice()) {
+                            $parameters[$pkgNumber.'_package_price'] = CommonManager::formatCurrency($objPackage->getPrice(), $container);
+                        } else {
+                            $parameters[$pkgNumber.'_package_price'] = "Free";
+                        }
+                        $i++;
+                    }
+                }
+            }
         }
 
         return $parameters;
@@ -1232,7 +1231,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             $userDetail['user_image'] = '';
             if (isset($userDetail['image']) && $userDetail['image'] != null) {
                 $userDetail['user_image'] = $userDetail['image'];
-            } else if (isset($userDetail['company_logo']) && $userDetail['company_logo'] != null) {
+            } elseif (isset($userDetail['company_logo']) && $userDetail['company_logo'] != null) {
                 $userDetail['user_image'] = $userDetail['company_logo'];
             }
             $userDetailArray[$userDetail['id']] = $userDetail;
@@ -1302,48 +1301,48 @@ class UserRepository extends EntityRepository implements UserProviderInterface
      */
     public function isTrustedUser($userId, $userUpsells, $container = null)
     {
-     /*
-        if ($container) {
-            $culture     = CommonManager::getCurrentCulture($container);
-            $tableName   = $this->getUserTableName();
-            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$userId.'_'.$culture;
-            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+        /*
+           if ($container) {
+               $culture     = CommonManager::getCurrentCulture($container);
+               $tableName   = $this->getUserTableName();
+               $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$userId.'_'.$culture;
+               $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
-            if ($cachedValue !== false) {
-                return $cachedValue;
-            }
-        }
+               if ($cachedValue !== false) {
+                   return $cachedValue;
+               }
+           }
 
-        $isTrusted = FALSE;
+           $isTrusted = FALSE;
 
-        if ($userId) {
-            $objUser = $this->find($userId);
+           if ($userId) {
+               $objUser = $this->find($userId);
 
-            if ($objUser) {
-                $dateDiff     = time() - $objUser->getCreatedAt();
-                $howOldUser   = floor($dateDiff/(60*60*24)); //in days
+               if ($objUser) {
+                   $dateDiff     = time() - $objUser->getCreatedAt();
+                   $howOldUser   = floor($dateDiff/(60*60*24)); //in days
 
-                $userRoleName = $this->getUserRole($userId, $container);
-                $userAds      = $this->_em->getRepository('FaAdBundle:Ad')->getPlacedAdCountByUserId($userId);
+                   $userRoleName = $this->getUserRole($userId, $container);
+                   $userAds      = $this->_em->getRepository('FaAdBundle:Ad')->getPlacedAdCountByUserId($userId);
 
-                if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER && $howOldUser > 30 && $userAds > 2) {
-                    $hasLogo = CommonManager::getUserLogoByUserId($container, $objUser->getId(), false, true);
-                    if ($hasLogo) {
-                        $isTrusted = TRUE;
-                    }
-                }
-            }
-        }
+                   if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER && $howOldUser > 30 && $userAds > 2) {
+                       $hasLogo = CommonManager::getUserLogoByUserId($container, $objUser->getId(), false, true);
+                       if ($hasLogo) {
+                           $isTrusted = TRUE;
+                       }
+                   }
+               }
+           }
 
-        if ($container) {
-            CommonManager::setCacheVersion($container, $cacheKey, $isTrusted, 3600);
-        }
-        */
+           if ($container) {
+               CommonManager::setCacheVersion($container, $cacheKey, $isTrusted, 3600);
+           }
+           */
 
-        $isTrusted = FALSE;
+        $isTrusted = false;
 
         if ($userUpsells && is_array($userUpsells) && count($userUpsells) > 0 && in_array(UpsellRepository::SHOP_VARIFIED_BUSINESS_BADGE_ID, $userUpsells)) {
-           $isTrusted = TRUE;
+            $isTrusted = true;
         }
 
         return $isTrusted;
@@ -1365,9 +1364,9 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $role = RoleRepository::ROLE_SELLER_ID;
 
         if ($user->getRoles()) {
-          foreach ($user->getRoles() as $userRole) {
-            $user->removeRole($userRole);
-          }
+            foreach ($user->getRoles() as $userRole) {
+                $user->removeRole($userRole);
+            }
         }
         $objRole = $this->_em->getRepository('FaUserBundle:Role')->find($role);
         $user->addRole($objRole);
@@ -1402,15 +1401,14 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $this->_em->getRepository('FaUserBundle:UserSite')->removeBusinessUserSiteData($user->getId(), $container);
 
         if ($objOldRole && count($objOldRole) > 0 && $objOldRole[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER && $objRole->getName() == RoleRepository::ROLE_SELLER) {
-          $updateSQL = "UPDATE ad SET is_trade_ad = '0' WHERE user_id = '".$user->getId()."'";
+            $updateSQL = "UPDATE ad SET is_trade_ad = '0' WHERE user_id = '".$user->getId()."'";
         }
 
-        if (!empty($updateSQL))
-        {
-          $stmt = $this->_em->getConnection()->prepare($updateSQL);
-          $stmt->execute();
+        if (!empty($updateSQL)) {
+            $stmt = $this->_em->getConnection()->prepare($updateSQL);
+            $stmt->execute();
 
-          exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$user->getId().'" >/dev/null &');
+            exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$user->getId().'" >/dev/null &');
         }
     }
 
@@ -1489,8 +1487,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             $updateSQL = "UPDATE ad SET is_trade_ad = '1' WHERE user_id = '".$user->getId()."'";
         }
 
-        if (!empty($updateSQL))
-        {
+        if (!empty($updateSQL)) {
             $stmt = $this->_em->getConnection()->prepare($updateSQL);
             $stmt->execute();
 
@@ -1508,9 +1505,26 @@ class UserRepository extends EntityRepository implements UserProviderInterface
     public function getUserDetailsById($userId)
     {
         $qb = $this->createQueryBuilder(self::ALIAS)
-        ->select(self::ALIAS.'.id', self::ALIAS.'.email', self::ALIAS.'.first_name', self::ALIAS.'.last_name', self::ALIAS.'.username', 'IDENTITY('.self::ALIAS.'.role) as user_role_id', self::ALIAS.'.phone', self::ALIAS.'.about_you', self::ALIAS.'.business_name', self::ALIAS.'.business_category_id', self::ALIAS.'.last_login', self::ALIAS.'.ip_address',
-                UserSiteRepository::ALIAS.'.company_welcome_message', UserSiteRepository::ALIAS.'.company_address', UserSiteRepository::ALIAS.'.phone1', UserSiteRepository::ALIAS.'.phone2', UserSiteRepository::ALIAS.'.website_link');
-        $qb->addSelect("group_concat(".PaymentTokenizationRepository::ALIAS.".card_number, ', ') as card_numbers","group_concat(".PaymentTokenizationRepository::ALIAS.".card_type, ',') as card_types")
+        ->select(
+            self::ALIAS.'.id',
+            self::ALIAS.'.email',
+            self::ALIAS.'.first_name',
+            self::ALIAS.'.last_name',
+            self::ALIAS.'.username',
+            'IDENTITY('.self::ALIAS.'.role) as user_role_id',
+            self::ALIAS.'.phone',
+            self::ALIAS.'.about_you',
+            self::ALIAS.'.business_name',
+            self::ALIAS.'.business_category_id',
+            self::ALIAS.'.last_login',
+            self::ALIAS.'.ip_address',
+                UserSiteRepository::ALIAS.'.company_welcome_message',
+            UserSiteRepository::ALIAS.'.company_address',
+            UserSiteRepository::ALIAS.'.phone1',
+            UserSiteRepository::ALIAS.'.phone2',
+            UserSiteRepository::ALIAS.'.website_link'
+        );
+        $qb->addSelect("group_concat(".PaymentTokenizationRepository::ALIAS.".card_number, ', ') as card_numbers", "group_concat(".PaymentTokenizationRepository::ALIAS.".card_type, ',') as card_types")
         ->leftJoin('Fa\Bundle\UserBundle\Entity\UserSite', UserSiteRepository::ALIAS, 'WITH', self::ALIAS.'.id = '.UserSiteRepository::ALIAS.'.user')
         ->leftJoin('Fa\Bundle\PaymentBundle\Entity\PaymentTokenization', PaymentTokenizationRepository::ALIAS, 'WITH', self::ALIAS.'.id = '.PaymentTokenizationRepository::ALIAS.'.user')
         ->groupBy(PaymentTokenizationRepository::ALIAS.'.user');
@@ -1537,7 +1551,8 @@ class UserRepository extends EntityRepository implements UserProviderInterface
      */
     public function getUserStatusByEmail($email, $container = null)
     {
-        $userDet = array();$userStatus = 0;
+        $userDet = array();
+        $userStatus = 0;
         $qb = $this->createQueryBuilder(self::ALIAS)
         ->select('IDENTITY('.self::ALIAS.'.status) AS status_id')
         ->andWhere(self::ALIAS.'.email = :email')
@@ -1545,7 +1560,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         ->setParameter('email', $email)->getQuery();
 
         $userDet = $qb->getArrayResult();
-        if(!empty($userDet)) {
+        if (!empty($userDet)) {
             $userStatus = $userDet[0]['status_id'];
         }
        
@@ -1553,15 +1568,15 @@ class UserRepository extends EntityRepository implements UserProviderInterface
     }
 
 
-     /**
-     * Send complete registration mail.
-     *
-     * @param object $user    User.
-     * @param object $paaLiteEmailNotification paaLiteEmailNotification.
-     * @param object  $container Container identifier.
-     *
-     * @return integer
-     */
+    /**
+    * Send complete registration mail.
+    *
+    * @param object $user    User.
+    * @param object $paaLiteEmailNotification paaLiteEmailNotification.
+    * @param object  $container Container identifier.
+    *
+    * @return integer
+    */
     public function sendCompleteRegistrationEmail($user, $paaLiteEmailNotification, $container = null)
     {
         //send email only if user and status is active and send mail opted.
@@ -1581,6 +1596,5 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             $this->_em->flush($paaLiteEmailNotification);
             //$output->writeln('Complete Registration mail sent to User Id:'.($user ? $user->getId() : null), true);
         }
-
     }
 }

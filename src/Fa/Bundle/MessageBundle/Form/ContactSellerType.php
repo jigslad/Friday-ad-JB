@@ -27,7 +27,6 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 
-
 /**
  * This form is used for contact seller.
  *
@@ -172,7 +171,6 @@ class ContactSellerType extends AbstractType
                 )
             );
         }
-
     }
 
     /**

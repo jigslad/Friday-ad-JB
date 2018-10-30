@@ -79,7 +79,6 @@ class FixMigratedImagesCommand extends ContainerAwareCommand
                 }
 
                 $last_id = $ad->getId();
-
             } else {
                 $done = true;
             }

@@ -81,7 +81,7 @@ class CategoryAdminType extends AbstractType
      * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {	
+    {
         $recommendedSlotArray = array();
         if ($builder->getData()->getId()) {
             $recommendedSlotArray = $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotArrayByCategoryId($builder->getData()->getId(), $this->container);
@@ -128,26 +128,26 @@ class CategoryAdminType extends AbstractType
             ->add('has_recommended_slot', CheckboxType::class, array('label' => 'Has recommended slots?', 'required' => false))
             ->add('is_oneclickenq_enabled', CheckboxType::class, array('label' => 'Enable One click enquire', 'required' => false));
             
-            /* Upgreade option enabled for root category */
-            if(($builder->getData()->getLvl() == '1' && $builder->getData()->getRoot() == '1') || $this->container->get('request_stack')->getCurrentRequest()->get('parent_id', null) == '1') {
-        		$builder->add('is_featured_upgrade_enabled', CheckboxType::class, array('label' => 'Featured upgrade', 'required' => false))
-		            ->add(
-		            	'featured_upgrade_info',
-		            	TextType::class,
-		            	array(
-		            		'label' => 'Category stats/info',
-		            		'required' => false
-		            	)
-		            )
-		            ->add(
-		            	'featured_upgrade_btn_txt',
-		            	TextType::class,
-		            	array(
-		            		'label' => 'CTA text',
-		            		'required' => false
-		            	)
-		            );
-        	}
+        /* Upgreade option enabled for root category */
+        if (($builder->getData()->getLvl() == '1' && $builder->getData()->getRoot() == '1') || $this->container->get('request_stack')->getCurrentRequest()->get('parent_id', null) == '1') {
+            $builder->add('is_featured_upgrade_enabled', CheckboxType::class, array('label' => 'Featured upgrade', 'required' => false))
+                    ->add(
+                        'featured_upgrade_info',
+                        TextType::class,
+                        array(
+                            'label' => 'Category stats/info',
+                            'required' => false
+                        )
+                    )
+                    ->add(
+                        'featured_upgrade_btn_txt',
+                        TextType::class,
+                        array(
+                            'label' => 'CTA text',
+                            'required' => false
+                        )
+                    );
+        }
         $builder
             ->add('has_recommended_slot_searchlist', CheckboxType::class, array('label' => 'Has recommended slots for search list page?', 'required' => false))
             ->add('is_oneclickenq_enabled', CheckboxType::class, array('label' => 'Enable One click enquire', 'required' => false))
@@ -163,12 +163,12 @@ class CategoryAdminType extends AbstractType
         }
 
         //recommended slots
-        $st = 0;$i=1;
+        $st = 0;
+        $i=1;
         for ($k = 1; $k <= 6; $k++) {
-
             for ($j = 1; $j <= 3; $j++) {
-                if(!empty($recommendedSlotSearchArray)) {
-                    if($recommendedSlotSearchArray[$st]['creative_group']== $k && $recommendedSlotSearchArray[$st]['creative_ord']==$j && count($recommendedSlotSearchArray)>$st) {
+                if (!empty($recommendedSlotSearchArray)) {
+                    if ($recommendedSlotSearchArray[$st]['creative_group']== $k && $recommendedSlotSearchArray[$st]['creative_ord']==$j && count($recommendedSlotSearchArray)>$st) {
                         $builder->add('recommended_slot_searchlist_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Title', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['title'] : '') ));
                         $builder->add('recommended_slot_searchlist_sub_title_'.$i, TextareaType::class, array('attr' => array('rows' => 5), 'mapped' => false, 'label' => 'Sub title', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['sub_title'] : '') ));
                         $builder->add('recommended_slot_searchlist_slot_file_'.$i, FileType::class, array('mapped' => false, 'label' => 'Image'));
@@ -176,7 +176,9 @@ class CategoryAdminType extends AbstractType
                         $builder->add('recommended_slot_searchlist_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['url'] : '') ));
                         $builder->add('recommended_slot_searchlist_creative_group_'.$i, HiddenType::class, array('mapped' => false,'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['creative_group'] : '')));
                         $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false,'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['creative_ord'] : '')));
-                        if(count($recommendedSlotSearchArray)-1 > $st) { $st++; }
+                        if (count($recommendedSlotSearchArray)-1 > $st) {
+                            $st++;
+                        }
                     } else {
                         $builder->add('recommended_slot_searchlist_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Title' ));
                         $builder->add('recommended_slot_searchlist_sub_title_'.$i, TextareaType::class, array('attr' => array('rows' => 5), 'mapped' => false, 'label' => 'Sub title' ));
@@ -197,7 +199,6 @@ class CategoryAdminType extends AbstractType
                 }
                 $i++;
             }
-           
         }
 
         $builder->addEventListener(FormEvents::SUBMIT, array($this, 'onSubmit'))
@@ -272,10 +273,10 @@ class CategoryAdminType extends AbstractType
         $financeTitle     = $form->get('finance_title')->getData();
         $financeUrl       = $form->get('finance_url')->getData();
         $hasRecommendedSlot = $form->get('has_recommended_slot')->getData();
-        if ($form->has('is_featured_upgrade_enabled') && $form->get('is_featured_upgrade_enabled')->getData()) { 
-        	if($form->get('featured_upgrade_info')->getData() == '') {
-        		$event->getForm()->get('featured_upgrade_info')->addError(new \Symfony\Component\Form\FormError($this->translator->trans('Please enter category stats/info.', array(), 'validators')));
-        	}
+        if ($form->has('is_featured_upgrade_enabled') && $form->get('is_featured_upgrade_enabled')->getData()) {
+            if ($form->get('featured_upgrade_info')->getData() == '') {
+                $event->getForm()->get('featured_upgrade_info')->addError(new \Symfony\Component\Form\FormError($this->translator->trans('Please enter category stats/info.', array(), 'validators')));
+            }
         }
         $hasRecommendedSlotSearchlist = $form->get('has_recommended_slot_searchlist')->getData();
 
@@ -342,12 +343,11 @@ class CategoryAdminType extends AbstractType
                     }
                     if ((!$form->get('recommended_slot_searchlist_slot_file_'.$i)->getData()) && (!$form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData())) {
                         $form->get('recommended_slot_searchlist_slot_file_'.$i)->addError(new FormError('Please upload slot image.'));
-                    } 
+                    }
                     if (!$form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
                         $form->get('recommended_slot_searchlist_url_'.$i)->addError(new FormError('Please enter url.'));
                     }
                 }
-
             }
             if ($oneSelectRecommendedSlotSearchlistFlag) {
                 $form->get('has_recommended_slot_searchlist')->addError(new FormError('Please enter atleast one recommended slot for search list page.'));
@@ -456,7 +456,7 @@ class CategoryAdminType extends AbstractType
                         } else {
                             $existslotFileName = null;
                             $existslotFileName     = $form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData();
-                            if($existslotFileName !== null) {
+                            if ($existslotFileName !== null) {
                                 $recommendedSlot->setSlotFilename($existslotFileName);
                             }
                         }

@@ -345,7 +345,7 @@ class AdEnquiryReportRepository extends EntityRepository
         if (in_array($sorter['sort_field'], $sortFields) && isset($sorter['sort_field']) && $sorter['sort_field'] && isset($sorter['sort_ord']) && $sorter['sort_ord']) {
             if (in_array($sorter['sort_field'], self::getReportSortFields())) {
                 $qb->orderBy(self::ALIAS.'.'.$sorter['sort_field'], $sorter['sort_ord']);
-            } else if (in_array($sorter['sort_field'], AdEnquiryReportDailyRepository::getReportSortFields())) {
+            } elseif (in_array($sorter['sort_field'], AdEnquiryReportDailyRepository::getReportSortFields())) {
                 $qb->orderBy($sorter['sort_field'].'_sum', $sorter['sort_ord']);
             }
         }

@@ -125,11 +125,11 @@ class EmailTemplate
      */
     private $status;
 
-     /**
-     * @var integer
-     *
-     * @ORM\Column(name="created_at", type="integer", length=10)
-     */
+    /**
+    * @var integer
+    *
+    * @ORM\Column(name="created_at", type="integer", length=10)
+    */
     private $created_at;
 
     /**

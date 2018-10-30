@@ -1,6 +1,6 @@
 <?php
 /*
-  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE. 
+  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE.
   Can be easily integrated with any other WYSIWYG editor or CMS.
 
   Copyright (C) 2013, RoxyFileman.com - Lyubomir Arsov. All rights reserved.
@@ -30,12 +30,12 @@ $path = trim(empty($_GET['d'])?'':$_GET['d']);
 $name = trim(empty($_GET['n'])?'':$_GET['n']);
 verifyPath($path);
 
-if(is_dir(fixPath($path))){
-  if(mkdir(fixPath($path).'/'.$name, octdec(DIRPERMISSIONS)))
-    echo getSuccessRes();
-  else
-    echo getErrorRes(t('E_CreateDirFailed').' '.basename($path));
+if (is_dir(fixPath($path))) {
+    if (mkdir(fixPath($path).'/'.$name, octdec(DIRPERMISSIONS))) {
+        echo getSuccessRes();
+    } else {
+        echo getErrorRes(t('E_CreateDirFailed').' '.basename($path));
+    }
+} else {
+    echo  getErrorRes(t('E_CreateDirInvalidPath'));
 }
-else
-  echo  getErrorRes(t('E_CreateDirInvalidPath'));
-?>

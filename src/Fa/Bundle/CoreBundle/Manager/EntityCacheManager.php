@@ -364,7 +364,6 @@ class EntityCacheManager
             if ($result) {
                 CommonManager::setCacheVersion($this->container, $cacheKey, $result['id']);
                 return $result['id'];
-
             }
         }//end if
 

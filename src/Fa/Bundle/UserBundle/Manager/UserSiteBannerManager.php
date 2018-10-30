@@ -118,7 +118,7 @@ class UserSiteBannerManager
         if ($userSiteBanner) {
             $this->removeImage();
             $imagepath = $siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename();
-            if(file_exists($imagepath)) {
+            if (file_exists($imagepath)) {
                 $dimension = getimagesize($imagepath);
                 //convert original image to jpg
                 $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');

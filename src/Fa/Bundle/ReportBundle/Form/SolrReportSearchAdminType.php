@@ -30,7 +30,6 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
 /**
  * SolrReportSearchAdminType form.
  *
@@ -73,11 +72,11 @@ class SolrReportSearchAdminType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder 
+        $builder
         ->add('user__id', TextType::class, array('required' => false))
         ->add('ad__id', TextType::class, array('required' => false))
-        ->add('user__email', TextType::class, array('required' => false)) 
-        ->add('status', HiddenType::class)      
+        ->add('user__email', TextType::class, array('required' => false))
+        ->add('status', HiddenType::class)
         ->add(
             'ad__status',
             EntityType::class,

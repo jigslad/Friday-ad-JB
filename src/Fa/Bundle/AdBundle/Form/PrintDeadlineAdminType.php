@@ -27,7 +27,6 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-
 /**
  * PrintDeadlineAdminType form.
  *
@@ -94,8 +93,8 @@ class PrintDeadlineAdminType extends AbstractType
             ->add('save', SubmitType::class)
             ->add('saveAndNew', SubmitType::class);
 
-            $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
-            $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmit'));
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
+        $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmit'));
     }
 
     /**

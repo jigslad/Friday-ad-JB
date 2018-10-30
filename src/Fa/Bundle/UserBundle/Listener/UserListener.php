@@ -281,7 +281,6 @@ class UserListener
      */
     private function removeUserCache($entity)
     {
-
     }
 
     /**

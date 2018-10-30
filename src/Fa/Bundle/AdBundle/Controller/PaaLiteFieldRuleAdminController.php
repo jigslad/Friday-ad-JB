@@ -137,7 +137,6 @@ class PaaLiteFieldRuleAdminController extends CrudController implements Resource
                       );
 
         return $this->render($this->getBundleName().':'.$this->getControllerName().':new.html.twig', $parameters);
-    
     }
 
     /**

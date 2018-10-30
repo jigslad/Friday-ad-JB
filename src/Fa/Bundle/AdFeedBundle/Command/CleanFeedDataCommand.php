@@ -112,7 +112,7 @@ EOF
                                 } else {
                                     $output->writeln('Problem in deleting image : '.$feedAdImage, true);
                                 }
-                            }else {
+                            } else {
                                 $output->writeln('Image not found for : '.$feedAdImage, true);
                             }
                         } else {

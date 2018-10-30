@@ -121,8 +121,8 @@ class PrintEditionAdminType extends AbstractType
             ->add('save', SubmitType::class)
             ->add('saveAndNew', SubmitType::class);
 
-            $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
-            $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmit'));
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
+        $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmit'));
     }
 
     /**

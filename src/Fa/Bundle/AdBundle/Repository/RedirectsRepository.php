@@ -26,7 +26,6 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
  */
 class RedirectsRepository extends EntityRepository
 {
-
     const ALIAS = 'red';
 
     /**
@@ -50,9 +49,9 @@ class RedirectsRepository extends EntityRepository
                 }
             }
 
-              $qb = $this->createQueryBuilder(self::ALIAS)
+            $qb = $this->createQueryBuilder(self::ALIAS)
                 ->setMaxResults(1);
-              $qb->addOrderBy(self::ALIAS.'.id', 'DESC');
+            $qb->addOrderBy(self::ALIAS.'.id', 'DESC');
 
             if ($location) {
                 $qb->andWhere(self::ALIAS.'.is_location = :is_location');
@@ -96,7 +95,7 @@ class RedirectsRepository extends EntityRepository
                 $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
                 if ($cachedValue !== false) {
-                   return $cachedValue;
+                    return $cachedValue;
                 }
             }
 

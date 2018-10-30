@@ -105,7 +105,7 @@ class ForgotPasswordType extends AbstractType
             $user = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('username' => $data['email'], 'is_half_account' => 0));
             if (!$user) {
                 $form->get('email')->addError(new FormError($this->translator->trans('This email is not registered in Friday-Ad.', array(), 'validators')));
-            } else if ($user && $user->getStatus()->getId() != EntityRepository::USER_STATUS_ACTIVE_ID) {
+            } elseif ($user && $user->getStatus()->getId() != EntityRepository::USER_STATUS_ACTIVE_ID) {
                 $form->get('email')->addError(new FormError($this->translator->trans('Your status is not active.', array(), 'validators')));
             }
         }

@@ -44,7 +44,6 @@ use \Exception;
 
 class XML2Array
 {
-
     private static $xml = null;
     private static $encoding = 'UTF-8';
 

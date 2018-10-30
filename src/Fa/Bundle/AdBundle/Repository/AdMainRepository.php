@@ -26,5 +26,4 @@ use Fa\Bundle\AdBundle\Repository\AdRepository;
  */
 class AdMainRepository extends EntityRepository
 {
-
 }

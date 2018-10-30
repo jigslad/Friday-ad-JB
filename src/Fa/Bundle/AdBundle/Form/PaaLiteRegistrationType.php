@@ -88,7 +88,6 @@ class PaaLiteRegistrationType extends RegistrationType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        
         $builder->add('Register', SubmitType::class, array('label' => 'Sign up with email'));
         $sessionUserData = $this->container->get('session')->get('paa_lite_user_info');
         if (isset($sessionUserData['user_facebook_id']) || isset($sessionUserData['user_google_id'])) {
@@ -124,9 +123,8 @@ class PaaLiteRegistrationType extends RegistrationType
                         $user->setGoogleId($sessionData['user_google_id']);
                     }
                 }
-                $this->container->get('session')->remove('paa_lite_user_info');               
-            } 
-            
+                $this->container->get('session')->remove('paa_lite_user_info');
+            }
         }
     }
     /**

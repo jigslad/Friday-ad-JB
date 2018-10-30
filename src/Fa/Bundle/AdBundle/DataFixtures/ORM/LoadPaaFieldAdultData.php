@@ -60,7 +60,7 @@ class LoadPaaFieldAdultData extends LoadPaaFieldData
 
             $fieldRuleLabel = array();
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -69,20 +69,20 @@ class LoadPaaFieldAdultData extends LoadPaaFieldData
                 'payment_method_id' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'title' => 2,
                 'description' => 2,
                 'location' => 4,
                 'personalized_title' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,

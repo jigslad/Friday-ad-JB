@@ -68,7 +68,7 @@ class DownloadOldImagesNewCommand extends ContainerAwareCommand
                 foreach ($images as $image) {
                     if ($image->getOldPathOrg() != "") {
                         if (!file_exists($imageDir.'/'.basename($image->getOldPathOrg()))) {
-                                echo $image->getOldPathOrg()."\n";
+                            echo $image->getOldPathOrg()."\n";
                         } else {
                             if (!file_exists($imageDir.'/'.basename($image->getOldPath()))) {
                                 echo $image->getOldPath()."\n";
@@ -82,7 +82,6 @@ class DownloadOldImagesNewCommand extends ContainerAwareCommand
                 }
 
                 $last_id = $image->getId();
-
             } else {
                 $done = true;
             }
@@ -115,5 +114,4 @@ class DownloadOldImagesNewCommand extends ContainerAwareCommand
 
         return $q->getQuery()->getResult();
     }
-
 }

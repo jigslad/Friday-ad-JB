@@ -19,10 +19,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Fa\Bundle\AdBundle\Repository\InActiveUserSolrAdsRepository;
 use Fa\Bundle\AdBundle\Entity\InActiveUserSolrAds;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
+
 // use Symfony\Component\Validator\Constraints\False;
 /**
  * Main purpose of this cron is to solve solr active and inactive user ads which are in solr and which are not solr.
- * This command is used to add active adverts yo solr which are not in solr 
+ * This command is used to add active adverts yo solr which are not in solr
  * This command is used to remove inactive user adverts from solr which are in solr.
  *
  * @author Vijay <vijay.namburi@fridaymediafroup.com>
@@ -97,7 +98,7 @@ EOF
         $userStatus = intval($input->getOption('user_status'));
         $idsNotFound = array();
         $idsFound    = array();
-        $qb          = $this->getAdQueryBuilder(FALSE, $input);
+        $qb          = $this->getAdQueryBuilder(false, $input);
         $step        = 100;
         $offset      = $input->getOption('offset');
         $em          = $this->getContainer()->get('doctrine')->getManager();
@@ -112,7 +113,7 @@ EOF
         $objAds = $qb->getQuery()->execute();
         
         foreach ($objAds as $objAd) {
-            $dataFlag = TRUE;
+            $dataFlag = true;
             $userId = $objAd['userId'];
             if ($userStatus == EntityRepository::USER_STATUS_ACTIVE_ID) {
                 $advertId = $objAd['adId'];
@@ -134,7 +135,7 @@ EOF
                     
                     if ($returnVar !== 0) {
                         $output->writeln('Error occurred during subtask', true);
-                        $dataFlag = FALSE;
+                        $dataFlag = false;
                     }
                     
                     if ($dataFlag) {
@@ -153,19 +154,19 @@ EOF
                                 }
                                 $output->writeln("Advert Id: $advertId add to solr", true);
                             }
-                        }                        
+                        }
                     }
-                }else {
+                } else {
                     $output->writeln('Got Error for AdvertId : '.$advertId, true);
                 }
-            }else {
+            } else {
                 $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:update:inactive-user-ads --user_id="'.$userId.'"';
                 $output->writeln($command, true);
                 passthru($command, $returnVar);
                 
                 if ($returnVar !== 0) {
                     $output->writeln('Error occurred during subtask', true);
-                    $dataFlag = FALSE;
+                    $dataFlag = false;
                 }
                 
                 if ($dataFlag) {
@@ -190,7 +191,7 @@ EOF
      */
     protected function syncSolrStatus($input, $output)
     {
-        $qb        = $this->getAdQueryBuilder(TRUE, $input);
+        $qb        = $this->getAdQueryBuilder(true, $input);
         $count     = $qb->getQuery()->getSingleScalarResult();
         $step      = 100;
         $stat_time = time();
@@ -238,7 +239,7 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE, $input)
+    protected function getAdQueryBuilder($onlyCount = false, $input)
     {
         $userStatus = intval($input->getOption('user_status'));
         
@@ -248,13 +249,13 @@ EOF
         if ($onlyCount) {
             if ($userStatus == EntityRepository::USER_STATUS_ACTIVE_ID) {
                 $qb->select('COUNT('.InActiveUserSolrAdsRepository::ALIAS.'.id)');
-            }else {
+            } else {
                 $qb->select('COUNT(DISTINCT '.InActiveUserSolrAdsRepository::ALIAS.'.userId)');
             }
-        }else {
+        } else {
             if ($userStatus == EntityRepository::USER_STATUS_ACTIVE_ID) {
                 $qb->select(InActiveUserSolrAdsRepository::ALIAS.'.adId AS adId', InActiveUserSolrAdsRepository::ALIAS.'.userId AS userId');
-            }else {
+            } else {
                 $qb->select('DISTINCT '.InActiveUserSolrAdsRepository::ALIAS.'.userId AS userId');
             }
         }
@@ -265,7 +266,7 @@ EOF
         if ($userStatus == EntityRepository::USER_STATUS_ACTIVE_ID) {
             $qb->andWhere(InActiveUserSolrAdsRepository::ALIAS.'.userStatus = :userStatus')
                 ->setParameter('userStatus', EntityRepository::USER_STATUS_ACTIVE_ID);
-        }else {
+        } else {
             $qb->andWhere(InActiveUserSolrAdsRepository::ALIAS.'.userStatus <> :userStatus')
                 ->setParameter('userStatus', EntityRepository::USER_STATUS_ACTIVE_ID);
         }

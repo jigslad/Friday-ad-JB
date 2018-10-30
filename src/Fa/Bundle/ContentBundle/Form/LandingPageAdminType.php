@@ -40,7 +40,6 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-
 /**
  * Landing page admin type form.
  *
@@ -225,7 +224,6 @@ class LandingPageAdminType extends AbstractType
                     }
                 }
             }
-
         }
         $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'onPostSubmit'))
             ->addEventListener(FormEvents::SUBMIT, array($this, 'onSubmit'));

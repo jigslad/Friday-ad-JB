@@ -22,7 +22,6 @@ use Fa\Bundle\AdBundle\Entity\AdProperty;
  */
 class Property
 {
-
     private $meta_text;
 
     private $ad_id;
@@ -40,7 +39,6 @@ class Property
         $this->em = $em;
         $this->container = $container;
         $this->init();
-
     }
 
     public function init()
@@ -119,7 +117,6 @@ class Property
             if (isset($string->PropertyTransMeta->hasPrivateCarpark)) {
                 $this->data['private_car_park'] =  (string) $string->PropertyTransMeta->hasPrivateCarpark;
             }
-
         }
     }
 
@@ -135,7 +132,6 @@ class Property
         if (isset($cType[$string])) {
             return $cType[$string];
         }
-
     }
     private function getBathRooms($string)
     {
@@ -292,7 +288,6 @@ class Property
                     echo $AdRepository->getStatus()->getId();
                     $metaData['rent_per_id'] = $rentPer;
                 }
-
             } elseif ($sc['name'] ==  'Share') {
                 $rentPer =  $this->getRentPerForShare($AdRepository->getPriceOldText());
                 if ($rentPer) {

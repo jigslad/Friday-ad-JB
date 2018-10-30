@@ -12,6 +12,7 @@
 namespace Fa\Bundle\AdBundle\lib\Migration;
 
 use Fa\Bundle\AdBundle\Entity\AdMotors;
+
 // use Fa\Bundle\AdBundle\Entity\Fa\Bundle\AdBundle\Entity;
 
 /**
@@ -23,7 +24,6 @@ use Fa\Bundle\AdBundle\Entity\AdMotors;
  */
 class CV
 {
-
     private $meta_text;
 
     private $ad_id;
@@ -37,7 +37,6 @@ class CV
         $this->ad_id     = $ad_id;
         $this->em = $em;
         $this->init();
-
     }
 
 
@@ -58,7 +57,7 @@ class CV
         if (isset($cType[$string])) {
             return $cType[$string];
         } else {
-           // echo $string."\n";
+            // echo $string."\n";
         }
     }
 
@@ -88,7 +87,7 @@ class CV
         if (isset($cType[$string])) {
             return $cType[$string];
         } else {
-           // echo $string."\n";
+            // echo $string."\n";
         }
     }
 
@@ -106,9 +105,8 @@ class CV
         if (isset($cType[$string])) {
             return $cType[$string];
         } else {
-           // echo $string."\n";
+            // echo $string."\n";
         }
-
     }
 
     public function getTransmissionId($string)
@@ -123,7 +121,7 @@ class CV
         if (isset($cType[$string])) {
             return $cType[$string];
         } else {
-           // echo $string."\n";
+            // echo $string."\n";
         }
     }
 
@@ -158,28 +156,28 @@ class CV
             }
 
             if (isset($string->MotorsTransMeta->engineSizeLitre)) {
-                 $this->data['engine_size']  = trim((string) $string->MotorsTransMeta->engineSizeLitre);
+                $this->data['engine_size']  = trim((string) $string->MotorsTransMeta->engineSizeLitre);
             }
 
             if (isset($string->MotorsTransMeta->make)) {
-                 $this->data['old_make']  = trim((string) $string->MotorsTransMeta->make);
+                $this->data['old_make']  = trim((string) $string->MotorsTransMeta->make);
             }
 
             if (isset($string->MotorsTransMeta->model)) {
-                 $this->data['old_model']  = trim((string) $string->MotorsTransMeta->model);
+                $this->data['old_model']  = trim((string) $string->MotorsTransMeta->model);
             }
 
             if (isset($string->MotorsTransMeta->regDate)) {
-                 $this->data['reg_year']  =  date('Y', strtotime(trim((string) $string->MotorsTransMeta->regDate)));
+                $this->data['reg_year']  =  date('Y', strtotime(trim((string) $string->MotorsTransMeta->regDate)));
             }
 
             if (isset($string->MotorsTransMeta->mileage)) {
-                 $this->data['mileage']  =  trim((string) $string->MotorsTransMeta->mileage);
+                $this->data['mileage']  =  trim((string) $string->MotorsTransMeta->mileage);
             }
 
             if (isset($string->MotorsTransMeta->transmission)) {
-                 $this->data['transmission_id'] = $this->getTransmissionId(trim((string) $string->MotorsTransMeta->transmission));
-                 $this->data['old_transmission'] = trim((string) $string->MotorsTransMeta->transmission);
+                $this->data['transmission_id'] = $this->getTransmissionId(trim((string) $string->MotorsTransMeta->transmission));
+                $this->data['old_transmission'] = trim((string) $string->MotorsTransMeta->transmission);
             }
 
             if (isset($string->MotorsTransMeta->hasAbs) && (string) $string->MotorsTransMeta->hasAbs == "true") {

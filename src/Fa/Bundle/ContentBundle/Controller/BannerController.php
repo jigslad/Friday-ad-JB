@@ -23,8 +23,6 @@ use Fa\Bundle\ContentBundle\Repository\BannerRepository;
 use Fa\Bundle\ContentBundle\Repository\BannerPageRepository;
 use Fa\Bundle\ContentBundle\Repository\BannerZoneRepository;
 
-
-
 /**
  * This controller is used for banner management.
  *

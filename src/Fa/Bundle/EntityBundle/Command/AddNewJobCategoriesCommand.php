@@ -57,7 +57,8 @@ Actions:
 Command:
  - php app/console fa:add:new-job-categories-name
 EOF
-        );;
+        );
+        ;
     }
 
     /**
@@ -117,7 +118,7 @@ EOF
                     $childCatObj->setParent($parentCatObj);
                     $this->entityManager->persist($childCatObj);
                     $this->entityManager->flush();
-                } elseif(!$childCatObj) {
+                } elseif (!$childCatObj) {
                     echo "Category not inserted:".$row['child']."\n";
                 }
             }

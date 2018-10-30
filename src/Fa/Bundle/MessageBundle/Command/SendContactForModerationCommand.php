@@ -83,7 +83,7 @@ EOF
             }
 
             // handle date
-            $searchParam['message']['created_at_from_to'] =  strtotime(date('d-m-Y',strtotime("-7 day"))).'|';
+            $searchParam['message']['created_at_from_to'] =  strtotime(date('d-m-Y', strtotime("-7 day"))).'|';
         }
 
         if (isset($offset)) {
@@ -130,7 +130,6 @@ EOF
                 $this->getContainer()->get('doctrine')->getManager()->persist($contactModerate);
                 $output->writeln('Message has been sent for moderation for message id: '.$contactModerate->getId(), true);
             }
-
         }
 
         $this->getContainer()->get('doctrine')->getManager()->flush();
@@ -202,7 +201,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('message' => array ('created_at' => 'asc'));
+        $data['query_sorter']  = array('message' => array('created_at' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($messageRepository, $data);

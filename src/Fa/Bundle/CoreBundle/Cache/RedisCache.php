@@ -155,14 +155,14 @@ class RedisCache extends BaseCache
         }
         
         $countKey = count($key);
-        if ($countKey > 50000){
+        if ($countKey > 50000) {
             $chunk = array_chunk($key, 50000);
             $countChunk = count($chunk);
             for ($i = 0; $i < $countChunk - 1; $i++) {
                 $this->redis->delete($chunk[$i]);
             }
             return $this->redis->delete($chunk[$countChunk-1]);
-        }else {
+        } else {
             return $this->redis->delete($key);
         }
     }
@@ -179,7 +179,7 @@ class RedisCache extends BaseCache
     {
         $keysToRemove = array();
         $keysToRemove[] = $hash;
-        $it = NULL;
+        $it = null;
         if ($this->redis instanceof \Redis) {
             $redis = $this->redis;
         } else {
@@ -189,8 +189,8 @@ class RedisCache extends BaseCache
         /* Don't ever return an empty array until we're done iterating */
         $redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
         //$params = array($hash, $pattern);
-        while($arr_keys = $redis->hScan($hash, $it, $pattern)) {
-            foreach($arr_keys as $str_field => $str_value) {
+        while ($arr_keys = $redis->hScan($hash, $it, $pattern)) {
+            foreach ($arr_keys as $str_field => $str_value) {
                 $keysToRemove[] = $str_field;
             }
         }

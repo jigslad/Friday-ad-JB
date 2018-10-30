@@ -154,7 +154,6 @@ class UserCreditAdminController extends CoreController implements ResourceAuthor
             $formManager->save($entity);
 
             return parent::handleMessage($this->get('translator')->trans('New user credits was successfully added.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'user_credit_new_admin' : ($backUrl ? $backUrl : 'user_admin')));
-
         }
 
         $parameters = array(
@@ -283,19 +282,13 @@ class UserCreditAdminController extends CoreController implements ResourceAuthor
         try {
             $deleteManager->delete($entity);
         } catch (\Doctrine\DBAL\DBALException $e) {
-            if ($e->getCode() == 0)
-            {
-                if ($e->getPrevious()->getCode() == 23000)
-                {
+            if ($e->getCode() == 0) {
+                if ($e->getPrevious()->getCode() == 23000) {
                     return parent::handleMessage($this->get('translator')->trans("This record can not be removed from database because it's reference exists in database.", array(), 'error'), 'user_credit_admin', array('userId' => $userId), 'error');
-                }
-                else
-                {
+                } else {
                     return parent::handleException($e, 'error', 'user_credit_admin', array('userId' => $userId));
                 }
-            }
-            else
-            {
+            } else {
                 return parent::handleException($e, 'error', 'user_credit_admin', array('userId' => $userId));
             }
         } catch (\Exception $e) {

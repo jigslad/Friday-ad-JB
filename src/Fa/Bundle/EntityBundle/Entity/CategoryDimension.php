@@ -337,9 +337,9 @@ class CategoryDimension
      */
     public function setOrd($ord)
     {
-    	$this->ord = $ord;
-    	
-    	return $this;
+        $this->ord = $ord;
+        
+        return $this;
     }
     
     /**
@@ -349,6 +349,6 @@ class CategoryDimension
      */
     public function getOrd()
     {
-    	return $this->ord;
+        return $this->ord;
     }
 }

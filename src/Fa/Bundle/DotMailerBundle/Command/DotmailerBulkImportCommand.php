@@ -97,9 +97,9 @@ EOF
 
         if ($ids) {
             $searchParam['dotmailer'] = array('id' => $ids);
-        } else if ($startDate && $endDate) {
+        } elseif ($startDate && $endDate) {
             $searchParam['dotmailer']['updated_at_from_to'] =  $startDate.'|'.$endDate;
-        } else if ($lastDays) {
+        } elseif ($lastDays) {
             $date = date('d/m/Y', strtotime('-'.$lastDays.' day'));
             $searchParam['dotmailer']['updated_at_from_to'] =  $date.'|'.$date;
         }
@@ -219,7 +219,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('dotmailer' => array ('updated_at' => 'asc'));
+        $data['query_sorter']  = array('dotmailer' => array('updated_at' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($dotMailerRepository, $data);

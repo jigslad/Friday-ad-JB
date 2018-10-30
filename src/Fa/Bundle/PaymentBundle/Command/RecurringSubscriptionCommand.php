@@ -115,7 +115,6 @@ class RecurringSubscriptionCommand extends ContainerAwareCommand
                             $cartCode = $this->updatePaymentRecords($user, $package, $payment, $cyberSourceReply, $subscriptionId);
                             $userPackage = $this->em->getRepository('FaUserBundle:UserPackage')->assignPackageToUser($user, $package, 'package-renew-thourgh-recurring', null, false, $this->getContainer());
                             $this->em->getRepository('FaUserBundle:UserPackage')->sendUserPackageBillingEmail($user, $package, $userPackage, $cartCode, $subscriptionId, 'subscription_billing_receipt', $this->getContainer());
-
                         } else {
                             echo "Subscription failed for user".$payment->getId()."\n";
                             $this->em->getRepository('FaUserBundle:UserPackage')->sendUserPackageEmail($user, $package, 'payment_not_received', $this->getContainer(), $subscriptionId);
@@ -126,7 +125,6 @@ class RecurringSubscriptionCommand extends ContainerAwareCommand
                 }
 
                 $last_id = $userPackage->getId();
-
             } else {
                 $done = true;
             }

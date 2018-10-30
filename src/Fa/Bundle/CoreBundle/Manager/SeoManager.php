@@ -264,14 +264,14 @@ class SeoManager
      *
      * @return string
      */
-    public function parseSeoStringForAdList($seoString, $searchParams, $cookieLocationDetails,$canonical_url=false)
+    public function parseSeoStringForAdList($seoString, $searchParams, $cookieLocationDetails, $canonical_url=false)
     {
         $parentCategoryIds  = array();
         $categoryClassName  = null;
         $seoReplaceArray    = array();
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $seoLocationName    = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', LocationRepository::COUNTY_ID);
-       	
+           
         if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['locality']) && $cookieLocationDetails['locality']) {
             $seoLocationName = $cookieLocationDetails['locality'];
             if ($this->em->getRepository('FaEntityBundle:Locality')->isDuplicateName($cookieLocationDetails['locality'], $this->container)
@@ -282,7 +282,7 @@ class SeoManager
             $seoLocationName = $cookieLocationDetails['county'];
         } elseif (is_array($cookieLocationDetails) && isset($cookieLocationDetails['town']) && $cookieLocationDetails['town']) {
             //check location is belongs to area or special area
-        	$seoLocationName = $this->em->getRepository('FaEntityBundle:Location')->getTownLocationNameForSeo($cookieLocationDetails['town'], $this->container);
+            $seoLocationName = $this->em->getRepository('FaEntityBundle:Location')->getTownLocationNameForSeo($cookieLocationDetails['town'], $this->container);
             if ($this->em->getRepository('FaEntityBundle:Location')->isDuplicateName($cookieLocationDetails['town'], $this->container)
                 && isset($cookieLocationDetails['paa_county']) && $cookieLocationDetails['paa_county']) {
                 $seoLocationName .= ', '.$cookieLocationDetails['paa_county'];
@@ -364,7 +364,7 @@ class SeoManager
         $seoString = preg_replace(array('/(\s*,\s*){2,}/', '/^(\s*,\s*)+/', '/(\s*,\s*)+$/'), array(', ', '', ''), $seoString);
         $seoString = preg_replace(array('/(\s*-\s*){2,}/', '/^(\s*-\s*)+/', '/(\s*-\s*)+$/'), array(' - ', '', ''), $seoString);
         
-        if(!$canonical_url) {
+        if (!$canonical_url) {
             $seoString = preg_replace('~/{2,}~', '/', $seoString);
         }
         $seoString = trim($seoString);
@@ -427,7 +427,6 @@ class SeoManager
                     }
                     $fieldVal = implode(' ', $fieldValArray);
                 } else {
-
                     $fieldVal = $this->em->getRepository('FaEntityBundle:Entity')->getSeoValueById($adDetailArray[$fieldName], $this->container);
                     if (!$fieldVal) {
                         $fieldVal = $entityCacheManager->getEntityNameById('FaEntityBundle:Entity', $adDetailArray[$fieldName]);

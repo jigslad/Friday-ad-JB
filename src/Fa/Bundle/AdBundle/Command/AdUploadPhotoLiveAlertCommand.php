@@ -193,7 +193,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('ad' => array ('id' => 'asc'));
+        $data['query_sorter']  = array('ad' => array('id' => 'asc'));
         $data['static_filters'] = AdRepository::ALIAS.'.original_published_at > 0';
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');

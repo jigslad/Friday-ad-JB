@@ -223,7 +223,7 @@ EOF
 
         $data                 = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter'] = array('ad' => array ('id' => 'asc'));
+        $data['query_sorter'] = array('ad' => array('id' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($adRepository, $data);

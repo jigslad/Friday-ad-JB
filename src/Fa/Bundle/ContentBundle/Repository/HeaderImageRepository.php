@@ -120,15 +120,15 @@ class HeaderImageRepository extends EntityRepository
             }
         }
 
-       /* $query = $this->getBaseQueryBuilder()
-        ->select(self::ALIAS.'.path', self::ALIAS.'.file_name', self::ALIAS.'.phone_file_name', self::ALIAS.'.screen_type', self::ALIAS.'.right_hand_image_url', CategoryRepository::ALIAS.'.id as category_id', LocationRepository::ALIAS.'t.id as town_id', LocationRepository::ALIAS.'d.id as domicile_id')
-        ->leftJoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
-        ->leftJoin(self::ALIAS.'.location_town', LocationRepository::ALIAS.'t')
-        ->leftJoin(self::ALIAS.'.location_domicile', LocationRepository::ALIAS.'d')
-        ->andWhere(self::ALIAS.'.status = 1');*/
+        /* $query = $this->getBaseQueryBuilder()
+         ->select(self::ALIAS.'.path', self::ALIAS.'.file_name', self::ALIAS.'.phone_file_name', self::ALIAS.'.screen_type', self::ALIAS.'.right_hand_image_url', CategoryRepository::ALIAS.'.id as category_id', LocationRepository::ALIAS.'t.id as town_id', LocationRepository::ALIAS.'d.id as domicile_id')
+         ->leftJoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
+         ->leftJoin(self::ALIAS.'.location_town', LocationRepository::ALIAS.'t')
+         ->leftJoin(self::ALIAS.'.location_domicile', LocationRepository::ALIAS.'d')
+         ->andWhere(self::ALIAS.'.status = 1');*/
 
         $query = $this->getBaseQueryBuilder()
-        ->select(self::ALIAS.'.path', self::ALIAS.'.file_name', self::ALIAS.'.phone_file_name', self::ALIAS.'.screen_type', self::ALIAS.'.right_hand_image_url', self::ALIAS.'.override_image', CategoryRepository::ALIAS.'.id as category_id',  LocationRepository::ALIAS.'d.id as domicile_id')
+        ->select(self::ALIAS.'.path', self::ALIAS.'.file_name', self::ALIAS.'.phone_file_name', self::ALIAS.'.screen_type', self::ALIAS.'.right_hand_image_url', self::ALIAS.'.override_image', CategoryRepository::ALIAS.'.id as category_id', LocationRepository::ALIAS.'d.id as domicile_id')
         ->leftJoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
         ->leftJoin(self::ALIAS.'.location_domicile', LocationRepository::ALIAS.'d')
         ->andWhere(self::ALIAS.'.status = 1');
@@ -141,9 +141,9 @@ class HeaderImageRepository extends EntityRepository
                 $headerImagePath = $container->get('kernel')->getRootDir().'/../web/'.$headeImage['path'].'/'.$headeImage['file_name'];
                 if (is_file($headerImagePath)) {
                     $key = '';
-                   /* if ($headeImage['town_id']) {
-                        $key .= $headeImage['town_id'].'_';
-                    }*/
+                    /* if ($headeImage['town_id']) {
+                         $key .= $headeImage['town_id'].'_';
+                     }*/
                     if ($headeImage['domicile_id']) {
                         $key .= $headeImage['domicile_id'].'_';
                     }
@@ -171,13 +171,13 @@ class HeaderImageRepository extends EntityRepository
                     );
 
                     if (isset($headeImage['phone_file_name']) && $headeImage['phone_file_name']) {
-                    	$headerImagesArray[$key]['override_'.$headeImage['override_image']][$index]['phone_image'] = CommonManager::getSharedImageUrl($container, $headeImage['path'], $headeImage['phone_file_name']);
-                    	$headerImagesArray['all'][$headeImage['screen_type']]['override_'.$headeImage['override_image']][$index]['phone_image'] = CommonManager::getSharedImageUrl($container, $headeImage['path'], $headeImage['phone_file_name']);
+                        $headerImagesArray[$key]['override_'.$headeImage['override_image']][$index]['phone_image'] = CommonManager::getSharedImageUrl($container, $headeImage['path'], $headeImage['phone_file_name']);
+                        $headerImagesArray['all'][$headeImage['screen_type']]['override_'.$headeImage['override_image']][$index]['phone_image'] = CommonManager::getSharedImageUrl($container, $headeImage['path'], $headeImage['phone_file_name']);
                     }
                     
                     if (!empty($headeImage['right_hand_image_url'])) {
-                    	$headerImagesArray[$key]['override_'.$headeImage['override_image']][$index]['phone_image_url'] = $headeImage['right_hand_image_url'];
-                    	$headerImagesArray['all'][$headeImage['screen_type']]['override_'.$headeImage['override_image']][$index]['phone_image_url'] = $headeImage['right_hand_image_url'];
+                        $headerImagesArray[$key]['override_'.$headeImage['override_image']][$index]['phone_image_url'] = $headeImage['right_hand_image_url'];
+                        $headerImagesArray['all'][$headeImage['screen_type']]['override_'.$headeImage['override_image']][$index]['phone_image_url'] = $headeImage['right_hand_image_url'];
                     }
                 }
             }
@@ -215,7 +215,7 @@ class HeaderImageRepository extends EntityRepository
      *
      * @return array
      */
-    public function getHeaderImageById($id,$container = null)
+    public function getHeaderImageById($id, $container = null)
     {
         if ($container) {
             $culture     = CommonManager::getCurrentCulture($container);
@@ -236,8 +236,8 @@ class HeaderImageRepository extends EntityRepository
         ->andWhere(self::ALIAS.'.id = '.$id);
 
         $headerImagesArray = array();
-        $headerImages = $query->getQuery()->getArrayResult();  
-        $headerImagesArray = ($headerImages)?$headerImages[0]:array();   
+        $headerImages = $query->getQuery()->getArrayResult();
+        $headerImagesArray = ($headerImages)?$headerImages[0]:array();
 
         if ($container) {
             CommonManager::setCacheVersion($container, $cacheKey, $headerImagesArray);
@@ -253,13 +253,14 @@ class HeaderImageRepository extends EntityRepository
      *
      * @return string
      */
-    public function findByImageName($imageName = '') {
-    	$qb = $this->getBaseQueryBuilder()
-    	->select('COUNT('.self::ALIAS.'.id)')
-    	->Where(self::ALIAS.'.file_name = :file_name')
-    	->setParameter('file_name', $imageName)
-    	->orWhere(self::ALIAS.'.phone_file_name = :phone_file_name')
-    	->setParameter('phone_file_name', $imageName);
-    	return $qb->getQuery()->getSingleScalarResult();
+    public function findByImageName($imageName = '')
+    {
+        $qb = $this->getBaseQueryBuilder()
+        ->select('COUNT('.self::ALIAS.'.id)')
+        ->Where(self::ALIAS.'.file_name = :file_name')
+        ->setParameter('file_name', $imageName)
+        ->orWhere(self::ALIAS.'.phone_file_name = :phone_file_name')
+        ->setParameter('phone_file_name', $imageName);
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }

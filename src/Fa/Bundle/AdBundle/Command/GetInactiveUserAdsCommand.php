@@ -21,11 +21,12 @@ use Fa\Bundle\AdBundle\Entity\InActiveUserSolrAds;
 use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Fa\Bundle\UserBundle\Repository\UserRepository;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
+
 // use Symfony\Component\Validator\Constraints\False;
 
 /**
  * Main purpose of this cron is to generate solr syncing reports and ensure 100% syncing of DB data to solr
- * This command is used to get all inactive users adverts from solr if any present in solr 
+ * This command is used to get all inactive users adverts from solr if any present in solr
  * This command is used to get all active users whose adverts in live status but those adverts are not in solr.
  *
  * @author Vijay <vijay.namburi@fridaymediafroup.com>
@@ -104,7 +105,7 @@ EOF
         $userStatus = intval($input->getOption('user_status'));
         $idsNotFound = array();
         $idsFound    = array();
-        $qb          = $this->getAdQueryBuilder(FALSE, $input);
+        $qb          = $this->getAdQueryBuilder(false, $input);
         $step        = 100;
         $offset      = $input->getOption('offset');
         $em          = $this->getContainer()->get('doctrine')->getManager();
@@ -114,7 +115,7 @@ EOF
         $objAds = $qb->getQuery()->execute();
         
         foreach ($objAds as $objAd) {
-            $dataFlag = FALSE;
+            $dataFlag = false;
             // Here we are checking advert is in solr or not
             $advertId = $objAd['adId'];
             $advertActive = EntityRepository::AD_STATUS_LIVE_ID;
@@ -135,13 +136,13 @@ EOF
                     // Active user adverts which are in live status should be in solr,
                     // if we found active/expired/sold adverts which are not solr then we are putting those adverts info in below table
                     if (empty($resObj['response']['docs'])) {
-                        $dataFlag = TRUE;
+                        $dataFlag = true;
                     }
-                }else {
+                } else {
                     // Inactive user adverts should be not in solr.
                     // if we found any blocked user adverts still solr then we are putting those adverts info in below table
                     if (!empty($resObj['response']['docs'])) {
-                        $dataFlag = TRUE;
+                        $dataFlag = true;
                     }
                 }
                 if ($dataFlag) {
@@ -157,7 +158,7 @@ EOF
                         $this->em->flush();
                     }
                 }
-            }else {
+            } else {
                 $output->writeln('Got Error for AdvertId : '.$advertId, true);
             }
         }
@@ -172,7 +173,7 @@ EOF
      */
     protected function updateAdStatus($input, $output)
     {
-        $qb        = $this->getAdQueryBuilder(TRUE, $input);
+        $qb        = $this->getAdQueryBuilder(true, $input);
         $count     = $qb->getQuery()->getSingleScalarResult();
         $step      = 100;
         $stat_time = time();
@@ -220,7 +221,7 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE, $input)
+    protected function getAdQueryBuilder($onlyCount = false, $input)
     {
         $adStatus = intval($input->getOption('ad_status'));
         $userStatus = intval($input->getOption('user_status'));
@@ -233,7 +234,7 @@ EOF
 
         if ($onlyCount) {
             $qb->select('COUNT('.AdRepository::ALIAS.'.id)');
-        }else {
+        } else {
             $qb->select(AdRepository::ALIAS.'.id AS adId', UserRepository::ALIAS.'.id AS userId', 'IDENTITY('.UserRepository::ALIAS.'.status)'.' AS userStatus', 'IDENTITY('.AdRepository::ALIAS.'.status)'.'  AS adStatus');
         }
         $qb->innerJoin(AdRepository::ALIAS.'.user', UserRepository::ALIAS, 'WITH', AdRepository::ALIAS.'.user = '.UserRepository::ALIAS.'.id');
@@ -241,7 +242,7 @@ EOF
         if (!empty($userStatus)) {
             $qb->where(UserRepository::ALIAS.'.status = :userStatus')
                 ->setParameter('userStatus', $userStatus);
-        }else {
+        } else {
             $qb->where(UserRepository::ALIAS.'.status <> :userStatus')
                 ->setParameter('userStatus', EntityRepository::USER_STATUS_ACTIVE_ID);
         }
@@ -259,9 +260,9 @@ EOF
         }
         
         if ($userStatus == EntityRepository::USER_STATUS_ACTIVE_ID) {
-            // for active users we consider only live adverts only. 
+            // for active users we consider only live adverts only.
             $qb->andWhere(AdRepository::ALIAS.'.status IN ('.EntityRepository::AD_STATUS_LIVE_ID.','.EntityRepository::AD_STATUS_EXPIRED_ID.','.EntityRepository::AD_STATUS_SOLD_ID.')');
-        }else {
+        } else {
             if (!empty($adStatus)) {
                 $qb->andWhere(AdRepository::ALIAS.'.status = :adStatus')
                     ->setParameter('adStatus', $adStatus);

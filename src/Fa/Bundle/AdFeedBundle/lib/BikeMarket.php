@@ -195,7 +195,7 @@ class BikeMarket extends Export
             $features = null;
             if (isset($adMetaData['features_id']) && $adMetaData['features_id']) {
                 $featureIds = explode(',', $adMetaData['features_id']);
-                foreach($featureIds as $featureId) {
+                foreach ($featureIds as $featureId) {
                     $features .= $entityCacheManager->getEntityNameById('FaEntityBundle:Entity', $featureId).', ';
                 }
             }

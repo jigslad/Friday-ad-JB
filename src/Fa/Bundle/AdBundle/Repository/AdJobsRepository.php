@@ -315,11 +315,10 @@ class AdJobsRepository extends EntityRepository
      */
     public function copyBusinessLogo($container, $adId = null, $sessionId = null, $userId = null)
     {
-
         $maxOrder = 0;
         if ($adId) {
             $maxOrder = $this->_em->getRepository('FaAdBundle:AdImage')->getMaxOrder($adId, false);
-        } elseif ($sessionId){
+        } elseif ($sessionId) {
             $maxOrder = $this->_em->getRepository('FaAdBundle:AdImage')->getMaxOrder($sessionId, true);
         }
 

@@ -22,6 +22,7 @@ use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+
 /**
  * This controller is used for ad package management.
  *
@@ -45,7 +46,7 @@ class AdPackageController extends CoreController
             $this->container->get('session')->set('paa_skip_login_step', true);
         }
         if (!preg_match('/^[-+]?[1-9]\d*$/', $adId)) {
-            return $this->render('FaCoreBundle:Exception:error404.html.twig',array('status_text' => 'Page Url Changed'));
+            return $this->render('FaCoreBundle:Exception:error404.html.twig', array('status_text' => 'Page Url Changed'));
         }
 
         $key = md5($request->getClientIp().$request->headers->get('User-Agent'));
@@ -62,7 +63,7 @@ class AdPackageController extends CoreController
 
         $ad = $this->getRepository('FaAdBundle:Ad')->find($adId);
         if (empty($ad)) {
-            return $this->render('FaCoreBundle:Exception:error404.html.twig',array('status_text' => 'Page Url Changed'));
+            return $this->render('FaCoreBundle:Exception:error404.html.twig', array('status_text' => 'Page Url Changed'));
         }
         if ($ad->getStatus()->getId() == EntityRepository::AD_STATUS_INACTIVE_ID) {
             return $this->handleMessage($this->get('translator')->trans('Ad has been deleted which you want to promote.', array(), 'frontend-ad-edit'), 'fa_frontend_homepage', array(), 'error');
@@ -114,12 +115,12 @@ class AdPackageController extends CoreController
         if ($request->get('business') && $request->get('business') == 1) {
             $privateUserUrlParams['business'] = 1;
             if (isset($privateUserAdParams['allowPrivateUserToPostAdFlag']) && !$privateUserAdParams['allowPrivateUserToPostAdFlag']) {
-                if ( !count($adCartDetailValue) || (count($adCartDetailValue) && isset($adCartDetailValue['privateUserAdParams']) && isset($adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) && !$adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) ||  (count($adCartDetailValue) && !isset($adCartDetailValue['privateUserAdParams'])) ) {
+                if (!count($adCartDetailValue) || (count($adCartDetailValue) && isset($adCartDetailValue['privateUserAdParams']) && isset($adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) && !$adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) ||  (count($adCartDetailValue) && !isset($adCartDetailValue['privateUserAdParams']))) {
                     $userRolesArray = array(RoleRepository::ROLE_BUSINESS_SELLER_ID);
                     $privateUserAdParams['business'] = 1;
                 }
             }
-            if (count($adCartDetailValue) && isset($adCartDetailValue['privateUserAdParams']) ) {
+            if (count($adCartDetailValue) && isset($adCartDetailValue['privateUserAdParams'])) {
                 $privateUserAdParams = $adCartDetailValue['privateUserAdParams'];
                 $privateUserAdParams['business'] = 1;
             }
@@ -344,7 +345,7 @@ class AdPackageController extends CoreController
             $cartDetails  = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
             $this->getRepository('FaPaymentBundle:TransactionDetail')->removeCodeFromAllItems($cartDetails);
             $this->getRepository('FaPromotionBundle:PackageDiscountCode')->processDiscountCode($codeObj, $cart, $cartDetails, $loggedinUser, $this->container, false);
-        } else if ($cart->getDiscountAmount() <= 0 && isset($cartValue['discount_values']) && count($cartValue['discount_values']) && isset($cartValue['discount_values']['code'])) {
+        } elseif ($cart->getDiscountAmount() <= 0 && isset($cartValue['discount_values']) && count($cartValue['discount_values']) && isset($cartValue['discount_values']['code'])) {
             $cartDetails  = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
             $this->getRepository('FaPaymentBundle:TransactionDetail')->removeCodeFromAllItems($cartDetails);
         }
@@ -437,11 +438,11 @@ class AdPackageController extends CoreController
         }
         
         //check User advert has location if not redirect to edit page
-        if(count($ad->getAdLocations()) == 0) {
-        	$redirectUrl = $request->getUri();
-        	$this->container->get('session')->set('choose_package_location_missing_'.$ad->getId(), $redirectUrl);
-        	$editPageUrl = $this->generateUrl('ad_edit', array('id' => $ad->getId()));
-        	return $this->redirect($editPageUrl);
+        if (count($ad->getAdLocations()) == 0) {
+            $redirectUrl = $request->getUri();
+            $this->container->get('session')->set('choose_package_location_missing_'.$ad->getId(), $redirectUrl);
+            $editPageUrl = $this->generateUrl('ad_edit', array('id' => $ad->getId()));
+            return $this->redirect($editPageUrl);
         }
 
         //get user roles.
@@ -512,12 +513,12 @@ class AdPackageController extends CoreController
             if ($request->get('business') && $request->get('business') == 1) {
                 $privateUserUrlParams['business'] = 1;
                 if (isset($privateUserAdParams['allowPrivateUserToPostAdFlag']) && !$privateUserAdParams['allowPrivateUserToPostAdFlag']) {
-                    if ( !count($adCartDetailValue) || (count($adCartDetailValue) && isset($adCartDetailValue['privateUserAdParams']) && isset($adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) && !$adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) ||  (count($adCartDetailValue) && !isset($adCartDetailValue['privateUserAdParams'])) ) {
+                    if (!count($adCartDetailValue) || (count($adCartDetailValue) && isset($adCartDetailValue['privateUserAdParams']) && isset($adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) && !$adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) ||  (count($adCartDetailValue) && !isset($adCartDetailValue['privateUserAdParams']))) {
                         $userRolesArray = array(RoleRepository::ROLE_BUSINESS_SELLER_ID);
                         $privateUserAdParams['business'] = 1;
                     }
                 }
-                if (count($adCartDetailValue) && isset($adCartDetailValue['privateUserAdParams']) ) {
+                if (count($adCartDetailValue) && isset($adCartDetailValue['privateUserAdParams'])) {
                     $privateUserAdParams = $adCartDetailValue['privateUserAdParams'];
                     $privateUserAdParams['business'] = 1;
                 }
@@ -540,7 +541,7 @@ class AdPackageController extends CoreController
 
         $printEditionLimits = $this->getRepository('FaPromotionBundle:Package')->getPrintEditionLimitForPackages($packageIds);
 
-        if (count($printEditionLimits) && 'POST' !== $request->getMethod()) { 
+        if (count($printEditionLimits) && 'POST' !== $request->getMethod()) {
             $defaultSelectedPrintEditions = $this->getRepository('FaAdBundle:AdPrint')->getPrintEditionForAd(max($printEditionLimits), $adId, true, $locationGroupIds);
             $defaultSelectedPrintEditions = array_combine(range(1, count($defaultSelectedPrintEditions)), array_values($defaultSelectedPrintEditions));
             if (!$adCartDetails) {
@@ -661,10 +662,10 @@ class AdPackageController extends CoreController
                         }
 
                         if (!count($cartDetails) && $isFreePaymentMethod) {
-                            $this->getRepository('FaPaymentBundle:Cart')->addPackageToCart($userId, $adId, $selectedPackageId, $this->container, true, $adExpiryDays, $selectedPackagePrintId, $type, ($activePackage ? $activePackage->getId() : null ), false, null, $printEditionValues, $userCreditId, $totalCredit, $privateUserAdParams);
+                            $this->getRepository('FaPaymentBundle:Cart')->addPackageToCart($userId, $adId, $selectedPackageId, $this->container, true, $adExpiryDays, $selectedPackagePrintId, $type, ($activePackage ? $activePackage->getId() : null), false, null, $printEditionValues, $userCreditId, $totalCredit, $privateUserAdParams);
                             return $this->redirectToRoute('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_FREE));
                         } else {
-                            return $this->addAdPackage($adId, $selectedPackageId, $adExpiryDays, $selectedPackagePrintId, $type, ($activePackage ? $activePackage->getId() : null ), false, $printEditionValues, $userCreditId, $totalCredit, $privateUserAdParams);
+                            return $this->addAdPackage($adId, $selectedPackageId, $adExpiryDays, $selectedPackagePrintId, $type, ($activePackage ? $activePackage->getId() : null), false, $printEditionValues, $userCreditId, $totalCredit, $privateUserAdParams);
                         }
                     }
                 }
@@ -691,6 +692,4 @@ class AdPackageController extends CoreController
 
         return $this->render('FaAdBundle:AdPackage:purchaseAdPackage.html.twig', $parameters);
     }
-    
 }
-

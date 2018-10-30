@@ -104,7 +104,7 @@ class PaaLiteCommonType extends PaaLiteType
         $this->campaign_name = isset($options['data']['campaign_name']) ? $options['data']['campaign_name'] : null;
 
         $builder->add('category_id', HiddenType::class);
-        $this->addCategoryChoiceFields($builder,$this->campaign_name);
+        $this->addCategoryChoiceFields($builder, $this->campaign_name);
         if ($this->container->get('session')->has('paa_skip_login_step')) {
             $builder->add('save', SubmitType::class, array(
                 'label' => 'Save my ad'
@@ -125,12 +125,12 @@ class PaaLiteCommonType extends PaaLiteType
         $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmit'));
     }
 
-/**
-     * Callbak method for PRE_SET_DATA form event.
-     *
-     * @param object $event
-     *            Event instance.
-     */
+    /**
+         * Callbak method for PRE_SET_DATA form event.
+         *
+         * @param object $event
+         *            Event instance.
+         */
     public function preSetData(FormEvent $event)
     {
         $ad = $event->getData();
@@ -163,10 +163,10 @@ class PaaLiteCommonType extends PaaLiteType
                         'mapped' => false
                     )
                 );
-             //array_push($this->orderedFields,'paypal_email','paypal_first_name','paypal_last_name');
+            //array_push($this->orderedFields,'paypal_email','paypal_first_name','paypal_last_name');
         }
         if (in_array('delivery_method_option_id', $this->orderedFields)) {
-            $form->add('postage_price',NumberType::class);
+            $form->add('postage_price', NumberType::class);
             //array_push($this->orderedFields,'postage_price');
         }
         if (in_array('dimensions_length', $this->orderedFields)) {
@@ -185,7 +185,6 @@ class PaaLiteCommonType extends PaaLiteType
 
         $paaLiteOrderedData = array_merge($this->orderedFields, $this->getPaaLiteOrderedFields());
         $form->add('paa_lite_ordered_fields', HiddenType::class, array('data' => implode(',', $paaLiteOrderedData)));
-
     }
 
     
@@ -228,33 +227,33 @@ class PaaLiteCommonType extends PaaLiteType
     {
         $ad = $event->getData();
         $form = $event->getForm();
-        $explodePaaFlds = explode(',',$ad['paa_lite_ordered_fields']);
+        $explodePaaFlds = explode(',', $ad['paa_lite_ordered_fields']);
 
         $this->validateAdLocation($form);
 
-        if(in_array('has_reg_no',$explodePaaFlds)) {
+        if (in_array('has_reg_no', $explodePaaFlds)) {
             $this->validateRegNo($form);
         }
         
-         if($form->has('price') || $form->has('price_text')) {
+        if ($form->has('price') || $form->has('price_text')) {
             $this->validatePrice($form);
         }
 
-        if(in_array('description',$explodePaaFlds)) {
+        if (in_array('description', $explodePaaFlds)) {
             $this->validateDescription($form);
         }
 
-        if(in_array('youtube_video_url',$explodePaaFlds)) {
+        if (in_array('youtube_video_url', $explodePaaFlds)) {
             $this->validateYoutubeField($form);
         }
-        if(in_array('photo_error',$explodePaaFlds)) {
+        if (in_array('photo_error', $explodePaaFlds)) {
             $this->validateAdImageLimit($form);
         }
 
-        if(in_array('travel_arrangements_id',$explodePaaFlds)) {
+        if (in_array('travel_arrangements_id', $explodePaaFlds)) {
             $this->validateAdultRates($form);
         }
-        if(in_array('business_phone',$explodePaaFlds)) {
+        if (in_array('business_phone', $explodePaaFlds)) {
             $this->validateBusinessAdField($form);
         }
 
@@ -265,13 +264,13 @@ class PaaLiteCommonType extends PaaLiteType
         if ($form->has('delivery_method_option_id')) {
             $this->validatePostagePrice($form);
         }
-        if($form->has('event_start')) {
+        if ($form->has('event_start')) {
             $this->validateEventDate($form);
         }
-        if($form->has('date_available')) {
+        if ($form->has('date_available')) {
             $this->validateDateAvailable($form);
         }
-        if($form->has('deposit')) {
+        if ($form->has('deposit')) {
             $this->validateDeposit($form);
         }
     }
@@ -286,39 +285,40 @@ class PaaLiteCommonType extends PaaLiteType
         $ad   = $event->getData();
         $form = $event->getForm();
 
-       if ($form->isValid()) {
+        if ($form->isValid()) {
             $this->saveAdOrSendForModeration($ad);
             $this->resetCategoryCookie();
-            if($this->container->get('session')->has('paa_image_id')) {
+            if ($this->container->get('session')->has('paa_image_id')) {
                 $this->container->get('session')->remove('paa_image_id');
             }
-       } else {
+        } else {
             //echo 'form is not validated properly';
-       }
+        }
     }
 
-    public function resetCategoryCookie() {
-        if(isset($_COOKIE['fa_paa_lite_common_category_1'])) {
+    public function resetCategoryCookie()
+    {
+        if (isset($_COOKIE['fa_paa_lite_common_category_1'])) {
             unset($_COOKIE['fa_paa_lite_common_category_1']);
             setcookie('fa_paa_lite_common_category_1', "", time() - 3600);
         }
-        if(isset($_COOKIE['fa_paa_lite_common_category_2'])) {
+        if (isset($_COOKIE['fa_paa_lite_common_category_2'])) {
             unset($_COOKIE['fa_paa_lite_common_category_2']);
             setcookie('fa_paa_lite_common_category_2', "", time() - 3600);
         }
-        if(isset($_COOKIE['fa_paa_lite_common_category_3'])) {
+        if (isset($_COOKIE['fa_paa_lite_common_category_3'])) {
             unset($_COOKIE['fa_paa_lite_common_category_3']);
             setcookie('fa_paa_lite_common_category_3', "", time() - 3600);
         }
-        if(isset($_COOKIE['fa_paa_lite_common_category_4'])) {
+        if (isset($_COOKIE['fa_paa_lite_common_category_4'])) {
             unset($_COOKIE['fa_paa_lite_common_category_4']);
             setcookie('fa_paa_lite_common_category_4', "", time() - 3600);
         }
-        if(isset($_COOKIE['fa_paa_lite_common_category_5'])) {
+        if (isset($_COOKIE['fa_paa_lite_common_category_5'])) {
             unset($_COOKIE['fa_paa_lite_common_category_5']);
             setcookie('fa_paa_lite_common_category_5', "", time() - 3600);
         }
-        if(isset($_COOKIE['fa_paa_lite_common_category_6'])) {
+        if (isset($_COOKIE['fa_paa_lite_common_category_6'])) {
             unset($_COOKIE['fa_paa_lite_common_category_6']);
             setcookie('fa_paa_lite_common_category_6', "", time() - 3600);
         }
@@ -349,10 +349,10 @@ class PaaLiteCommonType extends PaaLiteType
 
         //Save Ad
         $ad = $adPostManager->savePaaLiteAd($data, $campaign);
-        if($this->container->get('session')->get('redirect_to_cart')==0) {
+        if ($this->container->get('session')->get('redirect_to_cart')==0) {
             $adPostManager->sendAdForModerationPaaLite($ad, $data);
             $this->container->get('session')->set('show_ad_live_popup', 1);
-        } 
+        }
     }
 
     /**
@@ -361,12 +361,11 @@ class PaaLiteCommonType extends PaaLiteType
      * @param object $builder
      * @param string $campaign_name
      */
-    private function addCategoryChoiceFields($builder,$campaign_name)
+    private function addCategoryChoiceFields($builder, $campaign_name)
     {
-        
         $getCampaign = $this->em->getRepository('FaAdBundle:Campaigns')->getCampaignBySlug($campaign_name);
         
-        if(!empty($getCampaign)) {
+        if (!empty($getCampaign)) {
             $getCategoryId = $getCampaign[0]->getCategory()->getId();
             $getCategoryLevel = $getCampaign[0]->getCategory()->getLvl();
             $CategoryNxtLevel = $getCategoryLevel+1;
@@ -376,7 +375,6 @@ class PaaLiteCommonType extends PaaLiteType
 
         if ($totalLevel) {
             for ($i = 1; $i <= $totalLevel; $i++) {
-
                 if ($i == 1) {
                     $optionArray = array(
                         'placeholder' =>  'Please select category',

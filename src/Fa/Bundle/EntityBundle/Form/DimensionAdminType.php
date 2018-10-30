@@ -262,7 +262,7 @@ class DimensionAdminType extends AbstractType
             $category2  = $form->get('category_2')->getData();
             $category3  = $form->get('category_3')->getData();
             $category4  = $form->get('category_4')->getData();
-        } else if ($data) {
+        } elseif ($data) {
             $category1  = isset($data['category_1']) ? $data['category_1'] : null;
             $category2  = isset($data['category_2']) ? $data['category_2'] : null;
             $category3  = isset($data['category_3']) ? $data['category_3'] : null;

@@ -103,28 +103,34 @@ class HeaderImageAdminType extends AbstractType
                     )
                 )
                 ->add(
-                	'override_image',
-                	CheckboxType::class,
-                	array(
-                			'label' => 'Override Image', 
-                			'required' => false
-                	)
+                    'override_image',
+                    CheckboxType::class,
+                    array(
+                            'label' => 'Override Image',
+                            'required' => false
+                    )
                 )
                 ->add('save', SubmitType::class)
                 ->add('saveAndNew', SubmitType::class);
         } else {
-        	$domicileObj = $builder->getForm()->getData()->getLocationDomicile();
-        	$townObj = $builder->getForm()->getData()->getLocationTown();
-        	$categoryObj = $builder->getForm()->getData()->getCategory();
-        	if($domicileObj) {
-        		$editData['domicile_id'] = $domicileObj->getId();
-        	} else { $editData['domicile_id'] = 0; }
-            if($townObj) {
-            	$editData['town_id'] = $townObj->getId();
-            } else { $editData['town_id'] = 0; }
-            if($categoryObj) {
-            	$editData['category_id'] = $categoryObj->getId();
-            } else { $editData['category_id'] = 0; }
+            $domicileObj = $builder->getForm()->getData()->getLocationDomicile();
+            $townObj = $builder->getForm()->getData()->getLocationTown();
+            $categoryObj = $builder->getForm()->getData()->getCategory();
+            if ($domicileObj) {
+                $editData['domicile_id'] = $domicileObj->getId();
+            } else {
+                $editData['domicile_id'] = 0;
+            }
+            if ($townObj) {
+                $editData['town_id'] = $townObj->getId();
+            } else {
+                $editData['town_id'] = 0;
+            }
+            if ($categoryObj) {
+                $editData['category_id'] = $categoryObj->getId();
+            } else {
+                $editData['category_id'] = 0;
+            }
             
             
             $builder
@@ -150,8 +156,8 @@ class HeaderImageAdminType extends AbstractType
                         'mapped' => false,
                         'choices'   => array_flip($this->em->getRepository('FaEntityBundle:Location')->getLocationByLevelArray(2)),
                         'data' => array($editData['domicile_id']),
-                    	'required' => false,
-                    	'label' => "Location domicile (Don't select domicile for national image)"
+                        'required' => false,
+                        'label' => "Location domicile (Don't select domicile for national image)"
                     )
                 )
             ->add(
@@ -175,13 +181,13 @@ class HeaderImageAdminType extends AbstractType
                     )
                 )
             ->add(
-              		'override_image',
-               		CheckboxType::class,
-               		array(
-               				'label' => 'Override Image',
-               				'required' => false
-               		)
-            	)
+                      'override_image',
+                       CheckboxType::class,
+                       array(
+                               'label' => 'Override Image',
+                               'required' => false
+                       )
+                )
             ->add('save', SubmitType::class);
 
             // Below is used to load the car selectbox when brand is submitted
@@ -199,12 +205,11 @@ class HeaderImageAdminType extends AbstractType
                             'data' => array($editData['town_id'])
                         )
                     );
-                    
                 }
-            });    
+            });
 
             // Below is used to load the car selectbox when brand is submitted
-            $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event)  {
+            $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
                 $form = $event->getForm();
                 $data = $event->getData();
      
@@ -219,9 +224,8 @@ class HeaderImageAdminType extends AbstractType
                             'data' => $data['location_town']
                         )
                     );
-                    
                 }
-            });    
+            });
         }
 
         $builder->add(
@@ -277,7 +281,7 @@ class HeaderImageAdminType extends AbstractType
                 if (!empty($townIds)) {
                     $this->save($form, $townIds, true, $categories);
                 } elseif (!empty($domicileIds)) {
-                	$this->save($form, $domicileIds, false, $categories);
+                    $this->save($form, $domicileIds, false, $categories);
                 } else {
                     $this->save($form, null, null, $categories);
                 }
@@ -332,7 +336,6 @@ class HeaderImageAdminType extends AbstractType
                     $this->removeImage($headerImage, $oldPhoneFile, $oldPhoneFileName);
                     $this->uploadPhoneImage($headerImage, $phoneFileName);
                 }
-                
             }
         }
     }
@@ -415,12 +418,12 @@ class HeaderImageAdminType extends AbstractType
                 
                 if (count($categories)) {
                     foreach ($categories as $category) {
-                        if($headerImageId=='') {
+                        if ($headerImageId=='') {
                             $headerImage = new HeaderImage();
                         }
                         $headerImage->setCategory($this->em->getReference('FaEntityBundle:Category', $category));
                         $headerImage->setScreenType($form->get('screen_type')->getData());
-                        if($headerImageId == '') {
+                        if ($headerImageId == '') {
                             $headerImage->setFile($file);
                             $headerImage->setFileName($fileName);
                             $headerImage->setPhoneFile($phoneFile);
@@ -433,13 +436,13 @@ class HeaderImageAdminType extends AbstractType
                         $headerImage->setOverrideImage($override_image);
                         $this->em->persist($headerImage);
                     }
-                } else { 
-                    if($headerImageId=='') {
+                } else {
+                    if ($headerImageId=='') {
                         $headerImage = new HeaderImage();
                     }
                     
                     $headerImage->setScreenType($form->get('screen_type')->getData());
-                    if($headerImageId == '') {
+                    if ($headerImageId == '') {
                         $headerImage->setFile($file);
                         $headerImage->setFileName($fileName);
                         $headerImage->setPhoneFile($phoneFile);
@@ -453,7 +456,7 @@ class HeaderImageAdminType extends AbstractType
                     $this->em->persist($headerImage);
                 }
             }
-            if($headerImageId == '') {
+            if ($headerImageId == '') {
                 $this->uploadImage($headerImage, $fileName);
                 $this->uploadPhoneImage($headerImage, $phoneFileName);
             }
@@ -461,27 +464,27 @@ class HeaderImageAdminType extends AbstractType
         } else {
             if (count($categories)) {
                 foreach ($categories as $category) {
-                    if($headerImageId=='') {
+                    if ($headerImageId=='') {
                         $headerImage = new HeaderImage();
                     }
                     $headerImage->setCategory($this->em->getReference('FaEntityBundle:Category', $category));
                     $headerImage->setScreenType($form->get('screen_type')->getData());
-                    if($headerImageId == '') {
+                    if ($headerImageId == '') {
                         $headerImage->setFile($file);
                         $headerImage->setFileName($fileName);
                         $headerImage->setPhoneFile($phoneFile);
                         $headerImage->setPhoneFileName($phoneFileName);
-                    }    
+                    }
                     $headerImage->setStatus($status);
                     $headerImage->setOverrideImage($override_image);
                     $this->em->persist($headerImage);
                 }
             } else {
-                if($headerImageId=='') {
+                if ($headerImageId=='') {
                     $headerImage = new HeaderImage();
                 }
                 $headerImage->setScreenType($form->get('screen_type')->getData());
-                if($headerImageId == '') {
+                if ($headerImageId == '') {
                     $headerImage->setFile($file);
                     $headerImage->setFileName($fileName);
                     $headerImage->setPhoneFile($phoneFile);
@@ -494,7 +497,7 @@ class HeaderImageAdminType extends AbstractType
 
             $this->em->flush();
 
-            if($headerImageId == '') {
+            if ($headerImageId == '') {
                 $this->uploadImage($headerImage, $fileName);
                 $this->uploadPhoneImage($headerImage, $phoneFileName);
             }

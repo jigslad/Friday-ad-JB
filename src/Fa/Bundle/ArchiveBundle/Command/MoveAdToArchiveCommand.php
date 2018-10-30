@@ -133,7 +133,7 @@ EOF
 
         // read offset from file
         $fp       = fopen($this->getContainer()->get('kernel')->getRootDir()."/../data/notMovedToArchive.txt", "r");
-        $notMovedPrevious = fread($fp,filesize($this->getContainer()->get('kernel')->getRootDir()."/../data/notMovedToArchive.txt"));
+        $notMovedPrevious = fread($fp, filesize($this->getContainer()->get('kernel')->getRootDir()."/../data/notMovedToArchive.txt"));
         fclose($fp);
 
         echo "not moved previous: ".$notMovedPrevious."\n";
@@ -167,7 +167,7 @@ EOF
                 if (isset($adViewCounters[$adId])) {
                     echo "adViewCounters[adId]: ".$adViewCounters[$adId]."\n";
                 }
-                if (!isset($printAdIds[$adId]) && (!isset($adViewCounters[$adId]) || !$adViewCounters[$adId] || (isset($adViewCounters[$adId]) && $adViewCounters[$adId] < $count) )) {
+                if (!isset($printAdIds[$adId]) && (!isset($adViewCounters[$adId]) || !$adViewCounters[$adId] || (isset($adViewCounters[$adId]) && $adViewCounters[$adId] < $count))) {
                     try {
                         $entityManager->getRepository('FaArchiveBundle:ArchiveAd')->moveAdtoArchive($ad, $this->getContainer());
                         $movedAdIds[] = $adId;
@@ -175,7 +175,6 @@ EOF
                     } catch (\Exception $e) {
                         $output->writeln('Exception for, ad id: '.$adId."== ".$e->getMessage(), true);
                     }
-
                 } else {
                     $output->writeln('Ad has been NOT moved for ad id: '.$adId, true);
                     $notMoved++;
@@ -283,7 +282,7 @@ EOF
         }
 
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('ad' => array ('id' => 'asc'));
+        $data['query_sorter']  = array('ad' => array('id' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         if (isset($data['query_filters']) && isset($data['query_filters']['move_before'])) {

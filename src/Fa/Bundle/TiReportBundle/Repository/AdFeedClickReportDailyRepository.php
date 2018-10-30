@@ -105,10 +105,10 @@ class AdFeedClickReportDailyRepository extends EntityRepository
         }
 
         if (!$isCountQuery) {
-            if($searchParams['feed_report_type'] == 'ad_ref' && isset($searchParams['ad_feed_site_id']) && $searchParams['ad_feed_site_id']) {
+            if ($searchParams['feed_report_type'] == 'ad_ref' && isset($searchParams['ad_feed_site_id']) && $searchParams['ad_feed_site_id']) {
                 $qb->addGroupBy(self::ALIAS.'.ad_feed_site_id');
                 $qb->addGroupBy(self::ALIAS.'.ad_id');
-            } elseif($searchParams['feed_report_type'] == 'all' || (isset($searchParams['ad_feed_site_id']) && $searchParams['ad_feed_site_id'])) {
+            } elseif ($searchParams['feed_report_type'] == 'all' || (isset($searchParams['ad_feed_site_id']) && $searchParams['ad_feed_site_id'])) {
                 $qb = $qb->addGroupBy(self::ALIAS.'.ad_feed_site_id');
             } else {
                 $qb = $qb->addGroupBy(self::ALIAS.'.ad_id');
@@ -140,7 +140,7 @@ class AdFeedClickReportDailyRepository extends EntityRepository
         }
 
         if (isset($searchParams['ad_feed_site_id']) && $searchParams['ad_feed_site_id']) {
-          $qb->andWhere(self::ALIAS.'.ad_feed_site_id = (:adFeedSiteId)')
+            $qb->andWhere(self::ALIAS.'.ad_feed_site_id = (:adFeedSiteId)')
           ->setParameter('adFeedSiteId', $searchParams['ad_feed_site_id']);
         }
 
@@ -175,7 +175,7 @@ class AdFeedClickReportDailyRepository extends EntityRepository
         if (in_array($sorter['sort_field'], $sortFields) && isset($sorter['sort_field']) && $sorter['sort_field'] && isset($sorter['sort_ord']) && $sorter['sort_ord']) {
             if (in_array($sorter['sort_field'], self::getReportSortFields())) {
                 $qb->orderBy(self::ALIAS.'.'.$sorter['sort_field'], $sorter['sort_ord']);
-            } else if (in_array($sorter['sort_field'], AdFeedClickReportDailyRepository::getReportSortFields())) {
+            } elseif (in_array($sorter['sort_field'], AdFeedClickReportDailyRepository::getReportSortFields())) {
                 $qb->orderBy($sorter['sort_field'].'_sum', $sorter['sort_ord']);
             }
         }
@@ -206,9 +206,9 @@ class AdFeedClickReportDailyRepository extends EntityRepository
 
         foreach ($adReportDetailArray as $key => $value) {
             if ($value) {
-              $fieldValueArray[$key] = $value;
+                $fieldValueArray[$key] = $value;
             } else {
-              $fieldValueArray[$key] = '-';
+                $fieldValueArray[$key] = '-';
             }
         }
 

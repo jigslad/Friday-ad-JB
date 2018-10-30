@@ -71,7 +71,7 @@ class AmazonpayCheckoutAdminController extends CoreController implements Resourc
 
             if ($form->isValid()) {
                 $loggedinUser        = $this->getLoggedInUser();
-                $amazonJsonResponse = $amazonPayManager->getAmazonOrderProcess($cart,$this->container);
+                $amazonJsonResponse = $amazonPayManager->getAmazonOrderProcess($cart, $this->container);
                 $amazonResponse = json_decode($amazonJsonResponse);
                 $amazon_token = $request->request->get('fa_payment_amazonpay_checkout')['_token'];
                
@@ -92,7 +92,7 @@ class AmazonpayCheckoutAdminController extends CoreController implements Resourc
                         $this->getEntityManager()->persist($cart);
                         $this->getEntityManager()->flush($cart);
                         $paymentId = $this->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), $loggedinUser, $this->container);
-                       // activate the ads by payment id
+                        // activate the ads by payment id
                         $this->getRepository('FaAdBundle:Ad')->activateAdsByPaymentId($paymentId, $this->container);
 
                         $this->getEntityManager()->getConnection()->commit();
@@ -112,7 +112,6 @@ class AmazonpayCheckoutAdminController extends CoreController implements Resourc
                         return $this->handleMessage($this->get('translator')->trans('Problem in payment.', array(), 'backend-amazonpay'), 'checkout_payment_failure_admin', array('cartCode' => $cart->getCartCode()), 'error');
                     }
                     return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'backend-amazonpay'), 'checkout_payment_success_admin', array('cartCode' => $cart->getCartCode()), 'success');
-                	
                 }
             }
             //echo '<pre>';print_r($amazonResponse);die;
@@ -139,33 +138,35 @@ class AmazonpayCheckoutAdminController extends CoreController implements Resourc
 
     public function ajaxCartDetailsAction(Request $request)
     {
-        
         $orderReferenceId=$request->get('orderReferenceId');
         $userId = $request->get('userId');
-		$accessToken  = $this->container->get('session')->get('amazon_access_token');
+        $accessToken  = $this->container->get('session')->get('amazon_access_token');
         $cart = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $this->container);
         $cartDetails       = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
 
         $amazonMode = $this->container->getParameter('fa.amazon.mode');
 
         // calculate vat.
-        $totalVat = 0;$totalAmt=0;$payableAmt=0;$sellerNote = '';
+        $totalVat = 0;
+        $totalAmt=0;
+        $payableAmt=0;
+        $sellerNote = '';
         foreach ($cartDetails as $itemNo => $cartDetail) {
             //$totalVat = $totalVat + $cartDetail['vat_amount'];
             $totalAmt = $totalAmt + $cartDetail['amount'];
             $cartDetValue = ($cartDetail['value']!='')?unserialize($cartDetail['value']):array();
-            if(!empty($cartDetValue)) {
-            	foreach($cartDetValue['package'] as $key=>$val){
-            		$packageInfo = $this->getRepository('FaPromotionBundle:Package')->findOneById($key);
-            		$sellerNote = $sellerNote.$packageInfo->getTitle().' for the advert '.$cartDetail['title'].', ';
-            	}
+            if (!empty($cartDetValue)) {
+                foreach ($cartDetValue['package'] as $key=>$val) {
+                    $packageInfo = $this->getRepository('FaPromotionBundle:Package')->findOneById($key);
+                    $sellerNote = $sellerNote.$packageInfo->getTitle().' for the advert '.$cartDetail['title'].', ';
+                }
             }
         }
 
         //$totalVat = round($totalVat, 2);
         $totalAmt = round($totalAmt, 2);
         $payableAmt = $totalAmt + $totalVat;
-        $sellerNote = rtrim($sellerNote,', ').' are the packages you have purchased';
+        $sellerNote = rtrim($sellerNote, ', ').' are the packages you have purchased';
 
         $requestParameters['amount']            = $payableAmt;
         $requestParameters['seller_note']       = $sellerNote;
@@ -174,8 +175,8 @@ class AmazonpayCheckoutAdminController extends CoreController implements Resourc
         $requestParameters['custom_information']= '';
         $requestParameters['mws_auth_token']    = null; // only non-null if calling API on behalf of someone else
         $requestParameters['amazon_order_reference_id'] = $orderReferenceId;
-        $retcartdetails = $this->get('fa.amazonpay.manager')->getAmazonCartDetails($requestParameters,$accessToken);
-        $this->container->get('session')->set('amazon_order_reference_id',$orderReferenceId);
+        $retcartdetails = $this->get('fa.amazonpay.manager')->getAmazonCartDetails($requestParameters, $accessToken);
+        $this->container->get('session')->set('amazon_order_reference_id', $orderReferenceId);
         return new Response();
     }
     /**

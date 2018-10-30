@@ -36,8 +36,7 @@ class MatchAgainst extends FunctionNode
         do {
             $this->columns[] = $parser->StateFieldPathExpression();
             $parser->match(Lexer::T_COMMA);
-        }
-        while ($parser->getLexer()->isNextToken(Lexer::T_IDENTIFIER));
+        } while ($parser->getLexer()->isNextToken(Lexer::T_IDENTIFIER));
         $this->needle = $parser->InParameter();
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }

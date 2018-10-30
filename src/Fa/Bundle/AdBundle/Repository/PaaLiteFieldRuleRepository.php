@@ -83,7 +83,7 @@ class PaaLiteFieldRuleRepository extends EntityRepository
         $query = $this->getPaaLiteFieldRulesQueryBuilderByCategoryId($categoryId, $ordBy)->getQuery();
         if ($ordBy == 'bothWithNullLast') {
             $query
-            ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER,  'Fa\Bundle\CoreBundle\Walker\SortableNullsWalker')
+            ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Fa\Bundle\CoreBundle\Walker\SortableNullsWalker')
             ->setHint('SortableNullsWalker.fields', array(
                 'step' => SortableNullsWalker::NULLS_LAST,
             ));
@@ -197,7 +197,7 @@ class PaaLiteFieldRuleRepository extends EntityRepository
     {
         $PaaLiteFieldRules = $this->getPaaLiteFieldRulesArrayByCategoryId($categoryId, $container, $step, $ordBy);
 
-        if (isset($PaaLiteFieldRules[$categoryId]) && count($PaaLiteFieldRules[$categoryId])) { 
+        if (isset($PaaLiteFieldRules[$categoryId]) && count($PaaLiteFieldRules[$categoryId])) {
             return $PaaLiteFieldRules[$categoryId];
         } else {
             $categoryPath = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container);
@@ -226,7 +226,7 @@ class PaaLiteFieldRuleRepository extends EntityRepository
             $cacheKey    = $this->getTableName().'|'.__FUNCTION__.'|'.$categoryId.'_'.$step.'_'.$ordBy.'_'.$culture;
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
-            if ($cachedValue !== false) { 
+            if ($cachedValue !== false) {
                 return $cachedValue;
             }
         }
@@ -376,7 +376,7 @@ class PaaLiteFieldRuleRepository extends EntityRepository
         $query = $this->getPaaLiteFieldRulesQueryBuilderByCampaignId($campaignId, $ordBy)->getQuery();
         if ($ordBy == 'bothWithNullLast') {
             $query
-            ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER,  'Fa\Bundle\CoreBundle\Walker\SortableNullsWalker')
+            ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Fa\Bundle\CoreBundle\Walker\SortableNullsWalker')
             ->setHint('SortableNullsWalker.fields', array(
                 'step' => SortableNullsWalker::NULLS_LAST,
             ));
@@ -409,20 +409,20 @@ class PaaLiteFieldRuleRepository extends EntityRepository
         return $queryBuilder;
     }
     
-    public function getAllPaaLiteFields($campaignId) 
+    public function getAllPaaLiteFields($campaignId)
     {
         $queryBuilder = $this->createQueryBuilder(self::ALIAS)
         ->where(self::ALIAS.'.is_added = 1')
         ->andWhere(self::ALIAS.'.status = 1')
         ->andWhere(self::ALIAS.'.campaign = :campaignId')
         ->setParameter('campaignId', $campaignId)
-        ->orderBy(self::ALIAS.'.ord','asc')
+        ->orderBy(self::ALIAS.'.ord', 'asc')
         ->getQuery()->getResult();
         
         return $queryBuilder;
     }
 
-    public function getAllPaaLiteFieldsByCampId($campaignId) 
+    public function getAllPaaLiteFieldsByCampId($campaignId)
     {
         $queryBuilder = $this->createQueryBuilder(self::ALIAS)
         ->where(self::ALIAS.'.campaign = :campaignId')
@@ -432,7 +432,7 @@ class PaaLiteFieldRuleRepository extends EntityRepository
         return $queryBuilder;
     }
 
-    public function getPaaLiteFieldsByCampId($campaignId) 
+    public function getPaaLiteFieldsByCampId($campaignId)
     {
         $existPaaField = array();
         $PaaLiteFieldRules = $this->createQueryBuilder(self::ALIAS)
@@ -441,7 +441,7 @@ class PaaLiteFieldRuleRepository extends EntityRepository
         ->andWhere(self::ALIAS.'.is_added = 1')
         ->getQuery()->getResult();
 
-         if (count($PaaLiteFieldRules)) {
+        if (count($PaaLiteFieldRules)) {
             foreach ($PaaLiteFieldRules as $PaaLiteFieldRule) {
                 $existPaaField[] = $PaaLiteFieldRule->getPaaLiteField()->getId();
             }
@@ -449,7 +449,7 @@ class PaaLiteFieldRuleRepository extends EntityRepository
         return $existPaaField;
     }
 
-    public function getDetailByCampaignIdPaaField($paaField, $campaignId) 
+    public function getDetailByCampaignIdPaaField($paaField, $campaignId)
     {
         $queryBuilder = $this->createQueryBuilder(self::ALIAS)
         ->where(self::ALIAS.'.campaign = :campaignId')
@@ -474,7 +474,7 @@ class PaaLiteFieldRuleRepository extends EntityRepository
         $query = $this->getPaaLiteFieldRulesQryByCampaignIdWithAdded($campaignId, $ordBy)->getQuery();
         if ($ordBy == 'bothWithNullLast') {
             $query
-            ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER,  'Fa\Bundle\CoreBundle\Walker\SortableNullsWalker')
+            ->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, 'Fa\Bundle\CoreBundle\Walker\SortableNullsWalker')
             ->setHint('SortableNullsWalker.fields', array(
                 'step' => SortableNullsWalker::NULLS_LAST,
             ));
@@ -507,6 +507,4 @@ class PaaLiteFieldRuleRepository extends EntityRepository
         
         return $queryBuilder;
     }
-
-    
 }

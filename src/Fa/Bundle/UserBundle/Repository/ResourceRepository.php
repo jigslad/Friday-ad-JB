@@ -79,7 +79,7 @@ class ResourceRepository extends NestedTreeRepository
                 ->setParameter('flag', '0')
                 ->getQuery();
 
-          $objResources = $query->getArrayResult();
+        $objResources = $query->getArrayResult();
 
         return $objResources;
     }
@@ -137,7 +137,7 @@ class ResourceRepository extends NestedTreeRepository
             if ($resource->getParent()) {
                 if ((!isset($arr[$resource->getParent()->getId()])) && $resource->getIsMenu() != 1) {
                     $arr[$resource->getParent()->getId()]['hasChild'] = false;
-                } else if ($resource->getIsMenu()) {
+                } elseif ($resource->getIsMenu()) {
                     $arr[$resource->getParent()->getId()]['hasChild'] = true;
                 }
             }
@@ -190,10 +190,8 @@ class ResourceRepository extends NestedTreeRepository
                 foreach ($roleResourcePermissions as $roleResourcePermission) {
                     $role    = $roleResourcePermission->getRole();
                     $roles[] = $role->getName();
-
                 }
             }
-
         }
 
         return $roles;
@@ -246,7 +244,7 @@ class ResourceRepository extends NestedTreeRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-               return $cachedValue;
+                return $cachedValue;
             }
         }
 
@@ -267,7 +265,6 @@ class ResourceRepository extends NestedTreeRepository
 
             return $resources;
         }
-
     }
 
     /**

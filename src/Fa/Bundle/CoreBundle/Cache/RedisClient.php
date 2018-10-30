@@ -18,7 +18,8 @@ use Snc\RedisBundle\Client\Phpredis\Client;
  */
 class RedisClient extends Client
 {
-    public function getRedis() {
+    public function getRedis()
+    {
         return $this->redis;
     }
 }

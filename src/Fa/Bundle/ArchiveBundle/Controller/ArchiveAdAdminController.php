@@ -98,13 +98,12 @@ class ArchiveAdAdminController extends CoreController implements ResourceAuthori
         $adDetail = $this->getRepository('FaArchiveBundle:ArchiveAd')->getAdDetailArray($archiveAd, $this->container);
         
         //To fix archive ad missing image fields error
-        if(isset($adDetail['images']))
-        {
-            foreach($adDetail['images'] as $key => $val) {
-                if(empty($adDetail['images'][$key]['aws'])) {
+        if (isset($adDetail['images'])) {
+            foreach ($adDetail['images'] as $key => $val) {
+                if (empty($adDetail['images'][$key]['aws'])) {
                     $adDetail['images'][$key]['aws'] = '';
                 }
-                if(empty($adDetail['images'][$key]['image_name'])) {
+                if (empty($adDetail['images'][$key]['image_name'])) {
                     $adDetail['images'][$key]['image_name'] = '';
                 }
             }

@@ -72,7 +72,6 @@ EOF
         } else {
             $this->insertNonPaa($input, $output);
         }
-
     }
 
     /**
@@ -93,10 +92,11 @@ EOF
         $category = array();
         $row = $reader->getRow();
 
-        if ($offset > 0)
+        if ($offset > 0) {
             $reader->advanceTo($offset-1);
-        else
+        } else {
             $reader->advanceTo(1);
+        }
 
         while (($row = $reader->getRow()) && $reader->getLineNumber() != $offset + $batchSize) {
             $adMain = $this->em->getRepository('FaAdBundle:AdMain')->findOneBy(array('trans_id' => $row['AdRef'], 'update_type' => 'missing_non-paa'));
@@ -145,23 +145,29 @@ EOF
                 $adLocation->setAd($ad);
             }
 
-            if (isset($locations['town_id']) && $locations['town_id'])
-            $adLocation->setLocationTown($this->em->getReference('FaEntityBundle:Location', $locations['town_id']));
+            if (isset($locations['town_id']) && $locations['town_id']) {
+                $adLocation->setLocationTown($this->em->getReference('FaEntityBundle:Location', $locations['town_id']));
+            }
 
-            if (isset($locations['locality_id']) && $locations['locality_id'])
-             $adLocation->setLocality($this->em->getReference('FaEntityBundle:Locality', $locations['locality_id']));
+            if (isset($locations['locality_id']) && $locations['locality_id']) {
+                $adLocation->setLocality($this->em->getReference('FaEntityBundle:Locality', $locations['locality_id']));
+            }
 
-            if (isset($locations['county_id']) && $locations['county_id'])
-            $adLocation->setLocationDomicile($this->em->getReference('FaEntityBundle:Location', $locations['county_id']));
+            if (isset($locations['county_id']) && $locations['county_id']) {
+                $adLocation->setLocationDomicile($this->em->getReference('FaEntityBundle:Location', $locations['county_id']));
+            }
             $adLocation->setLocationCountry($this->em->getReference('FaEntityBundle:Location', 2));
 
-            if (isset($locations['postcode']) && $locations['postcode'])
-            $adLocation->setPostcode($locations['postcode']);
+            if (isset($locations['postcode']) && $locations['postcode']) {
+                $adLocation->setPostcode($locations['postcode']);
+            }
 
-            if (isset($locations['latitude']) && $locations['latitude'])
-            $adLocation->setLatitude($locations['latitude']);
-            if (isset($locations['longitude']) && $locations['longitude'])
-            $adLocation->setLongitude($locations['longitude']);
+            if (isset($locations['latitude']) && $locations['latitude']) {
+                $adLocation->setLatitude($locations['latitude']);
+            }
+            if (isset($locations['longitude']) && $locations['longitude']) {
+                $adLocation->setLongitude($locations['longitude']);
+            }
             $this->em->persist($adLocation);
             $this->em->flush();
 

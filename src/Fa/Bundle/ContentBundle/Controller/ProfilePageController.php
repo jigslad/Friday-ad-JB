@@ -47,15 +47,18 @@ class ProfilePageController extends CoreController
     {
         $userId          = CommonManager::encryptDecrypt($this->container->getParameter('profile_page_encryption_key'), $request->get('userId'), 'decrypt');
         $userProfileSlug = $this->getRepository('FaUserBundle:User')->getUserProfileSlug($userId, $this->container);
-        $removeSplCharArr[] = "'";$removeSplCharArr[] = '"';
+        $removeSplCharArr[] = "'";
+        $removeSplCharArr[] = '"';
         if ($userProfileSlug != $request->get('profileNameSlug')) {
             throw new HttpException(410);
         } else {
             $userDetail = $this->getRepository('FaUserBundle:User')->getPrivateUserProfileDetail($userId, true, $this->container);
 
-            if($userDetail['user_name']!='') {
-            	$userName = str_replace( $removeSplCharArr, "", $userDetail['user_name']);
-            } else { $userName = ''; }
+            if ($userDetail['user_name']!='') {
+                $userName = str_replace($removeSplCharArr, "", $userDetail['user_name']);
+            } else {
+                $userName = '';
+            }
 
             if (!$userDetail['id']) {
                 throw new HttpException(410);
@@ -247,7 +250,7 @@ class ProfilePageController extends CoreController
      */
     public function redirectMotorBusinessProfilePageAction(Request $request)
     {
-        $slug = preg_replace('/-N-.+/','',$request->get('page_string'));
+        $slug = preg_replace('/-N-.+/', '', $request->get('page_string'));
         $userSite = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('slug' => $slug));
         if ($userSite) {
             $url = $this->get('router')->generate('show_business_profile_page', array(
@@ -267,7 +270,8 @@ class ProfilePageController extends CoreController
      */
     public function showBusinessProfilePageAction(Request $request)
     {
-        $removeSplCharArr[] = "'";$removeSplCharArr[] = '"';
+        $removeSplCharArr[] = "'";
+        $removeSplCharArr[] = '"';
         $userSite = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('slug' => $request->get('profileNameSlug')));
         if (!$userSite || ($userSite && $userSite->getSlug() != $request->get('profileNameSlug'))) {
             throw new HttpException(410);
@@ -278,16 +282,18 @@ class ProfilePageController extends CoreController
 
             $objResponse = null;
             if ($user && $user->getBusinessCategoryId() == CategoryRepository::ADULT_ID) {
-            	$objResponse = CommonManager::setCacheControlHeaders();
+                $objResponse = CommonManager::setCacheControlHeaders();
             }
 
             if ($activeShopPackage && $activeShopPackage->getPackage() && $activeShopPackage->getPackage()->getPackageText() == PackageRepository::SHP_PACKAGE_BASIC_TEXT) {
                 $this->getRepository('FaUserBundle:UserSiteViewCounter')->updateUserSiteViewCounter($this->container, $userId);
                 $userDetail = $this->getRepository('FaUserBundle:User')->getBusinessUserProfileDetail($userId, true, false, $this->container);
 
-                if($userDetail['user_name']!='') {
-	            	$userName = str_replace( $removeSplCharArr, "", $userDetail['user_name']);
-	            } else { $userName = ''; }
+                if ($userDetail['user_name']!='') {
+                    $userName = str_replace($removeSplCharArr, "", $userDetail['user_name']);
+                } else {
+                    $userName = '';
+                }
 
                 if (!$userDetail['id']) {
                     throw new HttpException(410);
@@ -306,10 +312,12 @@ class ProfilePageController extends CoreController
                 $this->getRepository('FaUserBundle:UserSiteViewCounter')->updateUserSiteViewCounter($this->container, $userId);
                 $userDetail = $this->getRepository('FaUserBundle:User')->getBusinessUserProfileDetail($userId, true, true, $this->container);
 
-                 if($userDetail['user_name']!='') {
-	            	$userName = str_replace( $removeSplCharArr, "", $userDetail['user_name']);
-	            } else { $userName = ''; }
-	            
+                if ($userDetail['user_name']!='') {
+                    $userName = str_replace($removeSplCharArr, "", $userDetail['user_name']);
+                } else {
+                    $userName = '';
+                }
+                
                 if (!$userDetail['id']) {
                     throw new HttpException(410);
                 }
@@ -515,7 +523,7 @@ class ProfilePageController extends CoreController
      */
     public function redirectTiMotorBusinessProfilePageAction(Request $request)
     {
-        $slug = preg_replace('/-N-.+/','',$request->get('page_string'));
+        $slug = preg_replace('/-N-.+/', '', $request->get('page_string'));
         $userSite = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('slug' => $slug));
         if ($userSite) {
             $url = $this->get('router')->generate('show_business_profile_page', array(

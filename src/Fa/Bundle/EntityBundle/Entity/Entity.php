@@ -471,9 +471,9 @@ class Entity
      */
     public function setOptionalVal($optional_val)
     {
-    	$this->optional_val = $optional_val;
-    	
-    	return $this;
+        $this->optional_val = $optional_val;
+        
+        return $this;
     }
     
     /**
@@ -483,6 +483,6 @@ class Entity
      */
     public function getOptionalVal()
     {
-    	return $this->optional_val;
+        return $this->optional_val;
     }
 }

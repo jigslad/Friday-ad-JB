@@ -102,9 +102,9 @@ EOF
         $em  = $this->getContainer()->get('doctrine')->getManager();
 
         foreach ($users as $user) {
-                $businessUser  = new BusinessAd($user, $em, $this->getContainer());
-                $businessUser->update();
-                $em->flush();
+            $businessUser  = new BusinessAd($user, $em, $this->getContainer());
+            $businessUser->update();
+            $em->flush();
         }
 
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);

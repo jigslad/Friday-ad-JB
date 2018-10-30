@@ -105,7 +105,7 @@ EOF
         $keyword = $searchKeyword->getKeyword();
 
         // if do not overwrite category is set then only update search counter instead of insert new category entries.
-        if ($searchKeyword->getDoNotOverwriteCategory()){
+        if ($searchKeyword->getDoNotOverwriteCategory()) {
             $updateQuery = $this->em->getRepository('FaAdBundle:SearchKeywordCategory')->createQueryBuilder(SearchKeywordCategoryRepository::ALIAS)
             ->update()
             ->set(SearchKeywordCategoryRepository::ALIAS.'.search_count', $searchKeyword->getSearchCount())

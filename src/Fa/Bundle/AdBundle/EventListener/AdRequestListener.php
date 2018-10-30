@@ -55,7 +55,7 @@ class AdRequestListener
      * @return void|boolean
      */
     public function onKernelRequest(GetResponseEvent $event)
-    {	
+    {
         if (!$event->isMasterRequest()) {
             return;
         }
@@ -70,154 +70,154 @@ class AdRequestListener
             $locationUrl = str_replace('greate-london', 'greater-london', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/for-sale\/home-garden\/aids\//', $uri)) { //redirect aids FFR-2083
+        } elseif (preg_match('/for-sale\/home-garden\/aids\//', $uri)) { //redirect aids FFR-2083
             $locationUrl = str_replace('for-sale/home-garden/aids/', 'for-sale/home-garden/health/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/for-sale\/business-office\/office\/stationary\//', $uri)) { //redirect aids FFR-2390
+        } elseif (preg_match('/for-sale\/business-office\/office\/stationary\//', $uri)) { //redirect aids FFR-2390
             $locationUrl = str_replace('for-sale/business-office/office/stationary/', 'for-sale/business-office/office/stationery/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/for-sale\/([a-z\-]+)\/business-office\/office\/stationary\//', $uri, $matches)) {
+        } elseif (preg_match('/for-sale\/([a-z\-]+)\/business-office\/office\/stationary\//', $uri, $matches)) {
             $locationUrl = str_replace('for-sale/'.$matches[1].'/business-office/office/stationary/', 'for-sale/'.$matches[1].'/business-office/office/stationery/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/for-sale\/antiques-collectables\/gramaphones-radiograms\//', $uri)) {
+        } elseif (preg_match('/for-sale\/antiques-collectables\/gramaphones-radiograms\//', $uri)) {
             $locationUrl = str_replace('for-sale/antiques-collectables/gramaphones-radiograms/', 'for-sale/antiques-collectables/gramophones-radiograms/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/for-sale\/([a-z\-]+)\/antiques-collectables\/gramaphones-radiograms\//', $uri, $matches)) {
+        } elseif (preg_match('/for-sale\/([a-z\-]+)\/antiques-collectables\/gramaphones-radiograms\//', $uri, $matches)) {
             $locationUrl = str_replace('for-sale/'.$matches[1].'/antiques-collectables/gramaphones-radiograms/', 'for-sale/'.$matches[1].'/antiques-collectables/gramophones-radiograms/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/community\/whats-on\/entertainment\/restaurants\//', $uri)) { //redirect aids FFR-2410
+        } elseif (preg_match('/community\/whats-on\/entertainment\/restaurants\//', $uri)) { //redirect aids FFR-2410
             $locationUrl = str_replace('community/whats-on/entertainment/restaurants/', 'community/in-your-area/restaurants/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/jobs\/driving-warehouse\//', $uri)) { //FFR-2421
+        } elseif (preg_match('/jobs\/driving-warehouse\//', $uri)) { //FFR-2421
             $locationUrl = str_replace('jobs/driving-warehouse/', 'jobs/automotive-jobs/driver-jobs/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/for-sale\/electronics\/cameras-photography\/non-digital-camera-accessories\//', $uri)) { //FFR-2222
+        } elseif (preg_match('/for-sale\/electronics\/cameras-photography\/non-digital-camera-accessories\//', $uri)) { //FFR-2222
             $locationUrl = str_replace('for-sale/electronics/cameras-photography/non-digital-camera-accessories/', 'for-sale/electronics/cameras-photography/camera-accessories/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/for-sale\/electronics\/cameras-photography\/digital-camera-accessories\//', $uri)) {
+        } elseif (preg_match('/for-sale\/electronics\/cameras-photography\/digital-camera-accessories\//', $uri)) {
             $locationUrl = str_replace('for-sale/electronics/cameras-photography/digital-camera-accessories/', 'for-sale/electronics/cameras-photography/camera-accessories/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/for-sale\/([a-z\-]+)\/electronics\/cameras-photography\/non-digital-camera-accessories\//', $uri, $matches)) {
+        } elseif (preg_match('/for-sale\/([a-z\-]+)\/electronics\/cameras-photography\/non-digital-camera-accessories\//', $uri, $matches)) {
             $locationUrl = str_replace('for-sale/'.$matches[1].'/electronics/cameras-photography/non-digital-camera-accessories/', 'for-sale/'.$matches[1].'/electronics/cameras-photography/camera-accessories/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/for-sale\/([a-z\-]+)\/electronics\/cameras-photography\/digital-camera-accessories\//', $uri, $matches)) {
+        } elseif (preg_match('/for-sale\/([a-z\-]+)\/electronics\/cameras-photography\/digital-camera-accessories\//', $uri, $matches)) {
             $locationUrl = str_replace('for-sale/'.$matches[1].'/electronics/cameras-photography/digital-camera-accessories/', 'for-sale/'.$matches[1].'/electronics/cameras-photography/camera-accessories/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } else if (preg_match('/adult\/phone-cam-chat\//', $uri)) { 
-        	$locationUrl = ConfigRepository::LIVE_CAMS_URL;
-        	$response = new RedirectResponse($locationUrl, 301);
-        	$event->setResponse($response);
-        } else if (preg_match('/avon/', $uri)) {
-        	$uriSplit = explode('/', $uri);
-        	if( (isset($uriSplit[3]) && $uriSplit[3] == 'avon')) { 
-        		$uriSplit[3] = 'county-bristol';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	} elseif ( (isset($uriSplit[4]) && $uriSplit[4] == 'avon') ) { 
-        		$uriSplit[4] = 'county-bristol';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	}
-        } else if (preg_match('/cleveland/', $uri)) {
-        	$uriSplit = explode('/', $uri);
-        	if( (isset($uriSplit[3]) && $uriSplit[3] == 'cleveland')) {
-        		$uriSplit[3] = 'north-yorkshire';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	} elseif ( (isset($uriSplit[4]) && $uriSplit[4] == 'cleveland') ) {
-        		$uriSplit[4] = 'north-yorkshire';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	}
-        } else if (preg_match('/north-humberside/', $uri)) {
-        	$uriSplit = explode('/', $uri);
-        	if( (isset($uriSplit[3]) && $uriSplit[3] == 'north-humberside')) {
-        		$uriSplit[3] = 'east-yorkshire';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	} elseif ( (isset($uriSplit[4]) && $uriSplit[4] == 'north-humberside') ) {
-        		$uriSplit[4] = 'east-yorkshire';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	}
-        } else if (preg_match('/south-humberside/', $uri)) {
-        	$uriSplit = explode('/', $uri);
-        	if( (isset($uriSplit[3]) && $uriSplit[3] == 'south-humberside')) {
-        		$uriSplit[3] = 'lincolnshire';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	} elseif ( (isset($uriSplit[4]) && $uriSplit[4] == 'south-humberside') ) {
-        		$uriSplit[4] = 'lincolnshire';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	}
-        } else if (preg_match('/south-wirral/', $uri)) {
-        	$uriSplit = explode('/', $uri);
-        	if( (isset($uriSplit[3]) && $uriSplit[3] == 'south-wirral')) {
-        		$uriSplit[3] = 'cheshire';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	} elseif ( (isset($uriSplit[4]) && $uriSplit[4] == 'south-wirral') ) {
-        		$uriSplit[4] = 'cheshire';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	}
-        }  else if (preg_match('/middlesex-ashford/', $uri)) {
-        	$uriSplit = explode('/', $uri);
-        	if( (isset($uriSplit[3]) && $uriSplit[3] == 'middlesex-ashford')) {
-        		$uriSplit[3] = 'surrey-ashford';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	} elseif ( (isset($uriSplit[4]) && $uriSplit[4] == 'middlesex-ashford') ) {
-        		$uriSplit[4] = 'surrey-ashford';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	}
-        } else if (preg_match('/surrey-richmond/', $uri)) {
-        	$uriSplit = explode('/', $uri);
-        	if( (isset($uriSplit[3]) && $uriSplit[3] == 'surrey-richmond')) {
-        		$uriSplit[3] = 'greater-london-richmond';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	} elseif ( (isset($uriSplit[4]) && $uriSplit[4] == 'surrey-richmond') ) {
-        		$uriSplit[4] = 'greater-london-richmond';
-        		$locationUrl = implode('/', $uriSplit);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	}
-        } else if (preg_match('/car-hire/', $uri)) {
-        	$uriSplit = explode('/', $uri);
-        	if(in_array("car-hire", $uriSplit)) {
-        		$locationUrl = str_replace('car-hire', 'vehicle-hire', $uri);
-        		$response = new RedirectResponse($locationUrl, 301);
-        		$event->setResponse($response);
-        	}
-        } else if (preg_match('/bristol\/celebrations-special-occasions\/20-years-old-male-prostitute-for-you-16359610/', $uri)) { 
-        	throw new HttpException(410);
+        } elseif (preg_match('/adult\/phone-cam-chat\//', $uri)) {
+            $locationUrl = ConfigRepository::LIVE_CAMS_URL;
+            $response = new RedirectResponse($locationUrl, 301);
+            $event->setResponse($response);
+        } elseif (preg_match('/avon/', $uri)) {
+            $uriSplit = explode('/', $uri);
+            if ((isset($uriSplit[3]) && $uriSplit[3] == 'avon')) {
+                $uriSplit[3] = 'county-bristol';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            } elseif ((isset($uriSplit[4]) && $uriSplit[4] == 'avon')) {
+                $uriSplit[4] = 'county-bristol';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            }
+        } elseif (preg_match('/cleveland/', $uri)) {
+            $uriSplit = explode('/', $uri);
+            if ((isset($uriSplit[3]) && $uriSplit[3] == 'cleveland')) {
+                $uriSplit[3] = 'north-yorkshire';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            } elseif ((isset($uriSplit[4]) && $uriSplit[4] == 'cleveland')) {
+                $uriSplit[4] = 'north-yorkshire';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            }
+        } elseif (preg_match('/north-humberside/', $uri)) {
+            $uriSplit = explode('/', $uri);
+            if ((isset($uriSplit[3]) && $uriSplit[3] == 'north-humberside')) {
+                $uriSplit[3] = 'east-yorkshire';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            } elseif ((isset($uriSplit[4]) && $uriSplit[4] == 'north-humberside')) {
+                $uriSplit[4] = 'east-yorkshire';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            }
+        } elseif (preg_match('/south-humberside/', $uri)) {
+            $uriSplit = explode('/', $uri);
+            if ((isset($uriSplit[3]) && $uriSplit[3] == 'south-humberside')) {
+                $uriSplit[3] = 'lincolnshire';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            } elseif ((isset($uriSplit[4]) && $uriSplit[4] == 'south-humberside')) {
+                $uriSplit[4] = 'lincolnshire';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            }
+        } elseif (preg_match('/south-wirral/', $uri)) {
+            $uriSplit = explode('/', $uri);
+            if ((isset($uriSplit[3]) && $uriSplit[3] == 'south-wirral')) {
+                $uriSplit[3] = 'cheshire';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            } elseif ((isset($uriSplit[4]) && $uriSplit[4] == 'south-wirral')) {
+                $uriSplit[4] = 'cheshire';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            }
+        } elseif (preg_match('/middlesex-ashford/', $uri)) {
+            $uriSplit = explode('/', $uri);
+            if ((isset($uriSplit[3]) && $uriSplit[3] == 'middlesex-ashford')) {
+                $uriSplit[3] = 'surrey-ashford';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            } elseif ((isset($uriSplit[4]) && $uriSplit[4] == 'middlesex-ashford')) {
+                $uriSplit[4] = 'surrey-ashford';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            }
+        } elseif (preg_match('/surrey-richmond/', $uri)) {
+            $uriSplit = explode('/', $uri);
+            if ((isset($uriSplit[3]) && $uriSplit[3] == 'surrey-richmond')) {
+                $uriSplit[3] = 'greater-london-richmond';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            } elseif ((isset($uriSplit[4]) && $uriSplit[4] == 'surrey-richmond')) {
+                $uriSplit[4] = 'greater-london-richmond';
+                $locationUrl = implode('/', $uriSplit);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            }
+        } elseif (preg_match('/car-hire/', $uri)) {
+            $uriSplit = explode('/', $uri);
+            if (in_array("car-hire", $uriSplit)) {
+                $locationUrl = str_replace('car-hire', 'vehicle-hire', $uri);
+                $response = new RedirectResponse($locationUrl, 301);
+                $event->setResponse($response);
+            }
+        } elseif (preg_match('/bristol\/celebrations-special-occasions\/20-years-old-male-prostitute-for-you-16359610/', $uri)) {
+            throw new HttpException(410);
         }
         
         
@@ -258,7 +258,7 @@ class AdRequestListener
                     return $tiReturn;
                 }
             }
-        }        
+        }
 
         /*$tiUrl = $request->get('ti_url');
         if ($tiUrl) {
@@ -468,23 +468,23 @@ class AdRequestListener
                     $parent   = $this->getFirstLevelParent($catObj['id']);
 
                     if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
-                    	$queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::MOTORS_DISTANCE : $request->get('item__distance');
+                        $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::MOTORS_DISTANCE : $request->get('item__distance');
                     } else {
-                    	$queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::OTHERS_DISTANCE : $request->get('item__distance');
+                        $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::OTHERS_DISTANCE : $request->get('item__distance');
                     }
                     
                     
                     //check location belongs to area
-                    if (preg_match('/^\d+$/', $locationId) && is_null($request->get('item__distance'))) { 
-                    	$isLocationArea = $this->em->getRepository('FaEntityBundle:Location')->find($locationId);
-                    	if(!empty($isLocationArea) && $isLocationArea && $isLocationArea->getLvl() == '4') {
-                    		$queryParams['item__distance'] = $queryParams['item__distance']/CategoryRepository::AREA_DISTANCE_DIVISION;
-                    	}
+                    if (preg_match('/^\d+$/', $locationId) && is_null($request->get('item__distance'))) {
+                        $isLocationArea = $this->em->getRepository('FaEntityBundle:Location')->find($locationId);
+                        if (!empty($isLocationArea) && $isLocationArea && $isLocationArea->getLvl() == '4') {
+                            $queryParams['item__distance'] = $queryParams['item__distance']/CategoryRepository::AREA_DISTANCE_DIVISION;
+                        }
                     }
                     
                     $request->attributes->set('finders', array_merge($queryParams, array('item__category_id' => $catObj['id'], 'item__location' => $locationId)));
                 } else {
-                	$queryParams['item__distance'] = isset($queryParams['item__distance']) && $queryParams['item__distance'] != null ? $queryParams['item__distance'] : CategoryRepository::OTHERS_DISTANCE;
+                    $queryParams['item__distance'] = isset($queryParams['item__distance']) && $queryParams['item__distance'] != null ? $queryParams['item__distance'] : CategoryRepository::OTHERS_DISTANCE;
                     $request->attributes->set('finders', array_merge($queryParams, array('item__location' => $locationId)));
                 }
 
@@ -595,7 +595,7 @@ class AdRequestListener
             $redirectString = $request->get('location');
             $static_page = $this->em->getRepository('FaContentBundle:StaticPage')->getStaticPageLinkArray($this->container, true);
             if (in_array($redirectString, $static_page)) {
-                 $request->attributes->set('static_page', 1);
+                $request->attributes->set('static_page', 1);
             }
 
             if ((isset($params['path']) && $params['path']) || (isset($params['location']) && $params['location'])) {
@@ -615,20 +615,20 @@ class AdRequestListener
                 $redirectString = $request->get('location');
                 $this->redirectOldUrls($redirectString, 'uk', $request, $event, 'location_home');
             }
-        } elseif($currentRoute ==  'show_all_towns_by_county') { 
-                if (isset($params['countySlug']) && $params['countySlug']) {
-                    $location = isset($params['countySlug'])?trim($params['countySlug'], '/'):'';
-                    $locationString = $this->em->getRepository('FaAdBundle:Redirects')->getNewByOld($location, $this->container, true);
-                    if ($locationString) {
-                        $request->attributes->set('location', $locationString);
-                        $setCookieValue = $this->em->getRepository('FaEntityBundle:Location')->setLocationInCookie($request, $this->container);
-                        $url = $this->container->get('router')->generate('show_all_towns_by_county', array(
+        } elseif ($currentRoute ==  'show_all_towns_by_county') {
+            if (isset($params['countySlug']) && $params['countySlug']) {
+                $location = isset($params['countySlug'])?trim($params['countySlug'], '/'):'';
+                $locationString = $this->em->getRepository('FaAdBundle:Redirects')->getNewByOld($location, $this->container, true);
+                if ($locationString) {
+                    $request->attributes->set('location', $locationString);
+                    $setCookieValue = $this->em->getRepository('FaEntityBundle:Location')->setLocationInCookie($request, $this->container);
+                    $url = $this->container->get('router')->generate('show_all_towns_by_county', array(
                             'countySlug' => $locationString,
                         ), true);
-                        $response = new RedirectResponse($url, 301);
-                        $event->setResponse($response);
-                    }
+                    $response = new RedirectResponse($url, 301);
+                    $event->setResponse($response);
                 }
+            }
         } else {
             return false;
         }
@@ -951,7 +951,6 @@ class AdRequestListener
                                     $response = new RedirectResponse($url, 301);
                                     $event->setResponse($response);
                                 }
-
                             }
                         }
                     }

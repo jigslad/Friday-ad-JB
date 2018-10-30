@@ -215,7 +215,7 @@ class LandingPageAdminController extends CrudController implements ResourceAutho
 
             $redirectPath = $this->getRouteName('');
             // Check if user clicked on save and new then open new form
-            if($form->has('saveAndNew') &&  $form->get('saveAndNew')->isClicked()) {
+            if ($form->has('saveAndNew') &&  $form->get('saveAndNew')->isClicked()) {
                 $redirectPath = $this->getRouteName('create');
             }
 
@@ -327,7 +327,7 @@ class LandingPageAdminController extends CrudController implements ResourceAutho
 
             $redirectPath = $this->getRouteName('');
             // Check if user clicked on save and new then open new form
-            if($form->has('saveAndNew') &&  $form->get('saveAndNew')->isClicked()) {
+            if ($form->has('saveAndNew') &&  $form->get('saveAndNew')->isClicked()) {
                 $redirectPath = $this->getRouteName('create');
             }
 

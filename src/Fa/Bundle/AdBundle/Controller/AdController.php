@@ -279,19 +279,19 @@ class AdController extends CoreController
         $transactionJsArr = [];
         //check session for upgrade Payment has been done successfully
         if ($this->container->get('session')->has('payment_success_for_upgrade') && $this->container->get('session')->has('payment_success_for_upgrade') != '') {
-        	$successPaymentModalbox 	= true;
-        	if( $this->container->get('session')->has('upgrade_payment_transaction_id') ) {
-        		$loggedinUser = $this->getLoggedInUser();
-        		if($loggedinUser) {
-        			$transcations	= $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($this->container->get('session')->get('upgrade_payment_transaction_id'), $loggedinUser, true);
-        			$transactionJsArr['getTranscationJs'] = CommonManager::getGaTranscationJs($transcations);
-        			$transactionJsArr['getItemJs']        = CommonManager::getGaItemJs($transcations);
-        			$transactionJsArr['ga_transaction']   = $transcations;
-        		}
-        	}
-        	$this->container->get('session')->remove('payment_success_for_upgrade');
-        	$this->container->get('session')->remove('upgrade_payment_success_redirect_url');
-        	$this->container->get('session')->remove('upgrade_payment_transaction_id');
+            $successPaymentModalbox 	= true;
+            if ($this->container->get('session')->has('upgrade_payment_transaction_id')) {
+                $loggedinUser = $this->getLoggedInUser();
+                if ($loggedinUser) {
+                    $transcations	= $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($this->container->get('session')->get('upgrade_payment_transaction_id'), $loggedinUser, true);
+                    $transactionJsArr['getTranscationJs'] = CommonManager::getGaTranscationJs($transcations);
+                    $transactionJsArr['getItemJs']        = CommonManager::getGaItemJs($transcations);
+                    $transactionJsArr['ga_transaction']   = $transcations;
+                }
+            }
+            $this->container->get('session')->remove('payment_success_for_upgrade');
+            $this->container->get('session')->remove('upgrade_payment_success_redirect_url');
+            $this->container->get('session')->remove('upgrade_payment_transaction_id');
         }
 
         // initialize search filter manager service and prepare filter data for searching
@@ -315,7 +315,6 @@ class AdController extends CoreController
                 $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
                 $solrSearchManager->setGeoDistQuery($geoDistParams);
             }
-
         }
         $solrResponse = $solrSearchManager->getSolrResponse();
 
@@ -371,8 +370,8 @@ class AdController extends CoreController
             'location_id' => $cookieLocation['location'],
             'location_slug' => $cookieLocation['slug'],
             'similarAds' => $similarAds,
-        	'successPaymentModalbox' => $successPaymentModalbox,
-        	'paymentTransactionJs'	 => $transactionJsArr,
+            'successPaymentModalbox' => $successPaymentModalbox,
+            'paymentTransactionJs'	 => $transactionJsArr,
         );
 
         if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
@@ -389,8 +388,9 @@ class AdController extends CoreController
         $constructedUri = $requestUri['path'];
 
         if ($constructedUri != $url) {
-            if(isset($requestUri['query']))
+            if (isset($requestUri['query'])) {
                 $url = $url.'?'.$requestUri['query'];
+            }
             return $this->redirect($url, 301);
         }
 
@@ -603,18 +603,18 @@ class AdController extends CoreController
      * @return Response A Response object.
      */
     public function showAdDetailSeoBlocksAction(Request $request, $categoryId, $location = null, $seoPageRule = null, $adLocationName = null)
-    {	
+    {
         // fetch location from cookie.
         $cookieLocation = CommonManager::getLocationDetailFromParamsOrCookie($location, $request, $this->container);
         $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $this->container));
         $rootCategoryId = (isset($parentCategoryIds[0]) ? $parentCategoryIds[0] : null);
         $adlocationId = 0;
         //get Ad location id based on location Name
-        if( !is_null( $adLocationName ) ) {
-        	$adLocObj = $this->getRepository('FaEntityBundle:Location')->findOneBy(array('name' => $adLocationName));
-        	if(!empty($adLocObj)) {
-        		$adlocationId = $adLocObj->getId();
-        	}
+        if (!is_null($adLocationName)) {
+            $adLocObj = $this->getRepository('FaEntityBundle:Location')->findOneBy(array('name' => $adLocationName));
+            if (!empty($adLocObj)) {
+                $adlocationId = $adLocObj->getId();
+            }
         }
         
         // initialize search filter manager service and prepare filter data for searching
@@ -676,11 +676,11 @@ class AdController extends CoreController
                     }
 
                     if ((isset($blocks[$solrFieldName]['facet']) && is_array($blocks[$solrFieldName]['facet']) && count($blocks[$solrFieldName]['facet']) == 0) || !isset($blocks[$solrFieldName]['facet'])) {
-                    	$blocks[$solrFieldName]['facet'] = $facetResult[$solrFieldName];
-                    	//add location areas
-                    	if(isset($facetResult[AdSolrFieldMapping::AREA_ID]) && !empty($facetResult[AdSolrFieldMapping::AREA_ID])) {
-                    		$blocks[$solrFieldName]['facet'] = $blocks[$solrFieldName]['facet'] + $facetResult[AdSolrFieldMapping::AREA_ID];
-                    	}
+                        $blocks[$solrFieldName]['facet'] = $facetResult[$solrFieldName];
+                        //add location areas
+                        if (isset($facetResult[AdSolrFieldMapping::AREA_ID]) && !empty($facetResult[AdSolrFieldMapping::AREA_ID])) {
+                            $blocks[$solrFieldName]['facet'] = $blocks[$solrFieldName]['facet'] + $facetResult[AdSolrFieldMapping::AREA_ID];
+                        }
                     }
                 }
             }
@@ -896,7 +896,6 @@ class AdController extends CoreController
                     'facet' => (count($topLinkArray) ? $topLinkArray : array()),
                 );
             }
-
         } elseif ($rootCategoryId == CategoryRepository::ADULT_ID || $rootCategoryId == CategoryRepository::COMMUNITY_ID) {
             $lastElementOfCategory = count($parentCategoryIds) - 1;
             $seoSearchParams['item__category_id'] = $parentCategoryIds[$lastElementOfCategory];
@@ -908,11 +907,11 @@ class AdController extends CoreController
         $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
         
         //check ad loaction is exist
-        if( $rootCategoryId == CategoryRepository::ADULT_ID && $adlocationId !== 0 ) {
-        	$seoSearchParams['item__category_id'] = (!empty($parentCategoryIds))?$parentCategoryIds[1]:null;
-        	$data['query_filters']['item']['category_id'] = $seoSearchParams['item__category_id'];
-	        $data['query_filters']['item']['distance'] = CategoryRepository::ADULT_TOP_LOCATION_AT_DETAIL_BY_DISTANCE;
-	        $data['query_filters']['item']['location'] = $adlocationId."|".CategoryRepository::ADULT_TOP_LOCATION_AT_DETAIL_BY_DISTANCE;
+        if ($rootCategoryId == CategoryRepository::ADULT_ID && $adlocationId !== 0) {
+            $seoSearchParams['item__category_id'] = (!empty($parentCategoryIds))?$parentCategoryIds[1]:null;
+            $data['query_filters']['item']['category_id'] = $seoSearchParams['item__category_id'];
+            $data['query_filters']['item']['distance'] = CategoryRepository::ADULT_TOP_LOCATION_AT_DETAIL_BY_DISTANCE;
+            $data['query_filters']['item']['location'] = $adlocationId."|".CategoryRepository::ADULT_TOP_LOCATION_AT_DETAIL_BY_DISTANCE;
         }
         
         $data['facet_fields'] = array(
@@ -920,10 +919,10 @@ class AdController extends CoreController
                 'limit' => 10,
                 'min_count' => 1,
             ),
-        	AdSolrFieldMapping::AREA_ID => array(
-        		'limit' => 10,
-        		'min_count' => 1,
-        	)
+            AdSolrFieldMapping::AREA_ID => array(
+                'limit' => 10,
+                'min_count' => 1,
+            )
         );
         $blocks[AdSolrFieldMapping::TOWN_ID] = array(
             'heading' => $this->get('translator')->trans('Top Locations', array(), 'frontend-ad-detail-seo-block'),
@@ -947,12 +946,12 @@ class AdController extends CoreController
     {
         if ($request->isXmlHttpRequest()) {
             $response = new Response();
-            $response->headers->setCookie(new Cookie('got_it_one_click_enq',1, time() + 30 * 86400));
+            $response->headers->setCookie(new Cookie('got_it_one_click_enq', 1, time() + 30 * 86400));
             $response->sendHeaders();
-            return new JsonResponse(array('response' => TRUE));
+            return new JsonResponse(array('response' => true));
         }
 
-        return new JsonResponse(array('response' => FALSE));
+        return new JsonResponse(array('response' => false));
     }
 
 
@@ -969,7 +968,7 @@ class AdController extends CoreController
             $objAd = $this->getRepository('FaAdBundle:Ad')->find($request->get('adId'));
             if ($objAd) {
                 $isAlreadyEnquired = $this->getRepository('FaMessageBundle:Message')->isAlreadyEnquired($this->getLoggedInUser()->getId(), $objAd->getId());
-                if ($isAlreadyEnquired == FALSE) {
+                if ($isAlreadyEnquired == false) {
                     $objSeller       = $objAd->getUser();
                     $objBuyer        = $this->getLoggedInUser();
                     $adUrl           = $this->container->get('router')->generate('ad_detail_page_by_id', array('id' => $objAd->getId()), true);
@@ -977,7 +976,7 @@ class AdController extends CoreController
                     $htmlMessageText = 'Is the '.$adUrlLink.' still available?';
                     $textMessageText = 'Is the '.$objAd->getTitle().' still available?';
                     $objMessage      = new Message();
-                    $objMessage      = $this->getRepository('FaMessageBundle:Message')->setMessageDetail($objMessage, NULL, $objAd, $objBuyer, $objSeller, $request->getClientIp());
+                    $objMessage      = $this->getRepository('FaMessageBundle:Message')->setMessageDetail($objMessage, null, $objAd, $objBuyer, $objSeller, $request->getClientIp());
                     $objMessage->setSubject($objAd->getTitle());
                     $objMessage->setTextMessage($textMessageText);
                     $objMessage->setHtmlMessage($htmlMessageText);
@@ -996,15 +995,15 @@ class AdController extends CoreController
                     }
 
                     $response = new Response();
-                    return new JsonResponse(array('response' => TRUE));
+                    return new JsonResponse(array('response' => true));
                 } else {
-                    return new JsonResponse(array('response' => FALSE));
+                    return new JsonResponse(array('response' => false));
                 }
             }
-            return new JsonResponse(array('response' => FALSE));
+            return new JsonResponse(array('response' => false));
         }
 
-        return new JsonResponse(array('response' => FALSE));
+        return new JsonResponse(array('response' => false));
     }
 
     /**
@@ -1021,11 +1020,11 @@ class AdController extends CoreController
         if ($request->isXmlHttpRequest() && $request->get('adId')) {
             $objAd = $this->getRepository('FaAdBundle:Ad')->find($request->get('adId'));
             if ($objAd) {
-                $categoryPath = $this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($objAd->getCategory()->getId(), FALSE, $this->container);
+                $categoryPath = $this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($objAd->getCategory()->getId(), false, $this->container);
                 if ($categoryPath && is_array($categoryPath) && count($categoryPath) > 0) {
-                   foreach ($categoryPath as $categoryId => $categoryName) {
-                       $catString = $catString . $delimiter . $categoryName;
-                   }
+                    foreach ($categoryPath as $categoryId => $categoryName) {
+                        $catString = $catString . $delimiter . $categoryName;
+                    }
                 }
             }
         }
@@ -1043,13 +1042,13 @@ class AdController extends CoreController
      */
     public function ajaxSetGACookieAction(Request $request)
     {
-        $isSet = FALSE;
+        $isSet = false;
         if ($request->isXmlHttpRequest() && $request->get('ad_id', null) != null) {
             $response   = new Response();
             $cookieName = $request->get('ad_id').'_ad_detail_ga_tracking';
-            $response->headers->setCookie(new Cookie($cookieName,1, time() + 7 * 86400));
+            $response->headers->setCookie(new Cookie($cookieName, 1, time() + 7 * 86400));
             $response->sendHeaders();
-            $isSet = TRUE;
+            $isSet = true;
         }
         return new JsonResponse(array('is_set' => $isSet));
     }
@@ -1063,13 +1062,13 @@ class AdController extends CoreController
      */
     public function ajaxSetGAAfterCookieAction(Request $request)
     {
-        $isSet = FALSE;
+        $isSet = false;
         if ($request->isXmlHttpRequest() && $request->get('ad_id', null) != null) {
             $response   = new Response();
             $cookieName = $request->get('ad_id').'_ad_detail_ga_tracking_after';
-            $response->headers->setCookie(new Cookie($cookieName,1, time() + 7 * 86400));
+            $response->headers->setCookie(new Cookie($cookieName, 1, time() + 7 * 86400));
             $response->sendHeaders();
-            $isSet = TRUE;
+            $isSet = true;
         }
         return new JsonResponse(array('is_set' => $isSet));
     }
@@ -1083,18 +1082,18 @@ class AdController extends CoreController
      */
     public function ajaxEighteenPlusWarnningModelAction(Request $request)
     {
-    	if ($request->isXmlHttpRequest()) {
-    		$response   = new Response();
-    		$cookieName = $request->get('ad_id').'_ad_detail_ga_tracking_after';
-    		
-    		if($request->get('popupModification') != null && $request->get('popupModification') == 1) {
-    			$parameters['modification'] = true;
-    		} else {
-    			$parameters['for_third_party_link'] = true; 
-    		}
-    		$htmlContent = $this->renderView('FaFrontendBundle::adultWarnningPopup.html.twig', $parameters);
-    		return new JsonResponse(array('success' => true, 'htmlContent' => $htmlContent));
-    	}
-    	return new Response();
+        if ($request->isXmlHttpRequest()) {
+            $response   = new Response();
+            $cookieName = $request->get('ad_id').'_ad_detail_ga_tracking_after';
+            
+            if ($request->get('popupModification') != null && $request->get('popupModification') == 1) {
+                $parameters['modification'] = true;
+            } else {
+                $parameters['for_third_party_link'] = true;
+            }
+            $htmlContent = $this->renderView('FaFrontendBundle::adultWarnningPopup.html.twig', $parameters);
+            return new JsonResponse(array('success' => true, 'htmlContent' => $htmlContent));
+        }
+        return new Response();
     }
 }

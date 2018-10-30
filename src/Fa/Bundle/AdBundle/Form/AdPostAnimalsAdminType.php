@@ -219,7 +219,7 @@ class AdPostAnimalsAdminType extends AdPostAdminType
             $fieldOptions['placeholder'] = 'Select '.$paaField['label'];
         }
 
-        if(in_array($paaField['field'], array('breed_id', 'species_id'))) {
+        if (in_array($paaField['field'], array('breed_id', 'species_id'))) {
             $fieldOptions['attr']['class'] = 'custom_select';
         }
 

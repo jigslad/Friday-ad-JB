@@ -197,7 +197,7 @@ class ContactModerationRequestBuild
             $i                     = 0;
 
             foreach ($objMessageAttachments as $key => $objMessageAttachment) {
-                $fileExtension                       = substr(strrchr($objMessageAttachment->getOriginalFileName(),'.'),1);
+                $fileExtension                       = substr(strrchr($objMessageAttachment->getOriginalFileName(), '.'), 1);
                 $fileName                            = $objMessageAttachment->getSessionId().'_'.$objMessageAttachment->getHash().'.'.$fileExtension;
                 $attachmentsArray[$i]['Bytes']       = $objMessageAttachment->getSize();
                 $attachmentsArray[$i]['ContentType'] = $objMessageAttachment->getMimeType();

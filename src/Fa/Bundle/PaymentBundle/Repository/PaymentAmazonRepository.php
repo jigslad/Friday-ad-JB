@@ -50,11 +50,11 @@ class PaymentAmazonRepository extends EntityRepository
         $amazon_token        = isset($paymentValue['amazon_token']) ? $paymentValue['amazon_token'] : null;
         $paymentAmazon       = new PaymentAmazon();
         $paymentAmazon->setPayment($paymentObj);
-        if($billingInfo!=null) {
+        if ($billingInfo!=null) {
             $billingAddr = $billingInfo->Name.', '.$billingInfo->AddressLine1.', '.$billingInfo->City.', '.$billingInfo->CountryCode.', '.$billingInfo->PostalCode;
             $paymentAmazon->setBillingInfo($billingAddr);
         }
-        if($userAddressInfo!=null) {
+        if ($userAddressInfo!=null) {
             $userAddr = $userAddressInfo->Name.', '.$userAddressInfo->AddressLine1.', '.$userAddressInfo->City.', '.$userAddressInfo->CountryCode.', '.$userAddressInfo->PostalCode;
         }
         if ($amazonResponse!=null) {
@@ -68,10 +68,10 @@ class PaymentAmazonRepository extends EntityRepository
             }
             $paymentAmazon->setValue(serialize($amazonResponse));
         }
-        if($ip!=null) {
+        if ($ip!=null) {
             $paymentAmazon->setIp($ip);
         }
-        if($amazon_token!=null) {
+        if ($amazon_token!=null) {
             $paymentAmazon->setAmazonToken($amazon_token);
         }
 

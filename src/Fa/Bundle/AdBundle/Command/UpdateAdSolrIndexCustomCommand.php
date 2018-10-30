@@ -82,7 +82,6 @@ EOF
         $offset   = $input->getOption('offset');
 
         if ($action == 'add' || $action == 'update') {
-
             $searchParam = null;
 
             if (isset($offset)) {
@@ -141,7 +140,7 @@ EOF
      */
     protected function updateSolrIndex($solrClient, $searchParam, $input, $output)
     {
-        $qb        = $this->getAdQueryBuilder(TRUE);
+        $qb        = $this->getAdQueryBuilder(true);
         $count     = $qb->getQuery()->getSingleScalarResult();
         $step      = 1000;
         $stat_time = time();
@@ -191,7 +190,7 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE)
+    protected function getAdQueryBuilder($onlyCount = false)
     {
         $adRepository  = $this->em->getRepository('FaAdBundle:Ad');
         $qb = $adRepository->getBaseQueryBuilder();

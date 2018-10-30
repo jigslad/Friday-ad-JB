@@ -26,7 +26,6 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
  */
 class MotorsRedirectsRepository extends EntityRepository
 {
-
     const ALIAS = 'red';
 
     /**
@@ -50,7 +49,7 @@ class MotorsRedirectsRepository extends EntityRepository
             }
         }
 
-          $qb = $this->createQueryBuilder(self::ALIAS)
+        $qb = $this->createQueryBuilder(self::ALIAS)
             ->where(self::ALIAS.'.nval = :nval')
             ->setParameter('nval', $nval)
             ->setMaxResults(1);

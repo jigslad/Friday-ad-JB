@@ -77,5 +77,4 @@ class OrderReceiptController extends CoreController
 
         return $this->render('FaPaymentBundle:OrderReceipt:orderReceipt.html.twig', $parameters);
     }
-
 }

@@ -174,7 +174,6 @@ EOF
         $stmt->execute();
         $ads = $stmt->fetchAll();
         return $ads;
-
     }
 
     /**

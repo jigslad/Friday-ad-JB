@@ -83,8 +83,8 @@ class UserReportCategoryDailyRepository extends EntityRepository
                 ->andWhere('('.self::ALIAS.'.created_at BETWEEN '.$finalStartDate.' AND  '.$finalEndDate.')')
                 ->groupBy(self::ALIAS.'.user_id', self::ALIAS.'.category_id')
                 ->orderBy('CategoryCount', 'DESC');
-                //->setFirstResult(0)
-                //->setMaxResults(1);
+        //->setFirstResult(0)
+        //->setMaxResults(1);
 
         $resultArray      = $qb->getQuery()->getResult();
         $finalResultArray = array();

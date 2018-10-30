@@ -178,10 +178,10 @@ class PaymentTransactionDetailRepository extends EntityRepository
                         $category = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($ad->getCategory()->getId());
 
 
-                        if (isset($value['promoteRepostAdFlag']) && ( $value['promoteRepostAdFlag'] == 'repost' || $value['promoteRepostAdFlag'] == 'renew')) {
+                        if (isset($value['promoteRepostAdFlag']) && ($value['promoteRepostAdFlag'] == 'repost' || $value['promoteRepostAdFlag'] == 'renew')) {
                             $cart_code = $cart_code.'-Renewal';
-                        } else if($type) {
-                        	$cart_code = $cart_code.'-Upgrade';
+                        } elseif ($type) {
+                            $cart_code = $cart_code.'-Upgrade';
                         } else {
                             $cart_code = $cart_code.'-New';
                         }
@@ -205,8 +205,8 @@ class PaymentTransactionDetailRepository extends EntityRepository
                 $uniqueId = md5($cart_code.'_'.$paymentDetailArray[$paymentDetail['transaction_id']]['Name'].'_'.$paymentDetailArray[$paymentDetail['transaction_id']]['SKU'].'_'.$paymentDetailArray[$paymentDetail['transaction_id']]['Category']);
                 $paymentDetailArray[$paymentDetail['transaction_id']]['UniqueId'] = $uniqueId;
                 $paymentUniqueIds[] = $uniqueId;
-                if(isset($value['user_credit_id']) && isset($value['user_credit'])) {
-                	$paymentDetailArray[$paymentDetail['transaction_id']]['SKU'] = $paymentDetailArray[$paymentDetail['transaction_id']]['SKU']."-credit";
+                if (isset($value['user_credit_id']) && isset($value['user_credit'])) {
+                    $paymentDetailArray[$paymentDetail['transaction_id']]['SKU'] = $paymentDetailArray[$paymentDetail['transaction_id']]['SKU']."-credit";
                 }
             }
 

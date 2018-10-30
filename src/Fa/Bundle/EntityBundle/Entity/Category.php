@@ -961,9 +961,9 @@ class Category
      */
     public function setIsPaaDisabled($is_paa_disabled)
     {
-    	$this->is_paa_disabled = $is_paa_disabled;
+        $this->is_paa_disabled = $is_paa_disabled;
 
-    	return $this;
+        return $this;
     }
 
     /**
@@ -973,7 +973,7 @@ class Category
      */
     public function getIsPaaDisabled()
     {
-    	return $this->is_paa_disabled;
+        return $this->is_paa_disabled;
     }
 
     /**
@@ -984,9 +984,9 @@ class Category
      */
     public function setIsFinanceEnabled($is_finance_enabled)
     {
-     $this->is_finance_enabled = $is_finance_enabled;
+        $this->is_finance_enabled = $is_finance_enabled;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -996,7 +996,7 @@ class Category
      */
     public function getIsFinanceEnabled()
     {
-     return $this->is_finance_enabled;
+        return $this->is_finance_enabled;
     }
 
     /**
@@ -1008,9 +1008,9 @@ class Category
      */
     public function setFinanceTitle($financeTitle)
     {
-     $this->finance_title = $financeTitle;
+        $this->finance_title = $financeTitle;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -1020,7 +1020,7 @@ class Category
      */
     public function getFinanceTitle()
     {
-     return $this->finance_title;
+        return $this->finance_title;
     }
 
     /**
@@ -1030,7 +1030,7 @@ class Category
      */
     public function getFinanceUrl()
     {
-     return $this->finance_url;
+        return $this->finance_url;
     }
 
     /**
@@ -1042,9 +1042,9 @@ class Category
      */
     public function setFinanceUrl($financeUrl)
     {
-     $this->finance_url = $financeUrl;
+        $this->finance_url = $financeUrl;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -1055,9 +1055,9 @@ class Category
      */
     public function setIsOneclickenqEnabled($is_oneclickenq_enabled)
     {
-     $this->is_oneclickenq_enabled = $is_oneclickenq_enabled;
+        $this->is_oneclickenq_enabled = $is_oneclickenq_enabled;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -1067,7 +1067,7 @@ class Category
      */
     public function getIsOneclickenqEnabled()
     {
-     return $this->is_oneclickenq_enabled;
+        return $this->is_oneclickenq_enabled;
     }
 
     /**
@@ -1101,9 +1101,9 @@ class Category
      */
     public function setIsFeaturedUpgradeEnabled($is_featured_upgrade_enabled)
     {
-    	$this->is_featured_upgrade_enabled= $is_featured_upgrade_enabled;
-    	
-    	return $this;
+        $this->is_featured_upgrade_enabled= $is_featured_upgrade_enabled;
+        
+        return $this;
     }
     
     /**
@@ -1113,7 +1113,7 @@ class Category
      */
     public function getIsFeaturedUpgradeEnabled()
     {
-    	return $this->is_featured_upgrade_enabled;
+        return $this->is_featured_upgrade_enabled;
     }
     
     /**
@@ -1123,7 +1123,7 @@ class Category
      */
     public function getFeaturedUpgradeInfo()
     {
-    	return $this->featured_upgrade_info;
+        return $this->featured_upgrade_info;
     }
     
     /**
@@ -1135,9 +1135,9 @@ class Category
      */
     public function setFeaturedUpgradeInfo($featured_upgrade_info)
     {
-    	$this->featured_upgrade_info = $featured_upgrade_info;
-    	
-    	return $this;
+        $this->featured_upgrade_info = $featured_upgrade_info;
+        
+        return $this;
     }
     
     /**
@@ -1147,7 +1147,7 @@ class Category
      */
     public function getFeaturedUpgradeBtnTxt()
     {
-    	return $this->featured_upgrade_btn_txt;
+        return $this->featured_upgrade_btn_txt;
     }
     
     /**
@@ -1159,9 +1159,9 @@ class Category
      */
     public function setFeaturedUpgradeBtnTxt($featured_upgrade_btn_txt)
     {
-    	$this->featured_upgrade_btn_txt = $featured_upgrade_btn_txt;
-    	
-    	return $this;
+        $this->featured_upgrade_btn_txt = $featured_upgrade_btn_txt;
+        
+        return $this;
     }
 
     /**

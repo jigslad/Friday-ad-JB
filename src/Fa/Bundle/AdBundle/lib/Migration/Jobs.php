@@ -22,7 +22,6 @@ use Fa\Bundle\AdBundle\Entity\AdJobs;
  */
 class Jobs
 {
-
     private $meta_text;
 
     private $ad_id;
@@ -36,7 +35,6 @@ class Jobs
         $this->ad_id     = $ad_id;
         $this->em = $em;
         $this->init();
-
     }
 
     public function init()
@@ -92,7 +90,6 @@ class Jobs
             $jobsRepository->setContractTypeId($this->data['contract_type_id']);
             $this->em->persist($jobsRepository);
             echo "Dimension updated for ".$jobsRepository->getAd()->getId()."\n";
-
         }
     }
 }

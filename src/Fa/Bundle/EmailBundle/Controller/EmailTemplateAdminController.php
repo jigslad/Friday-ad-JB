@@ -113,7 +113,6 @@ class EmailTemplateAdminController extends CoreController implements ResourceAut
             }
 
             return parent::handleMessage($this->get('translator')->trans('Email template was successfully added.', array(), 'success'), ($backUrl ? $backUrl : $redirectRoute), $redirectRouteParams);
-
         }
 
         $parameters = array(

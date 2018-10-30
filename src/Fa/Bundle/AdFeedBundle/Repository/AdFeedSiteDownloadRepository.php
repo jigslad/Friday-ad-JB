@@ -22,7 +22,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdFeedSiteDownloadRepository extends EntityRepository
 {
-
     const ALIAS = 'afsd';
 
     /**
@@ -71,7 +70,6 @@ class AdFeedSiteDownloadRepository extends EntityRepository
      */
     public function deletePendingDownloadsOnNewDownload($ref_id)
     {
-
         $qb = $this->createQueryBuilder(self::ALIAS)
         ->where(self::ALIAS.'.status = :status')
         ->andWhere(self::ALIAS.'.ad_feed_site = :ref_id')

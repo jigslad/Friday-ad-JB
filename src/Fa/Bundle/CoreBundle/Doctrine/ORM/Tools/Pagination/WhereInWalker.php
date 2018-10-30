@@ -102,7 +102,6 @@ class WhereInWalker extends BaseWhereInWalker
             );
             $expression = new InExpression($arithmeticExpression);
             $expression->literals[] = new InputParameter(":" . self::PAGINATOR_ID_ALIAS);
-
         } else {
             $expression = new NullComparisonExpression($pathExpression);
             $expression->not = false;

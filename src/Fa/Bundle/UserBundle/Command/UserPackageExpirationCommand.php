@@ -80,7 +80,6 @@ class UserPackageExpirationCommand extends ContainerAwareCommand
                 }
 
                 $last_id = $userPackage->getId();
-
             } else {
                 $done = true;
             }

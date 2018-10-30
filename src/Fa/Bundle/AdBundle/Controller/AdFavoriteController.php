@@ -58,7 +58,7 @@ class AdFavoriteController extends CoreController
 
                 if ($ad->getUser() && $userId == $ad->getUser()->getId()) {
                     $error = $this->get('translator')->trans('You can not add your own ad to favourite.', array(), 'frontend-search-result');
-                } else if ((!$ad->getUser() && $this->getRepository('FaAdBundle:AdFavorite')->addAdToFavorite($ad, $userId)) || ($userId != $ad->getUser()->getId() && $this->getRepository('FaAdBundle:AdFavorite')->addAdToFavorite($ad, $userId))) {
+                } elseif ((!$ad->getUser() && $this->getRepository('FaAdBundle:AdFavorite')->addAdToFavorite($ad, $userId)) || ($userId != $ad->getUser()->getId() && $this->getRepository('FaAdBundle:AdFavorite')->addAdToFavorite($ad, $userId))) {
                     if ($type == 'list') {
                         $anchorHtml = '<a href="javascript:void(0)" onclick="return removeFromFavorite('.$ad->getId().');" class="saved-item outside-tricky">FA</a>';
                     } elseif ($type == 'detail') {

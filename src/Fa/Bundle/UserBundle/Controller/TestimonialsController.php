@@ -41,7 +41,7 @@ class TestimonialsController extends CoreController
         // initialize search filter manager service and prepare filter data for searching
         $this->get('fa.searchfilters.manager')->init($this->getRepository('FaUserBundle:Testimonials'), $this->getRepositoryTable('FaUserBundle:Testimonials'));
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
-        $data['query_sorter']  = array('testimonials' => array ('created_at' => 'desc'));
+        $data['query_sorter']  = array('testimonials' => array('created_at' => 'desc'));
         $data['select_fields']  = array(
                                     'testimonials' => array('id', 'user_name', 'created_at', 'comment'),
                                   );
@@ -85,7 +85,6 @@ class TestimonialsController extends CoreController
                     if ($form->isValid()) {
                         //save information
                         $testimonial = $formManager->save($testimonial);
-
                     } elseif ($request->isXmlHttpRequest()) {
                         $htmlContent = $this->renderView('FaUserBundle:Testimonials:ajaxAddTestimonial.html.twig', array('form' => $form->createView()));
                     }

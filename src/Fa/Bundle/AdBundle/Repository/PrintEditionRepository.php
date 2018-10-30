@@ -240,7 +240,8 @@ class PrintEditionRepository extends EntityRepository
         $query = $this->getBaseQueryBuilder()
         ->addOrderBy(self::ALIAS.'.name', 'asc');
 
-        $printEditions = $query->getQuery()->getResult();;
+        $printEditions = $query->getQuery()->getResult();
+        ;
 
         foreach ($printEditions as $printEdition) {
             $printEditionArray[$printEdition->getId()] = $printEdition->getName();

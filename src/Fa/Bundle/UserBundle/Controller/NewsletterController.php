@@ -46,7 +46,7 @@ class NewsletterController extends CoreController
             $action = $this->generateUrl('my_account_newsletter');
         }
 
-        if(!$dotmailer) {
+        if (!$dotmailer) {
             $redirectResponse = $this->checkIsValidLoggedInUser($request);
             if ($redirectResponse !== true) {
                 return $redirectResponse;

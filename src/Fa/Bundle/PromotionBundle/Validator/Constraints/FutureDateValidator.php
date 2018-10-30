@@ -8,7 +8,6 @@ use DateTime;
 
 class FutureDateValidator extends ConstraintValidator
 {
-
     public function validatedBy()
     {
         return get_class($this).'Validator';

@@ -507,5 +507,4 @@ class UserPackage
     {
         return $this->is_auto_renew;
     }
-
 }

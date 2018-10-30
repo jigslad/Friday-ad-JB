@@ -97,7 +97,7 @@ EOF
     {
         $idsNotFound = array();
         $idsFound    = array();
-        $qb          = $this->getAdQueryBuilder(FALSE, $input);
+        $qb          = $this->getAdQueryBuilder(false, $input);
         $step        = 100;
         $offset      = $input->getOption('offset');
         $em          = $this->getContainer()->get('doctrine')->getManager();
@@ -107,7 +107,7 @@ EOF
         $objAds = $qb->getQuery()->execute();
         
         foreach ($objAds as $objAd) {
-            $dataFlag = FALSE;
+            $dataFlag = false;
             $advertId = $objAd['adId'];
             $advertStatus = intval($objAd['adStatus']);
             
@@ -119,7 +119,7 @@ EOF
             if (isset($resObj['response']['docs'])) {
                 if (!empty($resObj['response']['docs'])) {
                     if ($resObj['response']['docs'][0]['a_status_id_i'] != $advertStatus) {
-                        $dataFlag = TRUE;
+                        $dataFlag = true;
                     }
                 }
                 
@@ -136,7 +136,7 @@ EOF
                         $this->em->flush();
                     }
                 }
-            }else {
+            } else {
                 $output->writeln('Got Error for AdvertId : '.$advertId, true);
             }
         }
@@ -151,7 +151,7 @@ EOF
      */
     protected function mixedAdStatus($input, $output)
     {
-        $qb        = $this->getAdQueryBuilder(TRUE, $input);
+        $qb        = $this->getAdQueryBuilder(true, $input);
         $count     = $qb->getQuery()->getSingleScalarResult();
         $step      = 100;
         $stat_time = time();
@@ -199,7 +199,7 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE, $input)
+    protected function getAdQueryBuilder($onlyCount = false, $input)
     {
         $userId = intval($input->getOption('user_id'));
         $startDate = intval($input->getOption('start_date'));
@@ -210,7 +210,7 @@ EOF
 
         if ($onlyCount) {
             $qb->select('COUNT('.AdRepository::ALIAS.'.id)');
-        }else {
+        } else {
             $qb->select(AdRepository::ALIAS.'.id AS adId', UserRepository::ALIAS.'.id AS userId', 'IDENTITY('.UserRepository::ALIAS.'.status)'.' AS userStatus', 'IDENTITY('.AdRepository::ALIAS.'.status)'.'  AS adStatus');
         }
         $qb->innerJoin(AdRepository::ALIAS.'.user', UserRepository::ALIAS, 'WITH', AdRepository::ALIAS.'.user = '.UserRepository::ALIAS.'.id');

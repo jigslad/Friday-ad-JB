@@ -22,7 +22,7 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 
 /**
  * Main purpose of this cron is to solve where adverts solr status and DB advert status are different.
- * This cron update solr adverts status with actual database advert status 
+ * This cron update solr adverts status with actual database advert status
  *
  * @author Vijay <vijay.namburi@fridaymediafroup.com>
  * @copyright 2014 Friday Media Group Ltd
@@ -94,7 +94,7 @@ EOF
     {
         $idsNotFound = array();
         $idsFound    = array();
-        $qb          = $this->getAdQueryBuilder(FALSE, $input);
+        $qb          = $this->getAdQueryBuilder(false, $input);
         $step        = 100;
         $offset      = $input->getOption('offset');
         $em          = $this->getContainer()->get('doctrine')->getManager();
@@ -109,7 +109,7 @@ EOF
         $objAds = $qb->getQuery()->execute();
         
         foreach ($objAds as $objAd) {
-            $dataFlag = TRUE;
+            $dataFlag = true;
             $userId = $objAd['userId'];
             $advertId = $objAd['adId'];
             $advertStatus = intval($objAd['adStatus']);
@@ -131,7 +131,7 @@ EOF
                 
                 if ($returnVar !== 0) {
                     $output->writeln('Error occurred during subtask', true);
-                    $dataFlag = FALSE;
+                    $dataFlag = false;
                 }
                 
                 if ($dataFlag) {
@@ -152,9 +152,9 @@ EOF
                                 $output->writeln("Advert Id: $advertId updated to solr", true);
                             }
                         }
-                    }                        
+                    }
                 }
-            }else {
+            } else {
                 $output->writeln('Got Error for AdvertId : '.$advertId, true);
             }
         }
@@ -169,7 +169,7 @@ EOF
      */
     protected function syncSolrStatus($input, $output)
     {
-        $qb        = $this->getAdQueryBuilder(TRUE, $input);
+        $qb        = $this->getAdQueryBuilder(true, $input);
         $count     = $qb->getQuery()->getSingleScalarResult();
         $step      = 100;
         $stat_time = time();
@@ -217,14 +217,14 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE, $input)
+    protected function getAdQueryBuilder($onlyCount = false, $input)
     {
         $adRepository  = $this->em->getRepository('FaAdBundle:MixedStatusUserSolrAds');
         $qb = $adRepository->getBaseQueryBuilder();
 
         if ($onlyCount) {
             $qb->select('COUNT('.MixedStatusUserSolrAdsRepository::ALIAS.'.id)');
-        }else {
+        } else {
             $qb->select(MixedStatusUserSolrAdsRepository::ALIAS.'.adId AS adId', MixedStatusUserSolrAdsRepository::ALIAS.'.userId AS userId', MixedStatusUserSolrAdsRepository::ALIAS.'.adStatus AS adStatus');
         }
         

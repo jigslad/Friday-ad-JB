@@ -268,7 +268,6 @@ Current Status : {{current_status}}");
             $emailtemplate->setType($line_of_text[7]);
             $em->persist($emailtemplate);
             $em->flush();
-
         }
 
         fclose($file_handle);

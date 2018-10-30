@@ -69,7 +69,7 @@ class CampaignsAdminSearchType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder        
+        $builder
         ->add('campaigns__campaignName', TextType::class, array(
             'required' => false
         ))
@@ -92,10 +92,10 @@ class CampaignsAdminSearchType extends AbstractType
         ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 2))
         ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 3))
         ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 4))
-        ->add('campaigns__campaignStatus',ChoiceType::class,array(
+        ->add('campaigns__campaignStatus', ChoiceType::class, array(
             'required' => false,
             'choices' => array(
-                'Active' => 1, 
+                'Active' => 1,
                 'In-Active' => 2),
             'placeholder'=>'Search By Status'))
         

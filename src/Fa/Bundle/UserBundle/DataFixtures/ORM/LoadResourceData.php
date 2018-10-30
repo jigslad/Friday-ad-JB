@@ -979,7 +979,7 @@ class LoadResourceData extends AbstractFixture implements OrderedFixtureInterfac
         $em->persist($resource_package_delete);
         $em->flush();
 
-                $resource_package = new Resource();
+        $resource_package = new Resource();
         $resource_package->setName('Subscriptions');
         $resource_package->setIsMenu(1);
         $resource_package->setDisplayInTree(1);
@@ -3196,7 +3196,7 @@ class LoadResourceData extends AbstractFixture implements OrderedFixtureInterfac
         $feedAggregator ->setResourceGroup('ad_feed_log_admin');
         $feedAggregator ->setParent($resource_root);
         $feedAggregator ->setPermission($viewPermissionObj);
-        $em->persist($feedAggregator );
+        $em->persist($feedAggregator);
         $em->flush();
 
         $adFeedLog = new Resource();

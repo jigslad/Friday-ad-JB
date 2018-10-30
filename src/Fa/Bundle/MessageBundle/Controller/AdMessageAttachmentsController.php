@@ -55,7 +55,7 @@ class AdMessageAttachmentsController extends CoreController
                     if (!$objMessageAttachment->getMessage()) {
                         $attachmentIds[] = $objMessageAttachment->getId();
                         $webPath         = $this->container->get('kernel')->getRootDir().'/../web';
-                        $fileExtension   = substr(strrchr($objMessageAttachment->getOriginalFileName(),'.'),1);
+                        $fileExtension   = substr(strrchr($objMessageAttachment->getOriginalFileName(), '.'), 1);
                         $fileName        = $objMessageAttachment->getSessionId().'_'.$objMessageAttachment->getHash().'.'.$fileExtension;
                         $filePath        = $webPath.DIRECTORY_SEPARATOR.$objMessageAttachment->getPath().'/'.$fileName;
                         if (file_exists($filePath)) {
@@ -73,7 +73,6 @@ class AdMessageAttachmentsController extends CoreController
         }
 
         return $this->render('FaMessageBundle:AdMessageAttachments:showAttachmentsUploader.html.twig', array('messageId' => $messageId, 'userId' => $userId, 'formName' => $formName, 'maxValue' => $maxValue, 'from' => $from));
-
     }
 
     /**
@@ -129,7 +128,8 @@ class AdMessageAttachmentsController extends CoreController
     private function checkIsUserIsValidToUploadImage($userId)
     {
         if ($this->isAuth()) {
-            return $this->getSecurityTokenStorage()->getToken()->getUser();;
+            return $this->getSecurityTokenStorage()->getToken()->getUser();
+            ;
         }
         if ($userId) {
             $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('id' => $userId, 'status' => EntityRepository::USER_STATUS_ACTIVE_ID));
@@ -211,14 +211,14 @@ class AdMessageAttachmentsController extends CoreController
         if ($messageId != '' || $attachmentId != '') {
             if ($messageId != '') {
                 $objMessageAttachments = $this->getRepository('FaMessageBundle:MessageAttachments')->getMessageAttachments($messageId);
-            } else if ($attachmentId != '') {
+            } elseif ($attachmentId != '') {
                 $objMessageAttachments = $this->getRepository('FaMessageBundle:MessageAttachments')->find($attachmentId);
             }
 
             if ($objMessageAttachments) {
                 if (count($objMessageAttachments) == 1) {
                     $downloadFileName = $objMessageAttachments->getOriginalFileName();
-                    $fileExtension    = substr(strrchr($downloadFileName,'.'),1);
+                    $fileExtension    = substr(strrchr($downloadFileName, '.'), 1);
                     $fileName         = $objMessageAttachments->getSessionId().'_'.$objMessageAttachments->getHash().'.'.$fileExtension;
                     $downloadFilePath = $this->container->get('kernel')->getRootDir().'/../web/'.$objMessageAttachments->getPath().'/'.$fileName;
 
@@ -229,12 +229,12 @@ class AdMessageAttachmentsController extends CoreController
                         $messageManager->setFlashMessage($this->get('translator')->trans('Sorry attachment file was not found!', array(), 'frontend-inbox'), 'error');
                         return $this->redirectToRoute('user_ad_message_all');
                     }
-                } else if (count($objMessageAttachments) > 1) {
+                } elseif (count($objMessageAttachments) > 1) {
                     $zipFilesArray = array();
                     foreach ($objMessageAttachments as $key => $objMessageAttachment) {
                         $messageId        = $objMessageAttachment->getMessage()->getId();
                         $downloadFileName = $objMessageAttachment->getOriginalFileName();
-                        $fileExtension    = substr(strrchr($downloadFileName,'.'),1);
+                        $fileExtension    = substr(strrchr($downloadFileName, '.'), 1);
                         $fileName         = $objMessageAttachment->getSessionId().'_'.$objMessageAttachment->getHash().'.'.$fileExtension;
                         $fileToAddInZip   = $this->container->get('kernel')->getRootDir().'/../web/'.$objMessageAttachment->getPath().'/'.$fileName;
 

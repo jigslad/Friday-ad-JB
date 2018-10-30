@@ -34,7 +34,7 @@ class BotManager
     public function isBot($userAgent)
     {
         try {
-            if($this->crawler->isCrawler($userAgent)) {
+            if ($this->crawler->isCrawler($userAgent)) {
                 return true;
             }
         } catch (\Exception $e) {

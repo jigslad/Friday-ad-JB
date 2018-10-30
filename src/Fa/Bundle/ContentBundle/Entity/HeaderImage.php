@@ -121,10 +121,10 @@ class HeaderImage
      */
     private $status;
 
-     /** @var integer
-     *
-     * @ORM\Column(name="created_at", type="integer", length=10)
-     */
+    /** @var integer
+    *
+    * @ORM\Column(name="created_at", type="integer", length=10)
+    */
     private $created_at;
 
     /**
@@ -570,9 +570,9 @@ class HeaderImage
      */
     public function setRightHandImageUrl($right_hand_image_url)
     {
-      $this->right_hand_image_url = $right_hand_image_url;
+        $this->right_hand_image_url = $right_hand_image_url;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -582,7 +582,7 @@ class HeaderImage
      */
     public function getRightHandImageUrl()
     {
-      return $this->right_hand_image_url;
+        return $this->right_hand_image_url;
     }
     
     /**
@@ -594,9 +594,9 @@ class HeaderImage
      */
     public function setOverrideImage($override_image)
     {
-    	$this->override_image = $override_image;
-    	
-    	return $this;
+        $this->override_image = $override_image;
+        
+        return $this;
     }
     
     /**
@@ -606,7 +606,6 @@ class HeaderImage
      */
     public function getOverrideImage()
     {
-    	return $this->override_image;
+        return $this->override_image;
     }
-    
 }

@@ -12,7 +12,6 @@ namespace Fa\Bundle\CoreBundle\Manager;
 
 class ImageMagickManager
 {
-
     protected $sourceWidth;
     protected $sourceHeight;
     protected $sourceMime;
@@ -253,8 +252,7 @@ class ImageMagickManager
         $width  = $this->sourceWidth;
         $height = $this->sourceHeight;
         $x = $y = 0;
-        switch (@$this->options['method'])
-        {
+        switch (@$this->options['method']) {
             case "shave_all":
                 $proportion['source'] = $width / $height;
                 $proportion['thumb'] = $thumbnail->getThumbWidth() / $thumbnail->getThumbHeight();

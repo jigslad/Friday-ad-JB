@@ -1107,9 +1107,9 @@ class Message
      */
     public function setIsOneclickenqMessage($is_oneclickenq_message)
     {
-     $this->is_oneclickenq_message = $is_oneclickenq_message;
+        $this->is_oneclickenq_message = $is_oneclickenq_message;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -1119,7 +1119,7 @@ class Message
      */
     public function getIsOneclickenqMessage()
     {
-     return $this->is_oneclickenq_message;
+        return $this->is_oneclickenq_message;
     }
 
     /**
@@ -1131,9 +1131,9 @@ class Message
      */
     public function setOneclickenqReply($oneclickenqReply)
     {
-     $this->oneclickenq_reply = $oneclickenqReply;
+        $this->oneclickenq_reply = $oneclickenqReply;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -1143,7 +1143,7 @@ class Message
      */
     public function getOneclickenqReply()
     {
-     return $this->oneclickenq_reply;
+        return $this->oneclickenq_reply;
     }
 
     /**

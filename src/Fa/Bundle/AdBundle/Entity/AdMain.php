@@ -87,11 +87,11 @@ class AdMain
         return $this->update_type = $update_type;
     }
 
-     /**
-     * Get update_type
-     *
-     * @return string
-     */
+    /**
+    * Get update_type
+    *
+    * @return string
+    */
     public function getUpdateType()
     {
         return $this->update_type;

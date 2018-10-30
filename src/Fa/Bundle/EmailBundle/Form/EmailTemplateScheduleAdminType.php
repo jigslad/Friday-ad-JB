@@ -166,8 +166,7 @@ class EmailTemplateScheduleAdminType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array
-            (
+            array(
                 'data_class' => 'Fa\Bundle\EmailBundle\Entity\EmailTemplateSchedule',
                 'validation_groups' => function (FormInterface $form) {
                     $data = $form->getData();

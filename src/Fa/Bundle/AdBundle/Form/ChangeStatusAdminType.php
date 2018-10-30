@@ -143,7 +143,7 @@ class ChangeStatusAdminType extends AbstractType
                     'constraints' => array(new NotBlank(array('message' => $this->translator->trans('Please select new ad status.', array(), 'validators')))),
                     'query_builder' => function (EntityRepository $er) use ($ad) {
                         return $this->prepareChangeStatusQuery($er->createQueryBuilder(EntityRepository::ALIAS), $ad);
-                     }
+                    }
                 )
             )
             ->add('return_url', HiddenType::class, array('data' => $this->request->get('return_url', null), 'mapped' => false));
@@ -160,7 +160,7 @@ class ChangeStatusAdminType extends AbstractType
         $qb->where(EntityRepository::ALIAS.'.category_dimension = '.EntityRepository::AD_STATUS_ID)
             ->orderBy(EntityRepository::ALIAS.'.name', 'ASC');
 
-        switch($ad->getStatus()->getId()) {
+        switch ($ad->getStatus()->getId()) {
             case EntityRepository::AD_STATUS_LIVE_ID:
                 $qb->andWhere(EntityRepository::ALIAS.'.id IN (:ids)');
                 $qb->setParameter('ids', array(EntityRepository::AD_STATUS_INACTIVE_ID, EntityRepository::AD_STATUS_EXPIRED_ID, EntityRepository::AD_STATUS_SOLD_ID));
@@ -204,6 +204,5 @@ class ChangeStatusAdminType extends AbstractType
         if ($form->isValid()) {
             $ad->setStatus($form->get('ad_status')->getData());
         }
-
     }
 }

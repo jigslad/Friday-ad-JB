@@ -68,9 +68,9 @@ class CaravanParser extends AdParser
             $this->advert['category_id'] = 478;
         } elseif ($adArray['Details']['IsStaticCaravan'] && strtolower($adArray['Details']['SaleOrHire']) != 'hire' && strtolower($adArray['Details']['Type']) == 'lodge') {
             $this->advert['category_id'] = 702;
-        } elseif (!$adArray['Details']['IsStaticCaravan'] && strtolower($adArray['Details']['SaleOrHire']) == 'hire' ) {
+        } elseif (!$adArray['Details']['IsStaticCaravan'] && strtolower($adArray['Details']['SaleOrHire']) == 'hire') {
             $this->advert['category_id'] = 702;
-        } elseif ($adArray['Details']['IsStaticCaravan'] && strtolower($adArray['Details']['SaleOrHire']) == 'hire' ) {
+        } elseif ($adArray['Details']['IsStaticCaravan'] && strtolower($adArray['Details']['SaleOrHire']) == 'hire') {
             $this->advert['category_id'] = 702;
         }
 
@@ -129,7 +129,6 @@ class CaravanParser extends AdParser
         }
 
         if (isset($adArray['Details']['Sleeps']) && $adArray['Details']['Sleeps'] != '') {
-
             $this->advert['motors']['berth_id'] = $this->getEntityId($adArray['Details']['Sleeps'], 130);
 
             if (!$this->advert['motors']['berth_id']) {
@@ -151,7 +150,7 @@ class CaravanParser extends AdParser
         }
 
         if (!$feedAd && $adArray['EndDate'] != '0001-01-01T00:00:00Z') {
-        	return 'discard';
+            return 'discard';
         }
 
         if ($this->advert['user']['email'] == '' && $this->advert['set_user'] == true) {
@@ -213,11 +212,9 @@ class CaravanParser extends AdParser
             if (implode(',', $this->advert['rejected_reason']) != '') {
                 $feedAd->setRemark(implode(',', $this->advert['rejected_reason']));
             }
-        }
-        elseif (isset($this->advert['status']) && $this->advert['status'] == 'E') {
-        	$feedAd->setStatus('E');
-        }
-        else {
+        } elseif (isset($this->advert['status']) && $this->advert['status'] == 'E') {
+            $feedAd->setStatus('E');
+        } else {
             $feedAd->setStatus('A');
         }
 

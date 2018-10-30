@@ -231,5 +231,4 @@ class InActiveUserSolrAds
     {
         return $this->createdAt;
     }
-    
 }

@@ -209,9 +209,7 @@ EOF
                 } else {
                     echo 'Not matched category:'.$entry['ClassID']."\n";
                 }
-
             }
-
         }
     }
 
@@ -315,7 +313,6 @@ EOF
         $dotmailerRepository  = $this->em->getRepository('FaDotMailerBundle:Dotmailer');
         $qb = $dotmailerRepository->createQueryBuilder(DotmailerRepository::ALIAS);
         return $qb;
-
     }
 
     /**

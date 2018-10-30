@@ -326,10 +326,10 @@ class BusinessUserModerationRequestBuild
      */
     protected function buildAdLocationFieldArray(User $user)
     {
-         //post code
-         if ($user->getZip()) {
-             $this->moderationRequest[BusinessUserModerationFieldMappingInterface::AD_POSTCODE] = $user->getZip();
-         }
+        //post code
+        if ($user->getZip()) {
+            $this->moderationRequest[BusinessUserModerationFieldMappingInterface::AD_POSTCODE] = $user->getZip();
+        }
     }
 
     /**

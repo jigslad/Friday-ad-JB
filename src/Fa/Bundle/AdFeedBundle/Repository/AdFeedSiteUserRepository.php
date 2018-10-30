@@ -14,5 +14,4 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdFeedSiteUserRepository extends EntityRepository
 {
-
 }

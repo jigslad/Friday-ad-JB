@@ -359,5 +359,4 @@ class AdLeftSearchType extends AbstractType
     {
         return 'fa_left_search';
     }
-    
 }

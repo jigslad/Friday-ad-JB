@@ -66,15 +66,15 @@ class UserSiteViewCounterRepository extends EntityRepository
 
                     if ($fieldName == "user_view_ids") {
                         $userViewCounterObj->setHits($userViewCounterObj->getHits() + 1);
-                    } else if ($fieldName == "profile_page_email_sent_count") {
+                    } elseif ($fieldName == "profile_page_email_sent_count") {
                         $userViewCounterObj->setProfilePageEmailSentCount($userViewCounterObj->getProfilePageEmailSentCount() + 1);
-                    } else if ($fieldName == "profile_page_website_url_click_count") {
+                    } elseif ($fieldName == "profile_page_website_url_click_count") {
                         $userViewCounterObj->setProfilePageWebsiteUrlClickCount($userViewCounterObj->getProfilePageWebsiteUrlClickCount() + 1);
-                    } else if ($fieldName == "profile_page_phone_click_count") {
+                    } elseif ($fieldName == "profile_page_phone_click_count") {
                         $userViewCounterObj->setProfilePagePhoneClickCount($userViewCounterObj->getProfilePagePhoneClickCount() + 1);
-                    } else if ($fieldName == "profile_page_social_links_click_count") {
+                    } elseif ($fieldName == "profile_page_social_links_click_count") {
                         $userViewCounterObj->setProfilePageSocialLinksClickCount($userViewCounterObj->getProfilePageSocialLinksClickCount() + 1);
-                    } else if ($fieldName == "profile_page_map_click_count") {
+                    } elseif ($fieldName == "profile_page_map_click_count") {
                         $userViewCounterObj->setProfilePageMapClickCount($userViewCounterObj->getProfilePageMapClickCount() + 1);
                     }
 

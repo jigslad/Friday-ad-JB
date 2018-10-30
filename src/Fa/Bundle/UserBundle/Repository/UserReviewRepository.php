@@ -257,7 +257,7 @@ class UserReviewRepository extends NestedTreeRepository
     {
         if ($reviewBy == 'from_sellers') {
             $isSeller = 1;
-        } else if ($reviewBy == 'from_buyers') {
+        } elseif ($reviewBy == 'from_buyers') {
             $isSeller = 0;
         }
 
@@ -355,11 +355,11 @@ class UserReviewRepository extends NestedTreeRepository
 
                 if (isset($moderationResult['moderationresult']) && strtolower($moderationResult['moderationresult']) == self::MODERATION_RESULT_OKEY) {
                     $userReview->setStatus(self::MODERATION_QUEUE_STATUS_OKAY);
-                } else if (isset($moderationResult['moderationresult']) && strtolower($moderationResult['moderationresult']) == self::MODERATION_RESULT_REJECTED) {
+                } elseif (isset($moderationResult['moderationresult']) && strtolower($moderationResult['moderationresult']) == self::MODERATION_RESULT_REJECTED) {
                     $userReview->setStatus(self::MODERATION_QUEUE_STATUS_REJECTED);
-                } else if (isset($moderationResult['moderationresult']) && strtolower($moderationResult['moderationresult']) == self::MODERATION_RESULT_MANUAL_MODERATION) {
+                } elseif (isset($moderationResult['moderationresult']) && strtolower($moderationResult['moderationresult']) == self::MODERATION_RESULT_MANUAL_MODERATION) {
                     $userReview->setStatus(self::MODERATION_QUEUE_STATUS_MANUAL_MODERATION);
-                } else if (isset($moderationResult['moderationresult']) && strtolower($moderationResult['moderationresult']) == self::MODERATION_RESULT_SCAM) {
+                } elseif (isset($moderationResult['moderationresult']) && strtolower($moderationResult['moderationresult']) == self::MODERATION_RESULT_SCAM) {
                     $userReview->setStatus(self::MODERATION_QUEUE_STATUS_REJECTED);
                 }
 
@@ -382,14 +382,14 @@ class UserReviewRepository extends NestedTreeRepository
                             $this->_em->getRepository('FaAdBundle:Ad')->deleteAdFromSolrByUserId($user->getId(), $container);
                         }
                     }
-                } else if (isset($moderationResult['moderationresult']) && strtolower($moderationResult['moderationresult']) == self::MODERATION_RESULT_REJECTED) {
+                } elseif (isset($moderationResult['moderationresult']) && strtolower($moderationResult['moderationresult']) == self::MODERATION_RESULT_REJECTED) {
                     try {
                         // send review rejected email
                         $this->sendReviewRejectedEmail($userReview, $moderationResult, $container);
                     } catch (\Exception $e) {
                         CommonManager::sendErrorMail($container, 'Error: Problem in your_review_is_rejected email', $e->getMessage(), $e->getTraceAsString());
                     }
-                } else if (isset($moderationResult['moderationresult']) && strtolower($moderationResult['moderationresult']) == self::MODERATION_RESULT_OKEY) {
+                } elseif (isset($moderationResult['moderationresult']) && strtolower($moderationResult['moderationresult']) == self::MODERATION_RESULT_OKEY) {
                     try {
                         // send review email
                         $this->sendReviewEmail($userReview, $moderationResult, $container);

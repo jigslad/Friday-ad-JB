@@ -293,7 +293,7 @@ class SolrSearchManager
         if ($this->geoDistQuery && count($this->geoDistQuery)) {
             if ($this->getSolrCoreName() == 'ad') {
                 $query->addField(\Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping::AWAY_FROM_LOCATION.', '.$fields);
-            } else if ($this->getSolrCoreName() == 'ad.view.counter') {
+            } elseif ($this->getSolrCoreName() == 'ad.view.counter') {
                 $query->addField(\Fa\Bundle\AdBundle\Solr\AdViewCounterSolrFieldMapping::AWAY_FROM_LOCATION.', '.$fields);
             }
         } else {

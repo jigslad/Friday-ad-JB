@@ -203,7 +203,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('ad' => array ('id' => 'asc'));
+        $data['query_sorter']  = array('ad' => array('id' => 'asc'));
         $data['static_filters'] = AdRepository::ALIAS.'.is_renewal_mail_sent IS NULL OR '.AdRepository::ALIAS.'.is_renewal_mail_sent = 0';
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');

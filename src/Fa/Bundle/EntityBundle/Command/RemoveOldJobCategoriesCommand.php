@@ -57,7 +57,8 @@ Actions:
 Command:
  - php app/console fa:remove:old-job-categories
 EOF
-        );;
+        );
+        ;
     }
 
     /**
@@ -101,7 +102,6 @@ EOF
             try {
                 $deleteManager->delete($oldJobCategory);
             } catch (\Exception $e) {
-
             }
         }
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);

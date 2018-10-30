@@ -298,19 +298,18 @@ class DashboardController extends CoreController
             ksort($recentyViwedAdsArray);
 
             return $recentyViwedAdsArray;
-
         }
 
         return null;
     }
 
-   /**
-     * Get my ads.
-     *
-     * @param Request $request A Request object.
-     *
-     * @return array
-     */
+    /**
+      * Get my ads.
+      *
+      * @param Request $request A Request object.
+      *
+      * @return array
+      */
     public function getMyAds(Request $request)
     {
         $loggedinUser = $this->getLoggedInUser();

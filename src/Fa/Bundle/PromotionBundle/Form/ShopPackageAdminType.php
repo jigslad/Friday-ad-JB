@@ -35,7 +35,6 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-
 /**
  * Shop package admin type form.
  *
@@ -114,7 +113,7 @@ class ShopPackageAdminType extends AbstractType
             )
             ->add('title')
             ->add('sub_title')
-            ->add('new_ad_cta', TextType::class ,array('label' => 'New package CTA', 'required' => false))
+            ->add('new_ad_cta', TextType::class, array('label' => 'New package CTA', 'required' => false))
             ->add('renewal_ad_cta', TextType::class, array('label' => 'Upgrade package CTA', 'required' => false))
             ->add('package_for', HiddenType::class, array('required' => true, 'data' => 'shop', 'constraints' => new NotBlank(array('message' => 'Please enter parameter value.'))))
             ->add('description', TextareaType::class, array('attr'=> array('rows' => 10)))
@@ -485,7 +484,7 @@ class ShopPackageAdminType extends AbstractType
      */
     public function getPackageColor()
     {
-       return array(
+        return array(
             'a:2:{s:11:"title_class";s:13:"pkg-gray-head";s:9:"btn_class";s:13:"primary-btn-3";}' => 'Grey',
             'a:2:{s:11:"title_class";s:13:"pkg-blue-head";s:9:"btn_class";s:13:"primary-btn-1";}' => 'Blue',
             'a:2:{s:11:"title_class";s:14:"pkg-green-head";s:9:"btn_class";s:13:"primary-btn-2";}' => 'Green');

@@ -112,9 +112,9 @@ EOF
         $csvFile = $this->getContainer()->get('kernel')->getRootDir()."/../data/dotmailer/filter_".$filterId."_".date('Ymd').".csv";
 
         //if (!$offset) {
-            if (file_exists($csvFile)) {
-                unlink($csvFile);
-            }
+        if (file_exists($csvFile)) {
+            unlink($csvFile);
+        }
         //}
 
         $file = fopen($csvFile, "w");
@@ -125,9 +125,9 @@ EOF
         fclose($file);
 
         //if ($masterId && $filterId && ($offset+10000) >= $count) {
-            $dotmailerFilter = $entityManager->getRepository('FaDotMailerBundle:DotmailerFilter')->findOneBy(array('id' => $filterId));
-            $this->sendRequest($masterId, $dotmailerFilter);
-            $entityManager->getRepository('FaDotMailerBundle:DotmailerFilter')->updateResponse($this->httpcode, $this->response, $dotmailerFilter);
+        $dotmailerFilter = $entityManager->getRepository('FaDotMailerBundle:DotmailerFilter')->findOneBy(array('id' => $filterId));
+        $this->sendRequest($masterId, $dotmailerFilter);
+        $entityManager->getRepository('FaDotMailerBundle:DotmailerFilter')->updateResponse($this->httpcode, $this->response, $dotmailerFilter);
         //}
 
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);

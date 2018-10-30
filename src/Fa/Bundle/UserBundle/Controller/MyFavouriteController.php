@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\AdBundle\Repository\AdFavoriteRepository;
 
-
 /**
  * This controller is used for user ads.
  *
@@ -60,8 +59,8 @@ class MyFavouriteController extends CoreController
             $solrSearchManager = $this->get('fa.solrsearch.manager');
             $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
             if (count($cookieLocation) && count($adIdsArray) && isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
-                    $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
-                    $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
+                $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
+                $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
             }
             $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
             $result       = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);

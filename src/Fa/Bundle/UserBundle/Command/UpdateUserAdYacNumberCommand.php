@@ -96,7 +96,7 @@ EOF
 
         if (!$this->userObj) {
             $output->writeln('No user found.', true);
-        } else if (!$this->userObj->getPhone()) {
+        } elseif (!$this->userObj->getPhone()) {
             $output->writeln('Use has no phone number.', true);
         } else {
             if (isset($offset)) {

@@ -56,7 +56,7 @@ class MyProfileController extends CoreController
         }
         $loggedinUser = $this->getLoggedInUser();
         $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
-        $formName     = UserPrivateProfileType::class; 
+        $formName     = UserPrivateProfileType::class;
         $templateName = 'privateProfile';
         $activeShopPackage = null;
         $shopForm          = null;

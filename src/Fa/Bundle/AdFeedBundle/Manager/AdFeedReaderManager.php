@@ -77,7 +77,7 @@ class AdFeedReaderManager
                 if ($i == 0) {
                     continue;
                 } else {
-                     $low = $i;
+                    $low = $i;
                 }
 
 
@@ -107,7 +107,6 @@ class AdFeedReaderManager
             $ad_feed_site_download->setFiles(serialize($file));
             $this->em->persist($ad_feed_site_download);
             $this->em->flush();
-
         } else {
             new Exception();
         }
@@ -360,7 +359,6 @@ class AdFeedReaderManager
             $ad_feed_site_download->setFiles(serialize($file));
             $this->em->persist($ad_feed_site_download);
             $this->em->flush();
-
         } else {
             new Exception();
         }
@@ -433,7 +431,6 @@ class AdFeedReaderManager
             $ad_feed_site_download->setFiles(serialize($file));
             $this->em->persist($ad_feed_site_download);
             $this->em->flush();
-
         } else {
             new Exception();
         }

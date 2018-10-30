@@ -28,7 +28,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
  */
 class UserCreditSearchAdminType extends AbstractType
 {
-        /**
+    /**
      * Translator.
      *
      * @var object

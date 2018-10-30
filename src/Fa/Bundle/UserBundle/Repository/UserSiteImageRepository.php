@@ -222,5 +222,4 @@ class UserSiteImageRepository extends EntityRepository
 
         return $updateQuery->getQuery()->execute();
     }
-
 }

@@ -411,5 +411,4 @@ class PaymentTransaction
     {
         return $this->ad_future_publish_at;
     }
-
 }

@@ -134,7 +134,7 @@ class UserPackageDiscountCodeRepository extends EntityRepository
         $lastTimeCodeUsedObj = $this->findOneBy(array('package_discount_code' => $discountCodeId, 'user' => $userId), array('created_at' => 'desc'));
         if ($lastTimeCodeUsedObj) {
             $createdAtFrom = CommonManager::getTimeStampFromStartDate(date('Y-m-d', $lastTimeCodeUsedObj->getCreatedAt()));
-            $createdAtTo   = CommonManager::getTimeStampFromEndDate(date('Y-m-d', strtotime('+'.PackageDiscountCodeRepository::PACKAGE_DISCOUNT_CODE_REFRESH_DAYS.' days',$lastTimeCodeUsedObj->getCreatedAt())));
+            $createdAtTo   = CommonManager::getTimeStampFromEndDate(date('Y-m-d', strtotime('+'.PackageDiscountCodeRepository::PACKAGE_DISCOUNT_CODE_REFRESH_DAYS.' days', $lastTimeCodeUsedObj->getCreatedAt())));
 
             //if created to is less than today then set new range to search
             if (date('Y-m-d', $createdAtTo) < date('Y-m-d')) {

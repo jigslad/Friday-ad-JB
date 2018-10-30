@@ -114,7 +114,7 @@ class MerchandiseParser extends AdParser
         }
 
         if (!$feedAd && $adArray['EndDate'] != '0001-01-01T00:00:00Z') {
-        	return 'discard';
+            return 'discard';
         }
 
         if ($feedAd) {
@@ -169,9 +169,9 @@ class MerchandiseParser extends AdParser
         }
         $getUserStatus = EntityRepository::USER_STATUS_ACTIVE_ID;
 
-        if(!empty($user) && $this->advert['user']['email'] != '') {
+        if (!empty($user) && $this->advert['user']['email'] != '') {
             $getUserStatus = $this->em->getRepository('FaUserBundle:User')->getUserStatusByEmail($this->advert['user']['email']);
-        }        
+        }
         $feedAd->setTransId($this->advert['trans_id']);
         $feedAd->setUniqueId($this->advert['unique_id']);
         $feedAd->setIsUpdated(1);
@@ -184,7 +184,7 @@ class MerchandiseParser extends AdParser
             if (implode(',', $this->advert['rejected_reason']) != '') {
                 $feedAd->setRemark(implode(',', $this->advert['rejected_reason']));
             }
-        } elseif($getUserStatus != EntityRepository::USER_STATUS_ACTIVE_ID) {
+        } elseif ($getUserStatus != EntityRepository::USER_STATUS_ACTIVE_ID) {
             $feedAd->setRemark('User account is blocked/inactive');
             $feedAd->setUser($user);
             $feedAd->setStatus('R');

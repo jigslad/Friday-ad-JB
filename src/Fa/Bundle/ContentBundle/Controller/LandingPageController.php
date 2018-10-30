@@ -261,11 +261,11 @@ class LandingPageController extends CoreController
     {
         $data = array();
 
-        if(isset($searchParams['item__location'])) {
+        if (isset($searchParams['item__location'])) {
             unset($searchParams['item__location']);
         }
 
-        if(isset($searchParams['item__distance'])) {
+        if (isset($searchParams['item__distance'])) {
             unset($searchParams['item__distance']);
         }
 
@@ -412,7 +412,7 @@ class LandingPageController extends CoreController
 
         $adIds = array();
         if (count($ads)) {
-            foreach($ads as $ad) {
+            foreach ($ads as $ad) {
                 $adIds[] = $ad['id'];
             }
         }

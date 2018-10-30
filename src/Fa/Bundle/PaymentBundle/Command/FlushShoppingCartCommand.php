@@ -190,7 +190,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('cart' => array ('created_at' => 'asc'));
+        $data['query_sorter']  = array('cart' => array('created_at' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($adModerateRepository, $data);

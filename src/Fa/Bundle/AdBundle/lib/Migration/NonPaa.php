@@ -28,7 +28,6 @@ use Fa\Bundle\AdBundle\Entity\AdPrint;
  */
 class NonPaa
 {
-
     private $meta_text;
 
     private $ad_id;
@@ -42,7 +41,6 @@ class NonPaa
         $this->ad_id     = $ad_id;
         $this->em = $em;
         $this->init();
-
     }
 
     public function init()
@@ -118,33 +116,30 @@ class NonPaa
             $printEditions = $this->em->getRepository('FaAdBundle:PrintEdition')->getActivePrintEditionCodeArray();
 
             if ($adRepository) {
+                if (isset($this->data['PubInserts']) && $this->data['PubInserts'] != '') {
+                    $print_entries = explode(',', $this->data['PubInserts']);
 
-            if (isset($this->data['PubInserts']) && $this->data['PubInserts'] != '') {
-
-                  $print_entries = explode(',', $this->data['PubInserts']);
-
-                  foreach ($print_entries as $print_entry) {
-
+                    foreach ($print_entries as $print_entry) {
                         $print_entries = explode('|', $print_entry);
 
                         if (isset($print_entries[0]) && isset($print_entries[1]) && isset($printEditions[$print_entries[0]])) {
-                          $printAd = $this->em->getRepository('FaAdBundle:AdPrint')->findOneBy(array('ad' => $adRepository));
-                          $p = $this->em->getRepository('FaAdBundle:PrintEdition')->find($printEditions[$print_entries[0]]);
-                          if (!$printAd) {
-                                   $adPrint = new AdPrint();
-                                  $adPrint->setAd($adRepository);
-                                  $adPrint->setPrintEdition($p);
-                                  $adPrint->setDuration('1 weeks');
-                                  $adPrint->setSequence(1);
-                                  $adPrint->setIsPaid(1);
-                                  $adPrint->setPrintQueue(0);
-                                  $adPrint->setAdModerateStatus(2);
-                                  $adPrint->setInsertDate(strtotime($print_entries[1]));
-                                  $this->em->persist($adPrint);
+                            $printAd = $this->em->getRepository('FaAdBundle:AdPrint')->findOneBy(array('ad' => $adRepository));
+                            $p = $this->em->getRepository('FaAdBundle:PrintEdition')->find($printEditions[$print_entries[0]]);
+                            if (!$printAd) {
+                                $adPrint = new AdPrint();
+                                $adPrint->setAd($adRepository);
+                                $adPrint->setPrintEdition($p);
+                                $adPrint->setDuration('1 weeks');
+                                $adPrint->setSequence(1);
+                                $adPrint->setIsPaid(1);
+                                $adPrint->setPrintQueue(0);
+                                $adPrint->setAdModerateStatus(2);
+                                $adPrint->setInsertDate(strtotime($print_entries[1]));
+                                $this->em->persist($adPrint);
                             }
                         }
-                  }
-            }
+                    }
+                }
 
                 if ($adRepository->getCategory()) {
                     $category = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryName($adRepository->getCategory()->getId());
@@ -165,7 +160,6 @@ class NonPaa
                     if ($category == 'jobs') {
                         $this->updateJobsData();
                     }
-
                 } else {
                     if (5016 == $adRepository->getOldClassId()) {
                         if (isset($this->data['Make']) && (!isset($this->data['Model']))) {
@@ -229,7 +223,6 @@ class NonPaa
                                 echo 'Non Paa category settings done for CV AD ID '.$adRepository->getId()."\n";
                             }
                         }
-
                     }
                 }
                 //echo "Dimension updated for ".$adRepository->getAd()->getId()."\n";

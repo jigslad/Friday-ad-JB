@@ -122,7 +122,7 @@ EOF
                     } else {
                         $output->writeln('Contact not found in dotmailer for email: '.$email, true);
                     }
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     CommonManager::sendErrorMail($container, 'Error: Delete contact from dotmailer => '.$email, $e->getMessage(), $e->getTraceAsString());
                 }
             }

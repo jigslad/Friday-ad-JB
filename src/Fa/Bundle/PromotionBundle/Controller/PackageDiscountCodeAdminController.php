@@ -107,7 +107,6 @@ class PackageDiscountCodeAdminController extends CoreController implements Resou
             $formManager->save($entity);
 
             return parent::handleMessage($this->get('translator')->trans('Package discount code was successfully added.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'package_discount_code_new_admin' : ($backUrl ? $backUrl : 'package_discount_code_admin')));
-
         }
 
         $parameters = array(

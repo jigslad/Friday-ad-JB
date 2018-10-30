@@ -59,13 +59,13 @@ class TransactionRepository extends EntityRepository
 
         if (isset($value['discount_values']) && count($value['discount_values'])) {
             $transactionValue['discount_values'] = $value['discount_values'];
-        } else if (isset($transactionValue['discount_values']) && count($transactionValue['discount_values'])) {
+        } elseif (isset($transactionValue['discount_values']) && count($transactionValue['discount_values'])) {
             unset($transactionValue['discount_values']);
         }
 
         if (isset($value['user_credit_id']) && isset($value['user_credit'])) {
             $transactionValue['user_credit_id'] = $value['user_credit_id'];
-        } else if (isset($transactionValue['user_credit_id']) && isset($transactionValue['user_credit'])) {
+        } elseif (isset($transactionValue['user_credit_id']) && isset($transactionValue['user_credit'])) {
             unset($transactionValue['user_credit_id']);
             unset($transactionValue['user_credit']);
         }
@@ -311,12 +311,12 @@ class TransactionRepository extends EntityRepository
         ->andWhere(CartRepository::ALIAS.'.is_shop_package_purchase = 0')
         ->setMaxResults(1);
 
-        if(count($categoryIds)) {
+        if (count($categoryIds)) {
             $query->andWhere(AdRepository::ALIAS.'.category IN (:adCategories)')
             ->setParameter('adCategories', $categoryIds);
         }
 
-        if(count($adIds)) {
+        if (count($adIds)) {
             $query->andWhere(AdRepository::ALIAS.'.id NOT IN (:adIds)')
             ->setParameter('adIds', $adIds);
         }

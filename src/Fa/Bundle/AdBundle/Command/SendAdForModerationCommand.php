@@ -139,7 +139,6 @@ EOF
                 $ad->setType($this->getContainer()->get('doctrine')->getManager()->getReference('FaEntityBundle:Entity', EntityRepository::AD_STATUS_IN_MODERATION_ID));
                 $this->getContainer()->get('doctrine')->getManager()->persist($ad);
             }
-
         }
 
         $this->getContainer()->get('doctrine')->getManager()->flush();
@@ -213,7 +212,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('ad_moderate' => array ('created_at' => 'asc'));
+        $data['query_sorter']  = array('ad_moderate' => array('created_at' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($adModerateRepository, $data);

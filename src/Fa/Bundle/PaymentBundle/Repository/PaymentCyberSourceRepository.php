@@ -97,7 +97,6 @@ class PaymentCyberSourceRepository extends EntityRepository
      */
     public function getAllowedCardTypeOptions()
     {
-
         $cardType        = array();
         $cardType['001'] = self::VISA;
         $cardType['002'] = self::MASTERCARD;

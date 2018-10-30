@@ -387,8 +387,8 @@ class UserSiteImageController extends CoreController
             rename($imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$oldHash.'.jpg', $imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org.jpg');
             if ($request->get('show_org')) {
                 copy($imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org.jpg', $imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'.jpg');
-                /*exec('convert -rotate '.($request->get('angle').' -resize '.($request->get('scale') * 100).'% '.$imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org1.jpg'.' -crop '.$request->get('w').'x'.$request->get('h').'+'.$request->get('x').'+'.$request->get('y').' '.$imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'.jpg'));
-                 unlink($imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org1.jpg');*/
+            /*exec('convert -rotate '.($request->get('angle').' -resize '.($request->get('scale') * 100).'% '.$imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org1.jpg'.' -crop '.$request->get('w').'x'.$request->get('h').'+'.$request->get('x').'+'.$request->get('y').' '.$imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'.jpg'));
+             unlink($imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'_org1.jpg');*/
             } else {
                 exec('convert -rotate '.($request->get('angle').' -resize '.($request->get('scale') * 100).'% '.$imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$hash.'_800X600.jpg'.' -crop '.$request->get('w').'x'.$request->get('h').'+'.$request->get('x').'+'.$request->get('y').' '.$imagePath.DIRECTORY_SEPARATOR.$userSiteId.'_'.$newHash.'.jpg'));
             }

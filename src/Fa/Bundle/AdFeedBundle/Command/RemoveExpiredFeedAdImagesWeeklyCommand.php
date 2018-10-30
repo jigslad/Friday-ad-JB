@@ -203,13 +203,12 @@ EOF
                             } else {
                                 $output->writeln('Problem in deleting image for Ad: '.($feedExpiredAd->getAd() ? $feedExpiredAd->getAd()->getId() : '-').' - '.basename($expiredAdImage), true);
                             }
-                        }else {
+                        } else {
                             $output->writeln('Image not found for Ad: '.($feedExpiredAd->getAd() ? $feedExpiredAd->getAd()->getId() : '-').' - '.basename($expiredAdImage), true);
                         }
                     }
                 }
             }
-
         }
     }
 

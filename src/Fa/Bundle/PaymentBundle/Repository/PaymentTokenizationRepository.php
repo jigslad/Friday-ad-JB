@@ -145,11 +145,10 @@ class PaymentTokenizationRepository extends EntityRepository
      */
     public function validateCreditCardTypes($cardnumber)
     {
-
         $isValid = false;
 
         // Remove any spaces from the credit card number
-        $cardNo = str_replace (' ', '', $cardnumber);
+        $cardNo = str_replace(' ', '', $cardnumber);
 
         $allowedCardTypes = $this->_em->getRepository('FaPaymentBundle:PaymentCyberSource')->getAllowedCardTypeOptions();
         $cards            = $this->getCardInfoArray();
@@ -171,13 +170,13 @@ class PaymentTokenizationRepository extends EntityRepository
             }
 
             // Load an array with the valid prefixes for this card
-            $prefix = explode(',',$cards[$cardType]['prefixes']);
+            $prefix = explode(',', $cards[$cardType]['prefixes']);
 
             // Now see if any of them match what we have in the card number
             $PrefixValid = false;
             for ($i=0; $i<sizeof($prefix); $i++) {
                 $exp = '/^' . $prefix[$i] . '/';
-                if (preg_match($exp,$cardNo)) {
+                if (preg_match($exp, $cardNo)) {
                     $PrefixValid = true;
                     break;
                 }
@@ -202,11 +201,10 @@ class PaymentTokenizationRepository extends EntityRepository
      */
     public function getCreditCardType($cardnumber)
     {
-
         $cardType = null;
 
         // Remove any spaces from the credit card number
-        $cardNo = str_replace (' ', '', $cardnumber);
+        $cardNo = str_replace(' ', '', $cardnumber);
 
         $allowedCardTypes = $this->_em->getRepository('FaPaymentBundle:PaymentCyberSource')->getAllowedCardTypeOptions();
         $cards            = $this->getCardInfoArray();
@@ -228,13 +226,13 @@ class PaymentTokenizationRepository extends EntityRepository
             }
 
             // Load an array with the valid prefixes for this card
-            $prefix = explode(',',$cards[$cardType]['prefixes']);
+            $prefix = explode(',', $cards[$cardType]['prefixes']);
 
             // Now see if any of them match what we have in the card number
             $PrefixValid = false;
             for ($i=0; $i<sizeof($prefix); $i++) {
                 $exp = '/^' . $prefix[$i] . '/';
-                if (preg_match($exp,$cardNo)) {
+                if (preg_match($exp, $cardNo)) {
                     $PrefixValid = true;
                     break;
                 }
@@ -267,80 +265,80 @@ class PaymentTokenizationRepository extends EntityRepository
 
         // Don't forget - all but the last array definition needs a comma separator!
 
-        $cards = array (
-                    array (
+        $cards = array(
+                    array(
                         'name' => 'American Express',
                         'length' => '15',
                         'prefixes' => '34,37',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'Diners Club Carte Blanche',
                         'length' => '14',
                         'prefixes' => '300,301,302,303,304,305',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'Diners Club',
                         'length' => '14,16',
                         'prefixes' => '36,38,54,55',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'Discover',
                         'length' => '16',
                         'prefixes' => '6011,622,64,65',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'Diners Club Enroute',
                         'length' => '15',
                         'prefixes' => '2014,2149',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'JCB',
                         'length' => '16',
                         'prefixes' => '35',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'Maestro',
                         'length' => '12,13,14,15,16,18,19',
                         'prefixes' => '5018,5020,5038,6304,6759,6761,6762,6763',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'MasterCard',
                         'length' => '16',
                         'prefixes' => '51,52,53,54,55',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'Solo',
                         'length' => '16,18,19',
                         'prefixes' => '6334,6767',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'Switch',
                         'length' => '16,18,19',
                         'prefixes' => '4903,4905,4911,4936,564182,633110,6333,6759',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'VISA',
                         'length' => '13,16',
                         'prefixes' => '4',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'VISA Electron',
                         'length' => '13,16',
                         'prefixes' => '417500,4917,4913,4508,4844',
                         'checkdigit' => true
                     ),
-                    array (
+                    array(
                         'name' => 'LaserCard',
                         'length' => '16,17,18,19',
                         'prefixes' => '6304,6706,6771,6709',

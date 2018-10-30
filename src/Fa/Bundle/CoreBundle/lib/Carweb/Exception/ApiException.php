@@ -20,5 +20,4 @@ namespace Fa\Bundle\CoreBundle\lib\Carweb\Exception;
  */
 class ApiException extends \Exception
 {
-
 }

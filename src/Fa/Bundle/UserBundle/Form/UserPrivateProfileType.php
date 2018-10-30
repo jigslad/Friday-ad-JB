@@ -101,7 +101,7 @@ class UserPrivateProfileType extends AbstractType
                     'label' => 'Last name',
                     'attr'=>array('maxlength'=>'100'),
                     'constraints' => array(new Regex(array('pattern' => '/^[a-z0-9 _-]+$/i', 'groups' => array('user_private_profile'), 'message' => $this->translator->trans('Last name cannot have special characters other than hyphen and underscore', array(), 'validators'))),new NotBlank(array('groups' => array('user_private_profile'), 'message' => $this->translator->trans('Please enter last name.', array(), 'validators'))))
-		)
+        )
             )
             ->add(
                 'about_you',

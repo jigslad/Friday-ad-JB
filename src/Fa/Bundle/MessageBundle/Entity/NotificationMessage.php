@@ -387,5 +387,4 @@ class NotificationMessage
     {
         return $this->updated_at;
     }
-
 }

@@ -85,8 +85,7 @@ class ParseAdFeedCommand extends ContainerAwareCommand
 
         echo "Modified time".$modified_since->format('Y-m-d H:i:s')."\n";
 
-        switch ($input->getArgument('action'))
-        {
+        switch ($input->getArgument('action')) {
             case 'image':
                 if ($input->getOption('file')) {
                     $feedReader->downloadImage($input->getOption('type'), $input->getOption('file'), $input->getOption('site_id'), $modified_since, $input->getOption('force'));
@@ -119,8 +118,6 @@ class ParseAdFeedCommand extends ContainerAwareCommand
                     if ($returnVar !== 0) {
                         $output->writeln('Error occurred during subtask', true);
                     }
-
-
                 }
                 break;
             case 'parse':
@@ -225,7 +222,7 @@ class ParseAdFeedCommand extends ContainerAwareCommand
                 $stmt = $this->em->getConnection()->prepare($query);
                 $stmt->execute();
                 $notdone = false;
-            } catch(\Exception $e ) {
+            } catch (\Exception $e) {
                 // here we could differentiate basic SQL errors and deadlock/serializable errors
                 $retry++;
                 sleep(5);
@@ -244,7 +241,7 @@ class ParseAdFeedCommand extends ContainerAwareCommand
                 $stmt = $this->em->getConnection()->prepare($query);
                 $stmt->execute();
                 $notdone = false;
-            } catch(\Exception $e ) {
+            } catch (\Exception $e) {
                 // here we could differentiate basic SQL errors and deadlock/serializable errors
                 $retry++;
                 sleep(5);
@@ -263,7 +260,7 @@ class ParseAdFeedCommand extends ContainerAwareCommand
                 $stmt = $this->em->getConnection()->prepare($query);
                 $stmt->execute();
                 $notdone = false;
-            } catch(\Exception $e ) {
+            } catch (\Exception $e) {
                 // here we could differentiate basic SQL errors and deadlock/serializable errors
                 $retry++;
                 sleep(5);
@@ -285,7 +282,7 @@ class ParseAdFeedCommand extends ContainerAwareCommand
                 $stmt = $this->em->getConnection()->prepare($query);
                 $stmt->execute();
                 $notdone = false;
-            } catch(\Exception $e ) {
+            } catch (\Exception $e) {
                 // here we could differentiate basic SQL errors and deadlock/serializable errors
                 $retry++;
                 sleep(5);

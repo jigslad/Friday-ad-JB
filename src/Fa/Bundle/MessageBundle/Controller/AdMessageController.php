@@ -144,7 +144,6 @@ class AdMessageController extends CoreController
         }
 
         throw $this->createNotFoundException($this->get('translator')->trans('Unable to find message conversation.'));
-
     }
 
     /**
@@ -539,7 +538,7 @@ class AdMessageController extends CoreController
             if ($objLogggedInUser && $messagesArray && count($messagesArray) > 0) {
                 $this->getRepository('FaMessageBundle:Message')->removeMessageCache($objMessage, $this->container);
                 $deleteCount = 0;
-                foreach ($messagesArray As $key => $msgArray) {
+                foreach ($messagesArray as $key => $msgArray) {
                     if ($msgArray['deleted_by_user1'] == 0) {
                         $fieldName = 'deleted_by_user1';
                     } else {
@@ -591,9 +590,9 @@ class AdMessageController extends CoreController
                     if ($objAd->getDeliveryMethodOptionId() && $objAd->getDeliveryMethodOptionId() != null) {
                         if ($objAd->getDeliveryMethodOptionId() == DeliveryMethodOptionRepository::COLLECTION_ONLY_ID) {
                             $deliveryMethodText = 'collection';
-                        } else if ($objAd->getDeliveryMethodOptionId() == DeliveryMethodOptionRepository::POSTED_ID) {
+                        } elseif ($objAd->getDeliveryMethodOptionId() == DeliveryMethodOptionRepository::POSTED_ID) {
                             $deliveryMethodText = 'delivery';
-                        } else if ($objAd->getDeliveryMethodOptionId() == DeliveryMethodOptionRepository::POSTED_OR_COLLECT_ID) {
+                        } elseif ($objAd->getDeliveryMethodOptionId() == DeliveryMethodOptionRepository::POSTED_OR_COLLECT_ID) {
                             $deliveryMethodText = 'collection or delivery';
                         }
                     }
@@ -630,12 +629,12 @@ class AdMessageController extends CoreController
                 $successMsg     = $this->get('translator')->trans('Your answer was sent successfully.', array(), 'frontend-inbox');
                 $messageManager->setFlashMessage($successMsg, 'success');
                 $response = new Response();
-                return new JsonResponse(array('response' => TRUE));
+                return new JsonResponse(array('response' => true));
             }
-            return new JsonResponse(array('response' => FALSE));
+            return new JsonResponse(array('response' => false));
         }
 
-        return new JsonResponse(array('response' => FALSE));
+        return new JsonResponse(array('response' => false));
     }
 
     /**
@@ -658,7 +657,7 @@ class AdMessageController extends CoreController
 
                 CommonManager::createGroupDirectory($attachmentDir, $messageId);
                 $messageGroupDir = CommonManager::getGroupDirNameById($messageId);
-                $fileExtension   = substr(strrchr($objMessageAttachment->getOriginalFileName(),'.'),1);
+                $fileExtension   = substr(strrchr($objMessageAttachment->getOriginalFileName(), '.'), 1);
                 $actualFileName  = $sessionId.'_'.$objMessageAttachment->getHash().'.'.$fileExtension;
 
                 $tmpFilePath     = $webPath.DIRECTORY_SEPARATOR.$attachmentPath.'/'.$actualFileName;
@@ -684,7 +683,7 @@ class AdMessageController extends CoreController
      */
     public function ajaxMarkMessageFieldAction(Request $request)
     {
-        $updateFlag = FALSE;
+        $updateFlag = false;
         if ($request->isXmlHttpRequest() && $request->get('messageId') != '' && $request->get('fieldName') != '' && $request->get('fieldValue') != '') {
             $updateFlag = $this->getRepository('FaMessageBundle:Message')->updateMessageField($request->get('messageId'), $request->get('fieldName'), $request->get('fieldValue'));
         }

@@ -100,11 +100,11 @@ class UserPackageRepository extends EntityRepository
             }
 
             if ($package->getPrice() == 0 || $expired) {
-                $userPackage->setExpiresAt(null);                               
+                $userPackage->setExpiresAt(null);
             } else {
                 $userPackage->setExpiresAt(CommonManager::getTimeFromDuration($package->getDuration(), time(), '+'));
             }
-            if($expired==1) {
+            if ($expired==1) {
                 $userPackage->setIsAutoRenew(1);
             } else {
                 $userPackage->setIsAutoRenew(0);
@@ -126,7 +126,6 @@ class UserPackageRepository extends EntityRepository
             $this->_em->flush();
 
             $this->_em->getRepository('FaUserBundle:UserUpsell')->setPackageUpsellForUser($user, $package);
-
         } else {
             if ($package->getPrice() == 0 || $expired) {
                 $userPackage->setExpiresAt(null);
@@ -136,7 +135,6 @@ class UserPackageRepository extends EntityRepository
                 } else {
                     $userPackage->setExpiresAt(CommonManager::getTimeFromDuration($package->getDuration(), time(), '+'));
                 }
-
             }
 
             if ($remark == 'package-renew-thourgh-recurring') {
@@ -226,7 +224,6 @@ class UserPackageRepository extends EntityRepository
      */
     public function renewPackage(User $user, Package $package)
     {
-
     }
 
     /**
@@ -308,7 +305,7 @@ class UserPackageRepository extends EntityRepository
      */
     public function sendUserPackageEmail(User $user, Package $package, $emailType, $container, $subscriptionId = null)
     {
-    	$dashboardURL = $container->get('router')->generate('dashboard_home', array(), true);
+        $dashboardURL = $container->get('router')->generate('dashboard_home', array(), true);
         $entityCache = $container->get('fa.entity.cache.manager');
         $text_billing_date = CommonManager::formatDate(time(), $container);
         $token                         = $this->_em->getRepository('FaPaymentBundle:PaymentTokenization')->getTokenBySubscriptionId($user->getId(), $subscriptionId);
@@ -627,9 +624,9 @@ class UserPackageRepository extends EntityRepository
      * @return boolean
      */
     public function checkIsAutoRenewedPackage($userId)
-    {   
+    {
         $qb = $this->createQueryBuilder(self::ALIAS)->select(self::ALIAS.'.is_auto_renew')->andWhere(self::ALIAS.'.status = :status')->andWhere(self::ALIAS.'.user = :userId')
-                    ->setParameter('status', 'A')->setParameter('userId', $userId); 
+                    ->setParameter('status', 'A')->setParameter('userId', $userId);
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result['is_auto_renew'];
     }

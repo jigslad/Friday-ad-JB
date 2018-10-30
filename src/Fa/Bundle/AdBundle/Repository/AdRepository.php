@@ -887,7 +887,7 @@ class AdRepository extends EntityRepository
     public function getAdDetailArray($adId, $container, $seoFlag = false)
     {
         $query = $this->getBaseQueryBuilder()
-        ->select(self::ALIAS.'.id as ad_id', self::ALIAS.'.privacy_number', self::ALIAS.'.qty', self::ALIAS.'.is_new', self::ALIAS.'.payment_method_id', UserRepository::ALIAS.'.id as user_id', self::ALIAS.'.title', self::ALIAS.'.description', self::ALIAS.'.personalized_title', self::ALIAS.'.price', self::ALIAS.'.published_at', self::ALIAS.'.created_at', CategoryRepository::ALIAS.'.id as category_id', AdLocationRepository::ALIAS.'.latitude', AdLocationRepository::ALIAS.'.longitude', DeliveryMethodOptionRepository::ALIAS.'.name as delivery_method_name', LocationRepository::ALIAS.'t.name as ad_town_name', LocalityRepository::ALIAS.'.name as ad_locality_name', BaseEntityRepository::ALIAS.'.id as type_id', LocationRepository::ALIAS.'la.id as area_id',  LocationRepository::ALIAS.'la.is_special_area as is_special_area',  LocationRepository::ALIAS.'la.name as area_name')
+        ->select(self::ALIAS.'.id as ad_id', self::ALIAS.'.privacy_number', self::ALIAS.'.qty', self::ALIAS.'.is_new', self::ALIAS.'.payment_method_id', UserRepository::ALIAS.'.id as user_id', self::ALIAS.'.title', self::ALIAS.'.description', self::ALIAS.'.personalized_title', self::ALIAS.'.price', self::ALIAS.'.published_at', self::ALIAS.'.created_at', CategoryRepository::ALIAS.'.id as category_id', AdLocationRepository::ALIAS.'.latitude', AdLocationRepository::ALIAS.'.longitude', DeliveryMethodOptionRepository::ALIAS.'.name as delivery_method_name', LocationRepository::ALIAS.'t.name as ad_town_name', LocalityRepository::ALIAS.'.name as ad_locality_name', BaseEntityRepository::ALIAS.'.id as type_id', LocationRepository::ALIAS.'la.id as area_id', LocationRepository::ALIAS.'la.is_special_area as is_special_area', LocationRepository::ALIAS.'la.name as area_name')
         ->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS)
         ->leftJoin(AdLocationRepository::ALIAS.'.location_town', LocationRepository::ALIAS.'t')
         ->leftJoin(AdLocationRepository::ALIAS.'.location_area', LocationRepository::ALIAS.'la')
@@ -1287,7 +1287,7 @@ class AdRepository extends EntityRepository
      * @return array
      */
     public function getAdDetailAndDimensionFields($categoryId, $adSolrObj, $container = null, $seoFlag = false, $adDetailFields = array(), $anchorTagFlag = false)
-    { 
+    {
         $parentCategories      = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container);
         $parentCategoryIds     = array_keys($parentCategories);
         $rootCategoryId        = (isset($parentCategoryIds[0]) ? $parentCategoryIds[0] : null);
@@ -1349,8 +1349,8 @@ class AdRepository extends EntityRepository
         }
         //get metadata array from solr.
         $metaDataValues = array();
-        if (defined($solrMapping.'META_DATA') && isset($adSolrObj[constant($solrMapping.'META_DATA')])) { 
-        $metaDataValues = unserialize($adSolrObj[constant($solrMapping.'META_DATA')]); 
+        if (defined($solrMapping.'META_DATA') && isset($adSolrObj[constant($solrMapping.'META_DATA')])) {
+            $metaDataValues = unserialize($adSolrObj[constant($solrMapping.'META_DATA')]);
             if (is_array($metaDataValues) && count($metaDataValues)) {
                 $metaDataValues = array_change_key_case($metaDataValues, CASE_UPPER);
             } else {
@@ -1415,7 +1415,7 @@ class AdRepository extends EntityRepository
      * @return array
      */
     private function getSolrFieldValues($parentCategories, $adSolrObj, $adDetailFields, $indexableFields, $metaDataValues, $adDetailTabFields, $unitForFields, $solrMapping, $seoFlag, $container, $anchorTagFlag)
-    {	
+    {
         $parentCategoryIds          = array_keys($parentCategories);
         $parentCategoryNames        = array_values($parentCategories);
         $secondLevelCategoryId      = (isset($parentCategoryIds[1]) ? $parentCategoryIds[1] : null);
@@ -1444,8 +1444,8 @@ class AdRepository extends EntityRepository
             'COLOUR_ID'
         );
         
-        if ((isset($parentCategoryIds[0]) && (($parentCategoryIds[0] == CategoryRepository::ANIMALS_ID && isset($parentCategoryIds[2]) && $parentCategoryIds[2] != CategoryRepository::HORSES) || $parentCategoryIds[0] == CategoryRepository::ADULT_ID) )) {
-        	$genderKey = array_search('GENDER_ID', $anchorTagFields);
+        if ((isset($parentCategoryIds[0]) && (($parentCategoryIds[0] == CategoryRepository::ANIMALS_ID && isset($parentCategoryIds[2]) && $parentCategoryIds[2] != CategoryRepository::HORSES) || $parentCategoryIds[0] == CategoryRepository::ADULT_ID))) {
+            $genderKey = array_search('GENDER_ID', $anchorTagFields);
             unset($anchorTagFields[$genderKey]);
         }
 
@@ -1470,7 +1470,7 @@ class AdRepository extends EntityRepository
             if (isset($unitForFields[$adDetailField])) {
                 $unit = ' '.$unitForFields[$adDetailField];
             }
-		
+        
             //check if it is separate field else check in meta data fields.
             if (in_array($adDetailField, $indexableFields) && defined($solrMappingField) && isset($adSolrObj[constant($solrMappingField)])) {
                 if ($repositoryName) {
@@ -1656,7 +1656,7 @@ class AdRepository extends EntityRepository
         if (in_array($rootCategoryId, array(CategoryRepository::FOR_SALE_ID)) && in_array($adDetailField, array('CATEGORY_ID', 'PARENT_CATEGORY_LVL_4_ID'))) {
             if ($adDetailField == 'CATEGORY_ID' && isset($parentCategoryIds[2]) && $parentCategoryIds[2]) {
                 $linkText = $entityCacheManager->getEntityNameById($repositoryName, $parentCategoryIds[2]);
-            }  elseif ($adDetailField == 'PARENT_CATEGORY_LVL_4_ID' && isset($parentCategoryIds[count($parentCategoryIds)-1]) && $parentCategoryIds[count($parentCategoryIds)-1]) {
+            } elseif ($adDetailField == 'PARENT_CATEGORY_LVL_4_ID' && isset($parentCategoryIds[count($parentCategoryIds)-1]) && $parentCategoryIds[count($parentCategoryIds)-1]) {
                 $linkText = $entityCacheManager->getEntityNameById($repositoryName, $parentCategoryIds[count($parentCategoryIds)-1]);
             }
         }
@@ -1957,9 +1957,9 @@ class AdRepository extends EntityRepository
                 } elseif ($adListingField == 'NUMBER_OF_BATHROOMS_ID') {
                     $fieldValue .= ' bathroom(s)';
                 }
-            } else if ($adListingField == 'DELIVERY_METHOD_OPTION_ID' && defined($solrMapping.$adListingField) && isset($adSolrObj[constant($solrMapping.$adListingField)])) {
+            } elseif ($adListingField == 'DELIVERY_METHOD_OPTION_ID' && defined($solrMapping.$adListingField) && isset($adSolrObj[constant($solrMapping.$adListingField)])) {
                 $fieldValue = $entityCacheManager->getEntityNameById('FaPaymentBundle:DeliveryMethodOption', $adSolrObj[constant($solrMapping.$adListingField)]);
-            } else if ($adListingField == 'BUSINESS_NAME' && defined($solrMapping.$adListingField) && isset($adSolrObj[constant($solrMapping.$adListingField)])) {
+            } elseif ($adListingField == 'BUSINESS_NAME' && defined($solrMapping.$adListingField) && isset($adSolrObj[constant($solrMapping.$adListingField)])) {
                 $fieldValue = $adSolrObj[constant($solrMapping.$adListingField)];
             }
 
@@ -3032,7 +3032,6 @@ class AdRepository extends EntityRepository
                     'manual_refresh_url' => $refreshAdUrl,
                     'text_lowest_category_package_price' => $text_lowest_category_package_price,
                 );
-
             }
 
             if (count($ads)) {
@@ -3051,13 +3050,13 @@ class AdRepository extends EntityRepository
         }
     }
 
-     /**
-     * send renewal reminder email
-     *
-     * @param user object $user
-     * @param string $renewalReminderEmailTemplate
-     * @param object $container
-     */
+    /**
+    * send renewal reminder email
+    *
+    * @param user object $user
+    * @param string $renewalReminderEmailTemplate
+    * @param object $container
+    */
     public function sendRenewalReminderEmailByUser($user, $renewalReminderEmailTemplate, $container)
     {
         if ($user) {
@@ -3102,7 +3101,6 @@ class AdRepository extends EntityRepository
                     'url_ad_view' => $adViewUrl,
                     'text_lowest_category_package_price' => $text_lowest_category_package_price,
                 );
-
             }
 
             if (count($ads)) {
@@ -3181,19 +3179,18 @@ class AdRepository extends EntityRepository
 
         if (count($transactionsObj)) {
             foreach ($transactionsObj as $transactionObj) {
-            	
-            	if ($transactionObj->getValue()) {
-            		$value = unserialize($transactionObj->getValue());
-            		
-            		if (isset($value['package'])) {
-            			$keys = array_keys($value['package']);
-            			if (isset($keys[0])) {
-            				$packageId = $keys[0];
-            			}
-            		}
-            	}
-            	
-            	if ($transactionObj->getAmount() || (isset($value['user_credit_id']) && $value['user_credit_id'] != '') || (isset($value['discount_values']))) {
+                if ($transactionObj->getValue()) {
+                    $value = unserialize($transactionObj->getValue());
+                    
+                    if (isset($value['package'])) {
+                        $keys = array_keys($value['package']);
+                        if (isset($keys[0])) {
+                            $packageId = $keys[0];
+                        }
+                    }
+                }
+                
+                if ($transactionObj->getAmount() || (isset($value['user_credit_id']) && $value['user_credit_id'] != '') || (isset($value['discount_values']))) {
                     if ($transactionObj && $transactionObj->getAd()) {
                         $ad = $transactionObj->getAd();
                         if ($ad) {
@@ -3227,7 +3224,7 @@ class AdRepository extends EntityRepository
                                 $parameters['text_package_name'] = $packageObj->getTitle();
                                 
                                 if (isset($value['package'][$packageId]) && isset($value['package'][$packageId]['price'])) {
-                                	$parameters['text_package_price'] = CommonManager::formatCurrency($value['package'][$packageId]['price'], $container);
+                                    $parameters['text_package_price'] = CommonManager::formatCurrency($value['package'][$packageId]['price'], $container);
                                 }
                                 $packagePrice = (isset($value['package'][$packageId]['price']))?$value['package'][$packageId]['price']:0;
                                 
@@ -3239,35 +3236,33 @@ class AdRepository extends EntityRepository
                                 }
                                 
                                 //Adding variable if credits are used
-                                if(isset($value['user_credit_id'])) { 
-                                	$parameters['text_credit_applied'] = '-100%';
-                                	$parameters['text_package_cost_without_vat'] = CommonManager::formatCurrency(($packagePrice/(1+(20/100))), $container);
-                                	$parameters['text_package_cost_with_vat'] = CommonManager::formatCurrency(0, $container);
-                                	$parameters['text_package_cost_vat']      = CommonManager::formatCurrency(0, $container);
-                                	$parameters['text_package_price'] 		  = CommonManager::formatCurrency(0, $container);
+                                if (isset($value['user_credit_id'])) {
+                                    $parameters['text_credit_applied'] = '-100%';
+                                    $parameters['text_package_cost_without_vat'] = CommonManager::formatCurrency(($packagePrice/(1+(20/100))), $container);
+                                    $parameters['text_package_cost_with_vat'] = CommonManager::formatCurrency(0, $container);
+                                    $parameters['text_package_cost_vat']      = CommonManager::formatCurrency(0, $container);
+                                    $parameters['text_package_price'] 		  = CommonManager::formatCurrency(0, $container);
                                 }
                                 
                                 //Adding variable if promotional code is applied
-                                if(isset($value['discount_values'])) { 
-                                	$textPackageWithoutVat = ($packagePrice/(1+(20/100))) - $value['discount_values']['discount_given'];
-                                	$totalAmount = $packagePrice - $value['discount_values']['discount_given'];
-                                	$totalVat = ($totalAmount - ($totalAmount/(1+(20/100))));
-                                	$totalPackageCost = $totalAmount - $totalVat;
-                                	
-                                	$parameters['text_original_cost'] = CommonManager::formatCurrency($packagePrice, $container);
-                                	$parameters['text_promotional_code_applied'] = '-'.(isset($value['discount_values']['discount_value']) && $value['discount_values']['discount_type'] == '2'?CommonManager::formatCurrency($value['discount_values']['discount_value'], $container):(isset($value['discount_values']['discount_value']) && $value['discount_values']['discount_type'] == '1'?$value['discount_values']['discount_value'].'%':''));
-                                	$parameters['text_package_cost_with_vat'] = CommonManager::formatCurrency($packagePrice - $value['discount_values']['discount_given'], $container);
-                                	$parameters['text_package_price'] = CommonManager::formatCurrency($packagePrice - $value['discount_values']['discount_given'], $container);                                	
-                                	if($textPackageWithoutVat > 0 ) {
-                                		$parameters['text_package_cost_without_vat'] = CommonManager::formatCurrency($totalPackageCost, $container);
-                                		$parameters['text_package_cost_vat'] = CommonManager::formatCurrency($totalVat, $container);
-                                	} else {
-                                		$parameters['text_package_cost_without_vat'] = CommonManager::formatCurrency(0, $container);
-                                		$parameters['text_package_cost_vat'] = CommonManager::formatCurrency(0, $container);
-                                	}
+                                if (isset($value['discount_values'])) {
+                                    $textPackageWithoutVat = ($packagePrice/(1+(20/100))) - $value['discount_values']['discount_given'];
+                                    $totalAmount = $packagePrice - $value['discount_values']['discount_given'];
+                                    $totalVat = ($totalAmount - ($totalAmount/(1+(20/100))));
+                                    $totalPackageCost = $totalAmount - $totalVat;
+                                    
+                                    $parameters['text_original_cost'] = CommonManager::formatCurrency($packagePrice, $container);
+                                    $parameters['text_promotional_code_applied'] = '-'.(isset($value['discount_values']['discount_value']) && $value['discount_values']['discount_type'] == '2'?CommonManager::formatCurrency($value['discount_values']['discount_value'], $container):(isset($value['discount_values']['discount_value']) && $value['discount_values']['discount_type'] == '1'?$value['discount_values']['discount_value'].'%':''));
+                                    $parameters['text_package_cost_with_vat'] = CommonManager::formatCurrency($packagePrice - $value['discount_values']['discount_given'], $container);
+                                    $parameters['text_package_price'] = CommonManager::formatCurrency($packagePrice - $value['discount_values']['discount_given'], $container);
+                                    if ($textPackageWithoutVat > 0) {
+                                        $parameters['text_package_cost_without_vat'] = CommonManager::formatCurrency($totalPackageCost, $container);
+                                        $parameters['text_package_cost_vat'] = CommonManager::formatCurrency($totalVat, $container);
+                                    } else {
+                                        $parameters['text_package_cost_without_vat'] = CommonManager::formatCurrency(0, $container);
+                                        $parameters['text_package_cost_vat'] = CommonManager::formatCurrency(0, $container);
+                                    }
                                 }
-                                
-                                
                             }
                         }
 
@@ -3275,10 +3270,7 @@ class AdRepository extends EntityRepository
                     }
                 }
             }
-            
         }
-        
-        
     }
 
     /**
@@ -3328,17 +3320,15 @@ class AdRepository extends EntityRepository
                             }
                             break;
                     }
-                } else { 
-                	$value = $this->_em->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($field, $adCategoryTableObj, $metaData, $container, $className, false);
-                    
+                } else {
+                    $value = $this->_em->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($field, $adCategoryTableObj, $metaData, $container, $className, false);
                 }
-                if ($value && !is_numeric($value)) { 
+                if ($value && !is_numeric($value)) {
                     $keywordSearch[] = $value;
-                    
                 }
             }
         }
-	
+    
         return $keywordSearch;
     }
 
@@ -4223,7 +4213,7 @@ class AdRepository extends EntityRepository
             ->setParameter('userId', $userId)
             ->setMaxResults(1);
 
-            if(isset($privateUserAdPostLimitRules['configRuleCategoryId']) && $privateUserAdPostLimitRules['configRuleCategoryId']) {
+            if (isset($privateUserAdPostLimitRules['configRuleCategoryId']) && $privateUserAdPostLimitRules['configRuleCategoryId']) {
                 $adCategories = $this->_em->getRepository('FaEntityBundle:Category')->getNestedChildrenIdsByCategoryId($privateUserAdPostLimitRules['configRuleCategoryId'], $container);
                 $query->andWhere($this->getRepositoryAlias().'.category IN (:adCategories)')
                     ->setParameter('adCategories', $adCategories);
@@ -4236,7 +4226,7 @@ class AdRepository extends EntityRepository
             $cartUserAd = $this->_em->getRepository('FaPaymentBundle:Transaction')->getTotalAdByUserIdAndCategoryId($userId, $adCategories, array($adId));
             $totalAds += $cartUserAd;
 
-            if(isset($privateUserAdPostLimitRules['privateUserAdPostLimit']) && $privateUserAdPostLimitRules['privateUserAdPostLimit'] > 0 && $totalAds >= $privateUserAdPostLimitRules['privateUserAdPostLimit']) {
+            if (isset($privateUserAdPostLimitRules['privateUserAdPostLimit']) && $privateUserAdPostLimitRules['privateUserAdPostLimit'] > 0 && $totalAds >= $privateUserAdPostLimitRules['privateUserAdPostLimit']) {
                 $allowPrivateUserToPostAdFlag = false;
             }
 
@@ -4278,28 +4268,28 @@ class AdRepository extends EntityRepository
      * @param integer $userId      User $userId.
      * @param object  $container Container object.
      */
-    function getUserLastBasicLiveAdvert($userId, $adId, $categoryId, $container) {
-    	
-    	$catIdArray = $this->_em->getRepository('FaEntityBundle:Category')->getNestedChildrenIdsByCategoryId($categoryId, $container);
-    	
-    	$qb = $this->createQueryBuilder(self::ALIAS)
-    	->select(self::ALIAS.'.id as adId', self::ALIAS.'.source', PackageRepository::ALIAS.'.id as packageId', PackageRepository::ALIAS.'.price as package_price', CategoryRepository::ALIAS.'.id as categoryId')
-    	->innerJoin('FaAdBundle:AdUserPackage', AdUserPackageRepository::ALIAS, 'WITH', self::ALIAS.'.id = '.AdUserPackageRepository::ALIAS.'.ad_id')
-    	->innerJoin('FaPromotionBundle:Package', PackageRepository::ALIAS, 'WITH', AdUserPackageRepository::ALIAS.'.package = '.PackageRepository::ALIAS.'.id')
-    	->innerJoin(AdRepository::ALIAS.'.user', UserRepository::ALIAS, 'WITH', UserRepository::ALIAS.'.status = :user_status')
-    	->innerJoin('FaEntityBundle:Category', CategoryRepository::ALIAS, 'WITH', self::ALIAS.'.category = '.CategoryRepository::ALIAS.'.id')
-    	->setParameter('user_status', BaseEntityRepository::USER_STATUS_ACTIVE_ID)
-    	->where(self::ALIAS.'.status = :statusId')
-    	->setParameter('statusId', BaseEntityRepository::AD_STATUS_LIVE_ID)
-    	->andWhere(self::ALIAS.'.user = :userId')
-    	->setParameter('userId', $userId)
-    	->andWhere(self::ALIAS.'.id = :adId')
-    	->setParameter('adId', $adId)
-    	->andWhere(self::ALIAS.'.category IN (:categoryIds) ')
-    	->setParameter('categoryIds', $catIdArray)
-    	->orderBy(AdUserPackageRepository::ALIAS.'.id', 'DESC')
-    	->setMaxResults(1);
-    	return $qb->getQuery()->getOneOrNullResult();
+    public function getUserLastBasicLiveAdvert($userId, $adId, $categoryId, $container)
+    {
+        $catIdArray = $this->_em->getRepository('FaEntityBundle:Category')->getNestedChildrenIdsByCategoryId($categoryId, $container);
+        
+        $qb = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id as adId', self::ALIAS.'.source', PackageRepository::ALIAS.'.id as packageId', PackageRepository::ALIAS.'.price as package_price', CategoryRepository::ALIAS.'.id as categoryId')
+        ->innerJoin('FaAdBundle:AdUserPackage', AdUserPackageRepository::ALIAS, 'WITH', self::ALIAS.'.id = '.AdUserPackageRepository::ALIAS.'.ad_id')
+        ->innerJoin('FaPromotionBundle:Package', PackageRepository::ALIAS, 'WITH', AdUserPackageRepository::ALIAS.'.package = '.PackageRepository::ALIAS.'.id')
+        ->innerJoin(AdRepository::ALIAS.'.user', UserRepository::ALIAS, 'WITH', UserRepository::ALIAS.'.status = :user_status')
+        ->innerJoin('FaEntityBundle:Category', CategoryRepository::ALIAS, 'WITH', self::ALIAS.'.category = '.CategoryRepository::ALIAS.'.id')
+        ->setParameter('user_status', BaseEntityRepository::USER_STATUS_ACTIVE_ID)
+        ->where(self::ALIAS.'.status = :statusId')
+        ->setParameter('statusId', BaseEntityRepository::AD_STATUS_LIVE_ID)
+        ->andWhere(self::ALIAS.'.user = :userId')
+        ->setParameter('userId', $userId)
+        ->andWhere(self::ALIAS.'.id = :adId')
+        ->setParameter('adId', $adId)
+        ->andWhere(self::ALIAS.'.category IN (:categoryIds) ')
+        ->setParameter('categoryIds', $catIdArray)
+        ->orderBy(AdUserPackageRepository::ALIAS.'.id', 'DESC')
+        ->setMaxResults(1);
+        return $qb->getQuery()->getOneOrNullResult();
     }
     
     /**
@@ -4307,23 +4297,24 @@ class AdRepository extends EntityRepository
      *
      * @param integer $packageid
      * @param all package available for upgrade
-     * 
+     *
      * @return package id
      */
-    public function getFeaturedAdForUpgrade($packageIds=[]) {
-    	$featuredPackageId = null;
-    	if(!empty($packageIds)) {
-    		foreach($packageIds as $package) {
-    			$featuredPackageId = $package;
-    			$featuredUpsellResult = $this->_em->getRepository('FaPromotionBundle:Package')->getFeaturedTopUpsell($package);
-    			if(!empty($featuredUpsellResult)) {  
-    				$featuredPackageId = $package;
-    				break;
-    			}
-    		}
-    		
-    		return $featuredPackageId;
-    	}
+    public function getFeaturedAdForUpgrade($packageIds=[])
+    {
+        $featuredPackageId = null;
+        if (!empty($packageIds)) {
+            foreach ($packageIds as $package) {
+                $featuredPackageId = $package;
+                $featuredUpsellResult = $this->_em->getRepository('FaPromotionBundle:Package')->getFeaturedTopUpsell($package);
+                if (!empty($featuredUpsellResult)) {
+                    $featuredPackageId = $package;
+                    break;
+                }
+            }
+            
+            return $featuredPackageId;
+        }
     }
     
     /**
@@ -4334,13 +4325,14 @@ class AdRepository extends EntityRepository
      *
      * @return category object
      */
-    public function checkIsfeaturedUpgradeEnabledForCategory($rootCategoryId, $container) {
-    	$categObj = null;
-    	if($rootCategoryId!= '') {
-	    	//$getRootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
-    		$categObj = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('id' => $rootCategoryId, 'is_featured_upgrade_enabled' => '1'));
-    	}
-    	return $categObj;
+    public function checkIsfeaturedUpgradeEnabledForCategory($rootCategoryId, $container)
+    {
+        $categObj = null;
+        if ($rootCategoryId!= '') {
+            //$getRootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+            $categObj = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('id' => $rootCategoryId, 'is_featured_upgrade_enabled' => '1'));
+        }
+        return $categObj;
     }
     
     /**
@@ -4351,18 +4343,19 @@ class AdRepository extends EntityRepository
      *
      * @return array
      */
-    public function getUserAllAdverts($userId, $container){
-    	$qb = $this->getBaseQueryBuilder()
-    	->select(self::ALIAS)
-    	->innerJoin(AdRepository::ALIAS.'.user', UserRepository::ALIAS, 'WITH', UserRepository::ALIAS.'.status = :user_status')
-    	->setParameter('user_status', BaseEntityRepository::USER_STATUS_ACTIVE_ID)
-    	->where(self::ALIAS.'.status = :statusId')
-    	->setParameter('statusId', BaseEntityRepository::AD_STATUS_LIVE_ID)
-    	->andWhere(self::ALIAS.'.user = :userId')
-    	->setParameter('userId', $userId)
-    	->orderBy(self::ALIAS.'.id', 'DESC');
-    	
-    	return $qb->getQuery()->getResult();
+    public function getUserAllAdverts($userId, $container)
+    {
+        $qb = $this->getBaseQueryBuilder()
+        ->select(self::ALIAS)
+        ->innerJoin(AdRepository::ALIAS.'.user', UserRepository::ALIAS, 'WITH', UserRepository::ALIAS.'.status = :user_status')
+        ->setParameter('user_status', BaseEntityRepository::USER_STATUS_ACTIVE_ID)
+        ->where(self::ALIAS.'.status = :statusId')
+        ->setParameter('statusId', BaseEntityRepository::AD_STATUS_LIVE_ID)
+        ->andWhere(self::ALIAS.'.user = :userId')
+        ->setParameter('userId', $userId)
+        ->orderBy(self::ALIAS.'.id', 'DESC');
+        
+        return $qb->getQuery()->getResult();
     }
     
     /**
@@ -4374,54 +4367,53 @@ class AdRepository extends EntityRepository
      *
      * @return array
      */
-    public function getLastBasicPackageAdvertForUpgrade($rootCategoryid, $userId, $keywords = null,$container) 
-    {	
-    	$getBasicAdResult = null;
-    	$availablePackageIds = [];
-    	$getNestedRootCategory = $this->_em->getRepository('FaEntityBundle:Category')->getNestedChildrenIdsByCategoryId($rootCategoryid, $container);
-    	$userLiveAdverts = $this->_em->getRepository('FaAdBundle:Ad')->getUserAllAdverts($userId, $container);
-    	if(!empty($userLiveAdverts)) {
-    		foreach ($userLiveAdverts as $adId) {  
-    		//check is it transaction happend earlier like upgrade or something else
-    		$isAdFree = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdPackageArrayByAdId($adId->getId());
-    		if( !empty($isAdFree) && isset($isAdFree[$adId->getId()]) && $isAdFree[$adId->getId()]['price'] == 0) {
-	    		$getUserLastBasicAdvert = $this->_em->getRepository('FaAdBundle:Ad')->getUserLastBasicLiveAdvert($userId, $adId->getId(), $rootCategoryid, $container);
-	    			if(!empty($getUserLastBasicAdvert)) {
-	    				$systemUserRoles  = $this->_em->getRepository('FaUserBundle:Role')->getRoleArrayByType('C', $container);
-	    				$userRole         = $this->_em->getRepository('FaUserBundle:User')->getUserRole($userId, $container);
-	    				$userRolesArray[] = array_search($userRole, $systemUserRoles);
-	    				$locationGroupIds = $this->_em->getRepository('FaAdBundle:AdLocation')->getLocationGroupIdForAd($getUserLastBasicAdvert['adId'], true);
-	    				$packages         = $this->_em->getRepository('FaPromotionBundle:PackageRule')->getActivePackagesByCategoryId($getUserLastBasicAdvert['categoryId'], $locationGroupIds, $userRolesArray, array(), $container);
-	    				
-	    				//loop through all show packages
-	    				foreach ($packages as $package) {
-	    					$availablePackageIds[] = $package->getPackage()->getId();
-	    					
-	    				} 
-	    				//check last user advert is Basic
-	    				if(isset($availablePackageIds[0]) && in_array($getUserLastBasicAdvert['packageId'], $availablePackageIds) &&  $getUserLastBasicAdvert['package_price'] == 0){
-	    					//remove basic advert from package list and check Featured Top upsell exist for this package
-	    					array_shift($availablePackageIds);
-	    					$getNextFeaturedTopPackageId= $this->_em->getRepository('FaAdBundle:Ad')->getFeaturedAdForUpgrade($availablePackageIds);
-	    					//no featured top upsell exist
-	    					if(!empty($getNextFeaturedTopPackageId)) {
-	    						$getSearchRootCategory = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($rootCategoryid, $container);
-	    						$getFeaturedAdRootCategory = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($getUserLastBasicAdvert['categoryId'], $container);
-	    						
-	    						$solrAd = [];
-	    						$featuredAd['query_filters']['item']['id']        = $getUserLastBasicAdvert['adId'];
-	    						$featuredAd['query_filters']['item']['status_id'] = BaseEntityRepository::AD_STATUS_LIVE_ID;
-	    						$container->get('fa.solrsearch.manager')->init('ad', $keywords, $featuredAd, 1, 1, 0, true);
-	    						$getBasicAdResult = $container->get('fa.solrsearch.manager')->getSolrResponseDocs();
-	    						break;
-	    					}
-	    				}
-	    			}
-    			}
-    		}
-    	}
-    	
-    	return $getBasicAdResult;
+    public function getLastBasicPackageAdvertForUpgrade($rootCategoryid, $userId, $keywords = null, $container)
+    {
+        $getBasicAdResult = null;
+        $availablePackageIds = [];
+        $getNestedRootCategory = $this->_em->getRepository('FaEntityBundle:Category')->getNestedChildrenIdsByCategoryId($rootCategoryid, $container);
+        $userLiveAdverts = $this->_em->getRepository('FaAdBundle:Ad')->getUserAllAdverts($userId, $container);
+        if (!empty($userLiveAdverts)) {
+            foreach ($userLiveAdverts as $adId) {
+                //check is it transaction happend earlier like upgrade or something else
+                $isAdFree = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdPackageArrayByAdId($adId->getId());
+                if (!empty($isAdFree) && isset($isAdFree[$adId->getId()]) && $isAdFree[$adId->getId()]['price'] == 0) {
+                    $getUserLastBasicAdvert = $this->_em->getRepository('FaAdBundle:Ad')->getUserLastBasicLiveAdvert($userId, $adId->getId(), $rootCategoryid, $container);
+                    if (!empty($getUserLastBasicAdvert)) {
+                        $systemUserRoles  = $this->_em->getRepository('FaUserBundle:Role')->getRoleArrayByType('C', $container);
+                        $userRole         = $this->_em->getRepository('FaUserBundle:User')->getUserRole($userId, $container);
+                        $userRolesArray[] = array_search($userRole, $systemUserRoles);
+                        $locationGroupIds = $this->_em->getRepository('FaAdBundle:AdLocation')->getLocationGroupIdForAd($getUserLastBasicAdvert['adId'], true);
+                        $packages         = $this->_em->getRepository('FaPromotionBundle:PackageRule')->getActivePackagesByCategoryId($getUserLastBasicAdvert['categoryId'], $locationGroupIds, $userRolesArray, array(), $container);
+                        
+                        //loop through all show packages
+                        foreach ($packages as $package) {
+                            $availablePackageIds[] = $package->getPackage()->getId();
+                        }
+                        //check last user advert is Basic
+                        if (isset($availablePackageIds[0]) && in_array($getUserLastBasicAdvert['packageId'], $availablePackageIds) &&  $getUserLastBasicAdvert['package_price'] == 0) {
+                            //remove basic advert from package list and check Featured Top upsell exist for this package
+                            array_shift($availablePackageIds);
+                            $getNextFeaturedTopPackageId= $this->_em->getRepository('FaAdBundle:Ad')->getFeaturedAdForUpgrade($availablePackageIds);
+                            //no featured top upsell exist
+                            if (!empty($getNextFeaturedTopPackageId)) {
+                                $getSearchRootCategory = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($rootCategoryid, $container);
+                                $getFeaturedAdRootCategory = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($getUserLastBasicAdvert['categoryId'], $container);
+                                
+                                $solrAd = [];
+                                $featuredAd['query_filters']['item']['id']        = $getUserLastBasicAdvert['adId'];
+                                $featuredAd['query_filters']['item']['status_id'] = BaseEntityRepository::AD_STATUS_LIVE_ID;
+                                $container->get('fa.solrsearch.manager')->init('ad', $keywords, $featuredAd, 1, 1, 0, true);
+                                $getBasicAdResult = $container->get('fa.solrsearch.manager')->getSolrResponseDocs();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $getBasicAdResult;
     }
     
     /**
@@ -4468,7 +4460,8 @@ class AdRepository extends EntityRepository
         }
     }
 
-    public function getAdCountByCampaignUser($campaign,$user) {
+    public function getAdCountByCampaignUser($campaign, $user)
+    {
         $results = $this->createQueryBuilder(self::ALIAS)
         ->select('COUNT('.self::ALIAS.'.id) as adCount')
         ->where(self::ALIAS.".campaign = :campaign")
@@ -4494,7 +4487,9 @@ class AdRepository extends EntityRepository
         $adPackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->findOneBy(array('ad_id'=>$ad->getId()));
         $adPackagePrice = $adPackage->getPackage()->getPrice();
         $entityCache =   $container->get('fa.entity.cache.manager');
-        $text_package_name = '';$text_lowest_category_package_price = '';$url_ad_upsell = '';
+        $text_package_name = '';
+        $text_lowest_category_package_price = '';
+        $url_ad_upsell = '';
         //send email only if ad has user and status is active and not feed ad.
         if ($user && CommonManager::checkSendEmailToUser($user, $container)) {
             $ads[] = array(
@@ -4528,7 +4523,6 @@ class AdRepository extends EntityRepository
                 $this->_em->persist($paaLiteEmailNotification);
                 $this->_em->flush($paaLiteEmailNotification);
                 //$output->writeln('Complete your Advert notification sent to User Id:'.($user ? $user->getId() : null), true);
-
             }
         }
     }

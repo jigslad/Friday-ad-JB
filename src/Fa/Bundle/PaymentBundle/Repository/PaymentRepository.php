@@ -297,7 +297,7 @@ class PaymentRepository extends EntityRepository
                 $this->_em->persist($ad);
                 $this->_em->flush($ad);
                 $user = $ad->getUser();
-                if($ad->getSource()=='paa_lite' && $adUserPackageCount==0) {
+                if ($ad->getSource()=='paa_lite' && $adUserPackageCount==0) {
                     $paaLiteEmailNotification = new PaaLiteEmailNotification();
                     $paaLiteEmailNotification->setAd($ad);
                     $paaLiteEmailNotification->setUser($user);
@@ -361,7 +361,6 @@ class PaymentRepository extends EntityRepository
                 $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByAdId('advert_live_for_14_days', $ad->getId());
                 $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByAdId('advert_live_for_21_days', $ad->getId());
             }
-
         } elseif (isset($value['promoteRepostAdFlag']) && $value['promoteRepostAdFlag'] == 'repost' && $addAdToModeration == false) {
             $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_live', $ad->getId(), $ad->getUser()->getId());
             $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('share_on_facebook_twitter', $ad->getId(), $ad->getUser()->getId());
@@ -570,21 +569,21 @@ class PaymentRepository extends EntityRepository
      * @return array
      */
     public function getPaymentMethodOptionsArray($container, $categoryId = null)
-    {	
+    {
         $translator  = CommonManager::getTranslator($container);
-        $optionArray = []; 
+        $optionArray = [];
         
-        if( is_null($categoryId) || $categoryId != CategoryRepository::PHONE_AND_CAM_CHAT_ID) { 
-	        $optionArray = array(
-	            self::PAYMENT_METHOD_CASH_ON_COLLECTION_ID  => $translator->trans('Cash on collection'),
-	            self::PAYMENT_METHOD_PAYPAL_ID              => $translator->trans('Paypal'),
-	            self::PAYMENT_METHOD_PAYPAL_OR_CASH_ID      => $translator->trans('Paypal or cash')
-	        );
-        } elseif ( $categoryId == CategoryRepository::PHONE_AND_CAM_CHAT_ID ) {        	
-        	$optionArray = array(
-        			self::PAYMENT_METHOD_BANK_TRANSFER			=> $translator->trans('Bank Transfer'),
-        			self::PAYMENT_METHOD_PAYPAL_ID              => $translator->trans('Paypal')
-        	);
+        if (is_null($categoryId) || $categoryId != CategoryRepository::PHONE_AND_CAM_CHAT_ID) {
+            $optionArray = array(
+                self::PAYMENT_METHOD_CASH_ON_COLLECTION_ID  => $translator->trans('Cash on collection'),
+                self::PAYMENT_METHOD_PAYPAL_ID              => $translator->trans('Paypal'),
+                self::PAYMENT_METHOD_PAYPAL_OR_CASH_ID      => $translator->trans('Paypal or cash')
+            );
+        } elseif ($categoryId == CategoryRepository::PHONE_AND_CAM_CHAT_ID) {
+            $optionArray = array(
+                    self::PAYMENT_METHOD_BANK_TRANSFER			=> $translator->trans('Bank Transfer'),
+                    self::PAYMENT_METHOD_PAYPAL_ID              => $translator->trans('Paypal')
+            );
         }
         return $optionArray;
     }
@@ -642,8 +641,7 @@ class PaymentRepository extends EntityRepository
      */
     public function updatePaymentMethod($paymentObj)
     {
-        switch ($paymentObj->getPaymentMethod())
-        {
+        switch ($paymentObj->getPaymentMethod()) {
             case self::PAYMENT_METHOD_CYBERSOURCE:
                 $this->_em->getRepository('FaPaymentBundle:PaymentCyberSource')->addPaymentRecord($paymentObj);
                 break;

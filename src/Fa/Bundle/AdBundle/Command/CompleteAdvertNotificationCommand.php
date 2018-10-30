@@ -86,9 +86,9 @@ EOF
      */
     protected function completeAdvertNotificationsWithOffset($input, $output)
     {
-        $records          = $this->getAdQueryBuilder(FALSE,$input);
+        $records          = $this->getAdQueryBuilder(false, $input);
         $step        = 100;
-        $offset      = 0; 
+        $offset      = 0;
         $container = $this->getContainer();
 
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
@@ -96,13 +96,12 @@ EOF
 
         foreach ($records as $record) {
             $paaLiteEmailNotification = $this->em->getRepository('FaAdBundle:PaaLiteEmailNotification')->find($record['id']);
-            $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('complete_advert', $record['ad_id'], $record['user_id'],strtotime('+3 minute'), true);
+            $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('complete_advert', $record['ad_id'], $record['user_id'], strtotime('+3 minute'), true);
 
             $paaLiteEmailNotification->setIsAdConfirmationNotificationSent(1);
             $this->em->persist($paaLiteEmailNotification);
             $this->em->flush($paaLiteEmailNotification);
             $output->writeln('Complete your advert notification sent to User Id:'.($record['user_id'] ? $record['user_id'] : null), true);
-
         }
     }
     
@@ -115,7 +114,7 @@ EOF
      */
     protected function completeAdvertNotifications($input, $output)
     {
-        $resultArr     = $this->getAdQueryBuilder(TRUE, $input);
+        $resultArr     = $this->getAdQueryBuilder(true, $input);
         $count  = $resultArr[0]['cnt'];
 
         $step      = 100;
@@ -166,19 +165,19 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getAdQueryBuilder($onlyCount = FALSE, $input)
+    protected function getAdQueryBuilder($onlyCount = false, $input)
     {
-        if($onlyCount) {
-             $sql = 'SELECT count(id) as cnt ';
+        if ($onlyCount) {
+            $sql = 'SELECT count(id) as cnt ';
         } else {
             $sql = 'SELECT * ';
         }
 
-       $sql .= ' FROM paa_lite_email_notification as '.PaaLiteEmailNotificationRepository::ALIAS.' WHERE UNIX_TIMESTAMP(date_add(FROM_UNIXTIME('.PaaLiteEmailNotificationRepository::ALIAS.'.created_at), interval +2 HOUR)) <= UNIX_TIMESTAMP(NOW()) AND '.PaaLiteEmailNotificationRepository::ALIAS.'.is_ad_confirmation_notification_sent = 0 ORDER BY '.PaaLiteEmailNotificationRepository::ALIAS.'.id ASC';
+        $sql .= ' FROM paa_lite_email_notification as '.PaaLiteEmailNotificationRepository::ALIAS.' WHERE UNIX_TIMESTAMP(date_add(FROM_UNIXTIME('.PaaLiteEmailNotificationRepository::ALIAS.'.created_at), interval +2 HOUR)) <= UNIX_TIMESTAMP(NOW()) AND '.PaaLiteEmailNotificationRepository::ALIAS.'.is_ad_confirmation_notification_sent = 0 ORDER BY '.PaaLiteEmailNotificationRepository::ALIAS.'.id ASC';
 
         $stmt = $this->em->getConnection()->prepare($sql);
         $stmt->execute();
         $arrResult = $stmt->fetchAll();
         return $arrResult;
-    }   
+    }
 }

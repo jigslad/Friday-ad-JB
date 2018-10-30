@@ -125,7 +125,7 @@ class PoliceReportSearchAdminType extends AbstractType
 
         if (!$adId && !$email) {
             $form->get('email')->addError(new FormError('Either email address or advert ref is required.'));
-        }else if ($adId && $email) {
+        } elseif ($adId && $email) {
             $form->get('email')->addError(new FormError('Either email address or advert ref any one should be entered.'));
         }
     }

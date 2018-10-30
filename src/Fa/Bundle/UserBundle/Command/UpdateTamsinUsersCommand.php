@@ -29,7 +29,6 @@ use Fa\Bundle\UserBundle\Entity\User;
 use Fa\Bundle\UserBundle\Encoder\Pbkdf2PasswordEncoder;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 
-
 /**
  * This command is used to update dimensionads.
  *
@@ -77,7 +76,6 @@ EOF
         } else {
             $this->insertTasminUser($input, $output);
         }
-
     }
 
     /**
@@ -98,13 +96,13 @@ EOF
         $category = array();
         $row = $reader->getRow();
 
-        if ($offset > 0)
+        if ($offset > 0) {
             $reader->advanceTo($offset-1);
-        else
+        } else {
             $reader->advanceTo(1);
+        }
 
         while (($row = $reader->getRow()) && $reader->getLineNumber() != $offset + $batchSize) {
-
             if (isset($row['EMAIL']) && $row['EMAIL']) {
                 $email = $row['EMAIL'];
                 $emailConstraint = new EmailConstraint();
@@ -125,7 +123,6 @@ EOF
                             if ($category) {
                                 if (!$user) {
                                     $newUser = new User();
-
                                 } else {
                                     $newUser = $user;
                                     $flag = false;
@@ -179,14 +176,17 @@ EOF
                                     $this->em->getRepository('FaUserBundle:UserPackage')->assignFreePackageToUser($newUser, null, $this->getContainer(), false);
                                 }
 
-                                if ($newUser)
+                                if ($newUser) {
                                     $this->em->detach($sellerRole);
+                                }
 
-                                if ($user)
+                                if ($user) {
                                     $this->em->detach($user);
+                                }
 
-                                if ($newUser)
+                                if ($newUser) {
                                     $this->em->detach($newUser);
+                                }
                                 $this->em->clear();
 
                                 if ($flag) {
@@ -198,7 +198,6 @@ EOF
                         } else {
                             if (!$user) {
                                 $newUser = new User();
-
                             } else {
                                 $newUser = $user;
                                 $flag = false;
@@ -234,14 +233,17 @@ EOF
 
                             $this->em->persist($newUser);
                             $this->em->flush();
-                            if ($newUser)
+                            if ($newUser) {
                                 $this->em->detach($sellerRole);
+                            }
 
-                            if ($user)
-                            $this->em->detach($user);
+                            if ($user) {
+                                $this->em->detach($user);
+                            }
 
-                            if ($newUser)
-                            $this->em->detach($newUser);
+                            if ($newUser) {
+                                $this->em->detach($newUser);
+                            }
                             $this->em->clear();
 
                             if ($flag) {
@@ -250,8 +252,7 @@ EOF
                                 echo 'Tamsin private user updated '.$newUser->getId().' = '.$row['EMAIL']."\n";
                             }
                         }
-                    }
-                    else {
+                    } else {
                         //echo ' Already user ->'.$email."\n";
                         $this->em->detach($user);
                         $this->em->flush();

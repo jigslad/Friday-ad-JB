@@ -119,58 +119,58 @@ EOF
         $objAds = $objQB->getQuery()->execute();
 
         foreach ($objAds as $objAd) {
-             $objAdModerates = $this->entityManager->getRepository('FaAdBundle:AdModerate')->findByAd($objAd);
-             if ($objAdModerates && count($objAdModerates)) {
-                 $objAdModerate = $objAdModerates[0];
-             }
+            $objAdModerates = $this->entityManager->getRepository('FaAdBundle:AdModerate')->findByAd($objAd);
+            if ($objAdModerates && count($objAdModerates)) {
+                $objAdModerate = $objAdModerates[0];
+            }
 
-             if ($action == 'delete') {
-                 $expiredAt     = time();
-                 $adRepository  = $this->entityManager->getRepository('FaAdBundle:Ad');
-                 $adStatRepository  = $this->entityManager->getRepository('FaAdBundle:AdStatistics');
-                 $user = ($objAd->getUser() ? $objAd->getUser() : null);
+            if ($action == 'delete') {
+                $expiredAt     = time();
+                $adRepository  = $this->entityManager->getRepository('FaAdBundle:Ad');
+                $adStatRepository  = $this->entityManager->getRepository('FaAdBundle:AdStatistics');
+                $user = ($objAd->getUser() ? $objAd->getUser() : null);
 
-                 //send email only if ad has user and status is active.
-                 /*if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer())) {
-                     $adRepository->sendExpirationEmail($objAd, $this->getContainer());
-                 }*/
+                //send email only if ad has user and status is active.
+                /*if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer())) {
+                    $adRepository->sendExpirationEmail($objAd, $this->getContainer());
+                }*/
 
-                 $objAd->setStatus($this->entityManager->getReference('FaEntityBundle:Entity', \Fa\Bundle\EntityBundle\Repository\EntityRepository::AD_STATUS_EXPIRED_ID));
-                 $objAd->setExpiresAt($expiredAt);
-                 $this->entityManager->persist($objAd);
+                $objAd->setStatus($this->entityManager->getReference('FaEntityBundle:Entity', \Fa\Bundle\EntityBundle\Repository\EntityRepository::AD_STATUS_EXPIRED_ID));
+                $objAd->setExpiresAt($expiredAt);
+                $this->entityManager->persist($objAd);
 
-                 // insert expire stat
-                 $adStatRepository->insertExpiredStat($objAd, $expiredAt);
+                // insert expire stat
+                $adStatRepository->insertExpiredStat($objAd, $expiredAt);
 
-                 // inactivate the package
-                 $this->entityManager->getRepository('FaAdBundle:Ad')->doAfterAdCloseProcess($objAd->getId(), $this->getContainer());
-                 $this->entityManager->flush();
+                // inactivate the package
+                $this->entityManager->getRepository('FaAdBundle:Ad')->doAfterAdCloseProcess($objAd->getId(), $this->getContainer());
+                $this->entityManager->flush();
 
-                 $user_id = $objAd->getUser() ? $objAd->getUser()->getId() : null;
-                 //$this->entityManager->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByOnlyAdId($objAd->getId());
-                 //$this->entityManager->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_expired', $objAd->getId(), $user_id);
+                $user_id = $objAd->getUser() ? $objAd->getUser()->getId() : null;
+                //$this->entityManager->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByOnlyAdId($objAd->getId());
+                //$this->entityManager->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('advert_expired', $objAd->getId(), $user_id);
 
-                 if ($objAdModerate) {
-                     $deleteManager = $this->getContainer()->get('fa.deletemanager');
-                     $deleteManager->delete($objAdModerate);
-                 }
-                 $output->writeln('Ad has been expired with AD ID: '.$objAd->getId(), true);
-             } else {
-                 if ($objAdModerates && count($objAdModerates)) {
-                     $objAdModerate = $objAdModerates[0];
+                if ($objAdModerate) {
+                    $deleteManager = $this->getContainer()->get('fa.deletemanager');
+                    $deleteManager->delete($objAdModerate);
+                }
+                $output->writeln('Ad has been expired with AD ID: '.$objAd->getId(), true);
+            } else {
+                if ($objAdModerates && count($objAdModerates)) {
+                    $objAdModerate = $objAdModerates[0];
 
-                     $buildRequest      = $this->getContainer()->get('fa_ad.moderation.request_build');
-                     $moderationRequest = $buildRequest->init($objAd, $objAdModerate->getValue());
-                     $moderationRequest = json_encode($moderationRequest);
+                    $buildRequest      = $this->getContainer()->get('fa_ad.moderation.request_build');
+                    $moderationRequest = $buildRequest->init($objAd, $objAdModerate->getValue());
+                    $moderationRequest = json_encode($moderationRequest);
 
-                     if ($buildRequest->sendRequest($moderationRequest)) {
-                         $objAdModerate->setModerationQueue(AdModerateRepository::MODERATION_QUEUE_STATUS_SENT);
-                         $this->getContainer()->get('doctrine')->getManager()->persist($objAdModerate);
-                         $output->writeln('Ad has been resend for moderation with AD ID: '.$objAd->getId(), true);
-                     }
-                     sleep(1);
-                 }
-             }
+                    if ($buildRequest->sendRequest($moderationRequest)) {
+                        $objAdModerate->setModerationQueue(AdModerateRepository::MODERATION_QUEUE_STATUS_SENT);
+                        $this->getContainer()->get('doctrine')->getManager()->persist($objAdModerate);
+                        $output->writeln('Ad has been resend for moderation with AD ID: '.$objAd->getId(), true);
+                    }
+                    sleep(1);
+                }
+            }
         }
         $this->getContainer()->get('doctrine')->getManager()->flush();
 
@@ -187,7 +187,7 @@ EOF
     protected function processAdForModeration($input, $output, $searchParam)
     {
         $action = $input->getOption('action');
-        $objQB  = $this->getMainQueryBuilder($searchParam, $input, $action, TRUE);
+        $objQB  = $this->getMainQueryBuilder($searchParam, $input, $action, true);
         $count  = $objQB->getQuery()->getSingleScalarResult();
 
         $step      = 100;
@@ -290,7 +290,7 @@ EOF
      *
      * @return Doctrine_Query Object.
      */
-    protected function getMainQueryBuilder($searchParam, $input, $action = '', $onlyCount = FALSE)
+    protected function getMainQueryBuilder($searchParam, $input, $action = '', $onlyCount = false)
     {
         $moderationStatusArray = array(AdModerateRepository::MODERATION_QUEUE_STATUS_SEND, AdModerateRepository::MODERATION_QUEUE_STATUS_SENT, AdModerateRepository::MODERATION_QUEUE_STATUS_MANUAL_MODERATION);
 

@@ -83,7 +83,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Boats', 'lvl' => 2));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -123,7 +123,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'features_id' => 35
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'manufacturer_id' => 2,
                 'model' => 2,
                 'title' => 2,
@@ -149,7 +149,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Cars', 'lvl' => 2));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -184,7 +184,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'features_id' => 11,
             );
 
-            $fieldRuleMinValue = array (
+            $fieldRuleMinValue = array(
                 'no_of_doors' => 1,
                 'no_of_seats' => 1,
                 'no_of_owners' => 1,
@@ -195,7 +195,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'engine_size' => 1
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'no_of_doors' => 10,
                 'no_of_seats' => 20,
                 'no_of_owners' => 100,
@@ -206,7 +206,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'engine_size' => 10000
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'no_of_doors' => PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE,
                 'no_of_seats' => PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE,
                 'no_of_owners' => PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE,
@@ -229,7 +229,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'description' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'colour_id' => 2,
                 'body_type_id' => 2,
                 'reg_year' => 2,
@@ -275,7 +275,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Commercial Vehicles', 'lvl' => 2));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -310,7 +310,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'features_id' => 11,
             );
 
-            $fieldRuleMinValue = array (
+            $fieldRuleMinValue = array(
                 'no_of_doors' => 1,
                 'no_of_seats' => 1,
                 'no_of_owners' => 1,
@@ -321,7 +321,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'engine_size' => 1
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'no_of_doors' => 10,
                 'no_of_seats' => 20,
                 'no_of_owners' => 100,
@@ -332,7 +332,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'engine_size' => 10000
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'no_of_doors' => PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE,
                 'no_of_seats' => PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE,
                 'no_of_owners' => PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE,
@@ -355,7 +355,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'description' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'colour_id' => 2,
                 'body_type_id' => 2,
                 'reg_year' => 2,
@@ -401,7 +401,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Farm', 'lvl' => 2));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -441,15 +441,15 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'features_id' => 35
             );
 
-            $fieldRuleMinValue = array (
+            $fieldRuleMinValue = array(
                 'no_of_owners' => 1
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'no_of_owners' => 100
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'no_of_owners' => PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE
             );
 
@@ -458,7 +458,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'mileage'      => 'How many miles are on the clock?'
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'manufacturer_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -485,7 +485,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Horseboxes And Trailers', 'lvl' => 2));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -528,7 +528,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'mileage'=> 'How many miles are on the clock?'
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'make_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -556,7 +556,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Motorbikes', 'lvl' => 2));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -594,21 +594,21 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'features_id' => 9,
             );
 
-            $fieldRuleMinValue = array (
+            $fieldRuleMinValue = array(
                 'no_of_owners' => 1,
                 //'top_speed' => 1,
                 //'062mph' => 1,
                 'engine_size' => 1
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'no_of_owners' => 100,
                 //'top_speed' => 200,
                 //'062mph' => 100,
                 'engine_size' => 10000
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'no_of_owners' => PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE,
                 //'top_speed' => PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE,
                 //'062mph' => PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE,
@@ -625,7 +625,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'description' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'make_id' => 2,
                 'model_id' => 2,
                 'reg_year' => 2,
@@ -664,7 +664,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Motorhomes and Caravans', 'lvl' => 2));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -708,7 +708,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'berth_id'=> 'Berths'
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'title' => 2,
                 'description' => 2,
                 'price' => 2,
@@ -732,7 +732,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Caravans', 'lvl' => 3));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -780,7 +780,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'berth_id'=> 'Berths'
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'make_id' => 2,
                 'model' => 2,
                 'title' => 2,
@@ -806,7 +806,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Static Caravans', 'lvl' => 3));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -854,7 +854,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'berth_id'=> 'Berths'
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'make_id' => 2,
                 'model' => 2,
                 'title' => 2,
@@ -880,7 +880,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Motorhomes', 'lvl' => 3));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -920,15 +920,15 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'model_id' => 'text_autosuggest'
             );
 
-            $fieldRuleMinValue = array (
+            $fieldRuleMinValue = array(
                 'engine_size' => 1
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'engine_size' => 10000
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'engine_size' => PaaFieldRuleRepository::MIN_MAX_TYPE_RANGE
             );
 
@@ -938,7 +938,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'mot_expiry_month' => 'MOT expiry month'
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'make_id' => 2,
                 'model_id' => 2,
                 'title' => 2,
@@ -969,7 +969,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Motors Services', 'lvl' => 2));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -1006,7 +1006,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'features_id' => 35
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'title' => 2,
                 'description' => 2,
                 'price' => 2,
@@ -1027,7 +1027,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
         $category = $this->_em->getRepository('FaEntityBundle:Category')->findOneBy(array('name' => 'Parts And Accessories', 'lvl' => 2));
 
         if ($category) {
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -1068,7 +1068,7 @@ class LoadPaaFieldMotorsData extends LoadPaaFieldData
                 'part_of_vehicle_id' => 'Part of the vehicle',
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'title' => 2,
                 'description' => 2,
                 'price' => 2,

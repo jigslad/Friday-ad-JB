@@ -127,10 +127,10 @@ class FaEntityLogRepository extends LogEntryRepository
             'Fa\Bundle\AdBundle\Entity\AdUserPackage' => 'Ad Package',
         );
 
-        if($key == null) {
-          return $objClassArr;
+        if ($key == null) {
+            return $objClassArr;
         } else {
-          return isset($objClassArr[$key]) ? $objClassArr[$key] : '';
+            return isset($objClassArr[$key]) ? $objClassArr[$key] : '';
         }
     }
 
@@ -172,7 +172,7 @@ class FaEntityLogRepository extends LogEntryRepository
             )),
         );
 
-        if($key == null) {
+        if ($key == null) {
             return $objClassArr;
         } else {
             return isset($objClassArr[$key]) ? $objClassArr[$key] : '';
@@ -336,7 +336,7 @@ class FaEntityLogRepository extends LogEntryRepository
             'Fa\Bundle\AdBundle\Entity\AdUserPackage' => 'ad_user_package',
         );
 
-        if($class == null) {
+        if ($class == null) {
             return $objClassArr;
         } else {
             return isset($objClassArr[$class]) ? $objClassArr[$class] : '';

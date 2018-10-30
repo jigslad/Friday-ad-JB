@@ -74,7 +74,9 @@ class UserPackageAdminController extends CoreController
 
         if (isset($catForm['is_auto_renew']) && $catForm['is_auto_renew']) {
             $is_auto_renew = $catForm['is_auto_renew'];
-        } else { $is_auto_renew = ($selis_auto_renew==1)?$selis_auto_renew:0; }
+        } else {
+            $is_auto_renew = ($selis_auto_renew==1)?$selis_auto_renew:0;
+        }
 
         $options =  array(
                 'action' => $this->generateUrl('user_package_admin', array('id' => $user->getId())),
@@ -212,7 +214,6 @@ class UserPackageAdminController extends CoreController
         $catFormObj = $catFormBuilder->getForm();
 
         if ('POST' === $request->getMethod()) {
-
             $catFormObj->submit($catForm);
 
             $isValidCatForm = $catFormObj->isValid();

@@ -61,12 +61,12 @@ EOF
         );
     }
 
-   /**
-     * Execute.
-     *
-     * @param InputInterface  $input  InputInterface object.
-     * @param OutputInterface $output OutputInterface object.
-     */
+    /**
+      * Execute.
+      *
+      * @param InputInterface  $input  InputInterface object.
+      * @param OutputInterface $output OutputInterface object.
+      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->em = $this->getContainer()->get('doctrine')->getManager();
@@ -217,8 +217,7 @@ EOF
                      AND a.category_id IN (SELECT node.id FROM category AS node, category AS parent WHERE node.lft BETWEEN parent.lft AND parent.rgt AND parent.id IN (456) AND node.rgt - node.lft =1)
                      AND (a.is_feed_ad = 0 OR a.is_feed_ad IS NULL)
                      ORDER BY a.id ASC LIMIT '.$offset.', '.$step;
-        }elseif ($searchParam['category'] == 'Forsale') {
-
+        } elseif ($searchParam['category'] == 'Forsale') {
             $query = 'SELECT a.id FROM ad a
                      LEFT JOIN ad_location al ON a.id = al.ad_id
                      LEFT JOIN user u ON a.user_id = u.id
@@ -232,9 +231,7 @@ EOF
                      AND al.town_id > 0
                      AND (a.published_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )) OR a.updated_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )))
                      ORDER BY a.id ASC LIMIT '.$offset.', '.$step;
-
         } elseif ($searchParam['category'] == 'Gardening') {
-
             $query = 'SELECT a.id FROM ad a
                      LEFT JOIN ad_location al ON a.id = al.ad_id
                      LEFT JOIN user u ON a.user_id = u.id
@@ -247,9 +244,7 @@ EOF
                      AND al.town_id > 0
                      AND (a.published_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )) OR a.updated_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )))
                      ORDER BY a.id ASC LIMIT '.$offset.', '.$step;
-
         } elseif ($searchParam['category'] == 'Pets') {
-
             $query = 'SELECT a.id FROM ad a
                      LEFT JOIN ad_location al ON a.id = al.ad_id
                      LEFT JOIN user u ON a.user_id = u.id
@@ -262,9 +257,7 @@ EOF
                      AND al.town_id > 0
                      AND (a.published_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )) OR a.updated_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )))
                      ORDER BY a.id ASC LIMIT '.$offset.', '.$step;
-
         } elseif ($searchParam['category'] == 'Property') {
-
             $query = 'SELECT a.id FROM ad a
                      LEFT JOIN ad_location al ON a.id = al.ad_id
                      LEFT JOIN user u ON a.user_id = u.id
@@ -277,14 +270,12 @@ EOF
                      AND al.town_id > 0
                      AND (a.published_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )) OR a.updated_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )))
                      ORDER BY a.id ASC LIMIT '.$offset.', '.$step;
-
         }
 
         $stmt = $this->em->getConnection()->prepare($query);
         $stmt->execute();
         $ads = $stmt->fetchAll();
         return $ads;
-
     }
 
     /**
@@ -297,7 +288,6 @@ EOF
     protected function getAdCount($searchParam)
     {
         if ($searchParam['category'] == 'Cars') {
-
             $query = 'SELECT count(a.id) AS count FROM ad a
                      LEFT JOIN ad_location al ON a.id = al.ad_id
                      LEFT JOIN ad_motors am ON a.id = am.ad_id
@@ -313,9 +303,7 @@ EOF
                      AND am.transmission_id > 0
                      AND (a.published_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )) OR a.updated_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )))
                      ORDER BY a.id';
-
         } elseif ($searchParam['category'] == 'OnlyCars') {
-
             $query = 'SELECT count(a.id) AS count FROM ad a
                      LEFT JOIN ad_location al ON a.id = al.ad_id
                      LEFT JOIN ad_motors am ON a.id = am.ad_id
@@ -324,9 +312,7 @@ EOF
                      AND a.category_id IN (SELECT node.id FROM category AS node, category AS parent WHERE node.lft BETWEEN parent.lft AND parent.rgt AND parent.id IN (456) AND node.rgt - node.lft =1)
                      AND (a.is_feed_ad = 0 OR a.is_feed_ad IS NULL)
                      ORDER BY a.id';
-
         } elseif ($searchParam['category'] == 'Forsale') {
-
             $query =     'SELECT count(a.id) AS count FROM ad a
                         LEFT JOIN ad_location al ON a.id = al.ad_id
                         LEFT JOIN user u ON a.user_id = u.id
@@ -341,7 +327,6 @@ EOF
                         AND (a.published_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )) OR a.updated_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )))
                         ORDER BY a.id';
         } elseif ($searchParam['category'] == 'Gardening') {
-
             $query =     'SELECT count(a.id) AS count FROM ad a
                         LEFT JOIN ad_location al ON a.id = al.ad_id
                         LEFT JOIN user u ON a.user_id = u.id
@@ -355,7 +340,6 @@ EOF
                         AND (a.published_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )) OR a.updated_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )))
                         ORDER BY a.id';
         } elseif ($searchParam['category'] == 'Pets') {
-
             $query =    'SELECT count(a.id) AS count FROM ad a
                         LEFT JOIN ad_location al ON a.id = al.ad_id
                         LEFT JOIN user u ON a.user_id = u.id
@@ -369,7 +353,6 @@ EOF
                         AND (a.published_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )) OR a.updated_at >= UNIX_TIMESTAMP((CURDATE() - INTERVAL '.$searchParam['last_days'].' DAY )))
                         ORDER BY a.id';
         } elseif ($searchParam['category'] == 'Property') {
-
             $query =    'SELECT count(a.id) AS count FROM ad a
                         LEFT JOIN ad_location al ON a.id = al.ad_id
                         LEFT JOIN user u ON a.user_id = u.id

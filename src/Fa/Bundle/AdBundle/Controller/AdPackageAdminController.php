@@ -20,6 +20,7 @@ use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+
 /**
  * This controller is used for ad package management.
  *
@@ -98,7 +99,7 @@ class AdPackageAdminController extends CoreController implements ResourceAuthori
                
  
         if ($adUserPackage) {
-        	if($ad->getStatus()->getId()== EntityRepository::AD_STATUS_LIVE_ID) {
+            if ($ad->getStatus()->getId()== EntityRepository::AD_STATUS_LIVE_ID) {
                 $adUserPackageUpsell = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->getAdPackageUpsell($adId, $adUserPackage->getId());
                 $parameters = array(
                     'adUserPackage' => $adUserPackage,
@@ -108,15 +109,16 @@ class AdPackageAdminController extends CoreController implements ResourceAuthori
                 );
                 return $this->render('FaAdBundle:AdPackageAdmin:showPurchaseAdPackage.html.twig', $parameters);
             } else {
-            	//disabled user package if advert is not active FFR-3337
-            	$disabledAdUserPackage = $this->getRepository('FaAdBundle:AdUserPackage')->disabledAdUserPackage($adId, $ad->getStatus()->getId());
+                //disabled user package if advert is not active FFR-3337
+                $disabledAdUserPackage = $this->getRepository('FaAdBundle:AdUserPackage')->disabledAdUserPackage($adId, $ad->getStatus()->getId());
             }
         }
 
         $oldSelectedPrintEditions = array();
         $selectedPrintEditions = array();
         $defaultSelectedPrintEditions = array();
-        $selectedPackageId = $request->get('packageId', null);;
+        $selectedPackageId = $request->get('packageId', null);
+        ;
         $printEditionSelectedFlag = true;
         $errorMsg         = null;
         $adCartDetails = null;
@@ -191,7 +193,7 @@ class AdPackageAdminController extends CoreController implements ResourceAuthori
 
         if (count($printEditionLimits) && 'POST' !== $request->getMethod()) {
             $defaultSelectedPrintEditions = $this->getRepository('FaAdBundle:AdPrint')->getPrintEditionForAd(max($printEditionLimits), $adId, true, $locationGroupIds);
-            if(count($defaultSelectedPrintEditions)>0) {
+            if (count($defaultSelectedPrintEditions)>0) {
                 $defaultSelectedPrintEditions = array_combine(range(1, count($defaultSelectedPrintEditions)), array_values($defaultSelectedPrintEditions));
             }
 

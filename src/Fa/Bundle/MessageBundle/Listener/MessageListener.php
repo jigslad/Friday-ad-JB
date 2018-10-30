@@ -108,8 +108,6 @@ class MessageListener
             CommonManager::removeCache($this->container, $this->getTableName().'|getMessageCount|'.$entity->getSender()->getId().'_all_'.$culture);
             CommonManager::removeCache($this->container, $this->getTableName().'|getMessageCount|'.$entity->getSender()->getId().'_receiver_'.$culture);
             CommonManager::removeCache($this->container, $this->getTableName().'|getMessageCount|'.$entity->getSender()->getId().'_sender_'.$culture);
-
-
         }
     }
 }

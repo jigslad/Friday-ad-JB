@@ -115,12 +115,12 @@ class AdPrintRepository extends EntityRepository
 
         // filter insert date.
         if (isset($searchParam['InsertDate']) && $searchParam['InsertDate']) {
-		$midnight = mktime(0,0,0);
-		$newData =  date('Y-m-d h:i:s A', strtotime($searchParam['InsertDate']));
-		$insertDate = date(strtotime($newData,$midnight));
-        	$query->andWhere(self::ALIAS.'.insert_date = :insert_date')
-        		->setParameter('insert_date', $insertDate);
-	}
+            $midnight = mktime(0, 0, 0);
+            $newData =  date('Y-m-d h:i:s A', strtotime($searchParam['InsertDate']));
+            $insertDate = date(strtotime($newData, $midnight));
+            $query->andWhere(self::ALIAS.'.insert_date = :insert_date')
+                ->setParameter('insert_date', $insertDate);
+        }
 
         return $query;
     }

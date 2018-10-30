@@ -2689,9 +2689,9 @@ class User implements UserInterface, \Serializable
      */
     public function setIsUserTypeChanged($is_user_type_changed)
     {
-      $this->is_user_type_changed = $is_user_type_changed;
+        $this->is_user_type_changed = $is_user_type_changed;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -2701,7 +2701,7 @@ class User implements UserInterface, \Serializable
      */
     public function getIsUserTypeChanged()
     {
-      return $this->is_user_type_changed;
+        return $this->is_user_type_changed;
     }
 
 
@@ -2712,7 +2712,7 @@ class User implements UserInterface, \Serializable
      */
     public function setUserTypeChangedAtValue()
     {
-      $this->user_type_changed_at = time();
+        $this->user_type_changed_at = time();
     }
 
 
@@ -2724,9 +2724,9 @@ class User implements UserInterface, \Serializable
      */
     public function setUserTypeChangedAt($userTypeChangedAt)
     {
-      $this->user_type_changed_at = $userTypeChangedAt;
+        $this->user_type_changed_at = $userTypeChangedAt;
 
-      return $this;
+        return $this;
     }
 
     /**
@@ -2736,7 +2736,7 @@ class User implements UserInterface, \Serializable
      */
     public function getUserTypeChangedAt()
     {
-      return $this->user_type_changed_at;
+        return $this->user_type_changed_at;
     }
 
     /**
@@ -2832,12 +2832,12 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Set via Paa Lite 
+     * Set via Paa Lite
      *
      * @param string $via_Paa_Lite
      * @return User
      */
-    public function setViaPaaLite ($via_Paa_Lite)
+    public function setViaPaaLite($via_Paa_Lite)
     {
         $this->via_Paa_Lite = $via_Paa_Lite;
 
@@ -2845,7 +2845,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Get via Paa Lite 
+     * Get via Paa Lite
      *
      * @return string
      */

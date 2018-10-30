@@ -36,7 +36,7 @@ class AdFeedClickReportSqlWalker extends SqlWalker
         }
 
         if ($this->getQuery()->getHint('adFeedClickReportRemoveId.ad_feed_site_id') === true) {
-          $sql = str_replace("AND a0_.id IN (?)", "AND a0_.ad_feed_site_id IN (?)", $sql);
+            $sql = str_replace("AND a0_.id IN (?)", "AND a0_.ad_feed_site_id IN (?)", $sql);
         }
         
         return $sql;
@@ -51,23 +51,23 @@ class AdFeedClickReportSqlWalker extends SqlWalker
      */
     public function walkSelectClause($selectClause)
     {
-      $sql = parent::walkSelectClause($selectClause);
-      if ($this->getQuery()->getHint('adFeedClickReportRemoveId.ad_id') === true) {
-        $sql = str_replace("SELECT count(DISTINCT a0_.id) AS sclr0", "SELECT count(DISTINCT a0_.ad_id) AS sclr0", $sql);
-      }
+        $sql = parent::walkSelectClause($selectClause);
+        if ($this->getQuery()->getHint('adFeedClickReportRemoveId.ad_id') === true) {
+            $sql = str_replace("SELECT count(DISTINCT a0_.id) AS sclr0", "SELECT count(DISTINCT a0_.ad_id) AS sclr0", $sql);
+        }
 
-      if ($this->getQuery()->getHint('adFeedClickReportRemoveId.ad_id') === true) {
-        $sql = str_replace("SELECT DISTINCT a0_.id AS id0", "SELECT DISTINCT a0_.ad_id AS id0", $sql);
-      }
+        if ($this->getQuery()->getHint('adFeedClickReportRemoveId.ad_id') === true) {
+            $sql = str_replace("SELECT DISTINCT a0_.id AS id0", "SELECT DISTINCT a0_.ad_id AS id0", $sql);
+        }
 
-      if ($this->getQuery()->getHint('adFeedClickReportRemoveId.ad_feed_site_id') === true) {
-        $sql = str_replace("SELECT count(DISTINCT a0_.id) AS sclr0", "SELECT count(DISTINCT a0_.ad_feed_site_id) AS sclr0", $sql);
-      }
+        if ($this->getQuery()->getHint('adFeedClickReportRemoveId.ad_feed_site_id') === true) {
+            $sql = str_replace("SELECT count(DISTINCT a0_.id) AS sclr0", "SELECT count(DISTINCT a0_.ad_feed_site_id) AS sclr0", $sql);
+        }
       
-      if ($this->getQuery()->getHint('adFeedClickReportRemoveId.ad_feed_site_id') === true) {
-        $sql = str_replace("SELECT DISTINCT a0_.id AS id0", "SELECT DISTINCT a0_.ad_feed_site_id AS id0", $sql);
-      }
+        if ($this->getQuery()->getHint('adFeedClickReportRemoveId.ad_feed_site_id') === true) {
+            $sql = str_replace("SELECT DISTINCT a0_.id AS id0", "SELECT DISTINCT a0_.ad_feed_site_id AS id0", $sql);
+        }
       
-      return $sql;
+        return $sql;
     }
 }

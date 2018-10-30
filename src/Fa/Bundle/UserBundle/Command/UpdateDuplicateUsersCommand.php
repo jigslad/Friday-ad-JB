@@ -29,7 +29,6 @@ use Fa\Bundle\UserBundle\Entity\User;
 use Fa\Bundle\UserBundle\Encoder\Pbkdf2PasswordEncoder;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 
-
 /**
  * This command is used to update dimensionads.
  *
@@ -77,7 +76,6 @@ EOF
         } else {
             $this->insertTasminUser($input, $output);
         }
-
     }
 
     /**
@@ -98,10 +96,11 @@ EOF
         $category = array();
         $row = $reader->getRow();
 
-        if ($offset > 0)
+        if ($offset > 0) {
             $reader->advanceTo($offset-1);
-        else
+        } else {
             $reader->advanceTo(1);
+        }
 
         while (($row = $reader->getRow()) && $reader->getLineNumber() != $offset + $batchSize) {
             if (isset($row['EMAIL']) && $row['EMAIL']) {
@@ -142,8 +141,9 @@ EOF
                         $keep_user = $this->em->getRepository('FaUserBundle:User')->find($keep_id);
                     }
 
-                    if ($keep_user)
+                    if ($keep_user) {
                         echo 'Keeped user account'.$keep_user->getId().'##'.'###'.$keep_user->getEmail()."\n";
+                    }
 
                     if ($keep_user) {
                         $this->em->detach($keep_user);
@@ -173,8 +173,9 @@ EOF
                         $this->em->detach($remove_user);
                     }
 
-                    if ($user)
+                    if ($user) {
                         $this->em->detach($user);
+                    }
 
                     $this->em->clear();
 
@@ -184,8 +185,8 @@ EOF
                     $errors = $this->getContainer()->get('validator')->validateValue($email, $emailConstraint);
                     */
                     //$users = $this->em->getRepository('FaUserBundle:User')->findBy(array('email' => $email));
-                  }
-              }
+                }
+            }
         }
 
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);

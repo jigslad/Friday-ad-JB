@@ -56,7 +56,8 @@ Actions:
 Command:
  - php app/console fa:generate:new-job-categories-mapping
 EOF
-        );;
+        );
+        ;
     }
 
     /**
@@ -130,7 +131,7 @@ EOF
                 if (isset($oldChildObj['id']) && isset($newChildObj['id']) && $oldChildObj['id'] && $newChildObj['id'] && $oldChildObj['id']  != $newChildObj['id']) {
                     echo $oldChildObj['id']."=>".$newChildObj['id']."\n";
                     $writer->writeRow(array($oldChildObj['id'], $newChildObj['id']));
-                }elseif (!isset($oldChildObj['id']) || !isset($newChildObj['id'])) {
+                } elseif (!isset($oldChildObj['id']) || !isset($newChildObj['id'])) {
                     echo "------".$row['new_child']."\n";
                     echo "old\n";
                     print_R($oldChildObj);
@@ -138,9 +139,7 @@ EOF
                     print_R($newChildObj);
                 }
             }
-
         }
-
     }
 
     /**

@@ -122,7 +122,7 @@ class MessageAttachmentsType extends AbstractType
             $fileMimeType     = $objUploadedFile->getMimeType();
             $fileSize         = $objUploadedFile->getSize();
             $fileOriginalName = str_replace(array('"', "'"), '', $fileOriginalName);
-            $fileExtension    = substr(strrchr($fileOriginalName,'.'),1);
+            $fileExtension    = substr(strrchr($fileOriginalName, '.'), 1);
             $fileName         = $messageId.'_'.$hash.'.'.$fileExtension;
             $tmpFilePath      = $webPath.DIRECTORY_SEPARATOR.$attachmentPath;
 

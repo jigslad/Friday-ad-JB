@@ -86,15 +86,15 @@ class ConvertOldUserImagesCommand extends ContainerAwareCommand
                         $user  = $image->getUser();
                         $userSite = $this->em->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $user));
                         if ($image->getOrd() == 0) {
-                                CommonManager::createGroupDirectory($userLogoDir, $user->getId(), 5000);
-                                $imagePath =  $userLogoDir.'/'.CommonManager::getGroupDirNameById($user->getId(), 5000);
-                                copy($path, $imagePath.'/'.basename($image->getOldPath()));
-                                $userImageManager = new UserImageManager($this->getContainer(), $user->getId(), $imagePath, true);
-                                $userImageManager->removeImage();
-                                $userImageManager->saveOriginalJpgImage(basename($image->getOldPath()));
-                                $userImageManager->createThumbnail();
-                                $userSite->setPath('uploads/company/'.CommonManager::getGroupDirNameById($user->getId(), 5000));
-                                $this->em->persist($userSite);
+                            CommonManager::createGroupDirectory($userLogoDir, $user->getId(), 5000);
+                            $imagePath =  $userLogoDir.'/'.CommonManager::getGroupDirNameById($user->getId(), 5000);
+                            copy($path, $imagePath.'/'.basename($image->getOldPath()));
+                            $userImageManager = new UserImageManager($this->getContainer(), $user->getId(), $imagePath, true);
+                            $userImageManager->removeImage();
+                            $userImageManager->saveOriginalJpgImage(basename($image->getOldPath()));
+                            $userImageManager->createThumbnail();
+                            $userSite->setPath('uploads/company/'.CommonManager::getGroupDirNameById($user->getId(), 5000));
+                            $this->em->persist($userSite);
                         } else {
                             $path  = $imageDir.'/'.basename($image->getOldPath());
                             $userSiteImage = $this->em->getRepository('FaUserBundle:UserSiteImage')->find($image->getId());
@@ -130,7 +130,7 @@ class ConvertOldUserImagesCommand extends ContainerAwareCommand
                                         $userSiteImage->setOrd($image->getOrd());
                                         $this->em->persist($userSiteImage);
                                     }
-                                        echo "User site image already converted :".$imagePath.'/'.$userSite->getId().'_'.$hash.'.jpg'."\n";
+                                    echo "User site image already converted :".$imagePath.'/'.$userSite->getId().'_'.$hash.'.jpg'."\n";
                                 }
                             }
                         }
@@ -139,7 +139,6 @@ class ConvertOldUserImagesCommand extends ContainerAwareCommand
                 }
 
                 $last_id = $image->getId();
-
             } else {
                 $done = true;
             }

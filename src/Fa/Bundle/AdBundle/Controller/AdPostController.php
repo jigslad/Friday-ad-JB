@@ -72,9 +72,9 @@ class AdPostController extends ThirdPartyLoginController
      */
     public function firstStepAction(Request $request)
     {
-        $objDraftAd   = NULL;
-        $categoryPath = NULL;
-        $regNo        = NULL;
+        $objDraftAd   = null;
+        $categoryPath = null;
+        $regNo        = null;
 
         $cartURL    = $this->container->getParameter('base_url') . $this->generateUrl('show_cart');
         $refererURL = $request->headers->get('referer');
@@ -84,7 +84,7 @@ class AdPostController extends ThirdPartyLoginController
 
         if (!$this->isAuth()) {
             $this->container->get('session')->remove('paa_skip_login_step');
-        } else if (!$request->get('is_edit') && $refererURL != $cartURL) {
+        } elseif (!$request->get('is_edit') && $refererURL != $cartURL) {
             $objDraftAd = $this->getRepository('FaAdBundle:Ad')->getLastDraftAdByUser($this->getUser()->getId());
         }
 
@@ -95,16 +95,16 @@ class AdPostController extends ThirdPartyLoginController
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                if ($form->get('category_id')->getData()) {  
-                	$firstStepData['category_id'] = $form->get('category_id')->getData();
-					
-                	//check old category and new choosed category are same or not
-                	$getOldFirstStepData = $this->getStepSessionData('first');
-                	//if not same remove the fourth step session data bcz of getting old category fields at fourth step
-                	if(isset($getOldFirstStepData['category_id']) && $getOldFirstStepData['category_id'] != $firstStepData['category_id']) {
-                		$this->container->get('session')->remove('paa_fourth_step_data');
-                	}
-                	
+                if ($form->get('category_id')->getData()) {
+                    $firstStepData['category_id'] = $form->get('category_id')->getData();
+                    
+                    //check old category and new choosed category are same or not
+                    $getOldFirstStepData = $this->getStepSessionData('first');
+                    //if not same remove the fourth step session data bcz of getting old category fields at fourth step
+                    if (isset($getOldFirstStepData['category_id']) && $getOldFirstStepData['category_id'] != $firstStepData['category_id']) {
+                        $this->container->get('session')->remove('paa_fourth_step_data');
+                    }
+                    
                     $category = $this->getRepository('FaEntityBundle:Category')->findOneBy(array('id' => $form->get('category_id')->getData()));
                     if ($category) {
                         $firstStepData['category_id_autocomplete'] = $category->getName();
@@ -328,7 +328,7 @@ class AdPostController extends ThirdPartyLoginController
             // second step data from session if exist either category is same or changed in first step in edit mode
             $secondStepData = $this->getStepSessionData('second');
             if (count($secondStepData)) {
-                // in 2.7v $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName); 
+                // in 2.7v $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName);
                 $formToken = '_csrf/https-'.$formName;
                 $csrfToken      = $this->container->get('session')->get($formToken);
                 //# It is generating new token that's why i'm getting old _csrf token from session
@@ -506,7 +506,7 @@ class AdPostController extends ThirdPartyLoginController
 
         $tempUserId = CommonManager::generateHash();
         if (!$this->container->get('session')->has('tempUserIdAP')) {
-         $this->container->get('session')->set('tempUserIdAP', $tempUserId);
+            $this->container->get('session')->set('tempUserIdAP', $tempUserId);
         }
 
         if ('POST' === $request->getMethod()) {
@@ -597,9 +597,9 @@ class AdPostController extends ThirdPartyLoginController
 
         $userLogoTmpPath = $this->container->get('kernel')->getRootDir().'/../web/uploads/tmp';
         if ($this->container->get('session')->has('tempUserIdAP') && file_exists($userLogoTmpPath.'/'.$this->container->get('session')->get('tempUserIdAP').'.jpg')) {
-         $privateUserLogo  = CommonManager::getUserLogo($this->container, '', $this->container->get('session')->get('tempUserIdAP'), null, null, true, false, null, null);
-         $businessUserLogo = CommonManager::getUserLogo($this->container, '', $this->container->get('session')->get('tempUserIdAP'), null, null, true, true, null, null);
-         $logoUploaded     = 1;
+            $privateUserLogo  = CommonManager::getUserLogo($this->container, '', $this->container->get('session')->get('tempUserIdAP'), null, null, true, false, null, null);
+            $businessUserLogo = CommonManager::getUserLogo($this->container, '', $this->container->get('session')->get('tempUserIdAP'), null, null, true, true, null, null);
+            $logoUploaded     = 1;
         }
 
         $parameters = array(
@@ -629,9 +629,9 @@ class AdPostController extends ThirdPartyLoginController
         if (is_array($response)) {
             $this->container->get('session')->set('paa_user_info', $response);
             return $this->redirect($this->generateUrl('ad_post_third_step_registration'));
-        } else if ($response == 'MISSINGDATA') {
+        } elseif ($response == 'MISSINGDATA') {
             return $this->handleMessage($this->get('translator')->trans('One of field is missing from Facebook (First Name, Last Name, Email).', array(), 'frontend-register'), 'ad_post_third_step', array(), 'error');
-        } else if ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
+        } elseif ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
             return $this->redirectToRoute('ad_post_third_step');
         } else {
             return $response;
@@ -652,9 +652,9 @@ class AdPostController extends ThirdPartyLoginController
         if (is_array($response)) {
             $this->container->get('session')->set('paa_user_info', $response);
             return $this->redirect($this->generateUrl('ad_post_third_step_registration'));
-        } else if ($response == 'MISSINGDATA') {
+        } elseif ($response == 'MISSINGDATA') {
             return $this->handleMessage($this->get('translator')->trans('One of field is missing from Google (First Name, Last Name, Email).', array(), 'frontend-register'), 'ad_post_third_step', array(), 'error');
-        } else if ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
+        } elseif ($response == 'MISSINGTOKEN' || $response == 'MISSINGCODE') {
             return $this->redirectToRoute('ad_post_third_step');
         } else {
             return $response;
@@ -778,7 +778,7 @@ class AdPostController extends ThirdPartyLoginController
                     $isPreview = true;
                 }
                 if (isset($fourthStepData['save'])) {
-                 $isSave = true;
+                    $isSave = true;
                 }
                 unset($fourthStepData['save'], $fourthStepData['preview'], $fourthStepData['_token']);
 
@@ -790,24 +790,23 @@ class AdPostController extends ThirdPartyLoginController
                 $data['ad_status_id'] = EntityRepository::AD_STATUS_DRAFT_ID;
                 $ad = $this->get('fa_ad.manager.ad_post')->saveAd($data, $this->container->get('session')->get('ad_id'), true);
                 //check location is updated or Not
-                if($ad) {
-                	$locationExist = $this->getEntityManager()->getRepository('FaAdBundle:AdLocation')->findLastAdLocationById($ad->getId());
-                	if($locationExist == null && $form->has('location_autocomplete')) {
-                		$form->get('location_autocomplete')->addError(new FormError('Location is invalid.'));                		
-                	} else {
-                		if ($this->container->get('session')->has('paa_edit_url') && !$isSave && !$isPreview) {
-                			return $this->redirect($this->container->get('session')->get('paa_edit_url'));
-                		}
-                		if ($isPreview) {
-                			$this->container->get('session')->set('back_url_from_ad_package_page', $this->generateUrl('show_draft_ad', array('adId' => $ad->getId()), true));
-                			return $this->redirect($this->generateUrl('show_draft_ad', array('adId' => $ad->getId())));
-                		} else {
-                			$this->container->get('session')->set('back_url_from_ad_package_page', $this->generateUrl('ad_post_fourth_step', array('is_edit' => 1), true));
-                			return $this->redirect($this->generateUrl('ad_package_purchase', array('adId' => $ad->getId())));
-                		}
-                	}
+                if ($ad) {
+                    $locationExist = $this->getEntityManager()->getRepository('FaAdBundle:AdLocation')->findLastAdLocationById($ad->getId());
+                    if ($locationExist == null && $form->has('location_autocomplete')) {
+                        $form->get('location_autocomplete')->addError(new FormError('Location is invalid.'));
+                    } else {
+                        if ($this->container->get('session')->has('paa_edit_url') && !$isSave && !$isPreview) {
+                            return $this->redirect($this->container->get('session')->get('paa_edit_url'));
+                        }
+                        if ($isPreview) {
+                            $this->container->get('session')->set('back_url_from_ad_package_page', $this->generateUrl('show_draft_ad', array('adId' => $ad->getId()), true));
+                            return $this->redirect($this->generateUrl('show_draft_ad', array('adId' => $ad->getId())));
+                        } else {
+                            $this->container->get('session')->set('back_url_from_ad_package_page', $this->generateUrl('ad_post_fourth_step', array('is_edit' => 1), true));
+                            return $this->redirect($this->generateUrl('ad_package_purchase', array('adId' => $ad->getId())));
+                        }
+                    }
                 }
-                
             } else {
                 $formErrors    = $formManager->getFormSimpleErrors($form, 'label');
                 $categoryPath  = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($firstStepData['category_id'], false, $this->container);
@@ -822,7 +821,7 @@ class AdPostController extends ThirdPartyLoginController
                     } else {
                         $errorMessages = $fieldName . ': ' . $errorMessage[0];
                     }
-                    if($fieldName=='Location') {
+                    if ($fieldName=='Location') {
                         $errorMessages .=  ' - '.$fourthStepData['location'];
                     }
                 }
@@ -882,23 +881,22 @@ class AdPostController extends ThirdPartyLoginController
                     $form->submit($fourthStepData);
                 }
             } elseif (!empty($this->getStepSessionData('fourth'))) {
-            	$fourthStepData = $this->getStepSessionData('fourth');
-            	
-            	// Remove fourth step data from session
-            	$this->container->get('session')->remove('paa_fourth_step_data');
-            	
-            	if (count($fourthStepData)) {
-            	    $csrfToken      = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
-            		$fourthStepData = $fourthStepData + array('_token' => $csrfToken);
-            		
-            		if (isset($fourthStepData['location_autocomplete']) && $fourthStepData['location_autocomplete']) {
-            			$fourthStepData['location_text'] = $fourthStepData['location_autocomplete'];
-            		}
-            		// Bind fourth step data from session
-            		$form->submit($fourthStepData);
-            		
-            	}
-            }else {            
+                $fourthStepData = $this->getStepSessionData('fourth');
+                
+                // Remove fourth step data from session
+                $this->container->get('session')->remove('paa_fourth_step_data');
+                
+                if (count($fourthStepData)) {
+                    $csrfToken      = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
+                    $fourthStepData = $fourthStepData + array('_token' => $csrfToken);
+                    
+                    if (isset($fourthStepData['location_autocomplete']) && $fourthStepData['location_autocomplete']) {
+                        $fourthStepData['location_text'] = $fourthStepData['location_autocomplete'];
+                    }
+                    // Bind fourth step data from session
+                    $form->submit($fourthStepData);
+                }
+            } else {
                 // Remove fourth step data from session
                 $this->container->get('session')->remove('paa_fourth_step_data');
             }
@@ -934,12 +932,12 @@ class AdPostController extends ThirdPartyLoginController
                 $lowerPrice = $this->getRepository('FaAdBundle:Ad')->getPriceSuggestion($this->container, $categoryId, $title, 1, 1, ($lower - 1));
                 $upperPrice = $this->getRepository('FaAdBundle:Ad')->getPriceSuggestion($this->container, $categoryId, $title, 1, 1, ($upper - 1));
 
-                 $priceSuggestion = array(
+                $priceSuggestion = array(
                      'lowerPrice' => $lowerPrice,
                      'upperPrice' => $upperPrice,
                  );
 
-                    $parameters = $parameters + $priceSuggestion;
+                $parameters = $parameters + $priceSuggestion;
             }
 
             return $this->render('FaAdBundle:AdPost:ajaxPriceSuggestion.html.twig', $parameters);
@@ -990,7 +988,7 @@ class AdPostController extends ThirdPartyLoginController
         
         // getName() symfony form function is removed After symfony 3, so to handle dynamic forms we need create array
         $formClassArray = [
-            'fa_paa_second_step_for_sale' => AdPostSecondStepForSaleType::class, 
+            'fa_paa_second_step_for_sale' => AdPostSecondStepForSaleType::class,
             'fa_paa_fourth_step_for_sale' => AdPostFourthStepForSaleType::class,
             'fa_paa_second_step_motors' => AdPostSecondStepMotorsType::class,
             'fa_paa_fourth_step_motors' => AdPostFourthStepMotorsType::class,
@@ -1357,46 +1355,46 @@ class AdPostController extends ThirdPartyLoginController
 
     public function moveUserLogo($user)
     {
-     $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
-     $orgImageName = $this->container->get('session')->get('tempUserIdAP');
-     $isCompany    = false;
-     $imageObj     = null;
-     $userId       = $user->getId();
+        $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
+        $orgImageName = $this->container->get('session')->get('tempUserIdAP');
+        $isCompany    = false;
+        $imageObj     = null;
+        $userId       = $user->getId();
 
-     $userRoleName = $this->getRepository('FaUserBundle:User')->getUserRole($userId, $this->container);
+        $userRoleName = $this->getRepository('FaUserBundle:User')->getUserRole($userId, $this->container);
 
-     if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER) {
-      $isCompany = true;
-     }
+        if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER) {
+            $isCompany = true;
+        }
 
-     if ($isCompany) {
-      $imagePath = $this->container->getParameter('fa.company.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
-      $imageObj  = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $userId));
-      CommonManager::createGroupDirectory($webPath.DIRECTORY_SEPARATOR.$this->container->getParameter('fa.company.image.dir'), $userId, 5000);
-     } else {
-      $imagePath = $this->container->getParameter('fa.user.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
-      $imageObj  = $user;
-      CommonManager::createGroupDirectory($webPath.DIRECTORY_SEPARATOR.$this->container->getParameter('fa.user.image.dir'), $userId, 5000);
-     }
+        if ($isCompany) {
+            $imagePath = $this->container->getParameter('fa.company.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
+            $imageObj  = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $userId));
+            CommonManager::createGroupDirectory($webPath.DIRECTORY_SEPARATOR.$this->container->getParameter('fa.company.image.dir'), $userId, 5000);
+        } else {
+            $imagePath = $this->container->getParameter('fa.user.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
+            $imageObj  = $user;
+            CommonManager::createGroupDirectory($webPath.DIRECTORY_SEPARATOR.$this->container->getParameter('fa.user.image.dir'), $userId, 5000);
+        }
 
-     // Check if user site entry not found then create first
-     if (!$imageObj && $isCompany) {
-      $imageObj = new UserSite();
-      $imageObj->setUser($user);
-     }
+        // Check if user site entry not found then create first
+        if (!$imageObj && $isCompany) {
+            $imageObj = new UserSite();
+            $imageObj->setUser($user);
+        }
 
-     if ($isCompany) {
-      $imageObj->setPath($imagePath);
-     } else {
-      $imageObj->setImage($imagePath);
-     }
+        if ($isCompany) {
+            $imageObj->setPath($imagePath);
+        } else {
+            $imageObj->setImage($imagePath);
+        }
 
-     rename($webPath.'/uploads/tmp/'.$orgImageName.'.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'.jpg');
-     rename($webPath.'/uploads/tmp/'.$orgImageName.'_org.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg');
-     rename($webPath.'/uploads/tmp/'.$orgImageName.'_original.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg');
+        rename($webPath.'/uploads/tmp/'.$orgImageName.'.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'.jpg');
+        rename($webPath.'/uploads/tmp/'.$orgImageName.'_org.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg');
+        rename($webPath.'/uploads/tmp/'.$orgImageName.'_original.jpg', $webPath.DIRECTORY_SEPARATOR.$imagePath.DIRECTORY_SEPARATOR.$userId.'_original.jpg');
 
-     $userImageManager = new UserImageManager($this->container, $userId, $imagePath, $isCompany);
-     $userImageManager->createThumbnail();
+        $userImageManager = new UserImageManager($this->container, $userId, $imagePath, $isCompany);
+        $userImageManager->createThumbnail();
     }
 
     /**
@@ -1422,245 +1420,245 @@ class AdPostController extends ThirdPartyLoginController
     public function setStepSessionDataAction($adId)
     {
         $objAd     = $this->getRepository('FaAdBundle:Ad')->find($adId);
-        $className = NULL;
+        $className = null;
 
         if ($objAd) {
             if ($objAd->getCategory()) {
-             $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($objAd->getCategory()->getId());
+                $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($objAd->getCategory()->getId());
 
-             // Set first step data into session
-             $firstStepData                             = array();
-             $firstStepData['category_id']              = $objAd->getCategory()->getId();
-             $firstStepData['category_id_autocomplete'] = $objAd->getCategory()->getName();
-             $this->container->get('session')->set('ad_id', $objAd->getId());
-             $this->setStepSessionData($firstStepData, 'first');
+                // Set first step data into session
+                $firstStepData                             = array();
+                $firstStepData['category_id']              = $objAd->getCategory()->getId();
+                $firstStepData['category_id_autocomplete'] = $objAd->getCategory()->getName();
+                $this->container->get('session')->set('ad_id', $objAd->getId());
+                $this->setStepSessionData($firstStepData, 'first');
 
-             // Set fourth step data into session
-             $className             = NULL;
-             $secondStepFieldsArray = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($objAd->getCategory()->getId(), $this->container, 2);
-             $motorsRegNoFields = $this->getMotorRegNoFields();
-             if ($secondStepFieldsArray && count($secondStepFieldsArray)) {
-                 foreach ($secondStepFieldsArray as $key => $valueArray) {
-                     if ($valueArray['status'] == TRUE) {
-                         $fieldName            = $valueArray['paa_field']['field'];
-                         $fieldType            = $valueArray['paa_field']['field_type'];
-                         $fieldLabel           = $valueArray['paa_field']['label'];
-                         $fieldNameInCamelCase = str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName)));
-                         $fieldGetFunction     = 'get'.$fieldNameInCamelCase;
+                // Set fourth step data into session
+                $className             = null;
+                $secondStepFieldsArray = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($objAd->getCategory()->getId(), $this->container, 2);
+                $motorsRegNoFields = $this->getMotorRegNoFields();
+                if ($secondStepFieldsArray && count($secondStepFieldsArray)) {
+                    foreach ($secondStepFieldsArray as $key => $valueArray) {
+                        if ($valueArray['status'] == true) {
+                            $fieldName            = $valueArray['paa_field']['field'];
+                            $fieldType            = $valueArray['paa_field']['field_type'];
+                            $fieldLabel           = $valueArray['paa_field']['label'];
+                            $fieldNameInCamelCase = str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName)));
+                            $fieldGetFunction     = 'get'.$fieldNameInCamelCase;
 
-                         if ($fieldName == 'ad_type_id') {
-                          $secondStepData[$fieldName] = ($objAd->getType() ? $objAd->getType()->getId() : null);
-                         } else if ($fieldName == 'location') {
-                             $objAdLocation = $this->getRepository('FaAdBundle:AdLocation')->findLocationByAdId($adId);
-                                 if ($objAdLocation) {
-                                     $objAdLocation = $objAdLocation[0];
-                                     $secondStepData['location_lat_lng'] = $objAdLocation->getLatitude().', '.$objAdLocation->getLongitude();
-                                     if ($objAdLocation->getPostcode()) {
-                                         $secondStepData['location']              = $objAdLocation->getPostcode();
-                                         $secondStepData['location_autocomplete'] = $objAdLocation->getPostcode();
-                                     } else {
-                                         $locationStr = $objAdLocation->getLocationTown()->getName() . ', ' . $objAdLocation->getLocationDomicile()->getName();
-                                         $secondStepData['location']              = $objAdLocation->getLocationTown()->getId();
-                                         $secondStepData['location_autocomplete'] = $locationStr;
-                                     }
-                                 }
-                         } else if ($fieldName == 'delivery_method_option_id') {
-                             $secondStepData[$fieldName] = $objAd->$fieldGetFunction();
-                             if ($objAd->getPostagePrice()) {
-                                 $secondStepData['postage_price'] = $objAd->getPostagePrice();
-                             }
-                         }  else if ($fieldName == 'payment_method_id') {
-                             $secondStepData[$fieldName] = $objAd->$fieldGetFunction();
-                             if ($objAd->getUser()->getPaypalEmail()) {
-                                 $secondStepData['paypal_email'] = $objAd->getUser()->getPaypalEmail();
-                             }
-                             if ($objAd->getUser()->getPaypalFirstName()) {
-                              $secondStepData['paypal_first_name'] = $objAd->getUser()->getPaypalFirstName();
-                             }
-                             if ($objAd->getUser()->getPaypalLastName()) {
-                              $secondStepData['paypal_last_name'] = $objAd->getUser()->getPaypalLastName();
-                             }
-                         } else {
-                             if (method_exists($objAd, $fieldGetFunction) === true) {
-                                 $secondStepData[$fieldName] = $objAd->$fieldGetFunction();
-                             } else {
-                                   if ($className == NULL) {
-                                       $className               = CommonManager::getCategoryClassNameById($rootCategoryId, true);
-                                       $objAdCategoryRepository = $this->getRepository('FaAdBundle:Ad'.$className);
-                                       $objAdCategory           = null;
-                                       $objAdCategory           = $objAdCategoryRepository->findOneBy(array('ad' => $adId));
-                                       $metaData                = ($objAdCategory->getMetaData() ? unserialize($objAdCategory->getMetaData()) : null);
-                                   }
+                            if ($fieldName == 'ad_type_id') {
+                                $secondStepData[$fieldName] = ($objAd->getType() ? $objAd->getType()->getId() : null);
+                            } elseif ($fieldName == 'location') {
+                                $objAdLocation = $this->getRepository('FaAdBundle:AdLocation')->findLocationByAdId($adId);
+                                if ($objAdLocation) {
+                                    $objAdLocation = $objAdLocation[0];
+                                    $secondStepData['location_lat_lng'] = $objAdLocation->getLatitude().', '.$objAdLocation->getLongitude();
+                                    if ($objAdLocation->getPostcode()) {
+                                        $secondStepData['location']              = $objAdLocation->getPostcode();
+                                        $secondStepData['location_autocomplete'] = $objAdLocation->getPostcode();
+                                    } else {
+                                        $locationStr = $objAdLocation->getLocationTown()->getName() . ', ' . $objAdLocation->getLocationDomicile()->getName();
+                                        $secondStepData['location']              = $objAdLocation->getLocationTown()->getId();
+                                        $secondStepData['location_autocomplete'] = $locationStr;
+                                    }
+                                }
+                            } elseif ($fieldName == 'delivery_method_option_id') {
+                                $secondStepData[$fieldName] = $objAd->$fieldGetFunction();
+                                if ($objAd->getPostagePrice()) {
+                                    $secondStepData['postage_price'] = $objAd->getPostagePrice();
+                                }
+                            } elseif ($fieldName == 'payment_method_id') {
+                                $secondStepData[$fieldName] = $objAd->$fieldGetFunction();
+                                if ($objAd->getUser()->getPaypalEmail()) {
+                                    $secondStepData['paypal_email'] = $objAd->getUser()->getPaypalEmail();
+                                }
+                                if ($objAd->getUser()->getPaypalFirstName()) {
+                                    $secondStepData['paypal_first_name'] = $objAd->getUser()->getPaypalFirstName();
+                                }
+                                if ($objAd->getUser()->getPaypalLastName()) {
+                                    $secondStepData['paypal_last_name'] = $objAd->getUser()->getPaypalLastName();
+                                }
+                            } else {
+                                if (method_exists($objAd, $fieldGetFunction) === true) {
+                                    $secondStepData[$fieldName] = $objAd->$fieldGetFunction();
+                                } else {
+                                    if ($className == null) {
+                                        $className               = CommonManager::getCategoryClassNameById($rootCategoryId, true);
+                                        $objAdCategoryRepository = $this->getRepository('FaAdBundle:Ad'.$className);
+                                        $objAdCategory           = null;
+                                        $objAdCategory           = $objAdCategoryRepository->findOneBy(array('ad' => $adId));
+                                        $metaData                = ($objAdCategory->getMetaData() ? unserialize($objAdCategory->getMetaData()) : null);
+                                    }
 
-                                   if ($fieldType == 'text_autosuggest') {
-                                       $fieldValue = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, true);
-                                       if ($fieldValue != NULL) {
-                                           $secondStepData[$fieldName.'_autocomplete'] = $fieldValue;
-                                           $secondStepData[$fieldName] = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
-                                           $categoryDimensionId = $this->getEntityManager()->getRepository('FaEntityBundle:CategoryDimension')->getDimensionIdByNameAndCategoryHierarchy($firstStepData['category_id'], $fieldLabel, $this->container);
-                                           $secondStepData[$fieldName.'_dimension_id'] = $categoryDimensionId;
+                                    if ($fieldType == 'text_autosuggest') {
+                                        $fieldValue = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, true);
+                                        if ($fieldValue != null) {
+                                            $secondStepData[$fieldName.'_autocomplete'] = $fieldValue;
+                                            $secondStepData[$fieldName] = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
+                                            $categoryDimensionId = $this->getEntityManager()->getRepository('FaEntityBundle:CategoryDimension')->getDimensionIdByNameAndCategoryHierarchy($firstStepData['category_id'], $fieldLabel, $this->container);
+                                            $secondStepData[$fieldName.'_dimension_id'] = $categoryDimensionId;
 
-                                           if (is_array($secondStepData[$fieldName]) && count($secondStepData[$fieldName])) {
-                                               $secondStepData[$fieldName] = $secondStepData[$fieldName][0];
-                                           }
-                                       }
-                                   } else {
-                                       $fieldValue = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
-                                       if ($fieldValue != NULL) {
-                                           $secondStepData[$fieldName] = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
-                                       }
-                                   }
+                                            if (is_array($secondStepData[$fieldName]) && count($secondStepData[$fieldName])) {
+                                                $secondStepData[$fieldName] = $secondStepData[$fieldName][0];
+                                            }
+                                        }
+                                    } else {
+                                        $fieldValue = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
+                                        if ($fieldValue != null) {
+                                            $secondStepData[$fieldName] = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
+                                        }
+                                    }
 
-                                   if ($valueArray['paa_field']['field_type'] == 'choice_single') {
-                                       $dataArray = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
-                                       if ($dataArray && count($dataArray)) {
-                                           $dataStr = $secondStepData[$fieldName] = implode(',', $dataArray);
-                                           $secondStepData[$fieldName] = $dataStr;
-                                       }
-                                   }
-                               }
-                         }
+                                    if ($valueArray['paa_field']['field_type'] == 'choice_single') {
+                                        $dataArray = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
+                                        if ($dataArray && count($dataArray)) {
+                                            $dataStr = $secondStepData[$fieldName] = implode(',', $dataArray);
+                                            $secondStepData[$fieldName] = $dataStr;
+                                        }
+                                    }
+                                }
+                            }
 
-                         if ($fieldName == 'location' || $fieldType == 'text_autosuggest') {
-                             $secondStepData['second_step_ordered_fields'][] = $fieldName.'_autocomplete';
-                         } else {
-                             $secondStepData['second_step_ordered_fields'][] = $fieldName;
-                         }
-                     }
-                   }
+                            if ($fieldName == 'location' || $fieldType == 'text_autosuggest') {
+                                $secondStepData['second_step_ordered_fields'][] = $fieldName.'_autocomplete';
+                            } else {
+                                $secondStepData['second_step_ordered_fields'][] = $fieldName;
+                            }
+                        }
+                    }
 
-              $secondStepData['second_step_ordered_fields'] = implode(',', $secondStepData['second_step_ordered_fields']);
-              $this->setStepSessionData($secondStepData, 'second');
-             }
+                    $secondStepData['second_step_ordered_fields'] = implode(',', $secondStepData['second_step_ordered_fields']);
+                    $this->setStepSessionData($secondStepData, 'second');
+                }
 
-             // Set fourth step data into session
-             $className             = NULL;
-             $fourthStepFieldsArray = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($objAd->getCategory()->getId(), $this->container, 4);
-             if ($fourthStepFieldsArray && count($fourthStepFieldsArray)) {
-                 foreach ($fourthStepFieldsArray as $key => $valueArray) {
-                     if ($valueArray['status'] == TRUE) {
-                         $fieldName            = $valueArray['paa_field']['field'];
-                         $fieldType            = $valueArray['paa_field']['field_type'];
-                         $fieldLabel           = $valueArray['paa_field']['label'];
-                         $fieldNameInCamelCase = str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName)));
-                         $fieldGetFunction     = 'get'.$fieldNameInCamelCase;
-                         if ($fieldName == 'location') {
-                             $objAdLocation = $this->getRepository('FaAdBundle:AdLocation')->findLocationByAdId($adId);
-                             if ($objAdLocation) {
-                                 $objAdLocation = $objAdLocation[0];
-                                 $fourthStepData['location_lat_lng'] = $objAdLocation->getLatitude().', '.$objAdLocation->getLongitude();
-                                 if ($objAdLocation->getPostcode()) {
-                                     $fourthStepData['location']              = $objAdLocation->getPostcode();
-                                     $fourthStepData['location_autocomplete'] = $objAdLocation->getPostcode();
-                                 } else {
-                                     $locationStr = $objAdLocation->getLocationTown()->getName() . ', ' . $objAdLocation->getLocationDomicile()->getName();
-                                     $fourthStepData['location']              = $objAdLocation->getLocationTown()->getId();
-                                     $fourthStepData['location_autocomplete'] = $locationStr;
-                                 }
-                             } else {
-                                 $fourthStepData['location_lat_lng'] = '55.37874009999999, -3.4612489999999525';
-                             }
-                         } else if ($fieldName == 'delivery_method_option_id') {
-                             if ($objAd->$fieldGetFunction()) {
-                                 $fourthStepData[$fieldName] = $objAd->$fieldGetFunction();
-                             } else {
-                                 $fourthStepData[$fieldName] = DeliveryMethodOptionRepository::COLLECTION_ONLY_ID;
-                             }
-                             if ($objAd->getPostagePrice()) {
-                                 $fourthStepData['postage_price'] = $objAd->getPostagePrice();
-                             }
-                         }  else if ($fieldName == 'payment_method_id') {
-                             if ($objAd->$fieldGetFunction()) {
-                                 $fourthStepData[$fieldName] = $objAd->$fieldGetFunction();
-                             } else {
-                                 $fourthStepData[$fieldName] = PaymentRepository::PAYMENT_METHOD_CASH_ON_COLLECTION_ID;
-                             }
-                             if ($objAd->getUser()->getPaypalEmail()) {
-                                 $fourthStepData['paypal_email'] = $objAd->getUser()->getPaypalEmail();
-                             }
-                             if ($objAd->getUser()->getPaypalFirstName()) {
-                              $fourthStepData['paypal_first_name'] = $objAd->getUser()->getPaypalFirstName();
-                             }
-                             if ($objAd->getUser()->getPaypalLastName()) {
-                              $fourthStepData['paypal_last_name'] = $objAd->getUser()->getPaypalLastName();
-                             }
-                         } else if ($fieldName == 'qty') {
-                             if ($objAd->$fieldGetFunction()) {
-                                 $fourthStepData[$fieldName] = $objAd->$fieldGetFunction();
-                             } else {
-                                 $fourthStepData[$fieldName] = 1;
-                             }
-                         } else {
-                             if (method_exists($objAd, $fieldGetFunction) === true) {
-                                 $fourthStepData[$fieldName] = $objAd->$fieldGetFunction();
-                             } else {
-                                   if ($className == NULL) {
-                                       $className               = CommonManager::getCategoryClassNameById($rootCategoryId, true);
-                                       $objAdCategoryRepository = $this->getRepository('FaAdBundle:Ad'.$className);
-                                       $objAdCategory           = null;
-                                       $objAdCategory           = $objAdCategoryRepository->findOneBy(array('ad' => $adId));
-                                       $metaData                = ($objAdCategory->getMetaData() ? unserialize($objAdCategory->getMetaData()) : null);
-                                   }
+                // Set fourth step data into session
+                $className             = null;
+                $fourthStepFieldsArray = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($objAd->getCategory()->getId(), $this->container, 4);
+                if ($fourthStepFieldsArray && count($fourthStepFieldsArray)) {
+                    foreach ($fourthStepFieldsArray as $key => $valueArray) {
+                        if ($valueArray['status'] == true) {
+                            $fieldName            = $valueArray['paa_field']['field'];
+                            $fieldType            = $valueArray['paa_field']['field_type'];
+                            $fieldLabel           = $valueArray['paa_field']['label'];
+                            $fieldNameInCamelCase = str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName)));
+                            $fieldGetFunction     = 'get'.$fieldNameInCamelCase;
+                            if ($fieldName == 'location') {
+                                $objAdLocation = $this->getRepository('FaAdBundle:AdLocation')->findLocationByAdId($adId);
+                                if ($objAdLocation) {
+                                    $objAdLocation = $objAdLocation[0];
+                                    $fourthStepData['location_lat_lng'] = $objAdLocation->getLatitude().', '.$objAdLocation->getLongitude();
+                                    if ($objAdLocation->getPostcode()) {
+                                        $fourthStepData['location']              = $objAdLocation->getPostcode();
+                                        $fourthStepData['location_autocomplete'] = $objAdLocation->getPostcode();
+                                    } else {
+                                        $locationStr = $objAdLocation->getLocationTown()->getName() . ', ' . $objAdLocation->getLocationDomicile()->getName();
+                                        $fourthStepData['location']              = $objAdLocation->getLocationTown()->getId();
+                                        $fourthStepData['location_autocomplete'] = $locationStr;
+                                    }
+                                } else {
+                                    $fourthStepData['location_lat_lng'] = '55.37874009999999, -3.4612489999999525';
+                                }
+                            } elseif ($fieldName == 'delivery_method_option_id') {
+                                if ($objAd->$fieldGetFunction()) {
+                                    $fourthStepData[$fieldName] = $objAd->$fieldGetFunction();
+                                } else {
+                                    $fourthStepData[$fieldName] = DeliveryMethodOptionRepository::COLLECTION_ONLY_ID;
+                                }
+                                if ($objAd->getPostagePrice()) {
+                                    $fourthStepData['postage_price'] = $objAd->getPostagePrice();
+                                }
+                            } elseif ($fieldName == 'payment_method_id') {
+                                if ($objAd->$fieldGetFunction()) {
+                                    $fourthStepData[$fieldName] = $objAd->$fieldGetFunction();
+                                } else {
+                                    $fourthStepData[$fieldName] = PaymentRepository::PAYMENT_METHOD_CASH_ON_COLLECTION_ID;
+                                }
+                                if ($objAd->getUser()->getPaypalEmail()) {
+                                    $fourthStepData['paypal_email'] = $objAd->getUser()->getPaypalEmail();
+                                }
+                                if ($objAd->getUser()->getPaypalFirstName()) {
+                                    $fourthStepData['paypal_first_name'] = $objAd->getUser()->getPaypalFirstName();
+                                }
+                                if ($objAd->getUser()->getPaypalLastName()) {
+                                    $fourthStepData['paypal_last_name'] = $objAd->getUser()->getPaypalLastName();
+                                }
+                            } elseif ($fieldName == 'qty') {
+                                if ($objAd->$fieldGetFunction()) {
+                                    $fourthStepData[$fieldName] = $objAd->$fieldGetFunction();
+                                } else {
+                                    $fourthStepData[$fieldName] = 1;
+                                }
+                            } else {
+                                if (method_exists($objAd, $fieldGetFunction) === true) {
+                                    $fourthStepData[$fieldName] = $objAd->$fieldGetFunction();
+                                } else {
+                                    if ($className == null) {
+                                        $className               = CommonManager::getCategoryClassNameById($rootCategoryId, true);
+                                        $objAdCategoryRepository = $this->getRepository('FaAdBundle:Ad'.$className);
+                                        $objAdCategory           = null;
+                                        $objAdCategory           = $objAdCategoryRepository->findOneBy(array('ad' => $adId));
+                                        $metaData                = ($objAdCategory->getMetaData() ? unserialize($objAdCategory->getMetaData()) : null);
+                                    }
 
-                                   if ($fieldType == 'text_autosuggest') {
-                                       $fieldValue = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, true);
-                                       if ($fieldValue != NULL) {
-                                           $fourthStepData[$fieldName.'_autocomplete'] = $fieldValue;
-                                           $fourthStepData[$fieldName] = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
-                                           $categoryDimensionId = $this->getEntityManager()->getRepository('FaEntityBundle:CategoryDimension')->getDimensionIdByNameAndCategoryHierarchy($firstStepData['category_id'], $fieldLabel, $this->container);
-                                           $fourthStepData[$fieldName.'_dimension_id'] = $categoryDimensionId;
-                                           if (is_array($fourthStepData[$fieldName]) && count($fourthStepData[$fieldName])) {
-                                               $fourthStepData[$fieldName] = $fourthStepData[$fieldName][0];
-                                           }
-                                       }
-                                   } else {
-                                       $fieldValue = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
-                                       if ($fieldValue != NULL) {
-                                           $fourthStepData[$fieldName] = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
-                                       }
-                                   }
+                                    if ($fieldType == 'text_autosuggest') {
+                                        $fieldValue = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, true);
+                                        if ($fieldValue != null) {
+                                            $fourthStepData[$fieldName.'_autocomplete'] = $fieldValue;
+                                            $fourthStepData[$fieldName] = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
+                                            $categoryDimensionId = $this->getEntityManager()->getRepository('FaEntityBundle:CategoryDimension')->getDimensionIdByNameAndCategoryHierarchy($firstStepData['category_id'], $fieldLabel, $this->container);
+                                            $fourthStepData[$fieldName.'_dimension_id'] = $categoryDimensionId;
+                                            if (is_array($fourthStepData[$fieldName]) && count($fourthStepData[$fieldName])) {
+                                                $fourthStepData[$fieldName] = $fourthStepData[$fieldName][0];
+                                            }
+                                        }
+                                    } else {
+                                        $fieldValue = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
+                                        if ($fieldValue != null) {
+                                            $fourthStepData[$fieldName] = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
+                                        }
+                                    }
 
-                                   if ($valueArray['paa_field']['field_type'] == 'choice_single') {
-                                       $dataArray = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
-                                       if ($dataArray && count($dataArray)) {
-                                           $dataStr = $fourthStepData[$fieldName] = implode(',', $dataArray);
-                                           $fourthStepData[$fieldName] = $dataStr;
-                                       }
-                                   }
-                               }
-                         }
+                                    if ($valueArray['paa_field']['field_type'] == 'choice_single') {
+                                        $dataArray = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
+                                        if ($dataArray && count($dataArray)) {
+                                            $dataStr = $fourthStepData[$fieldName] = implode(',', $dataArray);
+                                            $fourthStepData[$fieldName] = $dataStr;
+                                        }
+                                    }
+                                }
+                            }
 
-                         if ($fieldName == 'location' || $fieldType == 'text_autosuggest') {
-                             $fourthStepData['fourth_step_ordered_fields'][] = $fieldName.'_autocomplete';
-                         } else {
-                             $fourthStepData['fourth_step_ordered_fields'][] = $fieldName;
-                         }
-                     }
-                   }
-                   //set first step data for motor reg no.
-                   if (in_array('has_reg_no', array_keys($secondStepData))) {
-                       $firstStepDataForMotorsRegNo = array();
-                       $motorsRegNoFields = $this->getMotorRegNoFields();
-                       foreach ($motorsRegNoFields as $motorsRegNoField) {
-                           if (array_key_exists($motorsRegNoField, $secondStepData)) {
-                               $firstStepDataForMotorsRegNo[$motorsRegNoField] = $secondStepData[$motorsRegNoField];
-                           } else {
-                               $firstStepDataForMotorsRegNo[$motorsRegNoField] = null;
-                           }
-                       }
+                            if ($fieldName == 'location' || $fieldType == 'text_autosuggest') {
+                                $fourthStepData['fourth_step_ordered_fields'][] = $fieldName.'_autocomplete';
+                            } else {
+                                $fourthStepData['fourth_step_ordered_fields'][] = $fieldName;
+                            }
+                        }
+                    }
+                    //set first step data for motor reg no.
+                    if (in_array('has_reg_no', array_keys($secondStepData))) {
+                        $firstStepDataForMotorsRegNo = array();
+                        $motorsRegNoFields = $this->getMotorRegNoFields();
+                        foreach ($motorsRegNoFields as $motorsRegNoField) {
+                            if (array_key_exists($motorsRegNoField, $secondStepData)) {
+                                $firstStepDataForMotorsRegNo[$motorsRegNoField] = $secondStepData[$motorsRegNoField];
+                            } else {
+                                $firstStepDataForMotorsRegNo[$motorsRegNoField] = null;
+                            }
+                        }
 
-                       if (count($firstStepDataForMotorsRegNo)) {
-                           $firstStepDataForMotorsRegNo['first_step_ordered_fields'] = implode(',', array_keys($firstStepDataForMotorsRegNo));
-                           $firstStepDataForMotorsRegNo = $firstStepDataForMotorsRegNo + $this->getStepSessionData('first');
-                           $this->setStepSessionData($firstStepDataForMotorsRegNo, 'first');
-                       }
-                   }
-              $fourthStepData['fourth_step_ordered_fields'] = implode(',', $fourthStepData['fourth_step_ordered_fields']);
-              $this->setStepSessionData($fourthStepData, 'fourth');
-             }
+                        if (count($firstStepDataForMotorsRegNo)) {
+                            $firstStepDataForMotorsRegNo['first_step_ordered_fields'] = implode(',', array_keys($firstStepDataForMotorsRegNo));
+                            $firstStepDataForMotorsRegNo = $firstStepDataForMotorsRegNo + $this->getStepSessionData('first');
+                            $this->setStepSessionData($firstStepDataForMotorsRegNo, 'first');
+                        }
+                    }
+                    $fourthStepData['fourth_step_ordered_fields'] = implode(',', $fourthStepData['fourth_step_ordered_fields']);
+                    $this->setStepSessionData($fourthStepData, 'fourth');
+                }
 
-             return $this->redirect($this->generateUrl('ad_post_second_step', array('is_edit' => 1)));
-           }
+                return $this->redirect($this->generateUrl('ad_post_second_step', array('is_edit' => 1)));
+            }
         }
     }
 
@@ -1675,12 +1673,12 @@ class AdPostController extends ThirdPartyLoginController
     {
         if ($request->isXmlHttpRequest()) {
             $response = new Response();
-            $response->headers->setCookie(new Cookie('draft_ad_popup',1, time() + (3600 * 1)));
+            $response->headers->setCookie(new Cookie('draft_ad_popup', 1, time() + (3600 * 1)));
             $response->sendHeaders();
-            return new JsonResponse(array('response' => TRUE));
+            return new JsonResponse(array('response' => true));
         }
 
-        return new JsonResponse(array('response' => FALSE));
+        return new JsonResponse(array('response' => false));
     }
 
     /**
@@ -1719,34 +1717,34 @@ class AdPostController extends ThirdPartyLoginController
      *
      * @return Response A Response object.
      */
-    public function changeAdultCategoryFourthStepAction(Request $request) {
-    	if ($request->isXmlHttpRequest()) {
-    		$response = new Response();
-    		$em       = $this->getEntityManager();
-    		//change Category From Escort Service to Gay Male Escort Category
-    		$firstSessionData = unserialize($this->container->get('session')->get('paa_first_step_data'));
-    		//updating Session Category
-    		if(isset($firstSessionData['category_id']) && !empty($firstSessionData)) {
-    			$categoryObj = $this->getRepository('FaEntityBundle:Category')->getCategorybyName(CategoryRepository::GAY_MALE_ESCORT_NAME);
-    			if(!empty($categoryObj)) {
-    				//update Ad Category in DB
-    				$ad = $this->getRepository('FaAdBundle:Ad')->find($this->container->get('session')->get('ad_id'));
-    				if(!empty($ad)) {
-    					$ad->setCategory($this->getEntityManager()->getReference('FaEntityBundle:Category', $categoryObj['id']));
-    					$em->persist($ad);
-    					$em->flush();
-		    			$firstSessionData['category_id'] = $categoryObj['id'];
-		    			$firstSessionData['category_id_autocomplete'] = $categoryObj['name'];
-		    			//Set first step data into session
-		    			$this->setStepSessionData($firstSessionData, 'first');
-		    			return new JsonResponse(array('response' => TRUE));
-    				}
-    			}
-    		}
-    		
-    	}
-    	
-    	
-    	return new JsonResponse(array('response' => FALSE));
+    public function changeAdultCategoryFourthStepAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $response = new Response();
+            $em       = $this->getEntityManager();
+            //change Category From Escort Service to Gay Male Escort Category
+            $firstSessionData = unserialize($this->container->get('session')->get('paa_first_step_data'));
+            //updating Session Category
+            if (isset($firstSessionData['category_id']) && !empty($firstSessionData)) {
+                $categoryObj = $this->getRepository('FaEntityBundle:Category')->getCategorybyName(CategoryRepository::GAY_MALE_ESCORT_NAME);
+                if (!empty($categoryObj)) {
+                    //update Ad Category in DB
+                    $ad = $this->getRepository('FaAdBundle:Ad')->find($this->container->get('session')->get('ad_id'));
+                    if (!empty($ad)) {
+                        $ad->setCategory($this->getEntityManager()->getReference('FaEntityBundle:Category', $categoryObj['id']));
+                        $em->persist($ad);
+                        $em->flush();
+                        $firstSessionData['category_id'] = $categoryObj['id'];
+                        $firstSessionData['category_id_autocomplete'] = $categoryObj['name'];
+                        //Set first step data into session
+                        $this->setStepSessionData($firstSessionData, 'first');
+                        return new JsonResponse(array('response' => true));
+                    }
+                }
+            }
+        }
+        
+        
+        return new JsonResponse(array('response' => false));
     }
 }

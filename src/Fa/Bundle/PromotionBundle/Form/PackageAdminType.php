@@ -693,7 +693,7 @@ class PackageAdminType extends AbstractType
      */
     public function getPackageColor()
     {
-      return array(
+        return array(
             'a:2:{s:11:"title_class";s:13:"pkg-gray-head";s:9:"btn_class";s:13:"primary-btn-3";}' => 'Grey',
             'a:2:{s:11:"title_class";s:13:"pkg-blue-head";s:9:"btn_class";s:13:"primary-btn-1";}' => 'Blue',
             'a:2:{s:11:"title_class";s:14:"pkg-green-head";s:9:"btn_class";s:13:"primary-btn-2";}' => 'Green');

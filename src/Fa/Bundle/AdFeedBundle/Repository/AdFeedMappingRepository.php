@@ -22,7 +22,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdFeedMappingRepository extends EntityRepository
 {
-
     use \Fa\Bundle\CoreBundle\Search\Search;
 
     const ALIAS = 'afm';

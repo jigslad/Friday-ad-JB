@@ -55,7 +55,7 @@ class DBCache implements CacheInterface
         }
     }
 
-      /**
+    /**
      * gets cached value for current item
      *
      * @param $key

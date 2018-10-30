@@ -64,7 +64,8 @@ class DeleteContact extends DotMailerRequestBuild implements ResourceInterface
     /**
      * Get customer request method.
      */
-    public function getCustomRequest() {
+    public function getCustomRequest()
+    {
         return 'DELETE';
     }
 

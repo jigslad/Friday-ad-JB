@@ -193,12 +193,12 @@ class AdCommunityRepository extends EntityRepository
         if ($eventStartDate == $eventEndDate) {
             if ($eventStartDate == $today) {
                 $eventDateString = 'Today';
-            } else if ($eventStartDate == $tomorrow) {
+            } elseif ($eventStartDate == $tomorrow) {
                 $eventDateString = 'Tomorrow';
             } else {
                 $eventDateString = CommonManager::formatDate(strtotime($eventStartDate), $container, null, null, 'dd MMM');
             }
-        } else if ($eventStartDate != $eventEndDate) {
+        } elseif ($eventStartDate != $eventEndDate) {
             if ($eventStartDate < $today && $eventEndDate >= $today) {
                 $eventDateString = 'Today';
             } else {

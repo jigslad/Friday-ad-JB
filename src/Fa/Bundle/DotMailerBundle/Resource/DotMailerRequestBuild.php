@@ -68,7 +68,8 @@ abstract class DotMailerRequestBuild
     /**
      * Get customer request method.
      */
-    public function getCustomRequest() {
+    public function getCustomRequest()
+    {
         return null;
     }
 
@@ -96,21 +97,24 @@ abstract class DotMailerRequestBuild
     /**
      * Get response of dot mailer.
      */
-    public function getResponse() {
+    public function getResponse()
+    {
         return $this->response;
     }
 
     /**
      * Get response body of dot mailer.
      */
-    public function getResponseBody() {
+    public function getResponseBody()
+    {
         return $this->response_body;
     }
 
     /**
      * Get httpcode from dot mailer.
      */
-    public function getHttpcode() {
+    public function getHttpcode()
+    {
         return $this->httpcode;
     }
 

@@ -96,7 +96,7 @@ class DotmailerFilterRepository extends EntityRepository
      */
     public static function getStatusArray()
     {
-        return array (
+        return array(
             self::STATUS_PENDING  => 'Pending',
             self::STATUS_APPROVED => 'Approved',
             self::STATUS_SENT     => 'In progress',

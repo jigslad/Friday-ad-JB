@@ -89,7 +89,6 @@ class UploadImagesToAwsS3Command extends ContainerAwareCommand
                     }
                 }
                 $last_id = $image->getId();
-
             } else {
                 $done = true;
             }

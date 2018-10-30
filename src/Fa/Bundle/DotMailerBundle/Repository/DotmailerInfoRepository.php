@@ -166,7 +166,7 @@ class DotmailerInfoRepository extends EntityRepository
             if ($touchPoint == DotmailerRepository::TOUCH_POINT_PAA) {
                 $dotMailerInfo->setPaaCategoryId($ad->getCategory()->getId());
                 $dotMailerInfo->setPaaCreatedAt(time());
-            } else if ($touchPoint == DotmailerRepository::TOUCH_POINT_ENQUIRY) {
+            } elseif ($touchPoint == DotmailerRepository::TOUCH_POINT_ENQUIRY) {
                 $dotMailerInfo->setEnquiryCategoryId($ad->getCategory()->getId());
                 $dotMailerInfo->setEnquiryCreatedAt(time());
             }

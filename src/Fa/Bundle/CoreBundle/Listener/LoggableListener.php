@@ -28,7 +28,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @author Mark Ogilvie <mark.ogilvie@specshaper.com>
  */
-class LoggableListener extends GedmoLoggableListener {
+class LoggableListener extends GedmoLoggableListener
+{
 
     // Token storage to get user
     private $tokenStorage;
@@ -121,7 +122,7 @@ class LoggableListener extends GedmoLoggableListener {
                                 }
                             }
 
-                            if ($field == 'role' || ($field == 'password' && (!$oldValue || $newValues) ) || ($value == $oldValue) || (is_array($value) && is_array($oldValue) && md5(serialize($value)) == md5(serialize($oldValue)))) {
+                            if ($field == 'role' || ($field == 'password' && (!$oldValue || $newValues)) || ($value == $oldValue) || (is_array($value) && is_array($oldValue) && md5(serialize($value)) == md5(serialize($oldValue)))) {
                             } else {
                                 if ($field == 'password') {
                                     $oldValue = 'Password Changed';
@@ -156,7 +157,7 @@ class LoggableListener extends GedmoLoggableListener {
                                 } else {
                                     $newValues[$property->getName()]['new'] = (string)$removeValues;
                                 }
-                            } elseif(!count($newValues)) {
+                            } elseif (!count($newValues)) {
                                 $newValues = array();
                             }
                         }
@@ -164,7 +165,7 @@ class LoggableListener extends GedmoLoggableListener {
                         $logEntry->setMd5(md5(serialize($newValues)));
                     }
 
-                    if($action === self::ACTION_UPDATE && 0 === count($newValues)) {
+                    if ($action === self::ACTION_UPDATE && 0 === count($newValues)) {
                         return;
                     }
 

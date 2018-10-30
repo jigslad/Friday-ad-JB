@@ -29,7 +29,6 @@ use Fa\Bundle\PromotionBundle\Repository\UpsellRepository;
  */
 class ApplyOldAdPackageCommand extends ContainerAwareCommand
 {
-
     const DATE = '2015-09-08';
 
     /**
@@ -143,11 +142,10 @@ EOF
                             } else {
                                 $appliedPackage = $pkg['Non Print Package 2'];
                             }
-
                         } elseif ($row['print area'] == 'Y' && $row['print edition'] == '' && preg_match('/Top Ad/', $row['upsell'])) {
-                             $appliedPackage = $pkg['Print Area Package 3'];
+                            $appliedPackage = $pkg['Print Area Package 3'];
                         } elseif ($row['print area'] == 'Y' && $row['print edition'] == '' && $row['upsell'] != '') {
-                                $appliedPackage = $pkg['Print Area Package 1'];
+                            $appliedPackage = $pkg['Print Area Package 1'];
                         } elseif ($row['print area'] == 'Y' && $row['print edition'] != '') {
                             $edition_count =  count(explode(',', $row['print edition']));
                             $datetime1 = new \DateTime(self::DATE);
@@ -170,14 +168,12 @@ EOF
                                 } elseif ($d >= 7) {
                                     $appliedPackage = $pkg['Print Area Package 3'];
                                 }
-
                             } elseif (preg_match('/Top Ad/', $row['upsell'])) {
                                 if ($d <= 7) {
                                     $appliedPackage = $pkg['Print Area Package 3'];
                                 } elseif ($d >= 7) {
                                     $appliedPackage = $pkg['Print Area Package 3'];
                                 }
-
                             } elseif ($row['upsell'] != '') {
                                 if ($d <= 7) {
                                     if ($edition_count == 1) {
@@ -206,14 +202,12 @@ EOF
                                     $value['package'][$packageObj->getId()]['packagePrint'] = array('id' => $packagePrint->getId(), 'price' => 0, 'duration' => $packagePrint->getDuration());
                                     $value = $packageRepository->getPackageInfoForTransaction($packageObj, $ad, $user, $isUserHasPurchasedPackage, $selectedPackagePrintId);
                                     $selectedPackagePrintId = $packagePrint->getId();
-
                                 } else {
                                     echo "print ad for duration -->".$duration."\n";
                                     $packagePrint    = $this->em->getRepository('FaPromotionBundle:PackagePrint')->findOneBy(array('package' => $packageObj->getId()));
                                     $selectedPackagePrintId = $packagePrint->getId();
                                     $value = $packageRepository->getPackageInfoForTransaction($packageObj, $ad, $user, $isUserHasPurchasedPackage, $selectedPackagePrintId);
                                     $value['package'][$packageObj->getId()]['packagePrint'] = array('id' => $packagePrint->getId(), 'price' => 0, 'duration' => $duration);
-
                                 }
                             } else {
                                 $value = $packageRepository->getPackageInfoForTransaction($packageObj, $ad, $user, $isUserHasPurchasedPackage, $selectedPackagePrintId);
@@ -222,13 +216,11 @@ EOF
                             if ($packageObj) {
                                 $this->handlePackage($value['package'], $ad, $d);
                                 echo 'Assigned package '.$packageObj->getPackageText().'>>>'.$packageObj->getTitle().'('.$packageObj->getId().')'.' To ad ID '.$ad->getId()."\n";
-
                             }
 
                             // activate the ad
                             $this->em->getRepository('FaAdBundle:Ad')->activateAd($ad->getId(), true, false, true);
                         }
-
                     }
                 }
             }
@@ -250,7 +242,6 @@ EOF
                     $output->writeln('Error occurred during subtask', true);
                 }
             }
-
         }
     }
 
@@ -306,7 +297,6 @@ EOF
         }
 
         //$this->em->flush();
-
     }
 
     /**

@@ -4,7 +4,7 @@ namespace Fa\Bundle\CoreBundle\Factory;
 
 class ObjectFactory
 {
-    static private $_registry = array();
+    private static $_registry = array();
 
     /**
     * Retrieve a value from registry by a key
@@ -73,7 +73,7 @@ class ObjectFactory
         return self::registry($registryKey);
     }
 
-     /**
+    /**
     * Retrieve model object singleton
     *
     * @param string $modelClass model class name

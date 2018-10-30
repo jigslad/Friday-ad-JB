@@ -63,7 +63,7 @@ class ArchiveAdSearchAdminType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-         $builder
+        $builder
          ->add('archive_ad__id', TextType::class, array('required' => false))
          ->add('archive_ad__email', TextType::class, array('required' => false))
          ->add('search', SubmitType::class);

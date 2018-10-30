@@ -271,7 +271,7 @@ class SeoToolRepository extends EntityRepository
                 'canonical_url' => $seoRule->getCanonicalUrl(),
                 'list_content_title' => $seoRule->getListContentTitle(),
                 'list_content_detail' => $seoRule->getListContentDetail(),
-                'category_id' => ($seoRule->getCategory() ? $seoRule->getCategory()->getId() : NULL),
+                'category_id' => ($seoRule->getCategory() ? $seoRule->getCategory()->getId() : null),
                 'top_link' => $seoRule->getTopLink(),
             );
         }
@@ -333,7 +333,6 @@ class SeoToolRepository extends EntityRepository
                 CommonManager::setCacheVersion($container, $cacheKey, $seoRule);
             } else {
                 CommonManager::setCacheVersion($container, $cacheKey, -1);
-
             }
         }
 
@@ -392,7 +391,6 @@ class SeoToolRepository extends EntityRepository
                 CommonManager::setCacheVersion($container, $cacheKey, $seoRule);
             } else {
                 CommonManager::setCacheVersion($container, $cacheKey, -1);
-
             }
         }
 
@@ -442,7 +440,7 @@ class SeoToolRepository extends EntityRepository
                 }
             }
 
-              $qb = $this->createQueryBuilder(self::ALIAS)
+            $qb = $this->createQueryBuilder(self::ALIAS)
                 ->andWhere(self::ALIAS.'.target_url LIKE :target_url')
                 ->setParameter('target_url', $url.'%')
                 ->setMaxResults(1);
@@ -481,7 +479,7 @@ class SeoToolRepository extends EntityRepository
                 $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
                 if ($cachedValue !== false) {
-                     return $cachedValue;
+                    return $cachedValue;
                 }
             }
 
@@ -511,23 +509,24 @@ class SeoToolRepository extends EntityRepository
      *
      * @return string
      */
-    public function findSeoSourceUrlMotorRegYear( $targetUrl = '', $container = null ) {	
-    	if($targetUrl != '') {
-    		$regYearsList = [];
-    		$qb = $this->createQueryBuilder(self::ALIAS)
-    		->andWhere(self::ALIAS.'.target_url = :target_url')
-    		->setParameter('target_url', $targetUrl)
-    		->setMaxResults(1);
-    		
-    		$customizedSourceUrl = $qb->getQuery()->getOneOrNullResult();
-    		if ($customizedSourceUrl) {
-    			list($key, $regYears) = explode("=", $customizedSourceUrl->getSourceUrl());
-    			if($regYears != '') {
-    				$regYearsList = explode("__", $regYears);
-    			}
-    		}
-    		return $regYearsList;
-    	}
+    public function findSeoSourceUrlMotorRegYear($targetUrl = '', $container = null)
+    {
+        if ($targetUrl != '') {
+            $regYearsList = [];
+            $qb = $this->createQueryBuilder(self::ALIAS)
+            ->andWhere(self::ALIAS.'.target_url = :target_url')
+            ->setParameter('target_url', $targetUrl)
+            ->setMaxResults(1);
+            
+            $customizedSourceUrl = $qb->getQuery()->getOneOrNullResult();
+            if ($customizedSourceUrl) {
+                list($key, $regYears) = explode("=", $customizedSourceUrl->getSourceUrl());
+                if ($regYears != '') {
+                    $regYearsList = explode("__", $regYears);
+                }
+            }
+            return $regYearsList;
+        }
     }
 
     /**
@@ -647,7 +646,7 @@ class SeoToolRepository extends EntityRepository
      */
     protected function addBasicFieldsSearchFilter($keyword = null)
     {
-     $this->queryBuilder->andWhere(sprintf('%s.source_url LIKE \'%%%s%%\' OR %s.target_url LIKE \'%%%s%%\' OR %s.page_title LIKE \'%%%s%%\' OR %s.h1_tag LIKE \'%%%s%%\' OR %s.meta_description LIKE \'%%%s%%\'', $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword));
+        $this->queryBuilder->andWhere(sprintf('%s.source_url LIKE \'%%%s%%\' OR %s.target_url LIKE \'%%%s%%\' OR %s.page_title LIKE \'%%%s%%\' OR %s.h1_tag LIKE \'%%%s%%\' OR %s.meta_description LIKE \'%%%s%%\'', $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword, $this->getRepositoryAlias(), $keyword));
     }
 
     /**
@@ -657,7 +656,7 @@ class SeoToolRepository extends EntityRepository
      */
     protected function addTopLinkFilter($topLink = null)
     {
-     $this->queryBuilder->andWhere($this->getRepositoryAlias().'.top_link = :topLink')
+        $this->queryBuilder->andWhere($this->getRepositoryAlias().'.top_link = :topLink')
      ->setParameter('topLink', $topLink);
     }
 }

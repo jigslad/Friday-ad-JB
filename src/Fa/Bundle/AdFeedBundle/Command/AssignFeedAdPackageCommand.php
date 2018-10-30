@@ -249,7 +249,6 @@ EOF
             }
         } catch (\Exception $e) {
         }
-
     }
 
     /**

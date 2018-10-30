@@ -92,7 +92,6 @@ class AddDomicileChoiceFieldSubscriber implements EventSubscriberInterface
         if ($fieldOptions && count($fieldOptions)) {
             $this->fieldOptions = $fieldOptions;
         }
-
     }
 
     /**

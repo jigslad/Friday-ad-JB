@@ -179,7 +179,7 @@ class DotmailerFilterAdminController extends CrudController implements ResourceA
             if ($request->get('delete_filter_checkbox')) {
                 $idsToDelete = $request->get('delete_filter_checkbox');
                 if ($idsToDelete && is_array($idsToDelete) && count($idsToDelete) > 0) {
-                    foreach ($idsToDelete As $key => $dotmailerId) {
+                    foreach ($idsToDelete as $key => $dotmailerId) {
                         $entity = $this->getRepository($this->getBundleName().':'.$this->getEntityName())->find($dotmailerId);
                         if ($entity) {
                             $entities[] = $entity;
@@ -192,22 +192,22 @@ class DotmailerFilterAdminController extends CrudController implements ResourceA
             $entities[] = $entity;
         }
 
-        foreach ($entities As $key => $entity) {
-           try {
-               if (!$entity) {
-                   throw $this->createNotFoundException($this->get('translator')->trans('Unable to find %bundleAlias%.', array('%bundleAlias%' => $this->getBundleAlias())));
-               }
-           } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
-               return $this->handleException($e, 'error', $this->getRouteName(''));
-           }
+        foreach ($entities as $key => $entity) {
+            try {
+                if (!$entity) {
+                    throw $this->createNotFoundException($this->get('translator')->trans('Unable to find %bundleAlias%.', array('%bundleAlias%' => $this->getBundleAlias())));
+                }
+            } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
+                return $this->handleException($e, 'error', $this->getRouteName(''));
+            }
 
-           try {
-               $deleteManager->delete($entity);
-           } catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException $e) {
-               return parent::handleMessage($this->get('translator')->trans("This record can not be removed from database because it's reference exists in database.", array(), 'error'), ($backUrl ? $backUrl : $this->getRouteName('')), array(), 'error');
-           } catch (\Exception $e) {
-               return parent::handleException($e, 'error', ($backUrl ? $backUrl : $this->getRouteName('')));
-           }
+            try {
+                $deleteManager->delete($entity);
+            } catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException $e) {
+                return parent::handleMessage($this->get('translator')->trans("This record can not be removed from database because it's reference exists in database.", array(), 'error'), ($backUrl ? $backUrl : $this->getRouteName('')), array(), 'error');
+            } catch (\Exception $e) {
+                return parent::handleException($e, 'error', ($backUrl ? $backUrl : $this->getRouteName('')));
+            }
         }
 
         return parent::handleMessage($this->get('translator')->trans('Record has been deleted successfully.', array(), 'success'), ($backUrl ? $backUrl : $this->getRouteName('')));

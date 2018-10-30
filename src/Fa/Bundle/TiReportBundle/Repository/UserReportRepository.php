@@ -169,7 +169,7 @@ class UserReportRepository extends EntityRepository
         if (in_array($sorter['sort_field'], $sortFields) && isset($sorter['sort_field']) && $sorter['sort_field'] && isset($sorter['sort_ord']) && $sorter['sort_ord']) {
             if (in_array($sorter['sort_field'], self::getUserReportSortFields())) {
                 $qb->orderBy(self::ALIAS.'.'.$sorter['sort_field'], $sorter['sort_ord']);
-            } else if (in_array($sorter['sort_field'], UserReportDailyRepository::getUserReportDailySortFields())) {
+            } elseif (in_array($sorter['sort_field'], UserReportDailyRepository::getUserReportDailySortFields())) {
                 $qb->orderBy($sorter['sort_field'].'_sum', $sorter['sort_ord']);
             }
         }
@@ -242,18 +242,18 @@ class UserReportRepository extends EntityRepository
                     $counter = 1;
                     foreach ($categoryPath as $key => $value) {
                         switch ($counter) {
-                        	case 1:
-                        	    $recordArray['category'] = $value;
-                        	    break;
-                        	case 2:
-                        	    $recordArray['class'] = $value;
-                        	    break;
-                        	case 3:
-                        	    $recordArray['subclass'] = $value;
-                        	    break;
-                        	case 4:
-                        	    $recordArray['sub_sub_class'] = $value;
-                        	    break;
+                            case 1:
+                                $recordArray['category'] = $value;
+                                break;
+                            case 2:
+                                $recordArray['class'] = $value;
+                                break;
+                            case 3:
+                                $recordArray['subclass'] = $value;
+                                break;
+                            case 4:
+                                $recordArray['sub_sub_class'] = $value;
+                                break;
                         }
                         $counter++;
                     }
@@ -504,7 +504,7 @@ class UserReportRepository extends EntityRepository
         if (in_array($sorter['sort_field'], $sortFields) && isset($sorter['sort_field']) && $sorter['sort_field'] && isset($sorter['sort_ord']) && $sorter['sort_ord']) {
             if (in_array($sorter['sort_field'], self::getUserReportSortFields())) {
                 $qb->orderBy(self::ALIAS.'.'.$sorter['sort_field'], $sorter['sort_ord']);
-            } else if (in_array($sorter['sort_field'], UserReportDailyRepository::getUserReportDailySortFields())) {
+            } elseif (in_array($sorter['sort_field'], UserReportDailyRepository::getUserReportDailySortFields())) {
                 $qb->orderBy($sorter['sort_field'].'_sum', $sorter['sort_ord']);
             }
         }
@@ -572,7 +572,7 @@ class UserReportRepository extends EntityRepository
         if ($searchParams && !empty($searchParams['rus_source'])) {
             if ($searchParams['rus_source'] == 'netsuite') {
                 $remarkArray = array('migrated_package', 'choose-package-backend');
-            } else if ($searchParams['rus_source'] == 'self-service') {
+            } elseif ($searchParams['rus_source'] == 'self-service') {
                 $remarkArray = array('package-renew-thourgh-recurring', 'choose-package-frontend', 'reg_back', 'my_account_user_upgrade', 'downgraded-to-free-package-on-fail-payment');
             }
 
@@ -589,7 +589,7 @@ class UserReportRepository extends EntityRepository
         if (in_array($sorter['sort_field'], $sortFields) && isset($sorter['sort_field']) && $sorter['sort_field'] && isset($sorter['sort_ord']) && $sorter['sort_ord']) {
             if (in_array($sorter['sort_field'], self::getUserReportSortFields())) {
                 $qb->orderBy(self::ALIAS.'.'.$sorter['sort_field'], $sorter['sort_ord']);
-            } else if (in_array($sorter['sort_field'], UserReportDailyRepository::getUserReportDailySortFields())) {
+            } elseif (in_array($sorter['sort_field'], UserReportDailyRepository::getUserReportDailySortFields())) {
                 $qb->orderBy($sorter['sort_field'].'_sum', $sorter['sort_ord']);
             }
         }
@@ -652,7 +652,7 @@ class UserReportRepository extends EntityRepository
      */
     public function getUserProfileReportQuery($searchParams, $sorter = null)
     {
-         $qb = $this->createQueryBuilder(self::ALIAS)
+        $qb = $this->createQueryBuilder(self::ALIAS)
          ->select(
            self::ALIAS.'.user_id',
            self::ALIAS.'.role_id',
@@ -673,128 +673,129 @@ class UserReportRepository extends EntityRepository
            self::ALIAS.'.path'
            );
 
-         if ($searchParams && !empty($searchParams['rus_from_date'])) {
-             $finalStartDate = CommonManager::getTimeStampFromStartDate($searchParams['rus_from_date']);
-             if (isset($searchParams['rus_to_date']) && $searchParams['rus_to_date'] != '') {
-                 $finalEndDate = CommonManager::getTimeStampFromEndDate($searchParams['rus_to_date']);
-             } else {
-                 $finalEndDate = CommonManager::getTimeStampFromEndDate(date('d/m/Y'));
-             }
+        if ($searchParams && !empty($searchParams['rus_from_date'])) {
+            $finalStartDate = CommonManager::getTimeStampFromStartDate($searchParams['rus_from_date']);
+            if (isset($searchParams['rus_to_date']) && $searchParams['rus_to_date'] != '') {
+                $finalEndDate = CommonManager::getTimeStampFromEndDate($searchParams['rus_to_date']);
+            } else {
+                $finalEndDate = CommonManager::getTimeStampFromEndDate(date('d/m/Y'));
+            }
 
-             if ($searchParams['rus_date_filter_type'] == 'signup_date') {
-                 $qb = $qb->where('('.self::ALIAS.'.signup_date BETWEEN '.$finalStartDate.' AND  '.$finalEndDate.')');
-             } else {
-                 $qb = $qb->where('('.self::ALIAS.'.updated_at BETWEEN '.$finalStartDate.' AND  '.$finalEndDate.')');
-             }
-         }
+            if ($searchParams['rus_date_filter_type'] == 'signup_date') {
+                $qb = $qb->where('('.self::ALIAS.'.signup_date BETWEEN '.$finalStartDate.' AND  '.$finalEndDate.')');
+            } else {
+                $qb = $qb->where('('.self::ALIAS.'.updated_at BETWEEN '.$finalStartDate.' AND  '.$finalEndDate.')');
+            }
+        }
 
-         if ($searchParams && !empty($searchParams['rus_user_type'])) {
-             $qb = $qb->andWhere(self::ALIAS.'.role_id = '.$searchParams['rus_user_type']);
-         } else {
-             $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID);
-             $qb = $qb->andWhere(self::ALIAS.'.role_id IN (:roleIds)');
-             $qb = $qb->setParameter('roleIds', $roleIds);
-         }
+        if ($searchParams && !empty($searchParams['rus_user_type'])) {
+            $qb = $qb->andWhere(self::ALIAS.'.role_id = '.$searchParams['rus_user_type']);
+        } else {
+            $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID);
+            $qb = $qb->andWhere(self::ALIAS.'.role_id IN (:roleIds)');
+            $qb = $qb->setParameter('roleIds', $roleIds);
+        }
 
-         if ($searchParams && !empty($searchParams['rus_email'])) {
-             $qb = $qb->andWhere(self::ALIAS.'.email LIKE :email');
-             $qb = $qb->setParameter('email', $searchParams['rus_email'].'%');
-         }
+        if ($searchParams && !empty($searchParams['rus_email'])) {
+            $qb = $qb->andWhere(self::ALIAS.'.email LIKE :email');
+            $qb = $qb->setParameter('email', $searchParams['rus_email'].'%');
+        }
 
-         $booleanFields    = array('rus_banner_image' => 'banner_path', 'rus_welcome_message' => 'company_welcome_message', 'rus_address' => 'company_address', 'rus_website_link' => 'website_link', 'rus_about' => 'about_us');
-         $searchParamsKeys = array_keys($searchParams);
-         foreach ($booleanFields as $fieldName => $dbFieldName) {
-             if (in_array($fieldName, $searchParamsKeys) && $searchParams[$fieldName] != '') {
-                 if ($searchParams[$fieldName] == '1')
-                     $qb = $qb->andWhere(self::ALIAS.'.'.$dbFieldName.' IS NOT NULL AND '.self::ALIAS.'.'.$dbFieldName.' <> \'\'');
-                 else
-                     $qb = $qb->andWhere(self::ALIAS.'.'.$dbFieldName.' IS NULL OR '.self::ALIAS.'.'.$dbFieldName.' = \'\'');
-             }
-         }
+        $booleanFields    = array('rus_banner_image' => 'banner_path', 'rus_welcome_message' => 'company_welcome_message', 'rus_address' => 'company_address', 'rus_website_link' => 'website_link', 'rus_about' => 'about_us');
+        $searchParamsKeys = array_keys($searchParams);
+        foreach ($booleanFields as $fieldName => $dbFieldName) {
+            if (in_array($fieldName, $searchParamsKeys) && $searchParams[$fieldName] != '') {
+                if ($searchParams[$fieldName] == '1') {
+                    $qb = $qb->andWhere(self::ALIAS.'.'.$dbFieldName.' IS NOT NULL AND '.self::ALIAS.'.'.$dbFieldName.' <> \'\'');
+                } else {
+                    $qb = $qb->andWhere(self::ALIAS.'.'.$dbFieldName.' IS NULL OR '.self::ALIAS.'.'.$dbFieldName.' = \'\'');
+                }
+            }
+        }
 
-         if ($searchParams && $searchParams['rus_profile_image'] != '') {
-             if (!empty($searchParams['rus_user_type'])) {
-                 if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
-                     if ($searchParams['rus_profile_image'] == '1') {
-                         $qb = $qb->andWhere(self::ALIAS.'.path IS NOT NULL AND '.self::ALIAS.'.path <> \'\'');
-                     } else {
-                         $qb = $qb->andWhere(self::ALIAS.'.path IS NULL OR '.self::ALIAS.'.path = \'\'');
-                     }
-                 } else {
-                     if ($searchParams['rus_profile_image'] == '1') {
-                         $qb = $qb->andWhere(self::ALIAS.'.image IS NOT NULL AND '.self::ALIAS.'.image <> \'\'');
-                     } else {
-                         $qb = $qb->andWhere(self::ALIAS.'.image IS NULL OR '.self::ALIAS.'.image = \'\'');
-                     }
-                 }
-             } else {
-                 if ($searchParams['rus_profile_image'] == '1') {
-                     $qb = $qb->andWhere('('.self::ALIAS.'.path IS NOT NULL AND '.self::ALIAS.'.path <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') OR ('.self::ALIAS.'.image IS NOT NULL AND '.self::ALIAS.'.image <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
-                 } else {
-                     $qb = $qb->andWhere('('.self::ALIAS.'.path IS NULL OR '.self::ALIAS.'.path = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') AND ('.self::ALIAS.'.image IS NULL OR '.self::ALIAS.'.image = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
-                 }
-             }
-         }
+        if ($searchParams && $searchParams['rus_profile_image'] != '') {
+            if (!empty($searchParams['rus_user_type'])) {
+                if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+                    if ($searchParams['rus_profile_image'] == '1') {
+                        $qb = $qb->andWhere(self::ALIAS.'.path IS NOT NULL AND '.self::ALIAS.'.path <> \'\'');
+                    } else {
+                        $qb = $qb->andWhere(self::ALIAS.'.path IS NULL OR '.self::ALIAS.'.path = \'\'');
+                    }
+                } else {
+                    if ($searchParams['rus_profile_image'] == '1') {
+                        $qb = $qb->andWhere(self::ALIAS.'.image IS NOT NULL AND '.self::ALIAS.'.image <> \'\'');
+                    } else {
+                        $qb = $qb->andWhere(self::ALIAS.'.image IS NULL OR '.self::ALIAS.'.image = \'\'');
+                    }
+                }
+            } else {
+                if ($searchParams['rus_profile_image'] == '1') {
+                    $qb = $qb->andWhere('('.self::ALIAS.'.path IS NOT NULL AND '.self::ALIAS.'.path <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') OR ('.self::ALIAS.'.image IS NOT NULL AND '.self::ALIAS.'.image <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                } else {
+                    $qb = $qb->andWhere('('.self::ALIAS.'.path IS NULL OR '.self::ALIAS.'.path = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') AND ('.self::ALIAS.'.image IS NULL OR '.self::ALIAS.'.image = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                }
+            }
+        }
 
-         if ($searchParams && $searchParams['rus_phone'] != '') {
-             if (!empty($searchParams['rus_user_type'])) {
-                 if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
-                     if ($searchParams['rus_phone'] == '1') {
-                         $qb = $qb->andWhere('('.self::ALIAS.'.phone1 IS NOT NULL AND '.self::ALIAS.'.phone1 <> \'\') OR ('.self::ALIAS.'.phone2 IS NOT NULL AND '.self::ALIAS.'.phone2 <> \'\')');
-                     } else {
-                         $qb = $qb->andWhere('('.self::ALIAS.'.phone1 IS NULL OR '.self::ALIAS.'.phone1 = \'\') AND ('.self::ALIAS.'.phone2 IS NULL OR '.self::ALIAS.'.phone2 = \'\')');
-                     }
-                 } else {
-                     if ($searchParams['rus_phone'] == '1') {
-                         $qb = $qb->andWhere(self::ALIAS.'.phone IS NOT NULL AND '.self::ALIAS.'.phone <> \'\'');
-                     } else {
-                         $qb = $qb->andWhere(self::ALIAS.'.phone IS NULL OR '.self::ALIAS.'.phone = \'\'');
-                     }
-                 }
-             } else {
-                 if ($searchParams['rus_phone'] == '1') {
-                     $qb = $qb->andWhere('(('.self::ALIAS.'.phone1 IS NOT NULL AND '.self::ALIAS.'.phone1 <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') OR ('.self::ALIAS.'.phone2 IS NOT NULL AND '.self::ALIAS.'.phone2 <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.')) OR ('.self::ALIAS.'.phone IS NOT NULL AND '.self::ALIAS.'.phone <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
-                 } else {
-                     $qb = $qb->andWhere('(('.self::ALIAS.'.phone1 IS NULL OR '.self::ALIAS.'.phone1 = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') AND ('.self::ALIAS.'.phone2 IS NULL OR '.self::ALIAS.'.phone2 = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.')) AND ('.self::ALIAS.'.phone IS NULL OR '.self::ALIAS.'.phone = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
-                 }
-             }
-         }
+        if ($searchParams && $searchParams['rus_phone'] != '') {
+            if (!empty($searchParams['rus_user_type'])) {
+                if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+                    if ($searchParams['rus_phone'] == '1') {
+                        $qb = $qb->andWhere('('.self::ALIAS.'.phone1 IS NOT NULL AND '.self::ALIAS.'.phone1 <> \'\') OR ('.self::ALIAS.'.phone2 IS NOT NULL AND '.self::ALIAS.'.phone2 <> \'\')');
+                    } else {
+                        $qb = $qb->andWhere('('.self::ALIAS.'.phone1 IS NULL OR '.self::ALIAS.'.phone1 = \'\') AND ('.self::ALIAS.'.phone2 IS NULL OR '.self::ALIAS.'.phone2 = \'\')');
+                    }
+                } else {
+                    if ($searchParams['rus_phone'] == '1') {
+                        $qb = $qb->andWhere(self::ALIAS.'.phone IS NOT NULL AND '.self::ALIAS.'.phone <> \'\'');
+                    } else {
+                        $qb = $qb->andWhere(self::ALIAS.'.phone IS NULL OR '.self::ALIAS.'.phone = \'\'');
+                    }
+                }
+            } else {
+                if ($searchParams['rus_phone'] == '1') {
+                    $qb = $qb->andWhere('(('.self::ALIAS.'.phone1 IS NOT NULL AND '.self::ALIAS.'.phone1 <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') OR ('.self::ALIAS.'.phone2 IS NOT NULL AND '.self::ALIAS.'.phone2 <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.')) OR ('.self::ALIAS.'.phone IS NOT NULL AND '.self::ALIAS.'.phone <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                } else {
+                    $qb = $qb->andWhere('(('.self::ALIAS.'.phone1 IS NULL OR '.self::ALIAS.'.phone1 = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') AND ('.self::ALIAS.'.phone2 IS NULL OR '.self::ALIAS.'.phone2 = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.')) AND ('.self::ALIAS.'.phone IS NULL OR '.self::ALIAS.'.phone = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                }
+            }
+        }
 
-         if ($searchParams && $searchParams['rus_about'] != '') {
-             if (!empty($searchParams['rus_user_type'])) {
-                 if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
-                     if ($searchParams['rus_about'] == '1') {
-                         $qb = $qb->andWhere(self::ALIAS.'.about_us IS NOT NULL AND '.self::ALIAS.'.about_us <> \'\'');
-                     } else {
-                         $qb = $qb->andWhere(self::ALIAS.'.about_us IS NULL OR '.self::ALIAS.'.about_us = \'\'');
-                     }
-                 } else {
-                     if ($searchParams['rus_about'] == '1') {
-                         $qb = $qb->andWhere(self::ALIAS.'.about_you IS NOT NULL AND '.self::ALIAS.'.about_you <> \'\'');
-                     } else {
-                         $qb = $qb->andWhere(self::ALIAS.'.about_you IS NULL OR '.self::ALIAS.'.about_you = \'\'');
-                     }
-                 }
-             } else {
-                 if ($searchParams['rus_about'] == '1') {
-                     $qb = $qb->andWhere('('.self::ALIAS.'.about_us IS NOT NULL AND '.self::ALIAS.'.about_us <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') OR ('.self::ALIAS.'.about_you IS NOT NULL AND '.self::ALIAS.'.about_you <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
-                 } else {
-                     $qb = $qb->andWhere('('.self::ALIAS.'.about_us IS NULL OR '.self::ALIAS.'.about_us = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') AND ('.self::ALIAS.'.about_you IS NULL OR '.self::ALIAS.'.about_you = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
-                 }
-             }
-         }
+        if ($searchParams && $searchParams['rus_about'] != '') {
+            if (!empty($searchParams['rus_user_type'])) {
+                if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+                    if ($searchParams['rus_about'] == '1') {
+                        $qb = $qb->andWhere(self::ALIAS.'.about_us IS NOT NULL AND '.self::ALIAS.'.about_us <> \'\'');
+                    } else {
+                        $qb = $qb->andWhere(self::ALIAS.'.about_us IS NULL OR '.self::ALIAS.'.about_us = \'\'');
+                    }
+                } else {
+                    if ($searchParams['rus_about'] == '1') {
+                        $qb = $qb->andWhere(self::ALIAS.'.about_you IS NOT NULL AND '.self::ALIAS.'.about_you <> \'\'');
+                    } else {
+                        $qb = $qb->andWhere(self::ALIAS.'.about_you IS NULL OR '.self::ALIAS.'.about_you = \'\'');
+                    }
+                }
+            } else {
+                if ($searchParams['rus_about'] == '1') {
+                    $qb = $qb->andWhere('('.self::ALIAS.'.about_us IS NOT NULL AND '.self::ALIAS.'.about_us <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') OR ('.self::ALIAS.'.about_you IS NOT NULL AND '.self::ALIAS.'.about_you <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                } else {
+                    $qb = $qb->andWhere('('.self::ALIAS.'.about_us IS NULL OR '.self::ALIAS.'.about_us = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') AND ('.self::ALIAS.'.about_you IS NULL OR '.self::ALIAS.'.about_you = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                }
+            }
+        }
 
-         // sorting.
-         $sortFields = self::getReportSortFields();
-         if (in_array($sorter['sort_field'], $sortFields) && isset($sorter['sort_field']) && $sorter['sort_field'] && isset($sorter['sort_ord']) && $sorter['sort_ord']) {
-             if (in_array($sorter['sort_field'], self::getUserReportSortFields())) {
-                 $qb->orderBy(self::ALIAS.'.'.$sorter['sort_field'], $sorter['sort_ord']);
-             } else if (in_array($sorter['sort_field'], UserReportDailyRepository::getUserReportDailySortFields())) {
-                 $qb->orderBy($sorter['sort_field'].'_sum', $sorter['sort_ord']);
-             }
-         }
+        // sorting.
+        $sortFields = self::getReportSortFields();
+        if (in_array($sorter['sort_field'], $sortFields) && isset($sorter['sort_field']) && $sorter['sort_field'] && isset($sorter['sort_ord']) && $sorter['sort_ord']) {
+            if (in_array($sorter['sort_field'], self::getUserReportSortFields())) {
+                $qb->orderBy(self::ALIAS.'.'.$sorter['sort_field'], $sorter['sort_ord']);
+            } elseif (in_array($sorter['sort_field'], UserReportDailyRepository::getUserReportDailySortFields())) {
+                $qb->orderBy($sorter['sort_field'].'_sum', $sorter['sort_ord']);
+            }
+        }
 
-         return $qb->getQuery();
+        return $qb->getQuery();
     }
 
     /**
@@ -836,11 +837,11 @@ class UserReportRepository extends EntityRepository
                 }
 
                 if ($key == 'about_us' || $key == 'about_you') {
-                 if ((!empty($recordArray['about_us']) && $recordArray['about_us'] != '') || (!empty($recordArray['about_you']) && $recordArray['about_you'] != '')) {
-                  $recordArray['about'] = 'Yes';
-                 } else {
-                  $recordArray['about'] = 'No';
-                 }
+                    if ((!empty($recordArray['about_us']) && $recordArray['about_us'] != '') || (!empty($recordArray['about_you']) && $recordArray['about_you'] != '')) {
+                        $recordArray['about'] = 'Yes';
+                    } else {
+                        $recordArray['about'] = 'No';
+                    }
                 }
 
                 if (in_array($key, $booleanFields) && !in_array($key, $ignoreBooleanFields)) {

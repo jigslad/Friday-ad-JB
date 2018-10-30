@@ -97,12 +97,10 @@ class AdModerationController extends CoreController
 
                 //update ad report status
                 $this->getRepository('FaAdBundle:AdReport')->updateAdModerationStatus($response, $this->container);
-
             } catch (\Exception $e) {
                 $this->container->get('ad_moderate_logger')->info('Content Moderation Error  (Problem in nested ad moderation = '. $e->getMessage().' '.$e->getTraceAsString()." )");
                 CommonManager::sendErrorMail($this->container, 'Error: Problem in nested ad moderation', $e->getMessage(), $e->getTraceAsString());
             }
-
         } catch (\Exception $e) {
             $this->container->get('ad_moderate_logger')->info('Content Moderation Error  (Problem in Ad Moderation = '. $e->getMessage().' '.$e->getTraceAsString()." )");
             CommonManager::sendErrorMail($this->container, 'Error: Problem in Ad Moderation', $e->getMessage(), $e->getTraceAsString());

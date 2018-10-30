@@ -20,7 +20,6 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\AdBundle\Repository\PaaFieldRuleRepository;
 
-
 /**
  * This controller is used for ad management.
  *
@@ -104,7 +103,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'ad_type_id' => '1'
         );
 
-        $fieldRuleStatus = array (
+        $fieldRuleStatus = array(
             'colour_id' => 0,
             'brand_id' => 0,
             'age_range_id' => 0,
@@ -124,7 +123,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'event_date' => 0
         );
 
-        $fieldRuleStep = array (
+        $fieldRuleStep = array(
             'ad_type_id' => 2,
             'title' => 2,
             'description' => 2,
@@ -139,13 +138,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'condition_id' => 4,
         );
 
-        $fieldRuleMaxValue = array (
+        $fieldRuleMaxValue = array(
             'title' => 100,
             'description' => 2000,
             'personalized_title' => 140,
         );
 
-        $fieldRuleMinMaxType = array (
+        $fieldRuleMinMaxType = array(
             'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -183,7 +182,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'ad_type_id' => '1'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'business_type_id' => 0,
                 'net_profit_min' => 0,
                 'net_profit_max' => 0,
@@ -197,7 +196,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'event_date' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -218,13 +217,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'dimensions_height' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -251,7 +250,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'brand_id' => '15'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'business_type_id' => 0,
                 'net_profit_min' => 0,
                 'net_profit_max' => 0,
@@ -265,7 +264,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'event_date' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -286,13 +285,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'dimensions_height' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -318,7 +317,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'ad_type_id' => '1'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'colour_id' => 0,
                 'brand_id' => 0,
                 'age_range_id' => 0,
@@ -333,7 +332,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'event_date' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -353,13 +352,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'turnover_max' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -421,7 +420,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'ad_type_id' => '1'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'brand_id' => 0,
                 'age_range_id' => 0,
                 'dimensions_length' => 0,
@@ -436,7 +435,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'event_date' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -457,13 +456,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'neck_id' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -489,7 +488,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'ad_type_id' => '1'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'brand_id' => 0,
                 'age_range_id' => 0,
                 'dimensions_length' => 0,
@@ -507,7 +506,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'event_date' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -525,13 +524,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'size_id' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -593,7 +592,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'ad_type_id' => '1'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'brand_id' => 0,
                 'dimensions_length' => 0,
                 'dimensions_width' => 0,
@@ -611,7 +610,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'event_date' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -629,13 +628,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'age_range_id' => 4,
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -661,7 +660,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'ad_type_id' => '1'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'brand_id' => 0,
                 'age_range_id' => 0,
                 'business_type_id' => 0,
@@ -676,7 +675,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'event_date' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -697,13 +696,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
 
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -789,7 +788,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'ad_type_id' => '1'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'brand_id' => 0,
                 'age_range_id' => 0,
                 'dimensions_length' => 0,
@@ -808,7 +807,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'event_date' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -824,13 +823,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'colour_id' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -880,7 +879,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'ad_type_id' => '1'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'brand_id' => 0,
                 'age_range_id' => 0,
                 'dimensions_length' => 0,
@@ -898,7 +897,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'power' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -915,13 +914,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
                 'event_date' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -1028,7 +1027,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'ad_type_id' => '1'
         );
 
-        $fieldRuleStatus = array (
+        $fieldRuleStatus = array(
             'colour_id' => 0,
             'age_range_id' => 0,
             'dimensions_length' => 0,
@@ -1047,7 +1046,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'event_date' => 0
         );
 
-        $fieldRuleStep = array (
+        $fieldRuleStep = array(
             'ad_type_id' => 2,
             'title' => 2,
             'description' => 2,
@@ -1063,13 +1062,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'brand_id' => 4,
         );
 
-        $fieldRuleMaxValue = array (
+        $fieldRuleMaxValue = array(
             'title' => 100,
             'description' => 2000,
             'personalized_title' => 140,
         );
 
-        $fieldRuleMinMaxType = array (
+        $fieldRuleMinMaxType = array(
             'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -1093,7 +1092,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'ad_type_id' => '1'
         );
 
-        $fieldRuleStatus = array (
+        $fieldRuleStatus = array(
             'brand_id' => 0,
             'age_range_id' => 0,
             'dimensions_length' => 0,
@@ -1111,7 +1110,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'event_date' => 0
         );
 
-        $fieldRuleStep = array (
+        $fieldRuleStep = array(
             'ad_type_id' => 2,
             'title' => 2,
             'description' => 2,
@@ -1129,13 +1128,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'size_id' => 4,
         );
 
-        $fieldRuleMaxValue = array (
+        $fieldRuleMaxValue = array(
             'title' => 100,
             'description' => 2000,
             'personalized_title' => 140,
         );
 
-        $fieldRuleMinMaxType = array (
+        $fieldRuleMinMaxType = array(
             'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -1159,7 +1158,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'ad_type_id' => '1'
         );
 
-        $fieldRuleStatus = array (
+        $fieldRuleStatus = array(
             'age_range_id' => 0,
             'business_type_id' => 0,
             'net_profit_min' => 0,
@@ -1173,7 +1172,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'event_date' => 0
         );
 
-        $fieldRuleStep = array (
+        $fieldRuleStep = array(
             'ad_type_id' => 2,
             'title' => 2,
             'description' => 2,
@@ -1195,13 +1194,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
 
         );
 
-        $fieldRuleMaxValue = array (
+        $fieldRuleMaxValue = array(
             'title' => 100,
             'description' => 2000,
             'personalized_title' => 140,
         );
 
-        $fieldRuleMinMaxType = array (
+        $fieldRuleMinMaxType = array(
             'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -1225,7 +1224,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'ad_type_id' => '1'
         );
 
-        $fieldRuleStatus = array (
+        $fieldRuleStatus = array(
             'brand_id' => 0,
             'age_range_id' => 0,
             'dimensions_length' => 0,
@@ -1244,7 +1243,7 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'event_date' => 0
         );
 
-        $fieldRuleStep = array (
+        $fieldRuleStep = array(
             'ad_type_id' => 2,
             'title' => 2,
             'description' => 2,
@@ -1261,13 +1260,13 @@ class LoadPaaFieldForSaleData extends LoadPaaFieldData
             'colour_id' => 4
         );
 
-        $fieldRuleMaxValue = array (
+        $fieldRuleMaxValue = array(
             'title' => 100,
             'description' => 2000,
             'personalized_title' => 140,
         );
 
-        $fieldRuleMinMaxType = array (
+        $fieldRuleMinMaxType = array(
             'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,

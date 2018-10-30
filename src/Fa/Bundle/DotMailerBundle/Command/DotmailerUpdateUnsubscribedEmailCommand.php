@@ -121,7 +121,6 @@ EOF
                     CommonManager::sendErrorMail($this->getContainer(), 'Error: Unsubscribed contact from dotmailer => '.$id, $e->getMessage(), $e->getTraceAsString());
                     $output->writeln($e->getMessage(), true);
                 }
-
             }
 
             $entityManager->flush();
@@ -204,7 +203,9 @@ EOF
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt(
-            $ch, CURLOPT_HTTPHEADER, array(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
                 'Accept: application/json',
                 'Content-Type: application/json'
             )
@@ -212,7 +213,7 @@ EOF
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLAUTH_BASIC, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD,$username . ':' . $password);
+        curl_setopt($ch, CURLOPT_USERPWD, $username . ':' . $password);
 
         $response = json_decode(curl_exec($ch), true);
 

@@ -5,7 +5,6 @@ use Doctrine\Common\Collections\Collection;
 
 class RecursiveCategoryIterator implements \RecursiveIterator
 {
-
     private $_data;
 
     public function __construct(Collection $data)
@@ -15,7 +14,7 @@ class RecursiveCategoryIterator implements \RecursiveIterator
 
     public function hasChildren()
     {
-        return ( ! $this->_data->current()->getChildCategories()->isEmpty());
+        return (! $this->_data->current()->getChildCategories()->isEmpty());
     }
 
     public function getChildren()
@@ -47,5 +46,4 @@ class RecursiveCategoryIterator implements \RecursiveIterator
     {
         $this->_data->first();
     }
-
 }

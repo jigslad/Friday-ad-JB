@@ -104,9 +104,9 @@ class AdModerateRepository extends EntityRepository
 
                 $returnValueArray['ad_id'] = $adRef;
                 $ad = $adModerate->getAd();
-                $oldAdStatusId = ($ad && $ad->getStatus() ? $ad->getStatus()->getId() : null );
+                $oldAdStatusId = ($ad && $ad->getStatus() ? $ad->getStatus()->getId() : null);
 
-               	$returnValueArray['user_id'] = (!empty($ad->getUser())) ? $ad->getUser()->getId() : null;
+                $returnValueArray['user_id'] = (!empty($ad->getUser())) ? $ad->getUser()->getId() : null;
 
                 if (isset($moderationResult['ModerationResultId'])) {
                     $adModerate->setModerationResultId($moderationResult['ModerationResultId']);
@@ -122,13 +122,13 @@ class AdModerateRepository extends EntityRepository
                 if (isset($moderationResult['ModerationResult']) && $moderationResult['ModerationResult'] == self::MODERATION_RESULT_OKEY) {
                     $adModerate->setModerationQueue(self::MODERATION_QUEUE_STATUS_OKAY);
                     $adModerate->setStatus($this->_em->getReference('FaEntityBundle:Entity', BaseEntityRepository::AD_STATUS_LIVE_ID));
-                } else if (isset($moderationResult['ModerationResult']) && $moderationResult['ModerationResult'] == self::MODERATION_RESULT_REJECTED) {
+                } elseif (isset($moderationResult['ModerationResult']) && $moderationResult['ModerationResult'] == self::MODERATION_RESULT_REJECTED) {
                     $adModerate->setModerationQueue(self::MODERATION_QUEUE_STATUS_REJECTED);
                     $adModerate->setStatus($this->_em->getReference('FaEntityBundle:Entity', BaseEntityRepository::AD_STATUS_REJECTED_ID));
-                } else if (isset($moderationResult['ModerationResult']) && $moderationResult['ModerationResult'] == self::MODERATION_RESULT_MANUAL_MODERATION) {
+                } elseif (isset($moderationResult['ModerationResult']) && $moderationResult['ModerationResult'] == self::MODERATION_RESULT_MANUAL_MODERATION) {
                     $adModerate->setModerationQueue(self::MODERATION_QUEUE_STATUS_MANUAL_MODERATION);
-                    //$adModerate->setStatus($this->_em->getReference('FaEntityBundle:Entity', BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID));
-                } else if (isset($moderationResult['ModerationResult']) && $moderationResult['ModerationResult'] == self::MODERATION_RESULT_SCAM) {
+                //$adModerate->setStatus($this->_em->getReference('FaEntityBundle:Entity', BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID));
+                } elseif (isset($moderationResult['ModerationResult']) && $moderationResult['ModerationResult'] == self::MODERATION_RESULT_SCAM) {
                     $adModerate->setModerationQueue(self::MODERATION_RESULT_SCAM);
                     $adModerate->setStatus($this->_em->getReference('FaEntityBundle:Entity', BaseEntityRepository::AD_STATUS_REJECTED_ID));
                 }
@@ -160,7 +160,6 @@ class AdModerateRepository extends EntityRepository
 
                     // Update ad data to solr
                     $container->get('fa_ad.entity_listener.ad')->handleSolr($ad);
-
                 } elseif (isset($moderationResult['ModerationResult']) && $moderationResult['ModerationResult'] == self::MODERATION_RESULT_REJECTED) {
                     if (isset($moderationResult['ModerationMessage'])) {
                         if (($ad->getStatus()->getId() != BaseEntityRepository::AD_STATUS_LIVE_ID) || ($ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_LIVE_ID && $adModerateCurrentStatus == BaseEntityRepository::AD_STATUS_LIVE_ID)) {
@@ -363,7 +362,6 @@ class AdModerateRepository extends EntityRepository
 
                             // remove notification for draft ad
                             $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByAdId('advert_incomplete', $adObj->getId());
-
                         }
                     }
                 }
@@ -765,9 +763,7 @@ class AdModerateRepository extends EntityRepository
      */
     public function getLatestLocation($adId)
     {
-        
         $qb = $this->getBaseQueryBuilder()->andWhere(self::ALIAS.'.ad = :adId')->andWhere(self::ALIAS.'.moderation_queue =:moderation_queue')->setParameter('adId', $adId)->setParameter('moderation_queue', self::MODERATION_QUEUE_STATUS_SEND);
         return $qb->getQuery()->getOneOrNullResult();
     }
-
 }

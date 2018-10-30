@@ -26,7 +26,6 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
  */
 class TiRedirectsRepository extends EntityRepository
 {
-
     const ALIAS = 'tired';
 
     /**

@@ -285,7 +285,7 @@ class AdPostMotorsAdminType extends AdPostAdminType
             if ($form->get('price')->getData() == '') {
                 $form->get('price')->addError(new FormError('Value should not be blank.'));
             } else {
-                if (!preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData() , $matches)) {
+                if (!preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData(), $matches)) {
                     $form->get('price')->addError(new FormError('Price is invalid.'));
                 }
             }

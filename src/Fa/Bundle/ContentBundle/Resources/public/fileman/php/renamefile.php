@@ -1,6 +1,6 @@
 <?php
 /*
-  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE. 
+  RoxyFileman - web based file manager. Ready to use with CKEditor, TinyMCE.
   Can be easily integrated with any other WYSIWYG editor or CMS.
 
   Copyright (C) 2013, RoxyFileman.com - Lyubomir Arsov. All rights reserved.
@@ -30,14 +30,14 @@ $path = trim(empty($_GET['f'])?'':$_GET['f']);
 $name = trim(empty($_GET['n'])?'':$_GET['n']);
 verifyPath($path);
 
-if(is_file(fixPath($path))){
-  if(!RoxyFile::CanUploadFile($name))
-    echo getErrorRes(t('E_FileExtensionForbidden').' ".'.RoxyFile::GetExtension($name).'"');
-  elseif(rename(fixPath($path), dirname(fixPath($path)).'/'.$name))
-    echo getSuccessRes();
-  else
-    echo getErrorRes(t('E_RenameFile').' '.basename($path));
+if (is_file(fixPath($path))) {
+    if (!RoxyFile::CanUploadFile($name)) {
+        echo getErrorRes(t('E_FileExtensionForbidden').' ".'.RoxyFile::GetExtension($name).'"');
+    } elseif (rename(fixPath($path), dirname(fixPath($path)).'/'.$name)) {
+        echo getSuccessRes();
+    } else {
+        echo getErrorRes(t('E_RenameFile').' '.basename($path));
+    }
+} else {
+    echo getErrorRes(t('E_RenameFileInvalidPath'));
 }
-else
-  echo getErrorRes(t('E_RenameFileInvalidPath'));
-?>

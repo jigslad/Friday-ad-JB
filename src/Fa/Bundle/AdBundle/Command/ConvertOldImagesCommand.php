@@ -115,7 +115,6 @@ class ConvertOldImagesCommand extends ContainerAwareCommand
                             $adImageManager->createCropedThumbnail();
 
                             echo "ORG converted :".$imagePath.'/'.$image->getAd()->getId().'_'.$hash.'.jpg'."\n";
-
                         } else {
                             if ($image->getHash() == '') {
                                 $image->setHash($hash);
@@ -129,7 +128,6 @@ class ConvertOldImagesCommand extends ContainerAwareCommand
                             }
                             echo "ORG Already converted :".$imagePath.'/'.$image->getAd()->getId().'_'.$hash.'.jpg'."\n";
                         }
-
                     } else {
                         $path = $imageDir.'/'.basename($image->getOldPath());
                         $imagePath  = $adImageDir.CommonManager::getGroupDirNameById($image->getAd()->getId());
@@ -173,7 +171,6 @@ class ConvertOldImagesCommand extends ContainerAwareCommand
                                 $adImageManager->createCropedThumbnail();
 
                                 echo "converted :".$imagePath.'/'.$image->getAd()->getId().'_'.$hash.'.jpg'."\n";
-
                             } else {
                                 if ($image->getHash() == '') {
                                     $image->setHash($hash);
@@ -188,7 +185,6 @@ class ConvertOldImagesCommand extends ContainerAwareCommand
                                 }
                                 echo "Already converted :".$imagePath.'/'.$image->getAd()->getId().'_'.$hash.'.jpg'."\n";
                             }
-
                         } else {
                             echo "Not found :".$path."\n";
                         }
@@ -200,7 +196,6 @@ class ConvertOldImagesCommand extends ContainerAwareCommand
 
 
                 $last_id = $image->getId();
-
             } else {
                 $done = true;
             }

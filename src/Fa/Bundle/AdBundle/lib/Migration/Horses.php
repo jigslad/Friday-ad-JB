@@ -22,7 +22,6 @@ use Fa\Bundle\AdBundle\Entity\AdAnimals;
  */
 class Horses
 {
-
     private $meta_text;
 
     private $ad_id;
@@ -36,7 +35,6 @@ class Horses
         $this->ad_id     = $ad_id;
         $this->em = $em;
         $this->init();
-
     }
 
     public function init()
@@ -53,21 +51,20 @@ class Horses
             }
 
             if (isset($string->HorsesAndEquestrianTransMeta->gender)) {
-                 $this->data['gender_id'] =  $this->getHorseGender((string) $string->HorsesAndEquestrianTransMeta->gender);
+                $this->data['gender_id'] =  $this->getHorseGender((string) $string->HorsesAndEquestrianTransMeta->gender);
             }
 
             if (isset($string->HorsesAndEquestrianTransMeta->colour)) {
-                 $this->data['colour_id'] =  $this->getHorseColour((string) $string->HorsesAndEquestrianTransMeta->colour);
+                $this->data['colour_id'] =  $this->getHorseColour((string) $string->HorsesAndEquestrianTransMeta->colour);
             }
 
             if (isset($string->HorsesAndEquestrianTransMeta->breed)) {
-                 $this->data['breed_id'] =  $this->getHorseBreed((string) $string->HorsesAndEquestrianTransMeta->breed);
+                $this->data['breed_id'] =  $this->getHorseBreed((string) $string->HorsesAndEquestrianTransMeta->breed);
             }
 
             if (isset($string->HorsesAndEquestrianTransMeta->ageYears)) {
-                 $this->data['age'] =  $this->getHourseAge((string) $string->HorsesAndEquestrianTransMeta->ageYears);
+                $this->data['age'] =  $this->getHourseAge((string) $string->HorsesAndEquestrianTransMeta->ageYears);
             }
-
         }
     }
 
@@ -112,7 +109,6 @@ class Horses
         } else {
             return trim($string);
         }
-
     }
 
     private function getHorseBreed($string)

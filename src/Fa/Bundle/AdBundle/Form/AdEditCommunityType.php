@@ -168,7 +168,7 @@ class AdEditCommunityType extends AdEditType
                 if (!preg_match('/^\d{1,2}\/\d{1,2}\/(\d{2}|\d{4})$/', $eventEnd)) {
                     $form->get('event_end')->addError(new FormError('Event end date is invalid.'));
                     $validEndDate = false;
-                }  else {
+                } else {
                     $date = explode('/', $eventEnd);
                     if (!checkdate($date[1], $date[0], $date[2])) {
                         $form->get('event_end')->addError(new FormError('Event end date is invalid.'));
@@ -209,9 +209,9 @@ class AdEditCommunityType extends AdEditType
                     if (strtotime(str_replace('/', '-', $start)) >= strtotime(str_replace('/', '-', $end))) {
                         $form->get('event_start')->addError(new FormError('Event start should be before event end.'));
                     }
-                } else if ($start == '' && $end != '') {
+                } elseif ($start == '' && $end != '') {
                     $form->get('event_start')->addError(new FormError('Please add event start.'));
-                } else if ($start != '' && $end == '') {
+                } elseif ($start != '' && $end == '') {
                     if (strtotime(str_replace('/', '-', $start)) <= time()) {
                         $form->get('event_start')->addError(new FormError('Event start should not be before current date and time.'));
                     }
@@ -229,7 +229,7 @@ class AdEditCommunityType extends AdEditType
     {
         if ($form->has('price')) {
             if ($form->get('price')->getData() != '') {
-                if (!preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData() , $matches)) {
+                if (!preg_match('/^[0-9]{1,3}(?:\,?[0-9]{3})*(?:\.[0-9]{1,2})?$/', $form->get('price')->getData(), $matches)) {
                     $form->get('price')->addError(new FormError('Price is invalid.'));
                 }
             }

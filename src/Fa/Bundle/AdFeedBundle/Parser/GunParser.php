@@ -23,7 +23,6 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
  */
 class GunParser
 {
-
     const MAKE = 'MAKE';
 
     /**

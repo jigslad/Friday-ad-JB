@@ -22,7 +22,6 @@ use Fa\Bundle\AdBundle\Entity\AdMotors;
  */
 class Boats
 {
-
     private $meta_text;
 
     private $ad_id;
@@ -36,7 +35,6 @@ class Boats
         $this->ad_id     = $ad_id;
         $this->em = $em;
         $this->init();
-
     }
 
     public function init()
@@ -88,7 +86,6 @@ class Boats
             $boatRepository->setFuelTypeId($this->getFuelTypeId($this->data['fuel_type']));
             $this->em->persist($boatRepository);
             echo "Dimension updated for ".$boatRepository->getAd()->getId()."\n";
-
         }
     }
 }

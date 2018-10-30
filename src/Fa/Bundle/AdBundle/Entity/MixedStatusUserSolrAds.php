@@ -231,5 +231,4 @@ class MixedStatusUserSolrAds
     {
         return $this->createdAt;
     }
-    
 }

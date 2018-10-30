@@ -80,7 +80,6 @@ class ReviewModerationController extends CoreController
 
             $returnValueArray = $this->getRepository('FaUserBundle:UserReview')->handleModerationResult($response, $this->container);
             $this->getEntityManager()->getConnection()->commit();
-
         } catch (\Exception $e) {
             $this->getEntityManager()->getConnection()->rollback();
             CommonManager::sendErrorMail($this->container, 'Error: Problem in Review Moderation', $e->getMessage(), $e->getTraceAsString());

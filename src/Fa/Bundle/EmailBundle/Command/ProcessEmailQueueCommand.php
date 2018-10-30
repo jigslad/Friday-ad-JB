@@ -159,7 +159,6 @@ EOF
                 $this->em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($searchParam['email_queue']['identifier'], $user, $emailQueue->getId());
                 $output->writeln('Error occurred during subtask:'.$e->getMessage(), true);
             }
-
         }
         $this->em->clear();
 

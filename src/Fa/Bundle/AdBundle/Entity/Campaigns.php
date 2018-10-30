@@ -122,12 +122,12 @@ class Campaigns
      */
     private $is_not_deletable;
 
-   /**
-     * Set id
-     *
-     * @param string $id
-     * @return Campaigns
-     */
+    /**
+      * Set id
+      *
+      * @param string $id
+      * @return Campaigns
+      */
     public function setId($id)
     {
         $this->id = $id;
@@ -214,12 +214,12 @@ class Campaigns
         return $this->pageTitle;
     }
 
-     /**
-     * Set pageTitleColor
-     *
-     * @param string $pageTitleColor
-     * @return Campaigns
-     */
+    /**
+    * Set pageTitleColor
+    *
+    * @param string $pageTitleColor
+    * @return Campaigns
+    */
     public function setPageTitleColor($pageTitleColor)
     {
         $this->pageTitleColor = $pageTitleColor;
@@ -306,12 +306,12 @@ class Campaigns
         return $this->seoPageKeywords;
     }
 
-     /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return Campaigns
-     */
+    /**
+    * Set slug
+    *
+    * @param string $slug
+    * @return Campaigns
+    */
     public function setSlug($slug)
     {
         $this->slug = $slug;
@@ -329,12 +329,12 @@ class Campaigns
         return $this->slug;
     }
 
-     /**
-     * Set formFillTimes
-     *
-     * @param integer $formFillTimes
-     * @return Campaigns
-     */
+    /**
+    * Set formFillTimes
+    *
+    * @param integer $formFillTimes
+    * @return Campaigns
+    */
     public function setFormFillTimes($formFillTimes)
     {
         $this->formFillTimes = $formFillTimes;
@@ -530,5 +530,4 @@ class Campaigns
     {
         return null === $this->getCampaignBackgroundFileName() ? null : $this->getUploadRootDir().'/'.$this->getCampaignBackgroundFileName();
     }
-
 }

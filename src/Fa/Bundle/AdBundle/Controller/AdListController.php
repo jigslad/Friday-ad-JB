@@ -115,7 +115,6 @@ class AdListController extends CoreController
         $currentRoute = $request->get('_route');
         //for TI motor redirect
         if ($currentRoute == 'ti_motor_listing_page' && $request->attributes->get('not_found') == 1) {
-
             $pageString  = $request->get('page_string');
             $locationS   = $requestlocation;
 
@@ -140,7 +139,7 @@ class AdListController extends CoreController
             }
 
             throw new NotFoundHttpException('Invalid location.');
-        } else if ($currentRoute == 'ti_motor_listing_page') {
+        } elseif ($currentRoute == 'ti_motor_listing_page') {
             $tiPath = $requestlocation.'/'.$request->get('page_string');
             $tiUrl = 'http://'.$this->container->getParameter('fa.ti.motor.host').'/'.$tiPath;
             $key = md5($request->getClientIp().$request->headers->get('User-Agent'));
@@ -165,15 +164,15 @@ class AdListController extends CoreController
         if (isset($findersSearchParams['advertgone'])) {
             unset($findersSearchParams['advertgone']);
         }
-        $objSeoToolOverride = NULL;
+        $objSeoToolOverride = null;
         if ($pageUrl) {
             $objSeoToolOverride = $this->getRepository('FaContentBundle:SeoToolOverride')->findSeoRuleByPageUrl($pageUrl, $findersSearchParams, $this->container);
         }
         
         //get SEO Source URL for classic-car
         if (strpos($pageUrl, 'motors/classic-cars') !== false && !$request->query->has('item_motors__reg_year')) {
-            $getClassicCarRegYear = $this->getRepository('FaContentBundle:SeoTool')->findSeoSourceUrlMotorRegYear( 'motors/classic-cars/' );
-            if( !empty( $getClassicCarRegYear ) ) {
+            $getClassicCarRegYear = $this->getRepository('FaContentBundle:SeoTool')->findSeoSourceUrlMotorRegYear('motors/classic-cars/');
+            if (!empty($getClassicCarRegYear)) {
                 $findersSearchParams['item_motors__reg_year'] = $getClassicCarRegYear;
             }
         }
@@ -191,10 +190,9 @@ class AdListController extends CoreController
             
             $cookieValue = '';
             
-	if ($requestlocation != null && $requestlocation != 'uk' && (!isset($cookieLocationDetails['slug']) || $cookieLocationDetails['slug'] != $requestlocation || $requestlocation == LocationRepository::LONDON_TXT)) { 
-            	
-            	$cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($requestlocation, $this->container, true);
-            	
+            if ($requestlocation != null && $requestlocation != 'uk' && (!isset($cookieLocationDetails['slug']) || $cookieLocationDetails['slug'] != $requestlocation || $requestlocation == LocationRepository::LONDON_TXT)) {
+                $cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($requestlocation, $this->container, true);
+                
                 if (count($cookieValue) && count($cookieValue) !== count(array_intersect($cookieValue, $cookieLocationDetails))) {
                     $response = new Response();
                     $cookieValue = json_encode($cookieValue);
@@ -220,38 +218,38 @@ class AdListController extends CoreController
         $transactionJsArr = [];
         //check session for upgrade Payment has been done successfully
         if ($this->container->get('session')->has('payment_success_for_upgrade') && $this->container->get('session')->has('payment_success_for_upgrade') != '') {
-        	$successPaymentModalbox 	= true;
-        	if( $this->container->get('session')->has('upgrade_payment_transaction_id') ) {
-        		$loggedinUser = $this->getLoggedInUser();
-        		if($loggedinUser) {
-        			$transcations	= $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($this->container->get('session')->get('upgrade_payment_transaction_id'), $loggedinUser, true);
-        			$transactionJsArr['getTranscationJs'] = CommonManager::getGaTranscationJs($transcations);
-        			$transactionJsArr['getItemJs']        = CommonManager::getGaItemJs($transcations);
-        			$transactionJsArr['ga_transaction']   = $transcations;
-        		}
-        	}
-        	$this->container->get('session')->remove('payment_success_for_upgrade');
-        	$this->container->get('session')->remove('upgrade_payment_success_redirect_url');
-        	$this->container->get('session')->remove('upgrade_payment_transaction_id');
+            $successPaymentModalbox 	= true;
+            if ($this->container->get('session')->has('upgrade_payment_transaction_id')) {
+                $loggedinUser = $this->getLoggedInUser();
+                if ($loggedinUser) {
+                    $transcations	= $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($this->container->get('session')->get('upgrade_payment_transaction_id'), $loggedinUser, true);
+                    $transactionJsArr['getTranscationJs'] = CommonManager::getGaTranscationJs($transcations);
+                    $transactionJsArr['getItemJs']        = CommonManager::getGaItemJs($transcations);
+                    $transactionJsArr['ga_transaction']   = $transcations;
+                }
+            }
+            $this->container->get('session')->remove('payment_success_for_upgrade');
+            $this->container->get('session')->remove('upgrade_payment_success_redirect_url');
+            $this->container->get('session')->remove('upgrade_payment_transaction_id');
         }
 
         // get location from cookie
-        if (isset($cookieValue) && $cookieValue) {   
-        	if(is_array($cookieValue)) { 
-        		$cookieValue = json_encode($cookieValue);
-        	}
+        if (isset($cookieValue) && $cookieValue) {
+            if (is_array($cookieValue)) {
+                $cookieValue = json_encode($cookieValue);
+            }
             $cookieLocationDetails = json_decode($cookieValue, true);
         } else {
             $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
         }
        
         //check view alert tip for location area
-        $areaToolTipFlag = false;        
-        if(!$request->cookies->has('frontend_area_alert_tooltip') && $requestlocation != null && strtolower($requestlocation) == LocationRepository::LONDON_TXT) {
-        	$response = new Response();
-        	$response->headers->setCookie(new Cookie('frontend_area_alert_tooltip', $requestlocation, time() + (365*24*60*60*1000), '/', null, false, false));
-        	$response->sendHeaders();
-        	$areaToolTipFlag = true;
+        $areaToolTipFlag = false;
+        if (!$request->cookies->has('frontend_area_alert_tooltip') && $requestlocation != null && strtolower($requestlocation) == LocationRepository::LONDON_TXT) {
+            $response = new Response();
+            $response->headers->setCookie(new Cookie('frontend_area_alert_tooltip', $requestlocation, time() + (365*24*60*60*1000), '/', null, false, false));
+            $response->sendHeaders();
+            $areaToolTipFlag = true;
         }
 
         $mapFlag = $request->get('map', false);
@@ -275,7 +273,7 @@ class AdListController extends CoreController
 
         // fetch location from cookie.
         $geoDistParams = array();
-        if($mapFlag) {
+        if ($mapFlag) {
             if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
                 $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
             }
@@ -297,17 +295,17 @@ class AdListController extends CoreController
         
         $rootCategoryId = null;
         if (isset($data['search']['item__category_id'])) {
-        	$rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($data['search']['item__category_id'], $this->container);
+            $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($data['search']['item__category_id'], $this->container);
         }
         
         //check facet count again in ticket FFR-3375
         $locationFacets = array();
-        if(isset($data['search']['item__location'])) {
-        	$locationResult = $this->getRepository('FaEntityBundle:Location')->find($data['search']['item__location']);
+        if (isset($data['search']['item__location'])) {
+            $locationResult = $this->getRepository('FaEntityBundle:Location')->find($data['search']['item__location']);
         }
         
-        if ( !empty($facetResult) ) {
-        	$locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
+        if (!empty($facetResult)) {
+            $locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
         }
         
         /*$nextMiles              = 0;
@@ -316,12 +314,12 @@ class AdListController extends CoreController
             $nextMiles              = $this->getNextMiles($data['search']['item__distance']);
             $expandMilesresultCount = $this->getExpandDistanceAdCount($request, $keywords, $data, $resultCount, $nextMiles);
         }*/
-	
+    
         
         if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
             if (isset($locationFacets[$data['search']['item__location']])) {
                 unset($locationFacets[$data['search']['item__location']]);
-            } 
+            }
             $locationFacets = array_slice(array_unique($locationFacets), 0, 5, true);
         }
         // initialize pagination manager service and prepare listing with pagination based of solr result
@@ -329,38 +327,36 @@ class AdListController extends CoreController
         $pagination = $this->get('fa.pagination.manager')->getSolrPagination();
         $mapResult = [];
         //for map purpose iterating the advert result
-        if(!empty($pagination) && $mapFlag) {
-        	$mapData = (array) $pagination;
-        	$prevLatLongArr = array('latitude'=> 0, 'longitude'=>0);
+        if (!empty($pagination) && $mapFlag) {
+            $mapData = (array) $pagination;
+            $prevLatLongArr = array('latitude'=> 0, 'longitude'=>0);
             $existingLatLongArr = array();
-        	foreach ($pagination as $advert) {
-        		$mapResult[$advert->id]['adId'] = $advert[AdSolrFieldMapping::ID];
-        		$mapResult[$advert->id]['title'] = $advert[AdSolrFieldMapping::TITLE];
+            foreach ($pagination as $advert) {
+                $mapResult[$advert->id]['adId'] = $advert[AdSolrFieldMapping::ID];
+                $mapResult[$advert->id]['title'] = $advert[AdSolrFieldMapping::TITLE];
 
                 $existingLatLongArr = array('latitude'=> $advert[AdSolrFieldMapping::LATITUDE][0], 'longitude'=>$advert[AdSolrFieldMapping::LONGITUDE][0]);
 
-                if($prevLatLongArr == $existingLatLongArr) {
-                    $latOffset  = rand(0,1000)/10000000;
-                    $longOffset = rand(0,1000)/10000000;
+                if ($prevLatLongArr == $existingLatLongArr) {
+                    $latOffset  = rand(0, 1000)/10000000;
+                    $longOffset = rand(0, 1000)/10000000;
                 } else {
                     $latOffset = 0;
                     $longOffset = 0;
                 }
                 
 
-        		if(isset($advert[AdSolrFieldMapping::LATITUDE])) {
-
-        			$mapResult[$advert->id]['latitude'][0] = $advert[AdSolrFieldMapping::LATITUDE][0]+floatval($latOffset);
+                if (isset($advert[AdSolrFieldMapping::LATITUDE])) {
+                    $mapResult[$advert->id]['latitude'][0] = $advert[AdSolrFieldMapping::LATITUDE][0]+floatval($latOffset);
                     //$mapResult[$advert->id]['latitude'] = $advert[AdSolrFieldMapping::LATITUDE];
                     $prevLatLongArr['latitude'] = $advert[AdSolrFieldMapping::LATITUDE][0];
-        		}
-        		if(isset($advert[AdSolrFieldMapping::LONGITUDE])) {
-        			$mapResult[$advert->id]['longitude'][0] = $advert[AdSolrFieldMapping::LONGITUDE][0]+floatval($longOffset);
-        		    //$mapResult[$advert->id]['longitude'] = $advert[AdSolrFieldMapping::LONGITUDE];
+                }
+                if (isset($advert[AdSolrFieldMapping::LONGITUDE])) {
+                    $mapResult[$advert->id]['longitude'][0] = $advert[AdSolrFieldMapping::LONGITUDE][0]+floatval($longOffset);
+                    //$mapResult[$advert->id]['longitude'] = $advert[AdSolrFieldMapping::LONGITUDE];
                     $prevLatLongArr['longitude'] = $advert[AdSolrFieldMapping::LONGITUDE][0];
                 }
-
-        	}
+            }
         }
         // set search params in cookie.
         $this->setSearchParamsCookie($data);
@@ -371,40 +367,40 @@ class AdListController extends CoreController
 
 
         //if(!empty($getRecommendedSlots)) { shuffle($getRecommendedSlots); }
-        $getRecommendedSrchSlotWise = array();$getRecommendedSrchSlots=array();
-        if(!empty($getRecommendedSlots)) { 
+        $getRecommendedSrchSlotWise = array();
+        $getRecommendedSrchSlots=array();
+        if (!empty($getRecommendedSlots)) {
             foreach ($getRecommendedSlots as $getRecommendedSlot) {
-              $getRecommendedSrchSlots[$getRecommendedSlot['creative_group']][] = $getRecommendedSlot;
+                $getRecommendedSrchSlots[$getRecommendedSlot['creative_group']][] = $getRecommendedSlot;
             }
         }
         $recommendedSlotArr = array();
         $recommendedSlotOrder = array();
-        if(!empty($getRecommendedSrchSlots)) { 
-            for($arj=1;$arj<=6;$arj++) {
-                if(isset($getRecommendedSrchSlots[$arj])) {
+        if (!empty($getRecommendedSrchSlots)) {
+            for ($arj=1;$arj<=6;$arj++) {
+                if (isset($getRecommendedSrchSlots[$arj])) {
                     $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
                     $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
-                    if(isset($_COOKIE['recommended_slot_'.$arj])) {
-                        if(isset($getRecommendedSrchSlots[$arj][1]) && $_COOKIE['recommended_slot_'.$arj] == $getRecommendedSrchSlots[$arj][0]['creative_ord']) {
+                    if (isset($_COOKIE['recommended_slot_'.$arj])) {
+                        if (isset($getRecommendedSrchSlots[$arj][1]) && $_COOKIE['recommended_slot_'.$arj] == $getRecommendedSrchSlots[$arj][0]['creative_ord']) {
                             $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][1];
                             $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][1]['creative_ord'];
-                        } elseif(isset($getRecommendedSrchSlots[$arj][2])) {
-                            if($_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][1]['creative_ord'] || $_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][0]['creative_ord']) {
+                        } elseif (isset($getRecommendedSrchSlots[$arj][2])) {
+                            if ($_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][1]['creative_ord'] || $_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][0]['creative_ord']) {
                                 $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][2];
                                 $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][2]['creative_ord'];
-                            } elseif($_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][2]) {
+                            } elseif ($_COOKIE['recommended_slot_'.$arj]== $getRecommendedSrchSlots[$arj][2]) {
                                 $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
                                 $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
-                            }                        
+                            }
                         }
                     }
                     setcookie('recommended_slot_'.$arj, $recommendedSlotOrder[$arj]);
                 }
-                
             }
         }
 
-        if(!empty($recommendedSlotArr)) {
+        if (!empty($recommendedSlotArr)) {
             $getRecommendedSrchSlotWise = $recommendedSlotArr;
         }
         
@@ -426,8 +422,8 @@ class AdListController extends CoreController
             'successPaymentModalbox' => $successPaymentModalbox,
             'areaToolTipFlag'		 => $areaToolTipFlag,
             'recommendedSlotResult'  => $getRecommendedSrchSlotWise,
-        	'paymentTransactionJs'	 => $transactionJsArr,
-        	'mapResult'				 => $mapResult
+            'paymentTransactionJs'	 => $transactionJsArr,
+            'mapResult'				 => $mapResult
         );
 
         // for business user ads page
@@ -501,43 +497,45 @@ class AdListController extends CoreController
     }
     
     
-    private function getLocationFacetForSearchResult($locationFacets, $data) {
-    	if(!empty($locationFacets) && !empty($data)) {
-    		$getCount = [];
-    		foreach ($locationFacets as $facetKey=>$facet) {
-    			if($facetKey == 'a_l_town_id_txt' || $facetKey == 'a_l_area_id_txt') {
-    				$facetResult = get_object_vars($facet);
-    				if(!empty($facetResult)) {
-    					foreach ($facetResult as $key=>$res) {
-	    					//get Facet Count for Nearby Town
-    						$getCount[$key] = $this->getFacetCountForNearbyTown($key, $data);
-    					}
-    				}
-    			}
-    		}
-    		return $getCount;
-    	}
+    private function getLocationFacetForSearchResult($locationFacets, $data)
+    {
+        if (!empty($locationFacets) && !empty($data)) {
+            $getCount = [];
+            foreach ($locationFacets as $facetKey=>$facet) {
+                if ($facetKey == 'a_l_town_id_txt' || $facetKey == 'a_l_area_id_txt') {
+                    $facetResult = get_object_vars($facet);
+                    if (!empty($facetResult)) {
+                        foreach ($facetResult as $key=>$res) {
+                            //get Facet Count for Nearby Town
+                            $getCount[$key] = $this->getFacetCountForNearbyTown($key, $data);
+                        }
+                    }
+                }
+            }
+            return $getCount;
+        }
     }
     
-    private function getFacetCountForNearbyTown($key, $data) { 
-    	$keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: null;
-    	if (isset($data['facet_fields']) && isset($data['facet_fields'])) {
-    		unset($data['facet_fields']);
-    	}
-    	if(isset($data['search']['item__distance'])) {
-    		$data['search']['item__distance'] = 0;
-    	}
-    	if(isset($data['query_filters']['item']['distance'])) {
-    		$data['query_filters']['item']['distance'] = 0;
-    		$data['query_filters']['item']['location'] = $key."|0";
-    	}
-    	$page               = 1;
-    	$recordsPerPage     = 2;
-    	$solrSearchManager = $this->get('fa.solrsearch.manager');
-    	$solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage, 0, true);
-    	$solrResponse = $solrSearchManager->getSolrResponse();
-    	$resultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
-    	return $resultCount;
+    private function getFacetCountForNearbyTown($key, $data)
+    {
+        $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: null;
+        if (isset($data['facet_fields']) && isset($data['facet_fields'])) {
+            unset($data['facet_fields']);
+        }
+        if (isset($data['search']['item__distance'])) {
+            $data['search']['item__distance'] = 0;
+        }
+        if (isset($data['query_filters']['item']['distance'])) {
+            $data['query_filters']['item']['distance'] = 0;
+            $data['query_filters']['item']['location'] = $key."|0";
+        }
+        $page               = 1;
+        $recordsPerPage     = 2;
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+        $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage, 0, true);
+        $solrResponse = $solrSearchManager->getSolrResponse();
+        $resultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
+        return $resultCount;
     }
 
     /**
@@ -761,30 +759,30 @@ class AdListController extends CoreController
         }
         
         if (isset($searchParams['item__location']) && $searchParams['item__location']) {
-	        $locationText = $this->getRepository('FaEntityBundle:Postcode')->getPostCodTextByLocation($searchParams['item__location'], $this->container);
-	        if (!$locationText) {
-	        	if (preg_match('/^\d+$/', $searchParams['item__location'])) {
-	        		$locationText = $this->getRepository('FaEntityBundle:Location')->getLocationNameWithParentNameById($searchParams['item__location'], $this->container, false);
-	        	} else if (preg_match('/^([\d]+,[\d]+)$/', $searchParams['item__location'])) {
-	        		$localityTown = explode(',', $searchParams['item__location']);
-	        		$locality     = $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Locality', $localityTown[0]);
-	        		$town         = $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Location', $localityTown[1]);
-	        		$locationText = $locality.','.$town;
-	        	}
-	        	
-	        	if (!$locationText) {
-	        		if ($searchParams['item__location'] == LocationRepository::COUNTY_ID) {
-	        			$locationText = null;
-	        		} else {
-	        			$locationText = $this->getRepository('FaEntityBundle:Location')->getLocationTextByLocation($searchParams['item__location'], $this->container);
-	        			if (!$locationText) {
-	        				$locationText = $this->getRepository('FaEntityBundle:Locality')->getLocationTextByLocation($searchParams['item__location'], $this->container);
-	        			}
-	        		}
-	        		
-	        		//$searchParams['item__location'] = $locationText;
-	        	}
-	        }
+            $locationText = $this->getRepository('FaEntityBundle:Postcode')->getPostCodTextByLocation($searchParams['item__location'], $this->container);
+            if (!$locationText) {
+                if (preg_match('/^\d+$/', $searchParams['item__location'])) {
+                    $locationText = $this->getRepository('FaEntityBundle:Location')->getLocationNameWithParentNameById($searchParams['item__location'], $this->container, false);
+                } elseif (preg_match('/^([\d]+,[\d]+)$/', $searchParams['item__location'])) {
+                    $localityTown = explode(',', $searchParams['item__location']);
+                    $locality     = $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Locality', $localityTown[0]);
+                    $town         = $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Location', $localityTown[1]);
+                    $locationText = $locality.','.$town;
+                }
+                
+                if (!$locationText) {
+                    if ($searchParams['item__location'] == LocationRepository::COUNTY_ID) {
+                        $locationText = null;
+                    } else {
+                        $locationText = $this->getRepository('FaEntityBundle:Location')->getLocationTextByLocation($searchParams['item__location'], $this->container);
+                        if (!$locationText) {
+                            $locationText = $this->getRepository('FaEntityBundle:Locality')->getLocationTextByLocation($searchParams['item__location'], $this->container);
+                        }
+                    }
+                    
+                    //$searchParams['item__location'] = $locationText;
+                }
+            }
             $searchParams['item__location_autocomplete'] = $locationText;
         }
 
@@ -943,9 +941,9 @@ class AdListController extends CoreController
                                     AdSolrFieldMapping::TOWN_ID     => array('limit' => 5, 'min_count' => 1),
                                     AdSolrFieldMapping::CATEGORY_ID => array('min_count' => 1),
                                     AdSolrFieldMapping::ROOT_CATEGORY_ID => array('min_count' => 1),
-        							AdSolrFieldMapping::AREA_ID		=> array('limit' => 5, 'min_count' => 1)
+                                    AdSolrFieldMapping::AREA_ID		=> array('limit' => 5, 'min_count' => 1)
                                 );
-	
+    
         // Add dimension filters facets
         if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
             $categoryName = $this->getRepository('FaEntityBundle:Category')->getRootCategoryName($data['search']['item__category_id'], $this->container, true);
@@ -978,7 +976,7 @@ class AdListController extends CoreController
         if (isset($data['search']['item__location']) && $data['search']['item__location']) {
             $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
         }
-    //$data['query_filters']['item']['is_blocked_ad'] = 0;
+        //$data['query_filters']['item']['is_blocked_ad'] = 0;
         // remove adult results when there is no category selected
         if (!isset($data['search']['item__category_id']) && !in_array($currentRoute, array('show_business_user_ads', 'show_business_user_ads_page', 'show_business_user_ads_location'))) {
             $data['static_filters'] = ' AND -'.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID;
@@ -1121,26 +1119,27 @@ class AdListController extends CoreController
      *
      * @return array
      */
-    private function getUserLiveBasicAd($data, $keywords = null, $page = 1, $mapFlag = false, $request, $rootCategoryId) {
-    	$loggedinUser     = $this->getLoggedInUser();
-    	$getBasicAdResult = null;
-    	$availablePackageIds = [];
-    	if(!empty($loggedinUser)) {
-    		$user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
-    		if(!empty($user)) {    			
-    			if($rootCategoryId == 'null') {
-    				return false;
-    			}     			 
-    			//check for this package category upgrade featured top is enabled
-    			$isFeaturedTopisEnabledForCateg = $this->getRepository('FaAdBundle:Ad')->checkIsfeaturedUpgradeEnabledForCategory($rootCategoryId, $this->container);
-    			if(empty($isFeaturedTopisEnabledForCateg)) {  
-    				return false;	//featured upgrade is not enable for this root category
-    			}     			
-    			//get basic Live advert if exist
-    			$getBasicAdResult = $this->getRepository('FaAdBundle:Ad')->getLastBasicPackageAdvertForUpgrade($rootCategoryId, $user->getId(), null, $this->container);
-    		}
-    	}  
-    	return $getBasicAdResult;
+    private function getUserLiveBasicAd($data, $keywords = null, $page = 1, $mapFlag = false, $request, $rootCategoryId)
+    {
+        $loggedinUser     = $this->getLoggedInUser();
+        $getBasicAdResult = null;
+        $availablePackageIds = [];
+        if (!empty($loggedinUser)) {
+            $user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
+            if (!empty($user)) {
+                if ($rootCategoryId == 'null') {
+                    return false;
+                }
+                //check for this package category upgrade featured top is enabled
+                $isFeaturedTopisEnabledForCateg = $this->getRepository('FaAdBundle:Ad')->checkIsfeaturedUpgradeEnabledForCategory($rootCategoryId, $this->container);
+                if (empty($isFeaturedTopisEnabledForCateg)) {
+                    return false;	//featured upgrade is not enable for this root category
+                }
+                //get basic Live advert if exist
+                $getBasicAdResult = $this->getRepository('FaAdBundle:Ad')->getLastBasicPackageAdvertForUpgrade($rootCategoryId, $user->getId(), null, $this->container);
+            }
+        }
+        return $getBasicAdResult;
     }
 
     public function getAdDetailForMapBoxAction($adId, Request $request)
@@ -1223,11 +1222,11 @@ class AdListController extends CoreController
         $blocks = $this->getListingBlockParams($categoryId, $parentCategoryIds, $cookieLocation, $seoPageRule, $seoSearchParams);
         
         $data['facet_fields'] = array();
-        if (!count($cookieLocation)) { 
+        if (!count($cookieLocation)) {
             $data['facet_fields'] = array(
                 AdSolrFieldMapping::DOMICILE_ID => array('limit' => $blocks[AdSolrFieldMapping::DOMICILE_ID]['facet_limit'], 'min_count' => 1),
                 AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
-            	AdSolrFieldMapping::AREA_ID		=> array('limit' => 9, 'min_count' => 1),
+                AdSolrFieldMapping::AREA_ID		=> array('limit' => 9, 'min_count' => 1),
             );
         } else {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
@@ -1236,16 +1235,15 @@ class AdListController extends CoreController
 
             // for jobs and property and all their children categories need to show county seo box.
             if (isset($parentCategoryIds[0]) && in_array($parentCategoryIds[0], array(CategoryRepository::JOBS_ID, CategoryRepository::PROPERTY_ID))) {
-               
-            	$data['facet_fields'] = array(
+                $data['facet_fields'] = array(
                     AdSolrFieldMapping::DOMICILE_ID => array('limit' => 9, 'min_count' => 1),
                     AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
-                	AdSolrFieldMapping::AREA_ID		=> array('limit' => 9, 'min_count' => 1),
+                    AdSolrFieldMapping::AREA_ID		=> array('limit' => 9, 'min_count' => 1),
                 );
             } else {
                 $data['facet_fields'] = array(
                     AdSolrFieldMapping::TOWN_ID => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
-                	AdSolrFieldMapping::AREA_ID => array('limit' => 9, 'min_count' => 1),
+                    AdSolrFieldMapping::AREA_ID => array('limit' => 9, 'min_count' => 1),
                 );
             }
         }
@@ -1273,11 +1271,11 @@ class AdListController extends CoreController
                     unset($seoSearchParams['item_motors__model_id']);
                 }
                 if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
-                	$blocks[$solrFieldName]['facet'] = get_object_vars($facetResult[$solrFieldName]);
-                	//get Location Areas
-                	if($solrFieldName == AdSolrFieldMapping::TOWN_ID && isset($facetResult[AdSolrFieldMapping::AREA_ID]) && !empty($facetResult[AdSolrFieldMapping::AREA_ID])) {
-                		$blocks[$solrFieldName]['facet'] = $blocks[$solrFieldName]['facet'] + get_object_vars($facetResult[AdSolrFieldMapping::AREA_ID]);
-                	}
+                    $blocks[$solrFieldName]['facet'] = get_object_vars($facetResult[$solrFieldName]);
+                    //get Location Areas
+                    if ($solrFieldName == AdSolrFieldMapping::TOWN_ID && isset($facetResult[AdSolrFieldMapping::AREA_ID]) && !empty($facetResult[AdSolrFieldMapping::AREA_ID])) {
+                        $blocks[$solrFieldName]['facet'] = $blocks[$solrFieldName]['facet'] + get_object_vars($facetResult[AdSolrFieldMapping::AREA_ID]);
+                    }
                 }
             }
         }
@@ -1469,7 +1467,7 @@ class AdListController extends CoreController
                             $categoryDimensions = array_map('strtolower', $categoryDimensions);
                             if (count($categoryDimensions) && in_array($block['dimension_name'], $categoryDimensions)) {
                                 if (isset($searchParams['search'][$block['search_field_name']]) || count($cookieLocation)) {
-                                    $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField($solrFieldName, $block['search_field_name'], $block['facet_limit'], $blocksTmpSearchParams, $this->container, null ,true, $cookieLocation);
+                                    $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField($solrFieldName, $block['search_field_name'], $block['facet_limit'], $blocksTmpSearchParams, $this->container, null, true, $cookieLocation);
                                 } else {
                                     $data['facet_fields'][$solrFieldName] = array('limit' => $block['facet_limit'], 'min_count' => 1);
                                 }
@@ -1744,12 +1742,12 @@ class AdListController extends CoreController
                     }
                 }
             }
-        }       
+        }
         if (isset($searchParams['search']['item__location']) && $searchParams['search']['item__location']) {
             $data['query_filters']['item']['location'] = $searchParams['search']['item__location'].'|30';
         }
 
-        $data['facet_fields'][$solrFieldName] = array('limit' => $facetLimit, 'min_count' => 1);                
+        $data['facet_fields'][$solrFieldName] = array('limit' => $facetLimit, 'min_count' => 1);
         // initialize solr search manager service and fetch data based of above prepared search options
         $container->get('fa.solrsearch.manager')->init('ad', '', $data);
         
@@ -1992,8 +1990,9 @@ class AdListController extends CoreController
                         );
                     }
                 }
-                if($businessExposureUserDetails) {
-                    $businessExposureUserDetails = array_map("unserialize", array_unique(array_map("serialize", $businessExposureUserDetails)));;
+                if ($businessExposureUserDetails) {
+                    $businessExposureUserDetails = array_map("unserialize", array_unique(array_map("serialize", $businessExposureUserDetails)));
+                    ;
                 }
             }
         }
@@ -2128,23 +2127,23 @@ class AdListController extends CoreController
             return $cachedValue;
         }
 
-         $dataNext = $data;
-         $dataNext['search']['item__distance'] = $nextMiles;
-         $dataNext['query_filters']['item']['distance'] = $nextMiles;
-         $dataNext['query_filters']['item']['location'] = $dataNext['search']['item__location'].'|'.$nextMiles;
+        $dataNext = $data;
+        $dataNext['search']['item__distance'] = $nextMiles;
+        $dataNext['query_filters']['item']['distance'] = $nextMiles;
+        $dataNext['query_filters']['item']['location'] = $dataNext['search']['item__location'].'|'.$nextMiles;
 
-         // initialize solr search manager service and fetch data based of above prepared search options
-         $this->get('fa.solrsearch.manager')->init('ad', $keywords, $dataNext, 1, 10, 0, true);
-         $solrResponseNext = $this->get('fa.solrsearch.manager')->getSolrResponse();
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $this->get('fa.solrsearch.manager')->init('ad', $keywords, $dataNext, 1, 10, 0, true);
+        $solrResponseNext = $this->get('fa.solrsearch.manager')->getSolrResponse();
 
-         // fetch result set from solr
-         $resultNext             = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponseNext);
-         $expandMilesresultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponseNext);
-         $expandMilesresultCount = $expandMilesresultCount - $resultCount;
+        // fetch result set from solr
+        $resultNext             = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponseNext);
+        $expandMilesresultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponseNext);
+        $expandMilesresultCount = $expandMilesresultCount - $resultCount;
 
-         CommonManager::setCacheVersion($this->container, $cacheKey, $expandMilesresultCount, 600);
+        CommonManager::setCacheVersion($this->container, $cacheKey, $expandMilesresultCount, 600);
 
-         return $expandMilesresultCount;
+        return $expandMilesresultCount;
     }
 
     /**
@@ -2161,15 +2160,15 @@ class AdListController extends CoreController
         $milesArray = $this->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container);
 
         if ($milesArray && isset($currentDistance)) {
-         $index = array_search($currentDistance, array_keys($milesArray));
-         $index = $index + 1;
-         $count = 0;
-         foreach ($milesArray as $key => $value) {
-          if ($count == $index) {
-           $nextMiles = $key;
-          }
-          $count++;
-         }
+            $index = array_search($currentDistance, array_keys($milesArray));
+            $index = $index + 1;
+            $count = 0;
+            foreach ($milesArray as $key => $value) {
+                if ($count == $index) {
+                    $nextMiles = $key;
+                }
+                $count++;
+            }
         }
         return $nextMiles;
     }
@@ -2216,8 +2215,7 @@ class AdListController extends CoreController
      */
     public function ajaxUpdateFeedAdViewCountAction(Request $request)
     {
-        if ($request->isXmlHttpRequest())
-        {
+        if ($request->isXmlHttpRequest()) {
             $adId = $request->get('adId');
             $createdAt = CommonManager::getTimeStampFromStartDate(date("Y-m-d"));
             $adDetail = $this->getRepository('FaAdFeedBundle:AdFeed')->findOneByAd($adId);
@@ -2226,7 +2224,7 @@ class AdListController extends CoreController
 
             $this->historyEntityManager = $this->container->get('doctrine')->getManager('history');
 
-            if(!$adFeedClick) {
+            if (!$adFeedClick) {
                 $adFeedClick = new AdFeedClickReportDaily();
                 $adFeedClick->setAdId($adId);
                 $adFeedClick->setAdFeedSiteId($adFeedSiteId);
@@ -2248,76 +2246,72 @@ class AdListController extends CoreController
         return new JsonResponse();
     }
 
-    public function getAppendableStaticFilters($searchParams) {
+    public function getAppendableStaticFilters($searchParams)
+    {
         $appendQueryFilters = '';
-        if(isset($searchParams['search']['item_motors__colour_id']) && $searchParams['search']['item_motors__colour_id']) {
+        if (isset($searchParams['search']['item_motors__colour_id']) && $searchParams['search']['item_motors__colour_id']) {
             if (count($searchParams['search']['item_motors__colour_id'])) {
                 $itemMotorsColourIds = $searchParams['search']['item_motors__colour_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
-                foreach($itemMotorsColourIds as $itemMotorsColourId) {
+                foreach ($itemMotorsColourIds as $itemMotorsColourId) {
                     $appendQueryFilters .= "(a_m_colour_id_i : (".$itemMotorsColourId.")) OR ";
                 }
-                $appendQueryFilters = rtrim($appendQueryFilters," OR ");
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
                 $appendQueryFilters .= ')';
-
-            }       
+            }
         }
 
-        if(isset($searchParams['search']['item_motors__body_type_id']) && $searchParams['search']['item_motors__body_type_id']) {
+        if (isset($searchParams['search']['item_motors__body_type_id']) && $searchParams['search']['item_motors__body_type_id']) {
             if (count($searchParams['search']['item_motors__body_type_id'])) {
                 $itemMotorsBodyTypeIds = $searchParams['search']['item_motors__body_type_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
-                foreach($itemMotorsBodyTypeIds as $itemMotorsBodyTypeId) {
+                foreach ($itemMotorsBodyTypeIds as $itemMotorsBodyTypeId) {
                     $appendQueryFilters .= "(a_m_body_type_id_i : (".$itemMotorsBodyTypeId.")) OR ";
                 }
-                $appendQueryFilters = rtrim($appendQueryFilters," OR ");
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
                 $appendQueryFilters .= ')';
-
-            }       
+            }
         }
 
-        if(isset($searchParams['search']['item_motors__fuel_type_id']) && $searchParams['search']['item_motors__fuel_type_id']) {
+        if (isset($searchParams['search']['item_motors__fuel_type_id']) && $searchParams['search']['item_motors__fuel_type_id']) {
             if (count($searchParams['search']['item_motors__fuel_type_id'])) {
                 $itemMotorsFuelTypeIds = $searchParams['search']['item_motors__fuel_type_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
-                foreach($itemMotorsFuelTypeIds as $itemMotorsFuelTypeId) {
+                foreach ($itemMotorsFuelTypeIds as $itemMotorsFuelTypeId) {
                     $appendQueryFilters .= "(a_m_fuel_type_id_i : (".$itemMotorsFuelTypeId.")) OR ";
                 }
-                $appendQueryFilters = rtrim($appendQueryFilters," OR ");
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
                 $appendQueryFilters .= ')';
-
-            }       
+            }
         }
 
-        if(isset($searchParams['search']['item_motors__reg_year']) && $searchParams['search']['item_motors__reg_year']) {
+        if (isset($searchParams['search']['item_motors__reg_year']) && $searchParams['search']['item_motors__reg_year']) {
             if (count($searchParams['search']['item_motors__reg_year'])) {
                 $itemMotorsRegYears = $searchParams['search']['item_motors__reg_year'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
-                foreach($itemMotorsRegYears as $itemMotorsRegYear) {
+                foreach ($itemMotorsRegYears as $itemMotorsRegYear) {
                     $appendQueryFilters .= "(a_m_reg_year_s : (".$itemMotorsRegYear.")) OR ";
                 }
-                $appendQueryFilters = rtrim($appendQueryFilters," OR ");
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
                 $appendQueryFilters .= ')';
-
-            }       
+            }
         }
 
-        if(isset($searchParams['search']['item_motors__transmission_id']) && $searchParams['search']['item_motors__transmission_id']) {
+        if (isset($searchParams['search']['item_motors__transmission_id']) && $searchParams['search']['item_motors__transmission_id']) {
             if (count($searchParams['search']['item_motors__transmission_id'])) {
                 $itemMotorsTransmissionIds = $searchParams['search']['item_motors__transmission_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
-                foreach($itemMotorsTransmissionIds as $itemMotorsTransmissionId) {
+                foreach ($itemMotorsTransmissionIds as $itemMotorsTransmissionId) {
                     $appendQueryFilters .= "(a_m_transmission_id_i : (".$itemMotorsTransmissionId.")) OR ";
                 }
-                $appendQueryFilters = rtrim($appendQueryFilters," OR ");
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
                 $appendQueryFilters .= ')';
-
-            }       
+            }
         }
 
         /*if(isset($searchParams['search']['item_motors__mileage_range']) && $searchParams['search']['item_motors__mileage_range']) {
@@ -2331,24 +2325,23 @@ class AdListController extends CoreController
                 $appendQueryFilters = rtrim($appendQueryFilters," OR ");
                 $appendQueryFilters .= ')';
 
-            }       
+            }
         }*/
 
-        if(isset($searchParams['search']['item_motors__condition_id']) && $searchParams['search']['item_motors__condition_id']) {
+        if (isset($searchParams['search']['item_motors__condition_id']) && $searchParams['search']['item_motors__condition_id']) {
             if (count($searchParams['search']['item_motors__condition_id'])) {
                 $itemMotorsConditionIds = $searchParams['search']['item_motors__condition_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
-                foreach($itemMotorsConditionIds as $itemMotorsConditionId) {
+                foreach ($itemMotorsConditionIds as $itemMotorsConditionId) {
                     $appendQueryFilters .= "(a_m_condition_id_i : (".$itemMotorsConditionId.")) OR ";
                 }
-                $appendQueryFilters = rtrim($appendQueryFilters," OR ");
+                $appendQueryFilters = rtrim($appendQueryFilters, " OR ");
                 $appendQueryFilters .= ')';
-
-            }       
+            }
         }
         
-        return $appendQueryFilters; 
+        return $appendQueryFilters;
     }
 
     /**
@@ -2371,5 +2364,4 @@ class AdListController extends CoreController
         }
         return $recommendeSlotResult;
     }
-
 }

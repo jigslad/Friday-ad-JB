@@ -143,7 +143,6 @@ EOF
             } else {
                 $output->writeln('Solr index removed for all users.', true);
             }
-
         }
     }
 
@@ -254,7 +253,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('user' => array ('id' => 'asc'));
+        $data['query_sorter']  = array('user' => array('id' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($userRepository, $data);

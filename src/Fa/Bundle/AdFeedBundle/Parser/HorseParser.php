@@ -114,7 +114,7 @@ class HorseParser extends AdParser
         }
 
         if (!$feedAd && $adArray['EndDate'] != '0001-01-01T00:00:00Z') {
-        	return 'discard';
+            return 'discard';
         }
 
         if ($this->advert['user']['email'] == '' && $this->advert['set_user'] == true) {
@@ -164,11 +164,11 @@ class HorseParser extends AdParser
         }
         $getUserStatus = EntityRepository::USER_STATUS_ACTIVE_ID;
 
-        if(!empty($user) && $this->advert['user']['email'] != '') {
+        if (!empty($user) && $this->advert['user']['email'] != '') {
             $getUserStatus = $this->em->getRepository('FaUserBundle:User')->getUserStatusByEmail($this->advert['user']['email']);
         }
 
-        if($getUserStatus == EntityRepository::USER_STATUS_ACTIVE_ID) {
+        if ($getUserStatus == EntityRepository::USER_STATUS_ACTIVE_ID) {
             $feedAd->setTransId($this->advert['trans_id']);
             $feedAd->setUniqueId($this->advert['unique_id']);
             $feedAd->setIsUpdated(1);
@@ -177,12 +177,12 @@ class HorseParser extends AdParser
             $feedAd->setLastModified($ad_feed_site_download->getModifiedSince());
         }
 
-        if ((isset($this->advert['status']) && $this->advert['status'] == 'R') || $getUserStatus != EntityRepository::USER_STATUS_ACTIVE_ID){
+        if ((isset($this->advert['status']) && $this->advert['status'] == 'R') || $getUserStatus != EntityRepository::USER_STATUS_ACTIVE_ID) {
             $feedAd->setStatus('R');
             if (implode(',', $this->advert['rejected_reason']) != '') {
                 $feedAd->setRemark(implode(',', $this->advert['rejected_reason']));
             }
-            if($getUserStatus != EntityRepository::USER_STATUS_ACTIVE_ID) {
+            if ($getUserStatus != EntityRepository::USER_STATUS_ACTIVE_ID) {
                 $feedAd->setRemark('User account is blocked/inactive');
                 $feedAd->setUser($user);
             }

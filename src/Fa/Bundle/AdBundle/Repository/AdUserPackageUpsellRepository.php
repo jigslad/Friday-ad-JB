@@ -89,7 +89,6 @@ class AdUserPackageUpsellRepository extends EntityRepository
             }
 
             return $adUserPackageUpsell->getId();
-
         }
     }
 
@@ -178,8 +177,7 @@ class AdUserPackageUpsellRepository extends EntityRepository
      * @return array
      */
     public function getLatestAdPackageUpsell($adId)
-    {    	
-    	
+    {
         $upsellArray = array();
         $adUserPackageUpsellTableName = $this->_em->getClassMetadata('FaAdBundle:AdUserPackageUpsell')->getTableName();
         $adUserPackageTableName = $this->_em->getClassMetadata('FaAdBundle:AdUserPackage')->getTableName();
@@ -193,9 +191,9 @@ class AdUserPackageUpsellRepository extends EntityRepository
         $stmt = $this->_em->getConnection()->prepare($query);
         $stmt->execute();
         $adUpsells = $stmt->fetchAll();
-		
+        
         foreach ($adUpsells as $adUpsell) {
-        	$upsellArray[$adUpsell['upsell_id']] = $adUpsell['upsell_name'];
+            $upsellArray[$adUpsell['upsell_id']] = $adUpsell['upsell_name'];
         }
         
         return $upsellArray;
@@ -232,7 +230,7 @@ class AdUserPackageUpsellRepository extends EntityRepository
             if ($adUpsell->getUpsell()->getType() == UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_ID) {
                 if (!isset($upsellValueArray[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE])) {
                     $upsellValueArray[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE] = $adUpsell->getValue();
-                } else if (isset($upsellValueArray[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE]) && $upsellValueArray[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE] < $adUpsell->getValue()) {
+                } elseif (isset($upsellValueArray[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE]) && $upsellValueArray[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE] < $adUpsell->getValue()) {
                     $upsellValueArray[UpsellRepository::UPSELL_TYPE_ADDITIONAL_PHOTO_VALUE] = $adUpsell->getValue();
                 }
             }
@@ -299,9 +297,10 @@ class AdUserPackageUpsellRepository extends EntityRepository
      *
      * @return object
      */
-    public function getAdsByTypeValue($type = null,$upsellvalue=null,$ids=null)
+    public function getAdsByTypeValue($type = null, $upsellvalue=null, $ids=null)
     {
-        $resultArr = array();$returnArr = array();
+        $resultArr = array();
+        $returnArr = array();
         $queryBuilder = $this->createQueryBuilder(self::ALIAS)
                       ->select(self::ALIAS.'.ad_id')
                       ->innerJoin(self::ALIAS.'.upsell', UpsellRepository::ALIAS)
@@ -310,13 +309,13 @@ class AdUserPackageUpsellRepository extends EntityRepository
                       ->andWhere(self::ALIAS.'.status=1')
                       ->andWhere(UpsellRepository::ALIAS.'.value = :upsellvalue')
                       ->setParameter('upsellvalue', $upsellvalue);
-        if($ids) {
+        if ($ids) {
             $queryBuilder->andWhere(self::ALIAS.'.ad_id in ('.$ids.')');
         }
         $resultArr = $queryBuilder->getQuery()->getResult();
         
-        if(!empty($resultArr)) {
-            $returnArr = array_column($resultArr,'ad_id');
+        if (!empty($resultArr)) {
+            $returnArr = array_column($resultArr, 'ad_id');
         }
         return $returnArr;
     }

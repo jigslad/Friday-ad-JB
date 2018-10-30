@@ -170,7 +170,7 @@ EOF
             }
 
             $searchParam['ad']['town_id'] = '';
-            if($townId!='') {
+            if ($townId!='') {
                 $searchParam['ad']['town_id'] = $townId;
             }
 
@@ -199,7 +199,6 @@ EOF
             } else {
                 $output->writeln('Solr index removed for all ads.', true);
             }
-
         }
     }
 
@@ -313,7 +312,7 @@ EOF
 
         $data                 = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter'] = array('ad' => array ('id' => 'asc'));
+        $data['query_sorter'] = array('ad' => array('id' => 'asc'));
 
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
@@ -321,8 +320,8 @@ EOF
 
         $queryBuilder = $searchManager->getQueryBuilder();
 
-        if($townIds!='') {
-            $townId = explode(',',$townIds);
+        if ($townIds!='') {
+            $townId = explode(',', $townIds);
             $queryBuilder->leftJoin('FaAdBundle:AdLocation', AdLocationRepository::ALIAS, 'WITH', AdLocationRepository::ALIAS.'.ad = '.AdRepository::ALIAS);
             $queryBuilder->andWhere(AdLocationRepository::ALIAS.'.location_town IN (:ad_location_town_id)');
             $queryBuilder->setParameter('ad_location_town_id', $townId);

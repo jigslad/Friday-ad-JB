@@ -99,9 +99,9 @@ EOF
         $stat_time = time();
 
         $output->writeln('SCRIPT START TIME '.date('d-m-Y H:i:s', $stat_time), true);
-        $output->writeln('',true);
+        $output->writeln('', true);
         $output->writeln('Total attachments to be deleted: '.$count, true);
-        $output->writeln('',true);
+        $output->writeln('', true);
         for ($i = 0; $i < $count;) {
             if ($i == 0) {
                 $low = 0;
@@ -155,9 +155,9 @@ EOF
         $objAttachments      = $this->getOldAttachments($searchParams, $offset);
 
         if ($objAttachments) {
-            foreach ($objAttachments As $objAttachment) {
+            foreach ($objAttachments as $objAttachment) {
                 $webPath       = $this->getContainer()->get('kernel')->getRootDir().'/../web';
-                $fileExtension = substr(strrchr($objAttachment->getOriginalFileName(),'.'),1);
+                $fileExtension = substr(strrchr($objAttachment->getOriginalFileName(), '.'), 1);
                 $fileName      = $objAttachment->getSessionId().'_'.$objAttachment->getHash().'.'.$fileExtension;
                 $filePath      = $webPath.DIRECTORY_SEPARATOR.$objAttachment->getPath().'/'.$fileName;
                 if (file_exists($filePath)) {

@@ -157,13 +157,14 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                 //return $cachedValue;
             }
         }
-        $recommendedSlotArray = array();$recommendedSlots =array();
+        $recommendedSlotArray = array();
+        $recommendedSlots =array();
         $parentArray = array();
         $parentArray = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId);
         
-        if(!empty($parentArray)) {
+        if (!empty($parentArray)) {
             asort($parentArray);
-            foreach($parentArray as $categoryid => $categoryname) {
+            foreach ($parentArray as $categoryid => $categoryname) {
                 $recommendedSlots = $this->createQueryBuilder(self::ALIAS)
                 ->andWhere(self::ALIAS.'.category = :categoryId')
                 ->andWhere(self::ALIAS.'.is_searchlist = 1')
@@ -171,13 +172,12 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                 ->orderBy(self::ALIAS.'.creative_group')
                 ->getQuery()
                 ->execute();
-                if(!empty($recommendedSlots)) {
+                if (!empty($recommendedSlots)) {
                     break;
                 }
             }
-            
         }
-        if(!empty($recommendedSlots)) {
+        if (!empty($recommendedSlots)) {
             foreach ($recommendedSlots as $recommendedSlot) {
                 $recommendedSlotArray[] = array(
                     'title' => $recommendedSlot->getTitle(),

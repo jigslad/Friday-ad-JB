@@ -48,13 +48,13 @@ use Fa\Bundle\AdBundle\Form\AdEditAdultType;
  */
 class AdEditController extends CoreController
 {
-     /**
-     * Displays a form to create a new record.
-     *
-     * @param Request $request  A Request object.
-     * @param integer $id       Ad id.
-     *
-     */
+    /**
+    * Displays a form to create a new record.
+    *
+    * @param Request $request  A Request object.
+    * @param integer $id       Ad id.
+    *
+    */
     public function editAction(Request $request, $id)
     {
         $redirectResponse = $this->checkIsValidLoggedInUser($request);
@@ -88,23 +88,23 @@ class AdEditController extends CoreController
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-            	//check user redirect from package page due to location missing
-            	if($this->container->get('session')->has('choose_package_location_missing_'.$id)) { 
-            		$redirectUrl = $this->container->get('session')->get('choose_package_location_missing_'.$id);
-            		$this->container->get('session')->remove('choose_package_location_missing_'.$id);
-            		$addMissingLocation = $this->container->get('fa_ad.manager.ad_post')->updateAdMissingLocation($ad, $request->request->get($formName));
-            	}
-            	
-            	// Rediret to ad for package selection.
-            	if (in_array($ad->getStatus()->getId(), $this->getRepository('FaAdBundle:Ad')->getRepostButtonInEditAdStatus()) || $ad->getStatus()->getId() == EntityRepository::AD_STATUS_DRAFT_ID) {
-            		return $this->handleMessage($this->get('translator')->trans('Your advert %advert_title% has been updated.', array('%advert_title%' => '<i>'.$ad->getTitle().'</i>'), 'success'), 'ad_package_purchase', array('adId' => $ad->getId()));
-            	}
-            	
-            	if (in_array($ad->getStatus()->getId(), array(EntityRepository::AD_STATUS_LIVE_ID, EntityRepository::AD_STATUS_IN_MODERATION_ID))) {
-            		return $this->handleMessage($this->get('translator')->trans('Your advert %advert_title% has been updated.', array('%advert_title%' => '<i>'.$ad->getTitle().'</i>'), 'success'), 'manage_my_ads_active');
-            	}
-            	
-            	return $this->handleMessage($this->get('translator')->trans('Your advert %advert_title% has been updated.', array('%advert_title%' => '<i>'.$ad->getTitle().'</i>'), 'success'), 'manage_my_ads_active');
+                //check user redirect from package page due to location missing
+                if ($this->container->get('session')->has('choose_package_location_missing_'.$id)) {
+                    $redirectUrl = $this->container->get('session')->get('choose_package_location_missing_'.$id);
+                    $this->container->get('session')->remove('choose_package_location_missing_'.$id);
+                    $addMissingLocation = $this->container->get('fa_ad.manager.ad_post')->updateAdMissingLocation($ad, $request->request->get($formName));
+                }
+                
+                // Rediret to ad for package selection.
+                if (in_array($ad->getStatus()->getId(), $this->getRepository('FaAdBundle:Ad')->getRepostButtonInEditAdStatus()) || $ad->getStatus()->getId() == EntityRepository::AD_STATUS_DRAFT_ID) {
+                    return $this->handleMessage($this->get('translator')->trans('Your advert %advert_title% has been updated.', array('%advert_title%' => '<i>'.$ad->getTitle().'</i>'), 'success'), 'ad_package_purchase', array('adId' => $ad->getId()));
+                }
+                
+                if (in_array($ad->getStatus()->getId(), array(EntityRepository::AD_STATUS_LIVE_ID, EntityRepository::AD_STATUS_IN_MODERATION_ID))) {
+                    return $this->handleMessage($this->get('translator')->trans('Your advert %advert_title% has been updated.', array('%advert_title%' => '<i>'.$ad->getTitle().'</i>'), 'success'), 'manage_my_ads_active');
+                }
+                
+                return $this->handleMessage($this->get('translator')->trans('Your advert %advert_title% has been updated.', array('%advert_title%' => '<i>'.$ad->getTitle().'</i>'), 'success'), 'manage_my_ads_active');
             }
         }
 
@@ -179,7 +179,7 @@ class AdEditController extends CoreController
         $categoryName = $this->getRepository('FaEntityBundle:Category')->getRootCategoryName($categoryId, $this->container);
 
         if ($categoryName) {
-            $templateName = 'FaAdBundle:AdEdit:'.str_replace('_','', $categoryName).'.html.twig';
+            $templateName = 'FaAdBundle:AdEdit:'.str_replace('_', '', $categoryName).'.html.twig';
         }
 
         return $templateName;

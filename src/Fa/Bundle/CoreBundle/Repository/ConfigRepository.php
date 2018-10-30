@@ -64,7 +64,7 @@ class ConfigRepository extends EntityRepository
             self::PRIVATE_USER_AD_POST_LIMIT => 'Private user ad post limit',
             self::ADZUNA_MOTORS_FEED_USER_IDS => 'Adzuna motors feed user ids',
             self::DOTMAILER_ENROLLMENT_PROGRAM_ID => 'Dotmailer enrollment program id',
-        	self::MAPFIT_API_KEY_ID				  => 'MapFit Key',
+            self::MAPFIT_API_KEY_ID				  => 'MapFit Key',
         );
     }
 

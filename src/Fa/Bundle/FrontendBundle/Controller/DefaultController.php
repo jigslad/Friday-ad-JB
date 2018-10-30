@@ -134,7 +134,7 @@ class DefaultController extends ThirdPartyLoginController
         }
 
 
-         return $this->redirect($url, 301);
+        return $this->redirect($url, 301);
     }
 
     /**
@@ -664,7 +664,7 @@ class DefaultController extends ThirdPartyLoginController
                 $location['text'] = $cookieValue['location_text'];
                 $location['slug'] = $cookieValue['slug'];
                 $location['area'] = $cookieValue['location_area'];
-				
+                
                 $cookieValue = json_encode($cookieValue);
 
                 $response->headers->clearCookie('location');
@@ -799,30 +799,30 @@ class DefaultController extends ThirdPartyLoginController
             $key        = trim($key, '_');
 
             
-            if (isset($headerImagesArray[$key])) { 
-            	if (isset($headerImagesArray[$key]['override_1'])) {
-            		$randomKey  = array_rand($headerImagesArray[$key]['override_1'], 1);
-            		$imageArray = $headerImagesArray[$key]['override_1'][$randomKey];
-            	} else {
-            		$randomKey  = array_rand($headerImagesArray[$key]['override_'], 1);
-            		$imageArray = $headerImagesArray[$key]['override_'][$randomKey];
-            	}
+            if (isset($headerImagesArray[$key])) {
+                if (isset($headerImagesArray[$key]['override_1'])) {
+                    $randomKey  = array_rand($headerImagesArray[$key]['override_1'], 1);
+                    $imageArray = $headerImagesArray[$key]['override_1'][$randomKey];
+                } else {
+                    $randomKey  = array_rand($headerImagesArray[$key]['override_'], 1);
+                    $imageArray = $headerImagesArray[$key]['override_'][$randomKey];
+                }
             } elseif ($rootCategoryId && $screenType && isset($headerImagesArray[$rootCategoryId.'_'.$screenType])) {
-            	if ($rootCategoryId && $screenType && isset($headerImagesArray[$rootCategoryId.'_'.$screenType]['override_1'])) {
-            		$randomKey  = array_rand($headerImagesArray[$rootCategoryId.'_'.$screenType]['override_1'], 1);
-            		$imageArray = $headerImagesArray[$rootCategoryId.'_'.$screenType]['override_1'][$randomKey];
-            	} else {
-            		$randomKey  = array_rand($headerImagesArray[$rootCategoryId.'_'.$screenType]['override_'], 1);
-            		$imageArray = $headerImagesArray[$rootCategoryId.'_'.$screenType]['override_'][$randomKey];
-            	}
+                if ($rootCategoryId && $screenType && isset($headerImagesArray[$rootCategoryId.'_'.$screenType]['override_1'])) {
+                    $randomKey  = array_rand($headerImagesArray[$rootCategoryId.'_'.$screenType]['override_1'], 1);
+                    $imageArray = $headerImagesArray[$rootCategoryId.'_'.$screenType]['override_1'][$randomKey];
+                } else {
+                    $randomKey  = array_rand($headerImagesArray[$rootCategoryId.'_'.$screenType]['override_'], 1);
+                    $imageArray = $headerImagesArray[$rootCategoryId.'_'.$screenType]['override_'][$randomKey];
+                }
             } elseif ($screenType && isset($headerImagesArray['all'][$screenType])) {
-            	if ($screenType && isset($headerImagesArray['all'][$screenType]['override_1'])) {
-            		$randomKey  = array_rand($headerImagesArray['all'][$screenType]['override_1'], 1);
-            		$imageArray = $headerImagesArray['all'][$screenType]['override_1'][$randomKey];
-            	} else {
-            		$randomKey  = array_rand($headerImagesArray['all'][$screenType]['override_'], 1);
-            		$imageArray = $headerImagesArray['all'][$screenType]['override_'][$randomKey];
-            	}
+                if ($screenType && isset($headerImagesArray['all'][$screenType]['override_1'])) {
+                    $randomKey  = array_rand($headerImagesArray['all'][$screenType]['override_1'], 1);
+                    $imageArray = $headerImagesArray['all'][$screenType]['override_1'][$randomKey];
+                } else {
+                    $randomKey  = array_rand($headerImagesArray['all'][$screenType]['override_'], 1);
+                    $imageArray = $headerImagesArray['all'][$screenType]['override_'][$randomKey];
+                }
             }
 
             return new JsonResponse($imageArray);
@@ -908,12 +908,12 @@ class DefaultController extends ThirdPartyLoginController
     {
         if ($request->isXmlHttpRequest()) {
             $response = new Response();
-            $response->headers->setCookie(new Cookie('is_over_18',1, time() + 1 * 86400));
+            $response->headers->setCookie(new Cookie('is_over_18', 1, time() + 1 * 86400));
             $response->sendHeaders();
-            return new JsonResponse(array('response' => TRUE));
+            return new JsonResponse(array('response' => true));
         }
 
-        return new JsonResponse(array('response' => FALSE));
+        return new JsonResponse(array('response' => false));
     }
 
     /**
@@ -1021,7 +1021,7 @@ class DefaultController extends ThirdPartyLoginController
             CommonManager::removeCache($this->container, 'ti_url_'.$tiCacheKey);
         }
 
-        return new JsonResponse(array('response' => FALSE));
+        return new JsonResponse(array('response' => false));
     }
 
     /**
@@ -1174,4 +1174,3 @@ class DefaultController extends ThirdPartyLoginController
         return $this->render('FaFrontendBundle:Default:showHomePageLocationBlocks.html.twig', $parameters);
     }
 }
-

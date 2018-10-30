@@ -25,7 +25,7 @@ class FoundationGooglePagerTemplate extends Template
     /**
      * Default options.
      */
-    static protected $defaultOptions = array(
+    protected static $defaultOptions = array(
         'prev_message'        => '&#171;',
         'next_message'        => '&#187;',
         'dots_message'        => '&hellip;',

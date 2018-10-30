@@ -83,25 +83,25 @@ class AmazonPayManager
      */
     private $client_secret;
 
- /**
-     * Amazon Pay currency code.
-     *
-     * @var string
-     */
+    /**
+        * Amazon Pay currency code.
+        *
+        * @var string
+        */
     private $currency_code;
 
- /**
-     * Amazon Pay region.
-     *
-     * @var string
-     */
+    /**
+        * Amazon Pay region.
+        *
+        * @var string
+        */
     private $region;
 
- /**
-     * Amazon Pay sandbox.
-     *
-     * @var boolean
-     */
+    /**
+        * Amazon Pay sandbox.
+        *
+        * @var boolean
+        */
     private $sandbox;
 
     /**
@@ -127,13 +127,13 @@ class AmazonPayManager
         $amazonClient = new AmazonClient($amazonconfig);
     }
 
-     /**
-     * Get Amazon Pay config array.
-     *
-     * @param array $amazonpayParams Amazon Pay param array.
-     *
-     * @return array
-     */
+    /**
+    * Get Amazon Pay config array.
+    *
+    * @param array $amazonpayParams Amazon Pay param array.
+    *
+    * @return array
+    */
     public function getAmazonpayConfig()
     {
         $amazonconfig                = array();
@@ -147,7 +147,7 @@ class AmazonPayManager
         return $amazonconfig;
     }
  
-    public function getAmazonCartDetails($requestParameters,$accessToken)
+    public function getAmazonCartDetails($requestParameters, $accessToken)
     {
         $amazonconfig = $this->getAmazonpayConfig();
         $amazonClient = new AmazonClient($amazonconfig);
@@ -158,8 +158,7 @@ class AmazonPayManager
         $response = $amazonClient->setOrderReferenceDetails($requestParameters);
 
         // If the API call was a success Get the Order Details by making the GetOrderReferenceDetails API call
-        if ($amazonClient->success)
-        {
+        if ($amazonClient->success) {
             $requestParameters['access_token'] = $accessToken;
             $response = $amazonClient->getOrderReferenceDetails($requestParameters);
         }
@@ -168,9 +167,8 @@ class AmazonPayManager
         return json_encode($json, JSON_PRETTY_PRINT);
     }
 
-    public function getAmazonOrderProcess($cart,$container)
+    public function getAmazonOrderProcess($cart, $container)
     {
-        
         $requestParameters = array();
         $amazonconfig = $this->getAmazonpayConfig();
         $amazonClient = new AmazonClient($amazonconfig);
@@ -183,8 +181,7 @@ class AmazonPayManager
         $responsearray['confirm'] = json_decode($response->toJson());
 
         // If the API call was a success make the Authorize API call
-        if($amazonClient->success)
-        {
+        if ($amazonClient->success) {
             $requestParameters['authorization_amount'] = $cart->getAmount();
             $requestParameters['authorization_reference_id'] = uniqid();
             $requestParameters['seller_authorization_note'] = 'Authorizing payment';
@@ -195,8 +192,7 @@ class AmazonPayManager
         }
 
         // If the Authorize API call was a success, make the Capture API call when you are ready to capture for the order (for example when the order has been dispatched)
-        if($amazonClient->success)
-        {
+        if ($amazonClient->success) {
             $requestParameters['amazon_authorization_id'] = $responsearray['authorize']->AuthorizeResult->AuthorizationDetails->AmazonAuthorizationId;
             $requestParameters['capture_amount'] = $responsearray['authorize']->AuthorizeResult->AuthorizationDetails->CapturedAmount->Amount;
             $requestParameters['currency_code'] = $responsearray['authorize']->AuthorizeResult->AuthorizationDetails->CapturedAmount->CurrencyCode;
@@ -235,5 +231,5 @@ class AmazonPayManager
         parse_str($response, $responseArray);
 
         return $responseArray;
-    }    
+    }
 }

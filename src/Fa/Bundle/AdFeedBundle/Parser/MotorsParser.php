@@ -19,6 +19,7 @@ use Fa\Bundle\AdFeedBundle\Entity\AdFeedMapping;
 use Fa\Bundle\AdFeedBundle\Entity\AdFeed;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\UserBundle\Repository\UserRepository;
+
 /**
  * Car parser.
  *
@@ -146,9 +147,9 @@ class MotorsParser extends AdParser
 
         $getUserStatus = EntityRepository::USER_STATUS_ACTIVE_ID;
         
-        if(!empty($user) && $this->advert['user']['email'] != '') {
+        if (!empty($user) && $this->advert['user']['email'] != '') {
             $getUserStatus = $this->em->getRepository('FaUserBundle:User')->getUserStatusByEmail($this->advert['user']['email']);
-        } 
+        }
 
         $feedAd->setUser($user);
         $feedAd->setIsUpdated(1);
@@ -163,7 +164,7 @@ class MotorsParser extends AdParser
             if (implode(',', $this->advert['rejected_reason']) != '') {
                 $feedAd->setRemark(implode(',', $this->advert['rejected_reason']));
             }
-        } elseif($getUserStatus != EntityRepository::USER_STATUS_ACTIVE_ID) {
+        } elseif ($getUserStatus != EntityRepository::USER_STATUS_ACTIVE_ID) {
             $feedAd->setRemark('User account is blocked/inactive');
             $feedAd->setUser($user);
             $feedAd->setStatus('R');
@@ -357,18 +358,17 @@ class MotorsParser extends AdParser
             if (!$this->advert['motors']['make_id']) {
                 $this->advert['motors']['meta_data']['make'] = $adArray['Manufacturer'];
                 if (isset($adArray['Model']) && $adArray['Model'] != '') {
-                	$this->advert['motors']['meta_data']['model'] = $adArray['Model'];
+                    $this->advert['motors']['meta_data']['model'] = $adArray['Model'];
                 }
             } else {
-            	if (isset($adArray['Model']) && $adArray['Model'] != '') {
-            		$this->advert['motors']['model_id']  = $this->getBikeModelId($adArray['Model'], $this->advert['motors']['make_id']);
-            		if (!$this->advert['motors']['model_id']) {
-            			$this->advert['motors']['meta_data']['model'] = $adArray['Model'];
-            		}
-            	}
+                if (isset($adArray['Model']) && $adArray['Model'] != '') {
+                    $this->advert['motors']['model_id']  = $this->getBikeModelId($adArray['Model'], $this->advert['motors']['make_id']);
+                    if (!$this->advert['motors']['model_id']) {
+                        $this->advert['motors']['meta_data']['model'] = $adArray['Model'];
+                    }
+                }
             }
         }
-
     }
 
 
@@ -380,11 +380,11 @@ class MotorsParser extends AdParser
      */
     public function getBikeModelId($string, $make_id)
     {
-    	$entity = $this->em->getRepository('FaEntityBundle:Entity')->findOneBy(array('name' => $string, 'parent_id' => $make_id));
+        $entity = $this->em->getRepository('FaEntityBundle:Entity')->findOneBy(array('name' => $string, 'parent_id' => $make_id));
 
-    	if ($entity) {
-    		return $entity->getId();
-    	}
+        if ($entity) {
+            return $entity->getId();
+        }
     }
 
     /**
@@ -622,9 +622,9 @@ class MotorsParser extends AdParser
         }
 
         if (isset($this->advert['motors']['model_id'])) {
-        	$ad_motors->setModelId($this->advert['motors']['model_id']);
+            $ad_motors->setModelId($this->advert['motors']['model_id']);
         } else {
-        	$ad_motors->setModelId(null);
+            $ad_motors->setModelId(null);
         }
 
         if (isset($this->advert['motors']['transmission_id'])) {

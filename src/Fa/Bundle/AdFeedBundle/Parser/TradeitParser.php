@@ -198,7 +198,6 @@ class TradeitParser
             $dimension = @getimagesize($filePath);
 
             if (file_exists($filePath) && $dimension) {
-
                 print_r($img);
                 $hash = CommonManager::generateHash();
                 CommonManager::createGroupDirectory($adImageDir, $ad->getId());
@@ -497,7 +496,6 @@ class TradeitParser
         //$this->em->flush();
 
         foreach ($ads as $ad) {
-
             $this->advert = array();
             $r = $this->mapAdData($ad, $siteID, $ad_feed_site_download);
             if ($r != 'discard') {
@@ -531,7 +529,8 @@ class TradeitParser
 
         $category                    = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($adArray['category_slug']);
         $this->advert['category_id'] = $category['id'];
-        $this->advert['parent_category'] = $adArray['parent_category'];;
+        $this->advert['parent_category'] = $adArray['parent_category'];
+        ;
 
         if (!$this->advert['category_id']) {
             $this->setRejectAd();
@@ -557,7 +556,6 @@ class TradeitParser
         $this->advert['aff_image_url'] = $adArray['ImageThumbURL'];
         $this->advert['track_back_url']    = $adArray['AdURL'];
         $this->advert['aff_no_image']  = $adArray['NumberOfImages'];
-
     }
 
     /**
@@ -603,11 +601,9 @@ class TradeitParser
             if (implode(',', $this->advert['rejected_reason']) != '') {
                 $feedAd->setRemark(implode(',', $this->advert['rejected_reason']));
             }
-        }
-        elseif (isset($this->advert['status']) && $this->advert['status'] == 'E') {
+        } elseif (isset($this->advert['status']) && $this->advert['status'] == 'E') {
             $feedAd->setStatus('E');
-        }
-        else {
+        } else {
             $feedAd->setStatus('A');
         }
 
@@ -669,7 +665,7 @@ class TradeitParser
                 $locationArray = $this->em->getRepository('FaEntityBundle:Location')->getTownInfoArrayById($adArray['Town'], $this->container, 'name');
                 $location_not_found = true;
             }
-         }
+        }
 
         if ($location_not_found == true) {
             $this->advert['location']['town_id']     = isset($locationArray['town_id']) && $locationArray['town_id'] ? $locationArray['town_id'] : null;
@@ -839,331 +835,322 @@ class TradeitParser
         $dimension = isset($dimension[0]) ? $dimension[0] : null;
 
         if (count($dimension) > 0) {
-
             if ($this->advert['parent_category'] == 'For Sale') {
-                    $ad_forsale = $this->em->getRepository('FaAdBundle:AdForSale')->findOneBy(array('ad' => $ad->getId()));
+                $ad_forsale = $this->em->getRepository('FaAdBundle:AdForSale')->findOneBy(array('ad' => $ad->getId()));
 
-                    if (!$ad_forsale) {
-                        $ad_forsale= new AdForSale();
-                    }
-
-                    $ad_forsale->setAd($ad);
-
-                    if (isset($dimension['age_range_id'])) {
-                        $ad_forsale->setAgeRangeId($dimension['age_range_id']);
-                    } else {
-                        $ad_forsale->setAgeRangeId(null);
-                    }
-
-                    if (isset($dimension['brand_clothing_id'])) {
-                        $ad_forsale->setBrandClothingId($dimension['brand_clothing_id']);
-                    } else {
-                        $ad_forsale->setBrandClothingId(null);
-                    }
-
-                    if (isset($dimension['brand_id'])) {
-                        $ad_forsale->setBrandId($dimension['brand_id']);
-                    } else {
-                        $ad_forsale->setBrandId(null);
-                    }
-
-                    if (isset($dimension['business_type_id'])) {
-                        $ad_forsale->setBusinessTypeId($dimension['business_type_id']);
-                    } else {
-                        $ad_forsale->setBusinessTypeId(null);
-                    }
-
-                    if (isset($dimension['colour_id'])) {
-                        $ad_forsale->setColourId($dimension['colour_id']);
-                    } else {
-                        $ad_forsale->setColourId(null);
-                    }
-
-                    if (isset($dimension['condition_id'])) {
-                        $ad_forsale->setConditionId($dimension['condition_id']);
-                    } else {
-                        $ad_forsale->setConditionId(null);
-                    }
-
-                    if (isset($dimension['meta_data'])) {
-                        $ad_forsale->setMetaData($dimension['meta_data']);
-                    } else {
-                        $ad_forsale->setMetaData(null);
-                    }
-
-                    if (isset($dimension['size_id'])) {
-                        $ad_forsale->setSizeId($dimension['size_id']);
-                    } else {
-                        $ad_forsale->setSizeId(null);
-                    }
-
-                    $this->em->persist($ad_forsale);
-                } elseif ($this->advert['parent_category'] == 'Motors') {
-
-                    $ad_motors = $this->em->getRepository('FaAdBundle:AdMotors')->findOneBy(array('ad' => $ad->getId()));
-
-                    if (!$ad_motors) {
-                        $ad_motors = new AdMotors();
-                    }
-
-                    $ad_motors->setAd($ad);
-
-                    if (isset($dimension['berth_id'])) {
-                        $ad_motors->setBerthId($dimension['berth_id']);
-                    } else {
-                        $ad_motors->setBerthId(null);
-                    }
-
-                    if (isset($dimension['body_type_id'])) {
-                        $ad_motors->setBodyTypeId($dimension['body_type_id']);
-                    } else {
-                        $ad_motors->setBodyTypeId(null);
-                    }
-
-                    if (isset($dimension['colour_id'])) {
-                        $ad_motors->setColourId($dimension['colour_id']);
-                    } else {
-                        $ad_motors->setColourId(null);
-                    }
-
-                    if (isset($dimension['fuel_type_id'])) {
-                        $ad_motors->setFuelTypeId($dimension['fuel_type_id']);
-                    } else {
-                        $ad_motors->setFuelTypeId(null);
-                    }
-
-                    if (isset($dimension['make_id'])) {
-                        $ad_motors->setMakeId($dimension['make_id']);
-                    } else {
-                        $ad_motors->setMakeId(null);
-                    }
-
-                    if (isset($dimension['manufacturer_id'])) {
-                        $ad_motors->setManufacturerId($dimension['manufacturer_id']);
-                    } else {
-                        $ad_motors->setManufacturerId(null);
-                    }
-
-                    if (isset($dimension['meta_data'])) {
-                        $ad_motors->setMetaData($dimension['meta_data']);
-                    } else {
-                        $ad_motors->setMetaData(null);
-                    }
-
-                    if (isset($dimension['model_id'])) {
-                        $ad_motors->setModelId($dimension['model_id']);
-                    } else {
-                        $ad_motors->setModelId(null);
-                    }
-
-                    if (isset($dimension['part_manufacturer_id'])) {
-                        $ad_motors->setPartManufacturerId($dimension['part_manufacturer_id']);
-                    } else {
-                        $ad_motors->setPartManufacturerId(null);
-                    }
-
-                    if (isset($dimension['part_of_make_id'])) {
-                        $ad_motors->setPartOfMakeId($dimension['part_of_make_id']);
-                    } else {
-                        $ad_motors->setPartOfMakeId(null);
-                    }
-
-                    if (isset($dimension['transmission_id'])) {
-                        $ad_motors->setTransmissionId($dimension['transmission_id']);
-                    } else {
-                        $ad_motors->setTransmissionId(null);
-                    }
-
-                    $this->em->persist($ad_motors);
-
-                  } elseif ($this->advert['parent_category'] == 'Jobs') {
-
-                      $ad_jobs = $this->em->getRepository('FaAdBundle:AdJobs')->findOneBy(array('ad' => $ad->getId()));
-
-                      if (!$ad_jobs) {
-                          $ad_jobs = new AdJobs();
-                      }
-
-                      $ad_jobs->setAd($ad);
-
-                      if (isset($dimension['contract_type_id'])) {
-                          $ad_jobs->setContractTypeId($dimension['contract_type_id']);
-                      } else {
-                          $ad_jobs->setContractTypeId(null);
-                      }
-
-                      if (isset($dimension['meta_data'])) {
-                          $ad_jobs->setMetaData($dimension['meta_data']);
-                      } else {
-                          $ad_jobs->setMetaData(null);
-                      }
-
-                      $this->em->persist($ad_jobs);
-
-                  } elseif ($this->advert['parent_category'] == 'Services') {
-
-                      $ad_services = $this->em->getRepository('FaAdBundle:AdServices')->findOneBy(array('ad' => $ad->getId()));
-
-                      if (!$ad_services) {
-                          $ad_services = new AdServices();
-                      }
-
-                      $ad_services->setAd($ad);
-
-                      if (isset($dimension['event_type_id'])) {
-                          $ad_services->setEventTypeId($dimension['event_type_id']);
-                      } else {
-                          $ad_services->setEventTypeId(null);
-                      }
-
-                      if (isset($dimension['services_offered_id'])) {
-                          $ad_services->setServicesOfferedId($dimension['services_offered_id']);
-                      } else {
-                          $ad_services->setServicesOfferedId(null);
-                      }
-
-                      if (isset($dimension['service_type_id'])) {
-                          $ad_services->setServiceTypeId($dimension['service_type_id']);
-                      } else {
-                          $ad_services->setServiceTypeId(null);
-                      }
-
-                      if (isset($dimension['meta_data'])) {
-                          $ad_services->setMetaData($dimension['meta_data']);
-                      } else {
-                          $ad_services->setMetaData(null);
-                      }
-
-                      $this->em->persist($ad_services);
-                   } elseif ($this->advert['parent_category'] == 'Property') {
-                       $ad_property = $this->em->getRepository('FaAdBundle:AdProperty')->findOneBy(array('ad' => $ad->getId()));
-
-                       if (!$ad_property) {
-                           $ad_property = new AdProperty();
-                       }
-
-                       $ad_property->setAd($ad);
-
-                       if (isset($dimension['amenities_id'])) {
-                           $ad_property->setAmenitiesId($dimension['amenities_id']);
-                       } else {
-                           $ad_property->setAmenitiesId(null);
-                       }
-
-                       if (isset($dimension['number_of_bedrooms_id'])) {
-                           $ad_property->setNumberOfBedroomsId($dimension['number_of_bedrooms_id']);
-                       } else {
-                           $ad_property->setNumberOfBedroomsId(null);
-                       }
-
-                       if (isset($dimension['room_size_id'])) {
-                           $ad_property->setRoomSizeId($dimension['room_size_id']);
-                       } else {
-                           $ad_property->setRoomSizeId(null);
-                       }
-
-                      if (isset($dimension['meta_data'])) {
-                          $ad_property->setMetaData($dimension['meta_data']);
-                      } else {
-                          $ad_property->setMetaData(null);
-                      }
-
-                      $this->em->persist($ad_property);
-                 } elseif ($this->advert['parent_category'] == 'Animals') {
-
-                     $ad_animals = $this->em->getRepository('FaAdBundle:AdAnimals')->findOneBy(array('ad' => $ad->getId()));
-
-                     if (!$ad_animals) {
-                         $ad_animals = new AdAnimals();
-                     }
-
-                     $ad_animals->setAd($ad);
-
-                     if (isset($dimension['ad_type_id'])) {
-                         $ad_animals->setAdTypeId($dimension['ad_type_id']);
-                     } else {
-                         $ad_animals->setAdTypeId(null);
-                     }
-
-                     if (isset($dimension['breed_id'])) {
-                         $ad_animals->setBreedId($dimension['breed_id']);
-                     } else {
-                         $ad_animals->setBreedId(null);
-                     }
-
-                     if (isset($dimension['colour_id'])) {
-                         $ad_animals->setColourId($dimension['colour_id']);
-                     } else {
-                         $ad_animals->setColourId(null);
-                     }
-
-                     if (isset($dimension['gender_id'])) {
-                         $ad_animals->setGenderId($dimension['gender_id']);
-                     } else {
-                         $ad_animals->setGenderId(null);
-                     }
-
-                     if (isset($dimension['meta_data'])) {
-                         $ad_animals->setMetaData($dimension['meta_data']);
-                     } else {
-                         $ad_animals->setMetaData(null);
-                     }
-
-                     if (isset($dimension['species_id'])) {
-                         $ad_animals->setSpeciesId($dimension['species_id']);
-                     } else {
-                         $ad_animals->setSpeciesId(null);
-                     }
-
-                     $this->em->persist($ad_animals);
-                } elseif ($this->advert['parent_category'] == 'Community') {
-
-                    $ad_community = $this->em->getRepository('FaAdBundle:AdCommunity')->findOneBy(array('ad' => $ad->getId()));
-
-                    if (!$ad_community) {
-                        $ad_community = new AdCommunity();
-                    }
-
-                    $ad_community->setAd($ad);
-
-                    if (isset($dimension['education_level_id'])) {
-                        $ad_community->setEducationLevelId($dimension['education_level_id']);
-                    } else {
-                        $ad_community->setEducationLevelId(null);
-                    }
-
-                    if (isset($dimension['experience_level_id'])) {
-                        $ad_community->setExperienceLevelId($dimension['experience_level_id']);
-                    } else {
-                        $ad_community->setExperienceLevelId(null);
-                    }
-
-                    if (isset($dimension['meta_data'])) {
-                        $ad_community->setMetaData($dimension['meta_data']);
-                    } else {
-                        $ad_community->setMetaData(null);
-                    }
-
-                    $this->em->persist($ad_community);
-                } elseif ($this->advert['parent_category'] == 'Adult') {
-
-                    $ad_adult = $this->em->getRepository('FaAdBundle:AdAdult')->findOneBy(array('ad' => $ad->getId()));
-
-                    if (!$ad_adult) {
-                        $ad_adult = new AdAdult();
-                    }
-
-                    $ad_adult->setAd($ad);
-
-                    if (isset($dimension['meta_data'])) {
-                        $ad_adult->setMetaData($dimension['meta_data']);
-                    } else {
-                        $ad_adult->setMetaData(null);
-                    }
-
-                    $this->em->persist($ad_adult);
+                if (!$ad_forsale) {
+                    $ad_forsale= new AdForSale();
                 }
+
+                $ad_forsale->setAd($ad);
+
+                if (isset($dimension['age_range_id'])) {
+                    $ad_forsale->setAgeRangeId($dimension['age_range_id']);
+                } else {
+                    $ad_forsale->setAgeRangeId(null);
+                }
+
+                if (isset($dimension['brand_clothing_id'])) {
+                    $ad_forsale->setBrandClothingId($dimension['brand_clothing_id']);
+                } else {
+                    $ad_forsale->setBrandClothingId(null);
+                }
+
+                if (isset($dimension['brand_id'])) {
+                    $ad_forsale->setBrandId($dimension['brand_id']);
+                } else {
+                    $ad_forsale->setBrandId(null);
+                }
+
+                if (isset($dimension['business_type_id'])) {
+                    $ad_forsale->setBusinessTypeId($dimension['business_type_id']);
+                } else {
+                    $ad_forsale->setBusinessTypeId(null);
+                }
+
+                if (isset($dimension['colour_id'])) {
+                    $ad_forsale->setColourId($dimension['colour_id']);
+                } else {
+                    $ad_forsale->setColourId(null);
+                }
+
+                if (isset($dimension['condition_id'])) {
+                    $ad_forsale->setConditionId($dimension['condition_id']);
+                } else {
+                    $ad_forsale->setConditionId(null);
+                }
+
+                if (isset($dimension['meta_data'])) {
+                    $ad_forsale->setMetaData($dimension['meta_data']);
+                } else {
+                    $ad_forsale->setMetaData(null);
+                }
+
+                if (isset($dimension['size_id'])) {
+                    $ad_forsale->setSizeId($dimension['size_id']);
+                } else {
+                    $ad_forsale->setSizeId(null);
+                }
+
+                $this->em->persist($ad_forsale);
+            } elseif ($this->advert['parent_category'] == 'Motors') {
+                $ad_motors = $this->em->getRepository('FaAdBundle:AdMotors')->findOneBy(array('ad' => $ad->getId()));
+
+                if (!$ad_motors) {
+                    $ad_motors = new AdMotors();
+                }
+
+                $ad_motors->setAd($ad);
+
+                if (isset($dimension['berth_id'])) {
+                    $ad_motors->setBerthId($dimension['berth_id']);
+                } else {
+                    $ad_motors->setBerthId(null);
+                }
+
+                if (isset($dimension['body_type_id'])) {
+                    $ad_motors->setBodyTypeId($dimension['body_type_id']);
+                } else {
+                    $ad_motors->setBodyTypeId(null);
+                }
+
+                if (isset($dimension['colour_id'])) {
+                    $ad_motors->setColourId($dimension['colour_id']);
+                } else {
+                    $ad_motors->setColourId(null);
+                }
+
+                if (isset($dimension['fuel_type_id'])) {
+                    $ad_motors->setFuelTypeId($dimension['fuel_type_id']);
+                } else {
+                    $ad_motors->setFuelTypeId(null);
+                }
+
+                if (isset($dimension['make_id'])) {
+                    $ad_motors->setMakeId($dimension['make_id']);
+                } else {
+                    $ad_motors->setMakeId(null);
+                }
+
+                if (isset($dimension['manufacturer_id'])) {
+                    $ad_motors->setManufacturerId($dimension['manufacturer_id']);
+                } else {
+                    $ad_motors->setManufacturerId(null);
+                }
+
+                if (isset($dimension['meta_data'])) {
+                    $ad_motors->setMetaData($dimension['meta_data']);
+                } else {
+                    $ad_motors->setMetaData(null);
+                }
+
+                if (isset($dimension['model_id'])) {
+                    $ad_motors->setModelId($dimension['model_id']);
+                } else {
+                    $ad_motors->setModelId(null);
+                }
+
+                if (isset($dimension['part_manufacturer_id'])) {
+                    $ad_motors->setPartManufacturerId($dimension['part_manufacturer_id']);
+                } else {
+                    $ad_motors->setPartManufacturerId(null);
+                }
+
+                if (isset($dimension['part_of_make_id'])) {
+                    $ad_motors->setPartOfMakeId($dimension['part_of_make_id']);
+                } else {
+                    $ad_motors->setPartOfMakeId(null);
+                }
+
+                if (isset($dimension['transmission_id'])) {
+                    $ad_motors->setTransmissionId($dimension['transmission_id']);
+                } else {
+                    $ad_motors->setTransmissionId(null);
+                }
+
+                $this->em->persist($ad_motors);
+            } elseif ($this->advert['parent_category'] == 'Jobs') {
+                $ad_jobs = $this->em->getRepository('FaAdBundle:AdJobs')->findOneBy(array('ad' => $ad->getId()));
+
+                if (!$ad_jobs) {
+                    $ad_jobs = new AdJobs();
+                }
+
+                $ad_jobs->setAd($ad);
+
+                if (isset($dimension['contract_type_id'])) {
+                    $ad_jobs->setContractTypeId($dimension['contract_type_id']);
+                } else {
+                    $ad_jobs->setContractTypeId(null);
+                }
+
+                if (isset($dimension['meta_data'])) {
+                    $ad_jobs->setMetaData($dimension['meta_data']);
+                } else {
+                    $ad_jobs->setMetaData(null);
+                }
+
+                $this->em->persist($ad_jobs);
+            } elseif ($this->advert['parent_category'] == 'Services') {
+                $ad_services = $this->em->getRepository('FaAdBundle:AdServices')->findOneBy(array('ad' => $ad->getId()));
+
+                if (!$ad_services) {
+                    $ad_services = new AdServices();
+                }
+
+                $ad_services->setAd($ad);
+
+                if (isset($dimension['event_type_id'])) {
+                    $ad_services->setEventTypeId($dimension['event_type_id']);
+                } else {
+                    $ad_services->setEventTypeId(null);
+                }
+
+                if (isset($dimension['services_offered_id'])) {
+                    $ad_services->setServicesOfferedId($dimension['services_offered_id']);
+                } else {
+                    $ad_services->setServicesOfferedId(null);
+                }
+
+                if (isset($dimension['service_type_id'])) {
+                    $ad_services->setServiceTypeId($dimension['service_type_id']);
+                } else {
+                    $ad_services->setServiceTypeId(null);
+                }
+
+                if (isset($dimension['meta_data'])) {
+                    $ad_services->setMetaData($dimension['meta_data']);
+                } else {
+                    $ad_services->setMetaData(null);
+                }
+
+                $this->em->persist($ad_services);
+            } elseif ($this->advert['parent_category'] == 'Property') {
+                $ad_property = $this->em->getRepository('FaAdBundle:AdProperty')->findOneBy(array('ad' => $ad->getId()));
+
+                if (!$ad_property) {
+                    $ad_property = new AdProperty();
+                }
+
+                $ad_property->setAd($ad);
+
+                if (isset($dimension['amenities_id'])) {
+                    $ad_property->setAmenitiesId($dimension['amenities_id']);
+                } else {
+                    $ad_property->setAmenitiesId(null);
+                }
+
+                if (isset($dimension['number_of_bedrooms_id'])) {
+                    $ad_property->setNumberOfBedroomsId($dimension['number_of_bedrooms_id']);
+                } else {
+                    $ad_property->setNumberOfBedroomsId(null);
+                }
+
+                if (isset($dimension['room_size_id'])) {
+                    $ad_property->setRoomSizeId($dimension['room_size_id']);
+                } else {
+                    $ad_property->setRoomSizeId(null);
+                }
+
+                if (isset($dimension['meta_data'])) {
+                    $ad_property->setMetaData($dimension['meta_data']);
+                } else {
+                    $ad_property->setMetaData(null);
+                }
+
+                $this->em->persist($ad_property);
+            } elseif ($this->advert['parent_category'] == 'Animals') {
+                $ad_animals = $this->em->getRepository('FaAdBundle:AdAnimals')->findOneBy(array('ad' => $ad->getId()));
+
+                if (!$ad_animals) {
+                    $ad_animals = new AdAnimals();
+                }
+
+                $ad_animals->setAd($ad);
+
+                if (isset($dimension['ad_type_id'])) {
+                    $ad_animals->setAdTypeId($dimension['ad_type_id']);
+                } else {
+                    $ad_animals->setAdTypeId(null);
+                }
+
+                if (isset($dimension['breed_id'])) {
+                    $ad_animals->setBreedId($dimension['breed_id']);
+                } else {
+                    $ad_animals->setBreedId(null);
+                }
+
+                if (isset($dimension['colour_id'])) {
+                    $ad_animals->setColourId($dimension['colour_id']);
+                } else {
+                    $ad_animals->setColourId(null);
+                }
+
+                if (isset($dimension['gender_id'])) {
+                    $ad_animals->setGenderId($dimension['gender_id']);
+                } else {
+                    $ad_animals->setGenderId(null);
+                }
+
+                if (isset($dimension['meta_data'])) {
+                    $ad_animals->setMetaData($dimension['meta_data']);
+                } else {
+                    $ad_animals->setMetaData(null);
+                }
+
+                if (isset($dimension['species_id'])) {
+                    $ad_animals->setSpeciesId($dimension['species_id']);
+                } else {
+                    $ad_animals->setSpeciesId(null);
+                }
+
+                $this->em->persist($ad_animals);
+            } elseif ($this->advert['parent_category'] == 'Community') {
+                $ad_community = $this->em->getRepository('FaAdBundle:AdCommunity')->findOneBy(array('ad' => $ad->getId()));
+
+                if (!$ad_community) {
+                    $ad_community = new AdCommunity();
+                }
+
+                $ad_community->setAd($ad);
+
+                if (isset($dimension['education_level_id'])) {
+                    $ad_community->setEducationLevelId($dimension['education_level_id']);
+                } else {
+                    $ad_community->setEducationLevelId(null);
+                }
+
+                if (isset($dimension['experience_level_id'])) {
+                    $ad_community->setExperienceLevelId($dimension['experience_level_id']);
+                } else {
+                    $ad_community->setExperienceLevelId(null);
+                }
+
+                if (isset($dimension['meta_data'])) {
+                    $ad_community->setMetaData($dimension['meta_data']);
+                } else {
+                    $ad_community->setMetaData(null);
+                }
+
+                $this->em->persist($ad_community);
+            } elseif ($this->advert['parent_category'] == 'Adult') {
+                $ad_adult = $this->em->getRepository('FaAdBundle:AdAdult')->findOneBy(array('ad' => $ad->getId()));
+
+                if (!$ad_adult) {
+                    $ad_adult = new AdAdult();
+                }
+
+                $ad_adult->setAd($ad);
+
+                if (isset($dimension['meta_data'])) {
+                    $ad_adult->setMetaData($dimension['meta_data']);
+                } else {
+                    $ad_adult->setMetaData(null);
+                }
+
+                $this->em->persist($ad_adult);
             }
+        }
     }
 
     /**

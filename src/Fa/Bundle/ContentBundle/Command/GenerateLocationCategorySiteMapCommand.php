@@ -238,7 +238,7 @@ EOF
             $countyTownArray = array_merge($countyTownArray, array_keys(get_object_vars($result['a_l_main_town_id_i'])));
         }
         if (isset($result['a_l_area_id_txt'])) {
-        	$countyTownArray = array_merge($countyTownArray, array_keys(get_object_vars($result['a_l_area_id_txt'])));
+            $countyTownArray = array_merge($countyTownArray, array_keys(get_object_vars($result['a_l_area_id_txt'])));
         }
         
         return $countyTownArray;

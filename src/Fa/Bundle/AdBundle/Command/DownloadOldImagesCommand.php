@@ -115,7 +115,7 @@ class DownloadOldImagesCommand extends ContainerAwareCommand
                                 }
                             }
                         } else {
-                                echo ".";
+                            echo ".";
                         }
                     } else {
                         $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -133,7 +133,6 @@ class DownloadOldImagesCommand extends ContainerAwareCommand
                 }
 
                 $last_id = $image->getId();
-
             } else {
                 $done = true;
             }

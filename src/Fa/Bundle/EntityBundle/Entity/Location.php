@@ -576,9 +576,9 @@ class Location
      */
     public function setIsSpecialArea($is_special_area)
     {
-    	$this->is_special_area = $is_special_area;
-    	
-    	return $this;
+        $this->is_special_area = $is_special_area;
+        
+        return $this;
     }
     
     /**
@@ -588,6 +588,6 @@ class Location
      */
     public function getIsSpecialArea()
     {
-    	return $this->is_special_area;
+        return $this->is_special_area;
     }
 }

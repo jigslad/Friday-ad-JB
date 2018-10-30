@@ -84,7 +84,8 @@ class TradeItAdResponseBuild
 
         $this->similarAdApiResponse[TradeItAdFieldMappingInterface::ID]      = $adSolrObj[AdSolrFieldMapping::ID];
         $this->similarAdApiResponse[TradeItAdFieldMappingInterface::AD_URL]  = $adUrl;
-        $this->similarAdApiResponse['ad_type_id'] = (isset($adSolrObj[AdSolrFieldMapping::TYPE_ID]) ? $adSolrObj[AdSolrFieldMapping::TYPE_ID] : null);;
+        $this->similarAdApiResponse['ad_type_id'] = (isset($adSolrObj[AdSolrFieldMapping::TYPE_ID]) ? $adSolrObj[AdSolrFieldMapping::TYPE_ID] : null);
+        ;
 
         $this->similarAdApiResponse[TradeItAdFieldMappingInterface::DESCRIPTION] = (isset($adSolrObj[AdSolrFieldMapping::DESCRIPTION]) ? $adSolrObj[AdSolrFieldMapping::DESCRIPTION] : null);
 
@@ -96,7 +97,8 @@ class TradeItAdResponseBuild
         $this->similarAdApiResponse['status']          = (isset($adSolrObj[AdSolrFieldMapping::STATUS_ID]) ? $adSolrObj[AdSolrFieldMapping::STATUS_ID] : null);
         $parent   = $this->getFirstLevelParent($adSolrObj[AdSolrFieldMapping::CATEGORY_ID]);
         $this->similarAdApiResponse['parent_category'] = $parent['name'];
-        $this->similarAdApiResponse['delivery_method_option_id'] = (isset($adSolrObj[AdSolrFieldMapping::DELIVERY_METHOD_OPTION_ID]) ? $adSolrObj[AdSolrFieldMapping::DELIVERY_METHOD_OPTION_ID] : null);;
+        $this->similarAdApiResponse['delivery_method_option_id'] = (isset($adSolrObj[AdSolrFieldMapping::DELIVERY_METHOD_OPTION_ID]) ? $adSolrObj[AdSolrFieldMapping::DELIVERY_METHOD_OPTION_ID] : null);
+        ;
 
         $slug = $this->em->getRepository('FaEntityBundle:Category')->getFullSlugById($adSolrObj[AdSolrFieldMapping::CATEGORY_ID], $this->container);
         $this->similarAdApiResponse['category_slug'] = $slug;
@@ -117,7 +119,6 @@ class TradeItAdResponseBuild
             }
 
             $this->similarAdApiResponse[$key] = $val;
-
         }
 
         $root                          = $this->em->getRepository('FaEntityBundle:Category')->getRootNodeByCategory($adSolrObj[AdSolrFieldMapping::CATEGORY_ID]);

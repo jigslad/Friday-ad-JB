@@ -26,7 +26,6 @@ use Fa\Bundle\CoreBundle\lib\Carweb\Cache\DBCache;
  */
 class CarwebManager
 {
-
     private $consumer;
 
     /**
@@ -50,7 +49,6 @@ class CarwebManager
      */
     public function init()
     {
-
         $strUserName = $this->container->getParameter('fa.carweb.username'); //'Spidersnet';
         $strPassword = $this->container->getParameter('fa.carweb.password'); //'854629';
         $strKey1     = $this->container->getParameter('fa.carweb.key'); //'h391bv87z';

@@ -89,7 +89,6 @@ class DownloadAdFeedCommand extends ContainerAwareCommand
         if (file_exists($downloadedFile)) {
             echo "File downloaded successfully At:"."\n";
             echo $downloadedFile."\n";
-
         } else {
             echo "download failed"."\n";
         }
@@ -109,10 +108,10 @@ class DownloadAdFeedCommand extends ContainerAwareCommand
     {
         $files = glob($pathPattern);
         foreach ($files as $file) {
-                if (is_file($file)) {
-                    echo $file.": remove old json file \n";
-                    unlink($file);
-                }
+            if (is_file($file)) {
+                echo $file.": remove old json file \n";
+                unlink($file);
+            }
         }
     }
 

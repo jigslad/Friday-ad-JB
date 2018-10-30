@@ -89,7 +89,8 @@ Actions:
 Command:
  - php app/console fa:update:job-categories-entity --type="ad"
 EOF
-        );;
+        );
+        ;
     }
 
     /**
@@ -204,7 +205,6 @@ EOF
                     echo '.';
                 }
             }
-
         }
 
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);

@@ -72,7 +72,7 @@ class PaypalAccountVerificationManager
         curl_setopt(
             $ch,
             CURLOPT_HTTPHEADER,
-            array (
+            array(
                 'X-PAYPAL-SECURITY-USERID: '.$paypalParams['userid'],
                 'X-PAYPAL-SECURITY-PASSWORD : '.$paypalParams['password'],
                 'X-PAYPAL-SECURITY-SIGNATURE : '.$paypalParams['signature'],

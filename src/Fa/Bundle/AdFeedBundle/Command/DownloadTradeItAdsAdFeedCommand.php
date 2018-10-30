@@ -93,10 +93,10 @@ class DownloadTradeItAdsAdFeedCommand extends ContainerAwareCommand
     {
         $files = glob($pathPattern);
         foreach ($files as $file) {
-                if (is_file($file)) {
-                    echo $file.": remove old json file \n";
-                    unlink($file);
-                }
+            if (is_file($file)) {
+                echo $file.": remove old json file \n";
+                unlink($file);
+            }
         }
     }
 

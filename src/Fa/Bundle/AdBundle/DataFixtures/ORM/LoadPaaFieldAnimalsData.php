@@ -82,7 +82,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
             'ad_type_id' => '1'
         );
 
-        $fieldRuleStatus = array (
+        $fieldRuleStatus = array(
             'is_new' => 0,
             'qty' => 0,
             'price_text' => 0,
@@ -98,7 +98,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
             'ad_type_id' => 0,
         );
 
-        $fieldRuleStep = array (
+        $fieldRuleStep = array(
             'title' => 2,
             'description' => 2,
             'price' => 2,
@@ -106,13 +106,13 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
             'location' => 4
         );
 
-        $fieldRuleMaxValue = array (
+        $fieldRuleMaxValue = array(
             'title' => 100,
             'description' => 2000,
             'personalized_title' => 140,
         );
 
-        $fieldRuleMinMaxType = array (
+        $fieldRuleMinMaxType = array(
             'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
             'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -138,7 +138,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'ad_type_id' => AdAnimalsRepository::AD_TYPE_FOR_SALE_ID_PETS,
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -150,7 +150,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'height_id' => 0,
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -163,13 +163,13 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
 
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -195,7 +195,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'ad_type_id' => AdAnimalsRepository::AD_TYPE_FOR_SALE_ID_PETS,
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -206,7 +206,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'height_id' => 0,
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -219,13 +219,13 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'condition_id' => 4,
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -251,7 +251,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'ad_type_id' => AdAnimalsRepository::AD_TYPE_FOR_SALE_ID_PETS,
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -262,7 +262,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'height_id' => 0,
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -275,13 +275,13 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'species_id' => 4,
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -307,7 +307,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'ad_type_id' => AdAnimalsRepository::AD_TYPE_FOR_SALE_ID_PETS,
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -318,7 +318,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'height_id' => 0,
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -331,13 +331,13 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'breed_id' => 4,
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -363,7 +363,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'ad_type_id' => AdAnimalsRepository::AD_TYPE_FOR_SALE_ID_PETS,
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -374,7 +374,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'height_id' => 0,
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -387,13 +387,13 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'breed_id' => 4,
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -419,7 +419,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'ad_type_id' => AdAnimalsRepository::AD_TYPE_FOR_SALE_ID_HORSES,
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -429,7 +429,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'species_id' => 0,
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -443,13 +443,13 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'height_id' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -475,7 +475,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'ad_type_id' => AdAnimalsRepository::AD_TYPE_FOR_SALE_ID_LIVESTOCK,
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -488,7 +488,7 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'height_id' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'ad_type_id' => 2,
                 'title' => 2,
                 'description' => 2,
@@ -499,13 +499,13 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                 'colour_id' => 4,
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -550,11 +550,11 @@ class LoadPaaFieldAnimalsData extends LoadPaaFieldData
                     $catDimensionFields[$categoryId][$field]['category_dimension_id'] = $dimensionId;
                     $catDimensionFields[$categoryId][$field]['is_index']              = $isIndex;
                 } elseif ($field == 'gender_id') {
-                        $catDimensionFields[$categoryId][$field]['field']                 = $field;
-                        $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;
-                        $catDimensionFields[$categoryId][$field]['field_type']            = 'choice_checkbox';
-                        $catDimensionFields[$categoryId][$field]['category_dimension_id'] = $dimensionId;
-                        $catDimensionFields[$categoryId][$field]['is_index']              = $isIndex;
+                    $catDimensionFields[$categoryId][$field]['field']                 = $field;
+                    $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;
+                    $catDimensionFields[$categoryId][$field]['field_type']            = 'choice_checkbox';
+                    $catDimensionFields[$categoryId][$field]['category_dimension_id'] = $dimensionId;
+                    $catDimensionFields[$categoryId][$field]['is_index']              = $isIndex;
                 } else {
                     $catDimensionFields[$categoryId][$field]['field']                 = $field;
                     $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;

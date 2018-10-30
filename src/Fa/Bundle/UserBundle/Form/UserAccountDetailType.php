@@ -31,7 +31,6 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-
 /**
  * This is user account detail form.
  *
@@ -111,8 +110,7 @@ class UserAccountDetailType extends AbstractType
             $builder->add(
                 'new_password',
                 PasswordType::class,
-                array
-                (
+                array(
                     'label' => 'New password',
                     'mapped' => false,
                 )
@@ -129,8 +127,7 @@ class UserAccountDetailType extends AbstractType
             ->add(
                 'old_password',
                 PasswordType::class,
-                array
-                (
+                array(
                     'label' => 'Old password',
                     'mapped' => false,
                 )
@@ -240,8 +237,7 @@ class UserAccountDetailType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array
-            (
+            array(
                 'data_class' => 'Fa\Bundle\UserBundle\Entity\User',
                 'validation_groups' => array('user_detail'),
                 'constraints' => new UniqueEntity(array('groups' => array('user_detail'), 'fields'  => 'email','message' => $this->translator->trans('An account with this email address already exists.', array(), 'validators'))),

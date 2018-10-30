@@ -24,8 +24,6 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
  */
 class LocationPostalRepository extends EntityRepository
 {
-    
-
     const ALIAS = 'lpa';
 
     /**
@@ -48,16 +46,16 @@ class LocationPostalRepository extends EntityRepository
      * @return array
      */
     public function getTownAreasArrayByPostCode($postCode = null)
-    {	
-    	$areas = $this->getAreasByPostCodeQuery($postCode);
-    	
-    	$areaArray = array();
-    	if(!empty($areas)) {
-    		foreach ($areas as $area) { 
-    			$areaArray[] = array('id'=> $area->getParent()->getId(), 'text' => $area->getName().', '.$area->getParent()->getName(), 'area_id'=> $area->getId(), 'locationBy' => 'area', 'latlong' => $area->getLatitude().', '.$area->getLongitude());
-    		}
-    	}
-    	return $areaArray;
+    {
+        $areas = $this->getAreasByPostCodeQuery($postCode);
+        
+        $areaArray = array();
+        if (!empty($areas)) {
+            foreach ($areas as $area) {
+                $areaArray[] = array('id'=> $area->getParent()->getId(), 'text' => $area->getName().', '.$area->getParent()->getName(), 'area_id'=> $area->getId(), 'locationBy' => 'area', 'latlong' => $area->getLatitude().', '.$area->getLongitude());
+            }
+        }
+        return $areaArray;
     }
     
     /**
@@ -69,24 +67,25 @@ class LocationPostalRepository extends EntityRepository
      */
     public function getAreasByPostCode($postCode = null)
     {
-    	$areas = $this->getAreasByPostCodeQuery($postCode);
-    	
-    	$areaArray = array();
-    	if(!empty($areas)) {
-    		foreach ($areas as $area) {
-    			$areaArray[] = array('id'=> $area->getId(), 'latitude' => $area->getLatitude(), 'longitude'=> $area->getLongitude(), 'latlong' => $area->getLatitude().', '.$area->getLongitude());
-    		}
-    	}
-    	return $areaArray;
+        $areas = $this->getAreasByPostCodeQuery($postCode);
+        
+        $areaArray = array();
+        if (!empty($areas)) {
+            foreach ($areas as $area) {
+                $areaArray[] = array('id'=> $area->getId(), 'latitude' => $area->getLatitude(), 'longitude'=> $area->getLongitude(), 'latlong' => $area->getLatitude().', '.$area->getLongitude());
+            }
+        }
+        return $areaArray;
     }
     
-    private function getAreasByPostCodeQuery($postCode='') {
-    	return $this->getBaseQueryBuilder(self::ALIAS)
-	    	->select(LocationRepository::ALIAS)
-	    	->innerJoin('Fa\Bundle\EntityBundle\Entity\Location', LocationRepository::ALIAS, 'WITH', self::ALIAS.'.location_id = '.LocationRepository::ALIAS.'.id')
-	    	->andWhere(self::ALIAS.'.postal_code LIKE :postal_code')
-	    	->setParameter('postal_code', trim($postCode).'%')
-	    	->orderBy(self::ALIAS.'.id', 'asc')
-	    	->getQuery()->getResult();    	
+    private function getAreasByPostCodeQuery($postCode='')
+    {
+        return $this->getBaseQueryBuilder(self::ALIAS)
+            ->select(LocationRepository::ALIAS)
+            ->innerJoin('Fa\Bundle\EntityBundle\Entity\Location', LocationRepository::ALIAS, 'WITH', self::ALIAS.'.location_id = '.LocationRepository::ALIAS.'.id')
+            ->andWhere(self::ALIAS.'.postal_code LIKE :postal_code')
+            ->setParameter('postal_code', trim($postCode).'%')
+            ->orderBy(self::ALIAS.'.id', 'asc')
+            ->getQuery()->getResult();
     }
 }

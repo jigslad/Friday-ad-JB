@@ -205,7 +205,7 @@ abstract class CrudController extends CoreController
 
             $redirectPath = $this->getRouteName('');
             // Check if user clicked on save and new then open new form
-            if($form->has('saveAndNew') &&  $form->get('saveAndNew')->isClicked()) {
+            if ($form->has('saveAndNew') &&  $form->get('saveAndNew')->isClicked()) {
                 $redirectPath = $this->getRouteName('create');
             }
 
@@ -301,7 +301,7 @@ abstract class CrudController extends CoreController
 
             $redirectPath = $this->getRouteName('');
             // Check if user clicked on save and new then open new form
-            if($form->has('saveAndNew') &&  $form->get('saveAndNew')->isClicked()) {
+            if ($form->has('saveAndNew') &&  $form->get('saveAndNew')->isClicked()) {
                 $redirectPath = $this->getRouteName('create');
             }
             return $this->handleMessage($message, $redirectPath);

@@ -189,11 +189,11 @@ EOF
         
         //if category not exist then Adult Category will not consider in Search Agent like same as frontend search
         if (isset($searchParams['search']) && !isset($searchParams['search']['item__category_id'])) {
-        	if(isset($data['static_filters'])) {
-        		$data['static_filters'] .= ' AND -'.AdSolrFieldMapping::ROOT_CATEGORY_ID.': ('.\Fa\Bundle\EntityBundle\Repository\CategoryRepository::ADULT_ID.')';
-        	} else {
-        		$data['static_filters'] = ' AND -'.AdSolrFieldMapping::ROOT_CATEGORY_ID.': ('.\Fa\Bundle\EntityBundle\Repository\CategoryRepository::ADULT_ID.')';
-        	}
+            if (isset($data['static_filters'])) {
+                $data['static_filters'] .= ' AND -'.AdSolrFieldMapping::ROOT_CATEGORY_ID.': ('.\Fa\Bundle\EntityBundle\Repository\CategoryRepository::ADULT_ID.')';
+            } else {
+                $data['static_filters'] = ' AND -'.AdSolrFieldMapping::ROOT_CATEGORY_ID.': ('.\Fa\Bundle\EntityBundle\Repository\CategoryRepository::ADULT_ID.')';
+            }
         }
         
         $data['query_filters']['item']['status_id'] = \Fa\Bundle\EntityBundle\Repository\EntityRepository::AD_STATUS_LIVE_ID;
@@ -324,7 +324,6 @@ EOF
      */
     protected function getAgentQueryBuilder($id = null)
     {
-
         $searchAgentRepository  = $this->em->getRepository('FaUserBundle:UserSearchAgent');
         $qb = $searchAgentRepository->createQueryBuilder(UserSearchAgentRepository::ALIAS);
         $qb->andWhere(UserSearchAgentRepository::ALIAS.'.is_email_alerts = :alert_status');

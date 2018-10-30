@@ -68,7 +68,7 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
                 'service_type_id' => 'Type'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -80,7 +80,7 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
                 'event_type_id' => 0
             );
 
-            $fieldRuleStep = array (
+            $fieldRuleStep = array(
                 'title' => 2,
                 'ad_type_id' => 2,
                 'description' => 2,
@@ -91,13 +91,13 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
                 'event_type_id' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -140,7 +140,7 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
                 'service_type_id' => 'Type'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -162,13 +162,13 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
                 'services_offered_id' => 4,
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -198,7 +198,7 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
                 'service_type_id' => 'Type'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -220,13 +220,13 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
                 'services_offered_id' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -256,7 +256,7 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
                 'service_type_id' => 'Type'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -278,13 +278,13 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
                 'service_type_id' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -314,7 +314,7 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
                 'service_type_id' => 'Type'
             );
 
-            $fieldRuleStatus = array (
+            $fieldRuleStatus = array(
                 'is_new' => 0,
                 'qty' => 0,
                 'price_text' => 0,
@@ -336,13 +336,13 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
                 'event_type_id' => 4
             );
 
-            $fieldRuleMaxValue = array (
+            $fieldRuleMaxValue = array(
                 'title' => 100,
                 'description' => 2000,
                 'personalized_title' => 140,
             );
 
-            $fieldRuleMinMaxType = array (
+            $fieldRuleMinMaxType = array(
                 'title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'description' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
                 'personalized_title' => PaaFieldRuleRepository::MIN_MAX_TYPE_LENGTH,
@@ -374,17 +374,17 @@ class LoadPaaFieldServicesData extends LoadPaaFieldData
 
                 $field = $dimensionField.'_id';
                 if ($field == 'ad_type_id') {
-                        $catDimensionFields[$categoryId][$field]['field']                 = $field;
-                        $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;
-                        $catDimensionFields[$categoryId][$field]['field_type']            = 'choice_radio';
-                        $catDimensionFields[$categoryId][$field]['category_dimension_id'] = $dimensionId;
-                        $catDimensionFields[$categoryId][$field]['is_index']              = $isIndex;
+                    $catDimensionFields[$categoryId][$field]['field']                 = $field;
+                    $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;
+                    $catDimensionFields[$categoryId][$field]['field_type']            = 'choice_radio';
+                    $catDimensionFields[$categoryId][$field]['category_dimension_id'] = $dimensionId;
+                    $catDimensionFields[$categoryId][$field]['is_index']              = $isIndex;
                 } elseif ($field == 'services_offered_id') {
-                        $catDimensionFields[$categoryId][$field]['field']                 = $field;
-                        $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;
-                        $catDimensionFields[$categoryId][$field]['field_type']            = 'choice_checkbox';
-                        $catDimensionFields[$categoryId][$field]['category_dimension_id'] = $dimensionId;
-                        $catDimensionFields[$categoryId][$field]['is_index']              = $isIndex;
+                    $catDimensionFields[$categoryId][$field]['field']                 = $field;
+                    $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;
+                    $catDimensionFields[$categoryId][$field]['field_type']            = 'choice_checkbox';
+                    $catDimensionFields[$categoryId][$field]['category_dimension_id'] = $dimensionId;
+                    $catDimensionFields[$categoryId][$field]['is_index']              = $isIndex;
                 } elseif ($field == 'service_type_id' || $field == 'event_type_id') {
                     $catDimensionFields[$categoryId][$field]['field']                 = $field;
                     $catDimensionFields[$categoryId][$field]['label']                 = $dimensionName;

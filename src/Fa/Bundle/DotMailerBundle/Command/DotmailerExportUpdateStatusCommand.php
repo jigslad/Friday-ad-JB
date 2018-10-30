@@ -114,9 +114,7 @@ EOF
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
 
         if (count($dotmailerFilters) > 0) {
-
             foreach ($dotmailerFilters as $dotmailerFilter) {
-
                 $value = array();
                 if ($dotmailerFilter->getValue()) {
                     $value = json_decode($dotmailerFilter->getValue(), true);

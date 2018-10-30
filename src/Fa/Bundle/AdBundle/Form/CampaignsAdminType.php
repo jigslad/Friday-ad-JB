@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Fa\Bundle\AdBundle\Form;
 
 use Fa\Bundle\AdBundle\Entity\Campaigns;
@@ -30,7 +30,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormInterface;
-
 
 class CampaignsAdminType extends AbstractType
 {
@@ -96,7 +95,6 @@ class CampaignsAdminType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-         
         if (!$builder->getForm()->getData()->getId()) {
             $builder
             ->addEventSubscriber(
@@ -114,10 +112,9 @@ class CampaignsAdminType extends AbstractType
                 )
             );
             $builder->add('saveAndNew', SubmitType::class);
-        }  
+        }
 
-        if($builder->getForm()->getData()->getId() || $this->request->get('category_id')!='' || $this->request->get('fa_ad_campaigns_admin')['category_id']!='') {
-
+        if ($builder->getForm()->getData()->getId() || $this->request->get('category_id')!='' || $this->request->get('fa_ad_campaigns_admin')['category_id']!='') {
             $builder->add('campaign_name', TextType::class, array(
                     'attr' => array(
                         'placeholder' => 'Please enter name here....',
@@ -138,7 +135,7 @@ class CampaignsAdminType extends AbstractType
                         new NotBlank(),
                         new Length(array('max' => 250)),
                     )))
-                ->add('page_title_color', ChoiceType::class,array(
+                ->add('page_title_color', ChoiceType::class, array(
                     'label' => "Text Color",
                     'multiple' => false,
                     'choices'   => array('Light'=>'Light','Dark'=>'Dark')
@@ -183,14 +180,14 @@ class CampaignsAdminType extends AbstractType
                     ),
                     
                     ))
-                ->add('background_file',FileType::class, array('label' => 'Header Image','required' => false))
+                ->add('background_file', FileType::class, array('label' => 'Header Image','required' => false))
                 ->add('campaign_status', ChoiceType::class, array(
                     'label' => "Status",
                     'constraints' => array(
                         new NotBlank(),
                     ),
                     'choices' => array(
-                        'Active'=>1, 
+                        'Active'=>1,
                         'In-Active'=>2),
                     'placeholder'=>'Select Status'));
        
@@ -203,22 +200,22 @@ class CampaignsAdminType extends AbstractType
         $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'onPostSubmit'));
     }
     
-     /**
-     * Callbak method for SUBMIT form event.
-     *
-     * @param object $event
-     *            Event instance.
-     */
+    /**
+    * Callbak method for SUBMIT form event.
+    *
+    * @param object $event
+    *            Event instance.
+    */
     public function onSubmit(FormEvent $event)
     {
         $campaign = $event->getData();
         $form = $event->getForm();
-        $this->validateHeaderImage($form,$campaign);
+        $this->validateHeaderImage($form, $campaign);
     }
     
-    protected function validateHeaderImage($form,$campaign)
+    protected function validateHeaderImage($form, $campaign)
     {
-        if($campaign->getCampaignBackgroundFileName()=='' && $form->get('background_file')->getData() == '') {
+        if ($campaign->getCampaignBackgroundFileName()=='' && $form->get('background_file')->getData() == '') {
             //$form->get('background_file')->addError(new FormError($this->translator->trans('Please upload header image.', array(), 'validators')));
         }
     }
@@ -232,9 +229,10 @@ class CampaignsAdminType extends AbstractType
         $campaign = $event->getData();
         $form         = $event->getForm();
         $formdata     = $this->request->get('fa_ad_campaigns_admin');
-        $categoryId = '';$getCategoryObj =array();
+        $categoryId = '';
+        $getCategoryObj =array();
 
-        if(!empty($formdata)  && isset($formdata['category_id']) && !$campaign->getId()) {
+        if (!empty($formdata)  && isset($formdata['category_id']) && !$campaign->getId()) {
             $categoryId = $formdata['category_id'];
         } elseif (!$campaign->getId()) {
             $categoryId = $this->request->get('category_id', null);
@@ -306,7 +304,6 @@ class CampaignsAdminType extends AbstractType
 
                     $ord++;
                 }
-
             }
         }
     }
@@ -335,13 +332,11 @@ class CampaignsAdminType extends AbstractType
 
         if ((!$form->getData()->getId()) && (!$form->get('background_file')->getData())) {
             $form->get('background_file')->addError(new FormError('Please upload header image.'));
-        } 
+        }
 
         if ($form->isValid()) {
-            
             if (!$form->getData()->getId()) {
                 $this->save($form);
-                
             } else {
                 $oldFile = $campaign->getAbsolutePath();
                 $oldFileName = $campaign->getCampaignBackgroundFileName();
@@ -426,7 +421,7 @@ class CampaignsAdminType extends AbstractType
         }
         
         $is_not_deletable = 0;
-        if($campaignId=='') {
+        if ($campaignId=='') {
             $campaign = new Campaigns();
             $campaign->setBackgroundFile($campaign_background_file);
             $campaign->setCampaignBackgroundFileName($backgroundFileName);
@@ -442,7 +437,7 @@ class CampaignsAdminType extends AbstractType
             $category_parent_id = $category->getParent()->getId();
             //$is_not_deletable = ($category_parent_id==1)?1:0;
             $campaign->setIsNotDeletable($is_not_deletable);
-        } 
+        }
 
         $campaign->setCampaignName($campaign_name);
         $campaign->setPageTitle($form->get('page_title')->getData());
@@ -459,28 +454,28 @@ class CampaignsAdminType extends AbstractType
         $this->em->persist($campaign);
         $this->em->flush($campaign);
 
-        if($campaignId == '') {
+        if ($campaignId == '') {
             $this->uploadBackgroundImage($campaign, $backgroundFileName);
             $categoryId = $form->get('category_id')->getData();
             if ($categoryId) {
                 $category = $this->em->getRepository('FaEntityBundle:Category')->find($categoryId);
 
                 // Check if rule is already added for this category
-               /* if ($this->checkRuleExist($categoryId)) {
-                    $form->get('category_id')->addError(new FormError('Campaign already exists for category : '.$category->getName()));
-                }*/
+                /* if ($this->checkRuleExist($categoryId)) {
+                     $form->get('category_id')->addError(new FormError('Campaign already exists for category : '.$category->getName()));
+                 }*/
 
                 // Check if display same order is used many times for different fields
                 $this->validateDisplayOrder($form, $categoryId, $campaign);
 
                 if ($form->isValid()) {
-                    $this->savePaaLiteFieldRules($form, $category,$campaign);
+                    $this->savePaaLiteFieldRules($form, $category, $campaign);
                 }
             }
         } else {
             $categoryId = $form->getData()->getCategory()->getId();
             $this->validateDisplayOrder($form, $categoryId, $campaign);
-            $this->saveEditPaaLiteFieldRules($form, $categoryId,$campaign);
+            $this->saveEditPaaLiteFieldRules($form, $categoryId, $campaign);
         }
     }
 
@@ -490,9 +485,8 @@ class CampaignsAdminType extends AbstractType
      * @param object  $form     Form instance.
      * @param object  $category Select category instance.
      */
-    private function savePaaLiteFieldRules($form, $category,$campaign)
+    private function savePaaLiteFieldRules($form, $category, $campaign)
     {
-        
         $paaLiteFields = $this->em->getRepository('FaAdBundle:PaaField')->getAllPaaFields($category->getId());
         foreach ($paaLiteFields as $PaaLiteField) {
             $field = $PaaLiteField->getField();
@@ -530,9 +524,9 @@ class CampaignsAdminType extends AbstractType
      * @param object  $form       Form instance.
      * @param integer $categoryId Selected campaign id.
      */
-    private function saveEditPaaLiteFieldRules($form, $categoryId,$campaign)
+    private function saveEditPaaLiteFieldRules($form, $categoryId, $campaign)
     {
-        $PaaLiteFieldRules = $this->em->getRepository('FaAdBundle:PaaLiteFieldRule')->getPaaLiteFieldRulesByCampaignId($campaign->getId(),$categoryId);
+        $PaaLiteFieldRules = $this->em->getRepository('FaAdBundle:PaaLiteFieldRule')->getPaaLiteFieldRulesByCampaignId($campaign->getId(), $categoryId);
         foreach ($PaaLiteFieldRules as $PaaLiteFieldRule) {
             $PaaLiteField = $PaaLiteFieldRule->getPaaLiteField();
             $field    = $PaaLiteField->getField();
@@ -618,4 +612,3 @@ class CampaignsAdminType extends AbstractType
         }
     }
 }
-?>
