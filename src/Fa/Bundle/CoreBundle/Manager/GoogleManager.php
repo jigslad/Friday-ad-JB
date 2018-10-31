@@ -79,7 +79,7 @@ class GoogleManager
         $this->client = new \Google_Client();
         $this->client->setClientId($this->client_id);
         $this->client->setClientSecret($this->client_secret);
-        $this->client->setRedirectUri($this->container->get('router')->generate($redirectRoute, $routeParams, true));
+        $this->client->setRedirectUri($this->container->getParameter('base_url').$this->container->get('router')->generate($redirectRoute, $routeParams, true));
         $this->client->setScopes($scopes);
         
         $this->oauth = new \Google_Service_Oauth2($this->client);

@@ -60,15 +60,15 @@ parameters:
         login: ''
         password: ''
         timeout: 5
-    base_url: 'https://dev.friday-ad.co.uk'
+    base_url: 'https://devnew.friday-ad.co.uk'
     service_name: 'Friday Ad'
-    fa.cache.key: dev.friday-ad.co.uk
+    fa.cache.key: devnew.friday-ad.co.uk
     fa.facebook:
         app_id: '1920063958053200'
         app_secret: 14b9afd3310476aac03ce0587bc22667
     fa.google:
-        client_id: 657534475086-8j5hsmls58aik0fm3iurnku5mhlorae7.apps.googleusercontent.com
-        client_secret: zT7H0D_7WG0-jAxXY21ZdgFN
+        client_id: 657534475086-kc3flvu2vherucq7iuo4odr815qj4dfn.apps.googleusercontent.com
+        client_secret: 891qIa7yolMBRDZxqoFAazGi
     fa.image.allow_size_in_mb: 8
     fa.image.for_sale_upload_limit: 30
     fa.image.jobs_upload_limit: 30
@@ -99,11 +99,11 @@ parameters:
     fa.googlemap.api.key: AIzaSyCG_nZMaz62PiRqc8_3QiAP9IuwSSvABj4
     fa.feed.api.id: test
     fa.add.this.pubid: ra-54c34abe6fdc2e68
-    fa.static.url: //dev.friday-ad.co.uk/bundles
-    fa.static.asset.url: //dev.friday-ad.co.uk
+    fa.static.url: //devnew.friday-ad.co.uk/bundles
+    fa.static.asset.url: //devnew.friday-ad.co.uk
     #fa.static.aws.url: 'http://images.test.friday-ad.fiare.com.s3.eu-central-1.amazonaws.com'
     fa.static.aws.url: 'https://s3-eu-west-1.amazonaws.com/images.dev.friday-ad'
-    fa.static.shared.url: //dev.friday-ad.co.uk
+    fa.static.shared.url: //devnew.friday-ad.co.uk
     by_pass_payment: false
     by_pass_payment_admin: false
     fa.error.email: gaurav.aggarwal@fridaymediagroup.com
@@ -163,7 +163,7 @@ parameters:
     fa.contact.moderation.api.appKey: a1b67
     fa.contact.moderation.api.url: 'http://staging.api.fmgcontactmoderator.com/api'
     fa.contact.moderation.site.id: 4
-    fa.contact.moderation.api.domain: contactmoderator.dev.friday-ad.co.uk
+    fa.contact.moderation.api.domain: contactmoderator.devnew.friday-ad.co.uk
     fa.contact.moderation.api.test.name: 123
     #fa.aws_bucket: images.test.friday-ad.fiare.com
     fa.aws_bucket: images.dev.friday-ad
@@ -183,8 +183,8 @@ parameters:
     fa.company.image_size:
         - 200X150
     fa.php.path: php
-    fa.main.host: dev.friday-ad.co.uk
-    fa.motor.host: motors.dev.friday-ad.co.uk
+    fa.main.host: devnew.friday-ad.co.uk
+    fa.motor.host: motors.devnew.friday-ad.co.uk
     fa.image.user.site.allow_size_in_mb: 8
     fa.image.user.site.upload_limit: 8
     fa.image.user.site.thumb_size:
@@ -204,7 +204,7 @@ parameters:
     fa.url.scheme: https
     fa.user.site.banner.allow_size_in_mb: 8
     fa.user.site.banner.image.dir: uploads/usersitebanner
-    fa.feed.data.dir: dev.friday-ad.co.uk/data/feed_data
+    fa.feed.data.dir: devnew.friday-ad.co.uk/data/feed_data
     redis_host: localhost
     redis_read_host: 127.0.0.1
     fa.user.secure.schemes: https
