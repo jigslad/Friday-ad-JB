@@ -334,7 +334,7 @@ class PaymentTransactionDetailRepository extends EntityRepository
         $packageIdNameArray = array();
         $packageIdsArray    = array();
         $paymentDetails = $this->getBaseQueryBuilder()
-        ->select(self::ALIAS.'.payment_for', PaymentRepository::ALIAS.'.cart_code', PaymentRepository::ALIAS.'.payment_method', PaymentRepository::ALIAS.'.created_at', PaymentRepository::ALIAS.'.amount as total_amount', '('.PaymentTransactionRepository::ALIAS.'.amount/(1 + ('.PaymentTransactionRepository::ALIAS.'.vat/100)) as amount_without_vat', PaymentTransactionRepository::ALIAS.'.vat_amount', PaymentTransactionRepository::ALIAS.'.vat', PaymentRepository::ALIAS.'.value as payment_value', self::ALIAS.'.value as detail_value', AdRepository::ALIAS.'.title as ad_title', self::ALIAS.'.ti_package')
+        ->select(self::ALIAS.'.payment_for', PaymentRepository::ALIAS.'.cart_code', PaymentRepository::ALIAS.'.payment_method', PaymentRepository::ALIAS.'.created_at', PaymentRepository::ALIAS.'.amount as total_amount', '('.PaymentTransactionRepository::ALIAS.'.amount/(1 + ('.PaymentTransactionRepository::ALIAS.'.vat/100))) as amount_without_vat', PaymentTransactionRepository::ALIAS.'.vat_amount', PaymentTransactionRepository::ALIAS.'.vat', PaymentRepository::ALIAS.'.value as payment_value', self::ALIAS.'.value as detail_value', AdRepository::ALIAS.'.title as ad_title', self::ALIAS.'.ti_package')
         ->innerJoin(self::ALIAS.'.payment_transaction', PaymentTransactionRepository::ALIAS)
         ->leftJoin(PaymentTransactionRepository::ALIAS.'.ad', AdRepository::ALIAS)
         ->innerJoin(PaymentTransactionRepository::ALIAS.'.payment', PaymentRepository::ALIAS)
