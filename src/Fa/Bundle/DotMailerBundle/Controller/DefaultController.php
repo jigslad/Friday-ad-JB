@@ -88,7 +88,7 @@ class DefaultController extends CoreController
                 }
 
                 $createDataField->setDataToSubmit($data);
-                if ($createDataField->createDataField()) {
+                if ($createDataField->create()) {
                     $createdField .= "<b>".$data['Name']."</b>".': Field created successfully'."<br />";
                 } else {
                     $notCreatedField .= "<b>".$data['Name']."</b>".': Fields doesn\'t created successfully'. "<br />";
@@ -123,7 +123,7 @@ class DefaultController extends CoreController
             $createAddressBook = $this->get('fa.dotmailer.createaddressbook.resource');
             $message = '';
 
-            if ($createAddressBook->createAddressBook(40000, 'Master address book', 'Private')) {
+            if ($createAddressBook->create(40000, 'Master address book', 'Private')) {
                 $message = "Address book created successfully";
             } else {
                 $message = "Address book doesn't created successfully";

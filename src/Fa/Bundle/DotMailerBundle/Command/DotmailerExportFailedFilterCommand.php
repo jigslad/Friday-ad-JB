@@ -105,7 +105,7 @@ EOF
 
         if (count($dotmailerFilters) > 0) {
             foreach ($dotmailerFilters as $dotmailerFilter) {
-                $dotmailerFilter = $this->createAddressBook($dotmailerFilter);
+                $dotmailerFilter = $this->create($dotmailerFilter);
                 $masterId = $dotmailerFilter->getAddressBookId();
                 $dotmailerFilter->setFailedRetryCount($dotmailerFilter->getFailedRetryCount()+1);
                 $entityManager->persist($dotmailerFilter);
@@ -188,7 +188,7 @@ EOF
         if (!$dotmailerFilter->getAddressBookId()) {
             // create new address book
             $createAddressBook = $this->getContainer()->get('fa.dotmailer.createaddressbook.resource');
-            if ($createAddressBook->createAddressBook($dotmailerFilter->getId(), $dotmailerFilter->getName(), 'Private')) {
+            if ($createAddressBook->create($dotmailerFilter->getId(), $dotmailerFilter->getName(), 'Private')) {
                 $responseBody = $createAddressBook->getResponseBody();
                 $responseBody = json_decode($responseBody, true);
                 if (isset($responseBody['id'])) {

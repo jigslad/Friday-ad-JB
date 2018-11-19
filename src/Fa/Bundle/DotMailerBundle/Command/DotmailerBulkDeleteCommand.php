@@ -112,7 +112,7 @@ EOF
                         if ($response->id) {
                             $deleteConact = $this->getContainer()->get('fa.dotmailer.deletecontact.resource');
                             $deleteConact->setDataToSubmit(array(0 => $response->id));
-                            $deleted = $deleteConact->deleteContact();
+                            $deleted = $deleteConact->delete();
                             if (!$deleted) {
                                 CommonManager::sendErrorMail($container, 'Info: Delete contact from dotmailer => '.$email, 'Dotmailer', 'Dotmailer');
                             } else {

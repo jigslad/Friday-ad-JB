@@ -4,8 +4,8 @@ fa_dotmailer_homepage:
 
 fa_dotmailer_createdatafield:
     path:     /dotmailer/createdatafield
-    defaults: { _controller: FaDotMailerBundle:Default:createDataField }
+    defaults: { _controller: FaDotMailerBundle:Default:create }
 
 fa_dotmailer_createaddressbook:
     path:     /dotmailer/createaddressbook
-    defaults: { _controller: FaDotMailerBundle:Default:createAddressBook }
+    defaults: { _controller: FaDotMailerBundle:Default:create }

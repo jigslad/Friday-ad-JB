@@ -91,7 +91,7 @@ class DeleteContact extends DotMailerRequestBuild implements ResourceInterface
         return $this->container;
     }
 
-    public function deleteContact()
+    public function delete()
     {
         try {
             // Send request to dot mailer.
