@@ -80,7 +80,8 @@ class FacebookManager
     {
         //set default app & secret
         FacebookSession::setDefaultApplication($this->app_id, $this->app_secret);
-        $this->helper = new FacebookRedirectLoginHelper($this->container->get('router')->generate($redirectRoute, $routeParams, true));
+//         var_dump($this->container->getParameter('base_url').$this->container->get('router')->generate($redirectRoute, $routeParams, true));die();
+        $this->helper = new FacebookRedirectLoginHelper($this->container->getParameter('base_url').$this->container->get('router')->generate($redirectRoute, $routeParams, true));
 
         if (session_status() !== PHP_SESSION_ACTIVE) {
             $this->container->get('session')->start();
@@ -91,7 +92,7 @@ class FacebookManager
         } catch (FacebookRequestException $ex) {
             $this->container->get('session')->getFlashBag()->add('error', $ex->getMessage());
             return new RedirectResponse($this->container->get('router')->generate($redirectRoute, $routeParams));
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->container->get('session')->getFlashBag()->add('error', $ex->getMessage());
             return new RedirectResponse($this->container->get('router')->generate($redirectRoute, $routeParams));
         }

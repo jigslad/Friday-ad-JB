@@ -105,6 +105,16 @@ class HomePopularImageAdminType extends AbstractType
         )
         ->add('save', SubmitType::class)
         ->add('saveAndNew', SubmitType::class);
+        
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $data = $event->getData();
+            $url  = $data['url'];
+            // In URL if we give {} brances symfony throughing validation error to avoid that we just replaced with { %7B and }  %7D
+            $url  = str_replace('{', '%7B', $url);
+            $url  = str_replace('}', '%7D', $url);
+            $data['url'] = $url;
+            $event->setData($data);
+        });
 
         $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'onPostSubmitData'));
     }
@@ -133,7 +143,8 @@ class HomePopularImageAdminType extends AbstractType
                 $headerImage->setOverLayFile($file);
                 $headerImage->setOverlayFileName($fileName);
             }
-
+            $url = $form->getData()->getUrl();
+            $headerImage->setUrl(urldecode($url));
             $this->em->persist($headerImage);
             $this->em->flush();
 
