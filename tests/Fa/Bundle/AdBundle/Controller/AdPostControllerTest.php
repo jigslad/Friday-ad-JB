@@ -4,57 +4,39 @@ namespace Tests\Fa\Bundle\Controller;
 
 
 use Fa\Bundle\AdBundle\Controller\AdPostController;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Fa\Bundle\AdBundle\Controller\AdListController;
 
-
-class AdPostControllerTest extends TestCase
+class AdPostControllerTest extends WebTestCase
 {
     // ...
 
     public function testAdPost()
     {
-        $controller = new AdPostController;
+        $kernel = static::bootKernel(array('debug' => true, 'env' => 'test'));
+        $container = static::$kernel->getContainer();
+        /*
+        // Auth
+        $container->get('security.context')->setToken(
+            new UsernamePasswordToken(
+                'maintenance', null, 'main', array('ROLE_FIXTURE_LOADER')
+            )
+        );
+        */
 
+        $adlist = new AdListController();
+        $adlist->setContainer($container);
         $request = new Request();
-        $request->setMethod('POST');
+        $request->set('location', 'uk');
+        $result = $adlist->searchResultAction($request);
 
-        $form = $this
-            ->createMock('Symfony\Component\Form\Form')
-            ->method('isValid')
-            ;
+        // print value
+        print_r($result);
 
-        $form
-            ->expects($this->once())
-            ->method('bindRequest')
-            ->with($this->equalTo($request))
-        ;
-        $form
-            ->expects($this->once())
-            ->method('isValid')
-            ->will($this->returnValue(true))
-        ;
-
-        $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
-        $formFactory
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($form))
-        ;
-
-        $mailer = $this
-            ->getMockBuilder('\Swift_Mailer')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-        $mailer
-            ->expects($this->once())
-            ->method('send')
-        ;
-
-        $controller->setFormFactory($formFactory);
-
-        $controller->firstStepAction($request);
+        $this->assertContains('expected value', $result );
+        print('test completed');
     }
 }
