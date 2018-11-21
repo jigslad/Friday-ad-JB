@@ -83,7 +83,7 @@ class GetAddressBook extends DotMailerRequestBuild implements ResourceInterface
         return $this->container;
     }
 
-    public function getAddressBook()
+    public function get()
     {
         try {
             // Send request to dot mailer.

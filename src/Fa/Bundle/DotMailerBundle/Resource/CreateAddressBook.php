@@ -80,13 +80,13 @@ class CreateAddressBook extends DotMailerRequestBuild implements ResourceInterfa
         return $this->container;
     }
 
-    public function createAddressBook($id, $name, $visibility = 'Private')
+    public function create($id, $name, $visibility = 'Private')
     {
         try {
             // first check whether address book with given id already created or not.
             $addressBooks = $this->container->get('fa.dotmailer.getaddressbook.resource');
             $addressBooks->setDataToSubmit(array('Id' => $id));
-            if (!$addressBooks->getAddressBook()) {
+            if (!$addressBooks->get()) {
                 $data['id']         = $id;
                 $data['Name']       = $name;
                 $data['Visibility'] = $visibility;

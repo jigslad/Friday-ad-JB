@@ -79,7 +79,7 @@ class CreateDataField extends DotMailerRequestBuild implements ResourceInterface
         return $this->container;
     }
 
-    public function createDataField()
+    public function create()
     {
         try {
             // Send request to dot mailer.
