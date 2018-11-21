@@ -34,12 +34,7 @@
     {% endif %}
 {% endblock %}
 {% block scripttop %}
-    {% stylesheets output='bundles/css/compiled/home.css'
-        'bundles/facore/css/owl.carousel.css'
-        'bundles/facore/css/owl.theme.css'
-          %}
-        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
-    {% endstylesheets %}
+    {{ include('FaFrontendBundle:Default:home-css.html.twig') }}
 {% endblock %}
 
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -241,7 +236,7 @@
         'bundles/facore/js/owl.carousel.min.js'
         'bundles/fafrontend/js/parallax.min.js'
     %}
-    <script src="{{ static_asset_url(asset_url) }}"></script>
+    <script defer src="{{ static_asset_url(asset_url) }}"></script>
     {% endjavascripts %}
     
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -363,7 +358,7 @@
     function accordionCallback(accordion)
     {
         $(accordion).siblings('a').find('i').toggleClass("fi-plus fi-minus");
-        $(accordion).find('select.fa-select').selectmenu('refresh');
+        $(accordion).find('select.fa-select').selectmenu().selectmenu('refresh',true);
     }
     
     function getHeaderImage()

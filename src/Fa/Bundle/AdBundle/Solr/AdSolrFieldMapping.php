@@ -166,4 +166,6 @@ interface AdSolrFieldMapping
     
     const AREA_ID 					= 'a_l_area_id_txt';
     const IS_SPECIAL_AREA_LOCATION 	= 'a_is_special_area_location_b';
+
+    const IS_BOOSTED = 'a_is_boosted_b';
 }

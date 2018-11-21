@@ -189,7 +189,7 @@
             if($('#'+targetElement).is(':visible')) {
                 var selectMenuId = ($(this).attr('id').replace('element_toggle', "fa_paa_fourth_step_adult"));
                 if ($('#'+selectMenuId).hasClass('fa-select')) {
-                    $('#'+selectMenuId).selectmenu('refresh');
+                    $('#'+selectMenuId).selectmenu().selectmenu('refresh',true);
                 }
             }
         });

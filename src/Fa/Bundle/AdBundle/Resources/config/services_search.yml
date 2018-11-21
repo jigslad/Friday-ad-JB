@@ -136,3 +136,8 @@ services:
         class: Doctrine\ORM\EntityRepository
         factory: ['@doctrine.orm.entity_manager', getRepository]
         arguments: [FaAdBundle:Campaigns]
+        
+    fa.location_radius.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:LocationRadius]

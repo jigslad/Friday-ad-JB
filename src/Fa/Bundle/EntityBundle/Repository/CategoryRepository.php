@@ -2215,4 +2215,60 @@ class CategoryRepository extends NestedTreeRepository
         $objResources = $query->getQuery()->getOneOrNullResult();
         return $objResources;
     }
+
+    /**
+     * get Default Radius By Category Id
+     *
+     * @param integer $categoryId Category id
+     *
+     * @return boolean|string
+     */
+    public function getDefaultRadiusByCategoryId($categoryId,$container = null)
+    {
+        $parentCategoryIds = array_keys($this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container));
+        $locationRadius = $this->_em->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
+        if($locationRadius) { return $locationRadius['defaultRadius']; }
+        else { return null; }
+    }
+
+    /**
+     * get Default Radius By searchParams
+     *
+     * @param integer $categoryId Category id
+     *
+     * @return boolean|string
+     */
+    public function getDefaultRadiusBySearchParams($searchParams,$container = null)
+    {
+        
+        $setRadius = 1;$categoryId = 0;
+        $cookieLocation  = $container->get('request')->cookies->get('location');
+        $cookieLvl = '';
+        if($cookieLocation && (!is_array($cookieLocation))) { $cookieLocation = json_decode($cookieLocation); 
+            $cookieLvl = $cookieLocation->lvl;
+        } elseif($cookieLocation && (is_array($cookieLocation))) {
+            $cookieLvl = $cookieLocation->lvl;
+        }
+        if((isset($searchParams['item__location']) && $searchParams['item__location']==2) || !isset($searchParams['item__location']) || $cookieLvl=='')  {            
+            $setRadius = 0;
+        }elseif(isset($searchParams['item__distance']) && $searchParams['item__distance']) {
+            $setRadius = 0;
+        }
+
+        if($setRadius) {
+            if(isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+                $categoryId = $searchParams['item__category_id'];
+            }
+            if($categoryId) {
+                $parentCategoryIds = array_keys($this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container));
+                $locationRadius = $this->_em->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
+                if($locationRadius) { return $locationRadius['defaultRadius']; }
+                else { 
+                    $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                    return ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+                } 
+            } else { return null; }
+
+        } else { return null; }
+    }
 }

@@ -1,8 +1,7 @@
 <!-- Core Scripts - Include with every page -->
 {% set container = fetch_container_instance() %}
 <!-- script async src="{{ asset_url('fafrontend/js/banner.js') }}?v=1"></script -->
-<script>var isAdBlocker = true;</script>
-<script src="{{ asset_url('fafrontend/js/advertisement.js') }}"></script>
+<script>var isAdBlocker;isAdBlocker = false;</script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $.ajax({
@@ -15,71 +14,83 @@
         $('.banner-center').html('');
     }
 
-    {% if not app.request.get('is_copy') and not app.session.has('paa_fourth_step_brand') %}
-        bindFormErrorEvents();
-    {% endif %}
-    customSelectOpenCloseEvents(false);
-    $('.custom_select').select2({
-        dropdownCssClass: 'custom_select_options',
+    var notification_box = true;
+    $(window).on('load', function() {
+        {% if not app.request.get('is_copy') and not app.session.has('paa_fourth_step_brand') %}
+            bindFormErrorEvents();
+        {% endif %}
+        customSelectOpenCloseEvents(false);
+
+        $('.fdatepicker').fdatepicker({format: 'dd/mm/yyyy'});
+
+        $('.custom_select').select2({
+            dropdownCssClass: 'custom_select_options',
+        });
+
+        $('.fa-select').selectmenu(
+        {
+            change: function(event, ui) {
+                $('#'+$(this).attr('id')).trigger('change');
+                $(this).nextAll('small.error').first().remove();
+                $(this).parent().nextAll('small.error').first().remove();
+                $('#'+$(this).attr('id')+'-button').removeClass('error-bdr');
+            },
+            open: function(event, ui) {
+                //for fast click
+                $('.ui-menu li').addClass('needsclick');
+            },
+            create: function(event, ui) {
+                //for fast click
+                if ($('#'+$(this).attr('id')).hasClass('error-bdr')) {
+                    $('#'+$(this).attr('id')+'-button').addClass('error-bdr');
+                }
+            }
+        });
+
+        $('.fa-select-white').selectmenu(
+        {
+            change: function(event, ui) {
+                $('#'+$(this).attr('id')).trigger('change');
+                $(this).nextAll('small.error').first().remove();
+                $(this).parent().nextAll('small.error').first().remove();
+                $('#'+$(this).attr('id')+'-button').removeClass('error-bdr');
+            },
+            open: function(event, ui) {
+                //for fast click
+                $('.ui-menu li').addClass('needsclick');
+                $('.ui-menu').addClass('white-dropdown');
+            },
+            create: function(event, ui) {
+                //for fast click
+                if ($('#'+$(this).attr('id')).hasClass('error-bdr')) {
+                    $('#'+$(this).attr('id')+'-button').addClass('error-bdr');
+                }
+            }
+        });
+
+        $('.custom_select').on("select2-focus", function(e) {
+            $('.custom_select_options .select2-search').hide();
+        });
+
+
     });
 
-    $('.fa-select').selectmenu(
-    {
-        change: function(event, ui) {
-            $('#'+$(this).attr('id')).trigger('change');
-            $(this).nextAll('small.error').first().remove();
-            $(this).parent().nextAll('small.error').first().remove();
-            $('#'+$(this).attr('id')+'-button').removeClass('error-bdr');
-        },
-        open: function(event, ui) {
-            //for fast click
-            $('.ui-menu li').addClass('needsclick');
-        },
-        create: function(event, ui) {
-            //for fast click
-            if ($('#'+$(this).attr('id')).hasClass('error-bdr')) {
-                $('#'+$(this).attr('id')+'-button').addClass('error-bdr');
-            }
-        }
-    });
+    
 
-    $('.fa-select-white').selectmenu(
-    {
-        change: function(event, ui) {
-            $('#'+$(this).attr('id')).trigger('change');
-            $(this).nextAll('small.error').first().remove();
-            $(this).parent().nextAll('small.error').first().remove();
-            $('#'+$(this).attr('id')+'-button').removeClass('error-bdr');
-        },
-        open: function(event, ui) {
-            //for fast click
-            $('.ui-menu li').addClass('needsclick');
-            $('.ui-menu').addClass('white-dropdown');
-        },
-        create: function(event, ui) {
-            //for fast click
-            if ($('#'+$(this).attr('id')).hasClass('error-bdr')) {
-                $('#'+$(this).attr('id')+'-button').addClass('error-bdr');
-            }
-        }
-    });
+        
 
     $(window).on( "orientationchange", function( event ) {
         customSelectOpenCloseEvents(true);
-        $('.fa-select').selectmenu('refresh');
-        $('.fa-select-white').selectmenu('refresh');
+        $('.fa-select').selectmenu().selectmenu('refresh',true);
+        $('.fa-select-white').selectmenu().selectmenu('refresh',true);
     });
 
     $(document).ajaxStop(function () {
-        $('.fa-select').selectmenu('refresh');
-        $('.fa-select-white').selectmenu('refresh');
+        $('.fa-select').selectmenu().selectmenu('refresh',true);
+        $('.fa-select-white').selectmenu().selectmenu('refresh',true);
     });
 
-    $('.custom_select').on("select2-focus", function(e) {
-        $('.custom_select_options .select2-search').hide();
-    });
-
-    $('.fdatepicker').fdatepicker({format: 'dd/mm/yyyy'});
+   
     $( "#mobile_search_li" ).click(function() {
         if ($('#top_bar_nav').hasClass('expanded')) {
                 $('.top-bar, [data-topbar]').css('height', '').removeClass('expanded');
@@ -118,7 +129,6 @@
     	}
   	});
     
-    var notification_box = true;
     
     $("#notification-l").hover(function() {
         if (notification_box == true) {

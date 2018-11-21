@@ -96,7 +96,7 @@
 {% block similar_slider_js %}
     <script language="javascript" type="text/javascript">
     //<![CDATA[
-    $(document).ready(function() {
+    $(window).on('load', function() { 
     	{% if similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
             var similarItemSlider = $("#similar-item-slider");
             similarItemSlider.owlCarousel({

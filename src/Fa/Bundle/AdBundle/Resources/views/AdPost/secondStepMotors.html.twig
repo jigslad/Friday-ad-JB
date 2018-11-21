@@ -96,7 +96,7 @@
                            loadRegNoFieldDetailsByRegNo($.trim($('#fa_paa_second_step_motors_reg_no').val()));
                        {% else %}
                            $('#reg_no_details_fields').show();
-                           $('.fa-select').selectmenu('refresh');
+                           $('.fa-select').selectmenu().selectmenu('refresh',true);
                        {% endif %}
                    {% endif %}
                {% endif %}
@@ -104,14 +104,14 @@
                $('#fa_paa_second_step_motors_reg_no').val('');
                $('#reg_no_field').hide();
                $('#reg_no_details_fields').show();
-               $('.fa-select').selectmenu('refresh');
+               $('.fa-select').selectmenu().selectmenu('refresh',true);
            }
         }
         
         function showHideRegNoFields(hasRegNo) {
            if (hasRegNo == 1) {
                $('#reg_no_field').show();
-               $('.fa-select').selectmenu('refresh');
+               $('.fa-select').selectmenu().selectmenu('refresh',true);
                $('#reg_no_details_fields').hide();
                $('#reg_no_error_msg').html('');
                $('#reg_no_error_msg').hide();
@@ -122,7 +122,7 @@
 
                $('#reg_no_field').hide();
                $('#reg_no_details_fields').show();
-               $('.fa-select').selectmenu('refresh');
+               $('.fa-select').selectmenu().selectmenu('refresh',true);
            }
            $('#add_vehicle_msg').html('{{ "Add your vehicle details:"|trans({}, 'frontend-paa-second-step')}}');
         }
@@ -211,7 +211,7 @@
                 if ($('#fa_paa_second_step_motors_'+field).is("select")) {
                    if (field != 'reg_year') {
                        $('#fa_paa_second_step_motors_'+field).val('');
-                       $('#fa_paa_second_step_motors_'+field).selectmenu('refresh');
+                       $('#fa_paa_second_step_motors_'+field).selectmenu().selectmenu('refresh',true);
                    }
                 }
                 $('#fa_paa_second_step_motors_colour_id').val('');
@@ -238,12 +238,12 @@
                              });
                              $('#add_vehicle_msg').html('{{ "Confirm your vehicle details:"|trans({}, 'frontend-paa-second-step')}}');
                              $('#reg_no_details_fields').show();
-                             $('.fa-select').selectmenu('refresh');
+                             $('.fa-select').selectmenu().selectmenu('refresh',true);
 
                              checkCategoryWithCarWeb(regNo, regNoFieldsData);
                         } else {
                             resetRegNoFields();
-                            $('.fa-select').selectmenu('refresh');
+                            $('.fa-select').selectmenu().selectmenu('refresh',true);
                             $('#reg_no_details_fields').hide();
                             $('#fa_paa_second_step_motors_reg_no').addClass('error');
                             $('#reg_no_error_msg').html('{{ "Please enter correct registration number."|trans({}, 'frontend-paa-second-step')}}');
@@ -257,7 +257,7 @@
                 $('#fa_paa_second_step_motors_reg_no').addClass('error');
                 $('#reg_no_error_msg').html('{{ "Please enter registration number."|trans({}, 'frontend-paa-second-step')}}');
                 $('#reg_no_error_msg').show();
-                $('.fa-select').selectmenu('refresh');
+                $('.fa-select').selectmenu().selectmenu('refresh',true);
                 $('#reg_no_details_fields').hide();
             }
         }
@@ -303,7 +303,7 @@
                 });
             } else {
                 $('#fa_paa_second_step_motors_model_id').html('<option value="">{{ 'Select model'|trans({}, 'frontend-paa-second-step') }}</option>');
-                $('#fa_paa_second_step_motors_model_id').selectmenu('refresh');
+                $('#fa_paa_second_step_motors_model_id').selectmenu().selectmenu('refresh',true);
             }
             {% endif %}
         }

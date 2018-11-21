@@ -38,8 +38,8 @@
     function accordionCallback(accordion)
     {
         $(accordion).siblings('a').find('span:eq(1)').toggleClass("dark-arrow-down dark-arrow-up");
-        $(accordion).find('select.fa-select').selectmenu('refresh');
-        $(accordion).find('select.fa-select-white').selectmenu('refresh');
+        $(accordion).find('select.fa-select').selectmenu().selectmenu('refresh',true);
+        $(accordion).find('select.fa-select-white').selectmenu().selectmenu('refresh',true);
         bindEqualizerEvent('newsletter_equalizer');
     }
     
@@ -71,7 +71,7 @@
         if ($("input[name='fa_user_user_account_profile[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
             $('.business_seller_fields').show();
             $('.myacc-profile-dtl').show();
-            $('.fa-select-white').selectmenu('refresh');
+            $('.fa-select-white').selectmenu().selectmenu('refresh',true);
         }
         else {
             $('.business_seller_fields').hide();
@@ -348,7 +348,7 @@
         if (showFlag) {
             $('#add_new_card_anchor').hide();
             $('#card_detail').show();
-            $('.fa-select-white').selectmenu('refresh');
+            $('.fa-select-white').selectmenu().selectmenu('refresh',true);
         } else {
             $('#card_detail').hide();
             clearForm('#user_card_form');

@@ -451,6 +451,16 @@ class LoadUpsellData extends AbstractFixture implements OrderedFixtureInterface,
         $em->persist($upsell);
         $em->flush();
         $upsellId++;
+
+        $upsell = new Upsell();
+        $upsell->setId($upsellId);
+        $upsell->setType(UpsellRepository::UPSELL_TYPE_BOOST_ADVERT_ID);
+        $upsell->setTitle('Boost Ad');
+        $upsell->setUpsellFor('ad');
+        $upsell->setStatus(1);
+        $em->persist($upsell);
+        $em->flush();
+        $upsellId++;
     }
 
     /**

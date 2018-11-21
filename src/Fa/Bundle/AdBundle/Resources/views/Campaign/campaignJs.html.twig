@@ -216,7 +216,7 @@ function hideShowSalaryBand()
 {
   if ($('#fa_paa_lite_common_salary_type_id').val() == '2454') {
         $('#salary_band_id_div').show();
-        $('#fa_paa_lite_common_salary_band_id').selectmenu('refresh');
+        $('#fa_paa_lite_common_salary_band_id').selectmenu().selectmenu('refresh',true);
     } else {
         $('#fa_paa_lite_common_salary_band_id').val('');
         $('#salary_band_id_div').hide();
@@ -686,7 +686,7 @@ function checkCategoryWithCarWeb(regNo, regNoFieldsData)
             });
         } else {
             $('#fa_paa_lite_common_model_id').html('<option value="">{{ 'Select model'|trans({}, 'frontend-ad-edit') }}</option>');
-            $('#fa_paa_lite_common_model_id').selectmenu('refresh');
+            $('#fa_paa_lite_common_model_id').selectmenu().selectmenu('refresh',true);
         }
         {% endif %}
     }

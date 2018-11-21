@@ -24,7 +24,7 @@
             {% set allowDraggable = 0 %}
         {% endif %}
         var mapLoadedFalg = false;
-        $(document).ready(function(){
+        $(window).on('load', function() { 
             {% if adDetailMapVariables['mapOnLoad'] is defined and adDetailMapVariables['mapOnLoad'] == 'true' %}
                 initializeForAdDetail({{ allowDraggable }});
                 showMarker('{{adDetailMapVariables["latitude"]}}', '{{adDetailMapVariables["longitude"]}}');
@@ -72,8 +72,6 @@
         {% if mapFitConfig and mapFitConfig.0.value is defined %}
         	{% set mapFitkey = mapFitConfig.0.value %}
         {% endif %}
-        <script src="https://cdn.mapfit.com/v2-4/assets/js/tetragon.js"></script>
-        <script src="https://cdn.mapfit.com/v2-4/assets/js/mapfit.js"></script>
         {{ include('FaCoreBundle::mapFitJs.html.twig', {'key' : mapFitkey}) }}
         <script language="javascript" type="text/javascript">
         //<![CDATA[
@@ -83,7 +81,7 @@
             {% set allowDraggable = 0 %}
         {% endif %}
         var mapLoadedFalg = false;
-        $(document).ready(function(){ 
+        $(window).on('load', function() { 
         	 {% if adDetailMapVariables['mapOnLoad'] is defined and adDetailMapVariables['mapOnLoad'] == 'true' %}
         	 	showMarker('{{adDetailMapVariables["latitude"]}}', '{{adDetailMapVariables["longitude"]}}');
         	 {% else %}

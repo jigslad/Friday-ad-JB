@@ -93,7 +93,7 @@
             if($('#'+targetElement).is(':visible')) {
                 var selectMenuId = ($(this).attr('id').replace('element_toggle', "fa_paa_fourth_step_jobs"));
                 if ($('#'+selectMenuId).hasClass('fa-select')) {
-                    $('#'+selectMenuId).selectmenu('refresh');
+                    $('#'+selectMenuId).selectmenu().selectmenu('refresh',true);
                 }
                 var equalizerId = ($(this).attr('id').replace('element_toggle_', ""))+'_equalizer';
                 if ($('#'+equalizerId).hasClass('fa-equalizer')) {
@@ -112,7 +112,7 @@
 	   fa_paa_fourth_step_jobs_salary_type_id
        if ($('#fa_paa_fourth_step_jobs_salary_type_id').val() == '2454') {
            $('#salary_band_id_div').show();
-           $('#fa_paa_fourth_step_jobs_salary_band_id').selectmenu('refresh');
+           $('#fa_paa_fourth_step_jobs_salary_band_id').selectmenu().selectmenu('refresh',true);
        } else {
            $('#fa_paa_fourth_step_jobs_salary_band_id').val('');
            $('#salary_band_id_div').hide();

@@ -1,5 +1,7 @@
 {% extends 'FaFrontendBundle::layout.html.twig' %}
-
+{% block scripttop %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+{% endblock %}
 {% block body %}
     <div class="payment">
         <div class="mb20">
@@ -27,7 +29,6 @@
 {% endblock %}
 
 {% block scriptbottom %}
-    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
     <script language="javascript" type="text/javascript">
     //<![CDATA[
         blockPage();

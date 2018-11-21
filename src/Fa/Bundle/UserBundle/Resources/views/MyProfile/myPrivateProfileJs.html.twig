@@ -35,8 +35,8 @@
     function accordionCallback(accordion)
     {
         $(accordion).siblings('a').find('span:eq(1)').toggleClass("dark-arrow-down dark-arrow-up");
-        $(accordion).find('select.fa-select').selectmenu('refresh');
-        $(accordion).find('select.fa-select-white').selectmenu('refresh');
+        $(accordion).find('select.fa-select').selectmenu().selectmenu('refresh',true);
+        $(accordion).find('select.fa-select-white').selectmenu().selectmenu('refresh',true);
     }
     
     function updateCharCounter(fieldId)

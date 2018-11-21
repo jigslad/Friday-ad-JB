@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=no;target-densityDpi=medium-dpi" />
-    <link rel="stylesheet" type="text/css" href="{{ static_asset_url('/bundles/fafrontend/css/google-fonts.css') }}" />
-    <title>{% block title %} {{'Friday Ad'|trans}} {% if block('page_title') is defined %} - {{block('page_title')|trim}} {% endif %} {% endblock %}</title>
+
+    <title>{% block title %} {{'Friday Ad'|trans}} {% if block('page_title') %} - {{block('page_title')|trim}} {% endif %} {% endblock %}</title>
     
     {% set currentRoute = app.request.attributes.get('_route') %}
     {% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
@@ -39,15 +39,19 @@
     
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
-    {% stylesheets filter='uglifycss' output='bundles/css/compiled/simpleLayout.css'
+    {{ include('FaFrontendBundle::fa-main-css.html.twig') }}
+
+    {#{% stylesheets filter='uglifycss' output='bundles/css/compiled/simpleLayout.css'
         'bundles/fafrontend/css/style.css'
         'bundles/fafrontend/css/responsive.css'
           %}
         <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}?v=3000"/>
-    {% endstylesheets %}
-    {% block blockGaCode%}
+    {% endstylesheets %}#}
+
+    {% block blockGaCode %}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}
+
     {% if blockDimension2 %}
         {{ blockDimension2|raw }}
     {% else %}
@@ -95,11 +99,13 @@
         {{ include('FaFrontendBundle::simpleFooter.html.twig') }}
 
         <script type="text/javascript">
+        $(window).on('load', function() {
             $(document).foundation({
               accordion: {
                 multi_expand: true,
               }
             });
+        });
         </script>
     </body>
 </html>

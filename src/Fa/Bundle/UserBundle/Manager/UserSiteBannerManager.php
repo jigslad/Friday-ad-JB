@@ -115,18 +115,16 @@ class UserSiteBannerManager
      */
     public function assignDefaultCategoryBanner($userSiteBanner, $siteBannerImagePath)
     {
+        $imageQuality = $this->container->getParameter('fa.image.quality');
         if ($userSiteBanner) {
             $this->removeImage();
-            $imagepath = $siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename();
-            if (file_exists($imagepath)) {
-                $dimension = getimagesize($imagepath);
-                //convert original image to jpg
-                $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
-                $origImage->loadFile($imagepath);
-                $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', 'image/jpeg');
-                copy($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', $this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg');
-                exec('convert -rotate 0 -resize 100% '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg'.' -crop 1190x400+0+'.($dimension[1]*45/100).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg');
-            }
+            $dimension = getimagesize($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
+            //convert original image to jpg
+            $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
+            $origImage->loadFile($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
+            $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', 'image/jpeg');
+            copy($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', $this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg');
+            exec('convert -rotate 0 -resize 100% '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg'.' -crop 1190x400+0+'.($dimension[1]*45/100).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg');
         }
     }
 
@@ -137,9 +135,10 @@ class UserSiteBannerManager
      */
     public function saveOriginalJpgImage($orgImageName, $keepOriginal = false)
     {
+        $imageQuality = $this->container->getParameter('fa.image.quality');
         $dimension = getimagesize($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
         //convert original image to jpg
-        $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
+        $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
         $origImage->loadFile($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
         $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', 'image/jpeg');
         if ($dimension['mime'] == 'image/gif') {

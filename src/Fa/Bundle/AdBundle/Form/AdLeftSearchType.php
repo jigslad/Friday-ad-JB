@@ -93,15 +93,6 @@ class AdLeftSearchType extends AbstractType
         $builder
         ->add('item__price_from', TextType::class, array(/** @Ignore */'label' => false))
         ->add('item__price_to', TextType::class, array(/** @Ignore */'label' => false))
-        ->add(
-            'item__distance',
-            ChoiceType::class,
-            array(
-                'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
-                'data'    => 15,
-                'choice_translation_domain' => false,
-            )
-        )
         ->add('item__category_id', HiddenType::class)
         ->add('map', HiddenType::class)
         ->add('sort_field', HiddenType::class)
@@ -145,12 +136,33 @@ class AdLeftSearchType extends AbstractType
     {
         $form = $event->getForm();
         $this->addLocationAutoSuggestField($form);
+        $defDistance = '';$getDefaultRadius = array();$rootCategoryId = null;
 
         $categoryId   = '';
         $searchParams = $this->request->get('searchParams');
+
+        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:0;
+
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
             $categoryId = $searchParams['item__category_id'];
         }
+        if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
+            $defDistance = $searchParams['item__distance'];
+        } else {
+            $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+            $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+        }
+
+        $form->add(
+            'item__distance',
+            ChoiceType::class,
+            array(
+                'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
+                'empty_data' => $defDistance,
+                'data' => $defDistance,
+                'choice_translation_domain' => false,
+            )
+        );
 
         $this->addCategroyDimensionFilters($form, $categoryId);
         $this->addIsTradeAdField($form);

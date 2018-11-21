@@ -1,9 +1,12 @@
+<script defer src="https://cdn.mapfit.com/v2-4/assets/js/tetragon.js"></script>
+<script defer src="https://cdn.mapfit.com/v2-4/assets/js/mapfit.js"></script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-var myMarker, position, map, addressField, latlngField;
+var myMarker, position, map, addressField, latlngField, myIcon;
+$(window).on('load', function() {
 mapfit.apikey = "{{ key }}";
-var myIcon = mapfit.divIcon({className:"", iconUrl: "{{ asset_url('fafrontend/images/map-marker.png') }}", html: '<img class="markerImg" src="{{ asset_url('fafrontend/images/map-marker.png') }}" />'})
-
+myIcon = mapfit.divIcon({className:"", iconUrl: "{{ asset_url('fafrontend/images/map-marker.png') }}", html: '<img class="markerImg" src="{{ asset_url('fafrontend/images/map-marker.png') }}" />'})
+});
 function showAddress(val) {
     var latitude = '';
     var longitude = '';

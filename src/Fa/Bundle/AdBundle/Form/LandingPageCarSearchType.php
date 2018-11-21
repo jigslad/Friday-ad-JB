@@ -85,15 +85,6 @@ class LandingPageCarSearchType extends AbstractType
         ->add('item__price_from', NumberType::class, array(/** @Ignore */'label' => false))
         ->add('item__price_to', NumberType::class, array(/** @Ignore */'label' => false))
         ->add(
-            'item__distance',
-            ChoiceType::class,
-            array(
-                'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
-                'data'    => 30,
-                'attr'    => array('class' => 'fa-select-white')
-            )
-        )
-        ->add(
             'item__make_id',
             ChoiceType::class,
             array(
@@ -178,9 +169,43 @@ class LandingPageCarSearchType extends AbstractType
             )
         )
         ->add('item__location', HiddenType::class)
-        ->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false));
+        ->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false))
+        ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
     }
 
+    /**
+     * Callbak method for PRE_SET_DATA form event.
+     *
+     * @param object $event Event instance.
+     */
+    public function preSetData(FormEvent $event)
+    {
+        $form = $event->getForm();
+        $defDistance = '';$getDefaultRadius = $searchParams = array();
+
+        $categoryId   = '';
+        if($this->request->get('category_id')) {
+            $searchParams['item__category_id'] = $this->request->get('category_id');
+        }
+        if($this->request->get('location')) {
+            $searchParams['item__location'] = $this->request->get('location');
+        }
+        
+        $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+        $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+
+        $form->add(
+            'item__distance',
+            ChoiceType::class,
+            array(
+                'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
+                'empty_data' => $defDistance,
+                'data' => $defDistance,
+                'attr'    => array('class' => 'fa-select-white')
+            )
+        );
+
+    }
     /**
      * Set default form options.
      *

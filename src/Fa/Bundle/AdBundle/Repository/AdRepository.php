@@ -3349,8 +3349,10 @@ class AdRepository extends EntityRepository
         $container->get('fa.searchfilters.manager')->init($this, $this->getEntityManager()->getClassMetadata('FaAdBundle:Ad')->getTableName(), 'search', $data);
         $data = $container->get('fa.searchfilters.manager')->getFiltersData();
 
+        $getDefaultRadius = $this->_em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $container);
+
         if (isset($searchParams['item__location']) && $searchParams['item__location']) {
-            $distance = (isset($searchParams['item__distance']) && $searchParams['item__distance']) ? $searchParams['item__distance'] : '';
+            $distance = (isset($searchParams['item__distance']) && $searchParams['item__distance']) ? $searchParams['item__distance'] : ($getDefaultRadius)?$getDefaultRadius:'';
             $data['query_filters']['item']['location'] = $searchParams['item__location'].'|'.$distance;
         }
 
@@ -3407,7 +3409,7 @@ class AdRepository extends EntityRepository
         if ($isOnlyCount) {
             $qb->select('COUNT('.self::ALIAS.'.id) as total_ads');
         } else {
-            $qb->select(self::ALIAS.'.id', self::ALIAS.'.title', self::ALIAS.'.price', self::ALIAS.'.qty', self::ALIAS.'.qty_sold', self::ALIAS.'.created_at', self::ALIAS.'.updated_at', self::ALIAS.'.published_at', self::ALIAS.'.expires_at', self::ALIAS.'.sold_at', BaseEntityRepository::ALIAS_ADSTATUS.'.id as status_id', BaseEntityRepository::ALIAS_ADTYPE.'.id as type_id', CategoryRepository::ALIAS.'.id as cat_id ');
+            $qb->select(self::ALIAS.'.id', self::ALIAS.'.title', self::ALIAS.'.price', self::ALIAS.'.qty', self::ALIAS.'.qty_sold', self::ALIAS.'.is_boosted', self::ALIAS . '.boosted_at', self::ALIAS .'.created_at', self::ALIAS.'.updated_at', self::ALIAS.'.published_at', self::ALIAS.'.expires_at', self::ALIAS.'.sold_at', BaseEntityRepository::ALIAS_ADSTATUS.'.id as status_id', BaseEntityRepository::ALIAS_ADTYPE.'.id as type_id', CategoryRepository::ALIAS.'.id as cat_id ');
         }
 
 

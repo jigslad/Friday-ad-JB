@@ -77,7 +77,7 @@
     {
     	if ($('#fa_paa_edit_jobs_salary_type_id').val() == '2454') {
             $('#salary_band_id_div').show();
-            $('#fa_paa_edit_jobs_salary_band_id').selectmenu('refresh');
+            $('#fa_paa_edit_jobs_salary_band_id').selectmenu().selectmenu('refresh',true);
         } else {
             $('#fa_paa_edit_jobs_salary_band_id').val('');
             $('#salary_band_id_div').hide();

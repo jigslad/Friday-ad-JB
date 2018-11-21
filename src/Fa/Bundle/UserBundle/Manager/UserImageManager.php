@@ -144,6 +144,7 @@ class UserImageManager
      */
     public function saveOriginalJpgImage($orgImageName)
     {
+        $imageQuality = $this->container->getParameter('fa.image.quality');
         //convert original image to jpg
         $dimension = getimagesize($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
         if ($dimension['mime'] == 'image/png') {
@@ -153,7 +154,7 @@ class UserImageManager
                 unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'_original.png');
             }
         } else {
-            $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 90, 'ImageMagickManager');
+            $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
             $origImage->loadFile($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
             $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'_original.jpg', 'image/jpeg');
         }
@@ -179,6 +180,7 @@ class UserImageManager
      */
     public function createThumbnail()
     {
+        $imageQuality = $this->container->getParameter('fa.image.quality');
         if ($this->getIsCompany()) {
             $thumbSize = $this->container->getParameter('fa.company.image_size');
         } else {
@@ -193,10 +195,9 @@ class UserImageManager
             try {
                 foreach ($thumbSize as $d) {
                     $dim        = explode('X', $d);
-                    $thumbImage = new ThumbnailManager($dim[0], $dim[1], true, false, 90, 'ImageMagickManager');
+                    $thumbImage = new ThumbnailManager($dim[0], $dim[1], true, false, $imageQuality, 'ImageMagickManager');
                     $thumbImage->loadFile($orgImage);
                     $thumbImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserId().'.jpg', 'image/jpeg');
-
                     unset($thumbImage);
                 }
             } catch (\Exception $e) {

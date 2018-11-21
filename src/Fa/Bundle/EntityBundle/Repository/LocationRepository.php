@@ -226,7 +226,7 @@ class LocationRepository extends BaseEntityRepository
         
         $areaArray = array();
         foreach ($areas as $area) {
-            $areaArray[] = array('id'=> $area->getParent()->getId(), 'text' => $area->getName().', '.$area->getParent()->getName(), 'area_id'=> $area->getId(), 'locationBy' => 'area');
+    		$areaArray[] = array('id'=> $area->getParent()->getId(), 'text' => $area->getName().', '.$area->getParent()->getName(), 'area_id'=> $area->getId(), 'locationBy' => 'area', 'latlong' => $area->getLatitude().', '.$area->getLongitude());
         }
         
         return $areaArray;
@@ -278,6 +278,7 @@ class LocationRepository extends BaseEntityRepository
     {
         $translator  = CommonManager::getTranslator($container);
         $optionArray = array(
+                           ''       => $translator->trans('Select distance'),
                            '0'      => $translator->trans('0 mile'),
                            '2'      => $translator->trans('2 miles'),
                            '5'      => $translator->trans('5 miles'),

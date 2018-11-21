@@ -293,7 +293,21 @@ class Ad
     private $status;
 
     /**
-     * @var \Fa\Bundle\EntityBundle\Entity\Entity
+     *
+     * @var boolean @ORM\Column(name="is_boosted", type="boolean", nullable=true, options={"default" = 0})
+     */
+
+    private $is_boosted;
+
+    /**
+     *
+     * @var integer @ORM\Column(name="boosted_at", type="integer", length=10, nullable=true, options={"default" = 0})
+     */
+    
+    private $boosted_at;
+
+    /**
+     * @var \Fa\Bundle\AdBundle\Entity\Entity
      *
      * @ORM\ManyToOne(targetEntity="Fa\Bundle\EntityBundle\Entity\Entity")
      * @ORM\JoinColumns({
@@ -2356,5 +2370,51 @@ class Ad
     public function getCampaign()
     {
         return $this->campaign;
+    }
+
+    /**
+     * Set isBoosted
+     *
+     * @param string $isBoosted
+     * @return Ad
+     */
+    public function setIsBoosted($is_boosted = null)
+    {
+        $this->is_boosted = $is_boosted;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getIsBoosted()
+    {
+        return $this->is_boosted;
+    }
+
+    /**
+     * Set boosted_at
+     *
+     * @param integer $boosted_at
+     * @return Ad
+     */
+    public function setBoostedAt()
+    {
+        $this->boosted_at = time();
+
+        return $this;
+    }
+
+    /**
+     * Get updated_at
+     *
+     * @return integer
+     */
+    public function getBoostedAt()
+    {
+        return $this->boosted_at;
     }
 }

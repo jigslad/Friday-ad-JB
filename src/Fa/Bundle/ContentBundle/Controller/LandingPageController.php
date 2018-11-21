@@ -91,12 +91,18 @@ class LandingPageController extends CoreController
         if (isset($parameters['location']) && $parameters['location']) {
             $searchParams['item__location'] = $parameters['location'];
 
-            $distance = 15;
-            if (isset($searchParams['item__category_id']) && $searchParams['item__category_id'] == CategoryRepository::MOTORS_ID) {
-                $distance = 30;
+
+            $distance = '';
+            if(isset($searchParams['item__category_id']) && !isset($searchParams['item__distance'])) {
+                $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+                $distance = ($getDefaultRadius)?$getDefaultRadius:'';
+                //if($distance) { $searchParams['item__distance'] = $distance; }
             }
 
-            $searchParams['item__distance'] = $distance;
+            /*if (isset($searchParams['item__category_id']) && $searchParams['item__category_id'] == CategoryRepository::MOTORS_ID) {
+                $distance = 30;
+            }*/
+            //if($distance) { $searchParams['item__distance'] = $distance; }
             if (!in_array($categoryId, array(CategoryRepository::JOBS_ID, CategoryRepository::ADULT_ID))) {
                 $parameters['adsNearYou']       = $this->getAdsNearYou($searchParams, $cookieLocationDetails);
 
@@ -306,13 +312,14 @@ class LandingPageController extends CoreController
         }
         $data           = array();
         $data['search'] = $searchParams;
+        $searchDistance = isset($searchParams['item__distance'])?$searchParams['item__distance']:1;
         $data['search']['item__status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
 
         $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'), 'search', $data);
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
         if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID) {
-            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.$data['search']['item__distance'];
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.$searchDistance;
         }
 
         $data['query_sorter']                         = array();
@@ -388,6 +395,7 @@ class LandingPageController extends CoreController
     {
         $data    = array();
         $adLimit = 12;
+        $searchDistance = isset($searchParams['item__distance'])?$searchParams['item__distance']:1;
 
         if (isset($searchParams['item__category_id'])) {
             $searchParams['item_view_counter__root_category_id'] = $searchParams['item__category_id'];
@@ -400,7 +408,7 @@ class LandingPageController extends CoreController
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
         if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID) {
-            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.$data['search']['item__distance'];
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.$searchDistance;
         }
 
         $data['select_fields'] = array('item_view_counter' => array('id'));
@@ -494,8 +502,13 @@ class LandingPageController extends CoreController
         $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:Ad'), $this->getRepositoryTable('FaAdBundle:Ad'), 'search', $data);
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
+        $getDefaultRadius = '';
+        if($searchParams['item__category_id']!='') {
+            $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+        }
+
         if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID) {
-            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.$data['search']['item__distance'];
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.$getDefaultRadius;
         }
 
         $data['query_sorter'] = array();

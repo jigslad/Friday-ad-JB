@@ -124,9 +124,12 @@ if(isset($_GET['query'])) {
 <script type="text/javascript">
 $(document).ready(function() { 
 	var searchContent = $(".page-header-description").html();
+	var splitTxt = searchContent.split(" ");
 	var searchCount = parseInt(searchContent);
 	var searchText = $("input[name='query']").val();
-	if(isNaN(searchCount)) {
+	if(splitTxt[0] != "undefined" && splitTxt[0].toLowerCase() == 'one') {
+		searchCount = 1;
+	} else if(isNaN(searchCount)) {
 		searchCount = 0;
 	}
 	ga('send', 'event', 'help widget', 'search', "'"+searchText+" | "+searchCount+"'");

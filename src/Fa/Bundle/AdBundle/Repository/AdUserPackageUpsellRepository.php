@@ -408,4 +408,36 @@ class AdUserPackageUpsellRepository extends EntityRepository
 
         return $queryBuilder;
     }
+
+    /**
+     *
+     * @return array
+     */
+    public function getBoostAdUpsellData($ad_id, $user_id)
+    {
+        if($user_id)
+        {
+            $queryBuilder = $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS, UpsellRepository::ALIAS)
+            ->innerJoin(self::ALIAS . '.upsell', UpsellRepository::ALIAS)
+            ->where(self::ALIAS . '.status=1')
+            ->andWhere(self::ALIAS . '.ad_id = :adId')
+            ->andWhere(UpsellRepository::ALIAS . '.type='.UpsellRepository::UPSELL_TYPE_BOOST_ADVERT_ID)
+            ->setParameter('adId', $ad_id)
+            ->orderBy(self::ALIAS . '.ad_id', 'asc');
+            $getUserPackageUpsellResults = $queryBuilder->getQuery()->getResult();
+            if(!empty($getUserPackageUpsellResults))
+            {
+                return $getUserPackageUpsellResults;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

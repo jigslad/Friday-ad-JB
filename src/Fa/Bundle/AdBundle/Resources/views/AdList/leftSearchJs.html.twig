@@ -1,6 +1,6 @@
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-    $(document).ready(function(){
+    $(window).on('load', function() {
         bindDatePickerEvent();
         bindFloatFieldKeyupEvnet('fa_left_search_item__price_from');
         bindFloatFieldKeyupEvnet('fa_left_search_item__price_to');
@@ -35,6 +35,23 @@
             event.preventDefault();
             $(this).find('input[type="checkbox"]').trigger('click');
         });*/
+
+        $('form[name="fa_left_search"]').submit(function(event){
+            if($('#fa_left_search_item__distance').val()=='') {
+                $('#fa_left_search_item__distance-button').css("border", "solid 1px red");
+                $('#distance-error-placeholder small').show();
+                $('#distance-error-placeholder small').html('Please select your distance');
+                event.preventDefault();
+            } else if($('#fa_left_search_item__location_autocomplete').val() =='') {
+                $('#distance-error-placeholder small').show();
+                $('#distance-error-placeholder small').html('Please choose a valid town or postal code');
+                $('#fa_left_search_item__location_autocomplete').css("border", "solid 1px red");
+                event.preventDefault();
+            } else {
+                $('#distance-error-placeholder small').hide();
+            }
+            
+        });
 
         $('#left_search .accordion-navigation .content').each(function(){
             if (!$(this).parent().hasClass('keep-shown')) {
@@ -105,7 +122,8 @@
                          if (!$.isEmptyObject(data)) {
                             $('form[name="fa_left_search"]').submit();
                          } else {
-                             $('#header_search_editable_location_reveal_modal').foundation('reveal', 'open');
+                             $('#distance-error-placeholder small').html('Please choose a valid town or postal code');
+                            $('#fa_left_search_item__location_autocomplete').css("border", "solid 1px red");
                          }
                      }
                  });
@@ -162,7 +180,7 @@
     function accordionCallback(accordion)
     {
         $(accordion).siblings('a').find('i').toggleClass("fi-plus fi-minus");
-        $(accordion).find('select.fa-select').selectmenu('refresh');
+        $(accordion).find('select.fa-select').selectmenu().selectmenu('refresh',true);
 
         if ($(accordion).attr('id')  == 'panelBlock_seorule') {
         	$(accordion).addClass("active");

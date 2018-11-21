@@ -367,6 +367,12 @@ class DefaultController extends ThirdPartyLoginController
                 unset($searchParams['item']['location']);
             }
 
+            if(isset($searchParams['item']['distance'])) {
+                $searchDistance = $searchParams['item']['distance'];
+            } else {
+               $searchDistance =  CategoryRepository::OTHERS_DISTANCE;
+            }
+
             $location = null;
 
             if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
@@ -377,7 +383,7 @@ class DefaultController extends ThirdPartyLoginController
             $data['query_filters']                        = $searchParams;
             $data['query_filters']['item']['status_id']   = EntityRepository::AD_STATUS_LIVE_ID;
             if ($location) {
-                $data['query_filters']['item']['location'] = $location.'|'.$searchParams['item']['distance'];
+                $data['query_filters']['item']['location'] = $location.'|'.$searchDistance;
             }
             $data['query_sorter']                         = array();
             if (strlen($keywords)) {
@@ -931,7 +937,7 @@ class DefaultController extends ThirdPartyLoginController
         if (isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
             $searchParams['item__location'] = $cookieLocationDetails['location'];
 
-            $distance = 15;
+            $distance = CategoryRepository::OTHERS_DISTANCE;
 
             $searchParams['item__distance'] = $distance;
         }

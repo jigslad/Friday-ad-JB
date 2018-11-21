@@ -8,9 +8,9 @@
 {{ include('FaUserBundle:HalfAccount:halfAccountJs.html.twig') }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
+    $(window).on('load', function() {
     var callFromGlobal = '';
     $("img.lazy").lazyload();
-    $(document).ready(function(){
         {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
             saveSearchAgent();
         {% endif %}
@@ -191,7 +191,7 @@
     function toggleLeftSearch()
     {
         $('#left_search').toggle('slow');
-        $('#fa_left_search_item__distance, #fa_left_search_item_property__rent_per_id').selectmenu('refresh');
+        $('#fa_left_search_item__distance, #fa_left_search_item_property__rent_per_id').selectmenu().selectmenu('refresh',true);
     }
 
     $(".alertButton").mouseover(function() {

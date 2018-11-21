@@ -1,32 +1,33 @@
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-           
-$(document).on("click", '.continue-btn', function(event) {
-	$('#upgradeSuccessPaymentModal').foundation('reveal', 'close');
-});
-
-{% if paymentTransactionJs['ga_transaction'] is defined and paymentTransactionJs['ga_transaction'].PAYMENT_ID is defined %}
-    ga('require', 'ecommerce');
-    
-    {% if paymentTransactionJs['getTranscationJs'] is defined %}
-        {{ paymentTransactionJs['getTranscationJs'] | raw }}
-    {% endif %}
-    
-    {% if paymentTransactionJs['getItemJs'] is defined %}
-        {{ paymentTransactionJs['getItemJs'] | raw }}
-    {% endif %}
-    
-    ga('ecommerce:send');
-    
-    $.ajax({
-        type: "POST",
-        url: "{{path('ajax_update_ga_status')}}",
-        data: {'id':'{{ paymentTransactionJs['ga_transaction'].PAYMENT_ID }}'},
-    })
-    .done(function(response) {
+$(window).on('load', function() {           
+    $(document).on("click", '.continue-btn', function(event) {
+    	$('#upgradeSuccessPaymentModal').foundation('reveal', 'close');
     });
 
-{% endif %}
+    {% if paymentTransactionJs['ga_transaction'] is defined and paymentTransactionJs['ga_transaction'].PAYMENT_ID is defined %}
+        ga('require', 'ecommerce');
+        
+        {% if paymentTransactionJs['getTranscationJs'] is defined %}
+            {{ paymentTransactionJs['getTranscationJs'] | raw }}
+        {% endif %}
+        
+        {% if paymentTransactionJs['getItemJs'] is defined %}
+            {{ paymentTransactionJs['getItemJs'] | raw }}
+        {% endif %}
+        
+        ga('ecommerce:send');
+        
+        $.ajax({
+            type: "POST",
+            url: "{{path('ajax_update_ga_status')}}",
+            data: {'id':'{{ paymentTransactionJs['ga_transaction'].PAYMENT_ID }}'},
+        })
+        .done(function(response) {
+        });
+
+    {% endif %}
+});
 	
 function upgradeToFeaturedBtn(id, rootCategoryId) {
 	blockPage();

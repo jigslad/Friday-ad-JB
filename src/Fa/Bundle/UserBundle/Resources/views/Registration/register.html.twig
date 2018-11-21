@@ -238,7 +238,7 @@
             if ($("input[name='user_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
                 $('#logo_label').html("{{businessLogoLabel}}");
                 $('.business_seller_fields').show();
-                $('.fa-select-white').selectmenu('refresh');
+                $('.fa-select-white').selectmenu().selectmenu('refresh',true);
                 $('.profile-logo-ins').addClass('bz-profile-btn');
                   $.ajax({
                     type: "POST",

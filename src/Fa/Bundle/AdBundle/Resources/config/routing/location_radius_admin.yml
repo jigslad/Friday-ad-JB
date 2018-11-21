@@ -1,0 +1,26 @@
+location_radius_admin:
+    path:     /
+    defaults: { _controller: "FaAdBundle:LocationRadiusAdmin:index" }
+
+location_radius_new_admin:
+    path:     /new
+    defaults: { _controller: "FaAdBundle:LocationRadiusAdmin:new" }
+
+location_radius_create_admin:
+    path:     /create
+    defaults: { _controller: "FaAdBundle:LocationRadiusAdmin:create" }
+    requirements: { methods: post }
+
+location_radius_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaAdBundle:LocationRadiusAdmin:edit" }
+
+location_radius_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaAdBundle:LocationRadiusAdmin:update" }
+    requirements: { methods: post|put }
+
+location_radius_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaAdBundle:LocationRadiusAdmin:delete" }
+    

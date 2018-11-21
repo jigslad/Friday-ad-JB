@@ -76,7 +76,7 @@ class AdTopSearchType extends AbstractType
         ->add('keyword_category_id', HiddenType::class)
         ->add('item__price_from', HiddenType::class)
         ->add('item__price_to', HiddenType::class)
-        ->add('item__distance', HiddenType::class, array('data' => 15))
+        ->add('item__distance', HiddenType::class)
         ->add('tmpLeafLevelCategoryId', HiddenType::class, array('data' => $leafLevelCategoryId))
         ->add('leafLevelCategoryId', HiddenType::class)
         ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));

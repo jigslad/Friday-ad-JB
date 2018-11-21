@@ -312,6 +312,9 @@ class ImageMagickManager
             $command .= '!';
         }
         
+        //added for speed optimization
+        //$command .= '-sampling-factor 4:2:0 -strip ';
+        
         if ($this->quality && $targetMime == 'image/jpeg') {
             $command .= ' -quality '.$this->quality.'% ';
         }

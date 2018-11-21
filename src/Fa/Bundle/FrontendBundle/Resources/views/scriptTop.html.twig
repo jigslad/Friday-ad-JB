@@ -1,17 +1,7 @@
-{% stylesheets filter='uglifycss' output='bundles/css/compiled/main.css'
-    'bundles/fafrontend/css/foundation.css'
-    'bundles/fafrontend/foundation-icons/foundation-icons.css'
-    'bundles/fafrontend/css/select2.css'
-    'bundles/fafrontend/css/select2-foundation5.css'
-    'bundles/fafrontend/css/foundation-datepicker.css'
-    'bundles/fafrontend/css/jquery-ui.min.css'
-    'bundles/fafrontend/css/jquery.nouislider.min.css'
-      %}
-    <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}?v=200"/>
-{% endstylesheets %}
+{{ include('FaFrontendBundle::main-css.html.twig') }}
+{{ include('FaFrontendBundle::jquery-js.html.twig') }}
 
 {% javascripts filter='uglifyjs2' output='bundles/js/compiled/main.js'
-    'bundles/fafrontend/js/vendor/jquery.js'
     'bundles/facore/js/common.js'
     'bundles/fafrontend/js/vendor/modernizr.js'
     'bundles/fosjsrouting/js/router.js'
@@ -21,6 +11,7 @@
     'bundles/fafrontend/js/foundation/foundation.datepicker.js'
     'bundles/fafrontend/js/vendor/jquery-ui.min.js'
     'bundles/fafrontend/js/vendor/jquery.nouislider.all.min.js'
+    'bundles/facore/js/jquery.blockUI.min.js'
 %}
-<script src="{{ static_asset_url(asset_url) }}?v=210"></script>
+<script src="{{ static_asset_url(asset_url) }}"></script>
 {% endjavascripts %}

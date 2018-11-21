@@ -112,6 +112,13 @@ class AdRoutingManager
             unset($search_params['keyword_category_id']);
         }
 
+        $getDefaultRadius = '';
+
+        if(!isset($search_params['item__distance'])) {
+            $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($search_params, $this->container);
+            if($getDefaultRadius) { $search_params['item__distance'] = $getDefaultRadius; }
+        }
+
         if (!$fromCommandLine) {
             $cookieLocationDetails = json_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('location'), true);
         }
@@ -245,6 +252,10 @@ class AdRoutingManager
             //$categoryLvl  = $this->container->get('fa.entity.cache.manager')->getEntityLvlById('FaEntityBundle:Category', $categoryId);
         }
 
+        if (isset($search_params['item__location']) && $search_params['item__location'] == 2) {
+            unset($search_params['item__distance']);
+        }
+
         // Commented by Sagar
         /*if (isset($secondLevelParentId) && ( ($secondLevelParentId == CategoryRepository::COMMERCIALVEHICLES_ID && ($categoryLvl == 3 || $categoryLvl == 4)) || ($secondLevelParentId == CategoryRepository::CARS_ID && ($categoryLvl == 3 || $categoryLvl == 4)))) {
             $search_params = $this->getDimensionSlug($search_params, $orders, 1);
@@ -319,12 +330,22 @@ class AdRoutingManager
         }
 
         $pageString = $pageString == '' ? 'search' : $pageString;
+        $searchDistance = '';
 
-        if ((isset($search_params['search_param']['item__distance']) && ($categoryId != CategoryRepository::MOTORS_ID || $parentId != CategoryRepository::MOTORS_ID) && $search_params['search_param']['item__distance'] == 15) || (isset($search_params['search_param']['item__distance']) && ($parentId == CategoryRepository::MOTORS_ID || $categoryId == CategoryRepository::MOTORS_ID) && $search_params['search_param']['item__distance'] == 30)) {
+        if ((isset($search_params['search_param']['item__distance']))) {
+            $searchDistance = $search_params['search_param']['item__distance'];
+            if($getDefaultRadius!='' && $getDefaultRadius==$search_params['search_param']['item__distance']) {
             unset($search_params['search_param']['item__distance']);
         }
 
+            //unset($search_params['search_param']['item__distance']);
+        }
+ 
         $query = http_build_query(array_map(array($this, 'removeBlankElement'), $search_params['search_param']));
+
+        // if($searchDistance!='') {
+        //     $search_params['search_param']['item__distance'] = $searchDistance;
+        // }
 
         $pageString = preg_replace('/\/+/', '/', rtrim($pageString, '/'));
  
@@ -895,5 +916,20 @@ class AdRoutingManager
         }
 
         return null;
+    }
+
+     /**
+     * get Default Radius By Category Id
+     *
+     * @param integer $categoryId Category id
+     *
+     * @return boolean|string
+     */
+    public function getDefaultRadiusByCategoryId($categoryId)
+    {
+        $parentCategoryIds = array_keys($this->em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $this->container));
+        $locationRadius = $this->em->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
+        if($locationRadius) { return $locationRadius['defaultRadius']; }
+        else { return null; }
     }
 }

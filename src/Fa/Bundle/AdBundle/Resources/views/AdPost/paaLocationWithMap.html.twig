@@ -60,7 +60,9 @@
             </div>
         </div>
     </div>
-    <div id="location_map_div" class="map-box">
+    {# FFR-3458 hiding map  #}
+    {# <div id="location_map_div" class="map-box"> #}
+    <div id="location_map_div-hide" class="map-box" style="display:none;">
          {% set geolocation = attribute(form, 'location_lat_lng').vars.value|split(', ') %}
          {% if geolocation[0] is defined and geolocation[1] is defined %}
             {% set latitude = geolocation[0] %}

@@ -183,7 +183,7 @@
         function showHideBusinessSellerFields() {
             if ($("input[name='fa_paa_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
                 $('.business_seller_fields').show();
-                $('.fa-select').selectmenu('refresh');
+                $('.fa-select').selectmenu().selectmenu('refresh',true);
                 $('.profile-logo-ins').addClass('bz-profile-btn');
                 if ($('#profile_change_btn_with_opt').css('display') == 'none') {
                   $('#profile_image_div').html('{{businessUserLogo|raw}}')

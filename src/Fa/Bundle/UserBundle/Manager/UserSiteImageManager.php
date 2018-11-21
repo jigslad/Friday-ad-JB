@@ -143,6 +143,7 @@ class UserSiteImageManager
      */
     public function saveOriginalJpgImage($orgImageName, $keepOriginal = false)
     {
+        $imageQuality = $this->container->getParameter('fa.image.quality');
         $dimension = getimagesize($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
         //convert original image to jpg
         if ($dimension['mime'] == 'image/png') {
@@ -152,7 +153,7 @@ class UserSiteImageManager
                 unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'.png');
             }
         } else {
-            $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
+            $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
             $origImage->loadFile($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
             $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'.jpg', 'image/jpeg');
         }
@@ -177,7 +178,8 @@ class UserSiteImageManager
     {
         $thumbSize = $this->container->getParameter('fa.image.user.site.thumb_size');
         $thumbSize = array_map('strtoupper', $thumbSize);
-
+        $imageQuality = $this->container->getParameter('fa.image.quality');
+        
         if (is_array($thumbSize)) {
             $orig_image = $this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'.jpg';
             // zoom image from center and convert to big image
@@ -192,7 +194,7 @@ class UserSiteImageManager
                 foreach ($thumbSize as $d) {
                     $dim        = explode('X', $d);
 
-                    $thumbImage = new ThumbnailManager($dim[0], $dim[1], true, false, 75, 'ImageMagickManager');
+                    $thumbImage = new ThumbnailManager($dim[0], $dim[1], true, false, $imageQuality, 'ImageMagickManager');
                     $thumbImage->loadFile($orig_image);
                     $thumbImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'_'.$d.'.jpg', 'image/jpeg');
 

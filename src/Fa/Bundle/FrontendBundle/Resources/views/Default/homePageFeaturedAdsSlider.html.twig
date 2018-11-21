@@ -25,8 +25,11 @@
                 {% endif %}
             </a>
             {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, featureAd, '300X225', 1) %}
-            <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
-                {% if imagePath %}
+
+            {% set imagePathExists = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'checkFileExists', [imagePath]) %}
+
+            <div class="list-img {% if not imagePath  or not imagePathExists %}similar-placeholder{% endif %}">
+                {% if imagePath and imagePathExists %}
                     <img class="lazyOwl" src="#empty" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
                 {% else %}
                     <img class="lazyOwl" src="#empty" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
@@ -52,10 +55,10 @@
                         {% set userLogo = null %}
                         {% if adUserDetail|length %}
                             {% if adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
-                                {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['company_logo'], adUserDetail['id'], null, null, true, true, adUserDetail['status_id'], adUserDetail['user_name']]) %}
+                                {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['company_logo'], adUserDetail['id'], 54, 54, true, true, adUserDetail['status_id'], adUserDetail['user_name']]) %}
                             {% endif %}
                             {% if adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
-                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['image'], adUserDetail['id'], '100', '100', true, false, adUserDetail['status_id'], adUserDetail['user_name']]) %}
+                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['image'], adUserDetail['id'], '54', '54', true, false, adUserDetail['status_id'], adUserDetail['user_name']]) %}
                             {% endif %}
                         {% endif %}
                         <div class="member-icon {% if adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}member-logo{% endif %}">

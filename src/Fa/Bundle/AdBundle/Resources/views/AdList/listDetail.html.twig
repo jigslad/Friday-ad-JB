@@ -3,6 +3,7 @@
 {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
 {% set solrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+{% set adRepository = fetch_repository('FaAdBundle:Ad') %}
 {% set secondLevelCategoryId = null %}
 {% set affiliate_url = null %}
 {% set aff_desc_cls  = null %}
@@ -37,6 +38,11 @@
     {% endif %}
 {% endif %}
 
+{% set isBoostedClass = '' %}
+{% if attribute(ad, constant(solrMapping ~ 'IS_BOOSTED')) is defined and attribute(ad, constant(solrMapping ~ 'IS_BOOSTED')) == 1 %}
+{% set isBoostedClass = ' boosted_ad' %}
+{% endif %}
+
 {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(ad, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
 {% set imageAltString = null %}
 {% if seoRule['image_alt'] is defined %}
@@ -57,7 +63,7 @@
         {% set catString = catName %}
     {% endif %}
 {% endfor %}
-<div class="listing{{ isUrgentClass }}{{ isFeaturedClass }} {% if isLiveBasicAd is defined and isLiveBasicAd == 1 %} featured-upgrade-border {% endif %}">
+<div class="listing{{ isUrgentClass }} {{isBoostedClass}} {{ isFeaturedClass }} {% if isLiveBasicAd is defined and isLiveBasicAd == 1 %} featured-upgrade-border {% endif %}">
     {% set updateCountOnFeedAdView = '' %}
     {% if fromSimilarAdverts is not defined and aff_icon_cls is not null %}
         {% set updateCountOnFeedAdView = 'onclick=javascript:updateCountOnFeedAdView(' ~ ad.id ~ ');' %}

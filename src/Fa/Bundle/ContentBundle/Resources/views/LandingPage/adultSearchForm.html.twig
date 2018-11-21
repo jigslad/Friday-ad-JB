@@ -124,7 +124,7 @@
                     if (response.independent_options.length) {
                     	$("#fa_landing_page_adult_search_item_adult__independent_or_agency_id").empty().append(response.independent_options);
                     }
-                    $('.fa-select-white').selectmenu('refresh');
+                    $('.fa-select-white').selectmenu().selectmenu('refresh',true);
                     
                     {% if currentDevice == 'M'%}
                         scrollToElement('.adult-fields', '1000');

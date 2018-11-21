@@ -93,6 +93,9 @@
                       <button class="budget-go-btn" type="button" id="left_search_location_btn"></button>
                   </li>
               </ul>
+              <ul class="distance-search clearfix">
+                <li id="distance-error-placeholder"><small class="error" style="display:none"></small></li>
+              </ul>
               {% if locationFacets is defined and locationFacets|length > 0 %}
                   <div class="towns-list">
                       <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>

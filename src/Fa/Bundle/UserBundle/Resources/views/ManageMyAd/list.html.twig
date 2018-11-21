@@ -139,3 +139,50 @@
         </div>
     </div>
 </div>
+{% block scriptbottom%}
+<script language="javascript" type="text/javascript">
+    function boostad(elem)
+    {
+        if($(elem).hasClass("boosted_ad"))
+        {
+            var boost_value = 0;
+        }
+        else
+        {
+            var boost_value = 1;
+        }
+        var split_ad_id = elem.id.split("_");
+        var adIdToBoost = split_ad_id[split_ad_id.length-1];
+       
+        $.ajax({
+                type: "POST",
+                url: '{{path("ajax_manage_my_ads_boost_ad")}}',
+                data: {'adId':adIdToBoost,boost_value:boost_value},
+                asyn:false,
+                cache:false,
+                success:function(result)
+                {
+                    if(result.error == "")
+                    {
+                        if(boost_value == 1)
+                        {
+                            $(elem).removeClass('not_boosted_ad').addClass('boosted_ad');
+                            $("#"+elem.id+" span").text("Boosted");
+                            $("#"+elem.id+" span").before("<i class='fi-check large'></i>");
+                            $("#"+elem.id).attr("disabled",true);
+                            window.location.href = '{{ path('manage_my_ads_active') }}';
+                        }
+                        else
+                        {
+                            $(elem).removeClass('boosted_ad').addClass('not_boosted_ad');
+                            $("#"+elem.id+" span").text("Boost this ad");
+                            $("#"+elem.id+" .fi-check").remove();
+                            $("#"+elem.id).attr("disabled",true);
+                            window.location.href = '{{ path('manage_my_ads_active') }}';
+                        }
+                    }
+                }
+            })
+    }
+</script>
+{% endblock %}

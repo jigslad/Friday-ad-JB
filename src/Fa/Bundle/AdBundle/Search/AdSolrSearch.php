@@ -364,6 +364,12 @@ class AdSolrSearch extends SolrSearch
             $distance = 0;
         }
 
+        if (isset($locationData[2]) && $locationData[2]) {
+            $startDistance = $locationData[2];
+        } else {
+            $startDistance = 0;
+        }
+
         if ($distance && $distance > 200 && $distance <= 100000) {
             $location = null;
             $distance = null;
@@ -438,7 +444,29 @@ class AdSolrSearch extends SolrSearch
                 $pt = $latitude.','.$longitude;
                 $d  = ($distance * 1.60934); // convert milesto km
 
-                $this->query .= ' AND {!bbox pt='.$pt.' sfield=store d='.$d.'}';
+                //$this->query .= ' AND {!bbox pt='.$pt.' sfield=store d='.$d.'}';
+                if($startDistance) {
+                    $sd  = ($startDistance * 1.60934);
+                    $this->geoDistQuery['fq'] = '{!frange l='.$sd.' u='.$d.'}geodist()';
+                } elseif(isset($locationData[2]) && $locationData[2]==0) {
+                    $sd  = 0.81;
+                    $this->geoDistQuery['fq'] = '{!frange l='.$sd.' u='.$d.'}geodist()';
+                } else {
+                    $this->geoDistQuery['fq'] = '{!frange l=0 u='.$d.'}geodist()';
+                }
+            } elseif ($latitude && $longitude && (isset($locationData[1]) && $locationData[1]==0 && $locationData[1]!='')) {
+                $pt = $latitude.','.$longitude;
+                $d  = 0.8000; // convert miles to km
+                
+                if($startDistance) {
+                    $sd  = ($startDistance * 1.60934);
+                    $this->geoDistQuery['fq'] = '{!frange l='.$sd.' u='.$d.'}geodist()';
+                } elseif(isset($locationData[2]) && $locationData[2]==0) {
+                    $sd  = 0.81;
+                    $this->geoDistQuery['fq'] = '{!frange l='.$sd.' u='.$d.'}geodist()';
+                } else {
+                    $this->geoDistQuery['fq'] = '{!frange l=0 u='.$d.'}geodist()';
+                }
             } elseif ($localityId) {
                 $this->addLocalityIdFilter($localityId);
             } elseif ($townId && $lvl != '4') {

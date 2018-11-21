@@ -322,4 +322,58 @@ class ManageMyAdController extends CoreController
 
         return new Response();
     }
+
+     /**
+     * Change boost ad status.
+     *
+     * @param Request $request
+     *        A Request object.
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxBoostAdAction(Request $request)
+    {
+        if ($this->checkIsValidLoggedInUser($request) === true && $request->isXmlHttpRequest()) {
+            $error = '';
+            $successMsg = '';
+            $adId = $request->get('adId', 0);
+            $boostValue = $request->get('boost_value');
+            $ad = $this->getRepository('FaAdBundle:Ad')->find($adId);
+            $old_boost_value = $ad->getIsBoosted();
+            $this->getEntityManager()->refresh($ad);
+            $ad->setIsBoosted($boostValue);
+            $ad->setBoostedAt();
+            $this->getEntityManager()->persist($ad);
+            $this->getEntityManager()->flush($ad);
+            $ad = $this->getRepository('FaAdBundle:Ad')->find($adId);
+            if($ad->getIsBoosted() != $old_boost_value)
+            {
+                if($ad->getIsBoosted() == 1)
+                {
+                    $successMsg = $this->get('translator')->trans('Ad is boosted successfully.', array(), 'frontend-manage-my-ad');
+                }
+                else
+                {
+                    $successMsg = $this->get('translator')->trans('Ad is unboosted successfully.', array(), 'frontend-manage-my-ad');
+                }                
+                $messageManager = $this->get('fa.message.manager');
+                $messageManager->setFlashMessage($successMsg, 'success');
+            }
+            else 
+            {
+                $error = $this->get('translator')->trans('There was a problem in boosting your ad.', array(), 'frontend-manage-my-ad');
+                $messageManager = $this->get('fa.message.manager');
+                $messageManager->setFlashMessage($error, 'error');
+            }          
+            
+            sleep(2);
+            return new JsonResponse(array(
+                'error' => $error,
+                'successMsg' => $successMsg
+            ));
+        }
+
+        return new Response();
+    }
+    
 }

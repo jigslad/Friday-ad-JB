@@ -431,3 +431,14 @@ services:
         tags:
             - { name: form.type, alias: fa_paa_lite_register }
 
+    fa_ad.form.type.location_radius_admin:
+        class: Fa\Bundle\AdBundle\Form\LocationRadiusAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_location_radius_admin }
+
+    fa_ad.form.type.location_radius_search_admin:
+        class: Fa\Bundle\AdBundle\Form\LocationRadiusSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_ad_location_radius_search_admin }

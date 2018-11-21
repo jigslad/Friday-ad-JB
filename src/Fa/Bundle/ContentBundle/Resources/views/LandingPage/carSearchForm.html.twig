@@ -155,11 +155,11 @@
         $('#show_hide_more_options').click(function(){
            $(this).toggleText("{{ 'More options'|trans({}, 'frontend-landing-page') }}", "{{ 'Fewer options'|trans({}, 'frontend-landing-page') }}");
            $('#more_options').toggle();
-           $('#fa_landing_page_car_search_item__model_id').selectmenu('refresh');
-           $('#fa_landing_page_car_search_item_motors__mileage_range').selectmenu('refresh');
-           $('#fa_landing_page_car_search_item_motors__transmission_id').selectmenu('refresh');
-           $('#fa_landing_page_car_search_item_motors__colour_id').selectmenu('refresh');
-           $('#fa_landing_page_car_search_item_motors__fuel_type_id').selectmenu('refresh');
+           $('#fa_landing_page_car_search_item__model_id').selectmenu().selectmenu('refresh',true);
+           $('#fa_landing_page_car_search_item_motors__mileage_range').selectmenu().selectmenu('refresh',true);
+           $('#fa_landing_page_car_search_item_motors__transmission_id').selectmenu().selectmenu('refresh',true);
+           $('#fa_landing_page_car_search_item_motors__colour_id').selectmenu().selectmenu('refresh',true);
+           $('#fa_landing_page_car_search_item_motors__fuel_type_id').selectmenu().selectmenu('refresh',true);
            return false;
        });
     });
@@ -212,7 +212,7 @@
                                 $('#fa_landing_page_car_search_item__model_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
                             }
                         }
-                        $('#fa_landing_page_car_search_item__model_id').selectmenu('refresh');
+                        $('#fa_landing_page_car_search_item__model_id').selectmenu().selectmenu('refresh',true);
                     }
                 }
             });

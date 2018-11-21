@@ -191,6 +191,7 @@ class AdImageManager
     public function saveOriginalJpgImage($orgImageName, $keepOriginal = false)
     {
         $dimension = getimagesize($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
+        $imageQuality = $this->container->getParameter('fa.image.quality');
         //convert original image to jpg
         if ($dimension['mime'] == 'image/png') {
             exec('convert -flatten '.escapeshellarg($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.png');
@@ -199,7 +200,7 @@ class AdImageManager
                 unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.png');
             }
         } else {
-            $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 75, 'ImageMagickManager');
+            $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
             $origImage->loadFile($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
             $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.jpg', 'image/jpeg');
         }
@@ -225,7 +226,7 @@ class AdImageManager
     {
         $thumbSize = $this->container->getParameter('fa.image.thumb_size');
         $thumbSize = array_map('strtoupper', $thumbSize);
-
+        $imageQuality = $this->container->getParameter('fa.image.quality');
         if (is_array($thumbSize)) {
             // zoom image from center and convert to big image
             $orig_image = $this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.jpg';
@@ -244,7 +245,7 @@ class AdImageManager
                 foreach ($thumbSize as $d) {
                     $dim        = explode('X', $d);
 
-                    $thumbImage = new ThumbnailManager($dim[0], $dim[1], true, false, 75, 'ImageMagickManager');
+                    $thumbImage = new ThumbnailManager($dim[0], $dim[1], true, false, $imageQuality, 'ImageMagickManager');
                     $thumbImage->loadFile($orig_image);
                     $thumbImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'_'.$d.'.jpg', 'image/jpeg');
 

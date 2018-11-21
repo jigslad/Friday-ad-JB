@@ -463,8 +463,13 @@ class AdForSaleRepository extends EntityRepository
         $container->get('fa.searchfilters.manager')->init($this->_em->getRepository('FaAdBundle:Ad'), $this->_em->getClassMetadata('FaAdBundle:Ad'), 'search', $data);
         $data = $container->get('fa.searchfilters.manager')->getFiltersData();
 
+        $getDefaultRadius = '';
+        if($searchParams['item__category_id']!='') {
+            $getDefaultRadius = $this->_em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $container);
+        }
+
         if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID) {
-            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.$data['search']['item__distance'];
+            $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'.$getDefaultRadius;
         }
 
         $data['query_sorter'] = array();

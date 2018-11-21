@@ -3,6 +3,7 @@
 {% set seoManager = container.get('fa.seo.manager') %}
 {% set seoToolRepository = fetch_repository('FaContentBundle:SeoTool') %}
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+
 {% set seoPageRule = {} %}
 {% set seoFields = {} %}
 {% set customized_url = app.request.get('customized_page')  %}
@@ -15,6 +16,7 @@
 {% endif %}
 
 {% set totalAdCount = (pagination.getNbResults())?(pagination.getNbResults()|length):0 %}
+
 {% set businessExposureUsersCount = (businessExposureUsersDetails is defined )?(businessExposureUsersDetails|length) :0%}
 {% set topAdCount = (topAdResult is defined)?topAdResult|length:0 %}
 
@@ -46,6 +48,9 @@
 {% block meta_robots %}
     {% set metaRobotsArray = {} %}
     {% if not pagination.getNbResults() %}
+        noindex, follow
+        {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {% elseif extendedResultCount>0 and app.request.get('page') > defaultPages %}
         noindex, follow
         {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
     {% elseif 'item__distance=0' not in app.request.queryString %}
@@ -118,16 +123,16 @@
 
 {% block scripttop %}
     {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
-        {% stylesheets filter='uglifycss' output='bundles/css/compiled/searchResult.css'
-            'bundles/facore/css/owl.carousel.css'
-            'bundles/facore/css/owl.theme.css'
-              %}
-            <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
-        {% endstylesheets %}
+        {{ include('FaFrontendBundle:Default:home-css.html.twig') }}
     {% endif %}
 {% endblock %}
 
 {% block body %}
+<style>
+ul.fourlocationlist { margin: 15px auto;text-align:center; }
+ul.fourlocationlist li { display:inline; list-style-type: none; }
+ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
+</style>
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -210,7 +215,7 @@
                 {% endif %}
                 
                 {% if userLiveBasicAd is defined and userLiveBasicAd and userLiveBasicAd|length %}
-                	{% for ad in userLiveBasicAd %}
+                    {% for ad in userLiveBasicAd %}
                         {{ include('FaAdBundle:AdList:listDetail.html.twig', {'isLiveBasicAd': 1, 'isTopAd': 1}) }}
                     {% endfor %}
                     <div id="upgradeBasicAdToFeaturedModal" class="reveal-modal tiny remove-item-modal upgrade-modal" data-reveal></div>
@@ -237,10 +242,22 @@
 	                	{{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
 	                  {% endif %}
 	             {% endif %} 
-                {% set slotAdCount = 0 %}
+                {% set slotAdCount = 0 %}{% set setExtendedHeading = 0 %}
+                {% set getPagNum = (app.request.get('page'))?(app.request.get('page')):1 %}
+                {% set realAdCnt = (getPagNum-1)*20 %}
                 {% for ad in pagination.getCurrentPageResults() %}
                     {% set adCount = adCount + 1 %}
+                    {% set realAdCnt = realAdCnt + 1 %}
                     {% set slotAdCount = slotAdCount + 1 %}
+
+                    {% if ((realAdCnt > resultCount) and (setExtendedHeading==0)) %}
+                        <div data-alert="" class="alert-box info radius">
+                           <span class="alert-icon">&nbsp;</span>
+                           We found  {{extendedResultCount}} {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', searchParams.item__category_id) }} ads within  {{extendedRadius}} miles of {{ app.request.get('location') | replace({'-':' '}) | title }}
+                        </div>
+                        {% set setExtendedHeading = 1 %}
+                    {% endif %}
+
                     {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 %}
                         {% if slotAdCount== 5  and (recommendedSlotResult[3] is defined and recommendedSlotResult[3]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 3 }) }}
@@ -321,10 +338,9 @@
 
             
             {% else %}
-                <div data-alert class="alert-box success radius mt10">
+                <div data-alert class="alert-box info radius mt10">
                     <span class="alert-icon">&nbsp;</span>
-                    {{'No ad found matching your criteria.'|trans({}, 'frontend-search-result')}}
-                    <a href="javascript:void(0)" rel="nofollow" class="close">&times;</a>
+                    Sorry, we haven't found adverts matching your criteria in {{ app.request.get('location')| replace({'-':' '}) | title }}: <span style="font-weight:normal">Try modifying your keyword or filters selected.</span>
                 </div>
             {% endif %}
 
@@ -334,6 +350,30 @@
             <span id="createAlertBlockSpan">
                 {{ render(controller('FaAdBundle:AdList:createAlertBlock')) }}
             </span>
+
+            <div class="pagination-centered">
+                {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 1, 'seoPager': true}) }}
+            </div>
+            
+            {% if totalAdCount==0 %}
+                {% if fourLocationsDetails|length > 0 %}
+                    <div class="listing">
+                    We did mange to find adverts in these other location across the UK
+                    <ul class="fourlocationlist">
+                    {% for fourLocationsDetail in fourLocationsDetails %}
+                        <li><a href="{{fourLocationsDetail['locationUrl']}}" target="_blank">{{fourLocationsDetail['name']}}({{fourLocationsDetail['cnt']}})</a></li>
+                    {% endfor %}
+                    </ul>
+                    </div>
+                {% endif %}
+
+                {% if getXMiles > 0 %}
+                <div class="listing">
+                    Or you can view matching adverts within {{getXMiles}} miles of {{ app.request.get('location') }}
+                    <div class="text-center mt20 mb20"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams|merge({'item__distance': getXMiles })) }}" class="secondary-btn-1"  style="color:#fff">View matching adverts</a></div>
+                </div>
+                {% endif %}
+            {% endif %}
 
             {% if (adCounter > 3) %}
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_RESULTS') %}
@@ -345,9 +385,9 @@
 
             {% set locationUK = constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %}
 
-            <div class="pagination-centered">
+            {#<div class="pagination-centered">
                 {{ include('FaFrontendBundle:Default:googlePager.html.twig', {'pagination': pagination, 'addToEndPage': 1, 'seoPager': true}) }}
-            </div>
+            </div>#}
 
             {% if (pagination.haveToPaginate()) %}
                 {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_SR_BELOW_PAGINATION_DESKTOP') %}

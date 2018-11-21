@@ -146,8 +146,9 @@
 
 <div id="show-confirm-age-main"></div>
 
-<script language="javascript" type="text/javascript">
+<script language="javascript" type="text/javascript" defer="defer">
 //<![CDATA[
+$(window).on('load', function() {
     $(document).foundation('topbar', 'reflow');
     $(document).foundation('accordion', 'reflow');
     $(document).foundation({
@@ -156,6 +157,7 @@
             multi_expand: false,
           }
     });
+}
     $(document).click(function (e){
         var container = $("#top_bar_nav");
         if (!container.is(e.target) // if the target of the click isn't the container...
@@ -180,6 +182,7 @@
      $("#cat-mob-menu").click(function (e){
          scrollToElement('#cat-mob-menu', '1000', -100);
      });
+});
 //]]>
 </script>
 

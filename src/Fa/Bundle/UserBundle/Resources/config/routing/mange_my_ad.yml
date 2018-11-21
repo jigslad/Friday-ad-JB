@@ -29,3 +29,7 @@ manage_my_ads_social_share_popup:
 ajax_manage_my_ads_get_status:
     path:     /ajax/manage_my_ads/get_status/
     defaults: { _controller: FaUserBundle:ManageMyAd:ajaxGetStatus }
+
+ajax_manage_my_ads_boost_ad:
+    path:     /ajax/manage_my_ads/boost_ad/
+    defaults: { _controller: FaUserBundle:ManageMyAd:ajaxBoostAd }   

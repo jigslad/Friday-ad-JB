@@ -13,7 +13,7 @@
                            loadRegNoFieldDetailsByRegNo($.trim($('#fa_paa_category_select_reg_no').val()));
                        {% else %}
                            $('#reg_no_details_fields').show();
-                           $('.fa-select').selectmenu('refresh');
+                           $('.fa-select').selectmenu().selectmenu('refresh',true);
                        {% endif %}
                    {% endif %}
                {% endif %}
@@ -29,7 +29,7 @@
                {% endif %}
                $('#category_choice_div_3').show();
                moveCategoryDiv();
-               $('.fa-select').selectmenu('refresh');
+               $('.fa-select').selectmenu().selectmenu('refresh',true);
                $(document).foundation('equalizer', 'reflow');
            }
         }
@@ -38,7 +38,7 @@
            var categoryPath = getCategoryPath(lastLevel);
            if (hasRegNo == 1) {
                $('#reg_no_field').show();
-               $('.fa-select').selectmenu('refresh');
+               $('.fa-select').selectmenu().selectmenu('refresh',true);
                $('#reg_no_details_fields').hide();
                $('#reg_no_error_msg').html('');
                $('#reg_no_error_msg').hide();
@@ -65,7 +65,7 @@
                $('#category_choice_div_3').show();
                moveCategoryDiv();
                scrollToElement($('#category_choice_div_3'));
-               $('.fa-select').selectmenu('refresh');
+               $('.fa-select').selectmenu().selectmenu('refresh',true);
                $(document).foundation('equalizer', 'reflow');
                //GA Analytics code start
                var eventLabel = categoryPath + ' - No';
@@ -96,19 +96,19 @@
                 if (regNoFieldsData['cw_vehicle_cat_id'] == carsId || regNoFieldsData['cw_vehicle_cat_id'] == comVehicleId) {
                     if (regNoFieldsData['cw_make_id'] && regNoFieldsData['cw_model_id']) {
                         $('#fa_paa_category_select_category_3').val(regNoFieldsData['cw_make_id']).trigger('change');
-                        $('.fa-select').selectmenu('refresh');
+                        $('.fa-select').selectmenu().selectmenu('refresh',true);
                         setTimeout(function(){
                             $('#fa_paa_category_select_category_4').val(regNoFieldsData['cw_model_id']);
-                            $('.fa-select').selectmenu('refresh');
+                            $('.fa-select').selectmenu().selectmenu('refresh',true);
                             enableDisableNextBtn();
                         }, 500);
                         
                         $('#category_choice_div_3').show();
                         $('#category_choice_div_4').show();
-                        $('.fa-select').selectmenu('refresh');
+                        $('.fa-select').selectmenu().selectmenu('refresh',true);
                     } else {
                         $('#category_choice_div_3').show();
-                        $('.fa-select').selectmenu('refresh');
+                        $('.fa-select').selectmenu().selectmenu('refresh',true);
                         scrollToElement($('#category_choice_div_3'));
                     }
                 } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
@@ -117,12 +117,12 @@
                         setTimeout(function(){
                             $('#category_choice_div_3').show();
                             $('#fa_paa_category_select_category_3').val(thirdLevelCatId).trigger('change');
-                            $('.fa-select').selectmenu('refresh');
+                            $('.fa-select').selectmenu().selectmenu('refresh',true);
                             scrollToElement($('#category_choice_div_3'));
                         }, 1000);
                     } else {
                         $('#category_choice_div_3').show();
-                        $('.fa-select').selectmenu('refresh');
+                        $('.fa-select').selectmenu().selectmenu('refresh',true);
                         scrollToElement($('#category_choice_div_3'));
                     }
                 }
@@ -139,7 +139,7 @@
                             showMsg = true;
                         } else {
                         	$('#category_choice_div_3').show();
-                            $('.fa-select').selectmenu('refresh');
+                            $('.fa-select').selectmenu().selectmenu('refresh',true);
                             scrollToElement($('#category_choice_div_3'));
                         }
                     } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
@@ -152,7 +152,7 @@
                             showMsg = true;
                         } else {
                             $('#category_choice_div_3').show();
-                            $('.fa-select').selectmenu('refresh');
+                            $('.fa-select').selectmenu().selectmenu('refresh',true);
                             scrollToElement($('#category_choice_div_3'));
                         }
                     }
@@ -168,7 +168,7 @@
                             showMsg = true;
                         } else {
                             $('#category_choice_div_3').show();
-                            $('.fa-select').selectmenu('refresh');
+                            $('.fa-select').selectmenu().selectmenu('refresh',true);
                             scrollToElement($('#category_choice_div_3'));
                         }
                     } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
@@ -181,7 +181,7 @@
                             showMsg = true;
                         } else {
                             $('#category_choice_div_3').show();
-                            $('.fa-select').selectmenu('refresh');
+                            $('.fa-select').selectmenu().selectmenu('refresh',true);
                             scrollToElement($('#category_choice_div_3'));
                         }
                     }
@@ -205,26 +205,26 @@
                         if (thirdLevelCatId) {
                             setTimeout(function(){
                                 $('#fa_paa_category_select_category_3').val(thirdLevelCatId).trigger('change');
-                                $('.fa-select').selectmenu('refresh');
+                                $('.fa-select').selectmenu().selectmenu('refresh',true);
                             }, 1000);
                         } else {
                         	setTimeout(function(){
                         	    $('#category_choice_div_3').show();
                                 scrollToElement($('#category_choice_div_3'));
-                                $('.fa-select').selectmenu('refresh');
+                                $('.fa-select').selectmenu().selectmenu('refresh',true);
                             }, 1000);
                         }
                         if (fourthLevelCatId) {
                             setTimeout(function(){
                                 $('#fa_paa_category_select_category_4').val(fourthLevelCatId).trigger('change');
-                                $('.fa-select').selectmenu('refresh');
+                                $('.fa-select').selectmenu().selectmenu('refresh',true);
                                 enableDisableNextBtn();
                             }, 1500);
                         }
                         loadRegNofields = true;
                     } else {
                         $('#category_choice_div_3').show();
-                        $('.fa-select').selectmenu('refresh');
+                        $('.fa-select').selectmenu().selectmenu('refresh',true);
                         scrollToElement($('#category_choice_div_3'));
                     }
 
@@ -237,7 +237,7 @@
                     $('#carweb_category_msg').remove();
                     $('.close-reveal-modal').trigger('click');
                     $('#category_choice_div_3').show();
-                    $('.fa-select').selectmenu('refresh');
+                    $('.fa-select').selectmenu().selectmenu('refresh',true);
                     scrollToElement($('#category_choice_div_3'));
                 });
             }
@@ -250,7 +250,7 @@
                 if ($('#fa_paa_category_select_'+field).is("select")) {
                    if (field != 'reg_year') {
                        $('#fa_paa_category_select_'+field).val('');
-                       $('#fa_paa_category_select_'+field).selectmenu('refresh');
+                       $('#fa_paa_category_select_'+field).selectmenu().selectmenu('refresh',true);
                    }
                 }
                 $('#fa_paa_category_select_colour_id').val('');
@@ -285,14 +285,14 @@
                              });
                              $('#add_vehicle_msg').html('{{ "Confirm your vehicle details:"|trans({}, 'frontend-paa-second-step')}}');
                              $('#reg_no_details_fields').show();
-                             $('.fa-select').selectmenu('refresh');
+                             $('.fa-select').selectmenu().selectmenu('refresh',true);
                              checkCategoryWithCarWeb(regNo, regNoFieldsData);
                              moveCategoryDiv();
                              $(document).foundation('equalizer', 'reflow');
                              isSuccess = true;
                         } else {
                             resetRegNoFields();
-                            $('.fa-select').selectmenu('refresh');
+                            $('.fa-select').selectmenu().selectmenu('refresh',true);
                             $('#reg_no_details_fields').hide();
                             $('#fa_paa_category_select_reg_no').addClass('error');
                             $('#reg_no_error_msg').html('{{ "Please enter correct registration number."|trans({}, 'frontend-paa-second-step')}}');
@@ -309,7 +309,7 @@
                 $('#fa_paa_category_select_reg_no').addClass('error');
                 $('#reg_no_error_msg').html('{{ "Please enter registration number."|trans({}, 'frontend-paa-second-step')}}');
                 $('#reg_no_error_msg').show();
-                $('.fa-select').selectmenu('refresh');
+                $('.fa-select').selectmenu().selectmenu('refresh',true);
                 $('#reg_no_details_fields').hide();
                 $(document).foundation('equalizer', 'reflow');
                 return isSuccess;

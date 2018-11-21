@@ -345,7 +345,7 @@
                 $('#print_edition_show_anchor_'+packageId).text("{{"Hide editions"|trans({}, 'frontend-ad-package')}}")
             }
         }
-        //$('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu('refresh');
+        //$('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu().selectmenu('refresh',true);
         setTimeout(function() { $('#package_equalizer').trigger('enable.equalizer'); }, 1000);
         {% if printEditions is defined %}
             updateSelects(packageId);
@@ -374,7 +374,7 @@
         } else if (printEditionLimit > 1) {
             $('#print_edition_show_anchor_'+packageId).text("{{"Hide editions"|trans({}, 'frontend-ad-package')}}")
         }
-        //$('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu('refresh');
+        //$('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu().selectmenu('refresh',true);
         setTimeout(function() { $('#package_equalizer').trigger('enable.equalizer'); }, 1000);
         $('#package_print_editions_'+packageId+' .printSelect').each(
             function (i, elem)
@@ -431,7 +431,7 @@
                 }
             });
     
-            //setTimeout(function() { $('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu('refresh'); }, 200);
+            //setTimeout(function() { $('#package_print_editions_'+packageId+' > .fa-select-white').selectmenu().selectmenu('refresh',true); }, 200);
         }
     {% endif %}
  

@@ -947,7 +947,7 @@
         function accordionCallback(accordion)
         {
             $(accordion).siblings('a').find('i').toggleClass("fi-plus fi-minus");
-            $(accordion).find('select.fa-select').selectmenu('refresh');
+            $(accordion).find('select.fa-select').selectmenu().selectmenu('refresh',true);
         }
     });
 //]]>

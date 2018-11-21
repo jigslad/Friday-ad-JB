@@ -132,17 +132,17 @@
             {% for value,text in forRentRentPerOptions %}
                 rent_per_selector.append('<option value="'+ '{{ value }}'+'">'+ '{{ text }}' +'</option>');
             {% endfor %}
-            rent_per_selector.selectmenu('refresh');
+            rent_per_selector.selectmenu().selectmenu('refresh',true);
         } else if (id == '{{ property_share_id }}') {
             $('#rent_per_container').show();
             $('#rent_per_container').parent().addClass('rent-per-field');
             {% for value,text in shareRentPerOptions %}
                 rent_per_selector.append('<option value="'+ '{{ value }}'+'">'+ '{{ text }}' +'</option>');
             {% endfor %}
-            rent_per_selector.selectmenu('refresh');
+            rent_per_selector.selectmenu().selectmenu('refresh',true);
         } else {
             rent_per_selector.html('<option value="">{{ 'Rent per'|trans({}, 'frontend-landing-page') }}</option>');
-            rent_per_selector.selectmenu('refresh');
+            rent_per_selector.selectmenu().selectmenu('refresh',true);
             $('#rent_per_container').parent().removeClass('rent-per-field');
             $('#rent_per_container').hide();
         }

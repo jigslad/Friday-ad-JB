@@ -1,0 +1,77 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            <div class="row">
+                <div class="large-9 columns">
+                    {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                        {{ form_row(form.category_1) }}
+                        {{ form_row(form.category_2) }}
+                        {{ form_row(form.category_3) }}
+                        {{ form_row(form.category_4) }}
+                        {{ form_row(form.defaultRadius) }}
+                        {{ form_row(form.extendedRadius) }}
+                        {{ form_row(form.status) }}
+                        {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'seo_tool_admin'}) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}
+
+{% block scriptbottom %}
+    {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
+    {{ include('FaContentBundle:Default:tinyMceJs.html.twig', {'plugins' : 'link', 'toolbar1' : 'bold italic underline, bullist numlist link styleselect fontsizeselect', 'toolbar2' : 'false', 'menubar' : 'false', 'statusbar': 'false', 'custom_fontsize_formats': '8px 10px 12px 14px 18px 24px 36px' }) }}
+    <script src="{{ asset_url('facore/js/simple_ajax_uploader.js') }}"></script>
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        $("#fa_ad_location_radius_admin_category_1").change(function(){
+            loadCategoryByLevel($(this).val(), 2);
+            loadCategoryByLevel('', 3);
+            loadCategoryByLevel('', 4);
+        });
+
+        $("#fa_ad_location_radius_admin_category_2").change(function(){
+            loadCategoryByLevel($(this).val(), 3);
+            loadCategoryByLevel('', 4);
+        });
+
+        $("#fa_ad_location_radius_admin_category_3").change(function(){
+            loadCategoryByLevel($(this).val(), 4);
+        });
+    });
+
+    function loadCategoryByLevel(id, level)
+    {
+        var category_selector = $('#fa_ad_location_radius_admin_category_'+level);
+        category_selector.html('<option value="">{{'Select category'|trans}} '+level+'</option>');
+
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: (level == 4) ? '{{ path("category_ajax_get_nested_node_json") }}' : '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    for (var i=0, total = data.length; i < total; i++) {
+                        category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                    }
+                }
+            });
+        }
+    }
+    //]]>
+    </script>
+{% endblock %}

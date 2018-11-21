@@ -252,9 +252,52 @@ class AdListController extends CoreController
             $areaToolTipFlag = true;
         }
 
+
+        $data['query_sorter']['ad']['is_boosted'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+        
+        $rootCategoryId = null;
+        if (isset($data['search']['item__category_id'])) {
+            $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($data['search']['item__category_id'], $this->container);
+        }
+
+
         $mapFlag = $request->get('map', false);
         $data    = $this->setDefaultParameters($request, $mapFlag, 'finders', $cookieLocationDetails);
 
+        $extendlocation = '';$extendRadius = '';
+        $setDefRadius = 1;$setDefUKLoc = 0;
+        if(isset($data['search']) && isset($data['search']['item__distance'])) {
+            $setDefRadius = 0;
+        } 
+        if (($requestlocation != null && $requestlocation == 'uk') || (isset($cookieLocationDetails['lvl']) && $cookieLocationDetails['lvl']=='') || (!isset($cookieLocationDetails['lvl']))) {
+            //unset($data['search']['item__distance']);
+            $setDefUKLoc = 1;
+            $setDefRadius = 0;
+        }
+        
+        $locationRadius = array();
+        if($setDefRadius) {
+            if (isset($findersSearchParams['item__category_id']) && $findersSearchParams['item__category_id']) {
+                $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($findersSearchParams['item__category_id'], false, $this->container));
+                $locationRadius = $this->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
+                if($locationRadius) {
+                    $findersSearchParams['item__distance'] = $data['search']['item__distance'] = $data['query_filters']['item']['distance'] = $locationRadius['defaultRadius'];
+                    $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
+                    if($locationRadius['extendedRadius']>0 && $locationRadius['extendedRadius'] > $locationRadius['defaultRadius']) {
+                        $extendlocation = $data['search']['item__location'].'|'. (isset($locationRadius['extendedRadius']) ? $locationRadius['extendedRadius']: '').'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
+                        $extendRadius = (isset($locationRadius['extendedRadius']) ? $locationRadius['extendedRadius']: '');
+                    }
+                }
+
+                if(!isset($data['search']['item__distance'])) {
+                    $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($findersSearchParams['item__category_id'], $this->container);
+                    $data['search']['item__distance'] = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+                    $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'. (isset($data['search']['item__distance']) ? $data['search']['item__distance'] : '');
+                }
+            }
+        } 
+
+        $defaultRecordsPerPage = $this->container->getParameter('fa.search.records.per.page');
         $keywords       = (isset($data['search']['keywords']) && $data['search']['keywords']) ? $data['search']['keywords']: null;
         $page           = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page']: 1;
         $recordsPerPage = (isset($data['pager']['limit']) && $data['pager']['limit']) ? $data['pager']['limit']: $this->container->getParameter('fa.search.records.per.page');
@@ -283,6 +326,22 @@ class AdListController extends CoreController
             list($keywords, $data) = $this->handleCustomizedUrl($data, $request);
         }
 
+
+        $extendedData = $otherMatchingData = array();
+        $extendedData = $otherMatchingData = $data;
+
+        if($extendlocation) {
+            $extendedData['query_filters']['item']['location'] = $extendlocation;
+        }
+
+
+        if($locationRadius) {
+            $otherMatchingData['query_filters']['item']['location'] = $data['search']['item__location'].'| 200 | '. (isset($locationRadius['extendedRadius']) ? $locationRadius['extendedRadius']: (isset($locationRadius['defaultRadius'])?$locationRadius['defaultRadius']:0));
+        } else {
+            $otherMatchingData['query_filters']['item']['location'] = $data['search']['item__location'].'| 200 | '.(isset($data['search']['item__distance'])?$data['search']['item__distance']:0);
+        }
+
+
         // initialize solr search manager service and fetch data based of above prepared search options
         $this->get('fa.solrsearch.manager')->init('ad', $keywords, $data, $page, $recordsPerPage, 0, true);
         $solrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
@@ -291,6 +350,10 @@ class AdListController extends CoreController
         $result      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
         $resultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($solrResponse);
         $facetResult = $this->get('fa.solrsearch.manager')->getSolrResponseFacetFields($solrResponse);
+
+        $defaultRadiusPageCount = ($page==0)?1:ceil($resultCount/$recordsPerPage);
+        $defaultRadiusLastPageCount = ($resultCount%$recordsPerPage);
+
         $facetResult = get_object_vars($facetResult);
         
         $rootCategoryId = null;
@@ -308,6 +371,56 @@ class AdListController extends CoreController
             $locationFacets = $this->getLocationFacetForSearchResult($facetResult, $data);
         }
         
+
+        $extendedResult = array();$extendedResultCount = 0;$extpage =0;$staticOffset = 0;
+        
+        if($extendlocation) {
+            // initialize solr search manager service and fetch data based of above prepared search options
+            if($page == $defaultRadiusPageCount) {
+                $extpage = 1;
+                $staticOffset = 0;
+            } elseif($page > $defaultRadiusPageCount && $defaultRadiusPageCount>0 && $page>0) {
+                $extpagediff = $page - $defaultRadiusPageCount;
+                if($extpagediff<=0) { $extpage = 1; } else { $extpage = $extpagediff; }
+                $staticOffset = ($extpagediff>0)?((($extpage)*$recordsPerPage) - $defaultRadiusLastPageCount):0;
+            } elseif($page > $defaultRadiusPageCount && $page>0) {
+                $extpagediff = $page;
+                if($extpagediff<=0) { $extpage = 1; } else { $extpage = $extpagediff; }
+                $staticOffset = ($extpagediff>0)?((($extpage-1)*$recordsPerPage) - $defaultRadiusLastPageCount):0;
+            } else {
+                $extpage =1;
+                $staticOffset = 0;
+            }
+            $this->get('fa.solrsearch.manager')->init('ad', $keywords, $extendedData, $extpage, $recordsPerPage, $staticOffset, true);
+            $extendedSolrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+            $extendedResult      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($extendedSolrResponse);
+            $extendedResultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($extendedSolrResponse);
+        }
+
+        $getXMiles = 0;
+        
+        if(!$mapFlag && $setDefUKLoc==0) {
+            if(isset($otherMatchingData['search']['item__distance'])) {
+                $otherMatchingData['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+            }
+            $this->get('fa.solrsearch.manager')->init('ad', $keywords, $otherMatchingData, 1, 1, 0, true);
+            $otherMatchingSolrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+            $otherMatchingResult      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($otherMatchingSolrResponse);
+            $otherMatchingResultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($otherMatchingSolrResponse);
+
+            
+            if($otherMatchingResultCount>0 && !empty($otherMatchingResult)) {
+                if(isset($otherMatchingResult[0]['away_from_location'])) {
+                    $getXMiles = CommonManager::getClosest($otherMatchingResult[0]['away_from_location']);
+                }
+            }
+        }
+
+        $mergedresult = array_merge($result,$extendedResult);
+        $mergedResultCount = $resultCount + $extendedResultCount;
+
+
+
         /*$nextMiles              = 0;
         $expandMilesresultCount = 'XX';
         if (isset($data['search']['item__distance']) && $data['search']['item__distance'] < 200) {
@@ -316,14 +429,22 @@ class AdListController extends CoreController
         }*/
     
         
+    
+        $locationFacets = array();
         if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
+            $locationFacets =  get_object_vars($facetResult['a_l_town_id_txt']);
+            
+            if(isset($facetResult['a_l_area_id_txt']) && !empty(get_object_vars($facetResult['a_l_area_id_txt']))) {
+                $locationFacets = $locationFacets + get_object_vars($facetResult['a_l_area_id_txt']);
+            }
+
             if (isset($locationFacets[$data['search']['item__location']])) {
                 unset($locationFacets[$data['search']['item__location']]);
             }
             $locationFacets = array_slice(array_unique($locationFacets), 0, 5, true);
         }
         // initialize pagination manager service and prepare listing with pagination based of solr result
-        $this->get('fa.pagination.manager')->init($result, $page, $recordsPerPage, $resultCount);
+        $this->get('fa.pagination.manager')->init($mergedresult, $page, $recordsPerPage, $mergedResultCount);
         $pagination = $this->get('fa.pagination.manager')->getSolrPagination();
         $mapResult = [];
         //for map purpose iterating the advert result
@@ -356,6 +477,17 @@ class AdListController extends CoreController
                     //$mapResult[$advert->id]['longitude'] = $advert[AdSolrFieldMapping::LONGITUDE];
                     $prevLatLongArr['longitude'] = $advert[AdSolrFieldMapping::LONGITUDE][0];
                 }
+
+                if(isset($advert['away_from_location'])) {
+                    $mapResult[$advert->id]['away_from_location'] = $advert['away_from_location'];
+                }
+
+            }
+
+            if(!empty($mapResult)) {
+                usort($mapResult, function($a, $b) {
+                    return $a['away_from_location'] - $b['away_from_location'];
+                });
             }
         }
         // set search params in cookie.
@@ -404,6 +536,83 @@ class AdListController extends CoreController
             $getRecommendedSrchSlotWise = $recommendedSlotArr;
         }
         
+        $fourLocationsPagination = $fourLocationsDetails = array();$fourLocationsResultCount = 0;
+        $fourLocationsDetailsWithDistance = array();
+        
+
+        if($mergedResultCount==0) {
+            $fourLocationsData = $fourLocWithDistanceData = array();
+            $fourLocationsData = $fourLocWithDistanceData = $data;
+
+            unset($fourLocationsData['query_filters']['item']['location']);
+            $fourLocationsData['group_fields'] = array(
+               AdSolrFieldMapping::TOWN_ID => array('limit' => 1),
+            );
+
+            $this->get('fa.solrsearch.manager')->init('ad', null, $fourLocationsData);
+            $fourLocationsSolrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+            $fourLocationsFacetResult = $this->container->get('fa.solrsearch.manager')->getSolrResponseGroupFields($fourLocationsSolrResponse);
+            $fourLocationsDetails = array();
+            if (isset($fourLocationsFacetResult[AdSolrFieldMapping::TOWN_ID]) && isset($fourLocationsFacetResult[AdSolrFieldMapping::TOWN_ID]['groups']) && count($fourLocationsFacetResult[AdSolrFieldMapping::TOWN_ID]['groups'])) {
+                $adLocations = $fourLocationsFacetResult[AdSolrFieldMapping::TOWN_ID]['groups'];
+                foreach ($adLocations as $locationCnt => $adLocation) {
+                    $adLocation = get_object_vars($adLocation);
+                    if (isset($adLocation['doclist']['numFound']) && $adLocation['doclist']['numFound']>0) {
+                        //$tmpSearchParams['search']['item__location'] = $adLocation['groupValue'];
+                        $locationUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($data['search'], array('item__location' => $adLocation['groupValue'])));
+                        
+                        if($adLocation['groupValue']) {
+                            $getLocName = '';
+                            $getLoc = $this->getRepository('FaEntityBundle:Location')->find($adLocation['groupValue']);
+                            if($getLoc) { $getLocName = $getLoc->getName(); }
+                            $fourLocationsDetails[] = array(
+                                'id' => $adLocation['groupValue'],
+                                'locationUrl' => $locationUrl,
+                                'name' => $getLocName,
+                                'cnt'=> $adLocation['doclist']['numFound'],
+                            );
+                            usort($fourLocationsDetails, function($a, $b) {
+                                return $b['cnt'] - $a['cnt'];
+                            });
+                            $fourLocationsDetails = array_slice($fourLocationsDetails,0,10);
+                        }
+                    }
+                }
+            }
+
+
+            if(!empty($fourLocationsDetails)) {
+                foreach($fourLocationsDetails as $fourLocationsDetail)
+                {
+                    if($locationRadius) {
+                        $fourLocWithDistanceData['query_filters']['item']['location'] = $fourLocationsDetail['id'] . '|'. $locationRadius['defaultRadius'];
+                    } else {
+                        $fourLocWithDistanceData['query_filters']['item']['location'] = $fourLocationsDetail['id'] . '| '.(isset($data['search']['item__distance'])?$data['search']['item__distance']:(isset($fourLocationsData['query_filters']['item']['distance'])?$fourLocationsData['query_filters']['item']['distance']:200));
+                    }
+                    $this->get('fa.solrsearch.manager')->init('ad', null, $fourLocWithDistanceData);
+                    $fourLocWithDistanceSolrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+                    //$fourLocWithDistanceResult      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($fourLocWithDistanceSolrResponse);
+                    $fourLocWithDistanceResultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($fourLocWithDistanceSolrResponse);
+                    if($fourLocWithDistanceResultCount>0) {
+                        $fourLocationsDetailsWithDistance[] = array(
+                            'id' => $fourLocationsDetail['id'],
+                            'locationUrl' => $fourLocationsDetail['locationUrl'],
+                            'name' => $fourLocationsDetail['name'],
+                            'cnt'=> $fourLocWithDistanceResultCount,
+                        );
+                    }
+                }
+                if($fourLocationsDetailsWithDistance) {
+                    usort($fourLocationsDetailsWithDistance, function($a, $b) {
+                        return $b['cnt'] - $a['cnt'];
+                    });
+                    $fourLocationsDetailsWithDistance = array_slice($fourLocationsDetailsWithDistance,0,4);
+                }
+            }
+        }
+       
+
+
         $parameters = array(
             'pagination'             => $pagination,
             'resultCount'            => $resultCount,
@@ -423,7 +632,12 @@ class AdListController extends CoreController
             'areaToolTipFlag'		 => $areaToolTipFlag,
             'recommendedSlotResult'  => $getRecommendedSrchSlotWise,
             'paymentTransactionJs'	 => $transactionJsArr,
-            'mapResult'				 => $mapResult
+            'mapResult'              => $mapResult,
+            'extendedRadius'         => $extendRadius,
+            'extendedResultCount'    => $extendedResultCount,
+            'fourLocationsDetails'   => $fourLocationsDetailsWithDistance,
+            'defaultPages'           => $defaultRadiusPageCount,
+            'getXMiles'              => $getXMiles,
         );
 
         // for business user ads page
@@ -893,11 +1107,13 @@ class AdListController extends CoreController
                     }
                 }
                 if (isset($data['search']['keywords']) && strlen(trim($data['search']['keywords']))) {
-                    $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 4);
+                    $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 5);
                 }
-                $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 2);
+
+                 $data['query_sorter']['item']['is_boosted'] = array('sort_ord' => 'desc', 'field_ord' => 2);
+                $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 3);
             }
-            $data['query_sorter']['item']['is_top_ad'] = array('sort_ord' => 'desc', 'field_ord' => 3);
+            $data['query_sorter']['item']['is_top_ad'] = array('sort_ord' => 'desc', 'field_ord' => 4);
         }
 
         //set default sorting for map
@@ -1067,7 +1283,7 @@ class AdListController extends CoreController
      */
     private function getTopAds($data, $keywords = null, $page = 1, $mapFlag = false, $skipAds = true, $request, $rootCategoryId)
     {
-        $topAdResult = array();
+        $finalTopAdResult = array();
         if (!$mapFlag && $page == 1) {
             $data['query_filters']['item']['is_top_ad'] = '1';
             $data['query_sorter']['item'] = array('random' => 'desc');
@@ -1092,19 +1308,30 @@ class AdListController extends CoreController
             $topAdResult = $this->get('fa.solrsearch.manager')->getSolrResponseDocs();
             $topAdCount = count($topAdResult);
 
+            $newTopAdResult = array();
+            $time_of_boosted_ad = array();
+
             if ($topAdCount) {
-                foreach ($topAdResult as $topAd) {
-                    $viewedTopAds[] = $topAd['id'];
+                foreach ($topAdResult as $key=>$topAd) {
+                    $viewedTopAds[] = $topAd->id;
+
+                    if(isset($topAd->a_is_boosted_b) && $topAd->a_is_boosted_b == 1)
+                    {
+                        $newTopAdResult[$topAd->a_boosted_at_i] = $topAd;
+                        unset($topAdResult[$key]);
+                }
                 }
                 $viewedTopAds = array_unique($viewedTopAds);
             }
+            krsort($newTopAdResult);
+            $finalTopAdResult = array_merge($newTopAdResult, $topAdResult);
 
             $response = new Response();
             $response->headers->setCookie(new Cookie('top_ads_search_result_'.$rootCategoryId, implode(',', $viewedTopAds), CommonManager::getTimeStampFromEndDate(date('Y-m-d'))));
             $response->sendHeaders();
         }
 
-        return $topAdResult;
+        return $finalTopAdResult;
     }
     
     /**
@@ -1992,7 +2219,6 @@ class AdListController extends CoreController
                 }
                 if ($businessExposureUserDetails) {
                     $businessExposureUserDetails = array_map("unserialize", array_unique(array_map("serialize", $businessExposureUserDetails)));
-                    ;
                 }
             }
         }
@@ -2363,5 +2589,83 @@ class AdListController extends CoreController
             $recommendeSlotResult = $this->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotSearchlistArrayByCategoryId($data['search']['item__category_id'], $this->container);
         }
         return $recommendeSlotResult;
+    }
+
+     /**
+     * Find top ads randomly as defined slots.
+     *
+     * @param array $data
+     *            Search parameters.
+     * @param string $keywords
+     *            Keywords.
+     * @param int $page
+     *            Page.
+     * @param boolean $mapFlag
+     *            Boolean flag for map.
+     * @param Request $request
+     *            Request object.
+     * @param integer $rootCategoryId
+     *            Root category id.
+     *
+     * @return array
+     */
+    private function getSearchResultBoostedAds($data, $keywords = null, $page = 1, $mapFlag = false, $request, $rootCategoryId)
+    {
+        $boostedAdResult = $this->getBoostedAds($data, $keywords, $page, $mapFlag, true, $request, $rootCategoryId);
+
+        if (!count($boostedAdResult)) {
+            $boostedAdResult = $this->getBoostedAds($data, $keywords, $page, $mapFlag, false, $request, $rootCategoryId);
+        }
+
+        return $boostedAdResult;
+    }
+
+    /**
+     * Find top ads randomly as defined slots.
+     *
+     * @param array $data
+     *            Search parameters.
+     * @param string $keywords
+     *            Keywords.
+     * @param int $page
+     *            Page.
+     * @param boolean $mapFlag
+     *            Boolean flag for map.
+     * @param boolean $skipAds
+     *            Boolean flag for skip viewed ads.
+     * @param Request $request
+     *            Request object.
+     * @param integer $rootCategoryId
+     *            Root category id.
+     *
+     * @return array
+     */
+    private function getBoostedAds($data, $keywords = null, $page = 1, $mapFlag = false, $skipAds = true, $request, $rootCategoryId)
+    {
+        /** @var \Fa\Bundle\CoreBundle\Manager\SolrSearchManager $solrManager */
+        $solrManager = $this->get('fa.solrsearch.manager');
+
+        $boostedAdResult = array();
+        if (!$mapFlag && $page == 1) {
+
+            $recordsPerPage = $this->container->getParameter('fa.default.listing_topad_slots');
+            $solrManager->init('ad', $keywords, $data, $page, $recordsPerPage, 0, true);
+            //print_r($query = $solrManager->getSolrQuery());
+            $boostedAdResult = $solrManager->getSolrResponseDocs();
+            $boostedAdCount = count($boostedAdResult);
+
+            if ($boostedAdCount) {
+                foreach ($boostedAdResult as $boostedAd) {
+                    $viewedBoostedAds[] = $boostedAd['id'];
+                }
+                $viewedBoostedAds = array_unique($viewedBoostedAds);
+            }
+
+            $response = new Response();
+            $response->headers->setCookie(new Cookie('boosted_ads_search_result_' . $rootCategoryId, implode(',', $viewedBoostedAds), CommonManager::getTimeStampFromEndDate(date('Y-m-d'))));
+            $response->sendHeaders();
+        }
+
+        return $boostedAdResult;
     }
 }

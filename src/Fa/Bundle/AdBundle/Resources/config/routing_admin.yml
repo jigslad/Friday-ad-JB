@@ -37,3 +37,7 @@ FaAdBundle_paa_lite_field_rule_admin:
 FaAdBundle_campaigns_admin:
     resource: '@FaAdBundle/Resources/config/routing/campaigns_admin.yml'
     prefix:   /paa-lite
+
+FaAdBundle_location_radius_admin:
+    resource: '@FaAdBundle/Resources/config/routing/location_radius_admin.yml'
+    prefix:   /location-radius

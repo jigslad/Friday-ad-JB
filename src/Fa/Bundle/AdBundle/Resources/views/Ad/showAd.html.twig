@@ -808,17 +808,19 @@
     {% endif %}
     <script language="javascript" type="text/javascript">
     //<![CDATA[
-    var adMotorEquilizerFlag = false;
-    var gaCalledOnce = false;
-    var gaAfterCalledOnce = false;
+    $(window).on('load', function() {
+        var adMotorEquilizerFlag = false;
+        var gaCalledOnce = false;
+        var gaAfterCalledOnce = false;
 
-    {% if successPaymentModalbox is defined and successPaymentModalbox %}
-   		$('#upgradeSuccessPaymentModal').foundation('reveal', 'open');
-    {% endif %}
+        {% if successPaymentModalbox is defined and successPaymentModalbox %}
+       		$('#upgradeSuccessPaymentModal').foundation('reveal', 'open');
+        {% endif %}
 
-    {% if allowAdEdit is defined and promotePackages[0] is defined and allowAdEdit and attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')} and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
-    	ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
-    {% endif %}
+        {% if allowAdEdit is defined and promotePackages[0] is defined and allowAdEdit and attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')} and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
+        	ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
+        {% endif %}
+    });
 
     $(window).scroll(function () {
         {% if currentDevice == 'D' or currentDevice == 'T' %}
@@ -874,7 +876,7 @@
 
     
     
-    $(document).ready(function(){
+    $(window).on('load', function() {
         //$('#oneClickEnquireInfoModal').foundation('reveal', 'open'); // removed popup for one click enquire FFR-2342
         {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
             $("#map_tab_anchor").click();
