@@ -78,6 +78,7 @@ parameters:
     fa.image.community_upload_limit: 30
     fa.image.services_upload_limit: 30
     fa.image.adult_upload_limit: 30
+    fa.image.quality: 75
     fa.image.thumb_size:
         - 300X225
         - 800X600

@@ -2022,7 +2022,7 @@ class AdListController extends CoreController
             } else {
                 $additionaldistance = $exposureMiles;
             }
-            $searchParams['query_filters']['item']['location'] = $locationId.'|'.($distance+$additionaldistance);
+            $searchParams['query_filters']['item']['location'] = $locationId.'|'.(intval($distance)+$additionaldistance);
         }
 
         $data['select_fields']  = array('item' => array('user_id'));

@@ -2242,7 +2242,7 @@ class CategoryRepository extends NestedTreeRepository
     {
         
         $setRadius = 1;$categoryId = 0;
-        $cookieLocation  = $container->get('request')->cookies->get('location');
+        $cookieLocation  = $container->get('request_stack')->getCurrentRequest()->cookies->get('location');
         $cookieLvl = '';
         if($cookieLocation && (!is_array($cookieLocation))) { $cookieLocation = json_decode($cookieLocation); 
             $cookieLvl = $cookieLocation->lvl;

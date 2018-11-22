@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Fa\Bundle\ContentBundle\Listener;
+namespace Fa\Bundle\AdBundle\Listener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Fa\Bundle\AdBundle\Entity\LocationRadius;
-use Fa\Bundle\ADBundle\Repository\LocationRadiusRepository;
+use Fa\Bundle\AdBundle\Repository\LocationRadiusRepository;
 
 /**
  * This class is used to call LifecycleEvent of doctrine.
