@@ -96,7 +96,7 @@ class AdModerateRepository extends EntityRepository
             $adRef = $moderationResult['adRef'];
         }
 
-        if (count($moderationResult) > 0 && $adRef) {
+        if (!empty($moderationResult) && $adRef) {
             $adModerate = $this->findOneBy(array('ad' => $adRef));
 
             if ($adModerate) {
