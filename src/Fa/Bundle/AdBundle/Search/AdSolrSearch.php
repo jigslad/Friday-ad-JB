@@ -359,7 +359,7 @@ class AdSolrSearch extends SolrSearch
         $location     = $locationData[0];
 
         if (isset($locationData[1]) && $locationData[1]) {
-            $distance = $locationData[1];
+            $distance = intval($locationData[1]);
         } else {
             $distance = 0;
         }

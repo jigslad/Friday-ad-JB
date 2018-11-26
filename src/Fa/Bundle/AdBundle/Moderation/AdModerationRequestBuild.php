@@ -114,12 +114,13 @@ class AdModerationRequestBuild
      */
     protected function buildOtherParametersArray(Ad $ad, $priority = 1, $isForManualModeration = false, $manualModerationReason = '')
     {
+        $baseUrl = $this->container->getParameter('base_url');
         $this->moderationRequest[AdModerationFieldMappingInterface::SITE_ID] = $this->container->getParameter('fa.ad.moderation.site.id');
 
-        $this->moderationRequest[AdModerationFieldMappingInterface::CALLBACK_URL] = $this->container->get('router')->generate('ad_moderation_response', array(), true);
+        $this->moderationRequest[AdModerationFieldMappingInterface::CALLBACK_URL] = $baseUrl.$this->container->get('router')->generate('ad_moderation_response', array(), true);
 
         if ($ad->getId()) {
-            $this->moderationRequest[AdModerationFieldMappingInterface::EDIT_CALLBACK_URL] = $this->container->get('router')->generate('ad_post_edit_admin', array("id" => $ad->getId()), true);
+            $this->moderationRequest[AdModerationFieldMappingInterface::EDIT_CALLBACK_URL] = $baseUrl.$this->container->get('router')->generate('ad_post_edit_admin', array("id" => $ad->getId()), true);
         }
 
         $this->moderationRequest[AdModerationFieldMappingInterface::EXPECTED_RESPONSE] = null;
