@@ -88,7 +88,7 @@ class AdModerationController extends CoreController
             //logging the response
             $this->container->get('ad_moderate_logger')->info('Content Moderation Response ('.json_encode($response)." )");
             if (empty($response)) {
-                CommonManager::sendErrorMail($this->container, 'Error: Problem in Ad Moderation: Null response');
+                CommonManager::sendErrorMail($this->container, 'Error: Problem in Ad Moderation: Null response', 'Null Response from Moderation', 'Null');
                 return new Response();
             }
             $returnValueArray = $this->getRepository('FaAdBundle:AdModerate')->handleModerationResult($response, $this->container);
