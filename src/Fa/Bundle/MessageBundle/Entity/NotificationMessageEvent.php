@@ -21,7 +21,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @copyright 2014 Friday Media Group Ltd
  * @version v1.0
  *
- * @ORM\Table(name="notification_message_event")
+ * @ORM\Table(name="notification_message_event", indexes={@ORM\Index(name="idx_ad_id", columns={"ad_id"}), @ORM\Index(name="idx_user_id", columns={"user_id"}) })
  * @ORM\Entity(repositoryClass="Fa\Bundle\MessageBundle\Repository\NotificationMessageEventRepository")
  * @ORM\HasLifecycleCallbacks
  */

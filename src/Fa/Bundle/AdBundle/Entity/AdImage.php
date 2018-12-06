@@ -13,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @author Sagar Lotiya <sagar@aspl.in>
  * @copyright  2014 Friday Media Group Ltd.
  *
- * @ORM\Table(name="ad_image", indexes={@ORM\Index(name="fa_ad_images_trans_id",  columns={"trans_id"}), @ORM\Index(name="fa_ad_image_ad_ref",  columns={"ad_ref"})})
+ * @ORM\Table(name="ad_image", indexes={@ORM\Index(name="fa_ad_images_trans_id",  columns={"trans_id"}), @ORM\Index(name="fa_ad_image_ad_ref",  columns={"ad_ref"}), @ORM\Index(name="idx_aws",  columns={"aws"}), @ORM\Index(name="idx_created_at",  columns={"created_at"}), @ORM\Index(name="idx_local",  columns={"local"}) })
  * @ORM\Entity(repositoryClass="Fa\Bundle\AdBundle\Repository\AdImageRepository")
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\Loggable(logEntryClass="Fa\Bundle\EntityBundle\Entity\FaEntityLog")

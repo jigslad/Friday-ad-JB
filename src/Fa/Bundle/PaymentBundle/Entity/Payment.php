@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @copyright 2014 Friday Media Group Ltd
  * @version v1.0
  *
- * @ORM\Table(name="payment")
+ * @ORM\Table(name="payment", indexes={@ORM\Index(name="idx_cart_code", columns={"cart_code"}) })
  * @ORM\Entity(repositoryClass="Fa\Bundle\PaymentBundle\Repository\PaymentRepository")
  * @ORM\HasLifecycleCallbacks
  */

@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping\Index as Index;
  * @copyright 2014 Friday Media Group Ltd
  * @version v1.0
  *
- * @ORM\Table(name="postcode" ,indexes={@Index(name="post_code_i", columns={"post_code"}), @ORM\Index(name="post_code_c_i", columns={"post_code_c"})})
+ * @ORM\Table(name="postcode" ,indexes={@Index(name="post_code_i", columns={"post_code"}), @ORM\Index(name="post_code_c_i", columns={"post_code_c"}), @ORM\Index(name="idx_locality_id", columns={"locality_id"}) })
  * @ORM\Entity(repositoryClass="Fa\Bundle\EntityBundle\Repository\PostcodeRepository")
  * @ORM\EntityListeners({ "Fa\Bundle\EntityBundle\Listener\PostcodeListener" })
  */

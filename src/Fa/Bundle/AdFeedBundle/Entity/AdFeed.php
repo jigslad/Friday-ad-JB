@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @copyright 2014 Friday Media Group Ltd
  * @version v1.0
  *
- * @ORM\Table(name="ad_feed", indexes={@ORM\Index(name="fa_feed_trans_id",  columns={"trans_id"}), @ORM\Index(name="fa_feed_unique_idx", columns={"unique_id"}), @ORM\Index(name="fa_feed_ref_site_id",  columns={"ref_site_id"}), @ORM\Index(name="fa_feed_status",  columns={"status"}), @ORM\Index(name="fa_feed_is_updated",  columns={"is_updated"})})
+ * @ORM\Table(name="ad_feed", indexes={@ORM\Index(name="fa_feed_trans_id",  columns={"trans_id"}), @ORM\Index(name="fa_feed_unique_idx", columns={"unique_id"}), @ORM\Index(name="fa_feed_ref_site_id",  columns={"ref_site_id"}), @ORM\Index(name="fa_feed_status",  columns={"status"}), @ORM\Index(name="fa_feed_is_updated",  columns={"is_updated"}), @ORM\Index(name="created_at", columns={"created_at"}), @ORM\Index(name="updated_at", columns={"updated_at"})})
  * @ORM\Entity(repositoryClass="Fa\Bundle\AdFeedBundle\Repository\AdFeedRepository")
  * @ORM\HasLifecycleCallbacks
  */

@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @copyright 2014 Friday Media Group Ltd
  * @version v1.0
  *
- * @ORM\Table(name="user_site_view_counter")
+ * @ORM\Table(name="user_site_view_counter", indexes={@ORM\Index(name="created_at",  columns={"created_at"}) })
  * @ORM\Entity(repositoryClass="Fa\Bundle\UserBundle\Repository\UserSiteViewCounterRepository")
  * @ORM\HasLifecycleCallbacks
  * @ORM\EntityListeners({ "Fa\Bundle\UserBundle\Listener\UserSiteViewCounterListener" })
