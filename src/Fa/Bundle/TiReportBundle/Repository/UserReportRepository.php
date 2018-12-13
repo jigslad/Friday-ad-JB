@@ -145,7 +145,7 @@ class UserReportRepository extends EntityRepository
         if ($searchParams && !empty($searchParams['rus_user_type'])) {
             $qb = $qb->andWhere(self::ALIAS.'.role_id = '.$searchParams['rus_user_type']);
         } else {
-            $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID);
+            $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID, RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
             $qb = $qb->andWhere(self::ALIAS.'.role_id IN (:roleIds)');
             $qb = $qb->setParameter('roleIds', $roleIds);
         }
@@ -352,7 +352,7 @@ class UserReportRepository extends EntityRepository
         if ($searchParams && !empty($searchParams['rus_user_type'])) {
             $qb = $qb->andWhere(self::ALIAS.'.role_id = '.$searchParams['rus_user_type']);
         } else {
-            $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID);
+            $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID, RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
             $qb = $qb->andWhere(self::ALIAS.'.role_id IN (:roleIds)');
             $qb = $qb->setParameter('roleIds', $roleIds);
         }
@@ -581,7 +581,7 @@ class UserReportRepository extends EntityRepository
         }
 
         $qb = $qb->andWhere(self::ALIAS.'.role_id IN (:roleIds)');
-        $qb = $qb->setParameter('roleIds', array(RoleRepository::ROLE_BUSINESS_SELLER_ID));
+        $qb = $qb->setParameter('roleIds', array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID));
         $qb = $qb->groupBy(self::ALIAS.'.user_id');
 
         // sorting.
@@ -691,7 +691,7 @@ class UserReportRepository extends EntityRepository
         if ($searchParams && !empty($searchParams['rus_user_type'])) {
             $qb = $qb->andWhere(self::ALIAS.'.role_id = '.$searchParams['rus_user_type']);
         } else {
-            $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID);
+             $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID, RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
             $qb = $qb->andWhere(self::ALIAS.'.role_id IN (:roleIds)');
             $qb = $qb->setParameter('roleIds', $roleIds);
         }
@@ -715,7 +715,7 @@ class UserReportRepository extends EntityRepository
 
         if ($searchParams && $searchParams['rus_profile_image'] != '') {
             if (!empty($searchParams['rus_user_type'])) {
-                if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+                 if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID || $searchParams['rus_user_type'] == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                     if ($searchParams['rus_profile_image'] == '1') {
                         $qb = $qb->andWhere(self::ALIAS.'.path IS NOT NULL AND '.self::ALIAS.'.path <> \'\'');
                     } else {
@@ -730,16 +730,16 @@ class UserReportRepository extends EntityRepository
                 }
             } else {
                 if ($searchParams['rus_profile_image'] == '1') {
-                    $qb = $qb->andWhere('('.self::ALIAS.'.path IS NOT NULL AND '.self::ALIAS.'.path <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') OR ('.self::ALIAS.'.image IS NOT NULL AND '.self::ALIAS.'.image <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                     $qb = $qb->andWhere('('.self::ALIAS.'.path IS NOT NULL AND '.self::ALIAS.'.path <> \'\' AND '.self::ALIAS.'.role_id IN ('.RoleRepository::ROLE_BUSINESS_SELLER_ID.', '.RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID.')) OR ('.self::ALIAS.'.image IS NOT NULL AND '.self::ALIAS.'.image <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
                 } else {
-                    $qb = $qb->andWhere('('.self::ALIAS.'.path IS NULL OR '.self::ALIAS.'.path = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') AND ('.self::ALIAS.'.image IS NULL OR '.self::ALIAS.'.image = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                     $qb = $qb->andWhere('('.self::ALIAS.'.path IS NULL OR '.self::ALIAS.'.path = \'\' AND '.self::ALIAS.'.role_id IN ('.RoleRepository::ROLE_BUSINESS_SELLER_ID.', '.RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID.')) AND ('.self::ALIAS.'.image IS NULL OR '.self::ALIAS.'.image = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
                 }
             }
         }
 
         if ($searchParams && $searchParams['rus_phone'] != '') {
             if (!empty($searchParams['rus_user_type'])) {
-                if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+                 if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID || $searchParams['rus_user_type'] == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                     if ($searchParams['rus_phone'] == '1') {
                         $qb = $qb->andWhere('('.self::ALIAS.'.phone1 IS NOT NULL AND '.self::ALIAS.'.phone1 <> \'\') OR ('.self::ALIAS.'.phone2 IS NOT NULL AND '.self::ALIAS.'.phone2 <> \'\')');
                     } else {
@@ -754,16 +754,16 @@ class UserReportRepository extends EntityRepository
                 }
             } else {
                 if ($searchParams['rus_phone'] == '1') {
-                    $qb = $qb->andWhere('(('.self::ALIAS.'.phone1 IS NOT NULL AND '.self::ALIAS.'.phone1 <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') OR ('.self::ALIAS.'.phone2 IS NOT NULL AND '.self::ALIAS.'.phone2 <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.')) OR ('.self::ALIAS.'.phone IS NOT NULL AND '.self::ALIAS.'.phone <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                     $qb = $qb->andWhere('(('.self::ALIAS.'.phone1 IS NOT NULL AND '.self::ALIAS.'.phone1 <> \'\' AND '.self::ALIAS.'.role_id IN ('.RoleRepository::ROLE_BUSINESS_SELLER_ID.', '.RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID.')) OR ('.self::ALIAS.'.phone2 IS NOT NULL AND '.self::ALIAS.'.phone2 <> \'\' AND '.self::ALIAS.'.role_id IN ('.RoleRepository::ROLE_BUSINESS_SELLER_ID.', '.RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID.'))) OR ('.self::ALIAS.'.phone IS NOT NULL AND '.self::ALIAS.'.phone <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
                 } else {
-                    $qb = $qb->andWhere('(('.self::ALIAS.'.phone1 IS NULL OR '.self::ALIAS.'.phone1 = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') AND ('.self::ALIAS.'.phone2 IS NULL OR '.self::ALIAS.'.phone2 = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.')) AND ('.self::ALIAS.'.phone IS NULL OR '.self::ALIAS.'.phone = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                     $qb = $qb->andWhere('(('.self::ALIAS.'.phone1 IS NULL OR '.self::ALIAS.'.phone1 = \'\' AND '.self::ALIAS.'.role_id IN ('.RoleRepository::ROLE_BUSINESS_SELLER_ID.', '.RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID.')) AND ('.self::ALIAS.'.phone2 IS NULL OR '.self::ALIAS.'.phone2 = \'\' AND '.self::ALIAS.'.role_id IN ('.RoleRepository::ROLE_BUSINESS_SELLER_ID.', '.RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID.'))) AND ('.self::ALIAS.'.phone IS NULL OR '.self::ALIAS.'.phone = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
                 }
             }
         }
 
         if ($searchParams && $searchParams['rus_about'] != '') {
             if (!empty($searchParams['rus_user_type'])) {
-                if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+                 if ($searchParams['rus_user_type'] == RoleRepository::ROLE_BUSINESS_SELLER_ID || $searchParams['rus_user_type'] == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                     if ($searchParams['rus_about'] == '1') {
                         $qb = $qb->andWhere(self::ALIAS.'.about_us IS NOT NULL AND '.self::ALIAS.'.about_us <> \'\'');
                     } else {
@@ -778,9 +778,9 @@ class UserReportRepository extends EntityRepository
                 }
             } else {
                 if ($searchParams['rus_about'] == '1') {
-                    $qb = $qb->andWhere('('.self::ALIAS.'.about_us IS NOT NULL AND '.self::ALIAS.'.about_us <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') OR ('.self::ALIAS.'.about_you IS NOT NULL AND '.self::ALIAS.'.about_you <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                     $qb = $qb->andWhere('('.self::ALIAS.'.about_us IS NOT NULL AND '.self::ALIAS.'.about_us <> \'\' AND '.self::ALIAS.'.role_id IN ('.RoleRepository::ROLE_BUSINESS_SELLER_ID.', '.RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID.')) OR ('.self::ALIAS.'.about_you IS NOT NULL AND '.self::ALIAS.'.about_you <> \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
                 } else {
-                    $qb = $qb->andWhere('('.self::ALIAS.'.about_us IS NULL OR '.self::ALIAS.'.about_us = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_BUSINESS_SELLER_ID.') AND ('.self::ALIAS.'.about_you IS NULL OR '.self::ALIAS.'.about_you = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
+                     $qb = $qb->andWhere('('.self::ALIAS.'.about_us IS NULL OR '.self::ALIAS.'.about_us = \'\' AND '.self::ALIAS.'.role_id IN ('.RoleRepository::ROLE_BUSINESS_SELLER_ID.', '.RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID.')) AND ('.self::ALIAS.'.about_you IS NULL OR '.self::ALIAS.'.about_you = \'\' AND '.self::ALIAS.'.role_id = '.RoleRepository::ROLE_SELLER_ID.')');
                 }
             }
         }
@@ -815,6 +815,8 @@ class UserReportRepository extends EntityRepository
                 if ($key == 'role_id') {
                     if ($value == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
                         $recordArray[$key] = 'Business';
+                    } elseif ($value == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
+                        $recordArray[$key] = 'Netsuite Subscription';)
                     } else {
                         $recordArray[$key] = 'Private';
                     }

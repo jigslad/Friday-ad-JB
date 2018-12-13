@@ -483,10 +483,10 @@ class AdImageManager
             $thumbSize = array_map('strtoupper', $thumbSize);
 
             $images = array();
-
+            
             foreach ($thumbSize as $d) {
-                $sourceImg = $this->getOrgImagePath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'_'.$image->getHash().'_'.$d.'.jpg';
-
+            	$sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'_'.$image->getHash().'_'.$d.'.jpg';
+                
                 if (file_exists($sourceImg)) {
                     $images[$d] = $sourceImg;
                 }
@@ -497,11 +497,20 @@ class AdImageManager
             if (file_exists($sourceImg)) {
                 $images[''] = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'_'.$image->getHash().'.jpg';
             }
-
-            if (count($images) > 0) {
-                foreach ($images as $key => $im) {
+            
+            //for cropped Image 
+            $sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'_'.$image->getHash().'_org.jpg';
+            if (file_exists($sourceImg)) {
+            	$images['crop_org'] = $sourceImg;
+            }
+            
+            
+            if (count($images) > 0) { 
+            	foreach ($images as $key => $im) {
                     unlink($im);
                     echo 'Removed file '.$im."\n";
+                    //logging removed file
+                    $this->container->get('clean_local_images_logger')->info('Removed file ' . $im);
                 }
             } else {
                 echo 'File not exists at '.$webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'*'."\n";
@@ -511,5 +520,70 @@ class AdImageManager
             $em->persist($image);
             $em->flush();
         }
+    }
+    
+    public function removeArchiveAdImagesFromLocal($image)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        if ($image->getArchiveAd()) {
+            $webPath = $this->container->get('kernel')->getRootDir().'/../web';
+            
+            $thumbSize = $this->container->getParameter('fa.image.thumb_size');
+            $thumbSize = array_map('strtoupper', $thumbSize);
+            
+            $images = array();
+            
+            foreach ($thumbSize as $d) {
+                $sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getArchiveAd()->getId().'_'.$image->getHash().'_'.$d.'.jpg';
+                
+                if (file_exists($sourceImg)) {
+                    $images[$d] = $sourceImg;
+                }
+            }
+            
+            $sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getArchiveAd()->getId().'_'.$image->getHash().'.jpg';
+            
+            if (file_exists($sourceImg)) {
+                $images[''] = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getArchiveAd()->getId().'_'.$image->getHash().'.jpg';
+            }
+            
+            //for cropped Image
+            $sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getArchiveAd()->getId().'_'.$image->getHash().'_org.jpg';
+            if (file_exists($sourceImg)) {
+                $images['crop_org'] = $sourceImg;
+            }
+            
+            
+            if (count($images) > 0) {
+                foreach ($images as $key => $im) {
+                    unlink($im);
+                    echo 'Removed file Archive Image '.$im."\n";
+                    //logging removed file
+                    $this->container->get('clean_local_images_logger')->info('Removed file Archive Image ' . $im);
+                }
+            } else {
+                echo 'Archive Image File not exists at '.$webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getArchiveAd()->getId().'*'."\n";
+            }
+        }
+    }
+    
+    
+    /**
+     * Check images exist on AWS
+     *
+     * @param boolean $keepOriginal Flag for keep original image.
+     */
+    public function checkImageExistOnAws($imageUrl)
+    {
+    	$client = new S3Client([
+    			'version'     => 'latest',
+    			'region'      => $this->container->getParameter('fa.aws_region'),
+    			'credentials' => [
+    					'key'    => $this->container->getParameter('fa.aws_key'),
+    					'secret' => $this->container->getParameter('fa.aws_secret'),
+    			],
+    	]);
+    	$response = $client->doesObjectExist($this->container->getParameter('fa.aws_bucket'), $imageUrl);
+    	return $response;
     }
 }

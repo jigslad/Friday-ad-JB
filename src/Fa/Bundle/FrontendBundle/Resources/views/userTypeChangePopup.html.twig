@@ -1,6 +1,7 @@
 {% set userBusinessRole = constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+{% set netsuiteuserBusinessRole = constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID') %}
 
-{% if app.user and app.user.getRole().getId() == userBusinessRole %}
+{% if app.user and (app.user.getRole().getId() == userBusinessRole or app.user.getRole().getId() == netsuiteuserBusinessRole) %}
     {% set userCreatedAt          = app.user.getCreatedAt() %}
     {% set userCreatedBeforeDate  = '21-09-2015 23:59:59' | date('U') %}
     {% set isUserTypeChanged      = app.user.getIsUserTypeChanged() %}

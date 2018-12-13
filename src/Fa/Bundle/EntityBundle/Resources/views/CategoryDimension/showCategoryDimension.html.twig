@@ -1,6 +1,12 @@
 {% extends 'FaFrontendBundle::layout.html.twig' %}
 {% set container = fetch_container_instance() %}
 
+{% block meta_robots %}
+    noindex, follow
+    {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {{ set_variables('metaRobots', {'metaRobotsArray': metaRobotsArray}) }}
+{% endblock %}
+
 {% block body %}
 <div class="row">
     <div class="columns">

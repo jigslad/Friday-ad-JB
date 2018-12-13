@@ -45,6 +45,35 @@
     	closeRevealModel('#'+modelId);
     }
 
+    function openMarkAdAsBoostedModal() {
+        var selectedBoostAdCnt = 0;var msgInsideModal = '';
+        var remainingCnt = {{(boostAdRemaining is defined and boostAdRemaining!='')?boostAdRemaining:0}};
+        var remainingCntAfterSelection = 0;
+        $(".boostad").each(function(){
+            if($(this).parent('span').hasClass('checked')) {
+                selectedBoostAdCnt = selectedBoostAdCnt+1;
+            }
+        });
+        remainingCntAfterSelection = remainingCnt - selectedBoostAdCnt;
+        if(selectedBoostAdCnt > remainingCnt) {
+            alert('Sorry! Your maximum boost count exceeds. Please select only '+ remainingCnt +'adverts ');
+        } else if(selectedBoostAdCnt==0) {
+            $('#markAdAsBoostedModal').hide();
+            $("#markAdAsBoostedModal").removeClass('manage-my-ads-list-pad-bot');
+        } else {
+            $('.selAdsCount').html(selectedBoostAdCnt);
+            $('.leftoutAdCount').html(remainingCntAfterSelection);
+            $('#markAdAsBoostedModal').show();
+            $("#markAdAsBoostedModal").addClass('manage-my-ads-list-pad-bot');
+            /*$('html, body').animate({
+                scrollTop: $("#markAdAsBoostedModal").offset().top
+            }, 2000);*/
+        }
+    }
+    function openMarkAdAsUnBoostModal() {
+        $('#markAdAsUnBoostModal').foundation('reveal', 'open');
+    }
+
     var ajaxLoading = false;
     function changeAdStatus(statusId)
     {

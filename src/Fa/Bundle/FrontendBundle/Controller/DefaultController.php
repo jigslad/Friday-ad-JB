@@ -382,6 +382,7 @@ class DefaultController extends ThirdPartyLoginController
             //set ad criteria to search
             $data['query_filters']                        = $searchParams;
             $data['query_filters']['item']['status_id']   = EntityRepository::AD_STATUS_LIVE_ID;
+            $searchParamDistance = (isset($searchParams['item']['distance']))?$searchParams['item']['distance']:CategoryRepository::OTHERS_DISTANCE;
             if ($location) {
                 $data['query_filters']['item']['location'] = $location.'|'.$searchDistance;
             }

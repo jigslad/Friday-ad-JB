@@ -73,7 +73,8 @@ class UpsellRepository extends EntityRepository
     const SHOP_FOR_SALE_LANDING_PAGE_POPULAR_SHOP_ID = 33;
     const SHOP_ADULT_LANDING_PAGE_FEATURED_BUSINESS_ID = 34;
 
-    const UPSELL_TYPE_BOOST_ADVERT_ID = 53;
+    const UPSELL_TYPE_BOOST_ADVERT_ID = 35;
+    const UPSELL_TYPE_AUTO_RENEW_ID = 36;
 
     /**
      * Prepare query builder.
@@ -177,6 +178,7 @@ class UpsellRepository extends EntityRepository
         $upsellTypeArray[self::UPSELL_TYPE_EXPANDED_LOCATION_ID]        = $translator->trans('Expanded Location');
         $upsellTypeArray[self::UPSELL_TYPE_JOB_LANDING_PAGE_JOB_OF_WEEK_ID]        = $translator->trans('Job of the week');
         $upsellTypeArray[self::UPSELL_TYPE_BOOST_ADVERT_ID]             = $translator->trans('Boost Advert');
+        $upsellTypeArray[self::UPSELL_TYPE_AUTO_RENEW_ID]               = $translator->trans('Auto Renew Advert');
 
         asort($upsellTypeArray);
         if ($addEmpty) {

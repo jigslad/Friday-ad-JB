@@ -85,7 +85,7 @@ function setUpUploader(id, removeFileList)
             },
             UploadComplete: function(up, file) {
                 isCompany = 0;
-                if ($("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+                if ($("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER" || $("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_NETSUITE_SUBSCRIPTION") {
                   isCompany = 1;
                 }
                 if (!errorFlag) {
@@ -127,7 +127,7 @@ function setUpUploader(id, removeFileList)
 function getImage()
 {
   var isCompany = 0;
-  if ($("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+  if ($("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER" || $("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_NETSUITE_SUBSCRIPTION") {
     isCompany = 1;
   }
   
@@ -169,7 +169,7 @@ function deleteImage(url)
 function getProfileBigImage(url)
 {
     var isCompany = 0;
-    if ($("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+    if ($("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER" || $("input[name='"+formName+"[user_roles]']:checked").val() == "ROLE_NETSUITE_SUBSCRIPTION") {
       isCompany = 1;
     }
     

@@ -71,4 +71,12 @@ services:
         class: Monolog\Handler\StreamHandler
         arguments: ['%kernel.logs_dir%/%kernel.environment%.ad_moderate.log']     
         
-           
+    clean_local_images_logger:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: [clean_local_images_logger]
+        calls:
+        - [pushHandler, ['@clean_local_images_handler']]
+        
+    clean_local_images_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: ['%kernel.logs_dir%/%kernel.environment%.clean_local_images.log']

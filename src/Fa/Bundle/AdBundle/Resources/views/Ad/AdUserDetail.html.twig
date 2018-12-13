@@ -1,7 +1,7 @@
 {% set currentRoute = app.request.get('_route') %}
 {% set userRepository = fetch_repository('FaUserBundle:User') %}
 {% set userRole = userRepository.getUserRole(adDetail['user']['id'], container) %}
-{% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}
+{% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
     {% set isCompany = 1 %}
 {% elseif userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
     {% set isCompany = 0 %}
@@ -31,14 +31,14 @@
     </div>
     {% set userCompanyLogo = null %}
     {% set userLogo = null %}
-    {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}
+    {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
         {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adDetail['user']['company_logo'], adDetail['user']['id'], null, null, true, true, adDetail['user']['status_id'], adDetail['user']['user_name']]) %}
     {% endif %}
     {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
         {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adDetail['user']['image'], adDetail['user']['id'], null, null, true, false, adDetail['user']['status_id'], adDetail['user']['user_name']]) %}
     {% endif %}
 
-    <div class="pvt-seller-img {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}bz-seller-img{% else %}seller-img-round{% endif %}">
+    <div class="pvt-seller-img {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}bz-seller-img{% else %}seller-img-round{% endif %}">
         <div class="pvt-seller-wrapper" id="left_profile_image_div">
             {% if userCompanyLogo %}
                 {{userCompanyLogo|raw}}
@@ -154,7 +154,7 @@
 
         {% set isBusinessAdPage = false %}
         {% if adDetail['user']['role_id'] is defined %}
-            {% if adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+            {% if (adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
                 {% set isBusinessAdPage = true %}
                 {% set profileLabel = 'Visit profile'|trans({}, 'frontend-show-ad') %}
                 {% if adDetail['user']['business_category_id'] is defined and adDetail['user']['business_category_id'] is not null and ((solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'HAS_PROFILE_EXPOSURE')) is defined and attribute(adDetail, constant(solrMapping ~ 'HAS_PROFILE_EXPOSURE'))) or currentRoute == 'show_draft_ad') %}

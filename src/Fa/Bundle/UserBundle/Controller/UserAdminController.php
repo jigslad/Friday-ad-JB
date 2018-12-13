@@ -148,7 +148,7 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
      */
     public function handleRole(array $data)
     {
-        if (isset($data['search']['role__id']) && $data['search']['role__id'] && ($data['search']['role__id'] == RoleRepository::ROLE_SELLER_ID || $data['search']['role__id'] == RoleRepository::ROLE_BUSINESS_SELLER_ID)) {
+        if (isset($data['search']['role__id']) && $data['search']['role__id'] && ($data['search']['role__id'] == RoleRepository::ROLE_SELLER_ID || $data['search']['role__id'] == RoleRepository::ROLE_BUSINESS_SELLER_ID || $data['search']['role__id'] == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID)) {
             $data['query_filters']['user']['role'] = $data['query_filters']['role']['id'];
             unset($data['query_filters']['role']);
         }
@@ -329,7 +329,7 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
 
         $role = $form->getData()->getRoles();
         if ($role != '') {
-            if ($role == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+            if ($role == RoleRepository::ROLE_BUSINESS_SELLER_ID || $role == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                 $isShowBusinessSeller = true;
             }
         }
@@ -410,7 +410,7 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
 
         $roles = $entity->getRoles();
         foreach ($roles as $role) {
-            if ($role->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
+            if ($role->getName() == RoleRepository::ROLE_BUSINESS_SELLER || $role->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
                 $isShowBusinessSeller = true;
             }
         }
@@ -542,7 +542,7 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
 
         $roles = $form->getData()->getRoles();
         foreach ($roles as $role) {
-            if ($role->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
+            if ($role->getName() == RoleRepository::ROLE_BUSINESS_SELLER || $role->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
                 $isShowBusinessSeller = true;
             }
         }
@@ -1010,5 +1010,92 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
         );
 
         return $this->render('FaUserBundle:UserAdmin:show.html.twig', $parameters);
+    }
+
+    /**
+     * Boost Overide of User entity.
+     *
+     * @param integer $id      Id.
+     * @param Request $request A Request object.
+     *
+     * @throws NotFoundHttpException
+     * @return Response|RedirectResponse A Response or RedirectResponse object.
+     */
+    public function boostOverideAction($id, Request $request)
+    {
+        if (!empty($id) && strpos($id, ',') == true) {
+            $userIds = explode(',', $id);
+        } else if (!is_array($id)) {
+            $userIds = array($id);
+        }
+
+        $goBackUrl = null;
+        $session = $this->container->get('session');
+        if ($session->has('go_back_url')) {
+            $goBackUrl = $session->get('go_back_url');
+        } else {
+            $goBackUrl = CommonManager::getAdminBackUrl($this->container);
+            $session->set('go_back_url', $goBackUrl);
+        }
+
+        if ($request->getMethod() != 'PUT') {
+            CommonManager::setAdminBackUrl($request, $this->container);
+        }
+
+        $backUrl = CommonManager::getAdminBackUrl($this->container);
+        // initialize form manager service
+        $formManager = $this->get('fa.formmanager');
+
+        $entities = $this->getRepository('FaUserBundle:User')->findBy(array('id' => $userIds));
+
+        try {
+            if (!$entities) {
+                throw $this->createNotFoundException($this->get('translator')->trans('Unable to find User entity.'));
+            }
+        } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
+            return $this->handleException($e, 'error', 'user_admin');
+        }
+
+        $options =  array(
+            'action' => $this->generateUrl('user_boost_overide', array('id' => $id)),
+            'method' => 'PUT'
+        );
+
+        $form = $formManager->createForm('fa_user_user_boost_overide_admin', $entities[0], $options);
+
+
+        if ($formManager->isValid($form)) {
+            try {
+                foreach ($entities as $entity) {
+                    $this->getEntityManager()->beginTransaction();
+                    $userPackageId = $form->get('user_package_id')->getData();
+                    $userBoostOveride = $form->get('boost_overide')->getData();
+
+                    $userPackage = $this->getRepository('FaUserBundle:UserPackage')->find($userPackageId);
+                    if($userPackage) {
+                       $userPackage->setBoostOveride($userBoostOveride);
+                       $this->getEntityManager()->persist($userPackage);
+                    }
+                    $this->getEntityManager()->getConnection()->commit();
+                }
+
+                $this->getEntityManager()->flush();
+                return $this->handleMessage($this->get('translator')->trans('Boost count has been overiden successfully.'), ($goBackUrl ? $goBackUrl : 'user_admin'));
+            } catch (\Exception $e) {
+                $this->getEntityManager()->getConnection()->rollback();
+                CommonManager::sendErrorMail($this->container, 'Error: Problem in Changing user boost advert maximum number', $e->getMessage(), $e->getTraceAsString());
+                return $this->handleMessage($this->get('translator')->trans('Sorry there is an issue in updating user boost count.'), ($backUrl ? $backUrl : 'user_admin'));
+            }
+        }
+
+        $parameters = array(
+            'entities' => $entities,
+            'userIds'  => $id,
+            'form'     => $form->createView(),
+            'heading'  => 'Boost Overide',
+            'goBackUrl' => $goBackUrl
+        );
+
+        return $this->render('FaUserBundle:UserAdmin:boostOveride.html.twig', $parameters);
     }
 }

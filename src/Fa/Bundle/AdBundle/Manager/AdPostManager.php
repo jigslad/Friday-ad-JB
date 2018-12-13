@@ -187,7 +187,7 @@ class AdPostManager
         if ($user) {
             $userRoles = $this->em->getRepository('FaUserBundle:User')->getUserRolesArray($user);
             if (count($userRoles)) {
-                if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $userRoles)) {
+                if ((in_array(RoleRepository::ROLE_BUSINESS_SELLER, $userRoles)) || (in_array(RoleRepository::ROLE_NETSUITE_SUBSCRIPTION, $userRoles))) {
                     $ad->setIsTradeAd(1);
 
                     // Save ad specific phone number for business user.
@@ -394,7 +394,7 @@ class AdPostManager
         if ($user) {
             $userRoles = $this->em->getRepository('FaUserBundle:User')->getUserRolesArray($user);
             if (count($userRoles)) {
-                if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $userRoles)) {
+                if ((in_array(RoleRepository::ROLE_BUSINESS_SELLER, $userRoles)) || (in_array(RoleRepository::ROLE_NETSUITE_SUBSCRIPTION, $userRoles))) {
                     $ad->setIsTradeAd(1);
 
                     // Save ad specific phone number for business user.

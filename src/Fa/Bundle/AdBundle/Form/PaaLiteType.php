@@ -1333,7 +1333,7 @@ class PaaLiteType extends AbstractType
             $user = $this->container->get('security.token_storage')
                 ->getToken()
                 ->getUser();
-            if ($user && ($user->getRole() && $user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID)) {
+            if ($user && ($user->getRole() && ($user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID || $user->getRole()->getId() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID))) {
                 return true;
             }
         }

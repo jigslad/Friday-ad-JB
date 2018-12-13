@@ -235,7 +235,7 @@
         }
         
         function showHideBusinessSellerFields() {
-            if ($("input[name='user_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+            if ($("input[name='user_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER" || $("input[name='user_registration[user_roles]']:checked").val() == "ROLE_NETSUITE_SUBSCRIPTION") {
                 $('#logo_label').html("{{businessLogoLabel}}");
                 $('.business_seller_fields').show();
                 $('.fa-select-white').selectmenu().selectmenu('refresh',true);

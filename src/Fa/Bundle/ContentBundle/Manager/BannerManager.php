@@ -255,6 +255,7 @@ class BannerManager
         $userTypeArray = array(
                           RoleRepository::ROLE_SELLER_ID          => 'private',
                           RoleRepository::ROLE_BUSINESS_SELLER_ID => 'dealer',
+                          RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID => 'netsuite subscriber',
                          );
         if (in_array($roleId, $userTypeArray)) {
             return $userTypeArray[$roleId];

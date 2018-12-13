@@ -150,7 +150,7 @@ class UserListener
         $this->removeUserCache($entity);
 
         //if business seller then add new entry in user_site
-        if ($entity->getRole() && $entity->getRole()->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
+        if ($entity->getRole() && ($entity->getRole()->getName() == RoleRepository::ROLE_BUSINESS_SELLER || $entity->getRole()->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION)) {
             $userSite = $this->container->get('doctrine')->getManager()->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $entity->getId()));
             if (!$userSite) {
                 $userSite = new UserSite();

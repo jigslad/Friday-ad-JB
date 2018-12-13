@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Fa\Bundle\UserBundle\Repository\RoleRepository;
 
 /**
  * This command is used to send queued email to users.
@@ -100,8 +101,9 @@ EOF
         foreach ($emailQueues as $emailQueue) {
             try {
                 $user = $emailQueue->getUser();
+                $userRoleId = ($user ? $user->getRole()->getId() : 0);
                 //send email only if ad has user and status is active.
-                if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer())) {
+                if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                     switch ($searchParam['email_queue']['identifier']) {
                         case 'ad_expires_tomorrow':
                             $this->em->getRepository('FaAdBundle:Ad')->sendExpireTomorrowAlertEmailByUser($user, $this->getContainer());

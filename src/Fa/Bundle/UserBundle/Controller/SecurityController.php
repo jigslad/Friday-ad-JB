@@ -319,7 +319,7 @@ class SecurityController extends ThirdPartyLoginController
                 $em->persist($user);
                 $em->flush();
 
-                if (!empty($requestParams['type']) && $requestParams['type'] == 'Private' && $userRoleId == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+                if (!empty($requestParams['type']) && $requestParams['type'] == 'Private' && ($userRoleId == RoleRepository::ROLE_BUSINESS_SELLER_ID || $userRoleId == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID)) {
                     $em->getRepository('FaUserBundle:User')->updateBusinessUserToPrivate($userId, $this->container);
                 } elseif (!empty($requestParams['type']) && $requestParams['type'] == 'Business' && $userRoleId == RoleRepository::ROLE_SELLER_ID) {
                     $em->getRepository('FaUserBundle:User')->updatePrivateUserToBusiness($userId, null, $this->container);

@@ -23,6 +23,13 @@
 {% block title %}
     {{'My Profile'|trans({}, 'frontend-my-profile')}}
 {% endblock %}
+
+
+{% block canonical_url %}
+    {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+{% endblock %}
+
+
 {% set showUpgradeBtn = true %}
 {% if (activeShopPackage and activeShopPackage.getPackage() and activeShopPackage.getPackage().getPackageText() == constant('Fa\\Bundle\\PromotionBundle\\Repository\\PackageRepository::SHP_PACKAGE_PREMIUM_TEXT')) or (activeShopPackage and activeShopPackage.getPackage().getPrice() and activeShopPackage.getRemark() == 'choose-package-backend')%}
     {% set showUpgradeBtn = false %}

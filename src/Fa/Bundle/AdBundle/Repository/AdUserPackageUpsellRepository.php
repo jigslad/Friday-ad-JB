@@ -440,4 +440,23 @@ class AdUserPackageUpsellRepository extends EntityRepository
             return false;
         }
     }
+
+    /**
+     *
+     * @return array
+     */
+    public function getAutoRenewUpsellByAdId($ad_id)
+    {
+        $queryBuilder = $this->createQueryBuilder(self::ALIAS)
+            ->select(self::ALIAS, UpsellRepository::ALIAS)
+            ->innerJoin(self::ALIAS . '.upsell', UpsellRepository::ALIAS)
+            ->where(self::ALIAS . '.status=1')
+            ->andWhere(self::ALIAS . '.ad_id = :adId')
+            ->andWhere(UpsellRepository::ALIAS . '.type='.UpsellRepository::UPSELL_TYPE_AUTO_RENEW_ID)
+            ->setParameter('adId', $ad_id)
+            ->orderBy(self::ALIAS . '.ad_id', 'asc');
+            $getAutoRenewUpsellResults = $queryBuilder->getQuery()->getResult();
+            if(!empty($getAutoRenewUpsellResults)) { return $getAutoRenewUpsellResults; }
+            else { return array(); }
+    }
 }

@@ -1101,7 +1101,7 @@ class CategoryRepository extends NestedTreeRepository
 
         $tableName = $this->_em->getClassMetadata('FaEntityBundle:Category')->getTableName();
         $headerCategoryArray = array();
-        $query = 'SELECT parent.id,parent.name,parent.lvl,parent.slug,parent.parent_id,parent.full_slug
+        $query = 'SELECT parent.id,parent.name,parent.lvl,parent.slug,parent.parent_id,parent.full_slug,node.include_as_main_category_in_header,parent.is_children_header_sortable,node.header_sort_order
                 FROM '.$tableName.' AS node,
                     '.$tableName.' AS parent
                 WHERE node.lft BETWEEN parent.lft AND parent.rgt
@@ -1124,7 +1124,7 @@ class CategoryRepository extends NestedTreeRepository
                     }
                 }
 
-                $categoryArray = array('name' => $category['name'], 'id' => $category['id'], 'slug' => $category['slug'], 'count' => $count, 'full_slug' => $category['full_slug'], 'children' => array());
+                $categoryArray = array('name' => $category['name'], 'id' => $category['id'], 'slug' => $category['slug'], 'count' => $count, 'full_slug' => $category['full_slug'], 'children' => array(),'header_sortable'=>$category['is_children_header_sortable'],'sort_ord'=> $category['header_sort_order'] );
 
                 if ($category['lvl'] == 1 && !array_key_exists($category['id'], $headerCategoryArray)) {
                     if (isset($categoryClassArray[$category['id']])) {
@@ -1132,10 +1132,9 @@ class CategoryRepository extends NestedTreeRepository
                     }
                     $headerCategoryArray[$category['id']] = $categoryArray;
                     $categoryId1 = $category['id'];
-                } elseif ($category['lvl'] == 2 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'])) {
+                } elseif (($category['lvl'] == 2 || ($category['lvl'] == 3 && $category['include_as_main_category_in_header'] == 1)) && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'])) {
                     $headerCategoryArray[$categoryId1]['children'][$category['id']] = $categoryArray;
                     $categoryId2 = $category['id'];
-                    asort($headerCategoryArray[$categoryId1]['children']);
                 } elseif ($category['lvl'] == 3 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'])) {
                     $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$category['id']] = $categoryArray;
                     $categoryId3 = $category['id'];
@@ -1171,6 +1170,10 @@ class CategoryRepository extends NestedTreeRepository
 
                 $headerCategoryArray[self::MOTORS_ID]['children'] = ($carsCategoryArray + $motorsCategoryArray);
             }
+
+            if($headerCategoryArray[self::ANIMALS_ID]['header_sortable']==1) {
+                $headerCategoryArray[self::ANIMALS_ID]['children'] = CommonManager::msort($headerCategoryArray[self::ANIMALS_ID]['children'], 'sort_ord');
+        	}
         }
 
         //check for all main categories

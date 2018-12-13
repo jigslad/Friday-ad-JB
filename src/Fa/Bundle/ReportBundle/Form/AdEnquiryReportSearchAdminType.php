@@ -195,6 +195,7 @@ class AdEnquiryReportSearchAdminType extends AbstractType
             RoleRepository::ROLE_SELLER_ID => 'Private',
             RoleRepository::ROLE_BUSINESS_SELLER_ID => 'Business',
             RoleRepository::ROLE_BUSINESS_SELLER_ID.'-paid' => ' Business with paid profile',
+            RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID => 'Netsuite Subscription',
         );
     }
 }

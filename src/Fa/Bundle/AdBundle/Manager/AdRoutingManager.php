@@ -890,7 +890,7 @@ class AdRoutingManager
 
         if ($userRole == RoleRepository::ROLE_SELLER) {
             return $this->router->generate('show_private_profile_page', array('profileNameSlug' => $profileNameSlug, 'userId' => CommonManager::encryptDecrypt($this->container->getParameter('profile_page_encryption_key'), $userId)), true);
-        } elseif ($userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
+        } elseif ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             return $this->router->generate('show_business_profile_page', array('profileNameSlug' => $profileNameSlug), true);
         }
 
@@ -911,7 +911,7 @@ class AdRoutingManager
 
         if ($userRole == RoleRepository::ROLE_SELLER) {
             return $this->router->generate('show_private_user_ads', array('profileNameSlug' => $profileNameSlug, 'userId' => CommonManager::encryptDecrypt($this->container->getParameter('profile_page_encryption_key'), $userId), 'pageString' => 'ads'), true);
-        } elseif ($userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
+        } elseif ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             return $this->router->generate('show_business_user_ads', array('profileNameSlug' => $profileNameSlug), true);
         }
 

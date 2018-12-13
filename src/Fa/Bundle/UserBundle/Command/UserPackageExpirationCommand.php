@@ -77,6 +77,23 @@ class UserPackageExpirationCommand extends ContainerAwareCommand
                     $package = $userPackage->getPackage();
                     echo 'Subscription package expired for user -> '.$user->getId()."\n";
                     $this->em->getRepository('FaUserBundle:UserPackage')->assignFreePackageToUser($user, 'downgraded-to-free-package', $this->getContainer());
+                    
+                    //unboost ads in DB
+                    $this->em->getRepository('FaAdBundle:Ad')->unboostAdByUserId($user->getId(), 0);
+                    $this->em->getRepository('FaAdBundle:BoostedAd')->unboostAdByUserId($user->getId());
+
+                    //unboost in solr
+                    $memoryLimit = '';
+                    if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
+                        $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
+                }
+                    $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$user->getId().'" >/dev/null & ';
+                    $output->writeln($command, true);
+                    passthru($command, $returnVar);
+
+                    if ($returnVar !== 0) {
+                        $output->writeln('Error occurred during subtask', true);
+                    }
                 }
 
                 $last_id = $userPackage->getId();

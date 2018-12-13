@@ -181,7 +181,7 @@
         }
         
         function showHideBusinessSellerFields() {
-            if ($("input[name='fa_paa_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+            if ($("input[name='fa_paa_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER" || $("input[name='fa_paa_registration[user_roles]']:checked").val() == "ROLE_NETSUITE_SUBSCRIPTION") {
                 $('.business_seller_fields').show();
                 $('.fa-select').selectmenu().selectmenu('refresh',true);
                 $('.profile-logo-ins').addClass('bz-profile-btn');
@@ -252,7 +252,7 @@
     function removeImage()
     {
       var isCompany = 0;
-      if ($("input[name='fa_paa_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+      if ($("input[name='fa_paa_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER" || $("input[name='fa_paa_registration[user_roles]']:checked").val() == "ROLE_NETSUITE_SUBSCRIPTION") {
         isCompany = 1;
       }
       $.ajax({

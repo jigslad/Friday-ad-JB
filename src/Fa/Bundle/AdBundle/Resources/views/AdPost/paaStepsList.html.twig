@@ -36,13 +36,7 @@
             {{ 'Advertise on Friday-Ad'|trans({}, 'frontend-paa') }}
         {% endif %}
         </h3>
-        {% set stepremaining = (totalSteps-step+1) %}
-        {% set dispStepCount = stepremaining ~ ' steps' %}
-        {% if stepremaining == 0 %}
-            {% set stepremaining = 1  %}
-            {% set dispStepCount = stepremaining ~ ' step' %}
-        {% endif %}
-        <div class="step-to-complete"><span>{{ '%step_count%  left to complete your ad'|trans({'%step_count%' : dispStepCount}, 'frontend-paa') }}</span></div>
+        <div class="step-to-complete"><span>{{ '%step_count% steps to complete your ad'|trans({'%step_count%' : (totalSteps - step + 1)}, 'frontend-paa') }}</span></div>
     </div>
     <ul class="step-nav">
         {% set step1Class = 'step-off' %}
@@ -95,7 +89,7 @@
             </li>
         {% endif %}
     </ul>
-    {% if step == 1 and app.user and app.user.getRole() and app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+    {% if step == 1 and app.user and app.user.getRole() and (app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
         <div class="paaLeftContainer">
             <div class="dpaa-section text-center hide-for-small-only" id="paaLeftPrintItem">
                 <span class="self-service-img">&nbsp;</span>

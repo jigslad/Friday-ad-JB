@@ -314,6 +314,27 @@ class Category
     private $has_recommended_slot_searchlist = false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="include_as_main_category_in_header", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $include_as_main_category_in_header;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_children_header_sortable", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $is_children_header_sortable;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="header_sort_order", type="smallint", length=6, nullable=true)
+     */
+    private $header_sort_order;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -1186,5 +1207,77 @@ class Category
     public function getHasRecommendedSlotSearchlist()
     {
         return $this->has_recommended_slot_searchlist;
+    }
+
+    /**
+     * Set include_as_main_category_in_header.
+     *
+     * @param boolean $include_as_main_category_in_header
+     * @return Category
+     */
+
+    public function setIncludeAsMainCategoryInHeader($include_as_main_category_in_header)
+    {
+        $this->include_as_main_category_in_header = $include_as_main_category_in_header;
+
+        return $this;
+    }
+
+    /**
+     * Get include_as_main_category_in_header.
+     *
+     * @return boolean
+     */
+    public function getIncludeAsMainCategoryInHeader()
+    {
+        return $this->include_as_main_category_in_header;
+    }
+
+    /**
+     * Set is_children_header_sortable.
+     *
+     * @param boolean $is_children_header_sortable
+     * @return Category
+     */
+
+    public function setIsChildrenHeaderSortable($is_children_header_sortable)
+    {
+        $this->is_children_header_sortable = $is_children_header_sortable;
+
+        return $this;
+    }
+
+    /**
+     * Get is_children_header_sortable.
+     *
+     * @return boolean
+     */
+    public function getIsChildrenHeaderSortable()
+    {
+        return $this->is_children_header_sortable;
+    }
+
+    /**
+     * Set header_sort_order.
+     *
+     * @param boolean $header_sort_order
+     * @return Category
+     */
+
+    public function setHeaderSortOrder($header_sort_order)
+    {
+        $this->header_sort_order = $header_sort_order;
+
+        return $this;
+    }
+
+    /**
+     * Get header_sort_order.
+     *
+     * @return integer
+     */
+    public function getHeaderSortOrder()
+    {
+        return $this->header_sort_order;
     }
 }

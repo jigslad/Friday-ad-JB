@@ -68,7 +68,7 @@
     }
     
     function showHideBusinessSellerFields() {
-        if ($("input[name='fa_user_user_account_profile[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER") {
+        if ($("input[name='fa_user_user_account_profile[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER" || $("input[name='fa_user_user_account_profile[user_roles]']:checked").val() == "ROLE_NETSUITE_SUBSCRIPTION")  {
             $('.business_seller_fields').show();
             $('.myacc-profile-dtl').show();
             $('.fa-select-white').selectmenu().selectmenu('refresh',true);

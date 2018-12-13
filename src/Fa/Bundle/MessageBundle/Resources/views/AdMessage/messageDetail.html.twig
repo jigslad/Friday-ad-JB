@@ -21,14 +21,14 @@
 
     <div class="clearfix">
         <div class="large-3 columns">
-            {% if userLogosArray[arrayMessage['sender_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID')%}
+            {% if (userLogosArray[arrayMessage['sender_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or (userLogosArray[arrayMessage['sender_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID'))) %}
                 {% set isCompanyUser = true %}
             {% else %}
                 {% set isCompanyUser = false %}
             {% endif %}
 
             {% if arrayMessage['sender_id'] == app.user.getId() %}
-                {% if userLogosArray[arrayMessage['receiver_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID')%}
+                {% if (userLogosArray[arrayMessage['receiver_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or userLogosArray[arrayMessage['receiver_id']]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
                     {% set isCompanyUser = true %}
                 {% else %}
                     {% set isCompanyUser = false %}

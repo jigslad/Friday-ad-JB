@@ -1,3 +1,5 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set container = fetch_container_instance() %}
 {% set type = app.request.attributes.get('type') %}
 {% set adStatusSold = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
 {% set adStatusLive = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
@@ -7,11 +9,41 @@
 {% set mainRootCategoriesArray = {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID'), 4: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
 {% set adStatusInModeration = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
 
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+
+{% set adUserPackageUpsellRepository = fetch_repository('FaAdBundle:AdUserPackageUpsell') %}
+{% set getAutoRenewResultById = adUserPackageUpsellRepository.getAutoRenewUpsellByAdId(adId) %}
+{% if getAutoRenewResultById is not empty %}
+    {% set isAutoRenewAd = 1 %}
+{% else %}
+    {% set isAutoRenewAd = 0 %}
+{% endif %}
+
+{% set upgradePackagesCount = 0 %}
+{% set userRoleId = app.user.getRole().getId() %}
+{% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and ( adPackageArray[adId] is defined and adPackageArray[adId] is not null) %}
+    {% set categoryId       =  ad['cat_id'] %}
+    {% set adLocationRepository = fetch_repository('FaAdBundle:AdLocation') %}
+    {% set locationGroupIds = adLocationRepository.getLocationGroupIdForAd(adId, true) %}
+    {% set userRolesArray = {0:constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')} %}
+
+    {% set packageRuleRepository = fetch_repository('FaPromotionBundle:PackageRule') %}
+    {% set upgradePackages = packageRuleRepository.getActivePackagesByCategoryId(categoryId, locationGroupIds, userRolesArray) %}
+    {% set upgradePackagesCount = upgradePackages|length %}
+{% endif %}
+
 {% if not app.request.isXmlHttpRequest() %}
 <div class="manage-item-list" id="item_card_{{adId}}">
 {% endif %}
     <div class="row">
-        <div class="large-7 columns">
+        {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active' or currentRoute=='ajax_manage_my_ads_get_status') and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
+            <div class="medium-1 large-1 small-24 columns"><span class="custom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span></div>
+        {% elseif isBoostEnabled is defined and isBoostEnabled==1 and currentRoute == 'manage_my_ads_boosted' and (userBusinessCategory is defined and  userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
+            <div class="medium-1 large-1 small-24 columns"><span class="custom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span></div>
+        {% else %}
+            <div class="medium-1 large-1 columns"><span class="dummbychk"></span></div>
+        {% endif %}
+        <div class="small-10 medium-5 large-6 columns">
             <div class="manage-list-img">
                 {% if ad['status_id'] == adStatusLive %}
                     <a href="{{adUrl}}" target="_blank">
@@ -31,9 +63,9 @@
               {% if ad.status_id is defined and ad.status_id is not null %}
                   {% set adStatusClass = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdStatusCssClassByStatusId', [ad.status_id]) %}
                       {% if adId in inModerationLiveAdIds and ad.status_id == adStatusLive %}
-                      <span class="item-status hide-for-small-only {{adStatusClass}}-edit" id="item_status_{{ ad['id'] }}">
+                      <span class="item-status {{adStatusClass}}-edit" id="item_status_{{ ad['id'] }}">
                       {% else %}
-                      <span class="item-status hide-for-small-only {{adStatusClass}}" id="item_status_{{ ad['id'] }}">
+                      <span class="item-status {{adStatusClass}}" id="item_status_{{ ad['id'] }}">
                       {% endif %}
                             {% if ad.status_id == adStatusSold and rootCategoryId in mainRootCategoriesArray %}
                                 {{'Successful'|trans({}, 'frontend-manage-my-ad')}}
@@ -47,20 +79,20 @@
                             {% endif %}
                       </span>
                       {% if ad.status_id == adStatusInModeration and modToolTipText is defined %}
-                      <div class="image-tooltip-wrapper in-mod-tooltip">
+                      <div class="image-tooltip-wrapper in-mod-tooltip hide-for-small-only">
                       	<span class="image-tooltip">{{ modToolTipText['inModeration'] }}</span>
                         <span class="info-icon">info</span>
                       </div>
                       {% endif %}
                       {% if adId in inModerationLiveAdIds and ad.status_id == adStatusLive and modToolTipText is defined %}
-                      <div class="image-tooltip-wrapper in-mod-tooltip">
+                      <div class="image-tooltip-wrapper in-mod-tooltip hide-for-small-only">
                       	<span class="image-tooltip">{{ modToolTipText['liveEdit'] }}</span>
                         <span class="info-icon">info</span>
                       </div>
                       {% endif %}
               {% endif %}
         </div>
-        <div class="large-12 columns">
+        <div class="small-14 medium-9 large-10 columns">
             <div class="clearfix">
                 <h3 id="item_detail_link_{{adId}}">
                     {% if ad['status_id'] == adStatusLive %}
@@ -69,25 +101,40 @@
                         {{ad['title']}}
                     {% endif %}
                 </h3>
+                {% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
+                    <div {% if ad['town_id'] is defined or ad['area_id'] is defined or ad['locality_id'] is defined %} class="list-miles" {% endif %}>
+                        {% if ad['locality_id'] is defined and ad['locality_id'] is not null %}
+                            <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', ad['locality_id']) }}</b>
+                        {% elseif ad['town_id'] is defined and ad['town_id'] is not null %}
+                            {% if ad['area_id'] is defined and ad['area_id'] is not null %}
+                                <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['area_id']) ~ ', ' ~ entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['town_id']) }}</b>
+                            {% else %}
+                                <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['town_id']) }}</b>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endif %}
                 <div class="manage-price-box clearfix">
                     <div class="manage-price">
                         {% if ad.price > 0 %}
                             {{ format_currency(ad.price) }}
                         {% else %}
-                            &nbsp;
+                            
                         {% endif %}
                     </div>
-                    {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null %}
-                        <span class="item-status pkg-free hide-for-small-only">Package: {{adPackageArray[adId]['title']}}</span>
-                    {% endif %}
                 </div>
-                <div class="manage-list-desc hide-for-small-only">
+
+                    {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null %}
+                    <span class="item-status pkg-free">Package: {{adPackageArray[adId]['title']}}</span>
+                    {% endif %}
+                <div class="clearfix"></div>
+                <div class="manage-list-desc manage-list-desc-desk-tab show-for-small-up-only">
                     {% if ad.qty is not null and ad.qty > 1 and (type == 'active' or type == '') %}
                         {{'Quantity remaining'|trans({}, 'frontend-manage-my-ad')}}: {{ ad.qty }}<br />
                     {% endif %}
                     {{'Ad reference'|trans({}, 'frontend-manage-my-ad')}}: {{ ad.id }}<br />
 
-                {% if ad.expires_at is defined and ad.expires_at is not null and ad.published_at is defined and ad.published_at is not null%}
+                {% if ad.expires_at is defined and ad.expires_at is not null and ad.published_at is defined and ad.published_at is not null and isAutoRenewAd==0 %}
                     {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
                         {{'Expired (%expire_date%)'|trans({'%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}<br />
                     {% elseif ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') and ad.sold_at is defined and ad.sold_at is not null %}
@@ -110,10 +157,10 @@
             </div>
         </div>
 
-        <div class="show-for-small-only large-24 columns item-status-mob clearfix">
+        {#<div class="show-for-small-only small-24 medium-24 large-24 columns item-status-mob clearfix">
             {% if ad.status_id is defined and ad.status_id is not null %}
                   {% set adStatusClass = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdStatusCssClassByStatusId', [ad.status_id]) %}
-                  <span class="item-status {{adStatusClass}}" id="item_status_{{ ad['id'] }}">
+                  <span class="small-10 medium-10 large-10 columns item-status {{adStatusClass}}" id="item_status_{{ ad['id'] }}">
                         {% if ad.status_id == adStatusSold and rootCategoryId in mainRootCategoriesArray %}
                             {{'Successful'|trans({}, 'frontend-manage-my-ad')}}
                         {% elseif ad.status_id == adStatusRejectedWithReason%}
@@ -128,11 +175,11 @@
               {% endif %}
 
               {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null %}
-                  <span class="item-status pkg-free">Package: {{adPackageArray[adId]['title']}}</span>
+                  <span class="small-14 medium-14 large-14 columns item-status pkg-free">Package: {{adPackageArray[adId]['title']}}</span>
               {% endif %}
-        </div>
+        </div>#}
 
-        <div class="manage-list-desc show-for-small-only large-24 columns">
+        <div class="manage-list-desc show-for-small-only small-24 medium-24 large-24 columns">
                     {% if ad.qty is not null and ad.qty > 1 and type == 'active' %}
                         {% if ad.qty_sold is not null %}
                             {% set qtyRemaining = ad.qty - ad.qty_sold %}
@@ -163,24 +210,41 @@
                 {% endif %}
                 {{'Ad views'|trans({}, 'frontend-manage-my-ad')}}: {{ adViewCounter }}<br />
                 {% if ad['status_id'] == adStatusLive %}
-                    <a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{adUrl}}', '{{ad['title']}}')" class="mobile-share">&nbsp;</a>
+                    <a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>
                 {% endif %}
         </div>
 
-        <div class="large-5 columns">
-            <div class="manage-item-btns">
+        <div class="small-24 medium-9 large-7 columns">
+            <div class="manage-item-btns text-right">
+                <div style="width:100%">
+                    <span class="ad-edit"><a class="xs-btn-2 manage-item-button button " href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a></span>
+                    {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                        <span class="ad-remove"><a class="xs-btn-2 manage-item-button button last-btn" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</a></span>
+                    {% endif %}
+                </div>
+
+                <div style="width:100%">
                 {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
-                    <a class="primary-btn-1 xs-thin-btn button expand active" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a>
+                        <a class="primary-btn-1 manage-item-button xs-thin-btn button  active" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a>
                 {% endif %}
                 {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
-                    <a class="primary-btn-1 xs-thin-btn button expand active" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a>
+                        {% if ((userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and upgradePackagesCount > 1) or (userRoleId != constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+                            <a class="primary-btn-1 manage-item-button xs-thin-btn button  active" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a>
                 {% endif %}
-                <a class="xs-btn-1 button expand" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>
-                {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
-                    <a class="xs-btn-2 button expand last-btn" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{{'Remove'|trans({}, 'frontend-manage-my-ad')}}</a>
+                {% endif %}
+
+                    {% if ((isBoostEnabled is defined and isBoostEnabled==1) and (boostAdRemaining is defined and boostAdRemaining > 0) and (currentRoute == 'manage_my_ads_active' or currentRoute=='ajax_manage_my_ads_get_status' or  currentRoute == 'manage_my_ads_boosted')and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive) %}
+                        <a id="boost_ad_id_{{ad['id']}}" onclick="boostad(this)" class="xs-btn-1 manage-item-button button boost_your_ad not_boosted_ad package_boosted_ad"><span>Boost</span></a>
+                    {% endif %}
+                </div>
+
+                {% if isBoostEnabled is defined and isBoostEnabled==1 and ad.boosted_at is defined and ad.is_boosted==1 %}
+                <div class="list-boosted-hours list-boosted-hours-desk-tab show-for-small-up-only">
+                    {{ 'Boosted'|trans({}, 'frontend-manage-my-ad') }} {{ (ad.boosted_at|time_ago_in_words) }}
+                </div>
                 {% endif %}
                 {% if ad['status_id'] == adStatusLive %}
-                    <div class="dtl-social-icons manage-list-social-icons text-left hide-for-small-only">
+                    <div class="clearfix dtl-social-icons-desk-tab dtl-social-icons manage-list-social-icons show-for-small-up-only">
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/facebook/offer?url={{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0','Facebook');" href="javascript:void(0);" title="{{'Facebook'|trans({}, 'frontend-show-ad')}}" class="dtl-fb" id="dtl-fb-id"></a>
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/twitter/offer?url={{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Twitter');" href="javascript:void(0);" title="{{'Twitter'|trans({}, 'frontend-show-ad')}}" class="dtl-twi" id="dtl-twi-id"></a>
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/google_plusone_share/offer?url={{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'GooglePlus');" href="javascript:void(0);" title="{{'Google Plus'|trans({}, 'frontend-show-ad')}}" class="dtl-gpl" id="dtl-gpl-id"></a>
@@ -194,9 +258,19 @@
 
         </div>
     </div>
-    <div class="list-created-hours hide-for-small-only">
-        {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{(ad.updated_at ? ad.updated_at : ad.created_at)|time_ago_in_words}}
+    {% set createdInwords = ad['ad_date'] |time_ago_in_words %}
+    {% set boostedAtInWords = '' %}
+    {% if isBoostEnabled is defined and isBoostEnabled==1 and ad.boosted_at is defined and ad.is_boosted==1 %}
+        {% set boostedAtInWords = ad.boosted_at|time_ago_in_words %}
+    {% endif %}
+    {% if isBoostEnabled is defined and isBoostEnabled==1 and ad.boosted_at is defined and ad.is_boosted==1 and (createdInwords == boostedAtInWords) %}
+        
+    {% else %}
+        <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
+            {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords}}
     </div>
+    {% endif %}
+
     {% if ad.status_id == adStatusRejectedWithReason or ad.status_id == adStatusRejected %}
         {% if adModerateArray[adId] is defined and adModerateArray[adId] is not null %}
             {% set adModerateResponseArray = adModerateArray[adId]['moderation_response'] %}

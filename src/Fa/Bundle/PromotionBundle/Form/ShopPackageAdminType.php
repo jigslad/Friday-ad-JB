@@ -106,8 +106,8 @@ class ShopPackageAdminType extends AbstractType
                     'label' => 'User type',
                     'query_builder' => function (RoleRepository $er) {
                         return $er->createQueryBuilder(RoleRepository::ALIAS)
-                        ->where(RoleRepository::ALIAS.'.name = :name')
-                        ->setParameter('name', 'ROLE_BUSINESS_SELLER');
+                        ->where(RoleRepository::ALIAS.'.name IN (:name)')
+                        ->setParameter('name', array('ROLE_BUSINESS_SELLER','ROLE_NETSUITE_SUBSCRIPTION'));
                     }
                 )
             )
@@ -183,6 +183,22 @@ class ShopPackageAdminType extends AbstractType
                 array(
                     'required' => false,
                     'label'    => 'Admin only package',
+                )
+            )
+            ->add(
+                'monthly_boost_count',
+                TextType::class,
+                array(
+                    'required' => false,
+                    'label'=>'Max no. of boost per month',
+                )
+            )
+            ->add(
+                'boost_ad_enabled',
+                CheckboxType::class,
+                array(
+                    'required' => false,
+                    'label'    => 'Boost button enabled',
                 )
             )
             ->add('save', SubmitType::class)

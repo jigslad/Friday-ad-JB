@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Fa\Bundle\UserBundle\Repository\RoleRepository;
 
 /**
  * This command is used to send renew your ad alert to users for before given time
@@ -130,13 +131,18 @@ EOF
         foreach ($ads as $ad) {
             $emailTemplate = 'ad_refresh_upsell_'.$days.'_days';
             $duration      = CommonManager::encryptDecrypt('R', time());
-            if (($this->em->getRepository('FaAdBundle:Ad')->checkIsWeeklyRefreshAd($ad->getId()) == false) || $ad->getWeeklyRefreshAt() == null) {
-                //$this->em->getRepository('FaAdBundle:Ad')->sendRefreshAdEmail($ad, $emailTemplate, $duration, $this->getContainer());
-                $user = ($ad->getUser() ? $ad->getUser() : null);
-                $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue($emailTemplate, $user, $ad, $this->getContainer());
-                $output->writeln('Ad refresh email has been sent to AD ID: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
-            } else {
-                $refreshedAds[] = $ad->getId();
+
+            $userRoleId = ($ad->getUser() ? $ad->getUser()->getRole()->getId() : 0);
+
+            if($userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID && $userRoleId!=0) {
+                if (($this->em->getRepository('FaAdBundle:Ad')->checkIsWeeklyRefreshAd($ad->getId()) == false) || $ad->getWeeklyRefreshAt() == null) {
+                    //$this->em->getRepository('FaAdBundle:Ad')->sendRefreshAdEmail($ad, $emailTemplate, $duration, $this->getContainer());
+                    $user = ($ad->getUser() ? $ad->getUser() : null);
+                    $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue($emailTemplate, $user, $ad, $this->getContainer());
+                    $output->writeln('Ad refresh email has been sent to AD ID: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
+                } else {
+                    $refreshedAds[] = $ad->getId();
+                }
             }
         }
         $this->em->clear();

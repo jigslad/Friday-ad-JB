@@ -1338,7 +1338,7 @@ abstract class AdPostAdminType extends AbstractType
             $user = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('id' => $this->request->get('user_id', null)));
         }
 
-        if ($user && ($user->getRole() && $user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID)) {
+        if ($user && ($user->getRole() && ($user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID || $user->getRole()->getId() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID))) {
             return true;
         }
 

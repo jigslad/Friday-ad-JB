@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Fa\Bundle\UserBundle\Repository\RoleRepository;
 
 /**
  * This command is used to send 7 days after an ad first expires if the user has not reposted the ad and it is still inactive.
@@ -133,12 +134,14 @@ EOF
             $entityManager->persist($ad);
             $entityManager->flush($ad);
             $user_id = $user ? $user->getId() : null;
-            if (!$ad->getIsFeedAd()) {
+            $userRoleId = ($ad->getUser() ? $ad->getUser()->getRole()->getId() : 0);
+            
+            if (!$ad->getIsFeedAd() && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                 $this->em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('renewal_reminder', $ad->getId(), $user_id);
             }
 
             //send email only if ad has user and status is active and not feed ad.
-            if (!$ad->getIsFeedAd() && $user && CommonManager::checkSendEmailToUser($user_id, $this->getContainer())) {
+            if (!$ad->getIsFeedAd() && $user && CommonManager::checkSendEmailToUser($user_id, $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                 //$this->em->getRepository('FaAdBundle:Ad')->sendRefreshAdEmail($ad, 'confirmation_of_ad_refreshing', null, $this->getContainer());
                 $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('renewal_reminder', $user, $ad, $this->getContainer());
                 $output->writeln('Renewal Reminder for ad id: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);

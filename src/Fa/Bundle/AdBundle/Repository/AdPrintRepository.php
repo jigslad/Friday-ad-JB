@@ -261,13 +261,13 @@ class AdPrintRepository extends EntityRepository
         $currentDayOfWeek    = date('N', $rundate);
         $currentTime         = date('H:i', $rundate);
 
-        // for xmas fix 2017
-        // for Tunbridge Wells, Hastings & Uckfield 19th December 6pm and 2nd January 6pm HAVE to be booked with publish date 05th January.
-        if (in_array($printEdition->getId(), array(2, 5, 9)) && $rundate > strtotime('2017-12-19 18:00:00') && $rundate < strtotime('2018-01-02 18:00:00')) {
-            $insertDate = strtotime('2018-01-05 00:00:00');
-        }  // for Eastbourne, Brighton, Crawley, Worthing & Seaford 20th December 6pm and 3rd January 6pm HAVE to be booked with publish date 5th January.
-        elseif (in_array($printEdition->getId(), array(8, 11, 10, 12, 7)) && $rundate > strtotime('2017-12-20 18:00:00') && $rundate < strtotime('2018-01-03 18:00:00')) {
-            $insertDate = strtotime('2018-01-05 00:00:00');
+        // for xmas fix 2018
+        // for Tunbridge Wells, Hastings & Uckfield 18th December 6pm and before 1st January 6pm HAVE to be booked with publish date 4th January.
+        if (in_array($printEdition->getId(), array(2, 5, 9)) && $rundate > strtotime('2018-12-18 18:00:00') && $rundate < strtotime('2019-01-01 18:00:00')) {
+            $insertDate = strtotime('2019-01-04 00:00:00');
+        }  // for Eastbourne, Brighton, Crawley, Worthing & Seaford 19th December 6pm and before 2nd January 6pm HAVE to be booked with publish date 4th January.
+        elseif (in_array($printEdition->getId(), array(8, 11, 10, 12, 7)) && $rundate > strtotime('2018-12-19 18:00:00') && $rundate < strtotime('2019-01-02 18:00:00')) {
+            $insertDate = strtotime('2019-01-04 00:00:00');
         } else {
             //check for dead line.
             if ($currentDayOfWeek == $deadlineDayOfWeek && $currentTime <= $deadlineTimeOfDay) {

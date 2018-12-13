@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Fa\Bundle\UserBundle\Repository\RoleRepository;
 
 /**
  * This command is used to send renew your ad alert to users for before given 1 day
@@ -116,7 +117,8 @@ EOF
             $user = ($ad->getUser() ? $ad->getUser() : null);
 
             //send email only if ad has user and status is active.
-            if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer())) {
+            $userRoleId = ($ad->getUser() ? $ad->getUser()->getRole()->getId() : 0);
+            if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                 //$this->em->getRepository('FaAdBundle:Ad')->sendExpireTomorrowAlertEmail($ad, $this->getContainer());
                 $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('ad_expires_tomorrow', $user, $ad, $this->getContainer());
             }

@@ -25,6 +25,12 @@
     {% endif %}
 {% endblock %}
 
+
+{% block canonical_url %}
+    {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+{% endblock %}
+
+
 {% block body %}
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {% set userRepository = fetch_repository('FaUserBundle:User') %}

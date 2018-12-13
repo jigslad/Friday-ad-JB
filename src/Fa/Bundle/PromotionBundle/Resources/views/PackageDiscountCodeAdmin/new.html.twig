@@ -167,6 +167,8 @@
         var businessUserFlag = false;
         if (checkboxObj.is(":checked") && checkboxObj.val() == '{{ constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') }}') {
             businessUserFlag = true;
+        } else if (checkboxObj.is(":checked") && checkboxObj.val() == '{{ constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID') }}') {
+            businessUserFlag = true;
         }
         if (businessUserFlag) {
             $('#paid_user_field_div').show();

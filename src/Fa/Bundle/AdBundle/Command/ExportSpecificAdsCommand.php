@@ -237,7 +237,7 @@ EOF
             $recordValues[] = $adArray['id'];
             $recordValues[] = $adArray['title'];
             $recordValues[] = ($this->getContainer()->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Entity', $adArray['status_id']));
-            $recordValues[] = ($userRoleText == 'ROLE_BUSINESS_SELLER' ? 'Business' : 'Private');
+            $recordValues[] = ($userRoleText == 'ROLE_BUSINESS_SELLER' ? 'Business' :($userRoleText == 'ROLE_NETSUITE_SUBSCRIPTION' ? 'Netsuite Subscription Users':'Private'));
             $recordValues[] = join(' > ', $this->entityManager->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($adArray['category_id'], false, $this->getContainer()));
             $recordValues[] = $packageDetail['package_text'];
             $recordValues[] = $packageDetail['price_sum'];

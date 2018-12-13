@@ -203,7 +203,7 @@ class PackageDiscountCodeRepository extends EntityRepository
                         if (!in_array($userRoleId, $codeRoleIds)) {
                             $codeAppliedFlag = false;
                         } else {
-                            if ($codeObj->getPaidUserOnly() && $userRoleId == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+                            if ($codeObj->getPaidUserOnly() && ($userRoleId == RoleRepository::ROLE_BUSINESS_SELLER_ID || $userRoleId == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID)) {
                                 $userActivePackage = $this->_em->getRepository('FaUserBundle:UserPackage')->findOneBy(array('user' => $loggedinUser->getId(), 'status' => 'A'));
 
                                 if (!$userActivePackage || ($userActivePackage && !$userActivePackage->getPackage()) || ($userActivePackage && !$userActivePackage->getPackage() && $userActivePackage->getPackage()->getPrice() <=0)) {

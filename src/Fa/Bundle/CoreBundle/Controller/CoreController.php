@@ -167,7 +167,7 @@ class CoreController extends Controller
      */
     final protected function checkIsBusinessSaller($user)
     {
-        if ($this->isAuth() && ($user->getRole() && $user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID)) {
+        if ($this->isAuth() && ($user->getRole() && ($user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID || $user->getRole()->getId() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID))) {
             return true;
         }
 

@@ -20,7 +20,13 @@
 {% set businessExposureUsersCount = (businessExposureUsersDetails is defined )?(businessExposureUsersDetails|length) :0%}
 {% set topAdCount = (topAdResult is defined)?topAdResult|length:0 %}
 
+{% set selCatName = '' %}
+{% set selCatSlug = '' %}
+
 {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+    {% set selCatDet = categoryRepository.getCategoryArrayById(searchParams.item__category_id) %}
+    {% set selCatName = selCatDet['name'] %}
+    {% set selCatSlug = selCatDet['slug'] %}
     {% if customized_url|length %}
         {% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForListResult(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE'), customized_url['target_url'], container) %}
     {% else %}
@@ -33,7 +39,11 @@
 {% endif %}
 
 {% if (objSeoToolOverride|length) %}
+    {% if isClassicCarPage is defined and isClassicCarPage==1 %}
+         {% set seoPageRule = seoPageRule|merge({'h1_tag': objSeoToolOverride.getH1Tag()|replace({'{Manufacturer}': ((selCatName!='Cars')?selCatName:'')}), 'page_title': (objSeoToolOverride.getPageTitle()~' - '~resultCount) |replace({'{Manufacturer}':((selCatName!='Cars')?selCatName:'')}), 'meta_description': objSeoToolOverride.getMetaDescription()|replace({'{Manufacturer}': ((selCatName!='Cars')?selCatName:'')}), 'meta_keywords':  ((selCatName!='Cars')?selCatName:'')~' Classic cars for sale - '~resultCount~' results', 'no_index': 0, 'no_follow': 0, 'canonical_url': app.request.uri}) %} 
+    {% else %}
     {% set seoPageRule = seoPageRule|merge({'h1_tag': objSeoToolOverride.getH1Tag(), 'page_title': objSeoToolOverride.getPageTitle(), 'meta_description': objSeoToolOverride.getMetaDescription(), 'no_index': objSeoToolOverride.getNoIndex(), 'no_follow': objSeoToolOverride.getNoFollow(), 'canonical_url': objSeoToolOverride.getCanonicalUrl()}) %}
+{% endif %}
 {% endif %}
 
 {% if seoPageRule|length %}
@@ -51,6 +61,12 @@
         noindex, follow
         {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
     {% elseif extendedResultCount>0 and app.request.get('page') > defaultPages %}
+        noindex, follow
+        {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {% elseif isClassicCarPage is defined and isClassicCarPage==1 %}
+        index, follow
+        {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+    {% elseif 'item__distance=0' in app.request.queryString %}
         noindex, follow
         {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
     {% elseif 'item__distance=0' not in app.request.queryString %}
@@ -118,6 +134,8 @@
         {% else %}
             {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
         {% endif %}
+    {% else %}
+        {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
     {% endif %}
 {% endblock %}
 
@@ -129,9 +147,13 @@
 
 {% block body %}
 <style>
-ul.fourlocationlist { margin: 15px auto;text-align:center; }
+ul.fourlocationlist { margin: 10px auto 0px auto;text-align:center; }
 ul.fourlocationlist li { display:inline; list-style-type: none; }
 ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
+
+.boost-ribbon { display:none; }
+.boosted_ad .boost-ribbon { display:block;background:url(/bundles/fafrontend/images/featured-arrow.svg) no-repeat;width:25px;height:25px;position:absolute;right:0px;top:0px;text-indent:100%;overflow:hidden;white-space:nowrap;z-index:1}
+.boosted_ad .boost-ribbon span {right: -21px;position: relative;top: 6px;color: #ffffff;}
 </style>
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
@@ -361,7 +383,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     We did mange to find adverts in these other location across the UK
                     <ul class="fourlocationlist">
                     {% for fourLocationsDetail in fourLocationsDetails %}
-                        <li><a href="{{fourLocationsDetail['locationUrl']}}" target="_blank">{{fourLocationsDetail['name']}}({{fourLocationsDetail['cnt']}})</a></li>
+                        <li><a href="{{fourLocationsDetail['locationUrl']}}">{{fourLocationsDetail['name']}} ({{fourLocationsDetail['cnt']}})</a></li>
                     {% endfor %}
                     </ul>
                     </div>
@@ -369,8 +391,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
                 {% if getXMiles > 0 %}
                 <div class="listing">
-                    Or you can view matching adverts within {{getXMiles}} miles of {{ app.request.get('location') }}
-                    <div class="text-center mt20 mb20"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams|merge({'item__distance': getXMiles })) }}" class="secondary-btn-1"  style="color:#fff">View matching adverts</a></div>
+                    Or you can view matching adverts within {{getXMiles}} miles of {{ app.request.get('location') | replace({'-':' '}) | title }}
+                    <div class="text-center mt20"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams|merge({'item__distance': getXMiles })) }}" class="secondary-btn-1 button mb0"  style="color:#fff">View matching adverts</a></div>
                 </div>
                 {% endif %}
             {% endif %}
@@ -497,10 +519,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         }
     });
 
-    function visitUserProfileOrAd(hrefUrl, eventCategory, eventAction, eventLabel)
+    function visitUserProfileOrAd(eventCategory, eventAction, eventLabel)
     {
       ga('send', 'event', eventCategory, eventAction, eventLabel);
-      location.href = hrefUrl;
     }
 
     function gaSendForRecommendedSlotSearch(url, domain) 

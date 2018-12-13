@@ -512,7 +512,7 @@ class AdPostController extends ThirdPartyLoginController
         if ('POST' === $request->getMethod()) {
             $formData = $request->get('fa_paa_registration');
 
-            if ($formData && isset($formData['user_roles']) && $formData['user_roles'] == 'ROLE_BUSINESS_SELLER') {
+            if ($formData && isset($formData['user_roles']) && ($formData['user_roles'] == 'ROLE_BUSINESS_SELLER' || $formData['user_roles'] == 'ROLE_NETSUITE_SUBSCRIPTION')) {
                 $isCompany = 1;
             }
 
@@ -554,7 +554,7 @@ class AdPostController extends ThirdPartyLoginController
 
                 $dispatcher->dispatch(UserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
 
-                if (($user->getRole() && $user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID)) {
+                if (($user->getRole() && ($user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID || $user->getRole()->getId() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID))) {
                     $this->getRepository('FaUserBundle:UserPackage')->assignFreePackageToUser($user, null, $this->container);
                 }
 
@@ -689,7 +689,7 @@ class AdPostController extends ThirdPartyLoginController
 
         // Show business details page if user is business user and for service and adult ads only
         if (in_array($categoryName, array('adult', 'services'))
-            && ($user->getRole() && $user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID)
+            && ($user->getRole() && ($user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID || $user->getRole()->getId() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID))
             && (!$user->getBusinessName() || $this->container->get('session')->has('paa_show_business_step'))) {
 
             // Set session to show business details page in running PAA process
@@ -1118,7 +1118,7 @@ class AdPostController extends ThirdPartyLoginController
             }
 
             // Show business detail page for business user only.
-            if ($user->getRole() && $user->getRole()->getId() != RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+            if ($user->getRole() && ($user->getRole()->getId() != RoleRepository::ROLE_BUSINESS_SELLER_ID || $user->getRole()->getId() != RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID)) {
                 return $this->redirect($this->generateUrl('ad_post_fourth_step'));
             }
 
@@ -1363,7 +1363,7 @@ class AdPostController extends ThirdPartyLoginController
 
         $userRoleName = $this->getRepository('FaUserBundle:User')->getUserRole($userId, $this->container);
 
-        if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER) {
+     if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER || $userRoleName == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $isCompany = true;
         }
 

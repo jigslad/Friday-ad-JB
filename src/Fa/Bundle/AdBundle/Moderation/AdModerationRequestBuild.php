@@ -417,6 +417,7 @@ class AdModerationRequestBuild
         $roles = array(
             RoleRepository::ROLE_SELLER_ID => 'Private Seller',
             RoleRepository::ROLE_BUSINESS_SELLER_ID => 'Business Seller',
+            RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID => 'Netsuite Subscription Users',
         );
 
         return (isset($roles[$roleId]) ? $roles[$roleId] : null);

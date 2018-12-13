@@ -8,7 +8,7 @@
                 {% set rootCategoryName = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
                 {% set gaEventAction    = 'Featured Business Ad - ' ~ rootCategoryName %}
                 {% set gaEventLabel     = businessExposureUsersDetail['user_name'] ~ ' - ' ~ profilePosition %}
-                <a href='javascript:visitUserProfileOrAd("{{ userProfileUrl }}", "Click Ad position", "{{ gaEventAction }}", "{{ gaEventLabel }}");' class="tricky-link">{{ businessExposureUsersDetail['user_name']|raw }}</a>
+                <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "{{ gaEventAction }}", "{{ gaEventLabel }}");' class="tricky-link">{{ businessExposureUsersDetail['user_name']|raw }}</a>
                 <div class="row">
                     <div class="small-8 large-5 columns featured-bus-left">
                         <div class="featured-bz-listimg">
@@ -18,7 +18,7 @@
                     </div>
 
                     <div class="small-15 large-19 columns featured-bus-right">
-                        <h3 class="outside-tricky"><a href='javascript:visitUserProfileOrAd("{{ userProfileUrl }}", "Click Ad position", "{{ gaEventAction }}", "{{ gaEventLabel }}");'>{{ businessExposureUsersDetail['user_name']|raw }}</a></h3>
+                        <h3 class="outside-tricky"><a href="{{userProfileUrl}}" onClick='visitUserProfileOrAd("Click Ad position", "{{ gaEventAction }}", "{{ gaEventLabel }}");'>{{ businessExposureUsersDetail['user_name']|raw }}</a></h3>
                         <div class="profile-desc">
                             {% if businessExposureUsersDetail['company_welcome_message'] is defined and businessExposureUsersDetail['company_welcome_message']|length > 0 %}
                                 {{trim_text(businessExposureUsersDetail['company_welcome_message']|striptags, 300)|raw}}

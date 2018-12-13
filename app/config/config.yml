@@ -114,6 +114,11 @@ doctrine:
                         DATE_FORMAT: Fa\Bundle\CoreBundle\DQL\DateFormatFunction
                     numeric_functions:
                         regexp: Fa\Bundle\CoreBundle\DQL\RegexpFunction
+                        acos: Fa\Bundle\CoreBundle\DQL\AcosFunction
+                        cos: Fa\Bundle\CoreBundle\DQL\CosFunction
+                        sin: Fa\Bundle\CoreBundle\DQL\SinFunction
+                        pi: Fa\Bundle\CoreBundle\DQL\PiFunction
+                        radians: Fa\Bundle\CoreBundle\DQL\RadiansFunction                        
                 mappings:
                     loggable:
                         type: annotation
@@ -132,6 +137,11 @@ doctrine:
                         DATE_FORMAT: Fa\Bundle\CoreBundle\DQL\DateFormatFunction
                     numeric_functions:
                         regexp: Fa\Bundle\CoreBundle\DQL\RegexpFunction
+                        acos: Fa\Bundle\CoreBundle\DQL\AcosFunction
+                        cos: Fa\Bundle\CoreBundle\DQL\CosFunction
+                        sin: Fa\Bundle\CoreBundle\DQL\SinFunction
+                        pi: Fa\Bundle\CoreBundle\DQL\PiFunction
+                        radians: Fa\Bundle\CoreBundle\DQL\RadiansFunction                        
                 mappings:
                     FaReportBundle: ~
             ti_history:
@@ -145,6 +155,11 @@ doctrine:
                         DATE_FORMAT: Fa\Bundle\CoreBundle\DQL\DateFormatFunction
                     numeric_functions:
                         regexp: Fa\Bundle\CoreBundle\DQL\RegexpFunction
+                        acos: Fa\Bundle\CoreBundle\DQL\AcosFunction
+                        cos: Fa\Bundle\CoreBundle\DQL\CosFunction
+                        sin: Fa\Bundle\CoreBundle\DQL\SinFunction
+                        pi: Fa\Bundle\CoreBundle\DQL\PiFunction
+                        radians: Fa\Bundle\CoreBundle\DQL\RadiansFunction                        
                 mappings:
                     FaTiReportBundle: ~
 

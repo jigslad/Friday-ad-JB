@@ -96,7 +96,32 @@ class SeoToolOverrideRepository extends EntityRepository
         $splitpageUrl = explode('?', $fullpageUrl);
         $pageUrl = '';
         $pageUrl = $splitpageUrl[0];
+        $queryContent = $queryItem = '';$isClassicCar = 0;
+        $getCatFromUrl = $objSeoToolOverrideArr = $objSeoToolOverrideNew = array();
+        if(isset($splitpageUrl[1])) {
+            $queryContent = explode('=',$splitpageUrl[1]);
+            $queryItem = $queryContent[0];
+            if($queryItem=='item_motors__reg_year') {
+                $getCatFromUrl = explode('/',$pageUrl);
+                if(isset($getCatFromUrl[1]) && $getCatFromUrl[1]=='cars') {
+                    $allUnder25Yrs = 1;
+                    $get25ysrOlder = date('Y') - 24;
 
+                    foreach($searchParams['item_motors__reg_year'] as $srchRegYr) {
+                        if($srchRegYr > $get25ysrOlder) {
+                            $allUnder25Yrs = 0;
+                            break;
+                        }
+                    }
+                    
+                    if($allUnder25Yrs==1) {
+                        $isClassicCar = 1;
+                        $pageUrl = 'motors/cars/{Manufacturer}/item_motors__reg_year';
+                    }
+                }
+            }
+        }
+        
         if ($pageUrl!== '') {
             $objSeoToolOverride = $this->getSeoToolOverrideObj($pageUrl, $container);
         }

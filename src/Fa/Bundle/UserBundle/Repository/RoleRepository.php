@@ -34,12 +34,14 @@ class RoleRepository extends EntityRepository
     const ROLE_ADMIN           = 'ROLE_ADMIN';
     const ROLE_SUPER_ADMIN     = 'ROLE_SUPER_ADMIN';
     const ROLE_ADMIN_HIDE_SKIP_PAYMENT = 'ROLE_ADMIN_HIDE_SKIP_PAYMENT';
+    const ROLE_NETSUITE_SUBSCRIPTION = 'ROLE_NETSUITE_SUBSCRIPTION';
 
     const ROLE_ADMIN_ID           = '1';
     const ROLE_SUPER_ADMIN_ID     = '2';
     const ROLE_SELLER_ID          = '5';
     const ROLE_BUSINESS_SELLER_ID = '6';
     const ROLE_ADMIN_HIDE_SKIP_PAYMENT_ID = '7';
+    const ROLE_NETSUITE_SUBSCRIPTION_ID = '9';
 
     /**
      * Create query builder.
@@ -64,6 +66,7 @@ class RoleRepository extends EntityRepository
         return array(
             self::ROLE_SELLER => $translator->trans("I'm a private advertiser", array(), 'frontend-register'),
             self::ROLE_BUSINESS_SELLER => $translator->trans("I'm a business advertiser", array(), 'frontend-register'),
+            //self::ROLE_NETSUITE_SUBSCRIPTION => $translator->trans("I'm a netsuite subscriber", array(), 'frontend-register'),
         );
     }
 
@@ -77,6 +80,7 @@ class RoleRepository extends EntityRepository
         return array(
             self::ROLE_SELLER_ID => 'Private advertiser',
             self::ROLE_BUSINESS_SELLER_ID => 'Business advertiser',
+            self::ROLE_NETSUITE_SUBSCRIPTION_ID => 'Netsuite subscription advertiser',
         );
     }
 

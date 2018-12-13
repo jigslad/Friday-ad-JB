@@ -86,6 +86,13 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, C
         $role6->setType('C');
         $em->persist($role6);
         $em->flush();
+
+        $role9 = new Role();
+        $role9->setName('ROLE_NETSUITE_SUBSCRIPTION');
+        $role9->setId(9);
+        $role9->setType('C');
+        $em->persist($role9);
+        $em->flush();
     }
 
     /**

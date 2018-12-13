@@ -54,14 +54,14 @@
                         {% set userCompanyLogo = null %}
                         {% set userLogo = null %}
                         {% if adUserDetail|length %}
-                            {% if adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
-                                {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['company_logo'], adUserDetail['id'], 54, 54, true, true, adUserDetail['status_id'], adUserDetail['user_name']]) %}
+                            {% if (adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+                                {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['company_logo'], adUserDetail['id'], null, null, true, true, adUserDetail['status_id'], adUserDetail['user_name']]) %}
                             {% endif %}
                             {% if adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
-                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['image'], adUserDetail['id'], '54', '54', true, false, adUserDetail['status_id'], adUserDetail['user_name']]) %}
+                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['image'], adUserDetail['id'], 'null', 'null', true, false, adUserDetail['status_id'], adUserDetail['user_name']]) %}
                             {% endif %}
                         {% endif %}
-                        <div class="member-icon {% if adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}member-logo{% endif %}">
+                        <div class="member-icon {% if (adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}member-logo{% endif %}">
                             {% if userCompanyLogo %}
                                 {{userCompanyLogo|raw}}
                             {% elseif userLogo %}

@@ -138,7 +138,7 @@ class UserAccountProfileType extends AbstractType
 
             if (($shopPackageDetail && $shopPackageDetail->getPackage() && !$shopPackageDetail->getPackage()->getPrice() && !$activeAdCount) || (!$shopPackageDetail && !$activeAdCount)) {
                 if ($form->get('user_roles')->getData()
-                    && $form->get('user_roles')->getData() == RoleRepository::ROLE_BUSINESS_SELLER
+                    && ($form->get('user_roles')->getData() == RoleRepository::ROLE_BUSINESS_SELLER || $form->get('user_roles')->getData() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION)
                     && $form->has('business_category_id')
                     && $form->get('business_category_id')->getData() == '') {
                     $form->get('business_category_id')->addError(new FormError($this->translator->trans('Please select business category.', array(), 'validators')));
@@ -192,7 +192,7 @@ class UserAccountProfileType extends AbstractType
                         $updateSQL = "UPDATE ad SET is_trade_ad = '0' WHERE user_id = '".$user->getId()."'";
                     }
 
-                    if ($role == RoleRepository::ROLE_BUSINESS_SELLER) {
+                    if ($role == RoleRepository::ROLE_BUSINESS_SELLER || $role == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
                         $userSite = $this->em->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $user->getId()));
                         if (!$userSite) {
                             $userSite = new UserSite();
@@ -219,7 +219,7 @@ class UserAccountProfileType extends AbstractType
                 }
 
                 //update profile exposure category id.
-                if ($role == RoleRepository::ROLE_BUSINESS_SELLER) {
+                if ($role == RoleRepository::ROLE_BUSINESS_SELLER || $role == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
                     $userSite = $this->em->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $user->getId()));
                     //update profile exposure category id.
                     if ($userSite && $oldBusinessCat != $form->get('business_category_id')->getData()) {

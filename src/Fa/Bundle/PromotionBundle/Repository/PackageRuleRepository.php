@@ -14,6 +14,7 @@ namespace Fa\Bundle\PromotionBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Fa\Bundle\EntityBundle\Repository\LocationGroupRepository;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+use Fa\Bundle\UserBundle\Repository\RoleRepository;
 
 /**
  * Package rule repository.
@@ -103,6 +104,36 @@ class PackageRuleRepository extends EntityRepository
      */
     public function getActivePackagesByCategoryId($categoryId, $locationGroupIdArray, $roleIdArray, $currentActivePackageIds = array(), $container = null, $skipAdminPackages = true, $showOnlyCurrentActivePackage = false, $fetchOnlyAdminPackages = false)
     {
+        $netsuiteRoleArr = array('0'=>RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
+        $packages = array();
+
+        $packages = $this->getActivePackagesByCategoryIdRoleId($categoryId, $locationGroupIdArray, $roleIdArray, $currentActivePackageIds, $container, $skipAdminPackages, $showOnlyCurrentActivePackage, $fetchOnlyAdminPackages);
+
+        if(!count($packages) && $netsuiteRoleArr==$roleIdArray) {
+            $businessRoleArr = array('0'=>RoleRepository::ROLE_BUSINESS_SELLER_ID);
+            $packages = $this->getActivePackagesByCategoryIdRoleId($categoryId, $locationGroupIdArray, $businessRoleArr, $currentActivePackageIds, $container, $skipAdminPackages, $showOnlyCurrentActivePackage, $fetchOnlyAdminPackages);
+        }
+        return $packages;
+    }
+
+    /**
+     * Get active packages by category id, location group & user type.
+     *
+     * @param integer $categoryId
+     * @param array   $locationGroupIdArray
+     * @param array   $roleIdArray
+     * @param array   $currentActivePackageIds
+     * @param object  $container
+     * @param boolean $skipAdminPackages
+     * @param boolean $showOnlyCurrentActivePackage
+     * @param boolean $fetchOnlyAdminPackages
+     *
+     * @return Doctrine_Object
+     */
+    public function getActivePackagesByCategoryIdRoleId($categoryId, $locationGroupIdArray, $roleIdArray, $currentActivePackageIds = array(), $container = null, $skipAdminPackages = true, $showOnlyCurrentActivePackage = false, $fetchOnlyAdminPackages = false)
+    {
+        $netsuiteRoleArr = array('0'=>RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
+        $query1 = '';$firstIteration = '';
         $query = $this->createQueryBuilder(self::ALIAS)
             ->select(self::ALIAS, PackageRepository::ALIAS)
             ->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
@@ -111,7 +142,8 @@ class PackageRuleRepository extends EntityRepository
             ->setParameter('package_for', 'ad')
             ->andWhere(self::ALIAS.'.category = :categoryId')
             ->setParameter('categoryId', $categoryId)
-            //->addOrderBy(PackageRepository::ALIAS.'.price', 'ASC')
+            ->addOrderBy(PackageRepository::ALIAS.'.role', 'DESC')
+            ->addOrderBy(PackageRepository::ALIAS.'.price', 'ASC')
             ->addGroupBy(PackageRepository::ALIAS.'.id');
 
         // remove assigned packages.
@@ -133,12 +165,6 @@ class PackageRuleRepository extends EntityRepository
             $query->andWhere(self::ALIAS.'.location_group IS NULL');
         }
 
-        //add user type.
-        if (count($roleIdArray)) {
-            $query->andWhere(PackageRepository::ALIAS.'.role IN (:roleIds) OR '.PackageRepository::ALIAS.'.role IS NULL')
-            ->setParameter('roleIds', $roleIdArray);
-        }
-
         if ($skipAdminPackages) {
             $query->andWhere(PackageRepository::ALIAS.'.is_admin_package = 0');
         }
@@ -147,6 +173,16 @@ class PackageRuleRepository extends EntityRepository
             $query->andWhere(PackageRepository::ALIAS.'.is_admin_package = 1');
         }
 
+        if (count($roleIdArray)) {
+            $matchedArr = array_diff($netsuiteRoleArr,$roleIdArray);
+            if(empty($matchedArr)) { 
+                $query->andWhere(PackageRepository::ALIAS.'.role = :userRole')->setParameter('userRole', RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
+            } else {
+                $query->andWhere(PackageRepository::ALIAS.'.role IN (:roleIds) OR '.PackageRepository::ALIAS.'.role IS NULL')
+                    ->setParameter('roleIds', $roleIdArray);
+            }
+        }
+        
         $packages =  $query->getQuery()->getResult();
         
         if (!count($packages) && $categoryId) {
@@ -155,7 +191,7 @@ class PackageRuleRepository extends EntityRepository
             $parentCategoryIds = array_reverse($parentCategoryIds);
             if (count($parentCategoryIds)) {
                 foreach ($parentCategoryIds as $parentCategoryId) {
-                    return $this->getActivePackagesByCategoryId($parentCategoryId, $locationGroupIdArray, $roleIdArray, $currentActivePackageIds, $container, $skipAdminPackages, $showOnlyCurrentActivePackage, $fetchOnlyAdminPackages);
+                    return $this->getActivePackagesByCategoryIdRoleId($parentCategoryId, $locationGroupIdArray, $roleIdArray, $currentActivePackageIds, $container, $skipAdminPackages, $showOnlyCurrentActivePackage, $fetchOnlyAdminPackages);
                 }
             }
         }

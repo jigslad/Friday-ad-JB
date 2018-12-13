@@ -165,9 +165,13 @@ class FoundationGooglePagerView implements ViewInterface
     private function generatePages()
     {
         $this->calculateStartAndEndPage();
-
+        $endPage = $this->currentPage + $this->proximity+$this->addToEndPage;
+        $additionalPage = '';
+        if($endPage < $this->nbPages ) {
+            $additionalPage = '<li><a class="dotspagination">...</a></li>'.$this->page($this->nbPages);
+        }
         return $this->previous().
-        $this->pages().
+        $this->pages().$additionalPage.
         $this->next();
     }
 

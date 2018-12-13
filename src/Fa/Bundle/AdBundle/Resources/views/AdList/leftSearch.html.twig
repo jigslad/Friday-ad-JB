@@ -101,7 +101,7 @@
                       <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>
                       <ul>
                           {% for townId, count in locationFacets %}
-                              {% set queryParams = {'fa_left_search' : searchParams|merge({'item__location': townId, 'item__distance': 0 })} %}
+                              {% set queryParams = {'fa_left_search' : searchParams|merge({'item__location': townId })} %}
                               {% if customized_url|length and customized_url['target_url'] != '' %}
                                   {% set listurl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl(queryParams['fa_left_search'], customized_url['target_url'], true) %}
                               {% else %}

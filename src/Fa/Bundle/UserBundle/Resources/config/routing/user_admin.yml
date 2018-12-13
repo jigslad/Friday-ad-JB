@@ -63,3 +63,9 @@ user_reviews_list_left_for_other_admin:
 user_payment_list_admin:
     path:     /{id}/payments
     defaults: { _controller: "FaUserBundle:UserAdmin:showUserPayment" }
+
+user_boost_overide:
+    path:     /{id}/boost-overide
+    defaults: { _controller: "FaUserBundle:UserAdmin:boostOveride" }
+    options:
+        expose: true

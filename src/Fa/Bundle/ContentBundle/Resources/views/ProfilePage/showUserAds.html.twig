@@ -14,7 +14,7 @@
                 <span>
                     {% set userCompanyLogo = null %}
                     {% set userLogo = null %}
-                    {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}
+                    {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
                         {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['company_logo'], userDetail['id'], null, null, true, true, userDetail['status_id'], userDetail['user_name']]) %}
                     {% endif %}
                     {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
@@ -30,7 +30,7 @@
                 </span>
             </div>
             <h2 class="pro-user-name">
-            {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') %}
+            {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
                 {{ (userDetail['business_name'] ? "%business_name%'s ads"|trans({'%business_name%': userDetail['business_name']}, 'frontend-profile-show-ads') : '') }}
             {% endif %}
             {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}

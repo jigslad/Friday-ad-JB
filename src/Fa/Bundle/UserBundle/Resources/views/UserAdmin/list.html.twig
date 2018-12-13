@@ -1,4 +1,5 @@
 {% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set userPackageRepository = fetch_repository('FaUserBundle:UserPackage') %}
 
 {% set userIdArray = {} %}
 {% if pagination.getNbResults() %}
@@ -43,6 +44,10 @@
                  <tbody>
                      {% if pagination.getNbResults() %}
                           {% for user in pagination.getCurrentPageResults() %}
+
+                          {% set showBoostOveride = 0 %}{% set getBoostDetail = [] %}
+                          {% set getBoostDetail = userPackageRepository.checkUserHasBoostPackage(user.id) %}
+                          {% if getBoostDetail is not empty %} {% set showBoostOveride = 1 %} {% endif %}
                           <tr class="odd">
                               <td>
                                 <a href="{{ path('user_show_admin', {'id': user.id}) }}">
@@ -56,14 +61,14 @@
                               <td>
                                 {% if userDetailGrant %}
                                     <a href="{{ path('user_show_admin', {'id': user.id}) }}">
-                                    {% if userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+                                    {% if (userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
                                         {{ userDataArray[user.id]['business_name'] }}
                                     {% else %} 
                                         {{ userDataArray[user.id]['first_name'] }}  {{ userDataArray[user.id]['last_name'] }}
                                      {% endif %}
                                     </a><br />
                                 {% else %}
-                                    {% if userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+                                    {% if (userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
                                         {{ userDataArray[user.id]['business_name'] }}
                                     {% else %} 
                                         {{ userDataArray[user.id]['first_name'] }}  {{ userDataArray[user.id]['last_name'] }}
@@ -124,6 +129,10 @@
                                          <li><a href="{{ path('user_change_status', {'id': user.id}) }}"><i class="fi-loop"></i> {{ 'Change Status'|trans }}</a></li>
                                        {% endif %}
 
+                                       {% if userConfigRuleAddEditGrant and showBoostOveride == 1 %}
+                                         <li><a href="{{ path('user_boost_overide', {'id': user.id}) }}"><i class="fi-loop"></i> {{ 'Boost Overide'|trans }}</a></li>
+                                       {% endif %}
+
                                        {% if userConfigRuleAddEditGrant %}
                                          <li><a href="{{ path('user_config_rule_add_edit_admin', {'user_id': user.id, 'config_id': constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PAYPAL_COMMISION')}) }}"><i class="fi-wrench"></i> {{ 'Set Paypal Commission'|trans }}</a></li>
                                          <li><a href="{{ path('user_config_rule_add_edit_admin', {'user_id': user.id, 'config_id': constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::PRODUCT_INSERTION_FEE')}) }}"><i class="fi-wrench"></i> {{ 'Set Product Insertion Fee'|trans }}</a></li>
@@ -133,7 +142,7 @@
                                            <li><a href="{{ path('ad_post_new_admin', {'user_id': user.id}) }}"><i class="fi-plus"></i> {{ 'Create Ad'|trans }}</a></li>
                                        {% endif %}
                                        
-                                       {% if userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+                                       {% if (userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
                                             <li><a href="{{ path('user_package_admin', {'id': user.id}) }}"><i class="fi-loop"></i> {{ 'Assign package'|trans }}</a></li>
                                        {% endif %}
                                        {% if userCreditGrant %}

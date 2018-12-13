@@ -21,6 +21,10 @@
         {% set showTiLogo = true %}
     {% endif %}
     
+    {% if not blockMetaCanonicalUrl %}
+        {% set blockMetaCanonicalUrl = app.request.uri|replace({('?'~app.request.queryString) : ''}) %}
+    {% endif %}
+    
     {% if blockMetaRobots %}
         <meta name="robots" content="{{blockMetaRobots}}" />
     {% endif %}

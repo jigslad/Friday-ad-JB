@@ -179,6 +179,11 @@ abstract class AdParser
                 $sellerRole = $this->em->getRepository('FaUserBundle:Role')->findOneBy(array('name' => RoleRepository::ROLE_BUSINESS_SELLER));
                 $user->addRole($sellerRole);
                 $user->setRole($sellerRole);
+            } elseif ($this->advert['user']['role'] == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+                $sellerRole = $this->em->getRepository('FaUserBundle:Role')->findOneBy(array('name' => RoleRepository::ROLE_NETSUITE_SUBSCRIPTION));
+                $user->addRole($sellerRole);
+                $user->setRole($sellerRole);
+
             } else {
                 $sellerRole = $this->em->getRepository('FaUserBundle:Role')->findOneBy(array('name' => RoleRepository::ROLE_SELLER));
                 $user->addRole($sellerRole);
@@ -198,7 +203,7 @@ abstract class AdParser
 
         $sellerRole = $this->em->getRepository('FaUserBundle:Role')->findOneBy(array('name' => RoleRepository::ROLE_BUSINESS_SELLER));
 
-        if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $roles)) {
+        if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $roles) || in_array(RoleRepository::ROLE_NETSUITE_SUBSCRIPTION, $roles)) {
             if ($user->getBusinessName() == '') {
                 $user->setBusinessName($this->advert['user']['business_name']);
             }
@@ -239,7 +244,7 @@ abstract class AdParser
         $this->em->persist($user);
         $this->em->flush();
 
-        if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $roles)) {
+        if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $roles) || in_array(RoleRepository::ROLE_NETSUITE_SUBSCRIPTION, $roles)) {
             $user_site = $this->em->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $user));
 
             if (!$user_site) {
@@ -752,7 +757,7 @@ abstract class AdParser
         if ($user) {
             $userRoles = $this->em->getRepository('FaUserBundle:User')->getUserRolesArray($user);
             if (count($userRoles)) {
-                if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $userRoles)) {
+                if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $userRoles) || in_array(RoleRepository::ROLE_NETSUITE_SUBSCRIPTION, $userRoles)) {
                     $ad->setIsTradeAd(1);
                 } elseif (in_array(RoleRepository::ROLE_SELLER, $userRoles)) {
                     $ad->setIsTradeAd(0);

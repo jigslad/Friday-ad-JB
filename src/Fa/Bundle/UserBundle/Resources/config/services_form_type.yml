@@ -243,10 +243,8 @@ services:
         tags:
             - { name: form.type, alias: fa_user_competition }
     
-    fa_user.form.type.user_business_profile_user_detail:
-        class: Fa\Bundle\UserBundle\Form\UserBusinessProfileUserDetailType
-        arguments: ['@service_container']
+    fa_user.form.type.user_boost_overide_admin:
+        class: Fa\Bundle\UserBundle\Form\BoostOverideType
+        arguments: ['@doctrine', '@security.encoder_factory']
         tags:
-            - { name: form.type, alias: fa_user_user_business_profile_user_detail }
-
-
+            - { name: form.type, alias: fa_user_user_boost_overide_admin }

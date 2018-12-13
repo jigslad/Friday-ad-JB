@@ -217,9 +217,9 @@ EOF
     {
         $userRepository  = $this->em->getRepository('FaUserBundle:User');
         $qb = $userRepository->createQueryBuilder(UserRepository::ALIAS);
-        $qb->andWhere(UserRepository::ALIAS.'.role = :role');
+        $qb->andWhere(UserRepository::ALIAS.'.role IN (:role)');
         $qb->andWhere(UserRepository::ALIAS.'.update_type != :update_type OR '.UserRepository::ALIAS.'.update_type IS NULL');
-        $qb->setParameter('role', RoleRepository::ROLE_BUSINESS_SELLER_ID);
+        $qb->setParameter('role', array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID));
         $qb->setParameter('update_type', 'business-ad');
         return $qb;
     }

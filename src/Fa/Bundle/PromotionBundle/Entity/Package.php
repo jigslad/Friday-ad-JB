@@ -282,6 +282,22 @@ class Package
     private $is_admin_package = false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="boost_ad_enabled", type="boolean", nullable=true, options={"default" = 0})
+     * @Gedmo\Versioned
+     */
+    private $boost_ad_enabled = false;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="monthly_boost_count", type="smallint", length=4, nullable=true)
+     */
+    private $monthly_boost_count;
+
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -886,6 +902,54 @@ class Package
     {
         return $this->is_admin_package;
     }
+
+    /**
+     * Set boost_ad_enabled.
+     *
+     * @param string $boost_ad_enabled
+     * @return Package
+     */
+    public function setBoostAdEnabled($boost_ad_enabled)
+    {
+        $this->boost_ad_enabled = $boost_ad_enabled;
+
+        return $this;
+    }
+
+    /**
+     * Get boost_ad_enabled.
+     *
+     * @return string
+     */
+    public function getBoostAdEnabled()
+    {
+        return $this->boost_ad_enabled;
+    }
+
+    /**
+     * Set monthly_boost_count.
+     *
+     * @param string $monthly_boost_count
+     * @return Package
+     */
+    public function setMonthlyBoostCount($monthly_boost_count)
+    {
+        $this->monthly_boost_count = $monthly_boost_count;
+
+        return $this;
+    }
+
+    /**
+     * Get monthly_boost_count.
+     *
+     * @return integer
+     */
+    public function getMonthlyBoostCount()
+    {
+        return $this->monthly_boost_count;
+    }
+
+
 
     /**
      * Set new_ad_cta.

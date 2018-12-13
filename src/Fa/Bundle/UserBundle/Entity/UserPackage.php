@@ -149,6 +149,12 @@ class UserPackage
      */
     private $source;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="boost_overide", type="integer", length=10, nullable=true)
+     */
+    private $boost_overide;
 
     /**
      * Get status.
@@ -507,4 +513,28 @@ class UserPackage
     {
         return $this->is_auto_renew;
     }
+
+    /**
+     * Set boost_overide.
+     *
+     * @param integer $boost_overide
+     * @return UserPackage
+    */
+    public function setBoostOveride($boost_overide)
+    {
+        $this->boost_overide = $boost_overide;
+
+        return $this;
+    }
+
+    /**
+     * Get boost_overide.
+     *
+     * @return integer
+     */
+    public function getBoostOveride()
+    {
+        return $this->boost_overide;
+    }
+
 }

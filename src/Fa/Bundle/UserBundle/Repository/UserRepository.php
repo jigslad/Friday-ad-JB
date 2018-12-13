@@ -511,7 +511,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         unset($userDetail['first_name'], $userDetail['last_name'], $userDetail['business_name']);
         if (isset($userDetail['role_id']) && $userDetail['role_id']) {
             $userDetail['user_role'] = $userTypes[$userDetail['role_id']];
-            if ($userDetail['role_id'] == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+            if ($userDetail['role_id'] == RoleRepository::ROLE_BUSINESS_SELLER_ID || $userDetail['role_id'] == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                 // Code for google analytics
                 $userUpsell = $this->_em->getRepository('FaUserBundle:UserUpsell')->getUserUpsell($userDetail['id']);
                 if ($userUpsell) {
@@ -687,7 +687,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $parameters = $this->getRegistrationEmailParameters($user, $container);
         $template = 'welcome_to_your_account';
 
-        if ($user->getRoles() && count($user->getRoles()) && $user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
+       if ($user->getRoles() && count($user->getRoles()) && ($user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER || $user->getRoles()[0]->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION)) {
             $categoryNames = $this->_em->getRepository('FaEntityBundle:Category')->getSubtitleCategories();
             if ($categoryNames && count($categoryNames) && array_key_exists($user->getBusinessCategoryId(), $categoryNames)) {
                 $categoryName = $categoryNames[$user->getBusinessCategoryId()];
@@ -716,9 +716,9 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $parameters['url_account_dashboard'] = '';
 
         if ($user->getRoles() && count($user->getRoles())) {
-            if ($user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
+        	if ($user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER || $user->getRoles()[0]->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
                 $parameters['category_name'] = $container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $user->getBusinessCategoryId());
-                $objPackages = $this->_em->getRepository('FaPromotionBundle:Package')->getShopPackageByCategory($user->getBusinessCategoryId());
+        		$objPackages = $this->_em->getRepository('FaPromotionBundle:Package')->getShopPackageByCategory($user->getBusinessCategoryId(),$user->getRoles()[0]->getId());
                 if ($objPackages && count($objPackages)) {
                     $i = 1;
                     foreach ($objPackages as $objPackage) {
@@ -957,7 +957,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
                 $userProfileSlug = Sluggable\Urlizer::urlize($userObj->getProfileName(), '-');
             }
 
-            if ($userObj && $userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
+            if ($userObj && ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION)) {
                 if (!$userSite) {
                     $userSite = $this->_em->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $userObj->getId()));
                 }
@@ -1400,11 +1400,12 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $this->_em->getRepository('FaUserBundle:UserPackage')->closeActivePackage($user);
         $this->_em->getRepository('FaUserBundle:UserSite')->removeBusinessUserSiteData($user->getId(), $container);
 
-        if ($objOldRole && count($objOldRole) > 0 && $objOldRole[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER && $objRole->getName() == RoleRepository::ROLE_SELLER) {
+        if ($objOldRole && count($objOldRole) > 0 && $objOldRole[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER && $objRole->getName() == RoleRepository::ROLE_SELLER && $objRole->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $updateSQL = "UPDATE ad SET is_trade_ad = '0' WHERE user_id = '".$user->getId()."'";
         }
 
-        if (!empty($updateSQL)) {
+        if (!empty($updateSQL))
+        {
             $stmt = $this->_em->getConnection()->prepare($updateSQL);
             $stmt->execute();
 
@@ -1472,7 +1473,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
 
         $user->setImage(null);
         //Only assign a free package if only new user is creating or user role is changing from private to business
-        if (!$objOldRole || ($objOldRole && count($objOldRole) > 0 && $objOldRole[0]->getName() != RoleRepository::ROLE_BUSINESS_SELLER)) {
+        if (!$objOldRole || ($objOldRole && count($objOldRole) > 0 && ($objOldRole[0]->getName() != RoleRepository::ROLE_BUSINESS_SELLER || $objOldRole[0]->getName() != RoleRepository::ROLE_NETSUITE_SUBSCRIPTION))) {
             $this->_em->getRepository('FaUserBundle:UserPackage')->assignFreePackageToUser($user, 'my_account_user_upgrade', $container);
             $user->setFreeTrialEnable(1);
         }
@@ -1483,11 +1484,12 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $this->_em->flush($user);
         $this->_em->refresh($user);
 
-        if ($objOldRole && count($objOldRole) > 0 && $objOldRole[0]->getName() == RoleRepository::ROLE_SELLER && $objRole->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
+        if ($objOldRole && count($objOldRole) > 0 && $objOldRole[0]->getName() == RoleRepository::ROLE_SELLER && $objRole->getName() == RoleRepository::ROLE_BUSINESS_SELLER && $objRole->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $updateSQL = "UPDATE ad SET is_trade_ad = '1' WHERE user_id = '".$user->getId()."'";
         }
 
-        if (!empty($updateSQL)) {
+        if (!empty($updateSQL))
+        {
             $stmt = $this->_em->getConnection()->prepare($updateSQL);
             $stmt->execute();
 

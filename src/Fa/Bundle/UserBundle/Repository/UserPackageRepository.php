@@ -199,7 +199,7 @@ class UserPackageRepository extends EntityRepository
         foreach ($userPackages as $userPackage) {
             $userPackage->setStatus('C');
             $userPackage->setClosedAt(time());
-
+            $userPackage->setBoostOveride('0');
             $this->_em->persist($userPackage);
             $this->_em->flush();
         }
@@ -630,4 +630,22 @@ class UserPackageRepository extends EntityRepository
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result['is_auto_renew'];
     }
+
+    /**
+     * Check User Has Boost Package by userId.
+     *
+     * @param integer $userId User id integer
+     *
+     * @return boolean
+    */
+    public function checkUserHasBoostPackage($userId)
+    {   
+        $qb = $this->createQueryBuilder(self::ALIAS)->select(self::ALIAS.'.id',self::ALIAS.'.boost_overide',PackageRepository::ALIAS.'.monthly_boost_count')->innerJoin(self::ALIAS.'.package', PackageRepository::ALIAS)->andWhere(self::ALIAS.'.status = :status')->andWhere(self::ALIAS.'.user = :userId')->andWhere(PackageRepository::ALIAS.'.boost_ad_enabled = :boost_ad_enabled')->andWhere(PackageRepository::ALIAS.'.monthly_boost_count IS NOT NULL')->andWhere(PackageRepository::ALIAS.'.price > 0')->andWhere(PackageRepository::ALIAS.'.price IS NOT NULL')->setParameter('status', 'A')->setParameter('userId', $userId)->setParameter('boost_ad_enabled', '1'); 
+
+        $result = $qb->getQuery()->getResult();
+        return $result;
+    }
+
+
+
 }

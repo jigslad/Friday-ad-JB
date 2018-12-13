@@ -34,7 +34,7 @@
                         {% endif %}
                     {% endif %}
                     {% set gaEventLabel = profileUserDetail['user_name'] ~ ' - Business ad' %}
-                    <a href='javascript:visitUserProfileOrAd("{{ userProfileUrl }}", "Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
+                    <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
                 </div>
                 <div class="large-18 columns">
                     <div class="owl-carousel fa-slider" id="shop-user-item-slider" data-equalizer>

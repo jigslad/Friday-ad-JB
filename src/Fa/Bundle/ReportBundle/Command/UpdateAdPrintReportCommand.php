@@ -266,6 +266,8 @@ EOF
 
                     if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
                         $userRoleId = RoleRepository::ROLE_BUSINESS_SELLER_ID;
+                    } elseif ($userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+                        $userRoleId = RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID;
                     } elseif ($userRole == RoleRepository::ROLE_SELLER) {
                         $userRoleId = RoleRepository::ROLE_SELLER_ID;
                     }

@@ -13,6 +13,8 @@ namespace Fa\Bundle\CoreBundle\Twig;
 
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Pagerfanta\Pagerfanta;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * This twig extension is used to add custom twig functions, filters etc.
@@ -624,5 +626,64 @@ class CoreExtension extends \Twig_Extension implements \Twig_Extension_InitRunti
     public function multisort($array, $key)
     {
         return CommonManager::msort($array, $key, 0, true);
+    }
+
+    /**
+     * substr_exist.
+     *
+     * @param array $array
+     * @param string $str
+     *
+     * @return array
+     */
+    public function substrExist($array, $str)
+    {
+        return CommonManager::substr_exist($array, $str);
+    }
+
+    /**
+     * Check if the given object is a paginator.
+     *
+     * @param $paginator
+     * @return bool
+     */
+    public function is_paginator($paginator)
+    {
+        return !empty($paginator) && $paginator instanceof Pagerfanta;
+    }
+
+    /**
+     * Get the pagination heads for the page.
+     *
+     * @param $paginator
+     * @param Request $request
+     * @param null $base_url
+     * @return string
+     */
+    public function pagination_heads($paginator, Request $request, $base_url = null)
+    {
+        /**
+         * @var Pagerfanta $paginator
+         */
+        if (!$this->is_paginator($paginator) || !$paginator->haveToPaginate()) {
+            return '';
+        }
+
+        $html = [];
+        $uri = !empty($base_url) ? $base_url : $request->getUri();
+
+        $pageUri = rtrim(implode('/', array_filter(explode('/', strtolower($uri)), function ($part) {
+            return !CommonManager::substr_exist($part, 'page-');
+        })), '/');
+
+        if ($paginator->hasPreviousPage()) {
+            $html[] = "<link rel='prev' href='{$pageUri}/page-{$paginator->getPreviousPage()}/' />";
+        }
+
+        if ($paginator->hasNextPage()) {
+            $html[] = "<link rel='next' href='{$pageUri}/page-{$paginator->getNextPage()}/' />";
+        }
+
+        return implode("\n", $html);
     }
 }

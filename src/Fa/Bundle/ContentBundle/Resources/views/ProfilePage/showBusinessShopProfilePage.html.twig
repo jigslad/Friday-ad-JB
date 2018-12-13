@@ -46,6 +46,12 @@
     {% endif %}
 {% endblock %}
 
+
+{% block canonical_url %}
+    {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+{% endblock %}
+
+
 {% block scripttop %}
     <link href="{{ asset_url('facore/css/jquery.fancybox.css') }}" rel="stylesheet">
     {% if allowProfileEdit %}

@@ -1,0 +1,57 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+{% set totalUsers = entities|length %}
+<div class="row">
+   <div class="columns">
+       <h1>{{ heading }}</h1>
+   </div>
+   <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            <div class="row">
+                <div class="large-12 columns">
+                    <b>{{ 'Username'|trans }} : </b>
+                    {% set counter = 1 %}
+                    {% for entity in entities %}
+                        {{ entity.username }}{% if (counter < totalUsers) %},{% endif %}
+                        {% set counter = counter + 1 %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+                <div class="row">
+                    <div class="large-12 columns">
+                        <b>{{ 'Current status'|trans }} : </b>
+                        {% set counter = 1 %}
+                        {% for entity in entities %} 
+                            {{ entity.status.name }}{% if (counter < totalUsers) %},{% endif %}
+                            {% set counter = counter + 1 %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+            {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                {{ form_row(form.boost_overide) }}
+                <ul class="button-group text-center">
+                    <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
+                    <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ goBackUrl ? goBackUrl : path('user_admin') }}'">{{ 'Go back'|trans({}, 'messages') }}</button></li>
+                </ul>
+                <input type="hidden" name="userIds" value="{{ userIds }}">
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}
+{% block scriptbottom %}
+<script>
+$(document).ready(function () {
+$(window).scrollTop(0);
+});
+</script>
+{% endblock %}

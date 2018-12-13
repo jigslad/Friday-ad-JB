@@ -57,12 +57,7 @@
             {% set parsedCode  = bannerManager.parseBannerCode(bannersArray[zone_id]['code'], extraParams) %}
             {% set bannerClass = 'banner' ~ '-' ~ bannersArray[zone_id]['page_id'] ~ '-' ~ zone_id %}
 
-            <div class="banner-show-after-load" style="display:none;"><div id="{{ bannerDivId }}" class="{{bannerClass}} {{otherClass}} banner-center" style="{{ divStyle }}">{{ parsedCode|raw }}</div></div>
+            <div id="{{ bannerDivId }}" class="{{bannerClass}} {{otherClass}} banner-center" style="{{ divStyle }}">{{ parsedCode|raw }}</div>
         {% endif %}
     {% endif %}
 {% endif %}
-<script>
-$(window).on('load', function() {
-    $('.banner-show-after-load').show();
-});
-</script>

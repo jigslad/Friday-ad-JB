@@ -1,8 +1,10 @@
 <div class="large-8 columns">
     <div class="detail-right-pane">
         <p class="listed-date hide-for-small-only">
-        {% if attribute(adDetail, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT')) is defined %}
+        {% if attribute(adDetail, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT')) is defined and attribute(adDetail, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT'))>attribute(adDetail, constant(solrMapping ~ 'CREATED_AT')) %}
             <span class="ago-icon">ago</span>{{attribute(adDetail, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT'))|time_ago_in_words}}
+        {% else %}
+            <span class="ago-icon">ago</span>{{attribute(adDetail, constant(solrMapping ~ 'CREATED_AT'))|time_ago_in_words}}
         {% endif %}
         </p>
         <div class="details-price">

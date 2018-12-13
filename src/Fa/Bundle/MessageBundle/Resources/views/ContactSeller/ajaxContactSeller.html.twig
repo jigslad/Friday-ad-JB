@@ -12,7 +12,7 @@
 {% set thirdpartyEmailAlertStyle = 'block' %}
 
 {% if adUser %}
-    {% if adUser.getRole() and adUser.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+    {% if adUser.getRole() and (adUser.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUser.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
         {% set userTypeText = 'Business ad' %}
     {% elseif adUser.getRole() and adUser.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
         {% set userTypeText = 'Private ad' %}

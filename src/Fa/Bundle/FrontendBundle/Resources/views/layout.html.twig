@@ -20,6 +20,8 @@
     {% set blockDimension2 = block('dimension2') is defined ? block('dimension2')|trim : false %}
     {% set pushNotification = block('pushNotification') is defined ? block('pushNotification')|trim : false %}
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    {% set paginationHead = block('pagination_head') is defined ? block('pagination_head')|trim : false %}
+
     {% set showAdultPopup = 0 %}
     {% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
     {% set showTiLogo = false %}
@@ -91,6 +93,8 @@
     {% endif %}
     {% if not blockMetaCanonicalUrl and currentRoute == 'location_home_page' and app.request.get('location') == 'uk' %}
         {% set blockMetaCanonicalUrl = container.getParameter('base_url') %}
+    {% elseif not blockMetaCanonicalUrl %}
+        {% set blockMetaCanonicalUrl = app.request.uri|replace({('?'~app.request.queryString) : ''}) %}
     {% endif %}
     {% if app.request.get('advertgone') and not app.request.get('expired_ads') %}
         {% set blockMetaCanonicalUrl = app.request.uri|replace({'?advertgone=1': ''}) %}
@@ -139,6 +143,17 @@
     
     <!-- FB pixel code snippet -->
     {{ include('FaFrontendBundle::fbPixelCodeSnippet.html.twig') }}
+
+    <!-- Pagination Head Start -->
+    {% if paginationHead %}
+        {{ paginationHead|raw }}
+    {% else %}
+        {% if pagination is defined %}
+            {{ pagination_heads(pagination, app.request)|raw }}
+        {% endif %}
+    {% endif %}
+    <!-- Pagination Head End -->
+
 </head>
 <body {% if (showAdultPopup == 1) %} class="transbox" {% endif %}>
         {% if status_code is not defined %}

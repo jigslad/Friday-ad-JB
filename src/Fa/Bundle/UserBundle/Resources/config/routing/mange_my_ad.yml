@@ -10,6 +10,12 @@ manage_my_ads_inactive:
     requirements:
         type:  'inactive'
         
+manage_my_ads_boosted:
+    path:     /manage_my_ads/boosted/
+    defaults: {  _controller: FaUserBundle:ManageMyAd:index, type: boosted }
+    requirements:
+        type:  'boosted'
+        
 ajax_manage_my_ads_change_status:
     path:     /ajax/manage_my_ads/change_ad_status/
     defaults: { _controller: FaUserBundle:ManageMyAd:ajaxChangeAdStatus }
@@ -31,5 +37,10 @@ ajax_manage_my_ads_get_status:
     defaults: { _controller: FaUserBundle:ManageMyAd:ajaxGetStatus }
 
 ajax_manage_my_ads_boost_ad:
-    path:     /ajax/manage_my_ads/boost_ad/
-    defaults: { _controller: FaUserBundle:ManageMyAd:ajaxBoostAd }   
+    path:     /ajax/manage_my_ads/boost_ad/    
+    defaults: { _controller: FaUserBundle:ManageMyAd:ajaxBoostAd }
+       
+ajax_manage_my_ads_boost_multiple_ad:
+    path:     /ajax/manage_my_ads/boost_multiple_ad/
+    defaults: { _controller: FaUserBundle:ManageMyAd:ajaxBoostMultipleAd }
+

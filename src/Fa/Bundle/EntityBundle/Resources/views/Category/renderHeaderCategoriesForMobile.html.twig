@@ -90,8 +90,12 @@
                                     	<li class="last-level">
                                     		{% if thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox %}
                                         		<a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LIVE_CAMS_URL') }}" rel="nofollow" target="_blank" >Live Cams</a>
+                                                <a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::LOCAL_DATING_URL') }}" rel="nofollow" target="_blank" >Local Dating</a>
+                                                <a href="{{ constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::SUGAR_BABIES_URL') }}" rel="nofollow" target="_blank" >Sugar Babies</a>
                                         	{% else %}
                                         		<a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Live Cams</a>
+                                                <a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Local Dating</a>
+                                                <a href="javascript:void(0);" rel="nofollow" onclick="return showAdultPopup();" >Sugar Babies</a>
                             	            {% endif %}
                                 		</li>
                                      {% endif %}
@@ -157,7 +161,7 @@ $(window).on('load', function() {
             multi_expand: false,
           }
     });
-}
+});
     $(document).click(function (e){
         var container = $("#top_bar_nav");
         if (!container.is(e.target) // if the target of the click isn't the container...
@@ -182,7 +186,7 @@ $(window).on('load', function() {
      $("#cat-mob-menu").click(function (e){
          scrollToElement('#cat-mob-menu', '1000', -100);
      });
-});
+
 //]]>
 </script>
 

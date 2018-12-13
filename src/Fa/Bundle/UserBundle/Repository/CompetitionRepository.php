@@ -101,7 +101,7 @@ class CompetitionRepository extends EntityRepository
             if ($key == 'role_id') {
                 if ($value == RoleRepository::ROLE_SELLER_ID) {
                     $fieldValueArray['user_full_name'] = $reportDetailArray['first_name'].' '.$reportDetailArray['last_name'];
-                } elseif ($value == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+                } elseif ($value == RoleRepository::ROLE_BUSINESS_SELLER_ID || $value == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                     $fieldValueArray['user_full_name'] = $reportDetailArray['business_name'];
                 }
             } elseif ($key == 'interest') {

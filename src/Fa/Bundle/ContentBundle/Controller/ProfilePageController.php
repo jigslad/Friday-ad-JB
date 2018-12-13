@@ -129,7 +129,7 @@ class ProfilePageController extends CoreController
             if ($userRole == RoleRepository::ROLE_SELLER && $userProfileSlug) {
                 $url = $this->get('router')->generate('show_private_user_ads', array('profileNameSlug' => $userProfileSlug, 'pageString' => $request->get('pageString'), 'userId' => CommonManager::encryptDecrypt($this->container->getParameter('profile_page_encryption_key'), $userId)), true);
                 return $this->redirect(rtrim($url, '/'), 301);
-            } elseif ($userRole == RoleRepository::ROLE_BUSINESS_SELLER && $userProfileSlug) {
+            } elseif (($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) && $userProfileSlug) {
                 $url = $this->get('router')->generate('show_business_user_ads', array('profileNameSlug' => $userProfileSlug), true);
                 return $this->redirect($url, 301);
             } else {
@@ -565,7 +565,7 @@ class ProfilePageController extends CoreController
             if ($userRole == RoleRepository::ROLE_SELLER && $userProfileSlug) {
                 $url = $this->get('router')->generate('show_private_profile_page', array('profileNameSlug' => $userProfileSlug, 'userId' => CommonManager::encryptDecrypt($this->container->getParameter('profile_page_encryption_key'), $userId)), true);
                 return $this->redirect($url, 301);
-            } elseif ($userRole == RoleRepository::ROLE_BUSINESS_SELLER && $userProfileSlug) {
+            } elseif (($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) && $userProfileSlug) {
                 $url = $this->get('router')->generate('show_business_profile_page', array('profileNameSlug' => $userProfileSlug), true);
                 return $this->redirect($url, 301);
             } else {
@@ -604,7 +604,7 @@ class ProfilePageController extends CoreController
             if ($userRole == RoleRepository::ROLE_SELLER && $userProfileSlug) {
                 $url = $this->get('router')->generate('show_private_user_ads', array('profileNameSlug' => $userProfileSlug, 'pageString' => 'ads', 'userId' => CommonManager::encryptDecrypt($this->container->getParameter('profile_page_encryption_key'), $userId)), true);
                 return $this->redirect(rtrim($url, '/'), 301);
-            } elseif ($userRole == RoleRepository::ROLE_BUSINESS_SELLER && $userProfileSlug) {
+            } elseif (($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) && $userProfileSlug) {
                 $url = $this->get('router')->generate('show_business_user_ads', array('profileNameSlug' => $userProfileSlug), true);
                 return $this->redirect($url, 301);
             } else {
@@ -647,7 +647,7 @@ class ProfilePageController extends CoreController
                 }
                 $url = $this->get('router')->generate('show_private_user_ads', array('profileNameSlug' => $userProfileSlug, 'pageString' => $pageString, 'userId' => CommonManager::encryptDecrypt($this->container->getParameter('profile_page_encryption_key'), $userId)), true);
                 return $this->redirect(rtrim($url, '/'), 301);
-            } elseif ($userRole == RoleRepository::ROLE_BUSINESS_SELLER && $userProfileSlug) {
+            } elseif (($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) && $userProfileSlug) {
                 $url = $this->get('router')->generate('show_business_user_ads_page', array('profileNameSlug' => $userProfileSlug, 'page' => $request->get('page')), true);
                 return $this->redirect($url, 301);
             } else {
@@ -690,7 +690,7 @@ class ProfilePageController extends CoreController
                 }
                 $url = $this->get('router')->generate('show_private_user_ads', array('profileNameSlug' => $userProfileSlug, 'pageString' => $pageString, 'userId' => CommonManager::encryptDecrypt($this->container->getParameter('profile_page_encryption_key'), $userId)), true);
                 return $this->redirect(rtrim($url, '/'), 301);
-            } elseif ($userRole == RoleRepository::ROLE_BUSINESS_SELLER && $userProfileSlug) {
+            } elseif (($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) && $userProfileSlug) {
                 $url = $this->get('router')->generate('show_business_user_ads_location', array('profileNameSlug' => $userProfileSlug, 'page_string' => $request->get('page_string'), 'location' => $request->get('location')), true);
                 return $this->redirect($url, 301);
             } else {

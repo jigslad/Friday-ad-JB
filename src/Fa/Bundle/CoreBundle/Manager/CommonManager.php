@@ -990,7 +990,7 @@ class CommonManager
         $userName .= ' - Friday-Ad';
         $imagePath = null;
 
-        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
+        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $path = $container->getParameter('fa.company.image.dir').'/'.self::getGroupDirNameById($userId, 5000);
             $imagePath  = $container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'.jpg';
         } elseif ($userRole == RoleRepository::ROLE_SELLER) {
@@ -1002,7 +1002,7 @@ class CommonManager
             if ($getUrlOnly) {
                 return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null);
             } else {
-                if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
+                if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" />';
                 } else {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).')" title="'.$userName.'"></span>';
@@ -1013,10 +1013,11 @@ class CommonManager
                 return null;
             } else {
                 $noImageName = 'user-icon.svg';
-                if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
+                if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
                     $noImageName = 'user-no-logo.svg';
                 }
-                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).($userRole == RoleRepository::ROLE_BUSINESS_SELLER ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'" '.($userRole == RoleRepository::ROLE_SELLER? 'class="pvt-no-img"':null).' />'.($userRole == RoleRepository::ROLE_BUSINESS_SELLER ? '</div>' : '');
+
+                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).(($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" '.($userRole == RoleRepository::ROLE_SELLER? 'class="pvt-no-img"':null).' />'.(($userRole == RoleRepository::ROLE_BUSINESS_SELLER  || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) ? '</div>' : '');
             }
         }
     }
@@ -3288,5 +3289,23 @@ HTML;
           }
        }
        return $closest;
+    }
+
+    /**
+     * Check if a given substring exists in the given string - Case sensitive.
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @param bool $caseSensitive
+     * @return bool
+     */
+    public function substr_exist($haystack, $needle, $caseSensitive = false)
+    {
+        if (!$caseSensitive) {
+            $haystack = strtolower($haystack);
+            $needle = strtolower($needle);
+        }
+
+        return !is_bool(strpos($haystack, $needle));
     }
 }

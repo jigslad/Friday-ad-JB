@@ -139,7 +139,7 @@ class UserReportProfilePackageDailyRepository extends EntityRepository
         if ($searchParams && !empty($searchParams['rus_user_type'])) {
             $qb = $qb->andWhere(UserReportRepository::ALIAS.'.role_id = '.$searchParams['rus_user_type']);
         } else {
-            $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID);
+            $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID, RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
             $qb = $qb->andWhere(UserReportRepository::ALIAS.'.role_id IN (:roleIds)');
             $qb = $qb->setParameter('roleIds', $roleIds);
         }
@@ -186,7 +186,7 @@ class UserReportProfilePackageDailyRepository extends EntityRepository
         if ($searchParams && !empty($searchParams['rus_user_type'])) {
             $qb = $qb->andWhere(UserReportRepository::ALIAS.'.role_id = '.$searchParams['rus_user_type']);
         } else {
-            $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID);
+            $roleIds = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_SELLER_ID, RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
             $qb = $qb->andWhere(UserReportRepository::ALIAS.'.role_id IN (:roleIds)');
             $qb = $qb->setParameter('roleIds', $roleIds);
         }

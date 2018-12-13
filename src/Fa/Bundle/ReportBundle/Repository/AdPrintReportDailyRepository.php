@@ -258,6 +258,8 @@ class AdPrintReportDailyRepository extends EntityRepository
                             $fieldValueArray[$key] = 'Private advertiser';
                         } elseif ($value == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
                             $fieldValueArray[$key] = 'Business advertiser';
+                        } elseif ($value == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
+                            $fieldValueArray[$key] = 'Netsuite subscription advertiser';
                         }
                         break;
                 }

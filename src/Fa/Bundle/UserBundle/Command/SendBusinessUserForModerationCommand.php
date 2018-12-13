@@ -91,7 +91,7 @@ EOF
             $userIds = null;
         }
 
-        $searchParam['user']['role'] = RoleRepository::ROLE_BUSINESS_SELLER_ID;
+        $searchParam['user']['role'] = array(RoleRepository::ROLE_BUSINESS_SELLER_ID, RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
 
         if (isset($offset)) {
             $this->sendBusinessUserForModerationWithOffset($searchParam, $input, $output, $isForManualModeration, $manualModerationReason);

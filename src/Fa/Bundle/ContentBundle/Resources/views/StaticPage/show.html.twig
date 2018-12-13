@@ -30,6 +30,8 @@
 {% block canonical_url %}
     {% if seoFields.canonical_url is defined %}
         {{seoFields.canonical_url}}
+    {% else %}
+        {{ app.request.uri|replace({('?'~app.request.queryString) : ''}) }}
     {% endif %}
 {% endblock %}
 

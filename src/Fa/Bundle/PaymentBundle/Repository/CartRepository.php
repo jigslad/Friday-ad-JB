@@ -190,8 +190,9 @@ class CartRepository extends EntityRepository
         $adObj                       = $adRepository->find($adId);
         $packageObj                  = $packageRepository->find($packageId);
         $userObj                     = ($adObj->getUser() ? $adObj->getUser() : null);
-        $isAdminLoggedIn             = CommonManager::isAdminLoggedIn($container);
 
+        $isAdminLoggedIn             = CommonManager::isAdminLoggedIn($container);
+        
         if (!$isAdminLoggedIn && $adObj && $adObj->getSource() == AdRepository::SOURCE_ADMIN) {
             $isAdminLoggedIn = true;
         }

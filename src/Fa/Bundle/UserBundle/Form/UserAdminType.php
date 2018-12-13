@@ -220,7 +220,7 @@ class UserAdminType extends AbstractType
                         $user->addRole($objRole);
                         $user->setRole($objRole);
 
-                        if ($role == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+                        if ($role == RoleRepository::ROLE_BUSINESS_SELLER_ID || $role == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                             if ($user->getId()) {
                                 $userSite = $em->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $user->getId()));
                                 if (!$userSite) {
@@ -235,12 +235,12 @@ class UserAdminType extends AbstractType
 
                             $user->setImage(null);
                             //Only assign a free package if only new user is creating or user role is changing from private to business
-                            if (!$objOldRole || ($objOldRole && count($objOldRole) > 0 && $objOldRole[0]->getName() != RoleRepository::ROLE_BUSINESS_SELLER)) {
+                            if (!$objOldRole || ($objOldRole && count($objOldRole) > 0 && ($objOldRole[0]->getName() != RoleRepository::ROLE_BUSINESS_SELLER || $objOldRole[0]->getName() != RoleRepository::ROLE_NETSUITE_SUBSCRIPTION))) {
                                 $em->getRepository('FaUserBundle:UserPackage')->assignFreePackageToUser($user, 'my_account_user_upgrade', $this->container);
                                 $user->setFreeTrialEnable(1);
                             }
 
-                            if ($objOldRole && count($objOldRole) > 0 && $objOldRole[0]->getName() == RoleRepository::ROLE_SELLER && $objRole->getName() == RoleRepository::ROLE_BUSINESS_SELLER) {
+                            if ($objOldRole && count($objOldRole) > 0 && $objOldRole[0]->getName() == RoleRepository::ROLE_SELLER && $objRole->getName() == RoleRepository::ROLE_BUSINESS_SELLER && $objRole->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
                                 $updateSQL = "UPDATE ad SET is_trade_ad = '1' WHERE user_id = '".$user->getId()."'";
                             }
 
@@ -251,7 +251,7 @@ class UserAdminType extends AbstractType
                             $user->setBusinessName(null);
                             $user->setBusinessCategoryId(null);
 
-                            if ($objOldRole && count($objOldRole) > 0 && $objOldRole[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER && $objRole->getName() == RoleRepository::ROLE_SELLER) {
+                            if ($objOldRole && count($objOldRole) > 0 && $objOldRole[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER && $objOldRole[0]->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION && $objRole->getName() == RoleRepository::ROLE_SELLER) {
                                 $updateSQL = "UPDATE ad SET is_trade_ad = '0' WHERE user_id = '".$user->getId()."'";
                             }
                         }
@@ -336,7 +336,7 @@ class UserAdminType extends AbstractType
                 }
             }
 
-            if ($role == RoleRepository::ROLE_BUSINESS_SELLER_ID) {
+            if ($role == RoleRepository::ROLE_BUSINESS_SELLER_ID || $role == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                 $isBusinessSeller = true;
             }
         }

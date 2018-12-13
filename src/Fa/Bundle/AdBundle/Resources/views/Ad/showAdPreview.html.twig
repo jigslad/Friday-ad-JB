@@ -51,6 +51,10 @@
 {% endif %}
 {% set imageAltString = null %}
 
+{% block canonical_url %}
+    {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+{% endblock %}
+
 {% block body %}
 {{ set_variables('userAdDetail', {'is_private_phone_number':adDetail['user']['is_private_phone_number'], 'phone':adDetail['user']['phone'], 'privacy_number':adDetail['privacy_number']}) }}
 {% set latitude = null %}

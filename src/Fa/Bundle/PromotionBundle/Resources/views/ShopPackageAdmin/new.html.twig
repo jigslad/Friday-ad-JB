@@ -3,7 +3,7 @@
 {% block content %}
 
 {{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
-
+<style>#show_monthly_boost_count input { width: 100px; margin-top: -10px; margin-left: 10px; } </style>
 <div class="row">
     <div class="columns">
         <div class="panel">
@@ -23,6 +23,16 @@
                 {{ form_row(form.trail) }}
                 {{ form_row(form.value) }}
                 {{ form_row(form.is_admin_package) }}
+                <div class="row">
+                    <div class="large-3 columns" style="margin-bottom:20px">
+                        {{ form_label(attribute(form, 'boost_ad_enabled')) }}
+                        {{ form_widget(attribute(form, 'boost_ad_enabled')) }}
+                    </div>
+                    <div id="show_monthly_boost_count" class="large-9 columns" style="display:none;">
+                        {{ form_label(attribute(form, 'monthly_boost_count')) }}
+                        {{ form_widget(attribute(form, 'monthly_boost_count')) }}
+                    </div>
+                </div>
                 <div class="row">
                     <div class="large-12 columns">
                         <div class="form-group">
@@ -113,6 +123,20 @@
                 }
             });
         {% endfor %}
+
+        if($('#fa_promotion_shop_package_admin_boost_ad_enabled').is(":checked")) {
+            $('#show_monthly_boost_count').css('display','inline-flex');
+        } else {
+            $('#show_monthly_boost_count').css('display','none');
+        }
+
+        $('#fa_promotion_shop_package_admin_boost_ad_enabled').change(function() {
+            if($(this).is(":checked")) {
+                $('#show_monthly_boost_count').css('display','inline-flex');
+            } else {
+                $('#show_monthly_boost_count').css('display','none');
+            }
+        });
     });    
     //]]>
     </script>

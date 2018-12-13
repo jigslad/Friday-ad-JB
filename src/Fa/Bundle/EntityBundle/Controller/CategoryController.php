@@ -74,6 +74,8 @@ class CategoryController extends CoreController
             if ($rootCategoryId == CategoryRepository::ADULT_ID) {
                 $thirdPartyAdultModalBox = true;
             }
+    	} elseif($request->cookies->has('is_over_18')) {
+            $thirdPartyAdultModalBox = true;
         }
         
         

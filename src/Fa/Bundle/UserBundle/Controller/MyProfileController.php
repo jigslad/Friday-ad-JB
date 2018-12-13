@@ -71,13 +71,13 @@ class MyProfileController extends CoreController
             }
         }
 
-        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
+        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $formName     = UserBusinessProfileType::class;
             $templateName = 'businessProfile';
         }
         // initialize form manager service
         $formManager = $this->get('fa.formmanager');
-        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
+        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
             $userSite          = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $loggedinUser->getId()));
             if (!$userSite) {
@@ -126,7 +126,7 @@ class MyProfileController extends CoreController
             }
         }
 
-        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
+        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $parameters = array(
                 'form' => $form->createView(),
                 'activeShopPackage' => $activeShopPackage,
@@ -154,7 +154,7 @@ class MyProfileController extends CoreController
 
     private function updateShopDetailInSolr($loggedinUser, $userRole)
     {
-        if ($loggedinUser && $loggedinUser->getBusinessCategoryId() && $userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
+        if ($loggedinUser && $loggedinUser->getBusinessCategoryId() && ($userRole == RoleRepository::ROLE_BUSINESS_SELLER  || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION)) {
             if (in_array($loggedinUser->getBusinessCategoryId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
                 exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:user-shop-detail-solr-index --id='.$loggedinUser->getId().' >/dev/null &');
             }

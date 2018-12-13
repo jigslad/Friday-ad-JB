@@ -43,6 +43,11 @@
 {% set isBoostedClass = ' boosted_ad' %}
 {% endif %}
 
+{% set isExtendedRadiusClass = '' %}
+{% if setExtendedHeading is defined and setExtendedHeading == 1 %}
+    {% set isExtendedRadiusClass = ' extended-radius-ads' %}
+{% endif %}
+
 {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(ad, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
 {% set imageAltString = null %}
 {% if seoRule['image_alt'] is defined %}
@@ -63,14 +68,17 @@
         {% set catString = catName %}
     {% endif %}
 {% endfor %}
-<div class="listing{{ isUrgentClass }} {{isBoostedClass}} {{ isFeaturedClass }} {% if isLiveBasicAd is defined and isLiveBasicAd == 1 %} featured-upgrade-border {% endif %}">
+{% set adCount = (adCount is defined)?adCount:1 %} 
+{% set getCurrentPage = (pagination is defined)?pagination.getCurrentPage():1 %}
+<div class="listing{{ isUrgentClass }} {{isBoostedClass}} {{ isFeaturedClass }} {% if isLiveBasicAd is defined and isLiveBasicAd == 1 %} featured-upgrade-border {% endif %} {{ isExtendedRadiusClass }}">
     {% set updateCountOnFeedAdView = '' %}
     {% if fromSimilarAdverts is not defined and aff_icon_cls is not null %}
         {% set updateCountOnFeedAdView = 'onclick=javascript:updateCountOnFeedAdView(' ~ ad.id ~ ');' %}
     {% endif %}
-    <a id="listing_{{ad.id}}" href="{{ adUrl }}" oncontextmenu="openAdDetail('{{ catString }}', '{{ adCount }}', '{{ pagination.getCurrentPage() }}');" onclick="openAdDetail('{{ catString }}', '{{ adCount }}', '{{ pagination.getCurrentPage() }}');" {{affiliate_url}} {{ updateCountOnFeedAdView }} class="tricky-link">{% if attribute(ad, constant(solrMapping ~ 'TITLE')) is defined %}{{trim_text(attribute(ad, constant(solrMapping ~ 'TITLE')), 80)|raw}}{% endif %}</a>
+    <a id="listing_{{ad.id}}" href="{{ adUrl }}" oncontextmenu="openAdDetail('{{ catString }}', '{{ adCount }}', '{{ getCurrentPage }}');" onclick="openAdDetail('{{ catString }}', '{{ adCount }}', '{{ getCurrentPage }}');" {{affiliate_url}} {{ updateCountOnFeedAdView }} class="tricky-link">{% if attribute(ad, constant(solrMapping ~ 'TITLE')) is defined %}{{trim_text(attribute(ad, constant(solrMapping ~ 'TITLE')), 80)|raw}}{% endif %}</a>
     <div class="featured-ribbon">featured</div>
     <div class="urgent-ribbon">urgent</div>
+    <div class="boost-ribbon"></div>
     <div class="clearfix">
         <div class="list-col-1">
             {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, ad, '300X225', 1) %}
@@ -178,7 +186,11 @@
                     </div>
                     <div class="list-hr-ago">
                         {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') and attribute(ad, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT')) is defined %}
+                            {% if attribute(ad, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT'))>attribute(ad, constant(solrMapping ~ 'CREATED_AT'))  %}
                             {{attribute(ad, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT'))|time_ago_in_words}}
+                            {% else %}
+                                {{attribute(ad, constant(solrMapping ~ 'CREATED_AT'))|time_ago_in_words}}
+                            {% endif %}
                         {% endif %}
                     </div>
                     {% if (attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) is defined and not attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) and attribute(ad, constant(solrMapping ~ 'IS_TRADE_AD')) is defined and attribute(ad, constant(solrMapping ~ 'IS_TRADE_AD')) == 1 and rootCategoryId is defined and rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')) %}

@@ -62,7 +62,7 @@ class UserSiteBannerRepository extends EntityRepository
      */
     public function updateUserBanner($userObj, $container)
     {
-        if ($userObj->getRole()->getName() == RoleRepository::ROLE_BUSINESS_SELLER && $userObj->getBusinessCategoryId()) {
+        if (($userObj->getRole()->getName() == RoleRepository::ROLE_BUSINESS_SELLER || $userObj->getRole()->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) && $userObj->getBusinessCategoryId()) {
             $userSite = $this->_em->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $userObj->getId()));
             if (!$userSite) {
                 $userSite = new UserSite();

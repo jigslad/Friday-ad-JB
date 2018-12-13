@@ -73,7 +73,16 @@ class DashboardController extends CoreController
         
         $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
 
-        $parameters = array('recentlyViewedAds' => $recentlyViewedAds, 'myAdsParameters' => $myAdsParameters, 'myMessagesParameters' => $myMessagesParameters, 'myFavouritesParameters' => $myFavouritesParameters, 'mySavedSearchesParameters' => $mySavedSearchesParameters, 'myReviewsParameters' => $myReviewsParameters, 'searchResultUrl' => $searchResultUrl, 'modToolTipText'  => $moderationToolTipText);
+        $remainingDaysToRenewBoost=0; $boostedAdCount=0; $isBoostEnabled = 0; $boostMaxPerMonth = 0;$boostAdRemaining = 0; $getExipryDate = $boostRenewDate = '';
+
+        $parameters = array('recentlyViewedAds' => $recentlyViewedAds, 'myAdsParameters' => $myAdsParameters, 'myMessagesParameters' => $myMessagesParameters, 'myFavouritesParameters' => $myFavouritesParameters, 'mySavedSearchesParameters' => $mySavedSearchesParameters, 'myReviewsParameters' => $myReviewsParameters, 'searchResultUrl' => $searchResultUrl, 'modToolTipText'  => $moderationToolTipText,
+            'isBoostEnabled'  => $isBoostEnabled,
+            'boostMaxPerMonth'=> $boostMaxPerMonth,
+            'boostAdRemaining'=> $boostAdRemaining,
+            'boostRenewDate'  => $remainingDaysToRenewBoost,
+            'boostedAdCount'  => $boostedAdCount,
+        );
+        
         return $this->render('FaUserBundle:Dashboard:index.html.twig', $parameters);
     }
 
@@ -420,7 +429,7 @@ class DashboardController extends CoreController
             // initialize solr search manager service and fetch data based of above prepared search options
             $solrSearchManager = $this->get('fa.solrsearch.manager');
             $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
-            if (!empty($adIdsArray) && isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
+            if (!empty($cookieLocation) && !empty($adIdsArray) && isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
                 $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
             }

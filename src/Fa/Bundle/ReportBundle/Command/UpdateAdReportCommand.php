@@ -258,7 +258,7 @@ EOF
             $ipAddresses        = $this->entityManager->getRepository('FaAdBundle:AdIpAddress')->getIpAddressesByAdIds($adIdArray);
 
             $insertSql = 'INSERT INTO '.$this->historyDbName.'.'.$adReportDailyTableName.
-            '(`ad_id`, `user_id`, `ad_created_at`, `print_insert_date`, `published_at`, `is_edit`, `is_renewed`, `is_expired`, `expires_at`, `expired_at`, `status_id`, `category_id`, `postcode`, `town_id`, `county_id`, `print_edition_ids`, `source`, `source_latest`, `role_id`, `no_of_photos`, `total_revenue_gross`, `print_revenue_gross`, `online_revenue_gross`, `total_revenue_net`, `print_revenue_net`, `online_revenue_net`, `package_id`, `package_name`, `package_sr_no`, `duration_print`, `duration_online`, `shop_package_id`, `shop_package_name`, `shop_package_revenue`, `created_at`, `renewed_at`, `edited_at`, `admin_user_email`, `payment_method`, `ad_price`, `skip_payment_reason`, `is_discount_code_used`, `phones`, `is_credit_used`, `credit_value`, `ti_ad_id`, `ip_addresses`) VALUES';
+            '(`ad_id`, `user_id`, `ad_created_at`, `print_insert_date`, `published_at`, `is_edit`, `is_renewed`, `is_expired`, `expires_at`, `expired_at`, `status_id`, `category_id`, `postcode`, `town_id`, `county_id`, `print_edition_ids`, `source`, `source_latest`, `role_id`, `no_of_photos`, `total_revenue_gross`, `print_revenue_gross`, `online_revenue_gross`, `total_revenue_net`, `print_revenue_net`, `online_revenue_net`, `package_id`, `package_name`, `package_sr_no`, `duration_print`, `duration_online`, `shop_package_id`, `shop_package_name`, `shop_package_revenue`, `created_at`, `renewed_at`, `edited_at`, `admin_user_email`, `payment_method`, `ad_price`, `skip_payment_reason`, `is_discount_code_used`, `phones`, `is_credit_used`, `credit_value`, `ti_ad_id`, `ip_addresses`,`is_paa_lite`) VALUES';
 
             foreach ($ads as $ad) {
                 $isNew     = 0;
@@ -321,9 +321,12 @@ EOF
                 $printRevenueNet    = 0;
                 $onlineRevenueNet   = 0;
                 $shopPackageRevenue = 0;
+                $isPaaLite = 0;
 
                 if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER) {
                     $userRoleId = RoleRepository::ROLE_BUSINESS_SELLER_ID;
+                } elseif ($userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+                    $userRoleId = RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID;
                 } elseif ($userRole == RoleRepository::ROLE_SELLER) {
                     $userRoleId = RoleRepository::ROLE_SELLER_ID;
                 }
@@ -339,6 +342,10 @@ EOF
                 }
                 if ($ad['expires_at'] && $ad['expires_at'] >= $startDate && $ad['expires_at'] <= $endDate) {
                     $isExpired = 1;
+                }
+
+                if($ad['source']=='paa_lite') {
+                    $isPaaLite = 1;
                 }
 
                 if ($adUserPackage && $adPayment['created_at'] && $adPayment['created_at'] >= $startDate && $adPayment['created_at'] <= $endDate && ($isNew || $isRenewed || $action == 'all')) {
@@ -398,7 +405,7 @@ EOF
                     $ipAddressesStr = $ipAddresses[$ad['id']];
                 }
 
-                $insertSql .= '("'.$ad['id'].'", "'.$ad['user_id'].'", "'.$ad['created_at'].'", "'.$printInsertDate.'", "'.$ad['published_at'].'", "'.$isEdit.'", "'.$isRenewed.'", "'.$isExpired.'", "'.($ad['expires_at'] && !$isExpired ? $ad['expires_at'] : null).'", "'.($ad['expires_at'] && $isExpired ? $ad['expires_at'] : null).'", "'.$ad['status_id'].'", "'.$ad['category_id'].'", "'.$postCode.'", "'.$townId.'", "'.$countyId.'", "'.implode(',', $printEditionIds).'", "'.$source.'", "'.$sourceLatest.'", "'.$userRoleId.'", "'.$adImageCnt.'", "'.$totalRevenueGross.'", "'.$printRevenueGross.'", "'.$onlineRevenueGross.'", "'.$totalRevenueNet.'", "'.$printRevenueNet.'", "'.$onlineRevenueNet.'", "'.$packageId.'", "'.$packageName.'", "'.$packageSrNo.'", "'.$durationPrint.'", "'.$durationOnline.'", "'.$shopPackageId.'", "'.$shopPackageName.'", "'.$shopPackageRevenue.'", '.($action == 'all' ? time() : ($date ? strtotime($date) : (strtotime(date('Y-m-d'))- 24*60*60))).', "'.$ad['renewed_at'].'", "'.$ad['edited_at'].'", "'.$adminUserEmail.'", "'.$paymentMethod.'", "'.$ad['ad_price'].'", "'.$skipPaymentReason.'", "'.$isDiscountCodeUsed.'", "'.$adUserPhoneDetails.'", "'.$isCreditUsed.'", "'.mysql_escape_string(serialize($creditUsedValue)).'", "'.$ad['ti_ad_id'].'", "'.$ipAddressesStr.'"), ';
+                $insertSql .= '("'.$ad['id'].'", "'.$ad['user_id'].'", "'.$ad['created_at'].'", "'.$printInsertDate.'", "'.$ad['published_at'].'", "'.$isEdit.'", "'.$isRenewed.'", "'.$isExpired.'", "'.($ad['expires_at'] && !$isExpired ? $ad['expires_at'] : null ).'", "'.($ad['expires_at'] && $isExpired ? $ad['expires_at'] : null ).'", "'.$ad['status_id'].'", "'.$ad['category_id'].'", "'.$postCode.'", "'.$townId.'", "'.$countyId.'", "'.implode(',', $printEditionIds).'", "'.$source.'", "'.$sourceLatest.'", "'.$userRoleId.'", "'.$adImageCnt.'", "'.$totalRevenueGross.'", "'.$printRevenueGross.'", "'.$onlineRevenueGross.'", "'.$totalRevenueNet.'", "'.$printRevenueNet.'", "'.$onlineRevenueNet.'", "'.$packageId.'", "'.$packageName.'", "'.$packageSrNo.'", "'.$durationPrint.'", "'.$durationOnline.'", "'.$shopPackageId.'", "'.$shopPackageName.'", "'.$shopPackageRevenue.'", '.($action == 'all' ? time() : ($date ? strtotime($date) : (strtotime(date('Y-m-d'))- 24*60*60))).', "'.$ad['renewed_at'].'", "'.$ad['edited_at'].'", "'.$adminUserEmail.'", "'.$paymentMethod.'", "'.$ad['ad_price'].'", "'.$skipPaymentReason.'", "'.$isDiscountCodeUsed.'", "'.$adUserPhoneDetails.'", "'.$isCreditUsed.'", "'.mysql_escape_string(serialize($creditUsedValue)).'", "'.$ad['ti_ad_id'].'", "'.$ipAddressesStr.'", "'.$isPaaLite.'"), ';
             }
 
             $insertSql = trim($insertSql, ', ');

@@ -7,7 +7,6 @@
     {{'Choose your location'|trans({}, 'frontend-location')}}
 {% endblock %}
 
-
 {% block body -%}
     {% cache 'footer|locations|front/locations' 86400 %}
         {% set townIds   = locationRepository.getTopTownIdsForLocation(container) %}

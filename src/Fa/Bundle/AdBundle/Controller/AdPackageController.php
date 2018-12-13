@@ -116,7 +116,7 @@ class AdPackageController extends CoreController
             $privateUserUrlParams['business'] = 1;
             if (isset($privateUserAdParams['allowPrivateUserToPostAdFlag']) && !$privateUserAdParams['allowPrivateUserToPostAdFlag']) {
                 if (!count($adCartDetailValue) || (count($adCartDetailValue) && isset($adCartDetailValue['privateUserAdParams']) && isset($adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) && !$adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) ||  (count($adCartDetailValue) && !isset($adCartDetailValue['privateUserAdParams']))) {
-                    $userRolesArray = array(RoleRepository::ROLE_BUSINESS_SELLER_ID);
+                    $userRolesArray = array(RoleRepository::ROLE_BUSINESS_SELLER_ID,RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
                     $privateUserAdParams['business'] = 1;
                 }
             }
@@ -514,7 +514,7 @@ class AdPackageController extends CoreController
                 $privateUserUrlParams['business'] = 1;
                 if (isset($privateUserAdParams['allowPrivateUserToPostAdFlag']) && !$privateUserAdParams['allowPrivateUserToPostAdFlag']) {
                     if (!count($adCartDetailValue) || (count($adCartDetailValue) && isset($adCartDetailValue['privateUserAdParams']) && isset($adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) && !$adCartDetailValue['privateUserAdParams']['allowPrivateUserToPostAdFlag']) ||  (count($adCartDetailValue) && !isset($adCartDetailValue['privateUserAdParams']))) {
-                        $userRolesArray = array(RoleRepository::ROLE_BUSINESS_SELLER_ID);
+                        $userRolesArray = array(RoleRepository::ROLE_BUSINESS_SELLER_ID,RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
                         $privateUserAdParams['business'] = 1;
                     }
                 }

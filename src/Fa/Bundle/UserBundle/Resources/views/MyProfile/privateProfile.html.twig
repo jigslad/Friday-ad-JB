@@ -12,6 +12,12 @@
     {{'My Profile'|trans({}, 'frontend-my-profile')}}
 {% endblock %}
 
+
+{% block canonical_url %}
+    {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+{% endblock %}
+
+
 {% set deleteRoute = "ajax_delete_user_image" %}
 {% set getProfileBigImageRoute = "ajax_get_profile_big_image" %}
 

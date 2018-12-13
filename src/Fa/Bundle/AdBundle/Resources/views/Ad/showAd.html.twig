@@ -150,7 +150,7 @@
 
 {% set userTypeText = null %}
 {% if adDetail['user']['role_id'] is defined %}
-    {% if adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+    {% if (adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
         {% set userTypeText = 'Business ad' %}
     {% elseif adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
         {% set userTypeText = 'Private ad' %}
@@ -232,6 +232,11 @@
         {{ seoManager.parseAdDetailSeoString(seoFields.meta_keywords, adDetail) }}
     {% endif %}
 {% endblock %}
+
+{% block canonical_url %}
+    {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
+{% endblock %}
+
 {% set catString = null %}
 {% block body %}
 {% set imageZoomeZoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_IN_IMAGE_ZOOM') %}
@@ -1455,7 +1460,7 @@
 {% endblock %}
 
 {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(adCategoryId, false, fetch_container_instance()) %}
-{% if adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}
+{% if (adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
     {% if adDetail['user']['upsells'] is defined %}
         {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
             {% set dimension5 = 'Dealer_Paid' %}

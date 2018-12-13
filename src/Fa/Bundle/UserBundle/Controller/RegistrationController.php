@@ -90,7 +90,7 @@ class RegistrationController extends ThirdPartyLoginController
 
             if ('POST' === $request->getMethod()) {
                 $requestParams = $request->request->all();
-                if (isset($requestParams) && isset($requestParams['user_registration']) && $requestParams['user_registration']['user_roles'] && $requestParams['user_registration']['user_roles'] == 'ROLE_BUSINESS_SELLER') {
+                if (isset($requestParams) && isset($requestParams['user_registration']) && $requestParams['user_registration']['user_roles'] && ($requestParams['user_registration']['user_roles'] == 'ROLE_BUSINESS_SELLER' || $requestParams['user_registration']['user_roles'] == 'ROLE_BUSINESS_SELLER')) {
                     $isCompany = 1;
                 }
                 $form->handleRequest($request);
@@ -120,7 +120,7 @@ class RegistrationController extends ThirdPartyLoginController
                     $this->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('no_profile_photo', null, $user->getId());
                     $this->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('if_profile_incomplete', null, $user->getId());
 
-                    if (($user->getRole() && $user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID)) {
+                    if (($user->getRole() && ($user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID || RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID))) {
                         $this->getRepository('FaUserBundle:UserPackage')->assignFreePackageToUser($user, 'reg_back', $this->container);
                         return $this->handleMessage($this->get('translator')->trans('Hi %first_name%, welcome to Friday-Ad!', array('%first_name%' => $user->getFirstName())), 'user_package_choose_profile');
                     } else {
@@ -214,7 +214,7 @@ class RegistrationController extends ThirdPartyLoginController
 
         $userRoleName = $this->getRepository('FaUserBundle:User')->getUserRole($userId, $this->container);
 
-        if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER) {
+     if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER || $userRoleName == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $isCompany = true;
         }
 

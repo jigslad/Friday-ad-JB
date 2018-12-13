@@ -20,6 +20,7 @@ use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\EntityRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Fa\Bundle\UserBundle\Repository\RoleRepository;
 
 /**
  * This command is used to send renew your ad alert to users for before given time
@@ -125,8 +126,9 @@ EOF
             $adStatRepository  = $this->em->getRepository('FaAdBundle:AdStatistics');
             $user = ($ad->getUser() ? $ad->getUser() : null);
 
+            $userRoleId = ($ad->getUser() ? $ad->getUser()->getRole()->getId() : 0);
             //send email only if ad has user and status is active.
-            if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer())) {
+            if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                 //$adRepository->sendExpirationEmail($ad, $this->getContainer());
                 $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('ad_is_expired', $user, $ad, $this->getContainer());
             }

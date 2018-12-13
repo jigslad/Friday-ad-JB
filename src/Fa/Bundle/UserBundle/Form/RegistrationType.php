@@ -228,7 +228,7 @@ class RegistrationType extends AbstractType
         }
 
         if ($form->get('user_roles')->getData()
-            && $form->get('user_roles')->getData() == RoleRepository::ROLE_BUSINESS_SELLER
+            && ($form->get('user_roles')->getData() == RoleRepository::ROLE_BUSINESS_SELLER || $form->get('user_roles')->getData() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION)
             && $form->has('business_category_id')
             && $form->get('business_category_id')->getData() == '') {
             $form->get('business_category_id')->addError(new FormError($this->translator->trans('Please select business category.', array(), 'validators')));

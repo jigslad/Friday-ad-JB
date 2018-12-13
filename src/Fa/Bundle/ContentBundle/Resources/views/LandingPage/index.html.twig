@@ -36,8 +36,10 @@
 {% endblock %}
 
 {% block canonical_url %}
-    {% if app.request.get('location') == 'uk' %}
+    {% if app.request.get('location') == 'uk' and app.request.get('category_string') is defined %}
         {{ container.get('router').generate('landing_page_category', {'category_string' : app.request.get('category_string')}, true) }}
+    {% else %}
+        {{ app.request.uri|replace({('?'~app.request.queryString) : ''}) }}
     {% endif %}
 {% endblock %}
 

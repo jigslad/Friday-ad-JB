@@ -8,6 +8,10 @@
     {{ 'What are you advertising'|trans({}, 'frontend-paa-first-step') }}
 {% endblock %}
 
+{% block canonical_url %}
+ {{ app.request.uri|replace({('?'~app.request.queryString) : ''}) }}
+{% endblock %}
+
 {% set showRegNoFieldsFlag = false %}
 {% if (categoryPath is defined and categoryPath is not null) %}
     {% set categoryIds = categoryPath|keys%}
