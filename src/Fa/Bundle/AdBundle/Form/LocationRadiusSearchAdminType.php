@@ -83,7 +83,7 @@ class LocationRadiusSearchAdminType extends AbstractType
                 'choices' => LocationRadiusRepository::getExtendedRadius()
             )
         ); */
-      $builder
+        $builder
       ->add('location_radius__category__id', HiddenType::class, array('data' => ''))
         ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 1))
         ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 2))

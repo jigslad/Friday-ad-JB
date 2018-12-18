@@ -639,13 +639,10 @@ class UserPackageRepository extends EntityRepository
      * @return boolean
     */
     public function checkUserHasBoostPackage($userId)
-    {   
-        $qb = $this->createQueryBuilder(self::ALIAS)->select(self::ALIAS.'.id',self::ALIAS.'.boost_overide',PackageRepository::ALIAS.'.monthly_boost_count')->innerJoin(self::ALIAS.'.package', PackageRepository::ALIAS)->andWhere(self::ALIAS.'.status = :status')->andWhere(self::ALIAS.'.user = :userId')->andWhere(PackageRepository::ALIAS.'.boost_ad_enabled = :boost_ad_enabled')->andWhere(PackageRepository::ALIAS.'.monthly_boost_count IS NOT NULL')->andWhere(PackageRepository::ALIAS.'.price > 0')->andWhere(PackageRepository::ALIAS.'.price IS NOT NULL')->setParameter('status', 'A')->setParameter('userId', $userId)->setParameter('boost_ad_enabled', '1'); 
+    {
+        $qb = $this->createQueryBuilder(self::ALIAS)->select(self::ALIAS.'.id', self::ALIAS.'.boost_overide', PackageRepository::ALIAS.'.monthly_boost_count')->innerJoin(self::ALIAS.'.package', PackageRepository::ALIAS)->andWhere(self::ALIAS.'.status = :status')->andWhere(self::ALIAS.'.user = :userId')->andWhere(PackageRepository::ALIAS.'.boost_ad_enabled = :boost_ad_enabled')->andWhere(PackageRepository::ALIAS.'.monthly_boost_count IS NOT NULL')->andWhere(PackageRepository::ALIAS.'.price > 0')->andWhere(PackageRepository::ALIAS.'.price IS NOT NULL')->setParameter('status', 'A')->setParameter('userId', $userId)->setParameter('boost_ad_enabled', '1');
 
         $result = $qb->getQuery()->getResult();
         return $result;
     }
-
-
-
 }

@@ -415,8 +415,7 @@ class AdUserPackageUpsellRepository extends EntityRepository
      */
     public function getBoostAdUpsellData($ad_id, $user_id)
     {
-        if($user_id)
-        {
+        if ($user_id) {
             $queryBuilder = $this->createQueryBuilder(self::ALIAS)
             ->select(self::ALIAS, UpsellRepository::ALIAS)
             ->innerJoin(self::ALIAS . '.upsell', UpsellRepository::ALIAS)
@@ -426,17 +425,12 @@ class AdUserPackageUpsellRepository extends EntityRepository
             ->setParameter('adId', $ad_id)
             ->orderBy(self::ALIAS . '.ad_id', 'asc');
             $getUserPackageUpsellResults = $queryBuilder->getQuery()->getResult();
-            if(!empty($getUserPackageUpsellResults))
-            {
+            if (!empty($getUserPackageUpsellResults)) {
                 return $getUserPackageUpsellResults;
-            }
-            else
-            {
+            } else {
                 return false;
             }
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -455,8 +449,11 @@ class AdUserPackageUpsellRepository extends EntityRepository
             ->andWhere(UpsellRepository::ALIAS . '.type='.UpsellRepository::UPSELL_TYPE_AUTO_RENEW_ID)
             ->setParameter('adId', $ad_id)
             ->orderBy(self::ALIAS . '.ad_id', 'asc');
-            $getAutoRenewUpsellResults = $queryBuilder->getQuery()->getResult();
-            if(!empty($getAutoRenewUpsellResults)) { return $getAutoRenewUpsellResults; }
-            else { return array(); }
+        $getAutoRenewUpsellResults = $queryBuilder->getQuery()->getResult();
+        if (!empty($getAutoRenewUpsellResults)) {
+            return $getAutoRenewUpsellResults;
+        } else {
+            return array();
+        }
     }
 }

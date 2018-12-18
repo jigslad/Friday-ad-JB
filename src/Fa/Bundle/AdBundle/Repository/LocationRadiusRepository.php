@@ -84,7 +84,7 @@ class LocationRadiusRepository extends EntityRepository
      */
     public function getDefaultRadius()
     {
-       return $defaultRadiusChoices = array(0=>'0 Mile',2=>'2 Miles',5=>'5 Miles',10=>'10 Miles',15=>'15 Miles',20=>'20 Miles',30=>'30 Miles',50=>'50 Miles',75=>'75 Miles',100=>'100 Miles',150=>'150 Miles',200=>'200 Miles');
+        return $defaultRadiusChoices = array(0=>'0 Mile',2=>'2 Miles',5=>'5 Miles',10=>'10 Miles',15=>'15 Miles',20=>'20 Miles',30=>'30 Miles',50=>'50 Miles',75=>'75 Miles',100=>'100 Miles',150=>'150 Miles',200=>'200 Miles');
     }
 
 
@@ -95,7 +95,7 @@ class LocationRadiusRepository extends EntityRepository
      */
     public function getExtendedRadius()
     {
-       return $extendedRadiusChoices = array(0=>'No extended radius',2=>'2 Miles',5=>'5 Miles',10=>'10 Miles',15=>'15 Miles',20=>'20 Miles',30=>'30 Miles',50=>'50 Miles',75=>'75 Miles',100=>'100 Miles',150=>'150 Miles',200=>'200 Miles');
+        return $extendedRadiusChoices = array(0=>'No extended radius',2=>'2 Miles',5=>'5 Miles',10=>'10 Miles',15=>'15 Miles',20=>'20 Miles',30=>'30 Miles',50=>'50 Miles',75=>'75 Miles',100=>'100 Miles',150=>'150 Miles',200=>'200 Miles');
     }
 
     /**
@@ -105,10 +105,11 @@ class LocationRadiusRepository extends EntityRepository
      */
     public function getSingleLocationRadiusByCategory($categoryId)
     {
-        $categoryPathArray = array();$resultArray = array();
+        $categoryPathArray = array();
+        $resultArray = array();
         $categoryPathArray = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathDetailArrayById($categoryId);
-        if(!empty($categoryPathArray)) {
-            $categoryPathIds = array_column($categoryPathArray,'id');
+        if (!empty($categoryPathArray)) {
+            $categoryPathIds = array_column($categoryPathArray, 'id');
 
             $qb = $this->createQueryBuilder(self::ALIAS)
             ->andWhere(self::ALIAS.'.category IN (:categoryIds)')
@@ -117,7 +118,7 @@ class LocationRadiusRepository extends EntityRepository
             ->orderBy(self::ALIAS.'.category', 'desc');
 
             $resultObj = $qb->getQuery()->getResult();
-            if(!empty($resultObj)) {
+            if (!empty($resultObj)) {
                 $resultArray['categoryId'] = $resultObj[0]->getCategory()->getId();
                 $resultArray['defaultRadius'] = $resultObj[0]->getDefaultRadius();
                 $resultArray['extendedRadius'] = $resultObj[0]->getExtendedRadius();
@@ -133,7 +134,6 @@ class LocationRadiusRepository extends EntityRepository
      */
     public function getSingleLocationRadiusByCategoryIds($categoryIds)
     {
-
         $resultArray = array();
         
         $qb = $this->createQueryBuilder(self::ALIAS)
@@ -143,7 +143,7 @@ class LocationRadiusRepository extends EntityRepository
         ->orderBy(self::ALIAS.'.category', 'desc');
 
         $resultObj = $qb->getQuery()->getResult();
-        if(!empty($resultObj)) {
+        if (!empty($resultObj)) {
             $resultArray['categoryId'] = $resultObj[0]->getCategory()->getId();
             $resultArray['defaultRadius'] = $resultObj[0]->getDefaultRadius();
             $resultArray['extendedRadius'] = $resultObj[0]->getExtendedRadius();
@@ -154,15 +154,11 @@ class LocationRadiusRepository extends EntityRepository
                 ->setMaxResults(1)
                 ->orderBy(self::ALIAS.'.category', 'desc');
             $resultObj1 = $qb1->getQuery()->getOneOrNullResult();
-            if(!empty($resultObj1)) {
+            if (!empty($resultObj1)) {
                 $resultArray['defaultRadius'] = $resultObj1->getDefaultRadius();
                 $resultArray['extendedRadius'] = $resultObj1->getExtendedRadius();
             }
         }
         return $resultArray;
     }
-
-        
-
-    
 }

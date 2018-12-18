@@ -87,7 +87,7 @@ class LocationRadiusAdminController extends CrudController implements ResourceAu
         );
 
         return $this->render('FaAdBundle:LocationRadiusAdmin:index.html.twig', $parameters);
-    } 
+    }
 
     /**
      * Creates a new record.
@@ -153,8 +153,9 @@ class LocationRadiusAdminController extends CrudController implements ResourceAu
         if ($formManager->isValid($form)) {
             $messageManager = $this->get('fa.message.manager');
             $messageManager->setFlashMessage($this->get('translator')->trans('%displayword% was successfully updated.', array('%displayword%' => $this->getDisplayWord())), 'success');
-            if(empty($backUrl))
+            if (empty($backUrl)) {
                 $backUrl = $this->generateUrl('location_radius_admin');
+            }
             return $this->redirect($backUrl);
         }
 
@@ -165,5 +166,5 @@ class LocationRadiusAdminController extends CrudController implements ResourceAu
         );
 
         return $this->render($this->getBundleName().':'.$this->getControllerName().':new.html.twig', $parameters);
-    }   
+    }
 }

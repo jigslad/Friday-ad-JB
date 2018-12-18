@@ -687,7 +687,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $parameters = $this->getRegistrationEmailParameters($user, $container);
         $template = 'welcome_to_your_account';
 
-       if ($user->getRoles() && count($user->getRoles()) && ($user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER || $user->getRoles()[0]->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION)) {
+        if ($user->getRoles() && count($user->getRoles()) && ($user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER || $user->getRoles()[0]->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION)) {
             $categoryNames = $this->_em->getRepository('FaEntityBundle:Category')->getSubtitleCategories();
             if ($categoryNames && count($categoryNames) && array_key_exists($user->getBusinessCategoryId(), $categoryNames)) {
                 $categoryName = $categoryNames[$user->getBusinessCategoryId()];
@@ -716,9 +716,9 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $parameters['url_account_dashboard'] = '';
 
         if ($user->getRoles() && count($user->getRoles())) {
-        	if ($user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER || $user->getRoles()[0]->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+            if ($user->getRoles()[0]->getName() == RoleRepository::ROLE_BUSINESS_SELLER || $user->getRoles()[0]->getName() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
                 $parameters['category_name'] = $container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $user->getBusinessCategoryId());
-        		$objPackages = $this->_em->getRepository('FaPromotionBundle:Package')->getShopPackageByCategory($user->getBusinessCategoryId(),$user->getRoles()[0]->getId());
+                $objPackages = $this->_em->getRepository('FaPromotionBundle:Package')->getShopPackageByCategory($user->getBusinessCategoryId(), $user->getRoles()[0]->getId());
                 if ($objPackages && count($objPackages)) {
                     $i = 1;
                     foreach ($objPackages as $objPackage) {
@@ -1404,8 +1404,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             $updateSQL = "UPDATE ad SET is_trade_ad = '0' WHERE user_id = '".$user->getId()."'";
         }
 
-        if (!empty($updateSQL))
-        {
+        if (!empty($updateSQL)) {
             $stmt = $this->_em->getConnection()->prepare($updateSQL);
             $stmt->execute();
 
@@ -1488,8 +1487,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             $updateSQL = "UPDATE ad SET is_trade_ad = '1' WHERE user_id = '".$user->getId()."'";
         }
 
-        if (!empty($updateSQL))
-        {
+        if (!empty($updateSQL)) {
             $stmt = $this->_em->getConnection()->prepare($updateSQL);
             $stmt->execute();
 

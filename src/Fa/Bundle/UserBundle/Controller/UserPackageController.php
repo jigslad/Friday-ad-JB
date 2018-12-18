@@ -20,6 +20,7 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\UserBundle\Form\UserPackageType;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
+
 /**
  * This controller is used for handling user packages.
  *
@@ -61,7 +62,7 @@ class UserPackageController extends CoreController
         $userBusinessCategoryId = $user->getBusinessCategoryId() > 0 ? $user->getBusinessCategoryId() : CategoryRepository::FOR_SALE_ID;
         $userRoleId = $user->getRole()->getId();
         $currentPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($user);
-        $shopPackages = $this->getRepository('FaPromotionBundle:Package')->getShopPackageByCategory($userBusinessCategoryId, $userRoleId,  $currentPackage);
+        $shopPackages = $this->getRepository('FaPromotionBundle:Package')->getShopPackageByCategory($userBusinessCategoryId, $userRoleId, $currentPackage);
 
         $parameters = array(
                 'user'  => $user,

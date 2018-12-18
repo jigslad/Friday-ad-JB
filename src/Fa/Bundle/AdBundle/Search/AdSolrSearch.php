@@ -445,10 +445,10 @@ class AdSolrSearch extends SolrSearch
                 $d  = ($distance * 1.60934); // convert milesto km
 
                 //$this->query .= ' AND {!bbox pt='.$pt.' sfield=store d='.$d.'}';
-                if($startDistance) {
+                if ($startDistance) {
                     $sd  = ($startDistance * 1.60934);
                     $this->geoDistQuery['fq'] = '{!frange l='.$sd.' u='.$d.'}geodist()';
-                } elseif(isset($locationData[2]) && $locationData[2]==0) {
+                } elseif (isset($locationData[2]) && $locationData[2]==0) {
                     $sd  = 0.81;
                     $this->geoDistQuery['fq'] = '{!frange l='.$sd.' u='.$d.'}geodist()';
                 } else {
@@ -458,10 +458,10 @@ class AdSolrSearch extends SolrSearch
                 $pt = $latitude.','.$longitude;
                 $d  = 0.8000; // convert miles to km
                 
-                if($startDistance) {
+                if ($startDistance) {
                     $sd  = ($startDistance * 1.60934);
                     $this->geoDistQuery['fq'] = '{!frange l='.$sd.' u='.$d.'}geodist()';
-                } elseif(isset($locationData[2]) && $locationData[2]==0) {
+                } elseif (isset($locationData[2]) && $locationData[2]==0) {
                     $sd  = 0.81;
                     $this->geoDistQuery['fq'] = '{!frange l='.$sd.' u='.$d.'}geodist()';
                 } else {

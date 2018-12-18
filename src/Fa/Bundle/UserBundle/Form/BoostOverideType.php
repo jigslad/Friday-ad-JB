@@ -117,7 +117,7 @@ class BoostOverideType extends AbstractType
 
         if ($user->getId()) {
             $userPackageBoostDetails = $this->getUserPackageBoostCount($user);
-            $form->add('user_package_id',HiddenType::class, array('mapped'=>false,'data'=>($userPackageBoostDetails)?$userPackageBoostDetails['id']:''));
+            $form->add('user_package_id', HiddenType::class, array('mapped'=>false,'data'=>($userPackageBoostDetails)?$userPackageBoostDetails['id']:''));
             $form->add(
                 'boost_overide',
                 TextType::class,
@@ -144,7 +144,6 @@ class BoostOverideType extends AbstractType
         if ($form->isValid()) {
             //$user->setStatus($form->get('user_status')->getData());
         }
-
     }
 
     public function getUserPackageBoostCount($user)
@@ -153,7 +152,7 @@ class BoostOverideType extends AbstractType
 
         $getUserPackageBoostDetail  = $this->em->getRepository('FaUserBundle:UserPackage')->checkUserHasBoostPackage($user->getId());
 
-        if($getUserPackageBoostDetail) { 
+        if ($getUserPackageBoostDetail) {
             $userPackageBoostDetail['count'] = ($getUserPackageBoostDetail[0]['boost_overide'])?$getUserPackageBoostDetail[0]['boost_overide']:$getUserPackageBoostDetail[0]['monthly_boost_count'];
             $userPackageBoostDetail['id'] = $getUserPackageBoostDetail[0]['id'];
         }

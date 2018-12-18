@@ -3417,7 +3417,7 @@ class AdRepository extends EntityRepository
         if ($isOnlyCount) {
             $qb->select('COUNT('.self::ALIAS.'.id) as total_ads');
         } else {
-            $qb->select(self::ALIAS.'.id', self::ALIAS.'.title', self::ALIAS.'.price', self::ALIAS.'.qty', self::ALIAS.'.qty_sold', self::ALIAS . '.renewed_at', self::ALIAS . '.weekly_refresh_at', self::ALIAS.'.is_boosted', self::ALIAS . '.boosted_at', self::ALIAS .'.created_at', self::ALIAS.'.updated_at', self::ALIAS.'.published_at', self::ALIAS.'.expires_at', self::ALIAS.'.sold_at', BaseEntityRepository::ALIAS_ADSTATUS.'.id as status_id', BaseEntityRepository::ALIAS_ADTYPE.'.id as type_id', CategoryRepository::ALIAS.'.id as cat_id','IDENTITY('.AdLocationRepository::ALIAS.'.location_town) as town_id', 'IDENTITY('.AdLocationRepository::ALIAS.'.location_area) as area_id','IDENTITY('.AdLocationRepository::ALIAS.'.locality) as locality_id');
+            $qb->select(self::ALIAS.'.id', self::ALIAS.'.title', self::ALIAS.'.price', self::ALIAS.'.qty', self::ALIAS.'.qty_sold', self::ALIAS . '.renewed_at', self::ALIAS . '.weekly_refresh_at', self::ALIAS.'.is_boosted', self::ALIAS . '.boosted_at', self::ALIAS .'.created_at', self::ALIAS.'.updated_at', self::ALIAS.'.published_at', self::ALIAS.'.expires_at', self::ALIAS.'.sold_at', BaseEntityRepository::ALIAS_ADSTATUS.'.id as status_id', BaseEntityRepository::ALIAS_ADTYPE.'.id as type_id', CategoryRepository::ALIAS.'.id as cat_id', 'IDENTITY('.AdLocationRepository::ALIAS.'.location_town) as town_id', 'IDENTITY('.AdLocationRepository::ALIAS.'.location_area) as area_id', 'IDENTITY('.AdLocationRepository::ALIAS.'.locality) as locality_id');
         }
 
 
@@ -4547,7 +4547,6 @@ class AdRepository extends EntityRepository
                 $this->_em->persist($paaLiteEmailNotification);
                 $this->_em->flush($paaLiteEmailNotification);
                 //$output->writeln('Complete your Advert notification sent to User Id:'.($user ? $user->getId() : null), true);
-
             }
         }
     }
@@ -4577,11 +4576,10 @@ class AdRepository extends EntityRepository
      */
     public function getAdsCountBySearchParams($searchParams)
     {
-        
         $arrResources = array();
         $townId = $searchParams['search']['item__location'];
         $distance = isset($searchParams['search']['item__distance'])?$searchParams['search']['item__distance']:-1;
-        if($townId) {
+        if ($townId) {
             $location = $this->_em->getRepository('FaEntityBundle:Location')->find($townId);
             $distance = ($distance)?$distance:-1;
 
@@ -4590,19 +4588,19 @@ class AdRepository extends EntityRepository
             ->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS)
             ->leftJoin(AdLocationRepository::ALIAS.'.location_town', LocationRepository::ALIAS);
 
-            if(isset($searchParams['search']) && isset($searchParams['search']['keywords'])) {
+            if (isset($searchParams['search']) && isset($searchParams['search']['keywords'])) {
                 $query->andWhere('('.self::ALIAS.'.title like \'%'.$searchParams['search']['keywords'].'%\' or '.self::ALIAS.'.description like \'%'.$searchParams['search']['keywords'].'%\')');
             }
-            if(isset($searchParams['search']) && isset($searchParams['search']['item__category_id'])) {
+            if (isset($searchParams['search']) && isset($searchParams['search']['item__category_id'])) {
                 $query->andWhere(self::ALIAS.'.category IN (:CategoryId)');
-                $query->setParameter('CategoryId',$searchParams['search']['item__category_id']);
+                $query->setParameter('CategoryId', $searchParams['search']['item__category_id']);
             }
             $query->andWhere('IDENTITY('.AdLocationRepository::ALIAS.'.location_town) IS NOT NULL');
             $query->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID);
             $query->andWhere(self::ALIAS.'.is_blocked_ad=0');
             $query->andWhere(AdLocationRepository::ALIAS.'.location_town !='.$townId);
             $query->addGroupBy(AdLocationRepository::ALIAS.'.location_town');
-            $query->addOrderBy('distance','asc');
+            $query->addOrderBy('distance', 'asc');
             //$query->setMaxResults(4);
             $arrResources = $query->getQuery()->getArrayResult();
         }

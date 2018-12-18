@@ -109,7 +109,7 @@ class PackageRuleRepository extends EntityRepository
 
         $packages = $this->getActivePackagesByCategoryIdRoleId($categoryId, $locationGroupIdArray, $roleIdArray, $currentActivePackageIds, $container, $skipAdminPackages, $showOnlyCurrentActivePackage, $fetchOnlyAdminPackages);
 
-        if(!count($packages) && $netsuiteRoleArr==$roleIdArray) {
+        if (!count($packages) && $netsuiteRoleArr==$roleIdArray) {
             $businessRoleArr = array('0'=>RoleRepository::ROLE_BUSINESS_SELLER_ID);
             $packages = $this->getActivePackagesByCategoryIdRoleId($categoryId, $locationGroupIdArray, $businessRoleArr, $currentActivePackageIds, $container, $skipAdminPackages, $showOnlyCurrentActivePackage, $fetchOnlyAdminPackages);
         }
@@ -133,7 +133,8 @@ class PackageRuleRepository extends EntityRepository
     public function getActivePackagesByCategoryIdRoleId($categoryId, $locationGroupIdArray, $roleIdArray, $currentActivePackageIds = array(), $container = null, $skipAdminPackages = true, $showOnlyCurrentActivePackage = false, $fetchOnlyAdminPackages = false)
     {
         $netsuiteRoleArr = array('0'=>RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
-        $query1 = '';$firstIteration = '';
+        $query1 = '';
+        $firstIteration = '';
         $query = $this->createQueryBuilder(self::ALIAS)
             ->select(self::ALIAS, PackageRepository::ALIAS)
             ->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
@@ -174,8 +175,8 @@ class PackageRuleRepository extends EntityRepository
         }
 
         if (count($roleIdArray)) {
-            $matchedArr = array_diff($netsuiteRoleArr,$roleIdArray);
-            if(empty($matchedArr)) { 
+            $matchedArr = array_diff($netsuiteRoleArr, $roleIdArray);
+            if (empty($matchedArr)) {
                 $query->andWhere(PackageRepository::ALIAS.'.role = :userRole')->setParameter('userRole', RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID);
             } else {
                 $query->andWhere(PackageRepository::ALIAS.'.role IN (:roleIds) OR '.PackageRepository::ALIAS.'.role IS NULL')

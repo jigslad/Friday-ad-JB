@@ -229,9 +229,9 @@ class LocationRadius
      */
     public function setDefaultRadius($defaultRadius)
     {
-     $this->defaultRadius = $defaultRadius;
+        $this->defaultRadius = $defaultRadius;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -241,7 +241,7 @@ class LocationRadius
      */
     public function getDefaultRadius()
     {
-     return $this->defaultRadius;
+        return $this->defaultRadius;
     }
 
     /**
@@ -253,9 +253,9 @@ class LocationRadius
      */
     public function setExtendedRadius($extendedRadius)
     {
-     $this->extendedRadius = $extendedRadius;
+        $this->extendedRadius = $extendedRadius;
 
-     return $this;
+        return $this;
     }
 
     /**
@@ -265,6 +265,6 @@ class LocationRadius
      */
     public function getExtendedRadius()
     {
-     return $this->extendedRadius;
+        return $this->extendedRadius;
     }
 }

@@ -1025,7 +1025,7 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
     {
         if (!empty($id) && strpos($id, ',') == true) {
             $userIds = explode(',', $id);
-        } else if (!is_array($id)) {
+        } elseif (!is_array($id)) {
             $userIds = array($id);
         }
 
@@ -1072,9 +1072,9 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
                     $userBoostOveride = $form->get('boost_overide')->getData();
 
                     $userPackage = $this->getRepository('FaUserBundle:UserPackage')->find($userPackageId);
-                    if($userPackage) {
-                       $userPackage->setBoostOveride($userBoostOveride);
-                       $this->getEntityManager()->persist($userPackage);
+                    if ($userPackage) {
+                        $userPackage->setBoostOveride($userBoostOveride);
+                        $this->getEntityManager()->persist($userPackage);
                     }
                     $this->getEntityManager()->getConnection()->commit();
                 }

@@ -167,7 +167,7 @@ class FoundationGooglePagerView implements ViewInterface
         $this->calculateStartAndEndPage();
         $endPage = $this->currentPage + $this->proximity+$this->addToEndPage;
         $additionalPage = '';
-        if($endPage < $this->nbPages ) {
+        if ($endPage < $this->nbPages) {
             $additionalPage = '<li><a class="dotspagination">...</a></li>'.$this->page($this->nbPages);
         }
         return $this->previous().

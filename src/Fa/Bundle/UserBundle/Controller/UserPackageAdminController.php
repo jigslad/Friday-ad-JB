@@ -85,7 +85,7 @@ class UserPackageAdminController extends CoreController
 
         $form = $formManager->createForm(UserPackageAdminType::class, array('user_id' => $user->getId(), 'category_id' => $userBusinessCategoryId, 'is_auto_renew' => $is_auto_renew, $options));
         $userRoleId = $user->getRole()->getId();
-        $shopPackages = $this->getRepository('FaPromotionBundle:Package')->getShopPackageByCategory($userBusinessCategoryId,$userRoleId, null, false);
+        $shopPackages = $this->getRepository('FaPromotionBundle:Package')->getShopPackageByCategory($userBusinessCategoryId, $userRoleId, null, false);
         $currentPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($user);
 
         $cat_options =  array(

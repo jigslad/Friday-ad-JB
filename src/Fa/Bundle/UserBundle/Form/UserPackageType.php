@@ -117,9 +117,9 @@ class UserPackageType extends AbstractType
      * @param object $userBusinessCategoryId
      * @param object $userRoleId
      */
-    public function getPackages($userBusinessCategoryId,$userRoleId)
+    public function getPackages($userBusinessCategoryId, $userRoleId)
     {
-        return $this->em->getRepository('FaPromotionBundle:Package')->getShopPackageArrayByCategory($userBusinessCategoryId,$userRoleId, true);
+        return $this->em->getRepository('FaPromotionBundle:Package')->getShopPackageArrayByCategory($userBusinessCategoryId, $userRoleId, true);
     }
 
     /**

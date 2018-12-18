@@ -344,7 +344,7 @@ EOF
                     $isExpired = 1;
                 }
 
-                if($ad['source']=='paa_lite') {
+                if ($ad['source']=='paa_lite') {
                     $isPaaLite = 1;
                 }
 
@@ -405,7 +405,7 @@ EOF
                     $ipAddressesStr = $ipAddresses[$ad['id']];
                 }
 
-                $insertSql .= '("'.$ad['id'].'", "'.$ad['user_id'].'", "'.$ad['created_at'].'", "'.$printInsertDate.'", "'.$ad['published_at'].'", "'.$isEdit.'", "'.$isRenewed.'", "'.$isExpired.'", "'.($ad['expires_at'] && !$isExpired ? $ad['expires_at'] : null ).'", "'.($ad['expires_at'] && $isExpired ? $ad['expires_at'] : null ).'", "'.$ad['status_id'].'", "'.$ad['category_id'].'", "'.$postCode.'", "'.$townId.'", "'.$countyId.'", "'.implode(',', $printEditionIds).'", "'.$source.'", "'.$sourceLatest.'", "'.$userRoleId.'", "'.$adImageCnt.'", "'.$totalRevenueGross.'", "'.$printRevenueGross.'", "'.$onlineRevenueGross.'", "'.$totalRevenueNet.'", "'.$printRevenueNet.'", "'.$onlineRevenueNet.'", "'.$packageId.'", "'.$packageName.'", "'.$packageSrNo.'", "'.$durationPrint.'", "'.$durationOnline.'", "'.$shopPackageId.'", "'.$shopPackageName.'", "'.$shopPackageRevenue.'", '.($action == 'all' ? time() : ($date ? strtotime($date) : (strtotime(date('Y-m-d'))- 24*60*60))).', "'.$ad['renewed_at'].'", "'.$ad['edited_at'].'", "'.$adminUserEmail.'", "'.$paymentMethod.'", "'.$ad['ad_price'].'", "'.$skipPaymentReason.'", "'.$isDiscountCodeUsed.'", "'.$adUserPhoneDetails.'", "'.$isCreditUsed.'", "'.mysql_escape_string(serialize($creditUsedValue)).'", "'.$ad['ti_ad_id'].'", "'.$ipAddressesStr.'", "'.$isPaaLite.'"), ';
+                $insertSql .= '("'.$ad['id'].'", "'.$ad['user_id'].'", "'.$ad['created_at'].'", "'.$printInsertDate.'", "'.$ad['published_at'].'", "'.$isEdit.'", "'.$isRenewed.'", "'.$isExpired.'", "'.($ad['expires_at'] && !$isExpired ? $ad['expires_at'] : null).'", "'.($ad['expires_at'] && $isExpired ? $ad['expires_at'] : null).'", "'.$ad['status_id'].'", "'.$ad['category_id'].'", "'.$postCode.'", "'.$townId.'", "'.$countyId.'", "'.implode(',', $printEditionIds).'", "'.$source.'", "'.$sourceLatest.'", "'.$userRoleId.'", "'.$adImageCnt.'", "'.$totalRevenueGross.'", "'.$printRevenueGross.'", "'.$onlineRevenueGross.'", "'.$totalRevenueNet.'", "'.$printRevenueNet.'", "'.$onlineRevenueNet.'", "'.$packageId.'", "'.$packageName.'", "'.$packageSrNo.'", "'.$durationPrint.'", "'.$durationOnline.'", "'.$shopPackageId.'", "'.$shopPackageName.'", "'.$shopPackageRevenue.'", '.($action == 'all' ? time() : ($date ? strtotime($date) : (strtotime(date('Y-m-d'))- 24*60*60))).', "'.$ad['renewed_at'].'", "'.$ad['edited_at'].'", "'.$adminUserEmail.'", "'.$paymentMethod.'", "'.$ad['ad_price'].'", "'.$skipPaymentReason.'", "'.$isDiscountCodeUsed.'", "'.$adUserPhoneDetails.'", "'.$isCreditUsed.'", "'.mysql_escape_string(serialize($creditUsedValue)).'", "'.$ad['ti_ad_id'].'", "'.$ipAddressesStr.'", "'.$isPaaLite.'"), ';
             }
 
             $insertSql = trim($insertSql, ', ');

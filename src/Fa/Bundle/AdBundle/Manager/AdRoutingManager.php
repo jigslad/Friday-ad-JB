@@ -114,9 +114,11 @@ class AdRoutingManager
 
         $getDefaultRadius = '';
 
-        if(!isset($search_params['item__distance'])) {
+        if (!isset($search_params['item__distance'])) {
             $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($search_params, $this->container);
-            if($getDefaultRadius) { $search_params['item__distance'] = $getDefaultRadius; }
+            if ($getDefaultRadius) {
+                $search_params['item__distance'] = $getDefaultRadius;
+            }
         }
 
         if (!$fromCommandLine) {
@@ -334,9 +336,9 @@ class AdRoutingManager
 
         if ((isset($search_params['search_param']['item__distance']))) {
             $searchDistance = $search_params['search_param']['item__distance'];
-            if($getDefaultRadius!='' && $getDefaultRadius==$search_params['search_param']['item__distance']) {
-            unset($search_params['search_param']['item__distance']);
-        }
+            if ($getDefaultRadius!='' && $getDefaultRadius==$search_params['search_param']['item__distance']) {
+                unset($search_params['search_param']['item__distance']);
+            }
 
             //unset($search_params['search_param']['item__distance']);
         }
@@ -918,18 +920,21 @@ class AdRoutingManager
         return null;
     }
 
-     /**
-     * get Default Radius By Category Id
-     *
-     * @param integer $categoryId Category id
-     *
-     * @return boolean|string
-     */
+    /**
+    * get Default Radius By Category Id
+    *
+    * @param integer $categoryId Category id
+    *
+    * @return boolean|string
+    */
     public function getDefaultRadiusByCategoryId($categoryId)
     {
         $parentCategoryIds = array_keys($this->em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $this->container));
         $locationRadius = $this->em->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
-        if($locationRadius) { return $locationRadius['defaultRadius']; }
-        else { return null; }
+        if ($locationRadius) {
+            return $locationRadius['defaultRadius'];
+        } else {
+            return null;
+        }
     }
 }

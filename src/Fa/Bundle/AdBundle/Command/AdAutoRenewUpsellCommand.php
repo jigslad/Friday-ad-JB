@@ -28,6 +28,7 @@ use Fa\Bundle\AdBundle\Entity\Ad;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Fa\Bundle\UserBundle\Entity\UserCredit;
 use Fa\Bundle\UserBundle\Entity\UserCreditUsed;
+
 /**
  * This command is used to renew ad package automatic.
  *
@@ -138,14 +139,13 @@ EOF
         foreach ($results as $result) {
             //get basic data
             $ad  = $this->em->getRepository('FaAdBundle:Ad')->find($result[0]['id']);
-            if(!empty($ad)) {
+            if (!empty($ad)) {
                 $currentTime = time();
                 $adId = $ad->getId();
                 
                 $adUserPackage  = $this->em->getRepository('FaAdBundle:AdUserPackage')->findOneBy(array('ad_id'=>$adId,'status'=>AdUserPackageRepository::STATUS_ACTIVE));
                 //Update AdUserPackage
-                if(!empty($adUserPackage)) {
-                    
+                if (!empty($adUserPackage)) {
                     if ($adUserPackage->getDuration()) {
                         $expireAt = CommonManager::getTimeFromDuration($adUserPackage->getDuration());
                     } else {
@@ -162,7 +162,7 @@ EOF
                     //Update AdUserPackageUpsell
                     $adUserPackageUpsells  = $this->em->getRepository('FaAdBundle:AdUserPackageUpsell')->findBy(array('ad_user_package'=>$adUserPackage->getId(),'status'=>1));
 
-                    if(!empty($adUserPackageUpsells)) {
+                    if (!empty($adUserPackageUpsells)) {
                         foreach ($adUserPackageUpsells as $adUserPackageUpsell) {
                             $adUserPackageUpsell->setStatus(1);
                             $adUserPackageUpsell->setStartedAt($currentTime);
@@ -267,7 +267,7 @@ EOF
 
         $data                  = array();
         $data['query_filters'] = $searchParam;
-        $data['query_sorter']  = array('ad' => array ('id' => 'asc'));
+        $data['query_sorter']  = array('ad' => array('id' => 'asc'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($adRepository, $data);

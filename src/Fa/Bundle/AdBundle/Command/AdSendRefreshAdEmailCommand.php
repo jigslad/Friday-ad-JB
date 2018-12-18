@@ -134,7 +134,7 @@ EOF
 
             $userRoleId = ($ad->getUser() ? $ad->getUser()->getRole()->getId() : 0);
 
-            if($userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID && $userRoleId!=0) {
+            if ($userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID && $userRoleId!=0) {
                 if (($this->em->getRepository('FaAdBundle:Ad')->checkIsWeeklyRefreshAd($ad->getId()) == false) || $ad->getWeeklyRefreshAt() == null) {
                     //$this->em->getRepository('FaAdBundle:Ad')->sendRefreshAdEmail($ad, $emailTemplate, $duration, $this->getContainer());
                     $user = ($ad->getUser() ? $ad->getUser() : null);

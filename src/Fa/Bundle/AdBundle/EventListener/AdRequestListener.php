@@ -467,9 +467,12 @@ class AdRequestListener
 
                     $parent   = $this->getFirstLevelParent($catObj['id']);
 
-                    $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams,$this->container);
-                    if($request->get('item__distance')) { $searchParams['item__distance']  =  $request->get('item__distance');  }
-                    else { $searchParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:''; }
+                    $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+                    if ($request->get('item__distance')) {
+                        $searchParams['item__distance']  =  $request->get('item__distance');
+                    } else {
+                        $searchParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
+                    }
 
                     /*if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::MOTORS_DISTANCE : $request->get('item__distance');
@@ -481,11 +484,11 @@ class AdRequestListener
                     if (preg_match('/^\d+$/', $locationId) && is_null($request->get('item__distance'))) {
                         $isLocationArea = $this->em->getRepository('FaEntityBundle:Location')->find($locationId);
                         if (!empty($isLocationArea) && $isLocationArea && $isLocationArea->getLvl() == '4') {
-                    		$queryParams['item__distance'] = isset($queryParams['item__distance'])?$queryParams['item__distance']/CategoryRepository::AREA_DISTANCE_DIVISION:0;
-                    	}
+                            $queryParams['item__distance'] = isset($queryParams['item__distance'])?$queryParams['item__distance']/CategoryRepository::AREA_DISTANCE_DIVISION:0;
                         }
+                    }
 
-                    if(isset($searchParams['item__distance'])) {
+                    if (isset($searchParams['item__distance'])) {
                         $request->attributes->set('finders', array_merge($queryParams, array('item__distance' => $searchParams['item__distance'])));
                     }
                     
@@ -576,15 +579,18 @@ class AdRequestListener
 
                     $parent   = $this->getFirstLevelParent($catObj['id']);
 
-                    $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($queryParams,$this->container);
-                    if($request->get('item__distance')) { $queryParams['item__distance']  =  $request->get('item__distance');  }
-                    else { $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:''; }
-
-                   /* if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
-                        $queryParams['item__distance']  =  $request->get('item__distance') == '' ? 30 : $request->get('item__distance');
+                    $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($queryParams, $this->container);
+                    if ($request->get('item__distance')) {
+                        $queryParams['item__distance']  =  $request->get('item__distance');
                     } else {
-                        $queryParams['item__distance']  =  $request->get('item__distance') == '' ? 15 : $request->get('item__distance');
-                    }*/
+                        $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
+                    }
+
+                    /* if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
+                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? 30 : $request->get('item__distance');
+                     } else {
+                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? 15 : $request->get('item__distance');
+                     }*/
 
                     $request->attributes->set('finders', array_merge($queryParams, array('item__category_id' => $catObj['id'], 'item__location' => $locationId)));
                 } else {

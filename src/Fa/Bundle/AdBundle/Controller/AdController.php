@@ -1082,22 +1082,22 @@ class AdController extends CoreController
      */
     public function ajaxEighteenPlusWarnningModelAction(Request $request)
     {
-    	if ($request->isXmlHttpRequest()) {
-    		$response   = new Response();
-    		$cookieName = $request->get('ad_id').'_ad_detail_ga_tracking_after';
+        if ($request->isXmlHttpRequest()) {
+            $response   = new Response();
+            $cookieName = $request->get('ad_id').'_ad_detail_ga_tracking_after';
             $parameters['redirectlink'] = null;
-    		if($request->get('redirectlink') != null) {
-    			$parameters['redirectlink'] = $request->get('redirectlink');
-    		} 
+            if ($request->get('redirectlink') != null) {
+                $parameters['redirectlink'] = $request->get('redirectlink');
+            }
 
-            if($request->get('popupModification') != null && $request->get('popupModification') == 1) {
+            if ($request->get('popupModification') != null && $request->get('popupModification') == 1) {
                 $parameters['modification'] = true;
             } else {
-    			$parameters['for_third_party_link'] = true; 
-    		}
-    		$htmlContent = $this->renderView('FaFrontendBundle::adultWarnningPopup.html.twig', $parameters);
-    		return new JsonResponse(array('success' => true, 'htmlContent' => $htmlContent));
-    	}
-    	return new Response();
+                $parameters['for_third_party_link'] = true;
+            }
+            $htmlContent = $this->renderView('FaFrontendBundle::adultWarnningPopup.html.twig', $parameters);
+            return new JsonResponse(array('success' => true, 'htmlContent' => $htmlContent));
+        }
+        return new Response();
     }
 }

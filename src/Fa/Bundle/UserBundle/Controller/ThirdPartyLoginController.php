@@ -548,7 +548,7 @@ class ThirdPartyLoginController extends CoreController
 
         $userRoleName = $this->getRepository('FaUserBundle:User')->getUserRole($userId, $this->container);
 
-     if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER || $userRoleName == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+        if ($userRoleName == RoleRepository::ROLE_BUSINESS_SELLER || $userRoleName == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $isCompany = true;
         }
 

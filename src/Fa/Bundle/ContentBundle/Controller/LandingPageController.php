@@ -93,7 +93,7 @@ class LandingPageController extends CoreController
 
 
             $distance = '';
-            if(isset($searchParams['item__category_id']) && !isset($searchParams['item__distance'])) {
+            if (isset($searchParams['item__category_id']) && !isset($searchParams['item__distance'])) {
                 $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
                 $distance = ($getDefaultRadius)?$getDefaultRadius:'';
                 //if($distance) { $searchParams['item__distance'] = $distance; }
@@ -503,7 +503,7 @@ class LandingPageController extends CoreController
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
         $getDefaultRadius = '';
-        if($searchParams['item__category_id']!='') {
+        if ($searchParams['item__category_id']!='') {
             $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
         }
 

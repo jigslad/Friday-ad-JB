@@ -74,12 +74,12 @@ class LocationRadiusAdminType extends AbstractType
     {
         $builder
         ->add('defaultRadius', ChoiceType::class, array(
-                'data'=> (($builder->getData()->getDefaultRadius()!='' || $builder->getData()->getDefaultRadius()==0) && $builder->getData()->getId())?$builder->getData()->getDefaultRadius():5, 
+                'data'=> (($builder->getData()->getDefaultRadius()!='' || $builder->getData()->getDefaultRadius()==0) && $builder->getData()->getId())?$builder->getData()->getDefaultRadius():5,
                 'empty_value' => 'Select default radius',
                 'choices' => array_flip(LocationRadiusRepository::getDefaultRadius())
             ))
             ->add('extendedRadius', ChoiceType::class, array(
-                'data'=>($builder->getData()->getExtendedRadius())?$builder->getData()->getExtendedRadius():0, 
+                'data'=>($builder->getData()->getExtendedRadius())?$builder->getData()->getExtendedRadius():0,
                 'empty_value' => 'Select extended radius',
                 'choices' => array_flip(LocationRadiusRepository::getExtendedRadius())
             ))
@@ -208,19 +208,18 @@ class LocationRadiusAdminType extends AbstractType
         $getDefRadiusFromFrm = $form->get('defaultRadius')->getData();
         $getStatusFromFrm = $form->get('status')->getData();
 
-        if($categoryId) {
-           $category = $this->em->getRepository('FaEntityBundle:Category')->find($categoryId);
-           $locationcategory = $this->em->getRepository('FaAdBundle:LocationRadius')->getLocationRadiusByCategoryId($categoryId);
-           $categorylvl = $category->getLvl();
+        if ($categoryId) {
+            $category = $this->em->getRepository('FaEntityBundle:Category')->find($categoryId);
+            $locationcategory = $this->em->getRepository('FaAdBundle:LocationRadius')->getLocationRadiusByCategoryId($categoryId);
+            $categorylvl = $category->getLvl();
         }
 
         if (!empty($locationcategory)) {
-            if($form->getData()->getId() && count($locationcategory)>0 && $locationRadius->getCategory()->getId()!=$categoryId) {
+            if ($form->getData()->getId() && count($locationcategory)>0 && $locationRadius->getCategory()->getId()!=$categoryId) {
                 $form->get('category_'.$categorylvl)->addError(new FormError('Cannot save, record already exists.'));
-            } elseif(!$form->getData()->getId()) {
+            } elseif (!$form->getData()->getId()) {
                 $form->get('category_'.$categorylvl)->addError(new FormError('Cannot save, record already exists.'));
             }
-            
         }
 
         if (false === $getDefRadiusFromFrm || (empty($getDefRadiusFromFrm) && '0' != $getDefRadiusFromFrm)) {
@@ -231,7 +230,7 @@ class LocationRadiusAdminType extends AbstractType
             $form->get('status')->addError(new FormError('Please select status.'));
         }
         
-        if($form->get('extendedRadius')->getData()>0 && $form->get('extendedRadius')->getData() < $form->get('defaultRadius')->getData()) {
+        if ($form->get('extendedRadius')->getData()>0 && $form->get('extendedRadius')->getData() < $form->get('defaultRadius')->getData()) {
             $form->get('extendedRadius')->addError(new FormError('Extended radius must be larger than Default radius.'));
         }
     }
@@ -250,7 +249,7 @@ class LocationRadiusAdminType extends AbstractType
 
         if (empty($locationRadiusId)) {
             $locationRadius = new LocationRadius();
-        } 
+        }
 
         if ($form->isValid()) {
             $categoryId = $this->getCategoryId($form);
@@ -268,11 +267,11 @@ class LocationRadiusAdminType extends AbstractType
         }
     }
 
-   /**
-     * Set default options
-     *
-     * @param OptionsResolver $resolver
-     */
+    /**
+      * Set default options
+      *
+      * @param OptionsResolver $resolver
+      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -336,7 +335,7 @@ class LocationRadiusAdminType extends AbstractType
             $categoryId = $category2;
         } elseif ($category1) {
             $categoryId = $category1;
-        } 
+        }
 
         return $categoryId;
     }

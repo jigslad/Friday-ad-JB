@@ -73,7 +73,12 @@ class DashboardController extends CoreController
         
         $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
 
-        $remainingDaysToRenewBoost=0; $boostedAdCount=0; $isBoostEnabled = 0; $boostMaxPerMonth = 0;$boostAdRemaining = 0; $getExipryDate = $boostRenewDate = '';
+        $remainingDaysToRenewBoost=0;
+        $boostedAdCount=0;
+        $isBoostEnabled = 0;
+        $boostMaxPerMonth = 0;
+        $boostAdRemaining = 0;
+        $getExipryDate = $boostRenewDate = '';
 
         $parameters = array('recentlyViewedAds' => $recentlyViewedAds, 'myAdsParameters' => $myAdsParameters, 'myMessagesParameters' => $myMessagesParameters, 'myFavouritesParameters' => $myFavouritesParameters, 'mySavedSearchesParameters' => $mySavedSearchesParameters, 'myReviewsParameters' => $myReviewsParameters, 'searchResultUrl' => $searchResultUrl, 'modToolTipText'  => $moderationToolTipText,
             'isBoostEnabled'  => $isBoostEnabled,

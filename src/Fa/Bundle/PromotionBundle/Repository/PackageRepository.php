@@ -292,19 +292,19 @@ class PackageRepository extends EntityRepository
             $query->andWhere(self::ALIAS.'.price >= '.$currentUserPackage->getPackage()->getPrice());
         }
 
-        if($userRoleId) {
+        if ($userRoleId) {
             $query1 = $query;
             $query1->andWhere(self::ALIAS.'.role = :user_role');
             $query1->setParameter('user_role', $userRoleId);
             $resultArr = $query1->getQuery()->getResult();
-        } 
-        if(empty($resultArr)) {
+        }
+        if (empty($resultArr)) {
             $query2 = $query;
             $query2->andWhere(self::ALIAS.'.role = :user_role');
             $query2->setParameter('user_role', RoleRepository::ROLE_BUSINESS_SELLER_ID);
             $resultArr = $query2->getQuery()->getResult();
-    	}
-        if(empty($resultArr)) {
+        }
+        if (empty($resultArr)) {
             $query3 = $query;
             $query3->andWhere(self::ALIAS.'.role IS NULL');
             $resultArr = $query3->getQuery()->getResult();

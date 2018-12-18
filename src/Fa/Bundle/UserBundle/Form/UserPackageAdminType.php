@@ -153,7 +153,7 @@ class UserPackageAdminType extends AbstractType
      */
     public function getPackages($userBusinessCategoryId, $userRoleId)
     {
-        return $this->em->getRepository('FaPromotionBundle:Package')->getShopPackageArrayByCategory($userBusinessCategoryId,$userRoleId, false);
+        return $this->em->getRepository('FaPromotionBundle:Package')->getShopPackageArrayByCategory($userBusinessCategoryId, $userRoleId, false);
     }
 
     /**

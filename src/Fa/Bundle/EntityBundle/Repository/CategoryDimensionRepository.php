@@ -257,7 +257,7 @@ class CategoryDimensionRepository extends BaseEntityRepository
         $dimensionFacetData = array();
         $selected = (is_array($selected) ? $selected: array($selected));
 
-        if(!isset($searchParams['item__distance'])) {
+        if (!isset($searchParams['item__distance'])) {
             $searchParams['item__distance'] = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $container);
         }
         
@@ -322,11 +322,11 @@ class CategoryDimensionRepository extends BaseEntityRepository
 
                 // ad location filter with distance
                 if (isset($searchParams['item__location']) && $searchParams['item__location']) {
-                    if(isset($searchParams['item__distance'])) {
-                    	$data['query_filters']['item']['location'] = $searchParams['item__location'].'|'. (isset($searchParams['item__distance']) ? $searchParams['item__distance'] : '');
+                    if (isset($searchParams['item__distance'])) {
+                        $data['query_filters']['item']['location'] = $searchParams['item__location'].'|'. (isset($searchParams['item__distance']) ? $searchParams['item__distance'] : '');
                     } else {
                         $data['query_filters']['item']['location'] = $searchParams['item__location'];
-                	}
+                    }
                 }
 
                 // ads with min 1 photo

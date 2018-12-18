@@ -485,7 +485,7 @@ class AdImageManager
             $images = array();
             
             foreach ($thumbSize as $d) {
-            	$sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'_'.$image->getHash().'_'.$d.'.jpg';
+                $sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'_'.$image->getHash().'_'.$d.'.jpg';
                 
                 if (file_exists($sourceImg)) {
                     $images[$d] = $sourceImg;
@@ -498,15 +498,15 @@ class AdImageManager
                 $images[''] = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'_'.$image->getHash().'.jpg';
             }
             
-            //for cropped Image 
+            //for cropped Image
             $sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'_'.$image->getHash().'_org.jpg';
             if (file_exists($sourceImg)) {
-            	$images['crop_org'] = $sourceImg;
+                $images['crop_org'] = $sourceImg;
             }
             
             
-            if (count($images) > 0) { 
-            	foreach ($images as $key => $im) {
+            if (count($images) > 0) {
+                foreach ($images as $key => $im) {
                     unlink($im);
                     echo 'Removed file '.$im."\n";
                     //logging removed file
@@ -575,15 +575,15 @@ class AdImageManager
      */
     public function checkImageExistOnAws($imageUrl)
     {
-    	$client = new S3Client([
-    			'version'     => 'latest',
-    			'region'      => $this->container->getParameter('fa.aws_region'),
-    			'credentials' => [
-    					'key'    => $this->container->getParameter('fa.aws_key'),
-    					'secret' => $this->container->getParameter('fa.aws_secret'),
-    			],
-    	]);
-    	$response = $client->doesObjectExist($this->container->getParameter('fa.aws_bucket'), $imageUrl);
-    	return $response;
+        $client = new S3Client([
+                'version'     => 'latest',
+                'region'      => $this->container->getParameter('fa.aws_region'),
+                'credentials' => [
+                        'key'    => $this->container->getParameter('fa.aws_key'),
+                        'secret' => $this->container->getParameter('fa.aws_secret'),
+                ],
+        ]);
+        $response = $client->doesObjectExist($this->container->getParameter('fa.aws_bucket'), $imageUrl);
+        return $response;
     }
 }

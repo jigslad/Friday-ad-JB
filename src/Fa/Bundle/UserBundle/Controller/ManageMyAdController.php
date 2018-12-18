@@ -22,6 +22,7 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\PromotionBundle\Entity\Package;
 use Fa\Bundle\AdBundle\Entity\BoostedAd;
+
 /**
  * This controller is used for user ads.
  *
@@ -77,11 +78,11 @@ class ManageMyAdController extends CoreController
         $pagination = $this->get('fa.pagination.manager')->getPagination();
         $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
         
-        if($pagination->getNbResults()) {
+        if ($pagination->getNbResults()) {
             foreach ($pagination->getCurrentPageResults() as $ad) {
                 $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($ad['cat_id']);
-                if(!empty($getBoostDetails)) {
-                    if($getBoostDetails['isBoostEnabled']==1 && $getBoostDetails['boostAdRemaining'] > 0 && $getBoostDetails['userBusinessCategory'] == $rootCategoryId && $ad['status_id'] == EntityRepository::AD_STATUS_LIVE_ID) {
+                if (!empty($getBoostDetails)) {
+                    if ($getBoostDetails['isBoostEnabled']==1 && $getBoostDetails['boostAdRemaining'] > 0 && $getBoostDetails['userBusinessCategory'] == $rootCategoryId && $ad['status_id'] == EntityRepository::AD_STATUS_LIVE_ID) {
                         $onlyActiveAdCount = $onlyActiveAdCount + 1;
                     }
                 }
@@ -126,8 +127,13 @@ class ManageMyAdController extends CoreController
         return $this->render('FaUserBundle:ManageMyAd:index.html.twig', $parameters, $objResponse);
     }
 
-    public function getBoostDetails($loggedinUser) {
-        $isBoostEnabled = 0; $boostMaxPerMonth = 0;$boostAdRemaining = 0; $getExipryDate = $boostRenewDate = '';$boostedAdCountArray = array();
+    public function getBoostDetails($loggedinUser)
+    {
+        $isBoostEnabled = 0;
+        $boostMaxPerMonth = 0;
+        $boostAdRemaining = 0;
+        $getExipryDate = $boostRenewDate = '';
+        $boostedAdCountArray = array();
 
         $boostedAdCountArray  = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'boosted', true)->getResult();
 
@@ -136,34 +142,35 @@ class ManageMyAdController extends CoreController
             $boostedAdCount = $this->getRepository('FaAdBundle:BoostedAd')->getMyBoostedAdsCount($loggedinUser->getId());
         }
 
-        $remainingDaysToRenewBoost = '';$userBusinessCategory = '';
-        if($loggedinUser->getRole() == 'ROLE_BUSINESS_SELLER' || $loggedinUser->getRole() == 'ROLE_NETSUITE_SUBSCRIPTION') {
+        $remainingDaysToRenewBoost = '';
+        $userBusinessCategory = '';
+        if ($loggedinUser->getRole() == 'ROLE_BUSINESS_SELLER' || $loggedinUser->getRole() == 'ROLE_NETSUITE_SUBSCRIPTION') {
             $userBusinessCategory = $loggedinUser->getBusinessCategoryId();
             $getCurrentActivePackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
-            if($getCurrentActivePackage) {
-                if($getCurrentActivePackage->getPackage() && $getCurrentActivePackage->getPackage()->getPrice() >0 ) {
+            if ($getCurrentActivePackage) {
+                if ($getCurrentActivePackage->getPackage() && $getCurrentActivePackage->getPackage()->getPrice() >0) {
                     $isBoostEnabled = $getCurrentActivePackage->getPackage()->getBoostAdEnabled();
                     $boostMaxPerMonth = ($getCurrentActivePackage->getBoostOveride())?$getCurrentActivePackage->getBoostOveride():$getCurrentActivePackage->getPackage()->getMonthlyBoostCount();
                     $boostAdRemaining = $boostMaxPerMonth;
                     $getExpiryAtDate =  $getCurrentActivePackage->getExpiresAt();
-                    if($getExpiryAtDate=='') {
-                        $getExpiryDate = strtotime('+28 days',$getCurrentActivePackage->getCreatedAt());
+                    if ($getExpiryAtDate=='') {
+                        $getExpiryDate = strtotime('+28 days', $getCurrentActivePackage->getCreatedAt());
                     } else {
-                        $getExpiryDate =  strtotime('+1 days',$getCurrentActivePackage->getExpiresAt());
+                        $getExpiryDate =  strtotime('+1 days', $getCurrentActivePackage->getExpiresAt());
                     }
                     $todaysTime  = time();
-                    if($todaysTime > $getExpiryDate && $isBoostEnabled==1) {
+                    if ($todaysTime > $getExpiryDate && $isBoostEnabled==1) {
                         $isBoostEnabled = 0;
                     }
 
                     $remainingDaysToRenewBoost = date('jS M Y', $getExpiryDate);
-                } 
+                }
             }
         }
         
         //echo 'ExpiresAt===<pre>';print_r($getCurrentActivePackage->getPackage()->getPrice());die;
 
-        if($boostedAdCount > 0 && $boostMaxPerMonth > 0 ) {
+        if ($boostedAdCount > 0 && $boostMaxPerMonth > 0) {
             $boostAdRemaining = $boostMaxPerMonth - $boostedAdCount;
         }
 
@@ -409,14 +416,14 @@ class ManageMyAdController extends CoreController
         return new Response();
     }
 
-     /**
-     * Change boost ad status.
-     *
-     * @param Request $request
-     *        A Request object.
-     *
-     * @return Response|JsonResponse A Response or JsonResponse object.
-     */
+    /**
+    * Change boost ad status.
+    *
+    * @param Request $request
+    *        A Request object.
+    *
+    * @return Response|JsonResponse A Response or JsonResponse object.
+    */
     public function ajaxBoostAdAction(Request $request)
     {
         if ($this->checkIsValidLoggedInUser($request) === true && $request->isXmlHttpRequest()) {
@@ -435,12 +442,12 @@ class ManageMyAdController extends CoreController
                 $userBusinessCategory = $loggedinUser->getBusinessCategoryId();
                 $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($ad->getCategory()->getId());
 
-                if($userBusinessCategory == $adRootCategoryId) {
-            $ad->setIsBoosted($boostValue);
-            $ad->setBoostedAt();
-            $ad->setWeeklyRefreshAt(time());
-            $this->getEntityManager()->persist($ad);
-            $this->getEntityManager()->flush($ad);
+                if ($userBusinessCategory == $adRootCategoryId) {
+                    $ad->setIsBoosted($boostValue);
+                    $ad->setBoostedAt();
+                    $ad->setWeeklyRefreshAt(time());
+                    $this->getEntityManager()->persist($ad);
+                    $this->getEntityManager()->flush($ad);
 
                     $boostedAd = new BoostedAd();
                     $boostedAd->setAd($ad);
@@ -452,35 +459,34 @@ class ManageMyAdController extends CoreController
                     $this->getEntityManager()->flush($boostedAd);
                 }
 
-            $ad = $this->getRepository('FaAdBundle:Ad')->find($adId);
+                $ad = $this->getRepository('FaAdBundle:Ad')->find($adId);
 
-                if($ad->getIsBoosted() == 1)
-                {
-
+                if ($ad->getIsBoosted() == 1) {
                     $gaStr = $adId;
 
                     $categoryPaths = $this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($ad->getCategory()->getId());
                     $catPathCnt = 1;
-                    foreach($categoryPaths as $categoryPath ) {
-                        if($catPathCnt==2) { $gaStr .= ':'; }
-                        else { $gaStr .= '-'; }
+                    foreach ($categoryPaths as $categoryPath) {
+                        if ($catPathCnt==2) {
+                            $gaStr .= ':';
+                        } else {
+                            $gaStr .= '-';
+                        }
                         $gaStr .= $categoryPath;
                         $catPathCnt++;
-                }                
+                    }
 
                     $successMsg = '<span>Congratulations your ads are boosted now.</span> you can view your ads by <a href="'.$boostedUrl.'">clicking here.</a>';
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$loggedinUser->getId().'" >/dev/null &');
 
-                $messageManager = $this->get('fa.message.manager');
-                $messageManager->setFlashMessage($successMsg, 'success');
-            	}
-            }
-            catch(\Exception $e)
-            {
+                    $messageManager = $this->get('fa.message.manager');
+                    $messageManager->setFlashMessage($successMsg, 'success');
+                }
+            } catch (\Exception $e) {
                 $error = $this->get('translator')->trans('There was a problem in boosting your ad.', array(), 'frontend-manage-my-ad');
                 $messageManager = $this->get('fa.message.manager');
                 $messageManager->setFlashMessage($error, 'error');
-            }          
+            }
             
             sleep(2);
             return new JsonResponse(array(
@@ -507,21 +513,22 @@ class ManageMyAdController extends CoreController
             $error = '';
             $successMsg = '';
             $loggedinUser = $this->getLoggedInUser();
-            $adIds = rtrim($request->get('adIds', 0),',');
+            $adIds = rtrim($request->get('adIds', 0), ',');
             $boostValue = $request->get('boost_value');
-            $gaStr = $gaSubStr = '';$adCnt = 0;
-            $adArray = ($adIds)?explode(',',$adIds):array();
+            $gaStr = $gaSubStr = '';
+            $adCnt = 0;
+            $adArray = ($adIds)?explode(',', $adIds):array();
             $userBusinessCategory = $loggedinUser->getBusinessCategoryId();
 
             $boostedUrl = $this->container->get('router')->generate('manage_my_ads_boosted');
             $activeUrl = $this->container->get('router')->generate('manage_my_ads_active');
 
-            if(!empty($adArray)) {
+            if (!empty($adArray)) {
                 foreach ($adArray as $adId) {
                     $ad = $this->getRepository('FaAdBundle:Ad')->find($adId);
                     $this->getEntityManager()->refresh($ad);
                     $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($ad->getCategory()->getId());
-                    if($userBusinessCategory == $adRootCategoryId) {
+                    if ($userBusinessCategory == $adRootCategoryId) {
                         $adCnt++;
                         $ad->setIsBoosted($boostValue);
                         $ad->setBoostedAt();
@@ -538,7 +545,7 @@ class ManageMyAdController extends CoreController
                         $this->getEntityManager()->persist($boostedAd);
                         $this->getEntityManager()->flush($boostedAd);
 
-                        if($adCnt>1) {
+                        if ($adCnt>1) {
                             $gaSubStr .= ' , ';
                         }
 
@@ -546,16 +553,19 @@ class ManageMyAdController extends CoreController
 
                         $categoryPaths = $this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($ad->getCategory()->getId());
                         $catPathCnt = 1;
-                        foreach($categoryPaths as $categoryPath ) {
-                            if($catPathCnt==2) { $gaSubStr .= ':'; }
-                            else { $gaSubStr .= '-'; }
+                        foreach ($categoryPaths as $categoryPath) {
+                            if ($catPathCnt==2) {
+                                $gaSubStr .= ':';
+                            } else {
+                                $gaSubStr .= '-';
+                            }
                             $gaSubStr .= $categoryPath;
                             $catPathCnt++;
                         }
                     }
                 }
 
-                if($adCnt) {
+                if ($adCnt) {
                     $gaStr = $adCnt.' | '.$gaSubStr;
                     $successMsg = '<span>Congratulations your ads are boosted now.</span> you can view your ads by <a href="'.$boostedUrl.'">clicking here.</a>';
                     $messageManager = $this->get('fa.message.manager');
@@ -571,7 +581,9 @@ class ManageMyAdController extends CoreController
                 } else {
                     return new Response();
                 }
-            } else { return new Response(); }
+            } else {
+                return new Response();
+            }
         }
         return new Response();
     }

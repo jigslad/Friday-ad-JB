@@ -183,7 +183,6 @@ abstract class AdParser
                 $sellerRole = $this->em->getRepository('FaUserBundle:Role')->findOneBy(array('name' => RoleRepository::ROLE_NETSUITE_SUBSCRIPTION));
                 $user->addRole($sellerRole);
                 $user->setRole($sellerRole);
-
             } else {
                 $sellerRole = $this->em->getRepository('FaUserBundle:Role')->findOneBy(array('name' => RoleRepository::ROLE_SELLER));
                 $user->addRole($sellerRole);

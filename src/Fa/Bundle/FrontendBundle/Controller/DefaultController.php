@@ -367,10 +367,10 @@ class DefaultController extends ThirdPartyLoginController
                 unset($searchParams['item']['location']);
             }
 
-            if(isset($searchParams['item']['distance'])) {
+            if (isset($searchParams['item']['distance'])) {
                 $searchDistance = $searchParams['item']['distance'];
             } else {
-               $searchDistance =  CategoryRepository::OTHERS_DISTANCE;
+                $searchDistance =  CategoryRepository::OTHERS_DISTANCE;
             }
 
             $location = null;

@@ -21,7 +21,6 @@ use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Fa\Bundle\ArchiveBundle\Repository\ArchiveAdRepository;
 use Fa\Bundle\ArchiveBundle\Repository\ArchiveAdImageRepository;
 
-
 /**
  * This command is used to clean ad image data based on date and checking on aws image exist or not
  *
@@ -31,7 +30,6 @@ use Fa\Bundle\ArchiveBundle\Repository\ArchiveAdImageRepository;
  */
 class DeleteNFSImagesCommand extends ContainerAwareCommand
 {
-    
     const AD_TYPE       = 'ad';
     const ARCHIVE_TYPE  = 'archive';
     
@@ -47,7 +45,7 @@ class DeleteNFSImagesCommand extends ContainerAwareCommand
      * Configure.
      */
     protected function configure()
-    {	
+    {
         $this
         ->setName('fa:delete-nfs-images')
         ->setDescription('Delete NFS Images')
@@ -77,38 +75,38 @@ EOF
      * @param InputInterface  $input  InputInterface object.
      * @param OutputInterface $output OutputInterface object.
      */
-    protected function execute(InputInterface $input, OutputInterface $output) {
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->em 					= $this->getContainer()->get('doctrine')->getManager();
+        $offset 					= $input->getOption('offset');
+        $this->adImageDir 			= 'uploads/image/';
+        $searchParam 				= array();
+        $ids 						= $input->getOption('ad_id');
+        $status 					= $input->getOption('status');
+        $searchParam['start_date'] 	= intval($input->getOption('start_date'));
+        $searchParam['end_date'] 	= intval($input->getOption('end_date'));
+        $searchParam['type']    	= ($input->getOption('type') && $input->getOption('type') == "archive"?self::ARCHIVE_TYPE:self::AD_TYPE);
+        $status 					= $input->getOption('status');
+        $offset 					= $input->getOption('offset');
         
-    	$this->em 					= $this->getContainer()->get('doctrine')->getManager();
-    	$offset 					= $input->getOption('offset');
-    	$this->adImageDir 			= 'uploads/image/';    	
-    	$searchParam 				= array();
-    	$ids 						= $input->getOption('ad_id');
-    	$status 					= $input->getOption('status');
-    	$searchParam['start_date'] 	= intval($input->getOption('start_date'));
-    	$searchParam['end_date'] 	= intval($input->getOption('end_date')); 
-    	$searchParam['type']    	= ($input->getOption('type') && $input->getOption('type') == "archive"?self::ARCHIVE_TYPE:self::AD_TYPE);
-    	$status 					= $input->getOption('status');
-    	$offset 					= $input->getOption('offset');
-    	
-    	echo ucfirst($searchParam['type'])." clearing Command Started At: ".date('Y-m-d H:i:s', time())."\n";
-    	if ($ids) {
-    		$ids = explode(',', $ids);
-    		$searchParam['ad_ids'] = array_map('trim', $ids);
-    	} else {
-    		$searchParam['ad_ids'] = null;
-    	}    	
-    	if ($status) {
-    		$status= explode(',', $status);
-    		$searchParam['status']= array_map('trim', $status);
-    	} else {
-    		$searchParam['status'] = null;
-    	}  	
-    	if (isset($offset)) {
-    		$this->removeNFSImagesWithOffset($input, $output, $searchParam);
-    	} else {
-    		$this->removeNFSImages($input, $output, $searchParam);
-    	}
+        echo ucfirst($searchParam['type'])." clearing Command Started At: ".date('Y-m-d H:i:s', time())."\n";
+        if ($ids) {
+            $ids = explode(',', $ids);
+            $searchParam['ad_ids'] = array_map('trim', $ids);
+        } else {
+            $searchParam['ad_ids'] = null;
+        }
+        if ($status) {
+            $status= explode(',', $status);
+            $searchParam['status']= array_map('trim', $status);
+        } else {
+            $searchParam['status'] = null;
+        }
+        if (isset($offset)) {
+            $this->removeNFSImagesWithOffset($input, $output, $searchParam);
+        } else {
+            $this->removeNFSImages($input, $output, $searchParam);
+        }
     }
     
     /**
@@ -120,31 +118,31 @@ EOF
      */
     protected function removeNFSImagesWithOffset($input, $output, $searchParam)
     {
-    	$qb          		= $this->getAdQueryBuilder($searchParam);
-    	$step        		= 100;
-    	$offset    			= $input->getOption('offset');
-    	
-    	$qb->setFirstResult($offset);
-    	$qb->setMaxResults($step);
-    	
-    	$ads = $qb->getQuery()->getResult();
-    	$entityManager 		= $this->getContainer()->get('doctrine')->getManager();
-    	
-    	if(!empty($ads)) {
-    		foreach ($ads as $ad) {
-    		    if($searchParam['type'] == self::ARCHIVE_TYPE) {
-    		        $this->clearArchiveAdvertImages($ad, $entityManager);
-    		    } else {
-    		        $this->clearAdvertImages($ad, $entityManager, $output);    			
-    		    }
-    		}    		
-    	}
-    	
+        $qb          		= $this->getAdQueryBuilder($searchParam);
+        $step        		= 100;
+        $offset    			= $input->getOption('offset');
+        
+        $qb->setFirstResult($offset);
+        $qb->setMaxResults($step);
+        
+        $ads = $qb->getQuery()->getResult();
+        $entityManager 		= $this->getContainer()->get('doctrine')->getManager();
+        
+        if (!empty($ads)) {
+            foreach ($ads as $ad) {
+                if ($searchParam['type'] == self::ARCHIVE_TYPE) {
+                    $this->clearArchiveAdvertImages($ad, $entityManager);
+                } else {
+                    $this->clearAdvertImages($ad, $entityManager, $output);
+                }
+            }
+        }
     }
     
-    protected function clearAdvertImages($ad, $entityManager, $output) {
+    protected function clearAdvertImages($ad, $entityManager, $output)
+    {
         $getAdvertImages 				= $entityManager->getRepository('FaAdBundle:AdImage')->findBy(['ad'=>$ad->getId()]);
-        if(!empty($getAdvertImages)) {
+        if (!empty($getAdvertImages)) {
             foreach ($getAdvertImages as $image) {
                 $imagePath  			= $this->adImageDir.CommonManager::getGroupDirNameById($image->getAd()->getId());
                 if ($image->getImageName() != '') {
@@ -155,33 +153,34 @@ EOF
                 $adImageManager 		= new AdImageManager($this->getContainer(), $image->getAd()->getId(), $image->getHash(), $imagePath);
                 $checkImageExistOnAWS 	= $adImageManager->checkImageExistOnAws($imageUrl);
                 
-                if($checkImageExistOnAWS === false) {
+                if ($checkImageExistOnAWS === false) {
                     //$image->setAws(0);
                     //$this->em->persist($image);
                     //$this->em->flush();
                     //logging for status changed
                     $this->getContainer()->get('clean_local_images_logger')->info('Code Commented AWS status changed to 0 for Id ' . $image->getId());
                     $output->writeln('Image not existed on Aws bucket: '.$image->getId(), true);
-                } else if($checkImageExistOnAWS=== true){
+                } elseif ($checkImageExistOnAWS=== true) {
                     $adImageManager->removS3ImagesFromLocal($image);
                 }
             }
         }
     }
     
-    protected function clearArchiveAdvertImages($ad, $entityManager) { 
+    protected function clearArchiveAdvertImages($ad, $entityManager)
+    {
         //chech archive advert still exist in ad table
         $isExistInAdTable 				= $entityManager->getRepository('FaAdBundle:Ad')->find($ad->getId());
-        if(is_null($isExistInAdTable)) {
+        if (is_null($isExistInAdTable)) {
             $getAdvertImages 				= $entityManager->getRepository('FaArchiveBundle:ArchiveAdImage')->findBy(['archive_ad'=>$ad->getId()]);
-            if(!empty($getAdvertImages)) {
+            if (!empty($getAdvertImages)) {
                 foreach ($getAdvertImages as $image) {
                     $imagePath  			= $this->adImageDir.CommonManager::getGroupDirNameById($image->getArchiveAd()->getId());
                     $imageUrl = $this->getContainer()->getParameter('fa.static.aws.url').'/'.$image->getPath().'/'.$ad->getId().'_'.$image->getHash().'.jpg';
                     $adImageManager 		= new AdImageManager($this->getContainer(), $image->getArchiveAd()->getId(), $image->getHash(), $imagePath);
                     $adImageManager->removeArchiveAdImagesFromLocal($image);
                 }
-            } 
+            }
         }
     }
     
@@ -193,47 +192,47 @@ EOF
      */
     protected function removeNFSImages($input, $output, $searchParam)
     {
-    	$qb        = $this->getAdQueryBuilder($searchParam);
-    	$count     = $this->getAdCount($searchParam);
-    	
-    	$step      = 100;
-    	$stat_time = time();
-    	
-    	$output->writeln('SCRIPT START TIME '.date('d-m-Y H:i:s', $stat_time), true);
-    	$output->writeln('Total ads : '.$count, true);
-    	for ($i = 0; $i <= $count;) {
-    		if ($i == 0) {
-    			$low = 0;
-    		} else {
-    			$low = $i;
-    		}
-    		
-    		$i              = ($i + $step);
-    		$commandOptions = null;
-    		foreach ($input->getOptions() as $option => $value) {
-    			if ($value) {
-    				$commandOptions .= ' --'.$option.'="'.$value.'"';
-    			}
-    		}
-    		
-    		if (isset($low)) {
-    			$commandOptions .= ' --offset='.$low;
-    		}
-    		
-    		if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
-    			$memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
-    		}
-    		$command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:delete-nfs-images '.$commandOptions;
-    		$output->writeln($command, true);
-    		passthru($command, $returnVar);
-    		
-    		if ($returnVar !== 0) {
-    			$output->writeln('Error occurred during subtask', true);
-    		}
-    	}
-    	
-    	$output->writeln('SCRIPT END TIME '.date('d-m-Y H:i:s', time()), true);
-    	$output->writeln('TIME TAKEN TO EXECUTE SCRIPT '.((time() - $stat_time) / 60), true);
+        $qb        = $this->getAdQueryBuilder($searchParam);
+        $count     = $this->getAdCount($searchParam);
+        
+        $step      = 100;
+        $stat_time = time();
+        
+        $output->writeln('SCRIPT START TIME '.date('d-m-Y H:i:s', $stat_time), true);
+        $output->writeln('Total ads : '.$count, true);
+        for ($i = 0; $i <= $count;) {
+            if ($i == 0) {
+                $low = 0;
+            } else {
+                $low = $i;
+            }
+            
+            $i              = ($i + $step);
+            $commandOptions = null;
+            foreach ($input->getOptions() as $option => $value) {
+                if ($value) {
+                    $commandOptions .= ' --'.$option.'="'.$value.'"';
+                }
+            }
+            
+            if (isset($low)) {
+                $commandOptions .= ' --offset='.$low;
+            }
+            
+            if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
+                $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
+            }
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:delete-nfs-images '.$commandOptions;
+            $output->writeln($command, true);
+            passthru($command, $returnVar);
+            
+            if ($returnVar !== 0) {
+                $output->writeln('Error occurred during subtask', true);
+            }
+        }
+        
+        $output->writeln('SCRIPT END TIME '.date('d-m-Y H:i:s', time()), true);
+        $output->writeln('TIME TAKEN TO EXECUTE SCRIPT '.((time() - $stat_time) / 60), true);
     }
 
     /**
@@ -245,59 +244,58 @@ EOF
      */
     protected function getAdQueryBuilder($searchParam)
     {
-    	$entityManager = $this->getContainer()->get('doctrine')->getManager();   	
-    	$data = array();
-    	
-    	if($searchParam['type'] == self::ARCHIVE_TYPE) {
-    	    $q = $this->em->getRepository('FaArchiveBundle:ArchiveAd')->createQueryBuilder(ArchiveAdRepository::ALIAS);
-    	    if( (isset($searchParam['start_date']) && $searchParam['start_date'] != '') && (isset($searchParam['end_date']) && $searchParam['end_date'] != '') ) {
-    	        $q->andWhere(ArchiveAdRepository::ALIAS.'.archived_at >= :startDate');
-    	        $q->setParameter('startDate', $searchParam['start_date']);
-    	        $q->andWhere(ArchiveAdRepository::ALIAS.'.archived_at <= :endDate');
-    	        $q->setParameter('endDate', $searchParam['end_date']);
-    	    } else if(isset($searchParam['start_date']) && $searchParam['start_date'] != '') {
-    	        $q->andWhere(ArchiveAdRepository::ALIAS.'.archived_at >= :startDate');
-    	        $q->setParameter('startDate', $searchParam['start_date']);
-    	    } else if(isset($searchParam['end_date']) && $searchParam['end_date'] != '') {
-    	        $q->andWhere(ArchiveAdRepository::ALIAS.'.archived_at <= :endDate');
-    	        $q->setParameter('endDate', $searchParam['end_date']);
-    	    }  
-    	    
-    	    if ($searchParam['ad_ids']) {
-    	        $q->andWhere(ArchiveAdRepository::ALIAS.'.id IN (:ids)');
-    	        $q->setParameter('ids', $searchParam['ad_ids']);
-    	    } 
-    	    
-    	    $q->addOrderBy(ArchiveAdRepository::ALIAS.'.id');
-    	    
-    	} else {
-    	   $q = $this->em->getRepository('FaAdBundle:Ad')->createQueryBuilder(AdRepository::ALIAS);
-    	   if ($searchParam['status']) {
-    	       $q->andWhere(AdRepository::ALIAS.'.status IN (:status_ids)');
-    	       $q->setParameter('status_ids', $searchParam['status']);
-    	   }
-    	   if( (isset($searchParam['start_date']) && $searchParam['start_date'] != '') && (isset($searchParam['end_date']) && $searchParam['end_date'] != '') ) {
-    	       $q->andWhere(AdRepository::ALIAS.'.created_at >= :startDate');
-    	       $q->setParameter('startDate', $searchParam['start_date']);
-    	       $q->andWhere(AdRepository::ALIAS.'.created_at <= :endDate');
-    	       $q->setParameter('endDate', $searchParam['end_date']);
-    	   } else if(isset($searchParam['start_date']) && $searchParam['start_date'] != '') {
-    	       $q->andWhere(AdRepository::ALIAS.'.created_at >= :startDate');
-    	       $q->setParameter('startDate', $searchParam['start_date']);
-    	   } else if(isset($searchParam['end_date']) && $searchParam['end_date'] != '') {
-    	       $q->andWhere(AdRepository::ALIAS.'.created_at <= :endDate');
-    	       $q->setParameter('endDate', $searchParam['end_date']);
-    	   }    	
-    	   
-    	   if ($searchParam['ad_ids']) {
-    	       $q->andWhere(AdRepository::ALIAS.'.id IN (:ids)');
-    	       $q->setParameter('ids', $searchParam['ad_ids']);
-    	   } 
-    	   
-    	   $q->addOrderBy(AdRepository::ALIAS.'.id');
-    	}
-    	
-    	return $q;
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
+        $data = array();
+        
+        if ($searchParam['type'] == self::ARCHIVE_TYPE) {
+            $q = $this->em->getRepository('FaArchiveBundle:ArchiveAd')->createQueryBuilder(ArchiveAdRepository::ALIAS);
+            if ((isset($searchParam['start_date']) && $searchParam['start_date'] != '') && (isset($searchParam['end_date']) && $searchParam['end_date'] != '')) {
+                $q->andWhere(ArchiveAdRepository::ALIAS.'.archived_at >= :startDate');
+                $q->setParameter('startDate', $searchParam['start_date']);
+                $q->andWhere(ArchiveAdRepository::ALIAS.'.archived_at <= :endDate');
+                $q->setParameter('endDate', $searchParam['end_date']);
+            } elseif (isset($searchParam['start_date']) && $searchParam['start_date'] != '') {
+                $q->andWhere(ArchiveAdRepository::ALIAS.'.archived_at >= :startDate');
+                $q->setParameter('startDate', $searchParam['start_date']);
+            } elseif (isset($searchParam['end_date']) && $searchParam['end_date'] != '') {
+                $q->andWhere(ArchiveAdRepository::ALIAS.'.archived_at <= :endDate');
+                $q->setParameter('endDate', $searchParam['end_date']);
+            }
+            
+            if ($searchParam['ad_ids']) {
+                $q->andWhere(ArchiveAdRepository::ALIAS.'.id IN (:ids)');
+                $q->setParameter('ids', $searchParam['ad_ids']);
+            }
+            
+            $q->addOrderBy(ArchiveAdRepository::ALIAS.'.id');
+        } else {
+            $q = $this->em->getRepository('FaAdBundle:Ad')->createQueryBuilder(AdRepository::ALIAS);
+            if ($searchParam['status']) {
+                $q->andWhere(AdRepository::ALIAS.'.status IN (:status_ids)');
+                $q->setParameter('status_ids', $searchParam['status']);
+            }
+            if ((isset($searchParam['start_date']) && $searchParam['start_date'] != '') && (isset($searchParam['end_date']) && $searchParam['end_date'] != '')) {
+                $q->andWhere(AdRepository::ALIAS.'.created_at >= :startDate');
+                $q->setParameter('startDate', $searchParam['start_date']);
+                $q->andWhere(AdRepository::ALIAS.'.created_at <= :endDate');
+                $q->setParameter('endDate', $searchParam['end_date']);
+            } elseif (isset($searchParam['start_date']) && $searchParam['start_date'] != '') {
+                $q->andWhere(AdRepository::ALIAS.'.created_at >= :startDate');
+                $q->setParameter('startDate', $searchParam['start_date']);
+            } elseif (isset($searchParam['end_date']) && $searchParam['end_date'] != '') {
+                $q->andWhere(AdRepository::ALIAS.'.created_at <= :endDate');
+                $q->setParameter('endDate', $searchParam['end_date']);
+            }
+           
+            if ($searchParam['ad_ids']) {
+                $q->andWhere(AdRepository::ALIAS.'.id IN (:ids)');
+                $q->setParameter('ids', $searchParam['ad_ids']);
+            }
+           
+            $q->addOrderBy(AdRepository::ALIAS.'.id');
+        }
+        
+        return $q;
     }
     
     /**
@@ -309,8 +307,8 @@ EOF
      */
     protected function getAdCount($searchParam)
     {
-    	$qb = $this->getAdQueryBuilder($searchParam);
-    	$qb->select('COUNT('.$qb->getRootAlias().'.id)');
-    	return $qb->getQuery()->getSingleScalarResult();
+        $qb = $this->getAdQueryBuilder($searchParam);
+        $qb->select('COUNT('.$qb->getRootAlias().'.id)');
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }

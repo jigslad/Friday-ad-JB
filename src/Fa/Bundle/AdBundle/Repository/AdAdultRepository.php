@@ -417,7 +417,7 @@ class AdAdultRepository extends EntityRepository
         $data = $container->get('fa.searchfilters.manager')->getFiltersData();
 
         $getDefaultRadius = CategoryRepository::OTHERS_DISTANCE;
-        if($searchParams['item__category_id']!='') {
+        if ($searchParams['item__category_id']!='') {
             $getDefaultRadius = $this->_em->getRepository('FaEntityBundle:Category')->getDefaultRadiusByCategoryId($searchParams['item__category_id']);
         }
 

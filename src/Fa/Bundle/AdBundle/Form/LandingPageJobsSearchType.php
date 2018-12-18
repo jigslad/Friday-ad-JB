@@ -119,13 +119,14 @@ class LandingPageJobsSearchType extends AbstractType
     public function preSetData(FormEvent $event)
     {
         $form = $event->getForm();
-        $defDistance = '';$getDefaultRadius = $searchParams = array();
+        $defDistance = '';
+        $getDefaultRadius = $searchParams = array();
 
         $categoryId   = '';
-        if($this->request->get('category_id')) {
+        if ($this->request->get('category_id')) {
             $searchParams['item__category_id'] = $this->request->get('category_id');
         }
-        if($this->request->get('location')) {
+        if ($this->request->get('location')) {
             $searchParams['item__location'] = $this->request->get('location');
         }
         
@@ -142,7 +143,6 @@ class LandingPageJobsSearchType extends AbstractType
                 'attr'    => array('class' => 'fa-select-white')
             )
         );
-
     }
 
     /**

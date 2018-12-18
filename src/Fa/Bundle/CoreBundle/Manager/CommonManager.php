@@ -911,9 +911,9 @@ class CommonManager
                     }
 
                     if (!$imageWidth && !$imageHeight) {
-                     return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
+                        return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
                     } else {
-                     return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
+                        return ($isCompany ? '<div class="profile-placeholder">' : '').'<img src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" '.(!$isCompany ? 'class="pvt-no-img"':null).' />'.($isCompany ? '</div>' : '');
                     }
                 }
             } else {
@@ -929,20 +929,20 @@ class CommonManager
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).')" title="'.$userName.'" />';
                 }
             } else {
-                if(!file_exists($container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg')) {
-                if ($isCompany) {
-                            $orgImagPath = $container->getParameter('fa.company.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
-                } else {
-                            $orgImagPath = $container->getParameter('fa.user.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
-                }
+                if (!file_exists($container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg')) {
+                    if ($isCompany) {
+                        $orgImagPath = $container->getParameter('fa.company.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
+                    } else {
+                        $orgImagPath = $container->getParameter('fa.user.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
+                    }
                     exec('convert '.$orgImagPath.DIRECTORY_SEPARATOR.$userId.'.jpg -resize '.$imageWidth.'X'.$imageHeight.' -background white -gravity center -extent '.$imageWidth.'X'.$imageHeight.' '.$orgImagPath.DIRECTORY_SEPARATOR.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg');
-            }
+                }
 
                 $newImagePath = $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg'.($appendTime ? '?'.time() : null);
 
                 if ($isCompany) {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newImagePath.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />';
-        } else {
+                } else {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newImagePath.')" title="'.$userName.'"></span>';
                 }
             }
@@ -3260,11 +3260,12 @@ HTML;
     }
 
 
-    public static function checkFileExists($path) {
+    public static function checkFileExists($path)
+    {
         //if(file_exists($path)) { return true; }
         //else { return false; }
         $file_headers = @get_headers($url);
-        if ($file_headers[0] == 'HTTP/1.0 404 Not Found'){ // or "HTTP/1.1 404 Not Found" etc.
+        if ($file_headers[0] == 'HTTP/1.0 404 Not Found') { // or "HTTP/1.1 404 Not Found" etc.
             $file_exists = false;
         } else {
             $file_exists = true;
@@ -3280,15 +3281,16 @@ HTML;
         return array(0,2,5,10,15,20,30,50,75,100,150,200);
     }
 
-    public static function getClosest($search) {
-       $closest = null;
-       $getDistanceArray = self::getDistanceArray();
-       foreach ($getDistanceArray as $item) {
-          if ($closest === null || abs($search - $closest) > abs($item - $search)) {
-             $closest = $item;
-          }
-       }
-       return $closest;
+    public static function getClosest($search)
+    {
+        $closest = null;
+        $getDistanceArray = self::getDistanceArray();
+        foreach ($getDistanceArray as $item) {
+            if ($closest === null || abs($search - $closest) > abs($item - $search)) {
+                $closest = $item;
+            }
+        }
+        return $closest;
     }
 
     /**

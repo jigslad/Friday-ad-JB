@@ -536,5 +536,4 @@ class UserPackage
     {
         return $this->boost_overide;
     }
-
 }

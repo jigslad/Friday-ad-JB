@@ -54,5 +54,4 @@ class LocationRadiusListener
     {
         return $this->container->get('doctrine')->getManager()->getClassMetadata('FaAdBundle:LocationRadius')->getTableName();
     }
-
 }

@@ -136,7 +136,9 @@ class AdLeftSearchType extends AbstractType
     {
         $form = $event->getForm();
         $this->addLocationAutoSuggestField($form);
-        $defDistance = '';$getDefaultRadius = array();$rootCategoryId = null;
+        $defDistance = '';
+        $getDefaultRadius = array();
+        $rootCategoryId = null;
 
         $categoryId   = '';
         $searchParams = $this->request->get('searchParams');
