@@ -2576,21 +2576,21 @@
     .flexy-box .parent_box {display:table; table-layout:inherit; }
     .flexy-box .child_box { display:table; }
     #basic_info_panel .detail-label-adult { margin-top:0px; padding: 10px 0px;}
-    #mapfit .mapfit-popup, #mapfit .mapfit-popUpContent, #mapfit .mapfit-popup-content-wrapper { width:254px !important; height:236px !important;}
-    #mapfit .mapfit-popup .listing {padding: 20px 0px !important;}
-    #mapfit .mapfit-popUpContent {padding: 11px 11px !important;}
-    #mapfit .mapfit-popup .list-col-1 {width: 100px !important;}
-    #mapfit .mapfit-popup .list-col-2 { width: 115px !important; padding: 0 0 0 10px !important;}
+    #mapfit .leaflet-popup, #mapfit .leaflet-popup-content, #mapfit .leaflet-popup-content-wrapper { width:254px !important; height:236px !important;}
+    #mapfit .leaflet-popup .listing {padding: 20px 0px !important;}
+    #mapfit .leaflet-popup-content {padding: 11px 11px !important;}
+    #mapfit .leaflet-popup .list-col-1 {width: 100px !important;}
+    #mapfit .leaflet-popup .list-col-2 { width: 115px !important; padding: 0 0 0 10px !important;}
     .map-wrapper .listing:after {right: -4px !important; }
-    #mapfit .mapfit-popup .list-col-2 h3 { min-height: 54px; overflow: hidden;}
-    #mapfit .mapfit-popup .list-col-2 .list-price { margin-top: -16px !important; }
-    #mapfit .mapfit-popup .list-distance {position: absolute !important; bottom: 62px !important; right: 13px !important;}
-    #mapfit .mapfit-popup .list-miles {float: right !important;}
-    #mapfit .mapfit-popup { bottom: 0 !important; left: -118px !important;}
+    #mapfit .leaflet-popup .list-col-2 h3 { min-height: 54px; overflow: hidden;}
+    #mapfit .leaflet-popup .list-col-2 .list-price { margin-top: -16px !important; }
+    #mapfit .leaflet-popup .list-distance {position: absolute !important; bottom: 62px !important; right: 13px !important;}
+    #mapfit .leaflet-popup .list-miles {float: right !important;}
+    #mapfit .leaflet-popup { bottom: 0 !important; left: -118px !important;}
 }
 @media only screen and (min-width: 560px) and (max-width: 767px) {
-	#mapfit .mapfit-popup, #mapfit .mapfit-popUpContent, #mapfit .mapfit-popup-content-wrapper { width:400px !important; height:236px !important;}
-    #mapfit .mapfit-popup {left: -175px !important;}
+	#mapfit .leaflet-popup, #mapfit .leaflet-popup-content, #mapfit .leaflet-popup-content-wrapper { width:400px !important; height:236px !important;}
+    #mapfit .leaflet-popup {left: -175px !important;}
 }
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .miles-bg-image{background-size:91px 68px}

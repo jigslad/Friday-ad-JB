@@ -142,6 +142,64 @@
         });
     }
 
+
+     $('#manage-my-ads-list-only').on('click','.ajaxboost_your_ad', function(e) 
+        {
+            var boost_value = 1;
+            var elem_id = $(this).attr('id');
+            var split_ad_id = elem_id.split("_");
+            var adIdToBoost = split_ad_id[split_ad_id.length-1];
+            $('#'+elem_id).attr("disabled", true);
+            e.stopPropagation();
+            $('#'+elem_id).off('click','#manage-my-ads-list-only');
+            $('#'+elem_id).removeClass('ajaxboost_your_ad');
+            $.ajax({
+                    type: "POST",
+                    url: '{{path("ajax_manage_my_ads_boost_ad")}}',
+                    data: {'adId':adIdToBoost,boost_value:boost_value},
+                    asyn:false,
+                    cache:false,
+                    success:function(result)
+                    {
+                        if(result.error == "")
+                        {
+                            ga('send','event','MMA','Boost Button', result.gaStr);
+                        }
+                    },
+                    complete: function(){
+                        window.location.href = '{{ path('manage_my_ads_active') }}';
+                    }
+                })
+        });
+
+    $('#manage-my-ads-list-only').on('click','.ajaxcustom-checkbox', function() {
+        if ($(this).hasClass('checked')) {
+            $(this).removeClass('checked');
+            $(this).find('input[type="checkbox"]:first').removeAttr('checked');
+            
+        } else {
+            $(this).addClass('checked');
+            $(this).find('input[type="checkbox"]:first').attr('checked','checked');
+        }
+        if($(".boostad").length == $(".boostad:checked").length) {
+            $("#boostad_selectall").attr("checked", "checked");
+            $('#boostad_selectall').parent('span').addClass('checked');
+            $("#boostad_selectall_inmodal").attr("checked", "checked");
+            $('#boostad_selectall_inmodal').parent('span').addClass('checked');
+        } else if($(".boostad").length > $(".boostad:checked").length) {
+            $("#boostad_selectall_inmodal").attr("checked", "checked");
+            $('#boostad_selectall_inmodal').parent('span').addClass('checked');
+            $("#boostad_selectall").removeAttr("checked");
+            $('#boostad_selectall').parent('span').removeClass('checked');
+        } else {
+            $("#boostad_selectall").removeAttr("checked");
+            $('#boostad_selectall').parent('span').removeClass('checked');
+            $("#boostad_selectall_inmodal").removeAttr("checked");
+            $('#boostad_selectall_inmodal').parent('span').removeClass('checked');
+        }
+        openMarkAdAsBoostedModal();
+    });
+
     {% if showCompetitionPopup is defined and showCompetitionPopup %}
         function enterInCompetition()
         {

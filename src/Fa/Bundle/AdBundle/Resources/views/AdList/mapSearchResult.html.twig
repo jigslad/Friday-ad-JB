@@ -128,7 +128,7 @@
     }
 }
 </style>
-<link href="https://cdn.mapfit.com/v2-4/assets/css/mapfit.css" rel='stylesheet' />
+<link href="https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/master/leaflet.css" rel="stylesheet" type="text/css"/>
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
 <div class="row relative map-results-main">
     <div class="large-6 columns" id="left_search">
@@ -175,13 +175,11 @@
 {% block scriptbottom %}
     {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
     {{ include('FaAdBundle:AdList:listJs.html.twig') }}
-    <script src="https://cdn.mapfit.com/v2-4/assets/js/tetragon.js"></script>
-    <script src="https://cdn.mapfit.com/v2-4/assets/js/mapfit.js"></script>
-    
+        
     {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mapSearchResult.js'
         'bundles/facore/js/owl.carousel.min.js'
     %}
-    <script src="{{ static_asset_url(asset_url) }}?v=50"></script>
+    <script src="{{ static_asset_url(asset_url) }}?v=111"></script>
     {% endjavascripts %}
     
     {# {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mapSearchResult.js'
@@ -294,78 +292,80 @@
       //]]>
     </script> #}
     {% set container = fetch_container_instance() %}
+    {% set mapFitkey = '' %}
+    {% set mapFitConfig = fetch_repository('FaCoreBundle:ConfigRule').getActiveConfigRulesByCategoryId(constant('Fa\\Bundle\\CoreBundle\\Repository\\ConfigRepository::MAPFIT_API_KEY_ID'), null, 1) %}
+    {% if mapFitConfig and mapFitConfig.0.value is defined %}
+    	{% set mapFitkey = mapFitConfig.0.value %}
+    {% endif %}
+    
+    <script  type="text/javascript" src="https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/master/leaflet.js"></script>
+	<script  type="text/javascript" src="https://tiles.unwiredmaps.com/js/leaflet-unwired.js"></script>
+    
     <script language="javascript" type="text/javascript">
         //<![CDATA[
-        $(document).ready(function(){
-        	 let map = mapfit.MapView('mapfit', {theme: 'day'});
-        	 let museums = mapfit.Layer();
-             let extendedmuseums = mapfit.Layer();
-        	 let myIcon = mapfit.divIcon({className:"", iconUrl: "{{ asset_url('fafrontend/images/map-marker.png') }}", html: '<img class="markerImg" src="{{ asset_url('fafrontend/images/map-marker.png') }}" />'});
-             let extmyIcon = mapfit.divIcon({className:"", iconUrl: "{{ asset_url('fafrontend/images/search-pin.svg') }}", html: '<img class="markerImg" src="{{ asset_url('fafrontend/images/search-pin.svg') }}" />'});
+        		 var apikey = "{{ mapFitkey }}";
+                 var streets = L.tileLayer.Unwired({key: apikey, scheme: "streets"});
+        		 $(document).ready(function(){
+        			 var defaultRadCnt = {{resultCount}};
+                     var extRadCnt = {{extendedResultCount}};
+                     
+                     
+        			 {% if pagination.getNbResults() %}
+                 	 	var mapSearchList = {{ mapResult|json_encode|raw }};
+                 	 	showSearchResultMapLocations(mapSearchList, defaultRadCnt, extRadCnt);
+                 	 {% endif %}
+        			 
+        		 });
 
-        	 var title = '';
-             var rescnt = 0;
-             var defaultRadCnt = {{resultCount}};
-             var extRadCnt = {{extendedResultCount}};
-        	 {% if pagination.getNbResults() %}
-        	 	var mapSearchList = {{ mapResult|json_encode|raw }};
-        	 	showMapLocation(mapSearchList);
-        	 {% endif %}
+        		 function showSearchResultMapLocations(mapSearchList, defaultRadCnt = 0, extRadCnt = 0) {
+        				var rescnt = 0;
+        				var defaultRadLayer = [];
+        				var extendedRadLayer = [];
+                        var defaultRadFeature = [];
+        				var lat, lng, focusedLat, focusedLng = '';
+        				var myIcon = L.icon({className:"", iconUrl: "{{ asset_url('fafrontend/images/map-marker.png') }}"});
+        				
+        				$.each(mapSearchList, function (i, item) {
+        					rescnt = rescnt + 1;
+        					if( typeof item.latitude !== 'undefined' && item.latitude != '' && typeof item.longitude !== 'undefined' && item.longitude != '' ) {
+        						lat = parseFloat(item.latitude);
+        						lng = parseFloat(item.longitude);
+        						
+        						if(rescnt>defaultRadCnt) {
+        							extendedRadLayer.push(L.marker([lat, lng], {icon: myIcon}).bindPopup('   ').on('click', function() { updateContent(item.adId); }));  
+        						} else {
+        							defaultRadLayer.push(L.marker([lat, lng], {icon: myIcon}).bindPopup('  ').on('click', function() { updateContent(item.adId); }));
+                                    defaultRadFeature.push(L.marker([lat, lng]));  
+        							focusedLat = parseFloat(lat);
+        							focusedLng = parseFloat(lng);
+                				}   						
+        					}
+        				});
+        				var defaultLoc = L.layerGroup(defaultRadLayer);
+        				var extLoc = L.layerGroup(extendedRadLayer);
+                        var group = new L.featureGroup(defaultRadFeature);
+ 
+        			     map = L.map('mapfit', {
+        			        center: [focusedLat, focusedLng],
+        			        zoom: 10,
+        			        layers: [streets, defaultLoc, extLoc]
+        				});
+                        map.fitBounds(group.getBounds());
+        			}
 
-        	mapfit.LatLng('{{cookieLocationDetails['latitude']}}','{{cookieLocationDetails['longitude']}}');
-
-             function showMapLocation(mapLocation){ 
-                 $.each(mapLocation, function (i, item) {
-                     rescnt = rescnt + 1;
-                	 if( typeof item.latitude !== 'undefined' && item.latitude != '' && typeof item.longitude !== 'undefined' && item.longitude != '' ) {
-                		 if( typeof item.title !== 'undefined' && item.title != '') {
-                			 title = item.title;
-                    	 } else {
-                    		 title = item.adId;
+        		 function updateContent(adId) {
+                     var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': adId });
+                     $.ajax({
+                         type: "GET",
+                         url : route,
+                     })
+                     .done(function(response) {
+                         if (response.length) {
+                        	 var desc = response;
+                        	 $(".leaflet-popup-content").html(desc);
                          }
-                         
-                         var placeInfo = mapfit.PlaceInfo();
-                         var marker = mapfit.Marker([parseFloat(item.latitude), parseFloat(item.longitude)]);
-                         placeInfo.setTitle('');
-                         placeInfo.setDescription('');
-    
-                         marker.on('click', function () {
-                  	    	updateContent(item.adId);
-                  	     })
-                         
-                         marker.setPlaceInfo(placeInfo);
-                         marker.setIcon(myIcon);
-                         if(rescnt>defaultRadCnt) {
-                            marker.setIcon(myIcon);
-                            extendedmuseums.add(marker);
-                         } else {
-                            marker.setIcon(myIcon);
-                            museums.add(marker);
-                         }
-                 	     map.addMarker(marker);
-                	 }
-                 });
-                    map.addLayer(museums);
-                    map.addLayer(extendedmuseums);
-                    var latLongBounds = map.getLatLngBounds();
-                    map.setLatLngBounds(latLongBounds);
-                    map.setCenterWithLayer(museums, 0, 0); 
-             }
-
-             function updateContent(adId) {	
-                 var route = Routing.generate('ad_show_ad_for_infobox', { 'adId': adId });
-                 $.ajax({
-                     type: "GET",
-                     url : route,
-                 })
-                 .done(function(response) {
-                     if (response.length) {
-                    	 var desc = response;
-                    	 $(".mapfit-popup-description").html(desc);
-                     }
-                 });
-             }
-        });
+                     });
+                 }
         //]]>
       </script>
 {% endblock %}

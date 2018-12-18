@@ -199,7 +199,7 @@
 }
 
 </style>
-{% if boostedAdCount>0 and isBoostEnabled==1 %}
+{% if adsBoostedCount>0 and isBoostEnabled==1 %}
     <style>.manage-item-tabs li { width:33.3% !important; }</style>
 {% else %}
     <style>.manage-item-tabs li { width:50% !important; }</style>
@@ -256,7 +256,7 @@
 
 
                         </li>
-                        {% if isBoostEnabled==1 and boostedAdCount>0 %}
+                        {% if isBoostEnabled==1 and adsBoostedCount>0 %}
                             <li {% if currentRoute == 'manage_my_ads_boosted' %} class="active" {% endif %}>
 
                             <a href="{{path('manage_my_ads_boosted')}}" class="hide-for-small-only">{{ 'My Boosted Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{adsBoostedCount}}</span>)</a>
@@ -330,7 +330,7 @@
                                                 <div class="manage-list-desc">You will have <span class="leftoutAdCount">0</span> boosts left</div>
                                             </div>
                                             <div class="small-24 medium-6 large-6 columns">
-                                                <button type="button" class="button primary-btn-2  expand" onclick="closeRevealModel('#markAdAsBoostedModal');boostSelectedAds();">{{'Boost Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
+                                                <button type="button" id="boost-sel-ads-btn" class="button primary-btn-2  expand" onclick="closeRevealModel('#markAdAsBoostedModal');boostSelectedAds();">{{'Boost Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
                                             </div>
                                         </div>
             </div>
@@ -442,31 +442,8 @@
 </div>
 {% block scriptbottom%}
 <script language="javascript" type="text/javascript">
-    function boostad(elem)
-    {
-            var boost_value = 1;
-        var split_ad_id = elem.id.split("_");
-        var adIdToBoost = split_ad_id[split_ad_id.length-1];
-       
-        $.ajax({
-                type: "POST",
-                url: '{{path("ajax_manage_my_ads_boost_ad")}}',
-                data: {'adId':adIdToBoost,boost_value:boost_value},
-                asyn:false,
-                cache:false,
-                success:function(result)
-                {
-                    if(result.error == "")
-                    {
-                        ga('send','event','MMA','Boost Button', result.gaStr);
-                        window.location.href = '{{ path('manage_my_ads_active') }}';
-                    }
-                }
-            })
-
-    }
-
     function boostSelectedAds() {
+        $('#boost-sel-ads-btn').prop("disabled", true);
         var selectedBoostAdIds = '';
         $(".boostad").each(function(){
             if($(this).parent('span').hasClass('checked')) {
@@ -518,6 +495,34 @@
     
 
     $(function(){
+        $('.boost_your_ad').on('click',function(e)
+        {
+            var boost_value = 1;
+            var elem_id = $(this).attr('id');
+            var split_ad_id = elem_id.split("_");
+            var adIdToBoost = split_ad_id[split_ad_id.length-1];
+            $('#'+elem_id).attr("disabled", true);
+            $(this).off('click');
+            $('#'+elem_id).removeClass('boost_your_ad');
+            $.ajax({
+                    type: "POST",
+                    url: '{{path("ajax_manage_my_ads_boost_ad")}}',
+                    data: {'adId':adIdToBoost,boost_value:boost_value},
+                    asyn:false,
+                    cache:false,
+                    success:function(result)
+                    {
+                        if(result.error == "")
+                        {
+                            ga('send','event','MMA','Boost Button', result.gaStr);
+                        }
+                    },
+                    complete: function(){
+                        window.location.href = '{{ path('manage_my_ads_active') }}';
+                    }
+                })
+        });
+
         $("#boostad_selectall").parent('span').change(function () {
             if($(this).hasClass('checked')) {
                 $('.boostad').attr('checked', 'checked');

@@ -1,7 +1,7 @@
 {% block googlemap_location_html %}
     {% if latitude is defined and latitude and longitude is defined and longitude %}
         {# <div id="googlemaps" style="height:{{mapHeight}};width:{{mapWidth}}"></div> #}
-        <link href="https://cdn.mapfit.com/v2-4/assets/css/mapfit.css" rel='stylesheet' />
+        <link href="https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/master/leaflet.css" rel="stylesheet" type="text/css"/>
         <div id="mapfit" style="height:{{mapHeight}};width:{{mapWidth}}"></div>
     {% else %}
         <br />

@@ -587,5 +587,5 @@ table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.r
 .image-tooltip:after{left:50%;bottom:-15px;content:" ";height:0;width:0;position:absolute;pointer-events:none;margin-left:-9px;border-style:solid;border-width:7px;border-color:#b3b3b3 transparent transparent transparent}
 .image-tooltip-wrapper:hover .image-tooltip{visibility:visible;opacity:1}
 #amazon-tooltip .image-tooltip {left: 190px !important;bottom: 44px !important; }
-
+#mapfit { width:100% !important;}
 

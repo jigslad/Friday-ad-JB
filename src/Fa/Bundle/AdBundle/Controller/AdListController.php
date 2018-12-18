@@ -500,7 +500,7 @@ class AdListController extends CoreController
 
             }
 
-            if(!empty($mapResult)) {
+            if(!empty($mapResult) && $setDefUKLoc==0 && $isBusinessPage==0) {
                 usort($mapResult, function($a, $b) {
                     return $a['away_from_location'] - $b['away_from_location'];
                 });

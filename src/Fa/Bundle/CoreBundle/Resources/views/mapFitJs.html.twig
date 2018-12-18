@@ -1,178 +1,103 @@
-<script defer src="https://cdn.mapfit.com/v2-4/assets/js/tetragon.js"></script>
-<script defer src="https://cdn.mapfit.com/v2-4/assets/js/mapfit.js"></script>
+<script defer type="text/javascript" src="https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/master/leaflet.js"></script>
+<script defer type="text/javascript" src="https://tiles.unwiredmaps.com/js/leaflet-unwired.js"></script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-var myMarker, position, map, addressField, latlngField, myIcon;
+var map, streets, myMarker, myIcon;
 $(window).on('load', function() {
-mapfit.apikey = "{{ key }}";
-myIcon = mapfit.divIcon({className:"", iconUrl: "{{ asset_url('fafrontend/images/map-marker.png') }}", html: '<img class="markerImg" src="{{ asset_url('fafrontend/images/map-marker.png') }}" />'})
+	apikey = "{{ key }}";
+	streets = L.tileLayer.Unwired({key: apikey, scheme: "streets"});
+	myIcon = L.icon({className:"", iconUrl: "{{ asset_url('fafrontend/images/map-marker.png') }}"});
 });
 function showAddress(val) {
     var latitude = '';
     var longitude = '';
-    let geo = null; 
-    if(myMarker) { 
-    	map.removeLayer(myMarker);
-	}
-    geo = new mapfit.Geocoder("{{ key }}", "https://api.mapfit.com/v2");
-    geo.geocode(address=val, includeBuilding= true)
-   .then(function(data) {
-        if(data && data.length > 0) {
-            $.each(data, function (i, address_component) {
-                if(typeof address_component.location != 'undefined') {
-                	if(myMarker) { 
-                    	map.removeLayer(myMarker);
-                	}
-                	latitude = address_component.location.lat;
-                    longitude = address_component.location.lon;
-                    position = mapfit.LatLng([latitude, longitude]);
-                    map.setCenter(position);
-                    myMarker = mapfit.Marker(position);
-                    myMarker.setIcon(myIcon);
-                    map.addMarker(myMarker);
-                    map.setZoom(9);
-                    map.flyTo([latitude, longitude]);
-                }
-            });
-        }
-    })
-   .catch(function(error){
-	   if(error && error.length > 0) {
-		   console.log(error);
-	   }
-   });
+    if(map && myMarker) {  
+        map.removeLayer(myMarker);
+    }
+    let settings = {
+  		  "async": true,
+  		  "crossDomain": true,
+  		  "url": 'https://eu1.locationiq.com/v1/search.php?key={{ key|raw }}&q=="'+val+'"&format=json&countrycodess=gb&limit=1',
+  		  "method": "GET"
+  		}
+
+  		$.ajax(settings).done(function (response) {
+  			if(response && response.length > 0) {
+  				$.each(response, function (i, address_component) {
+  					if(typeof address_component.lat != 'undefined' && typeof address_component.lon != 'undefined') {
+  						if(map && myMarker) {  
+  					        map.removeLayer(myMarker);
+  					    }
+				 		latitude = address_component.lat;
+  	                    longitude = address_component.lon;							
+						map.setView(new L.LatLng(latitude, longitude), 8);
+						myMarker = L.marker([latitude, longitude], {icon: myIcon}).addTo(map);
+						map.flyTo([address_component.lat, address_component.lon]);
+  					}
+  				});
+  			}
+  		});
 }
 
-function initialize() {
-    map = mapfit.MapView('mapfit', {
-        theme: 'day',
-        zoom:9,
-        zoomControl: true,
-        panControl:false,
-        streetViewControl: false,
-        mapTypeControl: false,
-        
-        scaleControl: false,
-        scrollwheel: false,
-        disableDoubleClickZoom: true,
-        draggable: false,
-      }); 
-}
-
-function showMapForPaa(lat, lng, field, pointField) {
-  if(!map) { 
-  	map = mapfit.MapView('mapfit', {theme: 'day'});
-  }
-
-  if(myMarker) { 
-  	map.removeLayer(myMarker);
-  }
-  
-  position = mapfit.LatLng([lat, lng]);
-  map.setCenter(position);
-  myMarker = mapfit.Marker(position);
-  myMarker.setIcon(myIcon);
-  map.addMarker(myMarker);
-  map.setZoom(9);
-  map.flyTo([lat, lng]);
-   
-
- /* map.on('click', function (event) {   
-    var lat = '';
-    var long = '';
-    map.removeLayer(myMarker);
-      if(typeof event.latlng != 'undefined') { 
-          latitude = event.latlng.lat;
-          longitude = event.latlng.lng;
-          position = mapfit.LatLng([latitude, longitude]);
-          myMarker = mapfit.Marker(position)
-          map.setCenter(myMarker);
-          map.addMarker(myMarker);
-          map.setZoom(12); 
-          if (typeof field !== 'undefined' && typeof pointField !== 'undefined') {
-            getGeocodeLocationInfo(latitude, longitude, field, pointField);
-          }
-      }
-    }) */
-}
-
-/*function getGeocodeLocationInfo(latitude, longitude, addressField = '', latlngField = '') {
-  let geo = new mapfit.Geocoder("{{ key }}", "https://api.mapfit.com/v2");
-    geo.reverseGeocode(latlng=[latitude,longitude], building = true, radius = 75, limit = 1)
-    .then(function(data) {
-            if(data && data.length > 0) { 
-              var town, zip, locality, postal_town;
-                var strAddress = '';
-                $.each(data, function (i, address_component) { 
-                   if (typeof address_component.locality != 'undefined') {
-                     locality = address_component.locality;
-                     }
-
-                     if (typeof address_component.postal_code != 'undefined') {
-                         zip = address_component.postal_code;
-                     }
-
-                     if(typeof address_component.location != 'undefined') { 
-                          latitude = address_component.location.lat;
-                          longitude = address_component.location.lon;
-                    }
-                });
-                
-                if (zip != '' && typeof zip != 'undefined') {
-                    strAddress = zip;
-                } else if (locality != '' && typeof locality != 'undefined') {
-                    strAddress = locality;
-                }
-                
-                // Store town or zip to given field
-                if (addressField != '') {
-                    var addressIdField = addressField.replace('_autocomplete', '');
-                    if (strAddress) {
-                        $(addressField).val(strAddress);
-                        $(addressIdField).val(strAddress);
-                    }
-                    $(latlngField).val(latitude+', '+longitude)
-                }
-                  
-            }
-      })
-     .catch(function(error){
-         if(error && error.length > 0) {
-           console.log(error);
-         }
+function initialize(lat, lng) { 
+	map = L.map('mapfit', {
+        center: [lat, lng], // Map loads with this location as center
+        zoom: 10,
+        scrollWheelZoom: true,
+        layers: [streets], // Show 'streets' by default
     });
-} */
+}
+
+function showMapForPaa(lat, lng, field = '', pointField = '') {
+	if(map && myMarker) {  
+        map.removeLayer(myMarker);
+    }
+    
+	if(!map) {
+		// Initialize the map
+	    map = L.map('mapfit', {
+	        center: [lat, lng], // Map loads with this location as center
+	        zoom: 10,
+	        scrollWheelZoom: true,
+	        layers: [streets], // Show 'streets' by default
+	    });
+	}
+	myMarker = L.marker([lat, lng], {icon: myIcon}).addTo(map);
+}
 
 function showMarker(lat, lng) {
-	if(!map) { 
-		map = mapfit.MapView('mapfit', {theme: 'day'});
+	if(map && myMarker) {  
+        map.removeLayer(myMarker);
+    }
+    
+	if(!map) {
+		// Initialize the map
+	    map = L.map('mapfit', {
+	        center: [lat, lng], // Map loads with this location as center
+	        zoom: 10,
+	        scrollWheelZoom: true,
+	        layers: [streets], // Show 'streets' by default
+	    });
 	}
-	if(myMarker) { 
-    	map.removeLayer(myMarker);
-	}
-	position = mapfit.LatLng([lat, lng]);
-	myMarker = mapfit.Marker(position);
-	myMarker.setIcon(myIcon);
-	map.setCenter(myMarker);
-	map.addMarker(myMarker);
-	map.setZoom(12);
+	myMarker = L.marker([lat, lng], {icon: myIcon}).addTo(map);
 }
 
 function showCustomMarker(lat, lng, markerImage)
 {
-	if(!map) { 
-		map = mapfit.MapView('mapfit', {theme: 'day'});
+	if(map && myMarker) {  
+        map.removeLayer(myMarker);
+    }
+    
+	if(!map) {
+		// Initialize the map
+	    map = L.map('mapfit', {
+	        center: [lat, lng], // Map loads with this location as center
+	        zoom: 10,
+	        scrollWheelZoom: true,
+	        layers: [streets], // Show 'streets' by default
+	    });
 	}
-	
-	if(myMarker) { 
-    	map.removeLayer(myMarker);
-	}
-	position = mapfit.LatLng([lat, lng]);
-	myMarker = mapfit.Marker(position);
-	myMarker.setIcon(myIcon);
-	map.setCenter(myMarker);
-	map.addMarker(myMarker);
-	map.setZoom(12);
+	myMarker = L.marker([lat, lng], {icon: myIcon}).addTo(map);
 }
 
 //]]>

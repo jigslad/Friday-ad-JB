@@ -3491,6 +3491,8 @@ class AdRepository extends EntityRepository
 
             $objAd->setEditedAt(time());
             $objAd->setStatus($objStatus);
+            $objAd->setIsBoosted(0);
+            $objAd->setBoostedAt(null);
             $this->_em->persist($objAd);
             $this->_em->flush($objAd);
             $return = true;

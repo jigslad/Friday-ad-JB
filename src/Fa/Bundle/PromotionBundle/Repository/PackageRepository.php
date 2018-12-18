@@ -347,7 +347,8 @@ class PackageRepository extends EntityRepository
         ->andWhere(self::ALIAS.'.shop_category = :shop_category')
         ->andWhere(self::ALIAS.'.price IS NULL OR '.self::ALIAS.'.price < 0')
         ->setParameter('package_for', 'shop')
-        ->setParameter('shop_category', $category);
+        ->setParameter('shop_category', $category)
+        ->andWhere(self::ALIAS.'.status = 1');
 
         return $query->getQuery()->getOneOrNullResult();
     }

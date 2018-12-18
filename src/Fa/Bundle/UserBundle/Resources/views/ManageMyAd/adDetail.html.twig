@@ -31,15 +31,16 @@
     {% set upgradePackages = packageRuleRepository.getActivePackagesByCategoryId(categoryId, locationGroupIds, userRolesArray) %}
     {% set upgradePackagesCount = upgradePackages|length %}
 {% endif %}
-
-{% if not app.request.isXmlHttpRequest() %}
+{% if not app.request.isXmlHttpRequest() %} 
 <div class="manage-item-list" id="item_card_{{adId}}">
 {% endif %}
     <div class="row">
-        {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active' or currentRoute=='ajax_manage_my_ads_get_status') and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
+        {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute == 'manage_my_ads_active' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
             <div class="medium-1 large-1 small-24 columns"><span class="custom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span></div>
+        {% elseif isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute=='ajax_manage_my_ads_get_status' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
+            <div class="medium-1 large-1 small-24 columns"><span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span></div>
         {% elseif isBoostEnabled is defined and isBoostEnabled==1 and currentRoute == 'manage_my_ads_boosted' and (userBusinessCategory is defined and  userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
-            <div class="medium-1 large-1 small-24 columns"><span class="custom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span></div>
+            <div class="medium-1 large-1 small-24 columns"><span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span></div>
         {% else %}
             <div class="medium-1 large-1 columns"><span class="dummbychk"></span></div>
         {% endif %}
@@ -233,8 +234,10 @@
                 {% endif %}
                 {% endif %}
 
-                    {% if ((isBoostEnabled is defined and isBoostEnabled==1) and (boostAdRemaining is defined and boostAdRemaining > 0) and (currentRoute == 'manage_my_ads_active' or currentRoute=='ajax_manage_my_ads_get_status' or  currentRoute == 'manage_my_ads_boosted')and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive) %}
-                        <a id="boost_ad_id_{{ad['id']}}" onclick="boostad(this)" class="xs-btn-1 manage-item-button button boost_your_ad not_boosted_ad package_boosted_ad"><span>Boost</span></a>
+                    {% if ((isBoostEnabled is defined and isBoostEnabled==1) and (boostAdRemaining is defined and boostAdRemaining > 0) and (currentRoute == 'manage_my_ads_active'  or  currentRoute == 'manage_my_ads_boosted')and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive) %}
+                        <a id="boost_ad_id_{{ad['id']}}" class="xs-btn-1 manage-item-button button boost_your_ad not_boosted_ad package_boosted_ad"><span>Boost</span></a>
+                    {% elseif ((isBoostEnabled is defined and isBoostEnabled==1) and (boostAdRemaining is defined and boostAdRemaining > 0) and  currentRoute=='ajax_manage_my_ads_get_status' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive) %}
+                        <a id="boost_ad_id_{{ad['id']}}" class="xs-btn-1 manage-item-button button boost_your_ad not_boosted_ad package_boosted_ad ajaxboost_your_ad"><span>Boost</span></a>
                     {% endif %}
                 </div>
 

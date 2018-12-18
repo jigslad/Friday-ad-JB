@@ -2721,12 +2721,11 @@ table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.r
 .chcw_content { width: 100%; height: 460px; border: none; }
 
 /* Map fit Changes */
-.mapfit-popup-content-wrapper {width:100% !important;}
-.mapfit-popup-content { width:500px !important;}
+.leaflet-popup-content-wrapper {width:100% !important;}
+.leaflet-popup-content { width:500px !important;}
 #mapfit { z-index:1 !important; }
-#mapfit .mapfit-popup {bottom: 0 !important; left: -215px !important; }
-#mapfit .mapfit-popUpContent { width:500px !important; height:236px !important;}
-#mapfit .mapfit-bottom .mapfit-logo { display:none !important; }
-#mapfit .mapfit-watermarkImg { display:none !important; }
+#mapfit .leaflet-popup {bottom: 0 !important; left: -215px !important; }
+#mapfit .leaflet-popup-content { width:500px !important; height:236px !important;}
+#mapfit .leaflet-bottom { display:none !important; }
 .hide-location-mapfit { visibility: hidden; height: 0px; margin-top: -20px;}
 .show-location-mapfit { visibility: visible; height: 141px; margin-top: 0px;}

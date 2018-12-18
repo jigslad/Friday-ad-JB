@@ -3,7 +3,7 @@
 {% if mapFitConfig and mapFitConfig.0.value is defined %}
     {% set mapFitkey = mapFitConfig.0.value %}
 {% endif %}
-<link href="https://cdn.mapfit.com/v2-4/assets/css/mapfit.css" rel='stylesheet' />
+<link href="https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/master/leaflet.css" rel="stylesheet" type="text/css"/>
 {{ include('FaCoreBundle::mapFitJs.html.twig', {'key' : mapFitkey}) }}
 
 {% set showMap = true %}
@@ -27,7 +27,7 @@
             {% set showMap = false %}
         {% endif %}
         {% if showMap and userDetail["latitude"] is defined and userDetail["latitude"] and userDetail["longitude"] is defined and userDetail["longitude"] %}
-            initialize(); 
+            initialize('{{userDetail["latitude"]}}', '{{userDetail["longitude"]}}'); 
             showCustomMarker('{{userDetail["latitude"]}}', '{{userDetail["longitude"]}}', '{{ asset_url('fafrontend/images/map-marker.png') }}');
         {% endif %}
     });
