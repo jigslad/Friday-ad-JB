@@ -110,6 +110,9 @@ class CoreExtension extends \Twig_Extension implements \Twig_Extension_InitRunti
                    new \Twig_SimpleFunction('replace_case_insensitive', array($this, 'replaceCaseInsensitive')),
                    new \Twig_SimpleFunction('hash_hmac', array($this, 'hashHmac')),
                    new \Twig_SimpleFunction('msort', array($this, 'multisort')),
+                   new \Twig_SimpleFunction('substr_exist', array($this, 'substrExist')),
+                   new \Twig_SimpleFunction('is_paginator', array($this, 'is_paginator')),
+                   new \Twig_SimpleFunction('pagination_heads', array($this, 'pagination_heads')),
                );
     }
     
