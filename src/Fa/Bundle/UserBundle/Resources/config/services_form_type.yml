@@ -248,3 +248,9 @@ services:
         arguments: ['@doctrine', '@security.encoder_factory']
         tags:
             - { name: form.type, alias: fa_user_user_boost_overide_admin }
+            
+    fa_user.form.type.user_business_profile_user_detail:
+        class: Fa\Bundle\UserBundle\Form\UserBusinessProfileUserDetailType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_user_user_business_profile_user_detail }
