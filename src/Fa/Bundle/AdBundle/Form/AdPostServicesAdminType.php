@@ -214,7 +214,7 @@ class AdPostServicesAdminType extends AdPostAdminType
         }
 
         if (in_array($paaField['field'], array('ad_type_id'))) {
-            $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, true, 'ord');
+            $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, true, 'ord'));
         }
 
         if ($defaultData) {

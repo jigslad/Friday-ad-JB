@@ -105,7 +105,7 @@ class AdPostSecondStepCommunityType extends AdPostSecondStepType
         }
 
         if ($paaField['field'] == 'include_end_time') {
-            $fieldOptions['choices'] = array('1' => 'Include end time');
+            $fieldOptions['choices'] = array('Include end time' => '1');
         }
 
         return $fieldOptions;

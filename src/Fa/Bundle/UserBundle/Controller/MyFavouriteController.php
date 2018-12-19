@@ -51,14 +51,14 @@ class MyFavouriteController extends CoreController
         $recordsPerPage = 12;
         $parameters     = array();
 
-        if (is_array($adIdsArray) && count($adIdsArray) > 0) {
+        if (!empty($adIdsArray) && is_array($adIdsArray)) {
             //set ad criteria to search
             $data['query_filters']['item']['id'] = $adIdsArray;
 
             // initialize solr search manager service and fetch data based of above prepared search options
             $solrSearchManager = $this->get('fa.solrsearch.manager');
             $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
-            if (count($cookieLocation) && count($adIdsArray) && isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
+            if (!empty($cookieLocation) && !empty($adIdsArray) && isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
                 $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
             }
