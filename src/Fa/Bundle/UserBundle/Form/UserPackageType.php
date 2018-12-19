@@ -70,13 +70,14 @@ class UserPackageType extends AbstractType
         $user    = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('id' => $options['data']['user_id']));
         $package = $this->em->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($user);
         $userBusinessCategoryId = $user->getBusinessCategoryId() > 0 ? $user->getBusinessCategoryId() : CategoryRepository::FOR_SALE_ID;
+        $userRoleId = $user->getRole()->getId();
         $builder->add('user_id', HiddenType::class, array('mapped' => false, 'data' => $options['data']['user_id']))
         ->add('trail_enable', HiddenType::class, array('mapped' => false, 'data' => $user->getFreeTrialEnable()))
         ->add(
             'package',
             ChoiceType::class,
             array(
-                        'choices'  => array_flip($this->getPackages($userBusinessCategoryId)),
+                'choices'  => array_flip($this->getPackages($userBusinessCategoryId, $userRoleId)),
                         'mapped'   => false,
                         'multiple' => false,
                         'expanded' => true,
