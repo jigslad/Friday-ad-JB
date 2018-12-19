@@ -78,7 +78,7 @@ class CampaignsAdminSearchType extends AbstractType
         ))
         /*->add('campaigns__category__id', 'entity', array(
                 'class' => 'FaEntityBundle:Category',
-                'empty_value' => "Select Category",
+                'placeholder' => "Select Category",
                 'choice_label' => 'name',
                 'query_builder' => function (CategoryRepository $cr) {
                     return $cr->createQueryBuilder(CategoryRepository::ALIAS)

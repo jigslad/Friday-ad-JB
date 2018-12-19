@@ -75,12 +75,12 @@ class LocationRadiusAdminType extends AbstractType
         $builder
         ->add('defaultRadius', ChoiceType::class, array(
                 'data'=> (($builder->getData()->getDefaultRadius()!='' || $builder->getData()->getDefaultRadius()==0) && $builder->getData()->getId())?$builder->getData()->getDefaultRadius():5,
-                'empty_value' => 'Select default radius',
+                'placeholder' => 'Select default radius',
                 'choices' => array_flip(LocationRadiusRepository::getDefaultRadius())
             ))
             ->add('extendedRadius', ChoiceType::class, array(
                 'data'=>($builder->getData()->getExtendedRadius())?$builder->getData()->getExtendedRadius():0,
-                'empty_value' => 'Select extended radius',
+                'placeholder' => 'Select extended radius',
                 'choices' => array_flip(LocationRadiusRepository::getExtendedRadius())
             ))
             ->add(

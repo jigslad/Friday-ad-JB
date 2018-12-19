@@ -71,7 +71,7 @@ class LocationRadiusSearchAdminType extends AbstractType
             'location_radius__defaultRadius',
             'choice',
             array(
-                'empty_value' => 'Select default radius',
+                'placeholder' => 'Select default radius',
                 'choices' => LocationRadiusRepository::getDefaultRadius()
             )
         )
@@ -79,7 +79,7 @@ class LocationRadiusSearchAdminType extends AbstractType
             'location_radius__extendedRadius',
             'choice',
             array(
-                'empty_value' => 'Select extended radius',
+                'placeholder' => 'Select extended radius',
                 'choices' => LocationRadiusRepository::getExtendedRadius()
             )
         ); */

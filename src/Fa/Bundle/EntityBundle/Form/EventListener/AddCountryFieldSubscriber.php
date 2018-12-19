@@ -105,7 +105,7 @@ class AddCountryFieldSubscriber implements EventSubscriberInterface
         $formOptions = array(
             'class'         => 'FaEntityBundle:Location',
             'label'         => 'Select Country',
-            'empty_value'   => 'Select Country',
+            'placeholder'   => 'Select Country',
             'query_builder' => function (LocationRepository $repository) {
                 $qb = $repository->createQueryBuilder($repository::ALIAS)
                 ->where($repository::ALIAS.'.lvl = 1')

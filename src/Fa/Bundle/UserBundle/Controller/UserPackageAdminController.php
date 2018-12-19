@@ -160,7 +160,7 @@ class UserPackageAdminController extends CoreController
             for ($i = 1; $i <= $totalLevel; $i++) {
                 if ($i == 1) {
                     $optionArray = array(
-                        'empty_value' => 'Please select category',
+                        'placeholder' => 'Please select category',
                         'attr'        => array('class' => 'category category_'.$i),
                         'label'       => 'Category',
                         'data'        => $userBusinessCategoryId,

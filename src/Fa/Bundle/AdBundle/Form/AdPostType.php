@@ -449,7 +449,7 @@ class AdPostType extends AbstractType
                 }
                 $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField['category_dimension_id'], $this->container, true, $entitySortBy));
                 if ($paaField['field'] == 'travel_arrangements_id') {
-                    $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->customFormatOptions($fieldOptions['choices'], 'paa'));
+                    $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->customFormatOptions($fieldOptions['choices'], 'paa');
                 }
                 $fieldOptions['placeholder'] = 'Select ' . $paaField['label'];
                 $fieldOptions['choice_translation_domain'] = false;
@@ -792,7 +792,7 @@ class AdPostType extends AbstractType
                  * @Ignore
                  */
                 'label' => $dimensionName,
-                'choices' => $fieldChoices,
+                'choices' => array_flip($fieldChoices),
                 'attr' => array(
                     'class' => 'fa-select'
                 )

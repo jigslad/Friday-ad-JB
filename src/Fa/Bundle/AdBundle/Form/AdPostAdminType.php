@@ -667,7 +667,7 @@ abstract class AdPostAdminType extends AbstractType
                                 'placeholder' => $this->container->get('translator')->trans('Select %dimensionName%', array('%dimensionName%' => $dimensionName)),
                                 /** @Ignore */
                                 'label'       => $dimensionName,
-                                'choices'     => $fieldChoices,
+                                'choices'     => array_flip($fieldChoices),
                             );
 
             // Edit ad

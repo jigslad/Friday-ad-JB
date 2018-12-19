@@ -120,7 +120,7 @@ class AddDomicileFieldSubscriber implements EventSubscriberInterface
     {
         $formOptions = array(
             'class'         => 'FaEntityBundle:Location',
-            'empty_value'   => 'Select Domicile',
+            'placeholder'   => 'Select Domicile',
             'label'         => 'Select Domicile',
             'query_builder' => function (LocationRepository $repository) use ($countryId) {
                 $qb = $repository->createQueryBuilder($repository::ALIAS)
