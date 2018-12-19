@@ -71,6 +71,7 @@ class UserPackageAdminType extends AbstractType
         $user    = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('id' => $options['data']['user_id']));
         $package = $this->em->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($user);
         $userBusinessCategoryId = $options['data']['category_id'];
+        $userRoleId = $user->getRole()->getId();
         $builder->add('user_id', HiddenType::class, array('mapped' => false, 'data' => $options['data']['user_id']))
         ->add('is_auto_renew', HiddenType::class, array('mapped' => false))
         ->add('category_id', HiddenType::class, array('mapped' => false, 'data' => $options['data']['category_id']))
@@ -81,7 +82,7 @@ class UserPackageAdminType extends AbstractType
             'package',
             ChoiceType::class,
             array(
-                        'choices'  => array_flip($this->getPackages($userBusinessCategoryId)),
+                        'choices'  => array_flip($this->getPackages($userBusinessCategoryId, $userRoleId)),
                         'mapped'   => false,
                         'multiple' => false,
                         'expanded' => true,
