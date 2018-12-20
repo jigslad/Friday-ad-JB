@@ -109,7 +109,7 @@
         {% set adBigImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImage.path, adImage.hash, '', adImage.aws, adImage.image_name]) %}
         adImagesArray['{{loop.index - 1}}'] = {href : '{{ adBigImageUrl }}', 'imageHash': '{{ adImage.hash }}', 'imageId': '{{loop.index}}'},
     {% endfor %}
-    $(document).ready(function() {
+    $(window).on('load',function() {
         var sync1 = $("#big-image-slider");
         var sync2 = $("#small-image-slider");
 
