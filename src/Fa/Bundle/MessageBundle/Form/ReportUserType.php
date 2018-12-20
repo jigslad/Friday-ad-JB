@@ -110,7 +110,7 @@ class ReportUserType extends AbstractType
                     'expanded'  => true,
                     'mapped'  => false,
                     'data' => 1,
-                    'choices'   => $this->reasonOptions,
+                    'choices'   => array_flip($this->reasonOptions),
                     'constraints' => new NotBlank(array('message' => $this->translator->trans('Please select reason.', array(), 'validators')))
                 )
             )

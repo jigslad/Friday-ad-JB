@@ -64,7 +64,7 @@ class LocationRadiusSearchAdminType extends AbstractType
             'location_radius__status',
             'choice',
             array(
-                'choices' => EntityRepository::getStatusArray($this->container)
+                'choices' => array_flip(EntityRepository::getStatusArray($this->container))
             )
         )
         ->add(
@@ -72,7 +72,7 @@ class LocationRadiusSearchAdminType extends AbstractType
             'choice',
             array(
                 'placeholder' => 'Select default radius',
-                'choices' => LocationRadiusRepository::getDefaultRadius()
+                'choices' => array_flip(LocationRadiusRepository::getDefaultRadius())
             )
         )
         ->add(
@@ -80,7 +80,7 @@ class LocationRadiusSearchAdminType extends AbstractType
             'choice',
             array(
                 'placeholder' => 'Select extended radius',
-                'choices' => LocationRadiusRepository::getExtendedRadius()
+                'choices' => array_flip(LocationRadiusRepository::getExtendedRadius())
             )
         ); */
         $builder

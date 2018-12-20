@@ -73,14 +73,14 @@ class NotificationMessageAdminType extends AbstractType
                 'status',
                 ChoiceType::class,
                 array(
-                    'choices' => EntityRepository::getStatusArray($this->container)
+                    'choices' => array_flip(EntityRepository::getStatusArray($this->container))
                 )
             )
             ->add(
                 'notification_type',
                 ChoiceType::class,
                 array(
-                    'choices' => EntityRepository::getNotificationTypeArray($this->container)
+                    'choices' => array_flip(EntityRepository::getNotificationTypeArray($this->container))
                 )
             )
             ->add('save', SubmitType::class);

@@ -195,7 +195,7 @@ class UserBusinessShopProfileType extends AbstractType
                             'label'       => 'Category',
                             'data'        => (count($categoryPath) ? $categoryPath[0] : $profileExposureCategoryId),
                             'required'    => true,
-                            'choices'     => $choices,
+                            'choices'     => array_flip($choices),
                             'constraints' => $constraints,
                         );
                     } else {
@@ -222,7 +222,7 @@ class UserBusinessShopProfileType extends AbstractType
                             'placeholder' => 'Please select subcategory',
                             'attr'        => array('class' => 'fa-select-white category category_'.$i),
                             'label'       => 'Sub-category',
-                            'choices'     => $choices,
+                            'choices'     => array_flip($choices),
                             'data'        => $data,
                             'constraints' => $constraints,
                             'required'    => true,

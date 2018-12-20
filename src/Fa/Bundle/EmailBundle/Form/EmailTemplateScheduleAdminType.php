@@ -259,7 +259,7 @@ class EmailTemplateScheduleAdminType extends AbstractType
                 'weekly_days',
                 ChoiceType::class,
                 array(
-                    'choices'  => $this->getWeeklyDayChoices(),
+                    'choices'  => array_flip($this->getWeeklyDayChoices()),
                     'expanded' => true,
                     'multiple' => true,
                     'mapped'   => false,
@@ -272,7 +272,7 @@ class EmailTemplateScheduleAdminType extends AbstractType
                 'months',
                 ChoiceType::class,
                 array(
-                    'choices'  => $this->getMonthChoices(),
+                    'choices'  => array_flip($this->getMonthChoices()),
                     'expanded' => true,
                     'multiple' => true,
                     'mapped'   => false,
@@ -285,7 +285,7 @@ class EmailTemplateScheduleAdminType extends AbstractType
                 'monthly_days',
                 ChoiceType::class,
                 array(
-                    'choices'  => $this->getMonthlyDayChoices(),
+                    'choices'  => array_flip($this->getMonthlyDayChoices()),
                     'expanded' => true,
                     'multiple' => true,
                     'mapped'   => false,

@@ -34,7 +34,7 @@ class ConfigRuleSearchType extends AbstractType
             'config__id',
             ChoiceType::class,
             array(
-                'choices' => $this->entityManager->getRepository('FaCoreBundle:Config')->getRuleArray(),
+                'choices' => array_flip($this->entityManager->getRepository('FaCoreBundle:Config')->getRuleArray()),
                 'placeholder' => 'Select name'
             )
         )

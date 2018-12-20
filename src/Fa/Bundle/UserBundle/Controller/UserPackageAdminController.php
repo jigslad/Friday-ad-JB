@@ -95,7 +95,7 @@ class UserPackageAdminController extends CoreController
         );
 
         $catFormBuilder = $this->createFormBuilder(null, $cat_options)
-        ->add('is_auto_renew', ChoiceType::class, array('label' => 'Auto-renew', 'data' => $is_auto_renew, 'choices'  => EntityRepository::getYesNoArray($this->container, false), 'mapped' => false));
+        ->add('is_auto_renew', ChoiceType::class, array('label' => 'Auto-renew', 'data' => $is_auto_renew, 'choices'  => array_flip(EntityRepository::getYesNoArray($this->container, false)), 'mapped' => false));
 
         $totalLevel   = 1;
         $categoryPath = array();
@@ -193,7 +193,7 @@ class UserPackageAdminController extends CoreController
                         'placeholder' => 'Please select subcategory',
                         'attr'        => array('class' => 'category category_'.$i),
                         'label'       => 'Sub-category',
-                        'choices'     => $choices,
+                        'choices'     => array_flip($choices),
                         'data'        => $data,
                         'constraints' => $constraints,
                         'required'    => true,

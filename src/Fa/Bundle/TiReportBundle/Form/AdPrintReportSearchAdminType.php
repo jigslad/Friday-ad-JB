@@ -85,7 +85,7 @@ class AdPrintReportSearchAdminType extends AbstractType
                 array(
                     'mapped'    => false,
                     'placeholder' => 'User type',
-                    'choices'   => RoleRepository::getUserTypes()
+                    'choices'   => array_flip(RoleRepository::getUserTypes())
                 )
             )
             ->add('ad_id', TextType::class, array('required' => false))
@@ -95,7 +95,7 @@ class AdPrintReportSearchAdminType extends AbstractType
                 array(
                     'mapped'    => false,
                     'placeholder' => 'Print edition',
-                    'choices'   => CommonManager::getEntityRepository($this->container, 'FaAdBundle:PrintEdition')->getActivePrintEditionArray(),
+                    'choices'   => array_flip(CommonManager::getEntityRepository($this->container, 'FaAdBundle:PrintEdition')->getActivePrintEditionArray()),
                 )
             )
             ->add(
@@ -104,7 +104,7 @@ class AdPrintReportSearchAdminType extends AbstractType
                 array(
                     'mapped'    => false,
                     'placeholder' => 'Source',
-                    'choices'   => array(AdRepository::SOURCE_ADMIN => 'Admin', AdRepository::SOURCE_PAA => 'Paa', AdRepository::SOURCE_MIGRATED => 'Migrated'),
+                    'choices'   => array_flip(array(AdRepository::SOURCE_ADMIN => 'Admin', AdRepository::SOURCE_PAA => 'Paa', AdRepository::SOURCE_MIGRATED => 'Migrated')),
                 )
             )
             ->add('search', SubmitType::class)

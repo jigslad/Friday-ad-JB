@@ -148,7 +148,7 @@
     function selectPackage(packageId)
     {
         $('input:radio[name=fa_user_package_admin\\[package\\]][value='+packageId+']').attr('checked',true);
-        $('#fa_user_package_admin_id').attr('action', $('#fa_user_package_admin_id').attr('action')+'?'+$('#cat-form').serialize())
+        $('#fa_user_package_admin_id').attr('action', $('#cat-form').attr('action')+'?'+$('#cat-form').serialize())
         $('#fa_user_package_admin_id').submit();
     }
     
