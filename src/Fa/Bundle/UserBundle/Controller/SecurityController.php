@@ -218,7 +218,7 @@ class SecurityController extends ThirdPartyLoginController
                     $adminUserRolesArray[] = $adminUserRole->getName();
                 }
 
-                if (!count(array_intersect($resourceRoles, $adminUserRolesArray))) {
+                if (empty(array_intersect($resourceRoles, $adminUserRolesArray))) {
                     throw $this->createNotFoundException($this->get('translator')->trans('You do not have permission to access this resource.'));
                 }
 
@@ -228,7 +228,7 @@ class SecurityController extends ThirdPartyLoginController
                 }
                 $roleToCheck = $this->container->get('doctrine')->getManager()->getRepository('FaUserBundle:Role')->getRoleArrayByType('C');
 
-                if (!count(array_intersect($roleToCheck, $userRolesArray))) {
+                if (empty(array_intersect($roleToCheck, $userRolesArray))) {
                     throw $this->createNotFoundException($this->get('translator')->trans('You do not have enough credential to login.'));
                 }
 
