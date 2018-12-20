@@ -120,7 +120,7 @@ class RegistrationController extends ThirdPartyLoginController
                     $this->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('no_profile_photo', null, $user->getId());
                     $this->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('if_profile_incomplete', null, $user->getId());
 
-                    if (($user->getRole() && ($user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID || RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID))) {
+                    if (($user->getRole() && ($user->getRole()->getId() == RoleRepository::ROLE_BUSINESS_SELLER_ID || $user->getRole()->getId() == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID))) {
                         $this->getRepository('FaUserBundle:UserPackage')->assignFreePackageToUser($user, 'reg_back', $this->container);
                         return $this->handleMessage($this->get('translator')->trans('Hi %first_name%, welcome to Friday-Ad!', array('%first_name%' => $user->getFirstName())), 'user_package_choose_profile');
                     } else {
