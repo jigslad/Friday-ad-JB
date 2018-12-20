@@ -33,7 +33,7 @@ use Fa\Bundle\ContentBundle\Form\SeoToolOverrideAdminType;
 use Fa\Bundle\UserBundle\Form\UserConfigRuleAdminType;
 use Fa\Bundle\EntityBundle\Form\CategoryAdminType;
 use Fa\Bundle\AdBundle\Form\PrintDeadlineAdminType;
-
+use Fa\Bundle\AdBundle\Form\LocationRadiusAdminType;
 /**
  * This controller is used for basic crud management.
  *
@@ -371,7 +371,8 @@ abstract class CrudController extends CoreController
             'fa_content_seo_tool_override_admin' => SeoToolOverrideAdminType::class,
             'fa_user_user_config_rule_admin' => UserConfigRuleAdminType::class,
             'fa_entity_category_admin' => CategoryAdminType::class,
-            'fa_ad_print_deadline_admin' => PrintDeadlineAdminType::class
+            'fa_ad_print_deadline_admin' => PrintDeadlineAdminType::class,
+            'fa_ad_location_radius_admin' => LocationRadiusAdminType::class
         ];
         $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
         return $formName;

@@ -18,6 +18,8 @@ use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\AdBundle\Repository\LocationRadiusRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Fa\Bundle\AdBundle\Form\LocationRadiusAdminType;
+use Fa\Bundle\AdBundle\Form\LocationRadiusSearchAdminType;
 
 /**
  * This controller is used for location radius management.
@@ -73,7 +75,7 @@ class LocationRadiusAdminController extends CrudController implements ResourceAu
 
         // initialize form manager service
         $formManager = $this->get('fa.formmanager');
-        $form        = $formManager->createForm('fa_ad_location_radius_search_admin', null, array('action' => $this->generateUrl('location_radius_admin'), 'method' => 'GET'));
+        $form        = $formManager->createForm(LocationRadiusSearchAdminType::class, null, array('action' => $this->generateUrl('location_radius_admin'), 'method' => 'GET'));
 
         if ($data['search']) {
             $form->submit($data['search']);
@@ -106,7 +108,7 @@ class LocationRadiusAdminController extends CrudController implements ResourceAu
             'method' => 'POST'
         );
 
-        $form = $formManager->createForm('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin', $entity, $options);
+        $form = $formManager->createForm(LocationRadiusAdminType::class, $entity, $options);
 
         if ($formManager->isValid($form)) {
             return $this->handleMessage($this->get('translator')->trans('%displayWord% was successfully added.', array('%displayWord%' => $this->getDisplayWord()), 'success'), ($form->get('saveAndNew')->isClicked() ? $this->getRouteName('new') : $this->getRouteName('')));
@@ -148,7 +150,7 @@ class LocationRadiusAdminController extends CrudController implements ResourceAu
             'method' => 'PUT'
         );
 
-        $form = $formManager->createForm('fa_'.$this->getBundleAlias().'_'.$this->getTableName().'_admin', $entity, $options);
+        $form = $formManager->createForm(LocationRadiusAdminType::class, $entity, $options);
 
         if ($formManager->isValid($form)) {
             $messageManager = $this->get('fa.message.manager');
