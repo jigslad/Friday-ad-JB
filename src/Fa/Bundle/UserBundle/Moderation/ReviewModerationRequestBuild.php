@@ -90,9 +90,10 @@ class ReviewModerationRequestBuild
      */
     protected function buildOtherParametersArray(UserReview $userReview, $isForManualModeration = false)
     {
+        $baseUrl = $this->container->getParameter('base_url');
         $this->moderationRequest[ReviewModerationFieldMappingInterface::SITE_ID] = $this->container->getParameter('fa.review.moderation.site.id');
 
-        $this->moderationRequest[ReviewModerationFieldMappingInterface::CALLBACK_URL] = $this->container->get('router')->generate('review_moderation_response', array(), true);
+        $this->moderationRequest[ReviewModerationFieldMappingInterface::CALLBACK_URL] = $baseUrl.$this->container->get('router')->generate('review_moderation_response', array(), true);
 
         $this->moderationRequest[ReviewModerationFieldMappingInterface::IS_FOR_MANUAL_MODERATION] = $isForManualModeration;
     }
