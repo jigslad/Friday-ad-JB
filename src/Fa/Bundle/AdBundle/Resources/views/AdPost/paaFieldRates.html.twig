@@ -1,6 +1,9 @@
-
-{% set adultRatesDimensionId = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionIdByNameAndCategory(ad.category.id, 'Rates', fetch_container_instance()) %}
-{% set adultRatesOptions = fetch_repository('FaEntityBundle:Entity').getEntityArrayByType(adultRatesDimensionId, fetch_container_instance(), true, 'id', 'textCollection') %}
+{% if ad is defined %}
+    {% set adultRatesDimensionId = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionIdByNameAndCategory(ad.category.id, 'Rates', fetch_container_instance()) %}
+    {% set adultRatesOptions = fetch_repository('FaEntityBundle:Entity').getEntityArrayByType(adultRatesDimensionId, fetch_container_instance(), true, 'id', 'textCollection') %}
+{% else %}
+    {% set adultRatesOptions = [] %}
+{% endif %}
 {% set incallOptionLabel = '' %}
 {% set incallOptionAttr = '' %}
 {% set outcallOptionLabel = '' %}

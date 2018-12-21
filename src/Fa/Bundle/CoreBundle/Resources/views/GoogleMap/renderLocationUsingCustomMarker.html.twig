@@ -8,10 +8,11 @@
         <div data-alert class="alert-box info radius">
 			<span class="alert-icon">&nbsp;</span> {{'No location is found for ad.'}}
 		</div>
-    {% endif %}
+    {% endif %}    
 {% endblock %}
 
 {% block googlemap_location_js %}
+
     {% set adDetailMapVariables = get_variables('adDetailMap') %}
     {% if adDetailMapVariables['latitude'] is defined and adDetailMapVariables['longitude'] %}
         {% set container = fetch_container_instance() %}
@@ -80,6 +81,9 @@
         {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
             {% set allowDraggable = 0 %}
         {% endif %}
+        {% if adDetail['images'] is defined %}
+            {% set adImages = adDetail['images'] %}
+         {% endif %} 
         var mapLoadedFalg = false;
         $(window).on('load', function() { 
         	 {% if adDetailMapVariables['mapOnLoad'] is defined and adDetailMapVariables['mapOnLoad'] == 'true' %}
@@ -94,7 +98,7 @@
                  });
             	 {% if currentDevice is defined and currentDevice == 'M' and allowAdEdit is defined and allowAdEdit %}
                      {% set allowAdEdit = false %}
-                 {% endif %}
+                 {% endif %}                 
                  {% if not adImages|length and not (allowAdEdit is defined and allowAdEdit) and not youtubeVideoUrl|length %}
                      $('#{{adDetailMapVariables["mapContentId"]}}').show();
                      showCustomMarker('{{adDetailMapVariables["latitude"]}}', '{{adDetailMapVariables["longitude"]}}', '{{ asset_url('fafrontend/images/map-marker.png') }}');
