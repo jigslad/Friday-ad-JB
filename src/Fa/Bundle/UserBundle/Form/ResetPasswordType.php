@@ -21,6 +21,7 @@ use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
@@ -68,7 +69,7 @@ class ResetPasswordType extends AbstractType
     {
         $builder
         ->add('password', RepeatedType::class, array(
-            'type' => 'password',
+            'type' => PasswordType::class,
             'required' => true,
             'first_options' => array('label' => 'Password', 'constraints' => array(new NotBlank(array('groups' => array('reset-password'))))),
             'second_options' => array('label' => 'Confirm Password', 'constraints' => array(new NotBlank(array('groups' => array('reset-password'))))),
