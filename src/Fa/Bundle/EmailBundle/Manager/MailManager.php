@@ -316,7 +316,8 @@ class MailManager
             //
             $emailTemplate          = $this->getEmailTemplate($emailIdentifier, $locale);
             $mailVars['email_body'] = $this->renderTwig($emailTemplate->getBodyHtml(), $mailVars);
-
+            $mailVars['email_body'] = '<base href="'.$mailVars['site_url'].'" target="_blank">'.$mailVars['email_body'];
+            
             if (!$this->getMessage()->getFrom()) {
                 $this->setFrom($emailTemplate->getSenderEmail(), $emailTemplate->getSenderName());
             }
@@ -328,6 +329,7 @@ class MailManager
             $this->setBody($body);
 
             $mailVars['email_body'] = $this->renderTwig($emailTemplate->getBodyText(), $mailVars);
+
             $alternateBody          = $this->renderTwig($emailTemplateLayoutText, $mailVars);
             $this->setAlternateBody($alternateBody);
         } catch (\Exception $e) {
