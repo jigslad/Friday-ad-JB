@@ -40,15 +40,17 @@
                         {% if adDetail['personalized_title'] is defined and adDetail['personalized_title'] in not null %}
                             {{adDetail['personalized_title']}}
                         {% endif %}
+                        {% if adDetail['images'] is defined %}
+                            {% set adImages = adDetail['images'] %}
+                        {% endif %}
                         <ul id="adDetailMainTabs" class="tabs tab-menu clearfix" data-tab>
+                        	{% if adImages|length %}
                             <li class="active"><a href="#photo_panel">{{'Photos'|trans}}</a></li>
+                            {% endif %}
                             <li><a href="#map_panel">{{'Map'|trans}}</a></li>
                         </ul>
                         <div class="tabs-content">
-                            <div class="content active" id="photo_panel">
-                                {% if adDetail['images'] is defined %}
-                                    {% set adImages = adDetail['images'] %}
-                                {% endif %}
+                            <div class="content {% if adImages|length %}active{% endif %}" id="photo_panel">                               
                                 {{ block('image_slider_html') }}
                             </div>
                             <div class="content" id="map_panel">
