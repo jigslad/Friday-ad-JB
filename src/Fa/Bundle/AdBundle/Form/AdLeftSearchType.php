@@ -160,9 +160,9 @@ class AdLeftSearchType extends AbstractType
             ChoiceType::class,
             array(
                 'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
-                'empty_data' => $defDistance,
+                'placeholder' => $defDistance,
                 'data' => $defDistance,
-                'choice_translation_domain' => false,
+                'attr'    => array('class' => 'fa-select-white')
             )
         );
 

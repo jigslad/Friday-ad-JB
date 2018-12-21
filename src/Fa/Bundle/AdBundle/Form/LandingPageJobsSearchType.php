@@ -129,16 +129,19 @@ class LandingPageJobsSearchType extends AbstractType
         if ($this->request->get('location')) {
             $searchParams['item__location'] = $this->request->get('location');
         }
-        
-        $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
-        $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+        if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
+            $defDistance = $searchParams['item__distance'];
+        } else {
+            $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+            $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+        }
 
         $form->add(
             'item__distance',
             ChoiceType::class,
             array(
                 'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
-                'empty_data' => $defDistance,
+                'placeholder' => $defDistance,
                 'data' => $defDistance,
                 'attr'    => array('class' => 'fa-select-white')
             )

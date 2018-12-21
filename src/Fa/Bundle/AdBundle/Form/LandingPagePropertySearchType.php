@@ -133,7 +133,7 @@ class LandingPagePropertySearchType extends AbstractType
             ChoiceType::class,
             array(
                 'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
-                'empty_data' => $defDistance,
+                'placeholder' => $defDistance,
                 'data' => $defDistance,
                 'attr'    => array('class' => 'fa-select-white')
             )
