@@ -51,7 +51,7 @@ class CyberSourceCheckoutAdminController extends CoreController implements Resou
         $cartDetails = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
 
         //check for cart price and item
-        if (!$cart->getAmount() || !count($cartDetails)) {
+        if (!$cart->getAmount() || empty($cartDetails)) {
             $this->container->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('There is no item in your cart.', array(), 'backend-cyber-source'));
             return new RedirectResponse($this->container->get('router')->generate('fa_admin_homepage'));
         }
@@ -78,7 +78,7 @@ class CyberSourceCheckoutAdminController extends CoreController implements Resou
                         $this->container->get('session')->getFlashBag()->add('error', $this->get('translator')->trans('Invalid token.', array(), 'frontend-cyber-source'));
                     } else {
                         $tokenValue = unserialize($token->getValue());
-                        if (is_array($tokenValue) && count($tokenValue) && isset($tokenValue['billto'])) {
+                        if (is_array($tokenValue) && !empty($tokenValue) && isset($tokenValue['billto'])) {
                             $billTo = $tokenValue['billto'];
                             $userAddressBookInfo = $billTo;
                         }

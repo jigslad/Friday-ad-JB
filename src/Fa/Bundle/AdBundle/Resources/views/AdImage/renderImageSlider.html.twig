@@ -71,22 +71,23 @@
                     <div class="vif-overlay hide hide-for-small-only" id="financeOverlay">&nbsp;</div>
                 {% endif %}
             {% endif %}
-        </div>
-        {% if adImages|length > 1 or (adImages|length == 1 and allowAdEdit is defined and allowAdEdit) %}
-            <div class="owl-carousel hide-for-small-only {% if allowAdEdit is defined and allowAdEdit %}add-small-photo{% endif %}" id="small-image-slider">
-                {% for adImage in adImages %}
-                    {% set adSmallImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImage.path, adImage.hash, '300X225', adImage.aws, adImage.image_name]) %}
-                    {% set altString = imageAltStringArr['img_alt_'~((loop.index%8) == 0 ? 8 : (loop.index%8))] %}
-                    <div class="item"><img class="lazyOwl" data-src="{{ adSmallImageUrl }}" alt="{{ altString }}" /></div>
-                {% endfor %}
-            </div>
-            {% if allowAdEdit is defined and allowAdEdit %}
-                <div class="add-photo hide-for-small-only">
-                    <a id="add_a_photo_link" class="tricky-link" href="javascript:void(0);">{{ altString }}</a>
-                    <div class="add-photo-text">{{ 'Add a photo'|trans({}, 'frontend-show-ad') }}</div>
+        
+            {% if adImages|length > 1 or (adImages|length == 1 and allowAdEdit is defined and allowAdEdit) %}
+                <div class="owl-carousel hide-for-small-only {% if allowAdEdit is defined and allowAdEdit %}add-small-photo{% endif %}" id="small-image-slider">
+                    {% for adImage in adImages %}
+                        {% set adSmallImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImage.path, adImage.hash, '300X225', adImage.aws, adImage.image_name]) %}
+                        {% set altString = imageAltStringArr['img_alt_'~((loop.index%8) == 0 ? 8 : (loop.index%8))] %}
+                        <div class="item"><img class="lazyOwl" data-src="{{ adSmallImageUrl }}" alt="{{ altString }}" /></div>
+                    {% endfor %}
                 </div>
-            {% endif %}
+                {% if allowAdEdit is defined and allowAdEdit %}
+                    <div class="add-photo hide-for-small-only">
+                        <a id="add_a_photo_link" class="tricky-link" href="javascript:void(0);">{{ altString }}</a>
+                        <div class="add-photo-text">{{ 'Add a photo'|trans({}, 'frontend-show-ad') }}</div>
+                    </div>
+                {% endif %}               
         {% endif %}
+        </div>
     {% else %}
         <br />
         <div data-alert class="alert-box info radius">
