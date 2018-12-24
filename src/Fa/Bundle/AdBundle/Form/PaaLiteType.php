@@ -439,7 +439,7 @@ class PaaLiteType extends AbstractType
                 }
                 $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($paaField->getCategoryDimensionId(), $this->container, true, $entitySortBy));
                 if ($paaField->getField() == 'travel_arrangements_id') {
-                    $fieldOptions['choices'] = array_flip($this->em->getRepository('FaEntityBundle:Entity')->customFormatOptions($fieldOptions['choices'], 'paa'));
+                    $fieldOptions['choices'] = $this->em->getRepository('FaEntityBundle:Entity')->customFormatOptions($fieldOptions['choices'], 'paa');
                 }
                 $fieldOptions['placeholder'] = 'Select ' . $paaField->getLabel();
                 $fieldOptions['choice_translation_domain'] = false;
