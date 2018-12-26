@@ -292,7 +292,7 @@ class AdListController extends CoreController
         }
       
         $locationRadius = array();
-        if ($setDefRadius && $isBusinessPage==0) {
+        if ($setDefRadius && $isBusinessPage==0) {          
             if (isset($findersSearchParams['item__category_id']) && $findersSearchParams['item__category_id']) {
                 $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($findersSearchParams['item__category_id'], false, $this->container));
                 $locationRadius = $this->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
@@ -307,7 +307,7 @@ class AdListController extends CoreController
 
                 if (!isset($data['search']['item__distance'])) {
                     $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($findersSearchParams['item__category_id'], $this->container);
-                    $data['search']['item__distance'] = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+                    $findersSearchParams['item__distance'] = $data['search']['item__distance'] = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
                     $data['query_filters']['item']['location'] = $data['search']['item__location'].'|'. ((isset($data['search']['item__distance']) ? $data['search']['item__distance'] : ''));
                 }
             }
