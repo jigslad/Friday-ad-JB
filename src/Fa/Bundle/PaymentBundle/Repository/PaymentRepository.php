@@ -290,14 +290,14 @@ class PaymentRepository extends EntityRepository
             }
             
             $adUserPackages = $this->_em->getRepository('FaAdBundle:AdUserPackage')->findOneBy(array('ad_id'=>$transaction->getAd()->getId()));
-            $adUserPackageCount = !empty($adUserPackages) ? count($adUserPackages) : 0;
+            //$adUserPackageCount = !empty($adUserPackages) ? count($adUserPackages) : 0;
             // handle is_paid_ad and is_paid_before
             if ($transaction->getAmount() > 0 && $ad->getIsPaidAd() != 1) {
                 $ad->setIsPaidAd(1);
                 $this->_em->persist($ad);
                 $this->_em->flush($ad);
                 $user = $ad->getUser();
-                if ($ad->getSource()=='paa_lite' && $adUserPackageCount==0) {
+                if ($ad->getSource()=='paa_lite' && empty($adUserPackages)) {
                     $paaLiteEmailNotification = new PaaLiteEmailNotification();
                     $paaLiteEmailNotification->setAd($ad);
                     $paaLiteEmailNotification->setUser($user);

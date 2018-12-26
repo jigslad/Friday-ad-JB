@@ -63,7 +63,7 @@ class AdUserPackageRepository extends BaseEntityRepository
      */
     public function setAdUserPackage($data = array(), $addAdToModeration = true, $batchUpdate = false, $futureAdPostFlag = false)
     {
-        if (count($data) > 0) {
+        if (!empty($data)) {
             $adUserPackage = new AdUserPackage();
 
             // find & set package

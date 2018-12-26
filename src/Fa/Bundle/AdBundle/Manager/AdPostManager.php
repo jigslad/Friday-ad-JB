@@ -1173,21 +1173,24 @@ class AdPostManager
 
         //check rate field is defined
         if (isset($data['rates_id'])) {
-            $ratesData= $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($this->getFieldCategoryDimenionId('rates_id'), $this->container, true, 'id', 'textCollection');
-            $ratesRecord = [];
-            if (!empty($ratesData)) {
-                foreach ($ratesData as $rate=>$val) {
-                    $rateType = explode('_', $val);
-                    if ($data[str_replace(' ', '', $val)] != '') {
-                        $ratesRecord[$rateType[1]][$rate] = $data[str_replace(' ', '', $val)];
+            $getRateDimensionId = $this->getFieldCategoryDimenionId('rates_id');
+            if($getRateDimensionId!=null) {
+                $ratesData= $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($getRateDimensionId, $this->container, true, 'id', 'textCollection');
+                $ratesRecord = [];
+                if (!empty($ratesData)) {
+                    foreach ($ratesData as $rate=>$val) {
+                        $rateType = explode('_', $val);
+                        if ($data[str_replace(' ', '', $val)] != '') {
+                            $ratesRecord[$rateType[1]][$rate] = $data[str_replace(' ', '', $val)];
+                        }
                     }
                 }
-            }
-            
-            if (!empty($ratesRecord)) {
-                $metaData['rates_id'] = $ratesRecord;
-            } else {
-                unset($metaData['rates_id']);
+                
+                if (!empty($ratesRecord)) {
+                    $metaData['rates_id'] = $ratesRecord;
+                } else {
+                    unset($metaData['rates_id']);
+                }
             }
         }
         

@@ -46,6 +46,10 @@ use Fa\Bundle\AdBundle\Form\PaaLiteCommonType;
 use Fa\Bundle\AdBundle\Form\AdPostCategorySelectType;
 use Fa\Bundle\AdBundle\Form\PaaLiteLoginType;
 use Fa\Bundle\UserBundle\Form\UserSiteType;
+use Fa\Bundle\AdBundle\Entity\AdUserPackage;
+use Fa\Bundle\AdBundle\Entity\AdUserPackageUpsell;
+use Fa\Bundle\AdBundle\Repository\AdUserPackageRepository;
+use Fa\Bundle\AdBundle\Repository\AdUserPackageUpsellRepository;
 
 /**
  * This controller is used for ad post management.
@@ -564,6 +568,43 @@ class CampaignController extends ThirdPartyLoginController
 
     private function addInfoToCart($userId, $adId, $selectedPackageId, $selectedPackagePrintId, $printEditionLimits, $adExpiryDays, $printEditionValues, $request, $categoryId)
     {
+        //Add to ad user package
+        $adUserPackage = new AdUserPackage();
+        
+        // find & set package
+        $selpackage = $this->getRepository('FaPromotionBundle:Package')->find($selectedPackageId);
+        $adUserPackage->setPackage($selpackage);
+        
+        // set ad
+        $adMain = $this->getRepository('FaAdBundle:AdMain')->find($adId);
+        $ad = $this->getRepository('FaAdBundle:Ad')->find($adId);
+        $user = $this->getRepository('FaUserBundle:User')->find($userId);
+        $adUserPackage->setAdMain($adMain);
+        $adUserPackage->setAdId($adId);
+        $adUserPackage->setStatus(AdUserPackageRepository::STATUS_ACTIVE);
+        $adUserPackage->setStartedAt(time());
+        if ($selpackage->getDuration()) {
+            $adUserPackage->setExpiresAt(CommonManager::getTimeFromDuration($selpackage->getDuration()));
+        } elseif ($ad) {
+            $expirationDays = $this->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($ad->getCategory()->getId());
+            $adUserPackage->setExpiresAt(CommonManager::getTimeFromDuration($expirationDays.'d'));
+        }
+        
+        // set user
+        if ($user) {
+            $adUserPackage->setUser($user);
+        }
+        
+        $adUserPackage->setPrice($selpackage->getPrice());
+        $adUserPackage->setDuration($selpackage->getDuration());
+        $this->container->get('doctrine')->getManager()->persist($adUserPackage);
+        $this->container->get('doctrine')->getManager()->flush();
+        
+        foreach ($selpackage->getUpsells() as $upsell) {
+            $this->addAdUserPackageUpsell($ad, $adUserPackage, $upsell);
+        }
+        
+        
         //Add to the cart
         $cart            = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $this->container, false, false, false, true);
         $cartDetails     = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
@@ -573,6 +614,8 @@ class CampaignController extends ThirdPartyLoginController
                 $adCartDetailValue = unserialize($adCartDetails[0]->getValue());
             }
         }
+        
+        
         $this->container->get('session')->set('paa_lite_card_code', $cart->getCartCode());
         //get Package Detail
         $selectedPackageObj = $this->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $selectedPackageId));
@@ -591,6 +634,47 @@ class CampaignController extends ThirdPartyLoginController
         return $this->addAdPackage($adId, $selectedPackageId, $adExpiryDays, $selectedPackagePrintId, false, $printEditionValues, $privateUserAdParams);
     }
     
+    /**
+     * Add ad user package upsell
+     *
+     * @param object $ad
+     * @param object $adUserPackage
+     * @param object $upsell
+     */
+    protected function addAdUserPackageUpsell($ad, $adUserPackage, $upsell)
+    {
+        $adId = $ad->getId();
+        $adUserPackageUpsellObj = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->findOneBy(array('ad_id' => $adId, 'ad_user_package' => $adUserPackage->getId(), 'status' => 1, 'upsell' => $upsell->getId()));
+        if (!$adUserPackageUpsellObj) {
+            $adUserPackageUpsell = new AdUserPackageUpsell();
+            $adUserPackageUpsell->setUpsell($upsell);
+            
+            // set ad user package id.
+            if ($adUserPackage) {
+                $adUserPackageUpsell->setAdUserPackage($adUserPackage);
+            }
+            
+            // set ad
+            $adMain = $this->getRepository('FaAdBundle:AdMain')->find($adId);
+            $adUserPackageUpsell->setAdMain($adMain);
+            $adUserPackageUpsell->setAdId($adId);
+            
+            $adUserPackageUpsell->setValue($upsell->getValue());
+            $adUserPackageUpsell->setValue1($upsell->getValue1());
+            $adUserPackageUpsell->setDuration($upsell->getDuration());
+            $adUserPackageUpsell->setStatus(1);
+            $adUserPackageUpsell->setStartedAt(time());
+            if ($upsell->getDuration()) {
+                $adUserPackageUpsell->setExpiresAt(CommonManager::getTimeFromDuration($upsell->getDuration()));
+            } elseif ($ad) {
+                $expirationDays = $this->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($ad->getCategory()->getId());
+                $adUserPackageUpsell->setExpiresAt(CommonManager::getTimeFromDuration($expirationDays.'d'));
+            }
+            
+            $this->container->get('doctrine')->getManager()->persist($adUserPackageUpsell);
+            $this->container->get('doctrine')->getManager()->flush();
+        }
+    }
     
     /**
      * Assign ad package.

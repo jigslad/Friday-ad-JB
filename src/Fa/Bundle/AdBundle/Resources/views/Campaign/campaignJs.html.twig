@@ -53,6 +53,12 @@ $(document).ready(function(){
       bindCapsuleButtonEvent('fa_paa_lite_common', 'lease_type_id', 'drop-down');
       bindDatePickerEvent();
   {% endif %}
+
+  {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+      {% if (form.rates_id) is defined and (form.travel_arrangements_id) is defined %}
+      		showRateSection();
+      {% endif %}
+  {% endif %}
 	{% if (form.has_reg_no) is defined %}
 		showHideRegNoFieldsOnLoad($("input[name='fa_paa_lite_common[has_reg_no]']:checked").val());
         showHideRegNoFields(0);

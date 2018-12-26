@@ -213,7 +213,7 @@ class CartRepository extends EntityRepository
             $value['package'][$packageId]['is_package_assigned_by_admin'] = true;
         }
 
-        if (count($privateUserAdParams)) {
+        if (!empty($privateUserAdParams)) {
             $value['privateUserAdParams'] = $privateUserAdParams;
         }
 
