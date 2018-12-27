@@ -164,19 +164,21 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
         
         if (!empty($parentArray)) {
             asort($parentArray);
-            foreach ($parentArray as $categoryid => $categoryname) {
+            
+            foreach ($parentArray as $categoryId => $categoryname) {
                 $recommendedSlots = $this->createQueryBuilder(self::ALIAS)
                 ->andWhere(self::ALIAS.'.category = :categoryId')
                 ->andWhere(self::ALIAS.'.is_searchlist = 1')
                 ->setParameter('categoryId', $categoryId)
                 ->orderBy(self::ALIAS.'.creative_group')
                 ->getQuery()
-                ->execute();
+                ->execute();                
                 if (!empty($recommendedSlots)) {
                     break;
                 }
             }
         }
+        
         if (!empty($recommendedSlots)) {
             foreach ($recommendedSlots as $recommendedSlot) {
                 $recommendedSlotArray[] = array(
@@ -189,8 +191,8 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                 );
             }
         }
-
-        if ($container && count($recommendedSlotArray)) {
+       
+        if ($container && !empty($recommendedSlotArray)) {
             CommonManager::setCacheVersion($container, $cacheKey, $recommendedSlotArray);
         }
 
