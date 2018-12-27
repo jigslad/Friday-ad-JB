@@ -327,9 +327,11 @@ class AdPostController extends ThirdPartyLoginController
 
             // second step data from session if exist either category is same or changed in first step in edit mode
             $secondStepData = $this->getStepSessionData('second');
-            if (count($secondStepData)) {
+            if (!empty($secondStepData)) {
                 // in 2.7v $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName);
-                $formToken = '_csrf/https-'.$formName;
+                //$formToken = '_csrf/https-'.$formName;
+                $categoryName = $this->getRootCategoryName($firstStepData['category_id']);
+                $formToken = '_csrf/https-fa_paa_second_step_'.$categoryName;
                 $csrfToken      = $this->container->get('session')->get($formToken);
                 //# It is generating new token that's why i'm getting old _csrf token from session
                 // Note: Need to investigate more
@@ -866,7 +868,9 @@ class AdPostController extends ThirdPartyLoginController
                 }
 
                 if (count($fourthStepData)) {
-                    $formToken = '_csrf/https-'.$form->getName();
+                    //$formToken = '_csrf/https-'.$form->getName();
+                    $categoryName = $this->getRootCategoryName($firstStepData['category_id']);
+                    $formToken = '_csrf/https-fa_paa_fourth_step_'.$categoryName;
                     $csrfToken      = $this->container->get('session')->get($formToken);
                     //# It is generating new token that's why i'm getting old _csrf token from session
                     // Note: Need to investigate more
