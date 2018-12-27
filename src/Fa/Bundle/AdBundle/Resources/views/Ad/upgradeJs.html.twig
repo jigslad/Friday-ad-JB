@@ -128,6 +128,7 @@ function showHideCardDetail()
     var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();
     if (paymentMethod == 0) {
         $('#card_detail').show();
+        $('.fa-select-white').selectmenu().selectmenu('refresh',true);
         $('#card_detail_save').show();
     } else {
         $('#card_detail').hide();

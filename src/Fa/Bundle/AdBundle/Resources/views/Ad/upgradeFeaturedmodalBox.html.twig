@@ -41,6 +41,9 @@
 .upgrade-payments #AmazonPayButton { height: 46px;cursor: pointer;text-align:center;}
 .upgrade-payments #AmazonPayButton img { width: 100%; }
 .mt0 { margin-top:0px !important}
+.ui-front.ui-selectmenu-open {
+    z-index: 10000 !important;
+}
 </style>
 <a class="close-reveal-modal" style="display:{% if popup_title is defined %}none{% else %}block{% endif %}">&#215;</a> 
 
@@ -244,7 +247,6 @@
 {{ form_end(form) }}
 {% endif %}
 </div>
-
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
 <script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>
 <script language="javascript" type="text/javascript">
