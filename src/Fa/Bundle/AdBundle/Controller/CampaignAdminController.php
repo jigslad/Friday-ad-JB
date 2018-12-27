@@ -294,7 +294,7 @@ class CampaignAdminController extends CrudController implements ResourceAuthoriz
         $countCampaign = 0;
         //$slug = 'motor_boats';
         $campaign = $this->getRepository('FaAdBundle:Campaigns')->findOneBy(array('slug' => $slug));
-        $countCampaign = count($campaign);
+        if(!empty($campaign)) { $countCampaign = count($campaign); }
         return new JsonResponse(array('campaigncount' => $countCampaign));
     }
 

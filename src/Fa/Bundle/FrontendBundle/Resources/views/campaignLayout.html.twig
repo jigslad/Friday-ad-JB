@@ -8,13 +8,13 @@
     
     {% set currentRoute = app.request.attributes.get('_route') %}
     {% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
-    {% set blockMetaDescription = block('meta_description')|trim %}
-    {% set blockMetaKeywords = block('meta_keywords')|trim %}
+    {% set blockMetaDescription = block('meta_description') is defined ? block('meta_description')|trim : false %}
+    {% set blockMetaKeywords = block('meta_keywords') is defined ? block('meta_keywords')|trim : false %}
     {% set blockMetaCanonicalUrl = block('canonical_url') is defined ? block('canonical_url')|trim : false %}
-    {% set blockFacebookMeta = block('facebook_meta') is defined ? block('facebook_meta')|trim  : false%}
-    {% set blockDimension2 = block('dimension2') is defined ? block('dimension2')|trim  : false%}
-    {% set container = fetch_container_instance() %}
+    {% set blockFacebookMeta = block('facebook_meta') is defined ? block('facebook_meta')|trim : false %}    
+    {% set blockDimension2 = block('dimension2') is defined ? block('dimension2')|trim : false %}
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+    {% set container = fetch_container_instance() %}
     {% set showTiLogo = false %}
     {# {% if (app.user and app.user.getUserMasterSite()|lower == 'ti') or (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('ti_url')) %} #}
     {% if (not app.user and app.request.get('ti_url')) or (not app.user and app.request.cookies.has('new_ti_url')) %}
