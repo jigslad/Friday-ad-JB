@@ -114,7 +114,7 @@ class AdRoutingManager
 
         $getDefaultRadius = '';
        
-        if (!isset($search_params['item__distance'])) {
+        if (!isset($search_params['item__distance']) && $fromCommandLine == false) {
             $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($search_params, $this->container);
             if ($getDefaultRadius) {
                 $search_params['item__distance'] = $getDefaultRadius;
