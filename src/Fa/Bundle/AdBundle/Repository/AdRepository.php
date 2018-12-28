@@ -4061,6 +4061,7 @@ class AdRepository extends EntityRepository
                 'url_ad_main_photo'        => $this->getMainImageThumbUrlFromAd($ad, $container),
                 'url_ad_mark_sold'         => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
                 'url_ad_renew_early_1_day' => $container->get('router')->generate('ad_promote', array('type' => 'renew', 'adId' => $ad->getId()), true),
+                'url_ad_view'               => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
             );
             //send push notifications
             CommonManager::sendPushNotificationMessage('Your ad expires tomorrow. Repost it today!', 'Expires-tomorrow', $container->get('router')->generate('ad_promote', array('type' => 'renew', 'adId' => $ad->getId()), true), $user, $container);
