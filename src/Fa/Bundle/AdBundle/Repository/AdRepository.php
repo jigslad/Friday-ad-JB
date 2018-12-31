@@ -4062,6 +4062,8 @@ class AdRepository extends EntityRepository
                 'url_ad_mark_sold'         => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
                 'url_ad_renew_early_1_day' => $container->get('router')->generate('ad_promote', array('type' => 'renew', 'adId' => $ad->getId()), true),
                 'url_ad_view'               => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
+                'url_ad_preview'            => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
+                
             );
             //send push notifications
             CommonManager::sendPushNotificationMessage('Your ad expires tomorrow. Repost it today!', 'Expires-tomorrow', $container->get('router')->generate('ad_promote', array('type' => 'renew', 'adId' => $ad->getId()), true), $user, $container);
@@ -4507,10 +4509,10 @@ class AdRepository extends EntityRepository
      *
      * @return integer
      */
-    public function sendCompleteAdvertEmail($user, $ad, $paaLiteEmailNotification, $container = null)
+    public function sendCompleteAdvertEmail($user, $ad, $paaLiteEmailNotification, $container = null, $transactionAmt=0)
     {
         $adPackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->findOneBy(array('ad_id'=>$ad->getId()));
-        $adPackagePrice = $adPackage->getPackage()->getPrice();
+        $adPackagePrice = ($transactionAmt>0)?$transactionAmt:(($adPackage)?$adPackage->getPackage()->getPrice():0);
         $entityCache =   $container->get('fa.entity.cache.manager');
         $text_package_name = '';
         $text_lowest_category_package_price = '';
@@ -4531,7 +4533,7 @@ class AdRepository extends EntityRepository
                 'url_ad_upsell' => $container->get('router')->generate('ad_promote', array('type' => 'promote', 'adId' => $ad->getId()), true),
             );
             
-            if (count($ads)) {
+            if (!empty($ads)) {
                 $parameters = array(
                     'user_first_name' => $user->getFirstName()?$user->getFirstName():$user->getUserName(),
                     'ads' => $ads,

@@ -242,7 +242,7 @@ class UserReport
     /**
      * @var integer
      *
-     * @ORM\Column(name="updated_at", type="integer", length=10)
+     * @ORM\Column(name="updated_at", type="integer", length=10, nullable=true)
      */
     private $updated_at;
 

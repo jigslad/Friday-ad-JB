@@ -259,10 +259,15 @@ EOF
                 $adUserRoleId = (isset($adUserRoleDetails[$adUserId]) ? $adUserRoleDetails[$adUserId] : null);
                 $adUserSiteViewCounter = (isset($adUserSiteViewCounters[$adUserId]) ? $adUserSiteViewCounters[$adUserId] : 0);
                 $contact_seller_click = CommonManager::getCacheCounter($this->getContainer(), 'ad_enquiry_contact_seller_click_'.$created_at.'_'.$adId);
+                if(!$contact_seller_click){ $contact_seller_click = 0; }
                 $call_click = CommonManager::getCacheCounter($this->getContainer(), 'ad_enquiry_call_click_'.$created_at.'_'.$adId);
+                if(!$call_click){ $call_click = 0; }
                 $email_send_link = CommonManager::getCacheCounter($this->getContainer(), 'ad_enquiry_email_send_link_'.$created_at.'_'.$adId);
+                if(!$email_send_link){ $email_send_link = 0; }
                 $social_share = CommonManager::getCacheCounter($this->getContainer(), 'ad_enquiry_social_share_'.$created_at.'_'.$adId);
+                if(!$social_share){ $social_share = 0; }
                 $web_link_click = CommonManager::getCacheCounter($this->getContainer(), 'ad_enquiry_web_link_click_'.$created_at.'_'.$adId);
+                if(!$web_link_click){ $web_link_click = 0; }
                 $valuesSTR .= "('".$adId."', '".$view."', '".$contact_seller_click."', '".$call_click."', '".$email_send_link."', '".$social_share."', '".$web_link_click."', '".$created_at."', '".$created_at."', '".(count($adUserPackageDetail) ? $adUserPackageDetail['package_text'] : null)."', '".(count($adUserPackageDetail) ? $adUserPackageDetail['price'] : null)."', '".$adUserSiteViewCounter."', '".$adUserRoleId."'),";
 
                 //Remove each click counter

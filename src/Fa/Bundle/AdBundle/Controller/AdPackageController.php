@@ -175,7 +175,7 @@ class AdPackageController extends CoreController
         }
 
         if ('POST' === $request->getMethod()) {
-            $selectedPackageId = $request->get('package_id', null);
+            $selectedPackageId = $request->get('package_id', null);            
             $userCreditId = $request->get('credit_id', null);
             if (!in_array($selectedPackageId, $packageIds)) {
                 $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Please select atleast one ad package.', array(), 'frontend-ad-package'), 'error');
@@ -217,7 +217,7 @@ class AdPackageController extends CoreController
                         $totalCredit = ceil(($totalWeeks / 4));
                     }
                     $userActiveCredits = $this->getRepository('FaUserBundle:UserCredit')->getActiveCreditForUserByCategory($userId, $adRootCategoryId, $cart->getId(), $adId);
-                    if (count($userActiveCredits)) {
+                    if (!empty($userActiveCredits)) {
                         $activeShopPackageDetail = $this->getRepository('FaUserBundle:UserPackage')->getShopPackageDetailByUserIdForAdReport($userId);
                         $packageSrNoCredits = $this->getRepository('FaUserBundle:UserCredit')->getPackageWiseActiveCreditForUser($userActiveCredits);
                         $isValidUserCredit = ($selectedPackageObj->getPackageSrNo() && isset($userActiveCredits[$userCreditId]) && in_array($selectedPackageObj->getPackageSrNo(), $userActiveCredits[$userCreditId]['package_sr_no']) && $userActiveCredits[$userCreditId]['credit'] >= $totalCredit);

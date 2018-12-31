@@ -110,7 +110,7 @@ class UserReportDaily
     /**
      * @var float
      *
-     * @ORM\Column(name="total_spent", type="float", precision=15, scale=2)
+     * @ORM\Column(name="total_spent", type="float", precision=15, scale=2, nullable=true, options={"default" = 0})
      */
     private $total_spent = 0;
 
@@ -166,7 +166,7 @@ class UserReportDaily
     /**
      * @var integer
      *
-     * @ORM\Column(name="updated_at", type="integer", length=10)
+     * @ORM\Column(name="updated_at", type="integer", length=10, nullable=true)
      */
     private $updated_at;
 
