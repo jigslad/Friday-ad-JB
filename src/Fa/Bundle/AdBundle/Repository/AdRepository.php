@@ -3873,25 +3873,31 @@ class AdRepository extends EntityRepository
         $adUser      = $ad->getUser();
         $entityCache = $container->get('fa.entity.cache.manager');
         $adEnquries  = $this->getEntityManager()->getRepository('FaMessageBundle:Message')->getAdTotalMessageArrayByAdId($adUser->getId(), $ad->getId(), $ad->getPublishedAt());
-
-        $parameters = array(
-                'user_first_name'       => $adUser->getFirstName(),
-                'user_last_name'        => $adUser->getLastName(),
-                'text_ad_title'         => $ad->getTitle(),
-                'text_ad_category'      => $entityCache->getEntityNameById('FaEntityBundle:Category', $ad->getCategory()->getId()),
-                'text_ad_description'   => $ad->getDescription(),
-                'url_ad_main_photo'     => $this->getMainImageThumbUrlFromAd($ad, $container),
-                'text_ad_views'         => $viewCount,
-                'text_ad_enquiries'     => isset($adEnquries[0]) ? $adEnquries[0] : null,
-                'url_ad_upsell'         => $container->get('router')->generate('ad_promote', array('adId' => $ad->getId(), 'type' => 'promote'), true),
-                'url_ad_edit'           => $container->get('router')->generate('ad_edit', array('id' => $ad->getId()), true),
-                'url_ad_mark_sold'      => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
-                'url_ad_view'           => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
-                'url_account_dashboard' => $container->get('router')->generate('dashboard_home', array(), true),
-                'text_adref'            => $ad->getId()
+        $ads = array();
+        $ads[] = array(
+            'text_ad_title'       => $ad->getTitle(),
+            'text_ad_category'    => $entityCache->getEntityNameById('FaEntityBundle:Category', $ad->getCategory()->getId()),
+            'text_ad_description' => $ad->getDescription(),
+            'url_ad_main_photo'   => $this->getMainImageThumbUrlFromAd($ad, $container),
+            'text_ad_views'       => $viewCount,
+            'text_ad_enquiries'   => isset($adEnquries[0]) ? $adEnquries[0] : null,
+            'url_ad_upsell'         => $container->get('router')->generate('ad_promote', array('adId' => $ad->getId(), 'type' => 'promote'), true),
+            'url_ad_edit'           => $container->get('router')->generate('ad_edit', array('id' => $ad->getId()), true),
+            'url_ad_mark_sold'      => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
+            'url_ad_view'           => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),            
         );
+        if (!empty($ads)) {           
+            $parameters = array(
+                    'user_first_name'       => $adUser->getFirstName(),
+                    'user_last_name'        => $adUser->getLastName(),
+                    'url_account_dashboard' => $container->get('router')->generate('dashboard_home', array(), true),
+                    'text_adref'            => $ad->getId(),
+                    'ads' => $ads,
+                    'total_ads' => (count($ads) - 1),
+            );
 
-        $container->get('fa.mail.manager')->send($adUser->getEmail(), 'low_views_boost_response', $parameters, CommonManager::getCurrentCulture($container));
+            $container->get('fa.mail.manager')->send($adUser->getEmail(), 'low_views_boost_response', $parameters, CommonManager::getCurrentCulture($container));
+        }
     }
 
     /**
@@ -3906,26 +3912,33 @@ class AdRepository extends EntityRepository
     {
         $adUser      = $ad->getUser();
         $entityCache = $container->get('fa.entity.cache.manager');
-
-        $parameters = array(
-                'user_first_name'       => $adUser->getFirstName(),
-                'user_last_name'        => $adUser->getLastName(),
-                'text_ad_title'         => $ad->getTitle(),
-                'text_ad_category'      => $entityCache->getEntityNameById('FaEntityBundle:Category', $ad->getCategory()->getId()),
-                'text_ad_description'   => $ad->getDescription(),
-                'url_ad_main_photo'     => $this->getMainImageThumbUrlFromAd($ad, $container),
-                'text_ad_views'         => $viewCount,
-                'text_ad_enquiries'     => $adEnquriesCount,
-                'url_ad_upsell'         => $container->get('router')->generate('ad_promote', array('adId' => $ad->getId(), 'type' => 'promote'), true),
-                'url_ad_edit'           => $container->get('router')->generate('ad_edit', array('id' => $ad->getId()), true),
-                'url_ad_mark_sold'      => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
-                'url_ad_view'           => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
-                'url_account_dashboard' => $container->get('router')->generate('dashboard_home', array(), true),
-                'text_adref'            => $ad->getId(),
-                'text_ad_click_to_reveal' => $adCallClicks,
+        $ads = array();
+        $ads[] = array(
+            'text_ad_title'       => $ad->getTitle(),
+            'text_ad_category'    => $entityCache->getEntityNameById('FaEntityBundle:Category', $ad->getCategory()->getId()),
+            'text_ad_description' => $ad->getDescription(),
+            'url_ad_main_photo'   => $this->getMainImageThumbUrlFromAd($ad, $container),
+            'text_ad_views'       => $viewCount,
+            'text_ad_enquiries'   => $adEnquriesCount,
+            'url_ad_upsell'       => $container->get('router')->generate('ad_promote', array('adId' => $ad->getId(), 'type' => 'promote'), true),
+            'url_ad_edit'         => $container->get('router')->generate('ad_edit', array('id' => $ad->getId()), true),
+            'url_ad_mark_sold'    => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
+            'url_ad_view'         => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
         );
+        if (!empty($ads)) {
+            $parameters = array(
+                    'user_first_name'       => $adUser->getFirstName(),
+                    'user_last_name'        => $adUser->getLastName(),
+                    'url_account_dashboard' => $container->get('router')->generate('dashboard_home', array(), true),
+                    'text_adref'            => $ad->getId(),
+                    'text_ad_click_to_reveal' => $adCallClicks,
+                    'ads' => $ads,
+                    'total_ads' => (count($ads) - 1),
+            );
 
-        $container->get('fa.mail.manager')->send($adUser->getEmail(), 'low_enquiries_boost_response', $parameters, CommonManager::getCurrentCulture($container));
+            $container->get('fa.mail.manager')->send($adUser->getEmail(), 'low_enquiries_boost_response', $parameters, CommonManager::getCurrentCulture($container));
+    
+        }
     }
 
     /**
