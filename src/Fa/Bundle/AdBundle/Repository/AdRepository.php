@@ -838,6 +838,8 @@ class AdRepository extends EntityRepository
                     } else {
                         $object->setDeliveryMethodOption(null);
                     }
+                } elseif ($field == 'postage_price') {
+                    if ($value) { $object->setPostagePrice($value); } else { $object->setPostagePrice(0); }
                 }
             }
 
