@@ -3218,6 +3218,9 @@ class AdRepository extends EntityRepository
                         if ($userSite) {
                             $parameters['business_name']         = $adUserObj->getProfileName();
                             $parameters['text_business_address'] = $userSite->getCompanyAddress();
+                        } else {
+                            $parameters['business_name']         = '';
+                            $parameters['text_business_address'] = '';
                         }
 
                         $parameters['text_ad_title']   = $ad->getTitle();

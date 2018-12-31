@@ -161,7 +161,7 @@
        if ($.inArray(deliveryMethodId, ['{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::POSTED_ID')}}', '{{constant('Fa\\Bundle\\PaymentBundle\\Repository\\DeliveryMethodOptionRepository::POSTED_OR_COLLECT_ID')}}']) != '-1') {
           $('#postage_section_id').show();
        } else {
-           $('#fa_paa_fourth_step_for_sale_postage_price').val('');
+           $('#fa_paa_fourth_step_for_sale_postage_price').val(0);
            $('#postage_section_id').hide();
        }
    }

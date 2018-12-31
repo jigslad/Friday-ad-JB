@@ -1531,7 +1531,7 @@ class AdPostManager
         $adData[0]['type_id']                   = isset($data['ad_type_id']) ? $data['ad_type_id'] : null;
         $adData[0]['delivery_method_option_id'] = isset($data['delivery_method_option_id']) ? $data['delivery_method_option_id'] : null;
         $adData[0]['payment_method_id']         = isset($data['payment_method_id']) ? $data['payment_method_id'] : null;
-        $adData[0]['postage_price']             = isset($data['postage_price']) ? $data['postage_price'] : null;
+        $adData[0]['postage_price']             = isset($data['postage_price']) ? $data['postage_price'] : 0;
         $adData[0]['business_phone']            = isset($data['business_phone']) ? $data['business_phone'] : null;
         $adData[0]['youtube_video_url']         = isset($data['youtube_video_url']) ? $data['youtube_video_url'] : null;
         $adData[0]['edited_at']                 = time();
