@@ -109,7 +109,7 @@ class AdEditForSaleType extends AdEditType
                 'postage_price',
                 NumberType::class,
                 array(
-                    'data' => ($ad && $ad->getPostagePrice() ? $ad->getPostagePrice() : null),
+                    'data' => ($ad && $ad->getPostagePrice() ? $ad->getPostagePrice() : 0),
                 )
             );
         }
