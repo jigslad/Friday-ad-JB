@@ -104,9 +104,9 @@ class CommonManager
      */
     public static function getCurrencyCode($container)
     {
-        try {
+        if($container->get('request_stack')->getCurrentRequest()) {
             $locale = $container->get('request_stack')->getCurrentRequest()->getLocale();
-        } catch (\Exception $e) {
+        } else {
             $locale = $container->getParameter('locale');
         }
 
@@ -125,9 +125,9 @@ class CommonManager
     public static function getCurrencySymbol($locale, $container)
     {
         if (!$locale) {
-            try {
+            if($container->get('request_stack')->getCurrentRequest()) {
                 $locale = $container->get('request_stack')->getCurrentRequest()->getLocale();
-            } catch (\Exception $e) {
+            } else {
                 $locale = $container->getParameter('locale');
             }
         }

@@ -414,7 +414,7 @@ class AdLocationRepository extends EntityRepository
         $adLocationData = array();
         $adLocations    = $this->findLocationByAdId($adId);
 
-        if ($adLocations && count($adLocations)) {
+        if ($adLocations && !empty($adLocations)) {
             $count = 0;
             foreach ($adLocations as $adLocation) {
                 $adLocationData[$count]['country_id']  = $adLocation->getLocationCountry() ? $adLocation->getLocationCountry()->getId() : null;
