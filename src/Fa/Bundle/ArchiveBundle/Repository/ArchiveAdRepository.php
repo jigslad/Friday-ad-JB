@@ -74,10 +74,10 @@ class ArchiveAdRepository extends EntityRepository
         $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
 
         $archiveAd->setId($ad->getId());
-        $archiveAd->setAdData(count($adData) ? serialize($adData) : null);
-        $archiveAd->setAdVerticalData(count($adVerticalData) ? serialize($adVerticalData) : null);
-        $archiveAd->setAdLocationData(count($adLocationData) ? serialize($adLocationData) : null);
-        $archiveAd->setAdModerateData(count($adModerateData) ? serialize($adModerateData) : null);
+        $archiveAd->setAdData(!empty($adData) ? serialize($adData) : null);
+        $archiveAd->setAdVerticalData(!empty($adVerticalData) ? serialize($adVerticalData) : null);
+        $archiveAd->setAdLocationData(!empty($adLocationData) ? serialize($adLocationData) : null);
+        $archiveAd->setAdModerateData(!empty($adModerateData) ? serialize($adModerateData) : null);
         $archiveAd->setAdViewCounter(isset($adViewCounterData[$ad->getId()]) ? $adViewCounterData[$ad->getId()] : 0);
         $archiveAd->setAdMain($ad->getAdMain());
         $archiveAd->setUserId(($ad->getUser() ? $ad->getUser()->getId() : null));
@@ -85,7 +85,7 @@ class ArchiveAdRepository extends EntityRepository
         $archiveAd->setArchivedAt(time());
 
         $this->getEntityManager()->persist($archiveAd);
-        $this->getEntityManager()->flush($archiveAd);
+        $this->getEntityManager()->flush();
 
         // move ad images to archive and delete from original table
         if ($archiveAd) {
@@ -93,14 +93,17 @@ class ArchiveAdRepository extends EntityRepository
         }
 
         // Remove from original tables
-        $this->getEntityManager()->getRepository('FaAdBundle:'.'Ad'.$categoryName)->removeByAdId($ad->getId());
-
+        if (!empty($adVerticalData)) {
+            $this->getEntityManager()->getRepository('FaAdBundle:'.'Ad'.$categoryName)->removeByAdId($ad->getId());
+        }
         // Remove ad locations
-        $this->getEntityManager()->getRepository('FaAdBundle:AdLocation')->removeByAdId($ad->getId());
-
+        if (!empty($adLocationData)) {
+            $this->getEntityManager()->getRepository('FaAdBundle:AdLocation')->removeByAdId($ad->getId());
+        }
         // Remove ad moderate
-        $this->getEntityManager()->getRepository('FaAdBundle:AdModerate')->removeByAdId($ad->getId());
-
+        if (!empty($adModerateData)) {
+            $this->getEntityManager()->getRepository('FaAdBundle:AdModerate')->removeByAdId($ad->getId());
+        }
         // Remove ad view counter
         $this->getEntityManager()->getRepository('FaAdBundle:AdViewCounter')->removeByAdId($ad->getId());
 
@@ -128,7 +131,7 @@ class ArchiveAdRepository extends EntityRepository
         if ($ad) {
             $adId = $ad->getId();
             $this->getEntityManager()->remove($ad);
-            $this->getEntityManager()->flush($ad);
+            $this->getEntityManager()->flush();
 
             // Remove archive ad from solr.
             //$this->removeArchiveAdFromSolr($adId, $container);

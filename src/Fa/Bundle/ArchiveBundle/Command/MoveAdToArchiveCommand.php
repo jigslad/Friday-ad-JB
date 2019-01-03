@@ -156,7 +156,7 @@ EOF
             $adIds[]= $ad->getId();
         }
 
-        if (count($adIds)) {
+        if (!empty($adIds)) {
             // Check if ad view found in last 30 days then no need to move to archive, even ad has been expired before 90 days.
             $precedingDays  = $entityManager->getRepository('FaCoreBundle:Config')->getPrecedingPeriodToCheckViewsForMoveExpiredAdsToArvhice();
             $adViewCounters = $entityManager->getRepository('FaAdBundle:AdViewCounter')->getAdViewCounterByPrecedingDays($precedingDays, $adIds);
