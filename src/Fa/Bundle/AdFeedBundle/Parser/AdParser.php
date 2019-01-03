@@ -322,7 +322,7 @@ abstract class AdParser
         $this->em->persist($adFeedSiteStat);
         //$this->em->flush();
 
-        if (count($ads)) {
+        if (!empty($ads)) {
             foreach ($ads as $ad) {
                 $this->advert = array();
                 $r = $this->mapAdData($ad, $siteID, $ad_feed_site_download);
@@ -368,7 +368,7 @@ abstract class AdParser
 
         $i = 0;
         $multi_curl = new MultiCurl();
-        if (count($ads)) {
+        if (!empty($ads)) {
             foreach ($ads as $ad) {
                 if ($ad['EndDate'] == '0001-01-01T00:00:00Z' || strtotime($ad['EndDate']) >= time()) {
                     $multi_curl = $this->downLoadImages($ad, $ad_feed_site_download, $multi_curl);
