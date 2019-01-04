@@ -203,7 +203,7 @@ EOF
         }
 
         $solr = $solrClient->connect();
-        $solr->optimize();
+        //$solr->optimize();
 
         $output->writeln('SCRIPT END TIME '.date('d-m-Y H:i:s', time()), true);
         $output->writeln('TIME TAKEN TO EXECUTE SCRIPT '.((time() - $stat_time) / 60), true);
