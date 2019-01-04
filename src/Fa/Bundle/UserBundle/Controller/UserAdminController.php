@@ -31,6 +31,7 @@ use Fa\Bundle\UserBundle\Form\UserAdSearchType;
 use Fa\Bundle\UserBundle\Form\UserPaymentSearchType;
 use Fa\Bundle\UserBundle\Form\UserAdminType;
 use Fa\Bundle\UserBundle\Form\ChangeStatusType;
+use Fa\Bundle\UserBundle\Form\BoostOverideType;
 
 /**
  * This controller is used for user management.
@@ -1061,7 +1062,7 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
             'method' => 'PUT'
         );
 
-        $form = $formManager->createForm('fa_user_user_boost_overide_admin', $entities[0], $options);
+        $form = $formManager->createForm(BoostOverideType::class, $entities[0], $options);
 
 
         if ($formManager->isValid($form)) {
