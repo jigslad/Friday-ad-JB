@@ -65,6 +65,10 @@ class AdRequestListener
         // check for session timeout for cart/process and checkout uri
         $uri = $event->getRequest()->getUri();
         
+        if (strpos($uri, '?') !== false && substr($uri, -1) == '/') {
+            $uri = substr($uri, 0, -1);
+        }
+        
         //redirect greate-london slug
         if (preg_match('/greate-london/', $uri)) {
             $locationUrl = str_replace('greate-london', 'greater-london', $uri);
