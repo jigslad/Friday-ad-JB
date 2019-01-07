@@ -140,12 +140,14 @@
     {% if adDetail['user']['user_role'] is defined %}
         {% set userRolesArray = {0: adDetail['user']['user_role']} %}
     {% endif %}
-    
+     {% if adDetail['user']['role_id'] is defined %}
+        {% set userRoleIdsArray = {0: adDetail['user']['role_id']} %}
+    {% endif %}
     {% if adPackageArray[adId] is defined %}
         {% set activePackageArray = {0: adPackageArray[adId]['package_id']} %}
     {% endif %}
     
-    {% set promotePackages = fetch_repository('FaPromotionBundle:PackageRule').getActivePackagesByCategoryId(adCategoryId, locationGroupIds, userRolesArray, activePackageArray, container) %}
+    {% set promotePackages = fetch_repository('FaPromotionBundle:PackageRule').getActivePackagesByCategoryId(adCategoryId, locationGroupIds, userRoleIdsArray, activePackageArray, container) %}
 {% endif %}
 
 {% set userTypeText = null %}
@@ -467,7 +469,7 @@
                             {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and adDetail['user']['company_welcome_message'] is defined and adDetail['user']['company_welcome_message'] is not null %}
                                 <h2 class="services-desc">{{ adDetail['user']['company_welcome_message']|replace({"\\n": "<br />"})|raw }}</h2>
                             {% endif %}
-                            
+                          
                             {% if allowAdEdit is defined and promotePackages[0] is defined and allowAdEdit and attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')} and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
                                {# get featured Top upsell from packages #}
                               	{% set getTopUpsellPackagePrice = fetch_repository('FaPromotionBundle:Package').getPackageFeturedTopUpsellPrice(promotePackages) %}
