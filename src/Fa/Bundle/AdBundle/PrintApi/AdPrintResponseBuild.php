@@ -92,7 +92,8 @@ class AdPrintResponseBuild
     {
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $em                 = $this->container->get('doctrine')->getManager();
-
+        $baseUrl = $this->container->getParameter('base_url');
+        
         if (isset($adSolrObjs[$ad->getId()])) {
             $adSolrObj = $adSolrObjs[$ad->getId()];
             $townId = (isset($adSolrObj[AdSolrFieldMapping::MAIN_TOWN_ID]) ? $adSolrObj[AdSolrFieldMapping::MAIN_TOWN_ID] : null);
@@ -125,7 +126,7 @@ class AdPrintResponseBuild
 
         $this->printApiResponse[AdPrintFieldMappingInterface::DATE_MODIFIED] = ($ad->getUpdatedAt() ? $this->getDate($ad->getUpdatedAt()) : null);
         
-        $this->printApiResponse[AdPrintFieldMappingInterface::ADVERT_DETAILS_URL] = $this->container->get('fa_ad.manager.ad_routing')->getDetailUrl($ad);
+        $this->printApiResponse[AdPrintFieldMappingInterface::ADVERT_DETAILS_URL] = $baseUrl.$this->container->get('fa_ad.manager.ad_routing')->getDetailUrl($ad);
         
         $upsellArray = array();
         $upsells     = $em->getRepository('FaAdBundle:AdUserPackageUpsell')->getLatestAdPackageUpsell($ad->getId());

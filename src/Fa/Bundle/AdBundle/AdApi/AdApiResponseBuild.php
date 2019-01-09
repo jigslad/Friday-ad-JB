@@ -88,13 +88,14 @@ class AdApiResponseBuild
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $adRoutingManager   = $this->container->get('fa_ad.manager.ad_routing');
         $em                 = $this->container->get('doctrine')->getManager();
+        $baseUrl = $this->container->getParameter('base_url');
         if (isset($adSolrObjs[$ad->getId()])) {
             $adSolrObj = $adSolrObjs[$ad->getId()];
             $townId = (isset($adSolrObj[AdSolrFieldMapping::MAIN_TOWN_ID]) ? $adSolrObj[AdSolrFieldMapping::MAIN_TOWN_ID] : null);
             $domicileId = (isset($adSolrObj[AdSolrFieldMapping::DOMICILE_ID]) ? $adSolrObj[AdSolrFieldMapping::DOMICILE_ID][0] : null);
             $postcode = (isset($adSolrObj[AdSolrFieldMapping::POSTCODE]) ? $adSolrObj[AdSolrFieldMapping::POSTCODE][0] : null);
 
-            $adUrl = $adRoutingManager->getDetailUrl($adSolrObj);
+            $adUrl = $baseUrl.$adRoutingManager->getDetailUrl($adSolrObj);
             $this->adApiResponse[AdFieldMappingInterface::COUNTY] = ($domicileId ? $entityCacheManager->getEntityNameById('FaEntityBundle:Location', $domicileId) : null);
 
             $this->adApiResponse[AdFieldMappingInterface::TOWN] = ($townId ? $entityCacheManager->getEntityNameById('FaEntityBundle:Location', $townId) : null);
@@ -102,7 +103,7 @@ class AdApiResponseBuild
             $this->adApiResponse[AdFieldMappingInterface::POSTCODE] = $postcode;
         } else {
             $location = $em->getRepository('FaAdBundle:AdLocation')->getLatestLocation($ad->getId());
-            $adUrl    = $adRoutingManager->getDetailUrl($ad, $ad->getId(), $ad->getTitle(), $ad->getCategory()->getId(), ($location->getLocationTown() ? $location->getLocationTown()->getId() : ($location->getLocationDomicile() ? $location->getLocationDomicile()->getId() : null)));
+            $adUrl    = $baseUrl.$adRoutingManager->getDetailUrl($ad, $ad->getId(), $ad->getTitle(), $ad->getCategory()->getId(), ($location->getLocationTown() ? $location->getLocationTown()->getId() : ($location->getLocationDomicile() ? $location->getLocationDomicile()->getId() : null)));
 
             $this->adApiResponse[AdFieldMappingInterface::COUNTY] = ($location->getLocationDomicile() ? $entityCacheManager->getEntityNameById('FaEntityBundle:Location', $location->getLocationDomicile()->getId()) : null);
 
