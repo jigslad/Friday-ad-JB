@@ -5,6 +5,18 @@
     {% set businessName = userDetail['user_name'] %} 
 {% endif %}
 
+{% block meta_robots %}
+    {% set metaRobotsArray = {} %}
+    {% if userDetail['about_us']|length >= 50 and userDetail['company_logo']|length >0 and (userDetail['website_link']|length >0 or userDetail['phone1']|length >0 or userDetail['phone2']|length >0) %}
+        index, follow
+        {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+    {% else %}
+        noindex, follow
+        {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {% endif %}
+    {{ set_variables('metaRobots', {'metaRobotsArray': metaRobotsArray}) }}
+{% endblock %}
+
 {% block page_title %}
     {% set businessLocationName = '' %}
     {% set businessCategoryName = '' %}

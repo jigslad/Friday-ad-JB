@@ -1,4 +1,10 @@
 {% extends 'FaFrontendBundle::layout.html.twig' %}
+{% block meta_robots %}
+    {% set metaRobotsArray = {} %}
+    noindex, follow
+    {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}    
+    {{ set_variables('metaRobots', {'metaRobotsArray': metaRobotsArray}) }}
+{% endblock %}
 
 {% block body %}
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
