@@ -336,7 +336,7 @@ class CategoryRepository extends NestedTreeRepository
                     if ($rootFlag) {
                         $categoryPathArray[$category->getId()] = $category->getName();
                     } else {
-                        if ($category->getLvl() > 0) {
+                        if ($category->getLvl() > 0 && $category->getStatus() ==1) {
                             $categoryPathArray[$category->getId()] = $category->getName();
                         }
                     }
@@ -369,7 +369,7 @@ class CategoryRepository extends NestedTreeRepository
                 $categories = $this->getPath($categoryObj);
 
                 foreach ($categories as $category) {
-                    if ($category->getLvl() > 0) {
+                    if ($category->getLvl() > 0 && $category->getStatus() ==1) {
                         $categoryPathArray[$category->getId()] = $category->getName();
                     }
                 }
