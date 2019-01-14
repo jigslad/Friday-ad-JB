@@ -141,11 +141,14 @@ class UserPackageRepository extends EntityRepository
                 $userPackage->setRenewedAt(time());
                 $userPackage->setIsRenewalMailSent(1);
             }
-
+            
+            $userPackage->setUpdatedAt(time());
+            $userPackage->setBoostOveride(null);
             $userPackage->setRemark($remark);
             $this->_em->persist($userPackage);
             $this->_em->flush();
         }
+        
 
         if ($user && $user->getBusinessCategoryId() && $container && $ad_update) {
             if (in_array($user->getBusinessCategoryId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
@@ -174,6 +177,7 @@ class UserPackageRepository extends EntityRepository
 
         //assign credits to user if package has
         if ($package && $user) {
+            $this->_em->getRepository('FaAdBundle:BoostedAd')->unboostAdByUserId($user->getId());
             $this->_em->getRepository('FaUserBundle:UserCredit')->addUserCredit($user, $package);
         }
 

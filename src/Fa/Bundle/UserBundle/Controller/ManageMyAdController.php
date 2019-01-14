@@ -89,8 +89,6 @@ class ManageMyAdController extends CoreController
             }
         }
         
-        //echo 'xzczxcxzcx==<pre>';print_r($getCurrentActivePackage->getPackage()->getBoostAdEnabled());die;
-
         $parameters = array(
             'totalAdCount'    => $totalAdCount,
             'activeAdCount'   => $activeAdCount,
@@ -153,8 +151,9 @@ class ManageMyAdController extends CoreController
                     $boostMaxPerMonth = ($getCurrentActivePackage->getBoostOveride())?$getCurrentActivePackage->getBoostOveride():$getCurrentActivePackage->getPackage()->getMonthlyBoostCount();
                     $boostAdRemaining = $boostMaxPerMonth;
                     $getExpiryAtDate =  $getCurrentActivePackage->getExpiresAt();
+                    $getCreateOrUpdateDate = ($getCurrentActivePackage->getUpdatedAt() > $getCurrentActivePackage->getCreatedAt())?$getCurrentActivePackage->getUpdatedAt():$getCurrentActivePackage->getCreatedAt();
                     if ($getExpiryAtDate=='') {
-                        $getExpiryDate = strtotime('+28 days', $getCurrentActivePackage->getCreatedAt());
+                        $getExpiryDate = strtotime('+28 days', $getCreateOrUpdateDate);
                     } else {
                         $getExpiryDate =  strtotime('+1 days', $getCurrentActivePackage->getExpiresAt());
                     }
