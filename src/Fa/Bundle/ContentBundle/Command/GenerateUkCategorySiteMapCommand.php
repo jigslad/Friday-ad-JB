@@ -246,12 +246,19 @@ EOF
             $nonCrawlableDimensionValues = $this->entityManager->getRepository('FaEntityBundle:Entity')->nonCrawlableDimensionValues();
             foreach ($categories as $categoryId) {
                 // categorywise url
-                $categoryFullSlug = $this->entityManager->getRepository('FaEntityBundle:Category')->getFullSlugById($categoryId);
+                //$categoryFullSlug = $this->entityManager->getRepository('FaEntityBundle:Category')->getFullSlugById($categoryId);
+                $categoryArray = $this->entityManager->getRepository('FaEntityBundle:Category')->getCategoryArrayById($categoryId);
+                $categoryFullSlug = $categoryStatus = '';
+                if(!empty($categoryArray)) {
+                    $categoryFullSlug = $categoryArray['full_slug'];
+                    $categoryStatus = $categoryArray['status'];
+                }
+                
                 //by pass motors category.
                 if ($categoryFullSlug == 'motors') {
                     continue;
                 }
-                if ($locationObj->getUrl() && $categoryFullSlug) {
+                if ($locationObj->getUrl() && $categoryFullSlug && $categoryStatus==1) {
                     try {
                         $categoryUrl = $routingManager->getCategoryUrl($locationObj->getUrl(), $categoryFullSlug);
                         if (strpos($categoryUrl, 'other') === false) {

@@ -333,7 +333,7 @@ class CategoryRepository extends NestedTreeRepository
                 $categories = $this->getPath($categoryObj);
 
                 foreach ($categories as $category) {
-                    if ($rootFlag) {
+                    if ($rootFlag && $category->getStatus() ==1) {
                         $categoryPathArray[$category->getId()] = $category->getName();
                     } else {
                         if ($category->getLvl() > 0 && $category->getStatus() ==1) {
@@ -1171,7 +1171,7 @@ class CategoryRepository extends NestedTreeRepository
                 $headerCategoryArray[self::MOTORS_ID]['children'] = ($carsCategoryArray + $motorsCategoryArray);
             }
 
-            if ($headerCategoryArray[self::ANIMALS_ID]['header_sortable']==1) {
+            if (isset($headerCategoryArray[self::ANIMALS_ID]['header_sortable']) && $headerCategoryArray[self::ANIMALS_ID]['header_sortable']==1) {
                 $headerCategoryArray[self::ANIMALS_ID]['children'] = CommonManager::msort($headerCategoryArray[self::ANIMALS_ID]['children'], 'sort_ord');
             }
         }
