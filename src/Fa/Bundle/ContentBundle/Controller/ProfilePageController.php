@@ -297,7 +297,10 @@ class ProfilePageController extends CoreController
                 }
                 
                 if($userDetail['about_us']!='') {
-                    $aboutUsWordCount = str_word_count($userDetail['about_us']);
+                    $stripedText = strip_tags(rtrim($userDetail['about_us']));
+                    $stripedText = preg_replace('/\s\s+/',' ',$stripedText);
+                    $stripedText = str_replace('&nbsp;',"",$stripedText);
+                    $aboutUsWordCount = str_word_count($stripedText)+1;
                 }
 
                 if (!$userDetail['id']) {
@@ -324,8 +327,12 @@ class ProfilePageController extends CoreController
                     $userName = '';
                 }
                 if($userDetail['about_us']!='') {
-                    $aboutUsWordCount = str_word_count($userDetail['about_us']);
+                    $stripedText = strip_tags(rtrim($userDetail['about_us']));
+                    $stripedText = preg_replace('/\s\s+/',' ',$stripedText);
+                    $stripedText = str_replace('&nbsp;',"",$stripedText);
+                    $aboutUsWordCount = str_word_count($stripedText)+1;
                 }
+                
                 if (!$userDetail['id']) {
                     throw new HttpException(410);
                 }
