@@ -82,11 +82,13 @@
        $('.gender_choice').click(function(){
            var choiceId = $(this).attr('id');
            var genderId = choiceId.replace('gender_choice_', '');
-
+           
            if ($('#'+choiceId).hasClass('active')) {
+        	   $('.gender_choice').removeClass('active');
                $('#'+choiceId).removeClass('active');
                $('#'+choiceId).addClass('inactive');
            } else {
+        	   $('.gender_choice').removeClass('active');
                $('#'+choiceId).removeClass('inactive');
                $('#'+choiceId).addClass('active');
            }
