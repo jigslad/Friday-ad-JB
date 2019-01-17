@@ -22,11 +22,19 @@
 
 {% set selCatName = '' %}
 {% set selCatSlug = '' %}
+{% set selCatNoIndex = '' %}
+{% set selCatNoFollow = '' %}
+{% set selNoIndex = '' %}
+{% set selNoFollow = '' %}
 
 {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
     {% set selCatDet = categoryRepository.getCategoryArrayById(searchParams.item__category_id) %}
     {% set selCatName = selCatDet['name'] %}
     {% set selCatSlug = selCatDet['slug'] %}
+    {% set selCatNoIndex = selCatDet['no_index'] %}
+    {% set selCatNoFollow = selCatDet['no_follow'] %}
+    {% set selNoIndex = (selCatNoIndex==1)?'noindex':'index' %}
+    {% set selNoFollow = (selCatNoFollow==1)?'nofollow':'follow' %}
     {% if customized_url|length %}
         {% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForListResult(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE'), customized_url['target_url'], container) %}
     {% else %}
@@ -69,6 +77,9 @@
     {% elseif 'item__distance=0' in app.request.queryString %}
         noindex, follow
         {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+    {% elseif selCatNoIndex==1 or selCatNoFollow==1 %}
+    	{{selNoIndex}}, {{ selNoFollow }} 
+    	{% set metaRobotsArray = {0: selNoIndex, 1: selNoFollow} %}
     {% elseif 'item__distance=0' not in app.request.queryString %}
         {% if customized_url|length %}
             {% if seoFields.meta_robots is defined %}

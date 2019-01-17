@@ -128,4 +128,39 @@ class RedirectsRepository extends EntityRepository
     {
         return $this->_em->getClassMetadata('FaAdBundle:Redirects')->getTableName();
     }
+    
+    public function getCategoryRedirects($old, $container = null, $location = false)
+    {
+        if ($old) {
+            if ($container) {
+                $tableName   = $this->getEntityTableName();
+                $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$old.'_'.$location;
+                $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+                
+                if ($cachedValue !== false) {
+                    return $cachedValue;
+                }
+            }
+            
+            $qb = $this->createQueryBuilder(self::ALIAS)
+            ->setMaxResults(1);
+            $qb->addOrderBy(self::ALIAS.'.id', 'DESC');
+            
+            
+            $qb->andWhere(self::ALIAS.'.old = :old1');
+            $qb->setParameter('old1', $old);
+            
+            
+            $redirect = $qb->getQuery()
+            ->getOneOrNullResult();
+            
+            if ($redirect) {
+                if ($container) {
+                    CommonManager::setCacheVersion($container, $cacheKey, $redirect->getNew());
+                }
+                
+                return $redirect->getNew();
+            }
+        }
+    }
 }
