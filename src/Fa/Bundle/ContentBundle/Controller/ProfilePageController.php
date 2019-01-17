@@ -272,6 +272,7 @@ class ProfilePageController extends CoreController
     {
         $removeSplCharArr[] = "'";
         $removeSplCharArr[] = '"';
+        $aboutUsWordCount = 0;
         $userSite = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('slug' => $request->get('profileNameSlug')));
         if (!$userSite || ($userSite && $userSite->getSlug() != $request->get('profileNameSlug'))) {
             throw new HttpException(410);
@@ -294,6 +295,10 @@ class ProfilePageController extends CoreController
                 } else {
                     $userName = '';
                 }
+                
+                if($userDetail['about_us']!='') {
+                    $aboutUsWordCount = str_word_count($userDetail['about_us']);
+                }
 
                 if (!$userDetail['id']) {
                     throw new HttpException(410);
@@ -301,6 +306,7 @@ class ProfilePageController extends CoreController
                 $parameters = array(
                     'userDetail' => $userDetail,
                     'websiteset' => 1,
+                    'aboutUsWordCount' => $aboutUsWordCount,
                     'userName' => $userName,
                 );
                 return $this->render('FaContentBundle:ProfilePage:showBusinessProfilePage.html.twig', $parameters, $objResponse);
@@ -317,7 +323,9 @@ class ProfilePageController extends CoreController
                 } else {
                     $userName = '';
                 }
-                
+                if($userDetail['about_us']!='') {
+                    $aboutUsWordCount = str_word_count($userDetail['about_us']);
+                }
                 if (!$userDetail['id']) {
                     throw new HttpException(410);
                 }
@@ -325,6 +333,7 @@ class ProfilePageController extends CoreController
                     'userDetail' => $userDetail,
                     'userSiteObj' => $userSite,
                     'websiteset' => 1,
+                    'aboutUsWordCount' => $aboutUsWordCount,
                     'userName' => $userName,
                 );
 
