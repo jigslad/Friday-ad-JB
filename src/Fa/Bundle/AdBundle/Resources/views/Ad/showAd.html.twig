@@ -483,7 +483,7 @@
                                         </div>
                                         <div class="large-8 columns">
                                             {# <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a> #}
-                                             <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);" onclick="return upgradeToFeaturedBtn('{{ adId }}', '{{ rootCategoryId }}');">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a> 
+                                             <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);" onclick="return upgradeToNextPlanBtn('{{ adId }}', '{{ rootCategoryId }}');">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a> 
                                         </div>
                                     </div>
                                 </div>
@@ -1456,6 +1456,24 @@
     {
         ga('send', 'event', 'Ad details', 'Recommended external ads', '{{ catText|trim('-') }}-'+domain);
         window.open(url, '_blank');
+    }
+
+    function upgradeToNextPlanBtn(id, rootCategoryId) {
+    	blockPage();
+    	ga('send', 'event', 'Ad details', 'upgrade now', '{{ adId }}{{ catText }}');
+        var route = Routing.generate('upgrade_to_next_ad', { 'adId': id, 'rootCategoryId': rootCategoryId});
+        $.ajax({
+            type: "GET",
+            url : route,
+            data : {'redirectUrl': '{{app.request.getUri()}}'},
+        })
+        .always(function(response) {
+            unblockPage();
+        })
+        .done(function(response) {
+        	$('#upgradeBasicAdToFeaturedModal').html(response.htmlContent);
+            $('#upgradeBasicAdToFeaturedModal').foundation('reveal', 'open');
+        });
     }
 //]]>
 </script>
