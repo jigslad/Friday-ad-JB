@@ -42,6 +42,12 @@ upgrade_to_featured_ad:
     options:
         expose: true
         
+upgrade_to_next_ad:
+    path:   /upgrade_to_next_ad/{adId}/{rootCategoryId}
+    defaults:  { _controller: "FaAdBundle:UpgradeAd:ajaxUpgradeToNextAd" }
+    options:
+        expose: true
+        
 paypal_upgrade_to_featured_ad_ajax:
     path:   /paypal_payment_process_for_upgrade
     defaults:  { _controller: "FaAdBundle:UpgradeAd:ajaxPaypalPaymentProcessForUpgrade" }
