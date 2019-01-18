@@ -673,12 +673,13 @@ class AdRequestListener
                     throw new NotFoundHttpException('Invalid location.');
                 }
             }
-            
+            if(substr($redirectString,-1)!='/') { $redirectString = $redirectString.'/'; }
             $url = $this->container->get('router')->generate('listing_page', array(
                 'location' => $locationString,
                 'page_string' => str_replace($categoryText, $redirect, $redirectString),
             ), true);
-            $url = rtrim($url, '/');
+            $url = str_replace('//','/',$url);
+            
             $response = new RedirectResponse($url, 301);
             $event->setResponse($response);
         }
