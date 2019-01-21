@@ -477,8 +477,8 @@
                                     <div class="row">
                                         <div class="large-16 columns">
                                             <b>{{ 'Your ad type: %package_title%'|trans({'%package_title%': adPackageArray[adId]['title']}, 'frontend-show-ad') }}</b><br />
-                                            {% if getTopUpsellPackagePrice['title'] is defined  %}
-                                                {{ 'Get a better response by upgrading to %next_package_text% for %next_package_price%'|trans({'%next_package_text%': getTopUpsellPackagePrice['title'], '%next_package_price%': format_currency(getTopUpsellPackagePrice['price'])}, 'frontend-show-ad') }}
+                                            {% if promotePackages[0] is defined  %}
+                                                {{ 'Get a better response by upgrading to %next_package_text% for %next_package_price%'|trans({'%next_package_text%': promotePackages[0].getPackage().getTitle(), '%next_package_price%': format_currency(promotePackages[0].getPackage().getPrice())}, 'frontend-show-ad') }}
                                             {% endif %}
                                         </div>
                                         <div class="large-8 columns">
