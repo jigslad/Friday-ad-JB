@@ -236,7 +236,7 @@ class AdModerationRequestBuild
                 if ($image) {
                     $imageUrl = CommonManager::getAdImageUrl($this->container, $ad->getId(), $image->getPath(), $image->getHash(), null, $image->getAws(), $image->getImageName());
                     if (!preg_match("~^(?:ht)tps?://~i", $imageUrl)) {
-                        $imageUrl = str_replace('//', 'http://', $imageUrl);
+                        $imageUrl = str_replace('//', 'https://', $imageUrl);
                     }
 
                     $this->moderationRequest[AdModerationFieldMappingInterface::IMAGES][] = $imageUrl;

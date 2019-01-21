@@ -65,9 +65,15 @@ class AdRequestListener
         // check for session timeout for cart/process and checkout uri
         $uri = $event->getRequest()->getUri();
         
-        /*if (strpos($uri, '?') !== false && substr($uri, -1) == '/') {
-            $uri = substr($uri, 0, -1);
-        }*/
+        $supported_images = array('.gif','.jpg','.jpeg','.png');
+        
+        foreach ($supported_images as $imageExt) {
+            if (strpos($uri, $imageExt) !== FALSE && substr($uri, -1) == '/') { 
+                $response = new RedirectResponse($uri, 301);
+                $event->setResponse($response);
+            }
+        }
+
         
         //redirect greate-london slug
         if (preg_match('/greate-london/', $uri)) {

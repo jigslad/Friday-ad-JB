@@ -646,11 +646,32 @@ class AdModerateRepository extends EntityRepository
     {
         $parameters = $this->generateRejectedAdEmailParameters($objAd, $moderationResult, $container);
         $template   = 'ad_is_rejected';
+         
+        $ads[] = array(
+            'text_ad_title' => $objAd->getTitle(),
+            'text_ad_description' => $objAd->getDescription(),
+            'text_ad_category' => $entityCache->getEntityNameById('FaEntityBundle:Category', $objAd->getCategory()->getId()),
+            'url_ad_preview' => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $objAd->getId()), true),
+            'url_ad_view' => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $objAd->getId()), true),
+            'text_adref' => $objAd->getId(),
+            'url_ad_main_photo' => $this->getMainImageThumbUrlFromAd($objAd, $container),
+            'url_ad_edit' => $container->get('router')->generate('ad_edit', array('id' => $objAd->getId()), true),
+            'text_rejection_message' = $moderationResult['ModerationMessage']
+        );
 
         // receiver email
         $receiverEmail = $objAd->getUser()->getEmail();
+        if (count($ads)) {
+            $parameters = array(
+                'user_first_name' => $user->getFirstName(),
+                'user_last_name' => $user->getLastName(),
+                'ads' => $ads,
+                'total_ads' => (count($ads) - 1),
+                'url_account_dashboard' => $container->get('router')->generate('dashboard_home', array(), true),
+            );
 
-        $container->get('fa.mail.manager')->send($receiverEmail, $template, $parameters, CommonManager::getCurrentCulture($container), null, array(), array(), array(), null);
+            $container->get('fa.mail.manager')->send($receiverEmail, $template, $parameters, CommonManager::getCurrentCulture($container), null, array(), array(), array(), null);   
+        }
     }
 
     /**
