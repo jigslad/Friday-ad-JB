@@ -1,10 +1,10 @@
-fa_test_ok:
-    resource: '@AppBundle/Controller/'
-    type: annotation
+#fa_test_ok:
+#    resource: '@AppBundle/Controller/'
+#    type: annotation
     
-fa_frontend_homepage:
-    path:     /
-    defaults: { _controller: FaFrontendBundle:Default:index }
+#fa_frontend_homepage:
+#    path:     /
+#    defaults: { _controller: FaFrontendBundle:Default:index }
     
 fa_user_secure:
     resource: '@FaUserBundle/Resources/config/secure_routing.yml'

@@ -1,6 +1,6 @@
-#fa_frontend_homepage:
-#    path:     /
-#    defaults: { _controller: FaFrontendBundle:Default:index }
+fa_frontend_homepage:
+    path:     /
+    defaults: { _controller: FaFrontendBundle:Default:index }
 
 home_page_facebook_login_register:
     path:   /facebook_login_register/
