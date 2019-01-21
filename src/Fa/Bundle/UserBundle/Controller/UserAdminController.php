@@ -754,14 +754,14 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
                         $this->getRepository('FaAdBundle:Ad')->deleteAdFromSolrByUserId($entity->getId(), $this->container);
                     } else {
                         $this->getRepository('FaAdBundle:Ad')->blockUnblockAdByUserId($entity->getId(), 0);
-                        //$this->getRepository('FaAdBundle:Ad')->updateAdFromSolrByUserId($entity, $this->container);
+                        $this->getRepository('FaAdBundle:Ad')->updateAdFromSolrByUserId($entity->getId(), $this->container);
                     }
                     //update solr indexing for A,S,E ads in background if user status is active.
-                    if ($entity->getStatus() && $entity->getStatus()->getId() == EntityRepository::USER_STATUS_ACTIVE_ID) {
-                        $command = $this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --user_id="'.$entity->getId().'" --status="A,S,E" >/dev/null &';
+                    /*if ($entity->getStatus() && $entity->getStatus()->getId() == EntityRepository::USER_STATUS_ACTIVE_ID) {
+                        $command = $this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --user_id="'.$entity->getId().'" --status="A,S,E"';
                         passthru($command, $returnVar);
                         //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index add --user_id="'.$entity->getId().'" --status="A,S,E" >/dev/null &');
-                    }
+                    }*/
                     $this->getEntityManager()->getConnection()->commit();
                 }
 

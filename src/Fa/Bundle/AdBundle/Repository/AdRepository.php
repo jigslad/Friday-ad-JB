@@ -2786,6 +2786,39 @@ class AdRepository extends EntityRepository
             $solr->commit(true);
         }
     }
+    
+    /**
+     * Update ad from solr by user id.
+     *
+     * @param integer $userId
+     * @param object  $container
+     */
+    public function updateAdFromSolrByUserId($userId, $container)
+    {
+        if ($userId) {
+            $solrClient = $container->get('fa.solr.client.ad');
+            if (!$solrClient->ping()) {
+                return false;
+            }
+            
+            $solr = $solrClient->connect();
+            
+            $adSolrIndex = $container->get('fa.ad.solrindex');
+            $idsFound = array();
+            $idsUpdatedFound = array();
+            $idsNotUpdatedFound = array();
+            $ads = $this->_em->getRepository('FaAdBundle:Ad')->findBy(array('user'=>$userId));
+            foreach ($ads as $ad) {
+                $idsFound[] = $ad->getId();
+                if ($adSolrIndex->update($solrClient, $ad, $container, true)) {
+                    $idsUpdatedFound[] = $ad->getId();
+                } else {
+                    $idsNotUpdatedFound[] = $ad->getId();
+                }
+            }
+            $solr->commit(true);
+        }
+    }
 
     
     /**
