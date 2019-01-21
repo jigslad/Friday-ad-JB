@@ -656,7 +656,7 @@ class AdModerateRepository extends EntityRepository
             'text_adref' => $objAd->getId(),
             'url_ad_main_photo' => $this->getMainImageThumbUrlFromAd($objAd, $container),
             'url_ad_edit' => $container->get('router')->generate('ad_edit', array('id' => $objAd->getId()), true),
-            'text_rejection_message' = $moderationResult['ModerationMessage']
+            'text_rejection_message' => $moderationResult['ModerationMessage']
         );
 
         // receiver email
