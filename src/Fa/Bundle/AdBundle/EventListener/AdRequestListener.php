@@ -67,12 +67,13 @@ class AdRequestListener
         
         $supported_images = array('.gif','.jpg','.jpeg','.png');
         
-        //foreach ($supported_images as $imageExt) {
-        if ((strpos($uri, '.gif') !== FALSE || strpos($uri, '.jpg') !== FALSE || strpos($uri, '.jpeg') !== FALSE || strpos($uri, '.png') !== FALSE) && substr($uri, -1) == '/') { 
+        foreach ($supported_images as $imageExt) {
+            if (strpos($uri, $imageExt) !== FALSE && substr($uri, -1) == '/') { 
+                $uri = substr($uri, 0, -1);
                 $response = new RedirectResponse($uri, 301);
                 $event->setResponse($response);
             }
-        //}
+        }
 
         
         //redirect greate-london slug
