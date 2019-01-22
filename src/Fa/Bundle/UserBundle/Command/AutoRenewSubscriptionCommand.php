@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Fa\Bundle\PaymentBundle\Command;
+namespace Fa\Bundle\UserBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;

@@ -53,12 +53,11 @@ class AdFeedLogAdminController extends CrudController implements ResourceAuthori
      */
     public function indexAction()
     {
-        echo 'feed';
+
         CommonManager::removeAdminBackUrl($this->container);
         // initialize search filter manager service and prepare filter data for searching
         $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdFeedBundle:AdFeed'), $this->getRepositoryTable('FaAdFeedBundle:AdFeed'), 'fa_ad_feed_ad_feed_log_search_admin');
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
-        echo 'feed1';
 
         // initialize search manager service and fetch data based of filters
         $data['query_joins']['ad_feed']['ad']  = array('type' => 'left');
@@ -68,7 +67,6 @@ class AdFeedLogAdminController extends CrudController implements ResourceAuthori
         //print_r($data);exit;
         $this->get('fa.sqlsearch.manager')->init($this->getRepository('FaAdFeedBundle:AdFeed'), $data);
         $query = $this->get('fa.sqlsearch.manager')->getQuery();
-        echo 'feed2';
        
 
         // initialize pagination manager service and prepare listing with pagination based of data
