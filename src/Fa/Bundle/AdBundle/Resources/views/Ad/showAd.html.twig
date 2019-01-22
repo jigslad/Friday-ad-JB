@@ -140,7 +140,9 @@
     {% if adDetail['user']['user_role'] is defined %}
         {% set userRolesArray = {0: adDetail['user']['user_role']} %}
     {% endif %}
-     {% if adDetail['user']['role_id'] is defined %}
+    
+    {% set userRoleIdsArray = {} %}
+    {% if adDetail['user']['role_id'] is defined %}
         {% set userRoleIdsArray = {0: adDetail['user']['role_id']} %}
     {% endif %}
     {% if adPackageArray[adId] is defined %}
@@ -240,6 +242,67 @@
 {% endblock %}
 
 {% set catString = null %}
+
+{% set packageActualPrice = 0 %}
+{% set packagePrice = '' %}
+
+{% set isAdminPostedAd = false %}
+{% if adDetail is defined and adDetail['a_ad_source_s'] == constant('Fa\\Bundle\\AdBundle\\Repository\\AdRepository::SOURCE_ADMIN') %}
+    {% set isAdminPostedAd = true %}
+{% endif %}
+
+{% if promotePackages is defined and promotePackages|length %}
+    {% set packageIdArray = {} %}
+    {% set printOptionCount = 0 %}
+    {% set printDurationId = '' %}
+    {% set packageId = '' %}
+           
+    {% set packageIdArray = packageIdArray|merge({0 : promotePackages[0].getPackage().getId() }) %}    
+
+    {% set printPackageDuration = fetch_repository('FaPromotionBundle:PackagePrint').getPrintDurationForPackages(packageIdArray) %}
+    {% if printPackageDuration|length %}
+        {% set printEditions = fetch_repository('FaAdBundle:PrintEdition').getActivePrintEditionArray() %}
+        {% for printDuration in printPackageDuration %}
+            {% if printOptionCount < printDuration|length %}
+                {% set printOptionCount = printDuration|length %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    
+    
+    {% set packageValues = array_unserialize(promotePackages[0].getPackage().getValue()) %}   
+    
+    {% if isAdminPostedAd %}
+        {% if printPackageDuration[promotePackages[0].getPackage().getId()][0]['admin_price'] is defined and printPackageDuration[promotePackages[0].getPackage().getId()][0]['admin_price'] is not null %}
+            {% if printPackageDuration[promotePackages[0].getPackage().getId()][0]['admin_price'] > 0 %}
+                {% set packageActualPrice = printPackageDuration[promotePackages[0].getPackage().getId()][0]['admin_price'] %}
+            {% endif %}
+        {% elseif printPackageDuration[promotePackages[0].getPackage().getId()][0]['price'] is defined and printPackageDuration[promotePackages[0].getPackage().getId()][0]['price'] is not null %}
+            {% if printPackageDuration[promotePackages[0].getPackage().getId()][0]['price'] > 0 %}
+                {% set packageActualPrice = printPackageDuration[promotePackages[0].getPackage().getId()][0]['price'] %}
+            {% endif %}
+        {% elseif promotePackages[0].getPackage().getAdminPrice() is not null %}
+            {% if promotePackages[0].getPackage().getAdminPrice() > 0 %}
+                {% set packageActualPrice = promotePackages[0].getPackage().getAdminPrice() %}
+            {% endif %}
+        {% elseif promotePackages[0].getPackage().getPrice() is not null %}
+            {% if promotePackages[0].getPackage().getPrice() > 0 %}
+                {% set packageActualPrice = promotePackages[0].getPackage().getPrice() %}
+            {% endif %}
+        {% endif %}
+    {% else %}
+        {% if printPackageDuration[promotePackages[0].getPackage().getId()][0]['price'] is defined and printPackageDuration[promotePackages[0].getPackage().getId()][0]['price'] is not null %}
+            {% if printPackageDuration[promotePackages[0].getPackage().getId()][0]['price'] > 0 %}
+                {% set packageActualPrice = printPackageDuration[promotePackages[0].getPackage().getId()][0]['price'] %}
+            {% endif %}
+        {% elseif promotePackages[0].getPackage().getPrice() is not null %}
+            {% if promotePackages[0].getPackage().getPrice() > 0 %}
+                {% set packageActualPrice = promotePackages[0].getPackage().getPrice() %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endif %}          
+
 {% block body %}
 {% set imageZoomeZoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_IN_IMAGE_ZOOM') %}
 {% set imageZoomBannerExist = false %}
@@ -478,7 +541,7 @@
                                         <div class="large-16 columns">
                                             <b>{{ 'Your ad type: %package_title%'|trans({'%package_title%': adPackageArray[adId]['title']}, 'frontend-show-ad') }}</b><br />
                                             {% if promotePackages[0] is defined  %}
-                                                {{ 'Get a better response by upgrading to %next_package_text% for %next_package_price%'|trans({'%next_package_text%': promotePackages[0].getPackage().getTitle(), '%next_package_price%': format_currency(promotePackages[0].getPackage().getPrice())}, 'frontend-show-ad') }}
+                                                {{ 'Get a better response by upgrading to %next_package_text% for %next_package_price%'|trans({'%next_package_text%': promotePackages[0].getPackage().getTitle(), '%next_package_price%': format_currency(packageActualPrice)}, 'frontend-show-ad') }}
                                             {% endif %}
                                         </div>
                                         <div class="large-8 columns">
