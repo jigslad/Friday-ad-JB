@@ -960,8 +960,10 @@ class DefaultController extends ThirdPartyLoginController
         $queryParams = $request->query->all();
         if (count($queryParams)) {
             $tiPath = $tiPath.'?'.http_build_query($queryParams);
-        }
-
+        } else {
+            if(substr($tiPath,-1)!='/') { $tiPath = $tiPath.'/'; }
+        } 
+        
         $key = md5($request->getClientIp().$request->headers->get('User-Agent'));
 
         CommonManager::setCacheVersion($this->container, 'ti_url_'.$key, $this->container->getParameter('ti_base_url').(count($queryParams) ? '?'.http_build_query($queryParams) : ''));
@@ -997,14 +999,18 @@ class DefaultController extends ThirdPartyLoginController
         if (preg_match('/inbox\/reply\/email\/([0-9]+)/', $tiPath, $matches)) {
             $tiPath = 'inbox/reply/email/-'.$matches[1].'/';
         }
-
+        
         $queryParams = $request->query->all();
         if (count($queryParams)) {
             $tiPath = $tiPath.'?'.http_build_query($queryParams);
-        }
-
+        }  else {
+            if(substr($tiPath,-1)!='/') { $tiPath = $tiPath.'/'; }
+        } 
+        
         $tiUrl = $this->container->getParameter('ti_base_url').'/'.$tiPath;
         $tiPath = $this->container->getParameter('base_url').'/'.$tiPath;
+        
+        
 
         $key = md5($request->getClientIp().$request->headers->get('User-Agent'));
 
