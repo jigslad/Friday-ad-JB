@@ -163,7 +163,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
         $parentArray = $this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId);
         
         if (!empty($parentArray)) {
-            asort($parentArray);
+            arsort($parentArray);
             
             foreach ($parentArray as $categoryId => $categoryname) {
                 $recommendedSlots = $this->createQueryBuilder(self::ALIAS)

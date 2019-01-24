@@ -572,8 +572,9 @@ class CategoryRepository extends NestedTreeRepository
                 if ($levelDiff > 1) {
                     $levelSpitter = str_repeat('&nbsp;', (($levelDiff -1) * 6));
                 }
-
-                $childrenArray[$children['id']] = html_entity_decode($levelSpitter.$children['name']);
+                if($children['status']==1) {
+                    $childrenArray[$children['id']] = html_entity_decode($levelSpitter.$children['name']);
+                }
             }
         }
 
@@ -1751,7 +1752,7 @@ class CategoryRepository extends NestedTreeRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -1767,7 +1768,7 @@ class CategoryRepository extends NestedTreeRepository
             $qb->andWhere(self::ALIAS.'.name = :catName')
             ->setParameter('catName', $name);
         }
-
+        
         $categories = $qb->getQuery()->getResult();
 
         if ($categories && count($categories)) {
