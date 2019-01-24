@@ -98,7 +98,7 @@
                $('#'+formName+'_'+field).val(selectedId);
            } else if (fieldType == 'radio') { 
                $("input[name='"+formName+"["+field+"]']").attr('checked', false);
-               
+               alert('radio');
 				if(!$( '#'+choiceId ).hasClass( "active" )) { 
 					$('.'+fieldChoice).removeClass('active');
                     $('#'+choiceId).addClass('active');
@@ -107,12 +107,27 @@
            			$('.'+fieldChoice).removeClass('active');
                	}
            } else if (fieldType == 'checkbox') {
-               if ($(this).hasClass('active')) {
-                   $(this).removeClass('active');
+        	   if(fieldChoice == 'gender_choice') {
+        		   if ($(this).hasClass('active')) {
+                       $('.'+fieldChoice).removeClass('active');
+                       selectedId = '';
+                       $("input[name='"+formName+"["+field+"][]']").prop('checked', false);
+                   } else {
+                	   $('.'+fieldChoice).removeClass('active');
+                	   $("input[name='"+formName+"["+field+"][]'").prop('checked', false);
+                       $(this).addClass('active');
+                       $("input[type='checkbox'][name='"+formName+"["+field+"][]'][value='"+selectedId+"']").trigger('click');
+                   }
                } else {
-                   $(this).addClass('active');
+            	   if ($(this).hasClass('active')) {
+                       $(this).removeClass('active');
+                   } else {
+                       $(this).addClass('active');
+                   }
+            	   $("input[type='checkbox'][name='"+formName+"["+field+"][]'][value='"+selectedId+"']").trigger('click');
                }
-               $("input[type='checkbox'][name='"+formName+"["+field+"][]'][value='"+selectedId+"']").trigger('click');
+               
+               
            }
        });
     }
@@ -137,7 +152,7 @@
             return false;
         });
 
-        $('#'+formName+'_location_autocomplete').keypress(function(e){
+    $('#'+formName+'_location_autocomplete').keypress(function(e){
             var k = e.keyCode || e.which;
             if(k == 13) {
                 e.preventDefault();

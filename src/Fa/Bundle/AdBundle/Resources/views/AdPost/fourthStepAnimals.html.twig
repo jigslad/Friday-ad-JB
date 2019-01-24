@@ -86,14 +86,15 @@
            if ($('#'+choiceId).hasClass('active')) {
         	   $('.gender_choice').removeClass('active');
                $('#'+choiceId).removeClass('active');
-               $('#'+choiceId).addClass('inactive');
+               genderId = '';
+               $("input[name='fa_paa_fourth_step_animals[gender_id][]']").prop('checked', false);
            } else {
-        	   $('.gender_choice').removeClass('active');
-               $('#'+choiceId).removeClass('inactive');
+        	   $('.gender_choice').removeClass('active');         	 
+        	   $("input[name='fa_paa_fourth_step_animals[gender_id][]'").prop('checked', false);
+               $(this).addClass('active');              
                $('#'+choiceId).addClass('active');
-           }
-
-           $("input[name='fa_paa_fourth_step_animals[gender_id][]'][value='"+genderId+"']").trigger('click');
+               $("input[name='fa_paa_fourth_step_animals[gender_id][]'][value='"+genderId+"']").trigger('click');
+           }           
        });
 
        $("input[name='fa_paa_fourth_step_animals[gender_id][]']").each(function() {
