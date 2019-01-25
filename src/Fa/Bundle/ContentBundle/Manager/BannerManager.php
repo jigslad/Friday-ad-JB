@@ -244,6 +244,194 @@ class BannerManager
 
         return $bannerCodeString;
     }
+    
+    /**
+     * Parse static block seo string.
+     *
+     * @param string $staticBlockCodeString Seo string.
+     * @param array $extraParams.
+     *
+     * @return string
+     */
+    public function parseStaticBlockCode($staticBlockCodeString, $extraParams)
+    {
+        $currentRoute      = $this->container->get('request_stack')->getCurrentRequest()->get('_route');
+        $params             = $this->container->get('request_stack')->getCurrentRequest()->get('finders');
+        $entityCacheManager = $this->container->get('fa.entity.cache.manager');
+        $staticBlockVariables    = array('{page_type}', '{user_type}', '{user_location}', '{county}', '{edition_area}', '{target_id}', '{search_keyword}', '{width}', '{height}', '{hashed_email}');
+        $categoryVariables  = array('{category}', '{class}', '{sub_class}', '{sub_sub_class}');
+        $allStaticBlockVariables = array_merge($staticBlockVariables, $categoryVariables);
+        
+        if ($extraParams && isset($extraParams['cookieValues'])) {
+            $locationArray = json_decode($extraParams['cookieValues'], true);
+        } elseif ($params && isset($params['item__location'])) {
+            $locationArray = $this->em->getRepository('FaEntityBundle:Location')->getCookieValue($params['item__location'], $this->container);
+        } else {
+            $locationArray = json_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('location'), true);
+        }
+        
+        preg_match_all('/\{.*?\}/', $staticBlockCodeString, $staticBlockVariables);
+        
+        // replace variable values.
+        if (count($staticBlockVariables)) {
+            foreach ($staticBlockVariables[0] as $staticBlockVariable) {
+                //Reset banner variable if not properly parsed.
+                foreach ($allStaticBlockVariables as $bVariable) {
+                    if (strstr($staticBlockVariable, $bVariable)) {
+                        $staticBlockVariable = $bVariable;
+                    }
+                }
+                
+                if ($staticBlockVariable == '{page_type}') {
+                    if ($currentRoute && ($currentRoute ==  'location_home_page')) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, 'homepage', $staticBlockCodeString);
+                    } elseif ($currentRoute && ($currentRoute ==  'detail_page')) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, 'ad-details', $staticBlockCodeString);
+                    } elseif ($currentRoute && ($currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page')) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, 'search-results', $staticBlockCodeString);
+                    } elseif ($currentRoute && ($currentRoute == 'landing_page_category' || $currentRoute == 'landing_page_category_location')) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, 'Landing page', $staticBlockCodeString);
+                    } else {
+                        if($currentRoute=='') {
+                            $staticBlockCodeString = str_replace($staticBlockVariable, 'homepage', $staticBlockCodeString);
+                        } else {
+                            $staticBlockCodeString = str_replace($staticBlockVariable, '', $staticBlockCodeString);
+                        }
+                        
+                    }
+                } elseif ($staticBlockVariable == '{user_type}') {
+                    if (strstr($staticBlockVariable, '{user_type}')) {
+                        $staticBlockVariable = '{user_type}';
+                    }
+                    $userType = '';
+                    $objUser  = CommonManager::getLoggedInUser($this->container);
+                    
+                    if (is_object($objUser)) {
+                        if ($objUser->getRole()) {
+                            $userType = $this->getUserTypeByRole($objUser->getRole()->getId());
+                        }
+                    }
+                    $staticBlockCodeString = str_replace($staticBlockVariable, $userType, $staticBlockCodeString);
+                } elseif (in_array($staticBlockVariable, $categoryVariables)) {
+                    $categoryPath = '';
+                    $categorySlug = '';
+                    if ($currentRoute && ($currentRoute ==  'detail_page')) {
+                        if ($extraParams && count($extraParams) > 0 && isset($extraParams['ad'])) {
+                            if (isset($extraParams['ad'])) {
+                                $categoryPath = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathDetailArrayById($extraParams['ad']['a_category_id_i'], false, $this->container);
+                            }
+                        }
+                    } elseif ($params && isset($params['item__category_id'])) {
+                        $categoryPath = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathDetailArrayById($params['item__category_id'], false, $this->container);
+                    } elseif ($currentRoute && ($currentRoute == 'landing_page_category' || $currentRoute == 'landing_page_category_location')) {
+                        if ($this->container->get('request_stack')->getCurrentRequest()->get('category_id')) {
+                            $categoryPath = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathDetailArrayById($this->container->get('request_stack')->getCurrentRequest()->get('category_id'), false, $this->container);
+                        }
+                    }
+                    if (is_array($categoryPath) && count($categoryPath) > 0) {
+                        switch ($staticBlockVariable) {
+                            case '{category}':
+                                if (count($categoryPath) > 0) {
+                                    $categorySlug = $categoryPath[0]['slug'];
+                                }
+                                break;
+                            case '{class}':
+                                if (count($categoryPath) > 1) {
+                                    $categorySlug = $categoryPath[1]['slug'];
+                                }
+                                break;
+                            case '{sub_class}':
+                                if (count($categoryPath) > 2) {
+                                    $categorySlug = $categoryPath[2]['slug'];
+                                }
+                                break;
+                            case '{sub_sub_class}':
+                                if (count($categoryPath) > 3) {
+                                    $categorySlug = $categoryPath[3]['slug'];
+                                }
+                                break;
+                        }
+                    }
+                    $staticBlockCodeString = str_replace($staticBlockVariable, $categorySlug, $staticBlockCodeString);
+                } elseif ($staticBlockVariable == '{user_location}') {
+                    $townName = '';
+                    if ($currentRoute && ($currentRoute ==  'detail_page')) {
+                        if ($extraParams && count($extraParams) > 0 && isset($extraParams['ad'])) {
+                            if (isset($extraParams['ad'])) {
+                                $townName = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', $extraParams['ad']['a_l_town_id_txt'][0]);
+                            }
+                        }
+                    } elseif ($locationArray && isset($locationArray['town'])) {
+                        $townName = $locationArray['town'];
+                    }
+                    $staticBlockCodeString = str_replace($staticBlockVariable, $townName, $staticBlockCodeString);
+                } elseif ($staticBlockVariable == '{county}') {
+                    $countyName = '';
+                    if ($currentRoute && ($currentRoute ==  'detail_page')) {
+                        if ($extraParams && count($extraParams) > 0 && isset($extraParams['ad'])) {
+                            if (isset($extraParams['ad'])) {
+                                $countyName = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', $extraParams['ad']['a_l_domicile_id_txt'][0]);
+                            }
+                        }
+                    } elseif ($locationArray && is_array($locationArray)) {
+                        if (isset($locationArray['county'])) {
+                            $countyName = $locationArray['county'];
+                        } elseif (isset($locationArray['paa_county'])) {
+                            $countyName = $locationArray['paa_county'];
+                        }
+                    }
+                    $staticBlockCodeString = str_replace($staticBlockVariable, $countyName, $staticBlockCodeString);
+                } elseif ($staticBlockVariable == '{edition_area}') {
+                    $printEditionName = '';
+                    if ($currentRoute && ($currentRoute ==  'detail_page')) {
+                        if ($extraParams && count($extraParams) > 0 && isset($extraParams['ad'])) {
+                            if (isset($extraParams['ad'])) {
+                                $printEditionName = $this->em->getRepository('FaAdBundle:PrintEdition')->getPrintEditionColumnByTownId($extraParams['ad']['a_l_town_id_txt'][0], $this->container);
+                            }
+                        }
+                    } elseif ($locationArray && isset($locationArray['town_id'])) {
+                        $printEditionName = $this->em->getRepository('FaAdBundle:PrintEdition')->getPrintEditionColumnByTownId($locationArray['town_id'], $this->container);
+                    }
+                    $staticBlockCodeString = str_replace($staticBlockVariable, $printEditionName, $staticBlockCodeString);
+                } elseif ($staticBlockVariable == '{target_id}') {
+                    if ($extraParams && isset($extraParams['target_id'])) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $extraParams['target_id'], $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{search_keyword}') {
+                    if ($params && isset($params['keywords'])) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $params['keywords'], $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{width}') {
+                    if ($extraParams && isset($extraParams['max_width']) && $extraParams['max_width'] != null) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $extraParams['max_width'], $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{height}') {
+                    if ($extraParams && isset($extraParams['max_height']) && $extraParams['max_height'] != null) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, $extraParams['max_height'], $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, '', $staticBlockCodeString);
+                    }
+                } elseif ($staticBlockVariable == '{hashed_email}') {
+                    $objUser = CommonManager::getLoggedInUser($this->container);
+                    if ($objUser) {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, sha1($objUser->getEmail()), $staticBlockCodeString);
+                    } else {
+                        $staticBlockCodeString = str_replace($staticBlockVariable, '', $staticBlockCodeString);
+                    }
+                }
+            }
+        }
+        
+        $staticBlockCodeString = trim($staticBlockCodeString);
+        
+        return $staticBlockCodeString;
+    }
 
     /**
      * Get user types.

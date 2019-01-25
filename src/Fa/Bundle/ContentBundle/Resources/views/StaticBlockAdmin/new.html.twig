@@ -23,6 +23,22 @@
                         {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'static_block_admin'}) }}
                     {{ form_end(form) }}
                 </div>
+                <div class="large-3 columns">
+                    <b>{{ 'Variables available'|trans }}</b>
+                    <div style="overflow: auto; height: 380px;">
+                        {page_type}<br>
+                        {user_type}<br>
+                        {category}<br>
+                        {class}<br>
+                        {sub_class}<br>
+                        {sub_sub_class}<br>
+                        {user_location}<br>
+                        {county}<br>
+                        {edition_area}<br>
+                        {search_keyword}<br>
+                        {hashed_email}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
