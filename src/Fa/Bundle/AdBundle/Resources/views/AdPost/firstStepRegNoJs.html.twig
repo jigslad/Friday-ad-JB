@@ -27,7 +27,7 @@
                {% elseif(app.request.get('is_edit') == 1) %}
                    $('#reg_no_details_fields').show();
                {% endif %}
-               if($('#category_choice_div_3').length >1) {
+               if($('select#fa_paa_category_select_category_3 option').length >1) {
                    $('#category_choice_div_3').show();
                    moveCategoryDiv();
                }
@@ -64,7 +64,8 @@
                {% elseif(app.request.get('is_edit') == 1) %}
             	   $('#reg_no_details_fields').show();
                {% endif %}
-               if($('#category_choice_div_3').length >1) {
+
+               if($('select#fa_paa_category_select_category_3 option').length >1) {
             	   $('#category_choice_div_3').show();
                    moveCategoryDiv();
                    scrollToElement($('#category_choice_div_3'));                  
@@ -106,15 +107,15 @@
                             $('.fa-select').selectmenu().selectmenu('refresh',true);
                             enableDisableNextBtn();
                         }, 500);
-                        if($('#category_choice_div_3').length >1) {
+                        if($('select#fa_paa_category_select_category_3 option').length >1) {
                         	$('#category_choice_div_3').show();
                         }
-                        if($('#category_choice_div_4').length >1) {
+                        if($('select#fa_paa_category_select_category_4 option').length >1) {
                         	$('#category_choice_div_4').show();
                         }
                         $('.fa-select').selectmenu().selectmenu('refresh',true);
                     } else {
-                    	if($('#category_choice_div_3').length >1) {
+                    	if($('select#fa_paa_category_select_category_3 option').length >1) {
                         	$('#category_choice_div_3').show();
                         	$('.fa-select').selectmenu().selectmenu('refresh',true);
                         	scrollToElement($('#category_choice_div_3'));
@@ -123,7 +124,7 @@
                 } else if (regNoFieldsData['cw_vehicle_cat_id'] == motorbikesId) {
                 	if (regNoFieldsData['motorbike_id'] && regNoFieldsData['cw_motorbike_id'] && regNoFieldsData['motorbike_id'] != regNoFieldsData['cw_motorbike_id']) {
                         thirdLevelCatId = regNoFieldsData['cw_motorbike_id'];
-                        if($('#category_choice_div_3').length >1) {
+                        if($('select#fa_paa_category_select_category_3 option').length >1) {
                             setTimeout(function(){
                             	$('#category_choice_div_3').show();
                             	$('#fa_paa_category_select_category_3').val(thirdLevelCatId).trigger('change');
@@ -132,7 +133,7 @@
                             }, 1000);
                         }
                     } else {
-                    	if($('#category_choice_div_3').length >1) {
+                    	if($('select#fa_paa_category_select_category_3 option').length >1) {
                             $('#category_choice_div_3').show();
                             $('.fa-select').selectmenu().selectmenu('refresh',true);
                             scrollToElement($('#category_choice_div_3'));
@@ -151,7 +152,7 @@
                             fourthLevelCatId = regNoFieldsData['cw_model_id'];
                             showMsg = true;
                         } else {
-                        	if($('#category_choice_div_3').length >1) {
+                        	if($('select#fa_paa_category_select_category_3 option').length >1) {
                             	$('#category_choice_div_3').show();
                                 $('.fa-select').selectmenu().selectmenu('refresh',true);
                                 scrollToElement($('#category_choice_div_3'));
@@ -166,7 +167,7 @@
                             thirdLevelCatId = regNoFieldsData['cw_motorbike_id'];
                             showMsg = true;
                         } else {
-                        	if($('#category_choice_div_3').length >1) {
+                        	if($('select#fa_paa_category_select_category_3 option').length >1) {
                                 $('#category_choice_div_3').show();
                                 $('.fa-select').selectmenu().selectmenu('refresh',true);
                                 scrollToElement($('#category_choice_div_3'));
@@ -184,7 +185,7 @@
                             fourthLevelCatId = regNoFieldsData['cw_model_id'];
                             showMsg = true;
                         } else {
-                        	if($('#category_choice_div_3').length >1) {
+                        	if($('select#fa_paa_category_select_category_3 option').length >1) {
                                 $('#category_choice_div_3').show();
                                 $('.fa-select').selectmenu().selectmenu('refresh',true);
                                 scrollToElement($('#category_choice_div_3'));
@@ -199,7 +200,7 @@
                             thirdLevelCatId = regNoFieldsData['cw_motorbike_id'];
                             showMsg = true;
                         } else {
-                        	if($('#category_choice_div_3').length >1) {
+                        	if($('select#fa_paa_category_select_category_3 option').length >1) {
                                 $('#category_choice_div_3').show();
                                 $('.fa-select').selectmenu().selectmenu('refresh',true);
                                 scrollToElement($('#category_choice_div_3'));
@@ -229,7 +230,7 @@
                                 $('.fa-select').selectmenu().selectmenu('refresh',true);
                             }, 1000);
                         } else {
-                        	if($('#category_choice_div_3').length >1) {
+                        	if($('select#fa_paa_category_select_category_3 option').length >1) {
                             	setTimeout(function(){
                             	    $('#category_choice_div_3').show();
                                     scrollToElement($('#category_choice_div_3'));
@@ -246,7 +247,7 @@
                         }
                         loadRegNofields = true;
                     } else {
-                    	if($('#category_choice_div_3').length >1) {
+                    	if($('select#fa_paa_category_select_category_3 option').length >1) {
                             $('#category_choice_div_3').show();
                             $('.fa-select').selectmenu().selectmenu('refresh',true);
                             scrollToElement($('#category_choice_div_3'));
@@ -261,7 +262,7 @@
                 $('#close_carweb_category_msg').click(function(e){
                     $('#carweb_category_msg').remove();
                     $('.close-reveal-modal').trigger('click');
-                    if($('#category_choice_div_3').length >1) {
+                    if($('select#fa_paa_category_select_category_3 option').length >1) {
                         $('#category_choice_div_3').show();
                         $('.fa-select').selectmenu().selectmenu('refresh',true);
                         scrollToElement($('#category_choice_div_3'));
