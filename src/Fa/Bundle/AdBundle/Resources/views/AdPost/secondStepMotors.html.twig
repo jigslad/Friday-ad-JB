@@ -9,7 +9,12 @@
 {% set categoryPathArray = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance()) %}
 {% set categorykeys = categoryPathArray|keys %}
 {% set rootMotorsCategoryId = categorykeys|slice(1, 1)[0] %}
-{% set secondRootMotorsCategoryId = categorykeys|slice(2, 1)[0] %}
+
+{% if(categorykeys|length>2) %}
+     {% set secondRootMotorsCategoryId = categorykeys|slice(2, 1)[0] %}
+{% else %}
+    {% set secondRootMotorsCategoryId = '' %}
+{% endif %}
 {% block body %}
     <div class="posting-bg">
         <div class="fad-sign-bdr">&nbsp;</div>
