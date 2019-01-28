@@ -27,9 +27,9 @@
 {% set selNoIndex = '' %}
 {% set selNoFollow = '' %}
 
-{% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+{% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}    
+    {% set selCatDet = categoryRepository.getCategoryArrayById(searchParams.item__category_id) %}
     {% if selCatDet is defined %}
-        {% set selCatDet = categoryRepository.getCategoryArrayById(searchParams.item__category_id) %}
         {% set selCatName = selCatDet['name'] %}
         {% set selCatSlug = selCatDet['slug'] %}
         {% set selCatNoIndex = selCatDet['no_index'] %}
