@@ -709,6 +709,7 @@ class AdRequestListener
             $newRedirect = $redirect;
             
             if($adType) {
+                $adType = ltrim($adType,'/');
                 $explodeCatText = explode('/',$categoryText);
                 $rootCat = $explodeCatText[0];
                 array_shift($explodeCatText);
@@ -726,7 +727,11 @@ class AdRequestListener
                 'page_string' => str_replace($newCatText, $newRedirect, $redirectString),
             ), true);
             $url = str_replace('//','/',$url);
-
+            echo 'adType==='.$adType.'<br>';
+            echo 'newCatText==='.$newCatText.'<br>';
+            echo 'newRedirect==='.$newRedirect.'<br>';
+            echo 'redirectString==='.$redirectString.'<br>';
+            echo 'url==='.$url;die;
             $response = new RedirectResponse($url, 301);
             $event->setResponse($response);
         }
