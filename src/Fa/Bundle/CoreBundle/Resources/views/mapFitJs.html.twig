@@ -30,7 +30,7 @@ function showAddress(val) {
   					    }
 				 		latitude = address_component.lat;
   	                    longitude = address_component.lon;							
-						map.setView(new L.LatLng(latitude, longitude), 8);
+						map.setView(new L.LatLng(latitude, longitude), 10);
 						myMarker = L.marker([latitude, longitude], {icon: myIcon}).addTo(map);
 						map.flyTo([address_component.lat, address_component.lon]);
   					}
