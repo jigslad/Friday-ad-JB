@@ -470,11 +470,12 @@ class AdRequestListener
 
                 $categoryText =  substr($categoryText, 0, strrpos($categoryText, '/'));
                 
-                $this->getCatRedirects($redirectString, $categoryText, $locationId, $request, $event);                
+                                
                 $catObj = $this->getMatchedCategory($categoryText);
                 
                                 
                 if ($catObj) {
+                    $this->getCatRedirects($redirectString, $catObj['full_slug'], $locationId, $request, $event);
                     /*if($catObj['status']!=1) {
                         $this->redirectParentCatUrls($redirectString,$catObj['id'], $locationId, $request, $event);
                     } */
@@ -670,6 +671,7 @@ class AdRequestListener
     
     private function getCatRedirects($redirectString, $categoryText, $locationId, $request, $event, $page = null) {
         $url = null;
+                
         $redirect = $this->em->getRepository('FaAdBundle:Redirects')->getCategoryRedirects($categoryText, $this->container);
         if($redirect) {
             if ($locationId) {
@@ -681,9 +683,47 @@ class AdRequestListener
                 }
             }
             if(substr($redirectString,-1)!='/') { $redirectString = $redirectString.'/'; }
+            
+            $adType = null;
+            $matches = null;
+            $adTypeString = implode('\/|\/', $this->getAdTypeArray());
+            
+            $forsaleFlag  = false;
+            
+            if (strpos($redirectString, "for-sale") === 0) {
+                $forsaleFlag = true;
+            }
+            
+            if (strpos($redirectString, "property") === 0) {
+                $adTypeString = implode('\/|\/', array('wanted', 'offered', 'exchange'));
+            }
+            
+            // handle url for for sale category
+            if (preg_match('/'.$adTypeString.'/', $redirectString, $matches) && !$forsaleFlag) {
+                $adType = $matches[0];                
+            } elseif (preg_match('/~^'.$adTypeString.'/', $redirectString, $matches) && $forsaleFlag) {
+                $adType = $matches[0];
+            }
+            
+            $newCatText = $categoryText;
+            $newRedirect = $redirect;
+            
+            if($adType) {
+                $explodeCatText = explode('/',$categoryText);
+                $rootCat = $explodeCatText[0];
+                array_shift($explodeCatText);
+                $implodeRemainingCat = implode($explodeCatText,'/');
+                $newCatText = $rootCat.$adType.$implodeRemainingCat;
+                
+                $explodeRedirect = explode('/',$redirect);
+                array_shift($explodeRedirect);
+                $implodeRemainingRedirect = implode($explodeRedirect,'/');
+                $newRedirect = $rootCat.$adType.$implodeRemainingRedirect;
+            } 
+            
             $url = $this->container->get('router')->generate('listing_page', array(
                 'location' => $locationString,
-                'page_string' => str_replace($categoryText, $redirect, $redirectString),
+                'page_string' => str_replace($newCatText, $newRedirect, $redirectString),
             ), true);
             $url = str_replace('//','/',$url);
             
@@ -812,7 +852,14 @@ class AdRequestListener
         if ($cat) {
            return $cat;                                     
         } else {
-            return false;
+            $explodeCatArr = explode('/',$category);
+            if(!empty($explodeCatArr) && count($explodeCatArr)>1) {
+                array_pop($explodeCatArr);
+                $newCatText = implode('/',$explodeCatArr);
+                return $this->getMatchedCategory($newCatText);
+            } else {
+                return false;
+            }
         }
     }
 

@@ -28,13 +28,15 @@
 {% set selNoFollow = '' %}
 
 {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
-    {% set selCatDet = categoryRepository.getCategoryArrayById(searchParams.item__category_id) %}
-    {% set selCatName = selCatDet['name'] %}
-    {% set selCatSlug = selCatDet['slug'] %}
-    {% set selCatNoIndex = selCatDet['no_index'] %}
-    {% set selCatNoFollow = selCatDet['no_follow'] %}
-    {% set selNoIndex = (selCatNoIndex==1)?'noindex':'index' %}
-    {% set selNoFollow = (selCatNoFollow==1)?'nofollow':'follow' %}
+    {% if selCatDet is defined %}
+        {% set selCatDet = categoryRepository.getCategoryArrayById(searchParams.item__category_id) %}
+        {% set selCatName = selCatDet['name'] %}
+        {% set selCatSlug = selCatDet['slug'] %}
+        {% set selCatNoIndex = selCatDet['no_index'] %}
+        {% set selCatNoFollow = selCatDet['no_follow'] %}
+        {% set selNoIndex = (selCatNoIndex==1)?'noindex':'index' %}
+        {% set selNoFollow = (selCatNoFollow==1)?'nofollow':'follow' %}
+    {% endif %}
     {% if customized_url|length %}
         {% set seoPageRule = seoToolRepository.getSeoPageRuleDetailForListResult(constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_LIST_PAGE'), customized_url['target_url'], container) %}
     {% else %}
