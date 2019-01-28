@@ -713,12 +713,12 @@ class AdRequestListener
                 $rootCat = $explodeCatText[0];
                 array_shift($explodeCatText);
                 $implodeRemainingCat = implode($explodeCatText,'/');
-                $newCatText = $rootCat.$adType.$implodeRemainingCat;
+                $newCatText = $rootCat.'/'.$adType.$implodeRemainingCat;
                 
                 $explodeRedirect = explode('/',$redirect);
                 array_shift($explodeRedirect);
                 $implodeRemainingRedirect = implode($explodeRedirect,'/');
-                $newRedirect = $rootCat.$adType.$implodeRemainingRedirect;
+                $newRedirect = $rootCat.'/'.$adType.$implodeRemainingRedirect;
             } 
             
             $url = $this->container->get('router')->generate('listing_page', array(
@@ -726,7 +726,7 @@ class AdRequestListener
                 'page_string' => str_replace($newCatText, $newRedirect, $redirectString),
             ), true);
             $url = str_replace('//','/',$url);
-            
+
             $response = new RedirectResponse($url, 301);
             $event->setResponse($response);
         }
