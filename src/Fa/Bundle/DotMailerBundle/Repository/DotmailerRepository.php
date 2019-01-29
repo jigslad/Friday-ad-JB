@@ -751,7 +751,8 @@ class DotmailerRepository extends EntityRepository
 
             //send to dotmailer instantly.
             if ($isNewToDotmailer) {
-                exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->get('kernel')->getRootDir().'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+                //exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->get('kernel')->getRootDir().'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+                $response = $this->sendOneContactToDotmailerRequest($dotmailer, $container);
             }
         }
     }

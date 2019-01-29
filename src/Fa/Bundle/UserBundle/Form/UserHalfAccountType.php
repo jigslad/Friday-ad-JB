@@ -28,7 +28,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Fa\Bundle\DotMailerBundle\Repository\DotmailerRepository;
 /**
  * This is user half account form.
  *
@@ -177,7 +176,7 @@ class UserHalfAccountType extends AbstractType
 
                 $this->em->persist($user);
                 $this->em->flush($user);
-                $this->em->getRepository('FaDotMailerBundle:Dotmailer')->doTouchPointEntryByUser($user->getId(), DotmailerRepository::TOUCH_POINT_CREATE_ALERT, $this->container);
+                
             }
         }
     }
