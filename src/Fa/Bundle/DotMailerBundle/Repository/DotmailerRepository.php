@@ -39,6 +39,8 @@ class DotmailerRepository extends EntityRepository
     const TOUCH_POINT_ENQUIRY = 'enquiry';
 
     const OPTINTYPE = 'single';
+    
+    const TOUCH_POINT_CREATE_ALERT = 'create_alert';
 
     /**
      * Prepare query builder.
@@ -703,6 +705,8 @@ class DotmailerRepository extends EntityRepository
     {
         $isNewToDotmailer = false;
         $user = $this->getEntityManager()->getRepository('FaUserBundle:User')->findOneBy(array('id' => $userId));
+        $touchPointOpted = ($touchPoint== self::TOUCH_POINT_CREATE_ALERT)?$touchPoint:self::OPTINTYPE;
+        
         if (!$user->getIsEmailAlertEnabled()) {
             return;
         }
@@ -725,7 +729,7 @@ class DotmailerRepository extends EntityRepository
             // Save business details
             $dotmailer->setEmail($user->getEmail());
             $dotmailer->setGuid(CommonManager::generateGuid($user->getEmail()));
-            $dotmailer->setOptInType(self::OPTINTYPE);
+            $dotmailer->setOptInType($touchPointOpted);
             $dotmailer->setFirstName($user->getFirstName());
             $dotmailer->setLastName($user->getLastName());
             $dotmailer->setBusinessName($user->getBusinessName());

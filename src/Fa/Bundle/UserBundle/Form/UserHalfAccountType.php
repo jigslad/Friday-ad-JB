@@ -27,7 +27,8 @@ use Fa\Bundle\CoreBundle\Validator\Constraints\CustomEmail;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Fa\Bundle\DotMailerBundle\Repository\DotmailerRepository;
 /**
  * This is user half account form.
  *
@@ -86,6 +87,9 @@ class UserHalfAccountType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $emailAlertLabel = 'I\'d like to receive news, offers and promotions by email from Friday-Ad';
+        $thirdPartyEmailAlertLabel = 'I\'d like to receive offers and promotions by email on behalf of carefully chosen partners';
+        
         $builder
             ->add(
                 'first_name',
@@ -105,6 +109,22 @@ class UserHalfAccountType extends AbstractType
                         new NotBlank(array('message' => $this->translator->trans('Email is required.', array(), 'validators'))),
                         new CustomEmail(array('message' => 'Please enter valid email address.')),
                     ),
+                )
+            )
+            ->add(
+                'email_alert',
+                CheckboxType::class,
+                array(
+                    'label' => $emailAlertLabel,
+                    'mapped' => false,
+                )
+            )
+            ->add(
+                'third_party_email_alert',
+                CheckboxType::class,
+                array(
+                    'label' => $thirdPartyEmailAlertLabel,
+                    'mapped' => false,
                 )
             )
             ->add('save', SubmitType::class, array('label' => 'Create'));
@@ -133,6 +153,20 @@ class UserHalfAccountType extends AbstractType
 
                 $user->setUserName($form->get('email')->getData());
                 $user->setEmail($form->get('email')->getData());
+                
+                //update email alerts
+                if ($form->get('email_alert')->getData()) {
+                    $user->setIsEmailAlertEnabled(1);
+                } else {
+                    $user->setIsEmailAlertEnabled(0);
+                }
+                
+                //update third party email alerts
+                if ($form->get('third_party_email_alert')->getData()) {
+                    $user->setIsThirdPartyEmailAlertEnabled(1);
+                } else {
+                    $user->setIsThirdPartyEmailAlertEnabled(0);
+                }
 
                 //set user status
                 $userActiveStatus = $this->em->getRepository('FaEntityBundle:Entity')->find(EntityRepository::USER_STATUS_ACTIVE_ID);
@@ -143,6 +177,7 @@ class UserHalfAccountType extends AbstractType
 
                 $this->em->persist($user);
                 $this->em->flush($user);
+                $this->em->getRepository('FaDotMailerBundle:Dotmailer')->doTouchPointEntryByUser($user->getId(), DotmailerRepository::TOUCH_POINT_CREATE_ALERT, $this->container);
             }
         }
     }

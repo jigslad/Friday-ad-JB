@@ -1,9 +1,52 @@
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+<style>.alert-flex { display:inline-flex !important; }#form_create_alert_email_alert label, #form_create_alert_third_partyemail_alert label { font-size:13px !important;font-weight:500 !important }</style>
 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
 {{ form_errors(form) }}
 <div class="mt20">
     {{ form_row(form.first_name) }}
     {{ form_row(form.email) }}
+    <div id="form_create_alert_email_alert">
+    	<div class="alert-flex">
+        {{ form_widget(form.email_alert) }}
+        {{ form_label(form.email_alert) }}
+        </div>
+    </div>
+    <div id="form_create_alert_third_partyemail_alert" style="display:none">
+    	<div class="alert-flex">
+        {{ form_widget(form.third_party_email_alert) }}
+        {{ form_label(form.third_party_email_alert) }}
+        </div>
+    </div>
 </div>
 {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0 mt10 expand'}}) }}
 {{ form_end(form) }}
+
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $('.custom-checkbox').click(function(e) {
+        if ($(this).hasClass('checked')) {
+            $(this).removeClass('checked');
+         } else {
+            $(this).addClass('checked');
+         }
+    });
+    
+    $("#fa_user_half_account_email_alert").change(function () {
+    	if ($('#fa_user_half_account_email_alert').parent().hasClass('checked')) {
+            $('#fa_user_half_account_email_alert').attr('checked', true);
+            $('#form_create_alert_third_partyemail_alert').show();
+        } else {
+            $('#fa_user_half_account_email_alert').attr('checked', false);
+            $('#form_create_alert_third_partyemail_alert').hide();
+        }        
+    });
+
+    $("#form_create_alert_third_partyemail_alert").change(function () {
+    	if ($('#form_create_alert_third_partyemail_alert').parent().hasClass('checked')) {
+            $('#form_create_alert_third_partyemail_alert').attr('checked', true);
+        } else {
+            $('#form_create_alert_third_partyemail_alert').attr('checked', false);
+        }        
+    });
+//]]>
+</script>
