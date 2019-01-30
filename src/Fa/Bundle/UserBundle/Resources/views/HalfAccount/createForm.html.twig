@@ -36,16 +36,18 @@
             $('#fa_user_half_account_email_alert').attr('checked', true);
             $('#form_create_alert_third_partyemail_alert').show();
         } else {
-            $('#fa_user_half_account_email_alert').attr('checked', false);
+            $('#fa_user_half_account_email_alert').attr('checked', false);            
+            $('#fa_user_half_account_third_party_email_alert').parent().removeClass('checked');
+            $('#fa_user_half_account_third_party_email_alert').attr('checked', false);
             $('#form_create_alert_third_partyemail_alert').hide();
         }        
     });
 
     $("#form_create_alert_third_partyemail_alert").change(function () {
-    	if ($('#form_create_alert_third_partyemail_alert').parent().hasClass('checked')) {
-            $('#form_create_alert_third_partyemail_alert').attr('checked', true);
+    	if ($('#fa_user_half_account_third_party_email_alert').parent().hasClass('checked')) {
+            $('#fa_user_half_account_third_party_email_alert').attr('checked', true);
         } else {
-            $('#form_create_alert_third_partyemail_alert').attr('checked', false);
+            $('#fa_user_half_account_third_party_email_alert').attr('checked', false);
         }        
     });
 //]]>

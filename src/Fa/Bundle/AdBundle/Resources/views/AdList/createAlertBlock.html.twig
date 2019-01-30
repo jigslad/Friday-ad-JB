@@ -56,6 +56,7 @@
                     {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
                     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
                         {{ form_errors(form) }}
+                        <div style="display:none">{{ form_row(form.email_alert) }}{{ form_row(form.third_party_email_alert) }}</div>
                         {{ form_widget(form.email, {'attr': {'placeholder': 'Enter your email address', 'maxlength': '255'} }) }}
                         {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0'}}) }}
                     {{ form_end(form) }}

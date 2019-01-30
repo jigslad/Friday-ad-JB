@@ -713,6 +713,7 @@ class DotmailerRepository extends EntityRepository
         }
 
         $dotmailer = null;
+        $newsletterTypeIds = null;
         if ($user && $user->getEmail()) {
             $dotmailer = $this->findOneBy(array('email' => $user->getEmail()));
         }
@@ -745,6 +746,14 @@ class DotmailerRepository extends EntityRepository
                 if ($lastPaidAt && isset($lastPaidAt['created_at'])) {
                     $dotmailer->setLastPaidAt($lastPaidAt['created_at']);
                 }
+            }
+            
+            if($touchPoint== self::TOUCH_POINT_CREATE_ALERT) {
+                if ($user->getIsThirdPartyEmailAlertEnabled() == 1) {
+                    $newsletterTypeIds[] = 48;
+                }
+                $dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
+                $dotmailer->setNewsletterSignupAt(time());
             }
 
             $this->getEntityManager()->persist($dotmailer);
