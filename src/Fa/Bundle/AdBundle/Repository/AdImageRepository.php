@@ -666,9 +666,14 @@ class AdImageRepository extends EntityRepository
             if (!is_dir($orgImagePath)) {
                 mkdir($orgImagePath, 0775);
             }
-
-            //create original image.
-            copy($sourcePath.'/'.$sourceName, $orgImagePath.'/'.$orgImageName);
+            
+            $orginFilePath = $sourcePath.'/'.$sourceName;
+            if(file_exists($orginFilePath)) { $docopy = 1; } else { $docopy = 0; }
+            
+            if($docopy==1) {
+                //create original image.
+                copy($sourcePath.'/'.$sourceName, $orgImagePath.'/'.$orgImageName);
+            }
 
             $this->_em->persist($image);
             $this->_em->flush($image);
@@ -678,13 +683,15 @@ class AdImageRepository extends EntityRepository
             } else {
                 $adImageManager = new AdImageManager($container, $sessionId, $hash, $orgImagePath);
             }
-
-            //save original jpg image.
-            $adImageManager->saveOriginalJpgImage($orgImageName);
-            //create thumbnails
-            $adImageManager->createThumbnail();
-            //create cope thumbnails
-            $adImageManager->createCropedThumbnail();
+            
+            if($docopy==1) {
+                //save original jpg image.
+                $adImageManager->saveOriginalJpgImage($orgImageName);
+                //create thumbnails
+                $adImageManager->createThumbnail();
+                //create cope thumbnails
+                $adImageManager->createCropedThumbnail();
+            }
         }
     }
 
