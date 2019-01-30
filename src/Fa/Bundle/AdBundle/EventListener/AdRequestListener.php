@@ -671,7 +671,7 @@ class AdRequestListener
     
     private function getCatRedirects($redirectString, $categoryText, $locationId, $request, $event, $page = null) {
         $url = null;
-                
+        
         $redirect = $this->em->getRepository('FaAdBundle:Redirects')->getCategoryRedirects($categoryText, $this->container);
         if($redirect) {
             if ($locationId) {
@@ -705,28 +705,35 @@ class AdRequestListener
                 $adType = $matches[0];
             }
             
+           
             $newCatText = $categoryText;
             $newRedirect = $redirect;
             
             if($adType) {
                 $adType = ltrim($adType,'/');
-                $explodeCatText = explode('/',$categoryText);
-                $rootCat = $explodeCatText[0];
-                array_shift($explodeCatText);
-                $implodeRemainingCat = implode($explodeCatText,'/');
-                $newCatText = $rootCat.'/'.$adType.$implodeRemainingCat;
-                
-                $explodeRedirect = explode('/',$redirect);
-                array_shift($explodeRedirect);
-                $implodeRemainingRedirect = implode($explodeRedirect,'/');
-                $newRedirect = $rootCat.'/'.$adType.$implodeRemainingRedirect;
+                $adType = rtrim($adType,'/');
+                $explodeReirectString = explode('/',$redirectString);
+                $adTypePos = array_search($adType, $explodeReirectString);
+
+                if($adTypePos==1) {
+                    $explodeCatText = explode('/',$categoryText);
+                    $rootCat = $explodeCatText[0];
+                    array_shift($explodeCatText);
+                    $implodeRemainingCat = implode($explodeCatText,'/');
+                    $newCatText = $rootCat.'/'.$adType.'/'.$implodeRemainingCat;
+                    
+                    $explodeRedirect = explode('/',$redirect);
+                    array_shift($explodeRedirect);
+                    $implodeRemainingRedirect = implode($explodeRedirect,'/');
+                    $newRedirect = $rootCat.'/'.$adType.'/'.$implodeRemainingRedirect;
+                }
             } 
             
             $url = $this->container->get('router')->generate('listing_page', array(
                 'location' => $locationString,
                 'page_string' => str_replace($newCatText, $newRedirect, $redirectString),
             ), true);
-            $url = str_replace('//','/',$url);
+            $url = str_replace('//','/',$url);           
             
             $response = new RedirectResponse($url, 301);
             $event->setResponse($response);
