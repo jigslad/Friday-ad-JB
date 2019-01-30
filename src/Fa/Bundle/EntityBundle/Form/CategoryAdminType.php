@@ -155,16 +155,24 @@ class CategoryAdminType extends AbstractType
             ->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
 
         //recommended slots
+        $recommendedSlotUrl = array();
         for ($i = 1; $i <= 3; $i++) {
             $builder->add('recommended_slot_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Title', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['title'] : '') ));
             $builder->add('recommended_slot_sub_title_'.$i, TextareaType::class, array('attr' => array('rows' => 5), 'mapped' => false, 'label' => 'Sub title', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['sub_title'] : '') ));
             $builder->add('recommended_slot_user_id_'.$i, TextType::class, array('mapped' => false, 'label' => 'User id', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['user_id'] : '') ));
-            $builder->add('recommended_slot_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['url'] : '') ));
+            if(isset($recommendedSlotArray[$i-1]) && $recommendedSlotArray[$i-1]['url']!='') {
+                $recommendedSlotUrl[$i-1] = $recommendedSlotArray[$i-1]['url'];
+                $recommendedSlotUrl[$i-1]  = str_replace('{', '%7B', $recommendedSlotUrl[$i-1]);
+                $recommendedSlotUrl[$i-1]  = str_replace('}', '%7D', $recommendedSlotUrl[$i-1]);
+            } else {
+                $recommendedSlotUrl[$i-1] = '';
+            }
+            $builder->add('recommended_slot_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => $recommendedSlotUrl[$i-1] ));
         }
 
         //recommended slots
         $st = 0;
-        $i=1;
+        $i=1;$recommendedSearchSlotUrl = array();
         for ($k = 1; $k <= 6; $k++) {
             for ($j = 1; $j <= 3; $j++) {
                 if (!empty($recommendedSlotSearchArray)) {
@@ -173,7 +181,14 @@ class CategoryAdminType extends AbstractType
                         $builder->add('recommended_slot_searchlist_sub_title_'.$i, TextareaType::class, array('attr' => array('rows' => 5), 'mapped' => false, 'label' => 'Sub title', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['sub_title'] : '') ));
                         $builder->add('recommended_slot_searchlist_slot_file_'.$i, FileType::class, array('mapped' => false, 'label' => 'Image'));
                         $builder->add('recommended_slot_searchlist_slot_filename_'.$i, HiddenType::class, array('mapped' => false, 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['slot_filename'] : '')));
-                        $builder->add('recommended_slot_searchlist_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['url'] : '') ));
+                        if(isset($recommendedSlotSearchArray[$st]) && $recommendedSlotSearchArray[$st]['url']!='') {
+                            $recommendedSearchSlotUrl[$st] = $recommendedSlotSearchArray[$st]['url'];
+                            $recommendedSearchSlotUrl[$st] = str_replace('{', '%7B', $recommendedSearchSlotUrl[$st]);
+                            $recommendedSearchSlotUrl[$st]  = str_replace('}', '%7D', $recommendedSearchSlotUrl[$st]);
+                        } else {
+                            $recommendedSearchSlotUrl[$st] = '';
+                        }
+                        $builder->add('recommended_slot_searchlist_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => $recommendedSearchSlotUrl[$st] ));
                         $builder->add('recommended_slot_searchlist_creative_group_'.$i, HiddenType::class, array('mapped' => false,'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['creative_group'] : '')));
                         $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false,'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['creative_ord'] : '')));
                         if (count($recommendedSlotSearchArray)-1 > $st) {
