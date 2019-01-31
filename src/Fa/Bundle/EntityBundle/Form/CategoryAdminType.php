@@ -300,7 +300,6 @@ class CategoryAdminType extends AbstractType
                 if($recomSlotSrchUrl[$i] !='') {
                     $recomSlotSrchUrl[$i]  = str_replace('{', '%7B', $recomSlotSrchUrl[$i]);
                     $recomSlotSrchUrl[$i]  = str_replace('}', '%7D', $recomSlotSrchUrl[$i]);
-                    //echo 'i==='.$i.'===recomSlotSrchUrl==='.$recomSlotSrchUrl[$i].'<br>';
                     $data['recommended_slot_searchlist_url_'.$i] = $recomSlotSrchUrl[$i];                   
                 }
             }
@@ -482,7 +481,7 @@ class CategoryAdminType extends AbstractType
                         $recommendedSlot->setTitle($form->get('recommended_slot_title_'.$i)->getData());
                         $recommendedSlot->setSubTitle($form->get('recommended_slot_sub_title_'.$i)->getData());
                         $recommendedSlot->setUserId($form->get('recommended_slot_user_id_'.$i)->getData());
-                        $recommendedSlot->setUrl($form->get('recommended_slot_url_'.$i)->getData());
+                        $recommendedSlot->setUrl(urldecode($form->get('recommended_slot_url_'.$i)->getData()));
                         $this->em->persist($recommendedSlot);
                     }
                 }
@@ -512,7 +511,7 @@ class CategoryAdminType extends AbstractType
                             }
                         }
 
-                        $recommendedSlot->setUrl($form->get('recommended_slot_searchlist_url_'.$i)->getData());
+                        $recommendedSlot->setUrl(urldecode($form->get('recommended_slot_searchlist_url_'.$i)->getData()));
                         $recommendedSlot->setCreativeGroup($form->get('recommended_slot_searchlist_creative_group_'.$i)->getData());
                         $recommendedSlot->setCreativeOrd($form->get('recommended_slot_searchlist_creative_ord_'.$i)->getData());
                         $this->em->persist($recommendedSlot);
