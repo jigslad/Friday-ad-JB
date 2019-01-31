@@ -273,15 +273,13 @@ class CategoryAdminType extends AbstractType
                 throw new NotFoundHttpException('Unable to find Category entity.');
             }
             $form->add('parent', HiddenType::class);
-            $data['parent'] = $parent;   
-            $event->setData($data);
+            $data['parent'] = $parent;               
         }
         if($finance_url!='') {
             // In URL if we give {} brances symfony throughing validation error to avoid that we just replaced with { %7B and }  %7D
             $finance_url  = str_replace('{', '%7B', $finance_url);
             $finance_url  = str_replace('}', '%7D', $finance_url);
             $data['finance_url'] = $finance_url;
-            $event->setData($data);
         }
         if($hasRecommendedSlot) {
             $recomSlotUrl = array();
@@ -291,24 +289,24 @@ class CategoryAdminType extends AbstractType
                     $recomSlotUrl[$i]  = str_replace('{', '%7B', $recomSlotUrl[$i]);
                     $recomSlotUrl[$i]  = str_replace('}', '%7D', $recomSlotUrl[$i]);
                     $data['recommended_slot_url_'.$i] = $recomSlotUrl[$i];
-                    $event->setData($data);
                     
                 }
             }
         }
         if($hasRecommendedSlotSearchlist) {
             $recomSlotSrchUrl = array();
-            for ($i = 1; $i <=6; $i++) {
+            for ($i = 1; $i <=18; $i++) {
                 $recomSlotSrchUrl[$i] = $data['recommended_slot_searchlist_url_'.$i];
                 if($recomSlotSrchUrl[$i] !='') {
                     $recomSlotSrchUrl[$i]  = str_replace('{', '%7B', $recomSlotSrchUrl[$i]);
                     $recomSlotSrchUrl[$i]  = str_replace('}', '%7D', $recomSlotSrchUrl[$i]);
-                    $data['recommended_slot_searchlist_url_'.$i] = $recomSlotSrchUrl[$i];
-                    $event->setData($data);                    
+                    //echo 'i==='.$i.'===recomSlotSrchUrl==='.$recomSlotSrchUrl[$i].'<br>';
+                    $data['recommended_slot_searchlist_url_'.$i] = $recomSlotSrchUrl[$i];                   
                 }
             }
         }
-        
+        $event->setData($data);
+       
     }
 
     /**
@@ -332,38 +330,6 @@ class CategoryAdminType extends AbstractType
             }
         }
         $hasRecommendedSlotSearchlist = $form->get('has_recommended_slot_searchlist')->getData();
-        
-        if($financeUrl!='') {
-            // In URL if we give {} brances symfony throughing validation error to avoid that we just replaced with { %7B and }  %7D
-            $financeUrl  = str_replace('{', '%7B', $financeUrl);
-            $financeUrl  = str_replace('}', '%7D', $financeUrl);
-            $data['finance_url'] = $financeUrl;
-            $event->setData($data);
-        }
-        /*if($hasRecommendedSlot) {           
-            for ($i = 1; $i <=3; $i++) {
-                $recomSlotUrl[$i] = $form->get('recommended_slot_url_'.$i)->getData();
-                if($form->get('recommended_slot_url_'.$i)->getData() !='') {
-                    $form->get('recommended_slot_url_'.$i)->getData()  = str_replace('{', '%7B', $form->get('recommended_slot_url_'.$i)->getData());
-                    $form->get('recommended_slot_url_'.$i)->getData()  = str_replace('}', '%7D', $form->get('recommended_slot_url_'.$i)->getData());
-                    $data['recommended_slot_url_'.$i] = $form->get('recommended_slot_url_'.$i)->getData();
-                    $event->setData($data);
-                    
-                }
-            }
-        }
-        if($hasRecommendedSlotSearchlist) {
-            $recomSlotSrchUrl = array();
-            for ($i = 1; $i <=6; $i++) {
-                $recomSlotSrchUrl[$i] = $form->get('recommended_slot_searchlist_url_'.$i)->getData();
-                if($recomSlotSrchUrl[$i] !='') {
-                    $recomSlotSrchUrl[$i]  = str_replace('{', '%7B', $recomSlotSrchUrl[$i]);
-                    $recomSlotSrchUrl[$i]  = str_replace('}', '%7D', $recomSlotSrchUrl[$i]);
-                    $data['recommended_slot_searchlist_url_'.$i] = $recomSlotSrchUrl[$i];
-                    $event->setData($data);
-                }
-            }
-        }*/
 
         //removed post code validation
         if ($isNimberEnabled && !$nimberSize) {
