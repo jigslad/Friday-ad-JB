@@ -1,13 +1,13 @@
 {% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
-{% set paaBlock = staticPageRepository.getStaticBlockDetailArray('all-page-google-analytics-code' , fetch_container_instance()) %}
+{% set currentRoute      = app.request.get('_route') %}
+{% if currentRoute is defined and currentRoute=='ad_detail_page' and adDetail is defined %}
+    {% set paaBlock = staticPageRepository.getStaticBlockDetailArray('all-page-google-analytics-code' , fetch_container_instance(), adDetail) %}
+{% else %}
+	{% set paaBlock = staticPageRepository.getStaticBlockDetailArray('all-page-google-analytics-code' , fetch_container_instance()) %}
+{% endif %}
+
 {% if paaBlock['description'] is defined %}
-	{% set bannerManager = container.get('fa.banner.manager') %}
-	{% set extraParams = [] %}
-	{% if cookieValue is defined and cookieValue is not null %}
-        {% set extraParams = extraParams|merge({'cookieValues':cookieValue}) %}
-    {% endif %}
-	{% set parsedCode  = bannerManager.parseStaticBlockCode(paaBlock['description'], extraParams) %}
-    {{parsedCode|raw}}
+    {{paaBlock['description']|raw}}
 {% endif %}
 <script language="javascript" type="text/javascript">
     function getCookie(cname) {

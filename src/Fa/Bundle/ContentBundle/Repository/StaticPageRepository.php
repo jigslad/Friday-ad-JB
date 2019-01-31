@@ -128,7 +128,7 @@ class StaticPageRepository extends EntityRepository
      *
      * @return array
      */
-    public function getStaticBlockDetailArray($slug, $container = null)
+    public function getStaticBlockDetailArray($slug, $container = null, $ad = null)
     {
         if ($container) {
             $culture     = CommonManager::getCurrentCulture($container);
@@ -137,7 +137,7 @@ class StaticPageRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -154,6 +154,19 @@ class StaticPageRepository extends EntityRepository
         if ($container) {
             CommonManager::setCacheVersion($container, $cacheKey, $staticBlockDetailArray);
         }
+        
+        if ($staticBlockDetailArray['description']!='') {
+            $extraParams = array();
+            $cookieValue = $container->get('request_stack')->getCurrentRequest()->cookies->get('location');
+            if(!empty($cookieValue)) {
+                $extraParams = array_merge($extraParams,array('cookieValues'=>$cookieValue));
+            }
+            if($ad) {
+                $extraParams = array_merge($extraParams,array('ad'=>$ad));
+            }
+            $staticBlockDetailArray['description'] = $container->get('fa.banner.manager')->parseStaticBlockCode($staticBlockDetailArray['description'], $extraParams);
+        }
+        
 
         return $staticBlockDetailArray;
     }

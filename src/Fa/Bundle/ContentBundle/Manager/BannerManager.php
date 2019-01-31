@@ -285,7 +285,7 @@ class BannerManager
                 if ($staticBlockVariable == '{page_type}') {
                     if ($currentRoute && ($currentRoute ==  'location_home_page')) {
                         $staticBlockCodeString = str_replace($staticBlockVariable, 'homepage', $staticBlockCodeString);
-                    } elseif ($currentRoute && ($currentRoute ==  'detail_page')) {
+                    } elseif ($currentRoute && ($currentRoute ==  'ad_detail_page')) {
                         $staticBlockCodeString = str_replace($staticBlockVariable, 'ad-details', $staticBlockCodeString);
                     } elseif ($currentRoute && ($currentRoute ==  'listing_page'|| $currentRoute ==  'motor_listing_page')) {
                         $staticBlockCodeString = str_replace($staticBlockVariable, 'search-results', $staticBlockCodeString);
@@ -306,7 +306,7 @@ class BannerManager
                     $userType = '';
                     $objUser  = CommonManager::getLoggedInUser($this->container);
                     
-                    if (is_object($objUser)) {
+                    if (!empty($objUser)) {
                         if ($objUser->getRole()) {
                             $userType = $this->getUserTypeByRole($objUser->getRole()->getId());
                         }
@@ -315,7 +315,7 @@ class BannerManager
                 } elseif (in_array($staticBlockVariable, $categoryVariables)) {
                     $categoryPath = '';
                     $categorySlug = '';
-                    if ($currentRoute && ($currentRoute ==  'detail_page')) {
+                    if ($currentRoute && ($currentRoute ==  'ad_detail_page')) {
                         if ($extraParams && count($extraParams) > 0 && isset($extraParams['ad'])) {
                             if (isset($extraParams['ad'])) {
                                 $categoryPath = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathDetailArrayById($extraParams['ad']['a_category_id_i'], false, $this->container);
@@ -327,7 +327,16 @@ class BannerManager
                         if ($this->container->get('request_stack')->getCurrentRequest()->get('category_id')) {
                             $categoryPath = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathDetailArrayById($this->container->get('request_stack')->getCurrentRequest()->get('category_id'), false, $this->container);
                         }
+                    } elseif ($currentRoute && ($currentRoute == 'ad_post_first_step' || $currentRoute == 'ad_post_second_step' || $currentRoute == 'ad_post_fourth_step')) {
+                        if ($this->container->get('session')->has('paa_first_step_data')) {
+                            $postCatData = unserialize($this->container->get('session')->get('paa_first_step_data'));
+                        }
+                        
+                        if (!empty($postCatData) && $postCatData['category_id']!='') {
+                            $categoryPath = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathDetailArrayById($postCatData['category_id'], false, $this->container);
+                        }
                     }
+                    //echo 'currentRoute==='.$currentRoute;
                     if (is_array($categoryPath) && count($categoryPath) > 0) {
                         switch ($staticBlockVariable) {
                             case '{category}':
@@ -355,7 +364,7 @@ class BannerManager
                     $staticBlockCodeString = str_replace($staticBlockVariable, $categorySlug, $staticBlockCodeString);
                 } elseif ($staticBlockVariable == '{user_location}') {
                     $townName = '';
-                    if ($currentRoute && ($currentRoute ==  'detail_page')) {
+                    if ($currentRoute && ($currentRoute ==  'ad_detail_page')) {
                         if ($extraParams && count($extraParams) > 0 && isset($extraParams['ad'])) {
                             if (isset($extraParams['ad'])) {
                                 $townName = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', $extraParams['ad']['a_l_town_id_txt'][0]);
@@ -367,7 +376,7 @@ class BannerManager
                     $staticBlockCodeString = str_replace($staticBlockVariable, $townName, $staticBlockCodeString);
                 } elseif ($staticBlockVariable == '{county}') {
                     $countyName = '';
-                    if ($currentRoute && ($currentRoute ==  'detail_page')) {
+                    if ($currentRoute && ($currentRoute ==  'ad_detail_page')) {
                         if ($extraParams && count($extraParams) > 0 && isset($extraParams['ad'])) {
                             if (isset($extraParams['ad'])) {
                                 $countyName = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', $extraParams['ad']['a_l_domicile_id_txt'][0]);
@@ -383,7 +392,7 @@ class BannerManager
                     $staticBlockCodeString = str_replace($staticBlockVariable, $countyName, $staticBlockCodeString);
                 } elseif ($staticBlockVariable == '{edition_area}') {
                     $printEditionName = '';
-                    if ($currentRoute && ($currentRoute ==  'detail_page')) {
+                    if ($currentRoute && ($currentRoute ==  'ad_detail_page')) {
                         if ($extraParams && count($extraParams) > 0 && isset($extraParams['ad'])) {
                             if (isset($extraParams['ad'])) {
                                 $printEditionName = $this->em->getRepository('FaAdBundle:PrintEdition')->getPrintEditionColumnByTownId($extraParams['ad']['a_l_town_id_txt'][0], $this->container);
@@ -445,7 +454,7 @@ class BannerManager
                           RoleRepository::ROLE_BUSINESS_SELLER_ID => 'dealer',
                           RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID => 'netsuite subscriber',
                          );
-        if (in_array($roleId, $userTypeArray)) {
+        if (array_key_exists($roleId, $userTypeArray)) {
             return $userTypeArray[$roleId];
         }
     }
