@@ -158,11 +158,11 @@ class StaticPageRepository extends EntityRepository
         if ($staticBlockDetailArray['description']!='') {
             $extraParams = array();
             $cookieValue = $container->get('request_stack')->getCurrentRequest()->cookies->get('location');
-            if(!empty($cookieValue)) {
-                $extraParams = array_merge($extraParams,array('cookieValues'=>$cookieValue));
+            if (!empty($cookieValue)) {
+                $extraParams = array_merge($extraParams, array('cookieValues'=>$cookieValue));
             }
-            if($ad) {
-                $extraParams = array_merge($extraParams,array('ad'=>$ad));
+            if ($ad) {
+                $extraParams = array_merge($extraParams, array('ad'=>$ad));
             }
             $staticBlockDetailArray['description'] = $container->get('fa.banner.manager')->parseStaticBlockCode($staticBlockDetailArray['description'], $extraParams);
         }

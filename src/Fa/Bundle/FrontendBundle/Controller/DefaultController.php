@@ -961,8 +961,10 @@ class DefaultController extends ThirdPartyLoginController
         if (count($queryParams)) {
             $tiPath = $tiPath.'?'.http_build_query($queryParams);
         } else {
-            if(substr($tiPath,-1)!='/') { $tiPath = $tiPath.'/'; }
-        } 
+            if (substr($tiPath, -1)!='/') {
+                $tiPath = $tiPath.'/';
+            }
+        }
         
         $key = md5($request->getClientIp().$request->headers->get('User-Agent'));
 
@@ -1003,9 +1005,11 @@ class DefaultController extends ThirdPartyLoginController
         $queryParams = $request->query->all();
         if (count($queryParams)) {
             $tiPath = $tiPath.'?'.http_build_query($queryParams);
-        }  else {
-            if(substr($tiPath,-1)!='/') { $tiPath = $tiPath.'/'; }
-        } 
+        } else {
+            if (substr($tiPath, -1)!='/') {
+                $tiPath = $tiPath.'/';
+            }
+        }
         
         $tiUrl = $this->container->getParameter('ti_base_url').'/'.$tiPath;
         $tiPath = $this->container->getParameter('base_url').'/'.$tiPath;

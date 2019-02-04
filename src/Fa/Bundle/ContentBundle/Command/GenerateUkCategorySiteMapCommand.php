@@ -249,7 +249,7 @@ EOF
                 //$categoryFullSlug = $this->entityManager->getRepository('FaEntityBundle:Category')->getFullSlugById($categoryId);
                 $categoryArray = $this->entityManager->getRepository('FaEntityBundle:Category')->getCategoryArrayById($categoryId);
                 $categoryFullSlug = $categoryStatus = '';
-                if(!empty($categoryArray)) {
+                if (!empty($categoryArray)) {
                     $categoryFullSlug = $categoryArray['full_slug'];
                     $categoryStatus = $categoryArray['status'];
                 }

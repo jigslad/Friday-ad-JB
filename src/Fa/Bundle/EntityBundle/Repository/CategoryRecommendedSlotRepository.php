@@ -172,7 +172,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                 ->setParameter('categoryId', $categoryId)
                 ->orderBy(self::ALIAS.'.creative_group')
                 ->getQuery()
-                ->execute();                
+                ->execute();
                 if (!empty($recommendedSlots)) {
                     break;
                 }

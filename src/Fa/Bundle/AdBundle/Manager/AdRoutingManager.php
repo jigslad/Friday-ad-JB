@@ -200,9 +200,9 @@ class AdRoutingManager
             }
         }
         
-        if(!empty($categories)) {
+        if (!empty($categories)) {
             $locationRadius = array();
-            $locationRadius = $this->em->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($categories);           
+            $locationRadius = $this->em->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($categories);
             if (!empty($locationRadius)) {
                 $getDefaultRadius =  $locationRadius['defaultRadius'];
             }
@@ -343,11 +343,11 @@ class AdRoutingManager
         $pageString = $pageString == '' ? 'search' : $pageString;
         $searchDistance = '';
         
-         if ((isset($search_params['search_param']['item__distance']))) {            
+        if ((isset($search_params['search_param']['item__distance']))) {
             $searchDistance = $search_params['search_param']['item__distance'];
             if ($getDefaultRadius!='' && $getDefaultRadius==$search_params['search_param']['item__distance']) {
                 unset($search_params['search_param']['item__distance']);
-            } elseif($getDefaultRadius=='' && (($parentId == CategoryRepository::MOTORS_ID && $searchDistance==CategoryRepository::MOTORS_DISTANCE) || ($parentId != CategoryRepository::MOTORS_ID && $searchDistance==CategoryRepository::OTHERS_DISTANCE))) {
+            } elseif ($getDefaultRadius=='' && (($parentId == CategoryRepository::MOTORS_ID && $searchDistance==CategoryRepository::MOTORS_DISTANCE) || ($parentId != CategoryRepository::MOTORS_ID && $searchDistance==CategoryRepository::OTHERS_DISTANCE))) {
                 unset($search_params['search_param']['item__distance']);
             }
 

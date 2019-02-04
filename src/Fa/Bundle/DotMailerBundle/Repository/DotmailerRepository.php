@@ -751,7 +751,7 @@ class DotmailerRepository extends EntityRepository
                 }
             }
             
-            if($touchPoint== self::TOUCH_POINT_CREATE_ALERT) {
+            if ($touchPoint== self::TOUCH_POINT_CREATE_ALERT) {
                 if ($user->getIsThirdPartyEmailAlertEnabled() == 1) {
                     $newsletterTypeIds[] = 48;
                 }

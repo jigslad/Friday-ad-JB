@@ -258,9 +258,9 @@ class UpgradeAdController extends CoreController
             $errorMsg	= null;
             if (!empty($loggedinUser)) {
                 $user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
-                if (!empty($user)) {                    
+                if (!empty($user)) {
                     $activePackage      = null;
-                    $activePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getActiveAdPackage($adId);                    
+                    $activePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getActiveAdPackage($adId);
                                        
                     if (empty($activePackage)) {
                         return new JsonResponse(array('error' => 'No Basic Advert Found', 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));  //there is no plan allocated for this advert
@@ -282,7 +282,7 @@ class UpgradeAdController extends CoreController
                         $locationGroupIds = $this->getRepository('FaAdBundle:AdLocation')->getLocationGroupByAdId($adId);
                         $activePackageArray[] = $activePackage->getPackage()->getId();
                         $availablePackages = $this->getRepository('FaPromotionBundle:PackageRule')->getActivePackagesByCategoryId($categoryId, $locationGroupIds, $userRolesArray, $activePackageArray, $this->container);
-                        $adExpiryDays     = $this->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $this->container);                                                
+                        $adExpiryDays     = $this->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $this->container);
                         
                         if (empty($availablePackages)) {
                             return new JsonResponse(array('error' => 'No Package Found', 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));

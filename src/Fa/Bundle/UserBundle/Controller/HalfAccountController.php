@@ -19,6 +19,7 @@ use Fa\Bundle\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Fa\Bundle\UserBundle\Form\UserHalfAccountType;
 use Fa\Bundle\DotMailerBundle\Repository\DotmailerRepository;
+
 /**
  * This controller is used for registration management.
  *
@@ -45,7 +46,6 @@ class HalfAccountController extends CoreController
                 $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('email')->getData()));
                 $response = $this->getRepository('FaDotMailerBundle:Dotmailer')->doTouchPointEntryByUser($user->getId(), DotmailerRepository::TOUCH_POINT_CREATE_ALERT, $this->container);
                 return new JsonResponse(array('success' => '1', 'htmlContent' => '', 'user_id' => $user->getId()));
-                                
             } else {
                 $htmlContent = $this->renderView('FaUserBundle:HalfAccount:createForm.html.twig', array('form' => $form->createView()));
                 return new JsonResponse(array('success' => '', 'htmlContent' => $htmlContent, 'user_id' => ''));

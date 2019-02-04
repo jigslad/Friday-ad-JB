@@ -292,12 +292,11 @@ class BannerManager
                     } elseif ($currentRoute && ($currentRoute == 'landing_page_category' || $currentRoute == 'landing_page_category_location')) {
                         $staticBlockCodeString = str_replace($staticBlockVariable, 'Landing page', $staticBlockCodeString);
                     } else {
-                        if($currentRoute=='') {
+                        if ($currentRoute=='') {
                             $staticBlockCodeString = str_replace($staticBlockVariable, 'homepage', $staticBlockCodeString);
                         } else {
                             $staticBlockCodeString = str_replace($staticBlockVariable, '', $staticBlockCodeString);
                         }
-                        
                     }
                 } elseif ($staticBlockVariable == '{user_type}') {
                     if (strstr($staticBlockVariable, '{user_type}')) {

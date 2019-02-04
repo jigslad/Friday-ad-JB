@@ -292,7 +292,7 @@ class AdListController extends CoreController
         }
       
         $locationRadius = array();
-        if ($setDefRadius && $isBusinessPage==0) {          
+        if ($setDefRadius && $isBusinessPage==0) {
             if (isset($findersSearchParams['item__category_id']) && $findersSearchParams['item__category_id']) {
                 $parentCategoryIds = array_keys($this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($findersSearchParams['item__category_id'], false, $this->container));
                 $locationRadius = $this->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);

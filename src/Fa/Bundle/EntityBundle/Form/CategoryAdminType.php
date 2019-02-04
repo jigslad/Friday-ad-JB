@@ -160,7 +160,7 @@ class CategoryAdminType extends AbstractType
             $builder->add('recommended_slot_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Title', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['title'] : '') ));
             $builder->add('recommended_slot_sub_title_'.$i, TextareaType::class, array('attr' => array('rows' => 5), 'mapped' => false, 'label' => 'Sub title', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['sub_title'] : '') ));
             $builder->add('recommended_slot_user_id_'.$i, TextType::class, array('mapped' => false, 'label' => 'User id', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['user_id'] : '') ));
-            if(isset($recommendedSlotArray[$i-1]) && $recommendedSlotArray[$i-1]['url']!='') {
+            if (isset($recommendedSlotArray[$i-1]) && $recommendedSlotArray[$i-1]['url']!='') {
                 $recommendedSlotUrl[$i-1] = $recommendedSlotArray[$i-1]['url'];
                 $recommendedSlotUrl[$i-1]  = str_replace('{', '%7B', $recommendedSlotUrl[$i-1]);
                 $recommendedSlotUrl[$i-1]  = str_replace('}', '%7D', $recommendedSlotUrl[$i-1]);
@@ -172,7 +172,8 @@ class CategoryAdminType extends AbstractType
 
         //recommended slots
         $st = 0;
-        $i=1;$recommendedSearchSlotUrl = array();
+        $i=1;
+        $recommendedSearchSlotUrl = array();
         for ($k = 1; $k <= 6; $k++) {
             for ($j = 1; $j <= 3; $j++) {
                 if (!empty($recommendedSlotSearchArray)) {
@@ -181,7 +182,7 @@ class CategoryAdminType extends AbstractType
                         $builder->add('recommended_slot_searchlist_sub_title_'.$i, TextareaType::class, array('attr' => array('rows' => 5), 'mapped' => false, 'label' => 'Sub title', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['sub_title'] : '') ));
                         $builder->add('recommended_slot_searchlist_slot_file_'.$i, FileType::class, array('mapped' => false, 'label' => 'Image'));
                         $builder->add('recommended_slot_searchlist_slot_filename_'.$i, HiddenType::class, array('mapped' => false, 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['slot_filename'] : '')));
-                        if(isset($recommendedSlotSearchArray[$st]) && $recommendedSlotSearchArray[$st]['url']!='') {
+                        if (isset($recommendedSlotSearchArray[$st]) && $recommendedSlotSearchArray[$st]['url']!='') {
                             $recommendedSearchSlotUrl[$st] = $recommendedSlotSearchArray[$st]['url'];
                             $recommendedSearchSlotUrl[$st] = str_replace('{', '%7B', $recommendedSearchSlotUrl[$st]);
                             $recommendedSearchSlotUrl[$st]  = str_replace('}', '%7D', $recommendedSearchSlotUrl[$st]);
@@ -266,46 +267,44 @@ class CategoryAdminType extends AbstractType
         $hasRecommendedSlot = $form->get('has_recommended_slot')->getData();
         $hasRecommendedSlotSearchlist = $form->get('has_recommended_slot_searchlist')->getData();
         
-        if ($parentId) {            
+        if ($parentId) {
             $parent = $this->em->getRepository('FaEntityBundle:Category')->find($parentId);
 
             if (!$parent) {
                 throw new NotFoundHttpException('Unable to find Category entity.');
             }
             $form->add('parent', HiddenType::class);
-            $data['parent'] = $parent;               
+            $data['parent'] = $parent;
         }
-        if($finance_url!='') {
+        if ($finance_url!='') {
             // In URL if we give {} brances symfony throughing validation error to avoid that we just replaced with { %7B and }  %7D
             $finance_url  = str_replace('{', '%7B', $finance_url);
             $finance_url  = str_replace('}', '%7D', $finance_url);
             $data['finance_url'] = $finance_url;
         }
-        if($hasRecommendedSlot) {
+        if ($hasRecommendedSlot) {
             $recomSlotUrl = array();
             for ($i = 1; $i <=3; $i++) {
                 $recomSlotUrl[$i] =  $data['recommended_slot_url_'.$i];
-                if($recomSlotUrl[$i] !='') {
+                if ($recomSlotUrl[$i] !='') {
                     $recomSlotUrl[$i]  = str_replace('{', '%7B', $recomSlotUrl[$i]);
                     $recomSlotUrl[$i]  = str_replace('}', '%7D', $recomSlotUrl[$i]);
                     $data['recommended_slot_url_'.$i] = $recomSlotUrl[$i];
-                    
                 }
             }
         }
-        if($hasRecommendedSlotSearchlist) {
+        if ($hasRecommendedSlotSearchlist) {
             $recomSlotSrchUrl = array();
             for ($i = 1; $i <=18; $i++) {
                 $recomSlotSrchUrl[$i] = $data['recommended_slot_searchlist_url_'.$i];
-                if($recomSlotSrchUrl[$i] !='') {
+                if ($recomSlotSrchUrl[$i] !='') {
                     $recomSlotSrchUrl[$i]  = str_replace('{', '%7B', $recomSlotSrchUrl[$i]);
                     $recomSlotSrchUrl[$i]  = str_replace('}', '%7D', $recomSlotSrchUrl[$i]);
-                    $data['recommended_slot_searchlist_url_'.$i] = $recomSlotSrchUrl[$i];                   
+                    $data['recommended_slot_searchlist_url_'.$i] = $recomSlotSrchUrl[$i];
                 }
             }
         }
         $event->setData($data);
-       
     }
 
     /**
@@ -316,7 +315,7 @@ class CategoryAdminType extends AbstractType
     public function onSubmit(FormEvent $event)
     {
         $data = $event->getData();
-        $form             = $event->getForm();        
+        $form             = $event->getForm();
         $isNimberEnabled  = $form->get('is_nimber_enabled')->getData();
         $nimberSize       = $form->get('nimber_size')->getData();
         $isFinanceEnabled = $form->get('is_finance_enabled')->getData();
