@@ -731,15 +731,16 @@ class AdRequestListener
                     $newRedirect = $rootCat.'/'.$adType.'/'.$implodeRemainingRedirect;
                 }
             }
+            if($newRedirect!=$redirectString) {
+                $url = $this->container->get('router')->generate('listing_page', array(
+                    'location' => $locationString,
+                    'page_string' => str_replace($newCatText, $newRedirect, $redirectString),
+                ), true);
+                $url = str_replace('//', '/', $url);
             
-            $url = $this->container->get('router')->generate('listing_page', array(
-                'location' => $locationString,
-                'page_string' => str_replace($newCatText, $newRedirect, $redirectString),
-            ), true);
-            $url = str_replace('//', '/', $url);
-            
-            $response = new RedirectResponse($url, 301);
-            $event->setResponse($response);
+                $response = new RedirectResponse($url, 301);
+                $event->setResponse($response);
+            }
         }
     }
     
