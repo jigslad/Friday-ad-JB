@@ -53,7 +53,6 @@ class AdFeedLogAdminController extends CrudController implements ResourceAuthori
      */
     public function indexAction()
     {
-
         CommonManager::removeAdminBackUrl($this->container);
         // initialize search filter manager service and prepare filter data for searching
         $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdFeedBundle:AdFeed'), $this->getRepositoryTable('FaAdFeedBundle:AdFeed'), 'fa_ad_feed_ad_feed_log_search_admin');
@@ -71,7 +70,7 @@ class AdFeedLogAdminController extends CrudController implements ResourceAuthori
 
         // initialize pagination manager service and prepare listing with pagination based of data
         $page = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page'] : 1;
-        $this->get('fa.pagination.manager')->init($query, $page,10,0,false, array('distinct' => false));
+        $this->get('fa.pagination.manager')->init($query, $page, 10, 0, false, array('distinct' => false));
         $pagination = $this->get('fa.pagination.manager')->getPagination();
 
         // initialize form manager service

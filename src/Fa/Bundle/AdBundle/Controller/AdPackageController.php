@@ -175,7 +175,7 @@ class AdPackageController extends CoreController
         }
 
         if ('POST' === $request->getMethod()) {
-            $selectedPackageId = $request->get('package_id', null);            
+            $selectedPackageId = $request->get('package_id', null);
             $userCreditId = $request->get('credit_id', null);
             if (!in_array($selectedPackageId, $packageIds)) {
                 $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Please select atleast one ad package.', array(), 'frontend-ad-package'), 'error');

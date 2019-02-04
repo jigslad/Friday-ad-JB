@@ -34,6 +34,7 @@ use Fa\Bundle\UserBundle\Form\UserConfigRuleAdminType;
 use Fa\Bundle\EntityBundle\Form\CategoryAdminType;
 use Fa\Bundle\AdBundle\Form\PrintDeadlineAdminType;
 use Fa\Bundle\AdBundle\Form\LocationRadiusAdminType;
+
 /**
  * This controller is used for basic crud management.
  *

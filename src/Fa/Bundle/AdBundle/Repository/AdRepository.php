@@ -839,7 +839,11 @@ class AdRepository extends EntityRepository
                         $object->setDeliveryMethodOption(null);
                     }
                 } elseif ($field == 'postage_price') {
-                    if ($value) { $object->setPostagePrice($value); } else { $object->setPostagePrice(0); }
+                    if ($value) {
+                        $object->setPostagePrice($value);
+                    } else {
+                        $object->setPostagePrice(0);
+                    }
                 }
             }
 
@@ -3922,9 +3926,9 @@ class AdRepository extends EntityRepository
             'url_ad_upsell'         => $container->get('router')->generate('ad_promote', array('adId' => $ad->getId(), 'type' => 'promote'), true),
             'url_ad_edit'           => $container->get('router')->generate('ad_edit', array('id' => $ad->getId()), true),
             'url_ad_mark_sold'      => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
-            'url_ad_view'           => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),            
+            'url_ad_view'           => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
         );
-        if (!empty($ads)) {           
+        if (!empty($ads)) {
             $parameters = array(
                     'user_first_name'       => $adUser->getFirstName(),
                     'user_last_name'        => $adUser->getLastName(),
@@ -3975,7 +3979,6 @@ class AdRepository extends EntityRepository
             );
 
             $container->get('fa.mail.manager')->send($adUser->getEmail(), 'low_enquiries_boost_response', $parameters, CommonManager::getCurrentCulture($container));
-    
         }
     }
 
@@ -4637,7 +4640,7 @@ class AdRepository extends EntityRepository
             $location = $this->_em->getRepository('FaEntityBundle:Location')->find($townId);
             $distance = ($distance)?$distance:-1;
             
-            if(!empty($location)) {
+            if (!empty($location)) {
                 $query = $this->createQueryBuilder(self::ALIAS)
                 ->select(LocationRepository::ALIAS.'.name,( 3959 * ACOS( COS( RADIANS('.$location->getLatitude().') ) * COS( RADIANS( '.LocationRepository::ALIAS.'.latitude ) ) * COS( RADIANS( '.LocationRepository::ALIAS.'.longitude ) - RADIANS('.$location->getLongitude().') ) + SIN( RADIANS('.$location->getLatitude().') ) * SIN( RADIANS( '.LocationRepository::ALIAS.'.latitude ) ) ) ) AS distance, IDENTITY('.AdLocationRepository::ALIAS.'.location_town) as town_id, GROUP_CONCAT('.self::ALIAS.'.id, \',\') as ids, COUNT('.self::ALIAS.'.id) as cnt')
                 ->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS)

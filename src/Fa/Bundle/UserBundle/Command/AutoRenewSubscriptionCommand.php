@@ -106,12 +106,11 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
                 $user = $userPackage->getUser();
                 $userStatus = $this->em->getRepository('FaUserBundle:User')->getUserStatus($user->getId(), $this->getContainer());
                 if ($userStatus === EntityRepository::USER_STATUS_ACTIVE_ID) {
-                    $package = $userPackage->getPackage();                   
+                    $package = $userPackage->getPackage();
                     $this->em->getRepository('FaUserBundle:UserPackage')->assignPackageToUser($user, $package, 'auto-renew-package-backend', null, 1, $this->getContainer());
-                    
                 }
             }
-        } 
+        }
         $this->em->flush();
         $this->em->clear();
     }
@@ -199,7 +198,7 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
         }
         
         return $q->getQuery()->getResult();
-    }  
+    }
     
     
     /**
@@ -229,7 +228,5 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
         
         
         return $q->getQuery()->getSingleScalarResult();
-    } 
-   
+    }
 }
-

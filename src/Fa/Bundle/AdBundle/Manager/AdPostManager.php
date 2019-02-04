@@ -1174,7 +1174,7 @@ class AdPostManager
         //check rate field is defined
         if (isset($data['rates_id'])) {
             $getRateDimensionId = $this->getFieldCategoryDimenionId('rates_id');
-            if($getRateDimensionId!=null) {
+            if ($getRateDimensionId!=null) {
                 $ratesData= $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($getRateDimensionId, $this->container, true, 'id', 'textCollection');
                 $ratesRecord = [];
                 if (!empty($ratesData)) {

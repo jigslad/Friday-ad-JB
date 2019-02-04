@@ -258,8 +258,8 @@ class CategoryDimensionRepository extends BaseEntityRepository
         $selected = (is_array($selected) ? $selected: array($selected));
 
         if (!isset($searchParams['item__distance'])) {
-            if(!$fromCommandLine) {
-                $searchParams['item__distance'] = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $container);        
+            if (!$fromCommandLine) {
+                $searchParams['item__distance'] = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $container);
             }
         }
         

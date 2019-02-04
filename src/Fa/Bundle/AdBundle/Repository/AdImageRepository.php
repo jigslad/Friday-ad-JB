@@ -668,9 +668,13 @@ class AdImageRepository extends EntityRepository
             }
             
             $orginFilePath = $sourcePath.'/'.$sourceName;
-            if(file_exists($orginFilePath)) { $docopy = 1; } else { $docopy = 0; }
+            if (file_exists($orginFilePath)) {
+                $docopy = 1;
+            } else {
+                $docopy = 0;
+            }
             
-            if($docopy==1) {
+            if ($docopy==1) {
                 //create original image.
                 copy($sourcePath.'/'.$sourceName, $orgImagePath.'/'.$orgImageName);
             }
@@ -684,7 +688,7 @@ class AdImageRepository extends EntityRepository
                 $adImageManager = new AdImageManager($container, $sessionId, $hash, $orgImagePath);
             }
             
-            if($docopy==1) {
+            if ($docopy==1) {
                 //save original jpg image.
                 $adImageManager->saveOriginalJpgImage($orgImageName);
                 //create thumbnails

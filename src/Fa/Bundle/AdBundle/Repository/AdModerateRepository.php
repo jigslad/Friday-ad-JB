@@ -670,7 +670,7 @@ class AdModerateRepository extends EntityRepository
                 'url_account_dashboard' => $container->get('router')->generate('dashboard_home', array(), true),
             );
 
-            $container->get('fa.mail.manager')->send($receiverEmail, $template, $parameters, CommonManager::getCurrentCulture($container), null, array(), array(), array(), null);   
+            $container->get('fa.mail.manager')->send($receiverEmail, $template, $parameters, CommonManager::getCurrentCulture($container), null, array(), array(), array(), null);
         }
     }
 

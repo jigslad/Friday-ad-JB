@@ -572,7 +572,7 @@ class CategoryRepository extends NestedTreeRepository
                 if ($levelDiff > 1) {
                     $levelSpitter = str_repeat('&nbsp;', (($levelDiff -1) * 6));
                 }
-                if($children['status']==1) {
+                if ($children['status']==1) {
                     $childrenArray[$children['id']] = html_entity_decode($levelSpitter.$children['name']);
                 }
             }
