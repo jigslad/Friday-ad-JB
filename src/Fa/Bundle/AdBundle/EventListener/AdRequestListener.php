@@ -731,6 +731,7 @@ class AdRequestListener
                     $newRedirect = $rootCat.'/'.$adType.'/'.$implodeRemainingRedirect;
                 }
             }
+            $newRedirect = str_replace('[location]/','',$newRedirect);
             if($newRedirect!=$redirectString) {
                 $url = $this->container->get('router')->generate('listing_page', array(
                     'location' => $locationString,
