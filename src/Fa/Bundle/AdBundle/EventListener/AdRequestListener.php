@@ -859,19 +859,22 @@ class AdRequestListener
      */
     public function getMatchedCategory($category)
     {
-        $cat = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($category, $this->container);
-        if ($cat) {
-            return $cat;
-        } else {
-            $explodeCatArr = explode('/', $category);
-            if (!empty($explodeCatArr) && count($explodeCatArr)>1) {
-                array_pop($explodeCatArr);
-                $newCatText = implode('/', $explodeCatArr);
-                return $this->getMatchedCategory($newCatText);
+        $seoPopularSearchUrl = $this->em->getRepository('FaContentBundle:SeoToolPopularSearch')->findBy(array('url'=>'/'.$category.'/'));
+        if(empty($seoPopularSearchUrl)) {
+            $cat = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($category, $this->container);
+            if ($cat) {
+                return $cat;
             } else {
-                return false;
+                $explodeCatArr = explode('/', $category);
+                if (!empty($explodeCatArr) && count($explodeCatArr)>1) {
+                    array_pop($explodeCatArr);
+                    $newCatText = implode('/', $explodeCatArr);
+                    return $this->getMatchedCategory($newCatText);
+                } else {
+                    return false;
+                }
             }
-        }
+        } else { return false; }
     }
 
     /**
