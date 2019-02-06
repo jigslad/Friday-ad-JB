@@ -361,7 +361,7 @@ class AdRequestListener
             if ($currentRoute ==  'motor_listing_page') {
                 $params['path'] = '/'.$request->get('location').'/'.$redirectString.'/';
             }
-
+           
             // to decide old detail page url
             if (isset($params['path']) && $params['path']) {
                 if (preg_match('/-[A-Z0-9]{9,10}\/$/', $params['path'], $matches) && isset($matches[0])) {
@@ -498,12 +498,12 @@ class AdRequestListener
                     } else {
                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::OTHERS_DISTANCE : $request->get('item__distance');
                     }*/
-                    
+
                     //check location belongs to area
                     if (preg_match('/^\d+$/', $locationId) && is_null($request->get('item__distance'))) {
                         $isLocationArea = $this->em->getRepository('FaEntityBundle:Location')->find($locationId);
-                        if (!empty($isLocationArea) && $isLocationArea && $isLocationArea->getLvl() == '4') {
-                            $queryParams['item__distance'] = isset($queryParams['item__distance'])?$queryParams['item__distance']/CategoryRepository::AREA_DISTANCE_DIVISION:0;
+                        if (!empty($isLocationArea) && $isLocationArea && $isLocationArea->getLvl() == '4' && isset($queryParams['item__distance'])) {                            
+                            $queryParams['item__distance'] = $queryParams['item__distance']/CategoryRepository::AREA_DISTANCE_DIVISION;
                         }
                     }
 
@@ -524,7 +524,7 @@ class AdRequestListener
             if (!$catObj && $categoryText != 'search') {
                 $request->attributes->set('not_found', 1);
             }
-                        
+            
             $dimArray = $this->dimensionArray($categoryText, $adType, $request, $event);
             $request->attributes->set('finders', array_merge_recursive($request->attributes->get('finders'), $dimArray));
         } elseif ($currentRoute ==  'detail_page') {
