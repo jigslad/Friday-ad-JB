@@ -211,7 +211,7 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
     protected function getUserSubscriptionsCount($user_id)
     {
         $q = $this->em->getRepository('FaUserBundle:UserPackage')->getBaseQueryBuilder();
-        $q->select('COUNT('.UserPackageRepository::ALIAS.'.id) as user_count');
+        $q->select('COUNT('.UserPackageRepository::ALIAS.'.user) as user_count');
         $q->andWhere(UserPackageRepository::ALIAS.'.status = :status');
         $q->setParameter('status', 'A');
         $q->andWhere(UserPackageRepository::ALIAS.'.is_auto_renew = :is_auto_renew');
