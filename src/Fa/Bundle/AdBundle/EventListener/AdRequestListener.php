@@ -859,12 +859,12 @@ class AdRequestListener
      */
     public function getMatchedCategory($category)
     {
-        $seoPopularSearchUrl = $this->em->getRepository('FaContentBundle:SeoToolPopularSearch')->findBy(array('url'=>'/'.$category.'/'));
-        if(empty($seoPopularSearchUrl)) {
-            $cat = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($category, $this->container);
-            if ($cat) {
-                return $cat;
-            } else {
+        $cat = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($category, $this->container);
+        if ($cat) {
+            return $cat;
+        } else {
+            $seoPopularSearchUrl = $this->em->getRepository('FaContentBundle:SeoToolPopularSearch')->findBy(array('url'=>'/'.$category.'/'));        
+            if(empty($seoPopularSearchUrl)) {
                 $explodeCatArr = explode('/', $category);
                 if (!empty($explodeCatArr) && count($explodeCatArr)>1) {
                     array_pop($explodeCatArr);
@@ -872,9 +872,9 @@ class AdRequestListener
                     return $this->getMatchedCategory($newCatText);
                 } else {
                     return false;
-                }
-            }
-        } else { return false; }
+                }            
+            } else { return false; }
+        }
     }
 
     /**
