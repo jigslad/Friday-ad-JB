@@ -152,10 +152,10 @@ class UserPackageRepository extends EntityRepository
 
         if ($user && $user->getBusinessCategoryId() && $container && $ad_update) {
             if (in_array($user->getBusinessCategoryId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
-                exec('nohup'.' '.$container->getParameter('fa.php.path').' bin/console fa:update:user-shop-detail-solr-index --id='.$user->getId().' delete >/dev/null &');
-                exec('nohup'.' '.$container->getParameter('fa.php.path').' bin/console fa:update:user-shop-detail-solr-index --id='.$user->getId().' >/dev/null &');
+                exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:update:user-shop-detail-solr-index --id='.$user->getId().' delete >/dev/null &');
+                exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:update:user-shop-detail-solr-index --id='.$user->getId().' >/dev/null &');
             } elseif (!in_array($user->getBusinessCategoryId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
-                exec('nohup'.' '.$container->getParameter('fa.php.path').' bin/console fa:update:user-ad-shop-detail --user_id='.$user->getId().' >/dev/null &');
+                exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:update:user-ad-shop-detail --user_id='.$user->getId().' >/dev/null &');
             }
             if ($user->getBusinessCategoryId() == CategoryRepository::JOBS_ID) {
                 $culture = CommonManager::getCurrentCulture($container);

@@ -99,7 +99,7 @@ class BannerListener
         if ($objBanner->getBannerPages()) {
             foreach ($objBanner->getBannerPages()->toArray() as $bannerPage) {
                 CommonManager::removeCachePattern($this->container, $this->getTableName().'|getBannersArrayByPage|'.$bannerPage->getId().'_*');
-                //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:update:banner:cache generate '.$bannerPage->getId().' >/dev/null &');
+                //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:banner:cache generate '.$bannerPage->getId().' >/dev/null &');
             }
         }
     }

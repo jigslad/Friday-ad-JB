@@ -268,7 +268,7 @@ class UserListener
 
         //send user to moderation
         if ($this->sendUserToModerationFlag && $this->container->get('security.token_storage')->getToken() && CommonManager::isAuth($this->container) && !CommonManager::isAdminLoggedIn($this->container)) {
-            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:send:business-user-for-moderation --userId='.$entity->getId().' >/dev/null &');
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$entity->getId().' >/dev/null &');
         }
     }
 

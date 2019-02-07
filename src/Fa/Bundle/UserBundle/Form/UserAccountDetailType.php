@@ -151,7 +151,7 @@ class UserAccountDetailType extends AbstractType
                         $this->em->persist($dotmailer);
                         $this->em->flush($dotmailer);
                         //update new email to dotmailer.
-                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
                     }
                 }
             }

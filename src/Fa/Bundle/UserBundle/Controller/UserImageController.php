@@ -133,10 +133,10 @@ class UserImageController extends CoreController
             try {
                 if ($form->isValid()) {
                     $this->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByAdId('no_profile_photo', null, $userId);
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="Jobs" update >/dev/null &');
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="For sale" update >/dev/null &');
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="Adult" update >/dev/null &');
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:send:business-user-for-moderation --userId='.$userId.' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="Jobs" update >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="For sale" update >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="Adult" update >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userId.' >/dev/null &');
                     $culture  = CommonManager::getCurrentCulture($this->container);
                     $cacheKey = 'user|isTrustedUser|'.$userId.'|'.$culture;
                     CommonManager::removeCache($this->container, $cacheKey);
@@ -259,7 +259,7 @@ class UserImageController extends CoreController
 
                 $adImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
                 $adImageManager->removeImage();
-                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:send:business-user-for-moderation --userId='.$userId.' >/dev/null &');
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userId.' >/dev/null &');
 
                 if ($profileImage) {
                     $image = CommonManager::getUserLogo($this->container, null, $userId, null, null, true, $isCompany);
@@ -281,9 +281,9 @@ class UserImageController extends CoreController
                     } else {
                         $successMsg = $this->get('translator')->trans('User image has been deleted successfully.');
                     }
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="Jobs" update >/dev/null &');
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="For sale" update >/dev/null &');
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="Adult" update >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="Jobs" update >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="For sale" update >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="Adult" update >/dev/null &');
                     $culture  = CommonManager::getCurrentCulture($this->container);
                     $cacheKey = 'user|isTrustedUser|'.$user->getId().'_'.$culture;
                     CommonManager::removeCache($this->container, $cacheKey);
@@ -437,7 +437,7 @@ class UserImageController extends CoreController
                             $image = CommonManager::getUserLogo($this->container, $imageObj->getImage(), $userId, null, null, true);
                         }
                     }
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:send:business-user-for-moderation --userId='.$userId.' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userId.' >/dev/null &');
                 } else {
                     $error = $this->get('translator')->trans('Problem in loading image.');
                 }

@@ -160,15 +160,15 @@ class MyAccountController extends ThirdPartyLoginController
 
                 // update yac number if phone number changes and user has set privacy number.
                 if ($form->get('is_private_phone_number')->getData() && $oldPhoneNumber != $form->get('phone')->getData()) {
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:update:user-ad-yac-number edit --user_id='.$loggedinUser->getId().' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number edit --user_id='.$loggedinUser->getId().' >/dev/null &');
                 }
 
                 // update yac number if privacy phone number setting is changes.
                 if ($oldIsPrivatePhoneNumber != $form->get('is_private_phone_number')->getData()) {
                     if ($form->get('is_private_phone_number')->getData()) {
-                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:update:user-ad-yac-number allocate --user_id='.$loggedinUser->getId().' >/dev/null &');
+                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number allocate --user_id='.$loggedinUser->getId().' >/dev/null &');
                     } elseif (!$form->get('is_private_phone_number')->getData()) {
-                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:update:user-ad-yac-number setsold --user_id='.$loggedinUser->getId().' >/dev/null &');
+                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number setsold --user_id='.$loggedinUser->getId().' >/dev/null &');
                     }
                 }
 

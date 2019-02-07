@@ -119,7 +119,7 @@ class AdReportAdminController extends CoreController implements ResourceAuthoriz
         } else {
             CommonManager::setAdminBackUrl($request, $this->container);
             $backUrl = CommonManager::getAdminCancelUrl($this->container);
-            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:ad:report:export-to-csv --criteria=\''.$this->get('session')->get('ad_report_export_criteria').'\' >/dev/null &');
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:ad:report:export-to-csv --criteria=\''.$this->get('session')->get('ad_report_export_criteria').'\' >/dev/null &');
             $searchParam = unserialize($this->get('session')->get('ad_report_export_criteria'));
             if (isset($searchParam['search']['csv_email']) && $searchParam['search']['csv_email']) {
                 $message = $this->get('translator')->trans('Report csv will be generated and emailed to %email%.', array('%email%' => $searchParam['search']['csv_email']));

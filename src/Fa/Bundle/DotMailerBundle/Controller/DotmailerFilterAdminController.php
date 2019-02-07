@@ -155,7 +155,7 @@ class DotmailerFilterAdminController extends CrudController implements ResourceA
         $this->getEntityManager()->flush($dotmailerFilter);
 
         // export emails here after approve
-        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:dotmailer:export-filter --id='.$dotmailerFilter->getId().' >/dev/null &');
+        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:export-filter --id='.$dotmailerFilter->getId().' >/dev/null &');
 
         return parent::handleMessage($this->get('translator')->trans('Filter has been sent for export in dotmailer please check the status after some time.', array(), 'success'), $this->getRouteName(''));
     }
