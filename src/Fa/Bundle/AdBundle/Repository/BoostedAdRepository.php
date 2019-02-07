@@ -73,6 +73,7 @@ class BoostedAdRepository extends EntityRepository
         $qb = $this->createQueryBuilder(self::ALIAS);
         $qb->select('COUNT('.self::ALIAS.'.id) as total_ads');
         $qb->where(self::ALIAS.'.user = '.$userId);
+        $qb->andWhere(self::ALIAS.'.status = 1');
         return $qb->getQuery()->getSingleScalarResult();
     }
 

@@ -95,11 +95,11 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
      * @param object $input       Input object.
      * @param object $output      Output object.
      */
-    protected function autoRenewSubscriptionWithOffset($searchParam, $input, $output)
+    protected function autoRenewSubscriptionWithOffset($input, $output)
     {
         $offset  = $input->getOption('offset');
         $userId  = $input->getOption('user_id');
-        $userPackages = $this->getUserActiveAdResult($userId, $offset, $this->limit);
+        $userPackages = $this->getUserSubscriptionsResult($userId, $offset, $this->limit);
 
         if (!empty($userPackages)) {
             foreach ($userPackages as $userPackage) {
@@ -185,8 +185,8 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
         $q->setParameter('is_auto_renew', '1');
         
         $q->andWhere(UserPackageRepository::ALIAS.'.created_at > :created_at_from and '.UserPackageRepository::ALIAS.'.created_at < :created_at_to');
-        $q->setParameter('created_at_from', strtotime(date('d/m/Y 00:00:00')));
-        $q->setParameter('created_at_to', strtotime(date('d/m/Y 11:59:59')));
+        $q->setParameter('created_at_from', strtotime(date('d-m-Y 00:00:00')));
+        $q->setParameter('created_at_to', strtotime(date('d-m-Y 11:59:59')));
         
         $q->addOrderBy(UserPackageRepository::ALIAS.'.id');
         $q->setMaxResults($limit);
@@ -218,8 +218,8 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
         $q->setParameter('is_auto_renew', '1');
              
         $q->andWhere((UserPackageRepository::ALIAS.'.updated_at > '.UserPackageRepository::ALIAS.'.created_at and '.UserPackageRepository::ALIAS.'.updated_at > :created_at_from and '.UserPackageRepository::ALIAS.'.updated_at < :created_at_to) or ('.UserPackageRepository::ALIAS.'.created_at > :created_at_from and '.UserPackageRepository::ALIAS.'.created_at < :created_at_to'));
-        $q->setParameter('created_at_from', strtotime(date('d/m/Y 00:00:00')));
-        $q->setParameter('created_at_to', strtotime(date('d/m/Y 11:59:59')));
+        $q->setParameter('created_at_from', strtotime(date('d-m-Y 00:00:00')));
+        $q->setParameter('created_at_to', strtotime(date('d-m-Y 11:59:59')));
         
         if ($user_id != '') {
             $q->andWhere(UserPackageRepository::ALIAS.'.user = :user');
