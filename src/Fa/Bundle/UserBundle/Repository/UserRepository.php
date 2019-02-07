@@ -1408,7 +1408,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             $stmt = $this->_em->getConnection()->prepare($updateSQL);
             $stmt->execute();
 
-            exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$user->getId().'" >/dev/null &');
+            exec('nohup'.' '.$container->getParameter('fa.php.path').' bin/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$user->getId().'" >/dev/null &');
         }
     }
 
@@ -1491,7 +1491,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             $stmt = $this->_em->getConnection()->prepare($updateSQL);
             $stmt->execute();
 
-            exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$user->getId().'" >/dev/null &');
+            exec('nohup'.' '.$container->getParameter('fa.php.path').' bin/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$user->getId().'" >/dev/null &');
         }
     }
 

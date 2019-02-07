@@ -156,7 +156,7 @@ class MyProfileController extends CoreController
     {
         if ($loggedinUser && $loggedinUser->getBusinessCategoryId() && ($userRole == RoleRepository::ROLE_BUSINESS_SELLER  || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION)) {
             if (in_array($loggedinUser->getBusinessCategoryId(), array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
-                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:user-shop-detail-solr-index --id='.$loggedinUser->getId().' >/dev/null &');
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:update:user-shop-detail-solr-index --id='.$loggedinUser->getId().' >/dev/null &');
             }
         }
     }

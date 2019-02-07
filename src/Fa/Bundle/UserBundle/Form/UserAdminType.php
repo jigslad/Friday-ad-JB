@@ -197,7 +197,7 @@ class UserAdminType extends AbstractType
                             $this->em->persist($dotmailer);
                             $this->em->flush($dotmailer);
                             //update new email to dotmailer.
-                            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+                            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
                         }
                     }
 
@@ -260,7 +260,7 @@ class UserAdminType extends AbstractType
                             $stmt = $em->getConnection()->prepare($updateSQL);
                             $stmt->execute();
 
-                            exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$user->getId().'" >/dev/null &');
+                            exec('nohup'.' '.$container->getParameter('fa.php.path').' bin/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$user->getId().'" >/dev/null &');
                         }
                     }
 

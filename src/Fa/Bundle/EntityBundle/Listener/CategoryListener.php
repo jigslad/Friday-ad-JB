@@ -171,7 +171,7 @@ class CategoryListener
         //Remove cache for one click enquire
         CommonManager::removeCachePattern($this->container, $this->getTableName().'|getOneclickenqDetailForCategoryId|*');
 
-        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:generate:category-slug-path --category_id='.$entity->getId().' >/dev/null &');
-        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:generate:entity-url-keys --category_id='.$entity->getId().' >/dev/null &');
+        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:generate:category-slug-path --category_id='.$entity->getId().' >/dev/null &');
+        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' bin/console fa:generate:entity-url-keys --category_id='.$entity->getId().' >/dev/null &');
     }
 }
