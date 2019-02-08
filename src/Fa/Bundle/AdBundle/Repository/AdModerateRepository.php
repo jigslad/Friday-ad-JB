@@ -646,7 +646,7 @@ class AdModerateRepository extends EntityRepository
     {
         $parameters = $this->generateRejectedAdEmailParameters($objAd, $moderationResult, $container);
         $template   = 'ad_is_rejected';
-         
+        $entityCache = $container->get('fa.entity.cache.manager');
         $ads[] = array(
             'text_ad_title' => $objAd->getTitle(),
             'text_ad_description' => $objAd->getDescription(),
