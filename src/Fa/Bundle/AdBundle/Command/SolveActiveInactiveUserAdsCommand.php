@@ -129,7 +129,7 @@ EOF
                         $addUpdate = 'update';
                     }
                     
-                    $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:update:ad-solr-index --id="'.$advertId.'" --status="A,S,E" '.$addUpdate;
+                    $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:update:ad-solr-index --id="'.$advertId.'" --status="A,S,E" '.$addUpdate;
                     $output->writeln($command, true);
                     passthru($command, $returnVar);
                     
@@ -160,7 +160,7 @@ EOF
                     $output->writeln('Got Error for AdvertId : '.$advertId, true);
                 }
             } else {
-                $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:update:inactive-user-ads --user_id="'.$userId.'"';
+                $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:update:inactive-user-ads --user_id="'.$userId.'"';
                 $output->writeln($command, true);
                 passthru($command, $returnVar);
                 
@@ -221,7 +221,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:update:solveactiveinactive-user-ads '.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:update:solveactiveinactive-user-ads '.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 

@@ -87,7 +87,7 @@ class UserPackageExpirationCommand extends ContainerAwareCommand
                     if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                         $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
                     }
-                    $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$user->getId().'" >/dev/null & ';
+                    $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$user->getId().'" >/dev/null & ';
                     $output->writeln($command, true);
                     passthru($command, $returnVar);
 

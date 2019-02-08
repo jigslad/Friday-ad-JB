@@ -173,7 +173,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:update:ad-solr-index --id="'.$idString.'" --status="A,E" add';
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:update:ad-solr-index --id="'.$idString.'" --status="A,E" add';
             $output->writeln($command, true);
             passthru($command, $returnVar);
         }
@@ -239,7 +239,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:feed:update -v '.$commandOptions.' '.$input->getArgument('action');
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:feed:update -v '.$commandOptions.' '.$input->getArgument('action');
             $output->writeln($command, true);
             passthru($command, $returnVar);
 

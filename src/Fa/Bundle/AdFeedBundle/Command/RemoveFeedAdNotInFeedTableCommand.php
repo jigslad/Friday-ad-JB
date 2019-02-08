@@ -163,7 +163,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:remove-feed-ad-not-in-feed-table '.$commandOptions.' '.$input->getArgument('action');
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:remove-feed-ad-not-in-feed-table '.$commandOptions.' '.$input->getArgument('action');
             $output->writeln($command, true);
             passthru($command, $returnVar);
 

@@ -175,7 +175,7 @@ EOF
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
 
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:send-low-enquiry-alert '.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:send-low-enquiry-alert '.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 
