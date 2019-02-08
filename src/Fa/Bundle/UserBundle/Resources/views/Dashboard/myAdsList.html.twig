@@ -25,7 +25,7 @@
                 {% set adCategoryId = ad.cat_id %}
                 {% if ad['status_id'] == adStatusLive %}
                     {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
-                    {% set adUrl = adUrl|trim('/') %}
+                    {# {% set adUrl = adUrl|trim('/') %} #}
                 {% endif %}
                 {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
             {% endfor %}
