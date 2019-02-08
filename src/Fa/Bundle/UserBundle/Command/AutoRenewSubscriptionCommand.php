@@ -78,6 +78,7 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $this->mainDbName = $this->getContainer()->getParameter('database_name');
         $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         $offset   = $input->getOption('offset');
@@ -100,13 +101,12 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
         $offset  = $input->getOption('offset');
         $userId  = $input->getOption('user_id');
         $userPackages = $this->getUserSubscriptionsResult($userId, $offset, $this->limit);
-
-        if (!empty($userPackages)) {
-            foreach ($userPackages as $userPackage) {
-                $user = $userPackage->getUser();
-                $userStatus = $this->em->getRepository('FaUserBundle:User')->getUserStatus($user->getId(), $this->getContainer());
+        if (!empty($userPackages)) {            
+            foreach ($userPackages as $userPackage) {                
+                $userStatus = $this->em->getRepository('FaUserBundle:User')->getUserStatus($userPackage['user_id'], $this->getContainer());
                 if ($userStatus === EntityRepository::USER_STATUS_ACTIVE_ID) {
-                    $package = $userPackage->getPackage();
+                    $user = $this->em->getRepository('FaUserBundle:User')->find($userPackage['user_id']);
+                    $package = $this->em->getRepository('FaPromotionBundle:Package')->find($userPackage['package_id']);
                     $this->em->getRepository('FaUserBundle:UserPackage')->assignPackageToUser($user, $package, 'auto-renew-package-backend', null, 1, $this->getContainer());
                 }
             }
@@ -178,28 +178,24 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
      */
     protected function getUserSubscriptionsResult($user_id, $offset, $limit)
     {
-        $q = $this->em->getRepository('FaUserBundle:UserPackage')->createQueryBuilder(UserPackageRepository::ALIAS);
-        $q->andWhere(UserPackageRepository::ALIAS.'.status = :status');
-        $q->setParameter('status', 'A');
-        $q->andWhere(UserPackageRepository::ALIAS.'.is_auto_renew = :is_auto_renew');
-        $q->setParameter('is_auto_renew', '1');
+        $entityManager         = $this->getContainer()->get('doctrine')->getManager();
+        $expiryDefaultDaysBeforeDate = strtotime('-27 day', strtotime(date('Y-m-d H:i:s')));
+        $currentTime = strtotime(date('Y-m-d H:i:s'));
         
-        $q->andWhere(UserPackageRepository::ALIAS.'.created_at > :created_at_from and '.UserPackageRepository::ALIAS.'.created_at < :created_at_to');
-        $q->setParameter('created_at_from', strtotime(date('d-m-Y 00:00:00')));
-        $q->setParameter('created_at_to', strtotime(date('d-m-Y 11:59:59')));
         
-        $q->addOrderBy(UserPackageRepository::ALIAS.'.id');
-        $q->setMaxResults($limit);
-        $q->setFirstResult($offset);
-        
+        $querySql  = "SELECT * FROM ".$this->mainDbName.".user_package up WHERE up.status = 'A' AND up.is_auto_renew = 1";
+        $querySql  .= " AND (up.expires_at >= ".$currentTime." or (CASE WHEN (up.updated_at > up.created_at) THEN ";
+        $querySql  .= "(up.updated_at  < ".$expiryDefaultDaysBeforeDate.") ELSE (up.created_at < ".$expiryDefaultDaysBeforeDate;
+        $querySql  .= ") END))";
         if ($user_id != '') {
-            $q->andWhere(UserPackageRepository::ALIAS.'.user = :user');
-            $q->setParameter('user', $user_id);
+            $querySql  .= " AND up.user_id=".$user_id;
         }
         
-        return $q->getQuery()->getResult();
+        $stmt = $entityManager->getConnection()->prepare($querySql);
+        $stmt->execute();
+        $user_packages = $stmt->fetchAll();
+        return $user_packages;
     }
-    
     
     /**
      * Get query builder for user subscriptions count.
@@ -210,23 +206,22 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
      */
     protected function getUserSubscriptionsCount($user_id)
     {
-        $q = $this->em->getRepository('FaUserBundle:UserPackage')->getBaseQueryBuilder();
-        $q->select('COUNT('.UserPackageRepository::ALIAS.'.user) as user_count');
-        $q->andWhere(UserPackageRepository::ALIAS.'.status = :status');
-        $q->setParameter('status', 'A');
-        $q->andWhere(UserPackageRepository::ALIAS.'.is_auto_renew = :is_auto_renew');
-        $q->setParameter('is_auto_renew', '1');
-             
-        $q->andWhere((UserPackageRepository::ALIAS.'.updated_at > '.UserPackageRepository::ALIAS.'.created_at and '.UserPackageRepository::ALIAS.'.updated_at > :created_at_from and '.UserPackageRepository::ALIAS.'.updated_at < :created_at_to) or ('.UserPackageRepository::ALIAS.'.created_at > :created_at_from and '.UserPackageRepository::ALIAS.'.created_at < :created_at_to'));
-        $q->setParameter('created_at_from', strtotime(date('d-m-Y 00:00:00')));
-        $q->setParameter('created_at_to', strtotime(date('d-m-Y 11:59:59')));
+        $entityManager         = $this->getContainer()->get('doctrine')->getManager();
+        $expiryDefaultDaysBeforeDate = strtotime('-27 day', strtotime(date('Y-m-d H:i:s')));
+        $currentTime = strtotime(date('Y-m-d H:i:s'));
         
+        
+        $querySql  = "SELECT count(up.user_id) as user_count FROM ".$this->mainDbName.".user_package up WHERE up.status = 'A' AND up.is_auto_renew = 1";
+        $querySql  .= " AND (up.expires_at >= ".$currentTime." or (CASE WHEN (up.updated_at > up.created_at) THEN ";
+        $querySql  .= "(up.updated_at  < ".$expiryDefaultDaysBeforeDate.") ELSE (up.created_at < ".$expiryDefaultDaysBeforeDate;
+        $querySql  .= ") END))";
         if ($user_id != '') {
-            $q->andWhere(UserPackageRepository::ALIAS.'.user = :user');
-            $q->setParameter('user', $user_id);
+            $querySql  .= " AND up.user_id=".$user_id;
         }
         
-        
-        return $q->getQuery()->getSingleScalarResult();
+        $stmt = $entityManager->getConnection()->prepare($querySql);
+        $stmt->execute();
+        $user_packages = $stmt->fetchAll();
+        return $user_packages[0]['user_count'];
     }
 }
