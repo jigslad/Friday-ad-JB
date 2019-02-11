@@ -105,7 +105,7 @@ EOF
 
         if (count($dotmailerFilters) > 0) {
             foreach ($dotmailerFilters as $dotmailerFilter) {
-                $dotmailerFilter = $this->create($dotmailerFilter);
+                $dotmailerFilter = $this->createAddressBook($dotmailerFilter);
                 $masterId = $dotmailerFilter->getAddressBookId();
                 $dotmailerFilter->setFailedRetryCount($dotmailerFilter->getFailedRetryCount()+1);
                 $entityManager->persist($dotmailerFilter);
