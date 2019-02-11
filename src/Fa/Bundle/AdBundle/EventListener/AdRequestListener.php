@@ -524,8 +524,11 @@ class AdRequestListener
             if (!$catObj && $categoryText != 'search') {
                 $request->attributes->set('not_found', 1);
             }
-            
-            $dimArray = $this->dimensionArray($categoryText, $adType, $request, $event);
+            if($catObj) {
+                $dimArray = $this->dimensionArray($catObj['full_slug'], $adType, $request, $event);
+            } else {
+                $dimArray = $this->dimensionArray($categoryText, $adType, $request, $event);
+            }
             $request->attributes->set('finders', array_merge_recursive($request->attributes->get('finders'), $dimArray));
         } elseif ($currentRoute ==  'detail_page') {
             return false;

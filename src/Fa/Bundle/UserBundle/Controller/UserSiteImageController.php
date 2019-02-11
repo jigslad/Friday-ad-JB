@@ -107,7 +107,7 @@ class UserSiteImageController extends CoreController
                 try {
                     if ($form->isValid()) {
                         $formManager->save($userSiteImage);
-                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
+                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
                     } else {
                         $error = $form->getErrorsAsString();
                     }
@@ -200,7 +200,7 @@ class UserSiteImageController extends CoreController
             if (!$imageRemove) {
                 $error = $this->get('translator')->trans('Problem in deleting image.');
             } else {
-                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
                 $successMsg = $this->get('translator')->trans('Photo has been deleted successfully.');
             }
 
@@ -409,7 +409,7 @@ class UserSiteImageController extends CoreController
                 $error = $this->get('translator')->trans('Problem in croping photo.');
             } else {
                 $successMsg = $this->get('translator')->trans('Photo has been cropped successfully.');
-                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
             }
 
             return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg));

@@ -2183,7 +2183,7 @@ class AdRepository extends EntityRepository
             } else {
                 // Detached ad
                 if ($ad->getUsePrivacyNumber() && $ad->getPhone()) {
-                    exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->get('kernel')->getRootDir().'/console fa:update:ad-yac-number allocate --ad_id='.$ad->getId().' >/dev/null &');
+                    exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:update:ad-yac-number allocate --ad_id='.$ad->getId().' >/dev/null &');
                 }
             }
         } catch (\Exception $e) {
@@ -3596,7 +3596,7 @@ class AdRepository extends EntityRepository
         }
 
         //remove yac number
-        exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->get('kernel')->getRootDir().'/console fa:update:ad-yac-number setsold --ad_id='.$objAd->getId().' >/dev/null &');
+        exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:update:ad-yac-number setsold --ad_id='.$objAd->getId().' >/dev/null &');
         // No need to do anything with print ad status as we are checking ad status into account while sending advert for printing.
 
         /*$objAdPrints = $this->_em->getRepository('FaAdBundle:AdPrint')->findBy(array('ad' => $adId));

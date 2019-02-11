@@ -50,8 +50,9 @@ class DashboardController extends CoreController
             $location = $cookieLocationDetails['location'];
         }
 
+        $baseUrl = $this->container->getParameter('base_url');
         $routeManager    = $this->container->get('fa_ad.manager.ad_routing');
-        $searchResultUrl = $routeManager->getListingUrl(array('item__location' => ($location ? $location : LocationRepository::COUNTY_ID)));
+        $searchResultUrl = $baseUrl.$routeManager->getListingUrl(array('item__location' => ($location ? $location : LocationRepository::COUNTY_ID)));
 
         //get recently viewed ads.
         $recentlyViewedAds = $this->getRecentlyViewedAds($request);

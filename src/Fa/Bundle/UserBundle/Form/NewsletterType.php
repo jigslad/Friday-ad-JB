@@ -226,9 +226,9 @@ class NewsletterType extends AbstractType
                 $this->em->flush($user);
 
                 //unsubscribe from dotmailer.
-                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:dotmailer:unsubscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:unsubscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
                 // remove contact from dotmailer.
-                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:dotmailer:delete-contact --email='.$dotmailer->getEmail().' >/dev/null &');
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:delete-contact --email='.$dotmailer->getEmail().' >/dev/null &');
             }
             if ($dotmailer->getOptIn() == 1 && $user->getIsEmailAlertEnabled() != 1) {
                 // opt in user
@@ -239,7 +239,7 @@ class NewsletterType extends AbstractType
 
             //send to dotmailer instantly.
             if ($isNewToDotmailer) {
-                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
             }
         }
     }

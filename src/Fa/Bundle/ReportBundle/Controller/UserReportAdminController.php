@@ -255,7 +255,7 @@ class UserReportAdminController extends CoreController implements ResourceAuthor
             $serilizedSearchCriteria = trim($serilizedSearchCriteria);
             CommonManager::setAdminBackUrl($request, $this->container);
             $backUrl = CommonManager::getAdminCancelUrl($this->container);
-            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:export-user-report --criteria=\''.$serilizedSearchCriteria.'\' >/dev/null &');
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:export-user-report --criteria=\''.$serilizedSearchCriteria.'\' >/dev/null &');
             $searchParam = $this->get('session')->get('search_criteria');
             if (isset($searchParam['rus_csv_email']) && $searchParam['rus_csv_email']) {
                 $message = $this->get('translator')->trans('Report csv will be generated and emailed to %email%.', array('%email%' => $searchParam['rus_csv_email']));

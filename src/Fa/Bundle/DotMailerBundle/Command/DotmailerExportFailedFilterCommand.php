@@ -105,14 +105,14 @@ EOF
 
         if (count($dotmailerFilters) > 0) {
             foreach ($dotmailerFilters as $dotmailerFilter) {
-                $dotmailerFilter = $this->create($dotmailerFilter);
+                $dotmailerFilter = $this->createAddressBook($dotmailerFilter);
                 $masterId = $dotmailerFilter->getAddressBookId();
                 $dotmailerFilter->setFailedRetryCount($dotmailerFilter->getFailedRetryCount()+1);
                 $entityManager->persist($dotmailerFilter);
                 $entityManager->flush($dotmailerFilter);
                 if ($masterId) {
                     $output->writeln('Failed filter re-processed: '.$dotmailerFilter->getId(), true);
-                    exec('nohup'.' '.$this->getContainer()->getParameter('fa.php.path').' bin/console fa:dotmailer:export-filter-result --filterId='.$dotmailerFilter->getId().' --masterId='.$masterId.' --criteria=\''.$dotmailerFilter->getFilters().'\' >/dev/null &');
+                    exec('nohup'.' '.$this->getContainer()->getParameter('fa.php.path').' '.$this->getContainer()->getParameter('project_path').'/console fa:dotmailer:export-filter-result --filterId='.$dotmailerFilter->getId().' --masterId='.$masterId.' --criteria=\''.$dotmailerFilter->getFilters().'\' >/dev/null &');
                 }
             }
         }
@@ -160,7 +160,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:dotmailer:export-failed-filter '.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:dotmailer:export-failed-filter '.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 

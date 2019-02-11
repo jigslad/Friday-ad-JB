@@ -476,7 +476,7 @@ class ManageMyAdController extends CoreController
                     }
 
                     $successMsg = '<span>Congratulations your ads are boosted now.</span> you can view your ads by <a href="'.$boostedUrl.'">clicking here.</a>';
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$loggedinUser->getId().'" >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$loggedinUser->getId().'" >/dev/null &');
 
                     $messageManager = $this->get('fa.message.manager');
                     $messageManager->setFlashMessage($successMsg, 'success');
@@ -570,7 +570,7 @@ class ManageMyAdController extends CoreController
                     $messageManager = $this->get('fa.message.manager');
                     $messageManager->setFlashMessage($successMsg, 'success');
 
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$loggedinUser->getId().'" >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index update --status="A,S,E" --user_id="'.$loggedinUser->getId().'" >/dev/null &');
                     sleep(2);
                     return new JsonResponse(array(
                         'error' => $error,

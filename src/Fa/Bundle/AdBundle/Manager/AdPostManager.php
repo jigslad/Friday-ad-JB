@@ -797,30 +797,30 @@ class AdPostManager
         if ($ad->getUser()) {
             if ($isAssignUserToDetachedAd || $isNewAd) {
                 if ($ad->getUser()->getIsPrivatePhoneNumber() && $ad->getUser()->getPhone()) {
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-yac-number allocate --ad_id='.$ad->getId().' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-yac-number allocate --ad_id='.$ad->getId().' >/dev/null &');
                 } else {
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-yac-number setsold --ad_id='.$ad->getId().' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-yac-number setsold --ad_id='.$ad->getId().' >/dev/null &');
                 }
             } elseif ($ad->getUser()->getIsPrivatePhoneNumber() && $ad->getUser()->getPhone() && !$ad->getPrivacyNumber()) {
-                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-yac-number allocate --ad_id='.$ad->getId().' >/dev/null &');
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-yac-number allocate --ad_id='.$ad->getId().' >/dev/null &');
             } else {
                 //Phone Number Edited & Use Privacy Number is set
                 if ($ad->getUser()->getIsPrivatePhoneNumber() && $ad->getUsePrivacyNumber() && ($oldPhone && $oldPhone != $ad->getPhone())) {
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-yac-number edit --ad_id='.$ad->getId().' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-yac-number edit --ad_id='.$ad->getId().' >/dev/null &');
                 }
             }
         } else {
             // Detached ad : update yac number if phone number changes and ad has set user privacy number.
             if ($ad->getUsePrivacyNumber() && ($oldPhone && $oldPhone != $ad->getPhone())) {
-                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-yac-number edit --ad_id='.$ad->getId().' >/dev/null &');
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-yac-number edit --ad_id='.$ad->getId().' >/dev/null &');
             }
 
             // Detached ad : update yac number if privacy phone number setting is changes.
             if ($oldUsePrivacyNumber != $ad->getUsePrivacyNumber()) {
                 if ($ad->getUsePrivacyNumber()) {
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-yac-number allocate --ad_id='.$ad->getId().' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-yac-number allocate --ad_id='.$ad->getId().' >/dev/null &');
                 } else {
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-yac-number setsold --ad_id='.$ad->getId().' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-yac-number setsold --ad_id='.$ad->getId().' >/dev/null &');
                 }
             }
         }

@@ -137,7 +137,7 @@ class SearchKeywordAdminController extends CrudController implements ResourceAut
             // move file to import directory
             rename($this->get('kernel')->getRootDir().'/../web/uploads/keyword/search_keywords.csv', $this->get('kernel')->getRootDir().'/../web/uploads/keyword/import/search_keywords.csv');
 
-            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:import:search-keywords >/dev/null &');
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:import:search-keywords >/dev/null &');
 
             return $this->handleMessage($this->get('translator')->trans('Keywords import has been started...Please wait for a while.', array(), 'success'), 'search_keyword_admin');
         }
@@ -158,7 +158,7 @@ class SearchKeywordAdminController extends CrudController implements ResourceAut
             // move file to import directory
             rename($this->get('kernel')->getRootDir().'/../web/uploads/keyword/process/search_keywords.csv', $this->get('kernel')->getRootDir().'/../web/uploads/keyword/processing/search_keywords.csv');
 
-            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:process:search-keywords >/dev/null &');
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:process:search-keywords >/dev/null &');
 
             return $this->handleMessage($this->get('translator')->trans('Keywords processing has been started...Please wait for a while.', array(), 'success'), 'search_keyword_admin');
         }

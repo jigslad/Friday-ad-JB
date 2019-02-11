@@ -112,7 +112,7 @@ class ParseAdFeedCommand extends ContainerAwareCommand
                         $memoryLimit = ' -d memory_limit='.$input->getOption('memory_limit');
                     }
 
-                    $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:feed:parse '.$commandOptions.' '.$input->getArgument('action');
+                    $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:feed:parse '.$commandOptions.' '.$input->getArgument('action');
                     $output->writeln($command, true);
                     passthru($command, $returnVar);
                     if ($returnVar !== 0) {
@@ -159,7 +159,7 @@ class ParseAdFeedCommand extends ContainerAwareCommand
                         $memoryLimit = ' -d memory_limit='.$input->getOption('memory_limit');
                     }
 
-                    $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:feed:parse '.$commandOptions.' '.$input->getArgument('action');
+                    $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:feed:parse '.$commandOptions.' '.$input->getArgument('action');
                     $output->writeln($command, true);
                     passthru($command, $returnVar);
                     if ($returnVar !== 0) {

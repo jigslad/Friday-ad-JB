@@ -503,15 +503,15 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
 
             // update yac number if phone number changes and user has set privacy number.
             if ($form->get('is_private_phone_number')->getData() && $oldPhoneNumber != $form->get('phone')->getData()) {
-                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:user-ad-yac-number edit --user_id='.$id.' >/dev/null &');
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number edit --user_id='.$id.' >/dev/null &');
             }
 
             // update yac number if privacy phone number setting is changes.
             if ($oldIsPrivatePhoneNumber != $form->get('is_private_phone_number')->getData()) {
                 if ($form->get('is_private_phone_number')->getData()) {
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:user-ad-yac-number allocate --user_id='.$id.' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number allocate --user_id='.$id.' >/dev/null &');
                 } elseif (!$form->get('is_private_phone_number')->getData()) {
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:user-ad-yac-number setsold --user_id='.$id.' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number setsold --user_id='.$id.' >/dev/null &');
                 }
             }
 
@@ -758,9 +758,9 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
                     }
                     //update solr indexing for A,S,E ads in background if user status is active.
                     /*if ($entity->getStatus() && $entity->getStatus()->getId() == EntityRepository::USER_STATUS_ACTIVE_ID) {
-                        $command = $this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index update --user_id="'.$entity->getId().'" --status="A,S,E"';
+                        $command = $this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index update --user_id="'.$entity->getId().'" --status="A,S,E"';
                         passthru($command, $returnVar);
-                        //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:update:ad-solr-index add --user_id="'.$entity->getId().'" --status="A,S,E" >/dev/null &');
+                        //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index add --user_id="'.$entity->getId().'" --status="A,S,E" >/dev/null &');
                     }*/
                     $this->getEntityManager()->getConnection()->commit();
                 }

@@ -129,7 +129,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:remove-attachments-and-its-files '.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:remove-attachments-and-its-files '.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 

@@ -89,7 +89,7 @@ class UserSiteBannerController extends CoreController
 
             try {
                 if ($form->isValid()) {
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:send:business-user-for-moderation --userId='.$user->getId().' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$user->getId().' >/dev/null &');
                 } else {
                     $error = $form->getErrorsAsString();
                 }
@@ -229,7 +229,7 @@ class UserSiteBannerController extends CoreController
 
             //crop image
             exec('convert -rotate '.($request->get('banner_angle').' -resize '.($request->get('banner_scale') * 100).'% '.$imagePath.DIRECTORY_SEPARATOR.'banner_'.$userSiteId.'_org.jpg'.' -crop '.$request->get('banner_w').'x'.$request->get('banner_h').'+'.$request->get('banner_x').'+'.$request->get('banner_y').' '.$imagePath.DIRECTORY_SEPARATOR.'banner_'.$userSiteId.'.jpg'));
-            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
             if (!$userSite) {
                 $error = $this->get('translator')->trans('Problem in croping banner.');
             } else {
@@ -278,7 +278,7 @@ class UserSiteBannerController extends CoreController
                 $bannerUpdated = $this->getRepository('FaUserBundle:UserSiteBanner')->changeBanner($userSiteObj->getId(), $userSiteBanner, $this->container);
                 if ($bannerUpdated) {
                     $htmlContent = $this->renderView('FaUserBundle:UserSiteBanner:userSiteBanner.html.twig', array('userSiteObj' => $userSiteObj, 'fromProfilePage' => $fromProfilePage));
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:send:business-user-for-moderation --userId='.$userSiteObj->getUser()->getId().' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userSiteObj->getUser()->getId().' >/dev/null &');
                 } else {
                     $error = $this->get('translator')->trans('Problem in changing banner.', array(), 'frontend-my-profile');
                 }
