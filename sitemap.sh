@@ -1,7 +1,7 @@
 #!/bin/bash
 date
 
-/usr/bin/php /web/friday-ad.co.uk/bin/console fa:generate:sitemap
+/usr/bin/php /var/www/html/newfriday-ad/bin/console fa:generate:sitemap
 
 time sudo -u nginx rsync -avzhe ssh --exclude=data --exclude=web/bundles --exclude=web/uploads --exclude=bin/cache --exclude=bin/logs --exclude=bin/cache_ --exclude=data_ --exclude=web/uploads_ --exclude=web/bundles_ --exclude=bin/cache__ --exclude=.ssh --exclude=.git --exclude=bin/cache_local --delete /web/friday-ad.co.uk/web/sitemap.xml nginx@www2:/web/friday-ad.co.uk/web/sitemap.xml
 time sudo -u nginx rsync -avzhe ssh --exclude=data --exclude=web/bundles --exclude=web/uploads --exclude=bin/cache --exclude=bin/logs --exclude=bin/cache_ --exclude=data_ --exclude=web/uploads_ --exclude=web/bundles_ --exclude=bin/cache__ --exclude=.ssh --exclude=.git --exclude=bin/cache_local --delete /web/friday-ad.co.uk/web/sitemap.xml nginx@www3:/web/friday-ad.co.uk/web/sitemap.xml
