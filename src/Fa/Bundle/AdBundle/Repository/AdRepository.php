@@ -3463,14 +3463,14 @@ class AdRepository extends EntityRepository
         }
 
 
-        $qb->where(self::ALIAS.'.user = '.$userId)
-        ->addSelect('(case when '.self::ALIAS.'.renewed_at is not null and '.self::ALIAS.'.renewed_at>'.self::ALIAS.'.created_at then '.self::ALIAS.'.renewed_at when '.self::ALIAS.'.updated_at is not null and '.self::ALIAS.'.updated_at >'.self::ALIAS.'.created_at then '.self::ALIAS.'.updated_at else '.self::ALIAS.'.created_at end) as ad_date')
+        $qb->where(self::ALIAS.'.user = '.$userId);
+        //$qb->addSelect('(case when '.self::ALIAS.'.renewed_at is not null and '.self::ALIAS.'.renewed_at>'.self::ALIAS.'.created_at then '.self::ALIAS.'.renewed_at when '.self::ALIAS.'.updated_at is not null and '.self::ALIAS.'.updated_at >'.self::ALIAS.'.created_at then '.self::ALIAS.'.updated_at else '.self::ALIAS.'.created_at end) as ad_date');
+        $qb->addSelect('(case when '.self::ALIAS.'.renewed_at is not null and '.self::ALIAS.'.renewed_at>'.self::ALIAS.'.created_at then '.self::ALIAS.'.renewed_at else '.self::ALIAS.'.created_at end) as ad_date')
         ->innerJoin(self::ALIAS.'.status', BaseEntityRepository::ALIAS_ADSTATUS)
         ->innerJoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
         ->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS)
         ->leftJoin(self::ALIAS.'.type', BaseEntityRepository::ALIAS_ADTYPE)
         ->andWhere(self::ALIAS.'.future_publish_at IS NULL');
-
         if ($type == 'both') {
             $qb->andWhere(self::ALIAS.'.status IN (:status)');
             $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_LIVE_ID, BaseEntityRepository::AD_STATUS_EXPIRED_ID, BaseEntityRepository::AD_STATUS_SOLD_ID, BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
