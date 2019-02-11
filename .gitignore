@@ -19,6 +19,7 @@
 /data/oldimages/*
 /data/solrdata/ad/*
 /data/solrdata/user/*
+/data/dotmailer/*
 /.project
 /.buildpath
 /.settings
