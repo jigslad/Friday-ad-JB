@@ -922,7 +922,7 @@ class CommonManager
         }
 
         if (is_file($imagePath)) {
-            if ($imageWidth!=null && $imageHeight!= null && $imageWidth !='' && $imageHeight!='' && $imageWidth !=0 && $imageHeight!=0) {
+            if (($imageWidth==null && $imageHeight== null) || ($imageWidth =='' && $imageHeight=='') || ($imageWidth ==0 || $imageHeight==0)) {
                 if ($isCompany) {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" />';
                 } else {
