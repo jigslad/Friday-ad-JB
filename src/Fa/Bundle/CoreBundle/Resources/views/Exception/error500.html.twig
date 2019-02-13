@@ -9,7 +9,9 @@
         {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isErrorSearch': true } )) }}
         {% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
         {% set contactUsPage = staticPageRepository.findOneBy({'id': constant('Fa\\Bundle\\ContentBundle\\Repository\\StaticPageRepository::STATIC_PAGE_CONTACT_US_ID'), 'status': 1}) %}
-        <h2 class="black-text text-center mt30 mb20">If you're having an issue with the site,<br>please <a href="{{ path('location_home_page', {'location': contactUsPage.getSlug()}) }}">contact us</a> and we will do our best to fix it!</h2>
+        {% if contactUsPage is not null %}
+            <h2 class="black-text text-center mt30 mb20">If you're having an issue with the site,<br>please <a href="{{ path('location_home_page', {'location': contactUsPage.getSlug()}) }}">contact us</a> and we will do our best to fix it!</h2>
+        %}
     </div>
 {% endblock %}
 
