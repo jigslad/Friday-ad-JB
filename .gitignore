@@ -20,6 +20,12 @@
 /data/solrdata/ad/*
 /data/solrdata/user/*
 /data/dotmailer/*
+/data/reports/*
+/data/feed/*
+/data/feed_data/*
+/data/*.txt
+!data/ads.txt
+!data/ads1.txt
 /.project
 /.buildpath
 /.settings
