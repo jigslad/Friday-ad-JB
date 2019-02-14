@@ -2882,8 +2882,8 @@ HTML;
     {
         try {
             if ($container->get('session')->has('extend_session') && $container->get('session')->get('extend_session')) {
-                ini_set('session.cookie_lifetime', 3600*24*8);
-                ini_set('session.gc_maxlifetime', 3600*24*8);
+                //ini_set('session.cookie_lifetime', 3600*24*8);
+                //ini_set('session.gc_maxlifetime', 3600*24*8);
             }
         } catch (\Exception $e) {
         }
