@@ -124,7 +124,7 @@ class AdMotorsRepository extends EntityRepository
                     $document = $this->addField($document, AdMotorsSolrFieldMapping::BOAT_LENGTH, $metaData['boat_length']);
                 }
                 if (isset($metaData['engine_size'])) {
-                    $document = $this->addField($document, AdMotorsSolrFieldMapping::ENGINE_SIZE, $metaData['engine_size']);
+                    $document = $this->addField($document, AdMotorsSolrFieldMapping::ENGINE_SIZE, floatval($metaData['engine_size']));
                     $document = $this->addField($document, AdMotorsSolrFieldMapping::ENGINE_SIZE_RANGE, CommonManager::getEngineSizeRangeByValue($metaData['engine_size']));
                 }
             }
