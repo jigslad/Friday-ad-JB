@@ -922,13 +922,13 @@ class CommonManager
         }
 
         if (is_file($imagePath)) {
-            if (!$imageWidth && !$imageHeight) {
+            if (($imageWidth==null && $imageHeight== null) || ($imageWidth =='' && $imageHeight=='') || ($imageWidth ==0 || $imageHeight==0)) {
                 if ($isCompany) {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" />';
                 } else {
                     return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).')" title="'.$userName.'" />';
                 }
-            } else {
+            } else {                
                 if (!file_exists($container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg')) {
                     if ($isCompany) {
                         $orgImagPath = $container->getParameter('fa.company.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
@@ -2882,8 +2882,8 @@ HTML;
     {
         try {
             if ($container->get('session')->has('extend_session') && $container->get('session')->get('extend_session')) {
-                ini_set('session.cookie_lifetime', 3600*24*8);
-                ini_set('session.gc_maxlifetime', 3600*24*8);
+                //ini_set('session.cookie_lifetime', 3600*24*8);
+                //ini_set('session.gc_maxlifetime', 3600*24*8);
             }
         } catch (\Exception $e) {
         }
