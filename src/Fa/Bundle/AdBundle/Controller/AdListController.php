@@ -1844,7 +1844,7 @@ class AdListController extends CoreController
                         'facet_limit' => 19,
                         'repository'  => 'FaEntityBundle:Entity',
                         'first_entry_as_uk' => true,
-                    ));
+                    ));               
             }
         } elseif (in_array($rootCategoryId, array(CategoryRepository::PROPERTY_ID, CategoryRepository::JOBS_ID))) {
             $jobPropertyTopLinkArray = array();
@@ -1877,43 +1877,57 @@ class AdListController extends CoreController
                 );
             }
         }
+        
+        if ($rootCategoryId == CategoryRepository::ANIMALS_ID) {
+            if (isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::DOGS_AND_PUPPIES, CategoryRepository::HORSES, CategoryRepository::CATS_AND_KITTENS))) {
+                $blocks = $blocks + array(
+                    AdAnimalsSolrFieldMapping::BREED_ID => array(
+                        'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                        'search_field_name' => 'item_animals__breed_id',
+                        'is_category_specific' => true,
+                        'is_top_links' => false,
+                        'facet_limit'          => ($locationFlag ? 10 : 25),
+                        'dimension_name'       => 'breed',
+                        'repository'           => 'FaEntityBundle:Entity',
+                    ));
+            } elseif (isset($parentCategoryIds[2]) && in_array($parentCategoryIds[2], array(CategoryRepository::BIRDS))) {
+                $blocks = $blocks + array(
+                    AdAnimalsSolrFieldMapping::SPECIES_ID => array(
+                        'heading' => $this->get('translator')->trans('Top Species'.(isset($cookieLocation['location_text']) ? ' in '.$cookieLocation['location_text'] : null), array(), 'frontend-search-list-block'),
+                        'search_field_name' => 'item_animals__species_id',
+                        'is_category_specific' => true,
+                        'is_top_links' => false,
+                        'facet_limit'          => ($locationFlag ? 10 : 25),
+                        'dimension_name'       => 'species',
+                        'repository'           => 'FaEntityBundle:Entity',
+                    ));
+            }
+        } elseif($rootCategoryId == CategoryRepository::MOTORS_ID) {
+            if (isset($parentCategoryIds[1]) && in_array($parentCategoryIds[1], array(CategoryRepository::BOATS_ID, CategoryRepository::FARM_ID))) {
+                $blocks = $blocks + array(
+                    AdMotorsSolrFieldMapping::MANUFACTURER_ID => array(
+                        'heading' => $this->get('translator')->trans('Top Manufacturers'.(isset($cookieLocation['location_text']) ? ' in '.$cookieLocation['location_text'] : null), array(), 'frontend-search-list-block'),
+                        'search_field_name' => 'item_motors__manufacturer_id',
+                        'is_category_specific' => true,
+                        'is_top_links' => false,
+                        'facet_limit'          => ($locationFlag ? 10 : 25),
+                        'dimension_name'       => 'manufacturer',
+                        'repository'           => 'FaEntityBundle:Entity',
+                    ));
+            } else {
+                $blocks = $blocks + array(
+                    AdMotorsSolrFieldMapping::MAKE_ID => array(
+                        'heading' => $this->get('translator')->trans('Top Makes', array(), 'frontend-search-list-block'),
+                        'search_field_name' => 'item_motors__make_id',
+                        'is_category_specific' => true,
+                        'is_top_links' => false,
+                        'facet_limit'          => ($locationFlag ? 10 : 25),
+                        'dimension_name'       => 'make',
+                        'repository'           => 'FaEntityBundle:Entity',
+                    ));
+            }
+        }
         $blocks = $blocks + array(
-            AdAnimalsSolrFieldMapping::BREED_ID => array(
-                'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
-                'search_field_name' => 'item_animals__breed_id',
-                'is_category_specific' => true,
-                'is_top_links' => false,
-                'facet_limit'          => ($locationFlag ? 10 : 25),
-                'dimension_name'       => 'breed',
-                'repository'           => 'FaEntityBundle:Entity',
-            ),
-            AdAnimalsSolrFieldMapping::SPECIES_ID => array(
-                'heading' => $this->get('translator')->trans('Top Species'.(isset($cookieLocation['location_text']) ? ' in '.$cookieLocation['location_text'] : null), array(), 'frontend-search-list-block'),
-                'search_field_name' => 'item_animals__species_id',
-                'is_category_specific' => true,
-                'is_top_links' => false,
-                'facet_limit'          => ($locationFlag ? 10 : 25),
-                'dimension_name'       => 'species',
-                'repository'           => 'FaEntityBundle:Entity',
-            ),
-            AdMotorsSolrFieldMapping::MAKE_ID => array(
-                'heading' => $this->get('translator')->trans('Top Makes', array(), 'frontend-search-list-block'),
-                'search_field_name' => 'item_motors__make_id',
-                'is_category_specific' => true,
-                'is_top_links' => false,
-                'facet_limit'          => ($locationFlag ? 10 : 25),
-                'dimension_name'       => 'make',
-                'repository'           => 'FaEntityBundle:Entity',
-            ),
-            AdMotorsSolrFieldMapping::MANUFACTURER_ID => array(
-                'heading' => $this->get('translator')->trans('Top Manufacturers'.(isset($cookieLocation['location_text']) ? ' in '.$cookieLocation['location_text'] : null), array(), 'frontend-search-list-block'),
-                'search_field_name' => 'item_motors__manufacturer_id',
-                'is_category_specific' => true,
-                'is_top_links' => false,
-                'facet_limit'          => ($locationFlag ? 10 : 25),
-                'dimension_name'       => 'manufacturer',
-                'repository'           => 'FaEntityBundle:Entity',
-            ),
             AdSolrFieldMapping::DOMICILE_ID => array(
                 'heading' => $this->get('translator')->trans('Top Counties', array(), 'frontend-search-list-block'),
                 'search_field_name' => 'item__location',
