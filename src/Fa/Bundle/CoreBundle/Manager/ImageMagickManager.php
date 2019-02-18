@@ -313,7 +313,7 @@ class ImageMagickManager
         }
         
         //added for speed optimization
-        //$command .= '-sampling-factor 4:2:0 -strip ';
+        $command .= '-sampling-factor 4:2:0 -strip ';
         
         if ($this->quality && $targetMime == 'image/jpeg') {
             $command .= ' -quality '.$this->quality.'% ';
@@ -332,7 +332,7 @@ class ImageMagickManager
         $output = (($mime = array_search($targetMime, $this->mimeMap))?$mime.':':'').$output;
         
         $cmd = $this->magickCommands['convert'].' '.$command.' '.escapeshellarg($this->image).$extract.' '.escapeshellarg($output);
-        
+
         (is_null($thumbDest))?passthru($cmd):exec($cmd);
     }
     
