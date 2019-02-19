@@ -100,7 +100,7 @@
         {% set blockMetaCanonicalUrl = app.request.uri|replace({'?advertgone=1': ''}) %}
     {% endif %}
     {% if app.request.get('page') and app.request.get('page')==1 %}
-        {% set blockMetaCanonicalUrl = app.request.uri|replace({'/page-1': ''}) %}
+        {% set blockMetaCanonicalUrl = blockMetaCanonicalUrl|replace({'/page-1': ''}) %}
     {% endif %}
     {% if blockMetaCanonicalUrl %}
         <link rel="canonical" href="{{blockMetaCanonicalUrl}}" />
