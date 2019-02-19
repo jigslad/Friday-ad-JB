@@ -126,7 +126,7 @@ class AdRequestListener
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
         } elseif (preg_match('/adult\/phone-cam-chat\//', $uri)) {
-            $locationUrl = ConfigRepository::LIVE_CAMS_URL;
+            $locationUrl = str_replace('adult/phone-cam-chat/', 'adult/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
         } elseif (preg_match('/avon/', $uri)) {
