@@ -1751,18 +1751,20 @@ class AdListController extends CoreController
                     )
                 );
             } else {
-                $blocks = $blocks+ array(
-                    AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID => array(
-                        'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
-                        'search_field_name' => 'item__category_id',
-                        'is_category_specific' => true,
-                        'is_top_links' => false,
-                        'facet_limit' => 19,
-                        'repository'  => 'FaEntityBundle:Category',
-                        'first_entry_as_uk' => true,
-                        'removeOtherParams' => true,
-                    )
-                );
+                if (isset($parentCategoryIds[2])) {
+                    $blocks = $blocks+ array(
+                        AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID => array(
+                            'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__category_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit' => 19,
+                            'repository'  => 'FaEntityBundle:Category',
+                            'first_entry_as_uk' => true,
+                            'removeOtherParams' => true,
+                        )
+                    );
+                }
             }
         } elseif ($rootCategoryId == CategoryRepository::MOTORS_ID && $locationFlag) {
             $motorTopLinkArray = array();
@@ -1863,18 +1865,20 @@ class AdListController extends CoreController
                     )
                 );
             } else {
-                $blocks = $blocks + array(
-                    AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID => array(
-                        'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
-                        'search_field_name' => 'item__category_id',
-                        'is_category_specific' => true,
-                        'is_top_links' => false,
-                        'facet_limit'          => 19,
-                        'repository'           => 'FaEntityBundle:Category',
-                        'first_entry_as_uk' => true,
-                        'removeOtherParams' => true,
-                    )
-                );
+                if (isset($parentCategoryIds[2])) {
+                    $blocks = $blocks + array(
+                        AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID => array(
+                            'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__category_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit'          => 19,
+                            'repository'           => 'FaEntityBundle:Category',
+                            'first_entry_as_uk' => true,
+                            'removeOtherParams' => true,
+                        )
+                    );
+                }
             }
         }
         
