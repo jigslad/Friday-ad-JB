@@ -155,7 +155,7 @@ class ManageMyAdController extends CoreController
                     if ($getExpiryAtDate=='') {
                         $getExpiryDate = strtotime('+28 days', $getCreateOrUpdateDate);
                     } else {
-                        $getExpiryDate =  strtotime('+1 days', $getCurrentActivePackage->getExpiresAt());
+                        $getExpiryDate =  $getCurrentActivePackage->getExpiresAt();
                     }
                     $todaysTime  = time();
                     if ($todaysTime > $getExpiryDate && $isBoostEnabled==1) {
