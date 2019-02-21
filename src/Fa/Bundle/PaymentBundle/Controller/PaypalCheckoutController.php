@@ -58,8 +58,10 @@ class PaypalCheckoutController extends CoreController
         }
 
         $paypalManager                = $this->get('fa.paypal.manager');
-        $returnUrl                    = $this->generateUrl('paypal_process_payment', array(), true);
-        $cacelUrl                     = $this->generateUrl('show_cart', array(), true);
+        $baseUrl = $this->container->getParameter('base_url');
+        
+        $returnUrl                    = $baseUrl.$this->generateUrl('paypal_process_payment', array(), true);
+        $cacelUrl                     = $baseUrl.$this->generateUrl('show_cart', array(), true);
         $paypalSetExpCheckoutResponse = $paypalManager->getSetExpressCheckoutResponse($returnUrl, $cacelUrl, $cart, $cartDetails);
 
         //check for paypal token

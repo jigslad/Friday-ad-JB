@@ -4634,7 +4634,12 @@ class AdRepository extends EntityRepository
     public function getAdsCountBySearchParams($searchParams)
     {
         $arrResources = array();
-        $townId = $searchParams['search']['item__location'];
+        $townIds = $searchParams['search']['item__location'];
+        if($townIds) {
+            $explodetownIds = explode(',',$townIds);
+            $townId = $explodetownIds[0];
+        }
+        
         $distance = isset($searchParams['search']['item__distance'])?$searchParams['search']['item__distance']:-1;
         if ($townId) {
             $location = $this->_em->getRepository('FaEntityBundle:Location')->find($townId);
@@ -4656,10 +4661,11 @@ class AdRepository extends EntityRepository
                 $query->andWhere('IDENTITY('.AdLocationRepository::ALIAS.'.location_town) IS NOT NULL');
                 $query->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID);
                 $query->andWhere(self::ALIAS.'.is_blocked_ad=0');
-                $query->andWhere(AdLocationRepository::ALIAS.'.location_town !='.$townId);
+                $query->andWhere(AdLocationRepository::ALIAS.'.location_town not in ('.$townId.')'); 
                 $query->addGroupBy(AdLocationRepository::ALIAS.'.location_town');
                 $query->addOrderBy('distance', 'asc');
                 //$query->setMaxResults(4);
+                
                 $arrResources = $query->getQuery()->getArrayResult();
             }
         }

@@ -206,7 +206,7 @@ class SeoToolOverrideRepository extends EntityRepository
                 }
             
                 $allCommoUrl = $url;
-                if (count($indexableKeyArray) && count($dimensionUrl)) {
+                if (!empty($indexableKeyArray) && !empty($dimensionUrl)) {
                     $indexArrayStart = 0;
                     foreach ($indexableKeyArray as $indexableKey) {
                         if (isset($dimensionUrl[$indexArrayStart])) {

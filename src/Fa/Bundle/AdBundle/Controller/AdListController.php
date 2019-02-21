@@ -2279,13 +2279,14 @@ class AdListController extends CoreController
                     $locationId = $varExplodeLoc[0];
                 }
                 if (isset($varExplodeLoc[1]) && $varExplodeLoc[1]!='') {
-                    $distance = $varExplodeLoc[1];
+                    $distance = intval($varExplodeLoc[1]);
                 }
             }
+            
             if ($exposureMiles === 'national') {
                 $additionaldistance = 100000;
             } else {
-                $additionaldistance = $exposureMiles;
+                $additionaldistance = intval($exposureMiles);
             }
             $data['query_filters']['user_shop_detail']['location'] = $locationId.'|'.($distance+$additionaldistance);
         }

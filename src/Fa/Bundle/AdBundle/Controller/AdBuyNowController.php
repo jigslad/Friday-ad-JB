@@ -240,8 +240,10 @@ class AdBuyNowController extends CoreController
         $cart = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container, true);
 
         $paypalAdaptiveManager         = $this->get('fa.paypal.adaptive.manager');
-        $returnUrl                     = $this->generateUrl('paypal_adaptive_process_payment', array('cartCode' => $cart->getCartCode()), true);
-        $cacelUrl                      = $adDetailUrl;
+        $baseUrl = $this->container->getParameter('base_url');
+        
+        $returnUrl                     = $baseUrl.$this->generateUrl('paypal_adaptive_process_payment', array('cartCode' => $cart->getCartCode()), true);
+        $cacelUrl                      = $baseUrl.$adDetailUrl;
         $paypalAdaptivePaymentResponse = $paypalAdaptiveManager->getAdaptivePaymentResponse($returnUrl, $cacelUrl, $cart, $paypalCommission);
 
         //check for paypal token
