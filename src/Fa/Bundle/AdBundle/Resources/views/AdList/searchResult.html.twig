@@ -156,7 +156,7 @@
 {% endblock %}
 
 {% block scripttop %}
-    {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
+    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
         {{ include('FaFrontendBundle:Default:home-css.html.twig') }}
     {% endif %}
 {% endblock %}
@@ -481,7 +481,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 {% endblock %}
 
 {% block scriptbottom %}
-    {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
+    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
         <script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
     {% endif %}
     {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
