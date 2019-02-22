@@ -552,7 +552,7 @@ class AdController extends CoreController
                 $locationSlug = null;
                 $categorySlug = null;
                 $categoryObj = null;
-                if (count($adLocations) && isset($adLocations[0]) && isset($adLocations[0]['town_id'])) {
+                if (!empty($adLocations) && isset($adLocations[0]) && isset($adLocations[0]['town_id'])) {
                     $locationSlug = $this->getEntityManager()->getRepository('FaEntityBundle:Location')->getSlugById($adLocations[0]['town_id'], $this->container);
                 }
 
@@ -561,7 +561,7 @@ class AdController extends CoreController
                     $locationSlug = $this->getEntityManager()->getRepository('FaEntityBundle:Location')->getSlugById(LocationRepository::COUNTY_ID, $this->container);
                 }
 
-                if (count($adDatas) && isset($adDatas['category_id'])) {
+                if (!empty($adDatas) && isset($adDatas['category_id'])) {
                     $categoryObj = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->find($adDatas['category_id']);
                     $categorySlug = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->getFullSlugById($adDatas['category_id'], $this->container);
                 }
@@ -622,7 +622,7 @@ class AdController extends CoreController
 
         $blocks = $this->getAdDetailSeoBlockParams($categoryId, $parentCategoryIds, $seoPageRule, $adlocationId);
         
-        if (count($blocks)) {
+        if (!empty($blocks)) {
             foreach ($blocks as $solrFieldName => $block) {
                 // initialize solr search manager service and fetch data based of above prepared search options
                 $this->get('fa.solrsearch.manager')->init('ad', '', $block['data']);
@@ -654,7 +654,7 @@ class AdController extends CoreController
                     );
                     $solrFieldName = AdSolrFieldMapping::CATEGORY_ID;
                     $this->get('fa.solrsearch.manager')->init('ad', '', $data);
-                    if (count($cookieLocation)) {
+                    if (!empty($cookieLocation)) {
                         if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
                             $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
                             $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
@@ -667,7 +667,7 @@ class AdController extends CoreController
                     $facetResult = array_map("get_object_vars", get_object_vars($facetResult));
                 }
 
-                if (isset($facetResult[$solrFieldName]) && count($facetResult[$solrFieldName])) {
+                if (isset($facetResult[$solrFieldName]) && !empty($facetResult[$solrFieldName])) {
                     if ($rootCategoryId == CategoryRepository::MOTORS_ID && isset($parentCategoryIds[1]) && isset($blocks[$solrFieldName]['first_entry_as_uk']) && $blocks[$solrFieldName]['first_entry_as_uk']) {
                         $seoSearchParams['item__category_id'] = $parentCategoryIds[1];
                         $seoSearchParams['item__location'] = LocationRepository::COUNTY_ID;

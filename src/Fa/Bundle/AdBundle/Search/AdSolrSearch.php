@@ -365,7 +365,7 @@ class AdSolrSearch extends SolrSearch
         }
 
         if (isset($locationData[2]) && $locationData[2]) {
-            $startDistance = $locationData[2];
+            $startDistance = intval($locationData[2]);
         } else {
             $startDistance = 0;
         }

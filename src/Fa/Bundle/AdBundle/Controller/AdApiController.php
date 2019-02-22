@@ -72,8 +72,8 @@ class AdApiController extends CoreController
         $searchParam   = $request->query->all();
         $adArray  = array();
         $buildResponse = $this->get('fa_ad.ad.api.response_build');
-        $limit         = ((isset($searchParam['Limit']) && $searchParam['Limit'] <= 100) ? $searchParam['Limit'] : 100);
-        $page          = ((isset($searchParam['Page']) && $searchParam['Page'] > 0) ? $searchParam['Page'] : 1);
+        $limit         = ((isset($searchParam['Limit']) && $searchParam['Limit'] <= 100) ? intval($searchParam['Limit']) : 100);
+        $page          = ((isset($searchParam['Page']) && $searchParam['Page'] > 0) ? intval($searchParam['Page']) : 1);
         $offset        = ($page - 1) * $limit;
 
         $query= $this->getRepository('FaAdBundle:Ad')->getAdApiQueryBuilder($searchParam, $this->container)

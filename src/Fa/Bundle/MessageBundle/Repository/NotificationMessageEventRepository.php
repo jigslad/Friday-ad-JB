@@ -79,7 +79,7 @@ class NotificationMessageEventRepository extends EntityRepository
                     $notifcationEvent->setAdId($ad_id);
                 }
 
-                if ($user_id != '') {
+                if ($user_id != '' && $user_id != null) {
                     $notifcationEvent->setUserId($user_id);
                 }
 
