@@ -105,7 +105,7 @@ class AdMessageAttachmentsController extends CoreController
                         $isAdminUser = $this->isAdminLoggedIn() ? true : false;
                         $this->getRepository('FaMessageBundle:MessageAttachments')->saveAttachment($objMessageAttachments, $this->container);
                     } else {
-                        $error = $form->getErrorsAsString();
+                        $error = $form->getErrors(true, false);
                     }
                 } catch (\Exception $e) {
                     $error = $e->getMessage();
