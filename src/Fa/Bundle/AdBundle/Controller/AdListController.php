@@ -1455,7 +1455,7 @@ class AdListController extends CoreController
         $blocks = $this->getListingBlockParams($categoryId, $parentCategoryIds, $cookieLocation, $seoPageRule, $seoSearchParams);
         
         $data['facet_fields'] = array();
-        if (!count($cookieLocation)) {
+        if (empty($cookieLocation)) {
             $data['facet_fields'] = array(
                 AdSolrFieldMapping::DOMICILE_ID => array('limit' => $blocks[AdSolrFieldMapping::DOMICILE_ID]['facet_limit'], 'min_count' => 1),
                 AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
@@ -1486,7 +1486,7 @@ class AdListController extends CoreController
         
         // initialize solr search manager service and fetch data based of above prepared search options
         $this->get('fa.solrsearch.manager')->init('ad', '', $data);
-        if (count($cookieLocation)) {
+        if (!empty($cookieLocation)) {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
                 $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
@@ -1633,7 +1633,7 @@ class AdListController extends CoreController
                         unset($blocks[CategoryRepository::MOTORS_ID.'_top_links']);
                     }
                     $topModelLinks = array();
-                    if (count($cookieLocation) && count($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                    if (!empty($cookieLocation) && !empty($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
                         $topModelLinks = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
                         $blocks = CommonManager::insertBeforeArray($blocks, AdSolrFieldMapping::TOWN_ID, array(CategoryRepository::MOTORS_ID.'_top_links' => array(
                             'heading' => $this->get('translator')->trans('Top Models', array(), 'frontend-search-list-block'),
@@ -1642,7 +1642,7 @@ class AdListController extends CoreController
                             'facet' => $topModelLinks
                         )));
                     }
-                    if (count($cookieLocation) && !count($topModelLinks)) {
+                    if (!empty($cookieLocation) && empty($topModelLinks)) {
                         $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
                         $blocks = CommonManager::insertBeforeArray($blocks, AdSolrFieldMapping::TOWN_ID, array(AdMotorsSolrFieldMapping::MODEL_ID.'_UK' => array(
                             'heading' => $this->get('translator')->trans('Top Models', array(), 'frontend-search-list-block'),
@@ -1985,7 +1985,7 @@ class AdListController extends CoreController
             $indexableDimensionFieldArray = $this->getRepository('FaEntityBundle:CategoryDimension')->getIndexableDimensionFieldsArrayByCategoryId($categoryId, $this->container);
             $data['query_filters']['item']['category_id'] = $categoryId;
 
-            if (count($indexableDimensionFieldArray)) {
+            if (!empty($indexableDimensionFieldArray)) {
                 foreach ($indexableDimensionFieldArray as $indexableDimensionField) {
                     if (isset($searchParams['search'][$indexableDimensionField]) && $searchParams['search'][$indexableDimensionField]) {
                         $explodeRes                                            = explode('__', $indexableDimensionField);
@@ -2002,7 +2002,7 @@ class AdListController extends CoreController
         // initialize solr search manager service and fetch data based of above prepared search options
         $container->get('fa.solrsearch.manager')->init('ad', '', $data);
         
-        if (count($cookieLocation)) {
+        if (!empty($cookieLocation)) {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
                 $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
