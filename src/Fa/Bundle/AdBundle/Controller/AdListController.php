@@ -1671,10 +1671,10 @@ class AdListController extends CoreController
                     $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_MAKE_ID, 'item__category_id', (count($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_category_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_2_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_3_id_i : ('.$parentCategoryIds[1].'))', true, $cookieLocation);
                     $blocks[$solrFieldName]['repository'] = 'FaEntityBundle:Category';
                     $blocks[$solrFieldName]['search_field_name'] = 'item__category_id';
-                    if (!count($cookieLocation)) {
+                    if (empty($cookieLocation)) {
                         $blocks[$solrFieldName]['show_all_link'] = true;
                     }
-                    if (count($cookieLocation) && !isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK'])) {
+                    if (!empty($cookieLocation) && !isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK'])) {
                         $solrFieldName = AdMotorsSolrFieldMapping::MAKE_ID.'_UK';
                         $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
                         $blocks[$solrFieldName]['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_MAKE_ID, 'item__category_id', $blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK']['facet_limit'], $searchParams, $this->container, ' AND (a_parent_category_lvl_2_id_i : '.$parentCategoryIds[1].')', true, $cookieLocation);
@@ -1731,7 +1731,7 @@ class AdListController extends CoreController
      */
     private function getListingBlockParams($categoryId, $parentCategoryIds, $cookieLocation, $seoPageRule, $seoSearchParams)
     {
-        $locationFlag = count($cookieLocation);
+        $locationFlag = !empty($cookieLocation);
         $blocks = array();
         $rootCategoryId = (isset($parentCategoryIds[0]) ? $parentCategoryIds[0] : null);
         if ($rootCategoryId == CategoryRepository::FOR_SALE_ID) {
