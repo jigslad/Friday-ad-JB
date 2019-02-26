@@ -867,7 +867,7 @@ class AdPostController extends ThirdPartyLoginController
                     }
                 }
 
-                if (count($fourthStepData)) {
+                if (!empty($fourthStepData)) {
                     //$formToken = '_csrf/https-'.$form->getName();
                     $categoryName = $this->getRootCategoryName($firstStepData['category_id']);
                     $formToken = '_csrf/https-fa_paa_fourth_step_'.$categoryName;
