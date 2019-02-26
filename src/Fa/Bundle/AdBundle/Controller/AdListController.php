@@ -1698,8 +1698,8 @@ class AdListController extends CoreController
                         if ($block['is_category_specific'] && (!isset($block['first_entry_as_uk']))) {
                             $categoryDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getDimesionsByCategoryId($categoryId, $this->container);
                             $categoryDimensions = array_map('strtolower', $categoryDimensions);
-                            if (count($categoryDimensions) && in_array($block['dimension_name'], $categoryDimensions)) {
-                                if (isset($searchParams['search'][$block['search_field_name']]) || count($cookieLocation)) {
+                            if (!empty($categoryDimensions) && in_array($block['dimension_name'], $categoryDimensions)) {
+                                if (isset($searchParams['search'][$block['search_field_name']]) || !empty($cookieLocation)) {
                                     $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField($solrFieldName, $block['search_field_name'], $block['facet_limit'], $blocksTmpSearchParams, $this->container, null, true, $cookieLocation);
                                 } else {
                                     $data['facet_fields'][$solrFieldName] = array('limit' => $block['facet_limit'], 'min_count' => 1);
@@ -1707,7 +1707,7 @@ class AdListController extends CoreController
                                 $categoryDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getDimesionsByCategoryId($categoryId, $this->container);
                                 $categoryDimensions = array_map('strtolower', $categoryDimensions);
 
-                                if (!count($cookieLocation) && ($rootCategoryId == CategoryRepository::ANIMALS_ID || $categoryId == CategoryRepository::MOTORHOMES_ID || $categoryId == CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID || ($rootCategoryId == CategoryRepository::MOTORS_ID && count($parentCategoryIds) == 2))) {
+                                if (empty($cookieLocation) && ($rootCategoryId == CategoryRepository::ANIMALS_ID || $categoryId == CategoryRepository::MOTORHOMES_ID || $categoryId == CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID || ($rootCategoryId == CategoryRepository::MOTORS_ID && count($parentCategoryIds) == 2))) {
                                     $blocks[$solrFieldName]['show_all_link'] = true;
                                 }
                             }
@@ -2510,7 +2510,7 @@ class AdListController extends CoreController
     {
         $appendQueryFilters = '';
         if (isset($searchParams['search']['item_motors__colour_id']) && $searchParams['search']['item_motors__colour_id']) {
-            if (count($searchParams['search']['item_motors__colour_id'])) {
+            if (!empty($searchParams['search']['item_motors__colour_id'])) {
                 $itemMotorsColourIds = $searchParams['search']['item_motors__colour_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
@@ -2523,7 +2523,7 @@ class AdListController extends CoreController
         }
 
         if (isset($searchParams['search']['item_motors__body_type_id']) && $searchParams['search']['item_motors__body_type_id']) {
-            if (count($searchParams['search']['item_motors__body_type_id'])) {
+            if (!empty($searchParams['search']['item_motors__body_type_id'])) {
                 $itemMotorsBodyTypeIds = $searchParams['search']['item_motors__body_type_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
@@ -2536,7 +2536,7 @@ class AdListController extends CoreController
         }
 
         if (isset($searchParams['search']['item_motors__fuel_type_id']) && $searchParams['search']['item_motors__fuel_type_id']) {
-            if (count($searchParams['search']['item_motors__fuel_type_id'])) {
+            if (!empty($searchParams['search']['item_motors__fuel_type_id'])) {
                 $itemMotorsFuelTypeIds = $searchParams['search']['item_motors__fuel_type_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
@@ -2549,7 +2549,7 @@ class AdListController extends CoreController
         }
 
         if (isset($searchParams['search']['item_motors__reg_year']) && $searchParams['search']['item_motors__reg_year']) {
-            if (count($searchParams['search']['item_motors__reg_year'])) {
+            if (!empty($searchParams['search']['item_motors__reg_year'])) {
                 $itemMotorsRegYears = $searchParams['search']['item_motors__reg_year'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
@@ -2562,7 +2562,7 @@ class AdListController extends CoreController
         }
 
         if (isset($searchParams['search']['item_motors__transmission_id']) && $searchParams['search']['item_motors__transmission_id']) {
-            if (count($searchParams['search']['item_motors__transmission_id'])) {
+            if (!empty($searchParams['search']['item_motors__transmission_id'])) {
                 $itemMotorsTransmissionIds = $searchParams['search']['item_motors__transmission_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
@@ -2589,7 +2589,7 @@ class AdListController extends CoreController
         }*/
 
         if (isset($searchParams['search']['item_motors__condition_id']) && $searchParams['search']['item_motors__condition_id']) {
-            if (count($searchParams['search']['item_motors__condition_id'])) {
+            if (!empty($searchParams['search']['item_motors__condition_id'])) {
                 $itemMotorsConditionIds = $searchParams['search']['item_motors__condition_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
