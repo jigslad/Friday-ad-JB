@@ -122,7 +122,7 @@ class AdPrintController extends CoreController
             ->getQuery()->getSingleScalarResult();
         
         $printApiArray = array(
-            'CurrentPage' => $page,
+            'CurrentPage' => (int) $page,
             'TotalPages'  => ceil($count / $limit),
             'Adverts'     => $printAdArray,
         );
