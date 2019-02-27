@@ -908,7 +908,7 @@ class AdController extends CoreController
         
         //check ad loaction is exist
         if ($rootCategoryId == CategoryRepository::ADULT_ID && $adlocationId !== 0) {
-            $seoSearchParams['item__category_id'] = (!empty($parentCategoryIds))?$parentCategoryIds[1]:null;
+            $seoSearchParams['item__category_id'] = (!empty($parentCategoryIds) && isset($parentCategoryIds[1]))? $parentCategoryIds[1]:null;
             $data['query_filters']['item']['category_id'] = $seoSearchParams['item__category_id'];
             $data['query_filters']['item']['distance'] = CategoryRepository::ADULT_TOP_LOCATION_AT_DETAIL_BY_DISTANCE;
             $data['query_filters']['item']['location'] = $adlocationId."|".CategoryRepository::ADULT_TOP_LOCATION_AT_DETAIL_BY_DISTANCE;
