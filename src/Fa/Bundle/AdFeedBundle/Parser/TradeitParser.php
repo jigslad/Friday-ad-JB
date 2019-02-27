@@ -749,7 +749,9 @@ class TradeitParser
 
         $idir = $this->dir.'/images/'.$site_dir.'/'.$group_dir;
         if (!file_exists($idir)) {
+            $old     = umask(0);
             mkdir($idir, 0777, true);
+            umask($old);
         }
 
         $i = 1;

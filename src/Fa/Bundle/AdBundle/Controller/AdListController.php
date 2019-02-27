@@ -1664,11 +1664,11 @@ class AdListController extends CoreController
                         'dimension_name'       => 'model',
                         'repository'           => 'FaEntityBundle:Category',
                         'show_all_link'        => false,
-                        'facet'                => $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_ID, 'item__category_id', (count($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_parent_category_lvl_3_id_i : '.$parentCategoryIds[2].')', true, $cookieLocation),
-                    )));
+                        'facet'                => $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_ID, 'item__category_id', (!empty($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_parent_category_lvl_3_id_i : '.$parentCategoryIds[2].')', true, $cookieLocation),
+                    )));                    
                 } else {
                     $solrFieldName = AdMotorsSolrFieldMapping::MAKE_ID;
-                    $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_MAKE_ID, 'item__category_id', (count($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_category_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_2_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_3_id_i : ('.$parentCategoryIds[1].'))', true, $cookieLocation);
+                    $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_MAKE_ID, 'item__category_id', (!empty($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_category_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_2_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_3_id_i : ('.$parentCategoryIds[1].'))', true, $cookieLocation);
                     $blocks[$solrFieldName]['repository'] = 'FaEntityBundle:Category';
                     $blocks[$solrFieldName]['search_field_name'] = 'item__category_id';
                     if (empty($cookieLocation)) {

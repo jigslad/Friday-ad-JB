@@ -664,7 +664,9 @@ class AdImageRepository extends EntityRepository
             $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imagePath;
 
             if (!is_dir($orgImagePath)) {
+                $old     = umask(0);
                 mkdir($orgImagePath, 0777);
+                umask($old);
             }
             
             $orginFilePath = $sourcePath.'/'.$sourceName;
