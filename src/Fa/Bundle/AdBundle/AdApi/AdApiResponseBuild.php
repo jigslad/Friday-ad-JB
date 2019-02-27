@@ -197,7 +197,7 @@ class AdApiResponseBuild
         } else {
             $images = $this->container->get('doctrine')->getManager()->getRepository('FaAdBundle:AdImage')->getAdImages($ad->getId(), 1);
 
-            if (count($images)) {
+            if (!empty($images)) {
                 foreach ($images as $image) {
                     $imageUrl = CommonManager::getAdImageUrl($this->container, $ad->getId(), $image->getPath(), $image->getHash(), '800X600', $image->getAws(), $image->getImageName());
                     if (!preg_match("~^(?:ht)tps?://~i", $imageUrl)) {

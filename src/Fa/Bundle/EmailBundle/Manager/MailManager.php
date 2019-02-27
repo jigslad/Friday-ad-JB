@@ -232,7 +232,7 @@ class MailManager
      */
     protected function setAttachment($attachment)
     {
-        if (count($attachment)) {
+        if (!empty($attachment)) {
             foreach ($attachment as $filename => $filepath) {
                 $attachment = \Swift_Attachment::fromPath($filepath);
 
