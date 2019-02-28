@@ -119,7 +119,7 @@ class AdPostController extends ThirdPartyLoginController
                     if ($rootCategoryId == CategoryRepository::MOTORS_ID) {
                         $secondStepData = $firstStepData;
                         unset($secondStepData['category_id'], $secondStepData['category_id_autocomplete']);
-                        if (count($secondStepData) > 1) {
+                        if (!empty($secondStepData) && count($secondStepData) > 1) {
                             $this->setStepSessionData($secondStepData + $this->getStepSessionData('second'), 'second');
                         }
                     }
@@ -141,15 +141,19 @@ class AdPostController extends ThirdPartyLoginController
                 
                 if (!empty($firstStepData)) {
 //                     $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_paa_category_select');
-                    $formToken = '_csrf/https-'.'fa_paa_category_select';
-                    $csrfToken      = $this->container->get('session')->get($formToken);
+                    //$formToken = '_csrf/https-'.'fa_paa_category_select';
+                    //$csrfToken      = $this->container->get('session')->get($formToken);
+                    
+                    $formNameT = 'fa_paa_category_select';
+                    $csrfToken = $this->get('security.csrf.token_manager')->getToken($formNameT)->getValue();
+                    
 //                     $csrfToken      = $this->get('security.csrf.token_manager')->getToken('fa_paa_category_select')->getValue();
                     $firstStepData = $firstStepData + array('_token' => $csrfToken);
-                    if ($form->has('has_reg_no') && isset($firstStepData['first_step_ordered_fields']) && count(explode(',', $firstStepData['first_step_ordered_fields'])) && !isset($firstStepData['has_reg_no'])) {
+                    if ($form->has('has_reg_no') && isset($firstStepData['first_step_ordered_fields']) && !empty(explode(',', $firstStepData['first_step_ordered_fields'])) && !isset($firstStepData['has_reg_no'])) {
                         $options = $form->get('has_reg_no')->getConfig()->getOptions();
                         $firstStepData['has_reg_no'] = (isset($options['data']) ? $options['data'] : false);
                     }
-                    if ($form->has('has_reg_no') && isset($firstStepData['first_step_ordered_fields']) && count(explode(',', $firstStepData['first_step_ordered_fields'])) && isset($firstStepData['colour_id_dimension_id']) && !$firstStepData['colour_id_dimension_id']) {
+                    if ($form->has('has_reg_no') && isset($firstStepData['first_step_ordered_fields']) && !empty(explode(',', $firstStepData['first_step_ordered_fields'])) && isset($firstStepData['colour_id_dimension_id']) && !$firstStepData['colour_id_dimension_id']) {
                         $options = $form->get('colour_id_dimension_id')->getConfig()->getOptions();
                         $firstStepData['colour_id_dimension_id'] = (isset($options['data']) ? $options['data'] : false);
                     }
@@ -273,7 +277,7 @@ class AdPostController extends ThirdPartyLoginController
                         }
                     }
 
-                    if (count($firstStepDataForMotorsRegNo)) {
+                    if (!empty($firstStepDataForMotorsRegNo)) {
                         $firstStepDataForMotorsRegNo['first_step_ordered_fields'] = implode(',', array_keys($firstStepDataForMotorsRegNo));
                         $firstStepDataForMotorsRegNo = $firstStepDataForMotorsRegNo + $this->getStepSessionData('first');
                         $this->setStepSessionData($firstStepDataForMotorsRegNo, 'first');
@@ -331,8 +335,11 @@ class AdPostController extends ThirdPartyLoginController
                 // in 2.7v $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName);
                 //$formToken = '_csrf/https-'.$formName;
                 $categoryName = $this->getRootCategoryName($firstStepData['category_id']);
-                $formToken = '_csrf/https-fa_paa_second_step_'.$categoryName;
-                $csrfToken      = $this->container->get('session')->get($formToken);
+                //$formToken = '_csrf/https-fa_paa_second_step_'.$categoryName;
+                $formNameT = 'fa_paa_second_step_'.$categoryName;
+                //$csrfToken      = $this->container->get('session')->get($formToken);
+                $csrfToken = $this->get('security.csrf.token_manager')->getToken($formNameT)->getValue();
+                
                 //# It is generating new token that's why i'm getting old _csrf token from session
                 // Note: Need to investigate more
                 // $csrfToken = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
@@ -870,8 +877,11 @@ class AdPostController extends ThirdPartyLoginController
                 if (!empty($fourthStepData)) {
                     //$formToken = '_csrf/https-'.$form->getName();
                     $categoryName = $this->getRootCategoryName($firstStepData['category_id']);
-                    $formToken = '_csrf/https-fa_paa_fourth_step_'.$categoryName;
-                    $csrfToken      = $this->container->get('session')->get($formToken);
+                    //$formToken = '_csrf/https-fa_paa_fourth_step_'.$categoryName;
+                    $formNameT = 'fa_paa_fourth_step_'.$categoryName;
+                    //$csrfToken      = $this->container->get('session')->get($formToken);
+                    $csrfToken = $this->get('security.csrf.token_manager')->getToken($formNameT)->getValue();
+                    
                     //# It is generating new token that's why i'm getting old _csrf token from session
                     // Note: Need to investigate more
                     // $csrfToken = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
@@ -890,7 +900,7 @@ class AdPostController extends ThirdPartyLoginController
                 // Remove fourth step data from session
                 $this->container->get('session')->remove('paa_fourth_step_data');
                 
-                if (count($fourthStepData)) {
+                if (!empty($fourthStepData)) {
                     $csrfToken      = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
                     $fourthStepData = $fourthStepData + array('_token' => $csrfToken);
                     
@@ -1324,7 +1334,7 @@ class AdPostController extends ThirdPartyLoginController
     {
         $user = new User();
         $sessionData = $this->container->get('session')->get($sessionName, array());
-        if (count($sessionData) > 0) {
+        if (!empty($sessionData)) {
             if (isset($sessionData['user_email'])) {
                 $user->setEmail($sessionData['user_email']);
             }
