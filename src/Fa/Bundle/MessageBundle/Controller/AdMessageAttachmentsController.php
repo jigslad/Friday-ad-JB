@@ -215,8 +215,8 @@ class AdMessageAttachmentsController extends CoreController
                 $objMessageAttachments = $this->getRepository('FaMessageBundle:MessageAttachments')->find($attachmentId);
             }
 
-            if ($objMessageAttachments) {
-                if (!empty($objMessageAttachments) && count($objMessageAttachments) == 1) {
+            if (!empty($objMessageAttachments)) {
+                if (count($objMessageAttachments) == 1) {
                     $downloadFileName = $objMessageAttachments->getOriginalFileName();
                     $fileExtension    = substr(strrchr($downloadFileName, '.'), 1);
                     $fileName         = $objMessageAttachments->getSessionId().'_'.$objMessageAttachments->getHash().'.'.$fileExtension;

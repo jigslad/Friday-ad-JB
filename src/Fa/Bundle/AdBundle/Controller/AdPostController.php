@@ -119,8 +119,10 @@ class AdPostController extends ThirdPartyLoginController
                     if ($rootCategoryId == CategoryRepository::MOTORS_ID) {
                         $secondStepData = $firstStepData;
                         unset($secondStepData['category_id'], $secondStepData['category_id_autocomplete']);
-                        if (!empty($secondStepData) && count($secondStepData) > 1) {
-                            $this->setStepSessionData($secondStepData + $this->getStepSessionData('second'), 'second');
+                        if (!empty($secondStepData)) {
+                            if(count($secondStepData) > 1) {
+                                $this->setStepSessionData($secondStepData + $this->getStepSessionData('second'), 'second');
+                            }
                         }
                     }
 
@@ -1650,14 +1652,16 @@ class AdPostController extends ThirdPartyLoginController
                         }
                     }
                     //set first step data for motor reg no.
-                    if (in_array('has_reg_no', array_keys($secondStepData))) {
-                        $firstStepDataForMotorsRegNo = array();
-                        $motorsRegNoFields = $this->getMotorRegNoFields();
-                        foreach ($motorsRegNoFields as $motorsRegNoField) {
-                            if (array_key_exists($motorsRegNoField, $secondStepData)) {
-                                $firstStepDataForMotorsRegNo[$motorsRegNoField] = $secondStepData[$motorsRegNoField];
-                            } else {
-                                $firstStepDataForMotorsRegNo[$motorsRegNoField] = null;
+                      if (!empty($secondStepData))
+                        if(in_array('has_reg_no', array_keys($secondStepData))) {
+                            $firstStepDataForMotorsRegNo = array();
+                            $motorsRegNoFields = $this->getMotorRegNoFields();
+                            foreach ($motorsRegNoFields as $motorsRegNoField) {
+                                if (array_key_exists($motorsRegNoField, $secondStepData)) {
+                                    $firstStepDataForMotorsRegNo[$motorsRegNoField] = $secondStepData[$motorsRegNoField];
+                                } else {
+                                    $firstStepDataForMotorsRegNo[$motorsRegNoField] = null;
+                                }
                             }
                         }
 
