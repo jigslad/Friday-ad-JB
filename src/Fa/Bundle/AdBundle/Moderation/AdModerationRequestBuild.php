@@ -74,7 +74,7 @@ class AdModerationRequestBuild
      *
      * @return array
      */
-    public function init(Ad $ad, $values, $priority = 1, $isForManualModeration = false, $manualModerationReason = '')
+    public function init(Ad $ad, $values, $priority = 1, $isForManualModeration = false, $manualModerationReason = '',$remoderation = false )
     {
         $this->values = array();
         $this->values = unserialize($values);
@@ -85,7 +85,7 @@ class AdModerationRequestBuild
             }
         }
 
-        $this->buildOtherParametersArray($ad, $priority, $isForManualModeration, $manualModerationReason);
+        $this->buildOtherParametersArray($ad, $priority, $isForManualModeration, $manualModerationReason,$remoderation);
 
         $this->buildBasicFieldArray($ad);
 
@@ -112,9 +112,11 @@ class AdModerationRequestBuild
      * @param string $isForManualModeration    Whether you are sending ad for manual moderation or not.
      * @param string $manualModerationReason   What is the reason for manual moderation.
      */
-    protected function buildOtherParametersArray(Ad $ad, $priority = 1, $isForManualModeration = false, $manualModerationReason = '')
+    protected function buildOtherParametersArray(Ad $ad, $priority = 1, $isForManualModeration = false, $manualModerationReason = '',$remoderation=false)
     {
-        $baseUrl = $this->container->getParameter('base_url');
+        if(!$remoderation) {
+            $baseUrl = $this->container->getParameter('base_url');
+        } else { $baseUrl = ''; }
         $this->moderationRequest[AdModerationFieldMappingInterface::SITE_ID] = $this->container->getParameter('fa.ad.moderation.site.id');
 
         $this->moderationRequest[AdModerationFieldMappingInterface::CALLBACK_URL] = $baseUrl.$this->container->get('router')->generate('ad_moderation_response', array(), true);
