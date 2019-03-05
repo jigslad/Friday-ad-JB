@@ -1652,7 +1652,7 @@ class AdPostController extends ThirdPartyLoginController
                         }
                     }
                     //set first step data for motor reg no.
-                      if (!empty($secondStepData))
+                    if (!empty($secondStepData)) {
                         if(in_array('has_reg_no', array_keys($secondStepData))) {
                             $firstStepDataForMotorsRegNo = array();
                             $motorsRegNoFields = $this->getMotorRegNoFields();

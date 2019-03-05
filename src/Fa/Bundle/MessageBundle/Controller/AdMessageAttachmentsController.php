@@ -229,7 +229,7 @@ class AdMessageAttachmentsController extends CoreController
                         $messageManager->setFlashMessage($this->get('translator')->trans('Sorry attachment file was not found!', array(), 'frontend-inbox'), 'error');
                         return $this->redirectToRoute('user_ad_message_all');
                     }
-                } elseif (!empty($objMessageAttachments)) {
+                } elseif (count($objMessageAttachments) > 1) {
                     $zipFilesArray = array();
                     foreach ($objMessageAttachments as $key => $objMessageAttachment) {
                         $messageId        = $objMessageAttachment->getMessage()->getId();
