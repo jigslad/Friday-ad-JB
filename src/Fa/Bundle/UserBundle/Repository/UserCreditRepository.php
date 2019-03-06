@@ -250,10 +250,10 @@ class UserCreditRepository extends EntityRepository
                     $userCreditArr[$activeUserCredit->getCategory()->getId()]['credit'] = $activeUserCredit->getCredit();
                 }
 
-                if (isset($userCreditArr[$activeUserCredit->getCategory()->getId()][date('Y_m_d', $activeUserCredit->getExpiresAt()).'_'.$activeUserCredit->getPaidUserOnly()])) {
-                    $userCreditArr[$activeUserCredit->getCategory()->getId()][date('Y_m_d', $activeUserCredit->getExpiresAt()).'_'.$activeUserCredit->getPaidUserOnly()]['credit'] += $activeUserCredit->getCredit();
+                if (isset($userCreditArr[$activeUserCredit->getCategory()->getId()][date('Y_m_d', $activeUserCredit->getExpiresAt()).'_'.$activeUserCredit->getPaidUserOnly().'_'.$activeUserCredit->getPackageSrNo()])) {
+                    $userCreditArr[$activeUserCredit->getCategory()->getId()][date('Y_m_d', $activeUserCredit->getExpiresAt()).'_'.$activeUserCredit->getPaidUserOnly().'_'.$activeUserCredit->getPackageSrNo()]['credit'] += $activeUserCredit->getCredit();
                 } else {
-                    $userCreditArr[$activeUserCredit->getCategory()->getId()][date('Y_m_d', $activeUserCredit->getExpiresAt()).'_'.$activeUserCredit->getPaidUserOnly()] = array(
+                    $userCreditArr[$activeUserCredit->getCategory()->getId()][date('Y_m_d', $activeUserCredit->getExpiresAt()).'_'.$activeUserCredit->getPaidUserOnly().'_'.$activeUserCredit->getPackageSrNo()] = array(
                         'id' => $activeUserCredit->getId(),
                         'package_sr_no' => explode(',', $activeUserCredit->getPackageSrNo()),
                         'credit' => $activeUserCredit->getCredit(),
