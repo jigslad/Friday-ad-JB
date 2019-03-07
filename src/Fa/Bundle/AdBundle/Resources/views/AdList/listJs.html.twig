@@ -14,7 +14,7 @@
         {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
             saveSearchAgent();
         {% endif %}
-        {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
+        {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) %}
             var shopUserItemSlider = $("#shop-user-item-slider");
             shopUserItemSlider.owlCarousel({
                 items : 3,
@@ -24,9 +24,25 @@
                 responsiveRefreshRate : 100,
                 navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
                 lazyLoad: true,
+                center: true,
                 scrollPerPage: true,
             });
-        {% endif %}
+        {% endif %} 
+
+        {% if (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
+        var busShopUserItemSlider = $(".bus-shop-user-item-slider");
+        busShopUserItemSlider.owlCarousel({
+            items : 3,
+            itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 3]],
+            navigation: true,
+            pagination:false,
+            responsiveRefreshRate : 100,
+            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+            lazyLoad: true,
+            center: true,
+            scrollPerPage: true,
+        });
+    {% endif %}        
 
         $( window ).scroll(function() {
             if ($("#sticky_nav").hasClass('fixed')) {
