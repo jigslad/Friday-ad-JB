@@ -102,7 +102,7 @@
                         {{ad['title']}}
                     {% endif %}
                 </h3>
-                {% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
+                {% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and (userBusinessCategory is defined and userBusinessCategory == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')) and ad.status_id == adStatusLive %}
                     <div {% if ad['town_id'] is defined or ad['area_id'] is defined or ad['locality_id'] is defined %} class="list-miles" {% endif %}>
                         {% if ad['locality_id'] is defined and ad['locality_id'] is not null %}
                             <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', ad['locality_id']) }}</b>
