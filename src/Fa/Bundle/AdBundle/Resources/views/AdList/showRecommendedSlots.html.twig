@@ -20,7 +20,7 @@
             <div class="list-col-2">
                 <div class="clearfix">
                     <div class="recommendedtxt gray-text text-right">
-                        {{'Recommended'|trans({}, 'frontend-show-ad')}}
+                        {{'Sponsored'|trans({}, 'frontend-show-ad')}}
                     </div>
                     <h3 class="hide-for-small-only list-title">
                         {{ recommendedSlotResult[slotIndex]['title'] }}
@@ -28,10 +28,14 @@
                     <h5 class="show-for-small-only list-title">
                         {{ recommendedSlotResult[slotIndex]['title']|length > 80 ? trim_text(recommendedSlotResult[slotIndex]['title'], 80)|raw ~ '...': recommendedSlotResult[slotIndex]['title'] }}
                     </h5>
+                     <h5 class="list-display-url">{{ recommendedSlotResult[slotIndex]['display_url'] }}</h5>
                 </div>
-                <div class="list-desc hide-for-small-only">
-                    {{ recommendedSlotResult[slotIndex]['sub_title']|length > 150 ? trim_text(recommendedSlotResult[slotIndex]['sub_title'], 150)|raw ~ '...': recommendedSlotResult[slotIndex]['sub_title'] }}
-                </div>
+                <div>
+                    <div class="list-desc hide-for-small-only">
+                        {{ recommendedSlotResult[slotIndex]['sub_title']|length > 150 ? trim_text(recommendedSlotResult[slotIndex]['sub_title'], 150)|raw ~ '...': recommendedSlotResult[slotIndex]['sub_title'] }}
+                    </div>
+                    <div class="button">{{ recommendedSlotResult[slotIndex]['cta_text'] }}</div>
+               </div>
             </div>
         </div>
     </div>

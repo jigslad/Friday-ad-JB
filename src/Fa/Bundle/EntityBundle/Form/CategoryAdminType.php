@@ -125,7 +125,7 @@ class CategoryAdminType extends AbstractType
                     'label' => 'Third-party url',
                 )
             )
-            ->add('has_recommended_slot', CheckboxType::class, array('label' => 'Has recommended slots?', 'required' => false))
+            ->add('has_recommended_slot', CheckboxType::class, array('label' => 'Has sponsored slots?', 'required' => false))
             ->add('is_oneclickenq_enabled', CheckboxType::class, array('label' => 'Enable One click enquire', 'required' => false));
             
         /* Upgreade option enabled for root category */
@@ -149,7 +149,7 @@ class CategoryAdminType extends AbstractType
                     );
         }
         $builder
-            ->add('has_recommended_slot_searchlist', CheckboxType::class, array('label' => 'Has recommended slots for search list page?', 'required' => false))
+            ->add('has_recommended_slot_searchlist', CheckboxType::class, array('label' => 'Has sponsored slots for search list page?', 'required' => false))
             ->add('is_oneclickenq_enabled', CheckboxType::class, array('label' => 'Enable One click enquire', 'required' => false))
             ->add('save', SubmitType::class)
             ->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
@@ -167,7 +167,18 @@ class CategoryAdminType extends AbstractType
             } else {
                 $recommendedSlotUrl[$i-1] = '';
             }
+            
+            if (isset($recommendedSlotArray[$i-1]) && $recommendedSlotArray[$i-1]['display_url']!='') {
+                $recommendedSlotDisplayUrl[$i-1] = $recommendedSlotArray[$i-1]['display_url'];
+                $recommendedSlotDisplayUrl[$i-1]  = str_replace('{', '%7B', $recommendedSlotDisplayUrl[$i-1]);
+                $recommendedSlotDisplayUrl[$i-1]  = str_replace('}', '%7D', $recommendedSlotDisplayUrl[$i-1]);
+            } else {
+                $recommendedSlotDisplayUrl[$i-1] = '';
+            }
+            
             $builder->add('recommended_slot_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => $recommendedSlotUrl[$i-1] ));
+            $builder->add('recommended_slot_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL', 'data' => $recommendedSlotDisplayUrl[$i-1] ));
+            $builder->add('recommended_slot_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA text', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['cta_text'] : '') ));
         }
 
         //recommended slots
@@ -192,6 +203,17 @@ class CategoryAdminType extends AbstractType
                         $builder->add('recommended_slot_searchlist_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => $recommendedSearchSlotUrl[$st] ));
                         $builder->add('recommended_slot_searchlist_creative_group_'.$i, HiddenType::class, array('mapped' => false,'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['creative_group'] : '')));
                         $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false,'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['creative_ord'] : '')));
+                        
+                        if (isset($recommendedSlotSearchArray[$st]) && $recommendedSlotSearchArray[$st]['display_url']!='') {
+                            $recommendedSearchSlotDisplayUrl[$st] = $recommendedSlotSearchArray[$st]['display_url'];
+                            $recommendedSearchSlotDisplayUrl[$st] = str_replace('{', '%7B', $recommendedSearchSlotDisplayUrl[$st]);
+                            $recommendedSearchSlotDisplayUrl[$st]  = str_replace('}', '%7D', $recommendedSearchSlotDisplayUrl[$st]);
+                        } else {
+                            $recommendedSearchSlotDisplayUrl[$st] = '';
+                        }
+                        $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL', 'data' => $recommendedSearchSlotDisplayUrl[$st] ));
+                        $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA Text',  'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['cta_text'] : '')));
+                        
                         if (count($recommendedSlotSearchArray)-1 > $st) {
                             $st++;
                         }
@@ -203,6 +225,9 @@ class CategoryAdminType extends AbstractType
                         $builder->add('recommended_slot_searchlist_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url'));
                         $builder->add('recommended_slot_searchlist_creative_group_'.$i, HiddenType::class, array('mapped' => false));
                         $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false));
+                        
+                        $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL'));
+                        $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA Text' ));                        
                     }
                 } else {
                     $builder->add('recommended_slot_searchlist_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Title' ));
@@ -212,6 +237,9 @@ class CategoryAdminType extends AbstractType
                     $builder->add('recommended_slot_searchlist_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url'));
                     $builder->add('recommended_slot_searchlist_creative_group_'.$i, HiddenType::class, array('mapped' => false));
                     $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false));
+                    
+                    $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL'));
+                    $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA Text' ));
                 }
                 $i++;
             }
@@ -292,6 +320,16 @@ class CategoryAdminType extends AbstractType
                     $data['recommended_slot_url_'.$i] = $recomSlotUrl[$i];
                 }
             }
+            
+            $recomSlotDisplayUrl = array();
+            for ($i = 1; $i <=3; $i++) {
+                $recomSlotDisplayUrl[$i] =  $data['recommended_slot_display_url_'.$i];
+                if ($recomSlotDisplayUrl[$i] !='') {
+                    $recomSlotDisplayUrl[$i]  = str_replace('{', '%7B', $recomSlotDisplayUrl[$i]);
+                    $recomSlotDisplayUrl[$i]  = str_replace('}', '%7D', $recomSlotDisplayUrl[$i]);
+                    $data['recommended_slot_display_url_'.$i] = $recomSlotDisplayUrl[$i];
+                }
+            }
         }
         if ($hasRecommendedSlotSearchlist) {
             $recomSlotSrchUrl = array();
@@ -301,6 +339,16 @@ class CategoryAdminType extends AbstractType
                     $recomSlotSrchUrl[$i]  = str_replace('{', '%7B', $recomSlotSrchUrl[$i]);
                     $recomSlotSrchUrl[$i]  = str_replace('}', '%7D', $recomSlotSrchUrl[$i]);
                     $data['recommended_slot_searchlist_url_'.$i] = $recomSlotSrchUrl[$i];
+                }
+            }
+            
+            $recomSlotSrchDisplayUrl = array();
+            for ($i = 1; $i <=18; $i++) {
+                $recomSlotSrchDisplayUrl[$i] = $data['recommended_slot_searchlist_display_url_'.$i];
+                if ($recomSlotSrchDisplayUrl[$i] !='') {
+                    $recomSlotSrchDisplayUrl[$i]  = str_replace('{', '%7B', $recomSlotSrchDisplayUrl[$i]);
+                    $recomSlotSrchDisplayUrl[$i]  = str_replace('}', '%7D', $recomSlotSrchDisplayUrl[$i]);
+                    $data['recommended_slot_searchlist_url_'.$i] = $recomSlotSrchDisplayUrl[$i];
                 }
             }
         }
@@ -430,6 +478,8 @@ class CategoryAdminType extends AbstractType
                             'sub_title' => $form->get('recommended_slot_sub_title_'.$i)->getData(),
                             'user_id' => (int)$form->get('recommended_slot_user_id_'.$i)->getData(),
                             'url' => $form->get('recommended_slot_url_'.$i)->getData(),
+                            'display_url' => $form->get('recommended_slot_display_url_'.$i)->getData(),
+                            'cta_text' => $form->get('recommended_slot_cta_text_'.$i)->getData(),
                         );
                     }
                 }
@@ -455,6 +505,8 @@ class CategoryAdminType extends AbstractType
                             'url' => $form->get('recommended_slot_searchlist_url_'.$i)->getData(),
                             'creative_group' => $form->get('recommended_slot_searchlist_creative_group_'.$i)->getData(),
                             'creative_ord' => $form->get('recommended_slot_searchlist_creative_ord_'.$i)->getData(),
+                            'display_url' => $form->get('recommended_slot_searchlist_display_url_'.$i)->getData(),
+                            'cta_text' => $form->get('recommended_slot_searchlist_cta_text_'.$i)->getData(),
                         );
                     }
                 }
@@ -481,6 +533,8 @@ class CategoryAdminType extends AbstractType
                         $recommendedSlot->setSubTitle($form->get('recommended_slot_sub_title_'.$i)->getData());
                         $recommendedSlot->setUserId($form->get('recommended_slot_user_id_'.$i)->getData());
                         $recommendedSlot->setUrl(urldecode($form->get('recommended_slot_url_'.$i)->getData()));
+                        $recommendedSlot->setDisplayUrl(urldecode($form->get('recommended_slot_display_url_'.$i)->getData()));
+                        $recommendedSlot->setCtaText($form->get('recommended_slot_cta_text_'.$i)->getData());
                         $this->em->persist($recommendedSlot);
                     }
                 }
@@ -513,6 +567,8 @@ class CategoryAdminType extends AbstractType
                         $recommendedSlot->setUrl(urldecode($form->get('recommended_slot_searchlist_url_'.$i)->getData()));
                         $recommendedSlot->setCreativeGroup($form->get('recommended_slot_searchlist_creative_group_'.$i)->getData());
                         $recommendedSlot->setCreativeOrd($form->get('recommended_slot_searchlist_creative_ord_'.$i)->getData());
+                        $recommendedSlot->setDisplayUrl(urldecode($form->get('recommended_slot_searchlist_display_url_'.$i)->getData()));
+                        $recommendedSlot->setCtaText($form->get('recommended_slot_searchlist_cta_text_'.$i)->getData());
                         $this->em->persist($recommendedSlot);
                     }
                 }
