@@ -295,7 +295,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 %}
                         {% if slotAdCount== 3  and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 2 }) }}
-                            {% set slotallocated = slotallocated|merge([3]) %}
+                            {% set slotallocated = slotallocated|merge([2]) %}
                         {% elseif slotAdCount== 7  and (recommendedSlotResult[3] is defined and recommendedSlotResult[3]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 3 }) }}
                             {% set slotallocated = slotallocated|merge([3]) %}
