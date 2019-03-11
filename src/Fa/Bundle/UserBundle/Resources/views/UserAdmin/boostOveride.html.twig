@@ -1,5 +1,7 @@
 {% extends 'FaAdminBundle::layout.html.twig' %}
 {% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% set boostedAdRepository = fetch_repository('FaAdBundle:BoostedAd') %}
+{% set getUserUsedBoostCount  = boostedAdRepository. getMyBoostedAdsCount(userIds) %}
 {% block content -%}
 {% set totalUsers = entities|length %}
 <div class="row">
@@ -34,7 +36,14 @@
                         {% endfor %}
                     </div>
                 </div>
-
+                 <div class="row">
+                    <div class="large-12 columns">
+                        <b>{{ 'Used Count'|trans }} : </b>{{ getUserUsedBoostCount }}<br>
+                        <b>{{ 'Remaining Count'|trans }} : </b>{{ form.boost_overide.vars.data  -  getUserUsedBoostCount }}<br>
+                        Here Override count is considered as Maximum count = Used Count + Remaining Count
+                  </div>
+                </div>      
+                
             {{ form_start(form, {'attr': {'novalidate': ''}}) }}
                 {{ form_row(form.boost_overide) }}
                 <ul class="button-group text-center">
