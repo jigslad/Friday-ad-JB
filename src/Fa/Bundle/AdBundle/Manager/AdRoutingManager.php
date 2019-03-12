@@ -104,8 +104,10 @@ class AdRoutingManager
         $url = '';
         
         $search_params = array_map(array($this, 'removeEmptyElement'), $search_params);
+        if(isset($search_params['hide_distance_block'])) {
+            unset($search_params['hide_distance_block']);
+        }
 
-        
         // From top search keyword category
         if (isset($search_params['keyword_category_id']) && $search_params['keyword_category_id']) {
             $search_params['item__category_id'] = $search_params['keyword_category_id'];
