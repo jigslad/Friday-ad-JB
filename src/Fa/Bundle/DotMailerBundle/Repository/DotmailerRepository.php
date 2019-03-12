@@ -42,6 +42,12 @@ class DotmailerRepository extends EntityRepository
     
     const TOUCH_POINT_CREATE_ALERT = 'create_alert';
 
+    const TOUCH_POINT_ACCOUNT = 'account';
+
+    const TOUCH_POINT_GOOGLE = 'google';
+
+    const TOUCH_POINT_FACEBOOK = 'facebook';
+
     /**
      * Prepare query builder.
      *
