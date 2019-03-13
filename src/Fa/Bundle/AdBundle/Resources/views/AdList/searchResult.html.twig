@@ -180,6 +180,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 .bus-shop-user-item-slider .owl-prev, .bus-shop-user-item-slider .owl-next {height:240px;opacity:.5}
 .bus-shop-user-item-slider .owl-item .item {margin:auto}
 </style>
+{% if displayRecommendedSlot is defined and displayRecommendedSlot==1 %}
+    {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
+{% endif %}
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}

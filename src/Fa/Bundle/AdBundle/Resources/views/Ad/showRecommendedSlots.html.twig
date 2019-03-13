@@ -1,18 +1,15 @@
 {% set userRepository = fetch_repository('FaUserBundle:User') %}
-<div class="vif-rec-slider">
-    <div class="rec-slider-cap">{{'Recommended'|trans({}, 'frontend-show-ad')}}</div>
-    <div class="owl-carousel slots-{{recommendedSlotArray|length}}" id="recommended-slider">
+ <div class="recommended-div listing mb20 recommended-ad-detail"> 
         {% for recommendedSlot in recommendedSlotArray%}
             {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
             {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
             {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
             {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
             {% set only_domains = only_domains|replace({'www.': ''})%}
-            <div class="item">
                 <a class="tricky-link" href="javascript:void(0);" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">{{ userName }}</a>
                 <div class="clearfix">
-                    <div class="rec-slider-img">
-                        <div class="rec-img-holder {% if userLogo is null%}rec-placeholder{% endif %}">
+                	<div class="list-col-1">
+                        <div class="featured-bz-listimg {% if userLogo is null %}list-placeholder{% endif %}">
                             {% if userLogo is null%}
                                 <img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" />
                             {% else %}
@@ -20,14 +17,32 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="rec-slider-info">
-                        <h4>{{ recommendedSlot['title'] }}</h4>
-                        <div class="rec-slider-desc">
-                            {{ recommendedSlot['sub_title'] }}
+					<div class="list-col-2">
+                        <div class="clearfix">
+                            <div class="recommendedtxt gray-text text-right">
+                                {{'Sponsored Ad'|trans({}, 'frontend-show-ad')}}
+                            </div>
+                             {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+                            	<h5 class="show-for-small-only list-title">
+                                    {{ recommendedSlot['mobile_title'] }}
+                                </h5>
+                             {% else %}
+                                <h3 class="hide-for-small-only list-title">
+                                    {{ recommendedSlot['title'] }}
+                                </h3>
+                             {% endif %}
+                            
+                             <h5 class="list-display-url hide-for-small-only"><a href="{{ recommendedSlot['display_url'] }}" style="color: #a8dc28;">{{ recommendedSlot['display_url'] }}</a></h5>
                         </div>
-                    </div>
-                </div>
+                        <div class="mt10 recommended-more">
+                            <div class="list-desc hide-for-small-only left-block">
+                                {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
+                            </div>
+                            {% if recommendedSlot['cta_text'] !='' %}
+                            <div class="button secondary-btn-1 right-block">{{ recommendedSlot['cta_text'] }}<span><i class="fa fa-arrow"></i></span></div>
+                       		{% endif %}
+                       </div>
+                    </div>               
             </div>
         {% endfor %}
     </div>
-</div>

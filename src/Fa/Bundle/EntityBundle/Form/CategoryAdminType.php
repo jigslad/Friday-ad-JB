@@ -178,7 +178,8 @@ class CategoryAdminType extends AbstractType
             
             $builder->add('recommended_slot_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => $recommendedSlotUrl[$i-1] ));
             $builder->add('recommended_slot_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL', 'data' => $recommendedSlotDisplayUrl[$i-1] ));
-            $builder->add('recommended_slot_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA text', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['cta_text'] : '') ));
+            $builder->add('recommended_slot_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['cta_text'] : '') ));
+            $builder->add('recommended_slot_mobile_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Mobile Title', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['mobile_title'] : '') ));
         }
 
         //recommended slots
@@ -212,8 +213,8 @@ class CategoryAdminType extends AbstractType
                             $recommendedSearchSlotDisplayUrl[$st] = '';
                         }
                         $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL', 'data' => $recommendedSearchSlotDisplayUrl[$st] ));
-                        $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA Text',  'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['cta_text'] : '')));
-                        
+                        $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA',  'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['cta_text'] : '')));
+                        $builder->add('recommended_slot_searchlist_mobile_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Mobile Title', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['mobile_title'] : '') ));
                         if (count($recommendedSlotSearchArray)-1 > $st) {
                             $st++;
                         }
@@ -227,7 +228,8 @@ class CategoryAdminType extends AbstractType
                         $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false));
                         
                         $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL'));
-                        $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA Text' ));                        
+                        $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA' ));
+                        $builder->add('recommended_slot_searchlist_mobile_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Mobile Title' ));
                     }
                 } else {
                     $builder->add('recommended_slot_searchlist_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Title' ));
@@ -239,7 +241,8 @@ class CategoryAdminType extends AbstractType
                     $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false));
                     
                     $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL'));
-                    $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA Text' ));
+                    $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA' ));
+                    $builder->add('recommended_slot_searchlist_mobile_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Mobile Title' ));
                 }
                 $i++;
             }
@@ -348,7 +351,7 @@ class CategoryAdminType extends AbstractType
                 if ($recomSlotSrchDisplayUrl[$i] !='') {
                     $recomSlotSrchDisplayUrl[$i]  = str_replace('{', '%7B', $recomSlotSrchDisplayUrl[$i]);
                     $recomSlotSrchDisplayUrl[$i]  = str_replace('}', '%7D', $recomSlotSrchDisplayUrl[$i]);
-                    $data['recommended_slot_searchlist_url_'.$i] = $recomSlotSrchDisplayUrl[$i];
+                    $data['recommended_slot_searchlist_display_url_'.$i] = $recomSlotSrchDisplayUrl[$i];
                 }
             }
         }
@@ -394,13 +397,16 @@ class CategoryAdminType extends AbstractType
             $oneSelectRecommendedSlotFlag = true;
             $recommendedSlotError = array();
             for ($i = 1; $i <=3; $i++) {
-                if ($form->get('recommended_slot_title_'.$i)->getData() || $form->get('recommended_slot_sub_title_'.$i)->getData() || $form->get('recommended_slot_user_id_'.$i)->getData() || $form->get('recommended_slot_url_'.$i)->getData()) {
+                if ($form->get('recommended_slot_mobile_title_'.$i)->getData() || $form->get('recommended_slot_title_'.$i)->getData() || $form->get('recommended_slot_sub_title_'.$i)->getData() || $form->get('recommended_slot_user_id_'.$i)->getData() || $form->get('recommended_slot_url_'.$i)->getData()) {
                     $oneSelectRecommendedSlotFlag = false;
                     $recommendedSlotError[] = $i;
                 }
                 if (!$oneSelectRecommendedSlotFlag && in_array($i, $recommendedSlotError)) {
                     if (!$form->get('recommended_slot_title_'.$i)->getData()) {
                         $form->get('recommended_slot_title_'.$i)->addError(new FormError('Please enter title.'));
+                    }
+                    if (!$form->get('recommended_slot_mobile_title_'.$i)->getData()) {
+                        $form->get('recommended_slot_mobile_title_'.$i)->addError(new FormError('Please enter mobile title.'));
                     }
                     if (!$form->get('recommended_slot_sub_title_'.$i)->getData()) {
                         $form->get('recommended_slot_sub_title_'.$i)->addError(new FormError('Please enter sub title.'));
@@ -427,11 +433,14 @@ class CategoryAdminType extends AbstractType
             $oneSelectRecommendedSlotSearchlistFlag = true;
             $recommendedSlotSearchlistError = array();
             for ($i = 1; $i <=18; $i++) {
-                if ($form->get('recommended_slot_searchlist_title_'.$i)->getData() || $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
+                if ($form->get('recommended_slot_searchlist_mobile_title_'.$i)->getData() || $form->get('recommended_slot_searchlist_title_'.$i)->getData() || $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
                     $oneSelectRecommendedSlotSearchlistFlag = false;
                     $recommendedSlotSearchlistError[] = $i;
                 }
                 if (!$oneSelectRecommendedSlotSearchlistFlag && in_array($i, $recommendedSlotSearchlistError)) {
+                    if (!$form->get('recommended_slot_searchlist_mobile_title_'.$i)->getData()) {
+                        $form->get('recommended_slot_searchlist_mobile_title_'.$i)->addError(new FormError('Please enter mobile title.'));
+                    }
                     if (!$form->get('recommended_slot_searchlist_title_'.$i)->getData()) {
                         $form->get('recommended_slot_searchlist_title_'.$i)->addError(new FormError('Please enter title.'));
                     }
@@ -472,7 +481,7 @@ class CategoryAdminType extends AbstractType
                 $recommendedSlotArray = $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotArrayByCategoryId($category->getId(), $this->container);
                 $recommendedSlotFromArray = array();
                 for ($i = 1; $i <=3; $i++) {
-                    if ($form->get('recommended_slot_title_'.$i)->getData() && $form->get('recommended_slot_sub_title_'.$i)->getData() && $form->get('recommended_slot_user_id_'.$i)->getData() && $form->get('recommended_slot_url_'.$i)->getData()) {
+                    if ($form->get('recommended_slot_mobile_title_'.$i)->getData() && $form->get('recommended_slot_title_'.$i)->getData() && $form->get('recommended_slot_sub_title_'.$i)->getData() && $form->get('recommended_slot_user_id_'.$i)->getData() && $form->get('recommended_slot_url_'.$i)->getData()) {
                         $recommendedSlotFromArray[] = array(
                             'title' => $form->get('recommended_slot_title_'.$i)->getData(),
                             'sub_title' => $form->get('recommended_slot_sub_title_'.$i)->getData(),
@@ -480,6 +489,7 @@ class CategoryAdminType extends AbstractType
                             'url' => $form->get('recommended_slot_url_'.$i)->getData(),
                             'display_url' => $form->get('recommended_slot_display_url_'.$i)->getData(),
                             'cta_text' => $form->get('recommended_slot_cta_text_'.$i)->getData(),
+                            'mobile_title' => $form->get('recommended_slot_mobile_title_'.$i)->getData(),
                         );
                     }
                 }
@@ -497,7 +507,7 @@ class CategoryAdminType extends AbstractType
                 $recommendedSlotSearchlistArray = $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotSearchlistArrayByCategoryId($category->getId(), $this->container);
                 $recommendedSlotSearchlistFromArray = array();
                 for ($i = 1; $i <=18; $i++) {
-                    if ($form->get('recommended_slot_searchlist_title_'.$i)->getData() && $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() && ($form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData()) && $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
+                    if ($form->get('recommended_slot_searchlist_mobile_title_'.$i)->getData() && $form->get('recommended_slot_searchlist_title_'.$i)->getData() && $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() && ($form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData()) && $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
                         $recommendedSlotSearchlistFromArray[] = array(
                             'title' => $form->get('recommended_slot_searchlist_title_'.$i)->getData(),
                             'sub_title' => $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData(),
@@ -507,6 +517,7 @@ class CategoryAdminType extends AbstractType
                             'creative_ord' => $form->get('recommended_slot_searchlist_creative_ord_'.$i)->getData(),
                             'display_url' => $form->get('recommended_slot_searchlist_display_url_'.$i)->getData(),
                             'cta_text' => $form->get('recommended_slot_searchlist_cta_text_'.$i)->getData(),
+                            'mobile_title' => $form->get('recommended_slot_searchlist_mobile_title_'.$i)->getData(),
                         );
                     }
                 }
@@ -515,6 +526,7 @@ class CategoryAdminType extends AbstractType
                 if (md5(serialize($recommendedSlotSearchlistArray)) == md5(serialize($recommendedSlotSearchlistFromArray))) {
                     $insertRecommendedSlotSearchlistFlag = false;
                 }
+                
                 if ($insertRecommendedSlotSearchlistFlag || !$hasRecommendedSlotSearchlist) {
                     $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->removeSlotsSearchlistByCategoryId($category->getId());
                     $culture = CommonManager::getCurrentCulture($this->container);
@@ -526,7 +538,7 @@ class CategoryAdminType extends AbstractType
             //save seo tool popular search
             if ($hasRecommendedSlot && $insertRecommendedSlotFlag) {
                 for ($i = 1; $i <=3; $i++) {
-                    if ($form->get('recommended_slot_title_'.$i)->getData() && $form->get('recommended_slot_sub_title_'.$i)->getData() && $form->get('recommended_slot_user_id_'.$i)->getData() && $form->get('recommended_slot_url_'.$i)->getData()) {
+                    if ($form->get('recommended_slot_mobile_title_'.$i)->getData() && $form->get('recommended_slot_title_'.$i)->getData() && $form->get('recommended_slot_sub_title_'.$i)->getData() && $form->get('recommended_slot_user_id_'.$i)->getData() && $form->get('recommended_slot_url_'.$i)->getData()) {
                         $recommendedSlot = new CategoryRecommendedSlot();
                         $recommendedSlot->setCategory($category);
                         $recommendedSlot->setTitle($form->get('recommended_slot_title_'.$i)->getData());
@@ -535,6 +547,7 @@ class CategoryAdminType extends AbstractType
                         $recommendedSlot->setUrl(urldecode($form->get('recommended_slot_url_'.$i)->getData()));
                         $recommendedSlot->setDisplayUrl(urldecode($form->get('recommended_slot_display_url_'.$i)->getData()));
                         $recommendedSlot->setCtaText($form->get('recommended_slot_cta_text_'.$i)->getData());
+                        $recommendedSlot->setMobileTitle($form->get('recommended_slot_mobile_title_'.$i)->getData());
                         $this->em->persist($recommendedSlot);
                     }
                 }
@@ -543,7 +556,7 @@ class CategoryAdminType extends AbstractType
 
             if ($hasRecommendedSlotSearchlist && $insertRecommendedSlotSearchlistFlag) {
                 for ($i = 1; $i <=18; $i++) {
-                    if ($form->get('recommended_slot_searchlist_title_'.$i)->getData() && $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() && ($form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData()) && $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
+                    if ($form->get('recommended_slot_searchlist_mobile_title_'.$i)->getData() && $form->get('recommended_slot_searchlist_title_'.$i)->getData() && $form->get('recommended_slot_searchlist_sub_title_'.$i)->getData() && ($form->get('recommended_slot_searchlist_slot_file_'.$i)->getData() || $form->get('recommended_slot_searchlist_slot_filename_'.$i)->getData()) && $form->get('recommended_slot_searchlist_url_'.$i)->getData()) {
                         $recommendedSlot = new CategoryRecommendedSlot();
                         $recommendedSlot->setCategory($category);
                         $recommendedSlot->setTitle($form->get('recommended_slot_searchlist_title_'.$i)->getData());
@@ -569,6 +582,8 @@ class CategoryAdminType extends AbstractType
                         $recommendedSlot->setCreativeOrd($form->get('recommended_slot_searchlist_creative_ord_'.$i)->getData());
                         $recommendedSlot->setDisplayUrl(urldecode($form->get('recommended_slot_searchlist_display_url_'.$i)->getData()));
                         $recommendedSlot->setCtaText($form->get('recommended_slot_searchlist_cta_text_'.$i)->getData());
+                        $recommendedSlot->setMobileTitle($form->get('recommended_slot_searchlist_mobile_title_'.$i)->getData());
+                        //echo 'url==='.urldecode($form->get('recommended_slot_searchlist_url_'.$i)->getData());die;
                         $this->em->persist($recommendedSlot);
                     }
                 }
