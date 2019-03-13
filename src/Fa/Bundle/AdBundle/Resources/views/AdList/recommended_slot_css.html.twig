@@ -42,14 +42,25 @@
         .recommended-div.listing .list-col-2 {
             width: 67%;
         }
+        .recommended-div.listing.recommended-ad-detail .list-col-2 {
+            min-width: 63%;
+            width: 63% !important;
+        }
     }
     @media only screen and (min-width: 760px) and (max-width: 959px) {
         .recommended-div.listing .list-col-2 {
             min-width: 70%;
             width: 70%;
+        } 
+        .recommended-div.listing.recommended-ad-detail .list-col-2 {
+            min-width: 55%;
+            width: 55% !important;
         }
         .recommended-div.listing .recommended-more .list-desc {
             display: block !important;
+        }
+        .recommended-div.listing.recommended-ad-detail h3, .recommended-div.listing.recommended-ad-detail h5{
+        	width: auto !important;
         }
     }
     @media only screen and (min-width: 641px) and (max-width: 759px) {
@@ -57,6 +68,11 @@
             min-width: 68%;
             width: auto;
         }
+        .recommended-div.listing.recommended-ad-detail .list-col-2 {
+            min-width: 64%;
+            width: 64% !important;
+        }
+        
         .recommended-div.listing .recommended-more .list-desc {
             display: block !important;
         }
@@ -69,9 +85,9 @@
             width: 38%;
             padding: 15px 0px 15px 15px;
         }
-        .recommended-div.listing .list-col-2 {
+        .recommended-div.listing .list-col-2,.recommended-div.listing.recommended-ad-detail .list-col-2 {
         	width: 53% !important;
-        }
+        }       
         .recommended-div.listing .featured-bz-listimg, .recommended-div.listing .featured-bz-listimg .profile-placeholder {
             width: 38%;
             height: 70px;
