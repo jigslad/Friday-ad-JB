@@ -22,19 +22,25 @@
                     <div class="recommendedtxt gray-text text-right">
                         {{'Sponsored Ad'|trans({}, 'frontend-show-ad')}}
                     </div>
-                    <h3 class="hide-for-small-only list-title">
-                        {{ recommendedSlotResult[slotIndex]['title'] }}
-                    </h3>
-                    <h5 class="show-for-small-only list-title">
-                        {{ recommendedSlotResult[slotIndex]['title']|length > 80 ? trim_text(recommendedSlotResult[slotIndex]['title'], 80)|raw ~ '...': recommendedSlotResult[slotIndex]['title'] }}
-                    </h5>
-                     <h5 class="list-display-url">{{ recommendedSlotResult[slotIndex]['display_url'] }}</h5>
+                     {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+                    	<h5 class="show-for-small-only list-title">
+                            {{ recommendedSlotResult[slotIndex]['mobile_title'] }}
+                        </h5>
+                     {% else %}
+                        <h3 class="hide-for-small-only list-title">
+                            {{ recommendedSlotResult[slotIndex]['title'] }}
+                        </h3>
+                     {% endif %}
+                    
+                     <h5 class="list-display-url hide-for-small-only"><a href="{{ recommendedSlotResult[slotIndex]['display_url'] }}" style="color: #a8dc28;">{{ recommendedSlotResult[slotIndex]['display_url'] }}</a></h5>
                 </div>
-                <div>
-                    <div class="list-desc hide-for-small-only">
+                <div class="mt10 recommended-more">
+                    <div class="list-desc hide-for-small-only left-block">
                         {{ recommendedSlotResult[slotIndex]['sub_title']|length > 150 ? trim_text(recommendedSlotResult[slotIndex]['sub_title'], 150)|raw ~ '...': recommendedSlotResult[slotIndex]['sub_title'] }}
                     </div>
-                    <div class="button">{{ recommendedSlotResult[slotIndex]['cta_text'] }}</div>
+                    {% if recommendedSlotResult[slotIndex]['cta_text'] !='' %}
+                    <div class="button secondary-btn-1 right-block">{{ recommendedSlotResult[slotIndex]['cta_text'] }}<span><i class="fa fa-arrow"></i></span></div>
+               		{% endif %}
                </div>
             </div>
         </div>
