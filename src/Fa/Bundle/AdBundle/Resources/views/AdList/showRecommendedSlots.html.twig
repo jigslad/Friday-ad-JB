@@ -22,16 +22,15 @@
                     <div class="recommendedtxt gray-text text-right">
                         {{'Sponsored Ad'|trans({}, 'frontend-show-ad')}}
                     </div>
-                     {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-                    	<h5 class="show-for-small-only list-title">
-                            {{ recommendedSlotResult[slotIndex]['mobile_title'] }}
-                        </h5>
-                     {% else %}
-                        <h3 class="hide-for-small-only list-title">
-                            {{ recommendedSlotResult[slotIndex]['title'] }}
-                        </h3>
-                     {% endif %}
                     
+                	<h5 class="show-for-small-only list-title">
+                        {{ recommendedSlotResult[slotIndex]['mobile_title'] }}
+                    </h5>
+                 
+                    <h3 class="hide-for-small-only list-title">
+                        {{ recommendedSlotResult[slotIndex]['title'] }}
+                    </h3>
+                     
                      <h5 class="list-display-url hide-for-small-only"><a href="{{ recommendedSlotResult[slotIndex]['display_url'] }}" style="color: #a8dc28;">{{ recommendedSlotResult[slotIndex]['display_url'] }}</a></h5>
                 </div>
                 <div class="mt10 recommended-more">
