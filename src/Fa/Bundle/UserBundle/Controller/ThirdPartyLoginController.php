@@ -591,7 +591,7 @@ class ThirdPartyLoginController extends CoreController
         if (count($sessionData) > 0) {
             if (isset($sessionData['user_facebook_id']) && $sessionData['user_facebook_id']) {
                 try {
-                    $this->getRepository('FaDotmailerBundle:Dotmailer')->doTouchPointEntryByUser($user->getId(), DotmailerRepository::TOUCH_POINT_FACEBOOK, $this->container);
+                    $this->getRepository('FaDotMailerBundle:Dotmailer')->doTouchPointEntryByUser($user->getId(), DotmailerRepository::TOUCH_POINT_FACEBOOK, $this->container);
                 } catch (\Exception $e) {
                     if ($this->container) {
                         CommonManager::sendErrorMail($this->container, 'Error: Problem in touch point Facebook: '.$user->getId(), $e->getMessage(), $e->getTraceAsString());
@@ -599,19 +599,19 @@ class ThirdPartyLoginController extends CoreController
                 }
             } else if (isset($sessionData['user_google_id']) && $sessionData['user_google_id']) {
                 try {
-                    $this->getRepository('FaDotmailerBundle:Dotmailer')->doTouchPointEntryByUser($user->getId(), DotmailerRepository::TOUCH_POINT_GOOGLE, $this->container);
+                    $this->getRepository('FaDotMailerBundle:Dotmailer')->doTouchPointEntryByUser($user->getId(), DotmailerRepository::TOUCH_POINT_GOOGLE, $this->container);
                 } catch (\Exception $e) {
                     if ($this->container) {
                         CommonManager::sendErrorMail($this->container, 'Error: Problem in touch point Google: '.$user->getId(), $e->getMessage(), $e->getTraceAsString());
                     }
                 }
-            } else  {
-                try {
-                    $this->getRepository('FaDotmailerBundle:Dotmailer')->doTouchPointEntryByUser($user->getId(), DotmailerRepository::TOUCH_POINT_ACCOUNT, $this->container);
-                } catch (\Exception $e) {
-                    if ($this->container) {
-                        CommonManager::sendErrorMail($this->container, 'Error: Problem in touch point Account: '.$user->getId(), $e->getMessage(), $e->getTraceAsString());
-                    }
+            }
+        } else {
+            try {
+                $this->getRepository('FaDotMailerBundle:Dotmailer')->doTouchPointEntryByUser($user->getId(), DotmailerRepository::TOUCH_POINT_ACCOUNT, $this->container);
+            } catch (\Exception $e) {
+                if ($this->container) {
+                    CommonManager::sendErrorMail($this->container, 'Error: Problem in touch point Account: '.$user->getId(), $e->getMessage(), $e->getTraceAsString());
                 }
             }
         }
