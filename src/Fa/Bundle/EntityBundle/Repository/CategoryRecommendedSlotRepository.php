@@ -128,7 +128,8 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                 'user_id' => $recommendedSlot->getUserId(),
                 'url' => $recommendedSlot->getUrl(),
                 'display_url' => $recommendedSlot->getDisplayUrl(),
-                'cta_text' => $recommendedSlot->getCtaText()
+                'cta_text' => $recommendedSlot->getCtaText(),
+                'mobile_title' => $recommendedSlot->getMobileTitle()
             );
         }
 
@@ -191,7 +192,8 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                     'creative_group' => $recommendedSlot->getCreativeGroup(),
                     'creative_ord' => $recommendedSlot->getCreativeOrd(),
                     'display_url' => $recommendedSlot->getDisplayUrl(),
-                    'cta_text' => $recommendedSlot->getCtaText()
+                    'cta_text' => $recommendedSlot->getCtaText(),
+                    'mobile_title' => $recommendedSlot->getMobileTitle()
                 );
             }
         }
@@ -221,7 +223,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -262,7 +264,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 

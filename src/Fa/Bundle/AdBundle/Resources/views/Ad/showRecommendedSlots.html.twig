@@ -1,6 +1,6 @@
 {% set userRepository = fetch_repository('FaUserBundle:User') %}
 <div class="vif-rec-slider">
-    <div class="rec-slider-cap">{{'Recommended'|trans({}, 'frontend-show-ad')}}</div>
+    <div class="rec-slider-cap">{{'Sponsored Ad'|trans({}, 'frontend-show-ad')}}</div>
     <div class="owl-carousel slots-{{recommendedSlotArray|length}}" id="recommended-slider">
         {% for recommendedSlot in recommendedSlotArray%}
             {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
@@ -22,9 +22,13 @@
                     </div>
                     <div class="rec-slider-info">
                         <h4>{{ recommendedSlot['title'] }}</h4>
-                        <div class="rec-slider-desc">
-                            {{ recommendedSlot['sub_title'] }}
-                        </div>
+                        <h5 class="list-display-url">{{ recommendedSlotResult[slotIndex]['display_url'] }}</h5>
+                        <div>
+                            <div class="rec-slider-desc">
+                                {{ recommendedSlot['sub_title'] }}
+                            </div>
+                            <div class="button">{{ recommendedSlotResult[slotIndex]['cta_text'] }}</div>
+                       </div>
                     </div>
                 </div>
             </div>

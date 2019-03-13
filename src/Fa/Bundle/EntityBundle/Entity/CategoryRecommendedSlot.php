@@ -128,6 +128,13 @@ class CategoryRecommendedSlot
      * @ORM\Column(name="cta_text", type="string", length=255, nullable=false)
      */
     private $cta_text;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobile_title", type="string", length=255, nullable=false)
+     */
+    private $mobile_title;
 
     /**
      * Constructor.
@@ -495,5 +502,28 @@ class CategoryRecommendedSlot
     public function getCtaText()
     {
         return $this->cta_text;
+    }
+    
+    /**
+     * Set mobile_title.
+     *
+     * @param string $mobile_title
+     * @return CategoryRecommendedSlot
+     */
+    public function setMobileTitle($mobile_title)
+    {
+        $this->mobile_title = $mobile_title;
+        
+        return $this;
+    }
+    
+    /**
+     * Get mobile_title.
+     *
+     * @return string
+     */
+    public function getMobileTitle()
+    {
+        return $this->mobile_title;
     }
 }
