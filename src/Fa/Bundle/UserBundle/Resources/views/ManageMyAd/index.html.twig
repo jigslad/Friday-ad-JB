@@ -60,6 +60,8 @@
             remainingCntAfterSelection = remainingCnt - selectedBoostAdCnt;
             if(selectedBoostAdCnt > remainingCnt) {
                 alert('Sorry! Your maximum boost count exceeds. Please select only '+ remainingCnt +'adverts ');
+                $("#boostad_selectall").parent('span').removeClass('checked');
+                $("#boostad_selectall").parent('span').trigger("change");                
             } else if(selectedBoostAdCnt==0) {
                 $('#markAdAsBoostedModal').hide();
                 $('.boost_your_ad').addClass('ajaxboost_your_ad');
