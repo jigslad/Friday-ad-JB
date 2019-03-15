@@ -64,6 +64,7 @@
                 {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
                 {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
                 {% set only_domains = only_domains|replace({'www.': ''})%}
+
                 <div class="small-{{ centersmallCnt }} centered-block">
                 	<div class="small-10 medium-5 large-5 columns t-s-subblock-left {% if userLogo is null %} profile-placeholder-{{recommendedSlotCnt}} {% endif %} img-cls-recommend-{{recommendedSlotCnt}}" >
                         {% if userLogo is null%}
