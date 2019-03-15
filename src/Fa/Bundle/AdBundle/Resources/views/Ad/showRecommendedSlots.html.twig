@@ -1,29 +1,70 @@
 {% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set  recommendedSlotCls = 'small-24 medium-24 large-24' %}
+{% set  recommendedSlotCnt = 1 %} {% set centersmallCnt =24 %}
+{% if recommendedSlotArray is defined and recommendedSlotArray|length == 2 %}
+	{% set  recommendedSlotCls = 'small-24 medium-12 large-12' %}
+	 {% set  recommendedSlotCnt = 2 %}
+{% set centersmallCnt =12 %}
+{% elseif recommendedSlotArray is defined and recommendedSlotArray|length == 3 %}
+	{% set  recommendedSlotCls = 'large-3 large-centered text-center' %}
+	 {% set  recommendedSlotCnt = 3 %}
+{% set centersmallCnt =3 %}	
+{% endif %}
+
 <div class="recommended-div listing mb20 recommended-ad-detail hide-for-small-only">
-	<div class="clearfix">
-    <div class="s-block clearfix">
+{% if recommendedSlotCnt==1 %}
+	{% for recommendedSlot in recommendedSlotArray%}
+        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
+        {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
+        {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
+        {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
+        {% set only_domains = only_domains|replace({'www.': ''})%}
+        <div class="clearfix">
+    	<div class="{% if userLogo is null %} profile-placeholder-1 {% endif %} img-cls-recommend-1" >
+            {% if userLogo is null%}
+                    <img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" />
+                {% else %}
+                    <img src="{{ userLogo }}" alt="{{ userName }}" />
+                {% endif %}
+        </div>
+        <div class="content-cls-recommend-1">
+            <div class="recommendedtxt gray-text text-right sponsored-1">
+                Sponsored Ad
+            </div>
+            <div class="mt5 list-title"> 
+              	<h3>{{ recommendedSlot['title'] }}</h3>
+                {% if recommendedSlot['display_url'] !='' %}
+                	<h5 class="mt5 list-display-url show-for-large-only"><a href="{{ recommendedSlot['display_url'] }}" style="color: #a8dc28;">{{ recommendedSlot['display_url'] }}</a></h5>
+                {% endif %} 
+            </div> 
+            <div class="mt5 recommended-more">
+                <div class="list-desc show-for-large-only left-block">
+                    {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
+                </div>
+                {% if recommendedSlot['cta_text'] !='' %}
+                <div class="button secondary-btn-1 right-block  hide-for-small-only">{{ recommendedSlot['cta_text'] }}<span><i class="fa fa-arrow"></i></span></div>
+           		{% endif %}
+           </div>                      
+        </div>
+       </div>
+    {% endfor %}
+{% else %}
+	<div class="row">
+       
+    <div class="small-24 small-centered large-centered columns blue-container">
         <div class="small-24 columns">
-            <div class="recommendedtxt gray-text text-right">
+            <div class="recommendedtxt gray-text text-right sponsored-{{ recommendedSlotCnt  }}">
                 Sponsored Ad
             </div>
         </div>
-        <div class="t-s-block"> 
-            {% set  recommendedSlotCls = 'small-24 medium-24 large-24' %}
-            {% set  recommendedSlotCnt = 1 %}
-            {% if recommendedSlotArray is defined and recommendedSlotArray|length == 2 %}
-            	{% set  recommendedSlotCls = 'small-24 medium-12 large-12' %}
-            	 {% set  recommendedSlotCnt = 2 %}
-            {% elseif recommendedSlotArray is defined and recommendedSlotArray|length == 3 %}
-            	{% set  recommendedSlotCls = 'small-24 medium-8 large-8' %}
-            	 {% set  recommendedSlotCnt = 3 %}	
-            {% endif %}
+        <div class="center-blocks">             
             {% for recommendedSlot in recommendedSlotArray%}
                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
                 {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
                 {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
                 {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
                 {% set only_domains = only_domains|replace({'www.': ''})%}
-                <div class="{{ recommendedSlotCls }} columns t-s-column">
+                <div class="small-{{ centersmallCnt }} centered-block">
                 	<div class="small-10 medium-5 large-5 columns t-s-subblock-left {% if userLogo is null %} profile-placeholder-{{recommendedSlotCnt}} {% endif %} img-cls-recommend-{{recommendedSlotCnt}}" >
                         {% if userLogo is null%}
                                 <img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" />
@@ -32,29 +73,18 @@
                             {% endif %}
                     </div>
                     <div class="small-14  medium-19 large-19 columns t-s-subblock-right content-cls-recommend-{{recommendedSlotCnt}}">
-                        <div class="list-title"> {{ recommendedSlot['title'] }}</div>
-                        {% if recommendedSlot['display_url'] !='' and recommendedSlotArray|length ==1 %}
-                        	<h5 class="mt5 list-display-url show-for-medium-up"><a href="{{ recommendedSlot['display_url'] }}" style="color: #a8dc28;">{{ recommendedSlot['display_url'] }}</a></h5>
-                        {% endif %}
-                        
-                        {% if recommendedSlot['display_url'] !='' and recommendedSlotArray|length ==1 %}
-                        	<div class="mt5 recommended-more">
-                                <div class="list-desc show-for-medium-up left-block">
-                                    {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
-                                </div>
-                                {% if recommendedSlot['cta_text'] !='' %}
-                                <div class="button secondary-btn-1 right-block  hide-for-small-only">{{ recommendedSlot['cta_text'] }}<span><i class="fa fa-arrow"></i></span></div>
-                           		{% endif %}
-                           </div>
-                        {% elseif recommendedSlot['cta_text'] !='' and recommendedSlotArray|length == 2 %}
-                            <div class="button secondary-btn-1 show-for-medium-up">{{ recommendedSlot['cta_text'] }}<span><i class="fa fa-arrow"></i></span></div>
+                        <div class="list-title show-title-r-ad-det"> {{ recommendedSlot['title'] }}</div>
+                        <div class="list-title show-mob-title-r-ad-det"> {{ recommendedSlot['mobile_title'] }}</div>
+                        {% if recommendedSlot['cta_text'] !='' and recommendedSlotArray|length == 2 %}
+                            <div class="button secondary-btn-1 recommended-2-slot-ad-detail-btn">{{ recommendedSlot['cta_text'] }}<span><i class="fa fa-arrow"></i></span></div>
                        	{% endif %}
-                    </div>
+                    </div> 
     			</div>
            {% endfor %}
        </div>
     </div>
     </div>
+ {% endif %}
 </div>
 <!--  Mobile Starts Here -->
 <div class="show-for-small-only">
@@ -74,7 +104,7 @@
                     {% endif %}
             </div>
             <div class="content-cls-recommend-1">
-                <div class="recommendedtxt gray-text text-right">
+                <div class="recommendedtxt gray-text text-right sponsored-1">
                     Sponsored Ad
                 </div>
                 <div class="mt5 list-title"> {{ recommendedSlot['mobile_title'] }}</div>                       
