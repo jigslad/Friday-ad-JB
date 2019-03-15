@@ -49,23 +49,21 @@
        </div>
     {% endfor %}
 {% else %}
-	<div class="row">
-       
-    <div class="small-24 small-centered large-centered columns blue-container">
+	<div class="clearfix">
+    <div class="s-block clearfix">
         <div class="small-24 columns">
             <div class="recommendedtxt gray-text text-right sponsored-{{ recommendedSlotCnt  }}">
                 Sponsored Ad
             </div>
         </div>
-        <div class="center-blocks">             
+        <div class="t-s-block">             
             {% for recommendedSlot in recommendedSlotArray%}
                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
                 {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
                 {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
                 {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
                 {% set only_domains = only_domains|replace({'www.': ''})%}
-
-                <div class="small-{{ centersmallCnt }} centered-block">
+                <div class="{{ recommendedSlotCls }} columns t-s-column">
                 	<div class="small-10 medium-5 large-5 columns t-s-subblock-left {% if userLogo is null %} profile-placeholder-{{recommendedSlotCnt}} {% endif %} img-cls-recommend-{{recommendedSlotCnt}}" >
                         {% if userLogo is null%}
                                 <img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" />
