@@ -1,9 +1,27 @@
 <style>
+.center-blocks {
+	text-align: center;
+	display: inline-block!important;
+	height: 100%;
+	width:100%;
+	vertical-align: middle;
+}
+
+.centered-block {
+	display: inline-block!important;
+	vertical-align: middle;
+	margin:10px 10px 20px 10px;
+}
+.recommended-div.listing.recommended-ad-detail .small-3 { width:auto !important; }
+.recommended-div.listing.recommended-ad-detail .small-12 { width:46% !important; }
+
+.mt5 { margin-top:5px; }
 .recommended-div.listing .recommendedtxt {
         position: relative !important;
         right: 0 !important;
         top: 0 !important;
     }
+    .recommended-div.listing .recommendedtxt.sponsored-2, .recommended-div.listing .recommendedtxt.sponsored-3 { top: 5px !important; }
     .recommended-div.listing {
         padding: 0px;
     }
@@ -23,11 +41,21 @@
     }
     .recommended-div.listing h5 {
         font-weight: normal;
-        margin-top: 0px;
+        margin-top: 5px;
     }
+        
     .recommended-div.listing h5.list-title {
     	font-weight: 700;
     }
+
+    .recommended-div.listing.recommended-ad-detail .list-title {
+    	text-align:left;
+    }
+    
+    .recommended-div.listing.recommended-ad-detail .recommended-2-slot-ad-detail-btn {
+    	float:left;
+    }
+
     .recommended-div.listing .recommended-more {
         display: inline-flex; 
         width: 100%;
@@ -38,54 +66,174 @@
     .recommended-div.listing .recommended-more .right-block {
         width: 25%;
     }
+    
+    .recommended-div.listing.recommended-ad-detail .profile-placeholder-1, .recommended-div.listing.recommended-ad-detail .profile-placeholder-2, .recommended-div.listing.recommended-ad-detail .profile-placeholder-3 {
+        background: #a8a8a8;
+        overflow: hidden;
+        text-align: center;
+        position: relative;
+    }
+     .recommended-div.listing.recommended-ad-detail .profile-placeholder-1 {
+        width: 130px !important; 
+        height: 90px !important; 
+        line-height: 90px !important; 
+    }
+    .recommended-div.listing.recommended-ad-detail .profile-placeholder-2 {
+        width: 130px !important; 
+        height: 90px !important; 
+        line-height: 90px !important; 
+    }
+    .recommended-div.listing.recommended-ad-detail .profile-placeholder-3 {
+        width: 100px !important; 
+        height: 90px !important; 
+        line-height: 90px !important; 
+    }
+    
+    .recommended-div.listing.recommended-ad-detail .img-cls-recommend-1 {
+    	width:38% !important;
+    	float:left;
+	}
+    .recommended-div.listing.recommended-ad-detail .content-cls-recommend-1 {
+    	width:58% !important;
+    	float:right;
+    	padding: 5px 10px;
+	}    	
+    
+
+    .recommended-div.listing.recommended-ad-detail .img-cls-recommend-2 {
+    }
+    .recommended-div.listing.recommended-ad-detail .img-cls-recommend-3 {
+    }
+
+    .recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 {
+        max-width: 190px;
+        float: left !important;
+    }
+    .recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 {
+    	max-width: 105px;
+    }
+    .s-block {
+        padding: 15px 5px;
+    }
+    .t-s-block {
+        margin-top: 5px;
+    }
+    .t-s-subblock-left {
+        padding: 0px;
+    }
+    .t-s-subblock-right {
+        padding: 0px 0px 0px 10px;
+    }
+    .s-block .button {
+        height: 35px;
+        padding: 6px 10px 5px 10px;
+        margin-bottom: 0px;
+        margin-top: 15px;
+    }
+    .list-title {
+        font-weight: 700;
+    }
+
+    .show-title-r-ad-det { display:block; }
+    .show-mob-title-r-ad-det { display:none; }
+
+    @media only screen and (max-width: 640px) {
+        .t-s-column{
+            margin-bottom: 20px;
+        }
+    }
     @media only screen and (min-width: 960px) and (max-width: 1151px) {
         .recommended-div.listing .list-col-2 {
             width: 67%;
         }
-        .recommended-div.listing.recommended-ad-detail .list-col-2 {
-            min-width: 63%;
-            width: 63% !important;
-        }
+
+        .recommended-div.listing.recommended-ad-detail .content-cls-recommend-1 {
+
+        	width:60% !important;
+    	}
+    	.recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 {
+        	width:54% !important;
+    	}
+    	.show-title-r-ad-det, .recommended-2-slot-ad-detail-btn { display:none; }
+    	.show-mob-title-r-ad-det { display:block; }
+    	.recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 {
+        	float: left !important;
+            padding-left: 0px !important;
+            margin-top: 5px !important;
+    	}
     }
     @media only screen and (min-width: 760px) and (max-width: 959px) {
         .recommended-div.listing .list-col-2 {
             min-width: 70%;
             width: 70%;
-        } 
-        .recommended-div.listing.recommended-ad-detail .list-col-2 {
-            min-width: 55%;
-            width: 55% !important;
-        }
+        }        
         .recommended-div.listing .recommended-more .list-desc {
             display: block !important;
+        }
+        .recommended-div.listing.recommended-ad-detail .recommended-more .list-desc {
+            display: none !important;
         }
         .recommended-div.listing.recommended-ad-detail h3, .recommended-div.listing.recommended-ad-detail h5{
         	width: auto !important;
         }
+        .recommended-div.listing.recommended-ad-detail .content-cls-recommend-1 {
+        	width:60% !important;
+    	}
+    	
+    	.recommended-div.listing.recommended-ad-detail .recommended-more .right-block {
+            width: auto !important;
+        }
+        
+        .recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 {
+        	width:50% !important;
+    	}
+    	.recommended-div.listing.recommended-ad-detail .profile-placeholder-2 {
+            width: 110px !important; 
+            height: 80px !important; 
+            line-height: 80px !important; 
+        }
+    	
+        .show-title-r-ad-det, .recommended-2-slot-ad-detail-btn { display:none; }
+    	.show-mob-title-r-ad-det { display:block; }
+    	
+    	.recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 {
+        	float: left !important;
+            padding-left: 0px !important;
+            margin-top: 5px !important;
+        	width:70% !important;
+
+    	}
     }
     @media only screen and (min-width: 641px) and (max-width: 759px) {
         .recommended-div.listing .list-col-2 {
             min-width: 68%;
             width: auto;
         }
-        .recommended-div.listing.recommended-ad-detail .list-col-2 {
-            min-width: 64%;
-            width: 64% !important;
-        }
-        
-        .recommended-div.listing .recommended-more .list-desc {
+         .recommended-div.listing .recommended-more .list-desc {
             display: block !important;
         }
+        .recommended-div.listing.recommended-ad-detail .content-cls-recommend-1 {
+        	width:76% !important;
+    	}
+
+    	.show-title-r-ad-det, .recommended-2-slot-ad-detail-btn { display:none; }
+    	.show-mob-title-r-ad-det { display:block; }
+    	.recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 {
+        	float: left !important;
+            padding-left: 0px !important;
+            margin-top: 5px !important;
+    	}
+
     }
     @media only screen and (min-width: 320px) and (max-width: 640px) {
         .recommended-div.listing {
-            min-height: 102px;
+            min-height: 90px;
         }
         .recommended-div.listing .list-col-1 {
             width: 38%;
             padding: 15px 0px 15px 15px;
         }
-        .recommended-div.listing .list-col-2,.recommended-div.listing.recommended-ad-detail .list-col-2 {
+        .recommended-div.listing .list-col-2 {
         	width: 53% !important;
         }       
         .recommended-div.listing .featured-bz-listimg, .recommended-div.listing .featured-bz-listimg .profile-placeholder {
@@ -95,9 +243,38 @@
         .recommended-div.listing .recommended-more {
             display: none;
         }
+        
+        .recommended-div.listing .recommendedtxt {
+            font-size: 12px !important;
+        }
+        
+        .recommended-div.listing .list-title {
+            font-weight: 600 !important;
+            line-height: 20px !important;
+        }
+        
+        .recommended-div.listing.recommended-ad-detail .profile-placeholder-1 {
+            height: 88px !important; 
+            line-height: 88px !important; 
+        }
+    
         .recommended-div.listing .recommended-div.listing h5 {
             max-height: 50px;
             font-weight: 700;
         }
+       
+        .recommended-div.listing .mobile-recommended-ad-detail .img-cls-recommend-1 {
+        	width:38% !important;
+        	float:left;
+    	}
+        .recommended-div.listing .mobile-recommended-ad-detail .content-cls-recommend-1 {
+        	width:58% !important;
+        	float:right;
+        	padding: 5px 10px;
+    	}
+
+    	.show-title-r-ad-det, .recommended-2-slot-ad-detail-btn { display:none; }
+    	.show-mob-title-r-ad-det { display:block; }
+
     }
 </style>
