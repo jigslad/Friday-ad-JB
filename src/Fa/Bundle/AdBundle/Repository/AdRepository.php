@@ -849,8 +849,18 @@ class AdRepository extends EntityRepository
 
             // set expires at
             if ($object->getStatus()->getId() == BaseEntityRepository::AD_STATUS_IN_MODERATION_ID) {
+                $expirationDays = '';
+                
+                $adPackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdPackageArrayByAdId($object->getId());
                 $expirationDays = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($object->getCategory()->getId(), $container);
-                $object->setExpiresAt($this->getAdPrintExpiry($object->getId(), CommonManager::getTimeFromDuration($expirationDays.'d')));
+                if($expirationDays!='') { $expirationDays = $expirationDays.'d'; }
+                if(!empty($adPackage)) {
+                    if(!empty($adPackage[$object->getId()]) && $adPackage[$object->getId()]['duration']!='') {
+                        $expirationDays = $adPackage[$object->getId()]['duration'];
+                    }
+                }
+
+                $object->setExpiresAt($this->getAdPrintExpiry($object->getId(), CommonManager::getTimeFromDuration($expirationDays)));
             }
 
             $status = $this->_em->getRepository('FaEntityBundle:Entity')->findOneBy(array('id' => BaseEntityRepository::AD_STATUS_LIVE_ID));
@@ -2080,12 +2090,21 @@ class AdRepository extends EntityRepository
 
         if ($changeExpiresAtFlag) {
             if ($adExpiryDays) {
-                $expirationDays = $adExpiryDays;
+                $expirationDays = $adExpiryDays.'d';
             } else {
+                $expirationDays = '';
+                
+                $adPackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdPackageArrayByAdId($adId);
                 $expirationDays = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($object->getCategory()->getId());
+                if($expirationDays!='') { $expirationDays = $expirationDays.'d'; }
+                if(!empty($adPackage)) {
+                    if(!empty($adPackage[$adId]) && $adPackage[$adId]['duration']!='') {
+                        $expirationDays = $adPackage[$adId]['duration'];
+                    }
+                }
             }
 
-            $object->setExpiresAt($this->getAdPrintExpiry($adId, CommonManager::getTimeFromDuration($expirationDays.'d')));
+            $object->setExpiresAt($this->getAdPrintExpiry($adId, CommonManager::getTimeFromDuration($expirationDays)));
         }
 
         if ($changeRenewedAtFlag) {
