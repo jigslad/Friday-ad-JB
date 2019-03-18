@@ -399,6 +399,7 @@ class Ad
     private $old_sub_class_id;
 
     /**
+     * @var AdLocation[]
      * @ORM\OneToMany(targetEntity="Fa\Bundle\AdBundle\Entity\AdLocation", mappedBy="ad")
      */
     private $ad_locations;
@@ -1323,7 +1324,7 @@ class Ad
     /**
      * Get adLocations
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return AdLocation[]
      */
     public function getAdLocations()
     {
