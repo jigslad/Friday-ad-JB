@@ -241,7 +241,7 @@ class AdUserPackageRepository extends BaseEntityRepository
     public function getAdPackageArrayByAdId($adId = array(), $getTiPackageTitle = false)
     {
         $qb = $this->createQueryBuilder(self::ALIAS)
-        ->select(self::ALIAS.'.id', PackageRepository::ALIAS.'.id as package_id', PackageRepository::ALIAS.'.title', self::ALIAS.'.price', self::ALIAS.'.ad_id', self::ALIAS.'.ti_package', PackageRepository::ALIAS.'.package_text')
+        ->select(self::ALIAS.'.id', PackageRepository::ALIAS.'.id as package_id', PackageRepository::ALIAS.'.duration as duration', PackageRepository::ALIAS.'.title', self::ALIAS.'.price', self::ALIAS.'.ad_id', self::ALIAS.'.ti_package', PackageRepository::ALIAS.'.package_text')
         ->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
         ->andWhere(self::ALIAS.'.status = '.self::STATUS_ACTIVE);
 
@@ -267,6 +267,7 @@ class AdUserPackageRepository extends BaseEntityRepository
                 $adPackageArr[$adPackage['ad_id']]['price'] = $adPackage['price'];
                 $adPackageArr[$adPackage['ad_id']]['package_id'] = $adPackage['package_id'];
                 $adPackageArr[$adPackage['ad_id']]['package_text'] = $adPackage['package_text'];
+                $adPackageArr[$adPackage['ad_id']]['duration'] = $adPackage['duration'];
             }
         }
 

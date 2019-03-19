@@ -1,47 +1,114 @@
 {% set userRepository = fetch_repository('FaUserBundle:User') %}
- <div class="recommended-div listing mb20 recommended-ad-detail"> 
-        {% for recommendedSlot in recommendedSlotArray%}
-            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
-            {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
-            {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
-            {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
-            {% set only_domains = only_domains|replace({'www.': ''})%}
-                <a class="tricky-link" href="javascript:void(0);" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">{{ userName }}</a>
-                <div class="clearfix">
-                	<div class="list-col-1">
-                        <div class="featured-bz-listimg {% if userLogo is null %}list-placeholder{% endif %}">
-                            {% if userLogo is null%}
+{% set  recommendedSlotCls = 'small-24 medium-24 large-24' %}
+{% set  recommendedSlotCnt = 1 %} {% set centersmallCnt =24 %}
+{% if recommendedSlotArray is defined and recommendedSlotArray|length == 2 %}
+	{% set  recommendedSlotCls = 'small-24 medium-12 large-12' %}
+	 {% set  recommendedSlotCnt = 2 %}
+{% set centersmallCnt =12 %}
+{% elseif recommendedSlotArray is defined and recommendedSlotArray|length == 3 %}
+	{% set  recommendedSlotCls = 'small-24 medium-8 large-8' %}
+	 {% set  recommendedSlotCnt = 3 %}
+{% set centersmallCnt =3 %}	
+{% endif %}
+
+<div class="recommended-div listing mb20 recommended-ad-detail hide-for-small-only">
+{% if recommendedSlotCnt==1 %}
+	{% for recommendedSlot in recommendedSlotArray%}
+        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
+        {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
+        {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
+        {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
+        {% set only_domains = only_domains|replace({'www.': ''})%}
+        <div class="clearfix">
+    	<div class="{% if userLogo is null %} profile-placeholder-1 {% endif %} img-cls-recommend-1" >
+            {% if userLogo is null%}
+                    <img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" />
+                {% else %}
+                    <img src="{{ userLogo }}" alt="{{ userName }}" />
+                {% endif %}
+        </div>
+        <div class="content-cls-recommend-1">
+            <div class="recommendedtxt gray-text text-right sponsored-1">
+                Sponsored Ad
+            </div>
+            <div class="mt5 list-title"> 
+              	<h3>{{ recommendedSlot['title'] }}</h3>
+                {% if recommendedSlot['display_url'] !='' %}
+                	<h5 class="mt5 list-display-url show-for-large-only"><a href="{{ recommendedSlot['display_url'] }}" style="color: #a8dc28;">{{ recommendedSlot['display_url'] }}</a></h5>
+                {% endif %} 
+            </div> 
+            <div class="mt5 recommended-more">
+                <div class="list-desc show-for-large-only left-block">
+                    {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
+                </div>
+                {% if recommendedSlot['cta_text'] !='' %}
+                <div class="button secondary-btn-1 right-block  hide-for-small-only">{{ recommendedSlot['cta_text'] }}<span><i class="fa fa-arrow"></i></span></div>
+           		{% endif %}
+           </div>                      
+        </div>
+       </div>
+    {% endfor %}
+{% else %}
+	<div class="clearfix">
+    <div class="s-block clearfix">
+        <div class="small-24 columns">
+            <div class="recommendedtxt gray-text text-right sponsored-{{ recommendedSlotCnt  }}">
+                Sponsored Ad
+            </div>
+        </div>
+        <div class="t-s-block">             
+            {% for recommendedSlot in recommendedSlotArray%}
+                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
+                {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
+                {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
+                {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
+                {% set only_domains = only_domains|replace({'www.': ''})%}
+                <div class="{{ recommendedSlotCls }} columns t-s-column">
+                	<div class="small-10 medium-5 large-5 columns t-s-subblock-left {% if userLogo is null %} profile-placeholder-{{recommendedSlotCnt}} {% endif %} img-cls-recommend-{{recommendedSlotCnt}}" >
+                        {% if userLogo is null%}
                                 <img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" />
                             {% else %}
                                 <img src="{{ userLogo }}" alt="{{ userName }}" />
                             {% endif %}
-                        </div>
                     </div>
-					<div class="list-col-2">
-                        <div class="clearfix">
-                            <div class="recommendedtxt gray-text text-right">
-                                {{'Sponsored Ad'|trans({}, 'frontend-show-ad')}}
-                            </div>
-                             
-                        	<h5 class="show-for-small-only list-title">
-                                {{ recommendedSlot['mobile_title'] }}
-                            </h5>
-                         
-                            <h3 class="hide-for-small-only list-title">
-                                {{ recommendedSlot['title'] }}
-                            </h3>
-                                                       
-                             <h5 class="list-display-url hide-for-small-only"><a href="{{ recommendedSlot['display_url'] }}" style="color: #a8dc28;">{{ recommendedSlot['display_url'] }}</a></h5>
-                        </div>
-                        <div class="mt10 recommended-more">
-                            <div class="list-desc hide-for-small-only left-block">
-                                {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
-                            </div>
-                            {% if recommendedSlot['cta_text'] !='' %}
-                            <div class="button secondary-btn-1 right-block">{{ recommendedSlot['cta_text'] }}<span><i class="fa fa-arrow"></i></span></div>
-                       		{% endif %}
-                       </div>
-                    </div>               
-            </div>
-        {% endfor %}
+                    <div class="small-14  medium-19 large-19 columns t-s-subblock-right content-cls-recommend-{{recommendedSlotCnt}}">
+                        <div class="list-title show-title-r-ad-det"> {{ recommendedSlot['title'] }}</div>
+                        <div class="list-title show-mob-title-r-ad-det"> {{ recommendedSlot['mobile_title'] }}</div>
+                        {% if recommendedSlot['cta_text'] !='' and recommendedSlotArray|length == 2 %}
+                            <div class="button secondary-btn-1 recommended-2-slot-ad-detail-btn">{{ recommendedSlot['cta_text'] }}<span><i class="fa fa-arrow"></i></span></div>
+                       	{% endif %}
+                    </div> 
+    			</div>
+           {% endfor %}
+       </div>
     </div>
+    </div>
+ {% endif %}
+</div>
+<!--  Mobile Starts Here -->
+<div class="show-for-small-only">
+{% for recommendedSlot in recommendedSlotArray%}
+    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
+    {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
+    {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
+    {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
+    {% set only_domains = only_domains|replace({'www.': ''})%}
+    <div class="recommended-div listing mb20 recommended-ad-detail">
+        <div class="mobile-recommended-ad-detail">
+        	<div class="{% if userLogo is null %} profile-placeholder-1 {% endif %} img-cls-recommend-1" >
+                {% if userLogo is null%}
+                        <img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" />
+                    {% else %}
+                        <img src="{{ userLogo }}" alt="{{ userName }}" />
+                    {% endif %}
+            </div>
+            <div class="content-cls-recommend-1">
+                <div class="recommendedtxt gray-text text-right sponsored-1">
+                    Sponsored Ad
+                </div>
+                <div class="mt5 list-title"> {{ recommendedSlot['mobile_title'] }}</div>                       
+            </div>
+		</div>
+    </div>
+{% endfor %}
+</div>
