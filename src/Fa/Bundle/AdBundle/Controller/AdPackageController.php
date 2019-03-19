@@ -11,17 +11,18 @@
 
 namespace Fa\Bundle\AdBundle\Controller;
 
+use Fa\Bundle\AdBundle\Entity\Ad;
+use Fa\Bundle\EntityBundle\Entity\LocationGroupLocation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
-use Fa\Bundle\CoreBundle\Repository\ConfigRepository;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
-use Fa\Bundle\PromotionBundle\Repository\PackageRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This controller is used for ad package management.
@@ -42,6 +43,9 @@ class AdPackageController extends CoreController
      */
     public function purchaseAdPackageAction($adId, Request $request)
     {
+        /**
+         * @var Ad $ad
+         */
         if ($this->isAuth()) {
             $this->container->get('session')->set('paa_skip_login_step', true);
         }
@@ -218,8 +222,6 @@ class AdPackageController extends CoreController
                     }
                     $userActiveCredits = $this->getRepository('FaUserBundle:UserCredit')->getActiveCreditForUserByCategory($userId, $adRootCategoryId, $cart->getId(), $adId);
                     if (!empty($userActiveCredits)) {
-                        $activeShopPackageDetail = $this->getRepository('FaUserBundle:UserPackage')->getShopPackageDetailByUserIdForAdReport($userId);
-                        $packageSrNoCredits = $this->getRepository('FaUserBundle:UserCredit')->getPackageWiseActiveCreditForUser($userActiveCredits);
                         $isValidUserCredit = ($selectedPackageObj->getPackageSrNo() && isset($userActiveCredits[$userCreditId]) && in_array($selectedPackageObj->getPackageSrNo(), $userActiveCredits[$userCreditId]['package_sr_no']) && $userActiveCredits[$userCreditId]['credit'] >= $totalCredit);
                         if (!$isValidUserCredit) {
                             $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Sorry you do not have enough credits.', array(), 'frontend-ad-package'), 'error');
@@ -305,6 +307,7 @@ class AdPackageController extends CoreController
             'cart' => $cart,
             'privateUserAdParams' => $privateUserAdParams,
             'locationGroupIds' => $locationGroupIds,
+            'dimension12' => $this->getDimension12($ad),
         );
         return $this->render('FaAdBundle:AdPackage:purchaseAdPackage.html.twig', $parameters);
     }
@@ -327,7 +330,6 @@ class AdPackageController extends CoreController
     public function addAdPackage($adId, $packageId, $adExpiryDays, $selectedPackagePrintId, $type = null, $activeAdUserPackageId = null, $addAdToModeration = false, $printEditionValues = array(), $userCreditId = null, $totalCredit = null, $privateUserAdParams = array())
     {
         $ad      = $this->getRepository('FaAdBundle:Ad')->find($adId);
-        $package = $this->getRepository('FaPromotionBundle:Package')->find($packageId);
 
         $response = $this->checkIsValidAdUser($ad->getUser()->getId());
         if ($response !== true) {
@@ -364,6 +366,9 @@ class AdPackageController extends CoreController
      */
     public function promoteAdAction($type, $adId, Request $request)
     {
+        /**
+         * @var Ad $ad
+         */
         $redirectResponse = $this->checkIsValidLoggedInUser($request);
         if ($redirectResponse !== true) {
             return $redirectResponse;
@@ -436,7 +441,7 @@ class AdPackageController extends CoreController
         if ($response !== true) {
             return $response;
         }
-        
+
         //check User advert has location if not redirect to edit page
         if (count($ad->getAdLocations()) == 0) {
             $redirectUrl = $request->getUri();
@@ -608,8 +613,6 @@ class AdPackageController extends CoreController
                     }
                     $userActiveCredits = $this->getRepository('FaUserBundle:UserCredit')->getActiveCreditForUserByCategory($userId, $adRootCategoryId, $cart->getId(), $adId);
                     if (count($userActiveCredits)) {
-                        $activeShopPackageDetail = $this->getRepository('FaUserBundle:UserPackage')->getShopPackageDetailByUserIdForAdReport($userId);
-                        $packageSrNoCredits = $this->getRepository('FaUserBundle:UserCredit')->getPackageWiseActiveCreditForUser($userActiveCredits);
                         $isValidUserCredit = ($selectedPackageObj->getPackageSrNo() && isset($userActiveCredits[$userCreditId]) && in_array($selectedPackageObj->getPackageSrNo(), $userActiveCredits[$userCreditId]['package_sr_no']) && $userActiveCredits[$userCreditId]['credit'] >= $totalCredit);
                         if (!$isValidUserCredit) {
                             $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Sorry you do not have enough credits.', array(), 'frontend-ad-package'), 'error');
@@ -692,4 +695,54 @@ class AdPackageController extends CoreController
 
         return $this->render('FaAdBundle:AdPackage:purchaseAdPackage.html.twig', $parameters);
     }
+
+    /**
+     *
+     * @param Ad $ad
+     * @return string
+     */
+    private function getDimension12(Ad $ad)
+    {
+        $adLocations = $ad->getAdLocations();
+        $flagPrint = false;
+        $flagNonprint = false;
+        $dimension12 = '';
+        $arrPrintLocationTownIds = $this->getPrintLocationTownIds();
+        if(!empty($adLocations)){
+            foreach ($adLocations as $valAdLocation){
+                if(!empty($valAdLocation->getLocationTown())){
+                    $townId = $valAdLocation->getLocationTown()->getId();
+                    if (in_array($townId, $arrPrintLocationTownIds)) {
+                        $flagPrint = true;
+                    } else {
+                        $flagNonprint = true;
+                    }
+                }
+            }
+        }
+        if ($flagPrint) {
+            $dimension12 = "Print";
+        } else if ($flagNonprint) {
+            $dimension12 = "Non-print";
+        }
+        return $dimension12;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    private function getPrintLocationTownIds()
+    {
+        /**
+         * @var LocationGroupLocation[] $resLocationGroupLocations
+         */
+        $townIds = [];
+        $resLocationGroupLocations = $this->getRepository('FaEntityBundle:LocationGroupLocation')->findAll();
+        foreach ($resLocationGroupLocations as $valLocation) {
+            $townIds[] = $valLocation->getLocationTown()->getId();
+        }
+        return $townIds;
+    }
+
 }
