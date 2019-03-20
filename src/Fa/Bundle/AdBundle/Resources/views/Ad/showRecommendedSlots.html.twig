@@ -24,7 +24,7 @@
             {% if userLogo is null%}
                     <div class="img-img-cls-recommend-1"><div class="profile-placeholder-1"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
                 {% else %}
-                    <div class="img-img-cls-recommend-1"><img src="{{ userLogo }}" alt="{{ userName }}" /></div>
+                    <div class="img-img-cls-recommend-1"><div class="img-cls-ad-recommend-1"><img src="{{ userLogo }}" alt="{{ userName }}" /></div></div>
                 {% endif %}
         </div>
         <div class="content-cls-recommend-1">
@@ -68,7 +68,7 @@
                         {% if userLogo is null%}
                                 <div class="img-img-cls-recommend-{{recommendedSlotCnt}}"><div class="profile-placeholder-{{recommendedSlotCnt}}"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
                             {% else %}
-                                <div class="img-img-cls-recommend-{{recommendedSlotCnt}}"><img src="{{ userLogo }}" alt="{{ userName }}" /></div>
+                                <div class="img-img-cls-recommend-{{recommendedSlotCnt}}"><div class="img-cls-ad-recommend-{{recommendedSlotCnt}}"><img src="{{ userLogo }}" alt="{{ userName }}" /></div></div>
                             {% endif %}
                     </div>
                     <div class="small-14  medium-19 large-19 columns t-s-subblock-right content-cls-recommend-{{recommendedSlotCnt}}">
@@ -99,7 +99,7 @@
                 {% if userLogo is null%}
                         <div class="img-img-cls-recommend-1"><div class="profile-placeholder-1"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
                     {% else %}
-                        <div class="img-img-cls-recommend-1"><img src="{{ userLogo }}" alt="{{ userName }}" /></div>
+                        <div class="img-img-cls-recommend-1"><div class="img-cls-ad-recommend-1"><img src="{{ userLogo }}" alt="{{ userName }}" /></div></div>
                     {% endif %}
             </div>
             <div class="content-cls-recommend-1">

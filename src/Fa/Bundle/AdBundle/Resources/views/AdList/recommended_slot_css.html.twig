@@ -107,6 +107,7 @@
     .recommended-div.listing.recommended-ad-detail .img-cls-recommend-1 {
     	width:30% !important;
     	float:left;
+    	max-height: 140px;
 	}
     .recommended-div.listing.recommended-ad-detail .content-cls-recommend-1 {
     	width:68% !important;
@@ -131,6 +132,11 @@
     }
     
     .recommended-div.listing.recommended-ad-detail .fullblock-cls-recommend-3 { margin-bottom:3px; }
+    
+    .recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-1 .img-cls-ad-recommend-1 img {
+    	    height: -webkit-fill-available !important; float: left; width: 100% !important; 
+    }
+        
     .s-block {
         padding: 15px 5px;
     }
@@ -228,7 +234,7 @@
             height: 80px !important; 
             line-height: 80px !important; 
         }
-    	
+            	
         .show-title-r-ad-det, .recommended-2-slot-ad-detail-btn { display:none; }
     	.show-mob-title-r-ad-det { display:block; }
     	    	
@@ -277,14 +283,15 @@
     }
     @media only screen and (min-width: 320px) and (max-width: 640px) {
         .recommended-div.listing {
-            min-height: 90px;
+            min-height: 85px;
+            overflow: hidden;
         }
         .recommended-div.listing .list-col-1 {
-            width: 30%;
+            width: 39%;
             padding: 15px 0px 15px 15px;
         }
         .recommended-div.listing .list-col-2 {
-        	width: 61% !important;
+        	width: 50% !important;
         }       
         .recommended-div.listing .featured-bz-listimg, .recommended-div.listing .featured-bz-listimg .profile-placeholder {
             width: 30%;
@@ -316,7 +323,7 @@
     	}
     	
     	.recommended-div.listing .mobile-recommended-ad-detail .img-img-cls-recommend-1 { 
-    		height:88px !important;
+    		height:85px !important;
     	}
     	.recommended-div.listing .mobile-recommended-ad-detail .img-img-cls-recommend-1 .profile-placeholder-1{ 
     		height:auto !important;
@@ -329,6 +336,6 @@
     	.show-title-r-ad-det, .recommended-2-slot-ad-detail-btn { display:none; }
     	.show-mob-title-r-ad-det { display:block; }
     	
-    	.recommended-div.listing .img-cls-srchlist-recommend { width: 110px !important;height: 80px !important;line-height: 80px !important; }
+    	.recommended-div.listing .img-cls-srchlist-recommend { width: 100px !important;height: 80px !important;line-height: 80px !important; }
     }
 </style>
