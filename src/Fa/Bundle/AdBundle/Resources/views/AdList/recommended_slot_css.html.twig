@@ -19,7 +19,7 @@
 .recommended-div.listing .recommendedtxt {
         position: relative !important;
         right: 0 !important;
-        top: 0 !important;
+        top: 2px !important;
     }
     .recommended-div.listing .recommendedtxt.sponsored-2, .recommended-div.listing .recommendedtxt.sponsored-3 { top: -7px !important; }
     .recommended-div.listing {
@@ -28,13 +28,16 @@
     .recommended-div.listing .list-col-1 {
         width: 185px;
     }
-    .recommended-div.listing .featured-bz-listimg, .recommended-div.listing .featured-bz-listimg .profile-placeholder {
-        width: 185px;
-        height: 143px;
+    .recommended-div.listing .featured-bz-listimg {
+        width: 100%;
+        height: 100%;
     }
+    .recommended-div.listing .featured-bz-listimg .profile-placeholder { height: auto !important; }
+    .recommended-div.listing .featured-bz-listimg img { max-width: 100% !important;max-height: 100%  !important; }
+
     .recommended-div.listing .list-col-2 {
-        padding: 15px 0px 10px;
-        width: 560px;
+        padding: 9px 0px 9px;
+        width: 71.7%;
     }
     .recommended-div.listing.recommended-ad-detail .list-col-2 {
          width: 480px !important;
@@ -45,7 +48,7 @@
     }
         
     .recommended-div.listing h5.list-title {
-    	font-weight: 700;
+    	font-weight: 400;
     }
 
     .recommended-div.listing.recommended-ad-detail .list-title {
@@ -63,54 +66,72 @@
     .recommended-div.listing .recommended-more .left-block {
         width: 75%;
     }
+    .recommended-div.listing .recommended-more .outer-btn { width:25%; }
     .recommended-div.listing .recommended-more .right-block {
-        width: 25%;
+        height:35px;
+        margin-top:12px !important;
+        margin-bottom:0px !important;
+        padding:5px 5px !important;
     }
     
-    .recommended-div.listing.recommended-ad-detail .profile-placeholder-1, .recommended-div.listing.recommended-ad-detail .profile-placeholder-2, .recommended-div.listing.recommended-ad-detail .profile-placeholder-3 {
-        background: #a8a8a8;
-        overflow: hidden;
+    .recommended-div.listing .img-cls-srchlist-recommend { 
+    	overflow: hidden;text-align: center;position: relative; 
+    	width: 185px !important; 
+        height: 140px !important; 
+        line-height: 140px !important;
+    }
+    .recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-1, .recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-2, .recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-3 {
+    	overflow: hidden;
         text-align: center;
         position: relative;
     }
-     .recommended-div.listing.recommended-ad-detail .profile-placeholder-1 {
-        width: 100% !important; 
-        height: 138px !important; 
-        line-height: 138px !important; 
+    .recommended-div.listing.recommended-ad-detail .profile-placeholder-1, .recommended-div.listing.recommended-ad-detail .profile-placeholder-2, .recommended-div.listing.recommended-ad-detail .profile-placeholder-3 {
+        background: #a8a8a8;     
     }
-    .recommended-div.listing.recommended-ad-detail .profile-placeholder-2 {
+     .recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-1 {
+        width: 100% !important; 
+        height: 140px !important; 
+        line-height: 140px !important; 
+    }
+    .recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-2 {
         width: 130px !important; 
         height: 90px !important; 
         line-height: 90px !important; 
     }
-    .recommended-div.listing.recommended-ad-detail .profile-placeholder-3 {
+    .recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-3 {
         width: 100px !important; 
         height: 90px !important; 
         line-height: 90px !important; 
     }
     
     .recommended-div.listing.recommended-ad-detail .img-cls-recommend-1 {
-    	width:38% !important;
+    	width:30% !important;
     	float:left;
 	}
     .recommended-div.listing.recommended-ad-detail .content-cls-recommend-1 {
-    	width:58% !important;
+    	width:68% !important;
     	float:right;
-    	padding: 5px 10px;
+    	padding: 10px 15px 10px 10px;
 	}    	
-    
-    .recommended-div.listing.recommended-ad-detail .img-cls-recommend-2 {
-    }
-    .recommended-div.listing.recommended-ad-detail .img-cls-recommend-3 {
-    }
+    .recommended-div.listing  .btn-right-arrow i { top: 2px;position: relative;left: 3px;}
     
     .recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 {
-        max-width: 190px;
+        margin-left: 10px;
+    	max-width: 180px;
         float: left !important;
+        margin-bottom: 4px;
     }
+    .recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 .list-title {
+    	max-height: 40px;
+    	min-height: 40px;
+    	line-height: 20px;
+    }
+    .recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 .outer-btn{ width:75% }
     .recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 {
     	max-width: 105px;
     }
+    
+    .recommended-div.listing.recommended-ad-detail .fullblock-cls-recommend-3 { margin-bottom:3px; }
     .s-block {
         padding: 15px 5px;
     }
@@ -130,7 +151,7 @@
         margin-top: 15px;
     }
     .list-title {
-        font-weight: 700;
+        font-weight: 400;
     }
     .show-title-r-ad-det { display:block; }
     .show-mob-title-r-ad-det { display:none; }
@@ -143,25 +164,41 @@
         .recommended-div.listing .list-col-2 {
             width: 67%;
         }
+        
+        .recommended-div.listing.recommended-ad-detail .img-cls-recommend-1 {
+        	width:32% !important;
+    	}
 
         .recommended-div.listing.recommended-ad-detail .content-cls-recommend-1 {
-        	width:60% !important;
+        	width:66% !important;
     	}
     	.recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 {
         	width:54% !important;
     	}
     	.show-title-r-ad-det, .recommended-2-slot-ad-detail-btn { display:none; }
     	.show-mob-title-r-ad-det { display:block; }
-    	.recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 {
+    	.recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 .list-title { font-weight:600 }
+    	
+    	.recommended-div.listing.recommended-ad-detail .fullblock-cls-recommend-3 { margin-bottom:20px; }
+        .recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-3 { margin:0 auto; }
+        
+        .recommended-div.listing.recommended-ad-detail .img-cls-recommend-3 { width:100%; }
+        .recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 {
         	float: left !important;
             padding-left: 0px !important;
             margin-top: 5px !important;
+            width:100%;
+            max-width:100%;
+    	}
+    	.recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-3 { width:130px !important; }
+    	.recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 .list-title { 
+    		max-height: 78px !important;font-weight:600;  width: 130px !important;line-height:20px;overflow:hidden;margin:0 auto;
     	}
     }
     @media only screen and (min-width: 760px) and (max-width: 959px) {
         .recommended-div.listing .list-col-2 {
-            min-width: 70%;
-            width: 70%;
+            min-width: 71%;
+            width: 71%;
         }        
         .recommended-div.listing .recommended-more .list-desc {
             display: block !important;
@@ -172,8 +209,12 @@
         .recommended-div.listing.recommended-ad-detail h3, .recommended-div.listing.recommended-ad-detail h5{
         	width: auto !important;
         }
+        
+        .recommended-div.listing.recommended-ad-detail .img-cls-recommend-1 {
+        	width:37% !important;
+    	}
         .recommended-div.listing.recommended-ad-detail .content-cls-recommend-1 {
-        	width:60% !important;
+        	width:62% !important;
     	}
     	
     	.recommended-div.listing.recommended-ad-detail .recommended-more .right-block {
@@ -181,9 +222,9 @@
         }
         
         .recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 {
-        	width:50% !important;
+        	width:46% !important;
     	}
-    	.recommended-div.listing.recommended-ad-detail .profile-placeholder-2 {
+    	.recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-2 {
             width: 110px !important; 
             height: 80px !important; 
             line-height: 80px !important; 
@@ -191,12 +232,29 @@
     	
         .show-title-r-ad-det, .recommended-2-slot-ad-detail-btn { display:none; }
     	.show-mob-title-r-ad-det { display:block; }
-    	
-    	.recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 {
+    	    	
+    	.recommended-div.listing.recommended-ad-detail .list-title {
+        	max-height: 55px !important;
+        }
+        .recommended-div.listing.recommended-ad-detail .list-title h3 { height: 47px !important; }
+        .recommended-div.listing.recommended-ad-detail .recommended-more .outer-btn { width: 45%; }
+        .recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 .list-title { font-weight:600 }
+        
+        .recommended-div.listing.recommended-ad-detail .fullblock-cls-recommend-3 { margin-bottom:10px; }
+        .recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-3 { margin:0 auto; }
+        
+        .recommended-div.listing.recommended-ad-detail .img-cls-recommend-3 { width:100%; }
+        .recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 {
         	float: left !important;
             padding-left: 0px !important;
             margin-top: 5px !important;
+            width:100%;
+            max-width:100%;
     	}
+    	.recommended-div.listing.recommended-ad-detail .content-cls-recommend-3 .list-title { 
+    		max-height: 78px !important;font-weight:600;  width: 100px !important;line-height:20px;overflow:hidden;margin:0 auto;
+    	}
+        
     }
     @media only screen and (min-width: 641px) and (max-width: 759px) {
         .recommended-div.listing .list-col-2 {
@@ -216,36 +274,34 @@
             padding-left: 0px !important;
             margin-top: 5px !important;
     	}
+    	.recommended-div.listing.recommended-ad-detail .content-cls-recommend-2 .list-title { font-weight:600 }
     }
     @media only screen and (min-width: 320px) and (max-width: 640px) {
         .recommended-div.listing {
             min-height: 90px;
         }
         .recommended-div.listing .list-col-1 {
-            width: 38%;
+            width: 30%;
             padding: 15px 0px 15px 15px;
         }
         .recommended-div.listing .list-col-2 {
-        	width: 53% !important;
+        	width: 61% !important;
         }       
         .recommended-div.listing .featured-bz-listimg, .recommended-div.listing .featured-bz-listimg .profile-placeholder {
-            width: 38%;
+            width: 30%;
             height: 70px;
         }
         .recommended-div.listing .recommended-more {
             display: none;
         }
         
-        .recommended-div.listing .recommendedtxt {
-            font-size: 12px !important;
-        }
-        
         .recommended-div.listing .list-title {
-            font-weight: 600 !important;
+            font-weight: 700 !important;
             line-height: 20px !important;
+            max-height: 44px !important;
         }
         
-        .recommended-div.listing.recommended-ad-detail .profile-placeholder-1 {
+        .recommended-div.listing.recommended-ad-detail .img-img-cls-recommend-1 {
             height: 88px !important; 
             line-height: 88px !important; 
         }
@@ -259,18 +315,21 @@
         	width:38% !important;
         	float:left;
     	}
-    	.recommended-div.listing .mobile-recommended-ad-detail .profile-placeholder-1.img-cls-recommend-1 img { 
-    		height:auto !important;
-    	}
-    	.recommended-div.listing .mobile-recommended-ad-detail .img-cls-recommend-1 img { 
+    	
+    	.recommended-div.listing .mobile-recommended-ad-detail .img-img-cls-recommend-1 { 
     		height:88px !important;
     	}
+    	.recommended-div.listing .mobile-recommended-ad-detail .img-img-cls-recommend-1 .profile-placeholder-1{ 
+    		height:auto !important;
+    	}
         .recommended-div.listing .mobile-recommended-ad-detail .content-cls-recommend-1 {
-        	width:58% !important;
+        	width:61% !important;
         	float:right;
         	padding: 5px 10px;
     	}
     	.show-title-r-ad-det, .recommended-2-slot-ad-detail-btn { display:none; }
     	.show-mob-title-r-ad-det { display:block; }
+    	
+    	.recommended-div.listing .img-cls-srchlist-recommend { width: 110px !important;height: 80px !important;line-height: 80px !important; }
     }
 </style>
