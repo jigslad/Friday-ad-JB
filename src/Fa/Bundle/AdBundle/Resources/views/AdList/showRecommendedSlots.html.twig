@@ -9,11 +9,11 @@
             <div class="list-col-1">
                 {% set imagePath = container.getParameter('fa.static.asset.url')~'/uploads/category_recommended_slots/'~recommendedSlotResult[slotIndex]['slot_filename'] %}
 
-                <div class="featured-bz-listimg {% if not imagePath %}list-placeholder{% endif %}">
+                <div class="featured-bz-listimg">
                     {% if imagePath %}
-                        <img data-original="{{ imagePath }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" class="lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" />
+                        <div class="img-cls-srchlist-recommend"><div class="list-placeholder"><img data-original="{{ imagePath }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" class="lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" /></div></div>
                     {% else %}
-                        <img src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" />
+                        <div class="img-cls-srchlist-recommend"><img src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" /></div>
                     {% endif %}
                 </div>
             </div>
@@ -38,7 +38,7 @@
                         {{ recommendedSlotResult[slotIndex]['sub_title']|length > 150 ? trim_text(recommendedSlotResult[slotIndex]['sub_title'], 150)|raw ~ '...': recommendedSlotResult[slotIndex]['sub_title'] }}
                     </div>
                     {% if recommendedSlotResult[slotIndex]['cta_text'] !='' %}
-                    <div class="button secondary-btn-1 right-block">{{ recommendedSlotResult[slotIndex]['cta_text'] }}<span><i class="fa fa-arrow"></i></span></div>
+                    <div class="outer-btn"><div class="button secondary-btn-1 expand right-block">{{ recommendedSlotResult[slotIndex]['cta_text'] }}<span class="btn-right-arrow"><i class="fi-arrow-right"></i></span></div></div>
                		{% endif %}
                </div>
             </div>
