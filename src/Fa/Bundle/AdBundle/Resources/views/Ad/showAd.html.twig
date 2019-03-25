@@ -133,14 +133,14 @@
     {% set getProfileBigImageRoute = "ajax_get_profile_big_image" %}
     {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
     {% set adPackageArray  = adUserPackageRepository.getAdPackageArrayByAdId({0: adId}) %}
-    
+
     {% set locationGroupIds = fetch_repository('FaAdBundle:AdLocation').getLocationGroupIdForAd(adId, true) %}
     {% set userRolesArray = {} %}
     {% set activePackageArray = {} %}
     {% if adDetail['user']['user_role'] is defined %}
         {% set userRolesArray = {0: adDetail['user']['user_role']} %}
     {% endif %}
-    
+
     {% set userRoleIdsArray = {} %}
     {% if adDetail['user']['role_id'] is defined %}
         {% set userRoleIdsArray = {0: adDetail['user']['role_id']} %}
@@ -148,7 +148,7 @@
     {% if adPackageArray[adId] is defined %}
         {% set activePackageArray = {0: adPackageArray[adId]['package_id']} %}
     {% endif %}
-    
+
     {% set promotePackages = fetch_repository('FaPromotionBundle:PackageRule').getActivePackagesByCategoryId(adCategoryId, locationGroupIds, userRoleIdsArray, activePackageArray, container) %}
 {% endif %}
 
@@ -178,7 +178,7 @@
         {% set firstImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'addProtocolToUrl', [firstImageUrl]) %}
         {% set imageSize = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getImagesizeFromImageUrl', [firstImageUrl]) %}
         {% set firstImageUrlSecure = firstImageUrl %}
-        
+
         <meta property="og:image" content="{{firstImageUrl}}" />
         <meta property="og:image:secure_url" content="{{firstImageUrlSecure}}" />
         <meta property="og:image:type" content="image/jpeg" />
@@ -211,6 +211,7 @@
         {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
         {{ block('imageUploadStylesheets') }}
     {% endif %}
+    <link href="{{ asset_url('faad/css/zutoLoanCalc.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block meta_robots %}
@@ -256,8 +257,8 @@
     {% set printOptionCount = 0 %}
     {% set printDurationId = '' %}
     {% set packageId = '' %}
-           
-    {% set packageIdArray = packageIdArray|merge({0 : promotePackages[0].getPackage().getId() }) %}    
+
+    {% set packageIdArray = packageIdArray|merge({0 : promotePackages[0].getPackage().getId() }) %}
 
     {% set printPackageDuration = fetch_repository('FaPromotionBundle:PackagePrint').getPrintDurationForPackages(packageIdArray) %}
     {% if printPackageDuration|length %}
@@ -268,10 +269,10 @@
             {% endif %}
         {% endfor %}
     {% endif %}
-    
-    
-    {% set packageValues = array_unserialize(promotePackages[0].getPackage().getValue()) %}   
-    
+
+
+    {% set packageValues = array_unserialize(promotePackages[0].getPackage().getValue()) %}
+
     {% if isAdminPostedAd %}
         {% if printPackageDuration[promotePackages[0].getPackage().getId()][0]['admin_price'] is defined and printPackageDuration[promotePackages[0].getPackage().getId()][0]['admin_price'] is not null %}
             {% if printPackageDuration[promotePackages[0].getPackage().getId()][0]['admin_price'] > 0 %}
@@ -441,7 +442,7 @@
 {% endif %}
 
 <div class="banner-wrapper clearfix">
-    
+
     <div class="row relative details-wrapper banner-mid-column">
     	<div class="left-banner">
             {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
@@ -452,7 +453,7 @@
                 <div class="columns">
                     <div class="row">
                         <div class="large-16 columns">
-                            
+
                             <div class="row show-for-small-only">
                                 <div class="small-14 columns">
                                     <p class="listed-date">
@@ -464,10 +465,10 @@
                                 <div class="small-10 columns">
                                     {% if allowAdEdit is defined and allowAdEdit %}
                                         <a id ="edit_advert_link1" href="javascript:void(0);" class="edit-advert mt10">{{ 'Edit Advert'|trans({}, 'frontend-show-ad') }}</a>
-                                    {% endif %}                                
+                                    {% endif %}
                                 </div>
                             </div>
-                            
+
                             {% set noImage = 0 %}
                             {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, adDetail, '300X225', 1) %}
                             {% if not imagePath %}
@@ -484,7 +485,7 @@
                                         {% if noImage != 1 %}<a href="javascript:void(0);" onclick="showOriginalImage();">{% endif %}
                                             <img src="{{ imagePath }}" alt="no-image" />
                                         {% if noImage != 1 %}</a>{% endif %}
-                                        
+
                                     {% endif %}
                                 </div>
                             </div>
@@ -500,11 +501,11 @@
                             {% if attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE')) is defined %}
                                 <h2 class="detail-sub-head hide-for-small-only">"{{attribute(adDetail, constant(solrMapping ~ 'PERSONALIZED_TITLE'))}}"</h2>
                             {% endif %}
-                            
+
                             {% if attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')) is defined  %}
                             	{% set adLocationName = entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) %}
                             {% endif %}
-                            
+
                             <div class="row {% if rootCategoryId in {2:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 3:constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), } %}location-with-image{% endif %}">
                                 <div class="large-12 medium-11 columns">
                                     <div class="detail-location">
@@ -531,11 +532,11 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            
+
                             {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} and adDetail['user']['company_welcome_message'] is defined and adDetail['user']['company_welcome_message'] is not null %}
                                 <h2 class="services-desc">{{ adDetail['user']['company_welcome_message']|replace({"\\n": "<br />"})|raw }}</h2>
                             {% endif %}
-                          
+
                             {% if allowAdEdit is defined and promotePackages[0] is defined and allowAdEdit and attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')} and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
                                {# get featured Top upsell from packages #}
                               	{% set getTopUpsellPackagePrice = fetch_repository('FaPromotionBundle:Package').getPackageFeturedTopUpsellPrice(promotePackages) %}
@@ -549,13 +550,13 @@
                                         </div>
                                         <div class="large-8 columns">
                                             {# <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a> #}
-                                             <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);" onclick="return upgradeToNextPlanBtn('{{ adId }}', '{{ rootCategoryId }}');">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a> 
+                                             <a id="upgrade_now_link" class="primary-btn-1 button thin-btn expand mb0" href="javascript:void(0);" onclick="return upgradeToNextPlanBtn('{{ adId }}', '{{ rootCategoryId }}');">{{'Upgrade now'|trans({}, 'frontend-manage-my-ad')}}</a>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="upgradeBasicAdToFeaturedModal" class="reveal-modal tiny remove-item-modal upgrade-modal" data-reveal></div>
                             {% endif %}
-                            
+
                             <div class="clearfix">
                                 {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(adDetail, constant(solrMapping ~ 'PRICE')) is defined and attribute(adDetail, constant(solrMapping ~ 'PRICE')) > 0 %}
                                     <div class="show-for-small-only left">
@@ -583,7 +584,7 @@
                                     <span class="whats-on item-preview-on show-for-small-only">{{ eventStartDate }}</span>
                                 </div>
                             {% endif %}
-                           
+
                             {% set latitude = null %}
                             {% set longitude = null %}
                             {% if attribute(adDetail, constant(solrMapping ~ 'LATITUDE')) is defined and attribute(adDetail, constant(solrMapping ~ 'LONGITUDE')) is defined %}
@@ -593,7 +594,7 @@
                                 {% set mapWidth =  '709px' %}
                                 {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'tabId': 'adDetailMainTabs', 'mapContentId': 'map_panel'}) }}
                             {% endif %}
-                            
+
                             {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
                                 {% if attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) is defined and  attribute(adDetail, constant(solrMapping ~ 'STATUS_ID')) not in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID')}  %}
                                     {% set optHideOrRemove = 'remove' %}
@@ -637,9 +638,9 @@
                                 {{ include('FaAdBundle:Ad:AdServiceDetailTabs.html.twig') }}
                                 <br />
                             {% endif %}
-                            
+
                             {{ include('FaAdBundle:Ad:showMapImages.html.twig', { 'googlemap_location_html': block('googlemap_location_html'), 'image_slider_html': block('image_slider_html'), 'allowAdEdit': allowAdEdit, 'imageZoomBannerExist': imageZoomBannerExist }) }}
-                            
+
                             {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
                                 {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove]) %}
                                 {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
@@ -695,6 +696,9 @@
                                 {% set safetyFeatureIds = adMotorRepository.getSafetyFeature(featureIds) %}
                                 {% set otherFeatureIds = adMotorRepository.getOtherFeature(featureIds) %}
                                 {{ include('FaAdBundle:Ad:AdMotorDetailTabs.html.twig') }}
+                                <br>
+                                {{ include('FaAdBundle:Ad:zutoLoanCalc.html.twig') }}
+
                             {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
                                 {% set adPropertyDetail = {} %}
                                 {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
@@ -725,7 +729,7 @@
                             {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
                                 {% set adAdultDetail = {} %}
                                 {% set servicesIds = {} %}
-                                {% set metaData = {} %}                                
+                                {% set metaData = {} %}
                                 {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'META_DATA')) is defined %}
                                 	{% set metaData = array_unserialize(attribute(adDetail, constant(solrMapping ~ 'META_DATA'))) %}
                                 	{% if metaData['rates_id']['incall'] is defined %}
@@ -733,7 +737,7 @@
                                     {% endif %}
                                     {% if metaData['rates_id']['outcall'] is defined %}
                                         {% set adultOutCallRates = metaData['rates_id']['outcall'] %}
-                                    {% endif %}                                	
+                                    {% endif %}
                                 {% endif %}
                                 {% if solrMapping is defined and attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
                                     {% set adAdultDetail = adAdultDetail|merge({'description': attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))}) %}
@@ -771,7 +775,7 @@
                 {% set paypalBtnWidthClass = '' %}
                 {% set enqBtnWidthClass = 'large-12' %}
             {% endif %}
-                
+
             {% if not isSoldExpiredAdFlag and ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) or (adDetail['user'] is defined and showBuyNowWithPaypal)) %}
                 <div class="dtl-bottom-btn show-for-small-only">
                     <div class="row">
@@ -797,16 +801,16 @@
                                         <span class="contact-phone-icon">contact</span>
                                     {% endif %}
                                 </a>
-                                
+
                             </div>
                         {% endif %}
-                        
+
                         {% if (isOneclickenqbutton is defined and isOneclickenqbutton == true) %}
                             <div class="{{ enqBtnWidthClass }} columns">
                                 <a href="javascript:void(0)" class="primary-btn-2 button expand show-avl-btn" onclick="return sendOneClickEnquiry();" >{{'Still available?'|trans({}, 'frontend-show-ad')}}</a>
                             </div>
                         {% endif %}
-                    
+
                     </div>
                 </div>
             {% endif %}
@@ -815,23 +819,23 @@
         {% if not isSoldExpiredAdFlag and similarAds['totalAds'] is defined and similarAds['totalAds'] > 0 %}
             {{ block('similar_ads_html') }}
         {% endif %}
-        
+
         {% if currentDevice == 'M' and relatedBusinesses is defined and relatedBusinesses|length %}
             {{ include('FaAdBundle:Ad:relatedBusinessesMobile.html.twig') }}
         {% endif %}
-        
+
         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_DESKTOP') %}
         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_TABLET') %}
         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_BOTTOM_MOBILE') %}
         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-        
+
         <div class="row">
             <div class="columns">
             {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
             	{{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
-            {% else %}            
+            {% else %}
                 {% cache 'addetail|page|seo'~adCategoryId 900 %}
                     {{ render(controller('FaAdBundle:Ad:showAdDetailSeoBlocks', {'categoryId': adCategoryId, 'seoPageRule': seoPageRule, 'adLocationName' : adLocationName})) }}
                 {% endcache %}
@@ -866,7 +870,7 @@
     {% if allowAdEdit %}
         {{ set_variables('profileImageUploadJavascriptBottom', {'loaded':'true'}) }}
         {{ block('profileImageUploadJavascriptBottom') }}
-        
+
         {{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
         {{ block('imageUploadJavascriptBottom') }}
     {% endif %}
@@ -947,8 +951,8 @@
         }
     });
 
-    
-    
+
+
     $(window).on('load', function() {
         //$('#oneClickEnquireInfoModal').foundation('reveal', 'open'); // removed popup for one click enquire FFR-2342
         {% if rootCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID')} %}
@@ -1019,7 +1023,7 @@
                 $(this).siblings('a').find('i').removeClass('fi-minus');
             }
         });
-        
+
         $('#ad_motors_tabs').on('toggled', function (event, tab) {
             if (tab.attr('id') == 'safety_features_panel' && !adMotorEquilizerFlag) {
                 $(document).foundation('equalizer', 'reflow');
@@ -1267,7 +1271,7 @@
         }
       });
     {% endif %}
-      
+
     }
 
     function createAlert(adId, userId)
@@ -1461,7 +1465,7 @@
     {
         window.open(websiteUrl);
         adEnquiryIncrement('web_link_click', adId);
-        ga('send', 'event', 'CTA', 'url click - ad details page', businessName); 
+        ga('send', 'event', 'CTA', 'url click - ad details page', businessName);
     }
 
     function clearNimberCookies(showMsg)
@@ -1506,7 +1510,7 @@
         $('#profile_change_btn_with_opt_anchor, #pickProfileFile1').hover(
             function () {
                $('.profile-img-overlay').show();
-            }, 
+            },
             function () {
                 $('.profile-img-overlay').hide();
             }
@@ -1518,7 +1522,7 @@
         ga('send', 'event', 'Options', 'Copy dealer name - Ad detail', businessName);
     }
 
-    function gaSendForRecommendedSlot(url, domain) 
+    function gaSendForRecommendedSlot(url, domain)
     {
         ga('send', 'event', 'Ad details', 'Recommended external ads', '{{ catText|trim('-') }}-'+domain);
         window.open(url, '_blank');
@@ -1541,6 +1545,53 @@
             $('#upgradeBasicAdToFeaturedModal').foundation('reveal', 'open');
         });
     }
+
+    $(document).ready(function(){
+
+        function zutoLoanCalcGA(action, flagView){
+            if (!flagView) {
+                // ga('send', 'event', 'Zuto car finance', action, '[&amp;#163;' + $('#loan_amount').val() + '|' + $('#loan_period').val() + ']'); // todo add if GTM is not added later
+            } else {
+                // ga('send', 'event', 'Zuto car finance', action);
+            }
+        }
+
+        $(document.body).on('change','#loan_amount, #loan_period', function(e){
+            zutoLoanCalcGA('drop-down click', false);
+        });
+
+        $(document.body).on('submit','', function(e){
+            zutoLoanCalcGA('drop-down click', false);
+        });
+
+        $(document.body).on('click','#zuto_loan_calc', function(e){
+            e.preventDefault();
+            var loan_amount = $('#loan_amount').val();
+            var loan_period = $('#loan_period').val();
+            var device_type = "desktop";
+            {% if(currentDevice == 'M' or currentDevice == 'T') %}
+            device_type = "mobile";
+            {% endif %}
+            var zuto_url = "https://www.zuto.com/apply/?loanAmount=" + loan_amount + "&repaymentPeriod=" + loan_period
+                + "&utm_source=fridayads&utm_medium=affiliate&utm_campaign=" + device_type + "&showRepRate=true";
+            zutoLoanCalcGA('apply now click', false);
+            window.open(zuto_url, "_blank");
+        });
+
+        $(window).scroll(function() {
+            /* Commented as per Shiv/Jacob FFR-3607 comment
+            var hT = $('#zutoLoanCalcDiv').offset().top,
+                hH = $('#zutoLoanCalcDiv').outerHeight(),
+                wH = $(window).height(),
+                wS = $(this).scrollTop();
+            if ((wS+wH+20) > (hT+hH)){
+                zutoLoanCalcGA('View', false);
+            }
+            // */
+        });
+
+    });
+
 //]]>
 </script>
 {% endblock %}
@@ -1578,7 +1629,7 @@
     {% else %}
     	ga('set', 'dimension9', 'logged in');
     {% endif %}
-    
+
     {% if dimension5 == 'Private' %}
         ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Ad_Details', 'dimension4': '{{ dimension4 }}', 'dimension5' : '{{dimension5}}'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %} });
     {% else %}
