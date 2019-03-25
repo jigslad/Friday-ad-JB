@@ -17,7 +17,14 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\DotMailerBundle\Entity\Dotmailer;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\UserBundle\Form\NewsletterType;
-
+use Fa\Bundle\UserBundle\Form\NewsletterUpdateType;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Fa\Bundle\EntityBundle\Repository\EntityRepository;
+use Fa\Bundle\UserBundle\Entity\NewsletterFeedback;
+use Fa\Bundle\UserBundle\Form\NewsletterSubscribeType;
+use Fa\Bundle\UserBundle\Form\NewsletterFeedbackType;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * This controller is used for admin side role management.
  *
@@ -60,18 +67,185 @@ class NewsletterController extends CoreController
         }
 
         $formManager = $this->get('fa.formmanager');
-        $form = $formManager->createForm(NewsletterType::class, $dotmailer, array('action' => $action));
+        $form = $formManager->createForm(NewsletterUpdateType::class, $dotmailer, array('action' => $action));
 
 
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Newsletter successfully saved.'), 'success');
+                $getClickVal = $form->get('clickedElementValue')->getData();                
+                if ($getClickVal =='unsubscribe') {
+                    $feedbackUrl = $this->generateUrl('newsletter_feedback').'?guid='.$request->query->get('guid');
+                    return $this->redirect($feedbackUrl);
+                } else {
+                    $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('You have successfully updated your account.'), 'success');
+                }
                 return $this->redirect($action);
+            } else {
+                $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Form is not validated properly.'), 'error');
             }
         }
 
         $parameters  = array('form' => $form->createView());
         return $this->render('FaUserBundle:Newsletter:index.html.twig', $parameters);
+    }
+    
+    
+    /**
+     * Footer Newsletter
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function footerNewsletterAction(Request $request)
+    {
+        $formManager = $this->get('fa.formmanager');
+        $form        = $formManager->createForm(NewsletterSubscribeType::class, null, array('method' => 'POST'));
+        $error		 = '';
+        if ($request->isXmlHttpRequest() && 'POST' === $request->getMethod()) {
+            $form->handleRequest($request);
+            
+            if ($form->isValid()) {
+                $loggedinUser = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('email')->getData()));
+                if (!$loggedinUser) {
+                    $error = $this->get('translator')->trans('Unable to find user.', array(), 'frontend-show-ad');
+                } elseif ($loggedinUser->getStatus() && $loggedinUser->getStatus()->getId() != EntityRepository::USER_STATUS_ACTIVE_ID) {
+                    $error = $this->get('translator')->trans('Your account was blocked.', array(), 'frontend-show-ad');
+                }
+                
+                if ($loggedinUser && !$error) {
+                    //update email alerts
+                    if ($form->get('email_alert')->getData()) {
+                        $loggedinUser->setIsEmailAlertEnabled(1);
+                    }
+                    
+                    //update third party email alerts
+                    if ($form->get('third_party_email_alert')->getData()) {
+                        $loggedinUser->setIsThirdPartyEmailAlertEnabled(1);
+                    }
+                    
+                    $this->getEntityManager()->persist($loggedinUser);
+                    $this->getEntityManager()->flush($loggedinUser);
+                    
+                    return new JsonResponse(array('success' => '1', 'user_id' => $loggedinUser->getId()));
+                    
+                } else {
+                    return new JsonResponse(array('success' => '', 'user_id' => '', 'errorMessage' => $error));
+                }
+            } else {
+                foreach ($form->getErrors(true, true) as  $formError) {
+                    $error .= $formError->getMessage()."<br>";
+                }
+                
+                return new JsonResponse(array('success' => '', 'user_id' => '', 'errorMessage' => $error));
+            }
+        }
+        
+        $parameters = array('form' => $form->createView());
+        
+        return $this->render('FaUserBundle:Newsletter:footerNewsletter.html.twig', $parameters);
+    }
+    
+    
+    /**
+     * This is feedback action.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse A RedirectResponse object.
+     */
+    public function feedbackAction(Request $request)
+    {
+        $guid      = null;
+        $dotmailer = null;
+        $userEmail = null;
+        if ($request->query->get('guid')) {
+            $dotmailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('guid' => $request->query->get('guid')));
+            if($dotmailer) {
+                $userEmail = $dotmailer->getEmail();
+            }
+        }
+        
+        if(!$dotmailer) {
+            $redirectResponse = $this->checkIsValidLoggedInUser($request);
+            if ($redirectResponse !== true) {
+                return $redirectResponse;
+            }
+            $user = $this->container->get('security.token_storage')->getToken()->getUser();
+            $dotmailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('email' => $user->getEmail()));
+            $userEmail = $dotmailer->getEmail();
+        }
+        
+        if(!$dotmailer) {
+            throw new NotFoundHttpException(410);
+        }
+        
+        $newsletterFeedback = $this->getRepository('FaUserBundle:NewsletterFeedback')->findOneBy(array('email' => $userEmail, 'guid' => $request->query->get('guid')));
+        if(!$newsletterFeedback) {
+            $newsletterFeedback = new NewsletterFeedback();
+            $newsletterFeedback->setCreatedAt(time());
+        }
+        
+        $formManager = $this->get('fa.formmanager');
+        $form = $formManager->createForm(NewsletterFeedbackType::class, $newsletterFeedback, array());
+        
+        if ('POST' === $request->getMethod()) {
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $newsletterFeedback->setEmail($userEmail);
+                $newsletterFeedback->setUpdatedAt(time());
+                $newsletterFeedback->setGuid($request->query->get('guid'));
+                $newsletterFeedback->setReason($form->get('reason')->getData());
+                if ($form->get('reason')->getData() && $form->get('reason')->getData() == '6' && $form->get('otherReason')->getData() != '') {
+                    $newsletterFeedback->setOtherReason($form->get('otherReason')->getData());
+                } else {
+                    $newsletterFeedback->setOtherReason(null);
+                }
+                
+                $this->getEntityManager()->persist($newsletterFeedback);
+                $this->getEntityManager()->flush($newsletterFeedback);
+                $this->container->get('session')->set('newsletter_feedback_success', 1);
+                $feedbackUrl = $this->generateUrl('newsletter_feedback_success').'?guid='.$request->query->get('guid');
+                return $this->redirect($feedbackUrl);
+            }
+        }
+        
+        $parameters  = array('form' => $form->createView());
+        return $this->render('FaUserBundle:Newsletter:newsletterFeedback.html.twig', $parameters);
+        
+    }
+    
+    /**
+     * This is feedback success action.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse A RedirectResponse object.
+     */
+    public function successAction(Request $request)
+    {
+        if ($request->query->get('guid')) {
+            $newsletterFeedback = $this->getRepository('FaUserBundle:NewsletterFeedback')->findOneBy(array('guid' => $request->query->get('guid')));
+        }
+        
+        /*if(!$newsletterFeedback) {
+            throw new NotFoundHttpException(410);
+        }*/
+        
+        $gaString = '';
+        if ($this->container->get('session')->has('newsletter_feedback_success')) {
+            //get the feeback option for GA tracking
+            if($newsletterFeedback->getReason() != '6') {
+                $feedbackOption = $this->getRepository('FaUserBundle:NewsletterFeedback')->getFeedbackOptions();
+                $gaString = $feedbackOption[$newsletterFeedback->getReason()];
+            } elseif ($newsletterFeedback->getReason() == '6') {
+                $gaString = 'Other - '.$newsletterFeedback->getOtherReason();
+            }
+        }
+        
+        $this->container->get('session')->remove('newsletter_feedback_success');
+        $parameters  = array('guid' => $request->query->get('guid'), 'feedback' => $newsletterFeedback, 'gaCode' => $gaString);
+        return $this->render('FaUserBundle:Newsletter:feedbackSuccess.html.twig', $parameters);
     }
 }

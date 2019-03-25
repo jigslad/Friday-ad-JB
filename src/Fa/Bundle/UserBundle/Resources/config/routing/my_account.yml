@@ -39,3 +39,12 @@ invoice_receipt:
 ajax_load_invoice:
     path:   /ajax/load_invoice/
     defaults:  { _controller: FaUserBundle:MyAccount:ajaxLoadInvoice }
+    
+newsletter_feedback:
+    path:     /newsletter/feedback
+    defaults: { _controller: FaUserBundle:Newsletter:feedback }
+    
+newsletter_feedback_success:
+    path:     /newsletter/success
+    defaults: { _controller: FaUserBundle:Newsletter:success }
+    
