@@ -11,29 +11,18 @@
 
 namespace Fa\Bundle\ReportBundle\Form;
 
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormError;
-use Fa\Bundle\CoreBundle\Form\EventListener\AddDatePickerFieldSubscriber;
-use Fa\Bundle\UserBundle\Repository\RoleRepository;
-use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Fa\Bundle\ReportBundle\Repository\AdReportDailyRepository;
-use Fa\Bundle\EntityBundle\Form\EventListener\AddCategoryChoiceFieldSubscriber;
-use Fa\Bundle\EntityBundle\Form\EventListener\AddDomicileChoiceFieldSubscriber;
-use Fa\Bundle\EntityBundle\Form\EventListener\AddTownChoiceFieldSubscriber;
-use Fa\Bundle\AdBundle\Repository\PrintEditionRepository;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Fa\Bundle\CoreBundle\Validator\Constraints\CustomEmail;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Fa\Bundle\CoreBundle\Validator\Constraints\CustomEmail;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * This is police report admin search form.
@@ -61,7 +50,7 @@ class PoliceReportSearchAdminType extends AbstractType
     /**
      * Constructor.
      *
-     * @param object $container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -114,7 +103,7 @@ class PoliceReportSearchAdminType extends AbstractType
     /**
      * Add location field validation.
      *
-     * @param object $form Form instance.
+     * @param FormEvent $event
      */
     public function onSubmit(FormEvent $event)
     {
@@ -133,6 +122,7 @@ class PoliceReportSearchAdminType extends AbstractType
     /**
      * (non-PHPdoc)
      * @see \Symfony\Component\Form\AbstractType::setDefaultOptions()
+     * @param OptionsResolver $resolver
      */
     public function setDefaultOptions(OptionsResolver $resolver)
     {
@@ -156,4 +146,5 @@ class PoliceReportSearchAdminType extends AbstractType
     {
         return 'fa_police_report';
     }
+
 }
