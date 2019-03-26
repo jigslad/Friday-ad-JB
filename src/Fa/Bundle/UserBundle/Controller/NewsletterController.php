@@ -13,12 +13,11 @@ namespace Fa\Bundle\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\DotMailerBundle\Entity\Dotmailer;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
-use Fa\Bundle\UserBundle\Form\NewsletterType;
 use Fa\Bundle\UserBundle\Form\NewsletterUpdateType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\UserBundle\Entity\NewsletterFeedback;
@@ -43,7 +42,6 @@ class NewsletterController extends CoreController
      */
     public function indexAction(Request $request)
     {
-        $guid      = null;
         $dotmailer = null;
 
         if ($request->query->get('guid')) {
@@ -157,7 +155,6 @@ class NewsletterController extends CoreController
      */
     public function feedbackAction(Request $request)
     {
-        $guid      = null;
         $dotmailer = null;
         $userEmail = null;
         if ($request->query->get('guid')) {
