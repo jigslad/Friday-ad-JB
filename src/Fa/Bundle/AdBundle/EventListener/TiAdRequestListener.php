@@ -385,7 +385,7 @@ class TiAdRequestListener
                         $data = array();
                         $data = $this->em->getRepository('FaContentBundle:SeoTool')->getCustomizedUrlData($categoryText, $this->container);
 
-                        if (count($data) > 0 && $event) {
+                        if (!empty($data) && $event) {
                             if (!$request->attributes->get('customized_page')) {
                                 $request->attributes->set('page_string', strtok($data['source_url'], '?'));
                                 $request->attributes->set('customized_page', $data);
