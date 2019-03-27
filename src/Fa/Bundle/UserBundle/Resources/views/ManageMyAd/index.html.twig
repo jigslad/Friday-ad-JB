@@ -4,6 +4,23 @@
     {{'Manage ads'|trans({}, 'frontend-manage-my-ad')}}
 {% endblock %}
 
+{% block dimension2 %}
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        {% if app.user.getId() is not defined or app.user.getId() is null %}
+        ga('set', 'dimension9', 'not logged in');
+        {% else %}
+        ga('set', 'dimension9', 'logged in');
+        {% endif %}
+
+        {% if dimension12 is defined and dimension12 %}
+        ga('set', 'dimension12', '{{ dimension12 }}');
+        {% endif %}
+        ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Peripheral_Content'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+        //]]>
+    </script>
+{% endblock %}
+
 {% set container = fetch_container_instance() %}
 {% set adIdArray = {} %}
 {% if pagination.getNbResults() %}
