@@ -267,6 +267,12 @@ services:
         arguments: ['@service_container', "@request_stack"]
         tags:
             - { name: form.type, alias: fa_user_newsletter }
+            
+    fa_user.form.type.user_newsletter_resubscribe:
+        class: Fa\Bundle\UserBundle\Form\NewsletterResubscribeType
+        arguments: ['@service_container', "@request_stack"]
+        tags:
+            - { name: form.type, alias: fa_user_newsletter_resubscribe }
 
             
     fa_user.form.type.newsletterfeedback:

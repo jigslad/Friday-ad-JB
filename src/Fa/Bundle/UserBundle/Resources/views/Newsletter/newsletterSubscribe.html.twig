@@ -1,0 +1,65 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+
+{% block body %}
+ {{ include('FaUserBundle:Newsletter:newsletter-css.html.twig')}}
+<div class="homepage-row">
+        <div class="row">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            <div class="medium-14 medium-push-5 large-14 large-push-5 columns text-center">
+                <h1 class="mb20">Looks like you are not subscribed
+                	<span><img src="{{ asset_url('fafrontend/images/smile_emoji_icon.png') }}" width="30px"></span>
+               	</h1> 
+                <div class="medium-14 medium-push-5 large-14 large-push-5 columns text-left mt20">
+                    <div>You are not subscribed to Friday-Ad/Wightbay email newsletters. To join our mailing list, just confirm your email address below to subscribe.</div>   
+                    <div class="email-box-dis text-center"><div>
+                        {{ form_widget(form.email) }}</div>
+                    </div>
+                    {{ form_errors(form) }}
+                    <div class="label-inline white-checkbox mt0 mb0" style="display: inline-flex;">
+                        {{ form_widget(form.email_alert) }}
+                        
+                        {{ form_label(form.email_alert,'', {'label_attr': {'class': 'footer-subscribe-label'}}) }}
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="label-inline white-checkbox mt0 mb0 third-party-email-subscription" style="display: inline-flex;">
+                        {{ form_widget(form.third_party_email_alert) }}
+                        
+                        {{ form_label(form.third_party_email_alert,'', {'label_attr': {'class': 'footer-subscribe-label'}}) }}
+                    </div>
+                    <div class="clearfix">
+                       <div class="text-center">
+                            {{ form_widget(form.save) }}
+                        </div>
+                    </div>
+                </div>               
+            </div>
+            <div class="clearfix"></div>
+        {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+    	checkAnyOneClicked();
+
+
+        function checkAnyOneClicked() {
+        	if ($("#fa_user_newsletter_resubscribe_email_alert").is(':checked') || $("#fa_user_newsletter_resubscribe_third_party_email_alert").is(':checked')) {
+        		$('#fa_user_newsletter_resubscribe_save').attr("disabled", false);
+            } else {
+            	$('#fa_user_newsletter_resubscribe_save').attr("disabled", true);
+            }
+        }
+   		$("#fa_user_newsletter_resubscribe_email_alert").change(function(e) { 
+   			checkAnyOneClicked();
+    	});
+   		$("#fa_user_newsletter_resubscribe_third_party_email_alert").change(function(e) { 
+   			checkAnyOneClicked();
+    	});
+    });
+//]]>
+</script>
+{% endblock %}

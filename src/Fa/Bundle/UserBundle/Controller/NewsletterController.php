@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\UserBundle\Entity\NewsletterFeedback;
 use Fa\Bundle\UserBundle\Form\NewsletterSubscribeType;
+use Fa\Bundle\UserBundle\Form\NewsletterResubscribeType;
 use Fa\Bundle\UserBundle\Form\NewsletterFeedbackType;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
@@ -71,12 +72,21 @@ class NewsletterController extends CoreController
         if ('POST' === $request->getMethod()) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                $getClickVal = $form->get('clickedElementValue')->getData();                
-                if ($getClickVal =='unsubscribe') {
+                $getClickVal = $form->get('clickedElementValue')->getData(); 
+                
+                if ($getClickVal =='unsubscribe') {                    
                     $feedbackUrl = $this->generateUrl('newsletter_feedback').'?guid='.$request->query->get('guid');
-                    return $this->redirect($feedbackUrl);
+                    return $this->redirect($feedbackUrl);                                    
                 } else {
-                    $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('You have successfully updated your account.'), 'success');
+                    if($dotmailer->getDotmailerNewsletterUnsubscribe()==1) {
+                        $resubscribeUrl = $this->generateUrl('newsletter_resubscribe').'?guid='.$request->query->get('guid');
+                        return $this->redirect($resubscribeUrl);
+                    } elseif($dotmailer->getDotmailerNewsletterUnsubscribe()==0) {
+                        $subscribeUrl = $this->generateUrl('newsletter_subscribe').'?guid='.$request->query->get('guid');
+                        return $this->redirect($subscribeUrl);
+                    } else {
+                        $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('You have successfully updated your account.'), 'success');
+                    }                   
                 }
                 return $this->redirect($action);
             } else {
@@ -88,6 +98,161 @@ class NewsletterController extends CoreController
         return $this->render('FaUserBundle:Newsletter:index.html.twig', $parameters);
     }
     
+    /**
+     * Newsletter ReSubscribe
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function newsletterResubscribeAction(Request $request)
+    {
+        $dotmailer = null;
+        $userEmail = null;
+        if ($request->query->get('guid')) {
+            $dotmailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('guid' => $request->query->get('guid')));
+            $action    = $this->generateUrl('newsletter_resubscribe').'?guid='.$request->query->get('guid');
+            if($dotmailer) {
+                $userEmail = $dotmailer->getEmail();
+            }
+        }
+        
+        if(!$dotmailer) {
+            $redirectResponse = $this->checkIsValidLoggedInUser($request);
+            if ($redirectResponse !== true) {
+                return $redirectResponse;
+            }
+            $user = $this->container->get('security.token_storage')->getToken()->getUser();
+            $dotmailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('email' => $user->getEmail()));
+            $userEmail = $dotmailer->getEmail();
+        } else {
+            $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $userEmail));
+        }
+        
+        if(!$dotmailer) {
+            throw new NotFoundHttpException(410);
+        }
+        
+        $formManager = $this->get('fa.formmanager');
+        $form        = $formManager->createForm(NewsletterResubscribeType::class, null, array('method' => 'POST'));
+        $error		 = '';
+        
+        if ('POST' === $request->getMethod()) {
+            $form->handleRequest($request);
+            
+            if ($form->isValid()) {
+                if ($dotmailer && !$error) {
+                    //update email alerts
+                    if ($form->get('email_alert')->getData()) {
+                        $user->setIsEmailAlertEnabled(1);
+                    }
+                    
+                    //update third party email alerts
+                    if ($form->get('third_party_email_alert')->getData()) {
+                        $user->setIsThirdPartyEmailAlertEnabled(1);
+                    }
+                    
+                    $this->getEntityManager()->persist($user);
+                    $this->getEntityManager()->flush($user);
+                                       
+                    $newsletterSuccessUrl = $this->generateUrl('newsletter_resubscribe_success').'?guid='.$request->query->get('guid');
+                    return $this->redirect($newsletterSuccessUrl);
+                    //return new JsonResponse(array('success' => '1', 'user_id' => $dotmailer->getUser()->getId()));
+                    
+                } else {
+                    return new JsonResponse(array('success' => '', 'user_id' => '', 'errorMessage' => $error));
+                }
+            } else {
+                foreach ($form->getErrors(true, true) as  $formError) {
+                    $error .= $formError->getMessage()."<br>";
+                }
+                
+                return new JsonResponse(array('success' => '', 'user_id' => '', 'errorMessage' => $error));
+            }
+        }
+        
+        $parameters = array('form' => $form->createView());
+        
+        return $this->render('FaUserBundle:Newsletter:newsletterResubscribe.html.twig', $parameters);
+    }
+    
+    /**
+     * Newsletter Subscribe
+     *
+     * @param Request $request Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function newsletterSubscribeAction(Request $request)
+    {
+        $dotmailer = null;
+        $userEmail = null;
+        if ($request->query->get('guid')) {
+            $dotmailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('guid' => $request->query->get('guid')));
+            $action    = $this->generateUrl('newsletter_subscribe').'?guid='.$request->query->get('guid');
+            if($dotmailer) {
+                $userEmail = $dotmailer->getEmail();
+            }
+        }
+        
+        if(!$dotmailer) {
+            $redirectResponse = $this->checkIsValidLoggedInUser($request);
+            if ($redirectResponse !== true) {
+                return $redirectResponse;
+            }
+            $user = $this->container->get('security.token_storage')->getToken()->getUser();
+            $dotmailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('email' => $user->getEmail()));
+            $userEmail = $dotmailer->getEmail();
+        } else {
+            $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $userEmail));
+        }
+        
+        if(!$dotmailer) {
+            throw new NotFoundHttpException(410);
+        }
+        
+        $formManager = $this->get('fa.formmanager');
+        $form        = $formManager->createForm(NewsletterResubscribeType::class, null, array('method' => 'POST'));
+        $error		 = '';
+        
+        if ('POST' === $request->getMethod()) {
+            $form->handleRequest($request);
+            
+            if ($form->isValid()) {
+                if ($dotmailer && !$error) {
+                    //update email alerts
+                    if ($form->get('email_alert')->getData()) {
+                        $user->setIsEmailAlertEnabled(1);
+                    }
+                    
+                    //update third party email alerts
+                    if ($form->get('third_party_email_alert')->getData()) {
+                        $user->setIsThirdPartyEmailAlertEnabled(1);
+                    }
+                    
+                    $this->getEntityManager()->persist($user);
+                    $this->getEntityManager()->flush($user);
+                    
+                    $newsletterSuccessUrl = $this->generateUrl('newsletter_subscribe_success').'?guid='.$request->query->get('guid');
+                    return $this->redirect($newsletterSuccessUrl);
+                    //return new JsonResponse(array('success' => '1', 'user_id' => $dotmailer->getUser()->getId()));
+                    
+                } else {
+                    return new JsonResponse(array('success' => '', 'user_id' => '', 'errorMessage' => $error));
+                }
+            } else {
+                foreach ($form->getErrors(true, true) as  $formError) {
+                    $error .= $formError->getMessage()."<br>";
+                }
+                
+                return new JsonResponse(array('success' => '', 'user_id' => '', 'errorMessage' => $error));
+            }
+        }
+        
+        $parameters = array('form' => $form->createView());
+        
+        return $this->render('FaUserBundle:Newsletter:newsletterSubscribe.html.twig', $parameters);
+    }
     
     /**
      * Footer Newsletter
@@ -244,5 +409,29 @@ class NewsletterController extends CoreController
         $this->container->get('session')->remove('newsletter_feedback_success');
         $parameters  = array('guid' => $request->query->get('guid'), 'feedback' => $newsletterFeedback, 'gaCode' => $gaString);
         return $this->render('FaUserBundle:Newsletter:feedbackSuccess.html.twig', $parameters);
+    }
+    
+    /**
+     * This is resubscribe success action.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse A RedirectResponse object.
+     */
+    public function resubscribeSuccessAction(Request $request)
+    {        
+        return $this->render('FaUserBundle:Newsletter:newsletterResubscribeSuccess.html.twig');
+    }
+    
+    /**
+     * This is subscribe success action.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse A RedirectResponse object.
+     */
+    public function subscribeSuccessAction(Request $request)
+    {
+        return $this->render('FaUserBundle:Newsletter:newsletterSubscribeSuccess.html.twig');
     }
 }

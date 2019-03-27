@@ -44,7 +44,23 @@ newsletter_feedback:
     path:     /newsletter/feedback
     defaults: { _controller: FaUserBundle:Newsletter:feedback }
     
+newsletter_resubscribe:
+    path:     /newsletter/resubscribe
+    defaults: { _controller: FaUserBundle:Newsletter:newsletterResubscribe }
+    
 newsletter_feedback_success:
     path:     /newsletter/success
     defaults: { _controller: FaUserBundle:Newsletter:success }
+    
+newsletter_resubscribe_success:
+    path:     /newsletter/resubscribe_success
+    defaults: { _controller: FaUserBundle:Newsletter:resubscribeSuccess }
+    
+newsletter_subscribe:
+    path:     /newsletter/subscribe
+    defaults: { _controller: FaUserBundle:Newsletter:newsletterSubscribe }
+    
+newsletter_subscribe_success:
+    path:     /newsletter/subscribe_success
+    defaults: { _controller: FaUserBundle:Newsletter:subscribeSuccess }
     
