@@ -2729,3 +2729,7 @@ table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.r
 #mapfit .leaflet-bottom { display:none !important; }
 .hide-location-mapfit { visibility: hidden; height: 0px; margin-top: -20px;}
 .show-location-mapfit { visibility: visible; height: 141px; margin-top: 0px;}
+
+/* FFR-3609 */
+.signup-google-icon { background:url(/bundles/fafrontend/images/btn_google_dark_normal_ios.svg) !important; background-size: 110% !important; border-right: 0 !important; box-shadow: none !important; top: -3px !important; left: -3px !important; }
+.signup-google-btn { background: #4285F4 !important; border: 0 !important; }
