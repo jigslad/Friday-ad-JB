@@ -2721,9 +2721,7 @@ table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.r
 .chcw_header a img { margin-top: -3px; width: 21px; }
 .chcw_content { width: 100%; height: 460px; border: none; }
 @media only screen and (max-width:768px) {
-    .chcw_header a {
-        position: fixed !important;
-    }
+    .chcw_header a { position: fixed !important; background: rgb(239, 239, 239); padding: 0 10px; }
 }
 
 /* Map fit Changes */
