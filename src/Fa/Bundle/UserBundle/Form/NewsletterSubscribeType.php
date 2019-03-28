@@ -206,7 +206,7 @@ class NewsletterSubscribeType extends AbstractType
     			$this->em->flush($dotmailer);
     			
     			//send to dotmailer instantly.
-    			exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+    			exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
     		}
     	}
     }

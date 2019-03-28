@@ -222,7 +222,7 @@ class NewsletterResubscribeType extends AbstractType
     			$this->em->flush($dotmailer);
     			
     			//send to dotmailer instantly.
-    			exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');    		
+    			exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');    		
         	} else {
         	    $dotMailer->setDotmailerNewsletterUnsubscribe(0);
         	    if($form->get('email_alert')->getData() == 1) {
@@ -241,7 +241,7 @@ class NewsletterResubscribeType extends AbstractType
         	    $this->em->flush($dotMailer);
         	    
         	    //send to dotmailer instantly.
-        	    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->get('kernel')->getRootDir().'/console fa:dotmailer:subscribe-contact --id='.$dotMailer->getId().' >/dev/null &');
+        	    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotMailer->getId().' >/dev/null &');
         	}
         }
   }
