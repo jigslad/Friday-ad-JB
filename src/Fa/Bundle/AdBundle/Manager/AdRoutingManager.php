@@ -137,6 +137,10 @@ class AdRoutingManager
             $location = $this->getLocation($search_params);
         }
         
+        if($location=='uk' || $cookieLocationDetails['lvl']=='') {
+            unset($search_params['item__distance']);
+        }
+
         if (isset($search_params['item__user_id']) && $search_params['item__user_id'] != '') {
             $shopUserId = $search_params['item__user_id'];
             unset($search_params['item__user_id']);
