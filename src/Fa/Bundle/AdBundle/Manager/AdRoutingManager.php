@@ -19,7 +19,6 @@ use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Gedmo\Sluggable\Util\Urlizer;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
-use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Ad route manager.
@@ -393,14 +392,6 @@ class AdRoutingManager
                 'page_string' => $pageString,
             ), true).'?'.rawurldecode($query);
         }
-        // $url, $query
-        /*
-        if (strpos($url, "escort-services")) {
-            VarDumper::dump($query);
-            VarDumper::dump($url);
-            die;
-        }
-        */
         return rtrim($url, '?');
     }
 
