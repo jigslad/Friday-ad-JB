@@ -19,6 +19,7 @@ use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Gedmo\Sluggable\Util\Urlizer;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * Ad route manager.
@@ -102,7 +103,7 @@ class AdRoutingManager
         $dimension_slug = null;
         $cookieLocationDetails = null;
         $url = '';
-        
+
         $search_params = array_map(array($this, 'removeEmptyElement'), $search_params);
         if(isset($search_params['hide_distance_block'])) {
             unset($search_params['hide_distance_block']);
@@ -388,6 +389,14 @@ class AdRoutingManager
                 'page_string' => $pageString,
             ), true).'?'.rawurldecode($query);
         }
+        // $url, $query
+        /*
+        if (strpos($url, "escort-services")) {
+            VarDumper::dump($query);
+            VarDumper::dump($url);
+            die;
+        }
+        */
         return rtrim($url, '?');
     }
 
@@ -770,6 +779,7 @@ class AdRoutingManager
 
         $this->dimensionOrder[CategoryRepository::ADULT_ID]= array(
             'item__category_id' => 1,
+            'item_adult__ethnicity_id' => 5,
         );
     }
 
