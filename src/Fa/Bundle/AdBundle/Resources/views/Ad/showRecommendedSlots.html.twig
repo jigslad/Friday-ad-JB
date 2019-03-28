@@ -87,28 +87,70 @@
 </div>
 <!--  Mobile Starts Here -->
 <div class="show-for-small-only">
+{% if recommendedSlotCnt>1 %}
+	{{ include('FaFrontendBundle:Default:home-css.html.twig') }}
+	<script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
+	<div class="recommended-div listing mb20 recommended-ad-detail owl-carousel" id="recommended-slot-slider" data-equalizer style="display:block">
+{% endif %}
 {% for recommendedSlot in recommendedSlotArray%}
     {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
     {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
     {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
     {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
     {% set only_domains = only_domains|replace({'www.': ''})%}
-    <div class="recommended-div listing mb20 recommended-ad-detail">
-        <div class="mobile-recommended-ad-detail">
-        	<div class="img-cls-recommend-1" >
-                {% if userLogo is null%}
-                        <div class="img-img-cls-recommend-1"><div class="profile-placeholder-1"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
-                    {% else %}
-                        <div class="img-img-cls-recommend-1"><div class="img-cls-ad-recommend-1"><img src="{{ userLogo }}" alt="{{ userName }}" /></div></div>
-                    {% endif %}
-            </div>
-            <div class="content-cls-recommend-1">
-                <div class="recommendedtxt gray-text text-right sponsored-1">
-                    Sponsored Ad
+    
+    {% if recommendedSlotCnt==1 %}
+        <div class="recommended-div listing mb20 recommended-ad-detail">
+            <div class="mobile-recommended-ad-detail">
+            	<div class="img-cls-recommend-1" >
+                    {% if userLogo is null%}
+                            <div class="img-img-cls-recommend-1"><div class="profile-placeholder-1"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
+                        {% else %}
+                            <div class="img-img-cls-recommend-1"><div class="img-cls-ad-recommend-1"><img src="{{ userLogo }}" alt="{{ userName }}" /></div></div>
+                        {% endif %}
                 </div>
-                <div class="mt5 list-title"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>                       
-            </div>
-		</div>
-    </div>
+                <div class="content-cls-recommend-1">
+                    <div class="recommendedtxt gray-text text-right sponsored-1">
+                        Sponsored Ad
+                    </div>
+                    <div class="mt5 list-title"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>                       
+                </div>
+    		</div>
+        </div>
+    {% else %}
+    	<div class="item" data-equalizer-watch>        	
+             <div class="mobile-recommended-ad-detail">
+            	<div class="img-cls-recommend-1" >
+                    {% if userLogo is null%}
+                            <div class="img-img-cls-recommend-1"><div class="profile-placeholder-1"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
+                        {% else %}
+                            <div class="img-img-cls-recommend-1"><div class="img-cls-ad-recommend-1"><img src="{{ userLogo }}" alt="{{ userName }}" /></div></div>
+                        {% endif %}
+                </div>
+                <div class="content-cls-recommend-1">
+                    <div class="recommendedtxt gray-text text-right sponsored-1">
+                        Sponsored Ad
+                    </div>
+                    <div class="mt5 list-title"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>                       
+                </div>
+    		</div>        
+        </div>    
+    {% endif %}
 {% endfor %}
+{% if recommendedSlotCnt>1 %}
+	</div>
+    <script>
+    	$("#recommended-slot-slider").owlCarousel({
+            items : 1,
+            itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 3]],
+            navigation: true,
+            pagination:false,
+            responsiveRefreshRate : 100,
+            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+            lazyLoad: true,
+            scrollPerPage: true,
+        });
+    </script>
+ {% endif %}
 </div>
+
