@@ -2468,7 +2468,8 @@ class AdRepository extends EntityRepository
         $label['header']        = 'Seller';
         $label[($useIdAsKey ? RoleRepository::ROLE_SELLER_ID : 'private_user')]           = $userTypes[RoleRepository::ROLE_SELLER_ID];
         $label[($useIdAsKey ? RoleRepository::ROLE_BUSINESS_SELLER_ID : 'business_user')] = $userTypes[RoleRepository::ROLE_BUSINESS_SELLER_ID];
-        $label[($useIdAsKey ? RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID : 'netsuite_user')] = $userTypes[RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID];
+        // this function used for displaying in ad-details only. For FFR-3582 changed display value for netsuite users to business user.
+        $label[($useIdAsKey ? RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID : 'netsuite_user')] = $userTypes[RoleRepository::ROLE_BUSINESS_SELLER_ID];
 
         if ($rootCategoryId) {
             switch ($rootCategoryId) {
