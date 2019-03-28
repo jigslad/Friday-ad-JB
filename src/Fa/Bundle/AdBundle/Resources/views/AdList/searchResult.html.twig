@@ -172,6 +172,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 .boosted_ad .boost-ribbon { display:block;background:url(/bundles/fafrontend/images/featured-arrow.svg) no-repeat;width:25px;height:25px;position:absolute;right:0px;top:0px;text-indent:100%;overflow:hidden;white-space:nowrap;z-index:1}
 .boosted_ad .boost-ribbon span {right: -21px;position: relative;top: 6px;color: #ffffff;}
 </style>
+{% if displayRecommendedSlot is defined and displayRecommendedSlot==1 %}
+    {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
+{% endif %}
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -269,11 +272,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% endfor %}
                 {% endif %}
 
-                {% if displayRecommendedSlot==1 and recommendedSlotsCount > 1 and totalAdCount > 0 and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0)%}
-                    {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 2 }) }}
-                    {% set slotallocated = slotallocated|merge([2]) %}
-                {% endif %}
-
                 {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
                 	 {% if (adCount >= 2) %}
                 	 	{% set bannerStatus = false %}	
@@ -298,16 +296,19 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% endif %}
 
                     {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 %}
-                        {% if slotAdCount== 5  and (recommendedSlotResult[3] is defined and recommendedSlotResult[3]|length >0) %}
+                        {% if slotAdCount== 3  and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 2 }) }}
+                            {% set slotallocated = slotallocated|merge([2]) %}
+                        {% elseif slotAdCount== 7  and (recommendedSlotResult[3] is defined and recommendedSlotResult[3]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 3 }) }}
                             {% set slotallocated = slotallocated|merge([3]) %}
-                        {% elseif slotAdCount== 11  and (recommendedSlotResult[4] is defined and recommendedSlotResult[4]|length >0) %}
+                        {% elseif slotAdCount== 13  and (recommendedSlotResult[4] is defined and recommendedSlotResult[4]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 4 }) }}
                             {% set slotallocated = slotallocated|merge([4]) %}
-                        {% elseif slotAdCount== 14  and (recommendedSlotResult[5] is defined and recommendedSlotResult[5]|length >0) %}
+                        {% elseif slotAdCount== 17  and (recommendedSlotResult[5] is defined and recommendedSlotResult[5]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 5 }) }}
                             {% set slotallocated = slotallocated|merge([5]) %}
-                        {% elseif slotAdCount== 19  and (recommendedSlotResult[6] is defined and recommendedSlotResult[6]|length >0) %}
+                        {% elseif slotAdCount== 20  and (recommendedSlotResult[6] is defined and recommendedSlotResult[6]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 6 }) }}
                             {% set slotallocated = slotallocated|merge([6]) %}
                         {% endif %}

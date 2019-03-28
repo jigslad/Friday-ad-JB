@@ -46,7 +46,7 @@ li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3
                             {{ form_row(form.has_recommended_slot_searchlist) }}
                             <div style="display:none;" id="recommended_slot_fields_main_div">
                                 {% for i in 1..3 %}
-                                    <h4>{{ 'Recommended Slot'~' '~(loop.index)|trans }}</h4>
+                                    <h4>{{ 'Sponsored Slot'~' '~(loop.index)|trans }}</h4>
                                     <hr class="hr_margin" />
                                     <div class="row">
                                         <div class="large-2 columns">
@@ -84,6 +84,33 @@ li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3
                                             {{ form_errors(form['recommended_slot_url_'~i]) }}
                                         </div>
                                     </div>
+                                     <div class="row">
+                                        <div class="large-2 columns">
+                                            {{ form_label(form['recommended_slot_display_url_'~i]) }}
+                                        </div>
+                                        <div class="large-10 columns">
+                                            {{ form_widget(form['recommended_slot_display_url_'~i]) }}
+                                            {{ form_errors(form['recommended_slot_display_url_'~i]) }}
+                                        </div>
+                                    </div>
+                                     <div class="row">
+                                        <div class="large-2 columns">
+                                            {{ form_label(form['recommended_slot_cta_text_'~i]) }}
+                                        </div>
+                                        <div class="large-10 columns">
+                                            {{ form_widget(form['recommended_slot_cta_text_'~i]) }}
+                                            {{ form_errors(form['recommended_slot_cta_text_'~i]) }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="large-2 columns">
+                                            {{ form_label(form['recommended_slot_mobile_title_'~i]) }}
+                                        </div>
+                                        <div class="large-10 columns">
+                                            {{ form_widget(form['recommended_slot_mobile_title_'~i]) }}
+                                            {{ form_errors(form['recommended_slot_mobile_title_'~i]) }}
+                                        </div>
+                                    </div>
                                 {% endfor %}
                             </div>
                             <div>
@@ -92,7 +119,7 @@ li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3
                                 {% set slotCnt = 1 %}{% set creativeCnt = 1 %}
                                 {% for i in 1..18 %}
                                     {% if(i%3==1) %} 
-                                        <h4>{{ 'Recommended Slot For Search List Page '~' '~(slotCnt)|trans }}</h4>
+                                        <h4>{{ 'Sponsored Slot For Search List Page '~' '~(slotCnt)|trans }}</h4>
                                         <div class="tabs-ouline">
                                         <ul id="creative_tabs_{{slotCnt}}" class="tabs tab-menu clearfix" data-tab>
                                               <li class="creative_tabs active"><a href="#Creative1_{{slotCnt}}">Creative1</a></li>
@@ -143,6 +170,33 @@ li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3
                                             <div class="large-10 columns">
                                                 {{ form_widget(form['recommended_slot_searchlist_url_'~i]) }}
                                                 {{ form_errors(form['recommended_slot_searchlist_url_'~i]) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="large-2 columns">
+                                                {{ form_label(form['recommended_slot_searchlist_display_url_'~i]) }}
+                                            </div>
+                                            <div class="large-10 columns">
+                                                {{ form_widget(form['recommended_slot_searchlist_display_url_'~i]) }}
+                                                {{ form_errors(form['recommended_slot_searchlist_display_url_'~i]) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="large-2 columns">
+                                                {{ form_label(form['recommended_slot_searchlist_cta_text_'~i]) }}
+                                            </div>
+                                            <div class="large-10 columns">
+                                                {{ form_widget(form['recommended_slot_searchlist_cta_text_'~i]) }}
+                                                {{ form_errors(form['recommended_slot_searchlist_cta_text_'~i]) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="large-2 columns">
+                                                {{ form_label(form['recommended_slot_searchlist_mobile_title_'~i]) }}
+                                            </div>
+                                            <div class="large-10 columns">
+                                                {{ form_widget(form['recommended_slot_searchlist_mobile_title_'~i]) }}
+                                                {{ form_errors(form['recommended_slot_searchlist_mobile_title_'~i]) }}
                                             </div>
                                         </div>
                                         <div class="row">

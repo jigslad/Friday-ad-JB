@@ -114,6 +114,27 @@ class CategoryRecommendedSlot
      * @ORM\Column(name="creative_ord", type="integer", length=2, nullable=true)
      */
     private $creative_ord;
+        
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="display_url", type="string", length=255, nullable=false)
+     */
+    private $display_url;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cta_text", type="string", length=255, nullable=false)
+     */
+    private $cta_text;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobile_title", type="string", length=255, nullable=false)
+     */
+    private $mobile_title;
 
     /**
      * Constructor.
@@ -435,5 +456,74 @@ class CategoryRecommendedSlot
     public function getCreativeOrd()
     {
         return $this->creative_ord;
+    }
+    
+    /**
+     * Set display_url.
+     *
+     * @param string $display_url
+     * @return CategoryRecommendedSlot
+     */
+    public function setDisplayUrl($display_url)
+    {
+        $this->display_url = $display_url;
+        
+        return $this;
+    }
+    
+    /**
+     * Get display_url.
+     *
+     * @return string
+     */
+    public function getDisplayUrl()
+    {
+        return $this->display_url;
+    }
+    
+    /**
+     * Set cta_text.
+     *
+     * @param string $cta_text
+     * @return CategoryRecommendedSlot
+     */
+    public function setCtaText($cta_text)
+    {
+        $this->cta_text = $cta_text;
+        
+        return $this;
+    }
+    
+    /**
+     * Get cta_text.
+     *
+     * @return string
+     */
+    public function getCtaText()
+    {
+        return $this->cta_text;
+    }
+    
+    /**
+     * Set mobile_title.
+     *
+     * @param string $mobile_title
+     * @return CategoryRecommendedSlot
+     */
+    public function setMobileTitle($mobile_title)
+    {
+        $this->mobile_title = $mobile_title;
+        
+        return $this;
+    }
+    
+    /**
+     * Get mobile_title.
+     *
+     * @return string
+     */
+    public function getMobileTitle()
+    {
+        return $this->mobile_title;
     }
 }
