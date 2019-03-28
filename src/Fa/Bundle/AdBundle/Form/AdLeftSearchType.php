@@ -154,9 +154,12 @@ class AdLeftSearchType extends AbstractType
             $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
         }       
         
-        if($defDistance=='' && $categoryId!='') {
-            $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
-            $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+        if($defDistance=='') {
+            if($categoryId!='') {
+                $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+                $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+            } 
+            
             $form->add(
                 'item__distance',
                 HiddenType::class,
