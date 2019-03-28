@@ -70,10 +70,13 @@
               </ul>
             </div>
         </dd>
-
-        <dd class="accordion-navigation keep-shown">
+		
+		{% if (attribute(form, 'hide_distance_block') is defined and attribute(form, 'hide_distance_block').vars.value==0) or (locationFacets is defined and locationFacets|length > 0) %}
+        <dd class="accordion-navigation keep-shown">       
             <a href="#panel3a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</h5></a>
-            <div class="content active clearfix">
+        	<div class="content active clearfix">
+         {% endif %}
+            
               {% if attribute(form, 'hide_distance_block') is defined and attribute(form, 'hide_distance_block').vars.value==0 %}
                   <ul class="distance-search clearfix distance-left-search">
                       <li class="col white-select">
@@ -115,9 +118,10 @@
                       </ul>
                   </div>
               {% endif %}
+        {% if (attribute(form, 'hide_distance_block') is defined and attribute(form, 'hide_distance_block').vars.value==0) or (locationFacets is defined and locationFacets|length > 0) %}
             </div>
         </dd>
-
+        {% endif %}
         {% if isShopPage is not defined or (isShopPage is defined and not isShopPage) %}
             {% if attribute(form, 'item__is_trade_ad') is defined %}
                 {% if searchParams.item__category_id is not defined or (searchParams.item__category_id is defined and searchParams.item__category_id is not null and (rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID'))) %}
