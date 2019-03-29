@@ -106,7 +106,7 @@ class NewsletterResubscribeType extends AbstractType
         	    TextType::class,
         		array(
         		    'data'=>($dotmailer)?$dotmailer->getEmail():'',
-        		    'attr' => ['class' => 'textcounter', 'readonly' => true]
+        		    'attr' => ['class' => 'textcounter text-center', 'readonly' => true]
         		)
         	)
         	->add(

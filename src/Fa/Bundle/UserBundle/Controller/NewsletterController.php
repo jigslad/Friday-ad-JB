@@ -43,7 +43,7 @@ class NewsletterController extends CoreController
      */
     public function indexAction(Request $request)
     {
-        $dotmailer = null;
+        $dotmailer = null;$newRecord = 0;
 
         if ($request->query->get('guid')) {
             $dotmailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('guid' => $request->query->get('guid')));
@@ -62,6 +62,7 @@ class NewsletterController extends CoreController
             if (!$dotmailer) {
                 $dotmailer = new Dotmailer();
                 $dotmailer->setFadUser(1);
+                $newRecord = 1;
             }
         }
 
@@ -81,7 +82,7 @@ class NewsletterController extends CoreController
                     if($dotmailer->getDotmailerNewsletterUnsubscribe()==1) {
                         $resubscribeUrl = $this->generateUrl('newsletter_resubscribe').'?guid='.$request->query->get('guid');
                         return $this->redirect($resubscribeUrl);
-                    } elseif($dotmailer->getDotmailerNewsletterUnsubscribe()==0) {
+                    } elseif($newRecord ==1) {
                         $subscribeUrl = $this->generateUrl('newsletter_subscribe').'?guid='.$request->query->get('guid');
                         return $this->redirect($subscribeUrl);
                     } else {
