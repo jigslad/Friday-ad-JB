@@ -68,7 +68,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -131,7 +131,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -169,7 +169,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -191,6 +191,44 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
 
         return $newsletterTypesArray;
     }
+    
+    /**
+     * Get key value array for main category.
+     *
+     * @param object $container Container identifier.
+     *
+     * @return Doctrine\ORM\QueryBuilder The query builder
+     */
+    public function getChildrensWithName($mainCatId, $container = null)
+    {
+        if ($container) {
+            $tableName   = $this->getTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$mainCatId;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+            
+            if ($cachedValue !== false) {
+                //return $cachedValue;
+            }
+        }
+        
+        $newsletterTypesArray = array();
+        $newsletterTypes      = $this->getBaseQueryBuilder()
+        ->andWhere(self::ALIAS.'.parent_id = '.$mainCatId)
+        ->orderBy(self::ALIAS.'.ord', 'ASC')
+        ->getQuery()->getResult();
+        
+        if ($newsletterTypes && count($newsletterTypes)) {
+            foreach ($newsletterTypes as $newsletterType) {
+                $newsletterTypesArray[$newsletterType->getId()] = $newsletterType->getName();
+            }
+        }
+        
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $newsletterTypesArray);
+        }
+        
+        return $newsletterTypesArray;
+    }
 
     /**
      * Get non mapped categories array.
@@ -207,7 +245,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -228,6 +266,49 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
             CommonManager::setCacheVersion($container, $cacheKey, $newsletterTypesArray);
         }
 
+        return $newsletterTypesArray;
+    }
+    
+    
+    /**
+     * Get all newsletter.
+     *
+     * @param object $container Container identifier.
+     *
+     * @return Doctrine\ORM\QueryBuilder The query builder
+     */
+    public function getAllNewsletterTypeByOrd($container = null, $notConsiderId = null)
+    {
+        if ($container) {
+            $tableName   = $this->getTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+            
+            if ($cachedValue !== false) {
+                //return $cachedValue;
+            }
+        }
+        
+        $newsletterTypesArray = array();
+        $query     = $this->createQueryBuilder(self::ALIAS);
+        
+        if(!is_null( $notConsiderId)) {
+            $query->andWhere(self::ALIAS.'.id != :id')
+            ->setParameter('id', $notConsiderId);
+        }
+        $query->orderBy(self::ALIAS.'.ord', 'ASC');
+        $newsletterTypes = $query->getQuery()->getResult();
+        
+        if ($newsletterTypes && count($newsletterTypes)) {
+            foreach ($newsletterTypes as $newsletterType) {
+                $newsletterTypesArray[] = $newsletterType->getId();
+            }
+        }
+        
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $newsletterTypesArray);
+        }
+        
         return $newsletterTypesArray;
     }
 }

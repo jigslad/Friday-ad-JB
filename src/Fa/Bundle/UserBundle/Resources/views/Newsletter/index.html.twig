@@ -5,13 +5,8 @@
 {% set newsletterMainCategoryArray = newsletterTypeRepository.getMainCategoryArray(container) %}
 
 {% block body %}
-<div id="fa-news-pref">
-	<div class="row">
-	    <div class="columns">
-	        {{ include('FaUserBundle:MyAccount:myNewsletterPref.html.twig', {'userNewsletterPrefForm': form, 'newsletterMainCategoryArray': newsletterMainCategoryArray|keys, 'is_unsubscribe': 1}) }}
-	    </div>
-	</div>
-</div>
+ {{ include('FaUserBundle:Newsletter:newsletter-css.html.twig')}}
+ {{ include('FaUserBundle:Newsletter:newsletter.html.twig', {'userNewsletterPrefForm': form, 'newsletterMainCategoryArray': newsletterMainCategoryArray|keys, 'is_unsubscribe': 1}) }}
 {% endblock %}
 
 {% block scriptbottom %}
@@ -19,43 +14,18 @@
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){
-        unsubscribeFromAll();
-        bindEqualizerEvent('newsletter_equalizer');
+        $('.element_toggle').click(function(){
+            var targetElement = $(this).attr('id')+'_target';
+            $(this).toggleClass("tab-down tab-up");
+            $('#'+targetElement).toggle();
+            if($('#'+targetElement).is(':visible')) {
+                var selectMenuId = ($(this).attr('id').replace('element_toggle', "fa_paa_fourth_step_adult"));
+                if ($('#'+selectMenuId).hasClass('fa-select')) {
+                    $('#'+selectMenuId).selectmenu('refresh');
+                }
+            }
+        });
     });
-
-    function unsubscribeFromAll() {
-        if ($('#user_newsletter_dotmailer_newsletter_unsubscribe').is(':checked')) {
-            $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").attr('checked', false);
-            $('#newsletter_categories span.checked').removeClass('checked');
-        }
-
-        $("#user_newsletter_dotmailer_newsletter_unsubscribe").click(function() {
-            if ($('#user_newsletter_dotmailer_newsletter_unsubscribe').is(':checked')) {
-                $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").attr('checked', false);
-                $('#newsletter_categories span.checked').removeClass('checked');
-            }
-        });
-
-        $("input[name='user_newsletter[dotmailer_newsletter_type_id][]']").click( function () {
-            if ($(this).is(':checked')) {
-                $("#user_newsletter_dotmailer_newsletter_unsubscribe").attr('checked', false);
-                $('#user_newsletter_dotmailer_newsletter_unsubscribe').parent().removeClass('checked');
-            }
-        });
-    }
-
-    function bindEqualizerEvent(equalizerId)
-    {
-        $('#'+equalizerId).equalizer({
-            columns: '> div',
-            useHeight: 'height',
-            resizeable: true,
-            min: 0,
-            breakpoint: null,
-            disabled: 'breakpoint',
-            overflow: 'overflowed'
-        });
-    }
 //]]>
 </script>
 {% endblock %}

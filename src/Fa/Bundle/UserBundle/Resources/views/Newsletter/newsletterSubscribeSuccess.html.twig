@@ -1,0 +1,19 @@
+{% extends 'FaFrontendBundle::layout.html.twig' %}
+
+{% block body %}
+{{ include('FaUserBundle:Newsletter:newsletter-css.html.twig')}}
+<div class="homepage-row">
+    <div class="row">
+        <div class="medium-20 medium-push-2 large-18 large-push-3 columns text-center">
+            <h1 class="mb20">Thanks for subscribing to Friday-Ad!
+            <span><img src="{{ asset_url('fafrontend/images/smile_emoji_icon.png') }}" width="50px"></span>
+            </h1>
+           
+	   		<div class="mt20">Thank you for signing up to Friday-Ad newsletters. You will have full control over your Friday-Ad email experience by using your preference centre. You can access this by using the link at the bottom of any of our newsletter emails.</div>
+            <div class="medium-10 medium-push-7 large-10 large-push-7 columns mt40 p0 text-center">
+                <a href="{{ path('fa_frontend_homepage') }}" class="button expand primary-btn-2">Go to home page</a><br>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
