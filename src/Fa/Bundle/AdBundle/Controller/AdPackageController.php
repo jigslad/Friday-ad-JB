@@ -189,6 +189,15 @@ class AdPackageController extends CoreController
                     $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Sorry, maximum number of ad placements reached.', array(), 'frontend-ad-package'), 'error');
                     return $this->redirectToRoute('ad_package_purchase', array('adId' => $adId) + $privateUserUrlParams);
                 }
+                
+                if ($selectedPackageObj->getDuration()) {
+                    $getLastCharacter = substr($selectedPackageObj->getDuration(),-1);
+                    $noInDuration = substr($selectedPackageObj->getDuration(),0, -1);
+                    if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                    elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                    else { $adExpiryDays = $selectedPackageObj->getDuration(); }                   
+                }
+                
                 //check for print edition
                 $printEditionValues = array();
                 if (isset($printEditionLimits[$selectedPackageId]) && $printEditionLimits[$selectedPackageId]) {
@@ -579,7 +588,15 @@ class AdPackageController extends CoreController
                     $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Sorry, maximum number of ad placements reached.', array(), 'frontend-ad-package'), 'error');
                     return $this->redirectToRoute('ad_package_purchase', array('adId' => $adId) + $privateUserUrlParams);
                 }
-
+                
+                if ($selectedPackageObj->getDuration()) {
+                    $getLastCharacter = substr($selectedPackageObj->getDuration(),-1);
+                    $noInDuration = substr($selectedPackageObj->getDuration(),0, -1);
+                    if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                    elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                    else { $adExpiryDays = $selectedPackageObj->getDuration(); }
+                }
+                
                 //check for print edition
                 $printEditionValues = array();
                 if (isset($printEditionLimits[$selectedPackageId]) && $printEditionLimits[$selectedPackageId]) {
