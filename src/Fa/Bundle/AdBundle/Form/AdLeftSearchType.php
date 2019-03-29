@@ -136,17 +136,18 @@ class AdLeftSearchType extends AbstractType
     {
         $form = $event->getForm();        
         $defDistance = '';
-        $getDefaultRadius = array();
+        $getDefaultRadius = $cookieLocation = array();
         $rootCategoryId = null;
 
-        $categoryId   = '';
+        $categoryId   = '';$getLocLvl = 0;
         $searchParams = $this->request->get('searchParams');
         
-        $cookieLocation = $this->request->cookies->get('location');
-        $cookieLocation = get_object_vars(json_decode($cookieLocation));
-        
         $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:2;
-
+        if($searchLocation!=2) {
+            $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
+            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
+        }
+        
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
             $categoryId = $searchParams['item__category_id'];
         }
@@ -164,8 +165,8 @@ class AdLeftSearchType extends AbstractType
                 $defDistance = 2000;
             }
        }  
-        
-       if($searchLocation == 2 || $cookieLocation['lvl']=='') {           
+       
+       if($searchLocation == 2 || $getLocLvl==2) {           
             $form->add(
                 'item__distance',
                 HiddenType::class,
