@@ -137,7 +137,13 @@ class AdRoutingManager
             $location = $this->getLocation($search_params);
         }
         
-        if($location=='uk' || $cookieLocationDetails['lvl']=='') {
+        $getLocLvl = 0;
+        if($location!='uk') {
+            $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->findBy(array('url'=>$location));
+            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray[0]->getLvl(); }
+        }
+            
+        if($location=='uk' || $getLocLvl==2) {
             unset($search_params['item__distance']);
         }
 
