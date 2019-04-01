@@ -2805,5 +2805,6 @@
   body.noscroll { overflow: hidden;  }
 }
 @media only screen and (max-width:768px) {
-    .chcw_header a { position: fixed !important; background: rgb(239, 239, 239); padding: 0 10px; }
+    .chcw_header { position: fixed !important; width: 100% !important; }
+    .chcw_content { position: relative !important; top: 40px !important; }
 }
