@@ -2721,7 +2721,7 @@ table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.r
 .chcw_header a img { margin-top: -3px; width: 21px; }
 .chcw_content { width: 100%; height: 460px; border: none; }
 @media only screen and (max-width:768px) {
-    .chcw_header { position: fixed !important; width: 100% !important; }
+    .chcw_header { position: fixed !important; width: 100% !important; z-index: 100 !important; }
     .chcw_content { position: relative !important; top: 40px !important; }
 }
 
