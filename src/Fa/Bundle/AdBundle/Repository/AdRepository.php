@@ -2170,7 +2170,25 @@ class AdRepository extends EntityRepository
             // check user has use privacy phone number feature.
             if ($adUser && $adUser->getPhone() && $adUser->getIsPrivatePhoneNumber()) {
                 $yacManager = $container->get('fa.yac.manager');
-                $expiryDate = $ad->getExpiresAt();
+                
+                $categoryId = $ad->getCategory()->getId();
+                $adExpiryDays = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $container);
+                
+                $getActivePackage = array();
+                $getActivePackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getActiveAdPackage($adId);
+                if(!empty($getActivePackage)) {
+                    $selectedPackageObj = $this->_em->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $getActivePackage->getPackage()->getId()));
+                    if ($selectedPackageObj->getDuration()) {
+                        $getLastCharacter = substr($selectedPackageObj->getDuration(),-1);
+                        $noInDuration = substr($selectedPackageObj->getDuration(),0, -1);
+                        if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                        elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                        else { $adExpiryDays = $selectedPackageObj->getDuration(); }
+                    }
+                }
+                $expiryDate = strtotime("+$adExpiryDays days");
+                
+                //$expiryDate = $ad->getExpiresAt();
                 $expiryDate = $this->_em->getRepository('FaAdBundle:Ad')->getYacExpiry($ad->getId(), $expiryDate);
                 $yacManager->init();
                 // if no privacy number assigned then assigned new one else extend.
