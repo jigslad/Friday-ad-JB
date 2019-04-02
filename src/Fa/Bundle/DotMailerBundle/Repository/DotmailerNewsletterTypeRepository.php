@@ -253,6 +253,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
         $newsletterTypes      = $this->getBaseQueryBuilder()
         ->andWhere(self::ALIAS.'.parent_id = 0')
         ->andWhere(self::ALIAS.'.category_id = 0 OR '.self::ALIAS.'.category_id IS NULL')
+        ->andWhere(self::ALIAS.'.ord > 0')
         ->orderBy(self::ALIAS.'.ord', 'ASC')
         ->getQuery()->getResult();
 
