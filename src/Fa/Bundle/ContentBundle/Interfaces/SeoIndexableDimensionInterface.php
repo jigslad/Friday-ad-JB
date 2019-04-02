@@ -75,4 +75,8 @@ interface SeoIndexableDimensionInterface
     const SERVICES_OFFERED     = 'services_offered_id';
     const SERVICE_TYPE         = 'service_type_id';
     const EVENT_TYPE           = 'event_type_id';
+
+    // adult fields
+    const ETHNICITY = 'ethnicity_id';
+
 }
