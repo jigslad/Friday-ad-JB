@@ -88,7 +88,7 @@
                     {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
                     {% set choiceCount = 0 %}
                     {% set strForThirdParty = '' %}
-                    
+
                     {% for mainCatId in newsletterMainCategoryArray %}
                     	{% set child = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(mainCatId - 1)] %}
                     	{% if choiceCount % 3 == 0  %}
@@ -111,7 +111,7 @@
                                                 {% set childrenArray = newsletterTypeRepository.getChildrens(mainCatId, container)|keys %}
                                                 <li>
                                                     <div class="label-inline mt0 mb0 main-cat-newsletter">
-                                                        {{ form_widget(child) }} 
+                                                        {{ form_widget(child, {'attr': {'class':'parent_newsletter'}}) }} 
                                                         <label for="{{ child.vars.id }}"><b>{{ child.vars.label|striptags }}</b></label>
                                                     </div>
                                                 </li>
@@ -119,7 +119,7 @@
                                                 	{% set subChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(subCatId - 1)] %}
                                                 	<li>
                                                         <div class="label-inline mt0 mb0">
-                                                            {{ form_widget(subChild) }} 
+                                                            {{ form_widget(subChild, {'attr': {'class':'child_newsletter_'~mainCatId}}) }} 
                                                             <label for="{{ subChild.vars.id }}">{{ subChild.vars.label|striptags }}</label>
                                                         </div>
                                                     </li>
@@ -236,6 +236,15 @@
    {{ form_end(userNewsletterPrefForm) }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
+	$('.parent_newsletter').on('click', function() {
+		var parNewsId = $(this).val();
+		if($(this).is( ":checked" )) {
+			$('.child_newsletter_'+parNewsId).parent('span').addClass('checked');
+		} else {
+			$('.child_newsletter_'+parNewsId).parent('span').removeClass('checked');
+		}
+		
+	})
     function newsletterUpdate(e) {
         var clickedElement = $(e).attr('id');
         if(clickedElement =='user_newsletterupdate_update_newsletter_preferences') {

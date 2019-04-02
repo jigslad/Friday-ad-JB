@@ -74,6 +74,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
 
         $newsletterTypesArray = array();
         $newsletterTypes      = $this->getBaseQueryBuilder()
+            ->Where(self::ALIAS.'.ord > 0')
             ->orderBy(self::ALIAS.'.ord', 'ASC')
             ->getQuery()->getResult();
 
@@ -137,6 +138,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
         $newsletterTypes      = $this->getBaseQueryBuilder()
         ->andWhere(self::ALIAS.'.parent_id = 0')
         ->andWhere(self::ALIAS.'.category_id > 0')
+        ->andWhere(self::ALIAS.'.ord > 0')
         ->getQuery()->getResult();
 
         if ($newsletterTypes && count($newsletterTypes)) {
@@ -251,6 +253,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
         $newsletterTypes      = $this->getBaseQueryBuilder()
         ->andWhere(self::ALIAS.'.parent_id = 0')
         ->andWhere(self::ALIAS.'.category_id = 0 OR '.self::ALIAS.'.category_id IS NULL')
+        ->andWhere(self::ALIAS.'.ord > 0')
         ->orderBy(self::ALIAS.'.ord', 'ASC')
         ->getQuery()->getResult();
 
