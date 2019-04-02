@@ -74,7 +74,6 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
 
         $newsletterTypesArray = array();
         $newsletterTypes      = $this->getBaseQueryBuilder()
-<<<<<<< HEAD
             /* FFR-2855 : added new newsletter types but these should not be visible to end users, hence updated their 'ord' to 0 and querying here accordingly */
             ->where(self::ALIAS.'.ord > 0')
             ->orderBy(self::ALIAS.'.ord', 'ASC')
