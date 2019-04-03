@@ -105,7 +105,7 @@ class AdMessageAttachmentsController extends CoreController
                         $isAdminUser = $this->isAdminLoggedIn() ? true : false;
                         $this->getRepository('FaMessageBundle:MessageAttachments')->saveAttachment($objMessageAttachments, $this->container);
                     } else {
-                        $error = $form->getErrorsAsString();
+                        $error = $form->getErrors(true, false);
                     }
                 } catch (\Exception $e) {
                     $error = $e->getMessage();
@@ -215,7 +215,7 @@ class AdMessageAttachmentsController extends CoreController
                 $objMessageAttachments = $this->getRepository('FaMessageBundle:MessageAttachments')->find($attachmentId);
             }
 
-            if ($objMessageAttachments) {
+            if (!empty($objMessageAttachments)) {
                 if (count($objMessageAttachments) == 1) {
                     $downloadFileName = $objMessageAttachments->getOriginalFileName();
                     $fileExtension    = substr(strrchr($downloadFileName, '.'), 1);

@@ -472,7 +472,7 @@ class AdRequestListener
                 
                                 
                 $catObj = $this->getMatchedCategory($categoryText);
-                
+                $this->getCatRedirects($redirectString, $categoryText, $locationId, $request, $event);
                                 
                 if ($catObj) {
                     $this->getCatRedirects($redirectString, $catObj['full_slug'], $locationId, $request, $event);
@@ -866,7 +866,7 @@ class AdRequestListener
         if ($cat) {
             return $cat;
         } else {
-            $seoPopularSearchUrl = $this->em->getRepository('FaContentBundle:SeoToolPopularSearch')->findBy(array('url'=>'/'.$category.'/'));        
+            /*$seoPopularSearchUrl = $this->em->getRepository('FaContentBundle:SeoToolPopularSearch')->findBy(array('url'=>'/'.$category.'/'));        
             if(empty($seoPopularSearchUrl)) {
                 $explodeCatArr = explode('/', $category);
                 if (!empty($explodeCatArr) && count($explodeCatArr)>1) {
@@ -876,7 +876,8 @@ class AdRequestListener
                 } else {
                     return false;
                 }            
-            } else { return false; }
+            } else { return false; }*/
+            return false;
         }
     }
 

@@ -52,8 +52,10 @@ class PaypalCheckoutAdminController extends CoreController implements ResourceAu
         }
 
         $paypalManager                = $this->get('fa.paypal.manager');
-        $returnUrl                    = $this->generateUrl('paypal_process_payment_admin', array(), true);
-        $cacelUrl                     = $this->generateUrl('show_cart_admin', array(), true);
+        $baseUrl = $this->container->getParameter('base_url');
+        
+        $returnUrl                    = $baseUrl.$this->generateUrl('paypal_process_payment_admin', array(), true);
+        $cacelUrl                     = $baseUrl.$this->generateUrl('show_cart_admin', array(), true);
         $paypalSetExpCheckoutResponse = $paypalManager->getSetExpressCheckoutResponse($returnUrl, $cacelUrl, $cart, $cartDetails);
 
         //check for paypal token

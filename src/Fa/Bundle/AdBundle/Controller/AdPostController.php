@@ -119,8 +119,10 @@ class AdPostController extends ThirdPartyLoginController
                     if ($rootCategoryId == CategoryRepository::MOTORS_ID) {
                         $secondStepData = $firstStepData;
                         unset($secondStepData['category_id'], $secondStepData['category_id_autocomplete']);
-                        if (count($secondStepData) > 1) {
-                            $this->setStepSessionData($secondStepData + $this->getStepSessionData('second'), 'second');
+                        if (!empty($secondStepData)) {
+                            if(count($secondStepData) > 1) {
+                                $this->setStepSessionData($secondStepData + $this->getStepSessionData('second'), 'second');
+                            }
                         }
                     }
 
@@ -139,17 +141,21 @@ class AdPostController extends ThirdPartyLoginController
             if ($request->get('is_edit')) {
                 $firstStepData = $this->getStepSessionData('first');
                 
-                if (count($firstStepData)) {
+                if (!empty($firstStepData)) {
 //                     $csrfToken     = $this->container->get('form.csrf_provider')->generateCsrfToken('fa_paa_category_select');
-                    $formToken = '_csrf/https-'.'fa_paa_category_select';
-                    $csrfToken      = $this->container->get('session')->get($formToken);
+                    //$formToken = '_csrf/https-'.'fa_paa_category_select';
+                    //$csrfToken      = $this->container->get('session')->get($formToken);
+                    
+                    $formNameT = 'fa_paa_category_select';
+                    $csrfToken = $this->get('security.csrf.token_manager')->getToken($formNameT)->getValue();
+                    
 //                     $csrfToken      = $this->get('security.csrf.token_manager')->getToken('fa_paa_category_select')->getValue();
                     $firstStepData = $firstStepData + array('_token' => $csrfToken);
-                    if ($form->has('has_reg_no') && isset($firstStepData['first_step_ordered_fields']) && count(explode(',', $firstStepData['first_step_ordered_fields'])) && !isset($firstStepData['has_reg_no'])) {
+                    if ($form->has('has_reg_no') && isset($firstStepData['first_step_ordered_fields']) && !empty(explode(',', $firstStepData['first_step_ordered_fields'])) && !isset($firstStepData['has_reg_no'])) {
                         $options = $form->get('has_reg_no')->getConfig()->getOptions();
                         $firstStepData['has_reg_no'] = (isset($options['data']) ? $options['data'] : false);
                     }
-                    if ($form->has('has_reg_no') && isset($firstStepData['first_step_ordered_fields']) && count(explode(',', $firstStepData['first_step_ordered_fields'])) && isset($firstStepData['colour_id_dimension_id']) && !$firstStepData['colour_id_dimension_id']) {
+                    if ($form->has('has_reg_no') && isset($firstStepData['first_step_ordered_fields']) && !empty(explode(',', $firstStepData['first_step_ordered_fields'])) && isset($firstStepData['colour_id_dimension_id']) && !$firstStepData['colour_id_dimension_id']) {
                         $options = $form->get('colour_id_dimension_id')->getConfig()->getOptions();
                         $firstStepData['colour_id_dimension_id'] = (isset($options['data']) ? $options['data'] : false);
                     }
@@ -273,7 +279,7 @@ class AdPostController extends ThirdPartyLoginController
                         }
                     }
 
-                    if (count($firstStepDataForMotorsRegNo)) {
+                    if (!empty($firstStepDataForMotorsRegNo)) {
                         $firstStepDataForMotorsRegNo['first_step_ordered_fields'] = implode(',', array_keys($firstStepDataForMotorsRegNo));
                         $firstStepDataForMotorsRegNo = $firstStepDataForMotorsRegNo + $this->getStepSessionData('first');
                         $this->setStepSessionData($firstStepDataForMotorsRegNo, 'first');
@@ -331,8 +337,11 @@ class AdPostController extends ThirdPartyLoginController
                 // in 2.7v $csrfToken      = $this->container->get('form.csrf_provider')->generateCsrfToken($formName);
                 //$formToken = '_csrf/https-'.$formName;
                 $categoryName = $this->getRootCategoryName($firstStepData['category_id']);
-                $formToken = '_csrf/https-fa_paa_second_step_'.$categoryName;
-                $csrfToken      = $this->container->get('session')->get($formToken);
+                //$formToken = '_csrf/https-fa_paa_second_step_'.$categoryName;
+                $formNameT = 'fa_paa_second_step_'.$categoryName;
+                //$csrfToken      = $this->container->get('session')->get($formToken);
+                $csrfToken = $this->get('security.csrf.token_manager')->getToken($formNameT)->getValue();
+                
                 //# It is generating new token that's why i'm getting old _csrf token from session
                 // Note: Need to investigate more
                 // $csrfToken = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
@@ -867,11 +876,14 @@ class AdPostController extends ThirdPartyLoginController
                     }
                 }
 
-                if (count($fourthStepData)) {
+                if (!empty($fourthStepData)) {
                     //$formToken = '_csrf/https-'.$form->getName();
                     $categoryName = $this->getRootCategoryName($firstStepData['category_id']);
-                    $formToken = '_csrf/https-fa_paa_fourth_step_'.$categoryName;
-                    $csrfToken      = $this->container->get('session')->get($formToken);
+                    //$formToken = '_csrf/https-fa_paa_fourth_step_'.$categoryName;
+                    $formNameT = 'fa_paa_fourth_step_'.$categoryName;
+                    //$csrfToken      = $this->container->get('session')->get($formToken);
+                    $csrfToken = $this->get('security.csrf.token_manager')->getToken($formNameT)->getValue();
+                    
                     //# It is generating new token that's why i'm getting old _csrf token from session
                     // Note: Need to investigate more
                     // $csrfToken = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
@@ -890,7 +902,7 @@ class AdPostController extends ThirdPartyLoginController
                 // Remove fourth step data from session
                 $this->container->get('session')->remove('paa_fourth_step_data');
                 
-                if (count($fourthStepData)) {
+                if (!empty($fourthStepData)) {
                     $csrfToken      = $this->get('security.csrf.token_manager')->getToken($formName)->getValue();
                     $fourthStepData = $fourthStepData + array('_token' => $csrfToken);
                     
@@ -1324,7 +1336,7 @@ class AdPostController extends ThirdPartyLoginController
     {
         $user = new User();
         $sessionData = $this->container->get('session')->get($sessionName, array());
-        if (count($sessionData) > 0) {
+        if (!empty($sessionData)) {
             if (isset($sessionData['user_email'])) {
                 $user->setEmail($sessionData['user_email']);
             }
@@ -1441,7 +1453,7 @@ class AdPostController extends ThirdPartyLoginController
                 $className             = null;
                 $secondStepFieldsArray = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($objAd->getCategory()->getId(), $this->container, 2);
                 $motorsRegNoFields = $this->getMotorRegNoFields();
-                if ($secondStepFieldsArray && count($secondStepFieldsArray)) {
+                if ($secondStepFieldsArray && !empty($secondStepFieldsArray)) {
                     foreach ($secondStepFieldsArray as $key => $valueArray) {
                         if ($valueArray['status'] == true) {
                             $fieldName            = $valueArray['paa_field']['field'];
@@ -1502,7 +1514,7 @@ class AdPostController extends ThirdPartyLoginController
                                             $categoryDimensionId = $this->getEntityManager()->getRepository('FaEntityBundle:CategoryDimension')->getDimensionIdByNameAndCategoryHierarchy($firstStepData['category_id'], $fieldLabel, $this->container);
                                             $secondStepData[$fieldName.'_dimension_id'] = $categoryDimensionId;
 
-                                            if (is_array($secondStepData[$fieldName]) && count($secondStepData[$fieldName])) {
+                                            if (is_array($secondStepData[$fieldName]) && !empty($secondStepData[$fieldName])) {
                                                 $secondStepData[$fieldName] = $secondStepData[$fieldName][0];
                                             }
                                         }
@@ -1515,7 +1527,7 @@ class AdPostController extends ThirdPartyLoginController
 
                                     if ($valueArray['paa_field']['field_type'] == 'choice_single') {
                                         $dataArray = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
-                                        if ($dataArray && count($dataArray)) {
+                                        if ($dataArray && !empty($dataArray)) {
                                             $dataStr = $secondStepData[$fieldName] = implode(',', $dataArray);
                                             $secondStepData[$fieldName] = $dataStr;
                                         }
@@ -1538,7 +1550,7 @@ class AdPostController extends ThirdPartyLoginController
                 // Set fourth step data into session
                 $className             = null;
                 $fourthStepFieldsArray = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($objAd->getCategory()->getId(), $this->container, 4);
-                if ($fourthStepFieldsArray && count($fourthStepFieldsArray)) {
+                if ($fourthStepFieldsArray && !empty($fourthStepFieldsArray)) {
                     foreach ($fourthStepFieldsArray as $key => $valueArray) {
                         if ($valueArray['status'] == true) {
                             $fieldName            = $valueArray['paa_field']['field'];
@@ -1611,7 +1623,7 @@ class AdPostController extends ThirdPartyLoginController
                                             $fourthStepData[$fieldName] = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
                                             $categoryDimensionId = $this->getEntityManager()->getRepository('FaEntityBundle:CategoryDimension')->getDimensionIdByNameAndCategoryHierarchy($firstStepData['category_id'], $fieldLabel, $this->container);
                                             $fourthStepData[$fieldName.'_dimension_id'] = $categoryDimensionId;
-                                            if (is_array($fourthStepData[$fieldName]) && count($fourthStepData[$fieldName])) {
+                                            if (is_array($fourthStepData[$fieldName]) && !empty($fourthStepData[$fieldName])) {
                                                 $fourthStepData[$fieldName] = $fourthStepData[$fieldName][0];
                                             }
                                         }
@@ -1624,7 +1636,7 @@ class AdPostController extends ThirdPartyLoginController
 
                                     if ($valueArray['paa_field']['field_type'] == 'choice_single') {
                                         $dataArray = $this->getRepository('FaAdBundle:PaaField')->getPaaFieldValue($fieldName, $objAdCategory, $metaData, $this->container, $className, false, false);
-                                        if ($dataArray && count($dataArray)) {
+                                        if ($dataArray && !empty($dataArray)) {
                                             $dataStr = $fourthStepData[$fieldName] = implode(',', $dataArray);
                                             $fourthStepData[$fieldName] = $dataStr;
                                         }
@@ -1640,18 +1652,20 @@ class AdPostController extends ThirdPartyLoginController
                         }
                     }
                     //set first step data for motor reg no.
-                    if (in_array('has_reg_no', array_keys($secondStepData))) {
-                        $firstStepDataForMotorsRegNo = array();
-                        $motorsRegNoFields = $this->getMotorRegNoFields();
-                        foreach ($motorsRegNoFields as $motorsRegNoField) {
-                            if (array_key_exists($motorsRegNoField, $secondStepData)) {
-                                $firstStepDataForMotorsRegNo[$motorsRegNoField] = $secondStepData[$motorsRegNoField];
-                            } else {
-                                $firstStepDataForMotorsRegNo[$motorsRegNoField] = null;
+                    if (!empty($secondStepData)) {
+                        if(in_array('has_reg_no', array_keys($secondStepData))) {
+                            $firstStepDataForMotorsRegNo = array();
+                            $motorsRegNoFields = $this->getMotorRegNoFields();
+                            foreach ($motorsRegNoFields as $motorsRegNoField) {
+                                if (array_key_exists($motorsRegNoField, $secondStepData)) {
+                                    $firstStepDataForMotorsRegNo[$motorsRegNoField] = $secondStepData[$motorsRegNoField];
+                                } else {
+                                    $firstStepDataForMotorsRegNo[$motorsRegNoField] = null;
+                                }
                             }
                         }
 
-                        if (count($firstStepDataForMotorsRegNo)) {
+                        if (!empty($firstStepDataForMotorsRegNo)) {
                             $firstStepDataForMotorsRegNo['first_step_ordered_fields'] = implode(',', array_keys($firstStepDataForMotorsRegNo));
                             $firstStepDataForMotorsRegNo = $firstStepDataForMotorsRegNo + $this->getStepSessionData('first');
                             $this->setStepSessionData($firstStepDataForMotorsRegNo, 'first');

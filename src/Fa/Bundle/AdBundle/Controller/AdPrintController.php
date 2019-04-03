@@ -51,6 +51,7 @@ class AdPrintController extends CoreController
 
         $count = $this->getRepository('FaAdBundle:AdPrint')->getAdPrintQueryBuilder($searchParam, $this->container)
             ->select('COUNT('.AdPrintRepository::ALIAS.'.id)')
+            ->andWhere(AdRepository::ALIAS.'.is_blocked_ad=0')
             ->getQuery()->getSingleScalarResult();
 
         return new JsonResponse(array('count' => $count));
@@ -73,13 +74,14 @@ class AdPrintController extends CoreController
         $searchParam   = $request->query->all();
         $printAdArray  = array();
         $buildResponse = $this->get('fa_ad.print.api.response_build');
-        $limit         = ((isset($searchParam['Limit']) && $searchParam['Limit'] <= 100) ? $searchParam['Limit'] : 100);
-        $page          = ((isset($searchParam['Page']) && $searchParam['Page'] > 0) ? $searchParam['Page'] : 1);
+        $limit         = ((isset($searchParam['Limit']) && $searchParam['Limit'] <= 100) ? intval($searchParam['Limit']) : 100);
+        $page          = ((isset($searchParam['Page']) && $searchParam['Page'] > 0) ? intval($searchParam['Page']) : 1);
         $offset        = ($page - 1) * $limit;
         $em            = $this->getEntityManager();
 
         $adPrintResult = $this->getRepository('FaAdBundle:AdPrint')->getAdPrintQueryBuilder($searchParam, $this->container)
             ->select(AdPrintRepository::ALIAS, AdRepository::ALIAS, PrintEditionRepository::ALIAS, CategoryRepository::ALIAS)
+            ->andWhere(AdRepository::ALIAS.'.is_blocked_ad=0')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->getQuery()
@@ -122,7 +124,7 @@ class AdPrintController extends CoreController
             ->getQuery()->getSingleScalarResult();
         
         $printApiArray = array(
-            'CurrentPage' => $page,
+            'CurrentPage' => (int) $page,
             'TotalPages'  => ceil($count / $limit),
             'Adverts'     => $printAdArray,
         );

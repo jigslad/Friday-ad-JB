@@ -205,7 +205,7 @@ class AdImageController extends CoreController
                             $isAdminUser = $this->isAdminLoggedIn() ? true : false;
                             $this->getRepository('FaAdBundle:AdImage')->saveImage($adImage, $this->container, $isAdminUser);
                         } else {
-                            $error = $form->getErrorsAsString();
+                            $error = $form->getErrors(true, false);
                         }
                     } catch (\Exception $e) {
                         $error = $e->getMessage();

@@ -198,7 +198,7 @@ class AdEditType extends AdPostType
         }
 
         // fill ad object from moderation
-        if (count($this->moderationValue) > 0 && isset($this->moderationValue['ad'][0])) {
+        if (!empty($this->moderationValue)  && isset($this->moderationValue['ad'][0])) {
             $ad = $this->em->getRepository('FaAdBundle:Ad')->setObjectFromModerationData($this->moderationValue['ad'][0]);
         }
 

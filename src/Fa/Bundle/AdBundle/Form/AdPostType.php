@@ -180,7 +180,7 @@ class AdPostType extends AbstractType
 
             // Edit ad
             $verticalObj = $verticalObj ? $verticalObj : $this->getVerticalObject($ad);
-            if ($verticalObj && count($this->moderationValue) > 0 && isset($this->moderationValue['dimensions'][0])) {
+            if ($verticalObj && !empty($this->moderationValue) && isset($this->moderationValue['dimensions'][0])) {
                 $verticalObj = $this->getVerticalRepository()->setObjectFromModerationData($this->moderationValue['dimensions'][0]);
             }
 
@@ -881,9 +881,9 @@ class AdPostType extends AbstractType
 
         // Edit ad
         if ($ad && $ad->getId()) {
-            if ($ad->getAdLocations() && count($ad->getAdLocations())) {
+            if ($ad->getAdLocations() && !empty($ad->getAdLocations())) {
                 foreach ($ad->getAdLocations() as $key => $adLocation) {
-                    if (count($this->moderationValue) > 0 && isset($this->moderationValue['locations'][$key])) {
+                    if (!empty($this->moderationValue)  && isset($this->moderationValue['locations'][$key])) {
                         $adLocation = $this->em->getRepository('FaAdBundle:AdLocation')->setObjectFromModerationData($this->moderationValue['locations'][$key], $ad->getId());
                     }
                     

@@ -1650,7 +1650,7 @@ class MessageRepository extends EntityRepository
 
             $objMessage = $query->getQuery()->getOneOrNullResult();
 
-            if ($objMessage && count($objMessage) > 0) {
+            if (!empty($objMessage)) {
                 if ($objMessage->getOneclickenqReply() == 'No' || $objMessage->getOneclickenqReply() == null) {
                     return true;
                 } else {

@@ -136,7 +136,13 @@ class UserPackageRepository extends EntityRepository
                     $userPackage->setExpiresAt(CommonManager::getTimeFromDuration($package->getDuration(), time(), '+'));
                 }
             }
-
+            
+            if ($expired==1) {
+                $userPackage->setIsAutoRenew(1);
+            } else {
+                $userPackage->setIsAutoRenew(0);
+            }
+            
             if ($remark == 'package-renew-thourgh-recurring') {
                 $userPackage->setRenewedAt(time());
                 $userPackage->setIsRenewalMailSent(1);

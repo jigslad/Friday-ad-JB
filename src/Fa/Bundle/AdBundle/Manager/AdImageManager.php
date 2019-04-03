@@ -434,7 +434,7 @@ class AdImageManager
                     $key = $image->getPath().'/'.$image->getAd()->getId().'_'.$image->getHash().$size.'.jpg';
                 }
 
-                if ($this->container->getParameter('fa.aws_bucket') == 'friday-ad') {
+                if ($this->container->getParameter('fa.aws_bucket') == $this->container->getParameter('fa.aws_bucket_compare')) {
                     $result = $client->putObject(array(
                       'Bucket'     => $this->container->getParameter('fa.aws_bucket'),
                       'Key'        => $key,

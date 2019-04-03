@@ -255,7 +255,7 @@ class AdMessageController extends CoreController
                 $fullConversation = $this->getRepository('FaMessageBundle:Message')->getFullconversation($replyId, $loggedinUser->getId());
                 $messagesHtml = $this->renderView('FaMessageBundle:AdMessage:showReplyMessage.html.twig', array('fullConversation' => $fullConversation));
             } else {
-                $error = $form->getErrorsAsString();
+                $error = $form->getErrors(true, false);
             }
 
             return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg, 'newReplyId' => $newReplyId, 'messagesHtml' => $messagesHtml));
