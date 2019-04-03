@@ -239,11 +239,18 @@
 	$('.parent_newsletter').on('click', function() {
 		var parNewsId = $(this).val();
 		if($(this).is( ":checked" )) {
-			$('.child_newsletter_'+parNewsId).parent('span').addClass('checked');
-		} else {
-			$('.child_newsletter_'+parNewsId).parent('span').removeClass('checked');
-		}
-		
+            $('.child_newsletter_'+parNewsId).parent('span').addClass('checked');
+            $('.child_newsletter_'+parNewsId).each(function(){
+                    var id = $(this).attr('id');
+                    $('#'+id).attr('checked', 'checked');
+            });
+        } else {
+                $('.child_newsletter_'+parNewsId).parent('span').removeClass('checked');
+                $('.child_newsletter_'+parNewsId).each(function(){
+                        var id = $(this).attr('id');
+                        $('#'+id).removeAttr('checked');
+                });
+        }
 	})
     function newsletterUpdate(e) {
         var clickedElement = $(e).attr('id');
