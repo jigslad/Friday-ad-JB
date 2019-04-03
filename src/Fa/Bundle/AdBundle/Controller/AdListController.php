@@ -681,7 +681,7 @@ class AdListController extends CoreController
             // profile categories other than Services & Adults
             if (!in_array($rootCategoryId, array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
                 $shopParameters = $this->getShopUserBySearchCriteria($data, $request);
-                if (count($shopParameters)) {
+                if (!empty($shopParameters)) {
                     $parameters = $parameters + $shopParameters;
                 }
             }
@@ -689,7 +689,7 @@ class AdListController extends CoreController
             if ($rootCategoryId) {
                 if (in_array($rootCategoryId, array(CategoryRepository::ADULT_ID, CategoryRepository::SERVICES_ID))) {
                     $shopBusinessParameters = $this->getBusinessUserBySearchCriteria($data, $request);
-                    if (count($shopBusinessParameters)) {
+                    if (!empty($shopBusinessParameters)) {
                         $parameters = $parameters + $shopBusinessParameters;
                     }
                 }
@@ -2193,17 +2193,26 @@ class AdListController extends CoreController
                 $businessExposureMiles = $this->getRepository('FaPromotionBundle:Package')->getShopPackageProfileExposureUpsellByCategory($data['search']['item__category_id'], $this->container);
             }
         }
+        
+        
 
         $businessExposureUserDetails = array();
         $topBusiness = $this->getRepository('FaCoreBundle:ConfigRule')->getTopBusiness($data['search']['item__category_id'], $this->container);
         $viewedBusinessExposureUserIds = array_filter(explode(',', $request->cookies->get('business_exposure_user_ids_'.$rootCategoryId)));
 
         if ($topBusiness) {
-            $businessExposureUserDetails = $this->getRepository('FaUserBundle:User')->getTopbusinessUserDetailForAdList($topBusiness, $this->container);
-            $viewedBusinessExposureUserIds[] = !empty($businessExposureUserDetails) ? $businessExposureUserDetails[0]['user_id']:'';
+            $businessExposureTopUser = $this->getRepository('FaUserBundle:User')->getTopbusinessUserDetailForAdList($topBusiness, $this->container);           
+            $businessExposureTopUserAds = $this->getProfileExposureUserAds($businessExposureTopUser[0]['user_id'], $data);
+            $businessExposureUserDetails[] = array(
+                'businessExposureUserAds' => $businessExposureTopUserAds,
+                'businessUserId'          => $businessExposureTopUser[0]['user_id'],
+                'businessUserDetail'      => $this->getRepository('FaUserBundle:User')->getProfileExposureUserDetailForAdList($businessExposureTopUser[0]['user_id'], $this->container),
+            );
+            $viewedBusinessExposureUserIds[] = !empty($businessExposureTopUser) ? $businessExposureTopUser[0]['user_id']:'';
         }
+       
         $businessExposureUsers       = array();
-        if (count($businessExposureMiles)) {
+        if (!empty($businessExposureMiles)) {
             foreach ($businessExposureMiles as $businessExposureMile) {
                 foreach ($this->getBusinessExposureUser($data, $businessExposureMile, $viewedBusinessExposureUserIds) as $businessExposureUser) {
                     $businessExposureUsers[] = $businessExposureUser;
@@ -2211,7 +2220,7 @@ class AdListController extends CoreController
                 }
             }
 
-            if (!count($businessExposureUsers)) {
+            if (empty($businessExposureUsers)) {
                 $viewedBusinessExposureUserIds = array();
                 foreach ($businessExposureMiles as $businessExposureMile) {
                     foreach ($this->getBusinessExposureUser($data, $businessExposureMile, array()) as $businessExposureUser) {
@@ -2220,33 +2229,40 @@ class AdListController extends CoreController
                     }
                 }
             }
-
+           
             $response = new Response();
             $response->headers->setCookie(new Cookie('business_exposure_user_ids_'.$rootCategoryId, implode(',', $viewedBusinessExposureUserIds), CommonManager::getTimeStampFromEndDate(date('Y-m-d'))));
             $response->sendHeaders();
 
-            if (count($businessExposureUsers)) {
+            if (!empty($businessExposureUsers)) {
                 shuffle($businessExposureUsers);
                 $businessPageLimit = $this->getRepository('FaCoreBundle:ConfigRule')->getBusinessPageSlots($categoryId, $this->container);
                 for ($i = 0; $i < $businessPageLimit; $i++) {
                     if (isset($businessExposureUsers[$i])) {
+                        
                         $businessExposureUser = $businessExposureUsers[$i];
-                        $businessExposureUserDetails[] = array(
+                        $businessExposureUserAds = $this->getProfileExposureUserAds($businessExposureUser[UserShopDetailSolrFieldMapping::ID], $data);
+                        /*$businessExposureUserDetails[] = array(
                             'user_id' => $businessExposureUser[UserShopDetailSolrFieldMapping::ID],
                             'company_welcome_message' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::COMPANY_WELCOME_MESSAGE]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::COMPANY_WELCOME_MESSAGE] : null),
                             'about_us' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::ABOUT_US]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::ABOUT_US] : null),
                             'company_logo' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH] : null),
                             'status_id' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID] : null),
                             'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
+                        );*/
+                        $businessExposureUserDetails[] = array(
+                            'businessExposureUserAds' => $businessExposureUserAds,
+                            'businessUserId'          => $businessExposureUser[UserShopDetailSolrFieldMapping::ID],
+                            'businessUserDetail'      => $this->getRepository('FaUserBundle:User')->getProfileExposureUserDetailForAdList($businessExposureUser[UserShopDetailSolrFieldMapping::ID], $this->container),                          
                         );
                     }
-                }
+                }                
                 if ($businessExposureUserDetails) {
                     $businessExposureUserDetails = array_map("unserialize", array_unique(array_map("serialize", $businessExposureUserDetails)));
                 }
             }
         }
-
+        
         $parameters['businessExposureUsersDetails'] = $businessExposureUserDetails;
 
         return $parameters;
