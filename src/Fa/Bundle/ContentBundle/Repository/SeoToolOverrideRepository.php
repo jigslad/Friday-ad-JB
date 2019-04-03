@@ -218,6 +218,9 @@ class SeoToolOverrideRepository extends EntityRepository
            
                 if (count($catOrDimension)) {
                     foreach ($catOrDimension as $catOrDimensionKey=>$catOrDimensionValue) {
+                        if(!isset($indexableDimesionsArray[$catOrDimensionKey])){
+                            continue;
+                        }
                         $exacturl = str_replace($indexableDimesionsArray[$catOrDimensionKey], $catOrDimensionValue, $url);
                         $objSeoToolOverride = $this->getSeoToolOverrideObj($exacturl, $container);
                         if ($objSeoToolOverride!='') {
