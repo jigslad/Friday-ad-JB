@@ -33,7 +33,7 @@
                 Sponsored Ad
             </div>
             <div class="mt5 list-title"> 
-              	<h3 onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">{{ recommendedSlot['title'] }}</h3>
+              	<h3 style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">{{ recommendedSlot['title'] }}</h3>
                 {% if recommendedSlot['display_url'] !='' %}
                 	<h5 class="mt5 list-display-url show-for-large-up"><a href="{{ recommendedSlot['display_url'] }}" style="color: #a8dc28;">{{ recommendedSlot['display_url'] }}</a></h5>
                 {% endif %} 
@@ -43,7 +43,7 @@
                     {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
                 </div>
                 {% if recommendedSlot['cta_text'] !='' %}
-                <div class="outer-btn"><div class="button secondary-btn-1 right-block expand hide-for-small-only" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">{{ recommendedSlot['cta_text'] }}<span  class="btn-right-arrow"><i class="fi-arrow-right"></i></span></div></div>
+                <div class="outer-btn"><div class="button secondary-btn-1 right-block expand hide-for-small-only"  style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">{{ recommendedSlot['cta_text'] }}<span  class="btn-right-arrow"><i class="fi-arrow-right"></i></span></div></div>
            		{% endif %}
            </div>                      
         </div>
@@ -73,10 +73,10 @@
                             {% endif %}
                     </div>
                     <div class="small-14  medium-19 large-19 columns t-s-subblock-right content-cls-recommend-{{recommendedSlotCnt}}">
-                        <div class="list-title show-title-r-ad-det" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');"> {{ recommendedSlot['title']|length > 50 ? trim_text(recommendedSlot['title'], 50)|raw ~ '...': recommendedSlot['title'] }}</div>
-                        <div class="list-title show-mob-title-r-ad-det" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>
+                        <div class="list-title show-title-r-ad-det"  style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');"> {{ recommendedSlot['title']|length > 50 ? trim_text(recommendedSlot['title'], 50)|raw ~ '...': recommendedSlot['title'] }}</div>
+                        <div class="list-title show-mob-title-r-ad-det"  style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>
                         {% if recommendedSlot['cta_text'] !='' and recommendedSlotArray|length == 2 %}
-                            <div class="outer-btn"><div class="button expand secondary-btn-1 recommended-2-slot-ad-detail-btn" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">{{ recommendedSlot['cta_text'] }}<span  class="btn-right-arrow"><i class="fi-arrow-right"></i></span></div></div>
+                            <div class="outer-btn"><div class="button expand secondary-btn-1 recommended-2-slot-ad-detail-btn"  style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">{{ recommendedSlot['cta_text'] }}<span  class="btn-right-arrow"><i class="fi-arrow-right"></i></span></div></div>
                        	{% endif %}
                     </div> 
     			</div>
@@ -114,7 +114,7 @@
                     <div class="recommendedtxt gray-text text-right sponsored-1">
                         Sponsored Ad
                     </div>
-                    <div class="mt5 list-title" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>                       
+                    <div class="mt5 list-title"  style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>                       
                 </div>
     		</div>
         </div>
@@ -132,7 +132,7 @@
                     <div class="recommendedtxt gray-text text-right sponsored-1">
                         Sponsored Ad
                     </div>
-                    <div class="mt5 list-title" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>                       
+                    <div class="mt5 list-title"  style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>                       
                 </div>
     		</div>        
         </div>    
