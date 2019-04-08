@@ -77,11 +77,13 @@ class ContactSellerController extends CoreController
                             // Create half account in case of user not logged in.
                             if (!$this->isAuth()) {
                                 $halfAccountData = array(
-                                                       'email'      => $form->get('sender_email')->getData(),
-                                                       'first_name' => $form->get('sender_first_name')->getData(),
+                                    'email'      => $form->get('sender_email')->getData(),
+                                    'first_name' => $form->get('sender_first_name')->getData(),
+                                    'email_alert' => $form->get('email_alert')->getData(),
+                                    'third_party_email_alert' => $form->get('third_party_email_alert')->getData(),
                                     '_token'     => $this->get('security.csrf.token_manager')->getToken('fa_user_half_account')->getValue()
 //                                     $this->container->get('form.csrf_provider')->generateCsrfToken('fa_user_half_account')
-                                                   );
+                                );
 
                                 $halfAccountForm = $formManager->createForm(UserHalfAccountType::class, null, array('method' => 'POST'));
                                 $halfAccountForm->submit($halfAccountData);
@@ -259,18 +261,18 @@ class ContactSellerController extends CoreController
 
                             //update email alerts
                             if ($form->get('email_alert')->getData()) {
-                                $objUser->setIsEmailAlertEnabled(1);
+                                $objSeller->setIsEmailAlertEnabled(1);
                             } else {
-                                $objUser->setIsEmailAlertEnabled(0);
+                                $objSeller->setIsEmailAlertEnabled(0);
                             }
-                            $this->getEntityManager()->persist($objUser);
-                            $this->getEntityManager()->flush($objUser);
+                            $this->getEntityManager()->persist($objSeller);
+                            $this->getEntityManager()->flush($objSeller);
 
                             //save search agent.
                             if ($form->get('search_agent')->getData()) {
-                                $this->getRepository('FaUserBundle:UserSearchAgent')->saveUserSearch($ad, $objUser, $this->container);
+                                $this->getRepository('FaUserBundle:UserSearchAgent')->saveUserSearch($ad, $objSeller, $this->container);
                             } else {
-                                $this->getRepository('FaUserBundle:UserSearchAgent')->removeUserSearch($ad, $objUser, $this->container);
+                                $this->getRepository('FaUserBundle:UserSearchAgent')->removeUserSearch($ad, $objSeller, $this->container);
                             }
                         } elseif ($request->isXmlHttpRequest()) {
                             $htmlContent = $this->renderView('FaMessageBundle:ContactSeller:ajaxContactSeller.html.twig', array('form' => $form->createView(), 'ad' => $ad, 'rootCategoryId' => $rootCategoryId, 'deadlockRetry' => $deadlockRetry));

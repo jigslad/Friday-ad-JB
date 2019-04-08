@@ -84,7 +84,7 @@ class AdModerationController extends CoreController
             $this->getEntityManager()->beginTransaction();
 
             $response = json_decode($response, true);
-            
+
             //logging the response
             $this->container->get('ad_moderate_logger')->info('Content Moderation Response ('.json_encode($response)." )");
             if (empty($response)) {
@@ -93,6 +93,8 @@ class AdModerationController extends CoreController
             }
             $returnValueArray = $this->getRepository('FaAdBundle:AdModerate')->handleModerationResult($response, $this->container);
             $this->getEntityManager()->getConnection()->commit();
+            /** Unless the transaction is committed, the data is not reaching the dotmailer hence making it a separate function*/
+            $this->getRepository('FaAdBundle:Ad')->updateToDotmailer($response, $this->container);
 
             try {
 

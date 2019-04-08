@@ -849,8 +849,18 @@ class AdRepository extends EntityRepository
 
             // set expires at
             if ($object->getStatus()->getId() == BaseEntityRepository::AD_STATUS_IN_MODERATION_ID) {
+                $expirationDays = '';
+
+                $adPackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdPackageArrayByAdId($object->getId());
                 $expirationDays = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($object->getCategory()->getId(), $container);
-                $object->setExpiresAt($this->getAdPrintExpiry($object->getId(), CommonManager::getTimeFromDuration($expirationDays.'d')));
+                if($expirationDays!='') { $expirationDays = $expirationDays.'d'; }
+                if(!empty($adPackage)) {
+                    if(!empty($adPackage[$object->getId()]) && $adPackage[$object->getId()]['duration']!='') {
+                        $expirationDays = $adPackage[$object->getId()]['duration'];
+                    }
+                }
+
+                $object->setExpiresAt($this->getAdPrintExpiry($object->getId(), CommonManager::getTimeFromDuration($expirationDays)));
             }
 
             $status = $this->_em->getRepository('FaEntityBundle:Entity')->findOneBy(array('id' => BaseEntityRepository::AD_STATUS_LIVE_ID));
@@ -878,13 +888,27 @@ class AdRepository extends EntityRepository
             $this->_em->persist($object);
             $this->_em->flush($object);
             $this->_em->getRepository('FaAdBundle:AdIpAddress')->checkAndLogIpAddress($object, $object->getModifyIp());
+
+            /** Unless the data is committed, the data is not reaching the dotmailer hence moving it out*/
             // paa touchpoint entry for newsletter & dotmailer
-            try {
+            /*try {
                 $this->_em->getRepository('FaDotMailerBundle:Dotmailer')->doTouchPointEntry($object->getUser()->getId(), $object->getId(), DotmailerRepository::TOUCH_POINT_PAA, $container);
             } catch (\Exception $e) {
                 if ($container) {
                     CommonManager::sendErrorMail($container, 'Error: Problem in touch point PAA: '.$object->getId(), $e->getMessage(), $e->getTraceAsString());
                 }
+            }*/
+        }
+    }
+
+    public function updateToDotmailer($response, $container)
+    {
+        $object = $this->findOneBy(array('id' => $response['Adref']));
+        try {
+            $this->_em->getRepository('FaDotMailerBundle:Dotmailer')->doTouchPointEntry($object->getUser()->getId(), $object->getId(), DotmailerRepository::TOUCH_POINT_PAA, $container);
+        } catch (\Exception $e) {
+            if ($container) {
+                CommonManager::sendErrorMail($container, 'Error: Problem in touch point PAA: '.$object->getId(), $e->getMessage(), $e->getTraceAsString());
             }
         }
     }
@@ -947,7 +971,7 @@ class AdRepository extends EntityRepository
                 );
             }
         }
-       
+
         //ad dimensions
         if (isset($adDetail['category_id']) && $adDetail['category_id']) {
             $dimensionArray = $this->getAdDimensionByCategoryIdAndAdId($adDetail['category_id'], $adId, $categoryPath, $adDetail, $container, $seoFlag);
@@ -1456,7 +1480,7 @@ class AdRepository extends EntityRepository
             'MANUFACTURER_ID',
             'COLOUR_ID'
         );
-        
+
         if ((isset($parentCategoryIds[0]) && (($parentCategoryIds[0] == CategoryRepository::ANIMALS_ID && isset($parentCategoryIds[2]) && $parentCategoryIds[2] != CategoryRepository::HORSES) || $parentCategoryIds[0] == CategoryRepository::ADULT_ID))) {
             $genderKey = array_search('GENDER_ID', $anchorTagFields);
             unset($anchorTagFields[$genderKey]);
@@ -1483,7 +1507,7 @@ class AdRepository extends EntityRepository
             if (isset($unitForFields[$adDetailField])) {
                 $unit = ' '.$unitForFields[$adDetailField];
             }
-        
+
             //check if it is separate field else check in meta data fields.
             if (in_array($adDetailField, $indexableFields) && defined($solrMappingField) && isset($adSolrObj[constant($solrMappingField)])) {
                 if ($repositoryName) {
@@ -2080,12 +2104,20 @@ class AdRepository extends EntityRepository
 
         if ($changeExpiresAtFlag) {
             if ($adExpiryDays) {
-                $expirationDays = $adExpiryDays;
+                $expirationDays = $adExpiryDays . 'd';
             } else {
+                $expirationDays = '';
+                $adPackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdPackageArrayByAdId($adId);
                 $expirationDays = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($object->getCategory()->getId());
+                if($expirationDays!='') { $expirationDays = $expirationDays.'d'; }
+                if(!empty($adPackage)) {
+                    if(!empty($adPackage[$adId]) && $adPackage[$adId]['duration']!='') {
+                        $expirationDays = $adPackage[$adId]['duration'];
+                    }
+                }
             }
 
-            $object->setExpiresAt($this->getAdPrintExpiry($adId, CommonManager::getTimeFromDuration($expirationDays.'d')));
+            $object->setExpiresAt($this->getAdPrintExpiry($adId, CommonManager::getTimeFromDuration($expirationDays)));
         }
 
         if ($changeRenewedAtFlag) {
@@ -2151,7 +2183,23 @@ class AdRepository extends EntityRepository
             // check user has use privacy phone number feature.
             if ($adUser && $adUser->getPhone() && $adUser->getIsPrivatePhoneNumber()) {
                 $yacManager = $container->get('fa.yac.manager');
-                $expiryDate = $ad->getExpiresAt();
+                $categoryId = $ad->getCategory()->getId();
+                $adExpiryDays = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $container);
+
+                $getActivePackage = array();
+                $getActivePackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getActiveAdPackage($adId);
+                if(!empty($getActivePackage)) {
+                    $selectedPackageObj = $this->_em->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $getActivePackage->getPackage()->getId()));
+                    if ($selectedPackageObj->getDuration()) {
+                        $getLastCharacter = substr($selectedPackageObj->getDuration(),-1);
+                        $noInDuration = substr($selectedPackageObj->getDuration(),0, -1);
+                        if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                        elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                        else { $adExpiryDays = $selectedPackageObj->getDuration(); }
+                    }
+                    $expiryDate = strtotime("+$adExpiryDays days");
+                    //$expiryDate = $ad->getExpiresAt();
+                }
                 $expiryDate = $this->_em->getRepository('FaAdBundle:Ad')->getYacExpiry($ad->getId(), $expiryDate);
                 $yacManager->init();
                 // if no privacy number assigned then assigned new one else extend.
@@ -2791,7 +2839,7 @@ class AdRepository extends EntityRepository
             $solr->commit(true);
         }
     }
-    
+
     /**
      * Update ad from solr by user id.
      *
@@ -2805,9 +2853,9 @@ class AdRepository extends EntityRepository
             if (!$solrClient->ping()) {
                 return false;
             }
-            
+
             $solr = $solrClient->connect();
-            
+
             $adSolrIndex = $container->get('fa.ad.solrindex');
             $idsFound = array();
             $idsUpdatedFound = array();
@@ -2825,7 +2873,7 @@ class AdRepository extends EntityRepository
         }
     }
 
-    
+
     /**
      * Get main image thumb url from ad.
      *
@@ -3122,7 +3170,7 @@ class AdRepository extends EntityRepository
                 $editAdURL       = $container->get('router')->generate('ad_edit', array('id' => $ad->getId()), true);
                 $markAsSoldURL   = $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true);
 
-                
+
                 $adViewUrl       = $container->get('fa_ad.manager.ad_routing')->getDetailUrl($ad);
                 $viewCount       = $this->_em->getRepository('FaAdBundle:AdViewCounter')->getAdViewCounterArrayByAdId(array($ad->getId()));
                 $adEnquries      = $this->_em->getRepository('FaMessageBundle:Message')->getAdTotalMessageArrayByAdId($user->getId(), $ad->getId());
@@ -3229,7 +3277,7 @@ class AdRepository extends EntityRepository
             foreach ($transactionsObj as $transactionObj) {
                 if ($transactionObj->getValue()) {
                     $value = unserialize($transactionObj->getValue());
-                    
+
                     if (isset($value['package'])) {
                         $keys = array_keys($value['package']);
                         if (isset($keys[0])) {
@@ -3237,7 +3285,7 @@ class AdRepository extends EntityRepository
                         }
                     }
                 }
-                
+
                 if ($transactionObj->getAmount() || (isset($value['user_credit_id']) && $value['user_credit_id'] != '') || (isset($value['discount_values']))) {
                     if ($transactionObj && $transactionObj->getAd()) {
                         $ad = $transactionObj->getAd();
@@ -3266,26 +3314,26 @@ class AdRepository extends EntityRepository
                         $parameters['text_ad_title']   = $ad->getTitle();
                         $parameters['text_adref']      = $ad->getId();
 
-                        
-                        
+
+
                         // generate other package specific parameters
                         if ($packageId) {
                             $packageObj = $this->_em->getRepository('FaPromotionBundle:Package')->find($packageId);
                             if ($packageObj) {
                                 $parameters['text_package_name'] = $packageObj->getTitle();
-                                
+
                                 if (isset($value['package'][$packageId]) && isset($value['package'][$packageId]['price'])) {
                                     $parameters['text_package_price'] = CommonManager::formatCurrency($value['package'][$packageId]['price'], $container);
                                 }
                                 $packagePrice = (isset($value['package'][$packageId]['price']))?$value['package'][$packageId]['price']:0;
-                                
+
                                 if (isset($value['package'][$packageId]['price']) && $value['package'][$packageId]['price'] > 0  && !isset($value['user_credit_id']) && !isset($value['discount_values'])) {
                                     $packagePrice = $value['package'][$packageId]['price'];
                                     $parameters['text_package_cost_with_vat']    = CommonManager::formatCurrency($packagePrice, $container);
                                     $parameters['text_package_cost_without_vat'] = CommonManager::formatCurrency(($packagePrice/(1+(20/100))), $container);
                                     $parameters['text_package_cost_vat']         = CommonManager::formatCurrency(($packagePrice - ($packagePrice/(1+(20/100)))), $container);
                                 }
-                                
+
                                 //Adding variable if credits are used
                                 if (isset($value['user_credit_id'])) {
                                     $parameters['text_credit_applied'] = '-100%';
@@ -3294,14 +3342,14 @@ class AdRepository extends EntityRepository
                                     $parameters['text_package_cost_vat']      = CommonManager::formatCurrency(0, $container);
                                     $parameters['text_package_price'] 		  = CommonManager::formatCurrency(0, $container);
                                 }
-                                
+
                                 //Adding variable if promotional code is applied
                                 if (isset($value['discount_values'])) {
                                     $textPackageWithoutVat = ($packagePrice/(1+(20/100))) - $value['discount_values']['discount_given'];
                                     $totalAmount = $packagePrice - $value['discount_values']['discount_given'];
                                     $totalVat = ($totalAmount - ($totalAmount/(1+(20/100))));
                                     $totalPackageCost = $totalAmount - $totalVat;
-                                    
+
                                     $parameters['text_original_cost'] = CommonManager::formatCurrency($packagePrice, $container);
                                     $parameters['text_promotional_code_applied'] = '-'.(isset($value['discount_values']['discount_value']) && $value['discount_values']['discount_type'] == '2'?CommonManager::formatCurrency($value['discount_values']['discount_value'], $container):(isset($value['discount_values']['discount_value']) && $value['discount_values']['discount_type'] == '1'?$value['discount_values']['discount_value'].'%':''));
                                     $parameters['text_package_cost_with_vat'] = CommonManager::formatCurrency($packagePrice - $value['discount_values']['discount_given'], $container);
@@ -3379,7 +3427,7 @@ class AdRepository extends EntityRepository
                 }
             }
         }
-    
+
         return $keywordSearch;
     }
 
@@ -4118,7 +4166,7 @@ class AdRepository extends EntityRepository
                 'url_ad_renew_early_1_day' => $container->get('router')->generate('ad_promote', array('type' => 'renew', 'adId' => $ad->getId()), true),
                 'url_ad_view'               => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
                 'url_ad_preview'            => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
-                
+
             );
             //send push notifications
             CommonManager::sendPushNotificationMessage('Your ad expires tomorrow. Repost it today!', 'Expires-tomorrow', $container->get('router')->generate('ad_promote', array('type' => 'renew', 'adId' => $ad->getId()), true), $user, $container);
@@ -4343,7 +4391,7 @@ class AdRepository extends EntityRepository
             $container->get('fa.mail.manager')->send($userObj->getEmail(), 'add_a_photo', $parameters, CommonManager::getCurrentCulture($container));
         }
     }
-    
+
     /**
      * get User Last Live Basic Advert
      *
@@ -4353,7 +4401,7 @@ class AdRepository extends EntityRepository
     public function getUserLastBasicLiveAdvert($userId, $adId, $categoryId, $container)
     {
         $catIdArray = $this->_em->getRepository('FaEntityBundle:Category')->getNestedChildrenIdsByCategoryId($categoryId, $container);
-        
+
         $qb = $this->createQueryBuilder(self::ALIAS)
         ->select(self::ALIAS.'.id as adId', self::ALIAS.'.source', PackageRepository::ALIAS.'.id as packageId', PackageRepository::ALIAS.'.price as package_price', CategoryRepository::ALIAS.'.id as categoryId')
         ->innerJoin('FaAdBundle:AdUserPackage', AdUserPackageRepository::ALIAS, 'WITH', self::ALIAS.'.id = '.AdUserPackageRepository::ALIAS.'.ad_id')
@@ -4373,7 +4421,7 @@ class AdRepository extends EntityRepository
         ->setMaxResults(1);
         return $qb->getQuery()->getOneOrNullResult();
     }
-    
+
     /**
      * get Package Id if featured top upsell exist
      *
@@ -4394,11 +4442,11 @@ class AdRepository extends EntityRepository
                     break;
                 }
             }
-            
+
             return $featuredPackageId;
         }
     }
-    
+
     /**
      * get category object if is_featured_upgrade is enabled
      *
@@ -4416,7 +4464,7 @@ class AdRepository extends EntityRepository
         }
         return $categObj;
     }
-    
+
     /**
      * Get user all adverts
      *
@@ -4436,10 +4484,10 @@ class AdRepository extends EntityRepository
         ->andWhere(self::ALIAS.'.user = :userId')
         ->setParameter('userId', $userId)
         ->orderBy(self::ALIAS.'.id', 'DESC');
-        
+
         return $qb->getQuery()->getResult();
     }
-    
+
     /**
      * Get ad information that have basic package.
      *
@@ -4467,7 +4515,7 @@ class AdRepository extends EntityRepository
                         $userRolesArray[] = array_search($userRole, $systemUserRoles);
                         $locationGroupIds = $this->_em->getRepository('FaAdBundle:AdLocation')->getLocationGroupIdForAd($getUserLastBasicAdvert['adId'], true);
                         $packages         = $this->_em->getRepository('FaPromotionBundle:PackageRule')->getActivePackagesByCategoryId($getUserLastBasicAdvert['categoryId'], $locationGroupIds, $userRolesArray, array(), $container);
-                        
+
                         //loop through all show packages
                         foreach ($packages as $package) {
                             $availablePackageIds[] = $package->getPackage()->getId();
@@ -4481,7 +4529,7 @@ class AdRepository extends EntityRepository
                             if (!empty($getNextFeaturedTopPackageId)) {
                                 $getSearchRootCategory = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($rootCategoryid, $container);
                                 $getFeaturedAdRootCategory = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($getUserLastBasicAdvert['categoryId'], $container);
-                                
+
                                 $solrAd = [];
                                 $featuredAd['query_filters']['item']['id']        = $getUserLastBasicAdvert['adId'];
                                 $featuredAd['query_filters']['item']['status_id'] = BaseEntityRepository::AD_STATUS_LIVE_ID;
@@ -4494,10 +4542,10 @@ class AdRepository extends EntityRepository
                 }
             }
         }
-        
+
         return $getBasicAdResult;
     }
-    
+
     /**
      * Delete ad from solr by Advert id.
      *
@@ -4511,9 +4559,9 @@ class AdRepository extends EntityRepository
             if (!$solrClient->ping()) {
                 return false;
             }
-            
+
             $solr = $solrClient->connect();
-            
+
             $solr->deleteByQuery('id:"'.$adId.'"');
             $solr->commit(true);
         }
@@ -4533,11 +4581,11 @@ class AdRepository extends EntityRepository
             if (!$solrClient->ping()) {
                 return false;
             }
-            
+
             $solr = $solrClient->connect();
             $adSolrIndex = $container->get('fa.ad.solrindex');
             $adSolrIndex->update($solrClient, $ad, $container, true);
-            
+
             $solr->commit(true);
         }
     }
@@ -4587,7 +4635,7 @@ class AdRepository extends EntityRepository
                 'text_lowest_category_package_price' => $text_lowest_category_package_price,
                 'url_ad_upsell' => $container->get('router')->generate('ad_promote', array('type' => 'promote', 'adId' => $ad->getId()), true),
             );
-            
+
             if (!empty($ads)) {
                 $parameters = array(
                     'user_first_name' => $user->getFirstName()?$user->getFirstName():$user->getUserName(),
@@ -4640,18 +4688,18 @@ class AdRepository extends EntityRepository
             $explodetownIds = explode(',',$townIds);
             $townId = $explodetownIds[0];
         }
-        
+
         $distance = isset($searchParams['search']['item__distance'])?$searchParams['search']['item__distance']:-1;
         if ($townId) {
             $location = $this->_em->getRepository('FaEntityBundle:Location')->find($townId);
             $distance = ($distance)?$distance:-1;
-            
+
             if (!empty($location)) {
                 $query = $this->createQueryBuilder(self::ALIAS)
                 ->select(LocationRepository::ALIAS.'.name,( 3959 * ACOS( COS( RADIANS('.$location->getLatitude().') ) * COS( RADIANS( '.LocationRepository::ALIAS.'.latitude ) ) * COS( RADIANS( '.LocationRepository::ALIAS.'.longitude ) - RADIANS('.$location->getLongitude().') ) + SIN( RADIANS('.$location->getLatitude().') ) * SIN( RADIANS( '.LocationRepository::ALIAS.'.latitude ) ) ) ) AS distance, IDENTITY('.AdLocationRepository::ALIAS.'.location_town) as town_id, GROUP_CONCAT('.self::ALIAS.'.id, \',\') as ids, COUNT('.self::ALIAS.'.id) as cnt')
                 ->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS)
                 ->leftJoin(AdLocationRepository::ALIAS.'.location_town', LocationRepository::ALIAS);
-    
+
                 if (isset($searchParams['search']) && isset($searchParams['search']['keywords'])) {
                     $query->andWhere('('.self::ALIAS.'.title like \'%'.$searchParams['search']['keywords'].'%\' or '.self::ALIAS.'.description like \'%'.$searchParams['search']['keywords'].'%\')');
                 }
@@ -4662,15 +4710,15 @@ class AdRepository extends EntityRepository
                 $query->andWhere('IDENTITY('.AdLocationRepository::ALIAS.'.location_town) IS NOT NULL');
                 $query->andWhere('IDENTITY('.self::ALIAS.'.status) ='.BaseEntityRepository::AD_STATUS_LIVE_ID);
                 $query->andWhere(self::ALIAS.'.is_blocked_ad=0');
-                $query->andWhere(AdLocationRepository::ALIAS.'.location_town not in ('.$townId.')'); 
+                $query->andWhere(AdLocationRepository::ALIAS.'.location_town not in ('.$townId.')');
                 $query->addGroupBy(AdLocationRepository::ALIAS.'.location_town');
                 $query->addOrderBy('distance', 'asc');
                 //$query->setMaxResults(4);
-                
+
                 $arrResources = $query->getQuery()->getArrayResult();
             }
         }
-       
+
         return $arrResources;
     }
 }
