@@ -57,10 +57,11 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
      *
      * @param object $container Container identifier.
      * @param string $column
+     * @param bool   $orderGT0
      *
      * @return Doctrine\ORM\QueryBuilder The query builder
      */
-    public function getKeyValueArray($container = null, $column = 'label')
+    public function getKeyValueArray($container = null, $column = 'label', $orderGT0 = true)
     {
         if ($container) {
             $tableName   = $this->getTableName();
@@ -68,15 +69,17 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 
         $newsletterTypesArray = array();
-        $newsletterTypes      = $this->getBaseQueryBuilder()
+        $newsletterTypes      = $this->getBaseQueryBuilder();
+        if ($orderGT0) {
             /* FFR-2855 : added new newsletter types but these should not be visible to end users, hence updated their 'ord' to 0 and querying here accordingly */
-            ->where(self::ALIAS.'.ord > 0')
-            ->orderBy(self::ALIAS.'.ord', 'ASC')
+            $newsletterTypes->where(self::ALIAS . '.ord > 0');
+        }
+        $newsletterTypes = $newsletterTypes->orderBy(self::ALIAS.'.ord', 'ASC')
             ->getQuery()->getResult();
 
         if ($newsletterTypes && count($newsletterTypes)) {
@@ -131,7 +134,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 
@@ -170,7 +173,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 
@@ -192,7 +195,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
 
         return $newsletterTypesArray;
     }
-    
+
     /**
      * Get key value array for main category.
      *
@@ -206,28 +209,28 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
             $tableName   = $this->getTableName();
             $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$mainCatId;
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
-            
+
             if ($cachedValue !== false) {
                 //return $cachedValue;
             }
         }
-        
+
         $newsletterTypesArray = array();
         $newsletterTypes      = $this->getBaseQueryBuilder()
         ->andWhere(self::ALIAS.'.parent_id = '.$mainCatId)
         ->orderBy(self::ALIAS.'.ord', 'ASC')
         ->getQuery()->getResult();
-        
+
         if ($newsletterTypes && count($newsletterTypes)) {
             foreach ($newsletterTypes as $newsletterType) {
                 $newsletterTypesArray[$newsletterType->getId()] = $newsletterType->getName();
             }
         }
-        
+
         if ($container) {
             CommonManager::setCacheVersion($container, $cacheKey, $newsletterTypesArray);
         }
-        
+
         return $newsletterTypesArray;
     }
 
@@ -246,7 +249,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                //return $cachedValue;
+                return $cachedValue;
             }
         }
 
@@ -270,8 +273,8 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
 
         return $newsletterTypesArray;
     }
-    
-    
+
+
     /**
      * Get all newsletter.
      *
@@ -285,32 +288,32 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
             $tableName   = $this->getTableName();
             $cacheKey    = $tableName.'|'.__FUNCTION__;
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
-            
+
             if ($cachedValue !== false) {
                 //return $cachedValue;
             }
         }
-        
+
         $newsletterTypesArray = array();
         $query     = $this->createQueryBuilder(self::ALIAS);
-        
+
         if(!is_null( $notConsiderId)) {
             $query->andWhere(self::ALIAS.'.id != :id')
             ->setParameter('id', $notConsiderId);
         }
         $query->orderBy(self::ALIAS.'.ord', 'ASC');
         $newsletterTypes = $query->getQuery()->getResult();
-        
+
         if ($newsletterTypes && count($newsletterTypes)) {
             foreach ($newsletterTypes as $newsletterType) {
                 $newsletterTypesArray[] = $newsletterType->getId();
             }
         }
-        
+
         if ($container) {
             CommonManager::setCacheVersion($container, $cacheKey, $newsletterTypesArray);
         }
-        
+
         return $newsletterTypesArray;
     }
 }

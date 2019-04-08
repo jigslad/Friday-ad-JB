@@ -53,7 +53,7 @@
                     <h5>{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-register')}}</h5>
                 </div>
             {% endif %}
-            
+
             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                 {{ form_row(form.first_name) }}
                 {{ form_row(form.last_name) }}
@@ -80,7 +80,7 @@
                          {{ form_row(form.contact_through_email) }}
                      </div>
                  </div>
-               
+
                 <div class="paa-role">
                   {{ form_row(form.user_roles, {'attr': {'add-br': true}}) }}
                 </div>
@@ -131,7 +131,7 @@
                 <div class="label-inline regchkbox-label" style="display:inline-flex">
                     {{ form_widget(form.is_terms_agreed) }}
                     <label class="form-control">I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a></label><br>
-                    
+
                 </div>
                 <div>{{ form_errors(attribute(form, 'is_terms_agreed')) }}</div>
                 <div class="mt20 mb20" style="color: #a4a4a4;">
@@ -139,13 +139,13 @@
                 </div>
                 {{ form_widget(form.Register, {'attr': {'class':'primary-btn-1 button expand'}}) }}
             {{ form_end(form) }}
-    
+
              <div class="reg-here show-for-small-only">
                 <h2>{{'Already have an account?'|trans({}, 'frontend-register')}}</h2>
                 <a href="{{ path('login') }}" class="secondary-btn-1 button button">{{'Log In here'|trans({}, 'frontend-register')}}</a>
             </div>
         </div>
-        
+
         <div class="login-right">
             <a href="javascript:void(0)" class="primary-btn-1 button expand reg-email-btn show-for-small-only" id="register_with_email">{{ 'Register with email'|trans({}, 'frontend-register') }}</a>
 
@@ -218,7 +218,32 @@
         $("#user_registration_show_password").click(function() {
             showHidePassword();
         });
-        
+
+        $("#user_registration_is_third_party_email_alert_enabled").change(function () {
+            if ($('#user_registration_is_third_party_email_alert_enabled').parent().hasClass('checked')) {
+                $('#user_registration_is_third_party_email_alert_enabled').attr('checked', true);
+            } else {
+                $('#user_registration_is_third_party_email_alert_enabled').attr('checked', false);
+            }
+
+            if ($('#user_registration_is_third_party_email_alert_enabled').attr('checked')) {
+                $('#user_registration_is_email_alert_enabled').attr('checked', $('#user_registration_is_third_party_email_alert_enabled').attr('checked'));
+                $('#user_registration_is_email_alert_enabled').parent().addClass('checked');
+            }
+        });
+
+        $("#user_registration_is_email_alert_enabled").change(function(){
+            if ($('#user_registration_is_email_alert_enabled').parent().hasClass('checked')) {
+                $('#user_registration_is_email_alert_enabled').attr('checked', true);
+            } else {
+                $('#user_registration_is_email_alert_enabled').attr('checked', false);
+            }
+            if (!$('#user_registration_is_email_alert_enabled').attr('checked')) {
+                $('#user_registration_is_third_party_email_alert_enabled').attr('checked', false);
+                $('#user_registration_is_third_party_email_alert_enabled').parent().removeClass('checked');
+            }
+        });
+
         {% if  app.request.getMethod() == 'POST' or socialSiteName is defined %}
             if (screen.width < 700) {
                 $('.login-right').hide();
@@ -233,7 +258,7 @@
                 $('#user_registration_password').attr('type', 'password');
             }
         }
-        
+
         function showHideBusinessSellerFields() {
             if ($("input[name='user_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER" || $("input[name='user_registration[user_roles]']:checked").val() == "ROLE_NETSUITE_SUBSCRIPTION") {
                 $('#logo_label').html("{{businessLogoLabel}}");
@@ -318,7 +343,7 @@
         $('#profile_change_btn_with_opt').hide();
         $('#profile_change_btn_without_opt').show();
         $('#filelist').html('');
-        
+
         if (response.error.length) {
             $('#filelist').html(decorateMessage(response.error, 'alert'));
         } else if (response.successMsg) {

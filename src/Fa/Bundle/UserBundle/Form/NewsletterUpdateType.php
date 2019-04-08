@@ -38,28 +38,28 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
  */
 class NewsletterUpdateType extends AbstractType
 {
-    
+
     /**
      * Container service class object.
      *
      * @var object
      */
     private $container;
-    
+
     /**
      * Entity manager.
      *
      * @var object
      */
     private $em;
-    
+
     /**
      * Secutiry encoder.
      *
      * @var object
      */
     private $security_encoder;
-    
+
     /**
      * Constructor.
      *
@@ -73,7 +73,7 @@ class NewsletterUpdateType extends AbstractType
         $this->security_encoder  = $security_encoder;
         $this->container         = $container;
     }
-    
+
     /**
      * Build form.
      *
@@ -95,7 +95,7 @@ class NewsletterUpdateType extends AbstractType
         ->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmitData'))
         ->addEventListener(FormEvents::SUBMIT, array($this, 'onSubmit'));
     }
-    
+
     /**
      * Callbak method for PRE_SET_DATA form event.
      *
@@ -105,13 +105,13 @@ class NewsletterUpdateType extends AbstractType
     {
         $dotmailer = $event->getData();
         $form      = $event->getForm();
-        
+
         $birthDateVal = [];
         $getBirthDate = $dotmailer->getDateOfBirth();
         if( !empty($getBirthDate) ) {
             $birthDateVal = explode("-", $getBirthDate);
         }
-        
+
         $fieldOptions = array(
             /** @Ignore */
             'label'    => false,
@@ -119,15 +119,15 @@ class NewsletterUpdateType extends AbstractType
             'multiple' => true,
             'choices'  => array_flip($this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getKeyValueArray($this->container)),
         );
-        
+
         if ($dotmailer && $dotmailer->getDotmailerNewsletterTypeId() && !$dotmailer->getDotmailerNewsletterUnsubscribe()) {
             $fieldOptions['data'] = $dotmailer->getDotmailerNewsletterTypeId();
         }
-        
+
         $form->add('dotmailer_newsletter_type_id', ChoiceType::class, $fieldOptions);
         $form->add('email', TextType::class, ['label' => 'Email', 'data' => $dotmailer->getEmail(), 'attr' => ['class' => 'textcounter', 'readonly' => true]]);
         $form->add('email_dis', TextType::class, ['label' => false, 'mapped' => false,'data' => $dotmailer->getEmail(), 'attr' => ['class' => 'textcounter', 'readonly' => true]]);
-        
+
         $form->add(
             'day',
             ChoiceType::class,
@@ -167,9 +167,9 @@ class NewsletterUpdateType extends AbstractType
                         'data' => (isset($birthDateVal[2]) && $birthDateVal[2] != '')?$birthDateVal[2]:'year'
                     )
                     );
-                
+
     }
-    
+
     /**
      * Callbak method for SUBMIT form event.
      *
@@ -185,7 +185,7 @@ class NewsletterUpdateType extends AbstractType
         }
         //$this->validateGender($form);
     }
-    
+
     /**
      * On post submit data.
      *
@@ -198,9 +198,9 @@ class NewsletterUpdateType extends AbstractType
             $this->save($event);
         }
     }
-    
-    
-    
+
+
+
     /**
      * (non-PHPdoc)
      * @see \Symfony\Component\Form\FormTypeInterface::getName()
@@ -209,12 +209,12 @@ class NewsletterUpdateType extends AbstractType
     {
         return 'user_newsletterupdate';
     }
-    
+
     public function getBlockPrefix()
     {
         return 'user_newsletterupdate';
     }
-    
+
     /**
      * Save user site.
      *
@@ -226,26 +226,26 @@ class NewsletterUpdateType extends AbstractType
         $form      = $event->getForm();
         $user      = $this->container->get('security.token_storage')->getToken()->getUser();
         $dotmailer = $event->getData();
-        
+
         // refresh dotmailer object
         if ($dotmailer->getId()) {
             $this->em->refresh($dotmailer);
         } else {
             $isNewToDotmailer = true;
         }
-        
+
         $dotmailerNewsletterTypeId       = $dotmailer->getDotmailerNewsletterTypeId();
         $dotmailerNewsletterTypeOptoutId = $dotmailer->getDotmailerNewsletterTypeOptoutId();
-                
+
         if ($dotmailer && $dotmailer->getEmail() && $this->container->get('request_stack')->getCurrentRequest()->query->get('guid')) {
             $user = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('email' => $dotmailer->getEmail()));
         } else {
             $user = $this->container->get('security.token_storage')->getToken()->getUser();
         }
-        
+
         if (is_object($user)) {
             $getClickVal = $form->get('clickedElementValue')->getData();
-            if($getClickVal == 'update') {           
+            if($getClickVal == 'update') {
                 // Save business details
                 $dotmailer->setGuid(CommonManager::generateGuid($user->getEmail()));
                 //$dotmailer->setOptIn();
@@ -259,7 +259,7 @@ class NewsletterUpdateType extends AbstractType
                     $dotmailer->setRoleId($user->getRole()->getId());
                 }
                 $dotmailer->setPhone($user->getPhone());
-                
+
                 //get post code, town and county
                 if($dotmailer->getPostcode() != $form->get('postcode')->getData()) {
                     $postCode = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodByLocation($form->get('postcode')->getData());
@@ -277,7 +277,7 @@ class NewsletterUpdateType extends AbstractType
                     }
                 }
             }
-            
+
             // only process on n-values if unsubscribe doesn't selected
             if ($getClickVal == 'update' && ($dotmailer->getOptIn() !== false || $form->get('dotmailer_newsletter_type_id')->getData())) {
                 $dotmailer->setDotmailerNewsletterTypeId($form->get('dotmailer_newsletter_type_id')->getData());
@@ -285,7 +285,7 @@ class NewsletterUpdateType extends AbstractType
                 $dotmailer->setOptIn(1);
                 $dotmailer->setDotmailerNewsletterUnsubscribe(0);
             }
-            
+
             // update last_paid_at
             if (!$dotmailer->getLastPaidAt()) {
                 $lastPaidAt = $this->em->getRepository('FaPaymentBundle:Payment')->getLastPaidAt($user->getId());
@@ -293,29 +293,30 @@ class NewsletterUpdateType extends AbstractType
                     $dotmailer->setLastPaidAt($lastPaidAt['created_at']);
                 }
             }
-            
+
             if ($getClickVal == 'unsubscribe') {
                 $dotmailer->setOptIn(0);
                 $dotmailer->setDotmailerNewsletterUnsubscribe(1);
                 $dotmailer->setDotmailerNewsletterTypeOptoutId($this->getOptoutNewsletterTypeId($dotmailerNewsletterTypeId, $dotmailerNewsletterTypeOptoutId, $form));
                 $dotmailer->setDotmailerNewsletterTypeId(null);
             }
-            
+
             /*if ($form->get('stop_third_party_emails')->isClicked()) {
              $dotmailer->setOptIn(0);
              $preferences = array_diff($form->get('dotmailer_newsletter_type_id')->getData(), [48]);
              $dotmailer->setDotmailerNewsletterTypeId($preferences);
              }*/
-            
+
             if ($dotmailer && $dotmailer->getIsSuppressed()) {
                 $dotmailer->setDotmailerNewsletterUnsubscribe(1);
             }
-            
+
             $this->em->persist($dotmailer);
+            file_put_contents('/var/www/html/newfriday-ad/web/uploads/testing.txt', 'newsletter update type|', FILE_APPEND);
             $this->em->flush($dotmailer);
-            
+
             if ($dotmailer->getOptIn() != 1) {
-                
+
                 // opt out user
                 $user->setIsEmailAlertEnabled(0);
                 $this->em->persist($user);
@@ -326,14 +327,14 @@ class NewsletterUpdateType extends AbstractType
                 // remove contact from dotmailer.
                 //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:delete-contact --email='.$dotmailer->getEmail().' >/dev/null &');
             }
-            
+
             if ($dotmailer->getOptIn() == 1 && $user->getIsEmailAlertEnabled() != 1) {
                 // opt in user
                 $user->setIsEmailAlertEnabled(1);
                 $this->em->persist($user);
                 $this->em->flush($user);
             }
-            
+
             //send to dotmailer instantly.
             if ($isNewToDotmailer) {
                 exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
@@ -351,7 +352,7 @@ class NewsletterUpdateType extends AbstractType
             }
         }
     }
-    
+
     /**
      * Get output newsletter.
      *
@@ -385,7 +386,7 @@ class NewsletterUpdateType extends AbstractType
             return $dotmailerNewsletterTypeId;
         }
     }
-    
+
     /**
      * Set default options.
      *
@@ -399,7 +400,7 @@ class NewsletterUpdateType extends AbstractType
             'data_class' => 'Fa\Bundle\DotMailerBundle\Entity\Dotmailer',
         ));
     }
-    
+
     /**
      * Get year choices.
      *
@@ -408,14 +409,14 @@ class NewsletterUpdateType extends AbstractType
     public function getYearChoices()
     {
         $yearArray = array();
-        
+
         for ($i = date('Y'); $i >= 1920; $i--) {
             $yearArray[$i] = $i;
         }
-        
+
         return $yearArray;
     }
-    
+
     /**
      * Get day choices.
      *
@@ -424,14 +425,14 @@ class NewsletterUpdateType extends AbstractType
     public function getDayChoices()
     {
         $dayArray = array();
-        
+
         for ($i = 1; $i <= 31; $i++) {
             $dayArray[$i] = $i;
         }
-        
+
         return $dayArray;
     }
-    
+
     /**
      * Add postcode field validation.
      *
@@ -448,7 +449,7 @@ class NewsletterUpdateType extends AbstractType
             }
         }
     }
-    
+
     /**
      * Add gender field validation.
      *

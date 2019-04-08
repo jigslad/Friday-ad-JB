@@ -90,12 +90,12 @@ class NewsletterSubscribeType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-               
+
         $loggedInUser = (CommonManager::isAuth($this->container) ? CommonManager::getSecurityTokenStorage($this->container)->getToken()->getUser() : null);
-        
+
         $emailAlertLabel = 'Sign me up to the Friday-Ad newsletter';
         $thirdPartyEmailAlertLabel = 'Send me relevant offers and promotions from third parties';
-        
+
         $builder
         	->add(
         		'email',
@@ -131,7 +131,7 @@ class NewsletterSubscribeType extends AbstractType
         $builder->addEventListener(FormEvents::SUBMIT, array($this, 'onSubmit'));
         $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmitData'));
     }
-    
+
     /**
      * This function is called on post submit data event of form.
      *
@@ -146,35 +146,35 @@ class NewsletterSubscribeType extends AbstractType
     		if (!$user) {
     			$user = new User();
     			$user->setIsHalfAccount(1);
-    			
+
     			$user->setUserName($form->get('email')->getData());
     			$user->setEmail($form->get('email')->getData());
-    			
+
     			//set user status
     			$userActiveStatus = $this->em->getRepository('FaEntityBundle:Entity')->find(EntityRepository::USER_STATUS_ACTIVE_ID);
     			$user->setStatus($userActiveStatus);
-    			
+
     			// set guid
     			$user->setGuid(CommonManager::generateGuid($form->get('email')->getData()));
-    			
+
     			// manually added third party email alert
     			if ($form->get('email_alert')->getData() == 1) {
     				$user->setIsEmailAlertEnabled(1);
     			}
-    			
+
     			// manually added third party email alert
     			if ($form->get('third_party_email_alert')->getData() == 1) {
     				$user->setIsThirdPartyEmailAlertEnabled(1);
     			}
-    			
+
     			$user->setCreatedAt(time());
     			$user->setUpdatedAt(time());
-    			
+
     			$this->em->persist($user);
     			$this->em->flush($user);
     		}
-    		
-    		
+
+            file_put_contents('/var/www/html/newfriday-ad/web/uploads/testing.txt', 'line '.__LINE__.$this->_em->getRepository('FaDotMailerBundle:Dotmailer')->dotmailerFindByEmail($user->getEmail()).'|', FILE_APPEND);
     		$dotMailer = $this->em->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('email' => $form->get('email')->getData()));
     		if (!$dotMailer) {
     			$dotmailer = new Dotmailer();
@@ -189,7 +189,7 @@ class NewsletterSubscribeType extends AbstractType
     			$dotmailer->setCreatedAt(time());
     			$dotmailer->setUpdatedAt(time());
     			$dotmailer->setOptInType(DotmailerRepository::OPTINTYPE);
-				
+
     			if($form->get('email_alert')->getData() == 1) {
     				$newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getAllNewsletterTypeByOrd($this->container, 48);
     			}
@@ -197,20 +197,21 @@ class NewsletterSubscribeType extends AbstractType
     			if ($form->get('third_party_email_alert')->getData() == 1) {
     				$newsletterTypeIds[] = 48;
     			}
-    			
+
     			if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
     				$dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
     			}
-    			
+
     			$this->em->persist($dotmailer);
+                file_put_contents('/var/www/html/newfriday-ad/web/uploads/testing.txt', 'newsletter subscribe type|', FILE_APPEND);
     			$this->em->flush($dotmailer);
-    			
+
     			//send to dotmailer instantly.
     			exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
     		}
     	}
     }
-    
+
     /**
      * Callbak method for PRE_SET_DATA form event.
      *
@@ -222,8 +223,8 @@ class NewsletterSubscribeType extends AbstractType
     	$form         = $event->getForm();
     	if (!$form->get('email_alert')->getData()&& !$form->get('third_party_email_alert')->getData()) {
     		$form->get('email_alert')->addError(new FormError("Please choose atleast one below preferences."));
-    	} 
-    	
+    	}
+
     }
 
     /**
@@ -250,7 +251,7 @@ class NewsletterSubscribeType extends AbstractType
     {
         return 'fa_user_newsletter';
     }
-    
+
     public function getBlockPrefix()
     {
         return 'fa_user_newsletter';
