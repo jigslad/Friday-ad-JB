@@ -8,11 +8,15 @@
         bindFloatFieldKeyupEvnet('fa_left_search_item_motors__boat_length_to');
         bindSeeMoreLinkEvents();
 
-        /*if($('#fa_left_search_hide_distance_block').val()==1) {
-            $('.distance-left-search').hide();
+        if($('#fa_left_search_item__location').val()==2) {
+        	$('#fa_left_search_item__location_autocomplete').val('United Kingdom');
+        } 
+
+        if($('#fa_left_search_hide_distance_block').val()==1) {
+            $('#distance-left-search').hide();
         } else {
-        	 $('.distance-left-search').show();
-        }*/
+        	$('#distance-left-search').show();
+        }
 
         $('.date_period').change(function(e){
             var datesContainer = $(this).parent().siblings('div.event-dates');
@@ -119,13 +123,19 @@
     	    $('form[name="fa_left_search"]').submit()
     	{% else %}
     	    if (searchLocation && searchLocation != 2) {
+    	    	var selDist = $('#fa_left_search_item__distance').val();
+    	    	alert(selDist);
                 $.ajax({
                      type: "post",
                      dataType: "json",
                      url: "{{ path('fa_frontend_ajax_user_location') }}",
                      data: {'location': searchLocation},
                      success: function(data) {
+                         alert('aftersuccess=='+selDist);
                          if (!$.isEmptyObject(data)) {
+                        	 $('#fa_left_search_item__distance').val(selDist);
+                            if(data.slug=='uk') { $('#distance-left-search').hide(); }
+                            else { $('#distance-left-search').show(); }
                             $('form[name="fa_left_search"]').submit();
                          } else {
                              $('#distance-error-placeholder small').html('Please choose a valid town or postal code');
