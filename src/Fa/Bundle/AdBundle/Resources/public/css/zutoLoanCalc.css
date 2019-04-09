@@ -28,6 +28,10 @@
     display: inline-flex;
 }
 
+.get_online_decision .apply-new-block img{
+    height: 56px;
+}
+
 .get_online_decision .apply-new-left {
     width: 15%;
     padding-top: 10px;
@@ -114,7 +118,7 @@
 }
 
 .get_online_decision .form-block-1, .get_online_decision .form-block-2 {
-    width: 45%;
+    width: 44%;
     display: inline-flex;
     margin-right: 15px;
 }
