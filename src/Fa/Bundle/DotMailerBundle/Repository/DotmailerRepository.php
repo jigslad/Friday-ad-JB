@@ -34,17 +34,20 @@ class DotmailerRepository extends EntityRepository
 
     const ALIAS = 'dt';
 
-    const TOUCH_POINT_PAA = 'paa';
+    const TOUCH_POINT_PAA = 'PAA';
 
-    const TOUCH_POINT_ENQUIRY = 'enquiry';
+    const TOUCH_POINT_ENQUIRY = 'ENQUIRY';
 
     const OPTINTYPE = 'single';
     
-    const TOUCH_POINT_CREATE_ALERT = 'create_alert';
+    const TOUCH_POINT_CREATE_ALERT = 'CREATE_ALERT';
     
     const EMAIL_ALERT_LABEL = "I'd like to receive news, offers and promotions by email from Friday-Ad";
     const THIRD_PARTY_EMAIL_ALERT_LABEL = "I'd like to receive offers and promotions by email on behalf of carefully chosen partners";
-
+    
+    
+    const TOUCH_POINT_NEWSLETTER = 'NEWSLETTER';
+    
     /**
      * Prepare query builder.
      *
