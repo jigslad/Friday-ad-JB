@@ -116,6 +116,8 @@ class NewsletterResubscribeType extends AbstractType
 		        	'label' => $emailAlertLabel,
 		        	'mapped' => false,
         		    'data' => ($user ? $user->getIsEmailAlertEnabled() : false),
+        		    'empty_data' => ($user ? $user->getIsEmailAlertEnabled() : false),
+        		    'value'=>($user ? $user->getIsEmailAlertEnabled() : false),
         		)
         	)
 	        ->add(
@@ -124,7 +126,9 @@ class NewsletterResubscribeType extends AbstractType
 	        	array(
 	        		'label' => $thirdPartyEmailAlertLabel,
 	        		'mapped' => false,
-	        	    'data' => ($dotmailer ? $user->getIsThirdPartyEmailAlertEnabled() : false)
+	        	    'data' => ($dotmailer ? $user->getIsThirdPartyEmailAlertEnabled() : false),
+	        	    'empty_data' => ($user ? $user->getIsThirdPartyEmailAlertEnabled() : false),
+	        	    'value' => ($user ? $user->getIsThirdPartyEmailAlertEnabled() : false),
 	        	)
 	        )
 	        ->add('save', SubmitType::class, array('label' => 'Create'));
