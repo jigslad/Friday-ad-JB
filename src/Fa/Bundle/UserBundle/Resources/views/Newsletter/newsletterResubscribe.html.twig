@@ -47,7 +47,8 @@
 
 
         function checkAnyOneClicked() {
-        	if ($("#fa_user_newsletter_resubscribe_email_alert").is(':checked')) {
+        	if ($('#fa_user_newsletter_resubscribe_email_alert').parent().hasClass('checked')) {
+   	        	$('#fa_user_newsletter_resubscribe_email_alert').attr('checked', true);
         		$("#fa_user_newsletter_resubscribe_third_party_email_alert").css('cursor','pointer');
         		$('#fa_user_newsletter_resubscribe_third_party_email_alert').attr("disabled", false);
         		$('#fa_user_newsletter_resubscribe_save').attr("disabled", false);
