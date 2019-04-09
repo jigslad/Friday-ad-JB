@@ -34,24 +34,28 @@ class DotmailerRepository extends EntityRepository
 
     const ALIAS = 'dt';
 
-    const TOUCH_POINT_PAA = 'paa';
+    const TOUCH_POINT_PAA = 'PAA';
 
-    const TOUCH_POINT_ENQUIRY = 'enquiry';
+    const TOUCH_POINT_ENQUIRY = 'ENQUIRY';
 
     const OPTINTYPE = 'single';
 
-    const TOUCH_POINT_CREATE_ALERT = 'create_alert';
+    const TOUCH_POINT_ACCOUNT = 'ACCOUNT';
+
+    const TOUCH_POINT_GOOGLE = 'GOOGLE';
+
+    const TOUCH_POINT_FACEBOOK = 'FACEBOOK';
+
+    const FIRST_TOUCH_POINT_ID = 49;
+
+    const TOUCH_POINT_CREATE_ALERT = 'CREATE_ALERT';
     
     const EMAIL_ALERT_LABEL = "I'd like to receive news, offers and promotions by email from Friday-Ad";
     const THIRD_PARTY_EMAIL_ALERT_LABEL = "I'd like to receive offers and promotions by email on behalf of carefully chosen partners";
-
-    const TOUCH_POINT_ACCOUNT = 'account';
-
-    const TOUCH_POINT_GOOGLE = 'google';
-
-    const TOUCH_POINT_FACEBOOK = 'facebook';
-
-    const FIRST_TOUCH_POINT_ID = 49;
+    
+    
+    const TOUCH_POINT_NEWSLETTER = 'NEWSLETTER';
+    
 
     /**
      * Prepare query builder.
@@ -772,6 +776,9 @@ class DotmailerRepository extends EntityRepository
                 $isNewToDotmailer = true;
                 $dotmailer = new Dotmailer();
                 $dotmailer->setFadUser(1);
+                $dotmailer->setNewsletterSignupAt(time());
+                $dotmailer->setFirstTouchPoint($touchPoint);
+                $newsletterTypeIds[] = self::FIRST_TOUCH_POINT_ID;
             }
 
             $dotmailer->setOptIn(1);
@@ -802,13 +809,16 @@ class DotmailerRepository extends EntityRepository
                 }
             }
 
-            if (in_array($touchPoint, array(self::TOUCH_POINT_ACCOUNT, self::TOUCH_POINT_GOOGLE, self::TOUCH_POINT_FACEBOOK, self::TOUCH_POINT_ENQUIRY, self::TOUCH_POINT_PAA, self::TOUCH_POINT_CREATE_ALERT))) {
-                if ($user->getIsThirdPartyEmailAlertEnabled() == 1) {
-                    $newsletterTypeIds[] = 48;
-                }
-                $newsletterTypeIds[] = self::FIRST_TOUCH_POINT_ID;
+            
+            if (!empty($dotmailer->getDotmailerNewsletterTypeId())) {
+                $newsletterTypeIds[] = $dotmailer->getDotmailerNewsletterTypeId();
+            }
+            
+            if ($user->getIsThirdPartyEmailAlertEnabled() == 1) {
+                $newsletterTypeIds[] = 48;
+            }
+            if(!empty($newsletterTypeIds)) {
                 $dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
-                $dotmailer->setNewsletterSignupAt(time());
             }
 
             $this->getEntityManager()->persist($dotmailer);

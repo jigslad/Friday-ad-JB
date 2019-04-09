@@ -206,7 +206,8 @@ class NewsletterResubscribeType extends AbstractType
     			$dotmailer->setCreatedAt(time());
     			$dotmailer->setUpdatedAt(time());
     			$dotmailer->setOptInType(DotmailerRepository::OPTINTYPE);
-
+   			    $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_NEWSLETTER);
+    			
     			if($form->get('email_alert')->getData() == 1) {
     				$newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getAllNewsletterTypeByOrd($this->container, 48);
     			}
