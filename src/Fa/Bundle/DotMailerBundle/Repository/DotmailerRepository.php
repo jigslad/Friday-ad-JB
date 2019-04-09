@@ -761,6 +761,8 @@ class DotmailerRepository extends EntityRepository
                 $isNewToDotmailer = true;
                 $dotmailer = new Dotmailer();
                 $dotmailer->setFadUser(1);
+                $dotmailer->setNewsletterSignupAt(time());
+                $dotmailer->setFirstTouchPoint($touchPoint);
             }
 
             $dotmailer->setOptIn(1);
@@ -786,12 +788,15 @@ class DotmailerRepository extends EntityRepository
                 }
             }
             
-            if ($touchPoint== self::TOUCH_POINT_CREATE_ALERT) {
-                if ($user->getIsThirdPartyEmailAlertEnabled() == 1) {
-                    $newsletterTypeIds[] = 48;
-                }
+            if (!empty($dotmailer->getDotmailerNewsletterTypeId())) {
+                $newsletterTypeIds[] = $dotmailer->getDotmailerNewsletterTypeId();
+            }
+            
+            if ($user->getIsThirdPartyEmailAlertEnabled() == 1) {
+                $newsletterTypeIds[] = 48;
+            }
+            if(!empty($newsletterTypeIds)) {
                 $dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
-                $dotmailer->setNewsletterSignupAt(time());
             }
 
             $this->getEntityManager()->persist($dotmailer);
