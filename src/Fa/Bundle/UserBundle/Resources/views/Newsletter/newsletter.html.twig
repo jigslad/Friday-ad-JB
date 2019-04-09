@@ -150,7 +150,7 @@
                                             {% for nonMappedCatId in nonMappedChildrenArray %}
                                                  {% set nonMappedCatChild = userNewsletterPrefForm.dotmailer_newsletter_type_id.children[(nonMappedCatId - 1)] %}
                                             	<li>
-                                                    <div class="label-inline white-checkbox mt0 mb0">
+                                                    <div class="label-inline mt0 mb0">
                                                         {% if nonMappedCatChild.vars.name|raw == "47" %}
                                                         	{% set strForThirdParty = nonMappedCatChild %}  
                                                         {% else %}

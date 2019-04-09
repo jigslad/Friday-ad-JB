@@ -45,18 +45,38 @@
     $(document).ready(function(){
     	checkAnyOneClicked();
 
-
-        function checkAnyOneClicked() {
-        	if ($("#fa_user_newsletter_resubscribe_email_alert").is(':checked') || $("#fa_user_newsletter_resubscribe_third_party_email_alert").is(':checked')) {
+    	function checkAnyOneClicked() {
+        	if ($("#fa_user_newsletter_resubscribe_email_alert").is(':checked')) {
+        		$("#fa_user_newsletter_resubscribe_third_party_email_alert").css('cursor','pointer');
+        		$('#fa_user_newsletter_resubscribe_third_party_email_alert').attr("disabled", false);
         		$('#fa_user_newsletter_resubscribe_save').attr("disabled", false);
             } else {
             	$('#fa_user_newsletter_resubscribe_save').attr("disabled", true);
+            	$('#fa_user_newsletter_resubscribe_third_party_email_alert').attr("disabled", true);
+            	$('#fa_user_newsletter_resubscribe_third_party_email_alert').val('0');
+            	$('#fa_user_newsletter_resubscribe_third_party_email_alert').attr("checked", false);
+            	$('#fa_user_newsletter_resubscribe_third_party_email_alert').parent('span').removeClass("checked");
+            	$("#fa_user_newsletter_resubscribe_third_party_email_alert").css('cursor','not-allowed');
             }
         }
    		$("#fa_user_newsletter_resubscribe_email_alert").change(function(e) { 
+   			if ($('#fa_user_newsletter_resubscribe_email_alert').parent().hasClass('checked')) {
+   	        	$('#fa_user_newsletter_resubscribe_email_alert').attr('checked', true);
+   	        	$('#fa_user_newsletter_resubscribe_email_alert').val('1');
+   	        } else {
+   	        	$('#fa_user_newsletter_resubscribe_email_alert').attr('checked', false);
+   	        	$('#fa_user_newsletter_resubscribe_email_alert').val('0');
+   	        }
    			checkAnyOneClicked();
     	});
    		$("#fa_user_newsletter_resubscribe_third_party_email_alert").change(function(e) { 
+   			if ($('#fa_user_newsletter_resubscribe_third_party_email_alert').parent().hasClass('checked')) {
+   	        	$('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('checked', true);
+   	        	$('#fa_user_newsletter_resubscribe_third_party_email_alert').val('1');
+   	        } else {
+   	        	$('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('checked', false);
+   	        	$('#fa_user_newsletter_resubscribe_third_party_email_alert').val('0');
+   	        }
    			checkAnyOneClicked();
     	});
     });

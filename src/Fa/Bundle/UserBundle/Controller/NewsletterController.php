@@ -65,7 +65,13 @@ class NewsletterController extends CoreController
                 $newRecord = 1;
             }
         }
-
+        
+        if(!empty($dotmailer)) {
+            if($dotmailer->getDotmailerNewsletterUnsubscribe()==1) {
+                return $this->redirect($this->generateUrl('newsletter_resubscribe').'?guid='.$request->query->get('guid'));
+            }
+        }
+       
         $formManager = $this->get('fa.formmanager');
         $form = $formManager->createForm(NewsletterUpdateType::class, $dotmailer, array('action' => $action));
 
