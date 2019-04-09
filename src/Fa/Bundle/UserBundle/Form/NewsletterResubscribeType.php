@@ -224,11 +224,13 @@ class NewsletterResubscribeType extends AbstractType
     			$this->em->flush($dotmailer);
 
     			//send to dotmailer instantly.
-    			exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+    			$this->em->getRepository('FaDotMailerBundle:Dotmailer')->sendContactInfoToConsentDotmailerRequest($dotmailer,$this->container);
+    			exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &'); 
+    			
         	} else {
         	    $dotMailer->setDotmailerNewsletterUnsubscribe(0);
         	    if($form->get('email_alert')->getData() == 1) {
-        	        $newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getAllNewsletterTypeByOrd($this->container, 48);
+        	        $newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getAllNewsletterTypeByOrd($this->container, 47);
         	    }
         	    // manually added third party email alert
         	    if ($form->get('third_party_email_alert')->getData() == 1) {
@@ -238,11 +240,15 @@ class NewsletterResubscribeType extends AbstractType
         	    if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
         	        $dotMailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
         	    }
+        	    
+        	    $dotMailer->setOptIn(1);
+        	    $dotMailer->setOptInType(DotmailerRepository::OPTINTYPE);
 
         	    $this->em->persist($dotMailer);
         	    $this->em->flush($dotMailer);
 
         	    //send to dotmailer instantly.
+        	    $this->em->getRepository('FaDotMailerBundle:Dotmailer')->sendContactInfoToConsentDotmailerRequest($dotMailer,$this->container);
         	    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotMailer->getId().' >/dev/null &');
         	}
         }
