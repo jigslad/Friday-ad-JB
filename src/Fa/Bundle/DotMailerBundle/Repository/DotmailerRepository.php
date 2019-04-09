@@ -41,6 +41,9 @@ class DotmailerRepository extends EntityRepository
     const OPTINTYPE = 'single';
     
     const TOUCH_POINT_CREATE_ALERT = 'create_alert';
+    
+    const EMAIL_ALERT_LABEL = "I'd like to receive news, offers and promotions by email from Friday-Ad";
+    const THIRD_PARTY_EMAIL_ALERT_LABEL = "I'd like to receive offers and promotions by email on behalf of carefully chosen partners";
 
     /**
      * Prepare query builder.
@@ -699,6 +702,33 @@ class DotmailerRepository extends EntityRepository
 
         return $data;
     }
+    
+    /**
+     * Generate array to send it to dotmailer.
+     * @param object $dotmailer
+     * @param object $container
+     */
+    public function generateDotmailerConsentArray($dotmailer, $container)
+    {
+        $data = array();
+        $contextTextVal = DotmailerRepository::EMAIL_ALERT_LABEL;
+        $contextUrl = '';$getCurrenturi='';
+        if(!empty($dotmailer->getDotmailerNewsletterTypeId()) && in_array('48',$dotmailer->getDotmailerNewsletterTypeId())) {
+            $contextTextVal .= ' AND '.DotmailerRepository::EMAIL_ALERT_LABEL;
+        }
+        $getCurrenturi = $container->get('request_stack')->getCurrentRequest()->getUri();
+        if($getCurrenturi) {
+            $explodeCurrentUri = explode('?',$getCurrenturi);
+            $contextUrl= $explodeCurrentUri[0];
+        }
+        $data['CONSENTTEXT'] = $contextTextVal;
+        $data['CONSENTURL'] = $contextUrl;
+        $data['CONSENTDATETIME'] = date("Y-m-d\TH:i:s");
+        $data['CONSENTIP'] = $container->get('request_stack')->getCurrentRequest()->getClientIp();
+        $data['CONSENTUSERAGENT'] = $container->get('request_stack')->getCurrentRequest()->headers->get('User-Agent');
+        
+        return $data;
+    }
 
     /**
      * Touch point entry in dotmailer from front side.
@@ -966,6 +996,65 @@ class DotmailerRepository extends EntityRepository
             );
         }
         
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch, CURLOPT_HTTPHEADER, array(
+                'Accept: application/json',
+                'Content-Type: application/json'
+            )
+            );
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLAUTH_BASIC, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD,$username . ':' . $password);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        
+        $response = json_decode(curl_exec($ch), true);
+        curl_close($ch);
+        
+        return $response;
+    }
+    
+    /**
+     * Send request to dotmailer.
+     *
+     * @param object $dotmailer
+     * @param object $container
+     *
+     * @return boolean
+     */
+    public function sendContactInfoToConsentDotmailerRequest($dotmailer,$container)
+    {       
+        $url = $container->getParameter('fa.dotmailer.api.url').'/'.$container->getParameter('fa.dotmailer.api.version').'/';
+        
+        // build url by appending resource to it.
+        $url = $url.'contacts/with-consent';
+        
+        $username = $container->getParameter('fa.dotmailer.api.username');
+        $password = $container->getParameter('fa.dotmailer.api.password');
+        $dataLabels = $this->generateDotmailerBulkImportLabelArray($container);
+        $dataValues = $this->generateDotmailerBulkImportArray($dotmailer, $container);
+        $data = array();$consentArray = array();
+        $data['email'] = $dataValues[0];
+        $data['emailType'] = 'Html';
+        $data['optInType'] = ($dotmailer->getOptInType())?ucwords($dotmailer->getOptInType()):"";
+        unset($dataLabels[0]);
+        foreach ($dataLabels as $index => $dataLabel) {
+            $data['dataFields'][] = array(
+                'key' => $dataLabel,
+                'value' => $dataValues[$index],
+            );
+        }
+        $consentArray = $this->generateDotmailerConsentArray($dotmailer, $container);
+        foreach ($consentArray as $consentKey => $consentValue) {
+            $data['consentFields']['fields'][] = array(
+                'key' => $consentKey,
+                'value' => $consentValue,
+            );
+        }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

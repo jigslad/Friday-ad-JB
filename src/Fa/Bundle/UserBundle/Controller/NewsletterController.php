@@ -66,9 +66,13 @@ class NewsletterController extends CoreController
             }
         }
         
-        if(!empty($dotmailer)) {
+      if(!empty($dotmailer)) {
+            //echo 'getDotmailerNewsletterTypeId===<pre>';print_r($dotmailer->getDotmailerNewsletterTypeId());die;
             if($dotmailer->getDotmailerNewsletterUnsubscribe()==1) {
                 return $this->redirect($this->generateUrl('newsletter_resubscribe').'?guid='.$request->query->get('guid'));
+            }
+            elseif($dotmailer->getDotmailerNewsletterUnsubscribe()==0 && empty($dotmailer->getDotmailerNewsletterTypeId()) && $dotmailer->getIsSuppressed()==0) { 
+                return $this->redirect($this->generateUrl('newsletter_subscribe').'?guid='.$request->query->get('guid'));
             }
         }
        
@@ -135,7 +139,7 @@ class NewsletterController extends CoreController
         } else {
             $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $userEmail));
         }
-        
+       
         if(!$dotmailer) {
             throw new NotFoundHttpException(410);
         }
