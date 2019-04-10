@@ -254,9 +254,6 @@ class PackageDiscountCodeAdminController extends CoreController implements Resou
 
         $userentity = $this->getRepository('FaPromotionBundle:UserPackageDiscountCode')->getTotalUsedCountForCode($id);
         
-        //echo '<pre>'; print_R($userentity);die();
-        //$entity = array();
-        
         try {
             if ($userentity>0) {
                 throw $this->createNotFoundException($this->get('translator')->trans("This record can not be removed beacuse it's reference exists in user package discount.", array(), 'error'));

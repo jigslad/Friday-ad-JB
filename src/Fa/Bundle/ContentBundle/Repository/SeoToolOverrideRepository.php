@@ -225,19 +225,7 @@ class SeoToolOverrideRepository extends EntityRepository
                         }
                     }
                 }
-                //echo $allCommoUrl;die;
-                /*echo "<hr>";
-                print_r($searchParams);
-                echo "<hr>";
-                print_r($categoryIndexableDimensions);
-                echo "<hr>";
-                print_r($indexableKeyArray);
-                echo "<hr>";
-                print_r($indexableDimesionsArray);
-                echo "<hr>";
-                echo $url;
-                */
-               
+
                 if (!$objSeoToolOverride) {
                     $objSeoToolOverride = $this->getSeoToolOverrideObj($allCommoUrl, $container);
                 }
