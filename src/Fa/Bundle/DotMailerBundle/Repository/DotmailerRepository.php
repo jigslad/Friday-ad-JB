@@ -780,7 +780,7 @@ class DotmailerRepository extends EntityRepository
                 $dotmailer->setFirstTouchPoint($touchPoint);
                 $newsletterTypeIds[] = self::FIRST_TOUCH_POINT_ID;
             }
-
+            
             $dotmailer->setOptIn(1);
             $dotmailer->setDotmailerNewsletterUnsubscribe(0);
 

@@ -115,6 +115,7 @@ class NewsletterSubscribeType extends AbstractType
 		        		'label' => $emailAlertLabel,
 		        		'mapped' => false,
 		        		'data' => ($loggedInUser ? $loggedInUser->getIsEmailAlertEnabled() : false),
+        		        'value' => ($loggedInUser ? $loggedInUser->getIsEmailAlertEnabled() : false),
         		)
         	)
 	        ->add(
@@ -123,7 +124,8 @@ class NewsletterSubscribeType extends AbstractType
 	        	array(
 	        			'label' => $thirdPartyEmailAlertLabel,
 	        			'mapped' => false,
-	        			'data' => ($loggedInUser ? $loggedInUser->getIsThirdPartyEmailAlertEnabled() : false)
+	        			'data' => ($loggedInUser ? $loggedInUser->getIsThirdPartyEmailAlertEnabled() : false),
+	        	        'value' => ($loggedInUser ? $loggedInUser->getIsThirdPartyEmailAlertEnabled() : false)
 	        	)
 	        )
 	        ->add('save', SubmitType::class, array('label' => 'Create'));
@@ -193,7 +195,7 @@ class NewsletterSubscribeType extends AbstractType
 				
 
     			if($form->get('email_alert')->getData() == 1) {
-    				$newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getAllNewsletterTypeByOrd($this->container, 48);
+    				$newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getAllNewsletterTypeByOrd($this->container, 47);
     			}
     			// manually added third party email alert
     			if ($form->get('third_party_email_alert')->getData() == 1) {
@@ -209,6 +211,7 @@ class NewsletterSubscribeType extends AbstractType
     			$this->em->flush($dotmailer);
 
     			//send to dotmailer instantly.
+    			$this->em->getRepository('FaDotMailerBundle:Dotmailer')->sendContactInfoToConsentDotmailerRequest($dotmailer,$this->container);
     			exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
     		}
     	}
