@@ -2738,3 +2738,4 @@ table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.r
 /* FFR-3609 */
 .signup-google-icon { background:url(/bundles/fafrontend/images/btn_google_dark_normal_ios.svg) !important; background-size: 110% !important; border-right: 0 !important; box-shadow: none !important; top: -3px !important; left: -3px !important; }
 .signup-google-btn { background: #4285F4 !important; border: 0 !important; }
+.gplus-btn, .gplus-btn:hover {background:url(/bundles/fafrontend/images/google_signin.png) no-repeat;margin-left:22px; background-color: #3265D1;}
