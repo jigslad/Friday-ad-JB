@@ -588,13 +588,15 @@ class ManageMyAdController extends CoreController
     /**
      * @param array $transactions
      * @return string
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
      */
     private function getDimension12(&$transactions)
     {
         $flagPrint = false;
         $flagNonprint = false;
         $dimension12 = '';
-        $arrPrintLocationTownIds = $this->getPrintLocationTownIds();
+        $repoLocationGroupLocation = $this->getRepository('FaEntityBundle:LocationGroupLocation');
+        $arrPrintLocationTownIds = $repoLocationGroupLocation->getPrintLocationTownIds();
         if (isset($transactions['items']) && !empty($transactions['items']) && !empty($arrPrintLocationTownIds)) {
             foreach ($transactions['items'] as &$valItem) {
                 if (!isset($valItem['TownId'])) {
@@ -616,22 +618,6 @@ class ManageMyAdController extends CoreController
             $dimension12 = "Non-print";
         }
         return $dimension12;
-    }
-
-    /**
-     * @return array
-     */
-    private function getPrintLocationTownIds()
-    {
-        /**
-         * @var LocationGroupLocation[] $resLocationGroupLocations
-         */
-        $townIds = [];
-        $resLocationGroupLocations = $this->getRepository('FaEntityBundle:LocationGroupLocation')->findAll();
-        foreach ($resLocationGroupLocations as $valLocation) {
-            $townIds[] = $valLocation->getLocationTown()->getId();
-        }
-        return $townIds;
     }
 
 }

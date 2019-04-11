@@ -242,4 +242,34 @@ class LocationGroupLocationRepository extends BaseEntityRepository
 
         return $locationGroupIdArray;
     }
+
+    /**
+     * @return array|\Doctrine\ORM\QueryBuilder
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
+     */
+    public function getPrintLocationGroupLocations()
+    {
+        try {
+            return $this->createQueryBuilder(self::ALIAS)
+                ->where(self::ALIAS . '.location_group NOT IN ' . LocationGroupRepository::NON_PRINT_LOCATION_GROUP_ID);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * @return array
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
+     */
+    public function getPrintLocationTownIds()
+    {
+        $townIds = [];
+        if (!empty($resLocationGroupLocations = $this->getPrintLocationGroupLocations())) {
+            foreach ($resLocationGroupLocations as $valLocation) {
+                $townIds[] = $valLocation->getLocationTown()->getId();
+            }
+        }
+        return $townIds;
+    }
+
 }
