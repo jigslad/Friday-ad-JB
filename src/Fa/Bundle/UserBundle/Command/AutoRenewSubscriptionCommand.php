@@ -179,14 +179,13 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
     protected function getUserSubscriptionsResult($user_id, $offset, $limit)
     {
         $entityManager         = $this->getContainer()->get('doctrine')->getManager();
-        $expiryDefaultDaysBeforeDate = strtotime('-27 day', strtotime(date('Y-m-d H:i:s')));
-        $currentTime = strtotime(date('Y-m-d H:i:s'));
-        
+        $currentTime = date('Y-m-d');
         
         $querySql  = "SELECT * FROM ".$this->mainDbName.".user_package up WHERE up.status = 'A' AND up.is_auto_renew = 1";
-        $querySql  .= " AND (up.expires_at >= ".$currentTime." or (CASE WHEN (up.updated_at > up.created_at) THEN ";
-        $querySql  .= "(up.updated_at  < ".$expiryDefaultDaysBeforeDate.") ELSE (up.created_at < ".$expiryDefaultDaysBeforeDate;
+        $querySql  .= " AND (date_format(up.expires_at,'%Y-%m-%d') = '".$currentTime."' or (CASE WHEN (up.updated_at > up.created_at) THEN ";
+        $querySql  .= "(date_format(date_add(FROM_UNIXTIME(up.updated_at),INTERVAL 28 DAY),'%Y-%m-%d')  = '".$currentTime."') ELSE (date_format(date_add(FROM_UNIXTIME(up.created_at),INTERVAL 28 DAY),'%Y-%m-%d') = '".$currentTime."'";
         $querySql  .= ") END))";
+        
         if ($user_id != '') {
             $querySql  .= " AND up.user_id=".$user_id;
         }
@@ -207,14 +206,13 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
     protected function getUserSubscriptionsCount($user_id)
     {
         $entityManager         = $this->getContainer()->get('doctrine')->getManager();
-        $expiryDefaultDaysBeforeDate = strtotime('-27 day', strtotime(date('Y-m-d H:i:s')));
-        $currentTime = strtotime(date('Y-m-d H:i:s'));
-        
+        $currentTime = date('Y-m-d');
         
         $querySql  = "SELECT count(up.user_id) as user_count FROM ".$this->mainDbName.".user_package up WHERE up.status = 'A' AND up.is_auto_renew = 1";
-        $querySql  .= " AND (up.expires_at >= ".$currentTime." or (CASE WHEN (up.updated_at > up.created_at) THEN ";
-        $querySql  .= "(up.updated_at  < ".$expiryDefaultDaysBeforeDate.") ELSE (up.created_at < ".$expiryDefaultDaysBeforeDate;
+        $querySql  .= " AND (date_format(up.expires_at,'%Y-%m-%d') = '".$currentTime."' or (CASE WHEN (up.updated_at > up.created_at) THEN ";
+        $querySql  .= "(date_format(date_add(FROM_UNIXTIME(up.updated_at),INTERVAL 28 DAY),'%Y-%m-%d')  = '".$currentTime."') ELSE (date_format(date_add(FROM_UNIXTIME(up.created_at),INTERVAL 28 DAY),'%Y-%m-%d') = '".$currentTime."'";
         $querySql  .= ") END))";
+       
         if ($user_id != '') {
             $querySql  .= " AND up.user_id=".$user_id;
         }
