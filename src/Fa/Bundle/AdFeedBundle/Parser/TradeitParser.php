@@ -409,7 +409,7 @@ class TradeitParser
         $ad->setUser($user);
         $ad->setSkipSolr(1); // TO skip solr update
 
-        $rejectedReason = count($this->advert['rejected_reason']) > 0 ? serialize($this->advert['rejected_reason']) : null;
+        $rejectedReason = isset($this->advert['rejected_reason'])? serialize($this->advert['rejected_reason']) : null;
 
         // Save ad is trade ad or not
         $ad->setIsTradeAd(null);
@@ -836,7 +836,7 @@ class TradeitParser
         $dimension = $this->advert['dimensions'];
         $dimension = isset($dimension[0]) ? $dimension[0] : null;
 
-        if (count($dimension) > 0) {
+        if (!empty($dimension)) {
             if ($this->advert['parent_category'] == 'For Sale') {
                 $ad_forsale = $this->em->getRepository('FaAdBundle:AdForSale')->findOneBy(array('ad' => $ad->getId()));
 
