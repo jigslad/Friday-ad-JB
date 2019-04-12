@@ -464,7 +464,7 @@ class AdImageRepository extends EntityRepository
 
         $image = $this->findOneBy(array('ad' => $ad->getId(), 'ord' => $ord));
         if ($image) {
-            $url = CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), $size, $image->getImageName());
+            $url = CommonManager::getAdImageUrl($container, $ad->getId(), $image->getPath(), $image->getHash(), $size, 1, $image->getImageName());
         }
 
         return $url;
