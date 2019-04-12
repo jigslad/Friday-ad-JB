@@ -752,12 +752,12 @@ abstract class AdParser
         $ad->setUser($user);
         $ad->setSkipSolr(1); // TO skip solr update
 
-        $rejectedReason = count($this->advert['rejected_reason']) > 0 ? serialize($this->advert['rejected_reason']) : null;
+        $rejectedReason = isset($this->advert['rejected_reason']) ? serialize($this->advert['rejected_reason']) : null;
 
         // Save ad is trade ad or not
         if ($user) {
             $userRoles = $this->em->getRepository('FaUserBundle:User')->getUserRolesArray($user);
-            if (count($userRoles)) {
+            if (!empty($userRoles)) {
                 if (in_array(RoleRepository::ROLE_BUSINESS_SELLER, $userRoles) || in_array(RoleRepository::ROLE_NETSUITE_SUBSCRIPTION, $userRoles)) {
                     $ad->setIsTradeAd(1);
                 } elseif (in_array(RoleRepository::ROLE_SELLER, $userRoles)) {
@@ -1038,7 +1038,7 @@ abstract class AdParser
             if ($adArray['Advertiser']['Postcode']) {
                 $locationArray = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodInfoArrayByLocation($adArray['Advertiser']['Postcode'], $this->container, true);
             }
-            if (count($locationArray) > 0) {
+            if (!empty($locationArray)) {
                 $location_not_found = true;
             } else {
                 $townstring = explode(',', $adArray['Advertiser']['TownCity']);
@@ -1070,7 +1070,7 @@ abstract class AdParser
                     $locationArray = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodInfoArrayByLocation($adArray['Advertiser']['Postcode'], $this->container, true);
                 }
 
-                if (count($locationArray) > 0) {
+                if (!empty($locationArray)) {
                     $location_not_found = true;
                 } else {
                     $townstring = explode(',', $adArray['Advertiser']['TownCity']);
@@ -1088,12 +1088,12 @@ abstract class AdParser
         }
 
         if ($location_not_found == true) {
-            if (count($locationArray) < 1 && $adArray['Advertiser']['Postcode']) {
+            if (!empty($locationArray) && $adArray['Advertiser']['Postcode']) {
                 // Fall back to advertiser
                 $locationArray = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodInfoArrayByLocation($adArray['Advertiser']['Postcode'], $this->container, true);
             }
 
-            if (count($locationArray) > 0) {
+            if (!empty($locationArray)) {
                 $this->advert['location']['town_id']     = isset($locationArray['town_id']) && $locationArray['town_id'] ? $locationArray['town_id'] : null;
                 $this->advert['location']['latitude']    = isset($locationArray['latitude']) && $locationArray['latitude'] ? $locationArray['latitude'] : null;
                 $this->advert['location']['longitude']   = isset($locationArray['longitude']) && $locationArray['longitude'] ? $locationArray['longitude'] : null;
