@@ -752,7 +752,7 @@ abstract class AdParser
         $ad->setUser($user);
         $ad->setSkipSolr(1); // TO skip solr update
 
-        $rejectedReason = isset($this->advert['rejected_reason']) ? serialize($this->advert['rejected_reason']) : null;
+        $rejectedReason = count($this->advert['rejected_reason']) > 0 ? serialize($this->advert['rejected_reason']) : null;
 
         // Save ad is trade ad or not
         if ($user) {
