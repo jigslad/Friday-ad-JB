@@ -94,6 +94,7 @@ class UserPackageRepository extends EntityRepository
             $userPackage->setUser($user);
             $userPackage->setPackage($package);
             $userPackage->setStatus('A');
+            $userPackage->setCreatedAt(time());
 
             if ($paymentId != null) {
                 $userPackage->setPayment($this->getEntityManager()->getReference('FaPaymentBundle:Payment', $paymentId));
@@ -209,6 +210,7 @@ class UserPackageRepository extends EntityRepository
         foreach ($userPackages as $userPackage) {
             $userPackage->setStatus('C');
             $userPackage->setClosedAt(time());
+            $userPackage->setUpdatedAt(time());
             $userPackage->setBoostOveride('0');
             $this->_em->persist($userPackage);
             $this->_em->flush();
@@ -636,7 +638,8 @@ class UserPackageRepository extends EntityRepository
     public function checkIsAutoRenewedPackage($userId)
     {
         $qb = $this->createQueryBuilder(self::ALIAS)->select(self::ALIAS.'.is_auto_renew')->andWhere(self::ALIAS.'.status = :status')->andWhere(self::ALIAS.'.user = :userId')
-                    ->setParameter('status', 'A')->setParameter('userId', $userId);
+        ->setParameter('status', 'A')->setParameter('userId', $userId)->setParameter('status', 'A')->setParameter('userId', $userId)->orderBy(self::ALIAS.'.id', 'DESC')
+        ->setMaxResults(1);;
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result['is_auto_renew'];
     }
