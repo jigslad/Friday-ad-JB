@@ -438,6 +438,25 @@ class NewsletterController extends CoreController
      *
      * @return RedirectResponse A RedirectResponse object.
      */
+    public function resubscribeSuccessFromMailAction(Request $request)
+    {
+        if ($request->query->get('guid')) {
+            $dotmailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('guid' => $request->query->get('guid')));
+            $dotMailer->setDotmailerNewsletterUnsubscribe(0);
+            $this->getEntityManager()->persist($dotMailer);
+            $this->getEntityManager()->flush($dotMailer);
+        }
+        $newsletterUrl = $this->generateUrl('my_account_newsletter').'?guid='.$request->query->get('guid');
+        return $this->redirect($newsletterUrl);
+    }
+    
+    /**
+     * This is resubscribe success action.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse A RedirectResponse object.
+     */
     public function resubscribeSuccessAction(Request $request)
     {        
         return $this->render('FaUserBundle:Newsletter:newsletterResubscribeSuccess.html.twig');

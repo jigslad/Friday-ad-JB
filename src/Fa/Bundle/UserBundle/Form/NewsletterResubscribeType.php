@@ -198,7 +198,7 @@ class NewsletterResubscribeType extends AbstractType
     			$dotmailer = new Dotmailer();
     			$dotmailer->setOptIn(1);
     			$dotmailer->setFadUser(1);
-    			$dotmailer->setDotmailerNewsletterUnsubscribe(0);
+    			//$dotmailer->setDotmailerNewsletterUnsubscribe(0);
     			$dotmailer->setEmail($form->get('email')->getData());
     			$dotmailer->setGuid(CommonManager::generateGuid($form->get('email')->getData()));
     			$dotmailer->setIsSuppressed(0);
@@ -226,7 +226,7 @@ class NewsletterResubscribeType extends AbstractType
     			
      			
         	} else {
-        	    $dotMailer->setDotmailerNewsletterUnsubscribe(0);
+        	    //$dotMailer->setDotmailerNewsletterUnsubscribe(0);
         	    if($form->get('email_alert')->getData() == 1) {
         	        $newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getAllNewsletterTypeByOrd($this->container, 47);
         	    }
