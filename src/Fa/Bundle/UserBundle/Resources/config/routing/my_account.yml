@@ -64,3 +64,7 @@ newsletter_subscribe_success:
     path:     /newsletter/subscribe_success
     defaults: { _controller: FaUserBundle:Newsletter:subscribeSuccess }
     
+newsletter_resubscribe_success_from_mail:
+    path:     /newsletter/resubscribe_success_from_mail
+    defaults: { _controller: FaUserBundle:Newsletter:resubscribeSuccessFromMail }
+    

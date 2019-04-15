@@ -1141,12 +1141,17 @@ class DotmailerRepository extends EntityRepository
         $data = array();
         $data['unsubscribedContact']['email'] = $dataValues[0];
         unset($dataLabels[0]);
-        foreach ($dataLabels as $index => $dataLabel) {
-            $data['unsubscribedContact']['dataFields'][] = array(
-                'key' => $dataLabel,
-                'value' => $dataValues[$index],
-            );
-        }
+       
+        $data['unsubscribedContact']['dataFields'][] = array(
+            'key' => 'FIRSTNAME',
+            'value' => ($dotmailer->getFirstName())?ucwords($dotmailer->getFirstName()):"",
+        );
+        $data['unsubscribedContact']['dataFields'][] = array(
+            'key' => 'LASTNAME',
+            'value' => ($dotmailer->getLastName())?ucwords($dotmailer->getLastName()):"",
+        );
+        
+        $data['ReturnUrlToUseIfChallenged'] = $container->get('router')->generate('newsletter_resubscribe_success_from_mail', array('guid' => $dotmailer->getGuid()), true);
         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
