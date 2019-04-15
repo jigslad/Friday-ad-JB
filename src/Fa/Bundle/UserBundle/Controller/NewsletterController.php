@@ -165,6 +165,11 @@ class NewsletterController extends CoreController
                     
                     $this->getEntityManager()->persist($user);
                     $this->getEntityManager()->flush($user);
+                    
+                    //send to dotmailer instantly.
+                    $this->getRepository('FaDotMailerBundle:Dotmailer')->sendContactInfoToConsentDotmailerRequest($dotmailer,$this->container);
+                    $this->getRepository('FaDotMailerBundle:Dotmailer')->sendContactInfoToResubscribeDotmailerRequest($dotmailer,$this->container);
+                    //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');                   
                                        
                     $newsletterSuccessUrl = $this->generateUrl('newsletter_resubscribe_success').'?guid='.$request->query->get('guid');
                     return $this->redirect($newsletterSuccessUrl);
@@ -243,6 +248,10 @@ class NewsletterController extends CoreController
                     
                     $this->getEntityManager()->persist($user);
                     $this->getEntityManager()->flush($user);
+                    
+                    $this->getRepository('FaDotMailerBundle:Dotmailer')->sendContactInfoToConsentDotmailerRequest($dotmailer,$this->container);
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+                    
                     
                     $newsletterSuccessUrl = $this->generateUrl('newsletter_subscribe_success').'?guid='.$request->query->get('guid');
                     return $this->redirect($newsletterSuccessUrl);
