@@ -1130,7 +1130,7 @@ class DotmailerRepository extends EntityRepository
     {
         $masterId = $container->getParameter('fa.dotmailer.master.addressbook.id');
         $url = $container->getParameter('fa.dotmailer.api.url').'/'.$container->getParameter('fa.dotmailer.api.version').'/';
-        
+        $baseurl = $container->getParameter('base_url');
         // build url by appending resource to it.
         $url = $url.'address-books/'.$masterId.'/contacts/resubscribe';
          
@@ -1151,7 +1151,7 @@ class DotmailerRepository extends EntityRepository
             'value' => ($dotmailer->getLastName())?ucwords($dotmailer->getLastName()):"",
         );
         
-        $data['ReturnUrlToUseIfChallenged'] = $container->get('router')->generate('newsletter_resubscribe_success_from_mail', array('guid' => $dotmailer->getGuid()), true);
+        $data['ReturnUrlToUseIfChallenged'] = $baseurl.$container->get('router')->generate('newsletter_resubscribe_success_from_mail', array('guid' => $dotmailer->getGuid()), true);
         
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
