@@ -176,7 +176,7 @@ class NewsletterSubscribeType extends AbstractType
     			$this->em->flush($user);
     		}
 
-            file_put_contents('/var/www/html/newfriday-ad/web/uploads/testing.txt', 'line '.__LINE__.$this->_em->getRepository('FaDotMailerBundle:Dotmailer')->dotmailerFindByEmail($user->getEmail()).'|', FILE_APPEND);
+            //file_put_contents('/var/www/html/newfriday-ad/web/uploads/testing.txt', 'line '.__LINE__.$this->_em->getRepository('FaDotMailerBundle:Dotmailer')->dotmailerFindByEmail($user->getEmail()).'|', FILE_APPEND);
     		$dotMailer = $this->em->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('email' => $form->get('email')->getData()));
     		if (!$dotMailer) {
     			$dotmailer = new Dotmailer();
