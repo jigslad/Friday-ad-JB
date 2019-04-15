@@ -441,7 +441,7 @@ class NewsletterController extends CoreController
     public function resubscribeSuccessFromMailAction(Request $request)
     {
         if ($request->query->get('guid')) {
-            $dotmailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('guid' => $request->query->get('guid')));
+            $dotMailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('guid' => $request->query->get('guid')));
             $dotMailer->setDotmailerNewsletterUnsubscribe(0);
             $this->getEntityManager()->persist($dotMailer);
             $this->getEntityManager()->flush($dotMailer);
