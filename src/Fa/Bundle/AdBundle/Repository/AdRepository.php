@@ -2876,7 +2876,8 @@ class AdRepository extends EntityRepository
         //image url
         $adMainPhoto = null;
         if ($url = $this->_em->getRepository('FaAdBundle:AdImage')->getImageUrl($ad, '300X225', 1, $container)) {
-            $adMainPhoto = $container->getParameter('fa.url.scheme').":".$url;
+            //$adMainPhoto = $container->getParameter('fa.url.scheme').":".$url;
+            $adMainPhoto = $url;
         } else {
             $adMainPhoto = $container->getParameter('fa.url.scheme').":".$container->getParameter('fa.static.url').'/fafrontend/images/no-image-grey.png';
         }
