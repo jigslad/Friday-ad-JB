@@ -283,8 +283,18 @@ class PaymentRepository extends EntityRepository
 
             if ($ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_DRAFT_ID
                 || $ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_EXPIRED_ID || $ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_SOLD_ID) {
+                $expirationDays = '';
+                
+                $adPackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdPackageArrayByAdId($ad->getId());
                 $expirationDays = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($ad->getCategory()->getId(), $container);
-                $ad->setExpiresAt($this->_em->getRepository('FaAdBundle:Ad')->getAdPrintExpiry($ad->getId(), CommonManager::getTimeFromDuration($expirationDays.'d')));
+                if($expirationDays!='') { $expirationDays = $expirationDays.'d'; }
+                if(!empty($adPackage)) {
+                    if(!empty($adPackage[$ad->getId()]) && $adPackage[$ad->getId()]['duration']!='') {
+                        $expirationDays = $adPackage[$ad->getId()]['duration'];
+                    }
+                }
+                    
+                $ad->setExpiresAt($this->_em->getRepository('FaAdBundle:Ad')->getAdPrintExpiry($ad->getId(), CommonManager::getTimeFromDuration($expirationDays)));
                 $this->_em->persist($ad);
                 $this->_em->flush($ad);
             }
