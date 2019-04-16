@@ -7,6 +7,12 @@
 
 {% set loginError = strip_tags(form_errors(form), '')|trim %}
 
+{% block scripttop %}
+    <style>
+        .gplus-btn, .gplus-btn:hover, .gplus-btn:hover, .gplus-btn:active {background:url(/bundles/fafrontend/images/google_signin.png) no-repeat;margin-left:22px; background-color: #3265D1 !important;}
+    </style>
+{% endblock %}
+
 {% block body %}
     <div class="posting-bg">
         <div class="fad-sign-bdr">&nbsp;</div>
