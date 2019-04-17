@@ -53,7 +53,7 @@
                             {% endif %}
                             <div class="item" data-equalizer-watch>
                                 {% set gaEventLabel = profileUserDetail['user_name'] ~ ' - ' ~ adPosition %}
-                                <a class="tricky-link" href='javascript:visitUserProfileOrAd("{{ adUrl }}", "Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>
+                                <a class="tricky-link" href="{{ adUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>
                                 	{% if attribute(profileExposureUserAd, constant(profileExposureUserAdSolrMapping ~ 'TITLE')) is defined %}
                                        {{trim_text(attribute(profileExposureUserAd, constant(profileExposureUserAdSolrMapping ~ 'TITLE')), 65)|raw}}
                                     {% endif %}

@@ -2804,3 +2804,7 @@
   .chcw_content { width: 100%; height: 100%; height: -webkit-calc(100% - 46px); height: -moz-calc(100% - 46px); height: calc(100% - 46px); overflow: auto; -webkit-overflow-scrolling: touch; }
   body.noscroll { overflow: hidden;  }
 }
+@media only screen and (max-width:768px) {
+    .chcw_header { position: fixed !important; width: 100% !important; z-index: 100 !important; }
+    .chcw_content { position: relative !important; top: 40px !important; }
+}

@@ -51,6 +51,7 @@ class AdPrintController extends CoreController
 
         $count = $this->getRepository('FaAdBundle:AdPrint')->getAdPrintQueryBuilder($searchParam, $this->container)
             ->select('COUNT('.AdPrintRepository::ALIAS.'.id)')
+            ->andWhere(AdRepository::ALIAS.'.is_blocked_ad=0')
             ->getQuery()->getSingleScalarResult();
 
         return new JsonResponse(array('count' => $count));
@@ -80,6 +81,7 @@ class AdPrintController extends CoreController
 
         $adPrintResult = $this->getRepository('FaAdBundle:AdPrint')->getAdPrintQueryBuilder($searchParam, $this->container)
             ->select(AdPrintRepository::ALIAS, AdRepository::ALIAS, PrintEditionRepository::ALIAS, CategoryRepository::ALIAS)
+            ->andWhere(AdRepository::ALIAS.'.is_blocked_ad=0')
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->getQuery()
