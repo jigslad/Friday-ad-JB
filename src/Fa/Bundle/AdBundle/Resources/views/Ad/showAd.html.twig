@@ -305,6 +305,13 @@
 {% endif %}          
 
 {% block body %}
+<style>
+.get_online_decision .apply-new-left img.logo_img { height:60px !important; }
+@media only screen and (min-width:320px) and (max-width:640px) {
+	.get_online_decision .mobile-logo-button img.logo_img { height:48px !important; }
+}
+</style>
+
 {% set imageZoomeZoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_IN_IMAGE_ZOOM') %}
 {% set imageZoomBannerExist = false %}
 {% if (imageZoomeZoneId in bannersArray|keys) %}
