@@ -254,7 +254,6 @@ class PackageDiscountCodeAdminController extends CoreController implements Resou
 
         $userentity = $this->getRepository('FaPromotionBundle:UserPackageDiscountCode')->getTotalUsedCountForCode($id);
         
-        //echo '<pre>'; print_R($userentity);die();
         //$entity = array();
         
         try {

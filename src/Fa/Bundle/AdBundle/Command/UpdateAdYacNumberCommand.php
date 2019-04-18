@@ -114,7 +114,6 @@ EOF
         if (!$objAds) {
             $output->writeln('No ads found.', true);
         }
-        //echo '<pre>';print_r($objAds);die;
         foreach ($objAds as $objAd) {
             $ad = $this->em->getRepository('FaAdBundle:Ad')->find($objAd['ad_Ref']);
             $this->updateAdYacNumber($input, $output, $ad);
@@ -147,7 +146,6 @@ EOF
 
             $i              = ($i + $step);
             $commandOptions = null;
-            //echo '<pre>';print_r($input->getOptions());die;
             foreach ($input->getOptions() as $option => $value) {
                 if ($value) {
                     $commandOptions .= ' --'.$option.'="'.$value.'"';
