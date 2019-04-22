@@ -167,7 +167,6 @@ class ManageMyAdController extends CoreController
             }
         }
         
-        //echo 'ExpiresAt===<pre>';print_r($getCurrentActivePackage->getPackage()->getPrice());die;
 
         if ($boostedAdCount > 0 && $boostMaxPerMonth > 0) {
             $boostAdRemaining = $boostMaxPerMonth - $boostedAdCount;
