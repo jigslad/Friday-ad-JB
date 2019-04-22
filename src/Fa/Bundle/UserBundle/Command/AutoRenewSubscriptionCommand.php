@@ -64,6 +64,7 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
         ->setName('fa:auto-renew-subscription')
         ->setDescription('Auto Renew subscription')
         ->addOption('user_id', null, InputOption::VALUE_OPTIONAL, 'user id', null)
+        ->addOption('renew_date', null, InputOption::VALUE_OPTIONAL, 'renew date', null)
         ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit of script execution', null)
         ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null);
     }
@@ -100,7 +101,7 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
     {
         $offset  = $input->getOption('offset');
         $userId  = $input->getOption('user_id');
-        $userPackages = $this->getUserSubscriptionsResult($userId, $offset, $this->limit);
+        $userPackages = $this->getUserSubscriptionsResult($input, $offset, $this->limit);
         if (!empty($userPackages)) {            
             foreach ($userPackages as $userPackage) {                
                 $userStatus = $this->em->getRepository('FaUserBundle:User')->getUserStatus($userPackage['user_id'], $this->getContainer());
@@ -124,7 +125,7 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
     protected function autoRenewSubscription($input, $output)
     {
         $user_id   = $input->getOption('user_id');
-        $count     = $this->getUserSubscriptionsCount($user_id);
+        $count     = $this->getUserSubscriptionsCount($input);
         $step      = 200;
         $start_time = time();
         $returnVar = null;
@@ -176,10 +177,11 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
      *
      * @return object.
      */
-    protected function getUserSubscriptionsResult($user_id, $offset, $limit)
+    protected function getUserSubscriptionsResult($input, $offset, $limit)
     {
+        $user_id  = $input->getOption('user_id');
         $entityManager         = $this->getContainer()->get('doctrine')->getManager();
-        $currentTime = date('Y-m-d');
+        $currentTime = $input->getOption('renew_date')?$input->getOption('renew_date'):date('Y-m-d');
         
         $querySql  = "SELECT * FROM ".$this->mainDbName.".user_package up WHERE up.status = 'A' AND up.is_auto_renew = 1";
         $querySql  .= " AND (date_format(up.expires_at,'%Y-%m-%d') = '".$currentTime."' or (CASE WHEN (up.updated_at > up.created_at) THEN ";
@@ -203,10 +205,11 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
      *
      * @return integer.
      */
-    protected function getUserSubscriptionsCount($user_id)
+    protected function getUserSubscriptionsCount($input)
     {
+        $user_id  = $input->getOption('user_id');        
         $entityManager         = $this->getContainer()->get('doctrine')->getManager();
-        $currentTime = date('Y-m-d');
+        $currentTime = $input->getOption('renew_date')?$input->getOption('renew_date'):date('Y-m-d');
         
         $querySql  = "SELECT count(up.user_id) as user_count FROM ".$this->mainDbName.".user_package up WHERE up.status = 'A' AND up.is_auto_renew = 1";
         $querySql  .= " AND (date_format(up.expires_at,'%Y-%m-%d') = '".$currentTime."' or (CASE WHEN (up.updated_at > up.created_at) THEN ";
