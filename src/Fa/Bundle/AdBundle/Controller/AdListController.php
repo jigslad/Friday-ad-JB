@@ -2107,24 +2107,24 @@ class AdListController extends CoreController
     private function getProfileExposureUserAds($userId, $searchParams)
     {
         $profileExposureUserAds = $this->getProfileExposureUserAdsSolrResult($userId, $searchParams);
-
-        if (count($profileExposureUserAds)>=3) {
-            $adIds = array();
-            foreach ($profileExposureUserAds as $profileExposureUserAd) {
-                $adIds[] = $profileExposureUserAd[AdSolrFieldMapping::ID];
-            }
-            $profileExposureUserOtherAds = $this->getProfileExposureUserAdsSolrResult($userId, array(), $adIds);
-            $i = count($profileExposureUserAds);
-            foreach ($profileExposureUserOtherAds as $profileExposureUserOtherAd) {
-                if ($i <= 3) {
-                    $profileExposureUserAds[$i] = $profileExposureUserOtherAd;
-                    $i++;
-                } else {
-                    break;
+        if (!empty($profileExposureUserAds)) {
+            if (count($profileExposureUserAds)>=3) {
+                $adIds = array();
+                foreach ($profileExposureUserAds as $profileExposureUserAd) {
+                    $adIds[] = $profileExposureUserAd[AdSolrFieldMapping::ID];
+                }
+                $profileExposureUserOtherAds = $this->getProfileExposureUserAdsSolrResult($userId, array(), $adIds);
+                $i = count($profileExposureUserAds);
+                foreach ($profileExposureUserOtherAds as $profileExposureUserOtherAd) {
+                    if ($i < 3) {
+                        $profileExposureUserAds[$i] = $profileExposureUserOtherAd;
+                        $i++;
+                    } else {
+                        break;
+                    }
                 }
             }
         }
-
         return $profileExposureUserAds;
     }
 
@@ -2140,7 +2140,7 @@ class AdListController extends CoreController
     {
         $data                 = array();
         $page                 = 1;
-        $recordsPerPage       = 12;
+        $recordsPerPage       = 3;
         $data['query_sorter'] = array();
 
         if (count($searchParams)) {
@@ -2216,8 +2216,10 @@ class AdListController extends CoreController
         $businessExposureUsers       = array();
         
         if (!empty($businessExposureMiles)) {
+            $businessExposureMiles = array_unique($businessExposureMiles);           
             foreach ($businessExposureMiles as $businessExposureMile) {
-                foreach ($this->getBusinessExposureUser($data, $businessExposureMile, $viewedBusinessExposureUserIds) as $businessExposureUser) {
+                $varBusUsers = $this->getBusinessExposureUser($data, $businessExposureMile, $viewedBusinessExposureUserIds);                
+                foreach ($varBusUsers as $businessExposureUser) {
                     $businessExposureUsers[] = $businessExposureUser;
                     $viewedBusinessExposureUserIds[] = $businessExposureUser['id'];
                 }
@@ -2238,13 +2240,13 @@ class AdListController extends CoreController
             $response->sendHeaders();
 
             if (!empty($businessExposureUsers)) {
-                shuffle($businessExposureUsers);
+                shuffle($businessExposureUsers);               
                 $businessPageLimit = $this->getRepository('FaCoreBundle:ConfigRule')->getBusinessPageSlots($categoryId, $this->container);
                 for ($i = 0; $i < $businessPageLimit; $i++) {
                     if (isset($businessExposureUsers[$i])) {                        
                         $businessExposureUser = $businessExposureUsers[$i];
-                        $businessExposureUserAds = $this->getProfileExposureUserAds($businessExposureUser[UserShopDetailSolrFieldMapping::ID], $data);
-                        //var_dump($businessExposureUser[UserShopDetailSolrFieldMapping::ID]);
+                        $businessExposureUserAds = $this->getProfileExposureUserAds($businessExposureUser[UserShopDetailSolrFieldMapping::ID], $data);                        
+                       
                         /*$businessExposureUserDetails[] = array(
                             'user_id' => $businessExposureUser[UserShopDetailSolrFieldMapping::ID],
                             'company_welcome_message' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::COMPANY_WELCOME_MESSAGE]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::COMPANY_WELCOME_MESSAGE] : null),
@@ -2253,7 +2255,7 @@ class AdListController extends CoreController
                             'status_id' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID] : null),
                             'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
                         );*/
-                        if(!empty($businessExposureUserAds) && count($businessExposureUserAds)>=3) {
+                        if(!empty($businessExposureUserAds)) {
                             $businessExposureUserDetails[] = array(
                                 'businessExposureUserAds' => $businessExposureUserAds,
                                 'businessUserId'          => $businessExposureUser[UserShopDetailSolrFieldMapping::ID],
@@ -2310,10 +2312,11 @@ class AdListController extends CoreController
                 $additionaldistance = intval($exposureMiles);
             }
             $data['query_filters']['user_shop_detail']['location'] = $locationId.'|'.($distance+$additionaldistance);
-            //set ad criteria to search
-            //$data['static_filters'] .= ' AND '.UserShopDetailSolrFieldMapping::PROFILE_EXPOSURE_MILES.':'.$exposureMiles;
-        }
+         }
 
+         //set ad criteria to search
+         $data['static_filters'] .= ' AND '.UserShopDetailSolrFieldMapping::PROFILE_EXPOSURE_MILES.':[0 TO '.$exposureMiles.']';
+         
         
         if ($categoryId) {
             $srchCateIds = $this->getRepository('FaEntityBundle:Category')->getNestedChildrenIdsByCategoryId($categoryId,$this->container);
@@ -2335,14 +2338,14 @@ class AdListController extends CoreController
         
         $data['static_filters'] .= ' AND '.UserShopDetailSolrFieldMapping::USER_LIVE_ADS_COUNT.': [3 TO *]';
         
-       /* if (!empty($viewedBusinessExposureUserIds)) {
+        if (!empty($viewedBusinessExposureUserIds)) {
             $viewedBusinessExposureUserIds = array_unique($viewedBusinessExposureUserIds);
             if (isset($data['static_filters'])) {
                 $data['static_filters'] = $data['static_filters'].' AND -'.UserShopDetailSolrFieldMapping::ID.': ("'.implode('" "', $viewedBusinessExposureUserIds).'")';
             } else {
                 $data['static_filters'] = ' AND -'.UserShopDetailSolrFieldMapping::ID.': ("'.implode('" "', $viewedBusinessExposureUserIds).'")';
             }
-        }*/
+        }
 
         $data['query_sorter']   = array();
         if (strlen($keywords)) {
