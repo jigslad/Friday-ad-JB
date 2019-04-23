@@ -65,4 +65,25 @@ class AdFeedMappingRepository extends EntityRepository
     {
         return $this->_em->getClassMetadata('AdFeedBundle:AdFeedMapping')->getTableName();
     }
+    
+    /**
+     * Get FeedMapping array By Text.
+     *
+     * @param string $text Category Name.
+     * @param integer $ref_site_id ref_site_id.
+     *
+     * @return array
+     */
+    public function getFeedMappingByText($text,$ref_site_id)
+    {
+        $query = $this->getBaseQueryBuilder()->andWhere(self::ALIAS.'.text = :catname')
+        ->setParameter('catname', $text)
+        ->andWhere(self::ALIAS.'.ref_site_id = :ref_site_id')
+        ->setParameter('ref_site_id', $ref_site_id)
+        ->andWhere(self::ALIAS.'.target is not null')
+        ->orderBy(self::ALIAS.'.id', 'desc')
+        ->setMaxResults(1);
+        $mapping     = $query->getQuery()->getOneOrNullResult();
+        return  $mapping;
+    }
 }
