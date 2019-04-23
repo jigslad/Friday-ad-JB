@@ -113,7 +113,7 @@ class UserSiteRepository extends EntityRepository
     {
         $document = new \SolrInputDocument($user);
         $userSite = $this->_em->getRepository('FaUserBundle:UserSite')->findOneBy(array('user' => $user->getId()));
-
+        $adsCount = 0;
         $document = $this->addField($document, UserShopDetailSolrFieldMapping::ID, $user->getId());
         $document = $this->addField($document, UserShopDetailSolrFieldMapping::POSTCODE, $user->getZip());
         $document = $this->addField($document, UserShopDetailSolrFieldMapping::DOMICILE_ID, ($user->getLocationDomicile() ? $user->getLocationDomicile()->getId() : null));
@@ -168,7 +168,11 @@ class UserSiteRepository extends EntityRepository
         }
 
         $document = $this->addField($document, UserShopDetailSolrFieldMapping::SHOP_PACKAGE_PURCHASED_AT, $userPackagePurchasedAt);
-
+        $adsCount = $this->_em->getRepository('FaAdBundle:Ad')->getActiveAdCountForUser($user->getId());
+        var_dump($adsCount);
+        $document = $this->addField($document, UserShopDetailSolrFieldMapping::USER_LIVE_ADS_COUNT, $adsCount);
+        
+        
         return $document;
     }
 

@@ -172,13 +172,14 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 .boosted_ad .boost-ribbon { display:block;background:url(/bundles/fafrontend/images/featured-arrow.svg) no-repeat;width:25px;height:25px;position:absolute;right:0px;top:0px;text-indent:100%;overflow:hidden;white-space:nowrap;z-index:1}
 .boosted_ad .boost-ribbon span {right: -21px;position: relative;top: 6px;color: #ffffff;}
 
-.bus-shop-user-item-slider .owl-item .item {width:164px;border:0;padding:0}
+.bus-shop-user-item-slider .owl-item .item {width:100%;border:0;padding:0}
 .bus-shop-user-item-slider .list-img {width:164px;height:123px}
 .bus-shop-user-item-slider .list-img img {max-width:164px;max-height:123px}
 .bus-shop-user-item-slider .list-price {float:none;text-align:left;margin:10px 0 0 0}
 .bus-shop-user-item-slider h3 {float:none;font-family:'Asap',sans-serif;font-size:14px;font-weight:700;height:80px}
 .bus-shop-user-item-slider .owl-prev, .bus-shop-user-item-slider .owl-next {height:240px;opacity:.5}
 .bus-shop-user-item-slider .owl-item .item {margin:auto}
+.bus-shop-user-item-slider .owl-item .ads-item { width:164px; }
 </style>
 {% if displayRecommendedSlot is defined and displayRecommendedSlot==1 %}
     {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
@@ -295,6 +296,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% set realAdCnt = realAdCnt + 1 %}
                     {% set slotAdCount = slotAdCount + 1 %}
 					{% set displayBusinessExposureBlock = 0 %}
+					{% set displayBusinessExposureSingleBlock = 0 %}
 					
                     {% if ((realAdCnt > resultCount) and (setExtendedHeading==0)) %}
                         <div data-alert="" class="alert-box info radius">
@@ -326,10 +328,14 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 {% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and totalAdCount > 0  %}                       
                     {% if realAdCnt==5 or realAdCnt==10 or realAdCnt==15 %} 
                         {% set displayBusinessExposureBlock = 1 %}
+                    {% elseif realAdCnt==10 %} 
+                    	{% set displayBusinessExposureSingleBlock = 1 %}
                     {% endif %}
-                    {% if displayBusinessExposureBlock ==1 and businessExposureUsersDetails[busUserIndex] is defined and  businessExposureUsersDetails[busUserIndex]|length > 0 %} 
-                        {{ include('FaAdBundle:AdList:businessExposureSliderBlock.html.twig', {'busUserIndex':busUserIndex }) }}
-                        {% set busUserIndex = busUserIndex + 1 %}
+                    {% if displayBusinessExposureBlock ==1 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %} 
+                        {{ include('FaAdBundle:AdList:businessExposureSliderBlock.html.twig') }}
+                	{% endif %}
+                	{% if displayBusinessExposureSingleBlock ==1 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %} 
+                        {{ include('FaAdBundle:AdList:businessExposureSingleBlock.html.twig') }}
                 	{% endif %}
                 {% endif %}
                     

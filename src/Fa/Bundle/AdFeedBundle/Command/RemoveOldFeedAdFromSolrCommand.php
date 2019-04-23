@@ -66,9 +66,6 @@ EOF
         
         echo "Command Started At: ".date('Y-m-d H:i:s', time())."\n";
         
-        /* $transId = trim($input->getOption('trans_id'));
-        $ll = $this->feedAdvertRequest($transId);
-        */
         
         //get options passed in command
         $offset = $input->getOption('offset');
