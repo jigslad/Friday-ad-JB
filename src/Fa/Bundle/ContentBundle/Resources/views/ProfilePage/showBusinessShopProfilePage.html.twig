@@ -74,6 +74,7 @@
 {% endblock %}
 
 {% block body %}
+<style>.about-shop .other-pro-location { margin:10px 0px !important; }.bus-name-head { line-height:38px !important; }</style>
 {{ include('FaContentBundle:ProfilePage:shopHeader.html.twig') }}
 <div class="shops-main">
     <div class="row" id="profile_main_div">
@@ -107,13 +108,15 @@
             </div>
         </div>
         
-        <div class="large-18 columns">
+        <div class="large-18 columns white-content-box">
             {% if userDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
-                
+                <div id="business_welcome_message_div" class="mb20">
+                    {{ include('FaContentBundle:ProfilePage:shopWelcomeMessage.html.twig') }}
+                </div>
                 {% if userDetail['about_us']|length %}
-                    <div class="white-content-box" id="business_about_us_heading">
+                    <div id="business_about_us_heading">
                         <div class="clearfix">
-                            <h3 class="shop-profile-title left">{{ 'About us'|trans({}, 'frontend-profile-page') }}</h3>
+                           {#<h3 class="shop-profile-title left">{{ 'About us'|trans({}, 'frontend-profile-page') }}</h3> #}
                             {% if allowProfileEdit %}
                                 <div class="profile-edit clearfix about-edit">
                                     <div class="right relative">

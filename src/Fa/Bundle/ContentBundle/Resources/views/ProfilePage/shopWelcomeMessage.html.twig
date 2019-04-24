@@ -1,4 +1,4 @@
-<h2 id="company_welcome_message_content">
+<h2 id="company_welcome_message_content" class="shop-profile-title">
 {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['company_welcome_message'], 'hide','welcome_']) %}
 {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
 {{ adDescWithReplacedPhoneAndEmail|raw }}
