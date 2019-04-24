@@ -11,21 +11,21 @@
 
 namespace Fa\Bundle\ReportBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Fa\Bundle\CoreBundle\Controller\CoreController;
+use Fa\Bundle\CoreBundle\Manager\FormManager;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\ReportBundle\Form\AdReportSearchAdminType;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This is default controller for dot mailer bundle.
  *
- * @author Amit Limbadia <amitl@aspl.in>
+ * @author    Amit Limbadia <amitl@aspl.in>
  * @copyright 2014 Friday Media Group Ltd
- * @version v1.0
+ * @version   v1.0
  */
 class AdReportAdminController extends CoreController implements ResourceAuthorizationController
 {
@@ -35,19 +35,23 @@ class AdReportAdminController extends CoreController implements ResourceAuthoriz
      * @param Request $request A Request object.
      *
      * @param Response A Response object.
+     * @return Response
      */
     public function indexAction(Request $request)
     {
+        /**
+         * @var FormManager $formManager
+         */
         // initialize search filter manager service and prepare filter data for searching
         $this->get('fa.searchfilters.manager')->init($this->getHistoryRepository('FaReportBundle:AdReportDaily'), $this->getHistoryRepositoryTable('FaReportBundle:AdReportDaily'), 'fa_item_report');
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
         // initialize form manager service
-        $formManager    = $this->get('fa.formmanager');
-        $form           = $formManager->createForm(AdReportSearchAdminType::class, null, array('action' => $this->generateUrl('fa_report_ad'), 'method' => 'GET', 'allow_extra_fields' =>true));
-        $pagination     = null;
+        $formManager = $this->get('fa.formmanager');
+        $form = $formManager->createForm(AdReportSearchAdminType::class, null, array('action' => $this->generateUrl('fa_report_ad'), 'method' => 'GET', 'allow_extra_fields' => true));
+        $pagination = null;
         $data['search'] = array_filter($data['search']);
-        $isCountQuery   = false;
+        $isCountQuery = false;
 
         if (isset($data['search']['town_id'])) {
             $townIds = array_filter($data['search']['town_id']);
@@ -93,13 +97,13 @@ class AdReportAdminController extends CoreController implements ResourceAuthoriz
         }
 
         $parameters = array(
-            'heading'         => 'Ad report',
-            'form'            => $form->createView(),
-            'pagination'      => $pagination,
-            'sorter'          => $data['sorter'],
-            'searchParams'    => $data['search'],
-            'page'            => (isset($page) ? $page : 1),
-            'isCountQuery'    => $isCountQuery,
+            'heading' => 'Ad report',
+            'form' => $form->createView(),
+            'pagination' => $pagination,
+            'sorter' => $data['sorter'],
+            'searchParams' => $data['search'],
+            'page' => (isset($page) ? $page : 1),
+            'isCountQuery' => $isCountQuery,
         );
 
         return $this->render('FaReportBundle:AdReportAdmin:index.html.twig', $parameters);
@@ -109,8 +113,7 @@ class AdReportAdminController extends CoreController implements ResourceAuthoriz
      * Ad report export to csv action.
      *
      * @param Request $request A Request object.
-     *
-     * @param Response A Response object.
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function exportAdReportToCsvAction(Request $request)
     {
@@ -119,7 +122,7 @@ class AdReportAdminController extends CoreController implements ResourceAuthoriz
         } else {
             CommonManager::setAdminBackUrl($request, $this->container);
             $backUrl = CommonManager::getAdminCancelUrl($this->container);
-            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:ad:report:export-to-csv --criteria=\''.$this->get('session')->get('ad_report_export_criteria').'\' >/dev/null &');
+            exec('nohup' . ' ' . $this->container->getParameter('fa.php.path') . ' ' . $this->container->getParameter('project_path') . '/console fa:ad:report:export-to-csv --criteria=\'' . $this->get('session')->get('ad_report_export_criteria') . '\' >/dev/null &');
             $searchParam = unserialize($this->get('session')->get('ad_report_export_criteria'));
             if (isset($searchParam['search']['csv_email']) && $searchParam['search']['csv_email']) {
                 $message = $this->get('translator')->trans('Report csv will be generated and emailed to %email%.', array('%email%' => $searchParam['search']['csv_email']));
@@ -134,15 +137,14 @@ class AdReportAdminController extends CoreController implements ResourceAuthoriz
      * Ad report list csv action.
      *
      * @param Request $request A Request object.
-     *
-     * @param Response A Response object.
+     * @return JsonResponse|Response
      */
     public function ajaxListAdReportCsvAction(Request $request)
     {
-        $htmlContent   = '';
+        $htmlContent = '';
 
         if ($request->isXmlHttpRequest()) {
-            $fileList    = CommonManager::listDirFileByDate($this->container->get('kernel')->getRootDir()."/../data/reports/ad/", array('csv'));
+            $fileList = CommonManager::listDirFileByDate($this->container->get('kernel')->getRootDir() . "/../data/reports/ad/", array('csv'));
             $htmlContent = $this->renderView('FaReportBundle:AdReportAdmin:ajaxListAdReportCsv.html.twig', array('fileList' => $fileList));
             return new JsonResponse(array('htmlContent' => $htmlContent));
         } else {
@@ -154,20 +156,19 @@ class AdReportAdminController extends CoreController implements ResourceAuthoriz
      * Ad report delete csv action.
      *
      * @param Request $request A Request object.
-     *
-     * @param Response A Response object.
+     * @return JsonResponse|Response
      */
     public function ajaxDeleteAdReportCsvAction(Request $request)
     {
         $htmlContent = '';
-        $error       = '';
+        $error = '';
 
         if ($request->isXmlHttpRequest()) {
-            $reportPath = $this->container->get('kernel')->getRootDir()."/../data/reports/ad/";
-            $fileName   = $request->get('fileName');
-            if (is_file($reportPath.$fileName)) {
-                unlink($reportPath.$fileName);
-                $fileList    = CommonManager::listDirFileByDate($reportPath, array('csv'));
+            $reportPath = $this->container->get('kernel')->getRootDir() . "/../data/reports/ad/";
+            $fileName = $request->get('fileName');
+            if (is_file($reportPath . $fileName)) {
+                unlink($reportPath . $fileName);
+                $fileList = CommonManager::listDirFileByDate($reportPath, array('csv'));
                 $htmlContent = $this->renderView('FaReportBundle:AdReportAdmin:ajaxListAdReportCsv.html.twig', array('fileList' => $fileList, 'csvDelete' => 1));
             }
             return new JsonResponse(array('htmlContent' => $htmlContent, 'error' => $error));
@@ -179,16 +180,16 @@ class AdReportAdminController extends CoreController implements ResourceAuthoriz
     /**
      * Download ad report csv.
      *
-     * @param Request $request A Request object.
-     *
+     * @param string $fileName
      * @return Response|JsonResponse A Response or JsonResponse object.
      */
     public function downloadAdReportCsvAction($fileName)
     {
-        $filePath = $this->container->get('kernel')->getRootDir()."/../data/reports/ad/".$fileName;
+        $filePath = $this->container->get('kernel')->getRootDir() . "/../data/reports/ad/" . $fileName;
         if (is_file($filePath)) {
             CommonManager::downloadFile($filePath, $fileName);
             return new Response();
         }
     }
+
 }

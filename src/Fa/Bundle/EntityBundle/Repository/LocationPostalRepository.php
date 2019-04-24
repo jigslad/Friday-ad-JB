@@ -80,11 +80,17 @@ class LocationPostalRepository extends EntityRepository
     
     private function getAreasByPostCodeQuery($postCode='')
     {
+        if (strpos($postCode, ' ') > 0 && strlen($postCode) > 3) {
+            $postCodePart = trim($postCode);
+        } else {
+            $postCodePart = substr($postCode, 0, 3);
+        }
+
         return $this->getBaseQueryBuilder(self::ALIAS)
             ->select(LocationRepository::ALIAS)
             ->innerJoin('Fa\Bundle\EntityBundle\Entity\Location', LocationRepository::ALIAS, 'WITH', self::ALIAS.'.location_id = '.LocationRepository::ALIAS.'.id')
             ->andWhere(self::ALIAS.'.postal_code LIKE :postal_code')
-            ->setParameter('postal_code', trim($postCode).'%')
+            ->setParameter('postal_code', $postCodePart.'%')
             ->orderBy(self::ALIAS.'.id', 'asc')
             ->getQuery()->getResult();
     }

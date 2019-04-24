@@ -836,7 +836,7 @@ class TradeitParser
         $dimension = $this->advert['dimensions'];
         $dimension = isset($dimension[0]) ? $dimension[0] : null;
 
-        if (count($dimension) > 0) {
+        if (!empty($dimension)) {
             if ($this->advert['parent_category'] == 'For Sale') {
                 $ad_forsale = $this->em->getRepository('FaAdBundle:AdForSale')->findOneBy(array('ad' => $ad->getId()));
 

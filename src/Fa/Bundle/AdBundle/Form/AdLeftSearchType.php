@@ -134,8 +134,7 @@ class AdLeftSearchType extends AbstractType
      */
     public function preSetData(FormEvent $event)
     {
-        $form = $event->getForm();
-        $this->addLocationAutoSuggestField($form);
+        $form = $event->getForm();        
         $defDistance = '';
         $getDefaultRadius = array();
         $rootCategoryId = null;
@@ -143,7 +142,7 @@ class AdLeftSearchType extends AbstractType
         $categoryId   = '';
         $searchParams = $this->request->get('searchParams');
 
-        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:0;
+        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:2;
 
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
             $categoryId = $searchParams['item__category_id'];
@@ -153,18 +152,37 @@ class AdLeftSearchType extends AbstractType
         } else {
             $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
             $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+        }       
+        
+        if($defDistance=='' && $categoryId!='') {
+            $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+            $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+            $form->add(
+                'item__distance',
+                HiddenType::class,
+                array(
+                    'data' => $defDistance,
+                    'empty_data' => $defDistance,
+                )
+           );
+           $form->add('item__location', HiddenType::class);
+           $form->add('item__location_autocomplete', HiddenType::class, array('label' => false,'data'=>$searchLocation,'empty_data'=>$searchLocation));
+           $form->add('item__area', HiddenType::class);
+           $form->add('hide_distance_block', HiddenType::class,array('mapped' => false,'empty_data' => 1,'data'=>1));
+        } else {
+            $this->addLocationAutoSuggestField($form);
+            $form->add(
+                'item__distance',
+                ChoiceType::class,
+                array(
+                    'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
+                    'placeholder' => $defDistance,
+                    'data' => $defDistance,
+                    'attr'    => array('class' => 'fa-select-white')
+                )
+                );
+            $form->add('hide_distance_block', HiddenType::class,array('mapped' => false,'empty_data' => 0,'data'=>0));
         }
-
-        $form->add(
-            'item__distance',
-            ChoiceType::class,
-            array(
-                'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
-                'placeholder' => $defDistance,
-                'data' => $defDistance,
-                'attr'    => array('class' => 'fa-select-white')
-            )
-        );
 
         $this->addCategroyDimensionFilters($form, $categoryId);
         $this->addIsTradeAdField($form);

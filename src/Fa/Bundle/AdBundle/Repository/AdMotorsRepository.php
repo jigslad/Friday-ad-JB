@@ -693,7 +693,7 @@ class AdMotorsRepository extends EntityRepository
      */
     public function getISOFixIds()
     {
-        return array(1652, 1712);
+        return array(1660, 1720);
     }
 
     /**

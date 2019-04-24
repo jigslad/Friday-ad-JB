@@ -74,4 +74,8 @@ interface IndexableDimensionInterface
 
     //dealer or private
     const SELLER               = 'IS_TRADE_AD';
+
+    // adult fields
+    const ETHNICITY               = 'ETHNICITY_ID';
+
 }
