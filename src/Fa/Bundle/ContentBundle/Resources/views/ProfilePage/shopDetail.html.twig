@@ -1,5 +1,5 @@
 <div class="about-shop">
-    <h1 oncopy="gaSendDealerNameCopyEvent('{{ businessName }}');">{{ (userDetail['user_name'] ? userDetail['user_name'] : '-') }}</h1>
+    <h1 class="bus-name-head" oncopy="gaSendDealerNameCopyEvent('{{ businessName }}');">{{ (userDetail['user_name'] ? userDetail['user_name'] : '-') }}</h1>
     <div class="other-pro-location" id="business_location_div">
         {{ include('FaContentBundle:ProfilePage:shopLocationDetail.html.twig') }}
     </div>
@@ -7,13 +7,9 @@
     {% if (userDetail['id'] is defined and userDetail['business_category_id'] is defined) %}
         {{ include('FaContentBundle:ProfilePage:showTrustedUserLogo.html.twig', {'userId':userDetail['id'], 'businessCategoryId':userDetail['business_category_id'], 'userUpsells': userUpsell}) }}
     {% endif %}
-
-    <div id="business_welcome_message_div" class="mt10">
-        {{ include('FaContentBundle:ProfilePage:shopWelcomeMessage.html.twig') }}
-    </div>
     
     {% if (userDetail['contact_through_email'] is defined and userDetail['contact_through_email'] == 1) or (userDetail['contact_through_phone'] is defined and userDetail['contact_through_phone'] == 1) %}
-        <button class="primary-btn-1 expand button uppercase mt10 mb20" name="profilepage_contactuser" id="profilepage_contactuser" type="button">{{'Contact us'|trans({}, 'frontend-profile-page')}}</button>
+        <button class="primary-btn-1 expand button uppercase" name="profilepage_contactuser" id="profilepage_contactuser" type="button">{{'Contact us'|trans({}, 'frontend-profile-page')}}</button>
     {% endif %}
     {% if userDetail['website_link'] is defined  and userDetail['website_link']|length %}
                     {% set websiteLabel = 'Visit website'|trans({}, 'frontend-profile-page') %}  
