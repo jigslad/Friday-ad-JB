@@ -2661,7 +2661,7 @@ class AdListController extends CoreController
     {
         $recommendeSlotResult = array();
         if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
-            $recommendeSlotResult = $this->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotSearchlistArrayByCategoryId($data['search']['item__category_id'], $this->container);
+            $recommendeSlotResult = $this->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCatRecommendedSlotSearchlistArrByCategoryId($data['search']['item__category_id'], $this->container);
         }
         return $recommendeSlotResult;
     }
