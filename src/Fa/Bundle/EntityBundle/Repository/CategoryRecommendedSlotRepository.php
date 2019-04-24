@@ -204,6 +204,59 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
 
         return $recommendedSlotArray;
     }
+    
+    
+    /**
+     * Get category recommended slots
+     *
+     * @param integer $categoryId Category id.
+     * @param object  $container  Container object.
+     *
+     * @return array
+     */
+    public function getCatRecommendedSlotSearchlistArrByCategoryId($categoryId, $container)
+    {
+        if ($container) {
+            $culture     = CommonManager::getCurrentCulture($container);
+            $tableName   = $this->getCategoryRecommendedSlotTableName();
+            $cacheKey    = $tableName.'|'.__FUNCTION__.'|'.$categoryId.'_'.$culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+            
+            if ($cachedValue !== false) {
+                //return $cachedValue;
+            }
+        }
+        $recommendedSlotArray = array();
+        $recommendedSlots =array();
+        
+        $recommendedSlots = $this->createQueryBuilder(self::ALIAS)
+                ->andWhere(self::ALIAS.'.category = :categoryId')
+                ->andWhere(self::ALIAS.'.is_searchlist = 1')
+                ->setParameter('categoryId', $categoryId)
+                ->orderBy(self::ALIAS.'.creative_group')
+                ->getQuery()
+                ->execute();
+                
+
+        if (!empty($recommendedSlots)) {
+            foreach ($recommendedSlots as $recommendedSlot) {
+                $recommendedSlotArray[] = array(
+                    'title' => $recommendedSlot->getTitle(),
+                    'sub_title' => $recommendedSlot->getSubTitle(),
+                    'slot_filename' => $recommendedSlot->getSlotFilename(),
+                    'url' => $recommendedSlot->getUrl(),
+                    'creative_group' => $recommendedSlot->getCreativeGroup(),
+                    'creative_ord' => $recommendedSlot->getCreativeOrd()
+                );
+            }
+        }
+        
+        if ($container && !empty($recommendedSlotArray)) {
+            CommonManager::setCacheVersion($container, $cacheKey, $recommendedSlotArray);
+        }
+        
+        return $recommendedSlotArray;
+    }
 
 
     /**
