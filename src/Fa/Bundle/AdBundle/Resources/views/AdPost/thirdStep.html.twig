@@ -122,6 +122,17 @@
       ga('send', 'event', 'PAA - Step 3', 'Next step', 'google +');
       googleLoginPopup(googleLoginUrl);
     }
+
+    $(window).load(function() {
+        if ($('[type="email"]').next() && $('[type="email"]').next().hasClass('error')) {
+            $('[name="fa_paa_login[user_type]"]').closest('.custom-radio').removeClass('checked');
+            $('[name="fa_paa_login[user_type]"]').removeAttr('checked');
+
+            $('#fa_paa_login_user_type_0').trigger('click');
+            $('#fa_paa_login_user_type_0').closest('.custom-radio').addClass('checked');
+            $('#fa_paa_login_user_type_0').attr('checked', 'checked');
+        }
+    });
 //]]>
 </script>
 {% endblock %}
