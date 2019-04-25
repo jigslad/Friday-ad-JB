@@ -12,6 +12,7 @@
     {% set blockFacebookMeta = block('facebook_meta') is defined ? block('facebook_meta')|trim : false %}
     {% set blockTwitterMeta = block('twitter_meta') is defined ? block('twitter_meta')|trim : false %}
     {% set blockGaCode = block('google_ga_code') is defined ? block('google_ga_code')|trim : false %}
+    {% set blockBreadcrumbCode = block('breadcrumb_script') is defined ? block('breadcrumb_script')|trim : false %}
 
     {% set container = fetch_container_instance() %}
     {% set currentRoute = app.request.attributes.get('_route') %}
@@ -119,6 +120,10 @@
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}
+    
+    {% if blockBreadcrumbCode %}
+    	{{ blockBreadcrumbCode|raw }}
+    {% endif %}
     {% if blockDimension2 %}
         {{ blockDimension2|raw }}
     {% else %}
