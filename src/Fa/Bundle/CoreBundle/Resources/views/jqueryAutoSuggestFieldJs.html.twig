@@ -265,6 +265,7 @@ $(document).ready(function(){
                     	if(data.latitude && data.latitude != '' && data.longitude && data.longitude != '') {
                         	var locationConcat = data.latitude + ', ' + data.longitude;
                     		$("{{ field }}"+'_lat_lng').val(locationConcat);
+                    		showMarkerPaa(data.latitude, data.longitude);
                         } 
                      	if(locVal == '{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TXT') }}' || data.location  == '{{ constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::LONDON_TOWN_ID') }}' || data.lvl  == 4 ) {
 							$('#location_area_div').show();
