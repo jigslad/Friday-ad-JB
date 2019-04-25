@@ -2724,6 +2724,11 @@ table.responsive-card-table tr.even, table.responsive-card-table tr.alt, table.r
     .chcw_header { position: fixed !important; width: 100% !important; z-index: 100 !important; }
     .chcw_content { position: relative !important; top: 40px !important; }
 }
+@media only screen and (max-width: 768px) {
+    .chcw_header { top: 0!important; display: inline-block!important; width: 100% !important; z-index: 100 !important; position: -webkit-sticky !important; position: sticky !important; }
+    .custom_hc_widget, .chcw_header { -webkit-transition: 0s ease-out !important; -moz-transition: 0s ease-out !important; -o-transition: 0s ease-out !important; transition: 0s ease-out !important; }
+    .chcw_content { position: relative !important; top: 0 !important; }
+}
 
 /* Map fit Changes */
 .leaflet-popup-content-wrapper {width:100% !important;}
