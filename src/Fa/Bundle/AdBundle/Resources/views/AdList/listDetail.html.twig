@@ -78,7 +78,7 @@
     <a id="listing_{{ad.id}}" href="{{ adUrl }}" oncontextmenu="openAdDetail('{{ catString }}', '{{ adCount }}', '{{ getCurrentPage }}');" onclick="openAdDetail('{{ catString }}', '{{ adCount }}', '{{ getCurrentPage }}');" {{affiliate_url}} {{ updateCountOnFeedAdView }} class="tricky-link">{% if attribute(ad, constant(solrMapping ~ 'TITLE')) is defined %}{{trim_text(attribute(ad, constant(solrMapping ~ 'TITLE')), 80)|raw}}{% endif %}</a>
     <div class="featured-ribbon">featured</div>
     <div class="urgent-ribbon">urgent</div>
-    <div class="boost-ribbon"></div>
+    {#<div class="boost-ribbon"></div>#}
     <div class="clearfix">
         <div class="list-col-1">
             {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, ad, '300X225', 1) %}

@@ -2213,7 +2213,7 @@ class AdListController extends CoreController
             $viewedBusinessExposureUserIds[] = !empty($businessExposureTopUser) ? $businessExposureTopUser[0]['user_id']:'';
         }
        
-        $businessExposureUsers       = array();
+        $businessExposureUsers = $businessExposureUsersWithoutAd = array();
         
         if (!empty($businessExposureMiles)) {
             $businessExposureMiles = array_unique($businessExposureMiles);           
@@ -2222,6 +2222,11 @@ class AdListController extends CoreController
                 foreach ($varBusUsers as $businessExposureUser) {
                     $businessExposureUsers[] = $businessExposureUser;
                     $viewedBusinessExposureUserIds[] = $businessExposureUser['id'];
+                }
+                
+                $varBusUsersWithoutAd = $this->getBusinessExposureUserWithoutAd($data, $businessExposureMile);                
+                foreach ($varBusUsersWithoutAd as $businessExposureUserWithoutAd) {
+                    $businessExposureUsersWithoutAd[] = $businessExposureUserWithoutAd;
                 }
             }
             
@@ -2232,6 +2237,10 @@ class AdListController extends CoreController
                         $businessExposureUsers[] = $businessExposureUser;
                         $viewedBusinessExposureUserIds[] = $businessExposureUser['id'];
                     }
+                    
+                    foreach ($this->getBusinessExposureUserWithoutAd($data, $businessExposureMile) as $businessExposureUserWithoutAd) {
+                        $businessExposureUsersWithoutAd[] = $businessExposureUserWithoutAd;
+                    }
                 }
             }
             
@@ -2241,7 +2250,8 @@ class AdListController extends CoreController
 
             if (!empty($businessExposureUsers)) {
                 shuffle($businessExposureUsers);               
-                $businessPageLimit = $this->getRepository('FaCoreBundle:ConfigRule')->getBusinessPageSlots($categoryId, $this->container);
+                //$businessPageLimit = $this->getRepository('FaCoreBundle:ConfigRule')->getBusinessPageSlots($categoryId, $this->container);
+                $businessPageLimit = 14;
                 for ($i = 0; $i < $businessPageLimit; $i++) {
                     if (isset($businessExposureUsers[$i])) {                        
                         $businessExposureUser = $businessExposureUsers[$i];
@@ -2271,6 +2281,24 @@ class AdListController extends CoreController
         }
         
         $parameters['businessExposureUsersDetails'] = $businessExposureUserDetails;
+        
+        $businessExposureUserDetailsWithoutAd = array();
+        if (!empty($businessExposureUsersWithoutAd)) {
+            shuffle($businessExposureUsersWithoutAd);
+            foreach ($businessExposureUsersWithoutAd as $businessExposureUserWithoutAd) {
+                $businessExposureUserDetailsWithoutAd[] = array(
+                    'businessUserId'          => $businessExposureUserWithoutAd[UserShopDetailSolrFieldMapping::ID],
+                    'businessUserDetail'      => $this->getRepository('FaUserBundle:User')->getProfileExposureUserDetailForAdList($businessExposureUserWithoutAd[UserShopDetailSolrFieldMapping::ID], $this->container),
+                );
+             }
+             if ($businessExposureUserDetailsWithoutAd) {
+                 $businessExposureUserDetailsWithoutAd = array_map("unserialize", array_unique(array_map("serialize", $businessExposureUserDetailsWithoutAd)));
+            }
+        }
+    
+    
+        $parameters['businessExposureUsersDetailsWithoutAd'] = $businessExposureUserDetailsWithoutAd;
+    
 
         return $parameters;
     }
@@ -2358,6 +2386,85 @@ class AdListController extends CoreController
         $solrResponse = $solrSearchManager->getSolrResponse();
         $result = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
 
+        return $result;
+    }
+    
+    /**
+     * Get profile exposure user.
+     *
+     * @param array   $searchParams                  Search parameters.
+     * @param string  $exposureMiles                 Miles.
+     * @param array   $viewedBusinessExposureUserIds Array of viewed user ids.
+     *
+     * @return array
+     */
+    private function getBusinessExposureUserWithoutAd($searchParams, $exposureMiles)
+    {
+        $data               = array();
+        $keywords           = (isset($searchParams['search']['keywords']) ? $searchParams['search']['keywords'] : null);
+        $categoryId         = (isset($searchParams['query_filters']) && isset($searchParams['query_filters']['item']['category_id']) && $searchParams['query_filters']['item']['category_id'] ? $searchParams['query_filters']['item']['category_id'] : null);
+        $page               = 1;
+
+        $additionaldistance = $distance = 0;
+        $data['static_filters'] = '';
+        //set ad criteria to search
+        if (isset($searchParams['query_filters']) && isset($searchParams['query_filters']['item']['location']) && $searchParams['query_filters']['item']['location']!='') {
+            //list($locationId, $distance) = explode('|', $searchParams['query_filters']['item']['location']);
+            $varExplodeLoc = explode('|', $searchParams['query_filters']['item']['location']);
+            if (!empty($varExplodeLoc)) {
+                if (isset($varExplodeLoc[0])  && $varExplodeLoc[0]!='') {
+                    $locationId = $varExplodeLoc[0];
+                }
+                if (isset($varExplodeLoc[1]) && $varExplodeLoc[1]!='') {
+                    $distance = intval($varExplodeLoc[1]);
+                }
+            }
+            
+            if ($exposureMiles === 'national') {
+                $additionaldistance = 100000;
+            } else {
+                $additionaldistance = intval($exposureMiles);
+            }
+            $data['query_filters']['user_shop_detail']['location'] = $locationId.'|'.($distance+$additionaldistance);
+        }
+        
+        //set ad criteria to search
+        $data['static_filters'] .= ' AND '.UserShopDetailSolrFieldMapping::PROFILE_EXPOSURE_MILES.':[0 TO '.$exposureMiles.']';
+        
+        
+        if ($categoryId) {
+            $srchCateIds = $this->getRepository('FaEntityBundle:Category')->getNestedChildrenIdsByCategoryId($categoryId,$this->container);
+            if(!empty($srchCateIds)) {
+                $data['static_filters'] .= ' AND (';
+                $varFirstRec = 1;
+                foreach ($srchCateIds as $srchCateId)  {
+                    if($varFirstRec!=1) {
+                        $data['static_filters'] .= ' OR ';
+                    }
+                    $data['static_filters'] .= UserShopDetailSolrFieldMapping::PROFILE_EXPOSURE_CATEGORY_ID.':'.$srchCateId;
+                    $varFirstRec = $varFirstRec+1;
+                }
+                $data['static_filters'] .= ')';
+            }
+            //$data['query_filters']['user_shop_detail']['profile_exposure_category_id'] = $categoryId;
+            //$data['static_filters'] .= ' AND '.UserShopDetailSolrFieldMapping::PROFILE_EXPOSURE_CATEGORY_ID.': ("'.implode('" "', $srchCateIds).'")';
+        }
+        
+        $data['static_filters'] .= ' AND '.UserShopDetailSolrFieldMapping::ABOUT_US.': [* TO *]';
+        
+        $data['static_filters'] .= ' AND '.UserShopDetailSolrFieldMapping::USER_LIVE_ADS_COUNT.': 0';
+        
+        $data['query_sorter']   = array();
+        if (strlen($keywords)) {
+            $data['query_sorter']['user_shop_detail']['score'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+        }
+        $data['query_sorter']['user_shop_detail']['random'] = array('sort_ord' => 'desc', 'field_ord' => 2);
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+        $solrSearchManager->init('user.shop.detail', $keywords, $data, $page, 24, 0, true);
+        $solrResponse = $solrSearchManager->getSolrResponse();
+        $result = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
+        
         return $result;
     }
 
