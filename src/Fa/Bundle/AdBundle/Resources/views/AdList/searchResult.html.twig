@@ -206,7 +206,8 @@
 
 {% block scripttop %}
     {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
-        {{ include('FaFrontendBundle:Default:home-css.html.twig') }}
+        {#{ include('FaFrontendBundle:Default:home-css.html.twig') }#}
+        {{ include('FaAdBundle:AdList:owl-carousel-2-css.html.twig') }}
     {% endif %}
 {% endblock %}
 
@@ -228,7 +229,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 .bus-shop-user-item-slider .list-img img {max-width:164px;max-height:123px}
 .bus-shop-user-item-slider .list-price {float:none;text-align:left;margin:10px 0 0 0}
 .bus-shop-user-item-slider h3 {float:none;font-family:'Asap',sans-serif;font-size:14px;font-weight:700;height:60px;overflow:hidden}
-.bus-shop-user-item-slider .owl-prev, .bus-shop-user-item-slider .owl-next {height:82%;opacity:.5}
+.bus-shop-user-item-slider .owl-prev, .bus-shop-user-item-slider .owl-next {top:40%;position:absolute;width:40px}
 .bus-shop-user-item-slider .owl-item .item {margin:auto}
 .bus-shop-user-item-slider .owl-item .ads-item { width:164px;float:left;border:1px solid #eee;margin:0px 15px; }
 .bus-shop-user-item-slider .owl-item .ads-item:first-child { margin-left:15px; }
@@ -236,7 +237,11 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 .businessExposureCarousel .fa-slider .owl-controls .owl-buttons div { background:transparent !important; }
 .businessExposureCarousel .fa-slider .owl-controls .owl-buttons div img { top:60% !important }
 .bus-det-box h2 { height: 50px;overflow: hidden;line-height: 24px !important;font-size: 16px !important;}
-.bus-abt-us-div { height:195px; max-height:200px; overflow:hidden;padding-left:30px; }
+.bus-abt-us-div { height:220px; max-height:230px; overflow:hidden;padding-left:30px;padding-right:30px; }
+.bus-shop-user-item-slider item:hover h3.featured-single, .fa-slider .owl-item .item:hover h3.featured-single { color:#313133 !important; }
+#busshop-user-single-item-slider .bus-abt-us-div p { margin-bottom:0px;line-height:20px }
+.bus-shop-user-item-slider h3.featured-single { font-family:'Bree Serif',serif;height:auto;font-size:18px;font-weight:400 }
+
 @media only screen and (min-width:960px) and (max-width:1151px) {
 	.bus-shop-user-item-slider .ads-item .list-img, .bus-shop-user-item-slider .ads-item .list-img img {width:145px;}
 	.bus-shop-user-item-slider .owl-item .ads-item { width:145px; margin:0px 10px; }
@@ -424,7 +429,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     	{% set displayBusinessExposureSingleBlock = 1 %}
                     {% endif %}
                     {% if displayBusinessExposureBlock ==1 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %} 
-                        {{ include('FaAdBundle:AdList:businessExposureSliderBlock.html.twig') }}
+                        {{ include('FaAdBundle:AdList:businessExposureSliderBlock.html.twig', {'blockposition': realAdCnt }) }}
                 	{% endif %}
                 	{% if displayBusinessExposureSingleBlock ==1 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %} 
                         {{ include('FaAdBundle:AdList:businessExposureSingleBlock.html.twig') }}
@@ -600,8 +605,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 {% endblock %}
 
 {% block scriptbottom %}
-    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
-        <script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
+    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     {% endif %}
     {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
     {{ include('FaAdBundle:AdList:listJs.html.twig') }}
