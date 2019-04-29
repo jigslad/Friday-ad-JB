@@ -30,18 +30,32 @@
         {% endif %} 
 
         {% if (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
-        var busShopUserItemSlider = $(".bus-shop-user-item-slider");
+        var busShopUserItemSlider = $("#busshop-user-item-slider_5, #busshop-user-item-slider_15, #busshop-user-single-item-slider");
         busShopUserItemSlider.owlCarousel({
-            items : 1,
-            itemsCustom:[[320, 1], [568, 1], [768, 1], [1024, 1]],
-            navigation: true,
-            pagination:false,
-            responsiveRefreshRate : 100,
-            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+        	items:1,
+        	loop:true,
+        	autoplay:true,
+            autoplayTimeout:2000,
+            autoplayHoverPause:true,
+        	slideBy: 1,
+        	autoplaySpeed: 2000,
+        	rewind: false,
+        	nav: true,
+        	dots:false,
+            responsiveRefreshRate : 2000,
+            navText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
             lazyLoad: true,
-            center: true,
-            scrollPerPage: true,
         });
+
+        $('.businessExposureCarousel .owl-item, .businessExposureCarousel .owl-prev, .businessExposureCarousel .owl-next').on('click', function () {				          
+	  		var elemid = $(this).closest('.bus-shop-user-item-slider').attr('id');	        
+            $('#'+elemid).closest('.owl-carousel').trigger('stop.owl.autoplay');
+        });
+        $( ".businessExposureCarousel .owl-item" ).mousedown(function( event ) {
+        	var elemid = $(this).closest('.bus-shop-user-item-slider').attr('id');	        
+            $('#'+elemid).closest('.owl-carousel').trigger('stop.owl.autoplay');
+        });
+        
     {% endif %}        
 
         $( window ).scroll(function() {
