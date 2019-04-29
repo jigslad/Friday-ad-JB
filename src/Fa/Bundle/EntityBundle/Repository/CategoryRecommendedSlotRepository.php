@@ -229,8 +229,7 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                 ->setParameter('categoryId', $categoryId)
                 ->orderBy(self::ALIAS.'.creative_group')
                 ->getQuery()
-                ->execute();
-                
+                ->execute();          
 
         if (!empty($recommendedSlots)) {
             foreach ($recommendedSlots as $recommendedSlot) {
@@ -240,7 +239,10 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                     'slot_filename' => $recommendedSlot->getSlotFilename(),
                     'url' => $recommendedSlot->getUrl(),
                     'creative_group' => $recommendedSlot->getCreativeGroup(),
-                    'creative_ord' => $recommendedSlot->getCreativeOrd()
+                    'creative_ord' => $recommendedSlot->getCreativeOrd(),
+                    'display_url' => $recommendedSlot->getDisplayUrl(),
+                    'cta_text' => $recommendedSlot->getCtaText(),
+                    'mobile_title' => $recommendedSlot->getMobileTitle(),                    
                 );
             }
         }
