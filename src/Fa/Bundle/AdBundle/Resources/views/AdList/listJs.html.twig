@@ -10,6 +10,8 @@
 //<![CDATA[
     $(window).on('load', function() {
     var callFromGlobal = '';
+	var isDragging = false;
+	
     $("img.lazy").lazyload();
         {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
             saveSearchAgent();
@@ -35,14 +37,14 @@
         	items:1,
         	loop:true,
         	autoplay:true,
-            autoplayTimeout:2000,
+            autoplayTimeout:3000,
             autoplayHoverPause:true,
         	slideBy: 1,
-        	autoplaySpeed: 2000,
+        	autoplaySpeed: 3000,
         	rewind: false,
         	nav: true,
         	dots:false,
-            responsiveRefreshRate : 2000,
+            responsiveRefreshRate : 3000,
             navText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
             lazyLoad: true,
         });
@@ -235,6 +237,24 @@
             }
     	});
 
+    });
+
+    $(".businessExposureCarousel").mousedown(function(event) {
+        isDragging = false;
+        alert('mousedown');
+     })
+    .mousemove(function(event) {
+        isDragging = true;
+        alert('mousemove');
+     })
+    .mouseup(function(event) {
+        var wasDragging = isDragging;
+        isDragging = false;
+        alert('mouseup');
+        if (wasDragging) {
+        	var dragged_elemid = $(this).closest('.bus-shop-user-item-slider').attr('id');
+        	$('#'+dragged_elemid).closest('.owl-carousel').trigger('stop.owl.autoplay');
+        }
     });
 
     $(".alertButton").mouseout(function() {
