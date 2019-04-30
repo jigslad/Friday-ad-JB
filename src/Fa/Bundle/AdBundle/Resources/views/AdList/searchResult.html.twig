@@ -189,12 +189,12 @@
             {% for categoryId, categoryName in categoryPath %}
                 {% set catLinkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
                 {% set catListUrl = container.getParameter('base_url')~container.get('fa_ad.manager.ad_routing').getListingUrl(catLinkParam) %}
-    {
+{
     	"@type": "ListItem",
     	"position": {{breadcrumbCatCnt}},
     	"name": "{{categoryName}}",
     	"item": "{{catListUrl}}"
-  	},
+  	}{% if breadcrumbCatCnt <= categoryPath|length %},{% endif %}    
 				{% set breadcrumbCatCnt = breadcrumbCatCnt + 1 %}
             {% endfor %}
         {% endif %}

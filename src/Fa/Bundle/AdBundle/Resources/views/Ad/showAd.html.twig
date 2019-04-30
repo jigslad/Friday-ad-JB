@@ -279,7 +279,7 @@
     		"position": {{breadcrumbCatCnt}},
     		"name": "{{categoryName}}",
     		"item": "{{catListUrl}}"
-  		},
+  		}{% if breadcrumbCatCnt <= categoryPath|length %},{% endif %}    
 		{% set breadcrumbCatCnt = breadcrumbCatCnt + 1 %}
     {% endfor %}
     
