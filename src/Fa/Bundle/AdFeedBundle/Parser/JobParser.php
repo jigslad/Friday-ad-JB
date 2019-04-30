@@ -324,8 +324,8 @@ class JobParser extends AdParser
     {
         if ($cat_name) {
             $matchedText = null;
-            $mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->findOneBy(array('text' => $cat_name));
-
+            //$mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->findOneBy(array('text' => $cat_name));
+            $mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->getFeedMappingByText($cat_name,$this->advert['ref_site_id']);
             if ($mapping) {
                 $matchedText = $mapping->getTarget();
             } else {

@@ -306,6 +306,7 @@ class CampaignController extends ThirdPartyLoginController
                         $form->handleRequest($request);
                         if ($form->isValid()) {
                             $selectedPackageId = $request->get('package_id', null);
+                            
                             $printEditionValues = array();
                             if (isset($printEditionLimits[$selectedPackageId]) && $printEditionLimits[$selectedPackageId]) {
                                 for ($editionCntr = 1; $editionCntr <= $printEditionLimits[$selectedPackageId]; $editionCntr++) {
@@ -332,7 +333,14 @@ class CampaignController extends ThirdPartyLoginController
                                 }
                             }
                         
-                            
+                            $selectedPackageObj = $this->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $selectedPackageId));
+                            if ($selectedPackageObj->getDuration()) {
+                                $getLastCharacter = substr($selectedPackageObj->getDuration(),-1);
+                                $noInDuration = substr($selectedPackageObj->getDuration(),0, -1);
+                                if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                                elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                                else { $adExpiryDays = $selectedPackageObj->getDuration(); }
+                            }
                             //Add to the cart
                             $addCartInfo = $this->addInfoToCart($user->getId(), $adId, $selectedPackageId, $selectedPackagePrintId, $printEditionLimits, $adExpiryDays, $printEditionValues, $request, $categoryId);
                             if ($addCartInfo) {
@@ -461,7 +469,16 @@ class CampaignController extends ThirdPartyLoginController
                             return new JsonResponse(array('error' => 'Please select valid print option', 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
                         }
                     }
-
+                    
+                    $selectedPackageObj = $this->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $selectedPackageId));
+                    if ($selectedPackageObj->getDuration()) {
+                        $getLastCharacter = substr($selectedPackageObj->getDuration(),-1);
+                        $noInDuration = substr($selectedPackageObj->getDuration(),0, -1);
+                        if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                        elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                        else { $adExpiryDays = $selectedPackageObj->getDuration(); }
+                    }
+                    
                     //Add to the cart
                     $addCartInfo = $this->addInfoToCart($user->getId(), $adId, $selectedPackageId, $selectedPackagePrintId, $printEditionLimits, $adExpiryDays, $printEditionValues, $request, $categoryId);
                     if ($addCartInfo) {
@@ -543,6 +560,14 @@ class CampaignController extends ThirdPartyLoginController
                         }
                     }
                     
+                    $selectedPackageObj = $this->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $selectedPackageId));
+                    if ($selectedPackageObj->getDuration()) {
+                        $getLastCharacter = substr($selectedPackageObj->getDuration(),-1);
+                        $noInDuration = substr($selectedPackageObj->getDuration(),0, -1);
+                        if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                        elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                        else { $adExpiryDays = $selectedPackageObj->getDuration(); }
+                    }
                     //Add to the cart
                     $addCartInfo = $this->addInfoToCart($user->getId(), $adId, $selectedPackageId, $selectedPackagePrintId, $printEditionLimits, $adExpiryDays, $printEditionValues, $request, $categoryId);
                     if ($addCartInfo) {

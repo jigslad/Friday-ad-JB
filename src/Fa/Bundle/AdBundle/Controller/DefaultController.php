@@ -44,7 +44,7 @@ class DefaultController extends CoreController
                 }
             }
 
-            if (count($metaData)) {
+            if (!empty($metaData)) {
                 $adForSale->setMetaData(serialize($metaData));
                 $this->getEntityManager()->persist($adForSale);
                 $this->getEntityManager()->flush();

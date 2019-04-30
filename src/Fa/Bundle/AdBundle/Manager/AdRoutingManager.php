@@ -102,7 +102,7 @@ class AdRoutingManager
         $dimension_slug = null;
         $cookieLocationDetails = null;
         $url = '';
-        
+
         $search_params = array_map(array($this, 'removeEmptyElement'), $search_params);
         if(isset($search_params['hide_distance_block'])) {
             unset($search_params['hide_distance_block']);
@@ -780,6 +780,7 @@ class AdRoutingManager
 
         $this->dimensionOrder[CategoryRepository::ADULT_ID]= array(
             'item__category_id' => 1,
+            'item_adult__ethnicity_id' => 5,
         );
     }
 

@@ -293,7 +293,7 @@ class AdLocationRepository extends EntityRepository
         }
 
         // get location from moderation
-        if (count($moderationValue) && isset($moderationValue['locations']) && count($moderationValue['locations']) && isset($moderationValue['locations'][0]['town_id'])) {
+        if (!empty($moderationValue) && isset($moderationValue['locations']) && !empty($moderationValue['locations']) && isset($moderationValue['locations'][0]['town_id'])) {
             $townIds[] = $moderationValue['locations'][0]['town_id'];
             return $this->_em->getRepository('FaEntityBundle:LocationGroupLocation')->getLocationGroupIdByTownDomicile($townIds);
         } else {
