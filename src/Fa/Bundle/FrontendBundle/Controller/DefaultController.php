@@ -666,11 +666,38 @@ class DefaultController extends ThirdPartyLoginController
         if ($request->isXmlHttpRequest() && $request->get('location') != null) {
             $cookieValue = $this->getRepository('FaEntityBundle:Location')->getCookieValue($request->get('location'), $this->container, false, $request->get('location_area'));
             $locationByValue = $this->getRepository('FaEntityBundle:Location')->getArrayByTownId($request->get('location'), $this->container);
+            $categoryId = $request->get('catId');
+            
+            if($categoryId != '') {
+                $srchParam['item__category_id'] = $categoryId;
+            }
+            
             if (!empty($cookieValue)) {
-                $location['id']   = $cookieValue['location'];
+                $srchParam['item__location']   = $cookieValue['location'];
+            } elseif (!empty($locationByValue)) {
+                $srchParam['item__location']   = $locationByValue['location'];
+            } elseif (strtolower($request->get('location')) == 'uk' || strtolower($request->get('location')) == 'united kingdom') {
+                $srchParam['item__location']   = 2;
+            } 
+
+            $getDefaultRadius = $this->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($srchParam, $this->container);
+            $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+            
+            if($defDistance=='') {
+                if($categoryId!='') {
+                    $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+                    $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+                } else {
+                    $defDistance = 200;
+                }
+            }
+            
+            if (!empty($cookieValue)) {
+                $location['id'] = $cookieValue['location'];
                 $location['text'] = $cookieValue['location_text'];
                 $location['slug'] = $cookieValue['slug'];
                 $location['area'] = $cookieValue['location_area'];
+                $location['default_distance'] = $defDistance;
                 
                 $cookieValue = json_encode($cookieValue);
 
@@ -683,6 +710,7 @@ class DefaultController extends ThirdPartyLoginController
                 $location['text'] = $locationByValue['location_text'];
                 $location['slug'] = $locationByValue['slug'];
                 $location['area'] = null;
+                $location['default_distance'] = $defDistance;
 
                 $cookieValue = json_encode($locationByValue);
 
@@ -695,6 +723,7 @@ class DefaultController extends ThirdPartyLoginController
                 $location['text'] = 'uk';
                 $location['slug'] = 'uk';
                 $location['area'] = null;
+                $location['default_distance'] = $defDistance;
                 $response->headers->clearCookie('location');
                 $response->setContent(json_encode($location));
             } else {

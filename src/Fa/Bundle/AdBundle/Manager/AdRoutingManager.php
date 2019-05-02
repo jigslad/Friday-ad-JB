@@ -107,6 +107,10 @@ class AdRoutingManager
         if(isset($search_params['hide_distance_block'])) {
             unset($search_params['hide_distance_block']);
         }
+        
+        if(isset($search_params['default_distance'])) {
+            unset($search_params['default_distance']);
+        }
 
         // From top search keyword category
         if (isset($search_params['keyword_category_id']) && $search_params['keyword_category_id']) {
@@ -165,7 +169,7 @@ class AdRoutingManager
             unset($search_params['item__location']);
             unset($search_params['item__location_autocomplete']);
 
-            if (isset($search_params['item__distance']) && $search_params['item__distance'] == 15) {
+            if (isset($search_params['item__distance']) && $search_params['item__distance'] == $getDefaultRadius) {
                 unset($search_params['item__distance']);
             }
 
