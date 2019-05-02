@@ -88,6 +88,11 @@
         {{ include('FaFrontendBundle::cookiePolicy.html.twig') }}
 
         {{ include('FaFrontendBundle::simpleHeader.html.twig') }}
+
+        {% if app.user is not defined or app.user is null %}
+            {{ container.get('session').set('setWebMatchPixels', 'false') }}
+        {% endif %}
+
         <div class="row top-msg">
             <div class="columns">
                {{ include('FaCoreBundle::message.html.twig') }}

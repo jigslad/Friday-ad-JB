@@ -41,6 +41,9 @@ class CheckoutController extends CoreController
         if ($redirectResponse !== true) {
             return $redirectResponse;
         }
+
+        $this->container->get('session')->set('setWebMatchPixels', 'false');
+
         $loggedinUser = $this->getLoggedInUser();
         $cart         = $this->getRepository('FaPaymentBundle:Cart')->findOneBy(array('cart_code' => $cartCode, 'status' => 0, 'user' => $loggedinUser->getId()));
 
@@ -184,6 +187,9 @@ HTML;
         if ($redirectResponse !== true) {
             return $redirectResponse;
         }
+
+        $this->container->get('session')->set('setWebMatchPixels', 'false');
+
         $loggedinUser = $this->getLoggedInUser();
         $cart         = $this->getRepository('FaPaymentBundle:Cart')->findOneBy(array('cart_code' => $cartCode, 'status' => 1, 'user' => $loggedinUser->getId()));
 
