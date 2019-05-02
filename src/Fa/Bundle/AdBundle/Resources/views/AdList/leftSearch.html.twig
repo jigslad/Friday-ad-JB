@@ -76,6 +76,7 @@
         	<div class="content active clearfix">
                <ul class="distance-search clearfix" id="distance-left-search" style="display:none">
                   <li class="col white-select">
+                      {{ form_widget(form.default_distance) }}
                       {{ form_widget(form.item__distance, {'attr': {'class': 'fa-select-white'}}) }}
                   </li>
                   <li>

@@ -182,6 +182,15 @@ class AdLeftSearchType extends AbstractType
                 'attr'    => array('class' => 'fa-select-white')
             )
         );
+        $form->add(
+            'default_distance',
+            HiddenType::class,
+            array(
+                'mapped' => false,
+                'empty_data' => $defDistance,
+                'data' => $defDistance,             
+            )
+        );
         $this->addLocationAutoSuggestField($form);
         $this->addCategroyDimensionFilters($form, $categoryId);
         $this->addIsTradeAdField($form);

@@ -82,12 +82,16 @@
         });
 
         $('#fa_top_search_item__category_id').change(function() {
-            setDistanceByCategoryId($(this).val(), false);
+            //setDistanceByCategoryId($(this).val(), false);
+            setDistance();
         });
-
+        $('#top_search_location_ok').click(function(e) {
+        	setDistance();
+        });
+                
         $('#price_slider').val([$('#fa_top_search_item__price_from').val(), $('#fa_top_search_item__price_to').val()]);
-        setDistanceByCategoryId('', true);
-
+        //setDistanceByCategoryId('', true);
+		setDistance();
         if ($('#price_slider').length) {
             setAndMoveSliderCaption('price_slider', 'lower', 'price_from', false);
             setAndMoveSliderCaption('price_slider', 'upper', 'price_to', false);
@@ -97,10 +101,30 @@
         $('#reset_search').click(function() {
             $('#fa_top_search_item__price_from').val('');
             $('#fa_top_search_item__price_to').val('');
-            setDistanceByCategoryId($('#fa_top_search_item__category_id').val(), false);
+            //setDistanceByCategoryId($('#fa_top_search_item__category_id').val(), false);
+            setDistance();
             $('form[name="fa_top_search"]').submit();
         });
     });
+
+    function setDistance() {
+        var catId = $('#fa_top_search_item__category_id').val();
+    	var searchLocation = $('#fa_top_search_item__location').val();
+    	searchLocation = (searchLocation)?searchLocation:2;
+        $.ajax({
+             type: "post",
+             dataType: "json",
+             url: "{{ path('fa_frontend_ajax_user_location') }}",
+             data: {'location': searchLocation, 'catId' : catId},
+             success: function(data) {
+                 if (!$.isEmptyObject(data)) {
+                	$('#distance_slider').val([data.default_distance]);
+                    $('#fa_top_search_item__distance').val(data.default_distance);
+                    setAndMoveSliderCaption('distance_slider', 'lower', 'distance', false);                   	
+                 } 
+             }
+         });       
+    }
     
     function setDistanceByCategoryId(categoryId, isPopulate)
     {

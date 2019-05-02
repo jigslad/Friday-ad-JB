@@ -12,6 +12,10 @@
         	$('#fa_left_search_item__location_autocomplete').val('United Kingdom');
         } 
 
+        if($('#fa_left_search_default_distance').val()!='') {
+        	setDefDistance();
+        } 
+
         if($('#fa_left_search_hide_distance_block').val()==1) {
             $('#distance-left-search').hide();
         } else {
@@ -100,6 +104,13 @@
         });*/
     });
 
+    function setDefDistance() {
+    	var defdist = $('#fa_left_search_default_distance').val();
+        $('#fa_left_search_item__distance option[value=""]').attr("selected", null);
+    	$('#fa_left_search_item__distance option[value="'+defdist+'"]').attr("selected", "selected");
+    	$('#fa_left_search_item__distance').selectmenu().selectmenu('refresh',true);
+    }
+
     function clearModalDimensionAllCheckboxes(filterName)
     {
         $('input[type="checkbox"][name="fa_left_search_dimension\['+filterName+'\]\[\]"]').removeAttr('checked');
@@ -122,18 +133,18 @@
     	{% if isShopPage is defined and isShopPage %}
     	    $('form[name="fa_left_search"]').submit()
     	{% else %}
-    	    if (searchLocation && searchLocation != 2) {
-    	    	var selDist = $('#fa_left_search_item__distance').val();
-    	    	alert(selDist);
+    	   /* if (searchLocation && searchLocation != 2) {*/
+    	    	var catId = $('#fa_left_search_item__category_id').val();
+    	    	
                 $.ajax({
                      type: "post",
                      dataType: "json",
                      url: "{{ path('fa_frontend_ajax_user_location') }}",
-                     data: {'location': searchLocation},
+                     data: {'location': searchLocation, 'catId' : catId},
                      success: function(data) {
-                         alert('aftersuccess=='+selDist);
                          if (!$.isEmptyObject(data)) {
-                        	 $('#fa_left_search_item__distance').val(selDist);
+                        	$('#fa_left_search_default_distance').val(data.default_distance);
+                        	setDefDistance();
                             if(data.slug=='uk') { $('#distance-left-search').hide(); }
                             else { $('#distance-left-search').show(); }
                             $('form[name="fa_left_search"]').submit();
@@ -143,10 +154,10 @@
                          }
                      }
                  });
-            } else {
+            /*} else {
                 document.cookie="location=;expires=Wed; 01 Jan 1970; path=/";
                 $('form[name="fa_left_search"]').submit()
-            }
+            }*/
     	{% endif %}
     }
 
