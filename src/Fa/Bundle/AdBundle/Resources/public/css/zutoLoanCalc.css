@@ -77,12 +77,16 @@
 .get_online_decision .button {
     font-size: 14px;
     padding: 6px 30px;
-    background-color: #3abb2a;
+    background-color: #a8dc28;
     border-radius: 5px;
     font-weight: 700;
     position: relative;
     height: 35px;
     font-family: 'ApaxThree-Regular';
+}
+
+.get_online_decision .button:hover, .get_online_decision .button:active {
+    background-color: #9bcc21;
 }
 
 .get_online_decision span {
@@ -193,13 +197,17 @@
     .get_online_decision .button {
         font-size: 21px;
         padding: 10px 10px;
-        background-color: #3abb2a;
+        background-color: #a8dc28;
         border-radius: 5px;
         font-weight: 700;
         position: relative;
         height: 49px;
         text-align: left;
         margin: 0 15px;
+    }
+
+    .get_online_decision .button:hover, .get_online_decision .button:active {
+        background-color: #9bcc21;
     }
 
     .get_online_decision .button:after {
