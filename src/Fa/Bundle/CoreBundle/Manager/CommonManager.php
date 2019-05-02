@@ -3310,4 +3310,40 @@ HTML;
 
         return !is_bool(strpos($haystack, $needle));
     }
+
+    /**
+     * Get sha Hashed value
+     *
+     * @param string $value
+     *
+     * @return hash
+     */
+    public static function getShaHashedValue($value)
+    {
+        return sha1(strtolower(trim($value)));
+    }
+
+    /**
+     * Get MD5 Hashed value
+     *
+     * @param string $value
+     *
+     * @return hash
+     */
+    public static function getMd5HashedValue($value)
+    {
+        return md5(strtolower(trim($value)));
+    }
+
+    /**
+     * Get sha 256 Hashed value
+     *
+     * @param string $value
+     *
+     * @return hash
+     */
+    public static function getSha256HashedValue($value)
+    {
+        return hash('sha256', strtolower(trim($value)));
+    }
 }
