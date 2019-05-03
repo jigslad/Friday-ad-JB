@@ -140,6 +140,7 @@ class RegistrationType extends AbstractType
         )
         ->add('is_third_party_email_alert_enabled', CheckboxType::class, array(
             'label' => false,
+            'attr' => array('disabled' => true)
         ))
         ->add('is_email_alert_enabled', CheckboxType::class, array(
             'label' => false,
