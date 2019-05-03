@@ -218,6 +218,21 @@
         $("#user_registration_show_password").click(function() {
             showHidePassword();
         });
+        
+        {% if  app.request.getMethod() == 'POST' or socialSiteName is defined %}
+            if (screen.width < 700) {
+                $('.login-right').hide();
+                $('.login-left').show();
+            }
+        {% endif %}
+
+        function showHidePassword() {
+            if ($('#user_registration_show_password:checked').val()) {
+                $('#user_registration_password').attr('type', 'text');
+            } else {
+                $('#user_registration_password').attr('type', 'password');
+            }
+        }
 
         $("#user_registration_is_third_party_email_alert_enabled").change(function () {
             if ($('#user_registration_is_third_party_email_alert_enabled').parent().hasClass('checked')) {
@@ -234,8 +249,10 @@
 
         $("#user_registration_is_email_alert_enabled").change(function(){
             if ($('#user_registration_is_email_alert_enabled').parent().hasClass('checked')) {
+                $('#user_registration_is_third_party_email_alert_enabled').attr('disabled', false);
                 $('#user_registration_is_email_alert_enabled').attr('checked', true);
             } else {
+                $('#user_registration_is_third_party_email_alert_enabled').attr('disabled', true);
                 $('#user_registration_is_email_alert_enabled').attr('checked', false);
             }
             if (!$('#user_registration_is_email_alert_enabled').attr('checked')) {
@@ -243,21 +260,6 @@
                 $('#user_registration_is_third_party_email_alert_enabled').parent().removeClass('checked');
             }
         });
-
-        {% if  app.request.getMethod() == 'POST' or socialSiteName is defined %}
-            if (screen.width < 700) {
-                $('.login-right').hide();
-                $('.login-left').show();
-            }
-        {% endif %}
-
-        function showHidePassword() {
-            if ($('#user_registration_show_password:checked').val()) {
-                $('#user_registration_password').attr('type', 'text');
-            } else {
-                $('#user_registration_password').attr('type', 'password');
-            }
-        }
 
         function showHideBusinessSellerFields() {
             if ($("input[name='user_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER" || $("input[name='user_registration[user_roles]']:checked").val() == "ROLE_NETSUITE_SUBSCRIPTION") {
