@@ -60,7 +60,7 @@
                                     {% if seoRule['image_alt'] is defined %}
                                         {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], businessExposureUserAd]) %}
                                     {% endif %}
-                                    <div class="ads-item">
+                                    <div class="busad-item">
                                         {% set gaEventLabel = businessUserDetail['user_name'] ~ ' - ' ~ adBusPosition %}
                                        
                                         {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, businessExposureUserAd, '300X225', 1) %}
