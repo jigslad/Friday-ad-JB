@@ -44,6 +44,8 @@
         	rewind: false,
         	nav: true,
         	dots:false,
+        	mouseDrag: true,
+        	touchDrag: true,
             responsiveRefreshRate : 3000,
             navText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
             lazyLoad: true,
@@ -241,16 +243,15 @@
 
     $(".businessExposureCarousel").mousedown(function(event) {
         isDragging = false;
-        alert('mousedown');
      })
     .mousemove(function(event) {
         isDragging = true;
-        alert('mousemove');
+        var dragged_elemid = $(this).closest('.bus-shop-user-item-slider').attr('id');
+    	$('#'+dragged_elemid).closest('.owl-carousel').trigger('stop.owl.autoplay');
      })
     .mouseup(function(event) {
         var wasDragging = isDragging;
         isDragging = false;
-        alert('mouseup');
         if (wasDragging) {
         	var dragged_elemid = $(this).closest('.bus-shop-user-item-slider').attr('id');
         	$('#'+dragged_elemid).closest('.owl-carousel').trigger('stop.owl.autoplay');
