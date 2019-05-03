@@ -102,7 +102,7 @@
     background-repeat: no-repeat;
     position: absolute;
     content: "";
-    background-image: url(/bundles/faad/images/arrow-right.svg);
+    /*background-image: url(/bundles/faad/images/arrow-right.svg);*/
     right: 0;
     top: 7px;
     width: 20px;
@@ -198,6 +198,7 @@
         font-size: 21px;
         padding: 10px 10px;
         background-color: #a8dc28;
+        border: #a8dc28;
         border-radius: 5px;
         font-weight: 700;
         position: relative;
