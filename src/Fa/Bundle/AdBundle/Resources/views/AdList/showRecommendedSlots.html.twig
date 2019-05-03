@@ -1,5 +1,5 @@
 {% if slotIndex is defined and recommendedSlotResult[slotIndex] is defined and recommendedSlotResult[slotIndex]|length > 0 %}
-<div>
+<div style="cursor:pointer" onclick="gaSendForRecommendedSlotSearch('{{ recommendedSlotResult[slotIndex]['url'] }}', '{{ only_domains }}');">
     {% set no_protocol = recommendedSlotResult[slotIndex]['url']|split('//')[1] ?: recommendedSlotResult[slotIndex]['url'] %}
     {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
     {% set only_domains = only_domains|replace({'www.': ''})%}
@@ -22,22 +22,22 @@
                         {{'Sponsored Ad'|trans({}, 'frontend-show-ad')}}<span class="sponsored-ad-icon"></span>
                     </div>
                     
-                	<h5 class="show-for-small-only list-title" style="cursor: pointer;"  onclick="gaSendForRecommendedSlotSearch('{{ recommendedSlotResult[slotIndex]['url'] }}', '{{ only_domains }}');">
+                	<h5 class="show-for-small-only list-title">
                         {{ recommendedSlotResult[slotIndex]['mobile_title'] }}
                     </h5>
                  
-                    <h3 class="hide-for-small-only list-title" style="cursor: pointer;"  onclick="gaSendForRecommendedSlotSearch('{{ recommendedSlotResult[slotIndex]['url'] }}', '{{ only_domains }}');">
+                    <h3 class="hide-for-small-only list-title">
                         {{ recommendedSlotResult[slotIndex]['title'] }}
                     </h3>
                      
-                     <h5 class="list-display-url hide-for-small-only"><a href="{{ recommendedSlotResult[slotIndex]['display_url'] }}" style="color: #a8dc28;">{{ recommendedSlotResult[slotIndex]['display_url'] }}</a></h5>
+                     <h5 class="list-display-url hide-for-small-only"><a style="color: #a8dc28;">{{ recommendedSlotResult[slotIndex]['display_url'] }}</a></h5>
                 </div>
                 <div class="mt10 recommended-more">
                     <div class="list-desc hide-for-small-only left-block">
                         {{ recommendedSlotResult[slotIndex]['sub_title']|length > 150 ? trim_text(recommendedSlotResult[slotIndex]['sub_title'], 150)|raw ~ '...': recommendedSlotResult[slotIndex]['sub_title'] }}
                     </div>
                     {% if recommendedSlotResult[slotIndex]['cta_text'] !='' %}
-                    <div class="outer-btn"><div class="button secondary-btn-1 expand right-block" style="cursor: pointer;"  onclick="gaSendForRecommendedSlotSearch('{{ recommendedSlotResult[slotIndex]['url'] }}', '{{ only_domains }}');">{{ recommendedSlotResult[slotIndex]['cta_text'] }}<span class="btn-right-arrow"><i class="fi-arrow-right"></i></span></div></div>
+                    <div class="outer-btn"><div class="button secondary-btn-1 expand right-block" style="cursor: pointer;">{{ recommendedSlotResult[slotIndex]['cta_text'] }}<span class="btn-right-arrow"><i class="fi-arrow-right"></i></span></div></div>
                		{% endif %}
                </div>
             </div>
