@@ -949,11 +949,14 @@ class AdPostType extends AbstractType
                             $locationId = $cookieLocation['town_id'];
                         }
                     }
-                    if (isset($cookieLocation['town']) && $cookieLocation['town']) {
-                        $locationText = $cookieLocation['town'];
-                    }
-                    if (isset($cookieLocation['paa_county']) && $cookieLocation['paa_county']) {
-                        $locationText .= ', ' . $cookieLocation['paa_county'];
+                    if($locationId!='' && $locationId!=2) {
+                        if (isset($cookieLocation['town']) && $cookieLocation['town']) {
+                            $locationText = $cookieLocation['town'];
+                        }
+                    
+                        if (isset($cookieLocation['paa_county']) && $cookieLocation['paa_county']) {
+                            $locationText .= ', ' . $cookieLocation['paa_county'];
+                        }
                     }
                 }
             }
