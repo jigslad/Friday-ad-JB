@@ -576,10 +576,16 @@ class AdPackageController extends CoreController
                 }
             }
         }
+        
+        $varPackageCnt = ($packages)?count($packages):0;
+        $this->container->get('ad_repost_logger')->info('Page View '. $type.' AdId '.$adId.' Packages count '.$varPackageCnt);        
 
         if ('POST' === $request->getMethod()) {
             $selectedPackageId = $request->get('package_id', null);
             $userCreditId = $request->get('credit_id', null);
+            
+            $this->container->get('ad_repost_logger')->info('Transaction Page '. $type.' AdId '.$adId.' Packages count '.$varPackageCnt.' Selected Id '.$selectedPackageId);
+            
             if (!in_array($selectedPackageId, $packageIds)) {
                 $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Please select atleast one ad package.', array(), 'frontend-ad-package'), 'error');
             } else {
@@ -681,7 +687,7 @@ class AdPackageController extends CoreController
                             $adExpiryDays          = $adExpiryDays + $renewExtendExpiryDays;
                         }
 
-                        if (!count($cartDetails) && $isFreePaymentMethod) {
+                        if (empty($cartDetails) && $isFreePaymentMethod) {
                             $this->getRepository('FaPaymentBundle:Cart')->addPackageToCart($userId, $adId, $selectedPackageId, $this->container, true, $adExpiryDays, $selectedPackagePrintId, $type, ($activePackage ? $activePackage->getId() : null), false, null, $printEditionValues, $userCreditId, $totalCredit, $privateUserAdParams);
                             return $this->redirectToRoute('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_FREE));
                         } else {
