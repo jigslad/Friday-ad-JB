@@ -80,3 +80,14 @@ services:
     clean_local_images_handler:
         class: Monolog\Handler\StreamHandler
         arguments: ['%kernel.logs_dir%/%kernel.environment%.clean_local_images.log']
+        
+    ad_repost_logger:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: [ad_repost_logger]
+        calls:
+        - [pushHandler, ['@ad_repost_handler']]
+
+    ad_repost_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: ['%kernel.logs_dir%/%kernel.environment%.ad_repost.log']
+          
