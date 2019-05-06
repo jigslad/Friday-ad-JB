@@ -688,7 +688,7 @@ class DefaultController extends ThirdPartyLoginController
                     $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
                     $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
                 } else {
-                    $defDistance = 200;
+                    $defDistance = CategoryRepository::MAX_DISTANCE;
                 }
             }
             
