@@ -126,7 +126,7 @@ class AdTopSearchType extends AbstractType
         $form = $event->getForm();  
         $categoryId   = '';$getLocLvl = 0;
         $defDistance = '';
-        $getDefaultRadius = $cookieLocationDet = array();
+        $getDefaultRadius = $cookieLocationDet = array(); 
         
         $searchParams = $this->request->get('searchParams');
         $cookieLocation = $this->request->cookies->get('location');
@@ -136,7 +136,6 @@ class AdTopSearchType extends AbstractType
         }
         
         $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);         
-        var_dump('topsrch===');var_dump($cookieLocationDet->town_id);
         
         if($searchLocation!=2) {
             $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
