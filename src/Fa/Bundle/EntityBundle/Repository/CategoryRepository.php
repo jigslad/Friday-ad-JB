@@ -128,6 +128,7 @@ class CategoryRepository extends NestedTreeRepository
     const MOTORS_DISTANCE = 30;
     const OTHERS_DISTANCE = 15;
     const AREA_DISTANCE_DIVISION = 3;
+    const MAX_DISTANCE = 200;
 
     private $categoryCountArray = array();
 
@@ -2250,8 +2251,16 @@ class CategoryRepository extends NestedTreeRepository
         $setRadius = 1;
         $categoryId = 0;
         $getLocLvl = '';
+        $cookieLocationDet = $cookieLocation  = array();
         
-        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:2;
+        $cookieLocation  = $container->get('request_stack')->getCurrentRequest()->cookies->get('location');
+        
+        if(!empty($cookieLocation)) {
+            $cookieLocationDet = json_decode($cookieLocation);
+        }
+        
+        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);
+        
         if($searchLocation!=2) {
             $selLocationArray = $this->_em->getRepository('FaEntityBundle:Location')->find($searchLocation);
             if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }

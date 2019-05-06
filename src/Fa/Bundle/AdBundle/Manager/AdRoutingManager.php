@@ -169,7 +169,7 @@ class AdRoutingManager
             unset($search_params['item__location']);
             unset($search_params['item__location_autocomplete']);
 
-            if (isset($search_params['item__distance']) && $search_params['item__distance'] == $getDefaultRadius) {
+            if (isset($search_params['item__distance']) && ($search_params['item__distance'] == $getDefaultRadius || $search_params['item__distance'] == CategoryRepository::MAX_DISTANCE)) {
                 unset($search_params['item__distance']);
             }
 
