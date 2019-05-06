@@ -126,11 +126,18 @@ class AdTopSearchType extends AbstractType
         $form = $event->getForm();  
         $categoryId   = '';$getLocLvl = 0;
         $defDistance = '';
-        $getDefaultRadius = array();
+        $getDefaultRadius = $cookieLocationDet = array();
         
         $searchParams = $this->request->get('searchParams');
+        $cookieLocation = $this->request->cookies->get('location');
+
+        if(!empty($cookieLocation)) {
+            $cookieLocationDet = json_decode($cookieLocation);
+        }
         
-        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:2;
+        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);         
+        var_dump('topsrch===');var_dump($cookieLocationDet->town_id);
+        
         if($searchLocation!=2) {
             $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
             if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
@@ -150,7 +157,7 @@ class AdTopSearchType extends AbstractType
                 $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
                 $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
             } else {
-                $defDistance = 200;
+                $defDistance = CategoryRepository::MAX_DISTANCE;
             }
         }
                     
@@ -164,7 +171,7 @@ class AdTopSearchType extends AbstractType
             )
             );
         
-        $this->addLocationAutoSuggestField($event->getForm());
+        $this->addLocationAutoSuggestField($event->getForm(),$searchLocation);
     }
 
     /**
@@ -172,9 +179,9 @@ class AdTopSearchType extends AbstractType
      *
      * @param object $form Form instance.
      */
-    protected function addLocationAutoSuggestField($form)
+    protected function addLocationAutoSuggestField($form,$searchLocation)
     {
-        $form->add('item__location', HiddenType::class);
+        $form->add('item__location', HiddenType::class, array('data'=>$searchLocation,'empty_data'=>$searchLocation));
         $form->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false));
         $form->add('item__area', HiddenType::class);
     }

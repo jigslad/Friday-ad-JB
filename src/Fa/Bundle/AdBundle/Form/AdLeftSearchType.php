@@ -136,13 +136,19 @@ class AdLeftSearchType extends AbstractType
     {
         $form = $event->getForm();        
         $defDistance = '';
-        $getDefaultRadius = $cookieLocation = array();
+        $getDefaultRadius = $cookieLocation = $cookieLocationDet = array();
         $rootCategoryId = null;
 
         $categoryId   = '';$getLocLvl = 0;
         $searchParams = $this->request->get('searchParams');
         
-        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:2;
+        $cookieLocation = $this->request->cookies->get('location');
+        if(!empty($cookieLocation)) {
+            $cookieLocationDet = json_decode($cookieLocation);
+        }
+        
+        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);
+       
         if($searchLocation!=2) {
             $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
             if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
@@ -162,7 +168,7 @@ class AdLeftSearchType extends AbstractType
                 $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
                 $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
             } else {
-                $defDistance = 200;
+                $defDistance = CategoryRepository::MAX_DISTANCE;
             }
        }  
        
@@ -191,7 +197,7 @@ class AdLeftSearchType extends AbstractType
                 'data' => $defDistance,             
             )
         );
-        $this->addLocationAutoSuggestField($form);
+        $this->addLocationAutoSuggestField($form,$searchLocation);
         $this->addCategroyDimensionFilters($form, $categoryId);
         $this->addIsTradeAdField($form);
     }
@@ -201,9 +207,8 @@ class AdLeftSearchType extends AbstractType
      *
      * @param object $form Form instance.
      */
-    protected function addLocationAutoSuggestField($form)
+    protected function addLocationAutoSuggestField($form,$searchLocation)
     {
-        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:2;
         $form->add('item__location', HiddenType::class, array('data'=>$searchLocation,'empty_data'=>$searchLocation));
         $form->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false));
         $form->add('item__area', HiddenType::class);
