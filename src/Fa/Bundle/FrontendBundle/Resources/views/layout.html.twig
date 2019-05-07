@@ -248,13 +248,13 @@
             {{ container.get('session').set('setWebMatchPixels', 'true') }}
 
             {% set sha1_hashed_email = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getShaHashedValue', [app.user.getEmail()])  %}
-            <iframe name="_rlcdn" width=0 height=0 frameborder=0 src="https://ejp.rlcdn.com/$709040.html?s={{ sha1_hashed_email }}"></iframe>
+            <iframe name="_rlcdn" width=0 height=0 frameborder=0 src="https://ejp.rlcdn.com/709040.html?s={{ sha1_hashed_email }}"></iframe>
 
             {% set md5_hashed_email = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getMd5HashedValue', [app.user.getEmail()]) %}
-            <iframe name="_rlcdn" width=0 height=0 frameborder=0 src="https://ejp.rlcdn.com/$709040.html?m={{ md5_hashed_email }}"></iframe>
+            <iframe name="_rlcdn" width=0 height=0 frameborder=0 src="https://ejp.rlcdn.com/709040.html?m={{ md5_hashed_email }}"></iframe>
 
             {% set sha256_hashed_email = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSha256HashedValue', [app.user.getEmail()]) %}
-            <iframe name="_rlcdn" width=0 height=0 frameborder=0 src="https://ejp.rlcdn.com/$709040.html?s256={{ sha256_hashed_email }}"></iframe>
+            <iframe name="_rlcdn" width=0 height=0 frameborder=0 src="https://ejp.rlcdn.com/709040.html?s256={{ sha256_hashed_email }}"></iframe>
 
         {% endif %}
 
