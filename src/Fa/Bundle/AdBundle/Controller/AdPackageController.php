@@ -724,7 +724,8 @@ class AdPackageController extends CoreController
         $flagPrint = false;
         $flagNonprint = false;
         $dimension12 = '';
-        $arrPrintLocationTownIds = $this->getPrintLocationTownIds();
+        $repoLocationGroupLocation = $this->getRepository('FaEntityBundle:LocationGroupLocation');
+        $arrPrintLocationTownIds = $repoLocationGroupLocation->getPrintLocationTownIds();
         if(!empty($adLocations)){
             foreach ($adLocations as $valAdLocation){
                 if(!empty($valAdLocation->getLocationTown())){
@@ -737,7 +738,9 @@ class AdPackageController extends CoreController
                 }
             }
         }
-        if ($flagPrint) {
+        if ($flagPrint && $flagNonprint) {
+            $dimension12 = "Both areas";
+        } else if ($flagPrint) {
             $dimension12 = "Print";
         } else if ($flagNonprint) {
             $dimension12 = "Non-print";

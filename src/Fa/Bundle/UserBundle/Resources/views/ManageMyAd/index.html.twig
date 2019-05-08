@@ -4,6 +4,23 @@
     {{'Manage ads'|trans({}, 'frontend-manage-my-ad')}}
 {% endblock %}
 
+{% block dimension2 %}
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        {% if app.user.getId() is not defined or app.user.getId() is null %}
+        ga('set', 'dimension9', 'not logged in');
+        {% else %}
+        ga('set', 'dimension9', 'logged in');
+        {% endif %}
+
+        {% if dimension12 is defined and dimension12 %}
+        ga('set', 'dimension12', '{{ dimension12 }}');
+        {% endif %}
+        ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Peripheral_Content'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+        //]]>
+    </script>
+{% endblock %}
+
 {% set container = fetch_container_instance() %}
 {% set adIdArray = {} %}
 {% if pagination.getNbResults() %}
@@ -162,7 +179,7 @@
     }
 
 
-     $('#manage-my-ads-list-only').on('click','.ajaxboost_your_ad', function(e) 
+     $('#manage-my-ads-list-only').on('click','.ajaxboost_your_ad', function(e)
         {
             var boost_value = 1;
             var elem_id = $(this).attr('id');
@@ -212,6 +229,24 @@
                 $('#boostad_selectall_inmodal').parent('span').removeClass('checked');
             }
             openMarkAdAsBoostedModal();
+        if ($(this).hasClass('checked')) {
+            $(this).removeClass('checked');
+            $(this).find('input[type="checkbox"]:first').removeAttr('checked');
+
+        } else {
+            $(this).addClass('checked');
+            $(this).find('input[type="checkbox"]:first').attr('checked','checked');
+        }
+        if($(".boostad").length == $(".boostad:checked").length) {
+            $("#boostad_selectall").attr("checked", "checked");
+            $('#boostad_selectall').parent('span').addClass('checked');
+            $("#boostad_selectall_inmodal").attr("checked", "checked");
+            $('#boostad_selectall_inmodal').parent('span').addClass('checked');
+        } else if($(".boostad").length > $(".boostad:checked").length) {
+            $("#boostad_selectall_inmodal").attr("checked", "checked");
+            $('#boostad_selectall_inmodal').parent('span').addClass('checked');
+            $("#boostad_selectall").removeAttr("checked");
+            $('#boostad_selectall').parent('span').removeClass('checked');
         } else {
         	if ($(this).hasClass('checked')) {
                 $(this).removeClass('checked');
@@ -248,7 +283,7 @@
             });
         }
     {% endif %}
-    
+
     $(document).ready(function() {
     	{% if showCompetitionPopup is defined and showCompetitionPopup %}
     	    enterInCompetition();
@@ -265,15 +300,15 @@
 <script>
 {% if ga_transaction is defined and ga_transaction.PAYMENT_ID is defined %}
     ga('require', 'ecommerce');
-    
+
     {% if getTranscationJs is defined %}
     {{ getTranscationJs | raw }}
     {% endif %}
-    
+
     {% if getItemJs is defined %}
     {{ getItemJs | raw }}
     {% endif %}
-    
+
     ga('ecommerce:send');
     $.ajax({
         type: "POST",
