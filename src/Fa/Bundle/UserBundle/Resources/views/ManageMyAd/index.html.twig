@@ -229,26 +229,8 @@
                 $('#boostad_selectall_inmodal').parent('span').removeClass('checked');
             }
             openMarkAdAsBoostedModal();
-        if ($(this).hasClass('checked')) {
-            $(this).removeClass('checked');
-            $(this).find('input[type="checkbox"]:first').removeAttr('checked');
-
         } else {
-            $(this).addClass('checked');
-            $(this).find('input[type="checkbox"]:first').attr('checked','checked');
-        }
-        if($(".boostad").length == $(".boostad:checked").length) {
-            $("#boostad_selectall").attr("checked", "checked");
-            $('#boostad_selectall').parent('span').addClass('checked');
-            $("#boostad_selectall_inmodal").attr("checked", "checked");
-            $('#boostad_selectall_inmodal').parent('span').addClass('checked');
-        } else if($(".boostad").length > $(".boostad:checked").length) {
-            $("#boostad_selectall_inmodal").attr("checked", "checked");
-            $('#boostad_selectall_inmodal').parent('span').addClass('checked');
-            $("#boostad_selectall").removeAttr("checked");
-            $('#boostad_selectall').parent('span').removeClass('checked');
-        } else {
-        	if ($(this).hasClass('checked')) {
+            if ($(this).hasClass('checked')) {
                 $(this).removeClass('checked');
                 $(this).find('input[type="checkbox"]:first').removeAttr('checked');
                 
