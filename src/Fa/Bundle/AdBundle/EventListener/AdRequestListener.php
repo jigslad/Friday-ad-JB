@@ -40,7 +40,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class AdRequestListener
 {
-
+    
     /**
      * Constructor.
      *
@@ -51,7 +51,7 @@ class AdRequestListener
         $this->container = $container;
         $this->em = $this->container->get('doctrine')->getManager();
     }
-
+    
     /**
      * match urls
      *
@@ -64,7 +64,7 @@ class AdRequestListener
         if (!$event->isMasterRequest()) {
             return;
         }
-
+        
         CommonManager::extendLoggedInUserSessionLength($this->container);
         
         $request = $event->getRequest();
@@ -83,15 +83,15 @@ class AdRequestListener
         
         // If the ad-detail page url is having an entity in string, then forward to Ad-listings
         /*if ($this->_route($request) == 'ad_detail_page') {
-            $request = $this->redirectAdDetailPage($request);
-        } elseif ($this->isListingPageRoute($request)) {
-            $request = $this->redirectAdListingPage($request);
-        }*/
+         $request = $this->redirectAdDetailPage($request);
+         } elseif ($this->isListingPageRoute($request)) {
+         $request = $this->redirectAdListingPage($request);
+         }*/
         
         //echo 'location==='.$request->get('location');
         
         //redirect greate-london slug
-       if (preg_match('/for-sale\/home-garden\/aids\//', $uri)) { //redirect aids FFR-2083
+        if (preg_match('/for-sale\/home-garden\/aids\//', $uri)) { //redirect aids FFR-2083
             $locationUrl = str_replace('for-sale/home-garden/aids/', 'for-sale/home-garden/health/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
@@ -138,7 +138,7 @@ class AdRequestListener
         } elseif (preg_match('/adult\/phone-cam-chat\//', $uri)) {
             $locationUrl = str_replace('adult/phone-cam-chat/', 'adult/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
-            $event->setResponse($response);                                   
+            $event->setResponse($response);
         } elseif (preg_match('/car-hire/', $uri)) {
             $uriSplit = explode('/', $uri);
             if (in_array("car-hire", $uriSplit)) {
@@ -151,7 +151,7 @@ class AdRequestListener
         }
         
         
-
+        
         if (preg_match('/cart\/process/', $uri) || preg_match('/checkout/', $uri)) {
             if ($this->container->get('session')->has('lastActivityTime')) {
                 $minutes = round(abs(time() - $this->container->get('session')->get('lastActivityTime')) / 60, 2);
@@ -165,12 +165,12 @@ class AdRequestListener
         } else {
             $this->container->get('session')->set('lastActivityTime', time());
         }
-
+        
         $request = $event->getRequest();
         $currentRoute = $event->getRequest()->get('_route');
         $params      = $request->attributes->get('_route_params');
         $request->attributes->set('_route_params', array_merge($params, array('page' => 1)));
-
+        
         // handle TI redirects
         $tiCacheKey = md5($request->getClientIp().$request->headers->get('User-Agent'));
         $tiCacheVal = CommonManager::getCacheVersion($this->container, 'ti_url_'.$tiCacheKey);
@@ -180,7 +180,7 @@ class AdRequestListener
             $response->headers->setCookie(new Cookie('ti_url', $tiCacheVal, time() + (24 * 3600 * 365)));
             $response->headers->setCookie(new Cookie('new_ti_url', $tiCacheVal, time() + (24 * 3600 * 365)));
             $response->sendHeaders();
-
+            
             if (!in_array($currentRoute, array('trade_it_redirect_home', 'trade_it_redirect', 'trade_it_redirect_without_slash'))) {
                 $tiAdRequestListener = new TiAdRequestListener($this->container);
                 $tiReturn = $tiAdRequestListener->onKernelRequest($event);
@@ -190,91 +190,91 @@ class AdRequestListener
             }
         }
         
-        $uri = $request->getUri();        
+        $uri = $request->getUri();
         
         if ($this->_301($request)) {
             return true;
         }
-
+        
         /*$tiUrl = $request->get('ti_url');
-        if ($tiUrl) {
-            $tiRouteName   = null;
-            $tiRouteParams = array();
-            $urlParams = parse_url($tiUrl);
-            if (isset($urlParams['scheme']) && isset($urlParams['host']) && isset($urlParams['path'])) {
-                $refererUrl    = str_replace(array($urlParams['scheme'].'://'.$urlParams['host'], $request->getBaseURL()), '', $urlParams['path']);
-                try {
-                    $tiRouteDetails = $this->container->get('router')->match($refererUrl);
-
-                    if (isset($tiRouteDetails['path']) && $tiRouteDetails['path']) {
-                        $tiRouteDetails = $this->container->get('router')->match($tiRouteDetails['path']);
-                    }
-                    $tiRouteName = $tiRouteDetails['_route'];
-                    $unsetFields = array(
-                        '_route',
-                        '_controller',
-                        'path',
-                        'permanent',
-                        'scheme',
-                        'httpPort',
-                        'httpsPort',
-                    );
-                    foreach ($unsetFields as $unsetField) {
-                        if (isset($tiRouteDetails[$unsetField])) {
-                            unset($tiRouteDetails[$unsetField]);
-                        }
-                    }
-                    $tiRouteParams = $tiRouteDetails;
-                } catch (ResourceNotFoundException $e) {
-                    $tiRouteName = null;
-                }
-
-                if ($tiRouteName) {
-                    if ($tiRouteName == 'landing_page_category') {
-                        $tiRouteParams['location'] = 'bristol';
-                        $tiRouteName = 'landing_page_category_location';
-                    } elseif ($tiRouteName == 'fa_frontend_homepage') {
-                        $tiRouteParams['location'] = 'bristol';
-                        $tiRouteName = 'location_home_page';
-                    } elseif (in_array($tiRouteName, array('listing_page', 'location_home_page')) && isset($tiRouteParams['location']) && $tiRouteParams['location'] == 'bristol-south-west') {
-                        $tiRouteParams['location'] = 'bristol';
-                    } elseif ($tiRouteName == 'ad_detail_page_by_id' || $tiRouteName == 'ad_detail_page') {
-                        $adObj = $this->em->getRepository('FaAdBundle:Ad')->findOneBy(array('ti_ad_id' => $tiRouteParams['id']));
-                        if ($adObj) {
-                            $tiRouteParams['id'] = $adObj->getId();
-                        }
-                    }
-
-                    if (isset($urlParams['query']) && $urlParams['query']) {
-                        parse_str($urlParams['query'], $queryParamsArray);
-                        $tiRouteParams = array_merge($tiRouteParams, $queryParamsArray);
-                    }
-
-                    $tiRouteParams['utm_source'] = 'trade-it-redirect';
-                    $tiRouteParams['utm_medium'] = 'referral';
-                    $tiRouteParams['utm_campaign'] = $tiUrl;
-
-                    $url = $this->container->get('router')->generate($tiRouteName, $tiRouteParams, true);
-                    $url = rtrim($url, '/');
-                    $response = new RedirectResponse($url, 301);
-                    $event->setResponse($response);
-                }
-            }
-        }*/
-
+         if ($tiUrl) {
+         $tiRouteName   = null;
+         $tiRouteParams = array();
+         $urlParams = parse_url($tiUrl);
+         if (isset($urlParams['scheme']) && isset($urlParams['host']) && isset($urlParams['path'])) {
+         $refererUrl    = str_replace(array($urlParams['scheme'].'://'.$urlParams['host'], $request->getBaseURL()), '', $urlParams['path']);
+         try {
+         $tiRouteDetails = $this->container->get('router')->match($refererUrl);
+         
+         if (isset($tiRouteDetails['path']) && $tiRouteDetails['path']) {
+         $tiRouteDetails = $this->container->get('router')->match($tiRouteDetails['path']);
+         }
+         $tiRouteName = $tiRouteDetails['_route'];
+         $unsetFields = array(
+         '_route',
+         '_controller',
+         'path',
+         'permanent',
+         'scheme',
+         'httpPort',
+         'httpsPort',
+         );
+         foreach ($unsetFields as $unsetField) {
+         if (isset($tiRouteDetails[$unsetField])) {
+         unset($tiRouteDetails[$unsetField]);
+         }
+         }
+         $tiRouteParams = $tiRouteDetails;
+         } catch (ResourceNotFoundException $e) {
+         $tiRouteName = null;
+         }
+         
+         if ($tiRouteName) {
+         if ($tiRouteName == 'landing_page_category') {
+         $tiRouteParams['location'] = 'bristol';
+         $tiRouteName = 'landing_page_category_location';
+         } elseif ($tiRouteName == 'fa_frontend_homepage') {
+         $tiRouteParams['location'] = 'bristol';
+         $tiRouteName = 'location_home_page';
+         } elseif (in_array($tiRouteName, array('listing_page', 'location_home_page')) && isset($tiRouteParams['location']) && $tiRouteParams['location'] == 'bristol-south-west') {
+         $tiRouteParams['location'] = 'bristol';
+         } elseif ($tiRouteName == 'ad_detail_page_by_id' || $tiRouteName == 'ad_detail_page') {
+         $adObj = $this->em->getRepository('FaAdBundle:Ad')->findOneBy(array('ti_ad_id' => $tiRouteParams['id']));
+         if ($adObj) {
+         $tiRouteParams['id'] = $adObj->getId();
+         }
+         }
+         
+         if (isset($urlParams['query']) && $urlParams['query']) {
+         parse_str($urlParams['query'], $queryParamsArray);
+         $tiRouteParams = array_merge($tiRouteParams, $queryParamsArray);
+         }
+         
+         $tiRouteParams['utm_source'] = 'trade-it-redirect';
+         $tiRouteParams['utm_medium'] = 'referral';
+         $tiRouteParams['utm_campaign'] = $tiUrl;
+         
+         $url = $this->container->get('router')->generate($tiRouteName, $tiRouteParams, true);
+         $url = rtrim($url, '/');
+         $response = new RedirectResponse($url, 301);
+         $event->setResponse($response);
+         }
+         }
+         }*/
+        
         if ($currentRoute == 'landing_page_category' || $currentRoute == 'landing_page_category_location') {
             $catObj = $this->getMatchedCategory($request->get('category_string'));
-
+            
             if ($catObj && $catObj['id'] == CategoryRepository::ADULT_ID) {
                 $location = ($request->get('location') ? $request->get('location') : 'uk');
                 $url = $this->container->get('router')->generate('listing_page', array('location' => $location, 'page_string' => $request->get('category_string')), true);
                 $event->setResponse(new RedirectResponse($url, 301));
             }
-
+            
             if (isset($params['path'])) {
                 $this->redirectOldUrls(ltrim($params['path'], '/'), 'uk', $request, $event, 'location_home');
             }
-
+            
             if ($catObj) {
                 $request->attributes->set('category_id', $catObj['id']);
             }
@@ -282,11 +282,11 @@ class AdRequestListener
             $queryParams  =  array();
             $searchParams = $request->query->all();
             $redirectString = $request->get('page_string');
-
+            
             if ($currentRoute ==  'motor_listing_page') {
                 $params['path'] = '/'.$request->get('location').'/'.$redirectString.'/';
             }
-           
+            
             // to decide old detail page url
             if (isset($params['path']) && $params['path']) {
                 if (preg_match('/-[A-Z0-9]{9,10}\/$/', $params['path'], $matches) && isset($matches[0])) {
@@ -311,7 +311,7 @@ class AdRequestListener
                         }
                     }
                 }
-
+                
                 if (preg_match('/-N-/', $params['path'])) {
                     $urlString =  explode('/', $params['path']);
                     if (isset($urlString[1])) {
@@ -322,7 +322,7 @@ class AdRequestListener
                     }
                 }
             }
-
+            
             //If keyword is numbers only and if it is greater than or equals to 5 digit, then directly search for ad id.
             if (isset($searchParams['keywords']) && preg_match('/(\d{5,})/', $searchParams['keywords'])) {
                 $objAd = $this->em->getRepository('FaAdBundle:Ad')->find($searchParams['keywords']);
@@ -332,24 +332,24 @@ class AdRequestListener
                     $event->setResponse(new RedirectResponse($url));
                 }
             }
-
+            
             $redirectString = $request->get('page_string');
             $locationId = $this->getLocationId($request, $redirectString);
             
             if (!$locationId) {
                 $request->attributes->set('not_found', 1);
             }
-
+            
             $this->redirectOldUrls($redirectString, $locationId, $request, $event);
-
+            
             if ($currentRoute ==  'motor_listing_page') {
                 $request->attributes->set('not_found', 1);
             }
-
+            
             foreach ($request->query->all() as $key => $val) {
                 if (preg_match('/^(.*)_id$/', $key) || preg_match('/reg_year|mileage_range|engine_size_range/', $key)) {
                     $queryParams[$key] = explode("__", $val);
-
+                    
                     if (preg_match('/^(.*)_id$/', $key)) {
                         $queryParams[$key] = array_map('intval', explode("__", $val));
                     }
@@ -359,23 +359,23 @@ class AdRequestListener
             }
             
             $request->attributes->set('finders', array_merge($queryParams, array('item__location' => $locationId)));
-
+            
             $categoryText = $request->get('page_string');
             $check  = true;
             $adType = null;
             $matches = null;
             $adTypeString = implode('\/|\/', $this->getAdTypeArray());
-                       
+            
             $forsaleFlag  = false;
-
+            
             if (strpos($categoryText, "for-sale") === 0) {
                 $forsaleFlag = true;
             }
-
+            
             if (strpos($categoryText, "property") === 0) {
                 $adTypeString = implode('\/|\/', array('wanted', 'offered', 'exchange'));
             }
-
+            
             while ($check) {
                 // handle url for for sale category
                 if (preg_match('/'.$adTypeString.'/', $categoryText, $matches) && !$forsaleFlag) {
@@ -387,51 +387,51 @@ class AdRequestListener
                     $categoryText = (preg_replace('/~^'.$adTypeString.'/', '/', $categoryText));
                     $categoryText = preg_replace('/\/+/', '/', $categoryText);
                 }
-
+                
                 if (preg_match('/page-\d+\/$/', $categoryText, $matches)) {
                     $page = str_replace(array('page-', '/'), '', $matches[0]);
                     $request->attributes->set('page', $page);
                 }
-
+                
                 $categoryText =  substr($categoryText, 0, strrpos($categoryText, '/'));
                 
-                                
+                
                 $catObj = $this->getMatchedCategory($categoryText);
                 $this->getCatRedirects($redirectString, $categoryText, $locationId, $request, $event);
-                                
+                
                 if ($catObj) {
                     $this->getCatRedirects($redirectString, $catObj['full_slug'], $locationId, $request, $event);
                     /*if($catObj['status']!=1) {
-                        $this->redirectParentCatUrls($redirectString,$catObj['id'], $locationId, $request, $event);
-                    } */
+                     $this->redirectParentCatUrls($redirectString,$catObj['id'], $locationId, $request, $event);
+                     } */
                     
                     $check = false;
                     $request->attributes->set('cat_full_slug', $catObj['full_slug']);
                     //$categoryText = $catObj['full_slug'].'/';
                     
                     //$parent   = $this->getFirstLevelParent($catObj['id']);
-
+                    
                     $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
                     if ($request->get('item__distance')) {
                         $searchParams['item__distance']  =  $request->get('item__distance');
                     } else {
                         $searchParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
                     }
-
+                    
                     /*if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
-                        $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::MOTORS_DISTANCE : $request->get('item__distance');
-                    } else {
-                        $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::OTHERS_DISTANCE : $request->get('item__distance');
-                    }*/
-
+                     $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::MOTORS_DISTANCE : $request->get('item__distance');
+                     } else {
+                     $queryParams['item__distance']  =  $request->get('item__distance') == '' ? CategoryRepository::OTHERS_DISTANCE : $request->get('item__distance');
+                     }*/
+                    
                     //check location belongs to area
                     if (preg_match('/^\d+$/', $locationId) && is_null($request->get('item__distance'))) {
                         $isLocationArea = $this->em->getRepository('FaEntityBundle:Location')->find($locationId);
-                        if (!empty($isLocationArea) && $isLocationArea && $isLocationArea->getLvl() == '4' && isset($queryParams['item__distance'])) {                            
+                        if (!empty($isLocationArea) && $isLocationArea && $isLocationArea->getLvl() == '4' && isset($queryParams['item__distance'])) {
                             $queryParams['item__distance'] = $queryParams['item__distance']/CategoryRepository::AREA_DISTANCE_DIVISION;
                         }
                     }
-
+                    
                     if (isset($searchParams['item__distance'])) {
                         $request->attributes->set('finders', array_merge($queryParams, array('item__distance' => $searchParams['item__distance'])));
                     }
@@ -440,7 +440,7 @@ class AdRequestListener
                 } else {
                     $request->attributes->set('finders', array_merge($queryParams, array('item__location' => $locationId)));
                 }
-
+                
                 if (!strpos($categoryText, '/')) {
                     $check = false;
                 }
@@ -462,12 +462,12 @@ class AdRequestListener
             $searchParams   = $request->query->all();
             $redirectString = $request->get('page_string');
             $locationId     = $this->getLocationId($request);
-
+            
             $locationId = $locationId ? $locationId : 2;
             foreach ($request->query->all() as $key => $val) {
                 if (preg_match('/^(.*)_id$/', $key) || preg_match('/reg_year|mileage_range|engine_size_range/', $key)) {
                     $queryParams[$key] = explode("__", $val);
-
+                    
                     if (preg_match('/^(.*)_id$/', $key)) {
                         $queryParams[$key] = array_map('intval', explode("__", $val));
                     }
@@ -475,29 +475,29 @@ class AdRequestListener
                     $queryParams[$key] = $val;
                 }
             }
-
+            
             $userId = $this->em->getRepository('FaUserBundle:UserSite')->getUserIdBySlug($request->get('profileNameSlug'), $this->container);
             if ($userId) {
                 $queryParams['item__user_id'] = $userId;
             }
             $request->attributes->set('finders', array_merge($queryParams, array('item__location' => $locationId)));
-
+            
             $categoryText = $request->get('page_string');
             $check  = true;
             $adType = null;
             $matches = null;
             $adTypeString = implode('|\/', $this->getAdTypeArray());
-
+            
             $forsaleFlag  = false;
-
+            
             if (strpos($categoryText, "for-sale") === 0) {
                 $forsaleFlag = true;
             }
-
+            
             if (strpos($categoryText, "property") === 0) {
                 $adTypeString = implode('|\/', array('wanted', 'offered', 'exchange'));
             }
-
+            
             while ($check) {
                 // handle url for for sale category
                 if (preg_match('/'.$adTypeString.'/', $categoryText, $matches) && !$forsaleFlag) {
@@ -509,50 +509,50 @@ class AdRequestListener
                     $categoryText = (preg_replace('/~^'.$adTypeString.'/', '', $categoryText));
                     $categoryText = preg_replace('/\/+/', '/', $categoryText);
                 }
-
-
+                
+                
                 if (preg_match('/page-\d+\/$/', $categoryText, $matches)) {
                     $page = str_replace(array('page-', '/'), '', $matches[0]);
                     $request->attributes->set('page', $page);
                 }
-
+                
                 $categoryText =  substr($categoryText, 0, strrpos($categoryText, '/'));
-
+                
                 $catObj = $this->getMatchedCategory($categoryText);
-
+                
                 if ($catObj) {
                     $check = false;
                     $request->attributes->set('cat_full_slug', $catObj['full_slug']);
-
+                    
                     $parent   = $this->getFirstLevelParent($catObj['id']);
-
+                    
                     $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($queryParams, $this->container);
                     if ($request->get('item__distance')) {
                         $queryParams['item__distance']  =  $request->get('item__distance');
                     } else {
                         $queryParams['item__distance']  =  ($getDefaultRadius)?$getDefaultRadius:'';
                     }
-
+                    
                     /* if (($catObj['id'] == CategoryRepository::MOTORS_ID) || ($parent['id'] == CategoryRepository::MOTORS_ID)) {
-                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? 30 : $request->get('item__distance');
+                     $queryParams['item__distance']  =  $request->get('item__distance') == '' ? 30 : $request->get('item__distance');
                      } else {
-                         $queryParams['item__distance']  =  $request->get('item__distance') == '' ? 15 : $request->get('item__distance');
+                     $queryParams['item__distance']  =  $request->get('item__distance') == '' ? 15 : $request->get('item__distance');
                      }*/
-
+                    
                     $request->attributes->set('finders', array_merge($queryParams, array('item__category_id' => $catObj['id'], 'item__location' => $locationId)));
                 } else {
                     $queryParams['item__distance'] = isset($queryParams['item__distance']) && $queryParams['item__distance'] != null ? $queryParams['item__distance'] : CategoryRepository::OTHERS_DISTANCE;
                     $request->attributes->set('finders', array_merge($queryParams, array('item__location' => $locationId)));
                 }
-
+                
                 if (!strpos($categoryText, '/')) {
                     $check = false;
                 }
             }
-
+            
             $dimArray = $this->dimensionArray($categoryText, $adType, $request, $event);
-
-
+            
+            
             $request->attributes->set('finders', array_merge_recursive($request->attributes->get('finders'), $dimArray));
         } elseif ($currentRoute ==  'location_home_page') {
             $redirectString = $request->get('location');
@@ -560,16 +560,16 @@ class AdRequestListener
             if (in_array($redirectString, $static_page)) {
                 $request->attributes->set('static_page', 1);
             }
-
+            
             if ((isset($params['path']) && $params['path']) || (isset($params['location']) && $params['location'])) {
                 $location = isset($params['path'])?trim($params['path'], '/'):(isset($params['location'])?trim($params['location'], '/'):'');
                 $locationString = $this->em->getRepository('FaAdBundle:Redirects')->getNewByOld($location, $this->container, true);
                 if ($locationString) {
                     $request->attributes->set('location', $locationString);
                     $setCookieValue = $this->em->getRepository('FaEntityBundle:Location')->setLocationInCookie($request, $this->container);
-
+                    
                     $url = $this->container->get('router')->generate('location_home_page', array(
-                            'location' => $locationString,
+                        'location' => $locationString,
                     ), true);
                     $response = new RedirectResponse($url, 301);
                     $event->setResponse($response);
@@ -586,8 +586,8 @@ class AdRequestListener
                     $request->attributes->set('location', $locationString);
                     $setCookieValue = $this->em->getRepository('FaEntityBundle:Location')->setLocationInCookie($request, $this->container);
                     $url = $this->container->get('router')->generate('show_all_towns_by_county', array(
-                            'countySlug' => $locationString,
-                        ), true);
+                        'countySlug' => $locationString,
+                    ), true);
                     $response = new RedirectResponse($url, 301);
                     $event->setResponse($response);
                 }
@@ -636,7 +636,7 @@ class AdRequestListener
                 $adType = $matches[0];
             }
             
-           
+            
             $newCatText = $categoryText;
             $newRedirect = $redirect;
             
@@ -645,7 +645,7 @@ class AdRequestListener
                 $adType = rtrim($adType, '/');
                 $explodeReirectString = explode('/', $redirectString);
                 $adTypePos = array_search($adType, $explodeReirectString);
-
+                
                 if ($adTypePos==1) {
                     $explodeCatText = explode('/', $categoryText);
                     $rootCat = $explodeCatText[0];
@@ -666,14 +666,14 @@ class AdRequestListener
                     'page_string' => str_replace($newCatText, $newRedirect, $redirectString),
                 ), true);
                 $url = str_replace('//', '/', $url);
-            
+                
                 $response = new RedirectResponse($url, 301);
                 $event->setResponse($response);
             }
         }
     }
     
-
+    
     private function getLocationId($request, $redirectString = null)
     {
         $locationId = null;
@@ -681,11 +681,11 @@ class AdRequestListener
         if (!preg_match('/^\d+$/', $request->get('location'))) {
             $locationId = $this->em->getRepository('FaEntityBundle:Location')->getIdBySlug($request->get('location'), $this->container);
         }
-
+        
         if (!$locationId) {
             $locationId = $this->em->getRepository('FaEntityBundle:Locality')->getColumnBySlug('id', $request->get('location'), $this->container);
         }
-
+        
         if (!$locationId && preg_match('/^[A-Za-z0-9-]{3,8}$/', $request->get('location')) && preg_match('/-N-|—N-/', $redirectString)) {
             $locationId = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodTextByLocation($request->get('location'), $this->container, 1, true);
             if (preg_match('/^([\d]+,[\d]+)$/', $locationId)) {
@@ -700,18 +700,18 @@ class AdRequestListener
         
         return $locationId;
     }
-
+    
     private function dimensionArray($categoryText, $adType, $request, $event = null)
     {
         $categoryTextArray = explode('/', $categoryText);
         $pageArray = explode('/', $request->get('page_string'));
         $dimensions = array_diff($pageArray, $categoryTextArray);
-
-
+        
+        
         if (CommonManager::isConsicutiveSameValueInArray($pageArray)) {
             $request->attributes->set('not_found', 1);
         }
-
+        
         if ($adType) {
             $dimensions[] = trim($adType, '/');
         }
@@ -719,26 +719,26 @@ class AdRequestListener
         $dimensions = array_filter($dimensions);
         $dimensions = array_unique($dimensions);
         $parentDimention = null;
-
+        
         foreach ($dimensions as $dim) {
             if ($dim != '' && !preg_match('/page-\d+$/', $dim)) {
                 $dimensionFieldPrefix = 'item';
                 $catString =  explode('/', $request->get('cat_full_slug'));
-
+                
                 $dimensionObj = $this->getMatchedDimension($dim, implode("/", $catString), $parentDimention);
                 if ($dimensionObj) {
                     $rootCatName = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryName($dimensionObj->getCategoryDimension()->getCategory()->getId(), $this->container);
                     $dimensionFieldPrefix = $dimensionFieldPrefix.'_'.$rootCatName;
-
+                    
                     $dimensionField = str_replace(array('(', ')', ',', '?', '|', '.', '/', '\\', '*', '+', '-', '"', "'"), '', $dimensionObj->getCategoryDimension()->getName());
                     $dimensionField = str_replace(' ', '_', strtolower($dimensionField)).'_id';
-
+                    
                     if ($dimensionField == 'ad_type_id') {
                         $dimensionField = 'item__'.$dimensionField;
                     } else {
                         $dimensionField = $dimensionFieldPrefix.'__'.$dimensionField;
                     }
-
+                    
                     $dimArray[$dimensionField][] = $dimensionObj->getId();
                     $parentDimention = $dimensionObj->getId();
                 } else {
@@ -754,7 +754,7 @@ class AdRequestListener
                         }
                         $data = array();
                         $data = $this->em->getRepository('FaContentBundle:SeoTool')->getCustomizedUrlData($categoryText, $this->container);
-
+                        
                         if (!empty($data) > 0 && $event) {
                             if (!$request->attributes->get('customized_page')) {
                                 $request->attributes->set('page_string', strtok($data['source_url'], '?'));
@@ -762,12 +762,12 @@ class AdRequestListener
                                 $this->onKernelRequest($event);
                             }
                             /*$targetCatText = strtok($data['source_url'],'?');
-                            $targetCatText =  substr($targetCatText, 0, strrpos($targetCatText, '/'));
-                            $catObj = $this->getMatchedCategory($targetCatText);
-                            if ($catObj) {
-                                $request->attributes->set('finders', array_merge($request->attributes->get('finders'), array('item__category_id' => $catObj['id'])));
-                            }
-                            $request->attributes->set('customized_page', $data);*/
+                             $targetCatText =  substr($targetCatText, 0, strrpos($targetCatText, '/'));
+                             $catObj = $this->getMatchedCategory($targetCatText);
+                             if ($catObj) {
+                             $request->attributes->set('finders', array_merge($request->attributes->get('finders'), array('item__category_id' => $catObj['id'])));
+                             }
+                             $request->attributes->set('customized_page', $data);*/
                         } else {
                             $request->attributes->set('not_found', 1);
                         }
@@ -777,7 +777,7 @@ class AdRequestListener
         }
         return $dimArray;
     }
-
+    
     /**
      * get matched category
      *
@@ -791,21 +791,21 @@ class AdRequestListener
         if ($cat) {
             return $cat;
         } else {
-            /*$seoPopularSearchUrl = $this->em->getRepository('FaContentBundle:SeoToolPopularSearch')->findBy(array('url'=>'/'.$category.'/'));        
-            if(empty($seoPopularSearchUrl)) {
-                $explodeCatArr = explode('/', $category);
-                if (!empty($explodeCatArr) && count($explodeCatArr)>1) {
-                    array_pop($explodeCatArr);
-                    $newCatText = implode('/', $explodeCatArr);
-                    return $this->getMatchedCategory($newCatText);
-                } else {
-                    return false;
-                }            
-            } else { return false; }*/
+            /*$seoPopularSearchUrl = $this->em->getRepository('FaContentBundle:SeoToolPopularSearch')->findBy(array('url'=>'/'.$category.'/'));
+             if(empty($seoPopularSearchUrl)) {
+             $explodeCatArr = explode('/', $category);
+             if (!empty($explodeCatArr) && count($explodeCatArr)>1) {
+             array_pop($explodeCatArr);
+             $newCatText = implode('/', $explodeCatArr);
+             return $this->getMatchedCategory($newCatText);
+             } else {
+             return false;
+             }
+             } else { return false; }*/
             return false;
         }
     }
-
+    
     /**
      * get first level parent
      *
@@ -848,7 +848,7 @@ class AdRequestListener
             $event->setResponse($response);
         }
     }
-
+    
     /**
      * redirects old urls
      *
@@ -860,7 +860,7 @@ class AdRequestListener
             $redirectString = preg_replace('/\/No-\d+\/$/', '', $redirectString);
             $redirectString = preg_replace('/\/+/', '/', $redirectString);
             $redirect = $this->em->getRepository('FaAdBundle:Redirects')->getNewByOld($redirectString, $this->container);
-
+            
             if ($redirect) {
                 $url = null;
                 if ($page == 'location_home') {
@@ -875,27 +875,27 @@ class AdRequestListener
                         }
                     }
                 }
-
+                
                 if ($redirect == 'for-sale' || $redirect == 'property') {
                     if ($locationString == 'uk') {
                         $url = $this->container->get('router')->generate('landing_page_category', array(
-                                'category_string' => $redirect,
+                            'category_string' => $redirect,
                         ), true);
                     } else {
                         $url = $this->container->get('router')->generate('landing_page_category_location', array(
-                                'category_string' => $redirect,
-                                'location' => $locationString,
+                            'category_string' => $redirect,
+                            'location' => $locationString,
                         ), true);
                     }
                 } elseif ($redirect == 'homepage') {
                     $url = $this->container->get('router')->generate('fa_frontend_homepage', array(), true);
                 } else {
                     $url = $this->container->get('router')->generate('listing_page', array(
-                            'location' => $locationString,
-                            'page_string' => $redirect,
+                        'location' => $locationString,
+                        'page_string' => $redirect,
                     ), true);
                 }
-
+                
                 $response = new RedirectResponse($url, 301);
                 $event->setResponse($response);
             } elseif (preg_match('/popular\//', $redirectString) || preg_match('/advertiser|adverts/', $request->get('location')) || preg_match('/popular-searches\//', $redirectString) || preg_match('/urgent\/|urgent-N-/', $redirectString)) {
@@ -923,13 +923,13 @@ class AdRequestListener
                         }
                     }
                 }
-
+                
                 if ($locationString) {
                     if ($locationString == 'uk') {
                         $url = $this->container->get('router')->generate('fa_frontend_homepage', array(), true);
                     } else {
                         $url = $this->container->get('router')->generate('location_home_page', array(
-                                'location' => $locationString,
+                            'location' => $locationString,
                         ), true);
                     }
                     $response = new RedirectResponse($url, 301);
@@ -943,7 +943,7 @@ class AdRequestListener
                         $words = explode(' ', $url);
                         $NewSearchParams = array();
                         $field = array();
-
+                        
                         if ($page == 'location_home') {
                             $NewSearchParams['item__location'] = 2;
                         } else {
@@ -961,26 +961,26 @@ class AdRequestListener
                                 $NewSearchParams['item__location'] = $locationId ? $locationId : null;
                             }
                         }
-
+                        
                         $i = 1;
                         $parent = null;
                         $first_parent = null;
                         foreach ($words as $word) {
                             $field = $this->em->getRepository('FaAdBundle:MotorsRedirects')->getNewByOld($word, $parent, $first_parent, $this->container);
-
+                            
                             if ($i == 1) {
                                 $first_parent = isset($field['parent']) && $field['parent'] ? $field['parent'] : null;
                             }
-
+                            
                             $parent = $first_parent.'-'.$word;
-
+                            
                             $i++;
-
+                            
                             if (isset($field['field']) && is_array($field['field'])) {
                                 $NewSearchParams = array_merge($NewSearchParams, $field['field']);
                             }
                         }
-
+                        
                         if (isset($NewSearchParams['item__category_id'])) {
                             $routeManager = $this->container->get('fa_ad.manager.ad_routing');
                             $url = $routeManager->getListingUrl($NewSearchParams, 1);
@@ -992,7 +992,7 @@ class AdRequestListener
                                 $redirectString = str_replace($url, '', $redirectString);
                                 $redirectString = preg_replace('/\/No-\d+\/$/', '', $redirectString);
                                 $redirect = $this->em->getRepository('FaAdBundle:Redirects')->getNewByOld(rtrim($redirectString, '/'), $this->container);
-
+                                
                                 if ($redirect) {
                                     $url = null;
                                     if ($page == 'location_home') {
@@ -1007,7 +1007,7 @@ class AdRequestListener
                                             }
                                         }
                                     }
-
+                                    
                                     if ($redirect == 'for-sale' || $redirect == 'property') {
                                         if ($locationString == 'uk') {
                                             $url = $this->container->get('router')->generate('landing_page_category', array(
@@ -1027,7 +1027,7 @@ class AdRequestListener
                                             'page_string' => $redirect,
                                         ), true);
                                     }
-
+                                    
                                     $response = new RedirectResponse($url, 301);
                                     $event->setResponse($response);
                                 }
@@ -1038,7 +1038,7 @@ class AdRequestListener
             }
         }
     }
-
+    
     /**
      * get ad type arrays
      *
@@ -1047,27 +1047,27 @@ class AdRequestListener
     public function getAdTypeArray()
     {
         return array(
-                    'for-sale',
-                    'wanted',
-                    'swapping',
-                    'free-to-collector',
-                    'part-time',
-                    'full-time',
-                    'evenings',
-                    'weekend',
-                    'contract',
-                    'temporary',
-                    'freelance',
-                    'home-working',
-                    'offered',
-                    'exchange',
-                    'wanted',
-                    'rescue',
-                    'share',
-                    'loan',
-                    );
+            'for-sale',
+            'wanted',
+            'swapping',
+            'free-to-collector',
+            'part-time',
+            'full-time',
+            'evenings',
+            'weekend',
+            'contract',
+            'temporary',
+            'freelance',
+            'home-working',
+            'offered',
+            'exchange',
+            'wanted',
+            'rescue',
+            'share',
+            'loan',
+        );
     }
-
+    
     /**
      * get matched dimensions
      *
@@ -1080,31 +1080,31 @@ class AdRequestListener
     public function getMatchedDimension($slug, $category, $parentDimention)
     {
         $urlKeysPattern = '^('.$category.').*$|^.*\|\|('.$category.').*$';
-
+        
         $qb = $this->em->getRepository('FaEntityBundle:Entity')->createQueryBuilder(FaEntityRepo::ALIAS)
-                    ->andWhere(FaEntityRepo::ALIAS.'.slug = :slug_text')
-                    ->andWhere("regexp(".FaEntityRepo::ALIAS.".url_keys, '".$urlKeysPattern."') != false")
-                    ->setParameter('slug_text', $slug);
-
+        ->andWhere(FaEntityRepo::ALIAS.'.slug = :slug_text')
+        ->andWhere("regexp(".FaEntityRepo::ALIAS.".url_keys, '".$urlKeysPattern."') != false")
+        ->setParameter('slug_text', $slug);
+        
         if ($parentDimention) {
             $qb->andWhere(FaEntityRepo::ALIAS.'.parent_id = :parent_id OR '.FaEntityRepo::ALIAS.'.parent_id = 0')
             ->setParameter('parent_id', $parentDimention);
         }
-
+        
         $entities = $qb->getQuery()->getResult();
-
+        
         if ($entities) {
             return $entities[0];
         }
     }
     
-/*** Added for seo_config ***/
-/**
- * Check if the request is homepage request.
- *
- * @param $request
- * @return bool
- */
+    /*** Added for seo_config ***/
+    /**
+     * Check if the request is homepage request.
+     *
+     * @param $request
+     * @return bool
+     */
     protected function isHomepageRoute($request)
     {
         return $this->_route($request) == 'location_home_page';
@@ -1398,13 +1398,13 @@ class AdRequestListener
         /*$defaultListAllSlug = str_replace('-for-sale', '', $this->container->getParameter('fa.list_all_adverts_url_slug'));
         
         if ($name == $this->getLegacyListingSlug()) {
-            //  This value is being appended with '-for-sale' slug in some cases. So this is a one place to change those.
-            $name = $defaultListAllSlug;
-            return true;
+        //  This value is being appended with '-for-sale' slug in some cases. So this is a one place to change those.
+        $name = $defaultListAllSlug;
+        return true;
         }
         
         if ($name == $defaultListAllSlug) {
-            return true;
+        return true;
         }*/
         
         /** @var CategoryRepository $categoryRepository */
@@ -1913,7 +1913,7 @@ class AdRequestListener
     
     
     /**
-     * Get the request parts. 
+     * Get the request parts.
      *
      * @param $request
      * @return array
@@ -2099,6 +2099,98 @@ class AdRequestListener
     }
     
     /**
+     * Handle direct redirects.
+     *
+     * @param $request
+     * @return void
+     */
+    protected function handleDirectRedirects(&$request)
+    {
+        $fullUrl = '/' . strtolower(implode('/', $this->getPathParts($request)));
+        
+        $redirectSettings = $this->getSeoConfigs(SeoConfigRepository::REDIRECTS);
+        $fullList = $redirectSettings;
+        
+        $redirectSettings = array_filter($redirectSettings, function ($settings, $key) use ($fullUrl) {
+            return substr_exist($fullUrl, strtolower(array_first(explode(':', $settings)))) && !substr_exist($settings, ':absolute');
+        }, ARRAY_FILTER_USE_BOTH);
+            
+            uasort($redirectSettings, function ($a, $b) {
+                return strlen($b) - strlen($a);
+            });
+                
+                $variableRedirects = array_filter($fullList, function ($settings, $key) use ($fullUrl) {
+                    return substr_exist($settings, '{location}');
+                }, ARRAY_FILTER_USE_BOTH);
+                    
+                    uasort($variableRedirects, function ($a, $b) {
+                        return strlen($b) - strlen($a);
+                    });
+                        
+                        $absoluteRedirects = array_filter($fullList, function ($settings, $key) use ($fullUrl) {
+                            return substr_exist($settings, ':absolute') && ($fullUrl == strtolower(array_first(explode(':', $settings))));
+                        }, ARRAY_FILTER_USE_BOTH);
+                            
+                            uasort($absoluteRedirects, function ($a, $b) {
+                                return strlen($b) - strlen($a);
+                            });
+                                
+                                $absoluteRedirect = array_first($absoluteRedirects);
+                                $redirectSetting = array_first($redirectSettings);
+                                
+                                if (!empty($redirectSetting)) {
+                                    $redirectSetting = strtolower($redirectSetting);
+                                    $redirectSetting = explode(':', $redirectSetting);
+                                    $fromSegment = array_shift($redirectSetting);
+                                    $settings = array_values($redirectSetting);
+                                    $toSegment = array_first($settings);
+                                    $replaceType = data_get($settings, 1, 'partial');
+                                    
+                                    $route = $this->getRoute('location_home_page', [
+                                        'location' => '',
+                                    ], UrlGeneratorInterface::ABSOLUTE_PATH);
+                                    $pos = strpos($fullUrl, $fromSegment);
+                                    $prependPart = substr($fullUrl, 0, $pos);
+                                    
+                                    $route = rtrim($route, '/');
+                                    $prependPart = ltrim($prependPart, '/');
+                                    
+                                    if ($replaceType == 'full') {
+                                        
+                                        $parts = array_filter(explode('/', str_replace($request->server->get('SCRIPT_NAME'), '', "{$route}/{$prependPart}{$toSegment}")));
+                                        $this->enableRedirect($request);
+                                        $this->reBuildRequest($request, array_values($parts));
+                                    } elseif ($replaceType == 'partial') {
+                                        $appendPart = substr($fullUrl, ($pos + strlen($fromSegment)));
+                                        $parts = array_filter(explode('/', str_replace($request->server->get('SCRIPT_NAME'), '', "{$route}/{$prependPart}{$toSegment}{$appendPart}")));
+                                        
+                                        foreach ($request->query->all() as $param => $paramValue) {
+                                            $request->query->remove($param);
+                                        }
+                                        
+                                        $this->enableRedirect($request);
+                                        $this->reBuildRequest($request, array_values($parts));
+                                    }
+                                } elseif (!empty($absoluteRedirect)) {
+                                    $absoluteRedirect = strtolower($absoluteRedirect);
+                                    $absoluteRedirect = explode(':', $absoluteRedirect);
+                                    $settings = array_values($absoluteRedirect);
+                                    $toSegment = array_first($settings);
+                                    
+                                    $route = $this->getRoute('location_home_page', [
+                                        'location' => '',
+                                    ], UrlGeneratorInterface::ABSOLUTE_PATH);
+                                    
+                                    $route = rtrim($route, '/');
+                                    $toSegment = ltrim($toSegment, '/');
+                                    
+                                    $this->redirect("{$route}/{$toSegment}", 301);
+                                } elseif (!empty($variableRedirects)) {
+                                    $this->handleVariableRedirectRule($request, $fullUrl, $variableRedirects);
+                                }
+    }
+    
+    /**
      * Check if the incoming request needs to be redirected with code 301 and redirect.
      *
      * @param $request
@@ -2108,16 +2200,58 @@ class AdRequestListener
     protected function _301($request)
     {
         
-        if ($request->get('location')!='') {
-            $this->handleLocationAndRegionAliases($request);
+        /*if ($request->get('location')!='') {
+         $this->handleLocationAndRegionAliases($request);
+         }
+         
+         if ($request->get('category_string')!='' || $request->get('category_id')!='') {
+         $this->handleLegacyCategoryRedirects($request);
+         }*/
+        
+        if ($this->isHomepageRoute($request) || $this->isListingPageRoute($request)) {
+            
+            // Handles direct redirects
+            $this->handleDirectRedirects($request);
+            
+            // Handles OData Removal from URL.
+            $this->handleODataRemoval($request);
+            
+            // Handles direct redirects
+            $this->handleDirectRedirects($request);
+            
+            // Handles the oData Formatting.
+            $this->handleODataFormatting($request);
+            
+            // Redirects the legacy pagination links.
+            $this->handleLegacyPagination($request);
+            
+            // Redirects the archive ads filter links.
+            $this->handleLegacyArchiveLinks($request);
+            
+            // Remove hard-coded un-necessary query string parameters.
+            $this->removeUnnecessaryQueryParams($request);
+            
+            // Handles the changes in legacy filters
+            $this->handleLegacyFilterUrl($request);
+            
+            // Handles the filter with subcategory.
+            $this->handleCategoryEntityFilterUrl($request);
+            
+            // ---  Re do starts
+            // Handles direct redirects
+            $this->handleDirectRedirects($request);
+            
+            // Trim out ending OData - if not necessary
+            $this->handleURLODataTrim($request);
+            
+            // Handles the oData Formatting.
+            $this->handleODataFormatting($request);
         }
         
-        if ($request->get('category_string')!='' || $request->get('category_id')!='') {
-            $this->handleLegacyCategoryRedirects($request);
-        }
-        
+        // Handles protocol redirects
         $this->handleProtocolRedirects($request);
         
+        // Redirect if the redirect flag is set.
         $this->redirectIfRequired($request);
         return false;
     }
