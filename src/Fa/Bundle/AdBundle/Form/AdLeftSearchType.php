@@ -197,20 +197,25 @@ class AdLeftSearchType extends AbstractType
                 'data' => $defDistance,             
             )
         );
-        $this->addLocationAutoSuggestField($form,$searchLocation);
+        $this->addLocationAutoSuggestField($form,$selLocationArray);
         $this->addCategroyDimensionFilters($form, $categoryId);
         $this->addIsTradeAdField($form);
     }
-
+    
     /**
      * Add location autosuggest field.
      *
      * @param object $form Form instance.
      */
-    protected function addLocationAutoSuggestField($form,$searchLocation)
+    protected function addLocationAutoSuggestField($form,$selLocationArray)
     {
-        $form->add('item__location', HiddenType::class, array('data'=>$searchLocation,'empty_data'=>$searchLocation));
-        $form->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false));
+        $searchLocationId = $searchLocationText = '';
+        if(!empty($selLocationArray)) {
+            $searchLocationId = $selLocationArray->getId();
+            $searchLocationText = $selLocationArray->getName();
+        }
+        $form->add('item__location', HiddenType::class, array('data'=>$searchLocationId,'empty_data'=>$searchLocationId));
+        $form->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false,'data'=>$searchLocationText,'empty_data'=>$searchLocationText));
         $form->add('item__area', HiddenType::class);
     }
 
