@@ -29,3 +29,7 @@ FaContentBundle_home_popular_admin:
 FaContentBundle_seo_tool_override_admin:
     resource: '@FaContentBundle/Resources/config/routing/seo_tool_override_admin.yml'
     prefix:   /seo_tool_override
+    
+FaContentBundle_seo_config_admin:
+    resource: "@FaContentBundle/Resources/config/routing/seo_config_admin.yml"
+    prefix:   /seo-config
