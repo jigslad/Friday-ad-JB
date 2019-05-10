@@ -27,7 +27,8 @@ use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\ContentBundle\Repository\SeoConfigRepository;
 use Fa\Bundle\EntityBundle\Repository\CategoryDimensionRepository;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
-
+use Fa\Bundle\AdBundle\Repository\RedirectsRepository;
+use Fa\Bundle\AdBundle\Entity\Redirects;
 /**
  * This controller is used for static page management.
  *
@@ -115,6 +116,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
 
         $seoConfigs = [];
         $data = $seoConfigRepository->getBaseQueryBuilder()->getQuery()->getArrayResult();
+
         foreach ($data as $config) {
             $type = data_get($config, 'type');
             $jsonStringData = $config['data'];
@@ -284,12 +286,17 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
     {
         $data = $request->get('data');
 
-        $data = $this->processBulkUpload($request, $data, SeoConfigRepository::REDIRECTS);
+        $data = $this->processRedirectBulkUpload($request, $data);
 
         return new JsonResponse([
             'status' => 1,
             'data' => $data
         ]);
+    }
+    
+    public function processRedirectBulkUpload($request, $data) 
+    {
+        echo '<pre>';print_r();die($data);
     }
 
     /**
@@ -1135,7 +1142,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
     public function validateRedirectsViewAction(Request $request)
     {
         $root = $request->server->get('DOCUMENT_ROOT') . '/../data/seo';
-        $website = $this->container->getParameter('nmp.site.name');
+        $website = $this->container->getParameter('site.name');
         $file = "{$root}/{$website}/redirect_rules.csv";
 
         $data = [];
@@ -1199,7 +1206,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             mkdir($root, 0777);
         }
 
-        $website = $this->container->getParameter('nmp.site.name');
+        $website = $this->container->getParameter('site.name');
 
         if (!is_dir("{$root}/{$website}")) {
             mkdir("{$root}/{$website}", 0777);
@@ -1265,6 +1272,20 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             'data' => $configs,
         ]);
     }
+    
+    public function dataTableRedirectConfigAction(Request $request)
+    {
+        $configSlug = $request->get('config');
+        $offset = $request->get('start');
+        $page = $request->get('draw');
+        $perPage = $request->get('length');
+        
+        $configs = $this->getRedirectConfigData();
+        
+        return new JsonResponse([
+            'data' => $configs,
+        ]);
+    }
 
     /**
      * Get the config data for the data-table.
@@ -1285,9 +1306,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             $data = $newData;
         }
 
-        if ($config == SeoConfigRepository::REDIRECTS) {
-            return $this->transformRedirects($data);
-        } elseif (in_array($config, [
+      if (in_array($config, [
             SeoConfigRepository::UNNECESSARY_ODATA_PARAMS,
             SeoConfigRepository::UNNECESSARY_QUERY_PARAMS,
             SeoConfigRepository::URL_RIGHT_TRIM,
@@ -1306,6 +1325,17 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         }
     }
 
+    
+    /**
+     * Get the config data for the data-table.
+     *
+     * @param $config
+     * @return array
+     */
+    public function getRedirectConfigData() {
+        $data = $this->getRepository('FaAdBundle:Redirects')->getAllRedirects();
+        return $this->transformRedirects($data);
+    }
     /**
      * Transform Redirect data.
      *
@@ -1314,23 +1344,21 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
      */
     private function transformRedirects($data = [])
     {
-        return array_map(function ($item) {
-            $items = explode(':', $item);
-
+        return array_map(function ($item) {            
             $action =
                 '<span class="datatable-action-list" style="list-style: none">
-                    <textarea class="data" style="display: none;">'. $item .'</textarea>
-                    <i class="fa fa-pencil edit"></i>
-                    <i class="fa fa-undo undo hidden"></i>
-                    <i class="fa fa-trash delete"></i>
-                    <i class="fa fa-floppy-o save hidden"></i>
+                    <textarea class="data" style="display: none;">'. data_get($item, 'id', '') .'</textarea>
+                    <i class="fa fi-pencil small edit"></i>
+                    <i class="fa fi-undo undo hidden"></i>
+                    <i class="fa fi-trash redirectdelete"></i>
+                    <i class="fa fi-save redirectsave hidden"></i>
                 </span>';
 
 
             return [
-                'from'  => data_get($items, 0, ''),
-                'to'    => data_get($items, 1, ''),
-                'type'  => empty($type = data_get($items, 2)) ? 'partial' : $type,
+                'from'  => data_get($item, 'old', ''),
+                'to'    => data_get($item, 'new', ''),
+                'type'  => (data_get($item, 'is_location')==1) ? 'location' : ((data_get($item, 'is_location')==2)?'article':'category'),
                 'action'  => $action,
             ];
 
@@ -1539,6 +1567,67 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             ]);
         }
 
+        return new JsonResponse([
+            'changed' => false,
+            'ruleFrom' => $ruleFrom,
+            'ruleTo' => $ruleTo,
+        ]);
+    }
+    
+    public function redirectremoveRuleAction(Request $request)
+    {      
+        $ruleId = $request->get('rule');
+        $result = '';
+        
+        //$result = $this->getRepository('FaAdBundle:Redirects')->deleteRecordById($ruleId);        
+        
+        if ($result) {
+            return new JsonResponse([
+                'changed' => true,
+                'rule' => $ruleId,
+            ]);
+        }
+        
+        return new JsonResponse([
+            'changed' => false,
+            'rule' => $ruleId,
+        ]);
+    }
+    
+    
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function redirecteditRuleAction(Request $request)
+    {
+        $ruleTo = $ruleArray = $getExistData = array();
+        $ruleId = $request->get('rule_from');
+        $ruleVal = $request->get('rule_to');
+        $ruleTo = explode(':',$ruleVal);
+        
+        if(!empty($ruleTo)) {
+            $ruleArray['old'] = $ruleTo[0];
+            $ruleArray['new'] = $ruleTo[1];
+            $ruleArray['is_location'] = ($ruleTo[2]=='location')?1:($ruleTo[2]=='article'?2:0);
+        }
+        
+        $getExistData = $this->getRepository('FaAdBundle:Redirects')->getRedirectByArray($ruleArray);
+        if(empty($getExistData)) {            
+            $redirects = $this->getRepository('FaAdBundle:Redirects')->find($ruleId);           
+            $redirects->setOld($ruleArray['old']);
+            $redirects->setNew($ruleArray['new']);
+            $redirects->setIsLocation($ruleArray['is_location']);
+            $this->updateEntity($redirects);
+            
+            return new JsonResponse([
+                'changed' => true,
+                'ruleFrom' => $ruleId,
+                'ruleTo' => $ruleVal,
+            ]);
+        }
+                
         return new JsonResponse([
             'changed' => false,
             'ruleFrom' => $ruleFrom,

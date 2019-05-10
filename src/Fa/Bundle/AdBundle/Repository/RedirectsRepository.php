@@ -120,7 +120,58 @@ class RedirectsRepository extends EntityRepository
             }
         }
     }
+    
+    /**
+     * Get active Campaigns
+     */
+    public function getAllRedirects()
+    {
+        $results = $this->createQueryBuilder(self::ALIAS)
+        ->getQuery()
+        ->getArrayResult();
+        return $results;
+    }
+    
+    /**
+     * Get Redirect By Array
+     */
+    public function getRedirectByArray($redirectArr)
+    {
+        $qb = $this->createQueryBuilder(self::ALIAS)->setMaxResults(1);
+        
+        if(isset($redirectArr['old'])) {
+            $qb->andWhere(self::ALIAS.'.old = :oldUrl');
+            $qb->setParameter('oldUrl', $redirectArr['old']);
+        }
+        
+        if(isset($redirectArr['is_location'])) {
+            $qb->andWhere(self::ALIAS.'.is_location = :is_location');
+            $qb->setParameter('is_location', $redirectArr['is_location']);
+        }
+        
+        if(isset($redirectArr['new'])) {
+            $qb->andWhere(self::ALIAS.'.new = :newurl');
+            $qb->setParameter('newurl', $redirectArr['new']);
+        }
 
+        $results = $qb->getQuery()->getOneOrNullResult();
+        return $results;
+    }
+    
+    public function deleteRecordById($Id)
+    {        
+        if ($Id!='') {
+            $qb = $this->getBaseQueryBuilder()
+            ->delete()
+            ->where(self::ALIAS.'.id = :Id')
+            ->setParameter('Id', $Id);
+            
+            $result = $qb->getQuery()->execute();
+        }
+        
+        return $result;
+    }
+    
     /**
      * Get entity table name.
      */

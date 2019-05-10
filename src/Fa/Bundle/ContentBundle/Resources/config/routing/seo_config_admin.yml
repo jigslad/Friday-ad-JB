@@ -102,6 +102,10 @@ admin_seo_config_datatable:
     path: /data-table/data
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:dataTableConfig" }
 
+admin_seo_config_redirects_datatable:
+    path: /data-table/redirect-data
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:dataTableRedirectConfig" }
+
 admin_seo_config_datatable_delete:
     path: /data-table/delete
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:removeRule" }
@@ -109,3 +113,13 @@ admin_seo_config_datatable_delete:
 admin_seo_config_datatable_edit:
     path: /data-table/edit
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:editRule" }
+    
+admin_seo_config_datatable_redirectdelete:
+    path: /data-table/redirectdelete
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:redirectremoveRule" }
+
+admin_seo_config_datatable_redirectedit:
+    path: /data-table/redirectedit
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:redirecteditRule" }
+    
+    

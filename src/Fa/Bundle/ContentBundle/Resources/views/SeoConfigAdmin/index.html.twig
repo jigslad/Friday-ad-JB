@@ -844,6 +844,12 @@
         $(document).on('click', '.datatable-action-list .fa.save', function () {
             saveRow($(this).parents('tr').first())
         });
+        $(document).on('click', '.datatable-action-list .fa.redirectdelete', function () {
+        	redirectdeleteRow($(this).parents('tr').first())
+        });
+        $(document).on('click', '.datatable-action-list .fa.redirectsave', function () {
+        	redirectsaveRow($(this).parents('tr').first())
+        });
 
         $(document).ready(function() {
             $("#ForSaleExclusions").select2({placeholder: "Add Categories"});
@@ -1011,7 +1017,7 @@
         {% endif %}
 
         $('#redirects').DataTable( {
-            ajax: '{{ path('admin_seo_config_datatable', {'config': 'redirects'}) }}',
+            ajax: '{{ path('admin_seo_config_redirects_datatable', {'config': 'redirects'}) }}',
             columns: [
                 { data: 'from' },
                 { data: 'to' },
@@ -1209,6 +1215,7 @@
                 var settings = $(td).find('span.datatable-action-list');
                 if (settings.length) {
                     $(settings).find('.save').removeClass('hidden');
+                    $(settings).find('.redirectsave').removeClass('hidden');
                     $(settings).find('.undo').removeClass('hidden');
                     $(settings).find('.edit').addClass('hidden');
                 } else {
@@ -1303,6 +1310,73 @@
 
         }
 
+        function redirectdeleteRow(row) {
+            $(row).addClass('deleted');
+            var rule = $(row).find('.datatable-action-list .data').first().html();
+            var table = $(row).parents('table').first();
+            var config = $(table).data('rule');
+
+            blockPage('Removing rule');
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin_seo_config_datatable_redirectdelete')}}",
+                data: {
+                    config: config,
+                    rule: rule
+                }
+            })
+            .done(function(response) {
+                unblockPage();
+
+                if (response.changed) {
+                    $(row).remove();
+                    $(table).DataTable().ajax.reload()
+                } else {
+                    alert('Rule not deleted')
+                }
+
+            });
+
+        }
+
+        function redirectsaveRow(row) {
+            var ruleFrom = $(row).find('.datatable-action-list .data').first().html();
+            var table = $(row).parents('table').first();
+            var config = $(table).data('rule');
+
+            var ruleTo = [];
+            $.each($(row).find('input:not(.hidden)'), function (key, input) {
+                ruleTo.push($(input).val());
+            });
+
+            ruleTo = ruleTo.join(':');
+
+            console.log(ruleFrom, ruleTo);
+            blockPage('Saving rule');
+
+            $.ajax({
+                type: "POST",
+                url: "{{path('admin_seo_config_datatable_redirectedit')}}",
+                data: {
+                    config: config,
+                    rule_from: ruleFrom,
+                    rule_to: ruleTo
+                }
+            })
+            .done(function(response) {
+                unblockPage();
+
+                if (response.changed) {
+                    $(table).DataTable().ajax.reload()
+                } else {
+                    alert('Rule not Saved')
+                }
+
+            });
+
+        }
+        
         function read_url(input) {
 
             if (input.files && input.files[0]) {
