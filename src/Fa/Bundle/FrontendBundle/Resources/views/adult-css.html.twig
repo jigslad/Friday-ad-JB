@@ -40,10 +40,10 @@ button,.button{
     background:#9C1F9F !important;
 }
 ul.pagination li.current a,ul.pagination li.current button{
-    background:#9C1F9F !important;
+    background:transparent !important;
 }
 ul.pagination li.current a:hover,ul.pagination li.current a:focus,ul.pagination li.current button:hover,ul.pagination li.current button:focus{
-    background:#9C1F9F !important;
+    background:transparent !important;
 }
 .side-nav li a:not(.button){
     color:#9C1F9F !important;
@@ -567,11 +567,26 @@ footer a:hover{
     }
 }
 
-
-
+.list-display-url, .list-img a, .search-pref, #savedSearchAgentModal .modal-content a{
+    color: #9C1F9F !important;
+}
+.list-display-url:hover, .list-img a:hover, .search-pref a:hover, #savedSearchAgentModal .modal-content a:hover{
+    color: #760F62 !important;
+}
+.fa-range-slider .noUi-connect{
+    background: #9C1F9F !important;
+}
+.alert-tooltip {
+    background-image:url(/bundles/fafrontend/images/adul-alert-illustration.svg) !important;
+    border: 1px solid #9C1F9F !important;
+}
+.alert-tooltip:after { border-right-color: #9C1F9F !important; }
 .alert-box.success .alert-icon{
     background:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2227%22%20height%3D%2227%22%20viewBox%3D%22-1404%20458.9%2027%2027%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3Bstroke%3A%239C1F9F%3B%7D%0D%0A%09.st1%7Bfill%3Anone%3Bstroke%3A%239C1F9F%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Esuccess%20icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-54.000000%2C%20-199.000000%29%22%3E%3Cg%20transform%3D%22translate%2836.000000%2C%20182.000000%29%22%3E%3Cg%20transform%3D%22translate%2819.000000%2C%2018.000000%29%22%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%22-1391.5%22%20cy%3D%22471.4%22%20r%3D%2212.5%22/%3E%3Cpath%20class%3D%22st1%22%20d%3D%22M-1396%20471.9l3.8%204%206.2-8%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat !important;
 }
+.secondary-btn-2 { background:#ffffff !important; }
+.travel-arrangement-in-call { background-image:url(/bundles/fafrontend/images/adul-travel-incall.svg) !important; }
+
 .site-search .search-icon{
 	border:1px solid #760F62 !important;
     background:#9C1F9F url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2215.3%22%20height%3D%2215.3%22%20viewBox%3D%22-4226.7%201392.2%2015.3%2015.3%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3ESEARCH%20ICON%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-4211.4%201406l-3.6-3.6c0.8-1.1%201.3-2.4%201.3-3.8%200-1.7-0.7-3.4-1.9-4.6%20-2.5-2.5-6.7-2.5-9.2%200%20-1.2%201.2-1.9%202.9-1.9%204.6s0.7%203.4%201.9%204.6c1.3%201.3%202.9%201.9%204.6%201.9%201.3%200%202.7-0.4%203.8-1.3l3.6%203.6L-4211.4%201406zM-4223.5%201401.7c-0.9-0.9-1.3-2-1.3-3.2%200-1.2%200.5-2.3%201.3-3.2%200.9-0.9%202-1.3%203.2-1.3%201.2%200%202.3%200.4%203.2%201.3%200.9%200.8%201.3%202%201.3%203.2%200%201.2-0.5%202.3-1.3%203.2C-4218.8%201403.5-4221.7%201403.5-4223.5%201401.7z%22/%3E%3C/svg%3E') no-repeat center center !important;
@@ -734,8 +749,8 @@ footer a:hover{
 .tickmark-icon{
     background:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2226%22%20height%3D%2225%22%20viewBox%3D%220%200%2026%2025%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%239C1F9F%3B%7D%0D%0A%09.st1%7Bfill%3Anone%3Bstroke%3A%23FFFFFF%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EFeatures-Check-ON%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-497.000000%2C%20-708.000000%29%22%3E%3Cg%20transform%3D%22translate%28466.000000%2C%20398.000000%29%22%3E%3Cg%20transform%3D%22translate%2818.000000%2C%20301.000000%29%22%3E%3Cg%20transform%3D%22translate%2813.734783%2C%209.000000%29%22%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%2212.5%22%20cy%3D%2212.5%22%20r%3D%2212.5%22/%3E%3Cpath%20class%3D%22st1%22%20d%3D%22M7.4%2012l4%204L18%208%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat !important;
 }
-.back-link{
-    background:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%228%22%20height%3D%2214%22%20viewBox%3D%22-395%20229%208%2014%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%239C1F9F%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Egreen-arrow%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-656.000000%2C%20-366.000000%29%22%3E%3Cg%20transform%3D%22translate%28-2.000000%2C%20144.000000%29%22%3E%3Cg%20transform%3D%22translate%28458.000000%2C%2027.000000%29%22%3E%3Cg%20transform%3D%22translate%282.000000%2C%20141.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-191%20285l-4%205%204%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') 0 14px no-repeat !important;
+.breadcrumb .back-link{
+    background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%228%22%20height%3D%2214%22%20viewBox%3D%22-395%20229%208%2014%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%239C1F9F%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Egreen-arrow%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-656.000000%2C%20-366.000000%29%22%3E%3Cg%20transform%3D%22translate%28-2.000000%2C%20144.000000%29%22%3E%3Cg%20transform%3D%22translate%28458.000000%2C%2027.000000%29%22%3E%3Cg%20transform%3D%22translate%282.000000%2C%20141.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-191%20285l-4%205%204%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') !important;
 }
 .home-icon{
     background:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2236%22%20height%3D%2236%22%20viewBox%3D%22-381%20218%2036%2036%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23313133%3B%7D%0D%0A%09.st1%7Bfill%3A%239C1F9F%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EHome%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Crect%20x%3D%22-381%22%20y%3D%22218%22%20class%3D%22st0%22%20width%3D%2236%22%20height%3D%2236%22/%3E%3Cpolygon%20class%3D%22st1%22%20points%3D%22-371%20237%20-371%20247%20-365%20247%20-365%20243%20-360%20243%20-360%20247%20-354%20247%20-354%20237%20%22/%3E%3Cpolygon%20class%3D%22st1%22%20points%3D%22-362.5%20225%20-355%20235%20-370%20235%20%22/%3E%3C/svg%3E') no-repeat 10px 0 / 36px 36px !important
