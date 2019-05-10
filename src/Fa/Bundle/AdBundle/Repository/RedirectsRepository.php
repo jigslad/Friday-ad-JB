@@ -161,7 +161,7 @@ class RedirectsRepository extends EntityRepository
     public function deleteRecordById($Id)
     {        
         if ($Id!='') {
-            $qb = $this->getBaseQueryBuilder()
+            $qb = $this->createQueryBuilder(self::ALIAS)
             ->delete()
             ->where(self::ALIAS.'.id = :Id')
             ->setParameter('Id', $Id);

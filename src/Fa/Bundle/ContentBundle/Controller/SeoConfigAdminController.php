@@ -296,7 +296,29 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
     
     public function processRedirectBulkUpload($request, $data) 
     {
-        echo '<pre>';print_r();die($data);
+        $importData = array();
+        $importData = $data;
+        if(!empty($importData)) {
+            foreach($importData as $singleData) {
+                $actualData = $dataArray = array();
+                $actualData = explode(':',$singleData);
+                
+                if(!empty($actualData)) {
+                    $dataArray['old'] = $actualData[0];
+                    $dataArray['new'] = $actualData[1];
+                    $dataArray['is_location'] = ($actualData[2]=='location')?1:($actualData[2]=='article'?2:0);
+                }
+                $getExistData = $this->getRepository('FaAdBundle:Redirects')->getRedirectByArray($dataArray);
+                if(empty($getExistData)) {
+                    $redirects = new Redirects;
+                    $redirects->setOld($dataArray['old']);
+                    $redirects->setNew($dataArray['new']);
+                    $redirects->setIsLocation($dataArray['is_location']);
+                    $this->updateEntity($redirects);
+                }
+            }
+        }
+        return $this->dataTableRedirectConfigAction($request);
     }
 
     /**
@@ -1579,7 +1601,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         $ruleId = $request->get('rule');
         $result = '';
         
-        //$result = $this->getRepository('FaAdBundle:Redirects')->deleteRecordById($ruleId);        
+        $result = $this->getRepository('FaAdBundle:Redirects')->deleteRecordById($ruleId);        
         
         if ($result) {
             return new JsonResponse([
