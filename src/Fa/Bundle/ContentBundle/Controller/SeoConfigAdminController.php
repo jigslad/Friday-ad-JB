@@ -1400,10 +1400,10 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             $action =
                 '<span class="datatable-action-list" style="list-style: none">
                     <textarea class="data" style="display: none;">'. $item .'</textarea>
-                    <i class="fa fa-pencil edit"></i>
-                    <i class="fa fa-undo undo hidden"></i>
-                    <i class="fa fa-trash delete"></i>
-                    <i class="fa fa-floppy-o save hidden"></i>
+                    <i class="fa fi-pencil small edit"></i>
+                    <i class="fa fi-undo undo hidden"></i>
+                    <i class="fa fi-trash delete"></i>
+                    <i class="fa fi-save save hidden"></i>
                 </span>';
 
 
@@ -1429,10 +1429,10 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             $action =
                 '<span class="datatable-action-list" style="list-style: none">
                     <textarea class="data" style="display: none;">'. $item .'</textarea>
-                    <i class="fa fa-pencil edit"></i>
-                    <i class="fa fa-undo undo hidden"></i>
-                    <i class="fa fa-trash delete"></i>
-                    <i class="fa fa-floppy-o save hidden"></i>
+                    <i class="fa fi-pencil small edit"></i>
+                    <i class="fa fi-undo undo hidden"></i>
+                    <i class="fa fi-trash delete"></i>
+                    <i class="fa fi-save save hidden"></i>
                 </span>';
 
 
@@ -1459,10 +1459,10 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             $action =
                 '<span class="datatable-action-list" style="list-style: none">
                     <textarea class="data" style="display: none;">'. $item .'</textarea>
-                    <i class="fa fa-pencil edit"></i>
-                    <i class="fa fa-undo undo hidden"></i>
-                    <i class="fa fa-trash delete"></i>
-                    <i class="fa fa-floppy-o save hidden"></i>
+                    <i class="fa fi-pencil small edit"></i>
+                    <i class="fa fi-undo undo hidden"></i>
+                    <i class="fa fi-trash delete"></i>
+                    <i class="fa fi-save save hidden"></i>
                 </span>';
 
 

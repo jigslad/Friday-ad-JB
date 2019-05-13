@@ -2214,38 +2214,38 @@ class AdRequestListener
             $this->handleDirectRedirects($request);
             
             // Handles OData Removal from URL.
-            $this->handleODataRemoval($request);
+            //$this->handleODataRemoval($request);
             
             // Handles direct redirects
             $this->handleDirectRedirects($request);
             
             // Handles the oData Formatting.
-            $this->handleODataFormatting($request);
+            //$this->handleODataFormatting($request);
             
             // Redirects the legacy pagination links.
-            $this->handleLegacyPagination($request);
+            //$this->handleLegacyPagination($request);
             
             // Redirects the archive ads filter links.
-            $this->handleLegacyArchiveLinks($request);
+            //$this->handleLegacyArchiveLinks($request);
             
             // Remove hard-coded un-necessary query string parameters.
-            $this->removeUnnecessaryQueryParams($request);
+            //$this->removeUnnecessaryQueryParams($request);
             
             // Handles the changes in legacy filters
-            $this->handleLegacyFilterUrl($request);
+            //$this->handleLegacyFilterUrl($request);
             
             // Handles the filter with subcategory.
-            $this->handleCategoryEntityFilterUrl($request);
+            //$this->handleCategoryEntityFilterUrl($request);
             
             // ---  Re do starts
             // Handles direct redirects
             $this->handleDirectRedirects($request);
             
             // Trim out ending OData - if not necessary
-            $this->handleURLODataTrim($request);
+            //$this->handleURLODataTrim($request);
             
             // Handles the oData Formatting.
-            $this->handleODataFormatting($request);
+            //$this->handleODataFormatting($request);
         }
         
         // Handles protocol redirects

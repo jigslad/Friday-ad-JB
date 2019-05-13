@@ -14,7 +14,8 @@ namespace Fa\Bundle\ContentBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
-
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Seo tool repository.
  *
@@ -659,4 +660,121 @@ class SeoToolRepository extends EntityRepository
         $this->queryBuilder->andWhere($this->getRepositoryAlias().'.top_link = :topLink')
      ->setParameter('topLink', $topLink);
     }
+    
+    /**
+     * Give the custom meta robot contents.
+     *
+     * @param string             $uri
+     * @param $container
+     * @return array|bool
+     */
+    public function customMetaRobots($uri, $container)
+    {
+        $tagContents = $this->getTagConfigs($uri);
+        
+        /*if (empty($tagContents)) {
+            
+            
+            $routingManager = $container->get('fa_ad.manager.ad_routing');
+            $url = $routingManager->validateMaxDimRules($uri, '');
+            
+            // If the url is #, then the url is not allowed to be followed as per Max Dims
+            if ($url == '#') {
+                $tagContents = ['noindex', 'nofollow'];
+                return [
+                    'content' => implode(', ', $tagContents),
+                    'data' => $tagContents,
+                ];
+            }
+            
+            return false;
+        }*/
+        
+        return [
+            'content' => implode(', ', $tagContents),
+            'data' => $tagContents,
+        ];
+    }
+    
+    /**
+     * Get the meta robots tag for the given uri.
+     *
+     * @param string $uri
+     * @return array
+     */
+    public function getTagConfigs($uri)
+    {
+        $values = $this->getSeoConfig(SeoConfigRepository::META_ROBOTS);
+        
+        if (empty($values)) {
+            return [];
+        }
+        
+        if (is_array($values)) {
+            $values = $this->generateValueArray($values);
+        }
+        
+        $values = array_filter($values, function ($key, $urlSegment) use ($uri) {
+            return !is_bool(strpos($uri, $urlSegment));
+        }, ARRAY_FILTER_USE_BOTH);
+            
+            $values = array_flip($values);
+            uasort($values, function ($a, $b) {
+                return strlen($b) - strlen($a);
+            });
+                $values = array_flip($values);
+                
+                return array_filter(array_map('trim', explode(',', array_first($values, null, ''))));
+    }
+    
+    /**
+     * Get the seo config.
+     *
+     * @param string $type
+     * @return array|mixed
+     */
+    protected function getSeoConfig($type)
+    {
+        /** @var SeoConfigRepository $seoConfigRepository */
+        $seoConfigRepository = $this->_em->getRepository('FaContentBundle:SeoConfig');
+        
+        $config = $seoConfigRepository->getBaseQueryBuilder()
+        ->andWhere(SeoConfigRepository::ALIAS . ".type = '{$type}'")
+        ->andWhere(SeoConfigRepository::ALIAS . ".status = 1")
+        ->getQuery()
+        ->getArrayResult();
+        
+        $config = array_first($config, null, []);
+        
+        $values = json_decode(data_get($config, 'data'), true, 512);
+        
+        if (empty($values)) {
+            return [];
+        }
+        
+        return $values;
+    }
+    
+    /**
+     * Generate the data array from the ':' separated strings.
+     *
+     * @param array $values
+     * @return array
+     */
+    protected function generateValueArray($values = [])
+    {
+        $data = [];
+        foreach ($values as $item) {
+            if (!is_bool(strpos($item, ':'))) {
+                list($value, $key) = array_slice(explode(':', $item), 0, 2);
+                $data[$key] = $value;
+                continue;
+            }
+            
+            $data[] = $item;
+        }
+        
+        return $data;
+    }
+    
 }
