@@ -148,12 +148,11 @@ class AdLeftSearchType extends AbstractType
         }
         
         $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);
-       
-        if($searchLocation!=2) {
-            $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
-            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
-        }
         
+        $selLocationArray = array();       
+        $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
+        if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
+                
         if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
             $categoryId = $searchParams['item__category_id'];
         }
@@ -213,7 +212,8 @@ class AdLeftSearchType extends AbstractType
         if(!empty($selLocationArray)) {
             $searchLocationId = $selLocationArray->getId();
             $searchLocationText = $selLocationArray->getName();
-        }
+        } 
+        
         $form->add('item__location', HiddenType::class, array('data'=>$searchLocationId,'empty_data'=>$searchLocationId));
         $form->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false,'data'=>$searchLocationText,'empty_data'=>$searchLocationText));
         $form->add('item__area', HiddenType::class);
