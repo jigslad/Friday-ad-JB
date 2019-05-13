@@ -13,15 +13,12 @@ namespace Fa\Bundle\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\Query;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
-use Fa\Bundle\AdBundle\Repository\AdRepository;
-use Fa\Bundle\UserBundle\Form\ManageMyAdSearchType;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Fa\Bundle\PromotionBundle\Entity\Package;
 use Fa\Bundle\AdBundle\Entity\BoostedAd;
+use Fa\Bundle\EntityBundle\Entity\LocationGroupLocation;
 
 /**
  * This controller is used for user ads.
@@ -69,7 +66,7 @@ class ManageMyAdController extends CoreController
 
         $adsBoostedCount = $getBoostDetails['adsBoostedCount'];
         $boostedAdCount = $getBoostDetails['boostedAdCount'];
-        
+
         $totalAdCount = $activeAdCount + $inActiveAdCount + $adsBoostedCount;
 
         // initialize pagination manager service and prepare listing with pagination based of data
@@ -77,7 +74,7 @@ class ManageMyAdController extends CoreController
         $this->get('fa.pagination.manager')->init($query, $page);
         $pagination = $this->get('fa.pagination.manager')->getPagination();
         $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
-        
+
         if ($pagination->getNbResults()) {
             foreach ($pagination->getCurrentPageResults() as $ad) {
                 $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($ad['cat_id']);
@@ -88,7 +85,7 @@ class ManageMyAdController extends CoreController
                 }
             }
         }
-        
+
         $parameters = array(
             'totalAdCount'    => $totalAdCount,
             'activeAdCount'   => $activeAdCount,
@@ -110,12 +107,13 @@ class ManageMyAdController extends CoreController
         if ($request->get('transaction_id')) {
             $this->get('session')->getFlashBag()->get('error');
             $transcations                   = $this->getRepository('FaPaymentBundle:Payment')->getTranscationDetailsForGA($request->get('transaction_id'), $loggedinUser);
-            
+
             if ($this->container->get('session')->has('paa_lite_card_code')) {
                 $this->container->get('session')->remove('paa_lite_card_code');
             }
             $parameters['getTranscationJs'] = CommonManager::getGaTranscationJs($transcations);
             $parameters['getItemJs']        = CommonManager::getGaItemJs($transcations);
+            $parameters['dimension12']      = $this->getDimension12($transcations);
             $parameters['ga_transaction']   = $transcations;
         }
 
@@ -167,8 +165,6 @@ class ManageMyAdController extends CoreController
             }
         }
         
-        //echo 'ExpiresAt===<pre>';print_r($getCurrentActivePackage->getPackage()->getPrice());die;
-
         if ($boostedAdCount > 0 && $boostMaxPerMonth > 0) {
             $boostAdRemaining = $boostMaxPerMonth - $boostedAdCount;
         }
@@ -486,7 +482,7 @@ class ManageMyAdController extends CoreController
                 $messageManager = $this->get('fa.message.manager');
                 $messageManager->setFlashMessage($error, 'error');
             }
-            
+
             sleep(2);
             return new JsonResponse(array(
                 'error' => $error,
@@ -497,7 +493,7 @@ class ManageMyAdController extends CoreController
 
         return new Response();
     }
-    
+
     /**
      * Change boost ad status.
      *
@@ -586,4 +582,40 @@ class ManageMyAdController extends CoreController
         }
         return new Response();
     }
+
+    /**
+     * @param array $transactions
+     * @return string
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
+     */
+    private function getDimension12(&$transactions)
+    {
+        $flagPrint = false;
+        $flagNonprint = false;
+        $dimension12 = '';
+        $repoLocationGroupLocation = $this->getRepository('FaEntityBundle:LocationGroupLocation');
+        $arrPrintLocationTownIds = $repoLocationGroupLocation->getPrintLocationTownIds();
+        if (isset($transactions['items']) && !empty($transactions['items']) && !empty($arrPrintLocationTownIds)) {
+            foreach ($transactions['items'] as &$valItem) {
+                if (!isset($valItem['TownId'])) {
+                    continue;
+                }
+                if (in_array($valItem['TownId'], $arrPrintLocationTownIds)) {
+                    $flagPrint = true;
+                } else {
+                    $flagNonprint = true;
+                }
+                unset($valItem['TownId']);
+            }
+        }
+        if ($flagPrint && $flagNonprint) {
+            $dimension12 = "Both areas";
+        } else if ($flagPrint) {
+            $dimension12 = "Print";
+        } else if ($flagNonprint) {
+            $dimension12 = "Non-print";
+        }
+        return $dimension12;
+    }
+
 }

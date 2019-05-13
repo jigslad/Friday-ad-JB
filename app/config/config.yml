@@ -225,6 +225,7 @@ services:
            - { name: twig.extension }
 
 monolog:
+    
     handlers:
         main:
             type: fingers_crossed
@@ -237,12 +238,31 @@ monolog:
             handler: grouped
         grouped:
             type:    group
-            members: [streamed, buffered]
+            members: [streamed, buffered, errlog]
         streamed:
             type:  rotating_file
-            path:  '%kernel.logs_dir%/%kernel.environment%.log'
+            path:  '%kernel.logs_dir%/%kernel.environment%_critical.log'
             level: critical
-            max_files: 10
+            max_files: 2
+            channels: [streamed]  
+        errlog:
+           type: rotating_file
+           path:  '%kernel.logs_dir%/%kernel.environment%_error.log'
+           level: error
+           max_files: 2
+           channels: [errlog]  
+#        debuglog:
+#           type: rotating_file
+#           path:  '%kernel.logs_dir%/%kernel.environment%_debug.log'
+#           level: debug
+#           max_files: 2
+#           channels: [debuglog]
+#        inflog:
+#           type: rotating_file
+#           path:  '%kernel.logs_dir%/%kernel.environment%_info.log'
+#           level: info
+#           max_files: 2
+#           channels: [inflog]                                      
         buffered:
             type:    buffer
             handler: swift

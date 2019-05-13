@@ -221,6 +221,16 @@ class AdPackageAdminController extends CoreController implements ResourceAuthori
             if (!in_array($selectedPackageId, $packageIds)) {
                 $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Please select atleast one ad package.', array(), 'backend-ad-package'), 'error');
             } else {
+                
+                $selectedPackageObj = $this->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $selectedPackageId));
+                if ($selectedPackageObj->getDuration()) {
+                    $getLastCharacter = substr($selectedPackageObj->getDuration(),-1);
+                    $noInDuration = substr($selectedPackageObj->getDuration(),0, -1);
+                    if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                    elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                    else { $adExpiryDays = $selectedPackageObj->getDuration(); }
+                }
+                
                 //check for print edition
                 $printEditionValues = array();
                 if (isset($printEditionLimits[$selectedPackageId]) && $printEditionLimits[$selectedPackageId]) {
