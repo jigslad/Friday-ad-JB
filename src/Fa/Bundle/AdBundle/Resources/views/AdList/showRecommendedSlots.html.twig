@@ -1,8 +1,8 @@
 {% if slotIndex is defined and recommendedSlotResult[slotIndex] is defined and recommendedSlotResult[slotIndex]|length > 0 %}
-<div style="cursor:pointer" onclick="gaSendForRecommendedSlotSearch('{{ recommendedSlotResult[slotIndex]['url'] }}', '{{ only_domains }}');">
     {% set no_protocol = recommendedSlotResult[slotIndex]['url']|split('//')[1] ?: recommendedSlotResult[slotIndex]['url'] %}
     {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
     {% set only_domains = only_domains|replace({'www.': ''})%}
+<div style="cursor:pointer" onclick="gaSendForRecommendedSlotSearch('{{ recommendedSlotResult[slotIndex]['url'] }}', '{{ only_domains }}');">    
     <div class="recommended-div listing mb20">           
         <div class="clearfix">
             <div class="list-col-1">
@@ -30,7 +30,7 @@
                         {{ recommendedSlotResult[slotIndex]['title'] }}
                     </h3>
                      
-                     <h5 class="list-display-url hide-for-small-only"><a style="color: #a8dc28;">{{ recommendedSlotResult[slotIndex]['display_url'] }}</a></h5>
+                     <h5 class="list-display-url hide-for-small-only">{{ recommendedSlotResult[slotIndex]['display_url'] }}</h5>
                 </div>
                 <div class="mt10 recommended-more">
                     <div class="list-desc hide-for-small-only left-block">
