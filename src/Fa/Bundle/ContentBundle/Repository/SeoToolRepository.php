@@ -690,10 +690,12 @@ class SeoToolRepository extends EntityRepository
             return false;
         }*/
         
-        return [
-            'content' => implode(', ', $tagContents),
-            'data' => $tagContents,
-        ];
+        if (!empty($tagContents)) {
+            return [
+                'content' => implode(', ', $tagContents),
+                'data' => $tagContents,
+            ];
+        }
     }
     
     /**

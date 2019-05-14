@@ -2191,6 +2191,192 @@ class AdRequestListener
     }
     
     /**
+     * Handle OData removal from URL.
+     *
+     * @param $request
+     * @return void
+     */
+    protected function handleODataRemoval(&$request)
+    {
+        $unnecessaryODataParams = $this->getSeoConfigs(SeoConfigRepository::UNNECESSARY_ODATA_PARAMS);
+        
+        $pathParts = $this->getPathParts($request);
+        
+        if (empty($unnecessaryODataParams)) {
+            return;
+        }
+        
+        $partCount = count($pathParts);
+        $unnecessaryODataParams = array_map('strtolower', $unnecessaryODataParams);
+        
+        $pathParts = array_filter($pathParts, function ($part) use ($unnecessaryODataParams) {
+            return !in_array(strtolower($part), $unnecessaryODataParams);
+        });
+            
+            if (count($pathParts) != $partCount) {
+                $this->enableRedirect($request);
+                $this->reBuildRequest($request, array_values($pathParts));
+            }
+    }
+    
+    /**
+     * Handle OData removal from URL.
+     *
+     * @param $request
+     * @return void
+     */
+    protected function handleURLODataTrim(&$request)
+    {
+        $urlTrimParams = $this->getSeoConfigs(SeoConfigRepository::URL_RIGHT_TRIM);
+        
+        $pathParts = $this->getPathParts($request);
+        
+        if (empty($urlTrimParams) || !$request->get('_redirect')) {
+            return;
+        }
+        
+        $partCount = count($pathParts);
+        $urlTrimParams = array_map('strtolower', $urlTrimParams);
+        
+        if (in_array(strtolower($pathParts[$partCount - 1]), $urlTrimParams)) {
+            unset($pathParts[$partCount - 1]);
+        }
+        
+        if (count($pathParts) != $partCount) {
+            $this->enableRedirect($request);
+            $this->reBuildRequest($request, array_values($pathParts));
+        }
+    }
+    
+    /**
+     * Handles the oData formatting styles.
+     *
+     * @param $request
+     */
+    protected function handleODataFormatting(&$request)
+    {
+        $pathParts = $this->getPathParts($request);
+        
+        if ($this->isListingPageRoute($request) && !empty($pathParts)) {
+            
+            $changeFlag = false;
+            
+            if ($possibleLocation = $this->getLocation($request)) {
+                $location = $possibleLocation;
+            } else {
+                $possibleLocation = strtolower(array_first($pathParts));
+                if ($this->isLocation($possibleLocation) || ($possibleLocation = $this->isLegacyLocation($possibleLocation))) {
+                    $location = $possibleLocation;
+                    array_shift($pathParts);
+                } else {
+                    $location = $this->getDefaultLocation();
+                }
+            }
+            
+            $incomingString = implode('/', $pathParts);
+            $mainCategory = '';
+            $subCategories = [];
+            
+            foreach ($pathParts as $key => $pathPart) {
+                if ($pathPart == $location) {
+                    unset($pathParts[$key]);
+                    continue;
+                }
+                
+                if ($this->isCategory($pathPart, [1]) && empty($mainCategory)) {
+                    $mainCategory = slug($pathPart);
+                    unset($pathParts[$key]);
+                    continue;
+                } elseif ($this->isCategory($pathPart, [2]) && !isset($subCategories[0])) {
+                    $subCategories[0] = slug($pathPart);
+                    unset($pathParts[$key]);
+                    continue;
+                } elseif ($this->isCategory($pathPart, [3] && !isset($subCategories[1]))) {
+                    $subCategories[1] = slug($pathPart);
+                    unset($pathParts[$key]);
+                    continue;
+                } elseif ($this->isCategory($pathPart, [4]) && !isset($subCategories[2])) {
+                    $subCategories[2] = slug($pathPart);
+                    unset($pathParts[$key]);
+                    continue;
+                }
+                
+                if ($pathPart != ($slug = slug($pathPart))) {
+                    $pathParts[$key] = $slug;
+                    $changeFlag = true;
+                }
+            }
+            
+            $pathPartsSaved = array_values($pathParts);
+            $pathParts = [];
+            if (!empty($mainCategory)) {
+                $pathParts[] = $mainCategory;
+            }
+            if (!empty($subCategories)) {
+                $pathParts = array_merge($pathParts, $subCategories);
+            }
+            
+            if (empty($location)) {
+                $location = $this->getDefaultLocation();
+            }
+            
+            $pathParts = array_merge($pathParts, $pathPartsSaved);
+            $pathParts = array_filter($pathParts);
+            $changeFlag = $changeFlag
+            ? $changeFlag
+            : (trim($incomingString, '/') != ("{$location}/" . trim(implode('/', $pathParts), '/')));
+            
+            if ($changeFlag && !empty($pathParts)) {
+                $this->setRedirectRequest($request, [
+                    'location' => $location,
+                    'page_string' => implode('/', $pathParts),
+                ]);
+            }
+        }
+    }
+    
+    /**
+     * Set a redirect request with redirect flag - '_redirect'
+     *
+     * @param $request
+     * @param array   $params
+     */
+    protected function setRedirectRequest(&$request, $params = [])
+    {
+        if (empty($params)) {
+            return;
+        }
+        
+        foreach ($params as $key => $value) {
+            $request->attributes->set($key, $value);
+        }
+        
+        $this->enableRedirect($request);
+    }
+    
+    
+    /**
+     * Remove hard-coded un-necessary query string parameters.
+     *
+     * @param $request
+     */
+    protected function removeUnnecessaryQueryParams(&$request)
+    {
+        $unnecessaryQueryParams = $this->getSeoConfigs(SeoConfigRepository::UNNECESSARY_QUERY_PARAMS);
+        
+        if (!empty($removeMe = array_intersect($unnecessaryQueryParams, array_keys($request->query->all())))) {
+            foreach ($removeMe as $item) {
+                $request->query->remove($item);
+            }
+            
+            $path = (!empty($request->get('location')) ? "{$request->get('location')}/" : '') . $request->get('page_string');
+            $path = data_get(parse_url($path), 'path', '');
+            $this->enableRedirect($request);
+            $this->reBuildRequest($request, explode('/', $path));
+        }
+    }
+    
+    /**
      * Check if the incoming request needs to be redirected with code 301 and redirect.
      *
      * @param $request
@@ -2211,16 +2397,16 @@ class AdRequestListener
         if ($this->isHomepageRoute($request) || $this->isListingPageRoute($request)) {
             
             // Handles direct redirects
-            $this->handleDirectRedirects($request);
+            //$this->handleDirectRedirects($request);
             
             // Handles OData Removal from URL.
-            //$this->handleODataRemoval($request);
+            $this->handleODataRemoval($request);
             
             // Handles direct redirects
-            $this->handleDirectRedirects($request);
+            //$this->handleDirectRedirects($request);
             
             // Handles the oData Formatting.
-            //$this->handleODataFormatting($request);
+            $this->handleODataFormatting($request);
             
             // Redirects the legacy pagination links.
             //$this->handleLegacyPagination($request);
@@ -2229,7 +2415,7 @@ class AdRequestListener
             //$this->handleLegacyArchiveLinks($request);
             
             // Remove hard-coded un-necessary query string parameters.
-            //$this->removeUnnecessaryQueryParams($request);
+            $this->removeUnnecessaryQueryParams($request);
             
             // Handles the changes in legacy filters
             //$this->handleLegacyFilterUrl($request);
@@ -2239,13 +2425,13 @@ class AdRequestListener
             
             // ---  Re do starts
             // Handles direct redirects
-            $this->handleDirectRedirects($request);
+            //$this->handleDirectRedirects($request);
             
             // Trim out ending OData - if not necessary
-            //$this->handleURLODataTrim($request);
+            $this->handleURLODataTrim($request);
             
             // Handles the oData Formatting.
-            //$this->handleODataFormatting($request);
+            $this->handleODataFormatting($request);
         }
         
         // Handles protocol redirects
