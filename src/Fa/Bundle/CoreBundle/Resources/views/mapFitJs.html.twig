@@ -1,12 +1,35 @@
 <script defer type="text/javascript" src="https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/master/leaflet.js"></script>
 <script defer type="text/javascript" src="https://tiles.unwiredmaps.com/js/leaflet-unwired.js"></script>
+
+{% set showAdultMapMarker = 0 %}
+{% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+{% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+	{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
+    {% set catCnt = 0 %}
+    {% if categoryPath|length %}
+        {% for categoryId, categoryName in categoryPath %}
+            {% if catCnt == 0 %}
+                {% if (categoryId == ADULT_CATEGORY_ID) %}
+                    {% set showAdultMapMarker = 1 %}
+                {% endif %}
+            {% endif %}
+            {% set catCnt = catCnt + 1 %}
+        {% endfor %}
+    {% endif %}      
+{% endif %}
+{% if showAdultMapMarker==1  %}
+    {% set markerUrl = asset_url('fafrontend/images/adul-map-marker.svg') %}
+{% else %}
+	{% set markerUrl = asset_url('fafrontend/images/map-marker.png') %}
+{% endif %}
+
 <script language="javascript" type="text/javascript">
 //<![CDATA[
 var map, streets, myMarker, myIcon;
 $(window).on('load', function() {
 	apikey = "{{ key }}";
 	streets = L.tileLayer.Unwired({key: apikey, scheme: "streets"});
-	myIcon = L.icon({className:"", iconUrl: "{{ asset_url('fafrontend/images/map-marker.png') }}"});
+	myIcon = L.icon({className:"", iconUrl: "{{ markerUrl }}"});
 });
 function showAddress(val) {
     var latitude = '';
