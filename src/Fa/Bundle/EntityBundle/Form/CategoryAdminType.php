@@ -177,7 +177,7 @@ class CategoryAdminType extends AbstractType
             }
             
             $builder->add('recommended_slot_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid url with http or https.'))), 'mapped' => false, 'label' => 'Url', 'data' => $recommendedSlotUrl[$i-1] ));
-            $builder->add('recommended_slot_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL', 'data' => $recommendedSlotDisplayUrl[$i-1] ));
+            $builder->add('recommended_slot_display_url_'.$i, TextType::class, array('mapped' => false, 'label' => 'Display URL', 'data' => $recommendedSlotDisplayUrl[$i-1] ));
             $builder->add('recommended_slot_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['cta_text'] : '') ));
             $builder->add('recommended_slot_mobile_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Mobile Title', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['mobile_title'] : '') ));
         }
@@ -212,7 +212,7 @@ class CategoryAdminType extends AbstractType
                         } else {
                             $recommendedSearchSlotDisplayUrl[$st] = '';
                         }
-                        $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL', 'data' => $recommendedSearchSlotDisplayUrl[$st] ));
+                        $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('mapped' => false, 'label' => 'Display URL', 'data' => $recommendedSearchSlotDisplayUrl[$st] ));
                         $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA',  'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['cta_text'] : '')));
                         $builder->add('recommended_slot_searchlist_mobile_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Mobile Title', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['mobile_title'] : '') ));
                         if (count($recommendedSlotSearchArray)-1 > $st) {
@@ -227,7 +227,7 @@ class CategoryAdminType extends AbstractType
                         $builder->add('recommended_slot_searchlist_creative_group_'.$i, HiddenType::class, array('mapped' => false));
                         $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false));
                         
-                        $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL'));
+                        $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('mapped' => false, 'label' => 'Display URL'));
                         $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA' ));
                         $builder->add('recommended_slot_searchlist_mobile_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Mobile Title' ));
                     }
@@ -240,7 +240,7 @@ class CategoryAdminType extends AbstractType
                     $builder->add('recommended_slot_searchlist_creative_group_'.$i, HiddenType::class, array('mapped' => false));
                     $builder->add('recommended_slot_searchlist_creative_ord_'.$i, HiddenType::class, array('mapped' => false));
                     
-                    $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('constraints' => array(new Url(array('message' => 'Please enter valid display url with http or https.'))), 'mapped' => false, 'label' => 'Display URL'));
+                    $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('mapped' => false, 'label' => 'Display URL'));
                     $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA' ));
                     $builder->add('recommended_slot_searchlist_mobile_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Mobile Title' ));
                 }
