@@ -19,7 +19,7 @@
         {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
         {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
         {% set only_domains = only_domains|replace({'www.': ''})%}
-        <div class="clearfix"  style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">
+        <div class="clearfix"  style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}','{{ recommendedSlot['title'] }}');">
 
     	<div class="img-cls-recommend-1" >
             {% if userLogo is null%}
@@ -64,7 +64,7 @@
                 {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
                 {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
                 {% set only_domains = only_domains|replace({'www.': ''})%}                
-                <div class="{{ recommendedSlotCls }} columns t-s-column fullblock-cls-recommend-{{recommendedSlotCnt}}" style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">
+                <div class="{{ recommendedSlotCls }} columns t-s-column fullblock-cls-recommend-{{recommendedSlotCnt}}" style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}','{{ recommendedSlot['title'] }}');">
                 	<div class="small-10 medium-5 large-5 columns t-s-subblock-left img-cls-recommend-{{recommendedSlotCnt}}" >
                         {% if userLogo is null%}
                                 <div class="img-img-cls-recommend-{{recommendedSlotCnt}}"><div class="profile-placeholder-{{recommendedSlotCnt}}"><img src="{{container.getParameter('fa.static.url')}}/fafrontend/images/user-no-logo.svg" alt="{{ userName }}" /></div></div>
@@ -101,7 +101,7 @@
     {% set only_domains = only_domains|replace({'www.': ''})%}
     
     {% if recommendedSlotCnt==1 %}
-        <div class="recommended-div listing mb20 recommended-ad-detail" style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">
+        <div class="recommended-div listing mb20 recommended-ad-detail" style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}','{{ recommendedSlot['title'] }}');">
             <div class="mobile-recommended-ad-detail">
             	<div class="img-cls-recommend-1" >
                     {% if userLogo is null%}
@@ -119,7 +119,7 @@
     		</div>
         </div>
     {% else %}
-    	<div class="item" data-equalizer-watch style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}');">        	
+    	<div class="item" data-equalizer-watch style="cursor: pointer;" onclick="gaSendForRecommendedSlot('{{ recommendedSlot['url'] }}', '{{ only_domains }}','{{ recommendedSlot['title'] }}');">        	
              <div class="mobile-recommended-ad-detail">
             	<div class="img-cls-recommend-1" >
                     {% if userLogo is null%}
