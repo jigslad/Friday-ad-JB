@@ -1567,9 +1567,9 @@
         ga('send', 'event', 'Options', 'Copy dealer name - Ad detail', businessName);
     }
 
-    function gaSendForRecommendedSlot(url, domain)
+    function gaSendForRecommendedSlot(url, domain, title) 
     {
-        ga('send', 'event', 'Ad details', 'Recommended external ads', '{{ catText|trim('-') }}-'+domain);
+        ga('send', 'event', 'Ad details', 'Recommended external ads', '{{ catText|trim('-') }}-'+domain+'-'+title);
         window.open(url, '_blank');
     }
 
