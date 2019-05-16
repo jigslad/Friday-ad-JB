@@ -32,7 +32,7 @@ use Fa\Bundle\UserBundle\Form\UserPaymentSearchType;
 use Fa\Bundle\UserBundle\Form\UserAdminType;
 use Fa\Bundle\UserBundle\Form\ChangeStatusType;
 use Fa\Bundle\UserBundle\Form\BoostOverideType;
-
+use Fa\Bundle\UserBundle\Form\HalfaccountUserSearchType;
 /**
  * This controller is used for user management.
  *
@@ -1098,5 +1098,71 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
         );
 
         return $this->render('FaUserBundle:UserAdmin:boostOveride.html.twig', $parameters);
+    }
+    
+    /**
+     * Lists all User entities.
+     *
+     * @param Request $request A Request object.
+     *
+     * @return Response A Response object.
+     */
+    public function halfAccountUserAction(Request $request)
+    {
+        CommonManager::setAdminBackUrl($request, $this->container);
+        
+        $this->container->get('session')->set('go_back_url', $request->getUri());
+        
+        //Back to user list;
+        $currentUrl = $request->getUri();
+        $session = $this->container->get('session');
+        $session->set('admin_backto_halfaccount_userlist_url', $currentUrl);
+        
+        $fetchJoinCollection = true;
+        $pagination = null;
+        
+        // initialize search filter manager service and prepare filter data for searching
+        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaUserBundle:User'), $this->getRepositoryTable('FaUserBundle:User'), 'fa_user_halfaccount_user_search_admin');
+        $data = $this->get('fa.searchfilters.manager')->getFiltersData();
+        
+        // Search ony full account users
+        $data['query_filters']['user']['is_half_account'] = 1;
+        
+        $data['select_fields'] = array(
+            'user' => array('id')
+        );
+        
+        // initialize form manager service
+        $formManager = $this->get('fa.formmanager');
+        $form        = $formManager->createForm(HalfacccountUserSearchType::class, null, array('action' => $this->generateUrl('halfaccount_user_admin'), 'method' => 'GET'));
+        
+        // handle joins
+        $data = $this->handleJoins($data);
+        
+        if ($data['search']) {
+            $form->submit($data['search']);
+        }
+        
+        if ($form->isValid()) {
+            $this->get('fa.sqlsearch.manager')->init($this->getRepository('FaUserBundle:User'), $data);
+            $queryBuilder = $this->get('fa.sqlsearch.manager')->getQueryBuilder();
+            $queryBuilder->distinct(UserRepository::ALIAS.'.id');
+                            
+            $query = $queryBuilder->getQuery();
+            
+            // initialize pagination manager service and prepare listing with pagination based of data
+            $page = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page'] : 1;
+            $this->get('fa.pagination.manager')->init($query, $page, 10, 0, true);
+            $pagination = $this->get('fa.pagination.manager')->getPagination($fetchJoinCollection);
+        }
+        
+        $parameters = array(
+            'heading'     => 'Users',
+            'form'        => $form->createView(),
+            'pagination'  => $pagination,
+            'sorter'      => $data['sorter'],
+        );
+        
+        return $this->render('FaUserBundle:UserAdmin:halfaccountindex.html.twig', $parameters);
     }
 }

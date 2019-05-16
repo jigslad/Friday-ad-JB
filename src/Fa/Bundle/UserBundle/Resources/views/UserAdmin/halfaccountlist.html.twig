@@ -1,0 +1,86 @@
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+
+{% set userIdArray = {} %}
+{% if pagination.getNbResults() %}
+    {% for user in pagination.getCurrentPageResults() %}
+        {% set userIdArray = userIdArray|merge({0 : user.id}) %}
+    {% endfor %}
+  
+    {% set userDataArray    = userRepository.getUserDataArrayByUserId(userIdArray) %}
+    {% set isAdmin = false %}
+    {% if app.user and app.user.getRole() and app.user.getRole().getId()  == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_ADMIN_ID') %}
+        {% set isAdmin = true %}
+    {% endif %}
+{% endif %}
+
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+                 {% set sortField = {'user__id': 'User id'|trans}  %}
+                 
+
+             <form method="post" name="frmChangeStatus" id="frmChangeStatus" action="{{ path('user_change_status', {'id': '0'}) }}">
+             <table class="mb0 user-list">
+                 <thead>
+                     <tr>
+                         <th width="8%">{{ 'Customer id'|trans }}</th>
+                         <th width="16%">{{ 'Customer name'|trans }}</th>
+                         <th width="10%">{{ 'Email'|trans }}</th>
+                         <th width="15%"><i class="fa fa-gear"></i> {{ 'Action'|trans }}</th>
+                         <th width="5%"><input type="checkbox" name="checkAll" id="checkAll" class="ma0"></th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for user in pagination.getCurrentPageResults() %}
+                          <tr class="odd">
+                              <td>
+                                <a href="{{ path('user_show_admin', {'id': user.id}) }}">
+                                    {% if isAdmin and (userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_ADMIN_ID') or userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SUPER_ADMIN_ID')) and app.user and app.user.getId() != user.id %}
+                                        -
+                                    {% else %}
+                                        {{ user.id }}
+                                    {% endif %}
+                                </a>
+                              </td>
+                              <td>
+                                {% if userDetailGrant %}
+                                    <a href="{{ path('user_show_admin', {'id': user.id}) }}">                                    
+                                        {{ userDataArray[user.id]['first_name'] }}  {{ userDataArray[user.id]['last_name'] }}
+                                    </a><br />
+                                {% else %}
+                                    {{ userDataArray[user.id]['first_name'] }}  {{ userDataArray[user.id]['last_name'] }}
+                                {% endif %}
+                              </td>
+                              <td>{{ userDataArray[user.id]['email'] }}</td>                              
+                              <td>
+                                  {% if isAdmin and (userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_ADMIN_ID') or userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SUPER_ADMIN_ID')) and app.user and app.user.getId() != user.id %}
+                                    -
+                                  {% else %}
+                                  <button data-dropdown="drop{{ user.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">{{ 'Select'|trans }}</button>
+                                  <ul id="drop{{ user.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                       {% if userEditGrant %}
+                                         <li><a href="{{ path('user_edit_admin', {'id': user.id}) }}"><i class="fi-pencil"></i> Edit</a></li>
+                                       {% endif %}
+                                       
+                                       {% if userDeleteGrant %}
+                                         <li><a href="{{ path('user_delete_admin', {'id': user.id}) }}" onclick="javascript:return confirm('Do you want to proceed deleting this user?')"><i class="fi-trash"></i> {{ 'Delete'|trans }}</a></li>
+                                       {% endif %}
+                                  </ul>
+                                  {% endif %}
+                              </td>
+                              <td><input type="checkbox" class="user_change_status" name="change_status_checkbox[]" value="{{ user.id }}"></td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="odd gradeX">
+                              <td colspan="6" align="center">{{ 'No records found'|trans }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+             <div class="change-status"><button type="button" value="Change status for selected users" id="user_change_status_button" class="tiny button mb0">{{ 'Change status for selected users'|trans({}, 'messages') }}</button></div>
+             </form>
+        </div>
+    </div>
+  </div>

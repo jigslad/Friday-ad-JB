@@ -1,0 +1,41 @@
+{% block halfaccount_search_html %}
+<div class="row">
+      <div class="columns">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+               {{ form_errors(form) }}
+
+                <div class="row">
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__first_name, {'attr': {'class':'form-control', 'placeholder': 'First name'}}) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__last_name, {'attr': {'class':'form-control', 'placeholder': 'Last name'}}) }}
+                    </div>                  
+                </div>
+
+                <div class="row">
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__email, {'attr': {'class':'form-control', 'placeholder': 'Customer Email'}}) }}
+                    </div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__phone, {'attr': {'class':'form-control', 'placeholder': 'Customer Phone Number'}}) }}
+                    </div>                  
+                    <div class="large-3 columns">
+                        {{ form_widget(form.user__id, {'attr': {'class':'form-control', 'placeholder': 'User Reference'}}) }}
+                    </div>
+                </div>
+
+              <hr class="hr_margin">
+                
+                <div class="row">
+                    <div class="large-9 columns">&nbsp;</div>
+                    <div class="large-3 columns">
+                        {{ form_widget(form.search, {'attr': {'class':'small button right'}}) }}
+                    </div>
+                </div>
+            {{ form_end(form) }}
+       </div>
+  </div>
+{% endblock %}
+
+

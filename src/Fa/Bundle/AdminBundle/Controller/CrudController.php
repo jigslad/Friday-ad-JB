@@ -376,6 +376,7 @@ abstract class CrudController extends CoreController
             'fa_ad_print_deadline_admin' => PrintDeadlineAdminType::class,
             'fa_ad_location_radius_admin' => LocationRadiusAdminType::class,
             'fa_adfeed_ad_feed_mapping_admin' => AdFeedMappingAdminType::class,
+            'fa_user_halfaccount_user_search_admin' => HalfacccountUserSearchType::class,
         ];
         $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
         return $formName;

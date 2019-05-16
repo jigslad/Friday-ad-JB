@@ -69,3 +69,8 @@ user_boost_overide:
     defaults: { _controller: "FaUserBundle:UserAdmin:boostOveride" }
     options:
         expose: true
+        
+halfaccount_user_admin:
+    path:     /halfaccount
+    defaults: { _controller: "FaUserBundle:UserAdmin:halfAccountUser" }
+    

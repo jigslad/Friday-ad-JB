@@ -1,0 +1,38 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set userEditGrant = false %}
+{% set userDeleteGrant = false %}
+{% set loginAsUserGrant = false %}
+{% set userDetailGrant = false %}
+
+{% if fa_resource_authorization_manager.isGranted('user_edit_admin') %}
+  {% set userEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('user_delete_admin') %}
+  {% set userDeleteGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('user_show_admin') %}
+  {% set userDetailGrant = true %}
+{% endif %}
+
+{% block content -%}
+    <div class="large-row">
+        {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'addNewRoute': 'user_new_admin'}) }}
+
+        {% use "FaUserBundle:UserAdmin:halfaccountsearch.html.twig" %}
+	{{ block('halfaccount_search_html') }}
+
+        {% if pagination %}
+
+        {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+        {{ include('FaUserBundle:UserAdmin:halfaccountlist.html.twig', {'pagination': pagination}) }}
+
+        {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+        {% endif %}
+    </div>
+{% endblock %}
