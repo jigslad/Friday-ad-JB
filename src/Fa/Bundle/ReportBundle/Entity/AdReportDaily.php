@@ -372,6 +372,13 @@ class AdReportDaily
      * @ORM\Column(name="is_paa_lite", type="boolean", nullable=true, options={"default" = 0})
      */
     private $is_paa_lite = false;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="payment_date", type="integer", nullable=true)
+     */
+    private $payment_date;
 
     /**
      * Set created at value.
@@ -1464,5 +1471,28 @@ class AdReportDaily
     public function getIpAddresses()
     {
         return $this->ip_addresses;
+    }
+    
+    /**
+     * Set payment_date.
+     *
+     * @param string $payment_date
+     * @return AdReportDaily
+     */
+    public function setPaymentDate($payment_date)
+    {
+        $this->payment_date = $payment_date;
+        
+        return $this;
+    }
+    
+    /**
+     * Get payment_date.
+     *
+     * @return string
+     */
+    public function getPaymentDate()
+    {
+        return $this->payment_date;
     }
 }
