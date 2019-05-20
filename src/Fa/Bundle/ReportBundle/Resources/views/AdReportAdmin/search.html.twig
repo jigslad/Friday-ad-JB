@@ -178,6 +178,7 @@
     });
     $(document).ready(function(){
         enableDisableDisallowedFields();
+        checkPaymentData();
         $("#fa_item_report_category_1").change(function(){
             loadCategoryByLevel($(this).val(), 2)
             loadCategoryByLevel('', 3)
@@ -191,6 +192,20 @@
         
         $("#fa_item_report_category_3").change(function(){
             loadCategoryByLevel($(this).val(), 4)
+        });
+
+        $("#fa_item_report_payment_date_chk").click(function(){
+        	if($(this).prop("checked") == true){
+        		$('#fa_item_report_date_filter_type').val('payment_date');
+            }
+        });
+
+        $("#fa_item_report_date_filter_type").change(function(){
+        	if($('#fa_item_report_date_filter_type').val() == 'payment_date'){
+        		$('#fa_item_report_payment_date_chk').prop('checked', true);
+            } else {
+            	$('#fa_item_report_payment_date_chk').prop('checked', false);
+            }
         });
         
         $("form[name='fa_item_report']").submit(function()
@@ -215,6 +230,13 @@
            return true;
         });
     });
+
+    function checkPaymentData() {
+    	if($('#fa_item_report_payment_date_chk').prop("checked") == true || $('#fa_item_report_date_filter_type').val() == 'payment_date'){
+    		$('#fa_item_report_date_filter_type').val('payment_date');
+    		$('#fa_item_report_payment_date_chk').prop('checked', true);
+        }
+    }
     
     function loadCategoryByLevel(id, level)
     {
