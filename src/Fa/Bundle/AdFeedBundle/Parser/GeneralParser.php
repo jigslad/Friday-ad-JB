@@ -3,7 +3,7 @@
 /**
  * This file is part of the fa bundle.
  *
- * @copyright Copyright (c) 2014, FMG
+ * @copyright Copyright (c) 2019, FMG
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -23,13 +23,13 @@ use Gedmo\Sluggable\Util\Urlizer as Urlizer;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 
 /**
- * Business parser.
+ * General parser.
  *
- * @author Amit Limbadia <amitl@aspl.in>
- * @copyright 2014 Friday Media Group Ltd
+ * @author Rohini <rohinisubburam@fridaymediagroup.com>
+ * @copyright 2019 Friday Media Group Ltd
  * @version 1.0
  */
-class BusinessParser extends AdParser
+class GeneralParser extends AdParser
 {
 
     /**
@@ -122,8 +122,8 @@ class BusinessParser extends AdParser
         if (isset($adArray['Details']['MinPrice']) && $adArray['Details']['MinPrice'] && isset($adArray['Details']['MaxPrice']) && $adArray['Details']['MaxPrice']) {
             $this->advert['price'] = $adArray['Details']['MinPrice'];
         } else {
-            $this->setRejectAd();
-            $this->setRejectedReason('price is not specified');
+            //$this->setRejectAd();
+            //$this->setRejectedReason('price is not specified');
         }
 
         $feedAd = null;
@@ -215,7 +215,7 @@ class BusinessParser extends AdParser
         $this->em->flush();
         $this->advert['feed_ad_id'] = $feedAd->getId();
     }
-
+    
     /**
      * add data in child table
      *
@@ -268,8 +268,9 @@ class BusinessParser extends AdParser
     {
         if ($cat_name) {
             $matchedText = null;
+            $ad_feed_site   = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $this->advert['ref_site_id']));
             //$mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->findOneBy(array('text' => $cat_name));
-            $mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->getFeedMappingByText($cat_name,$this->advert['ref_site_id']);
+            $mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->getFeedMappingByText($cat_name,$ad_feed_site->getId());
             if ($mapping) {
                 $matchedText = $mapping->getTarget();
             } 
