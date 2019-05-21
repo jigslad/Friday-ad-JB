@@ -671,9 +671,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
       ga('send', 'event', eventCategory, eventAction, eventLabel);
     }
 
-    function gaSendForRecommendedSlotSearch(url, domain, title) 
+    function gaSendForRecommendedSlotSearch(url, domain, title,slotindex,creativeOrd) 
     {
-        ga('send', 'event', 'Search List Page', 'Recommended external ads', '{{ catSrchText|trim('-') }}-'+domain+'-'+title);
+        ga('send', 'event', 'Search List Page', 'Recommended external ads', 'Slot'+slotindex + "-Creative"+ creativeOrd +"-{{ catSrchText|trim('-') }}-" + domain + "-" + title);
         window.open(url, '_blank');
     }
 
