@@ -2,7 +2,7 @@
     {% set no_protocol = recommendedSlotResult[slotIndex]['url']|split('//')[1] ?: recommendedSlotResult[slotIndex]['url'] %}
     {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
     {% set only_domains = only_domains|replace({'www.': ''})%}
-<div style="cursor:pointer" onclick="gaSendForRecommendedSlotSearch('{{ recommendedSlotResult[slotIndex]['url'] }}', '{{ only_domains }}','{{ recommendedSlotResult[slotIndex]['title'] }}');">    
+<div style="cursor:pointer" onclick="gaSendForRecommendedSlotSearch('{{ recommendedSlotResult[slotIndex]['url'] }}', '{{ only_domains }}','{{ recommendedSlotResult[slotIndex]['title'] }}','{{ slotIndex }}','{{ recommendedSlotResult[slotIndex]['creative_ord'] }}');">    
     <div class="recommended-div listing mb20">           
         <div class="clearfix">
             <div class="list-col-1">
