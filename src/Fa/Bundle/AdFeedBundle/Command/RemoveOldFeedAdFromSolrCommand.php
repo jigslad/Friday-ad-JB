@@ -93,10 +93,18 @@ EOF
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);
         $objAds = $qb->getQuery()->execute();
+        $transIds = $feedAds = array();
         
         foreach ($objAds as $objAd) {
-            $transId = $objAd->getTransId();
-            $feedAd = $this->feedAdvertRequest($transId);
+            $transIds[] = $objAd->getTransId();
+        }
+        
+        if(!empty($transIds)) {
+            $feedAds = $this->feedAdvertRequest($transIds);
+        }
+
+        foreach ($feedAds as $feedAd) {
+            $objAd = $this->em->getRepository('FaAdBundle:Ad')->findOneBy(array('trans_id'=>$feedAd['Id']));
             if(!empty($feedAd) && $feedAd['AdStatus'] != 'Active') {
                 if ($feedAd['AdStatus']=='Archived') {
                     $objAd->setStatus($this->em->getReference('FaEntityBundle:Entity', \Fa\Bundle\EntityBundle\Repository\EntityRepository::AD_STATUS_EXPIRED_ID));
