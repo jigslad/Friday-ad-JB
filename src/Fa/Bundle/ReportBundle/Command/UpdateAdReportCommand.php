@@ -281,10 +281,11 @@ EOF
                 $adUserPhoneDetails = $this->getAdUserPhoneDetails($userPhoneDetails, $ad);
                 $userRole  = $this->entityManager->getRepository('FaUserBundle:User')->getUserRole($ad['user_id'], $this->getContainer());
                 $userRoleId = null;
+                $paymentDate = null;
                 
                 $packageId = ($adUserPackage ? $adUserPackage['package_id'] : 0);
                 $packageSrNo = ($adUserPackage ? $adUserPackage['package_sr_no'] : null);
-                $paymentDate = ($adUserPackage ? $adUserPackage['created_at'] : null);
+                
                 if (!$packageSrNo) {
                     $packageSrNo = 8;
                 }
@@ -372,7 +373,8 @@ EOF
                         }
 
                         $paymentTransactionDetailValue = array();
-
+                        $paymentDate = ($adPayment ? $adPayment['created_at'] : null);
+                        
                         try {
                             $paymentTransactionDetailValue = unserialize($adPayment['payment_trans_detail_value']);
                         } catch (\Exception $e) {
