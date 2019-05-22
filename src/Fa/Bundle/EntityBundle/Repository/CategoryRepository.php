@@ -2253,9 +2253,9 @@ class CategoryRepository extends NestedTreeRepository
         $cookieLvl = '';
         if ($cookieLocation && (!is_array($cookieLocation))) {
             $cookieLocation = json_decode($cookieLocation);
-            $cookieLvl = $cookieLocation->lvl;
+            $cookieLvl = isset($cookieLocation->lvl)?$cookieLocation->lvl:'';
         } elseif ($cookieLocation && (is_array($cookieLocation))) {
-            $cookieLvl = $cookieLocation->lvl;
+            $cookieLvl = isset($cookieLocation->lvl)?$cookieLocation->lvl:'';
         }
         if ((isset($searchParams['item__location']) && $searchParams['item__location']==2) || !isset($searchParams['item__location']) || $cookieLvl=='') {
             $setRadius = 0;

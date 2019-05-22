@@ -114,7 +114,6 @@ EOF
         if (!$objAds) {
             $output->writeln('No ads found.', true);
         }
-        //echo '<pre>';print_r($objAds);die;
         foreach ($objAds as $objAd) {
             $ad = $this->em->getRepository('FaAdBundle:Ad')->find($objAd['ad_Ref']);
             $this->updateAdYacNumber($input, $output, $ad);
@@ -147,7 +146,6 @@ EOF
 
             $i              = ($i + $step);
             $commandOptions = null;
-            //echo '<pre>';print_r($input->getOptions());die;
             foreach ($input->getOptions() as $option => $value) {
                 if ($value) {
                     $commandOptions .= ' --'.$option.'="'.$value.'"';
@@ -251,10 +249,24 @@ EOF
         if ($action == 'allocate') {
             $categoryId = $ad->getCategory()->getId();
             $adExpiryDays = $this->em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $this->getContainer());
+            
+            $getActivePackage = array();
+            $getActivePackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getActiveAdPackage($ad->getId());
+            if(!empty($getActivePackage)) {               
+                $selectedPackageObj = $this->em->getRepository('FaPromotionBundle:Package')->findOneBy(array('id' => $getActivePackage->getPackage()->getId()));
+                if ($selectedPackageObj->getDuration()) {
+                    $getLastCharacter = substr($selectedPackageObj->getDuration(),-1);
+                    $noInDuration = substr($selectedPackageObj->getDuration(),0, -1);
+                    if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                    elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                    else { $adExpiryDays = $selectedPackageObj->getDuration(); }
+                }               
+            }
+            
             if ($ad->getFuturePublishAt()) {
                 $expiryDate = strtotime("+$adExpiryDays days", $ad->getFuturePublishAt());
-            } elseif ($ad->getExpiresAt()) {
-                $expiryDate = $ad->getExpiresAt();
+           // } elseif ($ad->getExpiresAt()) {
+                //$expiryDate = $ad->getExpiresAt();
             } else {
                 $expiryDate = strtotime("+$adExpiryDays days");
             }

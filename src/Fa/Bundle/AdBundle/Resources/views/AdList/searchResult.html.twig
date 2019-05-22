@@ -154,6 +154,55 @@
         {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
     {% endif %}
 {% endblock %}
+    
+{% block breadcrumb_script %}
+	{% set location_id = null %}
+    {% if cookieLocationDetails['location'] is defined %}
+        {% set location_id = cookieLocationDetails['location'] %}
+    {% endif %}
+    {% set locality_id = null %}
+    {% if cookieLocationDetails['locality_id'] is defined %}
+        {% set locality_id = cookieLocationDetails['locality_id'] %}
+    {% endif %}
+
+    {% if location_id and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %} 
+        {% set HomePagePath = container.getParameter('base_url')~path('location_home_page', {'location': app.request.get('location')}) %} 
+    {% else %}
+        {% set HomePagePath =  container.getParameter('base_url')~path('fa_frontend_homepage') %}  
+    {% endif %} 
+    
+	<script type="application/ld+json">
+	{
+  		"@context": "https://schema.org",
+  		"@type": "BreadcrumbList",
+  		"itemListElement": [{
+    	"@type": "ListItem",
+    	"position": 1,
+    	"name": "Homepage",
+    	"item": "{{HomePagePath}}"
+  	},
+    {% set categoryPath = {} %}
+    {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+        {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
+        {% if categoryPath|length > 0 %}  
+			{% set breadcrumbCatCnt = 2 %}      	
+            {% for categoryId, categoryName in categoryPath %}
+                {% set catLinkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
+                {% set catListUrl = container.getParameter('base_url')~container.get('fa_ad.manager.ad_routing').getListingUrl(catLinkParam) %}
+{
+    	"@type": "ListItem",
+    	"position": {{breadcrumbCatCnt}},
+    	"name": "{{categoryName}}",
+    	"item": "{{catListUrl}}"
+  	}{% if breadcrumbCatCnt <= categoryPath|length %},{% endif %}    
+				{% set breadcrumbCatCnt = breadcrumbCatCnt + 1 %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+     ]
+	}
+</script>
+{% endblock %}
 
 {% block scripttop %}
     {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
@@ -172,6 +221,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 .boosted_ad .boost-ribbon { display:block;background:url(/bundles/fafrontend/images/featured-arrow.svg) no-repeat;width:25px;height:25px;position:absolute;right:0px;top:0px;text-indent:100%;overflow:hidden;white-space:nowrap;z-index:1}
 .boosted_ad .boost-ribbon span {right: -21px;position: relative;top: 6px;color: #ffffff;}
 </style>
+
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}

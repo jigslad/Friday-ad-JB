@@ -141,7 +141,7 @@ class UserImageController extends CoreController
                     $cacheKey = 'user|isTrustedUser|'.$userId.'|'.$culture;
                     CommonManager::removeCache($this->container, $cacheKey);
                 } else {
-                    $error = $form->getErrorsAsString();
+                    $error = $form->getErrors(true, false);
                 }
             } catch (\Exception $e) {
                 $error = $e->getMessage();

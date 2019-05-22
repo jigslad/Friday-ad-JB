@@ -97,6 +97,7 @@ class MailManager
     public function send($to, $emailIdentifier, $mailVars = array(), $locale = 'en_GB', $attachment = array(), $from = array(), $cc = array(), $bcc = array(), $sender = null, $replyTo = null, $priority = 1)
     {
         $this->message = \Swift_Message::newInstance();
+        $sendMailFlag = $this->container->hasParameter('fa.send.other.mails') ? $this->container->getParameter('fa.send.other.mails') : false;
 
         if ($to) {
             try {
@@ -112,9 +113,12 @@ class MailManager
                 $this->setPriority($priority);
                 $this->renderMail($emailIdentifier, $mailVars, $locale, $to);
                 $this->setAttachment($attachment);
-//                 $this->getMailer()->send($this->getMessage());
-                if (preg_match("~\b@fridaymediagroup\.com\b~", $to)) {
-                    $this->getMailer()->send($this->getMessage());
+                if($sendMailFlag) {
+                     $this->getMailer()->send($this->getMessage());
+                } else {
+                    if (preg_match("~\b@fridaymediagroup\.com\b~", $to)) {
+                        $this->getMailer()->send($this->getMessage());
+                    }
                 }
             } catch (\Exception $e) {
                 CommonManager::sendErrorMail($this->container, 'Error: Mail manager send', $e->getMessage(), $e->getTraceAsString());
@@ -232,7 +236,7 @@ class MailManager
      */
     protected function setAttachment($attachment)
     {
-        if (count($attachment)) {
+        if (!empty($attachment)) {
             foreach ($attachment as $filename => $filepath) {
                 $attachment = \Swift_Attachment::fromPath($filepath);
 

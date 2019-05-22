@@ -80,13 +80,17 @@ class AdUserPackageRepository extends BaseEntityRepository
                 } else {
                     $adUserPackage->setStatus(self::STATUS_ACTIVE);
                     $adUserPackage->setStartedAt(time());
+                    $adObj = $this->_em->getRepository('FaAdBundle:Ad')->findOneBy(array('id' => $data['ad_id']));
                     if ($package->getDuration()) {
                         $adUserPackage->setExpiresAt(CommonManager::getTimeFromDuration($package->getDuration()));
+                        $adObj->setExpiresAt(CommonManager::getTimeFromDuration($package->getDuration()));
                     } elseif (isset($data['ad_id'])) {
-                        $adObj = $this->_em->getRepository('FaAdBundle:Ad')->findOneBy(array('id' => $data['ad_id']));
                         $expirationDays = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($adObj->getCategory()->getId());
                         $adUserPackage->setExpiresAt(CommonManager::getTimeFromDuration($expirationDays.'d'));
+                        $adObj->setExpiresAt(CommonManager::getTimeFromDuration($expirationDays.'d'));
                     }
+                    $this->_em->persist($adObj);
+                    $this->_em->flush($adObj);
                 }
             }
 
@@ -153,20 +157,24 @@ class AdUserPackageRepository extends BaseEntityRepository
             return null;
         }
         $adUserPackage = $this->findCurrentInactivePackage($adId);
-
+        
         if ($adUserPackage) {
             $adUserPackage->setStatus(self::STATUS_ACTIVE);
             $adUserPackage->setStartedAt(time());
+            $ad = $this->_em->getRepository('FaAdBundle:Ad')->findOneBy(array('id' => $adId));
             if ($adUserPackage->getDuration()) {
                 $adUserPackage->setExpiresAt(CommonManager::getTimeFromDuration($adUserPackage->getDuration()));
+                $ad->setExpiresAt(CommonManager::getTimeFromDuration($adUserPackage->getDuration()));
             } else {
-                $ad = $this->_em->getRepository('FaAdBundle:Ad')->findOneBy(array('id' => $adId));
                 $expirationDays = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($ad->getCategory()->getId());
                 $adUserPackage->setExpiresAt(CommonManager::getTimeFromDuration($expirationDays.'d'));
+                $ad->setExpiresAt(CommonManager::getTimeFromDuration($expirationDays.'d'));
             }
 
             $this->_em->persist($adUserPackage);
             $this->_em->flush($adUserPackage);
+            $this->_em->persist($ad);
+            $this->_em->flush($ad);
             return $adUserPackage->getId();
         }
 
@@ -241,7 +249,7 @@ class AdUserPackageRepository extends BaseEntityRepository
     public function getAdPackageArrayByAdId($adId = array(), $getTiPackageTitle = false)
     {
         $qb = $this->createQueryBuilder(self::ALIAS)
-        ->select(self::ALIAS.'.id', PackageRepository::ALIAS.'.id as package_id', PackageRepository::ALIAS.'.title', self::ALIAS.'.price', self::ALIAS.'.ad_id', self::ALIAS.'.ti_package', PackageRepository::ALIAS.'.package_text')
+        ->select(self::ALIAS.'.id', PackageRepository::ALIAS.'.id as package_id', PackageRepository::ALIAS.'.duration as duration', PackageRepository::ALIAS.'.title', self::ALIAS.'.price', self::ALIAS.'.ad_id', self::ALIAS.'.ti_package', PackageRepository::ALIAS.'.package_text')
         ->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
         ->andWhere(self::ALIAS.'.status = '.self::STATUS_ACTIVE);
 
@@ -267,6 +275,7 @@ class AdUserPackageRepository extends BaseEntityRepository
                 $adPackageArr[$adPackage['ad_id']]['price'] = $adPackage['price'];
                 $adPackageArr[$adPackage['ad_id']]['package_id'] = $adPackage['package_id'];
                 $adPackageArr[$adPackage['ad_id']]['package_text'] = $adPackage['package_text'];
+                $adPackageArr[$adPackage['ad_id']]['duration'] = $adPackage['duration'];
             }
         }
 

@@ -17,7 +17,8 @@
 <script src="https://chat-assets.frontapp.com/v1/chat.bundle.js"></script>
 <script language="javascript" type="text/javascript">
     FrontChat('init', {
-      useDefaultLauncher: false
+      useDefaultLauncher: false,
+      userHash: '633f17171b8625504c46af1db007739a'
     });
     function runfrontchatfun() {
     	ga('send', 'event', 'help widget', 'contact');
@@ -42,7 +43,11 @@ $(document).ready(function() {
     $("body").removeClass('noscroll');
     $(".custom_hc_widget_trigger").show();
   });
-  
+
+    $(document).on('click touchend', function (event) {
+        $(".custom_hc_widget").css({"-webkit-overflow-scrolling": "touch"});
+    });
+
 });
 //]]>
 </script>

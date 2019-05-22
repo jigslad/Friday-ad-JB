@@ -79,8 +79,8 @@ Actions:
 - Can be run to auto-renew ad.
 
 Command:
- - php app/console fa:update:ad-auto-renew-upsell --ad_id=1
- - php app/console fa:update:ad-auto-renew-upsell
+ - php bin/console fa:update:ad-auto-renew-upsell --ad_id=1
+ - php bin/console fa:update:ad-auto-renew-upsell
 EOF
         );
     }
@@ -100,9 +100,6 @@ EOF
 
         $searchParam                     = array();
         $searchParam['entity_ad_status'] = array('id' => array(\Fa\Bundle\EntityBundle\Repository\EntityRepository::AD_STATUS_LIVE_ID));
-            
-        $renewdate = date('d/m/Y');
-        $searchParam['ad']['expires_at_from_to'] =  $renewdate.'|'.$renewdate;
 
         // Skip detached ads for auto renew
         $searchParam['ad']['is_detached_ad'] = 0;
@@ -268,6 +265,9 @@ EOF
         $data                  = array();
         $data['query_filters'] = $searchParam;
         $data['query_sorter']  = array('ad' => array('id' => 'asc'));
+        
+        $renewdateFrom = strtotime(date('Y-m-d 0:0:0'));
+        $renewdateTo = strtotime(date('Y-m-d 23:59:59'));
 
         $searchManager = $this->getContainer()->get('fa.sqlsearch.manager');
         $searchManager->init($adRepository, $data);
@@ -279,6 +279,8 @@ EOF
                      ->setParameter('ad_user_package_status', AdUserPackageRepository::STATUS_ACTIVE);
         $queryBuilder->leftJoin('FaAdBundle:AdUserPackageUpsell', AdUserPackageUpsellRepository::ALIAS, 'WITH', AdUserPackageUpsellRepository::ALIAS.'.ad_id = '.AdRepository::ALIAS.'.id')
                      ->leftJoin('FaPromotionBundle:Upsell', UpsellRepository::ALIAS, 'WITH', AdUserPackageUpsellRepository::ALIAS.'.upsell = '.UpsellRepository::ALIAS.'.id')
+                     ->andWhere(AdUserPackageUpsellRepository::ALIAS.'.expires_at >='. $renewdateFrom)
+                     ->andWhere(AdUserPackageUpsellRepository::ALIAS.'.expires_at <='. $renewdateTo)
                      ->andWhere(UpsellRepository::ALIAS.'.type = :ad_user_package_upsell_type')
                      ->setParameter('ad_user_package_upsell_type', UpsellRepository::UPSELL_TYPE_AUTO_RENEW_ID);
 

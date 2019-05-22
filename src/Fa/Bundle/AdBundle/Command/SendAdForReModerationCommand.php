@@ -120,7 +120,7 @@ EOF
 
         foreach ($objAds as $objAd) {
             $objAdModerates = $this->entityManager->getRepository('FaAdBundle:AdModerate')->findByAd($objAd);
-            if ($objAdModerates && count($objAdModerates)) {
+            if (!empty($objAdModerates)) {
                 $objAdModerate = $objAdModerates[0];
             }
 
@@ -156,11 +156,11 @@ EOF
                 }
                 $output->writeln('Ad has been expired with AD ID: '.$objAd->getId(), true);
             } else {
-                if ($objAdModerates && count($objAdModerates)) {
+                if (!empty($objAdModerates)) {
                     $objAdModerate = $objAdModerates[0];
 
                     $buildRequest      = $this->getContainer()->get('fa_ad.moderation.request_build');
-                    $moderationRequest = $buildRequest->init($objAd, $objAdModerate->getValue());
+                    $moderationRequest = $buildRequest->init($objAd, $objAdModerate->getValue(),1, false, '',true);
                     $moderationRequest = json_encode($moderationRequest);
 
                     if ($buildRequest->sendRequest($moderationRequest)) {

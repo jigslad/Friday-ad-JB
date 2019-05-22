@@ -95,7 +95,7 @@ class UserHalfAccountType extends AbstractType
                 'first_name',
                 TextType::class,
                 array(
-                    'label'       => 'Name',
+                    'label'       => 'First Name',
                     'attr'=>array('maxlength'=>'100'),
                     'constraints' => array(new NotBlank(array('message' => $this->translator->trans('Name is required.', array(), 'validators')))),
                 )

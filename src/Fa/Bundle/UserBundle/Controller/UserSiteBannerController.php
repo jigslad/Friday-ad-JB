@@ -91,7 +91,7 @@ class UserSiteBannerController extends CoreController
                 if ($form->isValid()) {
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$user->getId().' >/dev/null &');
                 } else {
-                    $error = $form->getErrorsAsString();
+                    $error = $form->getErrors(true, false);
                 }
             } catch (\Exception $e) {
                 $error = $e->getMessage();

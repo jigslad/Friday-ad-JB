@@ -1455,7 +1455,7 @@ class AdListController extends CoreController
         $blocks = $this->getListingBlockParams($categoryId, $parentCategoryIds, $cookieLocation, $seoPageRule, $seoSearchParams);
         
         $data['facet_fields'] = array();
-        if (!count($cookieLocation)) {
+        if (empty($cookieLocation)) {
             $data['facet_fields'] = array(
                 AdSolrFieldMapping::DOMICILE_ID => array('limit' => $blocks[AdSolrFieldMapping::DOMICILE_ID]['facet_limit'], 'min_count' => 1),
                 AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
@@ -1486,7 +1486,7 @@ class AdListController extends CoreController
         
         // initialize solr search manager service and fetch data based of above prepared search options
         $this->get('fa.solrsearch.manager')->init('ad', '', $data);
-        if (count($cookieLocation)) {
+        if (!empty($cookieLocation)) {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
                 $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
@@ -1633,7 +1633,7 @@ class AdListController extends CoreController
                         unset($blocks[CategoryRepository::MOTORS_ID.'_top_links']);
                     }
                     $topModelLinks = array();
-                    if (count($cookieLocation) && count($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
+                    if (!empty($cookieLocation) && !empty($seoPageRule) && isset($seoPageRule['seo_tool_id'])) {
                         $topModelLinks = $this->getRepository('FaContentBundle:SeoToolTopLink')->getTopLinkArrayBySeoToolId($seoPageRule['seo_tool_id'], $this->container);
                         $blocks = CommonManager::insertBeforeArray($blocks, AdSolrFieldMapping::TOWN_ID, array(CategoryRepository::MOTORS_ID.'_top_links' => array(
                             'heading' => $this->get('translator')->trans('Top Models', array(), 'frontend-search-list-block'),
@@ -1642,7 +1642,7 @@ class AdListController extends CoreController
                             'facet' => $topModelLinks
                         )));
                     }
-                    if (count($cookieLocation) && !count($topModelLinks)) {
+                    if (!empty($cookieLocation) && empty($topModelLinks)) {
                         $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
                         $blocks = CommonManager::insertBeforeArray($blocks, AdSolrFieldMapping::TOWN_ID, array(AdMotorsSolrFieldMapping::MODEL_ID.'_UK' => array(
                             'heading' => $this->get('translator')->trans('Top Models', array(), 'frontend-search-list-block'),
@@ -1664,17 +1664,17 @@ class AdListController extends CoreController
                         'dimension_name'       => 'model',
                         'repository'           => 'FaEntityBundle:Category',
                         'show_all_link'        => false,
-                        'facet'                => $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_ID, 'item__category_id', (count($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_parent_category_lvl_3_id_i : '.$parentCategoryIds[2].')', true, $cookieLocation),
-                    )));
+                        'facet'                => $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_ID, 'item__category_id', (!empty($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_parent_category_lvl_3_id_i : '.$parentCategoryIds[2].')', true, $cookieLocation),
+                    )));                    
                 } else {
                     $solrFieldName = AdMotorsSolrFieldMapping::MAKE_ID;
-                    $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_MAKE_ID, 'item__category_id', (count($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_category_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_2_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_3_id_i : ('.$parentCategoryIds[1].'))', true, $cookieLocation);
+                    $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_MAKE_ID, 'item__category_id', (!empty($cookieLocation) ? 10 : 25), $searchParams, $this->container, ' AND (a_category_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_2_id_i : ('.$parentCategoryIds[1].') OR a_parent_category_lvl_3_id_i : ('.$parentCategoryIds[1].'))', true, $cookieLocation);
                     $blocks[$solrFieldName]['repository'] = 'FaEntityBundle:Category';
                     $blocks[$solrFieldName]['search_field_name'] = 'item__category_id';
-                    if (!count($cookieLocation)) {
+                    if (empty($cookieLocation)) {
                         $blocks[$solrFieldName]['show_all_link'] = true;
                     }
-                    if (count($cookieLocation) && !isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK'])) {
+                    if (!empty($cookieLocation) && !isset($blocks[CategoryRepository::MOTORS_ID.'_top_links']) && isset($blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK'])) {
                         $solrFieldName = AdMotorsSolrFieldMapping::MAKE_ID.'_UK';
                         $searchResultUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($seoSearchParams, array('item__location' => LocationRepository::COUNTY_ID)));
                         $blocks[$solrFieldName]['facet'] = array('0' => array('title' => $this->container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Category', $categoryId), 'url' => $searchResultUrl)) + $this->getDimensionFacetByField(AdMotorsSolrFieldMapping::CATEGORY_MAKE_ID, 'item__category_id', $blocks[AdMotorsSolrFieldMapping::MAKE_ID.'_UK']['facet_limit'], $searchParams, $this->container, ' AND (a_parent_category_lvl_2_id_i : '.$parentCategoryIds[1].')', true, $cookieLocation);
@@ -1698,8 +1698,8 @@ class AdListController extends CoreController
                         if ($block['is_category_specific'] && (!isset($block['first_entry_as_uk']))) {
                             $categoryDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getDimesionsByCategoryId($categoryId, $this->container);
                             $categoryDimensions = array_map('strtolower', $categoryDimensions);
-                            if (count($categoryDimensions) && in_array($block['dimension_name'], $categoryDimensions)) {
-                                if (isset($searchParams['search'][$block['search_field_name']]) || count($cookieLocation)) {
+                            if (!empty($categoryDimensions) && in_array($block['dimension_name'], $categoryDimensions)) {
+                                if (isset($searchParams['search'][$block['search_field_name']]) || !empty($cookieLocation)) {
                                     $blocks[$solrFieldName]['facet'] = $this->getDimensionFacetByField($solrFieldName, $block['search_field_name'], $block['facet_limit'], $blocksTmpSearchParams, $this->container, null, true, $cookieLocation);
                                 } else {
                                     $data['facet_fields'][$solrFieldName] = array('limit' => $block['facet_limit'], 'min_count' => 1);
@@ -1707,7 +1707,7 @@ class AdListController extends CoreController
                                 $categoryDimensions = $this->getRepository('FaEntityBundle:CategoryDimension')->getDimesionsByCategoryId($categoryId, $this->container);
                                 $categoryDimensions = array_map('strtolower', $categoryDimensions);
 
-                                if (!count($cookieLocation) && ($rootCategoryId == CategoryRepository::ANIMALS_ID || $categoryId == CategoryRepository::MOTORHOMES_ID || $categoryId == CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID || ($rootCategoryId == CategoryRepository::MOTORS_ID && count($parentCategoryIds) == 2))) {
+                                if (empty($cookieLocation) && ($rootCategoryId == CategoryRepository::ANIMALS_ID || $categoryId == CategoryRepository::MOTORHOMES_ID || $categoryId == CategoryRepository::MOTORHOMES_AND_CARAVANS_CARAVANS_ID || ($rootCategoryId == CategoryRepository::MOTORS_ID && count($parentCategoryIds) == 2))) {
                                     $blocks[$solrFieldName]['show_all_link'] = true;
                                 }
                             }
@@ -1731,7 +1731,7 @@ class AdListController extends CoreController
      */
     private function getListingBlockParams($categoryId, $parentCategoryIds, $cookieLocation, $seoPageRule, $seoSearchParams)
     {
-        $locationFlag = count($cookieLocation);
+        $locationFlag = !empty($cookieLocation);
         $blocks = array();
         $rootCategoryId = (isset($parentCategoryIds[0]) ? $parentCategoryIds[0] : null);
         if ($rootCategoryId == CategoryRepository::FOR_SALE_ID) {
@@ -1751,18 +1751,20 @@ class AdListController extends CoreController
                     )
                 );
             } else {
-                $blocks = $blocks+ array(
-                    AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID => array(
-                        'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
-                        'search_field_name' => 'item__category_id',
-                        'is_category_specific' => true,
-                        'is_top_links' => false,
-                        'facet_limit' => 19,
-                        'repository'  => 'FaEntityBundle:Category',
-                        'first_entry_as_uk' => true,
-                        'removeOtherParams' => true,
-                    )
-                );
+                if (isset($parentCategoryIds[2])) {
+                    $blocks = $blocks+ array(
+                        AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID => array(
+                            'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__category_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit' => 19,
+                            'repository'  => 'FaEntityBundle:Category',
+                            'first_entry_as_uk' => true,
+                            'removeOtherParams' => true,
+                        )
+                    );
+                }
             }
         } elseif ($rootCategoryId == CategoryRepository::MOTORS_ID && $locationFlag) {
             $motorTopLinkArray = array();
@@ -1863,18 +1865,20 @@ class AdListController extends CoreController
                     )
                 );
             } else {
-                $blocks = $blocks + array(
-                    AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID => array(
-                        'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
-                        'search_field_name' => 'item__category_id',
-                        'is_category_specific' => true,
-                        'is_top_links' => false,
-                        'facet_limit'          => 19,
-                        'repository'           => 'FaEntityBundle:Category',
-                        'first_entry_as_uk' => true,
-                        'removeOtherParams' => true,
-                    )
-                );
+                if (isset($parentCategoryIds[2])) {
+                    $blocks = $blocks + array(
+                        AdSolrFieldMapping::PARENT_CATEGORY_LVL_3_ID => array(
+                            'heading' => $this->get('translator')->trans('Popular Searches', array(), 'frontend-search-list-block'),
+                            'search_field_name' => 'item__category_id',
+                            'is_category_specific' => true,
+                            'is_top_links' => false,
+                            'facet_limit'          => 19,
+                            'repository'           => 'FaEntityBundle:Category',
+                            'first_entry_as_uk' => true,
+                            'removeOtherParams' => true,
+                        )
+                    );
+                }
             }
         }
         
@@ -1981,7 +1985,7 @@ class AdListController extends CoreController
             $indexableDimensionFieldArray = $this->getRepository('FaEntityBundle:CategoryDimension')->getIndexableDimensionFieldsArrayByCategoryId($categoryId, $this->container);
             $data['query_filters']['item']['category_id'] = $categoryId;
 
-            if (count($indexableDimensionFieldArray)) {
+            if (!empty($indexableDimensionFieldArray)) {
                 foreach ($indexableDimensionFieldArray as $indexableDimensionField) {
                     if (isset($searchParams['search'][$indexableDimensionField]) && $searchParams['search'][$indexableDimensionField]) {
                         $explodeRes                                            = explode('__', $indexableDimensionField);
@@ -1998,7 +2002,7 @@ class AdListController extends CoreController
         // initialize solr search manager service and fetch data based of above prepared search options
         $container->get('fa.solrsearch.manager')->init('ad', '', $data);
         
-        if (count($cookieLocation)) {
+        if (!empty($cookieLocation)) {
             if (isset($cookieLocation['latitude']) && isset($cookieLocation['longitude'])) {
                 $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocation['latitude'].', '.$cookieLocation['longitude']);
                 $this->get('fa.solrsearch.manager')->setGeoDistQuery($geoDistParams);
@@ -2042,7 +2046,7 @@ class AdListController extends CoreController
             } else {
                 $additionaldistance = $exposureMiles;
             }
-            $searchParams['query_filters']['item']['location'] = $locationId.'|'.(intval($distance)+$additionaldistance);
+            $searchParams['query_filters']['item']['location'] = $locationId.'|'.(intval($distance)+intval($additionaldistance));
         }
 
         $data['select_fields']  = array('item' => array('user_id'));
@@ -2275,13 +2279,14 @@ class AdListController extends CoreController
                     $locationId = $varExplodeLoc[0];
                 }
                 if (isset($varExplodeLoc[1]) && $varExplodeLoc[1]!='') {
-                    $distance = $varExplodeLoc[1];
+                    $distance = intval($varExplodeLoc[1]);
                 }
             }
+            
             if ($exposureMiles === 'national') {
                 $additionaldistance = 100000;
             } else {
-                $additionaldistance = $exposureMiles;
+                $additionaldistance = intval($exposureMiles);
             }
             $data['query_filters']['user_shop_detail']['location'] = $locationId.'|'.($distance+$additionaldistance);
         }
@@ -2505,7 +2510,7 @@ class AdListController extends CoreController
     {
         $appendQueryFilters = '';
         if (isset($searchParams['search']['item_motors__colour_id']) && $searchParams['search']['item_motors__colour_id']) {
-            if (count($searchParams['search']['item_motors__colour_id'])) {
+            if (!empty($searchParams['search']['item_motors__colour_id'])) {
                 $itemMotorsColourIds = $searchParams['search']['item_motors__colour_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
@@ -2518,7 +2523,7 @@ class AdListController extends CoreController
         }
 
         if (isset($searchParams['search']['item_motors__body_type_id']) && $searchParams['search']['item_motors__body_type_id']) {
-            if (count($searchParams['search']['item_motors__body_type_id'])) {
+            if (!empty($searchParams['search']['item_motors__body_type_id'])) {
                 $itemMotorsBodyTypeIds = $searchParams['search']['item_motors__body_type_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
@@ -2531,7 +2536,7 @@ class AdListController extends CoreController
         }
 
         if (isset($searchParams['search']['item_motors__fuel_type_id']) && $searchParams['search']['item_motors__fuel_type_id']) {
-            if (count($searchParams['search']['item_motors__fuel_type_id'])) {
+            if (!empty($searchParams['search']['item_motors__fuel_type_id'])) {
                 $itemMotorsFuelTypeIds = $searchParams['search']['item_motors__fuel_type_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
@@ -2544,7 +2549,7 @@ class AdListController extends CoreController
         }
 
         if (isset($searchParams['search']['item_motors__reg_year']) && $searchParams['search']['item_motors__reg_year']) {
-            if (count($searchParams['search']['item_motors__reg_year'])) {
+            if (!empty($searchParams['search']['item_motors__reg_year'])) {
                 $itemMotorsRegYears = $searchParams['search']['item_motors__reg_year'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
@@ -2557,7 +2562,7 @@ class AdListController extends CoreController
         }
 
         if (isset($searchParams['search']['item_motors__transmission_id']) && $searchParams['search']['item_motors__transmission_id']) {
-            if (count($searchParams['search']['item_motors__transmission_id'])) {
+            if (!empty($searchParams['search']['item_motors__transmission_id'])) {
                 $itemMotorsTransmissionIds = $searchParams['search']['item_motors__transmission_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
@@ -2584,7 +2589,7 @@ class AdListController extends CoreController
         }*/
 
         if (isset($searchParams['search']['item_motors__condition_id']) && $searchParams['search']['item_motors__condition_id']) {
-            if (count($searchParams['search']['item_motors__condition_id'])) {
+            if (!empty($searchParams['search']['item_motors__condition_id'])) {
                 $itemMotorsConditionIds = $searchParams['search']['item_motors__condition_id'];
                 $appendQueryFilters .= ' AND (';
                 //$itemMotorsColourIds = implode(',',$searchParams['search']['item_motors__colour_id']);
@@ -2615,7 +2620,7 @@ class AdListController extends CoreController
     {
         $recommendeSlotResult = array();
         if (isset($data['search']['item__category_id']) && $data['search']['item__category_id']) {
-            $recommendeSlotResult = $this->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotSearchlistArrayByCategoryId($data['search']['item__category_id'], $this->container);
+            $recommendeSlotResult = $this->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCatRecommendedSlotSearchlistArrByCategoryId($data['search']['item__category_id'], $this->container);
         }
         return $recommendeSlotResult;
     }

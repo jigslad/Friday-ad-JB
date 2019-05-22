@@ -74,28 +74,31 @@
         <dd class="accordion-navigation keep-shown">
             <a href="#panel3a" class="clearfix" rel="nofollow" ><h5 class="left">{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</h5></a>
             <div class="content active clearfix">
-              <ul class="distance-search clearfix">
-                  <li class="col white-select">
-                      {{ form_widget(form.item__distance, {'attr': {'class': 'fa-select-white'}}) }}
-                  </li>
-                  <li>
-                      <label>{{ 'from'|trans({}, 'frontend')}}</label>
-                  </li>
-              </ul>
-              <ul class="distance-search clearfix">
-                  <li class="col">
-                      <div>
-                          {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
-                           <a href="javascript:void(0);" rel="nofollow" id="fa_left_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-                      </div>
-                  </li>
-                  <li>
-                      <button class="budget-go-btn" type="button" id="left_search_location_btn"></button>
-                  </li>
-              </ul>
-              <ul class="distance-search clearfix">
-                <li id="distance-error-placeholder"><small class="error" style="display:none"></small></li>
-              </ul>
+              {% if attribute(form, 'hide_distance_block') is defined and attribute(form, 'hide_distance_block').vars.value==0 %}
+                  <ul class="distance-search clearfix distance-left-search">
+                      <li class="col white-select">
+                          {{ form_widget(form.item__distance, {'attr': {'class': 'fa-select-white'}}) }}
+                      </li>
+                      <li>
+                          <label>{{ 'from'|trans({}, 'frontend')}}</label>
+                      </li>
+                  </ul>
+                  <ul class="distance-search clearfix distance-left-search">
+                      <li class="col">
+                          <div>
+                              {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
+                               <a href="javascript:void(0);" rel="nofollow" id="fa_left_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                          </div>
+                      </li>
+                      <li>
+                          <button class="budget-go-btn" type="button" id="left_search_location_btn"></button>
+                      </li>
+                  </ul>
+                  <ul class="distance-search distance-left-search clearfix">
+                    <li id="distance-error-placeholder"><small class="error" style="display:none"></small></li>
+                  </ul>
+              {% endif %}
+              
               {% if locationFacets is defined and locationFacets|length > 0 %}
                   <div class="towns-list">
                       <label>{{'Nearby towns'|trans({}, 'frontend-left-search')}}:</label>

@@ -743,7 +743,9 @@ class WightbayParser
 
         $idir = $this->dir.'/images/'.$site_dir.'/'.$group_dir;
         if (!file_exists($idir)) {
+            $old     = umask(0);
             mkdir($idir, 0777, true);
+            umask($old);
         }
 
         $i = 1;
@@ -828,7 +830,7 @@ class WightbayParser
         $dimension = $this->advert['dimensions'];
         $dimension = isset($dimension[0]) ? $dimension[0] : null;
 
-        if (count($dimension) > 0) {
+        if (!empty($dimension)) {
             if ($this->advert['parent_category'] == 'For Sale') {
                 $ad_forsale = $this->em->getRepository('FaAdBundle:AdForSale')->findOneBy(array('ad' => $ad->getId()));
 

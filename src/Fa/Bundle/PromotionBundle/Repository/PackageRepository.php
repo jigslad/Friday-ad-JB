@@ -774,8 +774,6 @@ class PackageRepository extends EntityRepository
                 $availablePackageIds[] = $package->getPackage()->getId();
             }
             if (!empty($availablePackageIds)) {
-                //array_shift($availablePackageIds);
-                //var_dump($availablePackageIds); die;
                 $packageId = $this->_em->getRepository('FaAdBundle:Ad')->getFeaturedAdForUpgrade($availablePackageIds);
                 if (!empty($packageId)) {
                     $packageResult = $this->find($packageId);

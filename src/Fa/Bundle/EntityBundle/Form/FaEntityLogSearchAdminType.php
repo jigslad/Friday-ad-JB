@@ -71,13 +71,15 @@ class FaEntityLogSearchAdminType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $classArray  = $this->em->getRepository('FaEntityBundle:FaEntityLog')->getObjectClassOptionArray();
+        $choiceOptionsArray = ($classArray != '') ? array_flip($classArray) : '';
         $builder
         ->addEventSubscriber(new AddDatePickerFieldSubscriber('fa_entity_log__loggedAt'))
         ->add('fa_entity_log__objectId', TextType::class, array('required' => false))
         ->add('fa_entity_log__objectClass', ChoiceType::class, array(
             'empty_data'  => null,
             'placeholder' => "Select Entity",
-            'choices' => array_flip($this->em->getRepository('FaEntityBundle:FaEntityLog')->getObjectClassOptionArray())
+            'choices' => $choiceOptionsArray
         ))
         ->add('fa_entity_log__username', TextType::class, array('required' => false))
         ->add('search', SubmitType::class, array('label' => 'Search'));

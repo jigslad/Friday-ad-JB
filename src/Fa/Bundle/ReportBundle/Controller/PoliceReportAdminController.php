@@ -11,22 +11,23 @@
 
 namespace Fa\Bundle\ReportBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Fa\Bundle\CoreBundle\Controller\CoreController;
+use Fa\Bundle\AdBundle\Entity\Ad;
+use Fa\Bundle\UserBundle\Entity\User;
+use Fa\Bundle\CoreBundle\Manager\FormManager;
 use Symfony\Component\HttpFoundation\Request;
-use Fa\Bundle\ReportBundle\Form\AdReportSearchAdminType;
-use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\HttpFoundation\Response;
+use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Fa\Bundle\CoreBundle\Controller\CoreController;
+use Fa\Bundle\AdBundle\Repository\AdImageRepository;
 use Fa\Bundle\ReportBundle\Form\PoliceReportSearchAdminType;
+use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
 
 /**
  * This is default controller for dot mailer bundle.
  *
- * @author Mohit Chauhan <mohitc@aspl.in>
+ * @author    Mohit Chauhan <mohitc@aspl.in>
  * @copyright 2014 Friday Media Group Ltd
- * @version v1.0
+ * @version   v1.0
  */
 class PoliceReportAdminController extends CoreController implements ResourceAuthorizationController
 {
@@ -34,11 +35,16 @@ class PoliceReportAdminController extends CoreController implements ResourceAuth
      * Police report action.
      *
      * @param Request $request A Request object.
-     *
-     * @param Response A Response object.
+     * @return Response A Response object.
      */
     public function indexAction(Request $request)
     {
+        /**
+         * @var FormManager $formManager
+         * @var Ad          $objSearchAd
+         * @var Ad[]        $objAds
+         * @var User        $objUser
+         */
         CommonManager::setAdminBackUrl($request, $this->container);
 
         // initialize search filter manager service and prepare filter data for searching
@@ -46,8 +52,8 @@ class PoliceReportAdminController extends CoreController implements ResourceAuth
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
         // initialize form manager service
         $formManager = $this->get('fa.formmanager');
-        $form        = $formManager->createForm(PoliceReportSearchAdminType::class, null, array('action' => $this->generateUrl('fa_report_police'), 'method' => 'GET'));
-        $reportData  = array();
+        $form = $formManager->createForm(PoliceReportSearchAdminType::class, null, array('action' => $this->generateUrl('fa_report_police'), 'method' => 'GET'));
+        $reportData = array();
 
         if ($data['search']) {
             $data['search'] = array_filter($data['search']);
@@ -66,7 +72,7 @@ class PoliceReportAdminController extends CoreController implements ResourceAuth
                         $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Sorry no user found.'), 'error');
                         return $this->redirectToRoute('fa_report_police');
                     }
-                    $userId  = $objUser->getId();
+                    $userId = $objUser->getId();
                 }
 
                 //General account info & Business details
@@ -98,30 +104,30 @@ class PoliceReportAdminController extends CoreController implements ResourceAuth
 
                     if ($objAds) {
                         foreach ($objAds as $key => $objAd) {
-                            $categoryId     = $objAd->getCategory()->getId();
-                            $adImages       = $this->getAdImages($objAd);
-                            $categoryPath   = $this->getCategoryPath($categoryId);
-                            $adDimensions   = $this->getAdDimensions($objAd, $categoryId);
+                            $categoryId = $objAd->getCategory()->getId();
+                            $adImages = $this->getAdImages($objAd);
+                            $categoryPath = $this->getCategoryPath($categoryId);
+                            $adDimensions = $this->getAdDimensions($objAd, $categoryId);
                             $advertPackages = $this->getRepository('FaAdBundle:AdUserPackage')->getAdvertPackagePurchases($objAd->getId());
 
-                            $activityParams['ad_id']          = $objAd->getId();
+                            $activityParams['ad_id'] = $objAd->getId();
                             $activityParams['report_columns'] = array('ad_created_at', 'ad_id', 'edited_at', 'expired_at', 'expires_at', 'is_edit', 'is_expired', 'is_renewed', 'renewed_at', 'status_id', 'ip_addresses');
-                            $activitySorter['sort_field']     = 'edited_at';
-                            $activitySorter['sort_ord']       = 'ASC';
-                            $activityQuery                    = $this->getHistoryRepository('FaReportBundle:AdReportDaily')->getAdReportQuery($activityParams, $activitySorter, $this->container, false);
-                            $advertActivityResult             = $activityQuery->execute();
+                            $activitySorter['sort_field'] = 'edited_at';
+                            $activitySorter['sort_ord'] = 'ASC';
+                            $activityQuery = $this->getHistoryRepository('FaReportBundle:AdReportDaily')->getAdReportQuery($activityParams, $activitySorter, $this->container, false);
+                            $advertActivityResult = $activityQuery->execute();
 
                             $reportData['user_adverts'][] = array(
-                                                                    'id'            => $objAd->getId(),
-                                                                    'title'         => $objAd->getTitle(),
-                                                                    'description'   => $objAd->getDescription(),
-                                                                    'category_id'   => $categoryId,
-                                                                    'images'        => $adImages,
-                                                                    'category_path' => $categoryPath,
-                                                                    'dimensions'    => $adDimensions,
-                                                                    'purchases'     => $advertPackages,
-                                                                    'activities'    => $advertActivityResult,
-                                );
+                                'id' => $objAd->getId(),
+                                'title' => $objAd->getTitle(),
+                                'description' => $objAd->getDescription(),
+                                'category_id' => $categoryId,
+                                'images' => $adImages,
+                                'category_path' => $categoryPath,
+                                'dimensions' => $adDimensions,
+                                'purchases' => $advertPackages,
+                                'activities' => $advertActivityResult,
+                            );
                         }
                     }
                 }
@@ -140,19 +146,27 @@ class PoliceReportAdminController extends CoreController implements ResourceAuth
         }
 
         $parameters = array(
-            'heading'      => 'Police report',
-            'form'         => $form->createView(),
+            'heading' => 'Police report',
+            'form' => $form->createView(),
             'searchParams' => $data['search'],
-            'reportData'   => $reportData,
+            'reportData' => $reportData,
         );
 
         return $this->render('FaReportBundle:PoliceReportAdmin:index.html.twig', $parameters);
     }
 
+    /**
+     * @param Ad $objAd
+     * @return array
+     */
     public function getAdImages($objAd)
     {
-        $adImages     = array();
-        $objAdImages  = $this->getRepository('FaAdBundle:AdImage')->getAdImages($objAd->getId());
+        /**
+         * @var AdImageRepository $objRepoAdImage
+         */
+        $adImages = array();
+        $objRepoAdImage = $this->getRepository('FaAdBundle:AdImage');
+        $objAdImages = $objRepoAdImage->getAdImages($objAd->getId());
         if ($objAdImages && count($objAdImages) > 0) {
             foreach ($objAdImages as $key => $objAdImage) {
                 if ($objAdImage) {
@@ -169,9 +183,13 @@ class PoliceReportAdminController extends CoreController implements ResourceAuth
         return $adImages;
     }
 
+    /**
+     * @param $categoryId
+     * @return string
+     */
     public function getCategoryPath($categoryId)
     {
-        $categoryPath      = '';
+        $categoryPath = '';
         $categoryPathArray = $this->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $this->container);
         if ($categoryPathArray && count($categoryPathArray) > 0) {
             $categoryPath = implode(' > ', $categoryPathArray);
@@ -180,14 +198,19 @@ class PoliceReportAdminController extends CoreController implements ResourceAuth
         return $categoryPath;
     }
 
+    /**
+     * @param $objAd
+     * @param $categoryId
+     * @return array
+     */
     public function getAdDimensions($objAd, $categoryId)
     {
-        $adDimensions   = array();
+        $adDimensions = array();
         $rootCategoryId = $this->container->get('doctrine')->getManager()->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
-        $className      = CommonManager::getCategoryClassNameById($rootCategoryId, true);
+        $className = CommonManager::getCategoryClassNameById($rootCategoryId, true);
         $repository = null;
         if ($className) {
-            $repository = $this->container->get('doctrine')->getManager()->getRepository('FaAdBundle:'.'Ad'.$className);
+            $repository = $this->container->get('doctrine')->getManager()->getRepository('FaAdBundle:' . 'Ad' . $className);
         }
 
         $object = null;
@@ -210,4 +233,5 @@ class PoliceReportAdminController extends CoreController implements ResourceAuth
 
         return $adDimensions;
     }
+
 }

@@ -12,6 +12,7 @@
 namespace Fa\Bundle\PaymentBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Fa\Bundle\AdBundle\Entity\Ad;
 use Fa\Bundle\PaymentBundle\Entity\PaymentTransactionDetail;
 use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
@@ -141,6 +142,9 @@ class PaymentTransactionDetailRepository extends EntityRepository
      */
     public function getTransactonDataForGoogleAnalytics($paymentId, $type = false)
     {
+        /**
+         * @var Ad $ad
+         */
         $paymentDetailArray = array();
         $paymentDetails = $this->getBaseQueryBuilder()
         ->select(self::ALIAS.'.payment_for as payment_for', PaymentTransactionRepository::ALIAS.'.transaction_id as transaction_id', PaymentRepository::ALIAS.'.cart_code as cart_code', PaymentRepository::ALIAS.'.id as payment_id', self::ALIAS.'.value', self::ALIAS.'.amount', AdRepository::ALIAS.'.id as ad_id')
@@ -158,6 +162,7 @@ class PaymentTransactionDetailRepository extends EntityRepository
                 $category     = array();
                 $packageNames = array();
                 $package      = null;
+                $townId = 0;
                 $value = unserialize($paymentDetail['value']);
                 if (isset($value['package'])) {
                     foreach ($value['package'] as $package) {
@@ -192,6 +197,13 @@ class PaymentTransactionDetailRepository extends EntityRepository
                                 $cart_code = $cart_code.'-'.$discountCodeObj->getCode();
                             }
                         }
+                        if($ad->getAdLocations()){
+                            foreach ($ad->getAdLocations() as $valAdLocation){
+                                if($valAdLocation->getLocationTown()){
+                                    $townId = $valAdLocation->getLocationTown()->getId();
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -208,6 +220,7 @@ class PaymentTransactionDetailRepository extends EntityRepository
                 if (isset($value['user_credit_id']) && isset($value['user_credit'])) {
                     $paymentDetailArray[$paymentDetail['transaction_id']]['SKU'] = $paymentDetailArray[$paymentDetail['transaction_id']]['SKU']."-credit";
                 }
+                $paymentDetailArray[$paymentDetail['transaction_id']]['TownId'] = $townId;
             }
 
             if (count($paymentUniqueIds)) {
