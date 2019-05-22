@@ -117,6 +117,8 @@
     {% block scripttop %}{% endblock %}
     {{ include('FaFrontendBundle::fa-main-css.html.twig') }}
     
+    {{ include('FaFrontendBundle::main-override-css.html.twig') }}
+    
     {% set showAdultCss = 0 %}
     {% set assignedCategoryId = 0 %}
     {% if app.request.cookies.has('is_over_18') %}
