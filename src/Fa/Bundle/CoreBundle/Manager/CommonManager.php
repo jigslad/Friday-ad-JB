@@ -2245,7 +2245,7 @@ HTML;
             $class['http://businessesforsale.com'] = 'businessforsale';
             $class['trade-it.co.uk'] = 'tradeit-list-logo';
             $class['wightbay.com'] = 'wightbay-list-logo';
-            $class['https://buildersbay.co.uk'] = 'buildersbay-list-logo';
+            $class['buildersbay.co.uk'] = 'buildersbay-list-logo';
             if (isset($class[$string])) {
                 return $class[$string];
             } else {
