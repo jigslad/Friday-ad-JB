@@ -293,6 +293,10 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 {% set slotallocated = slotallocated|merge([1]) %}
             {% endif %}
             
+            {% if businessTopExposureUsersDetailsWithoutAd is defined  %}
+                {{ include('FaAdBundle:AdList:businessTopExposureSingleBlock.html.twig', {}) }}
+            {% endif %}
+            
             {% set adCounter = 0 %}
             {% set adCount = 0 %}
             {% set bannerStatus = true %}

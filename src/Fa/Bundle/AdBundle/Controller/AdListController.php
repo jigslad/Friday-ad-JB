@@ -2194,22 +2194,21 @@ class AdListController extends CoreController
             }
         }
         
-        
-
-        $businessExposureUserDetails = array();
+        $businessExposureUserDetails = $businessTopExposureUserDetails = array();
         $topBusiness = $this->getRepository('FaCoreBundle:ConfigRule')->getTopBusiness($data['search']['item__category_id'], $this->container);
         $viewedBusinessExposureUserIds = array_filter(explode(',', $request->cookies->get('business_exposure_user_ids_'.$rootCategoryId)));
 
         if ($topBusiness) {
             $businessExposureTopUser = $this->getRepository('FaUserBundle:User')->getTopbusinessUserDetailForAdList($topBusiness, $this->container);           
-            $businessExposureTopUserAds = $this->getProfileExposureUserAds($businessExposureTopUser[0]['user_id'], $data);
-            if(!empty($businessExposureTopUserAds)) {
-                $businessExposureUserDetails[] = array(
-                    'businessExposureUserAds' => $businessExposureTopUserAds,
+            //$businessExposureTopUserAds = $this->getProfileExposureUserAds($businessExposureTopUser[0]['user_id'], $data);
+            //if(!empty($businessExposureTopUserAds)) {
+                $businessTopExposureUserDetails[] = array(
+                    //'businessExposureUserAds' => $businessExposureTopUserAds,
                     'businessUserId'          => $businessExposureTopUser[0]['user_id'],
                     'businessUserDetail'      => $this->getRepository('FaUserBundle:User')->getProfileExposureUserDetailForAdList($businessExposureTopUser[0]['user_id'], $this->container),
                 );
-            }
+           // }
+            $parameters['businessTopExposureUsersDetailsWithoutAd'] = $businessTopExposureUserDetails;
             $viewedBusinessExposureUserIds[] = !empty($businessExposureTopUser) ? $businessExposureTopUser[0]['user_id']:'';
         }
        
@@ -2364,7 +2363,7 @@ class AdListController extends CoreController
             //$data['static_filters'] .= ' AND '.UserShopDetailSolrFieldMapping::PROFILE_EXPOSURE_CATEGORY_ID.': ("'.implode('" "', $srchCateIds).'")';
         }
         
-        $data['static_filters'] .= ' AND '.UserShopDetailSolrFieldMapping::USER_LIVE_ADS_COUNT.': [3 TO *]';
+        $data['static_filters'] .= ' AND '.UserShopDetailSolrFieldMapping::USER_LIVE_ADS_COUNT.': [1 TO *]';
         
         if (!empty($viewedBusinessExposureUserIds)) {
             $viewedBusinessExposureUserIds = array_unique($viewedBusinessExposureUserIds);
@@ -2385,7 +2384,7 @@ class AdListController extends CoreController
         $solrSearchManager->init('user.shop.detail', $keywords, $data, $page, 24, 0, true);
         $solrResponse = $solrSearchManager->getSolrResponse();
         $result = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
-
+        
         return $result;
     }
     
