@@ -125,7 +125,7 @@
         	{% set assignedCategoryId = searchParams.item__category_id %}
     	{% elseif currentRoute == 'ad_detail_page' and app.request.get('category_string') %}
     		{% set assignedCategoryId = fetch_repository('FaEntityBundle:Category').getIdBySlug(app.request.get('category_string'), fetch_container_instance()) %}
-    	{% elseif currentRoute == 'show_business_profile_page' and app.request.get('profileNameSlug') %}
+    	{% elseif (currentRoute == 'show_business_profile_page' or currentRoute == 'show_business_user_ads') and app.request.get('profileNameSlug') %}
              {% set objUserSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'slug':app.request.get('profileNameSlug')}) %}
              {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}
     	{% endif %}
