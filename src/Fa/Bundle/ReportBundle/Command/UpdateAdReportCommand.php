@@ -231,7 +231,8 @@ EOF
         $adIdArray     = array();
         $adUserIdArray = array();
         $adminUserIdArray = array();
-        list($startDate, $endDate) = $this->getDateInTimeStamp($date);
+        list($startDate, $endDate) = $this->getDateInTimeStamp($date,$action);
+        
         foreach ($ads as $ad) {
             $adIdArray[]     = $ad['id'];
             $adUserIdArray[$ad['id']] = $ad['user_id'];
@@ -351,7 +352,9 @@ EOF
                 if ($ad['source']=='paa_lite') {
                     $isPaaLite = 1;
                 }
-
+                
+                $paymentDate = ($adPayment && $adPayment['payment_method']!= 'free')  ? $adPayment['created_at'] : null;
+                
                 if ($adUserPackage && $adPayment['created_at'] && $adPayment['created_at'] >= $startDate && $adPayment['created_at'] <= $endDate && ($isNew || $isRenewed || $action == 'all')) {
                     $paymentMethod     = $adPayment['payment_method'];
                     if ($adPayment['skip_payment_reason']) {
@@ -373,7 +376,7 @@ EOF
                         }
 
                         $paymentTransactionDetailValue = array();
-                        $paymentDate = ($adPayment ? $adPayment['created_at'] : null);
+                        
                         
                         try {
                             $paymentTransactionDetailValue = unserialize($adPayment['payment_trans_detail_value']);
@@ -464,7 +467,7 @@ EOF
             ->select('COUNT('.AdRepository::ALIAS.'.id)');
 
         if ($action == 'beforeoneday' || $date) {
-            list($startDate, $endDate) = $this->getDateInTimeStamp($date);
+            list($startDate, $endDate) = $this->getDateInTimeStamp($date,$action);
             $query->andWhere('('.AdRepository::ALIAS.'.created_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.published_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.edited_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.expires_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.renewed_at BETWEEN '.$startDate.' AND  '.$endDate.')');
         } elseif ($action == 'all') {
             $query->andWhere(AdRepository::ALIAS.'.status = '.EntityRepository::AD_STATUS_LIVE_ID);
@@ -495,7 +498,7 @@ EOF
         ->setFirstResult($offset);
 
         if ($action == 'beforeoneday' || $date) {
-            list($startDate, $endDate) = $this->getDateInTimeStamp($date);
+            list($startDate, $endDate) = $this->getDateInTimeStamp($date,$action);
             $query->andWhere('('.AdRepository::ALIAS.'.created_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.published_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.edited_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.expires_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.renewed_at BETWEEN '.$startDate.' AND  '.$endDate.')');
         } elseif ($action == 'all') {
             $query->andWhere(AdRepository::ALIAS.'.status = '.EntityRepository::AD_STATUS_LIVE_ID);
@@ -513,11 +516,14 @@ EOF
      *
      * @return array
      */
-    private function getDateInTimeStamp($date)
+    private function getDateInTimeStamp($date,$action)
     {
         if ($date) {
             $startDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', strtotime($date)));
             $endDate   = CommonManager::getTimeStampFromEndDate(date('Y-m-d', strtotime($date)));
+        } elseif ($action=='all') {
+            $startDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', strtotime('2015-01-01')));
+            $endDate   = CommonManager::getTimeStampFromEndDate(date('Y-m-d', (strtotime(date('Y-m-d'))- 24*60*60)));
         } else {
             $startDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', (strtotime(date('Y-m-d'))- 24*60*60)));
             $endDate   = CommonManager::getTimeStampFromEndDate(date('Y-m-d', (strtotime(date('Y-m-d'))- 24*60*60)));
