@@ -93,10 +93,13 @@
             {{ include('FaContentBundle:ProfilePage:shopDetail.html.twig') }}
             
             {% if userDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
+                <div id="business_welcome_message_div">
+                    {{ include('FaContentBundle:ProfilePage:shopWelcomeMessage.html.twig') }}
+                </div>
                 {% if userDetail['about_us']|length %}
                     <div class="mt30" id="business_about_us_heading">
                         <div class="clearfix">
-                            <h3 class="shop-profile-title left">{{ 'About us'|trans({}, 'frontend-profile-page') }}</h3>
+                            {#<h3 class="shop-profile-title left">{{ 'About us'|trans({}, 'frontend-profile-page') }}</h3>#}
                             {% if allowProfileEdit %}
                                 <div class="profile-edit clearfix about-edit">
                                     <div class="right relative">
