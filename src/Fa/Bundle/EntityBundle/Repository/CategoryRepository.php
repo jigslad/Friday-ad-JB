@@ -128,6 +128,7 @@ class CategoryRepository extends NestedTreeRepository
     const MOTORS_DISTANCE = 30;
     const OTHERS_DISTANCE = 15;
     const AREA_DISTANCE_DIVISION = 3;
+    const MAX_DISTANCE = 200;
 
     private $categoryCountArray = array();
 
@@ -2249,27 +2250,37 @@ class CategoryRepository extends NestedTreeRepository
     {
         $setRadius = 1;
         $categoryId = 0;
+        $getLocLvl = '';
+        $cookieLocationDet = $cookieLocation  = array();
+        
         $cookieLocation  = $container->get('request_stack')->getCurrentRequest()->cookies->get('location');
-        $cookieLvl = '';
-        if ($cookieLocation && (!is_array($cookieLocation))) {
-            $cookieLocation = json_decode($cookieLocation);
-            $cookieLvl = isset($cookieLocation->lvl)?$cookieLocation->lvl:'';
-        } elseif ($cookieLocation && (is_array($cookieLocation))) {
-            $cookieLvl = isset($cookieLocation->lvl)?$cookieLocation->lvl:'';
+        
+        if(!empty($cookieLocation)) {
+            $cookieLocationDet = json_decode($cookieLocation);
         }
-        if ((isset($searchParams['item__location']) && $searchParams['item__location']==2) || !isset($searchParams['item__location']) || $cookieLvl=='') {
+        
+        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);
+        
+        if($searchLocation!=2) {
+            $selLocationArray = $this->_em->getRepository('FaEntityBundle:Location')->find($searchLocation);
+            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
+        }
+        
+        if ((isset($searchParams['item__location']) && $searchParams['item__location']==2) || !isset($searchParams['item__location']) || $getLocLvl==2) {
             $setRadius = 0;
         } elseif (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
             $setRadius = 0;
         }
-
+        
         if ($setRadius) {
             if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
                 $categoryId = $searchParams['item__category_id'];
             }
+
             if ($categoryId) {
                 $parentCategoryIds = array_keys($this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container));
                 $locationRadius = $this->_em->getRepository('FaAdBundle:LocationRadius')->getSingleLocationRadiusByCategoryIds($parentCategoryIds);
+                
                 if ($locationRadius) {
                     return $locationRadius['defaultRadius'];
                 } else {

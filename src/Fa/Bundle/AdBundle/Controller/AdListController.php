@@ -352,9 +352,9 @@ class AdListController extends CoreController
 
 
         if ($locationRadius) {
-            $otherMatchingData['query_filters']['item']['location'] = $data['search']['item__location'].'| 200 | '. (isset($locationRadius['extendedRadius']) ? $locationRadius['extendedRadius']: (isset($locationRadius['defaultRadius'])?$locationRadius['defaultRadius']:0));
+            $otherMatchingData['query_filters']['item']['location'] = $data['search']['item__location'].'| '.CategoryRepository::MAX_DISTANCE.' | '. (isset($locationRadius['extendedRadius']) ? $locationRadius['extendedRadius']: (isset($locationRadius['defaultRadius'])?$locationRadius['defaultRadius']:0));
         } else {
-            $otherMatchingData['query_filters']['item']['location'] = $data['search']['item__location'].'| 200 | '.(isset($data['search']['item__distance'])?$data['search']['item__distance']:0);
+            $otherMatchingData['query_filters']['item']['location'] = $data['search']['item__location'].'| '.CategoryRepository::MAX_DISTANCE.' | '.(isset($data['search']['item__distance'])?$data['search']['item__distance']:0);
         }
 
 
@@ -431,7 +431,9 @@ class AdListController extends CoreController
                 $otherMatchingData['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
             }
             $this->get('fa.solrsearch.manager')->init('ad', $keywords, $otherMatchingData, 1, 1, 0, true);
+            //echo '<br><br>otherMacthqry===<br>';
             $otherMatchingSolrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
+            //die;
             $otherMatchingResult      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($otherMatchingSolrResponse);
             $otherMatchingResultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($otherMatchingSolrResponse);
 
@@ -447,7 +449,6 @@ class AdListController extends CoreController
         $mergedResultCount = $resultCount + $extendedResultCount;
 
 
-
         /*$nextMiles              = 0;
         $expandMilesresultCount = 'XX';
         if (isset($data['search']['item__distance']) && $data['search']['item__distance'] < 200) {
@@ -458,7 +459,7 @@ class AdListController extends CoreController
 
     
         //$locationFacets = array();
-        if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
+        if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
             // $locationFacets =  get_object_vars($facetResult['a_l_town_id_txt']);
             
             // if(isset($facetResult['a_l_area_id_txt']) && !empty(get_object_vars($facetResult['a_l_area_id_txt']))) {
@@ -1105,7 +1106,7 @@ class AdListController extends CoreController
                     $request->attributes->set('sort_ord', 'desc');
                 }
             }*/ else {
-                if ((!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
+            if ((!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
                     if (is_array($cookieLocationDetails) &&
                        (!isset($cookieLocationDetails['latitude']) || !$cookieLocationDetails['latitude']) &&
                        (!isset($cookieLocationDetails['longitude']) || !$cookieLocationDetails['longitude']) &&
@@ -1127,7 +1128,7 @@ class AdListController extends CoreController
         if ($mapFlag) {
             unset($data['query_sorter']);
 
-            if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
+            if (isset($data['search']['item__location']) && $data['search']['item__location'] != LocationRepository::COUNTY_ID && (!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
                 if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
                     $data['query_sorter']['item']['geodist'] = 'asc';
                 }

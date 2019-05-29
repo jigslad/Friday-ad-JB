@@ -21,6 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 
 /**
  * This form is used for header search.
@@ -37,6 +38,13 @@ class AdTopSearchType extends AbstractType
      * @var object
      */
     private $container;
+    
+    /**
+     * The request instance.
+     *
+     * @var Request
+     */
+    private $request;
 
     /**
      * Entity manager class object.
@@ -50,10 +58,11 @@ class AdTopSearchType extends AbstractType
      *
      * @param object $container Container instance.
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, RequestStack $requestStack)
     {
         $this->container = $container;
         $this->em        = $this->container->get('doctrine')->getManager();
+        $this->request   = $requestStack->getCurrentRequest();
     }
 
     /**
@@ -76,7 +85,6 @@ class AdTopSearchType extends AbstractType
         ->add('keyword_category_id', HiddenType::class)
         ->add('item__price_from', HiddenType::class)
         ->add('item__price_to', HiddenType::class)
-        ->add('item__distance', HiddenType::class)
         ->add('tmpLeafLevelCategoryId', HiddenType::class, array('data' => $leafLevelCategoryId))
         ->add('leafLevelCategoryId', HiddenType::class)
         ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
@@ -115,7 +123,54 @@ class AdTopSearchType extends AbstractType
      */
     public function preSetData(FormEvent $event)
     {
-        $this->addLocationAutoSuggestField($event->getForm());
+        $form = $event->getForm();  
+        $categoryId   = '';$getLocLvl = 0;
+        $defDistance = '';
+        $getDefaultRadius = $cookieLocationDet = array(); 
+        
+        $searchParams = $this->request->get('searchParams');
+        $cookieLocation = $this->request->cookies->get('location');
+
+        if(!empty($cookieLocation)) {
+            $cookieLocationDet = json_decode($cookieLocation);
+        }
+        
+        $searchLocation = isset($searchParams['item__location'])?$searchParams['item__location']:((!empty($cookieLocationDet) && isset($cookieLocationDet->town_id))?$cookieLocationDet->town_id:2);         
+        
+        if($searchLocation!=2) {
+            $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->find($searchLocation);
+            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray->getLvl(); }
+        }
+        
+        if (isset($searchParams['item__category_id']) && $searchParams['item__category_id']) {
+            $categoryId = $searchParams['item__category_id'];
+        }
+        if (isset($searchParams['item__distance']) && $searchParams['item__distance']) {
+            $defDistance = $searchParams['item__distance'];
+        } else {
+            $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+            $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+        }
+        if($defDistance=='') {
+            if($categoryId!='') {
+                $rootCategoryId = $this->em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+                $defDistance = ($rootCategoryId==CategoryRepository::MOTORS_ID)?CategoryRepository::MOTORS_DISTANCE:CategoryRepository::OTHERS_DISTANCE;
+            } else {
+                $defDistance = CategoryRepository::MAX_DISTANCE;
+            }
+        }
+                    
+        $form->add(
+            'item__distance',
+            HiddenType::class,
+            array(
+                'mapped' => false,
+                'empty_data' => $defDistance,
+                'data' => $defDistance,
+            )
+            );
+        
+        $this->addLocationAutoSuggestField($event->getForm(),$searchLocation);
     }
 
     /**
@@ -123,9 +178,9 @@ class AdTopSearchType extends AbstractType
      *
      * @param object $form Form instance.
      */
-    protected function addLocationAutoSuggestField($form)
+    protected function addLocationAutoSuggestField($form,$searchLocation)
     {
-        $form->add('item__location', HiddenType::class);
+        $form->add('item__location', HiddenType::class, array('data'=>$searchLocation,'empty_data'=>$searchLocation));
         $form->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false));
         $form->add('item__area', HiddenType::class);
     }
