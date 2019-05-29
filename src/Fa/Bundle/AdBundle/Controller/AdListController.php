@@ -2144,19 +2144,20 @@ class AdListController extends CoreController
         $recordsPerPage       = 3;
         $data['query_sorter'] = array();
 
-        if (count($searchParams)) {
+        /*if (count($searchParams)) {
             $keywords               = (isset($searchParams['search']['keywords']) ? $searchParams['search']['keywords'] : null);
-            $data['query_filters']  = (isset($searchParams['query_filters']) ? $searchParams['query_filters'] : array());
+            //$data['query_filters']  = (isset($searchParams['query_filters']) ? $searchParams['query_filters'] : array());
             if (strlen($keywords)) {
                 $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 1);
             } else {
                 $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
             }
-        } else {
+        } else {*/
             $keywords = null;
             $data['query_filters']['item']['status_id']   = EntityRepository::AD_STATUS_LIVE_ID;
-            $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
-        }
+            $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+            /*$data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+        }*/
 
         $data['query_filters']['item']['user_id'] = $userId;
         if (!empty($adIds)) {
