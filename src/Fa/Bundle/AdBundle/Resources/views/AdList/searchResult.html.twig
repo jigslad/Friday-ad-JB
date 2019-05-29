@@ -434,9 +434,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% endif %}
                     
                 {% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and totalAdCount > 0  %}                       
-                    {% if realAdCnt==5 or realAdCnt==15 %} 
+                    {% if adCount==5 or adCount==15 %} 
                         {% set displayBusinessExposureBlock = 1 %}
-                    {% elseif realAdCnt==10 %} 
+                    {% elseif adCount==10 %} 
                     	{% set displayBusinessExposureSingleBlock = 1 %}
                     {% endif %}
                     {% if displayBusinessExposureBlock ==1 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %} 
