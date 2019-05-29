@@ -348,7 +348,7 @@ class AdUserPackageRepository extends BaseEntityRepository
         $adUserPackageTableName = $this->_em->getClassMetadata('FaAdBundle:AdUserPackage')->getTableName();
         $packageTableName = $this->_em->getClassMetadata('FaPromotionBundle:Package')->getTableName();
 
-        $sql ='SELECT '.self::ALIAS.'.package_id,'.self::ALIAS.'.ad_id,'.self::ALIAS.'.started_at,'.self::ALIAS.'.value,'.self::ALIAS.'.price,'.PackageRepository::ALIAS.'.package_sr_no, '.PackageRepository::ALIAS.'.package_text FROM '.$adUserPackageTableName.' as '.self::ALIAS.'
+        $sql ='SELECT '.self::ALIAS.'.package_id,'.self::ALIAS.'.ad_id,'.self::ALIAS.'.started_at,'.self::ALIAS.'.value,'.self::ALIAS.'.price,'.PackageRepository::ALIAS.'.package_sr_no, '.PackageRepository::ALIAS.'.package_text , '.PackageRepository::ALIAS.'.created_at FROM '.$adUserPackageTableName.' as '.self::ALIAS.'
             JOIN (SELECT ad_id, MAX(id) max_id FROM '.$adUserPackageTableName.' GROUP BY ad_id) '.self::ALIAS.'1 ON ('.self::ALIAS.'.id = '.self::ALIAS.'1.max_id)
             LEFT JOIN '.$packageTableName.' as '.PackageRepository::ALIAS.' ON ('.self::ALIAS.'.package_id = '.PackageRepository::ALIAS.'.id)
             Where 1=1';
@@ -380,6 +380,7 @@ class AdUserPackageRepository extends BaseEntityRepository
                     'price' => $adPackage['price'],
                     'value' => $adPackage['value'],
                     'started_at' => $adPackage['started_at'],
+                    'created_at' => $adPackage['created_at'],
                 );
             }
         }

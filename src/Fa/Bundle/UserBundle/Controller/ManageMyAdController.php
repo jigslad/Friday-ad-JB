@@ -164,6 +164,7 @@ class ManageMyAdController extends CoreController
                 }
             }
         }
+
         
         if ($boostedAdCount > 0 && $boostMaxPerMonth > 0) {
             $boostAdRemaining = $boostMaxPerMonth - $boostedAdCount;

@@ -228,8 +228,6 @@ class SeoToolOverrideRepository extends EntityRepository
                         }
                     }
                 }
-                
-               
                 if (!$objSeoToolOverride) {
                     $objSeoToolOverride = $this->getSeoToolOverrideObj($allCommoUrl, $container);
                 }

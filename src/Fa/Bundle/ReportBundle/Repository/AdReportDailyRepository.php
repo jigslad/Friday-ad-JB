@@ -86,7 +86,7 @@ class AdReportDailyRepository extends EntityRepository
         $qb = $this->createQueryBuilder(self::ALIAS);
 
         if ($isCountQuery) {
-            $qb->select('COUNT(DISTINCT ' . self::ALIAS . '.id) as total_ads');
+            $qb->select('COUNT(' . self::ALIAS . '.id) as total_ads');
         } else {
             $qb->select(self::ALIAS . '.id', self::ALIAS . '.ad_id', self::ALIAS . '.print_revenue_gross', self::ALIAS . '.print_edition_ids', self::ALIAS . '.duration_print', self::ALIAS . '.skip_payment_reason')
                 ->distinct(self::ALIAS . '.id');
@@ -107,7 +107,13 @@ class AdReportDailyRepository extends EntityRepository
         if (in_array('print_insert_date', $searchParams['report_columns']) || (isset($searchParams['date_filter_type']) && $searchParams['date_filter_type'] == 'print_insert_date')) {
             $isPrintPublishedFlag = true;
         }
-        $qb = $this->addFilter($qb, $searchParams, $sorter, $container, $isPrintPublishedFlag, $isCountQuery, true);
+        
+        $isPaymentDateFlag = false;
+        if (in_array('payment_date_chk', $searchParams['report_columns']) || (isset($searchParams['date_filter_type']) && $searchParams['date_filter_type'] == 'payment_date')) {
+            $isPaymentDateFlag = true;
+        }
+        
+        $qb = $this->addFilter($qb, $searchParams, $sorter, $container, $isPrintPublishedFlag,  $isCountQuery, true, $isPaymentDateFlag);
 
         return $qb->getQuery();
     }
@@ -161,10 +167,12 @@ class AdReportDailyRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    private function addFilter($qb, $searchParams, $sorter, $container, $isPrintPublishedFlag = false, $isCountQuery = false, $isPrintPublishedGroupByAdFlag = false)
+    private function addFilter($qb, $searchParams, $sorter, $container, $isPrintPublishedFlag = false, $isCountQuery = false, $isPrintPublishedGroupByAdFlag = false, $isPaymentDateFlag = false)
     {
-        $qb->leftJoin('FaReportBundle:AdPrintInsertDateReportDaily', AdPrintInsertDateReportDailyRepository::ALIAS, 'WITH', AdPrintInsertDateReportDailyRepository::ALIAS . '.ad_report_daily_id = ' . self::ALIAS . '.id');
-
+        if ($isPrintPublishedFlag) {
+            $qb->leftJoin('FaReportBundle:AdPrintInsertDateReportDaily', AdPrintInsertDateReportDailyRepository::ALIAS, 'WITH', AdPrintInsertDateReportDailyRepository::ALIAS . '.ad_report_daily_id = ' . self::ALIAS . '.id');
+        }
+        
         // filter for admin user email.
         if (isset($searchParams['admin_user_email']) && $searchParams['admin_user_email']) {
             $qb->andWhere(self::ALIAS . '.admin_user_email = :admin_user_email')
@@ -199,6 +207,8 @@ class AdReportDailyRepository extends EntityRepository
             $qb->andWhere('(' . AdPrintInsertDateReportDailyRepository::ALIAS . '.print_insert_date BETWEEN ' . $finalStartDate . ' AND  ' . $finalEndDate . ')');
             $printPackageArray = CommonManager::getEntityRepository($container, 'FaPromotionBundle:Package')->getPrintPackagesArray();
             $qb->andWhere(self::ALIAS . '.package_id in (' . implode(',', $printPackageArray) . ')');
+        } elseif($isPaymentDateFlag) {
+            $qb->andWhere('(' . self::ALIAS . '.payment_date BETWEEN ' . $finalStartDate . ' AND  ' . $finalEndDate . ')');
         } elseif (isset($searchParams['date_filter_type'])) {
             $qb->andWhere('(' . self::ALIAS . '.' . $searchParams['date_filter_type'] . ' BETWEEN ' . $finalStartDate . ' AND  ' . $finalEndDate . ')');
         }
@@ -311,6 +321,7 @@ class AdReportDailyRepository extends EntityRepository
         $adReportFields['is_credit_used'] = 'Credit used?';
         $adReportFields['ip_addresses'] = 'Ip Address';
         $adReportFields['user_id'] = 'User email';
+        $adReportFields['payment_date'] = 'Payment Date';
         asort($adReportFields);
 
         return $adReportFields;
@@ -361,6 +372,7 @@ class AdReportDailyRepository extends EntityRepository
         $entityFields = array('status_id', 'category_id', 'town_id', 'county_id', 'print_edition_ids', 'role_id', 'user_id', 'ad_id');
         $priceFields = array('total_revenue_gross', 'total_revenue_net', 'print_revenue_gross', 'print_revenue_net', 'online_revenue_gross', 'online_revenue_net', 'shop_package_revenue', 'ad_price');
         $ucFirstFields = array('payment_method');
+        $dateTimeFields = array('payment_date');
 
         $objRepoUser = CommonManager::getEntityRepository($container, 'FaUserBundle:User');
         $objRepoAd = CommonManager::getEntityRepository($container, 'FaAdBundle:Ad');
@@ -445,6 +457,8 @@ class AdReportDailyRepository extends EntityRepository
                     if ($value) {
                         if (in_array($key, $dateFields)) {
                             $fieldValueArray[$key] = CommonManager::formatDate($value, $container, \IntlDateFormatter::SHORT);
+                        } elseif (in_array($key, $dateTimeFields)) {
+                            $fieldValueArray[$key] = date('d/m/Y, H:i:s', $value);
                         } else {
                             $fieldValueArray[$key] = $value;
                         }

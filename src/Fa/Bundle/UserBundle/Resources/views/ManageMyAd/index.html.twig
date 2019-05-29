@@ -179,7 +179,7 @@
     }
 
 
-     $('#manage-my-ads-list-only').on('click','.ajaxboost_your_ad', function(e)
+     $('#manage-my-ads-list-only').on('click','.ajaxboost_your_ad', function(e) 
         {
             var boost_value = 1;
             var elem_id = $(this).attr('id');
@@ -265,7 +265,7 @@
             });
         }
     {% endif %}
-
+    
     $(document).ready(function() {
     	{% if showCompetitionPopup is defined and showCompetitionPopup %}
     	    enterInCompetition();
@@ -282,15 +282,15 @@
 <script>
 {% if ga_transaction is defined and ga_transaction.PAYMENT_ID is defined %}
     ga('require', 'ecommerce');
-
+    
     {% if getTranscationJs is defined %}
     {{ getTranscationJs | raw }}
     {% endif %}
-
+    
     {% if getItemJs is defined %}
     {{ getItemJs | raw }}
     {% endif %}
-
+    
     ga('ecommerce:send');
     $.ajax({
         type: "POST",

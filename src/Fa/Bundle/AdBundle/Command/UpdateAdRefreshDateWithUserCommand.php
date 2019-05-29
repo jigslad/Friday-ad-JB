@@ -130,7 +130,6 @@ EOF
 
         $ads = $qb->getQuery()->getResult();
 
-
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
         
         $memoryLimit = '';

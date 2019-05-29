@@ -106,6 +106,8 @@ class PaypalCheckoutController extends CoreController
             return $redirectResponse;
         }
 
+        $this->container->get('session')->set('setWebMatchPixels', 'false');
+
         $loggedinUser = $this->getLoggedInUser();
         $cart         = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container);
         $cartDetails  = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());

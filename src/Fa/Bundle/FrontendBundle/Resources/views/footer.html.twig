@@ -10,6 +10,10 @@
     <div class="row">
         {{ render(controller('FaEntityBundle:Category:renderFooterCategories', {'location': (currentRoute == 'listing_page' ? app.request.get('location') : null), 'searchParams': searchParams})) }}
         <div class="large-6 columns">
+        	{% if app.request.attributes.get('_route') != 'my_account_newsletter'  and app.request.attributes.get('_route') != 'newsletter_feedback' and app.request.attributes.get('_route') != 'newsletter_feedback_success' %}
+            	<div class="clearfix"></div>
+                {{ render(controller('FaUserBundle:Newsletter:footerNewsletter')) }}
+            {% endif %}           
             <h6 class="footer-head">{{ 'Find us on'|trans({}, 'frontend-footer') }}:</h6>
             <div class="footer-icons">
                 <a href="{{container.getParameter('fa.footer.facebook.page.link')}}" class="facebook" target="_blank" title="{{ 'Facebook'|trans({}, 'frontend-footer') }}">{{ 'Facebook'|trans({}, 'frontend-footer') }}</a>

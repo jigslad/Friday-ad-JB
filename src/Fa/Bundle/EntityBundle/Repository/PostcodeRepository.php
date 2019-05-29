@@ -55,11 +55,11 @@ class PostcodeRepository extends BaseEntityRepository
         $qb = $this->getBaseQueryBuilder();
 
         if ($partial_match) {
-            $qb->where(self::ALIAS.".post_code_c LIKE :post_code");
+            $qb->where(self::ALIAS.".post_code_c LIKE :post_code or ".self::ALIAS.".post_code LIKE :post_code");
             $qb->setParameter('post_code', $location.'%');
             $qb->setMaxResults(1);
         } else {
-            $qb->where(self::ALIAS.".post_code_c = :post_code");
+            $qb->where(self::ALIAS.".post_code_c = :post_code or ".self::ALIAS.".post_code = :post_code");
             $qb->setParameter('post_code', $location);
         }
 

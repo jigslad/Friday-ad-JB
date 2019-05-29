@@ -116,6 +116,40 @@
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
     {{ include('FaFrontendBundle::fa-main-css.html.twig') }}
+    
+    {{ include('FaFrontendBundle::main-override-css.html.twig') }}
+    
+    {% set showAdultCss = 0 %}
+    {% set assignedCategoryId = 0 %}
+    {% if app.request.cookies.has('is_over_18') %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null  %}
+        	{% set assignedCategoryId = searchParams.item__category_id %}
+    	{% elseif currentRoute == 'ad_detail_page' and app.request.get('category_string') %}
+    		{% set assignedCategoryId = fetch_repository('FaEntityBundle:Category').getIdBySlug(app.request.get('category_string'), fetch_container_instance()) %}
+    	{% elseif (currentRoute == 'show_business_profile_page' or currentRoute == 'show_business_user_ads') and app.request.get('profileNameSlug') %}
+             {% set objUserSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'slug':app.request.get('profileNameSlug')}) %}
+             {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}
+    	{% endif %}
+    	
+    	{% if assignedCategoryId!=0 %}
+        	{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(assignedCategoryId, false, fetch_container_instance()) %}
+            {% set catCnt = 0 %}
+            {% if categoryPath|length %}
+                {% for categoryId, categoryName in categoryPath %}
+                    {% if catCnt == 0 %}
+                        {% if (categoryId == ADULT_CATEGORY_ID) %}
+                            {% set showAdultCss = 1 %}
+                        {% endif %}
+                    {% endif %}
+                    {% set catCnt = catCnt + 1 %}
+                {% endfor %}
+            {% endif %}
+        {% endif %}	
+    {% endif %}
+    
+    {% if showAdultCss==1 %}
+    	 {{ include('FaFrontendBundle::adult-css.html.twig') }}
+    {% endif %}
   
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
@@ -206,6 +240,24 @@
                     </div>
                 </div>
             {% endif %}
+        {% endif %}
+
+        {% if app.user is not defined or app.user is null %}
+            {{ container.get('session').set('setWebMatchPixels', 'false') }}
+
+        {% elseif container.get('session').get('setWebMatchPixels') == 'false' %}
+
+            {{ container.get('session').set('setWebMatchPixels', 'true') }}
+
+            {% set sha1_hashed_email = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getShaHashedValue', [app.user.getEmail()])  %}
+            <iframe name="_rlcdn" width=0 height=0 frameborder=0 src="https://ejp.rlcdn.com/709040.html?s={{ sha1_hashed_email }}"></iframe>
+
+            {% set md5_hashed_email = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getMd5HashedValue', [app.user.getEmail()]) %}
+            <iframe name="_rlcdn" width=0 height=0 frameborder=0 src="https://ejp.rlcdn.com/709040.html?m={{ md5_hashed_email }}"></iframe>
+
+            {% set sha256_hashed_email = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getSha256HashedValue', [app.user.getEmail()]) %}
+            <iframe name="_rlcdn" width=0 height=0 frameborder=0 src="https://ejp.rlcdn.com/709040.html?s256={{ sha256_hashed_email }}"></iframe>
+
         {% endif %}
 
         <section>

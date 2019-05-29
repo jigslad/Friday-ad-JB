@@ -231,7 +231,8 @@ EOF
         $adIdArray     = array();
         $adUserIdArray = array();
         $adminUserIdArray = array();
-        list($startDate, $endDate) = $this->getDateInTimeStamp($date);
+        list($startDate, $endDate) = $this->getDateInTimeStamp($date,$action);
+        
         foreach ($ads as $ad) {
             $adIdArray[]     = $ad['id'];
             $adUserIdArray[$ad['id']] = $ad['user_id'];
@@ -258,7 +259,7 @@ EOF
             $ipAddresses        = $this->entityManager->getRepository('FaAdBundle:AdIpAddress')->getIpAddressesByAdIds($adIdArray);
 
             $insertSql = 'INSERT INTO '.$this->historyDbName.'.'.$adReportDailyTableName.
-            '(`ad_id`, `user_id`, `ad_created_at`, `print_insert_date`, `published_at`, `is_edit`, `is_renewed`, `is_expired`, `expires_at`, `expired_at`, `status_id`, `category_id`, `postcode`, `town_id`, `county_id`, `print_edition_ids`, `source`, `source_latest`, `role_id`, `no_of_photos`, `total_revenue_gross`, `print_revenue_gross`, `online_revenue_gross`, `total_revenue_net`, `print_revenue_net`, `online_revenue_net`, `package_id`, `package_name`, `package_sr_no`, `duration_print`, `duration_online`, `shop_package_id`, `shop_package_name`, `shop_package_revenue`, `created_at`, `renewed_at`, `edited_at`, `admin_user_email`, `payment_method`, `ad_price`, `skip_payment_reason`, `is_discount_code_used`, `phones`, `is_credit_used`, `credit_value`, `ti_ad_id`, `ip_addresses`,`is_paa_lite`) VALUES';
+            '(`ad_id`, `user_id`, `ad_created_at`, `print_insert_date`, `published_at`, `is_edit`, `is_renewed`, `is_expired`, `expires_at`, `expired_at`, `status_id`, `category_id`, `postcode`, `town_id`, `county_id`, `print_edition_ids`, `source`, `source_latest`, `role_id`, `no_of_photos`, `total_revenue_gross`, `print_revenue_gross`, `online_revenue_gross`, `total_revenue_net`, `print_revenue_net`, `online_revenue_net`, `package_id`, `package_name`, `package_sr_no`, `duration_print`, `duration_online`, `shop_package_id`, `shop_package_name`, `shop_package_revenue`, `created_at`, `renewed_at`, `edited_at`, `admin_user_email`, `payment_method`, `ad_price`, `skip_payment_reason`, `is_discount_code_used`, `phones`, `is_credit_used`, `credit_value`, `ti_ad_id`, `ip_addresses`,`is_paa_lite`,`payment_date`) VALUES';
 
             foreach ($ads as $ad) {
                 $isNew     = 0;
@@ -281,12 +282,16 @@ EOF
                 $adUserPhoneDetails = $this->getAdUserPhoneDetails($userPhoneDetails, $ad);
                 $userRole  = $this->entityManager->getRepository('FaUserBundle:User')->getUserRole($ad['user_id'], $this->getContainer());
                 $userRoleId = null;
+                $paymentDate = null;
+                
                 $packageId = ($adUserPackage ? $adUserPackage['package_id'] : 0);
                 $packageSrNo = ($adUserPackage ? $adUserPackage['package_sr_no'] : null);
+                
                 if (!$packageSrNo) {
                     $packageSrNo = 8;
                 }
-
+               
+                
                 $packageName = ($adUserPackage ? $packageSrNo.' ('.($adUserPackage['package_text'] ? $adUserPackage['package_text'] : 'Other Package').')' : null);
                 $shopPackageId = (isset($adUserShopPackages[$adUserIdArray[$ad['id']]]) ? $adUserShopPackages[$adUserIdArray[$ad['id']]]['package_id'] : 0);
                 $shopPackageName = (isset($adUserShopPackages[$adUserIdArray[$ad['id']]]) ? $adUserShopPackages[$adUserIdArray[$ad['id']]]['package_sr_no'].' ('.$adUserShopPackages[$adUserIdArray[$ad['id']]]['package_text'].')' : null);
@@ -347,7 +352,9 @@ EOF
                 if ($ad['source']=='paa_lite') {
                     $isPaaLite = 1;
                 }
-
+                
+                $paymentDate = ($adPayment && $adPayment['payment_method']!= 'free')  ? $adPayment['created_at'] : null;
+                
                 if ($adUserPackage && $adPayment['created_at'] && $adPayment['created_at'] >= $startDate && $adPayment['created_at'] <= $endDate && ($isNew || $isRenewed || $action == 'all')) {
                     $paymentMethod     = $adPayment['payment_method'];
                     if ($adPayment['skip_payment_reason']) {
@@ -369,7 +376,8 @@ EOF
                         }
 
                         $paymentTransactionDetailValue = array();
-
+                        
+                        
                         try {
                             $paymentTransactionDetailValue = unserialize($adPayment['payment_trans_detail_value']);
                         } catch (\Exception $e) {
@@ -407,12 +415,13 @@ EOF
                 
                 $ll = $this->historyEntityManager->getConnection()->quote(serialize($creditUsedValue));
                 $ll = str_replace("'", "", $ll);
-                $insertSql .= '("'.intval($ad['id']).'", "'.intval($ad['user_id']).'", "'.intval($ad['created_at']).'", "'.intval($printInsertDate).'", "'.intval($ad['published_at']).'", "'.$isEdit.'", "'.$isRenewed.'", "'.$isExpired.'", "'.($ad['expires_at'] && !$isExpired ? intval($ad['expires_at']) : 0).'", "'.($ad['expires_at'] && $isExpired ? $ad['expires_at'] : 0).'", "'.$ad['status_id'].'", "'.$ad['category_id'].'", "'.$postCode.'", "'.intval($townId).'", "'.intval($countyId).'", "'.implode(',', $printEditionIds).'", "'.$source.'", "'.$sourceLatest.'", "'.intval($userRoleId).'", "'.intval($adImageCnt).'", "'.$totalRevenueGross.'", "'.$printRevenueGross.'", "'.$onlineRevenueGross.'", "'.$totalRevenueNet.'", "'.$printRevenueNet.'", "'.$onlineRevenueNet.'", "'.intval($packageId).'", "'.$packageName.'", "'.$packageSrNo.'", "'.intval($durationPrint).'", "'.$durationOnline.'", "'.intval($shopPackageId).'", "'.$shopPackageName.'", "'.$shopPackageRevenue.'", '.($action == 'all' ? time() : ($date ? strtotime($date) : (strtotime(date('Y-m-d'))- 24*60*60))).', "'.intval($ad['renewed_at']).'", "'.intval($ad['edited_at']).'", "'.$adminUserEmail.'", "'.$paymentMethod.'", "'.($ad['ad_price']?$ad['ad_price']:0).'", "'.$skipPaymentReason.'", "'.$isDiscountCodeUsed.'", "'.$adUserPhoneDetails.'", "'.$isCreditUsed.'", "'.$ll.'", "'.intval($ad['ti_ad_id']).'", "'.$ipAddressesStr.'", "'.$isPaaLite.'"), ';
+                $insertSql .= '("'.intval($ad['id']).'", "'.intval($ad['user_id']).'", "'.intval($ad['created_at']).'", "'.intval($printInsertDate).'", "'.intval($ad['published_at']).'", "'.$isEdit.'", "'.$isRenewed.'", "'.$isExpired.'", "'.($ad['expires_at'] && !$isExpired ? intval($ad['expires_at']) : 0).'", "'.($ad['expires_at'] && $isExpired ? $ad['expires_at'] : 0).'", "'.$ad['status_id'].'", "'.$ad['category_id'].'", "'.$postCode.'", "'.intval($townId).'", "'.intval($countyId).'", "'.implode(',', $printEditionIds).'", "'.$source.'", "'.$sourceLatest.'", "'.intval($userRoleId).'", "'.intval($adImageCnt).'", "'.$totalRevenueGross.'", "'.$printRevenueGross.'", "'.$onlineRevenueGross.'", "'.$totalRevenueNet.'", "'.$printRevenueNet.'", "'.$onlineRevenueNet.'", "'.intval($packageId).'", "'.$packageName.'", "'.$packageSrNo.'", "'.intval($durationPrint).'", "'.$durationOnline.'", "'.intval($shopPackageId).'", "'.$shopPackageName.'", "'.$shopPackageRevenue.'", '.($action == 'all' ? time() : ($date ? strtotime($date) : (strtotime(date('Y-m-d'))- 24*60*60))).', "'.intval($ad['renewed_at']).'", "'.intval($ad['edited_at']).'", "'.$adminUserEmail.'", "'.$paymentMethod.'", "'.($ad['ad_price']?$ad['ad_price']:0).'", "'.$skipPaymentReason.'", "'.$isDiscountCodeUsed.'", "'.$adUserPhoneDetails.'", "'.$isCreditUsed.'", "'.$ll.'", "'.intval($ad['ti_ad_id']).'", "'.$ipAddressesStr.'", "'.$isPaaLite.'", "'.intval($paymentDate).'"), ';
                 
                 //$insertSql .= '("'.$ad['id'].'", "'.$ad['user_id'].'", "'.$ad['created_at'].'", "'.$printInsertDate.'", "'.$ad['published_at'].'", "'.$isEdit.'", "'.$isRenewed.'", "'.$isExpired.'", "'.($ad['expires_at'] && !$isExpired ? $ad['expires_at'] : null).'", "'.($ad['expires_at'] && $isExpired ? $ad['expires_at'] : null).'", "'.$ad['status_id'].'", "'.$ad['category_id'].'", "'.$postCode.'", "'.$townId.'", "'.$countyId.'", "'.implode(',', $printEditionIds).'", "'.$source.'", "'.$sourceLatest.'", "'.$userRoleId.'", "'.$adImageCnt.'", "'.$totalRevenueGross.'", "'.$printRevenueGross.'", "'.$onlineRevenueGross.'", "'.$totalRevenueNet.'", "'.$printRevenueNet.'", "'.$onlineRevenueNet.'", "'.$packageId.'", "'.$packageName.'", "'.$packageSrNo.'", "'.$durationPrint.'", "'.$durationOnline.'", "'.$shopPackageId.'", "'.$shopPackageName.'", "'.$shopPackageRevenue.'", '.($action == 'all' ? time() : ($date ? strtotime($date) : (strtotime(date('Y-m-d'))- 24*60*60))).', "'.$ad['renewed_at'].'", "'.$ad['edited_at'].'", "'.$adminUserEmail.'", "'.$paymentMethod.'", "'.$ad['ad_price'].'", "'.$skipPaymentReason.'", "'.$isDiscountCodeUsed.'", "'.$adUserPhoneDetails.'", "'.$isCreditUsed.'", "'.mysqli::escape_string(serialize($creditUsedValue)).'", "'.$ad['ti_ad_id'].'", "'.$ipAddressesStr.'", "'.$isPaaLite.'"), ';
             }
 
             $insertSql = trim($insertSql, ', ');
+                      
             $this->executeRawQuery($insertSql, $this->historyEntityManager);
 
             $this->entityManager->getRepository('FaAdBundle:AdIpAddress')->deleteRecordsByAdIds($adIdArray);
@@ -458,7 +467,7 @@ EOF
             ->select('COUNT('.AdRepository::ALIAS.'.id)');
 
         if ($action == 'beforeoneday' || $date) {
-            list($startDate, $endDate) = $this->getDateInTimeStamp($date);
+            list($startDate, $endDate) = $this->getDateInTimeStamp($date,$action);
             $query->andWhere('('.AdRepository::ALIAS.'.created_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.published_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.edited_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.expires_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.renewed_at BETWEEN '.$startDate.' AND  '.$endDate.')');
         } elseif ($action == 'all') {
             $query->andWhere(AdRepository::ALIAS.'.status = '.EntityRepository::AD_STATUS_LIVE_ID);
@@ -489,7 +498,7 @@ EOF
         ->setFirstResult($offset);
 
         if ($action == 'beforeoneday' || $date) {
-            list($startDate, $endDate) = $this->getDateInTimeStamp($date);
+            list($startDate, $endDate) = $this->getDateInTimeStamp($date,$action);
             $query->andWhere('('.AdRepository::ALIAS.'.created_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.published_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.edited_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.expires_at BETWEEN '.$startDate.' AND  '.$endDate.') OR ('.AdRepository::ALIAS.'.renewed_at BETWEEN '.$startDate.' AND  '.$endDate.')');
         } elseif ($action == 'all') {
             $query->andWhere(AdRepository::ALIAS.'.status = '.EntityRepository::AD_STATUS_LIVE_ID);
@@ -507,11 +516,14 @@ EOF
      *
      * @return array
      */
-    private function getDateInTimeStamp($date)
+    private function getDateInTimeStamp($date,$action)
     {
         if ($date) {
             $startDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', strtotime($date)));
             $endDate   = CommonManager::getTimeStampFromEndDate(date('Y-m-d', strtotime($date)));
+        } elseif ($action=='all') {
+            $startDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', strtotime('2015-01-01')));
+            $endDate   = CommonManager::getTimeStampFromEndDate(date('Y-m-d', (strtotime(date('Y-m-d'))- 24*60*60)));
         } else {
             $startDate = CommonManager::getTimeStampFromStartDate(date('Y-m-d', (strtotime(date('Y-m-d'))- 24*60*60)));
             $endDate   = CommonManager::getTimeStampFromEndDate(date('Y-m-d', (strtotime(date('Y-m-d'))- 24*60*60)));
