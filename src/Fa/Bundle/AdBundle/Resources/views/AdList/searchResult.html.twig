@@ -440,7 +440,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     	{% set displayBusinessExposureSingleBlock = 1 %}
                     {% endif %}
                     {% if displayBusinessExposureBlock ==1 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %} 
-                        {{ include('FaAdBundle:AdList:businessExposureSliderBlock.html.twig', {'blockposition': realAdCnt }) }}
+                        {{ include('FaAdBundle:AdList:businessExposureSliderBlock.html.twig', {'blockposition': adCount }) }}
                 	{% endif %}
                 	{% if displayBusinessExposureSingleBlock ==1 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %} 
                         {{ include('FaAdBundle:AdList:businessExposureSingleBlock.html.twig') }}
