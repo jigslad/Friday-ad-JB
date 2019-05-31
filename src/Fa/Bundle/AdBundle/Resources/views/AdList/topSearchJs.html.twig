@@ -208,7 +208,6 @@
     });
 //]]>
 </script>
-
 {#{ include('FaCoreBundle::autoSuggestField.html.twig', {'field' : '#fa_top_search_item__location', 'jsonField' : '#fa_top_search_item__location_json', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'maximumSelectionSize': 1, 'selectOnBlur': 'true'}) }#}
 {% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}
     {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_top_search_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}

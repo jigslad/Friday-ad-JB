@@ -2143,10 +2143,10 @@ class AdListController extends CoreController
         $page                 = 1;
         $recordsPerPage       = 3;
         $data['query_sorter'] = array();
-        $keywords = null;
+        $keywords = null; 
         
         $data['query_filters']['item']['status_id']   = EntityRepository::AD_STATUS_LIVE_ID;
-        if (count($searchParams)) {
+        if (!empty($searchParams)) {
             $data['query_filters']  = (isset($searchParams['query_filters']) ? $searchParams['query_filters'] : array());
             if(isset($searchParams['query_filters']['item']['distance'])) {
                 $data['query_filters']['item']['distance']=200;

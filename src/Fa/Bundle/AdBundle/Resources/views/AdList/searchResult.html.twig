@@ -363,8 +363,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             {% set adCount = 0 %}
             {% set bannerStatus = true %}
             {% set busUserIndex = 0 %}
-            
-             
+                         
             {% if pagination.getNbResults() %}
                 {% set adFavoriteRepository   = fetch_repository('FaAdBundle:AdFavorite') %}
                 {% set adRepository   = fetch_repository('FaAdBundle:Ad') %}

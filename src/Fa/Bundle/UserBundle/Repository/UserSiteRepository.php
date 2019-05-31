@@ -60,7 +60,6 @@ class UserSiteRepository extends EntityRepository
             $deleteManager->delete($userSite);
         }
     }
-
     /**
      * Get user site table name.
      *

@@ -992,8 +992,7 @@ class AdPostType extends AbstractType
         $form->add('area', HiddenType::class, array(
             'mapped' => false,
             'data' => $areaId
-        ));
-        
+        ));        
         // autocomplete text field for location Area
         $fieldOptionsForArea = array(
             'mapped' => false,

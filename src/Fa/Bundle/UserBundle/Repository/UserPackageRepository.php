@@ -643,7 +643,6 @@ class UserPackageRepository extends EntityRepository
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result['is_auto_renew'];
     }
-
     /**
      * Check User Has Boost Package by userId.
      *

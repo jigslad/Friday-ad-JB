@@ -36,8 +36,7 @@
                                 </div>
                             </div>
                             
-                            <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'><h2 class="text-center">{{businessUserDetail['user_name']}}</h2></a>
-                            
+                            <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'><h2 class="text-center">{{businessUserDetail['user_name']}}</h2></a>                            
                             <div class="exposure-rating">
                             {% if (businessUserDetail and businessUserDetail['user_rating'] and businessUserDetail['user_rating'] > 0) %}
                               {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': businessUserDetail['user_rating']}) }}

@@ -16,8 +16,7 @@
                         </div>
                     </div>
                     
-                    <h2 class="text-center">{{profileUserDetail['user_name']}}</h2>
-                    
+                    <h2 class="text-center">{{profileUserDetail['user_name']}}</h2>                   
                     <div class="exposure-rating">
                     {% if (profileUserDetail and profileUserDetail['user_rating'] and profileUserDetail['user_rating'] > 0) %}
                       {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': profileUserDetail['user_rating']}) }}
