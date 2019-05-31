@@ -639,7 +639,6 @@ class UserPackageRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder(self::ALIAS)->select(self::ALIAS.'.is_auto_renew')->andWhere(self::ALIAS.'.status = :status')->andWhere(self::ALIAS.'.user = :userId')
         ->setParameter('status', 'A')->setParameter('userId', $userId)->orderBy(self::ALIAS.'.id', 'DESC')->setMaxResults(1);
-        
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result['is_auto_renew'];
     }

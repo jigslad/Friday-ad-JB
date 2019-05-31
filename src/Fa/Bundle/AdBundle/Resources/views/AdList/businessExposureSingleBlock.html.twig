@@ -40,8 +40,8 @@
                         {% if (businessUserDetail and businessUserDetail['user_rating'] and businessUserDetail['user_rating'] > 0) %}
                           {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': businessUserDetail['user_rating']}) }}
                         {% endif %}
-                        </div>
-                       <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
+                        </div>                        
+                        <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
                     </div>
                     <div class="medium-19 large-19 columns hide-for-small-only">                    
                         <div class="bus-abt-us-div">

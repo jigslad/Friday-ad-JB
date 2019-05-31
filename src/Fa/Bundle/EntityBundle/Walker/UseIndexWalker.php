@@ -16,4 +16,3 @@ class UseIndexWalker extends SqlWalker
         return preg_replace('/( INNER JOIN| LEFT JOIN|$)/', sprintf(' USE INDEX(%s)\1', $index), $sql, 1);
     }
 }
-
