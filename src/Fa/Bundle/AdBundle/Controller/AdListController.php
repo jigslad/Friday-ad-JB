@@ -431,9 +431,9 @@ class AdListController extends CoreController
                 $otherMatchingData['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
             }
             $this->get('fa.solrsearch.manager')->init('ad', $keywords, $otherMatchingData, 1, 1, 0, true);
-            //echo '<br><br>otherMacthqry===<br>';
+            
             $otherMatchingSolrResponse = $this->get('fa.solrsearch.manager')->getSolrResponse();
-            //die;
+            
             $otherMatchingResult      = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($otherMatchingSolrResponse);
             $otherMatchingResultCount = $this->get('fa.solrsearch.manager')->getSolrResponseDocsCount($otherMatchingSolrResponse);
 
@@ -2143,18 +2143,25 @@ class AdListController extends CoreController
         $page                 = 1;
         $recordsPerPage       = 3;
         $data['query_sorter'] = array();
-
+        $keywords = null;
+        $data['query_filters']['item']['status_id']   = EntityRepository::AD_STATUS_LIVE_ID;
         if (count($searchParams)) {
-            $keywords               = (isset($searchParams['search']['keywords']) ? $searchParams['search']['keywords'] : null);
+            //$keywords               = (isset($searchParams['search']['keywords']) ? $searchParams['search']['keywords'] : null);
             $data['query_filters']  = (isset($searchParams['query_filters']) ? $searchParams['query_filters'] : array());
-            if (strlen($keywords)) {
+            
+            /*if (strlen($keywords)) {
                 $data['query_sorter']['item']['score'] = array('sort_ord' => 'desc', 'field_ord' => 1);
             } else {
                 $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
-            }
+            }*/
+            if(isset($searchParams['query_filters']['item']['distance'])) {
+                $data['query_filters']['item']['distance']=200;
+                $data['query_filters']['item']['location']= $searchParams['search']['item__location'].'|200';
+                $data['query_sorter']['item']['geodist'] = array('sort_ord' => 'asc', 'field_ord' => 1);
+            } else {
+                $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+            } 
         } else {
-            $keywords = null;
-            $data['query_filters']['item']['status_id']   = EntityRepository::AD_STATUS_LIVE_ID;
             $data['query_sorter']['item']['weekly_refresh_published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
         }
 

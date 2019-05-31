@@ -169,7 +169,6 @@ class UserSiteRepository extends EntityRepository
 
         $document = $this->addField($document, UserShopDetailSolrFieldMapping::SHOP_PACKAGE_PURCHASED_AT, $userPackagePurchasedAt);
         $adsCount = $this->_em->getRepository('FaAdBundle:Ad')->getActiveAdCountForUser($user->getId());
-        var_dump($adsCount);
         $document = $this->addField($document, UserShopDetailSolrFieldMapping::USER_LIVE_ADS_COUNT, $adsCount);
         
         

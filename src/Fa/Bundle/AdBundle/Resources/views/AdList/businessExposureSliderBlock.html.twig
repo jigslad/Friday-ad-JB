@@ -9,7 +9,18 @@
     	{% if businessExposureUserAds is defined and businessUserId is defined and businessUserDetail is defined and businessUserDetail|length %}
             {% set userProfileUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(businessUserDetail['user_id']) %}
             {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), businessUserDetail['company_logo'], businessUserDetail['user_id'], null, null, true, true, businessUserDetail['status_id'], businessUserDetail['user_name']]) %}
-            {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}            
+            {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
+            {% set profileLabel = 'Visit profile'|trans({}, 'frontend-profile-exposure') %}
+            {% if businessUserDetail['business_category_id'] is defined and businessUserDetail['business_category_id'] is not null %}
+                {% if businessUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')}  %}
+                    {% set profileLabel = 'Visit shop'|trans({}, 'frontend-profile-exposure') %}
+                {% elseif businessUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID')}  %}
+                    {% set profileLabel = 'Visit dealership'|trans({}, 'frontend-profile-exposure') %}
+                {% elseif businessUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')}  %}
+                    {% set profileLabel = 'Visit agency'|trans({}, 'frontend-profile-exposure') %}
+                {% endif %}
+            {% endif %}
+            {% set gaEventLabel = businessUserDetail['user_name'] ~ ' - Business ad' %}            
                 <div class="list-featured-bz item" data-equalizer-watch>
                     <div class="row">
                         <div class="small-24 medium-24 large-24 columns">
@@ -19,28 +30,17 @@
                             {% endif %}
                             <div class="exposure-logo">
                                 <div class="exposure-logo-thumb">
-                                    {{userCompanyLogo|raw}}
+                                    <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>{{userCompanyLogo|raw}}</a>
                                 </div>
                             </div>
                             
-                            <h2 class="text-center">{{businessUserDetail['user_name']}}</h2>
+                            <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'><h2 class="text-center">{{businessUserDetail['user_name']}}</h2></a>
                             
                             <div class="exposure-rating">
                             {% if (businessUserDetail and businessUserDetail['user_rating'] and businessUserDetail['user_rating'] > 0) %}
                               {{ include('FaCoreBundle::showStarRating.html.twig', {'rating': businessUserDetail['user_rating']}) }}
                             {% endif %}
-                            </div>
-                            {% set profileLabel = 'Visit profile'|trans({}, 'frontend-profile-exposure') %}
-                            {% if businessUserDetail['business_category_id'] is defined and businessUserDetail['business_category_id'] is not null %}
-                                {% if businessUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID')}  %}
-                                    {% set profileLabel = 'Visit shop'|trans({}, 'frontend-profile-exposure') %}
-                                {% elseif businessUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID')}  %}
-                                    {% set profileLabel = 'Visit dealership'|trans({}, 'frontend-profile-exposure') %}
-                                {% elseif businessUserDetail['business_category_id'] in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID')}  %}
-                                    {% set profileLabel = 'Visit agency'|trans({}, 'frontend-profile-exposure') %}
-                                {% endif %}
-                            {% endif %}
-                            {% set gaEventLabel = businessUserDetail['user_name'] ~ ' - Business ad' %}
+                            </div>                           
                             <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
                         </div>
                         <div class="medium-19 large-19 columns hide-for-small-only">
@@ -68,9 +68,9 @@
                                         <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
                                             <a href="{{ adUrl }}" onClick='javascript:visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>
                                         {% if imagePath %}
-                                                <img class="lazyOwl" data-src="{{ imagePath }}" alt="{{ imageAltString }}"/>
+                                                <img class="lazyOwl" src="{{ imagePath }}" alt="{{ imageAltString }}"/>
                                             {% else %}
-                                                <img class="lazyOwl" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}"/>
+                                                <img class="lazyOwl" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}"/>
                                             {% endif %}
                                             </a>
                                         </div>

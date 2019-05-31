@@ -72,7 +72,11 @@ $(function() {
                     		$(areaId).val(ui.item.area_id);
                         }
 					
-                        $('#{{ submitFormAfterSelect }}').submit();
+                        {% if submitFormAfterSelect == 'fa_top_search' %}
+                                setTopSearchDistance();
+                        {% else %}
+                                $('#{{ submitFormAfterSelect }}').submit();
+                        {% endif %}
                     {% else %}  
                         {% if 'area' in field %}  
                         	if(ui.item.area_id != '') { 
@@ -288,6 +292,24 @@ $(document).ready(function(){
 function bindShowMapOnChangeLocationEvent()
 {
    $('#find_on_map').trigger('click');
+}
+
+function setTopSearchDistance() {
+    var catId = $('#fa_top_search_item__category_id').val();
+	var searchLocation = $('#fa_top_search_item__location').val();
+	searchLocation = (searchLocation)?searchLocation:2;
+    $.ajax({
+         type: "post",
+         dataType: "json",
+         url: "{{ path('fa_frontend_ajax_user_location') }}",
+         data: {'location': searchLocation, 'catId' : catId},
+         success: function(data) {
+             if (!$.isEmptyObject(data)) {
+            	$('#distance_slider').val(data.default_distance);
+                $('#fa_top_search_item__distance').val(data.default_distance);                 	
+             } 
+         }
+     });       
 }
 
 function bindShowMapOnChangeAreasEvent(formName) {
