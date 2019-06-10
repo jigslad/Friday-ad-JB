@@ -155,7 +155,7 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:auto-renew-subscription '.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:auto-renew-subscription '.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 
@@ -181,8 +181,9 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
     {
         $user_id  = $input->getOption('user_id');
         $entityManager         = $this->getContainer()->get('doctrine')->getManager();
+        $expiryDefaultDaysBeforeDate = strtotime('-28 day', strtotime(date('Y-m-d H:i:s')));
         $currentTime = $input->getOption('renew_date')?$input->getOption('renew_date'):date('Y-m-d');
-        
+                
         $querySql  = "SELECT * FROM ".$this->mainDbName.".user_package up WHERE up.status = 'A' AND up.is_auto_renew = 1";
         $querySql  .= " AND (date_format(up.expires_at,'%Y-%m-%d') = '".$currentTime."' or (CASE WHEN (up.updated_at > up.created_at) THEN ";
         $querySql  .= "(date_format(date_add(FROM_UNIXTIME(up.updated_at),INTERVAL 28 DAY),'%Y-%m-%d')  = '".$currentTime."') ELSE (date_format(date_add(FROM_UNIXTIME(up.created_at),INTERVAL 28 DAY),'%Y-%m-%d') = '".$currentTime."'";
@@ -206,16 +207,19 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
      * @return integer.
      */
     protected function getUserSubscriptionsCount($input)
-    {
-        $user_id  = $input->getOption('user_id');        
+    {   
+        $user_id  = $input->getOption('user_id');
         $entityManager         = $this->getContainer()->get('doctrine')->getManager();
+        $expiryDefaultDaysBeforeDate = strtotime('-28 day', strtotime(date('Y-m-d H:i:s')));
         $currentTime = $input->getOption('renew_date')?$input->getOption('renew_date'):date('Y-m-d');
-        
+                
         $querySql  = "SELECT count(up.user_id) as user_count FROM ".$this->mainDbName.".user_package up WHERE up.status = 'A' AND up.is_auto_renew = 1";
+        // $querySql  .= " AND (up.expires_at >= ".$currentTime." or (CASE WHEN (up.updated_at > up.created_at) THEN ";
+        // $querySql  .= "(up.updated_at  < ".$expiryDefaultDaysBeforeDate.") ELSE (up.created_at < ".$expiryDefaultDaysBeforeDate;
         $querySql  .= " AND (date_format(up.expires_at,'%Y-%m-%d') = '".$currentTime."' or (CASE WHEN (up.updated_at > up.created_at) THEN ";
         $querySql  .= "(date_format(date_add(FROM_UNIXTIME(up.updated_at),INTERVAL 28 DAY),'%Y-%m-%d')  = '".$currentTime."') ELSE (date_format(date_add(FROM_UNIXTIME(up.created_at),INTERVAL 28 DAY),'%Y-%m-%d') = '".$currentTime."'";
         $querySql  .= ") END))";
-       
+        
         if ($user_id != '') {
             $querySql  .= " AND up.user_id=".$user_id;
         }
