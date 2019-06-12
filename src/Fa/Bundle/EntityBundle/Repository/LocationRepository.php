@@ -71,6 +71,26 @@ class LocationRepository extends BaseEntityRepository
 
         return $objResources;
     }
+    
+    /**
+     * Get children by id.
+     *
+     * @param string $id
+     *
+     * @return object
+     */
+    public function getChildrenIdsById($id)
+    {
+        $query = $this->createQueryBuilder(self::ALIAS);
+        $query->where(self::ALIAS.'.parent = '.$id);
+        $childrens = $query->getQuery()->getArrayResult();
+        $childrenArray = array();
+        foreach ($childrens as $children) {
+            $childrenArray[] = $children['id'];
+        }
+        
+        return $childrenArray;
+    }
 
     /**
      * Get children key value array by parent id.

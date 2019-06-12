@@ -52,15 +52,26 @@ class AdReportAdminController extends CoreController implements ResourceAuthoriz
         $pagination = null;
         $data['search'] = array_filter($data['search']);
         $isCountQuery = false;
-
+        $townIds = array();
+        
         if (isset($data['search']['town_id'])) {
-            $townIds = array_filter($data['search']['town_id']);
-            if (count($townIds)) {
-                $data['search']['town_id'] = $townIds;
-            } else {
-                unset($data['search']['town_id']);
-            }
+            $townIds = array_filter($data['search']['town_id']);            
+        }elseif(isset($data['search']['county_id'])) {
+            $getTownIds = $this->getRepository('FaEntityBundle:Location')->getChildrenIdsById($data['search']['county_id']);
+            $townIds = array_filter($getTownIds);
+        } elseif(isset($data['search']['location_group__location_group_id'])) {
+            $getTownIds = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getChildrenIdsByIds($data['search']['location_group__location_group_id']);
+            $townIds = array_filter($getTownIds);    
         }
+        //echo 'getTownIds===<pre>';print_r($getTownIds);
+       //echo '<pre>';print_r($townIds); die;
+        
+        if (!empty($townIds)) {
+            $data['search']['town_id'] = $townIds;
+        } else {
+            unset($data['search']['town_id']);
+        }
+        
 
         if ($data['search']) {
             $form->submit($data['search']);
