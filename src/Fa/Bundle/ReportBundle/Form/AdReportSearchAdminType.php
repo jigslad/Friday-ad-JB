@@ -87,6 +87,7 @@ class AdReportSearchAdminType extends AbstractType
                         'Date posted' => 'ad_created_at',
                         'Date of last action' => 'created_at',
                         'Date of print insertion' => 'print_insert_date',
+                        'Payment date' => 'payment_date',
                     ),
                 )
             )
@@ -113,6 +114,16 @@ class AdReportSearchAdminType extends AbstractType
             ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 2))
             ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 3))
             ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 4))
+            ->add(
+                'location_group__location_group_id',
+                ChoiceType::class,
+                array(
+                    'multiple' => true,
+                    'required' => false,
+                    'label'    => 'Location Group',
+                    'choices' => array_flip($this->em->getRepository('FaEntityBundle:LocationGroup')->getLocationGroupsKeyValueArray()),
+                )
+            ) 
             ->addEventSubscriber(new AddDomicileChoiceFieldSubscriber($this->container, false, 'county_id', null, array('placeholder' => 'Select County')))
             ->addEventSubscriber(new AddTownChoiceFieldSubscriber($this->container, false, 'town_id', 'county_id', array('multiple' => true)))
             ->add(
@@ -182,6 +193,13 @@ class AdReportSearchAdminType extends AbstractType
                 CheckboxType::class,
                 array(
                     'label' => 'Only ads booked through Admin',
+                )
+            )
+            ->add(
+                'payment_date_chk',
+                CheckboxType::class,
+                array(
+                    'label' => 'Payment date',
                 )
             )
             ->addEventListener(FormEvents::SUBMIT, array($this, 'onSubmit'));

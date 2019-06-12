@@ -137,6 +137,40 @@ class LocationController extends CoreController
 
         return new Response();
     }
+    
+    /**
+     * Get ajax a location nodes in json format.
+     *
+     * @param Request $request Request instance
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxGetNodeJsonForLocationGroupByIdAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $nodeId = $request->get('id');
+            $locationGroupId = $request->get('locationGroupId');
+            $locationField = $request->get('locationField');
+            if ($nodeId) {
+                //$childrens     = $this->getRepository('FaEntityBundle:Location')->getChildrenKeyValueArrayByParentId($nodeId);
+                $childrenArray = array();
+                $locationGroupArray = array();
+                               
+                $locationGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getDomicilesTownsOrArrayByLocationGroupId($locationGroupId, $locationField);
+                
+                
+                //echo '<pre>locationIds'; print_r($locationGroupArray);
+                
+                foreach ($locationGroupArray as $id => $name) {
+                   $childrenArray[] = array('id' => $id, 'text' => $name);                    
+                }
+                
+                return new JsonResponse($childrenArray);
+            }
+        }
+        
+        return new Response();
+    }
 
     /**
      * Get towns with locality ajax action.

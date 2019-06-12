@@ -61,16 +61,24 @@
                     </div>
                 </div>
                     
+                <hr class="hr_margin">                
+               
+                <div class="row">
+                	<div class="large-4 columns" style="vertical-align:top;">
+                        {{ form_widget(form.location_group__location_group_id, {'attr': {'class':'form-control'}}) }}
+                    </div>
+                    <div class="large-4 columns">
+                        {{ form_widget(form.county_id, {'attr': {'class':'form-control'}}) }}
+                    </div>
+                    <div class="large-4 columns" style="width:33%;padding-right:18px">
+                        {{ form_widget(form.town_id, {'attr': {'class':'form-control'}}) }}
+                    </div>                        
+                </div>
+                               
                 <hr class="hr_margin">
                 
-                <div class="search_box">
+                 <div class="search_box">
                     <div class="row">
-                        <div class="large-3 columns" style="vertical-align:top;">
-                            {{ form_widget(form.county_id, {'attr': {'class':'form-control'}}) }}
-                        </div>
-                        <div class="large-3 columns">
-                            {{ form_widget(form.town_id, {'attr': {'class':'form-control'}}) }}
-                        </div>
                         <div class="large-3 columns">
                             {{ form_widget(form.print_edition_id, {'attr': {'class':'form-control', 'placeholder': 'Advert Reference'}}) }}
                         </div>
@@ -82,8 +90,10 @@
                             {{ form_widget(form.is_paa_lite, {'attr': {'class':'form-control'}}) }}
                             {{ form_label(form.is_paa_lite) }}
                         </div>
+                        <div class="large-6 columns"></div>
                     </div>
                 </div>
+                        
                 
                 <hr class="hr_margin">
 
@@ -235,6 +245,30 @@
             });
         }
     }
+
+    $("#fa_item_report_location_group__location_group_id").change(function(){
+        var data = {
+            id: $(this).val(),
+            locationGroupId: $(this).val(),
+            locationField: 'domicile'
+        };
+     
+        $.ajax({
+            type: 'post',
+            url: '{{ path("location_group_by_id_ajax_get_node_json") }}',
+            data: data,
+            success: function(data) {
+                var $county_selector = $('#fa_item_report_county_id');
+                var $town_selector = $('#fa_item_report_town_id');
+                $county_selector.html('');$town_selector.html('');
+                $county_selector.html('<option value="">Select County</option>');
+                $town_selector.html('<option value="">Select Town</option>');
+                for (var i=0, total = data.length; i < total; i++) {
+                    $county_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                }
+            }
+        });
+    });
     
     $("#fa_item_report_county_id").change(function(){
         var data = {
