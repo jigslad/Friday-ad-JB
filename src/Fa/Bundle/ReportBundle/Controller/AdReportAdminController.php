@@ -63,8 +63,6 @@ class AdReportAdminController extends CoreController implements ResourceAuthoriz
             $getTownIds = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getChildrenIdsByIds($data['search']['location_group__location_group_id']);
             $townIds = array_filter($getTownIds);    
         }
-        //echo 'getTownIds===<pre>';print_r($getTownIds);
-       //echo '<pre>';print_r($townIds); die;
         
         if (!empty($townIds)) {
             $data['search']['town_id'] = $townIds;

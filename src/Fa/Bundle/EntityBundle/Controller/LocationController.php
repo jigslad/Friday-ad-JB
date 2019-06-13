@@ -153,16 +153,23 @@ class LocationController extends CoreController
             $locationField = $request->get('locationField');
             if ($nodeId) {
                 //$childrens     = $this->getRepository('FaEntityBundle:Location')->getChildrenKeyValueArrayByParentId($nodeId);
-                $childrenArray = array();
-                $locationGroupArray = array();
+                $childrenArray  =  $domicileArray = $domicileGroupArray = array();
+                $townArray = $townGroupArray = array();
                                
-                $locationGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getDomicilesTownsOrArrayByLocationGroupId($locationGroupId, $locationField);
+                $domicileGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getDomicilesTownsOrArrayByLocationGroupId($locationGroupId, $locationField);
                 
-                
-                //echo '<pre>locationIds'; print_r($locationGroupArray);
-                
-                foreach ($locationGroupArray as $id => $name) {
-                   $childrenArray[] = array('id' => $id, 'text' => $name);                    
+                if(!empty($domicileGroupArray)) {
+                    $townGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getDomicilesTownsOrArrayByLocationGroupId($locationGroupId, 'town');
+                    foreach ($domicileGroupArray as $id => $name) {
+                        $domicileArray[] = array('id' => $id, 'text' => $name);                    
+                    }
+                    $childrenArray['domicile'] = $domicileArray;
+                    if(!empty($townGroupArray)) {
+                        foreach ($townGroupArray as $id => $name) {
+                            $townArray[] = array('id' => $id, 'text' => $name);
+                        }
+                        $childrenArray['town'] = $townArray;
+                    }
                 }
                 
                 return new JsonResponse($childrenArray);
