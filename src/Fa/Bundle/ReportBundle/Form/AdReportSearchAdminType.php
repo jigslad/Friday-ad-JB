@@ -118,13 +118,12 @@ class AdReportSearchAdminType extends AbstractType
                 'location_group__location_group_id',
                 ChoiceType::class,
                 array(
-                    'multiple' => true,
                     'required' => false,
                     'label'    => 'Location Group',
                     'choices' => array_flip($this->em->getRepository('FaEntityBundle:LocationGroup')->getLocationGroupsKeyValueArray()),
                 )
             ) 
-            ->addEventSubscriber(new AddDomicileChoiceFieldSubscriber($this->container, false, 'county_id', null, array('placeholder' => 'Select County')))
+            ->addEventSubscriber(new AddDomicileChoiceFieldSubscriber($this->container, false, 'county_id', null, array('multiple' => true, 'placeholder' => 'Select County')))
             ->addEventSubscriber(new AddTownChoiceFieldSubscriber($this->container, false, 'town_id', 'county_id', array('multiple' => true)))
             ->add(
                 'print_edition_id',

@@ -200,6 +200,9 @@ class LocationGroupLocationRepository extends BaseEntityRepository
             if ($location->getLocationDomicile() && $locationGroupType=='domicile') {
                 $retArray[$location->getLocationDomicile()->getId()] = $location->getLocationDomicile()->getName();
             }
+            if ($location->getLocationTown() && $locationGroupType=='town') {
+                $retArray[$location->getLocationTown()->getId()] = $location->getLocationTown()->getName();
+            }
         }
         return array_unique($retArray);
     }
