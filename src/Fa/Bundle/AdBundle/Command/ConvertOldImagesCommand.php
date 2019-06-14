@@ -30,6 +30,7 @@ use Gedmo\Sluggable\Util\Urlizer;
  * @author Janak Jadeja <janak@aspl.in>
  * @copyright 2014 Friday Media Group Ltd
  * @version v1.0
+ * @deprecated Command created in 2015. Not used now. Finish todos in code if this is to be used.
  */
 class ConvertOldImagesCommand extends ContainerAwareCommand
 {
@@ -111,6 +112,8 @@ class ConvertOldImagesCommand extends ContainerAwareCommand
                             }
 
                             $adImageManager = new AdImageManager($this->getContainer(), $image->getAd()->getId(), $hash, $imagePath);
+                            // todo need to change to upload direct to AmazonS3 if this function is correct.
+                            // Command not used anymore ? No need to make changes here.
                             $adImageManager->createThumbnail();
                             $adImageManager->createCropedThumbnail();
 
@@ -167,6 +170,7 @@ class ConvertOldImagesCommand extends ContainerAwareCommand
                                 }
 
                                 $adImageManager = new AdImageManager($this->getContainer(), $image->getAd()->getId(), $hash, $imagePath);
+                                // todo need to change to upload direct to AmazonS3 if this function is correct.
                                 $adImageManager->createThumbnail();
                                 $adImageManager->createCropedThumbnail();
 

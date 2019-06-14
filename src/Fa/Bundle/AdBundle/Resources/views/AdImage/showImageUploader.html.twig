@@ -163,7 +163,7 @@
                             $('{{ fileListId }}').html(decorateMessage(obj.error, 'alert'));
                         }
                         $('#maxfileremain').val(obj.imageLimitRemaining);
-                        {% if (formName is defined and formName is not null) %} 
+                        {% if (formName is defined and formName is not null) %}
                             $('#{{formName}}_photo_error').val(obj.adImgCount);
                         {% endif %}
                     },
@@ -244,7 +244,7 @@
                     $('{{ fileListId }}').html(decorateMessage(response.successMsg, 'success'));
                     $('#uploaded_images_div').html(response.images);
                     $('#maxfileremain').val(response.imageLimitRemaining);
-                    {% if (formName is defined and formName is not null) %} 
+                    {% if (formName is defined and formName is not null) %}
                         $('#{{formName}}_photo_error').val(response.adImgCount);
                     {% endif %}
                     makeImagesSortable();
@@ -277,9 +277,20 @@
                     $( "#crop_big_image" ).load(function() {
                         $('#crop_image').show();
                         var picture = $('#crop_big_image');
+                        // For handling vertical and horizontal images both, swap HxW based on image dimensions.
+                        // Earlier only horizontal images were handled by default.
+                        var imgW = $(picture).width();
+                        var imgH = $(picture).height();
+                        var gllW = 800;
+                        var gllH = 600;
+                        if(imgH > imgW){
+                            var tempW = gllW;
+                            gllW = gllH;
+                            gllH = tempW;
+                        }
                         picture.guillotine({
-                          width: 800,
-                          height: 600,
+                          width: gllW,
+                          height: gllH,
                           zoomStep: 0.2,
                           onChange: function(data, action){
                             data.scale = parseFloat(data.scale.toFixed(4));

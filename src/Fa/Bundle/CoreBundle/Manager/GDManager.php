@@ -1,6 +1,8 @@
 <?php
 namespace Fa\Bundle\CoreBundle\Manager;
 
+use \Exception;
+
 /**
  * sfGDAdapter provides a mechanism for creating thumbnail images.
  * @see http://www.php.net/gd
@@ -56,12 +58,12 @@ class GDManager
     
     /**
      *
-     * @param unknown $maxWidth
-     * @param unknown $maxHeight
-     * @param unknown $scale
-     * @param unknown $inflate
-     * @param unknown $quality
-     * @param unknown $options
+     * @param integer $maxWidth
+     * @param integer $maxHeight
+     * @param bool $scale
+     * @param bool $inflate
+     * @param integer $quality
+     * @param array $options
      * @throws Exception
      */
     public function __construct($maxWidth, $maxHeight, $scale, $inflate, $quality, $options)
@@ -79,8 +81,8 @@ class GDManager
     
     /**
      *
-     * @param unknown $thumbnail
-     * @param unknown $image
+     * @param ThumbnailManager $thumbnail
+     * @param string $image
      * @throws Exception
      * @return boolean
      */
@@ -118,9 +120,9 @@ class GDManager
     
     /**
      *
-     * @param unknown $thumbnail
-     * @param unknown $image
-     * @param unknown $mime
+     * @param ThumbnailManager $thumbnail
+     * @param string $image
+     * @param string $mime
      * @throws Exception
      * @return boolean
      */
@@ -148,8 +150,8 @@ class GDManager
     
     /**
      *
-     * @param unknown $thumbnail
-     * @param unknown $thumbDest
+     * @param ThumbnailManager $thumbnail
+     * @param string $thumbDest
      * @param string $targetMime
      */
     public function save($thumbnail, $thumbDest, $targetMime = null)
@@ -166,11 +168,12 @@ class GDManager
             $creator($this->thumb, $thumbDest);
         }
     }
-    
+
     /**
      *
-     * @param unknown $thumbnail
-     * @param string $targetMime
+     * @param ThumbnailManager $thumbnail
+     * @param string           $targetMime
+     * @return string
      */
     public function toString($thumbnail, $targetMime = null)
     {

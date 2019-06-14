@@ -27,6 +27,8 @@ use Fa\Bundle\ArchiveBundle\Repository\ArchiveAdImageRepository;
  * @author Gaurav Aggarwal <gaurav.aggarwal@fridaymediagroup.com>
  * @copyright 2018 Friday Media Group Ltd
  * @version 1.0
+ * @deprecated This command was used already by running it manually. But not all the images were deleted from NFS.
+ * Hence new command [DeleteOrphanAdImagesCommand] is written with entirely different logic to delete unwanted images from NFS.
  */
 class DeleteNFSImagesCommand extends ContainerAwareCommand
 {
