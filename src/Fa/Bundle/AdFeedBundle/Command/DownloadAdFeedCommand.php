@@ -57,7 +57,7 @@ class DownloadAdFeedCommand extends ContainerAwareCommand
         $type           = $input->getOption('type');
         $site_id        = $input->getOption('site_id');
 
-        if (!in_array($type, array('BoatAdvert', 'ClickEditVehicleAdvert', 'HorseAdvert', 'PropertyAdvert', 'PetAdvert', 'MerchandiseAdvert', 'MotorhomeAdvert', 'LivestockAdvert', 'JobAdvert', 'BusinessAdvert', 'CaravanAdvert'))) {
+        if (!in_array($type, array('BoatAdvert', 'ClickEditVehicleAdvert', 'HorseAdvert', 'PropertyAdvert', 'PetAdvert', 'MerchandiseAdvert', 'MotorhomeAdvert', 'LivestockAdvert', 'JobAdvert', 'BusinessAdvert', 'CaravanAdvert',  'GeneralAdvert'))) {
             $output->writeln('Invalid ad type argument', true);
             return false;
         }

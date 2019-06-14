@@ -306,7 +306,7 @@ class CategoryDimensionRepository extends BaseEntityRepository
                 $container->get('fa.searchfilters.manager')->init($this->_em->getRepository('FaAdBundle:Ad'), $this->_em->getClassMetadata('FaAdBundle:Ad')->getTableName(), 'search', $searchParamsCommandLine);
                 $data = $container->get('fa.searchfilters.manager')->getFiltersData();
 
-                if ((!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= 200))) {
+                if ((!isset($data['search']['item__distance']) || (isset($data['search']['item__distance']) && $data['search']['item__distance'] >= 0 && $data['search']['item__distance'] <= CategoryRepository::MAX_DISTANCE))) {
                     if (is_array($cookieLocationDetails) && count($cookieLocationDetails) &&
                         (!isset($cookieLocationDetails['latitude']) || !$cookieLocationDetails['latitude']) &&
                         (!isset($cookieLocationDetails['longitude']) || !$cookieLocationDetails['longitude']) &&
