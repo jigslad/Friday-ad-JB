@@ -186,6 +186,36 @@
     $('#fa_item_report_download_csv').click(function(e){
         showAdReportCsvList();
     });
+
+    (function($) {
+        var re = /([^&=]+)=?([^&]*)/g;
+        var decode = function(str) {
+            return decodeURIComponent(str.replace(/\+/g, ' '));
+        };
+        $.parseParams = function(query) {
+            var params = {}, e;
+            if (query) {
+                if (query.substr(0, 1) == '?') {
+                    query = query.substr(1);
+                }
+
+                while (e = re.exec(query)) {
+                    var k = decode(e[1]);
+                    var v = decode(e[2]);
+                    if (params[k] !== undefined) {
+                        if (!$.isArray(params[k])) {
+                            params[k] = [params[k]];
+                        }
+                        params[k].push(v);
+                    } else {
+                        params[k] = v;
+                    }
+                }
+            }
+            return params;
+        };
+    })(jQuery);
+    
     $(document).ready(function(){
         enableDisableDisallowedFields();
         checkPaymentData();
@@ -276,7 +306,24 @@
 	}
 	
      function getDomicileTownByGroupOnLoad(groupId) {
-        var data = {
+    	var countyvars = townvars = [], hash;
+	    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+	    for(var i = 0; i < hashes.length; i++)
+	    {			
+	        hash = hashes[i].split('=');
+			var variable_decode = decodeURIComponent(hash[0]);
+			var county_name = 'fa_item_report[county_id]';
+			var town_name = 'fa_item_report[town_id]';
+			
+			if(variable_decode.indexOf(town_name) != -1) {
+	        	townvars.push(hash[1]);    	        
+	        }
+			if(variable_decode.indexOf(county_name) != -1) {
+	        	countyvars.push(hash[1]);
+	        }
+	    }
+
+         var data = {
             id: groupId,
             locationGroupId: groupId,
             locationField: 'domicile'
@@ -289,30 +336,35 @@
             success: function(data) {
                 var county_selector = $('#fa_item_report_county_id');
                 var town_selector = $('#fa_item_report_town_id');
-                var county_selector_val = $('#fa_item_report_county_id').val();
-                var town_selector_val = $('#fa_item_report_town_id').val();
+                var county_selector_val = countyvars;
+                var town_selector_val = townvars;
                 var domiciledata = data.domicile;
                 var towndata = data.town;
 
                 county_selector.html('');town_selector.html('');
                 county_selector.html('<option value="">Select County</option>');
                 town_selector.html('<option value="">Select Town</option>');
-                countselected = townselected = '';
-                for (var i=0, domiciletotal = domiciledata.length; i < domiciletotal; i++) {
-                	if($.inArray(domiciledata[i].id, county_selector_val) !== -1) {
-                		countselected = '';
-                	} else {
-                    	countselected = 'selected';
-                    } 
-                    county_selector.append('<option value="' + domiciledata[i].id + '" selected="'+countselected+'">' + domiciledata[i].text + '</option>');
+                countselected = townselected = [];
+                
+                for (var di=0, domiciletotal = domiciledata.length; di < domiciletotal; di++) {
+                	countselected[di] = '';
+                	for (var dj=0, domicilejtotal = county_selector_val.length; dj < domicilejtotal; dj++) {
+                    	if(domiciledata[di].id == county_selector_val[dj]) {
+                    		countselected[di] = 'selected="selected"';
+                        }
+                	}                	
+                    county_selector.append('<option value="' + domiciledata[di].id + '" '+countselected[di]+'>' + domiciledata[di].text + '</option>');
                 }
+                
                 for (var i=0, towntotal = towndata.length; i < towntotal; i++) {
-                	if($.inArray(towndata[i].id, town_selector_val) !== -1) {
-                		townselected = '';
-                	} else {
-                    	townselected = 'selected';
-                    } 
-                    town_selector.append('<option value="' + towndata[i].id + '"  selected="'+townselected+'">' + towndata[i].text + '</option>');
+                	townselected[i] = '';
+
+                	for (var j=0, townjtotal = town_selector_val.length; j < townjtotal; j++) {
+                    	if(towndata[i].id == town_selector_val[j]) {
+                    		townselected[i] = 'selected="selected"';
+                        }
+                	}
+                    town_selector.append('<option value="' + towndata[i].id + '"  '+townselected[i]+'>' + towndata[i].text + '</option>');
                 }
             }
         });
@@ -347,7 +399,7 @@
         });
     });
     
-    $("#fa_item_report_county_id").change(function(){
+   $("#fa_item_report_county_id").change(function(){
         var data = {
             id: $(this).val()
         };
