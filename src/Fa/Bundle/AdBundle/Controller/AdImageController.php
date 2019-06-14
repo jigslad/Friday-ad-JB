@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\AdBundle\Controller;
 
+use GuzzleHttp\Client;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -371,7 +372,7 @@ class AdImageController extends CoreController
     }
 
     /**
-     * Crop ad image using ajax.
+     * Crop ad image using ajax. Rotate is achieved using the same function.
      *
      * @param Request $request
      *
@@ -379,6 +380,9 @@ class AdImageController extends CoreController
      */
     public function ajaxCropImageAction(Request $request)
     {
+        /**
+         * @var AdImage $adImgObj
+         */
         if ($request->isXmlHttpRequest()) {
             $error      = '';
             $successMsg = '';
@@ -419,18 +423,50 @@ class AdImageController extends CoreController
             $imagePath = $this->get('kernel')->getRootDir().'/../web/'.$adImgObj->getPath();
 
             if ($adImgObj->getAws() == 1) {
+                $imageRelpath = CommonManager::getImageRelativePath($adId, $adImgObj->getPath(), $adImgObj->getHash(), null, $adImgObj->getImageName());
+
+                // start of Lambda API call for altering image
+                $amazonAPIs = $this->container->getParameter("amazon.lambda.api");
+                if (isset($amazonAPIs['s3UploadImagePython']) && isset($amazonAPIs['s3UploadImagePython']['url'])) {
+                    // todo test x-api-key with test function available in BannerController and implement here later.
+                    $amazonAPIUrl = $amazonAPIs['s3UploadImagePython']['url'];
+                    $clientReqAPI = new Client();
+                    $resAPI = $clientReqAPI->request("GET", $amazonAPIUrl, [
+                        'query' => [
+                            'key' => $imageRelpath,
+                            'x' => $request->get('x'),
+                            'y' => $request->get('y'),
+                            'scale' => $request->get('scale'),
+                            'angle' => $request->get('angle'),
+                        ],
+                    ]);
+                    if ($resAPI->getStatusCode() == 200) {
+                        $resJsonBody = $resAPI->getBody()->getContents();
+                        $resArr = json_decode($resJsonBody, true);
+                        if (isset($resArr['error']) && $resArr['error'] == 0) {
+                            $successMsg = $this->get('translator')->trans('Photo has been edited successfully.');
+                        } else {
+                            $error = $this->get('translator')->trans('Problem in croping photo.');
+                        }
+                    } else {
+                        $error = $this->get('translator')->trans('Problem in croping photo.');
+                    }
+                } else {
+                    $error = $this->get('translator')->trans('Image not cropped due to Lambda unavailability. Set in parameter from My NMP Everything.');
+                }
+                // end of Lambda API call for altering image
+
+                /*
                 if ($adImgObj->getImageName() != '') {
                     $oldAwsUrl = CommonManager::getAdImageUrl($this->container, $adId, $adImgObj->getPath(), $adImgObj->getHash(), null, 1, $adImgObj->getImageName());
                 }
                 $OldOrgimage = $imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$oldHash.'.jpg';
-                
                 if (isset($oldAwsUrl)) {
                     $this->writeDataFromURL($oldAwsUrl, $OldOrgimage);
                 }
+                */
             } else {
                 $OldOrgimage = $imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$oldHash.'.jpg';
-            }
-
             $newHash  = CommonManager::generateHash();
             $adImgObj->setHash($newHash);
             $adImgObj->setAws(0);
@@ -453,6 +489,7 @@ class AdImageController extends CoreController
 
             //rename org image.
             //rename($imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$newHash.'_org.jpg', $imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$newHash.'.jpg');
+            // todo why is there rotate image twice here??
             exec('convert '.$imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$newHash.'_org.jpg'.' -rotate '.$request->get('angle').' '.$imagePath.DIRECTORY_SEPARATOR.$adId.'_'.$newHash.'.jpg');
 
             $adImgObj = $this->getRepository('FaAdBundle:AdImage')->getAdImageQueryByAdIdImageIdHash($adId, $imageId, $newHash)->getQuery()->getOneOrNullResult();
@@ -465,6 +502,7 @@ class AdImageController extends CoreController
                 $error = $this->get('translator')->trans('Problem in croping photo.');
             } else {
                 $successMsg = $this->get('translator')->trans('Photo has been edited successfully.');
+            }
             }
 
             return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg));
@@ -600,7 +638,7 @@ class AdImageController extends CoreController
     {
         return $this->get('translator')->trans('You do not have permission to access this resource.');
     }
-    
+
     /**
      * GetAdNotFoundMessage.
      *
@@ -617,9 +655,11 @@ class AdImageController extends CoreController
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     * @deprecated since 06-May-2019. function usage not found anywhere.
      */
     public function ajaxResetImageAction(Request $request)
     {
+        // todo modify logic to reset image directly in S3
         if ($request->isXmlHttpRequest()) {
             $image      = '';
             $error      = '';
@@ -664,6 +704,8 @@ class AdImageController extends CoreController
             $orgImagePath      = $webPath.DIRECTORY_SEPARATOR.$imagePath;
             $objAdImageManager = new AdImageManager($this->container, $adId, $hash, $orgImagePath);
             $objAdImageManager->removeImage(true);
+
+            // todo need to change to upload direct to AmazonS3.
             $objAdImageManager->saveOriginalJpgImage($adId.'_'.$hash.'.jpg', true);
             $objAdImageManager->createThumbnail(false);
 
@@ -685,9 +727,11 @@ class AdImageController extends CoreController
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     * @deprecated Since 06-May-2019. ajaxCropImageAction handles rotation too. Hence function not used anywhere.
      */
     public function ajaxRotateImageAction(Request $request)
     {
+        // rewrite ad image rotation directly in S3 if this function is to be used.
         if ($request->isXmlHttpRequest()) {
             $error      = '';
             $successMsg = '';
@@ -772,6 +816,7 @@ class AdImageController extends CoreController
                 $adImageManagerOld->removeFromAmazoneS3();
 
                 $adImageManager = new AdImageManager($this->container, $adId, $newHash, $imagePath, $adImgObj->getImageName(), $adImgObj->getPath());
+                // need to change to upload direct to AmazonS3 if this function is to be used.
                 $adImageManager->uploadImagesToS3($adImgObj);
             }
 

@@ -28,6 +28,7 @@ use Fa\Bundle\AdBundle\Manager\AdImageManager;
  * @author Janak Jadeja <janak@aspl.in>
  * @copyright 2014 Friday Media Group Ltd
  * @version v1.0
+ * @deprecated Command created in 2015. Not used now. Shouldn't be used since it will directly delete ad-images from NFS without any checks.
  */
 class CleanS3LocalImagesCommand extends ContainerAwareCommand
 {
@@ -78,6 +79,7 @@ class CleanS3LocalImagesCommand extends ContainerAwareCommand
                     if ($image->getAd()) {
                         $imagePath  = $adImageDir.CommonManager::getGroupDirNameById($image->getAd()->getId());
                         $adImageManager = new AdImageManager($this->getContainer(), $image->getAd()->getId(), null, $imagePath);
+                        // todo need to change to upload direct to AmazonS3 if this function is correct and is to be used.
                         $adImageManager->removS3ImagesFromLocal($image);
                         echo "Image removed from local: ".$image->getId()."\n";
                     }
