@@ -133,7 +133,8 @@ class AdImageType extends AbstractType
                 $image->setImageName(Urlizer::urlize($ad->getTitle().'-'.$ad->getId().'-'.$maxOrder));
             }
             $image->setStatus('1');
-            $image->setAws(0);
+            $image->setAws(1);
+            /*
             $orgImageName = $uploadedFile->getClientOriginalName();
             $orgImageName = str_replace(array('"', "'"), '', $orgImageName);
             $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imagePath;
@@ -143,12 +144,22 @@ class AdImageType extends AbstractType
             $uploadedFile->move($orgImagePath, $orgImageName);
 
             $adImageManager = new AdImageManager($this->container, $adId, $hash, $orgImagePath);
+            */
+
+            $adImageManager = new AdImageManager($this->container, $adId, $hash, $imagePath);
+            $adImageS3Name = $adImageManager->uploadImageDirectlyToS3($uploadedFile, $image->getImageName());
+            if(!empty($adImageS3Name)) {
+                $image->setAws(1);
+                $image->setStatus('1');
+            }
+            /*
             //save original jpg image.
             $adImageManager->saveOriginalJpgImage($orgImageName);
             //create thumbnails
             $adImageManager->createThumbnail();
             //create cope thumbnails
             $adImageManager->createCropedThumbnail();
+            // */
 
             //$adImageManager->uploadImagesToS3($image);
         }

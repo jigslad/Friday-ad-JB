@@ -1,6 +1,8 @@
 <?php
 namespace Fa\Bundle\CoreBundle\Manager;
 
+use \Exception;
+
 /**
  * sfImageMagickAdapter provides a mechanism for creating thumbnail images.
  * @see http://www.imagemagick.org
@@ -70,7 +72,7 @@ class ImageMagickManager
     'video/mpeg',
     'video/mpeg2',
     );
-    
+
     /**
     * Imagemagick-specific Type to Mime type map
     */
@@ -125,16 +127,16 @@ class ImageMagickManager
     'png24' => 'image/png',
     'png32' => 'image/png',
     );
-    
+
     /**
      * constructor
      *
-     * @param unknown $maxWidth
-     * @param unknown $maxHeight
-     * @param unknown $scale
-     * @param unknown $inflate
-     * @param unknown $quality
-     * @param unknown $options
+     * @param int $maxWidth
+     * @param integer $maxHeight
+     * @param bool $scale
+     * @param bool $inflate
+     * @param integer $quality
+     * @param array $options
      * @throws Exception
      */
     public function __construct($maxWidth, $maxHeight, $scale, $inflate, $quality, $options)
@@ -142,17 +144,17 @@ class ImageMagickManager
         $this->magickCommands = array();
         $this->magickCommands['convert'] = isset($options['convert']) ? escapeshellcmd($options['convert']) : 'convert';
         $this->magickCommands['identify'] = isset($options['identify']) ? escapeshellcmd($options['identify']) : 'identify';
-        
+
         exec($this->magickCommands['convert'], $stdout);
         if (strpos($stdout[0], 'ImageMagick') === false) {
             throw new Exception(sprintf("ImageMagick convert command not found"));
         }
-        
+
         exec($this->magickCommands['identify'], $stdout);
         if (strpos($stdout[0], 'ImageMagick') === false) {
             throw new Exception(sprintf("ImageMagick identify command not found"));
         }
-        
+
         $this->maxWidth = $maxWidth;
         $this->maxHeight = $maxHeight;
         $this->scale = $scale;
@@ -160,20 +162,21 @@ class ImageMagickManager
         $this->quality = $quality;
         $this->options = $options;
     }
-    
+
     /**
      *
      * @param unknown $thumbnail
-     * @param string $targetMime
+     * @param string  $targetMime
+     * @return string
      */
     public function toString($thumbnail, $targetMime = null)
     {
         ob_start();
         $this->save($thumbnail, null, $targetMime);
-        
+
         return ob_get_clean();
     }
-    
+
     /**
      *
      * @throws Exception
@@ -182,11 +185,11 @@ class ImageMagickManager
     {
         throw new Exception('The ImageMagick adapter does not support the toResource method.');
     }
-    
+
     /**
      *
-     * @param unknown $thumbnail
-     * @param unknown $image
+     * @param ThumbnailManager $thumbnail
+     * @param string $image
      * @throws Exception
      * @return boolean
      */
@@ -203,7 +206,7 @@ class ImageMagickManager
                 // get image data via identify
                 list($img, $type, $dimen) = explode(' ', $stdout[0]);
                 list($width, $height) = explode('x', $dimen);
-        
+
                 $this->sourceWidth = $width;
                 $this->sourceHeight = $height;
                 $this->sourceMime = $this->mimeMap[strtolower($type)];
@@ -214,19 +217,19 @@ class ImageMagickManager
             $this->sourceHeight = $imgData[1];
             $this->sourceMime = $imgData['mime'];
         }
-        
+
         $this->image = $image;
-        
+
         // open file resource
         $source = fopen($image, 'r');
-        
+
         $this->source = $source;
-        
+
         $thumbnail->initThumb($this->sourceWidth, $this->sourceHeight, $this->maxWidth, $this->maxHeight, $this->scale, $this->inflate);
-        
+
         return true;
     }
-    
+
     /**
      *
      * @param unknown $thumbnail
@@ -238,17 +241,17 @@ class ImageMagickManager
     {
         throw new Exception('This function is not yet implemented. Try a different adapter.');
     }
-    
+
     /**
      *
-     * @param unknown $thumbnail
-     * @param unknown $thumbDest
+     * @param ThumbnailManager $thumbnail
+     * @param string $thumbDest
      * @param string $targetMime
      */
     public function save($thumbnail, $thumbDest, $targetMime = null)
     {
         $command = '';
-        
+
         $width  = $this->sourceWidth;
         $height = $this->sourceHeight;
         $x = $y = 0;
@@ -256,7 +259,7 @@ class ImageMagickManager
             case "shave_all":
                 $proportion['source'] = $width / $height;
                 $proportion['thumb'] = $thumbnail->getThumbWidth() / $thumbnail->getThumbHeight();
-            
+
                 if ($proportion['source'] > 1 && $proportion['thumb'] < 1) {
                     $x = ($width - $height * $proportion['thumb']) / 2;
                 } else {
@@ -303,22 +306,22 @@ class ImageMagickManager
                 }
                 break;
         } // end switch
-        
+
         $command .= ' -thumbnail ';
         $command .= $thumbnail->getThumbWidth().'x'.$thumbnail->getThumbHeight();
-        
+
         // absolute sizing
         if (!$this->scale) {
             $command .= '!';
         }
-        
+
         //added for speed optimization
         $command .= '-sampling-factor 4:2:0 -strip ';
-        
+
         if ($this->quality && $targetMime == 'image/jpeg') {
             $command .= ' -quality '.$this->quality.'% ';
         }
-        
+
         // extract images such as pages from a pdf doc
         $extract = '';
         if (isset($this->options['extract']) && is_int($this->options['extract'])) {
@@ -327,27 +330,27 @@ class ImageMagickManager
             }
             $extract = '['.escapeshellarg($this->options['extract']).'] ';
         }
-        
+
         $output = (is_null($thumbDest))?'-':$thumbDest;
         $output = (($mime = array_search($targetMime, $this->mimeMap))?$mime.':':'').$output;
-        
+
         $cmd = $this->magickCommands['convert'].' '.$command.' '.escapeshellarg($this->image).$extract.' '.escapeshellarg($output);
 
         (is_null($thumbDest))?passthru($cmd):exec($cmd);
     }
-    
+
     public function freeSource()
     {
         if (is_resource($this->source)) {
             fclose($this->source);
         }
     }
-    
+
     public function freeThumb()
     {
         return true;
     }
-    
+
     public function getSourceMime()
     {
         return $this->sourceMime;
