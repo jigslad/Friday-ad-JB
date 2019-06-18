@@ -304,6 +304,7 @@ class AdImageManager
      */
     public function removeImage($keepOriginal = false)
     {
+        // START of code not required. Image is uploaded only to S3 since FFR-3664. 14-June-2019.
         //remove original file
         if (!$keepOriginal && is_file($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.jpg')) {
             unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.jpg');
@@ -332,6 +333,7 @@ class AdImageManager
                 }
             }
         }
+        // END of code not required. Image is uploaded only to S3 since FFR-3664. 14-June-2019.
 
         try {
             $this->removeFromAmazoneS3($keepOriginal);
