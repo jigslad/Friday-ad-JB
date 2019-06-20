@@ -1,0 +1,165 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set container = fetch_container_instance() %}
+{% set type = app.request.attributes.get('type') %}
+{% set adStatusSold = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
+{% set adStatusLive = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
+{% set adStatusRejected = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_REJECTED_ID') %}
+{% set adStatusRejectedWithReason = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_REJECTEDWITHREASON_ID') %}
+{% set rootCategoryId = fetch_repository('FaEntityBundle:Category').getRootCategoryId(adCategoryId) %}
+{% set mainRootCategoriesArray = {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::COMMUNITY_ID'), 4: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
+{% set adStatusInModeration = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+
+{% set adStatusExpired = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
+{% set adStatusDraft = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_DRAFT_ID') %}
+{% set adStatusModerated = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_MODERATED_ID') %}
+{% set adStatusInactive = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_INACTIVE_ID') %}
+
+{% set entityCacheManager = container.get('fa.entity.cache.manager') %}
+
+{% set adUserPackageUpsellRepository = fetch_repository('FaAdBundle:AdUserPackageUpsell') %}
+{% set getAutoRenewResultById = adUserPackageUpsellRepository.getAutoRenewUpsellByAdId(adId) %}
+{% if getAutoRenewResultById is not empty %}
+    {% set isAutoRenewAd = 1 %}
+{% else %}
+    {% set isAutoRenewAd = 0 %}
+{% endif %}
+
+{% set upgradePackagesCount = 0 %}
+{% set userRoleId = app.user.getRole().getId() %}
+{% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and ( adPackageArray[adId] is defined and adPackageArray[adId] is not null) %}
+    {% set categoryId       =  ad['cat_id'] %}
+    {% set adLocationRepository = fetch_repository('FaAdBundle:AdLocation') %}
+    {% set locationGroupIds = adLocationRepository.getLocationGroupIdForAd(adId, true) %}
+    {% set userRolesArray = {0:constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')} %}
+
+    {% set packageRuleRepository = fetch_repository('FaPromotionBundle:PackageRule') %}
+    {% set upgradePackages = packageRuleRepository.getActivePackagesByCategoryId(categoryId, locationGroupIds, userRolesArray) %}
+    {% set upgradePackagesCount = upgradePackages|length %}
+{% endif %}
+{% if not app.request.isXmlHttpRequest() %} 
+<div class="manage-item-list" id="item_card_{{adId}}">
+{% endif %}
+    <div class="row">
+    	<div class="small-8 columns">
+            {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute == 'manage_my_ads_active' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
+                <span class="custom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span>
+            {% elseif isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute=='ajax_manage_my_ads_get_status' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
+                <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span>
+            {% elseif isBoostEnabled is defined and isBoostEnabled==1 and currentRoute == 'manage_my_ads_boosted' and (userBusinessCategory is defined and  userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
+                <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span>
+            {% else %}
+                <span class="dummbychk"></span>
+            {% endif %}
+        </div>
+        <div class="small-16 columns">
+        	<div class="featuredBlock">
+        		{% if ad['status_id'] == adStatusLive %}
+                    <a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>
+                {% endif %}
+        		<label class="switch"><input type="checkbox"><span class="slider round"></span></label><span class="featuredTxt">Featured</span>
+        	</div>
+        </div>
+        
+        
+        <div class="small-24 columns">            
+            <h3 id="item_detail_link_{{adId}}">
+                {% if ad['status_id'] == adStatusLive %}
+                    <a href="{{adUrl}}" target="_blank">{{ad['title']}}</a>
+                {% else %}
+                    {{ad['title']}}
+                {% endif %}
+            </h3>        	
+        </div>
+        <div class="small-24 columns location-boost-blk">
+            {% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and (userBusinessCategory is defined and userBusinessCategory == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')) and ad.status_id == adStatusLive %}
+                <div {% if ad['town_id'] is defined or ad['area_id'] is defined or ad['locality_id'] is defined %} class="list-miles clearfix" {% endif %}>
+                    {% if ad['locality_id'] is defined and ad['locality_id'] is not null %}
+                        <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Locality', ad['locality_id']) }}</b>
+                    {% elseif ad['town_id'] is defined and ad['town_id'] is not null %}
+                        {% if ad['area_id'] is defined and ad['area_id'] is not null %}
+                            <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['area_id']) ~ ', ' ~ entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['town_id']) }}</b>
+                        {% else %}
+                            <b>{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', ad['town_id']) }}</b>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endif %}
+            
+            {% if ad['status_id'] == adStatusLive %}
+                {% if isBoostEnabled is defined and isBoostEnabled==1 and ad.boosted_at is defined and ad.is_boosted==1 %}
+                    <div class="list-boosted-hours list-boosted-hours-desk-tab">
+                        {{ 'Boosted'|trans({}, 'frontend-manage-my-ad') }} {{ (ad.boosted_at|time_ago_in_words) }}
+                    </div>
+                {% endif %} 
+            {% endif %}
+       </div>
+
+        <div class="small-24 columns img-btns-blk">
+        	<div class="manage-list-img">
+                {% if ad['status_id'] == adStatusLive %}
+                    <a href="{{adUrl}}" target="_blank">
+                {% endif %}
+                    {% if adImageArray[adId]['path'] is defined and adImageArray[adId]['hash'] %}
+                        {% set adImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImageArray[adId]['path'], adImageArray[adId]['hash'], '300X225', adImageArray[adId]['aws'], adImageArray[adId]['image_name']]) %}
+                        <img src="{{ adImageUrl }}" />
+                    {% else %}
+                        <!--<div class="user_icon"><i class="gray_color fi-photo size-48"></i></div>-->
+                        <img src="/bundles/fafrontend/images/no-image.svg" alt="" />
+                    {% endif %}
+                {% if ad['status_id'] == adStatusLive %}
+                    </a>
+                {% endif %}
+                
+                {% set statusClass = '' %}
+                {% set statusText = '' %}
+                {% if ad.status_id is defined and ad.status_id is not null %}
+                	{% if ad.status_id == adStatusSold %}
+                        {% set statusClass = 'successCls' %}
+                        {% set statusText = 'Success' %}
+                    {% elseif ad.status_id == adStatusRejectedWithReason or ad.status_id == adStatusRejected %}
+                    	{% set statusClass = 'rejectedCls' %}
+                    	{% set statusText = 'Rejected' %}
+                    {% elseif ad.status_id == adStatusModerated or ad.status_id == adStatusInModeration %}
+                    	{% set statusClass = 'moderationCls' %}	
+                    	{% set statusText = 'Advert in Review' %}
+                    {% elseif (adId in inModerationLiveAdIds and ad.status_id == adStatusLive) %}
+                    	{% set statusClass = 'moderationCls' %}	
+                    	{% set statusText = fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', ad.status_id)~' - Edits in Review' %}
+                    {% elseif ad.status_id == adStatusExpired %}
+                    	{% set statusClass = 'expiredCls' %}
+                    	{% set statusText = 'Expired' %}
+                    {% elseif ad.status_id == adStatusDraft %}
+                    	{% set statusClass = 'draftCls' %}	
+                    	{% set statusText = 'Draft' %}                    		
+                    {% else %}
+                        {% set statusClass = '' %}   
+                        {% set statusText = '' %}              
+                    {% endif %}
+                {% endif %}
+                
+                <div class="img-status-overlay {{ statusClass  }}">
+                	{% if (ad.status_id == adStatusInModeration and modToolTipText is defined) or ( adId in inModerationLiveAdIds and ad.status_id == adStatusLive and modToolTipText is defined) %}
+                      <div class="image-tooltip-wrapper in-mod-tooltip">
+                      	<span class="image-tooltip">{{ modToolTipText['inModeration'] }}</span>
+                        <span class="info-icon">info</span>
+                      </div>
+                    {% endif %}
+                    <p class="img-status-overlay-text">{{ statusText }}</p>
+                </div>
+            </div>
+            <div class="manage-item-btns text-right">            	
+                <div class="right-manage-buttons adEditBlock">
+                    <a class="xs-btn-1 expand button" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>                  
+                </div>
+                
+                {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
+                     <div class="right-manage-buttons adRemoveBlock"><a class="xs-red-btn expand button" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{{'Stop this ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="small-24 columns img-btns-blk"></div>
+    </div>   
+{% if not app.request.isXmlHttpRequest() %}
+</div>
+{% endif %}
+
