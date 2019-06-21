@@ -246,7 +246,7 @@
     </div>
 </div>
 {% block scriptbottom%}
-<script language="javascript" type="text/javascript">
+<script language="javascript" type="text/javascript">	
     function boostSelectedAds() {
         $('#boost-sel-ads-btn').prop("disabled", true);
         var selectedBoostAdIds = '';
@@ -414,5 +414,23 @@
             }
         }
     });
+</script>
+<script>
+(function($) {
+    $.fn.extend({
+    	toggleSwitch: function(){
+            $('.featured-switch').on('click',function(){
+              if($(this).hasClass('toggle-off')){
+                $(this).removeClass('toggle-off').addClass('toggle-on');
+              }else{
+                $(this).removeClass('toggle-on').addClass('toggle-off');
+              }
+            })
+        }
+    })
+})(jQuery)
+$(document).ready(function(){
+    $('.featured-switch').toggleSwitch();
+ });
 </script>
 {% endblock %}

@@ -48,15 +48,6 @@ ul.toplistWithBullets li.lightgreencircle::before { color: #9bcc21; }
 ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-size:0px; }
 .all-sel-texts { margin-bottom:0px; margin-top:15px; float: right; }
 
-.switch { position: relative;display: inline-block; width: 45px;height: 20px;}
-.switch input { opacity: 0;width: 0;height: 0;}
-.slider { position: absolute;cursor: pointer;top: 0;left: 0;right: 0;bottom: 0;background-color: #fff;-webkit-transition: .4s;transition: .4s;box-shadow:1px 1px 0.7px 0.7px #ccc; }
-.slider:before { position: absolute;content: ""; height: 16px;width: 16px;left: 3px;bottom: 2px;background-color: white;-webkit-transition: .4s;transition: .4s; }
-input:checked + .slider {background-color: #2196F3;}
-input:focus + .slider {box-shadow: 0 0 1px #2196F3;}
-input:checked + .slider:before {-webkit-transform: translateX(26px);-ms-transform: translateX(26px);transform: translateX(26px);}
-.slider.round { border-radius: 34px;}
-.slider.round:before {border-radius: 50%;box-shadow: 1px 1px 1px 1px #ccc;}
 .featuredBlock, .featuredBlock1 { display:flex;float:right; }
 .featuredTxt { margin-left:20px;font-family: 'Asap',sans-serif;font-size: 14px;font-weight: 700;color: #a4a4a4;}
 
@@ -73,7 +64,8 @@ input:checked + .slider:before {-webkit-transform: translateX(26px);-ms-transfor
 .xs-blue-btn { background: #31c5f2;border: 1px solid #2ab6e0;color: #fff;font-family: 'Asap',sans-serif;font-size: 14px;font-weight: 700;line-height: 16px;padding: 5px 20px 7px 20px;}
 .xs-blue-btn:focus, .xs-blue-btn:hover { background: #2ab6e0;border: 1px solid #2ab6e0;color: #ffffff; }
 .manage-item-list .featuredBlock, .manage-item-list .adEditBlock  { margin-bottom:10px; }
-.manage-item-list .featuredBlock1, .manage-item-list .adEditBlock1  { margin-bottom:5px; }
+.manage-item-list .featuredBlock1  { margin-bottom:10px; }
+.manage-item-list .adEditBlock1  { margin-bottom:5px; }
 .manage-list-img { height:120px !important; }
 .manage-list-img img { max-height:120px !important; }
 .list-created-hours { text-align:left !important; margin:0 0 0 0 !important; }
@@ -95,9 +87,107 @@ input:checked + .slider:before {-webkit-transform: translateX(26px);-ms-transfor
 .img-status-overlay.moderationCls { background: #f3ca03 !important; }
 .img-status-overlay.expiredCls { background: #ff0000 !important; }
 .img-status-overlay.draftCls { background: #000000 !important; }
-.img-status-overlay.moderationCls .in-mod-tooltip { right:0 !important; bottom: 0 !important; left:4%; top:10% }
+.img-status-overlay.moderationCls .in-mod-tooltip { right:0 !important; bottom: 0 !important; left:4%; top:22% }
 .img-status-overlay.moderationCls .info-icon { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='21' height='19' viewBox='-389 226 21 19' xml:space='preserve'%3E%3Cstyle type='text/css'%3E .st0%7Bfill:%23ffffff;%7D .st1%7Benable-background:new ;%7D .st2%7Bfill:%23e3cb55;%7D%0A%3C/style%3E%3Ctitle%3Einfo icon%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg transform='translate(-726.000000, -1133.000000)'%3E%3Cg transform='translate(-2.000000, -127.000000)'%3E%3Cg transform='translate(465.000000, 451.000000)'%3E%3Cg transform='translate(111.000000, 745.000000)'%3E%3Cg transform='translate(153.000000, 64.000000)'%3E%3Cellipse class='st0' cx='-379.4' cy='235.5' rx='9.9' ry='9.5'/%3E%3Cg class='st1'%3E%3Cpath class='st2' d='M-378.9 238.9h0.7v1h-3.1v-1h0.4c0.2 0 0.4-0.1 0.4-0.4v-3.6c0-0.3-0.1-0.4-0.3-0.4h-0.5v-1h2.3v5.4H-378.9zM-379.8 230.7c0.6 0 1 0.4 1 1 0 0.6-0.4 0.9-1 0.9 -0.6 0-1-0.4-1-0.9S-380.4 230.7-379.8 230.7z'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A") !important; }
 .image-tooltip { bottom:0 !important;top:50%; font-size:16px !important; left:50% !important; }
+
+.featured-switch {
+    width: 45px;height: 20px;
+    position: relative;
+    display: inline-block;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    -webkit-border-radius: 9999px;
+    -moz-border-radius: 9999px;
+    border-radius: 9999px;
+    cursor: pointer;
+    -webkit-box-shadow: 0.5px 0.5px 1px 1px #ccc;
+    -moz-box-shadow: 0.5px 0.5px 1px 1px #ccc;
+    box-shadow: 0.5px 0.5px 1px 1px #ccc;    
+}
+
+.featured-switch .toggle-handler {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    -webkit-border-radius: 80px;
+    -moz-border-radius: 80px;
+    border-radius: 80px;
+    top: 0;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    transition: all .2s ease-out
+}
+
+.featured-switch .toggle-bg-on {
+    width: 45px;height: 20px;
+    background-color: #2196F3;
+    -webkit-border-radius: 9999px;
+    -moz-border-radius: 9999px;
+    border-radius: 9999px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+    transform-origin: 0 50%
+}
+
+.featured-switch.toggle-off .toggle-handler {
+    background-color: #ffffff;
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+    transform: translateX(0);
+    -webkit-box-shadow: 0.5px 0.5px 1px 1px #ccc;
+    -moz-box-shadow: 0.5px 0.5px 1px 1px #ccc;
+    box-shadow: 0.5px 0.5px 1px 1px #ccc;
+    left: 1px;
+    top: 2px;
+}
+
+.featured-switch.toggle-off .toggle-bg-on {
+    visibility: hidden;
+    opacity: .4;
+    -webkit-transform: scale(.8);
+    -moz-transform: scale(.8);
+    -ms-transform: scale(.8);
+    -o-transform: scale(.8);
+    transform: scale(.8);
+    width: 50%
+}
+
+.featured-switch.toggle-on .toggle-handler {
+    background-color: #ffffff;
+    -webkit-transform: translateX(25px);
+    -moz-transform: translateX(25px);
+    -ms-transform: translateX(25px);
+    -o-transform: translateX(25px);
+    transform: translateX(25px);
+    -webkit-box-shadow: 0.5px 0.5px 1px 1px #ccc;
+    -moz-box-shadow: 0.5px 0.5px 1px 1px #ccc;
+    box-shadow: 0.5px 0.5px 1px 1px #ccc;
+    top:1px;
+}
+
+.featured-switch.toggle-on .toggle-bg-on {
+    visibility: visible;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+    width: 100%
+}
+
 
 @media only screen and (min-width:320px) and (max-width:399px) {
     .manage-item-list .large-7 { width:100% !important; }
