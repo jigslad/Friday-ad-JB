@@ -149,7 +149,13 @@
         <div class="small-24 medium-9 large-5 columns">
             <div class="manage-item-btns text-right">
             	<div class="right-manage-buttons featuredBlock">
-            		<label class="switch"><input type="checkbox"><span class="slider round"></span></label><span class="featuredTxt">Featured</span>
+            		<div class="featured-switch toggle-off">
+            			<div class="toggle-wrap">            
+            				<div class="toggle-bg-on"></div>
+            			</div>
+            			<div class="toggle-handler"></div>
+            		</div>
+            		<span class="featuredTxt">Featured</span>
             	</div>
                 <div class="right-manage-buttons adEditBlock">
                     <a class="xs-btn-1 expand button" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>                  

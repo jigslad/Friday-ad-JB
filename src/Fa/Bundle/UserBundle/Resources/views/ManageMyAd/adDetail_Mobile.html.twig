@@ -55,7 +55,13 @@
             		{% if ad['status_id'] == adStatusLive %}
                         <a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>
                     {% endif %}
-            		<label class="switch"><input type="checkbox"><span class="slider round"></span></label><span class="featuredTxt">Featured</span>
+                    <div class="featured-switch toggle-off">
+            			<div class="toggle-wrap">            
+            				<div class="toggle-bg-on"></div>
+            			</div>
+            			<div class="toggle-handler"></div>
+            		</div>
+            		<span class="featuredTxt">Featured</span>           		
             	</div>
             </div>
         </div>
