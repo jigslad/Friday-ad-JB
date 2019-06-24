@@ -42,13 +42,15 @@
                         {% endif %}
                         </div>                        
                         <a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");' class="button expand secondary-btn-1 mb0">{{ profileLabel }}</a>
-                    </div>
+                    </div> 
                     <div class="medium-19 large-19 columns hide-for-small-only">                    
                         <div class="bus-abt-us-div">
+                        	<a href="{{ userProfileUrl }}" onClick='visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>
                         	{% if businessUserDetail['company_welcome_message']!='' %}
                         	    <h3 class="featured-single">{{businessUserDetail['company_welcome_message']|raw}}</h3>
                         	 {% endif %}
  							{{businessUserDetail['about_us']|raw}}
+ 							</a>
                         </div>
                     </div>
                 </div>                
