@@ -8,7 +8,8 @@
     {% endstylesheets %}
 {% endblock %}
 {% block image_slider_html %}
-    {% set container = fetch_container_instance() %}
+	<style>.finance-btn { bottom:20% !important; } #big-image-slider { height:500px !important }</style>
+    {% set co ntainer = fetch_container_instance() %}
     {% set imageAltString = null %}
     {% set imageAltStringArr = {} %}
     {% set altString = '' %}
