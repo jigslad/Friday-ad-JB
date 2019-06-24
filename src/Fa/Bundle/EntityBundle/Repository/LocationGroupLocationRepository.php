@@ -186,6 +186,26 @@ class LocationGroupLocationRepository extends BaseEntityRepository
 
         return array_unique($domicileIds);
     }
+    
+    public function getDomicilesTownsOrArrayByLocationGroupId($locationGroupIds = null,$locationGroupType = null) {
+        $query = $this->createQueryBuilder(self::ALIAS);
+        if ($locationGroupIds) {
+            $query->andWhere(self::ALIAS.'.location_group IN(:locationGroupIds)');
+            $query->setParameter('locationGroupIds', $locationGroupIds);
+        }       
+        $locations = $query->getQuery()->getResult();
+
+        $retArray = array();
+        foreach ($locations as $location) {
+            if ($location->getLocationDomicile() && $locationGroupType=='domicile') {
+                $retArray[$location->getLocationDomicile()->getId()] = $location->getLocationDomicile()->getName();
+            }
+            if ($location->getLocationTown() && $locationGroupType=='town') {
+                $retArray[$location->getLocationTown()->getId()] = $location->getLocationTown()->getName();
+            }
+        }
+        return array_unique($retArray);
+    }
 
     /**
      * Get location group id by town id.
@@ -272,6 +292,22 @@ class LocationGroupLocationRepository extends BaseEntityRepository
             }
         }
         return $townIds;
+    }
+    
+    public function getChildrenIdsByIds($locationGroupIds)
+    {
+        $query = $this->createQueryBuilder(self::ALIAS);
+        $query->select('IDENTITY('.self::ALIAS.'.location_town) as town_id');
+        $query->where(self::ALIAS.'.location_group IN (:locationGroupIds)');
+        $query->setParameter('locationGroupIds', $locationGroupIds);
+        $childrens = $query->getQuery()->getArrayResult();
+        $childrenArray = array();
+        
+        foreach ($childrens as $children) {
+            $childrenArray[] = $children['town_id'];
+        }
+        
+        return $childrenArray;
     }
 
 }

@@ -137,6 +137,47 @@ class LocationController extends CoreController
 
         return new Response();
     }
+    
+    /**
+     * Get ajax a location nodes in json format.
+     *
+     * @param Request $request Request instance
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxGetNodeJsonForLocationGroupByIdAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $nodeId = $request->get('id');
+            $locationGroupId = $request->get('locationGroupId');
+            $locationField = $request->get('locationField');
+            if ($nodeId) {
+                //$childrens     = $this->getRepository('FaEntityBundle:Location')->getChildrenKeyValueArrayByParentId($nodeId);
+                $childrenArray  =  $domicileArray = $domicileGroupArray = array();
+                $townArray = $townGroupArray = array();
+                               
+                $domicileGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getDomicilesTownsOrArrayByLocationGroupId($locationGroupId, $locationField);
+                
+                if(!empty($domicileGroupArray)) {
+                    $townGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getDomicilesTownsOrArrayByLocationGroupId($locationGroupId, 'town');
+                    foreach ($domicileGroupArray as $id => $name) {
+                        $domicileArray[] = array('id' => $id, 'text' => $name);                    
+                    }
+                    $childrenArray['domicile'] = $domicileArray;
+                    if(!empty($townGroupArray)) {
+                        foreach ($townGroupArray as $id => $name) {
+                            $townArray[] = array('id' => $id, 'text' => $name);
+                        }
+                        $childrenArray['town'] = $townArray;
+                    }
+                }
+                
+                return new JsonResponse($childrenArray);
+            }
+        }
+        
+        return new Response();
+    }
 
     /**
      * Get towns with locality ajax action.
