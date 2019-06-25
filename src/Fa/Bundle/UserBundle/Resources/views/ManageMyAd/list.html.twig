@@ -77,7 +77,8 @@
                        		{% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}
                                 <div class="manage-item-list" style="border-top:0px">
                                     <span class="all-sel-chkbox custom-checkbox"><input type="checkbox" id="boostad_selectall"></span> <a id="boost_ad_selected_all" class="all-sel-text"> {% if currentRoute == 'manage_my_ads_active' %}
-                                        Select All ads on this page ({{ pagination.getNbResults()>10?10:pagination.getNbResults() }}){% endif %} </a>                                    
+                                        Select all ads <span class="hide-for-small-only">on this page</span> ({{ pagination.getNbResults()>10?10:pagination.getNbResults() }})
+                                    {% endif %} </a>                                    
                                 </div>
                             {% endif %}                          
                             {% for ad in pagination.getCurrentPageResults() %}
@@ -91,17 +92,9 @@
                                     {# {% set adUrl = adUrl|trim('/') %} #}
                                 {% endif %}
 								{% if userBusType is defined and userBusType == 'netsuite' %}
-									{% if mobileDetectManager.isMobile() %}
-                                        {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail_Mobile.html.twig') }}
-                                    {% else %}
-                                    	{{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}
-                                    {% endif %}
+                                    {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
                                 {% else %}
-                                	{% if mobileDetectManager.isMobile() %}
-                                	    {{ include('FaUserBundle:ManageMyAd:adDetail_Mobile.html.twig') }}
-                                	{% else %}
-                                    	{{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
-                                    {% endif %}
+                                    {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
                                 {% endif %}
                             {% endfor %}
                         {% else %}
