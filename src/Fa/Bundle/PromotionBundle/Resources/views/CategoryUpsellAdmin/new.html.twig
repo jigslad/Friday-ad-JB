@@ -1,0 +1,32 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+
+            {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                {{ form_row(form.category) }}
+                {{ form_row(form.upsell) }}
+                {{ form_row(form.price) }}
+                {{ form_row(form.show_in_filters) }}
+
+                {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'category_upsell_admin'}) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scriptbottom %}
+    <script language="javascript" type="text/javascript">
+    //<![CDATA[
+    
+    //]]>
+    </script>
+{% endblock %}

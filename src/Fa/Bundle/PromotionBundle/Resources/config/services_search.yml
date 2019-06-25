@@ -19,3 +19,9 @@ services:
         class: Doctrine\ORM\EntityRepository
         factory: ['@doctrine.orm.entity_manager', getRepository]
         arguments: [FaPromotionBundle:PackageDiscountCode]
+        
+    fa.category_upsell.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaPromotionBundle:CategoryUpsell]
+        
