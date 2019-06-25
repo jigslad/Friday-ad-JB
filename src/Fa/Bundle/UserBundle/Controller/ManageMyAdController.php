@@ -76,13 +76,10 @@ class ManageMyAdController extends CoreController
         $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
 
         if ($pagination->getNbResults()) {
-            foreach ($pagination->getCurrentPageResults() as $ad) {
-                $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($ad['cat_id']);
-                if (!empty($getBoostDetails)) {
-                    if ($getBoostDetails['isBoostEnabled']==1 && $getBoostDetails['boostAdRemaining'] > 0 && $getBoostDetails['userBusinessCategory'] == $rootCategoryId && $ad['status_id'] == EntityRepository::AD_STATUS_LIVE_ID) {
-                        $onlyActiveAdCount = $onlyActiveAdCount + 1;
-                    }
-                }
+            foreach ($pagination->getCurrentPageResults() as $ad) {                
+                if ($ad['status_id'] == EntityRepository::AD_STATUS_LIVE_ID) {
+                    $onlyActiveAdCount = $onlyActiveAdCount + 1;
+                }                
             }
         }
 
