@@ -52,8 +52,9 @@ class ManageMyAdController extends CoreController
 
         $activeAdCountArray   = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'active', true)->getResult();
         $inActiveAdCountArray = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'inactive', true)->getResult();
+        $onlyActiveAdCountArray   = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'onlyactive', true)->getResult();
         $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type);
-
+        
         if (is_array($activeAdCountArray)) {
             $activeAdCount = $activeAdCountArray[0]['total_ads'];
         }
@@ -61,7 +62,10 @@ class ManageMyAdController extends CoreController
         if (is_array($inActiveAdCountArray)) {
             $inActiveAdCount = $inActiveAdCountArray[0]['total_ads'];
         }
-
+        
+        if(is_array($onlyActiveAdCountArray)) {
+            $onlyActiveAdCount = $onlyActiveAdCountArray[0]['total_ads'];
+        }
         $getBoostDetails = $this->getBoostDetails($loggedinUser);
 
         $adsBoostedCount = $getBoostDetails['adsBoostedCount'];
@@ -75,13 +79,13 @@ class ManageMyAdController extends CoreController
         $pagination = $this->get('fa.pagination.manager')->getPagination();
         $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
 
-        if ($pagination->getNbResults()) {
+        /*if ($pagination->getNbResults()) {
             foreach ($pagination->getCurrentPageResults() as $ad) {                
                 if ($ad['status_id'] == EntityRepository::AD_STATUS_LIVE_ID) {
                     $onlyActiveAdCount = $onlyActiveAdCount + 1;
                 }                
             }
-        }
+        }*/
 
         $parameters = array(
             'totalAdCount'    => $totalAdCount,
