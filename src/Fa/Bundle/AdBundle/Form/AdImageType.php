@@ -129,7 +129,9 @@ class AdImageType extends AbstractType
             $image->setOrd($maxOrder);
 
             $ad = $this->em->getRepository('FaAdBundle:Ad')->find($adId);
+            $adTitle = "";
             if ($ad) {
+                $adTitle = $ad->getTitle();
                 $image->setImageName(Urlizer::urlize($ad->getTitle().'-'.$ad->getId().'-'.$maxOrder));
             }
             $image->setStatus('1');
@@ -147,7 +149,14 @@ class AdImageType extends AbstractType
             */
 
             $adImageManager = new AdImageManager($this->container, $adId, $hash, $imagePath);
-            $adImageS3Name = $adImageManager->uploadImageDirectlyToS3($uploadedFile, $image->getImageName());
+            $imageFileName = "";
+            if (!empty($image->getImageName())) {
+                $imageFileName = $image->getImageName();
+            } else {
+                $imageFileName = CommonManager::generateImageFileName($adTitle, $adId, $maxOrder);
+                $image->setImageName($imageFileName);
+            }
+            $adImageS3Name = $adImageManager->uploadImageDirectlyToS3($uploadedFile, $imageFileName);
             if(!empty($adImageS3Name)) {
                 $image->setAws(1);
                 $image->setStatus('1');
