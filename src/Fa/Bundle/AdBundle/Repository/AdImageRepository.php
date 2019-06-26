@@ -261,7 +261,7 @@ class AdImageRepository extends EntityRepository
             || $ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_SOLD_ID)) {
             $this->updateImageToSolr($ad, $container);
         }
-        
+
         if ($ad) {
             $adImageCountArray = $this->getAdImageCountArrayByAdId(array($ad->getId()));
             $ad->setImageCount((isset($adImageCountArray[$ad->getId()]) ? $adImageCountArray[$ad->getId()] : 0));
@@ -642,6 +642,7 @@ class AdImageRepository extends EntityRepository
      */
     public function createImageFromSource($container, $sourcePath, $sourceName, $adId = null, $sessionId = null)
     {
+        // todo this function is not used properly. It is used ONLY IN ONE PLACE to copy business image at Fa/Bundle/AdBundle/Repository/AdJobsRepository.php:337. But this function copies image from ad directory to same folder. Doesn't make sense.
         $imagePath = null;
         if ($adId) {
             $imagePath = $container->getParameter('fa.ad.image.dir').'/'.CommonManager::getGroupDirNameById($adId);
@@ -675,14 +676,14 @@ class AdImageRepository extends EntityRepository
                 mkdir($orgImagePath, 0777);
                 umask($old);
             }
-            
+
             $orginFilePath = $sourcePath.'/'.$sourceName;
             if (file_exists($orginFilePath)) {
                 $docopy = 1;
             } else {
                 $docopy = 0;
             }
-            
+
             if ($docopy==1) {
                 //create original image.
                 copy($sourcePath.'/'.$sourceName, $orgImagePath.'/'.$orgImageName);
@@ -696,8 +697,10 @@ class AdImageRepository extends EntityRepository
             } else {
                 $adImageManager = new AdImageManager($container, $sessionId, $hash, $orgImagePath);
             }
-            
+
             if ($docopy==1) {
+
+                // todo need to change to upload direct to AmazonS3 if this function is correct.
                 //save original jpg image.
                 $adImageManager->saveOriginalJpgImage($orgImageName);
                 //create thumbnails

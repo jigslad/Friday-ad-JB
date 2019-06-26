@@ -304,6 +304,7 @@ class AdImageManager
      */
     public function removeImage($keepOriginal = false)
     {
+        // START of code not required. Image is uploaded only to S3 since FFR-3664. 14-June-2019.
         //remove original file
         if (!$keepOriginal && is_file($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.jpg')) {
             unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.jpg');
@@ -332,6 +333,7 @@ class AdImageManager
                 }
             }
         }
+        // END of code not required. Image is uploaded only to S3 since FFR-3664. 14-June-2019.
 
         try {
             $this->removeFromAmazoneS3($keepOriginal);
@@ -605,7 +607,7 @@ class AdImageManager
 
     /**
      * Receives the input image object and uploads to S3.
-     * @param UploadedFile $uploadedFile
+     * @param UploadedFile|string $uploadedFile
      * @param string       $imageName
      * @return string
      * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
@@ -613,8 +615,12 @@ class AdImageManager
     public function uploadImageDirectlyToS3($uploadedFile, $imageName)
     {
         // no need to generate thumbnail here. Since Amazon Lambda function is written to handle the same.
+        $sourcePath = $uploadedFile;
+        if($uploadedFile instanceof UploadedFile){
+            $sourcePath = $uploadedFile->getRealPath();
+        }
         $objAS3IM = AmazonS3ImageManager::getInstance($this->container);
-        return $objAS3IM->uploadImageToS3($uploadedFile->getRealPath(), $this->getAdImageDestination($imageName));
+        return $objAS3IM->uploadImageToS3($sourcePath, $this->getAdImageDestination($imageName));
     }
 
     /**

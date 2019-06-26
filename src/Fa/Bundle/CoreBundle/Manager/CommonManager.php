@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\CoreBundle\Manager;
 
+use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\MessageSelector;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
@@ -3349,23 +3350,39 @@ HTML;
     }
 
     /**
+     * Gets the folder structure for an image irrespective of the destination where the image is to be stored
      * @param integer $adId
      * @param string  $imagePath
      * @param string  $imageHash
      * @param string  $size
      * @param string  $image_name
+     * @param string  $adTitle
+     * @param integer $maxOrder
      * @return string
      * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
      */
-    public static function getImageRelativePath($adId, $imagePath, $imageHash, $size = null, $image_name = null)
+    public static function getImageRelativePath($adId, $imagePath, $imageHash, $size = null, $image_name = null, $adTitle = "", $maxOrder = null)
     {
-        $imgRelPath = "";
-        if ($image_name != '') {
-            $imgRelPath = $imagePath . '/' . $image_name . ($size ? '_' . $size : '') . '.jpg?' . $imageHash;
-        } else {
-            $imgRelPath = $imagePath . '/' . $adId . '_' . $imageHash . ($size ? '_' . $size : '') . '.jpg';
+        $image_name = $adId . '_' . $imageHash;
+        if ($image_name) {
+            $image_name = self::generateImageFileName($adTitle, $adId, $maxOrder);
         }
+        $imgRelPath = $imagePath . '/' . $image_name . ($size ? '_' . $size : '') . '.jpg?' . $imageHash;
         return $imgRelPath;
+    }
+
+    /**
+     * Returns the urlized image name generated using ad details.
+     * @param string $adTitle
+     * @param integer $adId
+     * @param integer $maxOrder
+     * @return string
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
+     */
+    public static function generateImageFileName($adTitle, $adId, $maxOrder)
+    {
+        $imageFileName = Urlizer::urlize($adTitle.'-'.$adId.'-'.$maxOrder);;
+        return $imageFileName;
     }
 
 }

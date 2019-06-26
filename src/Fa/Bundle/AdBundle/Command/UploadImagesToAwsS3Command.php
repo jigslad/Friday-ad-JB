@@ -28,6 +28,7 @@ use Fa\Bundle\AdBundle\Manager\AdImageManager;
  * @author Janak Jadeja <janak@aspl.in>
  * @copyright 2014 Friday Media Group Ltd
  * @version v1.0
+ * @deprecated This command shouldn't be used since the direct image upload to S3 in PAA is implemented.
  */
 class UploadImagesToAwsS3Command extends ContainerAwareCommand
 {
