@@ -50,7 +50,7 @@
         {% else %}
             <div class="medium-1 large-1 columns"><span class="dummbychk"></span></div>
         {% endif %}
-        <div class="small-10 medium-5 large-6 columns">
+        <div class="small-10 medium-6 large-6 columns  medium-left-cols">
             <div class="manage-list-img">
                 {% if ad['status_id'] == adStatusLive %}
                     <a href="{{adUrl}}" target="_blank">
@@ -60,7 +60,7 @@
                         <img src="{{ adImageUrl }}" />
                     {% else %}
                         <!--<div class="user_icon"><i class="gray_color fi-photo size-48"></i></div>-->
-                        <img src="/bundles/fafrontend/images/no-image.svg" alt="" />
+                        <img src="/bundles/fafrontend/images/no-image.svg" alt="" class="no-img-cls"/>
                     {% endif %}
                 {% if ad['status_id'] == adStatusLive %}
                     </a>
@@ -104,7 +104,7 @@
                 </div>
             </div>
         </div>
-        <div class="small-14 medium-9 large-12 columns">
+        <div class="small-14 medium-10 large-12 columns medium-center-cols">
             <div class="clearfix">
                 <h3 id="item_detail_link_{{adId}}">
                     {% if ad['status_id'] == adStatusLive %}
@@ -147,7 +147,7 @@
             </div>
         </div>
 
-        <div class="small-24 medium-9 large-5 columns">
+        <div class="small-24 medium-8 large-5 columns medium-right-cols">
             <div class="manage-item-btns text-right">
             	<div class="right-manage-buttons featuredBlock">
             		<div class="featured-switch toggle-off">
@@ -243,7 +243,7 @@
                         <img src="{{ adImageUrl }}" />
                     {% else %}
                         <!--<div class="user_icon"><i class="gray_color fi-photo size-48"></i></div>-->
-                        <img src="/bundles/fafrontend/images/no-image.svg" alt="" />
+                        <img src="/bundles/fafrontend/images/no-image.svg" alt="" class="no-img-cls"/>
                     {% endif %}
                 {% if ad['status_id'] == adStatusLive %}
                     </a>
