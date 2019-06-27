@@ -414,12 +414,13 @@
                 $town_selector.html('<option value="">Select Town</option>');
 
                 for (var i=0, total = data.length; i < total; i++) {
-                    $town_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                    $town_selector.append('<option value="' + data[i].id + '"  selected="selected">' + data[i].text + '</option>');
                 }
             }
         });
     });
-    
+   
+   $("#fa_item_report_county_id").prepend('<option value="">{{ 'Select County'|trans }}</option>');
     $("#fa_item_report_town_id").prepend('<option value="">{{ 'Select Town'|trans }}</option>');
     
     $('#ad_report_columns input[type=checkbox]').change(function() {
