@@ -13,12 +13,9 @@ namespace Fa\Bundle\PromotionBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Fa\Bundle\AdminBundle\Controller\CrudController;
-use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\PromotionBundle\Entity\CategoryUpsell;
 use Fa\Bundle\PromotionBundle\Form\CategoryUpsellSearchAdminType;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
-use Fa\Bundle\PromotionBundle\Repository\CategoryUpsellRepository;
-use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\PromotionBundle\Form\CategoryUpsellAdminType;
 
 /**
@@ -58,13 +55,12 @@ class CategoryUpsellAdminController extends CrudController implements ResourceAu
     /**
      * Lists all Entities.
      *
-     * @return Response A Response object.
+     * @return object.
      */
     public function indexAction(Request $request)
     {
-        //CommonManager::setAdminBackUrl($request, $this->container);
         // initialize search filter manager service and prepare filter data for searching
-        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaPromotionBundle:CategoryUpsell'), $this->getRepositoryTable('FaPromotionBundle:CategoryUpsell'), CategoryUpsellSearchAdminType::class);
+        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaPromotionBundle:CategoryUpsell'), $this->getRepositoryTable('FaPromotionBundle:CategoryUpsell'), 'fa_promotion_category_upsell_search_admin');
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
         // initialize search manager service and fetch data based of filters
@@ -97,7 +93,8 @@ class CategoryUpsellAdminController extends CrudController implements ResourceAu
 
         $this->get('fa.sqlsearch.manager')->init($this->getRepository('FaPromotionBundle:CategoryUpsell'), $data);
         $query = $this->get('fa.sqlsearch.manager')->getQuery();
-
+        //echo $query->getSql();die;
+        
         $page = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page'] : 1;
         $this->get('fa.pagination.manager')->init($query, $page);
         $pagination = $this->get('fa.pagination.manager')->getPagination();
@@ -129,12 +126,10 @@ class CategoryUpsellAdminController extends CrudController implements ResourceAu
      * @param Request $request
      *            Request instance.
      *
-     * @return Response A Response object.
+     * @return  entity.
      */
     public function createAction(Request $request)
     {
-        $backUrl = CommonManager::getAdminBackUrl($this->container);
-
         // initialize form manager service
         $formManager = $this->get('fa.formmanager');
 
@@ -145,18 +140,8 @@ class CategoryUpsellAdminController extends CrudController implements ResourceAu
         );
 
         $form = $formManager->createForm(CategoryUpsellAdminType::class, $entity, $options);
-
+       
         if ($formManager->isValid($form)) {
-            if (! empty($form['category']->getData())) {
-                $entity->setCategory($this->getRepository('FaEntityBundle:Category')->find($form['category']->getData()));
-            }
-
-            if (! empty($form['upsell']->getData())) {
-                $entity->setUpsell($this->getRepository('FaPromotionBundle:Upsell')->find($form['upsell']->getData()));
-            }
-
-            $formManager->save($entity);
-
             return parent::handleMessage($this->get('translator')->trans('Category upsell was successfully added.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'category_upsell_new_admin' : 'category_upsell_admin'));
         }
 
@@ -178,12 +163,9 @@ class CategoryUpsellAdminController extends CrudController implements ResourceAu
      *            Id.
      *
      * @throws createNotFoundException.
-     * @return Response A Response object.
      */
     final public function updateAction(Request $request, $id)
     {
-        $backUrl = CommonManager::getAdminBackUrl($this->container);
-
         // initialize form manager service
         $formManager = $this->get('fa.formmanager');
         $entity = $this->getRepository('FaPromotionBundle:CategoryUpsell')->find($id);
@@ -205,25 +187,10 @@ class CategoryUpsellAdminController extends CrudController implements ResourceAu
         );
 
         $form = $formManager->createForm(CategoryUpsellAdminType::class, $entity, $options);
-
+        
         $this->unsetFormFields($form);
 
         if ($formManager->isValid($form)) {
-            if (! empty($form['category']->getData())) {
-                $entity->setCategory($this->getRepository('FaEntityBundle:Category')->find($form['category']->getData()));
-            } else {
-                $form->get('category')->addError(new FormError('Category is mandatory.'));
-                return false;
-            }
-
-            if (! empty($form['upsell']->getData())) {
-                $entity->setUpsell($this->getRepository('FaPromotionBundle:Upsell')->find($form['upsell']->getData()));
-            }
-
-            $formManager->save($entity);
-
-            $this->getEntityManager()->flush();
-
             return parent::handleMessage($this->get('translator')->trans('Category upsell was successfully updated.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'category_upsell_new_admin' : 'category_upsell_admin'));
         }
 
@@ -234,5 +201,32 @@ class CategoryUpsellAdminController extends CrudController implements ResourceAu
         );
 
         return $this->render('FaPromotionBundle:CategoryUpsellAdmin:new.html.twig', $parameters);
+    }
+    
+    /**
+     * Deletes a record.
+     *
+     * @param Request $request
+     * @param integer $id
+     *
+     * @see \Fa\Bundle\AdminBundle\Controller\CrudController::deleteAction()
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $deleteManager = $this->get('fa.deletemanager');
+        $entity = $this->getRepository('FaPromotionBundle:CategoryUpsell')->find($id);
+        
+        try {
+            if (!$entity) {
+                throw $this->createNotFoundException($this->get('translator')
+                    ->trans('Unable to find category upsell.'));
+            } else {
+                $deleteManager->delete($entity);
+            }
+        } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e) {
+            return parent::handleException($e, 'error', 'category_upsell_admin');
+        }
+        
+        return parent::handleMessage($this->get('translator')->trans('Record has been deleted successfully.', array(), 'success'), $this->getRouteName(''));
     }
 }

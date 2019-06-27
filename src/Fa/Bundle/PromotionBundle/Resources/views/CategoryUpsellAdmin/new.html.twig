@@ -10,11 +10,13 @@
             <p class="text-right"><span class="required">*</span> = mandatory fields</p>
 
             {{ form_start(form, {'attr': {'novalidate': ''}}) }}
-                {{ form_row(form.category) }}
+                {{ form_row(form.category_1) }}
+                {{ form_row(form.category_2) }}
+                {{ form_row(form.category_3) }}
+                {{ form_row(form.category_4) }}
                 {{ form_row(form.upsell) }}
                 {{ form_row(form.price) }}
                 {{ form_row(form.show_in_filters) }}
-
                 {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'category_upsell_admin'}) }}
             {{ form_end(form) }}
         </div>
@@ -26,7 +28,44 @@
 {% block scriptbottom %}
     <script language="javascript" type="text/javascript">
     //<![CDATA[
+    	$(document).ready(function(){ 
+            $("#fa_promotion_category_upsell_admin_category_1").change(function(){
+                loadCategoryByLevel($(this).val(), 2);
+                loadCategoryByLevel('', 3);
+                loadCategoryByLevel('', 4);
+            });
     
+            $("#fa_promotion_category_upsell_admin_category_2").change(function(){
+                loadCategoryByLevel($(this).val(), 3);
+                loadCategoryByLevel('', 4);
+            });
+    
+            $("#fa_promotion_category_upsell_admin_category_3").change(function(){
+                loadCategoryByLevel($(this).val(), 4);
+            });
+        });
+
+     	function loadCategoryByLevel(id, level)
+        {
+            var category_selector = $('#fa_promotion_category_upsell_admin_category_'+level);
+            category_selector.html('<option value="">{{'Select category'|trans}} '+level+'</option>');
+
+            if (id) {
+                var data = {
+                    id: id
+                };
+                $.ajax({
+                    type: 'post',
+                    url: (level == 4) ? '{{ path("category_ajax_get_nested_node_json") }}' : '{{ path("category_ajax_get_node_json") }}',
+                    data: data,
+                    success: function(data) {
+                        for (var i=0, total = data.length; i < total; i++) {
+                            category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                        }
+                    }
+                });
+            }
+        }
     //]]>
     </script>
 {% endblock %}

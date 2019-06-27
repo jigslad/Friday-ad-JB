@@ -13,16 +13,12 @@ namespace Fa\Bundle\PromotionBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\PromotionBundle\Repository\UpsellRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Fa\Bundle\EntityBundle\Form\EventListener\AddCategoryChoiceFieldSubscriber;
 
 /**
  * Upsell search admin type form.
@@ -67,7 +63,7 @@ class CategoryUpsellSearchAdminType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('category__id', EntityType::class, array(
+        /*$builder->add('category__id', EntityType::class, array(
             'class' => 'FaEntityBundle:Category',
             'choice_label' => 'name',
             'placeholder' => 'Category',
@@ -77,8 +73,16 @@ class CategoryUpsellSearchAdminType extends AbstractType
             ->andWhere(CategoryRepository::ALIAS . '.status = 1')
             ->orderBy(CategoryRepository::ALIAS . '.name', 'ASC');
             }
-         ))
-         ->add('upsell__id', EntityType::class, array(
+         ));
+        */
+        
+        $builder->add('category__id', HiddenType::class, array('data' => ''))
+        ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 1))
+        ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 2))
+        ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 3))
+        ->addEventSubscriber(new AddCategoryChoiceFieldSubscriber($this->container, 4));
+        
+         $builder->add('upsell__id', EntityType::class, array(
              'class' => 'FaPromotionBundle:Upsell',
              'choice_label' => 'title',
              'placeholder' => 'All Upsells',
