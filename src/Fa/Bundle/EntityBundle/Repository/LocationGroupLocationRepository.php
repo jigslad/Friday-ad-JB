@@ -206,6 +206,23 @@ class LocationGroupLocationRepository extends BaseEntityRepository
         }
         return array_unique($retArray);
     }
+    
+    public function getTownsByLocationGroupDomicileId($locationGroupIds = null,$locationDomiciles = null) {
+        $query = $this->createQueryBuilder(self::ALIAS);
+        if ($locationGroupIds) {
+            $query->andWhere(self::ALIAS.'.location_group IN(:locationGroupIds)');
+            $query->andWhere(self::ALIAS.'.location_domicile IN(:locationDomiciles)');
+            $query->setParameter('locationGroupIds', $locationGroupIds);
+            $query->setParameter('locationDomiciles', $locationDomiciles);
+        }
+        $locations = $query->getQuery()->getResult();
+        
+        $retArray = array();
+        foreach ($locations as $location) {
+            $retArray[$location->getLocationTown()->getId()] = $location->getLocationTown()->getName();           
+        }
+        return array_unique($retArray);
+    }
 
     /**
      * Get location group id by town id.
