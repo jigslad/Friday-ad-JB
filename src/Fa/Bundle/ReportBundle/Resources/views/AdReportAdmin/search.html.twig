@@ -279,8 +279,16 @@
 	if($("#fa_item_report_location_group__location_group_id").val()!='') {
 		var groupId = $("#fa_item_report_location_group__location_group_id").val();
     	getDomicileTownByGroupOnLoad(groupId);
+	} else {
+		$('#fa_item_report_county_id').find('option').remove().end();
+		$('#fa_item_report_town_id').find('option').remove().end();
 	}
-	
+
+	if($("#fa_item_report_location_group__county_id").val()!='') {
+		var countyId = $("#fa_item_report_location_group__county_id").val();
+		$('#fa_item_report_location_group__county_id').val(countyId).trigger('change');
+	}
+
      function getDomicileTownByGroupOnLoad(groupId) {
     	var countyvars = townvars = [], hash;
 	    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -377,20 +385,22 @@
     
    $("#fa_item_report_county_id").change(function(){
         var data = {
-            id: $(this).val()
+            id: $(this).val(),
+            locationGroupId: $('#fa_item_report_location_group__location_group_id').val(),
         };
      
         $.ajax({
             type: 'post',
-            url: '{{ path("location_ajax_get_node_json") }}',
+            url: '{{ path("location_town_by_county_ajax_get_node_json") }}',
             data: data,
             success: function(data) {
+            	var towndata = data.town;
                 var $town_selector = $('#fa_item_report_town_id');
-
+                $town_selector.html('');
                 $town_selector.html('<option value="">Select Town</option>');
 
-                for (var i=0, total = data.length; i < total; i++) {
-                    $town_selector.append('<option value="' + data[i].id + '"  selected="selected">' + data[i].text + '</option>');
+                for (var i=0, total = towndata.length; i < total; i++) {
+                    $town_selector.append('<option value="' + towndata[i].id + '"  selected="selected">' + towndata[i].text + '</option>');
                 }
             }
         });

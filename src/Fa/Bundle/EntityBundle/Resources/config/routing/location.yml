@@ -13,6 +13,10 @@ location_group_ajax_get_node_json:
 location_group_by_id_ajax_get_node_json:
     path:     /location/ajax/get/location_group_by_id_nodejson/
     defaults: { _controller: "FaEntityBundle:Location:ajaxGetNodeJsonForLocationGroupById" }
+    
+location_town_by_county_ajax_get_node_json:
+    path:     /location/ajax/get/location_town_by_county_nodejson/
+    defaults: { _controller: "FaEntityBundle:Location:ajaxGetNodeJsonForLocationTownByCounty" }
 
 town_ajax_find_town_by_term:
     path:     /location/ajax/find_town/{term}/
