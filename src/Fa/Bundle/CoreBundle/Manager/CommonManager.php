@@ -3363,8 +3363,7 @@ HTML;
      */
     public static function getImageRelativePath($adId, $imagePath, $imageHash, $size = null, $image_name = null, $adTitle = "", $maxOrder = null)
     {
-        $image_name = $adId . '_' . $imageHash;
-        if ($image_name) {
+        if (empty($image_name)) {
             $image_name = self::generateImageFileName($adTitle, $adId, $maxOrder);
         }
         $imgRelPath = $imagePath . '/' . $image_name . ($size ? '_' . $size : '') . '.jpg?' . $imageHash;
