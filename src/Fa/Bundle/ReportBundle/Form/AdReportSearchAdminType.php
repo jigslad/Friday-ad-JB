@@ -119,6 +119,7 @@ class AdReportSearchAdminType extends AbstractType
                 ChoiceType::class,
                 array(
                     'required' => false,
+                    'placeholder' => 'Select Location Group',
                     'label'    => 'Location Group',
                     'choices' => array_flip($this->em->getRepository('FaEntityBundle:LocationGroup')->getLocationGroupsKeyValueArray()),
                 )
