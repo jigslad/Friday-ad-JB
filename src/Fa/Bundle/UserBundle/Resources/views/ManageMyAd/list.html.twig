@@ -1,4 +1,6 @@
 {% set currentRoute = app.request.attributes.get('_route') %}
+{% set container = fetch_container_instance() %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
 {% set adRepository         = fetch_repository('FaAdBundle:Ad') %}
 {% set adLocationRepository = fetch_repository('FaAdBundle:AdLocation') %}
 {% set adImageRepository = fetch_repository('FaAdBundle:AdImage') %}
@@ -11,6 +13,16 @@
 {% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
 {% set adUrl = ''%}
 
+{% set userRoleId = app.user.getRole().getId() %}
+{% set userBusType = 'private' %}
+{% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+	{% set userBusType = 'netsuite' %}
+{% elseif (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID')) %}
+	{% set userBusType = 'business' %}
+{% else %}
+	{% set userBusType = 'private' %}
+{% endif %}
+
 {% if pagination.getNbResults() %}
     {% set adCategoryIdArray    = adRepository.getAdCategoryIdArrayByAdId(adIdArray) %}
     {% set adImageArray         = adImageRepository.getAdMainImageArrayByAdId(adIdArray) %}
@@ -19,273 +31,56 @@
     {% set adModerateArray      = adModerateRepository.findResultsByAdIdsAndModerationResult(adIdArray, 'rejected') %}
     {% set inModerationLiveAdIds = adModerateRepository.getInModerationStatusForLiveAdIds(adIdArray) %}
 {% endif %}
-<style>
-.manage-item-list .manage-price { min-width:100% !important; }
-.manage-item-list .pkg-free { margin:0px 0px 10px 0px !important;width:auto !important;max-width:100% !important; }
-.manage-item-list .manage-price-box { margin:10px 0px 15px 0px !important; }
-.manage-item-list .large-7 { width:29.16667% !important; }
-.manage-item-list .manage-item-btns .button  { /*display:inline-flex !important;*/ }
-.manage-item-list .manage-list-social-icons { width:100% !important; }
-.manage-item-list .manage-item-button { width:46%;padding: 5px 15px 5px 15px;margin: 0 0 8px 5px;    white-space: nowrap; }
-/*.manage-items-main .custom-checkbox input[type="checkbox"] { opacity:0.5 !important; }*/
-.manage-my-ad-boost-text.total-credits-remaining span { font-size:14px;font-family: "Helvetica Neue",Arial;color: #a8a8a8;line-height: 20px;padding-left:10px }
 
-.manage-item-list .list-boosted-hours { font-size: 13px;color: #a8a8a8;font-style: italic;text-align: right;line-height: normal;white-space: nowrap;min-height: 22px; }
+{{ include('FaUserBundle:ManageMyAd:manageMyAd-css.html.twig') }}
 
-.manage-item-list .pkg-free { 
-    white-space: nowrap; overflow: hidden;text-overflow: ellipsis; 
-}
-
-
-.manage-item-list .ad-remove a { background-image:url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2213%22%20height%3D%2218%22%20viewBox%3D%220%200%2013%2018%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23A4A4A4%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Edelete%20icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%3Cg%20transform%3D%22translate%28-849.000000%2C%20-967.000000%29%22%3E%3Cg%20transform%3D%22translate%28-2.000000%2C%20260.000000%29%22%3E%3Cg%20transform%3D%22translate%28459.000000%2C%2021.000000%29%22%3E%3Cg%20transform%3D%22translate%281.000000%2C%20563.000000%29%22%3E%3Cg%20transform%3D%22translate%28373.000000%2C%20118.000000%29%22%3E%3Cg%20transform%3D%22translate%2818.000000%2C%205.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M11.8%207.4L11.8%207.4C11.8%207.4%2011.8%207.4%2011.8%207.4%2011.8%207.4%2011.8%207.4%2011.8%207.4l-0.4%208.9h0c0%200.7-0.8%201.7-5.1%201.7%20-4.3%200-5.1-1-5.1-1.7h0L0.8%207.5c0%200%200%200%200%200%200%200%200%200%200%200l0%200h0c0-0.1%200.1-0.1%200.1-0.2%200.6%200.6%202.8%200.7%205.4%200.7s4.8-0.1%205.4-0.7C11.8%207.2%2011.8%207.3%2011.8%207.4L11.8%207.4%2011.8%207.4zM12.6%204v1c0%200.2-0.2%200.4-0.6%200.6%20-1%200.5-3.2%200.8-5.7%200.8%20-2.5%200-4.7-0.3-5.7-0.8C0.2%205.5%200%205.3%200%205.1V4c0-0.5%201.4-1%203.4-1.2V0.6C3.4%200.3%203.7%200%204.1%200h4.2c0.3%200%200.6%200.3%200.6%200.6v2.1C11.1%203%2012.6%203.5%2012.6%204L12.6%204zM7.8%201.8c0-0.4-0.1-0.7-0.1-0.7H6.9%205.5%204.7c-0.1%200-0.1%200.3-0.1%200.7v0.9l0.2%200c0.5%200%201%200%201.5%200%200.5%200%201%200%201.5%200V1.8L7.8%201.8z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E');background-repeat: no-repeat;background-position: 13px 3px;padding-left: 30px;  }
-
-.manage-item-list .ad-edit a { background-image:url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%20standalone%3D%22no%22%3F%3E%0A%3Csvg%20width%3D%2219px%22%20height%3D%2218px%22%20viewBox%3D%220%200%2019%2018%22%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%3E%0A%20%20%20%20%3C%21--%20Generator%3A%20Sketch%203.8.3%20%2829802%29%20-%20http%3A//www.bohemiancoding.com/sketch%20--%3E%0A%20%20%20%20%3Ctitle%3Eedit%20icon@3x%3C/title%3E%0A%20%20%20%20%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%20%20%20%20%3Cdefs%3E%3C/defs%3E%0A%20%20%20%20%3Cg%20id%3D%22Page-1%22%20stroke%3D%22none%22%20stroke-width%3D%221%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Shop-Profile_Edit%22%20transform%3D%22translate%28-413.000000%2C%20-758.000000%29%22%20fill%3D%22%23A8A8A8%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Company-info%22%20transform%3D%22translate%28182.000000%2C%20573.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Group%22%20transform%3D%22translate%280.000000%2C%20115.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22edit-icon%22%20transform%3D%22translate%28231.000000%2C%2070.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M10.1137546%2C3.47712317%20L0.326245579%2C3.47712317%20C0.146117711%2C3.47712317%200%2C3.62342083%200%2C3.80336875%20L0%2C17.6737544%20C0%2C17.8540622%200.145937763%2C18%200.326245579%2C18%20L14.1969911%2C18%20C14.377299%2C18%2014.5232367%2C17.8537023%2014.5232367%2C17.6737544%20L14.5232367%2C10.5017501%20L12.7856596%2C12.2389673%20L12.7856596%2C16.262063%20L1.73775706%2C16.262063%20L1.73775706%2C5.21470028%20L8.632847%2C5.21470028%20L8.54348575%2C5.047392%20L10.1137546%2C3.47712317%20L10.1137546%2C3.47712317%20Z%22%20id%3D%22Fill-1%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M6.84067145%2C8.85782783%20C6.79651076%2C8.9017561%206.77024677%2C8.96079197%206.76745768%2C9.01889813%20L6.3381693%2C12.0057877%20C6.32771019%2C12.0843472%206.35443902%2C12.1649986%206.4106858%2C12.2210129%20C6.4587977%2C12.2688924%206.52224964%2C12.2951564%206.59035007%2C12.2951564%20C6.60266858%2C12.2951564%206.61452224%2C12.2942267%206.62660832%2C12.2923673%20L9.59978479%2C11.8647059%20C9.66602582%2C11.8630789%209.72692109%2C11.8370473%209.775033%2C11.7884706%20L16.5199971%2C5.04211191%20L13.5893544%2C2.11123673%20L6.84067145%2C8.85782783%22%20id%3D%22Fill-2%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M18.5811392%2C2.87498422%20C18.5811392%2C2.80688379%2018.5546428%2C2.74319943%2018.5065308%2C2.69555237%20L15.9356815%2C0.124703013%20C15.8438737%2C0.0319655667%2015.6683931%2C0.0319655667%2015.5761205%2C0.124470588%20L14.3626313%2C1.33795983%20L17.2930416%2C4.26860258%20L18.5067633%2C3.05464849%20C18.5546428%2C3.00653659%2018.5811392%2C2.94285222%2018.5811392%2C2.87498422%22%20id%3D%22Fill-3%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%3C/g%3E%0A%3C/svg%3E');background-repeat: no-repeat;background-position: 25px 3px;padding-left: 40px;  }
-
-.mt50 { margin-top:50px; }
-.mb20 { margin-bottom:20px; }
-.mr20 { margin-right:20px; }
-.ml5  { margin-left:5px; }
-
-.manage-lst .db-sub-title.title-space2 { min-height: 38px; }
-.manage-lst .dummbychk { width:20px;height:20px;display: inline-block;margin: 0 5px 2px 0; }
-.manage-lst .all-sel-text { font-size: 16px;font-weight: 500;cursor:none;color: #313131; }
-.manage-lst .all-sel-chkbox.custom-checkbox, .manage-lst .all-sel-chkbox.custom-checkbox.checked { margin-left:5px }
-.manage-lst .manage-my-ad-boost-mob-text, .manage-lst .total-credits-remaining-mob { font-size: 18px;font-family: "Bree Serif",serif;margin-top:10px; }
-.manage-lst .manage-my-ad-boost-mob-text a, .manage-lst .total-credits-remaining-mob a{ font-size: 24px; }
-.manage-lst .manage-my-ad-boost-mob-text span { font-size: 14px;font-family: "Helvetica Neue",Arial;color: #a8a8a8;line-height: 20px;}
-
-
-@media only screen and (min-width:320px) and (max-width:399px) {
-    .manage-item-list .large-7 { width:100% !important; }
-    .manage-item-list .manage-item-button { width: 48.5%;margin: 0 0 8px 2px; }
-    .manage-item-list .pkg-free { margin: 45px 0px 0px 0px !important; }
-    .manage-item-list .list-created-hours-desk-tab, .manage-item-list .dtl-social-icons-desk-tab, .manage-item-list .list-boosted-hours-desk-tab, .manage-item-list .manage-list-desc-desk-tab, .manage-item-list .pkg-free-desk-tab, .manage-item-list .item-status-desk-tab { display:none !important; }
-}
-@media only screen and (min-width:400px) and (max-width:640px) {
-    .manage-item-list .large-7 { width:100% !important; }
-    .manage-item-list .manage-item-button { width: 48.5%;margin: 0 0 8px 2px; }
-    .manage-item-list .pkg-free { margin: 45px 0px 0px 0px !important; }
-    .manage-item-list .list-created-hours-desk-tab, .manage-item-list .dtl-social-icons-desk-tab, .manage-item-list .list-boosted-hours-desk-tab, .manage-item-list .manage-list-desc-desk-tab, .manage-item-list .pkg-free-desk-tab, .manage-item-list .item-status-desk-tab { display:none !important; }
-}
-@media only screen and (min-width:641px) and (max-width:759px) {
-    .manage-item-list .large-7 { width:38% !important; }
-    .manage-item-list .item-status-mob, .manage-item-list .mobile-share { display:none !important; }
-    .manage-item-list .pkg-free { margin:0px !important; }
-    .manage-item-list .dtl-social-icons { text-align: right;margin:0px !important; }
-    .manage-item-list .manage-price-box { margin: 5px 0px 10px 0px !important; }
-    .d-board-main .manage-item-list .show-for-small-only { display:none !important; }
-}
-@media only screen and (min-width: 760px) and (max-width: 959px) {
-    .manage-item-list .manage-price-box { margin: 10px 0px 0px 0px !important; }
-    .manage-item-list .item-status-mob, .manage-item-list .mobile-share { display:none !important; }
-    .manage-item-list .large-7 { width:37.5% !important; }
-    .manage-item-list .dtl-social-icons { margin:0px !important; }
-    .d-board-main .manage-item-list .show-for-small-only { display:none !important; }
-
-}
-@media only screen and (min-width: 960px) and (max-width: 1024px) {
-    .manage-item-list .large-7 { width:37.5% !important; }
-    .manage-item-list .large-10 { width:32.5% !important; }
-    .manage-item-list .dtl-social-icons { margin:0px !important; }
-}
-@media only screen and (min-width: 1025px) and (max-width: 1151px) {
-    .manage-item-list .large-7 { width:37.5% !important; }
-    .manage-item-list .large-10 { width:32.5% !important; }
-    .manage-item-list .dtl-social-icons { margin:0px !important; }
-}
-@media only screen and (min-width: 320px) and (max-width: 960px) {
-    .manage-lst .all-sel-chkbox.custom-checkbox, .manage-lst .all-sel-chkbox.custom-checkbox.checked { margin-left:0px }
-    .seladv-addet { display: inline-block !important;margin: 0px 0px 10px 5px;font-size: 15px;font-weight: 600;}
-}
-
-#db-left-part-boost {position: absolute;top: 0;padding: 0;background: #313133;z-index: 1; display: none;}
-
-#db-right-part-boost { background: #ffffff; } 
-.d-board-main-boost { position:relative }
-
-
-.d-board-main-boost .inner-wrap { background-color: #313131 !important; }
-
-#markAdAsBoostedModal #db-right-part-boost.large-18 { width: 100%;box-shadow: 0 -3px 5px 0 rgba(0, 0, 0, 0.11);-moz-box-shadow: 0 -3px 5px 0 rgba(0, 0, 0, 0.11); }
-
-.boostRightContentBox .selAdContent { font-family: 'Bree Serif',serif;font-size: 18px;color: #a8dc28; }
-.boostRightContentBox .custom-checkbox input[type="checkbox"] { /*opacity:0.5 !important*/ }
-.boostRightContentBox .manage-list-desc { padding-top:10px; }
-
-.boostedModal { position: fixed;bottom: 0;width:100%;z-index:97; }
-#markAdAsBoostedModal {    width: 117.9%;margin-left: -15px;z-index: 1;}
-.footerTopBoostedModal { position: absolute !important;-webkit-transition: position 1s linear;  -moz-transition: position 1s linear;  -o-transition:position 1s linear;  transition: position 1s linear; }
-.fixdesktopwidth { background: #ffffff;padding-top: 20px; }
-.manage-my-ads-list-pad-bot { margin-bottom:50px; }
-
-.manage-item-list .list-miles {
-    padding-left: 20px;
-    padding-top: 1px;
-    min-height: 15px;
-    line-height:24px
-    background-size: 15px;
-    background-position-y: 5px;
-}
-
-@media only screen and (min-width: 1921px)
-{  
-    #db-left-part-boost.left-off-canvas-menu { box-sizing: border-box;overflow-x: visible;-webkit-transform: none;-ms-transform: none;-o-transform: none;transform: none;-webkit-transition: none;-ms-transition: none;-o-transition: none;transition: none; bottom: unset;left: auto;bottom: auto; }
-    #markAdAsBoostedModal { margin-left: -16px;width: 108%; }
-    #db-right-part-boost { width: 75.8%; }
-    #markAdAsBoostedModal #d-board-main-boost .inner-wrap { margin-top:-5px !important; }
-} 
-
-@media only screen and (max-width:1920px) and (min-width: 1601px)
-{  
-    #db-left-part-boost.left-off-canvas-menu { box-sizing: border-box;overflow-x: visible;-webkit-transform: none;-ms-transform: none;-o-transform: none;transform: none;-webkit-transition: none;-ms-transition: none;-o-transition: none;transition: none; bottom: unset;left: auto;bottom: auto; }
-    #markAdAsBoostedModal { margin-left: -15px;width: 100%; }
-    #db-right-part-boost { width: 75.8%; }
-    #markAdAsBoostedModal #d-board-main-boost .inner-wrap { margin-top:-5px !important; }
-} 
-
-@media only screen and (max-width: 1151px) and (min-width: 1024px)
-{  
-    #db-left-part-boost.left-off-canvas-menu { box-sizing: border-box;overflow-x: visible;-webkit-transform: none;-ms-transform: none;-o-transform: none;transform: none;-webkit-transition: none;-ms-transition: none;-o-transition: none;transition: none; bottom: unset;left: auto;bottom: auto; }
-    #markAdAsBoostedModal {width: 100%;}
-    .boostedModal {margin-left: 0px;}
-    #db-right-part-boost { width: 75.8%; }
-    #markAdAsBoostedModal #d-board-main-boost .inner-wrap { margin-top:-5px !important; }
-} 
-@media only screen and (max-width: 1023px) and (min-width: 960px)
-{  
-    #db-left-part-boost.left-off-canvas-menu { box-sizing: border-box;overflow-x: visible;-webkit-transform: none;-ms-transform: none;-o-transform: none;transform: none;-webkit-transition: none;-ms-transition: none;-o-transition: none;transition: none; bottom: unset;left: auto;bottom: auto; }
-    #db-right-part-boost { width: 75.8%; }
-    #markAdAsBoostedModal #d-board-main-boost .inner-wrap { margin-top:-5px !important; }
-} 
-@media only screen and (max-width: 959px) and (min-width: 760px) {
-   #markAdAsBoostedModal #d-board-main-boost .inner-wrap { margin-top:-5px !important; }
-   #markAdAsBoostedModal {width: 100%;margin-left:-5px;}
-   #db-right-part-boost { width: 75.8%; }
-   } 
-@media only screen and (max-width: 759px) and (min-width: 320px) {
-    #markAdAsBoostedModal { background:transparent; }
-    #markAdAsBoostedModal #db-right-part-boost.large-18 { width:100% }
-    #markAdAsBoostedModal #d-board-main-boost .inner-wrap { margin-top:-5px !important; }
-}
-
-@media only screen and (min-width: 1025px) {
-    .fixdesktopwidth { max-width:836px; }
-}
-@media only screen and (min-width:960px) and (max-width: 1024px) {
-    .fixdesktopwidth { max-width:730px; }
-}
-@media only screen and (min-width:760px) and (max-width: 959px) {
-    .fixdesktopwidth { max-width:572px; }
-}
-
-@media only screen and (min-width:1025px) and (max-width: 1920px) {
-    body { overflow-x:hidden !important; }
-    .footerTopBoostedModal { min-width: 100vw; }
-}
-
-@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait) {
-    body { overflow-x:hidden !important;width:100% !important; }
-    .footerTopBoostedModal { width:100% }
-}
-@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:landscape) {
-    body { overflow-x:hidden !important;width:100% !important; }
-   .footerTopBoostedModal { width:100% }
-}
-
-@media only screen and (max-width: 640px) {
-    .manage-items-main { padding-bottom:20px; }
-    .manage-my-ads-list-pad-bot { margin-bottom:160px !important; }
-    .boostedModal .inner-wrap { margin-top:21px; }
-}
-
-</style>
-{% if adsBoostedCount>0 and isBoostEnabled==1 %}
+{# {% if adsBoostedCount>0 and isBoostEnabled==1 %}
     <style>.manage-item-tabs li { width:33.3% !important; }</style>
 {% else %}
     <style>.manage-item-tabs li { width:50% !important; }</style>
-{% endif %}
+{% endif %} #}
+
 <div class="posting-bg manage-lst">
     {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
-    <div class="row d-board-main">
+    <div class="row">
         <div class="off-canvas-wrap" data-offcanvas>
             <div class="inner-wrap">
                 {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
                 
                 <div class="small-24 medium-18 large-18 columns" id="db-right-part">
                 <div id="manage-my-ads-list-only">
-                    <h1 class="db-title">{{'Manage ads (%ad_count%)'|trans({'%ad_count%': totalAdCount}, 'frontend-manage-my-ad')}}</h1>
-                    <h2 class="db-sub-title title-space2">You'll find everything you need to update, edit, track and generally manage your ads.</h2>
-
-                    <div class="{% if userCreditCount > 0 or (isBoostEnabled==1 and boostMaxPerMonth > 0) %}mb20{% endif%} hide-for-small-only">
-                    {% if userCreditCount > 0 %}
-                        <span class="total-credits-remaining mr20">
-                            {{'Total credits remaining:'|trans({}, 'frontend-manage-my-ad')}} <a href="{{ path('my_credits') }}">{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</a>
-                        </span>
-                    {% endif %}
-
-                     {% if isBoostEnabled==1 and boostMaxPerMonth > 0 %} 
-                        <span class="manage-my-ad-boost-text total-credits-remaining">
-                            {{'Boosts remaining:'|trans({}, 'frontend-manage-my-ad')}} <a href="{{ path('manage_my_ads_boosted') }}">{{ boostAdRemaining }}</a> <span> Boost renew on {{ boostRenewDate }}</span>
-                        </span>
-                    {% endif %} 
-                    </div>
-
-                    <div class="show-for-small-only">
-                    {% if userCreditCount > 0 %}
-                        <div class="total-credits-remaining-mob">
-                            {{'Total credits remaining:'|trans({}, 'frontend-manage-my-ad')}} <a href="{{ path('my_credits') }}">{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</a>
-                        </div>
-                    {% endif %}
-
-                    {% if isBoostEnabled==1 and boostMaxPerMonth > 0 %}
-                        <div class="manage-my-ad-boost-mob-text">
-                            {{'Boosts remaining:'|trans({}, 'frontend-manage-my-ad')}} <a href="{{ path('manage_my_ads_boosted') }}">{{ boostAdRemaining }}</a> 
-                        </div>
-                        <div class="manage-my-ad-boost-mob-text mb20"><span>Boost renew on {{ boostRenewDate }}</span></div>
-                    {% endif %}
-                    </div>
-
-
+                    <h1 class="db-title">Manage ads</h1>                   
+					<div class="toplistdiv clearfix">                    	
+                		<ul class="toplistWithBullets">
+                			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
+                			<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>
+                			{% if isBoostEnabled==1 %}
+                    			<li class="lightgreencircle">Boosts remaining: <span>{{ boostAdRemaining }}</span></li>
+                    			<li class="boostBtn"><a id="boost_ad_selected_all" class="xs-btn-1 button all-sel-texts">Boost All Actives</a></li>
+                    		{% endif %}
+                		</ul>                    	
+					</div>
 
                     <ul class="tab-menu manage-item-tabs clearfix">
                         <li {% if currentRoute == 'manage_my_ads_active' %} class="active" {% endif %}>
-
-                        <a href="{{path('manage_my_ads_active')}}" class="hide-for-small-only">{{ 'My Active Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
-
-                        <a href="{{path('manage_my_ads_active')}}" class="show-for-small-only">{{ 'Active'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
-
-
-                        </li>
-                        {% if isBoostEnabled==1 and adsBoostedCount>0 %}
-                            <li {% if currentRoute == 'manage_my_ads_boosted' %} class="active" {% endif %}>
-
-                            <a href="{{path('manage_my_ads_boosted')}}" class="hide-for-small-only">{{ 'My Boosted Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{adsBoostedCount}}</span>)</a>
-
-                            <a href="{{path('manage_my_ads_boosted')}}" class="show-for-small-only">{{ 'Boosted'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{adsBoostedCount}}</span>)</a>
-
-                            </li>
-                        {% endif %}
+                        	<a href="{{path('manage_my_ads_active')}}" class="hide-for-small-only">{{ 'My Active Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
+                        	<a href="{{path('manage_my_ads_active')}}" class="show-for-small-only">{{ 'Active'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
+                        </li>                       
                         <li {% if currentRoute == 'manage_my_ads_inactive' %} class="active" {% endif %}>
-
-                        <a href="{{path('manage_my_ads_inactive')}}" class="hide-for-small-only">{{ 'My Inactive Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
-
-                        <a href="{{path('manage_my_ads_inactive')}}" class="show-for-small-only">{{ 'Inactive'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
-
+                       		<a href="{{path('manage_my_ads_inactive')}}" class="hide-for-small-only">{{ 'My Inactive Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
+                        	<a href="{{path('manage_my_ads_inactive')}}" class="show-for-small-only">{{ 'Inactive'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
                         </li>
                     </ul>
                  
                    <div class="manage-items-main">
-                       {% if pagination.getNbResults() %}
-                            {% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active' or currentRoute == 'manage_my_ads_boosted') %}
+                       {% if pagination.getNbResults() %}  
+                       		{% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}
                                 <div class="manage-item-list" style="border-top:0px">
-                                    <span class="all-sel-chkbox custom-checkbox"><input type="checkbox" id="boostad_selectall"></span> <a id="boost_ad_selected_all" class="all-sel-text">All {% if currentRoute == 'manage_my_ads_active' %}
-                                        Active Ads ({{onlyActiveAdCount}})
-                                    {% elseif currentRoute == 'manage_my_ads_boosted' %}
-                                        Boosted Ads ({{adsBoostedCount}})
-                                    {% endif %}
-                                    </a>
+                                    <span class="all-sel-chkbox custom-checkbox"><input type="checkbox" id="boostad_selectall"></span> <a id="boost_ad_selected_all" class="all-sel-text"> {% if currentRoute == 'manage_my_ads_active' %}
+                                        Select all ads <span class="hide-for-small-only">on this page</span> ({{ pagination.getNbResults()>10?10:pagination.getNbResults() }})
+                                    {% endif %} </a>                                    
                                 </div>
-                            {% endif %}
+                            {% endif %}                          
                             {% for ad in pagination.getCurrentPageResults() %}
                                 {% set adId = ad.id %}
                                 {% set adCategoryId = null %}
@@ -296,8 +91,11 @@
                                     {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
                                     {# {% set adUrl = adUrl|trim('/') %} #}
                                 {% endif %}
-
-                                {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+								{% if userBusType is defined and userBusType == 'netsuite' %}
+                                    {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
+                                {% else %}
+                                    {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+                                {% endif %}
                             {% endfor %}
                         {% else %}
                             <div class="row">
@@ -441,7 +239,7 @@
     </div>
 </div>
 {% block scriptbottom%}
-<script language="javascript" type="text/javascript">
+<script language="javascript" type="text/javascript">	
     function boostSelectedAds() {
         $('#boost-sel-ads-btn').prop("disabled", true);
         var selectedBoostAdIds = '';
@@ -609,5 +407,23 @@
             }
         }
     });
+</script>
+<script>
+(function($) {
+    $.fn.extend({
+    	toggleSwitch: function(){
+            $('.featured-switch').on('click',function(){
+              if($(this).hasClass('toggle-off')){
+                $(this).removeClass('toggle-off').addClass('toggle-on');
+              }else{
+                $(this).removeClass('toggle-on').addClass('toggle-off');
+              }
+            })
+        }
+    })
+})(jQuery)
+$(document).ready(function(){
+    $('.featured-switch').toggleSwitch();
+ });
 </script>
 {% endblock %}
