@@ -3385,4 +3385,15 @@ HTML;
         return $imageFileName;
     }
 
+    
+    public function getIndividualUpsellMpdalDetails($upsellId) {
+        $upsellModalDetail = array();
+        switch ($upsellId) {
+            case 5:
+                $upsellModalDetail['title'] = 'Featured ad';
+                $upsellModalDetail['name'] = 'featuredTopUpsellModal';
+                break;
+        }
+        return $upsellModalDetail;
+    }
 }

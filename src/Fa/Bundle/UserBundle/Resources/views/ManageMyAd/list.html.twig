@@ -9,6 +9,7 @@
 {% set adModerateRepository = fetch_repository('FaAdBundle:AdModerate') %}
 {% set userCreditRepository = fetch_repository('FaUserBundle:UserCredit') %}
 {% set userCreditCount = userCreditRepository.getActiveCreditCountForUser(app.user.getId()) %}
+{% set adUserPackageUpsellRepository = fetch_repository('FaAdBundle:AdUserPackageUpsell') %}
 
 {% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
 {% set adUrl = ''%}
@@ -28,11 +29,13 @@
     {% set adImageArray         = adImageRepository.getAdMainImageArrayByAdId(adIdArray) %}
     {% set adViewCounterArray   = adViewCounterRepository.getAdViewCounterArrayByAdId(adIdArray) %}
     {% set adPackageArray       = adUserPackageRepository.getAdPackageArrayByAdId(adIdArray, true) %}
+    {% set adFeaturedUpsellArray = adUserPackageUpsellRepository.getAdFeaturedUpsellArrayByAdId(adIdArray) %}
     {% set adModerateArray      = adModerateRepository.findResultsByAdIdsAndModerationResult(adIdArray, 'rejected') %}
     {% set inModerationLiveAdIds = adModerateRepository.getInModerationStatusForLiveAdIds(adIdArray) %}
 {% endif %}
 
 {{ include('FaUserBundle:ManageMyAd:manageMyAd-css.html.twig') }}
+{{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}
 
 {# {% if adsBoostedCount>0 and isBoostEnabled==1 %}
     <style>.manage-item-tabs li { width:33.3% !important; }</style>
@@ -238,7 +241,15 @@
         </div>
     </div>
 </div>
+
+<div id="featuredTopUpsellModal" class="reveal-modal tiny remove-item-modal featured-top-modal" data-reveal></div>
+{% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
+    {#  Featured Top Success Modal Box   #}
+    {{ include('FaUserBundle:ManageMyAd:individualSuccessPaymentModal.html.twig') }}
+{% endif %}
+    	
 {% block scriptbottom%}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
 <script language="javascript" type="text/javascript">	
     function boostSelectedAds() {
         $('#boost-sel-ads-btn').prop("disabled", true);
@@ -407,16 +418,26 @@
             }
         }
     });
+
+    {% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
+    	$('#featuredTopSuccessPaymentModal').foundation('reveal', 'open');
+    {% endif %}
+
 </script>
 <script>
 (function($) {
     $.fn.extend({
     	toggleSwitch: function(){
             $('.featured-switch').on('click',function(){
+              var elem_id = $(this).attr('id');
+              var split_ad_id = elem_id.split("_");
+              var adId = split_ad_id[1];
+              var upsellId = split_ad_id[2];
               if($(this).hasClass('toggle-off')){
                 $(this).removeClass('toggle-off').addClass('toggle-on');
+                featuredTopUpsellBtn(adId,upsellId);
               }else{
-                $(this).removeClass('toggle-on').addClass('toggle-off');
+                /*$(this).removeClass('toggle-on').addClass('toggle-off');*/
               }
             })
         }

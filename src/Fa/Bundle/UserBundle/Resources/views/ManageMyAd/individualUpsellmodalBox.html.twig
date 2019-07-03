@@ -1,0 +1,191 @@
+{% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+{% set container = fetch_container_instance() %}
+{% set packageIdArray = {} %}
+{% set packageId = '' %}
+
+{% set adRootCategoryId = null %}
+{% block body %}
+<style>
+.upgrade-modal .payment-buttons-block { column-count: 1; margin-left: 0px!important; }
+.upgrade-modal .payment-card-option-block { margin-left: 0px; }
+.upgrade-modal .payment-card-option-block li { border-top: 1px solid #e3e3e3; }
+.upgrade-modal .payment-card-option-block li .card-number { margin-right: 10px; }
+.upgrade-modal .security-block { display: inline-flex; width: 100%; }
+.upgrade-modal .input-block { width: 30%; margin-right: 10px; }
+.individual-upsell-upgrade-border { border: 1px dashed #999 !important; }
+#contactSellerModal .receive-alert li label, #profilePageContactUserModal .receive-alert li label { line-height:20px !important;padding-top:2px !important}
+.modal-paypal-box{background:#FFC439 url(/bundles/fafrontend/images/paypal-payment.png) no-repeat center center;height:37px;margin-bottom: 3px;border:solid 1px #DC911D;border-radius:2px;cursor:pointer}
+.upgrade-payments #AmazonPayButton { height: 46px;cursor: pointer;text-align:center;}
+.upgrade-payments #AmazonPayButton img { width: 100%; }
+.mt0 { margin-top:0px !important}
+.ui-front.ui-selectmenu-open {
+    z-index: 10000 !important;
+}
+.individual-upsell-modal-content { padding: 0px 20px; }
+.upsell-pkg-box { border:2px solid #A8DC28;background-color:#313133;display: inline-block;padding:0px; }
+.upsell-pkg-bg { background-color:#a8dc28; }
+.upsell-title { height:24px; line-height:24px; text-align:center; color: #4A4A4A;font-family: "Bree Serif";font-size: 18px;  }
+.upsell-pkg-inner-box { padding:10px; color:#fff;display: inline-block; }
+.upsell-pkg-left { width:25%;height:124px; float:left;background:url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='61px' height='124px' viewBox='0 0 61 124' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cg id='Manage-my-ads' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='Pay-featured-b' transform='translate(-598.000000, -262.000000)'%3E%3Cg transform='translate(560.000000, 141.000000)'%3E%3Cg%3E%3Cg id='Info-box' transform='translate(19.000000, 60.000000)'%3E%3Cg id='One-click-upsell-graphic' transform='translate(19.000000, 61.000000)'%3E%3Cg id='graphic'%3E%3Cg id='Group' transform='translate(1.000000, 1.000000)'%3E%3Crect id='Rectangle-Copy-3' stroke='%23E3E3E3' fill='%23FFFFFF' x='0.5' y='0.5' width='59' height='19'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-3' fill='%23A8A8A8' x='0' y='0' width='23' height='20'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-8' fill='%23313133' x='28' y='5' width='27' height='2'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-9' fill='%23313133' x='28' y='10' width='17' height='2'%3E%3C/rect%3E%3C/g%3E%3Cg id='Group' transform='translate(1.000000, 27.000000)'%3E%3Crect id='Rectangle-Copy-3' stroke='%23E3E3E3' fill='%23FFFFFF' x='0.5' y='0.5' width='59' height='19'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-3' fill='%23A8A8A8' x='0' y='0' width='23' height='20'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-8' fill='%23313133' x='28' y='5' width='27' height='2'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-9' fill='%23313133' x='28' y='10' width='17' height='2'%3E%3C/rect%3E%3C/g%3E%3Cg id='Group' transform='translate(1.000000, 53.000000)'%3E%3Crect id='Rectangle-Copy-3' stroke='%23E3E3E3' fill='%23FFFFFF' x='0.5' y='0.5' width='59' height='19'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-3' fill='%23A8A8A8' x='0' y='0' width='23' height='20'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-8' fill='%23313133' x='28' y='5' width='27' height='2'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-9' fill='%23313133' x='28' y='10' width='17' height='2'%3E%3C/rect%3E%3C/g%3E%3Cg id='Group' opacity='0.6' transform='translate(1.000000, 79.000000)'%3E%3Crect id='Rectangle-Copy-3' stroke='%23E3E3E3' fill='%23FFFFFF' x='0.5' y='0.5' width='59' height='19'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-3' fill='%23E3E3E3' x='0' y='0' width='23' height='20'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-8' fill='%23313133' x='28' y='5' width='27' height='2'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-9' fill='%23313133' x='28' y='10' width='17' height='2'%3E%3C/rect%3E%3C/g%3E%3Cg id='Group-Copy' opacity='0.6' transform='translate(1.000000, 104.000000)'%3E%3Crect id='Rectangle-Copy-3' stroke='%23E3E3E3' fill='%23FFFFFF' x='0.5' y='0.5' width='59' height='19'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-3' fill='%23E3E3E3' x='0' y='0' width='23' height='20'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-8' fill='%23313133' x='28' y='5' width='27' height='2'%3E%3C/rect%3E%3Crect id='Rectangle-Copy-9' fill='%23313133' x='28' y='10' width='17' height='2'%3E%3C/rect%3E%3C/g%3E%3Cg id='ribbon'%3E%3Cpolygon id='Rectangle-150' fill='%2331C5F2' points='5.45983998 0 14 0 14 0.0201977088 0 15 0 5.84195169 0 0.0201977088'%3E%3C/polygon%3E%3Cpolygon id='Star-5-Copy' fill='%23FFFFFF' points='3.49999996 5.14589803 1.95491497 6 2.24999998 4.19098301 1 2.90983006 2.72745747 2.64589803 3.49999996 1 4.27254245 2.64589803 6 2.90983006 4.75000002 4.19098301 5.04508494 6'%3E%3C/polygon%3E%3C/g%3E%3Cg id='ribbon-copy' transform='translate(0.000000, 26.000000)'%3E%3Cpolygon id='Rectangle-150' fill='%2331C5F2' points='5.45983998 0 14 0 14 0.0201977088 0 15 0 5.84195169 0 0.0201977088'%3E%3C/polygon%3E%3Cpolygon id='Star-5-Copy' fill='%23FFFFFF' points='3.49999996 5.14589803 1.95491497 6 2.24999998 4.19098301 1 2.90983006 2.72745747 2.64589803 3.49999996 1 4.27254245 2.64589803 6 2.90983006 4.75000002 4.19098301 5.04508494 6'%3E%3C/polygon%3E%3C/g%3E%3Cg id='ribbon-copy-2' transform='translate(0.000000, 52.000000)'%3E%3Cpolygon id='Rectangle-150' fill='%2331C5F2' points='5.45983998 0 14 0 14 0.0201977088 0 15 0 5.84195169 0 0.0201977088'%3E%3C/polygon%3E%3Cpolygon id='Star-5-Copy' fill='%23FFFFFF' points='3.49999996 5.14589803 1.95491497 6 2.24999998 4.19098301 1 2.90983006 2.72745747 2.64589803 3.49999996 1 4.27254245 2.64589803 6 2.90983006 4.75000002 4.19098301 5.04508494 6'%3E%3C/polygon%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E") no-repeat;  }
+.upsell-pkg-right { width:70%;float:right;}
+.upsell-subtitle { font-family: Asap;font-size: 14px;line-height: 18px; }
+.upsell-price { height: 27px;color: #A8DC28;font-family: "Bree Serif";font-size: 20px;line-height: 27px;text-align: right; padding-top: 10px; }
+.individual-upsell-modal-content ul { margin-left: 0px !important; margin-bottom: 0px !important; }
+.individual-upsell-modal-content ul li { padding-bottom: 20px; padding-top: 20px; border-bottom: 2px solid #e3e3e3; }
+/*.individual-upsell-modal-content ul.payment-card-option-block li:last-child { border-bottom: 0px solid #e3e3e3; }*/
+.individual-upsell-payment-buttons .columns { padding-left:0px !important;  padding-right:0px !important; }
+.individual-upsell-payment-buttons .modal-paypal-box { background-color: #ffffff !important; border-color: #e3e3e3 !important; height:57px !important; }
+</style>
+<a class="close-reveal-modal" style="display:{% if popup_title is defined %}none{% else %}block{% endif %}">&#215;</a> 
+
+<h5 class="modal-title">{{ individualUpsellModalDetails['title'] }}</h5>
+
+<div class="individual-upsell-modal-content">
+    <div data-alert class="alert-box alert radius" style="display:none;" id="deadlock_error_main">
+        <span class="alert-icon">&nbsp;</span>
+        <span id="deadlock_error"></span>
+        <a href="javascript:void(0)" class="close">&times;</a>
+    </div>   
+   
+    {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }}  
+        
+    {% if individualUpsellArr|length %} 
+    	{% set upsellPrice = format_currency(individualUpsellArr['price']) %}              
+        <div class="columns upsell-pkg-box">
+        	<div class="upsell-pkg-bg"><div class="upsell-title">{{ individualUpsellArr['title'] }}</div></div>
+        	<div class="upsell-pkg-inner-box">
+        		<div class="upsell-pkg-left"></div>
+        		<div class="upsell-pkg-right">
+        		    <div class="upsell-subtitle">{{ individualUpsellArr['description'] }}</div>
+        		    <div class="upsell-price">{{ upsellPrice }}</div>
+        		</div>
+        	</div>
+        </div>           
+    {% endif %}    
+    
+    <div class="individual-upsell-payment-buttons">
+    <div class="large-24 columns" >
+          {% set ccUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')}) %}
+          {% set catPath = '' %}
+          
+          {% if isAdultAdvertPresent is defined and isAdultAdvertPresent==0 %}
+           	<ul class="payment-buttons-block upgrade-payments">
+                <li>
+                	{% set paypalUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL')}) %}
+                	<div class="modal-paypal-box" onclick="paypalIndividualUpsellPaymentProcess('{{ individualUpsellModalDetails['name'] }}', {{ individualUpsellArr['id'] }}, {{ adId }});"> </div>
+                </li>
+            </ul>
+           {% endif %}
+           
+            <ul id="payment_method_id" class="payment-card-option-block">
+                {% for choice in form.payment_method.vars.choices %}
+                	<li>
+                    	<div class="label-inline white-radio">
+                            <span class="custom-radio {% if form.payment_method.vars.data == choice.value %}checked{% endif %} "><input onclick="return showHideCardDetail();" type="radio" value="{{ choice.value }}" {% if form.payment_method.vars.data == choice.value %}checked="checked"{% endif %} name="{{ form.payment_method.vars.full_name }}" id="{{ form.payment_method.vars.id }}_{{ choice.value }}" /></span>
+                            <label for="{{ form.payment_method.vars.id }}_{{ choice.value }}">{{ choice.label|raw }}</label>
+                        </div>
+                	</li>
+                {% endfor %}
+                {% do attribute(form, 'payment_method').setRendered %}
+            </ul>            
+    </div>
+    </div>
+    
+    <div id="payment-form">
+   	    {{ include('FaAdBundle:Ad:upgradePaymentForm.html.twig', {'form': form }) }}
+	</div>
+	<div id="card_detail_save" class="small-wrapper">
+            <div class="payment-row">
+                <div class="label-inline white-checkbox">
+                    {{ form_widget(form.is_save_credit_card) }}
+                    {{ form_label(form.is_save_credit_card) }}
+                    {{ form_errors(form.is_save_credit_card) }}
+                </div>
+            </div>
+   	    </div>
+   	    <div class="mt20 mb20 remove-item-btn">
+            <div id="pay_now_btn">
+                {{ form_widget(form.save, {'attr': {'class':'button secondary-btn-1 thin-btn expand mt20'}, 'label': 'Pay'}) }}
+            </div>               
+    	</div>	
+{{ form_end(form) }}
+
+</div>
+<script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
+<script src="{{ asset_url('facore/js/jquery.query-object.js') }}"></script>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function(){
+        bindFormErrorEvents();
+        bindCustomRadioEvent();
+        bindCustomCheckboxEvent();
+
+        if (!$('.credit_btn').length) {
+            $('.free-button-spacing').each(function() {
+                $(this).removeClass('free-button-spacing');
+            });
+        }
+        
+        //checked the default first saved payment
+		{% if form.payment_method.vars.choices|length > 1 %}
+			triggerFirstCheckBox();
+	    {% endif %}
+
+	    {% if (gaStr is defined and gaStr != '') %}
+            ga('send', 'event', 'Category Upsell - Checkout', 'Form error', '{{gaStr}}');
+            triggerFirstCheckBox();
+        {% endif %}
+	    
+        showHideCardDetail();
+    });
+
+    function triggerFirstCheckBox() {
+    	$("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").attr('checked', true);
+	    $("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").trigger('click');
+	    return true;
+    }
+    
+    $("#cyber_source_form").submit(function(event) {  
+    	var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();
+    	if(typeof paymentMethod  === "undefined") {
+    		$("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").attr('checked', true);
+    	    $("#payment_method_id input:radio[name='fa_payment_cyber_source_checkout[payment_method]']:first").trigger('click');
+            return false
+    	}
+
+        blockElement('#upgradeBasicAdToFeaturedModal');
+        // Stop form from submitting normally
+        event.preventDefault();
+       
+        var packageId = '{{ packageId }}';
+        var paymentMethod = $("input[name='fa_payment_cyber_source_checkout[payment_method]']:checked").val();     
+        $.ajax({
+            type: "POST",
+            url: "{{app.request.getUri()}}",
+            data: new FormData(this),
+            contentType: false,
+            processData:false,
+        })
+        .done(function(response) {
+            if(response.error && response.error != '') {
+            	unblockElement('#upgradeBasicAdToFeaturedModal');
+            	$("#post-all-errors").html('<small class="error">'+response.error+'<br></small>');
+				return false;
+            } else if(response.htmlContent.success) { 
+            	window.location.href = response.htmlContent.redirectUrl;
+            } else {
+            	 unblockElement('#upgradeBasicAdToFeaturedModal');
+            	$('#payment-form').html(response.htmlContent);
+            	if (paymentMethod == 0) {
+                    $('#card_detail').show();
+                    $('#card_detail_save').show();
+                }
+            }
+            
+        });
+    });
+
+</script>
+
+{{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}
+{% endblock %}
+

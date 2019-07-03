@@ -19,6 +19,9 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\AdBundle\Entity\BoostedAd;
 use Fa\Bundle\EntityBundle\Entity\LocationGroupLocation;
+use Fa\Bundle\PaymentBundle\Form\CyberSourceCheckoutType;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 
 /**
  * This controller is used for user ads.
@@ -86,7 +89,7 @@ class ManageMyAdController extends CoreController
                 }                
             }
         }*/
-
+                
         $parameters = array(
             'totalAdCount'    => $totalAdCount,
             'activeAdCount'   => $activeAdCount,
@@ -619,5 +622,200 @@ class ManageMyAdController extends CoreController
         }
         return $dimension12;
     }
+    
+    public function ajaxIndividualUpsellAction($adId, $upsellId, Request $request)
+    {
+        $redirectToUrl = '';
+        $error         = '';
+        $htmlContent   = '';
+        $deadlockError = '';
+        $deadlockRetry = $request->get('deadlockRetry', 0);
+        $cybersource3DSecureResponseFlag = false;
+        $redirectUrl	= '';
+        $gaStr	        = '';
+        $individualUpsellArr = $individualUpsellDetails = array();
+        $isAdultAdvertPresent = 0;
+        
+        if ($request->isXmlHttpRequest()) {
+            $cyberSourceManager  = $this->get('fa.cyber.source.manager');
+            $loggedinUser     = $this->getLoggedInUser();           
+            $errorMsg	= null;
+            if (!empty($loggedinUser)) {
+                $user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
+                if (!empty($user)) {                    
+                    //Payment gateway form
+                    $formManager = $this->get('fa.formmanager');
+                    $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => null));
 
+                    $individualUpsellDetails = $this->getRepository('FaPromotionBundle:Upsell')->findBy(array('id'=>$upsellId));
+                    if(!empty($individualUpsellDetails)) {
+                        $individualUpsellArr['id'] =  $individualUpsellDetails[0]->getId();
+                        $individualUpsellArr['title'] =  $individualUpsellDetails[0]->getTitle();
+                        $individualUpsellArr['description'] =  $individualUpsellDetails[0]->getDescription();
+                        $individualUpsellArr['price'] =  $individualUpsellDetails[0]->getPrice();
+                    }
+                    $individualUpsellModalDetails = CommonManager::getIndividualUpsellMpdalDetails($upsellId);
+                    
+                    $ad 			  = $this->getRepository('FaAdBundle:Ad')->find($adId);
+                    
+                    $categoryId       = $ad->getCategory()->getId();
+                    $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
+                    if ($adRootCategoryId == CategoryRepository::ADULT_ID) {
+                        $isAdultAdvertPresent = 1;
+                    }
+                                            
+                    if ('POST' === $request->getMethod()) {
+                        $form->handleRequest($request);
+                        if ($form->isValid()) {
+                            $selectedUpsellId = $upsellId;
+                            
+                            //Add to the cart
+                            $addCartInfo = $this->addUpsellInfoToCart($user->getId(), $adId, $selectedUpsellId, $request, $categoryId);
+                            if ($addCartInfo) {
+                                //make it cybersource payment
+                                $redirectUrl = $request->headers->get('referer');
+                                $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
+                                $this->get('session')->set('upgrade_cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
+                                $htmlContent= array(
+                                    'success' 		=> true,
+                                    'redirectUrl' 	=> $this->generateUrl('process_payment', array('paymentMethod' => PaymentRepository::PAYMENT_METHOD_CYBERSOURCE), true)
+                                );
+                            }
+                        } elseif ($request->isXmlHttpRequest()) {
+                            $formErrors    = $formManager->getFormSimpleErrors($form, 'label');
+                            $errorMessages = '';
+                            foreach ($formErrors as $fieldName => $errorMessage) {
+                                if ($errorMessages != '') {
+                                    $errorMessages = $errorMessages . ' | ' . $fieldName . ': ' . $errorMessage[0];
+                                } else {
+                                    $errorMessages = $fieldName . ': ' . $errorMessage[0];
+                                }
+                            }
+                            $gaStr = $gaStr . $errorMessages;
+                            $parameters = array(
+                                'form' => $form->createView(),
+                                'subscription' => $request->get('subscription'),
+                            );
+                            
+                            $htmlContent = $this->renderView('FaAdBundle:Ad:upgradePaymentForm.html.twig', $parameters);
+                        }
+                    } else {
+                        $parameters = array(
+                            'adId' => $adId,
+                            'adRootCategoryId' => $adRootCategoryId,
+                            'form' => $form->createView(),
+                            'individualUpsellArr' => $individualUpsellArr,
+                            'isAdultAdvertPresent' => $isAdultAdvertPresent,
+                            'individualUpsellModalDetails' => $individualUpsellModalDetails,
+                         );
+                         $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:individualUpsellmodalBox.html.twig', $parameters);
+                    }
+                } else {
+                    $error = "Oops! Something went wrong.";
+                }
+            }
+            return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
+        } else {
+            return new Response();
+        }
+    }
+    
+    private function addUpsellInfoToCart($userId, $adId, $selectedUpsellId, $request, $categoryId)
+    {
+        //Add to the cart
+        $cart            = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $this->container, false, false, true);
+        $cartDetails     = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+        if ($cartDetails) {
+            $adCartDetails   = $this->getRepository('FaPaymentBundle:Transaction')->getTransactionsByCartIdAndAdId($cart->getId(), $adId);
+            if ($adCartDetails) {
+                $adCartDetailValue = unserialize($adCartDetails[0]->getValue());
+            }
+        }
+        
+        //get Upsell Detail
+        $selectedUpsellObj = $this->getRepository('FaPromotionBundle:Upsell')->findOneBy(array('id' => $selectedUpsellId));
+        $privateUserAdParams = $this->getRepository('FaAdBundle:Ad')->getPrivateUserPostAdParams($userId, $categoryId, $adId, $this->container);
+        
+        //remove if same ad is in cart.
+        if (count($cartDetails) == 1 && $cartDetails[0]['ad_id'] == $adId) {
+            unset($cartDetails[0]);
+        }
+        
+        return $this->addAdUpsell($adId, $selectedUpsellId, $privateUserAdParams);
+    }
+    
+    
+    /**
+     * Assign ad package.
+     *
+     * @param integer $adId                   Ad id.
+     * @param integer $upsellId               Upsell id.
+      *
+     * @return object.
+     */
+    public function addAdUpsell($adId, $upsellId, $privateUserAdParams = array())
+    {
+        $ad      = $this->getRepository('FaAdBundle:Ad')->find($adId);
+        
+        $response = $this->checkIsValidAdUser($ad->getUser()->getId());
+        if ($response !== true) {
+            return $response;
+        }
+        
+        $this->getRepository('FaPaymentBundle:Cart')->addUpsellToCart($this->getLoggedInUser()->getId(), $adId, $upsellId, null, $this->container, $privateUserAdParams);
+        return true;
+    }
+    
+    /**
+     * Upgrade To Featured Ad.
+     *
+     * @param Request $request A Request object.
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxPaypalPaymentProcessForIndividualUpsellAction($upsellId, $adId, Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $redirectToUrl = '';
+            $error         = '';
+            $htmlContent   = '';
+            $deadlockError = '';
+            $deadlockRetry = $request->get('deadlockRetry', 0);
+            $loggedinUser     = $this->getLoggedInUser();
+            $errorMsg	= null;
+            $selectedUpsellId = $upsellId;            
+            
+            if (!empty($loggedinUser)) {
+                $user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
+                $ad        = $this->getRepository('FaAdBundle:Ad')->find($adId);
+                
+                if (!empty($user)) {
+                    $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($ad->getCategory()->getId(), $this->container);
+                    if ($rootCategoryId != CategoryRepository::ADULT_ID) {
+                        
+                        $selectedUpsellObj = $this->getRepository('FaPromotionBundle:Upsell')->findOneBy(array('id' => $selectedUpsellId));
+                        if ($selectedUpsellObj->getDuration()) {
+                            $getLastCharacter = substr($selectedUpsellObj->getDuration(),-1);
+                            $noInDuration = substr($selectedUpsellObj->getDuration(),0, -1);
+                            if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                            elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                            else { $adExpiryDays = $selectedUpsellObj->getDuration(); }
+                        }
+                        
+                        //Add to the cart
+                        $addCartInfo = $this->addUpsellInfoToCart($user->getId(), $adId, $selectedUpsellId, $request, $ad->getCategory()->getId());
+                        if ($addCartInfo) {
+                            $redirectUrl = $request->headers->get('referer');
+                            $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
+                            $htmlContent= array(
+                                'success' 		=> true,
+                                'redirectUrl' 	=> $redirectUrl
+                            );
+                        }                            
+                    }                    
+                    return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
+                }
+            }
+        }
+    }    
 }
