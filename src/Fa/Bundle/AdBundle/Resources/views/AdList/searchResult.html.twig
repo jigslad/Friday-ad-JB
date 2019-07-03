@@ -73,7 +73,7 @@
     {% elseif extendedResultCount>0 and app.request.get('page') > defaultPages %}
         noindex, follow
         {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
-    {% elseif 'motors/cars-under-1000' in app.request.uri or 'motors/cars-under-500' in app.request.uri  or 'motors/left-hand-drive-cars/' in app.request.uri %}
+    {% elseif 'motors/left-hand-drive-cars/' in app.request.uri %}
     	index, follow
         {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
     {% elseif isClassicCarPage is defined and isClassicCarPage==1 %}
@@ -86,25 +86,31 @@
     	{{selNoIndex}}, {{ selNoFollow }} 
     	{% set metaRobotsArray = {0: selNoIndex, 1: selNoFollow} %}
     {% elseif 'item__distance=0' not in app.request.queryString %}
-        {% if customized_url|length %}
-            {% if seoFields.meta_robots is defined %}
-                {{seoFields.meta_robots}}
-                {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
-             {% else %}
-                index, follow
-                {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
-            {% endif %}
+    	{% set customMeta = seoToolRepository.customMetaRobots(app.request.uri, container) %}
+        {% if customMeta %}
+            {{ customMeta['content'] }}
+            {% set metaRobotsArray = customMeta['data'] %}
         {% else %}
-            {% if isUrlIndexable == false %}
-                noindex, follow
-                {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
-            {% else %}
+            {% if customized_url|length %}
                 {% if seoFields.meta_robots is defined %}
                     {{seoFields.meta_robots}}
                     {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+                 {% else %}
+                    index, follow
+                    {% set metaRobotsArray = {0: 'index', 1: 'follow'} %}
+                {% endif %}
+            {% else %}
+                {% if isUrlIndexable == false %}
+                    noindex, follow
+                    {% set metaRobotsArray = {0: 'noindex', 1: 'follow'} %}
+                {% else %}
+                    {% if seoFields.meta_robots is defined %}
+                        {{seoFields.meta_robots}}
+                        {% set metaRobotsArray = seoFields.meta_robots|split(', ') %}
+                    {% endif %}
                 {% endif %}
             {% endif %}
-        {% endif %}
+         {% endif %}
     {% endif %}
     {{ set_variables('metaRobots', {'metaRobotsArray': metaRobotsArray}) }}
 {% endblock %}

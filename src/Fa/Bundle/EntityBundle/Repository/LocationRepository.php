@@ -1466,4 +1466,46 @@ class LocationRepository extends BaseEntityRepository
         
         return $townArray;
     }
+    
+    /**
+     * Get default location Id.
+     *
+     * @param Container|ContainerInterface $container
+     *            Container interface.
+     *
+     * @return integer
+     */
+    public function getDefaultLocationId($container)
+    {
+        /**
+         * @var Location[] $objResources
+         */
+        $cacheKey = "";
+        if ($container) {
+            $slug = $container->getParameter('fa.default.location_slug');
+            $cacheKey = $this->getEntityTableName() . '|' . __FUNCTION__ . '|' . $slug;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+            
+            if ($cachedValue !== false) {
+                return $cachedValue;
+            }
+        } else {
+            $slug = 'uk';
+        }
+        
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->where(self::ALIAS . '.url = :url')
+        ->setParameter('url', $slug);
+        
+        $objResources = $query->getQuery()->getResult();
+        
+        if ($objResources) {
+            if ($container) {
+                CommonManager::setCacheVersion($container, $cacheKey, $objResources[0]->getId());
+            }
+            
+            return $objResources[0]->getId();
+        }
+        return 0;
+    }
 }
