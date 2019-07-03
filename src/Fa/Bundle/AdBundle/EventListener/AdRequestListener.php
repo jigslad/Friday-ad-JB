@@ -2076,8 +2076,8 @@ class AdRequestListener
     protected function handleProtocolRedirects(&$request)
     {
         $uri = $request->getUri();
-        $siteDomain = $this->container->getParameter('site.domain');
-        $siteName = trim(strtolower($this->container->getParameter('site.name')));
+        $siteDomain = $this->container->getParameter('fa.main.host');
+        $siteName = trim(strtolower($this->container->getParameter('service_name')));
         $subDomain = array_first(explode('.', $siteDomain));
         $isLiveSite = ($siteName == $subDomain) && !in_array($subDomain, ['fmtinew', 'stage', 'devnew']);
         
