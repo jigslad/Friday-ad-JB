@@ -75,7 +75,9 @@ class UpsellRepository extends EntityRepository
 
     const UPSELL_TYPE_BOOST_ADVERT_ID = 35;
     const UPSELL_TYPE_AUTO_RENEW_ID = 36;
-
+    
+    const UPSELL_FEATURED_TOP_7DAYS_ID = 5;
+    
     /**
      * Prepare query builder.
      *
@@ -286,6 +288,30 @@ class UpsellRepository extends EntityRepository
             $upsellArray[$upsell->getId()] = $upsell->getTitle();
         }
 
+        return $upsellArray;
+    }
+    
+    /**
+     * Get package array for transaction.
+     *
+     * @param object  $upsellObj                 Upsell object.
+     * @param object  $adObj                     Ad object.
+     * @param object  $userObj                   User object.
+     * @param mixed   $isAdminLoggedIn           Admin loggedin user.
+     * @return array
+     */
+    public function getUpsellInfoForTransaction($upsellObj, $adObj, $userObj = null, $isAdminLoggedIn = null)
+    {
+        $upsellArray = array();
+        $upsellArray['upsell']['id'] = $upsellObj->getId();
+        $upsellArray['upsell']['price'] = $upsellObj->getPrice();
+        $upsellArray['upsell']['title'] = $upsellObj->getTitle();
+        $upsellArray['upsell']['duration'] = $upsellObj->getDuration();
+        $upsellArray['upsell']['type'] = $upsellObj->getType();
+        $upsellArray['payment_for'] = 'UP';
+        $upsellArray['ad_id'] = $adObj->getId();
+        $upsellArray['user_id'] = $userObj->getId();
+        
         return $upsellArray;
     }
 }

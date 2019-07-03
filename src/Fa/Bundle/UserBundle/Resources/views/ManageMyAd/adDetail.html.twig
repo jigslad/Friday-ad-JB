@@ -36,6 +36,9 @@
     {% set upgradePackages = packageRuleRepository.getActivePackagesByCategoryId(categoryId, locationGroupIds, userRolesArray) %}
     {% set upgradePackagesCount = upgradePackages|length %}
 {% endif %}
+
+{% set featuredTopUpsell7days = constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID')  %}
+
 {% if not app.request.isXmlHttpRequest() %} 
 <div class="manage-item-list" id="item_card_{{adId}}">
 {% endif %}
@@ -149,7 +152,11 @@
         <div class="small-24 medium-8 large-5 columns medium-right-cols">
             <div class="manage-item-btns text-right">
             	<div class="right-manage-buttons featuredBlock1">  
-            		<div class="featured-switch toggle-off">
+            		{% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
+            			<div class="featured-switch toggle-on" id="featuredTopId_{{ adId }}_{{ featuredTopUpsell7days }}">
+            		{% else %}
+            			<div class="featured-switch toggle-off" id="featuredTopId_{{ adId }}_{{ featuredTopUpsell7days }}">
+            		{% endif %}
             			<div class="toggle-wrap">            
             				<div class="toggle-bg-on"></div>
             			</div>
@@ -326,6 +333,7 @@
         <div class="small-24 columns"></div>
     </div>   
 </div>
+
 {# Mobile Version Ends here #}  
 {% if not app.request.isXmlHttpRequest() %}
 </div>
