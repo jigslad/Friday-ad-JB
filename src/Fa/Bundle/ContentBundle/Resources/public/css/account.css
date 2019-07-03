@@ -1,0 +1,159 @@
+.top-links .f-dropdown, #top-nav-strip.top-links .f-dropdown {
+    min-width: 205px;
+    background: #313133 !important;
+    padding: 10px 0;
+}
+.top-links .f-dropdown, #top-nav-strip.top-links .f-dropdown#notification-menu {
+    min-width: 315px;
+    background: #313133 !important;
+    padding: 0;
+    z-index: 9999;
+}
+.notification-counter {
+    background: #313133 !important;
+}
+.top-links .f-dropdown li a {
+    padding: 0 15px 0 12px;
+}
+.top-links .f-dropdown li {
+    border-top: none !important;
+    box-shadow: none !important;
+}
+.top-links .f-dropdown li:hover, .top-links .f-dropdown li:focus {
+    background: #313133 !important;
+}
+
+/* Icon profiles */
+@font-face {
+    font-family: 'icomoon';
+    src:  url('fonts/icomoon.eot?if24ed');
+    src:  url('fonts/icomoon.eot?if24ed#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?if24ed') format('truetype'),
+    url('fonts/icomoon.woff?if24ed') format('woff'),
+    url('fonts/icomoon.svg?if24ed#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.icon-profile:before {
+    content: "\e9607";
+    color: #fff;
+}
+.icon-messages:before {
+    content: "\e9608";
+    color: #fff;
+}
+.icon-favourites:before {
+    content: "\e9609";
+    color: #fff;
+}
+.icon-home:before {
+    content: "\e9610";
+    color: #fff;
+}
+.icon-manage-ads:before {
+    content: "\e9611";
+    color: #fff;
+}
+.icon-account:before {
+    content: "\e9612";
+    color: #fff;
+}
+.icon-alerts:before {
+    content: "\e9613";
+    color: #fff;
+}
+
+/* Misc Account css */
+.my-account-icons {
+    font-size: 30px;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+.top-links a, .top-links button {
+    color: #ffffff !important;
+    font-size: 14px !important;
+}
+.top-links a.dropdown::after {
+    content: "\f107";
+    display: block;
+    height: 6px;
+    margin: 0px 0 0;
+    position: absolute;
+    right: .4rem;
+    top: 0;
+    width: auto;
+    font-family: FontAwesome;
+    font-size: 18px;
+    line-height: 32px;
+    background: none;
+}
+.top-links a.dropdown {
+    padding: 0 24px 0 5px;
+}
+.top-links .notification-link a span, .top-links .msg-link a span, .basket-icon span {
+    color: #ffffff;
+    font-weight: bold;
+}
+.basket-icon {
+    background: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8' standalone='no'?%3e%3csvg width='17px' height='14px' viewBox='0 0 17 14' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3c!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch --%3e%3ctitle%3eBasket link%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cdefs%3e%3c/defs%3e%3cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3e%3cg id='Desktop-DIG-20261_Basket-link' transform='translate(-1166.000000, -126.000000)'%3e%3cg id='User-logged-in' transform='translate(715.000000, 121.000000)'%3e%3cg id='Basket-link' transform='translate(451.000000, 5.000000)'%3e%3cpath d='M4.12430769,5.11101538 L6.66584615,0.827938462' id='Stroke-1' stroke='%23FFFFFF' stroke-width='1.346' stroke-linecap='round' stroke-linejoin='round'%3e%3c/path%3e%3cpath d='M12.3689846,5.11101538 L9.82744615,0.827938462' id='Stroke-3' stroke='%23FFFFFF' stroke-width='1.346' stroke-linecap='round' stroke-linejoin='round'%3e%3c/path%3e%3cpath d='M0.955815385,5.63335385 L15.5798154,5.63335385' id='Stroke-5' stroke='%23FFFFFF' stroke-width='1.553' stroke-linecap='round' stroke-linejoin='round'%3e%3c/path%3e%3cpath d='M11.9932308,12.2836923 L10.6,12.2836923 L10.6,7.02584615 L12.968,7.02584615 L11.9932308,12.2836923 Z M7.31507692,12.3181538 L9.43938462,12.3181538 L9.43938462,7.02584615 L7.31507692,7.02584615 L7.31507692,12.3181538 Z M6.00430769,12.2836923 L4.61107692,12.2836923 L3.63630769,7.02584615 L6.00430769,7.02584615 L6.00430769,12.2836923 Z M1.02584615,6.39938462 L2.56676923,12.7784615 C2.68369231,13.2646154 3.11815385,13.6067692 3.61784615,13.6067692 L12.8252308,13.6067692 C13.3581538,13.6067692 13.8221538,13.2412308 13.9452308,12.7218462 L15.4750769,6.32923077 L1.02584615,6.39938462 Z' id='Fill-7' fill='%23FFFFFF'%3e%3c/path%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat 4px 0px;
+    background-size: 17px 14px;
+    padding: 0 5px 0 20px;
+}
+.top-links .f-dropdown li {
+    border-top: 0px solid #000;
+    box-shadow: none;
+    padding: 2px 10px;
+}
+.top-links .f-dropdown li a {
+    padding: 0 15px 0 0px;
+}
+a.dropdown.notification-link.needsclick:hover {
+    color: #ffffff !important;
+}
+.topbar-user-icon {
+    margin: 3px 6px 0 0;
+}
+header.header-top-space {
+    top: 34px !important;
+}
+
+ul.f-dropdown.my-account-list {
+    z-index: 9999 !important;
+}
+
+/* Site based color */
+ul.gunstar .my-account-list>li:hover .my-account-icons:before, .top-links.gunstar .f-dropdown li a:hover {
+    color: #f49900 !important;
+}
+
+ul.dogsandpuppies .my-account-list>li:hover .my-account-icons:before, .top-links.dogsandpuppies .f-dropdown li a:hover {
+    color: #69c6e8 !important;
+}
+
+ul.kittenads .my-account-list>li:hover .my-account-icons:before, .top-links.kittenads .f-dropdown li a:hover {
+    color: #e5007e !important;
+}
+
+ul.birdtrader .my-account-list>li:hover .my-account-icons:before, .top-links.birdtrader .f-dropdown li a:hover {
+    color: #dd1b20 !important;
+}
+@media only screen and (min-width: 320px) and (max-width: 640px) {
+    header.header-top-space {
+        top: 0px !important;
+    }
+}

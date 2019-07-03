@@ -1,0 +1,174 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig') }}
+
+    <div class="row">
+        <div class="columns">
+            <div class="panel">
+                <form action="{{ path('admin_validate_redirects_upload') }}" method='POST' enctype='multipart/form-data'>
+                    <input type='file' accept='.csv' name='redirects' />
+                    <input type='submit'/>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="columns" >
+            <h6>Uploaded Data:</h6>
+            <div class="panel">
+                <div id="table-wrapper">
+                    <div id="table-scroll">
+                        <table  id="redirect-table" class="dataTable display">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">#</th>
+                                    <th style="width: 25%">From URL</th>
+                                    <th style="width: 25%">Expected To</th>
+                                    <th style="width: 25%">Actually To</th>
+                                    <th style="width: 10%">Type</th>
+                                    <th style="width: 5%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for key,datum in data %}
+                                <tr data-key="{{ key }}">
+                                    <td>{{ key + 1 }}</td>
+                                    <td class="from">{{ datum.from }}</td>
+                                    <td class="expected-to">{{ datum.expected_to }}</td>
+                                    <td class="actual">-</td>
+                                    <td>{{ datum.type }}</td>
+                                    <td>
+                                        <a href="javascript:;" onclick="validateSingle(this)">
+                                            <i class="fa fi-refresh"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scriptbottom %}
+    <style type="text/css">
+        .fa-spin {
+            color: blue;
+        }
+        tr.checked .fa {
+            color: green;
+        }
+        .row {
+            max-width: 92.5em;
+        }
+    </style>
+    <script type="text/javascript" src="/bundles/faadmin/js/bootstrap.min.js?v=3"> </script>
+    <script type="text/javascript" src="/bundles/fafrontend/js/vendor/jquery-ui.min.js?v=3"></script>
+    <link rel="stylesheet" type="text/css" href="/bundles/facontent/css/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/bundles/facontent/css/buttons.dataTables.min.css"/>
+    <script type="text/javascript" src="/bundles/facontent/js/datatables.min.js"></script>
+    <script type="text/javascript" src="/bundles/facontent/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="/bundles/facontent/js/dataTables.buttons.min.js"></script>
+
+    <script type="text/javascript">
+
+        // var buttonCommon = {
+        //     exportOptions: {
+        //         format: {
+        //             body: function (data, row, column, node) {
+        //                 return data;
+        //             }
+        //         }
+        //     }
+        // };
+
+        $(document).on('click', '.paginate_button', function () {
+            checkCurrentPage();
+        });
+
+        $(document).ready(function() {
+            $('#redirect-table').DataTable( {
+                fixedHeader: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
+            } );
+
+            checkCurrentPage();
+
+        });
+
+        function checkCurrentPage() {
+            var pending = $('#redirect-table tbody tr:not(.checked)');
+            pending = pending.slice(0, 10);
+            var data = [];
+
+            $.each(pending, function (key, row) {
+                data.push({
+                    from: $(row).find('.from').html(),
+                    expected_to: $(row).find('.expected-to').html(),
+                    key: $(row).data('key')
+                });
+
+                $(row).find('.fa').addClass('fa-spin');
+            });
+
+            if (data.length > 0) {
+                validate(data);
+            }
+
+            return data;
+        }
+
+        function validateSingle(elt) {
+            var row = $(elt).parents('tr').first();
+            var data = [];
+
+            data.push({
+                from: $(row).find('.from').html(),
+                expected_to: $(row).find('.expected-to').html(),
+                key: $(row).data('key')
+            });
+
+            $(row).find('.fa').addClass('fa-spin');
+            $(row).addClass('checked');
+
+            validate(data);
+        }
+
+        function validate(data) {
+
+            $.ajax({
+                type: "POST",
+                url: "{{ path('admin_validate_redirects') }}",
+                data: {
+                    data: data
+                }
+            })
+            .done(function (response) {
+
+                if (response.length > 0) {
+                    $.each(response, function (key, value) {
+                        var row = $('#redirect-table tbody tr[data-key='+ value.key +']');
+
+                        $(row).find('.actual').first().html(value.redirect);
+                        $(row).find('.fa').removeClass('fa-spin');
+                        $(row).addClass('checked');
+                    })
+                }
+
+            });
+        }
+
+    </script>
+{% endblock %}

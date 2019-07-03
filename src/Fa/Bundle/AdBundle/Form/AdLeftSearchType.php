@@ -11,6 +11,8 @@
 
 namespace Fa\Bundle\AdBundle\Form;
 
+use Fa\Bundle\ContentBundle\Repository\SeoConfigRepository;
+use Fa\Bundle\EntityBundle\Entity\Entity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -257,6 +259,7 @@ class AdLeftSearchType extends AbstractType
             if ($rootCategoryName) {
                 $dimensionFieldPrefix = $dimensionFieldPrefix.'_'.$rootCategoryName;
             }
+            $moreFilterChoices = $this->getMoreFilterEntities();
 
             foreach ($dimensions as $dimensionId => $dimension) {
                 $dimensionName  = $dimension['name'];
@@ -365,6 +368,16 @@ class AdLeftSearchType extends AbstractType
                 } elseif ($dimension['search_type'] == 'text') {
                     $fieldOptions = array(/** @Ignore */'label' => $dimensionLabel,'attr' => array('class' => 'white-field'));
                     $form->add($dimensionFieldPrefix.'__'.$dimensionField, TextType::class, $fieldOptions);
+                } else {
+                    if(!empty($moreFilterChoices)) {
+                        $fieldChoices = $moreFilterChoices;
+                    }
+                    $fieldOptions = array(/** @Ignore */'label' => $dimensionLabel, 'choices' => array_flip($fieldChoices));
+
+                    $dimensionField = $dimensionFieldPrefix.'__'.$dimensionField;
+
+                    $form->add($dimensionField, ChoiceType::class, $fieldOptions);
+                    $this->addDimensionFilter($dimensionField);
                 }
             }
         }
@@ -409,5 +422,60 @@ class AdLeftSearchType extends AbstractType
     public function getBlockPrefix()
     {
         return 'fa_left_search';
+    }
+
+    /**
+     * Get 'More Filter's Entities.
+     *
+     * @return array
+     */
+    protected function getMoreFilterEntities()
+    {
+        /** @var SeoConfigRepository $seoConfigRepository */
+        $seoConfigRepository = $this->em->getRepository('FaContentBundle:SeoConfig');
+        $data = $seoConfigRepository->getBaseQueryBuilder()
+            ->where(SeoConfigRepository::ALIAS . ".type = '" . SeoConfigRepository::LHS_FILTER_ORDER ."'")
+            ->getQuery()->getArrayResult();
+
+        foreach ($data as $config) {
+            $datum = json_decode($config['data'], true, 512);
+            $moreFilterEntityIds = explode(',', data_get($datum, '_more_filter_entities_', ''));
+        }
+
+        if (!empty($moreFilterEntityIds)) {
+            return $this->getEntities($moreFilterEntityIds);
+        }
+
+        return [];
+    }
+
+    /**
+     * Get Entities given by ids.
+     *
+     * @param array $ids
+     * @return array
+     */
+    protected function getEntities($ids = [])
+    {
+        $entities = [];
+        /** @var Entity[] $allEntities */
+        $allEntities = $this->em->getRepository('FaEntityBundle:Entity')->findBy([
+            'status' => 1,
+            'id' => $ids
+        ]);
+
+        foreach ($allEntities as $entity) {
+            $entities[$entity->getId()] = $entity->getName();
+        }
+
+        $values = [];
+        foreach ($ids as $id) {
+
+            if (!empty($data = data_get($entities, $id))) {
+                $values[$id] = $data;
+            }
+        }
+
+        return $values;
     }
 }
