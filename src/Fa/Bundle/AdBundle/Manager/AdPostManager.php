@@ -1066,7 +1066,7 @@ class AdPostManager
             foreach ($adImages as $adImage) {
                 $adTempImg = $adTempImageDir.'/'.$adTempId.'_'.$adImage->getHash().'.jpg';
 
-                $imagePath = $adImageDir . DIRECTORY_SEPARATOR . $adGroupDir;
+                $imagePath = $this->container->getParameter('fa.ad.image.dir') . DIRECTORY_SEPARATOR . $adGroupDir;
                 $hash = $adImage->getHash();
                 $adImageManager = new AdImageManager($this->container, $ad->getId(), $hash, $imagePath);
 

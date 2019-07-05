@@ -3,3 +3,11 @@ banner_ajax_get_banner_by_zone:
     defaults: { _controller: "FaContentBundle:Banner:getBannerByZoneAjax" }
     options:
         expose: true
+
+test_s3_image_uploader:
+    path:     /test-s3-image-uploader
+    defaults: { _controller: "FaContentBundle:Banner:testS3ImageUploader" }
+
+test_guzzle_get_req:
+    path:     /test/guzzle-get-req
+    defaults: { _controller: "FaContentBundle:Banner:testGuzzleGetReq" }
