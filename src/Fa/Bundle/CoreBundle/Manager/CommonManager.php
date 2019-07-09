@@ -3385,7 +3385,7 @@ HTML;
     }
 
     
-    public function getIndividualUpsellMpdalDetails($upsellId) {
+    public function getIndividualUpsellModalDetails($upsellId) {
         $upsellModalDetail = array();
         switch ($upsellId) {
             case 5:

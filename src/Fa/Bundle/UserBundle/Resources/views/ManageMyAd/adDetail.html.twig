@@ -107,7 +107,7 @@
                </div>
            {% endif %}
         </div>
-        <div class="small-14 medium-10 large-12 columns medium-center-cols">
+        <div class="small-14 medium-10 large-11 columns medium-center-cols">
             <div class="clearfix">
             	<div class="manage-price-box clearfix">
                     <div class="manage-price">
@@ -151,6 +151,7 @@
 
         <div class="small-24 medium-8 large-5 columns medium-right-cols">
             <div class="manage-item-btns text-right">
+            	{% if ad.status_id == adStatusLive %}
             	<div class="right-manage-buttons featuredBlock1">  
             		{% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
             			<div class="featured-switch toggle-on" id="featuredTopId_{{ adId }}_{{ featuredTopUpsell7days }}">
@@ -164,6 +165,7 @@
             		</div>
             		<span class="featuredTxt">Featured</span>
             	</div>
+            	{% endif %}
             	{% if ad.status_id != adStatusSold  and ad.status_id != adStatusExpired %}
                     <div class="right-manage-buttons adEditBlock1">
                         <a class="xs-btn-1 expand button" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>                  
@@ -205,11 +207,10 @@
                     {% endif %}
                 </div>                
             </div>
+            {% if ad['status_id'] == adStatusLive %}
             <div class="featured-share-box-mobile">
-            	<div class="featuredBlock1">
-            		{% if ad['status_id'] == adStatusLive %}
-                        <a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>
-                    {% endif %}
+            	<div class="featuredBlock1">            		
+                   <a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>                    
                     <div class="featured-switch toggle-off">
             			<div class="toggle-wrap">            
             				<div class="toggle-bg-on"></div>
@@ -219,6 +220,7 @@
             		<span class="featuredTxt">Featured</span>           		
             	</div>
             </div>
+            {% endif %}
         </div>
         
         <div class="small-24 columns">            

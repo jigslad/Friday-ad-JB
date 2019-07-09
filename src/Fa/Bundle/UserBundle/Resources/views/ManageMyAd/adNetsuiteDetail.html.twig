@@ -104,7 +104,7 @@
                 </div>
             </div>
         </div>
-        <div class="small-14 medium-10 large-12 columns medium-center-cols">
+        <div class="small-14 medium-10 large-11 columns medium-center-cols">
             <div class="clearfix">
                 <h3 id="item_detail_link_{{adId}}">
                     {% if ad['status_id'] == adStatusLive %}
@@ -149,6 +149,7 @@
 
         <div class="small-24 medium-8 large-5 columns medium-right-cols">
             <div class="manage-item-btns text-right">
+            	{% if ad['status_id'] == adStatusLive %}
             	<div class="right-manage-buttons featuredBlock">
             		<div class="featured-switch toggle-off">
             			<div class="toggle-wrap">            
@@ -158,9 +159,20 @@
             		</div>
             		<span class="featuredTxt">Featured</span>
             	</div>
+            	{% endif %}
                 <div class="right-manage-buttons adEditBlock">
                     <a class="xs-btn-1 expand button" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>                  
                 </div>
+                
+                 {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
+                        <div class="right-manage-buttons adEditBlock"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
+                {% endif %}
+                                
+                {% if (adPackageArray[adId] is defined and adPackageArray[adId]['price'] <=0)  and ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
+                     {% if ((userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and upgradePackagesCount > 1) or (userRoleId != constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+                        <div class="right-manage-buttons adEditBlock"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a></div>
+                     {% endif %}
+                {% endif %}
                 
                 {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
                      <div class="right-manage-buttons adRemoveBlock"><a class="xs-red-btn expand button" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{{'Stop this ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
@@ -185,10 +197,9 @@
             {% endif %}
         </div>
         <div class="small-16 columns">
+        	{% if ad['status_id'] == adStatusLive %}
         	<div class="featuredBlock1">
-        		{% if ad['status_id'] == adStatusLive %}
-                    <a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>
-                {% endif %}
+        		<a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>                
         		<div class="featured-switch toggle-off">
         			<div class="toggle-wrap">            
         				<div class="toggle-bg-on"></div>
@@ -197,6 +208,7 @@
         		</div>
         		<span class="featuredTxt">Featured</span>
         	</div>
+           {% endif %}
         </div>
         
         
@@ -290,6 +302,16 @@
                 <div class="right-manage-buttons adEditBlock">
                     <a class="xs-btn-1 expand button" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>                  
                 </div>
+                
+                {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
+                        <div class="right-manage-buttons adEditBlock"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
+                {% endif %}
+                                
+                {% if (adPackageArray[adId] is defined and adPackageArray[adId]['price'] <=0)  and ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
+                     {% if ((userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and upgradePackagesCount > 1) or (userRoleId != constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+                        <div class="right-manage-buttons adEditBlock"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a></div>
+                     {% endif %}
+                {% endif %}
                 
                 {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
                      <div class="right-manage-buttons adRemoveBlock"><a class="xs-red-btn expand button" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{{'Stop this ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>

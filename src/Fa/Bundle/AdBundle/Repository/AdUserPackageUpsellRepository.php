@@ -98,28 +98,29 @@ class AdUserPackageUpsellRepository extends EntityRepository
      *
      * @param array   $data              Package value array.
      * @param string  $upsellId          Upsell id.
+     * @param string  $ad                Advert.
      *
      * @return integer
      */
-    public function setAdUserIndividualUpsell($data = array())
+    public function setAdUserIndividualUpsell($data = array(), $ad = array())
     {
-        if (count($data) > 0) {
-            $ad = null;
+        if (!empty($data)) {
+            
             $adUserPackageUpsell = new AdUserPackageUpsell();
             
             // find & set upsell
-            $upsell = $this->_em->getRepository('FaPromotionBundle:Upsell')->find($data['id']);
+            $upsell = $this->_em->getRepository('FaPromotionBundle:Upsell')->find($data->getId());
             $adUserPackageUpsell->setUpsell($upsell);
             
             // find & set ad
-            if (isset($data['ad_id'])) {
-                $ad = $this->_em->getRepository('FaAdBundle:AdMain')->find($data['ad_id']);
-                $adUserPackageUpsell->setAdMain($ad);
-                $adUserPackageUpsell->setAdId($data['ad_id']);
+            if (!empty($ad)) {
+                //$ad = $this->_em->getRepository('FaAdBundle:AdMain')->find($data['ad_id']);
+                $adUserPackageUpsell->setAdMain($ad->getAdMain());
+                $adUserPackageUpsell->setAdId($ad->getId());
             }
             
-            $adUserPackageUpsell->setValue($data['value']);
-            $adUserPackageUpsell->setDuration($data['duration']);
+            $adUserPackageUpsell->setValue($data->getValue());
+            $adUserPackageUpsell->setDuration($data->getDuration());
             $adUserPackageUpsell->setStatus(1);
             $adUserPackageUpsell->setStartedAt(time());
             
@@ -128,10 +129,8 @@ class AdUserPackageUpsellRepository extends EntityRepository
             } 
             
             $this->_em->persist($adUserPackageUpsell);
+            $this->_em->flush();
             
-            if ($batchUpdate == false) {
-                $this->_em->flush();
-            }
             
             return true;
         }
@@ -170,6 +169,47 @@ class AdUserPackageUpsellRepository extends EntityRepository
         }
 
         return false;
+    }
+    
+    /**
+     * Find ad package upsells.
+     *
+     * @param integer $adId            Ad id.
+     * @param mixed   $adUserPackageId Ad user package id.
+     *
+     * @return array
+     */
+    public function getFeaturedUpsellById($adId, $upsellId)
+    {
+        $upsellArray = array();
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS)
+        ->andWhere(self::ALIAS.'.ad_id = :adId')
+        ->setParameter('adId', $adId)
+        ->andWhere(self::ALIAS.'.upsell = :upsellId')
+        ->setParameter('upsellId', $upsellId);
+        
+        return $query->getQuery()->getResult();        
+    }
+    
+    /**
+     * Enable ad user package upsell.
+     *
+     * @param integer $adId Ad id.
+     *
+     * @return integer
+     */
+    public function disableFeaturedAdUpsell($adId)
+    {
+        $adUserPackageUpsells = array();
+        $adUserPackageUpsells = $this->getFeaturedUpsellById($adId, 5);
+        if(!empty($adUserPackageUpsells)) {
+            $adUserPackageUpsell = $adUserPackageUpsells[0];
+            $adUserPackageUpsell->setStatus(self::STATUS_EXPIRED);
+            $this->_em->persist($adUserPackageUpsell);
+            $this->_em->flush();        
+            return true; 
+        } else { return false; }
     }
 
     /**

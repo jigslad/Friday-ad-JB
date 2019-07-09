@@ -50,7 +50,7 @@ class ManageMyAdController extends CoreController
         $inActiveAdCount = 0;
         $boostedAdCount  = $adsBoostedCount  =  0;
         $type            = $request->get('type', 'active');
-
+        
         $onlyActiveAdCount = 0;
 
         $activeAdCountArray   = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'active', true)->getResult();
@@ -269,6 +269,45 @@ class ManageMyAdController extends CoreController
         }
     }
 
+    
+    /**
+     * Deactivate featured.
+     *
+     * @param Request $request A Request object.
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxDeactivateFeaturedAction(Request $request)
+    {
+        if ($this->checkIsValidLoggedInUser($request) === true && $request->isXmlHttpRequest()) {
+            $error        = '';
+            $successMsg   = '';
+            $adId         = $request->get('adId', 0);
+
+            $ad = $this->getRepository('FaAdBundle:Ad')->find($adId);
+            $this->checkIsValidAdUser($ad->getUser()->getId());
+            
+            $loggedinUser = $this->getLoggedInUser();
+                        
+            $ans = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->disableFeaturedAdUpsell($adId);
+            
+            if ($ans) {
+                $successMsg     = $this->get('translator')->trans('Featured upsell was removed successfully.', array(), 'frontend-manage-my-ad');
+                $messageManager = $this->get('fa.message.manager');
+                $messageManager->setFlashMessage($successMsg, 'success');
+            } else {
+                $error          = $this->get('translator')->trans('There was a problem in removing Featured upsell for this advert.', array(), 'frontend-manage-my-ad');
+                $messageManager = $this->get('fa.message.manager');
+                $messageManager->setFlashMessage($error, 'error');
+            }
+            
+            sleep(2);
+            return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg));
+        }
+        
+        return new Response();
+    }
+    
     /**
      * Change ad status.
      *
@@ -654,7 +693,7 @@ class ManageMyAdController extends CoreController
                         $individualUpsellArr['description'] =  $individualUpsellDetails[0]->getDescription();
                         $individualUpsellArr['price'] =  $individualUpsellDetails[0]->getPrice();
                     }
-                    $individualUpsellModalDetails = CommonManager::getIndividualUpsellMpdalDetails($upsellId);
+                    $individualUpsellModalDetails = CommonManager::getIndividualUpsellModalDetails($upsellId);
                     
                     $ad 			  = $this->getRepository('FaAdBundle:Ad')->find($adId);
                     
@@ -674,6 +713,7 @@ class ManageMyAdController extends CoreController
                             if ($addCartInfo) {
                                 //make it cybersource payment
                                 $redirectUrl = $request->headers->get('referer');
+                                $this->addOrRemoveFeaturedCredits($user->getId(), $adId);
                                 $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
                                 $this->get('session')->set('upgrade_cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
                                 $htmlContent= array(
@@ -718,6 +758,10 @@ class ManageMyAdController extends CoreController
         } else {
             return new Response();
         }
+    }
+    
+    public function addOrRemoveFeaturedCredits($userId, $adId) {
+        
     }
     
     private function addUpsellInfoToCart($userId, $adId, $selectedUpsellId, $request, $categoryId)
