@@ -36,6 +36,9 @@
     {% set upgradePackages = packageRuleRepository.getActivePackagesByCategoryId(categoryId, locationGroupIds, userRolesArray) %}
     {% set upgradePackagesCount = upgradePackages|length %}
 {% endif %}
+
+{% set featuredTopUpsell7days = constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID')  %}
+
 {% if not app.request.isXmlHttpRequest() %} 
 <div class="manage-item-list" id="item_card_{{adId}}">
 {% endif %}
@@ -151,7 +154,11 @@
             <div class="manage-item-btns text-right">
             	{% if ad['status_id'] == adStatusLive %}
             	<div class="right-manage-buttons featuredBlock">
-            		<div class="featured-switch toggle-off">
+            		{% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
+            			<div class="featured-switch toggle-on" id="featuredTopId_{{ adId }}_{{ featuredTopUpsell7days }}">
+            		{% else %}
+            			<div class="featured-switch toggle-off" id="featuredTopId_{{ adId }}_{{ featuredTopUpsell7days }}">
+            		{% endif %}
             			<div class="toggle-wrap">            
             				<div class="toggle-bg-on"></div>
             			</div>
@@ -200,7 +207,12 @@
         	{% if ad['status_id'] == adStatusLive %}
         	<div class="featuredBlock1">
         		<a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>                
-        		<div class="featured-switch toggle-off">
+        		    {% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
+            			<div class="featured-switch toggle-on" id="featuredTopId_{{ adId }}_{{ featuredTopUpsell7days }}">
+            		{% else %}
+            			<div class="featured-switch toggle-off" id="featuredTopId_{{ adId }}_{{ featuredTopUpsell7days }}">
+            		{% endif %}
+
         			<div class="toggle-wrap">            
         				<div class="toggle-bg-on"></div>
         			</div>

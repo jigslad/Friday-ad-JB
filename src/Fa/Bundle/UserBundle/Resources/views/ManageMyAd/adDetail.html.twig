@@ -211,7 +211,12 @@
             <div class="featured-share-box-mobile">
             	<div class="featuredBlock1">            		
                    <a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>                    
-                    <div class="featured-switch toggle-off">
+                    {% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
+            			<div class="featured-switch toggle-on" id="featuredTopId_{{ adId }}_{{ featuredTopUpsell7days }}">
+            		{% else %}
+            			<div class="featured-switch toggle-off" id="featuredTopId_{{ adId }}_{{ featuredTopUpsell7days }}">
+            		{% endif %}
+
             			<div class="toggle-wrap">            
             				<div class="toggle-bg-on"></div>
             			</div>
