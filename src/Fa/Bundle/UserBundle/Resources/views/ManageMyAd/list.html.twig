@@ -10,6 +10,7 @@
 {% set userCreditRepository = fetch_repository('FaUserBundle:UserCredit') %}
 {% set userCreditCount = userCreditRepository.getActiveCreditCountForUser(app.user.getId()) %}
 {% set adUserPackageUpsellRepository = fetch_repository('FaAdBundle:AdUserPackageUpsell') %}
+{% set shopPackageCreditRepository = fetch_repository('FaPromotionBundle:ShopPackageCredit') %}
 
 {% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
 {% set adUrl = ''%}
@@ -22,6 +23,17 @@
 	{% set userBusType = 'business' %}
 {% else %}
 	{% set userBusType = 'private' %}
+{% endif %}
+
+{% set totalFeaturedCredit = 0 %}
+{% set usedFeaturedCredits = 0 %}
+{% if (activeShopPackage and activeShopPackage.getPackage()) %}
+    {% set shopPackageCreditArr = shopPackageCreditRepository.getFeaturedCreditsByPackageId(activeShopPackage.getPackage().getId()) %}
+	{% if shopPackageCreditArr|length >0 %}
+        {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
+        {% set remainingFeaturedCredits = userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) %}
+        {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
+    {% endif %}
 {% endif %}
 
 {% if pagination.getNbResults() %}
@@ -56,7 +68,7 @@
 					<div class="toplistdiv clearfix">                    	
                 		<ul class="toplistWithBullets">
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
-                			<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>
+                			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}/{{ totalFeaturedCredit }}</span></li>
                 			{% if isBoostEnabled==1 %}
                     			<li class="lightgreencircle">Boosts remaining: <span>{{ boostAdRemaining }}</span></li>
                     			<li class="boostBtn"><a id="boost_ad_selected_all" class="xs-btn-1 button all-sel-texts">Boost All Actives</a></li>

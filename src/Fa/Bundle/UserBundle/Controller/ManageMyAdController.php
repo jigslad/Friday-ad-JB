@@ -22,6 +22,7 @@ use Fa\Bundle\EntityBundle\Entity\LocationGroupLocation;
 use Fa\Bundle\PaymentBundle\Form\CyberSourceCheckoutType;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
+use Fa\Bundle\UserBundle\Repository\RoleRepository;
 
 /**
  * This controller is used for user ads.
@@ -88,8 +89,13 @@ class ManageMyAdController extends CoreController
                     $onlyActiveAdCount = $onlyActiveAdCount + 1;
                 }                
             }
-        }*/
-                
+        }*/ 
+        $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
+        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+            $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
+        }
+    
+        
         $parameters = array(
             'totalAdCount'    => $totalAdCount,
             'activeAdCount'   => $activeAdCount,
@@ -104,6 +110,7 @@ class ManageMyAdController extends CoreController
             'boostAdRemaining'=> $getBoostDetails['boostAdRemaining'],
             'boostRenewDate'  => $getBoostDetails['boostRenewDate'],
             'userBusinessCategory' => $getBoostDetails['userBusinessCategory'],
+            'activeShopPackage' => $activeShopPackage,
         );
 
         $showCompetitionPopup = false;
