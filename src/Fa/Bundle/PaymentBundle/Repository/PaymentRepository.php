@@ -283,7 +283,7 @@ class PaymentRepository extends EntityRepository
                 
             if(isset($value['payment_for']) && $value['payment_for']=='UP') {
                 $upsell = $this->_em->getRepository('FaPromotionBundle:Upsell')->find($value['upsell']['id']);
-                $this->_em->getRepository('FaAdBundle:AdUserPackageUpsell')->setAdUserIndividualUpsell($upsell);
+                $this->_em->getRepository('FaAdBundle:AdUserPackageUpsell')->setAdUserIndividualUpsell($upsell, $ad);
             } else {    
                 if ($ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_DRAFT_ID
                     || $ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_EXPIRED_ID || $ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_SOLD_ID) {

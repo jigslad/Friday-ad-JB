@@ -44,7 +44,8 @@
 //<![CDATA[
     var adIdToRemove = '';
     var statusIdToChange = '';
-
+    var featurredUpsellRemoveId = '';
+    
     function removeAdConfirmation(adId, currentAdStatus)
     {
     	adIdToRemove = adId;
@@ -122,6 +123,28 @@
                 type: "POST",
                 url: '{{path("ajax_manage_my_ads_change_status")}}',
                 data: {'adId':adIdToRemove, 'newStatusId':statusIdToChange},
+                cache:false,
+                asyn:false
+            })
+            .always(function(response) {
+                unblockPage();
+             })
+            .done(function(response) {
+                location.reload();
+            });
+        }
+    }
+
+    function deactivateFeatured()
+    {
+        if (!ajaxLoading && featurredUpsellRemoveId != '') {
+        	ajaxLoading = true;
+        	blockPage();
+        	blockElement('.db-right-part');
+        	$.ajax({
+                type: "POST",
+                url: '{{path("ajax_manage_my_ads_deactivate_featured")}}',
+                data: {'adId':featurredUpsellRemoveId},
                 cache:false,
                 asyn:false
             })

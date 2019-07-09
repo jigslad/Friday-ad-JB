@@ -56,5 +56,7 @@ paypal_payment_process_for_individual_upsell:
     options:
         expose: true
         
-        
+ajax_manage_my_ads_deactivate_featured:
+    path:     /ajax/manage_my_ads/deactivate_featured/
+    defaults: { _controller: FaUserBundle:ManageMyAd:ajaxDeactivateFeatured }        
 
