@@ -27,6 +27,7 @@
 
 {% set totalFeaturedCredit = 0 %}
 {% set usedFeaturedCredits = 0 %}
+{% set remainingFeaturedCredits = 0 %}
 {% if (activeShopPackage and activeShopPackage.getPackage()) %}
     {% set shopPackageCreditArr = shopPackageCreditRepository.getFeaturedCreditsByPackageId(activeShopPackage.getPackage().getId()) %}
 	{% if shopPackageCreditArr|length >0 %}
@@ -472,7 +473,11 @@
               var upsellId = split_ad_id[2];
               if($(this).hasClass('toggle-off')){
                 $(this).removeClass('toggle-off').addClass('toggle-on');
-                featuredTopUpsellBtn(adId,upsellId);
+                {% if remainingFeaturedCredits > 0 %}
+                	useCreditForFeaturedUpsell(adId,upsellId);
+                {% else %}
+                	featuredTopUpsellBtn(adId,upsellId);
+                {% endif %}
               }else{
             	 featurredUpsellRemoveId = adId;
             	 $('#featuredOffConfirmModal').foundation('reveal', 'open');

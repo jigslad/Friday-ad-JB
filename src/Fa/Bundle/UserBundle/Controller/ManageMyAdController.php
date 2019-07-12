@@ -94,7 +94,6 @@ class ManageMyAdController extends CoreController
         if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
         }
-    
         
         $parameters = array(
             'totalAdCount'    => $totalAdCount,
@@ -295,8 +294,11 @@ class ManageMyAdController extends CoreController
             $this->checkIsValidAdUser($ad->getUser()->getId());
             
             $loggedinUser = $this->getLoggedInUser();
+            $userId = $loggedinUser->getId();
+            $upsellObj = $this->getRepository('FaPromotionBundle:Upsell')->find('5');
                         
             $ans = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->disableFeaturedAdUpsell($adId);
+            $this->getRepository('FaUserBundle:UserCreditUsed')->redeemCreditUsedByUpsell($userId,$ad,$upsellObj,$this->container);
             
             if ($ans) {
                 $successMsg     = $this->get('translator')->trans('Featured upsell was removed successfully.', array(), 'frontend-manage-my-ad');
@@ -767,11 +769,7 @@ class ManageMyAdController extends CoreController
         }
     }
     
-    public function addOrRemoveFeaturedCredits($userId, $adId) {
-        
-    }
-    
-    private function addUpsellInfoToCart($userId, $adId, $selectedUpsellId, $request, $categoryId)
+    private function addUpsellInfoToCart($userId, $adId, $selectedUpsellId, $request = null, $categoryId)
     {
         //Add to the cart
         $cart            = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $this->container, false, false, true);
@@ -868,5 +866,67 @@ class ManageMyAdController extends CoreController
                 }
             }
         }
-    }    
+    } 
+    
+    /**
+     * Upgrade To Featured Ad.
+     *
+     * @param Request $request A Request object.
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxCreditPaymentProcessForIndividualUpsellAction($upsellId, $adId, Request $request)
+    {
+        //$upsellId = 5;
+        //$adId = 17260111;
+        if ($request->isXmlHttpRequest()) {
+            $redirectToUrl = '';
+            $error         = '';
+            $htmlContent   = '';
+            $deadlockError = '';
+            $deadlockRetry = '';
+            $loggedinUser     = $this->getLoggedInUser();
+            $errorMsg	= null;
+            $selectedUpsellId = $upsellId;
+            
+            if (!empty($loggedinUser)) {
+                $user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
+                $ad        = $this->getRepository('FaAdBundle:Ad')->find($adId);
+                
+                if (!empty($user)) {
+                    $selectedUpsellObj = $this->getRepository('FaPromotionBundle:Upsell')->findOneBy(array('id' => $selectedUpsellId));
+                    if ($selectedUpsellObj->getDuration()) {
+                        $getLastCharacter = substr($selectedUpsellObj->getDuration(),-1);
+                        $noInDuration = substr($selectedUpsellObj->getDuration(),0, -1);
+                        if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                        elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                        else { $adExpiryDays = $selectedUpsellObj->getDuration(); }
+                    }
+                    
+                    //Add to the cart
+                    $addCartInfo = $this->addUpsellInfoToCart($user->getId(), $adId, $selectedUpsellId, $request, $ad->getCategory()->getId());
+
+                    if ($addCartInfo) {
+                        $upsellObj = $this->getRepository('FaPromotionBundle:Upsell')->find($upsellId);
+                        $this->getRepository('FaAdBundle:AdUserPackageUpsell')->setAdUserIndividualUpsell($upsellObj, $ad);
+                        $this->getRepository('FaUserBundle:UserCreditUsed')->addCreditUsedByUpsell($user->getId(), $ad, $upsellObj);
+                        
+                        $redirectUrl = $request->headers->get('referer');
+                        $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
+                        
+                        $successMsg     = $this->get('translator')->trans('Featured upsell was added successfully.', array(), 'frontend-manage-my-ad');
+                        $messageManager = $this->get('fa.message.manager');
+                        $messageManager->setFlashMessage($successMsg, 'success');
+                        
+                        $htmlContent= array(
+                            'success' 		=> true,
+                            'redirectUrl' 	=> $redirectUrl
+                        );
+                    }
+
+                    return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
+                }
+            }
+        }
+    }  
 }
