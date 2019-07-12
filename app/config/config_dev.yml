@@ -14,9 +14,10 @@ web_profiler:
 monolog:
     handlers:
         main:
-            type: stream
+            type: rotating_file
             path: '%kernel.logs_dir%/%kernel.environment%.log'
-            level: debug
+            level: error
+            max_files: 4
             channels: ['!event']
         console:
             type: console
@@ -37,8 +38,8 @@ monolog:
         #    type: chromephp
         #    level: info
 
-assetic:
-    use_controller: '%use_assetic_controller%'
+#assetic:
+#    use_controller: '%use_assetic_controller%'
 
 #swiftmailer:
 #    delivery_addresses: ['me@example.com']

@@ -950,10 +950,10 @@ class AdPostType extends AbstractType
                         }
                     }
                     if (isset($cookieLocation['town']) && $cookieLocation['town']) {
-                        $locationText = $cookieLocation['town'];
+                        if($locationId!='' && $locationId==2) { $locationText = $cookieLocation['town']; }
                     }
                     if (isset($cookieLocation['paa_county']) && $cookieLocation['paa_county']) {
-                        $locationText .= ', ' . $cookieLocation['paa_county'];
+                        if($locationId!='' && $locationId==2) { $locationText .= ', ' . $cookieLocation['paa_county']; }
                     }
                 }
             }
@@ -969,9 +969,6 @@ class AdPostType extends AbstractType
         $fieldOptions = array(
             'mapped' => false,
             'label' => 'Location',
-            'constraints' => new NotBlank(array(
-                'message' => 'Location should not be blank.'
-            )),
             'data' => $locationText,
             'attr' => array(
                 'class' => 'white-field'

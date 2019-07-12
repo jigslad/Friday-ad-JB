@@ -66,10 +66,6 @@ EOF
         
         echo "Command Started At: ".date('Y-m-d H:i:s', time())."\n";
         
-        /* $transId = trim($input->getOption('trans_id'));
-        $ll = $this->feedAdvertRequest($transId);
-        var_dump($ll);
-        die('here I am'); */
         
         //get options passed in command
         $offset = $input->getOption('offset');
@@ -97,20 +93,26 @@ EOF
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);
         $objAds = $qb->getQuery()->execute();
+        $transIds = $feedAds = array();
         
         foreach ($objAds as $objAd) {
-            $transId = $objAd->getTransId();
-            $feedAd = $this->feedAdvertRequest($transId);
-            if (empty($feedAd)) {
-                $objAd->setStatus($this->em->getReference('FaEntityBundle:Entity', \Fa\Bundle\EntityBundle\Repository\EntityRepository::AD_STATUS_EXPIRED_ID));
-                $this->em->getRepository('FaAdBundle:Ad')->deleteAdFromSolrByAdId($objAd->getId(), $this->getContainer());
-                $this->em->persist($objAd);
-                $this->em->flush();
-                $output->writeln('Removed feed advert Id: '.$objAd->getId(), true);
-            } else {
-                if (isset($feedAd['Message'])) {
-                    $output->writeln('Some thing went wrong for trans Id: '.$transId, true);
-                } else {
+            $transIds[] = $objAd->getTransId();
+        }
+        
+        if(!empty($transIds)) {
+            $feedAds = $this->feedAdvertRequest($transIds);
+        }
+
+        foreach ($feedAds as $feedAd) {
+            $objAd = $this->em->getRepository('FaAdBundle:Ad')->findOneBy(array('trans_id'=>$feedAd['Id']));
+            if(!empty($feedAd) && $feedAd['AdStatus'] != 'Active') {
+                if ($feedAd['AdStatus']=='Archived') {
+                    $objAd->setStatus($this->em->getReference('FaEntityBundle:Entity', \Fa\Bundle\EntityBundle\Repository\EntityRepository::AD_STATUS_EXPIRED_ID));
+                    $this->em->getRepository('FaAdBundle:Ad')->deleteAdFromSolrByAdId($objAd->getId(), $this->getContainer());
+                    $this->em->persist($objAd);
+                    $this->em->flush();
+                    $output->writeln('Removed feed advert Id: '.$objAd->getId(), true);
+                } elseif($feedAd['AdStatus']=='Expired') {
                     if (isset($feedAd['EndDate']) && ($feedAd['EndDate'] != '0001-01-01T00:00:00Z')) {
                         $objAd->setStatus($this->em->getReference('FaEntityBundle:Entity', \Fa\Bundle\EntityBundle\Repository\EntityRepository::AD_STATUS_EXPIRED_ID));
                         $objAd->setExpiresAt(strtotime($feedAd['EndDate']));
@@ -119,7 +121,8 @@ EOF
                         $this->em->getRepository('FaAdBundle:Ad')->updateAdStatusInSolrByAd($objAd, $this->getContainer());
                         $output->writeln('Updated feed advert Id: '.$objAd->getId(), true);
                     }
-                    // Feed Advert found. TODO Update expire date and status.
+                } else {
+                   $output->writeln('Some thing went wrong for trans Id: '.$transId, true);                    
                 }
             }
         }
@@ -230,13 +233,17 @@ EOF
     {
         $mode = $this->getContainer()->getParameter('fa.feed.mode');
         $mainUrl = $this->getContainer()->getParameter('fa.feed.'.$mode.'.url');
-        $url = $mainUrl.'/adverts/GetAdvertById?appkey='.$this->getContainer()->getParameter('fa.feed.api.id').'&advertId='.$transId;
-        
+        //$url = $mainUrl.'/adverts/GetAdvertById?appkey='.$this->getContainer()->getParameter('fa.feed.api.id').'&advertId='.$transId;
+        $url = $mainUrl.'/advertstatus/CheckStatusForAdverts/?appkey='.$this->getContainer()->getParameter('fa.feed.api.id');
+        $parameter = '{"advertIds":'.json_encode($transId).'}';
         // Build the HTTP Request Headers
         $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $parameter);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 180);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         
         $response = json_decode(curl_exec($ch), true);
         

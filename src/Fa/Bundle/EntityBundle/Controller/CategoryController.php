@@ -81,7 +81,6 @@ class CategoryController extends CoreController
         
         
         $locationDetails = CommonManager::getLocationDetailFromParamsOrCookie($location, $request, $this->container);
-        //echo '<pre>'; print_r($locationDetails);die;
         if (!empty($locationDetails)) {
             if ($locationDetails['location']!='') {
                 $splitLocation = explode(',', $locationDetails['location']);

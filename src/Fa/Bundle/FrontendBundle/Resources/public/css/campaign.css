@@ -143,7 +143,7 @@
         background: url(http://www.friday-ad.co.uk/bundles/fafrontend/images/fb-btn.svg) no-repeat;
     }
 
-    .gplus-btn, .gplus-btn:hover {
+    .gplus-btn, .gplus-btn:hover, .gplus-btn:focus, .gplus-btn:active {
         background: url(http://www.friday-ad.co.uk/bundles/fafrontend/images/gplus-btn.svg) no-repeat;
     }
     .post-info {

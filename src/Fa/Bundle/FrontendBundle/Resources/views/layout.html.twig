@@ -12,6 +12,7 @@
     {% set blockFacebookMeta = block('facebook_meta') is defined ? block('facebook_meta')|trim : false %}
     {% set blockTwitterMeta = block('twitter_meta') is defined ? block('twitter_meta')|trim : false %}
     {% set blockGaCode = block('google_ga_code') is defined ? block('google_ga_code')|trim : false %}
+    {% set blockBreadcrumbCode = block('breadcrumb_script') is defined ? block('breadcrumb_script')|trim : false %}
 
     {% set container = fetch_container_instance() %}
     {% set currentRoute = app.request.attributes.get('_route') %}
@@ -119,6 +120,10 @@
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}
+    
+    {% if blockBreadcrumbCode %}
+    	{{ blockBreadcrumbCode|raw }}
+    {% endif %}
     {% if blockDimension2 %}
         {{ blockDimension2|raw }}
     {% else %}
@@ -156,7 +161,31 @@
         {% endif %}
     {% endif %}
     <!-- Pagination Head End -->
-
+    
+    {% if currentRoute in {0: 'fa_frontend_homepage'} or (app.request.uri == container.getParameter('base_url')~'/contact-us/') %}
+    <script type="application/ld+json">
+	{ 
+		"@context": "http://schema.org",
+ 		"@type": "Organization",
+ 		"name": "Friday-Ad",
+ 		"url" : "https://www.friday-ad.co.uk",
+  		"description" : "Friday-Ad is a community based classified ads website and newspaper in the UK.",
+ 		"logo": "https://static.friday-ad.co.uk/bundles/fafrontend/images/fad-logo.svg",
+		"address": {
+		"@type": "PostalAddress",
+		"streetAddress": "London Road",
+		"addressLocality": "Sayers Common",
+		"postalCode": "BN6 9HS",
+		"addressCountry": "UK"
+	},
+	"sameAs" : [
+		"https://www.facebook.com/TheFridayAd/",
+		"https://twitter.com/thefridayad",
+		"https://www.instagram.com/thefridayad/",
+		"https://www.wikidata.org/wiki/Q62031955"
+	]}
+	</script>
+	{% endif %}
 </head>
 <body {% if (showAdultPopup == 1) %} class="transbox" {% endif %}>
         {% if status_code is not defined %}
@@ -213,7 +242,7 @@
             {{ include('FaFrontendBundle::adultWarnningPopup.html.twig') }}
         {% endif %}
 
-        {{ include('FaFrontendBundle::pushNotificationsJs.html.twig') }}
+        {#{ include('FaFrontendBundle::pushNotificationsJs.html.twig') }#}
 
         <script type="text/javascript">
         $(window).on('load', function() {

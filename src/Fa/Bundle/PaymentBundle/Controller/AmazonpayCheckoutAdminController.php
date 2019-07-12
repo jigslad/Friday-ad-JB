@@ -114,7 +114,6 @@ class AmazonpayCheckoutAdminController extends CoreController implements Resourc
                     return $this->handleMessage($this->get('translator')->trans('Your payment received successfully.', array(), 'backend-amazonpay'), 'checkout_payment_success_admin', array('cartCode' => $cart->getCartCode()), 'success');
                 }
             }
-            //echo '<pre>';print_r($amazonResponse);die;
         }
 
         if ($this->container->get('session')->get('popup')) {

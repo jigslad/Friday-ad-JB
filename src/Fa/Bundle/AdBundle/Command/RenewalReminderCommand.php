@@ -124,8 +124,6 @@ EOF
         $qb->setFirstResult($offset);
         $qb->setMaxResults($step);
 
-        //echo '<pre>';print_r($searchParam);die;
-        //echo $qb->getQuery()->getSql();die;
         $ads = $qb->getQuery()->getResult();
 
         $entityManager = $this->getContainer()->get('doctrine')->getManager();

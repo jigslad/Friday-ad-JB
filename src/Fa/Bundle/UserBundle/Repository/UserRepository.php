@@ -1142,12 +1142,12 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
         $qb = $this->createQueryBuilder(self::ALIAS)
-        ->select(self::ALIAS.'.id as user_id', self::ALIAS.'.business_name', self::ALIAS.'.business_category_id', UserSiteRepository::ALIAS.'.path as company_logo', 'AVG('.UserReviewRepository::ALIAS.'.rating) as user_rating', 'IDENTITY('.self::ALIAS.'.status) AS status_id')
+        ->select(self::ALIAS.'.id as user_id', self::ALIAS.'.business_name', UserSiteRepository::ALIAS.'.company_welcome_message as company_welcome_message', UserSiteRepository::ALIAS.'.about_us as about_us', self::ALIAS.'.business_category_id', UserSiteRepository::ALIAS.'.path as company_logo', 'AVG('.UserReviewRepository::ALIAS.'.rating) as user_rating', 'IDENTITY('.self::ALIAS.'.status) AS status_id')
         ->leftJoin('Fa\Bundle\UserBundle\Entity\UserSite', UserSiteRepository::ALIAS, 'WITH', self::ALIAS.'.id = '.UserSiteRepository::ALIAS.'.user')
         ->leftJoin('Fa\Bundle\UserBundle\Entity\UserReview', UserReviewRepository::ALIAS, 'WITH', UserReviewRepository::ALIAS.'.user = '.self::ALIAS.'.id AND '.UserReviewRepository::ALIAS.'.user = '.$userId.' AND '.UserReviewRepository::ALIAS.'.rating IS NOT NULL AND '.UserReviewRepository::ALIAS.'.status = '.UserReviewRepository::MODERATION_QUEUE_STATUS_OKAY)
         ->andWhere(self::ALIAS.'.status IN (:userStatus)')

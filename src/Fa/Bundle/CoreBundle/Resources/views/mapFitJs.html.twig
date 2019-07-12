@@ -52,7 +52,6 @@ function showMapForPaa(lat, lng, field = '', pointField = '') {
 	if(map && myMarker) {  
         map.removeLayer(myMarker);
     }
-    
 	if(!map) {
 		// Initialize the map
 	    map = L.map('mapfit', {
@@ -63,6 +62,26 @@ function showMapForPaa(lat, lng, field = '', pointField = '') {
 	    });
 	}
 	myMarker = L.marker([lat, lng], {icon: myIcon}).addTo(map);
+}
+
+function showMarkerPaa(lat,lng) {
+	if(map && myMarker) {  
+        map.removeLayer(myMarker);
+    }
+
+	if(!map) {
+		// Initialize the map
+	    map = L.map('mapfit', {
+	        center: [lat, lng], // Map loads with this location as center
+	        zoom: 12,
+	        scrollWheelZoom: true,
+	        layers: [streets], // Show 'streets' by default
+	    });
+	} else {
+		map.setView(new L.LatLng(lat,lng), 12);
+		myMarker = L.marker([lat,lng], {icon: myIcon}).addTo(map);
+		map.flyTo([lat, lng]);
+	}
 }
 
 function showMarker(lat, lng) {

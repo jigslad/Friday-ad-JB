@@ -102,10 +102,14 @@ class AdRoutingManager
         $dimension_slug = null;
         $cookieLocationDetails = null;
         $url = '';
-        
+
         $search_params = array_map(array($this, 'removeEmptyElement'), $search_params);
         if(isset($search_params['hide_distance_block'])) {
             unset($search_params['hide_distance_block']);
+        }
+        
+        if(isset($search_params['default_distance'])) {
+            unset($search_params['default_distance']);
         }
 
         // From top search keyword category
@@ -137,6 +141,16 @@ class AdRoutingManager
             $location = $this->getLocation($search_params);
         }
         
+        $getLocLvl = 0;
+        if($location!='uk') {
+            $selLocationArray = $this->em->getRepository('FaEntityBundle:Location')->findBy(array('url'=>$location));
+            if(!empty($selLocationArray)) { $getLocLvl = $selLocationArray[0]->getLvl(); }
+        }
+            
+        if($location=='uk' || $getLocLvl==2) {
+            unset($search_params['item__distance']);
+        }
+
         if (isset($search_params['item__user_id']) && $search_params['item__user_id'] != '') {
             $shopUserId = $search_params['item__user_id'];
             unset($search_params['item__user_id']);
@@ -155,7 +169,7 @@ class AdRoutingManager
             unset($search_params['item__location']);
             unset($search_params['item__location_autocomplete']);
 
-            if (isset($search_params['item__distance']) && $search_params['item__distance'] == 15) {
+            if (isset($search_params['item__distance']) && ($search_params['item__distance'] == $getDefaultRadius || $search_params['item__distance'] == CategoryRepository::MAX_DISTANCE)) {
                 unset($search_params['item__distance']);
             }
 
@@ -770,6 +784,7 @@ class AdRoutingManager
 
         $this->dimensionOrder[CategoryRepository::ADULT_ID]= array(
             'item__category_id' => 1,
+            'item_adult__ethnicity_id' => 5,
         );
     }
 

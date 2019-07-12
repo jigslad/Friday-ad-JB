@@ -436,6 +436,7 @@ class AdReportDailyRepository extends EntityRepository
                         case 'ad_id':
                             $resAd = $objRepoAd->find($value);
                             if ($resAd) {
+                                $fieldValueArray['ad_id'] = $resAd->getId();
                                 $fieldValueArray['ad_title'] = $resAd->getTitle();
                             }
                             break;

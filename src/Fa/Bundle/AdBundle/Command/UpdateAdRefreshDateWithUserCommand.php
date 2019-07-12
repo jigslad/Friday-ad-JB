@@ -130,7 +130,6 @@ EOF
 
         $ads = $qb->getQuery()->getResult();
 
-        //echo '<pre>'; print_r($ads);die;
 
         $entityManager = $this->getContainer()->get('doctrine')->getManager();
         

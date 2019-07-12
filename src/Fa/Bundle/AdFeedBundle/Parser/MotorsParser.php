@@ -192,7 +192,7 @@ class MotorsParser extends AdParser
             $makeUrl  = Urlizer::urlize($adArray['Manufacturer']);
             $parent_cat= $this->em->getRepository('FaEntityBundle:Category')->getIdByNameAndFullSlugPattern($adArray['Manufacturer'], 'motors/cars/', $this->container, false, $makeUrl);
 
-            if (!count($parent_cat) > 0) {
+            if (empty($parent_cat)) {
                 $matchedText = $this->getMatchedText('Car'.'#'.$adArray['Manufacturer']);
                 if ($matchedText != '') {
                     $TargetCat= $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($matchedText, $this->container);
@@ -202,7 +202,7 @@ class MotorsParser extends AdParser
                 }
             }
 
-            if (count($parent_cat) > 0) {
+            if (!empty($parent_cat)) {
                 $parent_cat_id = $parent_cat[0]['id'];
                 $parent_name   = $parent_cat[0]['name'];
                 $this->setModelId($adArray, $parent_cat_id, $parent_name);
@@ -510,7 +510,7 @@ class MotorsParser extends AdParser
             $makeUrl  = Urlizer::urlize($adArray['Manufacturer']);
             $parent_cat= $this->em->getRepository('FaEntityBundle:Category')->getIdByNameAndFullSlugPattern($adArray['Manufacturer'], 'motors/commercial-vehicles/', $this->container, false, $makeUrl);
 
-            if (!count($parent_cat) > 0) {
+            if (empty($parent_cat)) {
                 $matchedText = $this->getMatchedText('CV'.'#'.$adArray['Manufacturer']);
                 if ($matchedText != '') {
                     $TargetCat= $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($matchedText, $this->container);
@@ -520,7 +520,7 @@ class MotorsParser extends AdParser
                 }
             }
 
-            if (count($parent_cat) > 0) {
+            if (!empty($parent_cat)) {
                 $parent_cat_id = $parent_cat[0]['id'];
                 $parent_name   = $parent_cat[0]['name'];
                 $this->setModelId($adArray, $parent_cat_id, $parent_name, 'CV');

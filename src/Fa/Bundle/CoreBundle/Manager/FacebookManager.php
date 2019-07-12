@@ -80,7 +80,6 @@ class FacebookManager
     {
         //set default app & secret
         FacebookSession::setDefaultApplication($this->app_id, $this->app_secret);
-//         var_dump($this->container->getParameter('base_url').$this->container->get('router')->generate($redirectRoute, $routeParams, true));die();
         $this->helper = new FacebookRedirectLoginHelper($this->container->getParameter('base_url').$this->container->get('router')->generate($redirectRoute, $routeParams, true));
 
         if (session_status() !== PHP_SESSION_ACTIVE) {

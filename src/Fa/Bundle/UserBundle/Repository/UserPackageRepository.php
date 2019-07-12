@@ -136,7 +136,13 @@ class UserPackageRepository extends EntityRepository
                     $userPackage->setExpiresAt(CommonManager::getTimeFromDuration($package->getDuration(), time(), '+'));
                 }
             }
-
+            
+            if ($expired==1) {
+                $userPackage->setIsAutoRenew(1);
+            } else {
+                $userPackage->setIsAutoRenew(0);
+            }
+            
             if ($remark == 'package-renew-thourgh-recurring') {
                 $userPackage->setRenewedAt(time());
                 $userPackage->setIsRenewalMailSent(1);
@@ -630,7 +636,7 @@ class UserPackageRepository extends EntityRepository
     public function checkIsAutoRenewedPackage($userId)
     {
         $qb = $this->createQueryBuilder(self::ALIAS)->select(self::ALIAS.'.is_auto_renew')->andWhere(self::ALIAS.'.status = :status')->andWhere(self::ALIAS.'.user = :userId')
-                    ->setParameter('status', 'A')->setParameter('userId', $userId);
+        ->setParameter('status', 'A')->setParameter('userId', $userId)->orderBy(self::ALIAS.'.id', 'DESC')->setMaxResults(1);
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result['is_auto_renew'];
     }
