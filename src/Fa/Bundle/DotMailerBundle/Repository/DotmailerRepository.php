@@ -48,6 +48,12 @@ class DotmailerRepository extends EntityRepository
 
     const TOUCH_POINT_FACEBOOK = 'facebook';
 
+    const TOUCH_POINT_ACCOUNT_ID = 49;
+
+    const TOUCH_POINT_GOOGLE_ID = 50;
+
+    const TOUCH_POINT_FACEBOOK_ID = 51;
+
     /**
      * Prepare query builder.
      *
@@ -756,10 +762,18 @@ class DotmailerRepository extends EntityRepository
                     $dotmailer->setLastPaidAt($lastPaidAt['created_at']);
                 }
             }
-            
-            if ($touchPoint== self::TOUCH_POINT_CREATE_ALERT) {
+
+            if ($touchPoint == self::TOUCH_POINT_CREATE_ALERT || $touchPoint == self::TOUCH_POINT_ACCOUNT || $touchPoint == self::TOUCH_POINT_GOOGLE || $touchPoint == self::TOUCH_POINT_FACEBOOK || $touchPoint == self::TOUCH_POINT_ENQUIRY) {
                 if ($user->getIsThirdPartyEmailAlertEnabled() == 1) {
-                    $newsletterTypeIds[] = 48;
+                    if ($touchPoint == self::TOUCH_POINT_ACCOUNT) {
+                        $newsletterTypeIds[] = self::TOUCH_POINT_ACCOUNT_ID;
+                    } else if ($touchPoint == self::TOUCH_POINT_GOOGLE) {
+                        $newsletterTypeIds[] = self::TOUCH_POINT_GOOGLE_ID;
+                    } else if ($touchPoint == self::TOUCH_POINT_FACEBOOK) {
+                        $newsletterTypeIds[] = self::TOUCH_POINT_FACEBOOK_ID;
+                    } else {
+                        $newsletterTypeIds[] = 48;
+                    }
                 }
                 $dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
                 $dotmailer->setNewsletterSignupAt(time());
