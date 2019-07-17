@@ -459,13 +459,13 @@ class DotmailerRepository extends EntityRepository
             $this->getEntityManager()->getRepository('FaDotMailerBundle:DotmailerInfo')->doTouchPointEntry($dotmailer->getId(), $adId, $touchPoint);
 
             //send to dotmailer instantly.
-            if ($isNewToDotmailer) {
+            //if ($isNewToDotmailer) {
                 exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
                 /* $response = $this->sendOneContactToDotmailerRequest($dotmailer, $container);
                 if (isset($response['id']) && isset($response['email'])) {
                     $retresponse = $this->sendUserForDotmailerEnrollmentProgramRequest($response['id'], $container);
                 } */
-            }
+           //}
         }
     }
 
@@ -781,15 +781,15 @@ class DotmailerRepository extends EntityRepository
 
             $this->getEntityManager()->persist($dotmailer);
             $this->getEntityManager()->flush($dotmailer);
-
+            
             //send to dotmailer instantly.
-            if ($isNewToDotmailer) {
+            //if ($isNewToDotmailer) {
                 exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
                 /* $response = $this->sendOneContactToDotmailerRequest($dotmailer, $container);
                 if (isset($response['id']) && isset($response['email'])) {
                     $retresponse = $this->sendUserForDotmailerEnrollmentProgramRequest($response['id'], $container);
                 } */
-            }
+            //}
         }
     }
 
