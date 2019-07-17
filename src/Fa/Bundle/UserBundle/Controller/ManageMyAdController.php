@@ -47,13 +47,27 @@ class ManageMyAdController extends CoreController
         $inActiveAdCount = 0;
         $boostedAdCount  = $adsBoostedCount  =  0;
         $type            = $request->get('type', 'active');
+        $sortBy            = $request->get('sortBy', 'ad_date');
 
         $onlyActiveAdCount = 0;
+        $adLimitCount = 0;
+        $activeAdIdarr = $activeAdsarr = array();$activeAdIds = '';
 
-        $activeAdCountArray   = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'active', true)->getResult();
-        $inActiveAdCountArray = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'inactive', true)->getResult();
-        $onlyActiveAdCountArray   = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'onlyactive', true)->getResult();
-        $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type);
+        $activeAdCountArray   = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'active', $sortBy, true)->getResult();
+        $inActiveAdCountArray = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'inactive',  $sortBy, true)->getResult();
+        $onlyActiveAdCountArray   = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'onlyactive',  $sortBy, true)->getResult();
+        $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type, $sortBy);
+        
+        $activeAdsarr   = $this->getRepository('FaAdBundle:Ad')->getMyAdIdsQuery($loggedinUser->getId())->getResult();
+        if(!empty($activeAdsarr)) {
+            $activeAdIdarr = array_column($activeAdsarr, 'id');
+            $activeAdIds  =  implode(',',$activeAdIdarr);
+        }
+        
+        $currentActivePackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
+        if($currentActivePackage && $currentActivePackage->getPackage())  {
+            $adLimitCount = $currentActivePackage->getPackage()->getAdLimit();
+        }        
         
         if (is_array($activeAdCountArray)) {
             $activeAdCount = $activeAdCountArray[0]['total_ads'];
@@ -78,28 +92,32 @@ class ManageMyAdController extends CoreController
         $this->get('fa.pagination.manager')->init($query, $page);
         $pagination = $this->get('fa.pagination.manager')->getPagination();
         $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
-
-        /*if ($pagination->getNbResults()) {
+        
+        $onlyActiveAdInPageCount = 0; 
+        if ($pagination->getNbResults()) {
             foreach ($pagination->getCurrentPageResults() as $ad) {                
                 if ($ad['status_id'] == EntityRepository::AD_STATUS_LIVE_ID) {
-                    $onlyActiveAdCount = $onlyActiveAdCount + 1;
+                    $onlyActiveAdInPageCount = $onlyActiveAdInPageCount + 1;
                 }                
-            }
-        }*/
+            }            
+        }
 
         $parameters = array(
-            'totalAdCount'    => $totalAdCount,
-            'activeAdCount'   => $activeAdCount,
-            'inActiveAdCount' => $inActiveAdCount,
-            'adsBoostedCount' => $adsBoostedCount,
-            'onlyActiveAdCount'=> $onlyActiveAdCount,
-            'pagination'      => $pagination,
-            'modToolTipText'  => $moderationToolTipText,
-            'boostedAdCount'  => $boostedAdCount,
-            'isBoostEnabled'  => $getBoostDetails['isBoostEnabled'],
-            'boostMaxPerMonth'=> $getBoostDetails['boostMaxPerMonth'],
-            'boostAdRemaining'=> $getBoostDetails['boostAdRemaining'],
-            'boostRenewDate'  => $getBoostDetails['boostRenewDate'],
+            'totalAdCount'      => $totalAdCount,
+            'activeAdCount'     => $activeAdCount,
+            'inActiveAdCount'   => $inActiveAdCount,
+            'onlyActiveAdInPageCount' => $onlyActiveAdInPageCount,
+            'activeAdIds'       => $activeAdIds,
+            'adsBoostedCount'   => $adsBoostedCount,
+            'onlyActiveAdCount' => $onlyActiveAdCount,
+            'adLimitCount'      => $adLimitCount,
+            'pagination'        => $pagination,
+            'modToolTipText'    => $moderationToolTipText,
+            'boostedAdCount'    => $boostedAdCount,
+            'isBoostEnabled'    => $getBoostDetails['isBoostEnabled'],
+            'boostMaxPerMonth'  => $getBoostDetails['boostMaxPerMonth'],
+            'boostAdRemaining'  => $getBoostDetails['boostAdRemaining'],
+            'boostRenewDate'    => $getBoostDetails['boostRenewDate'],
             'userBusinessCategory' => $getBoostDetails['userBusinessCategory'],
         );
 
@@ -132,7 +150,7 @@ class ManageMyAdController extends CoreController
         $getExipryDate = $boostRenewDate = '';
         $boostedAdCountArray = array();
 
-        $boostedAdCountArray  = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'boosted', true)->getResult();
+        $boostedAdCountArray  = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'boosted', 'ad_date', true)->getResult();
 
         if (!empty($boostedAdCountArray)) {
             $adsBoostedCount = $boostedAdCountArray[0]['total_ads'];
@@ -383,7 +401,7 @@ class ManageMyAdController extends CoreController
 
                 if (count($liveAdStatusArray)) {
                     $type                 = $request->get('type');
-                    $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type, false, $liveAdStatusArray);
+                    $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type, 'ad_date', false, $liveAdStatusArray);
                     $liveAds              = $query->getResult();
                     $adRepository         = $this->getRepository('FaAdBundle:Ad');
                     $adLocationRepository = $this->getRepository('FaAdBundle:AdLocation');
