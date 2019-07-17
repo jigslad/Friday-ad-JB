@@ -13,4 +13,18 @@
     {# {% set adUrl = adUrl|trim('/') %} #}
 {% endif %}
 
-{{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+{% set userRoleId = app.user.getRole().getId() %}
+{% set userBusType = 'private' %}
+{% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+	{% set userBusType = 'netsuite' %}
+{% elseif (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID')) %}
+	{% set userBusType = 'business' %}
+{% else %}
+	{% set userBusType = 'private' %}
+{% endif %}
+
+{% if userBusType is defined and userBusType == 'netsuite' %}
+    {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
+{% else %}
+    {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+{% endif %}
