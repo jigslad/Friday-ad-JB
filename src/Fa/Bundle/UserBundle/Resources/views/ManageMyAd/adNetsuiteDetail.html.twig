@@ -42,17 +42,19 @@
 {% if not app.request.isXmlHttpRequest() %} 
 <div class="manage-item-list" id="item_card_{{adId}}">
 {% endif %}
-<div class="hide-for-small-only">
-    <div class="row">
+<div class="row">
+	<div class="small-8 medium-1 large-1 columns">
         {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute == 'manage_my_ads_active' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
-            <div class="medium-1 large-1 small-24 columns"><span class="custom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span></div>
+            <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet">Select</span>
         {% elseif isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute=='ajax_manage_my_ads_get_status' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
-            <div class="medium-1 large-1 small-24 columns"><span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span></div>
+            <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet">Select</span>
         {% elseif isBoostEnabled is defined and isBoostEnabled==1 and currentRoute == 'manage_my_ads_boosted' and (userBusinessCategory is defined and  userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
-            <div class="medium-1 large-1 small-24 columns"><span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span></div>
+            <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet">Select</span>
         {% else %}
-            <div class="medium-1 large-1 columns"><span class="dummbychk"></span></div>
+            <span class="dummbychk"></span>
         {% endif %}
+	</div>        
+<div class="hide-for-small-only">    
         <div class="small-10 medium-6 large-6 columns  medium-left-cols">
             <div class="manage-list-img">
                 {% if ad['status_id'] == adStatusLive %}
@@ -135,7 +137,7 @@
                     <div class="clearfix dtl-social-icons-desk-tab dtl-social-icons manage-list-social-icons show-for-small-up-only">
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/facebook/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0','Facebook');" href="javascript:void(0);" title="{{'Facebook'|trans({}, 'frontend-show-ad')}}" class="dtl-fb" id="dtl-fb-id"></a>
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/twitter/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Twitter');" href="javascript:void(0);" title="{{'Twitter'|trans({}, 'frontend-show-ad')}}" class="dtl-twi" id="dtl-twi-id"></a>
-                        <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/google_plusone_share/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'GooglePlus');" href="javascript:void(0);" title="{{'Google Plus'|trans({}, 'frontend-show-ad')}}" class="dtl-gpl" id="dtl-gpl-id"></a>
+                        <a onclick="return socialShare('{{ ad.id }}', 'https://plus.google.com/share?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'GooglePlus');" href="javascript:void(0);" title="{{'Google Plus'|trans({}, 'frontend-show-ad')}}" class="dtl-gpl" id="dtl-gpl-id"></a>
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/pinterest/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Pinterest');" href="javascript:void(0);" title="{{'Pinterest'|trans({}, 'frontend-show-ad')}}" class="dtl-pin" id="dtl-pin-id"></a>
                         <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/email/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Email');" href="javascript:void(0);" title="{{'Email'|trans({}, 'frontend-show-ad')}}" class="dtl-eml" id="dtl-eml-id"></a>
                     
@@ -187,22 +189,9 @@
             </div>
         </div>
     </div>
-</div>
 
 {# Mobile Version Starts here #}
 <div class="show-for-small-only">
-	<div class="row">
-    	<div class="small-8 columns">
-            {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute == 'manage_my_ads_active' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
-                <span class="custom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span>
-            {% elseif isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute=='ajax_manage_my_ads_get_status' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
-                <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span>
-            {% elseif isBoostEnabled is defined and isBoostEnabled==1 and currentRoute == 'manage_my_ads_boosted' and (userBusinessCategory is defined and  userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
-                <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet show-for-small-only">Select</span>
-            {% else %}
-                <span class="dummbychk"></span>
-            {% endif %}
-        </div>
         <div class="small-16 columns">
         	{% if ad['status_id'] == adStatusLive %}
         	<div class="featuredBlock1">
@@ -332,9 +321,9 @@
         </div>
         <div class="small-24 columns img-btns-blk"></div>
     </div>  
-</div>
 {# Mobile Version Ends here #}
-      
+
+</div>     
 {% if not app.request.isXmlHttpRequest() %}
 </div>
 {% endif %}

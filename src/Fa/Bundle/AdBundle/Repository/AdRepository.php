@@ -3584,7 +3584,7 @@ class AdRepository extends EntityRepository
      * @param string  $type
      *
      */
-    public function getMyAdsQuery($userId, $type = 'active', $isOnlyCount = false, $adIds = array())
+    public function getMyAdsQuery($userId, $type = 'active', $sortBy = 'ad_date', $isOnlyCount = false, $adIds = array())
     {
         $qb = $this->createQueryBuilder(self::ALIAS);
 
@@ -3603,6 +3603,7 @@ class AdRepository extends EntityRepository
         ->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS)
         ->leftJoin(self::ALIAS.'.type', BaseEntityRepository::ALIAS_ADTYPE)
         ->andWhere(self::ALIAS.'.future_publish_at IS NULL');
+        
         if ($type == 'both') {
             $qb->andWhere(self::ALIAS.'.status IN (:status)');
             $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_LIVE_ID, BaseEntityRepository::AD_STATUS_EXPIRED_ID, BaseEntityRepository::AD_STATUS_SOLD_ID, BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
@@ -3634,9 +3635,41 @@ class AdRepository extends EntityRepository
             $qb->andWhere(self::ALIAS.'.id IN (:adIds)');
             $qb->setParameter('adIds', $adIds);
         }
-
+        
+        if($sortBy == 'sel-basic') {
+            
+        } else if($sortBy == 'sel-featured') {
+            
+        }
+        
         $qb->addOrderBy('ad_date', 'DESC');
+                
+        return $qb->getQuery();
+    }
+    
+    /**
+     * Get my ads query.
+     *
+     * @param integer $userId
+     * @param string  $type
+     *
+     */
+    public function getMyAdIdsQuery($userId)
+    {
+        $qb = $this->createQueryBuilder(self::ALIAS);
+        $qb->select(self::ALIAS.'.id');
+        $qb->where(self::ALIAS.'.user = '.$userId);
+        
+        $qb->innerJoin(self::ALIAS.'.status', BaseEntityRepository::ALIAS_ADSTATUS)
+        ->innerJoin(self::ALIAS.'.category', CategoryRepository::ALIAS)
+        ->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS)
+        ->leftJoin(self::ALIAS.'.type', BaseEntityRepository::ALIAS_ADTYPE)
+        ->andWhere(self::ALIAS.'.future_publish_at IS NULL');
 
+        $qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at))');
+        $qb->setParameter('updated_at', strtotime('-29 days'));
+        $qb->setParameter('created_at', strtotime('-29 days'));
+        
         return $qb->getQuery();
     }
 

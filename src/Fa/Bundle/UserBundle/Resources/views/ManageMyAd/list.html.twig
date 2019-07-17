@@ -67,8 +67,12 @@
                     <h1 class="db-title">Manage ads</h1>                   
 					<div class="toplistdiv clearfix">                    	
                 		<ul class="toplistWithBullets">
+                		{% if userBusType is defined and userBusType == 'netsuite' and adLimitCount!=0 %}
+                			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ adLimitCount }}</span></li>
+                		{% else %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
-                			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}/{{ totalFeaturedCredit }}</span></li>
+                		{% endif %}
+                			<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>
                 			{% if isBoostEnabled==1 %}
                     			<li class="lightgreencircle">Boosts remaining: <span>{{ boostAdRemaining }}</span></li>
                     			<li class="boostBtn"><a id="boost_ad_selected_all" class="xs-btn-1 button all-sel-texts">Boost All Actives</a></li>
@@ -79,23 +83,27 @@
                     <ul class="tab-menu manage-item-tabs clearfix">
                         <li {% if currentRoute == 'manage_my_ads_active' %} class="active" {% endif %}>
                         	<a href="{{path('manage_my_ads_active')}}" class="hide-for-small-only">{{ 'My Active Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
-                        	<a href="{{path('manage_my_ads_active')}}" class="show-for-small-only">{{ 'Active'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
+                        	<a href="{{path('manage_my_ads_active')}}" class="show-for-small-only">{{ 'Active ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
                         </li>                       
                         <li {% if currentRoute == 'manage_my_ads_inactive' %} class="active" {% endif %}>
                        		<a href="{{path('manage_my_ads_inactive')}}" class="hide-for-small-only">{{ 'My Inactive Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
-                        	<a href="{{path('manage_my_ads_inactive')}}" class="show-for-small-only">{{ 'Inactive'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
+                        	<a href="{{path('manage_my_ads_inactive')}}" class="show-for-small-only">{{ 'Inactive ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
                         </li>
                     </ul>
                  
                    <div class="manage-items-main">
                        {% if pagination.getNbResults() %}  
-                       		{% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}
-                                <div class="manage-item-list" style="border-top:0px">
-                                    <span class="all-sel-chkbox custom-checkbox"><input type="checkbox" id="boostad_selectall"></span> <a id="boost_ad_selected_all" class="all-sel-text"> {% if currentRoute == 'manage_my_ads_active' %}
-                                        Select all ads <span class="hide-for-small-only">on this page</span> ({{ pagination.getNbResults()>10?10:pagination.getNbResults() }})
-                                    {% endif %} </a>                                    
-                                </div>
-                            {% endif %}                          
+                       	   {% if userBusType is defined and userBusType == 'netsuite' %}
+                       		<div class="manage-item-list top-selects-mma" style="border-top:0px">                       			
+                           		<div class="select-diff-ads"><select class="fa-select-white"><option value="">Select</option><option value="sel-all">All ads</option><option value="sel-basic">Basic ads</option><option value="sel-featured">Featured ads</option></select></div>                           		
+                       			{% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}                                
+                                    <div class="select-all-ads-active"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <a class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
+                                        Select all ads <span class="hide-for-small-only">on this page</span> ({{ onlyActiveAdInPageCount }})
+                                    {% endif %} </a></div>                                                                    
+                                {% endif %}
+                           </div>
+                           {% endif %}  
+                                                   
                             {% for ad in pagination.getCurrentPageResults() %}
                                 {% set adId = ad.id %}
                                 {% set adCategoryId = null %}
@@ -341,6 +349,24 @@
     
 
     $(function(){
+        $('#boost_ad_selected_all').on('click',function(e) {
+        	var activeAdIds = '{{ activeAdIds }}';
+        	$.ajax({
+                type: "POST",
+                url: '{{path("ajax_manage_my_ads_boost_multiple_ad")}}',
+                data: {'adIds':activeAdIds,boost_value:1},
+                asyn:false,
+                cache:false,
+                success:function(result)
+                        {
+                    if(result.error == "")
+                    {
+                            window.location.href = '{{ path('manage_my_ads_active') }}';
+                        }
+                    }
+        	});            
+        });
+        
         $('.boost_your_ad').on('click',function(e)
         {
             var boost_value = 1;
@@ -373,7 +399,7 @@
             }
         });
 
-        $("#boostad_selectall").parent('span').change(function () {
+        $(".boostad_selectall").parent('span').change(function () {
             if($(this).hasClass('checked')) {
                 $('.boostad').attr('checked', 'checked');
                 $('.boostad').parent('span').addClass('checked');
@@ -395,15 +421,15 @@
             if($(this).hasClass('checked')) {
                 $('.boostad').attr('checked', 'checked');
                 $('.boostad').parent('span').addClass('checked');
-                $('#boostad_selectall').attr('checked', 'checked');
-                $('#boostad_selectall').parent('span').addClass('checked');
+                $('.boostad_selectall').attr('checked', 'checked');
+                $('.boostad_selectall').parent('span').addClass('checked');
                 $('.boost_your_ad').removeClass('ajaxboost_your_ad');
                 openMarkAdAsBoostedModal();
             } else {
                 $(".boostad").removeAttr("checked");
                 $('.boostad').parent('span').removeClass('checked');
-                $("#boostad_selectall").removeAttr("checked");
-                $('#boostad_selectall').parent('span').removeClass('checked');
+                $(".boostad_selectall").removeAttr("checked");
+                $('.boostad_selectall').parent('span').removeClass('checked');
                 $('#markAdAsBoostedModal').hide();
                 $('.boost_your_ad').addClass('ajaxboost_your_ad');
             }
@@ -419,18 +445,18 @@
                     $(this).find('.boostad').removeAttr("checked");
                 }
                 if($(".boostad").length == $(".boostad:checked").length) {
-                    $("#boostad_selectall").attr("checked", "checked");
-                    $('#boostad_selectall').parent('span').addClass('checked');
+                    $(".boostad_selectall").attr("checked", "checked");
+                    $('.boostad_selectall').parent('span').addClass('checked');
                     $("#boostad_selectall_inmodal").attr("checked", "checked");
                     $('#boostad_selectall_inmodal').parent('span').addClass('checked');
                 } else if($(".boostad").length > $(".boostad:checked").length) {
                     $("#boostad_selectall_inmodal").attr("checked", "checked");
                     $('#boostad_selectall_inmodal').parent('span').addClass('checked');
-                    $("#boostad_selectall").removeAttr("checked");
-                    $('#boostad_selectall').parent('span').removeClass('checked');
+                    $(".boostad_selectall").removeAttr("checked");
+                    $('.boostad_selectall').parent('span').removeClass('checked');
                 } else {
-                    $("#boostad_selectall").removeAttr("checked");
-                    $('#boostad_selectall').parent('span').removeClass('checked');
+                    $(".boostad_selectall").removeAttr("checked");
+                    $('.boostad_selectall').parent('span').removeClass('checked');
                     $("#boostad_selectall_inmodal").removeAttr("checked");
                     $('#boostad_selectall_inmodal').parent('span').removeClass('checked');
                 }
