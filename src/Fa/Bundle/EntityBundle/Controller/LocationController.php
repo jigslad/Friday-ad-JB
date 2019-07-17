@@ -150,6 +150,7 @@ class LocationController extends CoreController
         if ($request->isXmlHttpRequest()) {
             $nodeId = $request->get('id');
             $locationGroupId = $request->get('locationGroupId');
+            $locationCountyId = $request->get('locationCountyId');
             $locationField = $request->get('locationField');
             if ($nodeId) {
                 //$childrens     = $this->getRepository('FaEntityBundle:Location')->getChildrenKeyValueArrayByParentId($nodeId);
@@ -159,7 +160,12 @@ class LocationController extends CoreController
                 $domicileGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getDomicilesTownsOrArrayByLocationGroupId($locationGroupId, $locationField);
                 
                 if(!empty($domicileGroupArray)) {
-                    $townGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getDomicilesTownsOrArrayByLocationGroupId($locationGroupId, 'town');
+                    if($locationCountyId!='') {
+                        $townGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getTownsByLocationGroupDomicileId($locationGroupId,$locationCountyId);
+                    } else {
+                        $townGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getDomicilesTownsOrArrayByLocationGroupId($locationGroupId, 'town');
+                    }
+                    
                     foreach ($domicileGroupArray as $id => $name) {
                         $domicileArray[] = array('id' => $id, 'text' => $name);                    
                     }
