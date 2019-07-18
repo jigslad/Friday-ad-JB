@@ -38,7 +38,7 @@
 {% block scriptbottom %}  
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-    $(document).ready(function(){
+    /*$(document).ready(function(){
     	$('#fa_user_newsletter_third_party_email_alert').prop('disabled', true);
     });
     $('#fa_user_newsletter_email_alert').on('click', function(){
@@ -46,6 +46,31 @@
 				$('#fa_user_newsletter_third_party_email_alert').prop('disabled', false);
 				$('#fa_user_newsletter_third_party_email_alert').css('cursor', 'pointer');
 			}
+    	});*/
+
+    	$("#fa_user_newsletter_third_party_email_alert").change(function () {
+    		if ($('#fa_user_newsletter_third_party_email_alert').parent().hasClass('checked')) {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', true);
+    		} else {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+    		}
+
+    		if ($('#fa_user_newsletter_third_party_email_alert').attr('checked')) {
+    		    $('#fa_user_newsletter_email_alert').attr('checked', $('#fa_user_newsletter_third_party_email_alert').attr('checked'));
+    		    $('#fa_user_newsletter_email_alert').parent().addClass('checked');
+    		}
+    	});
+
+    	$("#fa_user_newsletter_email_alert").change(function(){
+    		if ($('#fa_user_newsletter_email_alert').parent().hasClass('checked')) {
+    			$('#fa_user_newsletter_email_alert').attr('checked', true);
+    		} else {
+    			$('#fa_user_newsletter_email_alert').attr('checked', false);
+    		}
+    		if (!$('#fa_user_newsletter_email_alert').attr('checked')) {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+    		    $('#fa_user_newsletter_third_party_email_alert').parent().removeClass('checked');
+    		} 
     	});
 	   
     $("#fa_user_newsletter").submit(function(event) {
