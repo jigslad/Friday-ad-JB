@@ -154,10 +154,60 @@
         {{ app.request.uri|replace({('?'~app.request.queryString) : ''})}}
     {% endif %}
 {% endblock %}
+    
+{% block breadcrumb_script %}
+	{% set location_id = null %}
+    {% if cookieLocationDetails['location'] is defined %}
+        {% set location_id = cookieLocationDetails['location'] %}
+    {% endif %}
+    {% set locality_id = null %}
+    {% if cookieLocationDetails['locality_id'] is defined %}
+        {% set locality_id = cookieLocationDetails['locality_id'] %}
+    {% endif %}
+
+    {% if location_id and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %} 
+        {% set HomePagePath = container.getParameter('base_url')~path('location_home_page', {'location': app.request.get('location')}) %} 
+    {% else %}
+        {% set HomePagePath =  container.getParameter('base_url')~path('fa_frontend_homepage') %}  
+    {% endif %} 
+    
+	<script type="application/ld+json">
+	{
+  		"@context": "https://schema.org",
+  		"@type": "BreadcrumbList",
+  		"itemListElement": [{
+    	"@type": "ListItem",
+    	"position": 1,
+    	"name": "Homepage",
+    	"item": "{{HomePagePath}}"
+  	},
+    {% set categoryPath = {} %}
+    {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
+        {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(searchParams.item__category_id, false, fetch_container_instance()) %}
+        {% if categoryPath|length > 0 %}  
+			{% set breadcrumbCatCnt = 2 %}      	
+            {% for categoryId, categoryName in categoryPath %}
+                {% set catLinkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
+                {% set catListUrl = container.getParameter('base_url')~container.get('fa_ad.manager.ad_routing').getListingUrl(catLinkParam) %}
+{
+    	"@type": "ListItem",
+    	"position": {{breadcrumbCatCnt}},
+    	"name": "{{categoryName}}",
+    	"item": "{{catListUrl}}"
+  	}{% if breadcrumbCatCnt <= categoryPath|length %},{% endif %}    
+				{% set breadcrumbCatCnt = breadcrumbCatCnt + 1 %}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+     ]
+	}
+</script>
+{% endblock %}
 
 {% block scripttop %}
-    {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
-        {{ include('FaFrontendBundle:Default:home-css.html.twig') }}
+    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
+        {#{ include('FaFrontendBundle:Default:home-css.html.twig') }#}
+        {{ include('FaAdBundle:AdList:owl-carousel-2-css.html.twig') }}
     {% endif %}
 {% endblock %}
 
@@ -171,7 +221,68 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 .boost-ribbon { display:none; }
 .boosted_ad .boost-ribbon { display:block;background:url(/bundles/fafrontend/images/featured-arrow.svg) no-repeat;width:25px;height:25px;position:absolute;right:0px;top:0px;text-indent:100%;overflow:hidden;white-space:nowrap;z-index:1}
 .boosted_ad .boost-ribbon span {right: -21px;position: relative;top: 6px;color: #ffffff;}
+
+.businessExposureCarousel { margin:30px 0px 50px; }
+#shop-user-item-slider .owl-stage { transform:none !important; }
+.bus-shop-user-item-slider { padding:0px 0px; }
+.bus-shop-user-item-slider .owl-item .item {width:100%;border:0;}
+.bus-shop-user-item-slider .list-img {width:164px;height:123px}
+.bus-shop-user-item-slider .list-img img {max-width:164px;max-height:123px}
+.bus-shop-user-item-slider .list-price {float:none;text-align:left;margin:10px 0 0 0}
+.bus-shop-user-item-slider h3 {float:none;font-family:'Asap',sans-serif;font-size:14px;font-weight:700;height:60px;overflow:hidden}
+.bus-shop-user-item-slider .owl-prev, .bus-shop-user-item-slider .owl-next {top:40%;position:absolute;width:40px}
+.bus-shop-user-item-slider .owl-item .item {margin:auto}
+.bus-shop-user-item-slider .owl-item .busad-item { width:164px;float:left;border:1px solid #eee;margin:0px 15px; }
+.bus-shop-user-item-slider .owl-item .busad-item:first-child { margin-left:15px; }
+.bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:1px; }
+.businessExposureCarousel .fa-slider .owl-controls .owl-buttons div { background:transparent !important; }
+.businessExposureCarousel .fa-slider .owl-controls .owl-buttons div img { top:60% !important }
+.bus-det-box h2 { height: 50px;overflow: hidden;line-height: 24px !important;font-size: 16px !important;}
+.bus-abt-us-div { height:220px; max-height:230px; overflow:hidden;padding-left:30px;padding-right:30px; }
+.bus-shop-user-item-slider item:hover h3.featured-single, .fa-slider .owl-item .item:hover h3.featured-single { color:#313133 !important; }
+#busshop-user-single-item-slider .bus-abt-us-div p { margin-bottom:0px;line-height:20px }
+.bus-shop-user-item-slider h3.featured-single { font-family:'Bree Serif',serif;height:auto;font-size:18px;font-weight:400 }
+
+@media only screen and (min-width:960px) and (max-width:1151px) {
+	.bus-shop-user-item-slider .busad-item .list-img, .bus-shop-user-item-slider .busad-item .list-img img {width:145px;}
+	.bus-shop-user-item-slider .owl-item .busad-item { width:145px; margin:0px 10px; }
+	.bus-shop-user-item-slider .owl-item .busad-item:first-child { margin-left:20px; }
+	.bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:0px; }
+}
+@media only screen and (min-width:760px) and (max-width:959px) {
+	.bus-shop-user-item-slider .owl-item .busad-item { margin:0px 8px; }
+	.bus-shop-user-item-slider .owl-item .busad-item:first-child { margin-left:8px; }
+	.bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:0px; }
+}
+@media only screen and (min-width:641px) and (max-width:759px) {
+	.bus-shop-user-item-slider .busad-item .list-img, .bus-shop-user-item-slider .busad-item .list-img img {width:130px;}
+	.bus-shop-user-item-slider .owl-item .busad-item { width:130px; margin:0px 8px; }
+	.bus-shop-user-item-slider .owl-item .busad-item:first-child { margin-left:15px; }
+	.bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:0px; }
+	.bus-det-box h2 {  width:100%;text-align:center !important;margin: 0px 0px !important; float: none !important;height: 50px; overflow: auto; text-overflow: initial;white-space:normal; }
+}
+@media only screen and (min-width:320px) and (max-width:640px) {
+	.bus-shop-user-item-slider .busad-item .list-img, .bus-shop-user-item-slider .busad-item .list-img img {width:130px;}
+	.bus-shop-user-item-slider .owl-item .busad-item { width:130px; margin:0px 8px; }
+	.bus-shop-user-item-slider .owl-item .busad-item:first-child { margin-left:15px; }
+	.bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:0px; }
+
+   .bus-shop-user-item-slider .bus-det-box { width: 75%;text-align: center;margin: auto !important;float: none !important; }
+   .bus-shop-user-item-slider .exposure-logo, 
+   .bus-shop-user-item-slider .exposure-logo-thumb, 
+   .bus-shop-user-item-slider .exposure-logo-thumb .profile-placeholder {
+ 	  width:175px !important;height:120px !important;margin:0 auto !important;float:none !important;
+   }
+   .bus-det-box h2 {  width: 175px;margin: 10px auto 0px; float: none !important;height: auto; overflow: auto; text-overflow: initial;white-space:normal;}
+}
+
+#fa_left_search_item__distance-button { width:100% !important; }
+.buildersbay-list-logo { background:url(/bundles/fafrontend/images/Builders-Bay.png) 100% 100% no-repeat;width: 124px;height: 40px; }
 </style>
+{% if displayRecommendedSlot is defined and displayRecommendedSlot==1 %}
+    {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
+{% endif %}
+
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -237,13 +348,17 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 1 }) }}
                 {% set slotallocated = slotallocated|merge([1]) %}
             {% endif %}
-
-            {{ include('FaAdBundle:AdList:businessExposureBlock.html.twig', {}) }}
-
+            
+            {% if businessTopExposureUsersDetailsWithoutAd is defined  %}
+                {#{ include('FaAdBundle:AdList:businessTopExposureSingleBlock.html.twig', {}) }#}
+            {% endif %}
+            
             {% set adCounter = 0 %}
             {% set adCount = 0 %}
             {% set bannerStatus = true %}
+            {% set busUserIndex = 0 %}
             
+             
             {% if pagination.getNbResults() %}
                 {% set adFavoriteRepository   = fetch_repository('FaAdBundle:AdFavorite') %}
                 {% set adRepository   = fetch_repository('FaAdBundle:Ad') %}
@@ -269,11 +384,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% endfor %}
                 {% endif %}
 
-                {% if displayRecommendedSlot==1 and recommendedSlotsCount > 1 and totalAdCount > 0 and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0)%}
-                    {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 2 }) }}
-                    {% set slotallocated = slotallocated|merge([2]) %}
-                {% endif %}
-
                 {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
                 	 {% if (adCount >= 2) %}
                 	 	{% set bannerStatus = false %}	
@@ -288,7 +398,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% set adCount = adCount + 1 %}
                     {% set realAdCnt = realAdCnt + 1 %}
                     {% set slotAdCount = slotAdCount + 1 %}
-
+					{% set displayBusinessExposureBlock = 0 %}
+					{% set displayBusinessExposureSingleBlock = 0 %}
+					
                     {% if ((realAdCnt > resultCount) and (setExtendedHeading==0)) %}
                         <div data-alert="" class="alert-box info radius">
                            <span class="alert-icon">&nbsp;</span>
@@ -298,20 +410,38 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% endif %}
 
                     {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 %}
-                        {% if slotAdCount== 5  and (recommendedSlotResult[3] is defined and recommendedSlotResult[3]|length >0) %}
+                        {% if slotAdCount== 3  and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 2 }) }}
+                            {% set slotallocated = slotallocated|merge([2]) %}
+                        {% elseif slotAdCount== 7  and (recommendedSlotResult[3] is defined and recommendedSlotResult[3]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 3 }) }}
                             {% set slotallocated = slotallocated|merge([3]) %}
-                        {% elseif slotAdCount== 11  and (recommendedSlotResult[4] is defined and recommendedSlotResult[4]|length >0) %}
+                        {% elseif slotAdCount== 13  and (recommendedSlotResult[4] is defined and recommendedSlotResult[4]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 4 }) }}
                             {% set slotallocated = slotallocated|merge([4]) %}
-                        {% elseif slotAdCount== 14  and (recommendedSlotResult[5] is defined and recommendedSlotResult[5]|length >0) %}
+                        {% elseif slotAdCount== 17  and (recommendedSlotResult[5] is defined and recommendedSlotResult[5]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 5 }) }}
                             {% set slotallocated = slotallocated|merge([5]) %}
-                        {% elseif slotAdCount== 19  and (recommendedSlotResult[6] is defined and recommendedSlotResult[6]|length >0) %}
+                        {% elseif slotAdCount== 20  and (recommendedSlotResult[6] is defined and recommendedSlotResult[6]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 6 }) }}
                             {% set slotallocated = slotallocated|merge([6]) %}
                         {% endif %}
                     {% endif %}
+                    
+                {% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and totalAdCount > 0  %}                       
+                    {% if adCount==5 or adCount==15 %} 
+                        {% set displayBusinessExposureBlock = 1 %}
+                    {% elseif adCount==10 %} 
+                    	{% set displayBusinessExposureSingleBlock = 1 %}
+                    {% endif %}
+                    {% if displayBusinessExposureBlock ==1 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %} 
+                        {{ include('FaAdBundle:AdList:businessExposureSliderBlock.html.twig', {'blockposition': adCount }) }}
+                	{% endif %}
+                	{% if displayBusinessExposureSingleBlock ==1 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %} 
+                        {{ include('FaAdBundle:AdList:businessExposureSingleBlock.html.twig') }}
+                	{% endif %}
+                {% endif %}
+                    
 
                     {{ include('FaAdBundle:AdList:listDetail.html.twig') }}
                     {% set adCounter = adCounter + 1 %}
@@ -481,8 +611,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 {% endblock %}
 
 {% block scriptbottom %}
-    {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
-        <script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
+    {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     {% endif %}
     {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
     {{ include('FaAdBundle:AdList:listJs.html.twig') }}
@@ -541,9 +671,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
       ga('send', 'event', eventCategory, eventAction, eventLabel);
     }
 
-    function gaSendForRecommendedSlotSearch(url, domain) 
+    function gaSendForRecommendedSlotSearch(url, domain, title,slotindex,creativeOrd) 
     {
-        ga('send', 'event', 'Search List Page', 'Recommended external ads', '{{ catSrchText|trim('-') }}-'+domain);
+        ga('send', 'event', 'Search List Page', 'Recommended external ads', 'Slot'+slotindex + "-Creative"+ creativeOrd +"-{{ catSrchText|trim('-') }}-" + domain + "-" + title);
         window.open(url, '_blank');
     }
 

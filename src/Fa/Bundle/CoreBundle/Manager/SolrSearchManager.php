@@ -353,7 +353,7 @@ class SolrSearchManager
         }
 
         $query->addParam('shards.tolerant', 'true');
-
+       // echo $query;
         $startTime = microtime(true);
         $result    = $solrClient->connect()->query($query);
         $duration  = (microtime(true) - $startTime) * 1000;
@@ -361,7 +361,7 @@ class SolrSearchManager
         $error = false; ///$result instanceof ResponseError ? (string) $result : false;
         $this->logger->logCommand((string) $query, $duration, '', $error);
 
-        //echo $query;
+        
         return $result;
     }
 

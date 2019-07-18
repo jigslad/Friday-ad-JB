@@ -56,4 +56,6 @@ interface UserShopDetailSolrFieldMapping
     const RANDOM = 'random';
 
     const SHOP_PACKAGE_PURCHASED_AT = 'a_shop_package_purchased_at_i';
+    
+    const USER_LIVE_ADS_COUNT = 'u_live_ad_count_i';
 }

@@ -61,9 +61,9 @@
                                 {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, profileExposureUserAd, '300X225', 1) %}
                                 <div class="list-img {% if not imagePath %}similar-placeholder{% endif %}">
                                     {% if imagePath %}
-                                        <img class="lazyOwl" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                                        <img class="lazyOwl" src="{{ imagePath }}" alt="{{ imageAltString }}" />
                                     {% else %}
-                                        <img class="lazyOwl" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                                        <img class="lazyOwl" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
                                     {% endif %}
                                 </div>
                                 <div class="list-price">
