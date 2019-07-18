@@ -249,10 +249,10 @@
 
         $("#user_registration_is_email_alert_enabled").change(function(){
             if ($('#user_registration_is_email_alert_enabled').parent().hasClass('checked')) {
-                $('#user_registration_is_third_party_email_alert_enabled').attr('disabled', false);
+                //$('#user_registration_is_third_party_email_alert_enabled').attr('disabled', false);
                 $('#user_registration_is_email_alert_enabled').attr('checked', true);
             } else {
-                $('#user_registration_is_third_party_email_alert_enabled').attr('disabled', true);
+                //$('#user_registration_is_third_party_email_alert_enabled').attr('disabled', true);
                 $('#user_registration_is_email_alert_enabled').attr('checked', false);
             }
             if (!$('#user_registration_is_email_alert_enabled').attr('checked')) {
