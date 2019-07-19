@@ -9,6 +9,8 @@
 {% set adModerateRepository = fetch_repository('FaAdBundle:AdModerate') %}
 {% set userCreditRepository = fetch_repository('FaUserBundle:UserCredit') %}
 {% set userCreditCount = userCreditRepository.getActiveCreditCountForUser(app.user.getId()) %}
+{% set adUserPackageUpsellRepository = fetch_repository('FaAdBundle:AdUserPackageUpsell') %}
+{% set shopPackageCreditRepository = fetch_repository('FaPromotionBundle:ShopPackageCredit') %}
 
 {% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
 {% set adUrl = ''%}
@@ -23,16 +25,30 @@
 	{% set userBusType = 'private' %}
 {% endif %}
 
+{% set totalFeaturedCredit = 0 %}
+{% set usedFeaturedCredits = 0 %}
+{% set remainingFeaturedCredits = 0 %}
+{% if (activeShopPackage and activeShopPackage.getPackage()) %}
+    {% set shopPackageCreditArr = shopPackageCreditRepository.getFeaturedCreditsByPackageId(activeShopPackage.getPackage().getId()) %}
+	{% if shopPackageCreditArr|length >0 %}
+        {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
+        {% set remainingFeaturedCredits = userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) %}
+        {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
+    {% endif %}
+{% endif %}
+
 {% if pagination.getNbResults() %}
     {% set adCategoryIdArray    = adRepository.getAdCategoryIdArrayByAdId(adIdArray) %}
     {% set adImageArray         = adImageRepository.getAdMainImageArrayByAdId(adIdArray) %}
     {% set adViewCounterArray   = adViewCounterRepository.getAdViewCounterArrayByAdId(adIdArray) %}
     {% set adPackageArray       = adUserPackageRepository.getAdPackageArrayByAdId(adIdArray, true) %}
+    {% set adFeaturedUpsellArray = adUserPackageUpsellRepository.getAdFeaturedUpsellArrayByAdId(adIdArray) %}
     {% set adModerateArray      = adModerateRepository.findResultsByAdIdsAndModerationResult(adIdArray, 'rejected') %}
     {% set inModerationLiveAdIds = adModerateRepository.getInModerationStatusForLiveAdIds(adIdArray) %}
 {% endif %}
 
 {{ include('FaUserBundle:ManageMyAd:manageMyAd-css.html.twig') }}
+{{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}
 
 {# {% if adsBoostedCount>0 and isBoostEnabled==1 %}
     <style>.manage-item-tabs li { width:33.3% !important; }</style>
@@ -56,9 +72,9 @@
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ adLimitCount }}</span></li>
                 		{% else %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
-                		{% endif %}
-                			<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>
-                			{% if isBoostEnabled==1 %}
+				{% endif %}
+                			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}/{{ totalFeaturedCredit }}</span></li>
+                		{% if isBoostEnabled==1 %}
                     			<li class="lightgreencircle">Boosts remaining: <span>{{ boostAdRemaining }}</span></li>
                     			<li class="boostBtn"><a id="boost_ad_selected_all" class="xs-btn-1 button all-sel-texts">Boost All Actives</a></li>
                     		{% endif %}
@@ -246,7 +262,40 @@
         </div>
     </div>
 </div>
+
+
+<div id="featuredOffConfirmModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Featured ad'|trans({}, 'frontend-manage-my-ad')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Are you sure that you want to remove featured from this advert?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="deactivateFeatured();">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRevealModel('#featuredOffConfirmModal');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="featuredTopUpsellModal" class="reveal-modal tiny remove-item-modal featured-top-modal" data-reveal></div>
+{% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
+    {#  Featured Top Success Modal Box   #}
+    {{ include('FaUserBundle:ManageMyAd:individualSuccessPaymentModal.html.twig') }}
+{% endif %}
+    	
 {% block scriptbottom%}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
 <script language="javascript" type="text/javascript">	
     function boostSelectedAds() {
         $('#boost-sel-ads-btn').prop("disabled", true);
@@ -433,22 +482,38 @@
             }
         }
     });
+
+    {% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
+    	$('#featuredTopSuccessPaymentModal').foundation('reveal', 'open');
+    {% endif %}
+
 </script>
 <script>
 (function($) {
     $.fn.extend({
     	toggleSwitch: function(){
             $('.featured-switch').on('click',function(){
+              var elem_id = $(this).attr('id');
+              var split_ad_id = elem_id.split("_");
+              var adId = split_ad_id[1];
+              var upsellId = split_ad_id[2];
               if($(this).hasClass('toggle-off')){
                 $(this).removeClass('toggle-off').addClass('toggle-on');
+                {% if remainingFeaturedCredits > 0 %}
+                	useCreditForFeaturedUpsell(adId,upsellId);
+                {% else %}
+                	featuredTopUpsellBtn(adId,upsellId);
+                {% endif %}
               }else{
-                $(this).removeClass('toggle-on').addClass('toggle-off');
+            	 featurredUpsellRemoveId = adId;
+            	 $('#featuredOffConfirmModal').foundation('reveal', 'open');
+                /*$(this).removeClass('toggle-on').addClass('toggle-off');*/
               }
             })
         }
     })
 })(jQuery)
-$(document).ready(function(){
+$(document).ready(function(){	
     $('.featured-switch').toggleSwitch();
  });
 </script>
