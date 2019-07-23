@@ -109,7 +109,7 @@
                                 {% endif %}
                            </div>
                            {% endif %}  
-                                                   
+                            <div id="resulthtml_div">                       
                             {% for ad in pagination.getCurrentPageResults() %}
                                 {% set adId = ad.id %}
                                 {% set adCategoryId = null %}
@@ -119,13 +119,14 @@
                                 {% if ad['status_id'] == adStatusLive %}
                                     {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
                                     {# {% set adUrl = adUrl|trim('/') %} #}
-                                {% endif %}
+                                {% endif %}                                
 								{% if userBusType is defined and userBusType == 'netsuite' %}
                                     {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
                                 {% else %}
                                     {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
-                                {% endif %}
+                                {% endif %}                                
                             {% endfor %}
+                            </div>
                         {% else %}
                             <div class="row">
                                 <div class="columns">

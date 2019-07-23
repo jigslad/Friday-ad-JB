@@ -35,9 +35,6 @@
     {% set inModerationLiveAdIds = adModerateRepository.getInModerationStatusForLiveAdIds(adIdArray) %}
  {% endif %}
 
-{{ include('FaUserBundle:ManageMyAd:manageMyAd-css.html.twig') }}
-{{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}
-
 {% if userBusType is defined and userBusType == 'netsuite' %}
     {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
 {% else %}

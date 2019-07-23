@@ -56,6 +56,7 @@ class ManageMyAdController extends CoreController
         $onlyActiveAdCount = 0;
         $adLimitCount = 0;
         $activeAdIdarr = $activeAdsarr = array();$activeAdIds = '';
+        $activeShopPackage = array();
 
         $activeAdCountArray   = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'active', $sortBy, true)->getResult();
         $inActiveAdCountArray = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'inactive',  $sortBy, true)->getResult();
@@ -962,7 +963,7 @@ class ManageMyAdController extends CoreController
             //$adIds = '17260111,17260144';
             $adIdArr = $adIdsArr = $responseHtml = $resAdArr = array();
             $liveAdStatusArray = $activeShopPackage = array();
-            $adCategoryId = '';
+            $adCategoryId = $responseHtml = '';
             
             $getBoostDetails = $this->getBoostDetails($loggedinUser);
             
@@ -985,7 +986,7 @@ class ManageMyAdController extends CoreController
                     
                     if(!empty($resAdArr)) {
                         foreach($resAdArr as $resAd) {
-                            $adIdsArr[] = $resAd[id];
+                            $adIdsArr[] = $resAd['id'];
                         }
                     }
                     
@@ -1026,24 +1027,13 @@ class ManageMyAdController extends CoreController
                             'modToolTipText'    => $moderationToolTipText,
                             'activeShopPackage' => $activeShopPackage,  
                             'adCategoryId'  => $adCategoryId,
-                            
-                            /*'totalAdCount'      => $totalAdCount,
-                            'activeAdCount'     => $activeAdCount,
-                            'inActiveAdCount'   => $inActiveAdCount,
-                            'onlyActiveAdInPageCount' => $onlyActiveAdInPageCount,
-                            'activeAdIds'       => $activeAdIds,
-                            'adsBoostedCount'   => $adsBoostedCount,
-                            'onlyActiveAdCount' => $onlyActiveAdCount,
-                            'adLimitCount'      => $adLimitCount,
-                            'pagination'        => $pagination,                            
-                            'boostedAdCount'    => $boostedAdCount,*/
                         );
                         $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:ajaxGetFeaturedAd.html.twig', $parameters);
-                        $responseHtml[] = $htmlContent;
+                        $responseHtml .= $htmlContent;
                     }
                 }
                 
-                return new JsonResponse($responseHtml);
+                return new Response($responseHtml);
             }
         }
         

@@ -39,9 +39,8 @@
 
 {% set featuredTopUpsell7days = constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID')  %}
 
-{% if not app.request.isXmlHttpRequest() %} 
+
 <div class="manage-item-list" id="item_card_{{adId}}">
-{% endif %}
 <div class="hide-for-small-only">
     <div class="row">       
         <div class="small-10 medium-6 large-6 columns medium-left-cols">
@@ -342,6 +341,4 @@
 </div>
 
 {# Mobile Version Ends here #}  
-{% if not app.request.isXmlHttpRequest() %}
 </div>
-{% endif %}
