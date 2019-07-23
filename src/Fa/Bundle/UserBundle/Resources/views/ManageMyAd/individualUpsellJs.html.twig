@@ -46,6 +46,22 @@ function featuredTopUpsellBtn(id,upsellId) {
     });
 }
 
+function useCreditForFeaturedUpsell(adId, upsellId) {
+	blockPage();
+    var route = Routing.generate('credit_payment_process_for_individual_upsell', { 'upsellId': upsellId, 'adId': adId });
+    $.ajax({
+        type: "GET",
+        url : route,
+        data : {'redirectUrl': '{{app.request.getUri()}}'},   
+    })
+    .always(function(response) {
+        unblockPage();
+    })
+    .done(function(response) {
+    	return true;
+    });
+}
+
 function paypalIndividualUpsellPaymentProcess(upsellModalName, upsellId, adId) {
 	
 	var modalName = '#'+upsellModalName;

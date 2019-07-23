@@ -27,12 +27,17 @@
 
 {% set totalFeaturedCredit = 0 %}
 {% set usedFeaturedCredits = 0 %}
+{% set remainingFeaturedCredits = 0 %}
 {% if (activeShopPackage and activeShopPackage.getPackage()) %}
     {% set shopPackageCreditArr = shopPackageCreditRepository.getFeaturedCreditsByPackageId(activeShopPackage.getPackage().getId()) %}
 	{% if shopPackageCreditArr|length >0 %}
         {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
         {% set remainingFeaturedCredits = userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) %}
-        {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
+        {% if  remainingFeaturedCredits > totalFeaturedCredit %}
+            {% set usedFeaturedCredits = totalFeaturedCredit %}
+        {% else %}
+            {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
+        {% endif %}
     {% endif %}
 {% endif %}
 
@@ -71,9 +76,10 @@
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ adLimitCount }}</span></li>
                 		{% else %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
-                		{% endif %}
-                			<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>
-                			{% if isBoostEnabled==1 %}
+				        {% endif %}
+                			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}/{{ totalFeaturedCredit }}</span></li>
+                			{#<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>#}
+                		{% if isBoostEnabled==1 %}
                     			<li class="lightgreencircle">Boosts remaining: <span>{{ boostAdRemaining }}</span></li>
                     			<li class="boostBtn"><a id="boost_ad_selected_all" class="xs-btn-1 button all-sel-texts">Boost All Actives</a></li>
                     		{% endif %}
@@ -90,12 +96,12 @@
                         	<a href="{{path('manage_my_ads_inactive')}}" class="show-for-small-only">{{ 'Inactive ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
                         </li>
                     </ul>
-                 
+
                    <div class="manage-items-main">
                        {% if pagination.getNbResults() %}  
                        	   {% if userBusType is defined and userBusType == 'netsuite' %}
                        		<div class="manage-item-list top-selects-mma" style="border-top:0px">                       			
-                           		<div class="select-diff-ads"><select class="fa-select-white"><option value="">Select</option><option value="sel-all">All ads</option><option value="sel-basic">Basic ads</option><option value="sel-featured">Featured ads</option></select></div>                           		
+                           		<div class="select-diff-ads mb10"><select id="select-featureds" class="fa-select-white"><option value="">Select</option><option value="sel-all">All ads</option><option value="sel-basic">Basic ads</option><option value="sel-featured">Featured ads</option></select></div>                           		
                        			{% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}                                
                                     <div class="select-all-ads-active"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <a class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
                                         Select all ads <span class="hide-for-small-only">on this page</span> ({{ onlyActiveAdInPageCount }})
@@ -498,7 +504,11 @@
               var upsellId = split_ad_id[2];
               if($(this).hasClass('toggle-off')){
                 $(this).removeClass('toggle-off').addClass('toggle-on');
-                featuredTopUpsellBtn(adId,upsellId);
+                {% if remainingFeaturedCredits > 0 %}
+                	useCreditForFeaturedUpsell(adId,upsellId);
+                {% else %}
+                	featuredTopUpsellBtn(adId,upsellId);
+                {% endif %}
               }else{
             	 featurredUpsellRemoveId = adId;
             	 $('#featuredOffConfirmModal').foundation('reveal', 'open');

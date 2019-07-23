@@ -582,4 +582,34 @@ class AdUserPackageUpsellRepository extends EntityRepository
         
         return $adUpsellArr;
     }
+    
+    /**
+     * Get featured upsell for ad id.
+     *
+     * @param array   $userId              Ad id array.
+     * @param boolean $getTiPackageTitle Get ti package name flag.
+     *
+     * @return array
+     */
+    public function getAdFeaturedUpsellIdsByAdId($adId = array())
+    {
+        $qb = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.ad_id')
+        ->leftJoin(self::ALIAS.'.upsell', UpsellRepository::ALIAS)
+        ->andWhere(self::ALIAS.'.upsell IN (:FeaturedId)')
+        ->setParameter('FeaturedId', UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID)
+        ->andWhere(self::ALIAS.'.status = 1');
+               
+        if (!is_array($adId)) {
+            $adId = array($adId);
+        }
+        
+        if (!empty($adId)) {
+            $qb->andWhere(self::ALIAS.'.ad_id IN (:adId)');
+            $qb->setParameter('adId', $adId);
+        }
+                
+        $adFeaturedUpsellIds   = $qb->getQuery()->getArrayResult();
+        return $adFeaturedUpsellIds;
+    }
 }

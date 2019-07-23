@@ -58,5 +58,14 @@ paypal_payment_process_for_individual_upsell:
         
 ajax_manage_my_ads_deactivate_featured:
     path:     /ajax/manage_my_ads/deactivate_featured/
-    defaults: { _controller: FaUserBundle:ManageMyAd:ajaxDeactivateFeatured }        
-
+    defaults: { _controller: FaUserBundle:ManageMyAd:ajaxDeactivateFeatured } 
+    
+credit_payment_process_for_individual_upsell:
+    path:   /credit_payment_process_for_individual_upsell/{upsellId}/{adId}
+    defaults:  { _controller: "FaUserBundle:ManageMyAd:ajaxCreditPaymentProcessForIndividualUpsell" }
+    options:
+        expose: true
+               
+ajax_manage_my_ads_get_featured_ads:
+    path:     /ajax/manage_my_ads/get_featured_ads/
+    defaults: { _controller: FaUserBundle:ManageMyAd:ajaxGetFeaturedAd }
