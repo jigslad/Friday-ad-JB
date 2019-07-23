@@ -949,4 +949,105 @@ class ManageMyAdController extends CoreController
             }
         }
     }  
+    
+    /**
+     * Get ad status action
+     *
+     * @param Request $request
+     */
+    public function ajaxGetFeaturedAdAction(Request $request)
+    {
+        if ($this->checkIsValidLoggedInUser($request) === true && $request->isXmlHttpRequest()) {
+            $loggedinUser = $this->getLoggedInUser();
+            $adIds         = $request->get('adIds', 0);
+            //$adIds = '17260111,17260144';
+            $adIdArr = $adIdsArr = $responseHtml = $resAdArr = array();
+            $liveAdStatusArray = $activeShopPackage = array();
+            $adCategoryId = '';
+            
+            $getBoostDetails = $this->getBoostDetails($loggedinUser);
+            
+            if ($adIds) {
+                $adIdArr           = explode(',', $adIds);
+                
+                if (!empty($adIdArr)) {
+                    $type                       = $request->get('type');
+                    $selAdsOption               = $request->get('selAdsOption','ad_date');
+                    //$type                       = 'active';
+                    $query                      = $this->getRepository('FaAdBundle:Ad')->getMyFeaturedAdsQuery($loggedinUser->getId(), $type, $selAdsOption, $adIds);
+
+                    $resAdArr                   = $query->getResult();
+                                       
+                    $adRepository               = $this->getRepository('FaAdBundle:Ad');
+                    $adImageRepository          = $this->getRepository('FaAdBundle:AdImage');
+                    $adViewCounterRepository    = $this->getRepository('FaAdBundle:AdViewCounter');
+                    $adUserPackageRepository    = $this->getRepository('FaAdBundle:AdUserPackage');
+                    $adModerateRepository       = $this->getRepository('FaAdBundle:AdModerate');
+                    
+                    if(!empty($resAdArr)) {
+                        foreach($resAdArr as $resAd) {
+                            $adIdsArr[] = $resAd[id];
+                        }
+                    }
+                    
+                    $adCategoryIdArray          = $adRepository->getAdCategoryIdArrayByAdId($adIdsArr);
+                    $adImageArray               = $adImageRepository->getAdMainImageArrayByAdId($adIdsArr);
+                    $adViewCounterArray         = $adViewCounterRepository->getAdViewCounterArrayByAdId($adIdsArr);
+                    $adPackageArray             = $adUserPackageRepository->getAdPackageArrayByAdId($adIdsArr, true);
+                    $adModerateArray            = $adModerateRepository->findResultsByAdIdsAndModerationResult($adIdsArr, 'rejected');
+                    $inModerationLiveAdIds      = $adModerateRepository->getInModerationStatusForLiveAdIds($adIdsArr);
+                    $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
+                    
+                    $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
+                    if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+                        $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
+                    }
+                    
+                    foreach ($resAdArr as $resAd) {                        
+                        if($adCategoryIdArray[$resAd['id']]) {
+                            $adCategoryId = $adCategoryIdArray[$resAd['id']];
+                        }                        
+                        
+                        $parameters = array(
+                            'adIdArray'=> $adIdsArr, 
+                            'adId' => $resAd['id'],
+                            'status_id' => $resAd['status_id'], 
+                            'ad' => $resAd, 
+                            'adCategoryIdArray' => $adCategoryIdArray, 
+                            'adImageArray' => $adImageArray, 
+                            'adViewCounterArray' => $adViewCounterArray, 
+                            'adPackageArray' => $adPackageArray, 
+                            'adModerateArray' => $adModerateArray, 
+                            'inModerationLiveAdIds' => $inModerationLiveAdIds, 
+                            'isBoostEnabled'  => $getBoostDetails['isBoostEnabled'],
+                            'boostMaxPerMonth'=> $getBoostDetails['boostMaxPerMonth'],
+                            'boostAdRemaining'=> $getBoostDetails['boostAdRemaining'], 
+                            'boostRenewDate'  => $getBoostDetails['boostRenewDate'],
+                            'userBusinessCategory' => $getBoostDetails['userBusinessCategory'],
+                            'modToolTipText'    => $moderationToolTipText,
+                            'activeShopPackage' => $activeShopPackage,  
+                            'adCategoryId'  => $adCategoryId,
+                            
+                            /*'totalAdCount'      => $totalAdCount,
+                            'activeAdCount'     => $activeAdCount,
+                            'inActiveAdCount'   => $inActiveAdCount,
+                            'onlyActiveAdInPageCount' => $onlyActiveAdInPageCount,
+                            'activeAdIds'       => $activeAdIds,
+                            'adsBoostedCount'   => $adsBoostedCount,
+                            'onlyActiveAdCount' => $onlyActiveAdCount,
+                            'adLimitCount'      => $adLimitCount,
+                            'pagination'        => $pagination,                            
+                            'boostedAdCount'    => $boostedAdCount,*/
+                        );
+                        $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:ajaxGetFeaturedAd.html.twig', $parameters);
+                        $responseHtml[] = $htmlContent;
+                    }
+                }
+                
+                return new JsonResponse($responseHtml);
+            }
+        }
+        
+        return new Response();
+    }
 }

@@ -45,6 +45,7 @@
     var adIdToRemove = '';
     var statusIdToChange = '';
     var featurredUpsellRemoveId = '';
+    var adIdsArray = "{{ adIdArray|join(',') }}";
     
     function removeAdConfirmation(adId, currentAdStatus)
     {
@@ -201,7 +202,22 @@
         });
     }
 
+    $('#select-featureds').change(function(e) {
+		var selFeaturedId = $('#select-featureds').val();
+		var setType = "{{app.request.get('type')}}";
 
+    	$.ajax({
+            type: "POST",
+            url: '{{path("ajax_manage_my_ads_get_featured_ads")}}',
+            data: {'adIds':adIdsArray, 'type': setType, 'selAdsOption': selFeaturedId }
+        })
+        .done(function(response) {
+            $.each (response, function (key, value) {                
+                //$('#item_card_'+key).html(value);
+            });
+        });
+    });
+    
      $('#manage-my-ads-list-only').on('click','.ajaxboost_your_ad', function(e)
         {
             var boost_value = 1;
