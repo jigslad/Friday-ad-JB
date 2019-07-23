@@ -599,6 +599,8 @@ class AdUserPackageUpsellRepository extends EntityRepository
         ->andWhere(self::ALIAS.'.upsell IN (:FeaturedId)')
         ->setParameter('FeaturedId', UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID)
         ->andWhere(self::ALIAS.'.status = 1');
+        $qb->groupBy(self::ALIAS.'.ad_id');
+        
                
         if (!is_array($adId)) {
             $adId = array($adId);
@@ -608,8 +610,13 @@ class AdUserPackageUpsellRepository extends EntityRepository
             $qb->andWhere(self::ALIAS.'.ad_id IN (:adId)');
             $qb->setParameter('adId', $adId);
         }
-                
-        $adFeaturedUpsellIds   = $qb->getQuery()->getArrayResult();
+        
+        $adFeaturedUpsellArr   = $qb->getQuery()->getArrayResult();
+        if(!empty($adFeaturedUpsellArr)) {
+            $adFeaturedUpsellIdArr = array_column($adFeaturedUpsellArr, 'ad_id');
+            $adFeaturedUpsellIds = implode(',', $adFeaturedUpsellIdArr);
+        }
+
         return $adFeaturedUpsellIds;
     }
 }

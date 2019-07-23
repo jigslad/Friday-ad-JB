@@ -39,9 +39,8 @@
 
 {% set featuredTopUpsell7days = constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID')  %}
 
-{% if not app.request.isXmlHttpRequest() %} 
+
 <div class="manage-item-list" id="item_card_{{adId}}">
-{% endif %}
 <div class="row">
 	<div class="small-8 medium-1 large-1 columns">
         {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute == 'manage_my_ads_active' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
@@ -324,6 +323,4 @@
 {# Mobile Version Ends here #}
 
 </div>     
-{% if not app.request.isXmlHttpRequest() %}
 </div>
-{% endif %}

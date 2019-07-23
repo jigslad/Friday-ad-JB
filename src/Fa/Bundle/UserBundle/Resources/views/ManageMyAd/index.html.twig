@@ -212,9 +212,7 @@
             data: {'adIds':adIdsArray, 'type': setType, 'selAdsOption': selFeaturedId }
         })
         .done(function(response) {
-            $.each (response, function (key, value) {                
-                //$('#item_card_'+key).html(value);
-            });
+        	$('#resulthtml_div').html(response);
         });
     });
     

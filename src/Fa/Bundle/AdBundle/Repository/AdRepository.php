@@ -3611,14 +3611,9 @@ class AdRepository extends EntityRepository
             $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
             $qb->setParameter('updated_at', strtotime('-29 days'));
             $qb->setParameter('created_at', strtotime('-29 days'));
-        }        
+        }                
         
-        if (!empty($adIds)) {
-            $qb->andWhere(self::ALIAS.'.id IN (:adIds)');
-            $qb->setParameter('adIds', $adIds);
-        }
-        
-        if($sortBy == 'sel-basic' || $sortBy == 'sel-featured') {
+        if($sortBy == 'sel-featured') {
             $qb->leftJoin('FaAdBundle:AdUserPackageUpsell', AdUserPackageUpsellRepository::ALIAS, 'WITH', AdUserPackageUpsellRepository::ALIAS.'.ad_id = '.self::ALIAS.'.id')
             ->andWhere(AdUserPackageUpsellRepository::ALIAS.'.upsell IN (:FeaturedId)')
             ->setParameter('FeaturedId', UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID)
@@ -3630,6 +3625,9 @@ class AdRepository extends EntityRepository
             $adUserPackageUpsellIds = $this->_em->getRepository('FaAdBundle:AdUserPackageUpsell')->getAdFeaturedUpsellIdsByAdId($adIds);
             $qb->andWhere(AdRepository::ALIAS.'.id NOT IN (:adUserPackageUpsellIds)');
             $qb->setParameter('adUserPackageUpsellIds', $adUserPackageUpsellIds);
+        } elseif (!empty($adIds)) {
+            $qb->andWhere(self::ALIAS.'.id IN (:adIds)');
+            $qb->setParameter('adIds', $adIds);
         }
         
         $qb->addOrderBy('ad_date', 'DESC');
