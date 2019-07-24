@@ -74,10 +74,12 @@
                 		<ul class="toplistWithBullets">
                 		{% if userBusType is defined and userBusType == 'netsuite' and adLimitCount!=0 %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ adLimitCount }}</span></li>
-                		{% else %}
-                			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
-				        {% endif %}
                 			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}/{{ totalFeaturedCredit }}</span></li>
+                		{% elseif userBusType is defined and userBusType == 'business' %}
+                			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
+                			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}</span></li>
+				        {% endif %}
+                			
                 			{#<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>#}
                 		{% if isBoostEnabled==1 %}
                     			<li class="lightgreencircle">Boosts remaining: <span>{{ boostAdRemaining }}</span></li>

@@ -168,9 +168,11 @@
             		<span class="featuredTxt">Featured</span>
             	</div>
             	{% endif %}
+            	{% if ad.status_id != adStatusSold  and ad.status_id != adStatusExpired %} 
                 <div class="right-manage-buttons adEditBlock">
                     <a class="xs-btn-1 expand button" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>                  
                 </div>
+                {% endif %}
                 
                  {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
                         <div class="right-manage-buttons adEditBlock"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
@@ -298,10 +300,12 @@
                     <p class="img-status-overlay-text">{{ statusText }}</p>
                 </div>
             </div>
-            <div class="manage-item-btns text-right">            	
+            <div class="manage-item-btns text-right">  
+                {% if ad.status_id != adStatusSold  and ad.status_id != adStatusExpired %}           	
                 <div class="right-manage-buttons adEditBlock">
                     <a class="xs-btn-1 expand button" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>                  
                 </div>
+                {% endif %}
                 
                 {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
                         <div class="right-manage-buttons adEditBlock"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>

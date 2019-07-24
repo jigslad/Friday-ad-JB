@@ -312,27 +312,29 @@
                     {% endif %}
                </div>
             </div>
-            <div class="manage-item-btns text-right manage-item-btns-mobile">            	
+            <div class="manage-item-btns text-right manage-item-btns-mobile"> 
+                {% if ad.status_id != adStatusSold  and ad.status_id != adStatusExpired %}           	
                 <div class="right-manage-buttons adEditBlock1">
                     <a class="xs-btn-1 expand button" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>                  
                 </div>
-                
+                 {% endif %}
+                 
                  {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
                         <div class="right-manage-buttons adEditBlock1"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                 {% endif %}
-                                
-                {% if adPackageArray[adId] is not defined and ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
+                
+                {% if (adPackageArray[adId] is defined and adPackageArray[adId]['price'] <=0)  and ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
                      {% if ((userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and upgradePackagesCount > 1) or (userRoleId != constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
                         <div class="right-manage-buttons adEditBlock1"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                      {% endif %}
                 {% endif %}
-                
+                                
                 {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
                      <div class="right-manage-buttons adRemoveBlock"><a class="xs-red-btn expand button" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{{'Stop this ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                 {% endif %}
                 
                 {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null %}
-                    <span class="item-status">{{adPackageArray[adId]['title']}}</span>
+                    <span class="item-status mma-pkg-title">{{adPackageArray[adId]['title']}}</span>
                 {% endif %}
             </div>
         </div>
