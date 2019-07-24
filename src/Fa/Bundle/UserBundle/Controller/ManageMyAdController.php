@@ -743,7 +743,7 @@ class ManageMyAdController extends CoreController
                             if ($addCartInfo) {
                                 //make it cybersource payment
                                 $redirectUrl = $request->headers->get('referer');
-                                $this->addOrRemoveFeaturedCredits($user->getId(), $adId);
+                                //$this->addOrRemoveFeaturedCredits($user->getId(), $adId);
                                 $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
                                 $this->get('session')->set('upgrade_cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
                                 $htmlContent= array(
