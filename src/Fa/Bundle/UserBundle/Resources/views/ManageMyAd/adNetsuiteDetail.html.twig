@@ -42,7 +42,8 @@
 
 <div class="manage-item-list" id="item_card_{{adId}}">
 <div class="row">
-	<div class="small-8 medium-1 large-1 columns">
+	<div class="small-8 medium-1 large-1 columns">	
+	{% if currentRoute == 'manage_my_ads_active' %}	
         {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute == 'manage_my_ads_active' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
             <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet">Select</span>
         {% elseif isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute=='ajax_manage_my_ads_get_status' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
@@ -50,8 +51,9 @@
         {% elseif isBoostEnabled is defined and isBoostEnabled==1 and currentRoute == 'manage_my_ads_boosted' and (userBusinessCategory is defined and  userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
             <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet">Select</span>
         {% else %}
-            <span class="dummbychk"></span>
+            <span class="dummychk"></span>
         {% endif %}
+    {% endif %}
 	</div>        
 <div class="hide-for-small-only">    
         <div class="small-10 medium-6 large-6 columns  medium-left-cols">
@@ -173,7 +175,6 @@
                     <a class="xs-btn-1 expand button" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>                  
                 </div>
                 {% endif %}
-                
                  {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
                         <div class="right-manage-buttons adEditBlock"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                 {% endif %}

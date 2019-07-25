@@ -135,6 +135,37 @@
             });
         }
     }
+    
+    var ajaxChangeAdStatusBulkLoading = false;
+    function changeAdStatusBulk(statusId)
+    {
+    	statusIdToChange = statusId;
+    	$('#stop-sel-ads-btn').prop("disabled", true);
+        var selectedStopAdIds = '';
+        $(".boostad").each(function(){
+            if($(this).parent('span').hasClass('checked')) {
+                selectedStopAdIds += $(this).val()+',';
+            }
+        });
+        if (!ajaxLoading && selectedStopAdIds != '') {
+        	ajaxChangeAdStatusBulkLoading = true;
+        	blockPage();
+        	blockElement('.db-right-part');
+        	$.ajax({
+                type: "POST",
+                url: '{{path("ajax_manage_my_ads_stop_multiple_ad")}}',
+                data: {'adIds':selectedStopAdIds, 'newStatusId':statusIdToChange},
+                cache:false,
+                asyn:false
+            })
+            .always(function(response) {
+                unblockPage();
+             })
+            .done(function(response) {
+                location.reload();
+            });
+        }
+    }
 
     function deactivateFeatured()
     {
@@ -209,11 +240,12 @@
     	$.ajax({
             type: "POST",
             url: '{{path("ajax_manage_my_ads_get_featured_ads")}}',
-            data: {'adIds':adIdsArray, 'type': setType, 'selAdsOption': selFeaturedId }
+            data: {'selAdsOption': selFeaturedId }
         })
         .done(function(response) {
-        	$('#resulthtml_div').html(response);
-        });
+            location.reload();
+        	/*$('#resulthtml_div').html(response);*/
+        }); 
     });
     
      $('#manage-my-ads-list-only').on('click','.ajaxboost_your_ad', function(e)
