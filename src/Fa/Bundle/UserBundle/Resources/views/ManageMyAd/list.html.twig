@@ -100,17 +100,23 @@
                     </ul>
 
                    <div class="manage-items-main">
-                       {% if pagination.getNbResults() %}  
-                       	   {% if userBusType is defined and userBusType == 'netsuite' %}
-                       		<div class="manage-item-list top-selects-mma" style="border-top:0px">                       			
-                           		<div class="select-diff-ads mb10"><select id="select-featureds" class="fa-select-white"><option value="">Select</option><option value="sel-all">All ads</option><option value="sel-basic">Basic ads</option><option value="sel-featured">Featured ads</option></select></div>                           		
-                       			{% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}                                
-                                    <div class="select-all-ads-active"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <a class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
-                                        Select all ads <span class="hide-for-small-only">on this page</span> ({{ onlyActiveAdInPageCount }})
-                                    {% endif %} </a></div>                                                                    
-                                {% endif %}
-                           </div>
-                           {% endif %}  
+               		   {% if userBusType is defined and userBusType == 'netsuite' and (currentRoute == 'manage_my_ads_active') %}
+                   		<div class="manage-item-list top-selects-mma" style="border-top:0px">                      			
+                       		<div class="select-diff-ads mb10"><select id="select-featureds" class="fa-select-white">
+                       			<option value=""  {{ (filterBy == 'ad_date')?'selected':'' }}>Select</option>
+                       			<option value="sel-all"  {{ (filterBy=='sel-all')?'selected':'' }}>All ads</option>
+                       			<option value="sel-basic"  {{ (filterBy=='sel-basic')?'selected':'' }}>Basic ads</option>
+                       			<option value="sel-featured"  {{ (filterBy=='sel-featured')?'selected':'' }}>Featured ads</option>
+                       		</select></div>                           		
+                   		    {% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}                                
+                                <div class="select-all-ads-active"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <a class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
+                                    Select all ads <span class="hide-for-small-only">on this page</span> ({{ onlyActiveAdInPageCount }})
+                                {% endif %} </a></div>                                                                    
+                            {% endif %}
+                       </div>
+                       {% endif %} 
+                           
+                       {% if pagination.getNbResults() %}                        	   
                             <div id="resulthtml_div">                       
                             {% for ad in pagination.getCurrentPageResults() %}
                                 {% set adId = ad.id %}
@@ -130,6 +136,7 @@
                             {% endfor %}
                             </div>
                         {% else %}
+                        <div class="manage-item-list">
                             <div class="row">
                                 <div class="columns">
                                     {% if app.request.attributes.get('type') == 'inactive' %}
@@ -139,6 +146,7 @@
                                     {% endif %}
                                 </div>
                             </div>
+                        </div>
                         {% endif %}
 
                         <div class="pagination-centered">
@@ -155,12 +163,15 @@
                                     <div class="db-left-part-boost" class="large-6 columns left-off-canvas-menu"></div>
                                     <div class="large-18 columns boostRightContentBox" id="db-right-part-boost">
                                             <div class="small-24 medium-24 large-24 columns fixdesktopwidth">
-                                            <div class="small-24 medium-18 large-18 columns">
+                                            <div class="small-24 medium-12 large-12 columns">
                                                 <div><span class="custom-checkbox checked"><input type="checkbox" checked="checked" id="boostad_selectall_inmodal"></span> <span class="selAdContent"><span class="selAdsCount">0</span> Ads selected</span></div>
                                                 <div class="manage-list-desc">You will have <span class="leftoutAdCount">0</span> boosts left</div>
                                             </div>
                                             <div class="small-24 medium-6 large-6 columns">
-                                                <button type="button" id="boost-sel-ads-btn" class="button primary-btn-2  expand" onclick="closeRevealModel('#markAdAsBoostedModal');boostSelectedAds();">{{'Boost Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
+                                                <button type="button" id="stop-sel-ads-btn" class="button xs-red-large-btn  expand" onclick="closeRevealModel('#markAdAsBoostedModal');stopAds();">{{'Stop Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
+                                            </div>
+                                            <div class="small-24 medium-6 large-6 columns">
+                                                <button type="button" id="boost-sel-ads-btn" class="button primary-btn-2 xs-green-large-btn expand" onclick="closeRevealModel('#markAdAsBoostedModal');boostSelectedAds();">{{'Boost Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
                                             </div>
                                         </div>
             </div>
@@ -177,7 +188,32 @@
 </div>
 
             
-           
+<div id="markAdAsSoldOrExpireBulkModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Was your advert successful?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-6 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsSoldOrExpireBulkModal');changeAdStatusBulk('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')}}');">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+                <div class="large-6 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsSoldOrExpireBulkModal');changeAdStatusBulk('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')}}');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsSoldOrExpireBulkModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>          
                 
 <div id="markAdAsSoldOrExpireModal" class="reveal-modal tiny remove-item-modal" data-reveal>
     <a class="close-reveal-modal">&#215;</a>
@@ -329,6 +365,10 @@
                         }
                 }
         });
+    }
+
+    function stopAds() {
+    	$('#markAdAsSoldOrExpireBulkModal').foundation('reveal', 'open');
     }
 
     function unBoostSelectedAds() {

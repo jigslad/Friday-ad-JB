@@ -3612,8 +3612,12 @@ class AdRepository extends EntityRepository
             $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_LIVE_ID, BaseEntityRepository::AD_STATUS_EXPIRED_ID, BaseEntityRepository::AD_STATUS_SOLD_ID, BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
         } elseif ($type == 'active') {
             $qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' OR ('.self::ALIAS.'.status IN (:status)'.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at)))');
-            //$qb->andWhere('('.self::ALIAS.'.is_boosted IS NULL OR '.self::ALIAS.'.is_boosted=0)');
-            $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
+            if($sortBy == 'sel-featured' || $sortBy == 'sel-basic') {
+                $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_LIVE_ID));
+            } else {                
+                //$qb->andWhere('('.self::ALIAS.'.is_boosted IS NULL OR '.self::ALIAS.'.is_boosted=0)');
+                $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
+            }
             $qb->setParameter('updated_at', strtotime('-29 days'));
             $qb->setParameter('created_at', strtotime('-29 days'));
         } elseif ($type == 'onlyactive') {
@@ -3634,22 +3638,21 @@ class AdRepository extends EntityRepository
             $qb->setParameter('created_at', strtotime('-29 days'));
         }
 
-        if (count($adIds)) {
-            $qb->andWhere(self::ALIAS.'.id IN (:adIds)');
-            $qb->setParameter('adIds', $adIds);
-        }
-        
-        if($sortBy == 'sel-basic') {
-            $qb->leftJoin(AdRepository::ALIAS.'.upsell', AdUserPackageUpsellRepository::ALIAS)
-            ->andWhere(AdUserPackageUpsellRepository::ALIAS.'.upsell IN (:FeaturedId)')
-            ->setParameter('FeaturedId', UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID)
-            ->andWhere(AdUserPackageUpsellRepository::ALIAS.'.status = 1')
-            ->andWhere(AdRepository::ALIAS.'.id NOT IN '.AdUserPackageUpsellRepository::ALIAS.'.ad_id');
-        } else if($sortBy == 'sel-featured') {
-            $qb->leftJoin(AdRepository::ALIAS.'.upsell', AdUserPackageUpsellRepository::ALIAS)
+        if($sortBy == 'sel-featured') {
+            $qb->leftJoin('FaAdBundle:AdUserPackageUpsell', AdUserPackageUpsellRepository::ALIAS, 'WITH', AdUserPackageUpsellRepository::ALIAS.'.ad_id = '.self::ALIAS.'.id')
             ->andWhere(AdUserPackageUpsellRepository::ALIAS.'.upsell IN (:FeaturedId)')
             ->setParameter('FeaturedId', UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID)
             ->andWhere(AdUserPackageUpsellRepository::ALIAS.'.status = 1');
+            $qb->groupBy(AdUserPackageUpsellRepository::ALIAS.'.ad_id');
+        }
+        
+        if($sortBy == 'sel-basic') {
+            $adUserPackageUpsellIds = $this->_em->getRepository('FaAdBundle:AdUserPackageUpsell')->getAdFeaturedUpsellIdsByAdId($adIds);
+            $qb->andWhere(AdRepository::ALIAS.'.id NOT IN (:adUserPackageUpsellIds)');
+            $qb->setParameter('adUserPackageUpsellIds', $adUserPackageUpsellIds);            
+        } elseif (!empty($adIds)) {
+            $qb->andWhere(self::ALIAS.'.id IN (:adIds)');
+            $qb->setParameter('adIds', $adIds);
         }
         
         $qb->addOrderBy('ad_date', 'DESC');
