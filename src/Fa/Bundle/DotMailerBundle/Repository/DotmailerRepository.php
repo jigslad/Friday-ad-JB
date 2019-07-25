@@ -46,7 +46,7 @@ class DotmailerRepository extends EntityRepository
 
     const TOUCH_POINT_FACEBOOK = 'FACEBOOK';
 
-    const FIRST_TOUCH_POINT_ID = 49;
+    const FIRST_TOUCH_POINT_ID = 48;
 
     const TOUCH_POINT_CREATE_ALERT = 'CREATE_ALERT';
     
@@ -56,7 +56,11 @@ class DotmailerRepository extends EntityRepository
     
     const TOUCH_POINT_NEWSLETTER = 'NEWSLETTER';
     
+    const TOUCH_POINT_ACCOUNT_ID = 49;
 
+    const TOUCH_POINT_GOOGLE_ID = 50;
+
+    const TOUCH_POINT_FACEBOOK_ID = 51;
     /**
      * Prepare query builder.
      *
@@ -555,6 +559,69 @@ class DotmailerRepository extends EntityRepository
 
         return $dotmailer;
     }
+    
+    /**
+     * Touch point entry in dotmailer from front side.
+     *
+     * @param integer $adId
+     * @param integer $userId
+     * @param string  $touchPoint
+     * @param boolean $isEmailAlertEnabled
+     * @param boolean $isThirdPartyEmailAlertEnabled
+     * @param object  $container
+     *
+     * @return object
+     */
+    public function doTouchPointEntryForNewsletterTypeByUser($dotmailer, $userId, $touchPoint, $isEmailAlertEnabled, $isThirdPartyEmailAlertEnabled, $container = null, $isNewToDotmailer = false)
+    {
+        $newsletterTypeIds = null;
+        
+        $user         = $this->getEntityManager()->getRepository('FaUserBundle:User')->findOneBy(array('id' => $userId));
+        $categoryId = $user->getBusinessCategoryId();
+        
+        $categoryPathArray = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId);
+        $categoryPathArray = array_keys($categoryPathArray);
+        
+        $newsletterTypeIds = $this->getEntityManager()->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getNewsletterTypeIds($categoryPathArray);
+        // manually added third party email alert
+        
+        if ($isNewToDotmailer == true && ($touchPoint == self::TOUCH_POINT_CREATE_ALERT || $touchPoint == self::TOUCH_POINT_ACCOUNT || $touchPoint == self::TOUCH_POINT_GOOGLE || $touchPoint == self::TOUCH_POINT_FACEBOOK || $touchPoint == self::TOUCH_POINT_ENQUIRY)) {
+            if ($user->getIsThirdPartyEmailAlertEnabled() == 1) {
+                if ($touchPoint == self::TOUCH_POINT_ACCOUNT) {
+                    $newsletterTypeIds[] = self::TOUCH_POINT_ACCOUNT_ID;
+                } else if ($touchPoint == self::TOUCH_POINT_GOOGLE) {
+                    $newsletterTypeIds[] = self::TOUCH_POINT_GOOGLE_ID;
+                } else if ($touchPoint == self::TOUCH_POINT_FACEBOOK) {
+                    $newsletterTypeIds[] = self::TOUCH_POINT_FACEBOOK_ID;
+                } else {
+                    $newsletterTypeIds[] = self::FIRST_TOUCH_POINT_ID;
+                }
+            }
+        }           
+        
+        if ($touchPoint == DotmailerRepository::TOUCH_POINT_PAA || ($touchPoint == DotmailerRepository::TOUCH_POINT_ENQUIRY && $isEmailAlertEnabled != 1)) {
+            if ($dotmailer->getDotmailerNewsletterTypeOptoutId()) {
+                $newsletterTypeIds = array_diff($newsletterTypeIds, $dotmailer->getDotmailerNewsletterTypeOptoutId());
+            }
+        } elseif ($touchPoint == DotmailerRepository::TOUCH_POINT_ENQUIRY && $isEmailAlertEnabled == 1) {
+            if ($dotmailer->getDotmailerNewsletterTypeOptoutId()) {
+                $modifiedOptedOutId = array_diff($dotmailer->getDotmailerNewsletterTypeOptoutId(), $newsletterTypeIds);
+                $modifiedOptedOutId = array_unique($modifiedOptedOutId);
+                $dotmailer->setDotmailerNewsletterTypeOptoutId($modifiedOptedOutId);
+            }
+        }
+        
+        if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
+            if ($dotmailer->getDotmailerNewsletterTypeId()) {
+                $newsletterTypeIds = array_merge($newsletterTypeIds, $dotmailer->getDotmailerNewsletterTypeId());
+                $newsletterTypeIds = array_unique($newsletterTypeIds);
+            }
+            
+            $dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
+        }
+        
+        return $dotmailer;
+    }
 
     /**
      * Touch point entry in dotmailer from front side.
@@ -764,13 +831,13 @@ class DotmailerRepository extends EntityRepository
         if (!$user->getIsEmailAlertEnabled()) {
             return;
         }
-
+        
         $dotmailer = null;
         $newsletterTypeIds = null;
         if ($user && $user->getEmail()) {
             $dotmailer = $this->findOneBy(array('email' => $user->getEmail()));
         }
-
+        
         if (is_object($user)) {
             if (!$dotmailer) {
                 $isNewToDotmailer = true;
@@ -778,17 +845,16 @@ class DotmailerRepository extends EntityRepository
                 $dotmailer->setFadUser(1);
                 $dotmailer->setNewsletterSignupAt(time());
                 $dotmailer->setFirstTouchPoint($touchPoint);
-                $newsletterTypeIds[] = self::FIRST_TOUCH_POINT_ID;
             }
             
             $dotmailer->setOptIn(1);
             $dotmailer->setDotmailerNewsletterUnsubscribe(0);
-
-            $dotmailer->setFirstTouchPoint($touchPoint);
-
+            
             // Save business details
-            $dotmailer->setEmail($user->getEmail());
-            $dotmailer->setGuid(CommonManager::generateGuid($user->getEmail()));
+            if($isNewToDotmailer==true) {
+                $dotmailer->setEmail($user->getEmail());
+                $dotmailer->setGuid(CommonManager::generateGuid($user->getEmail()));
+            }
             $dotmailer->setOptInType($touchPointOpted);
             $dotmailer->setFirstName($user->getFirstName());
             $dotmailer->setLastName($user->getLastName());
@@ -800,7 +866,7 @@ class DotmailerRepository extends EntityRepository
                 $dotmailer->setIsHalfAccount(1);
             }
             $dotmailer->setPhone($user->getPhone());
-
+            
             // update last_paid_at
             if (!$dotmailer->getLastPaidAt()) {
                 $lastPaidAt = $this->getEntityManager()->getRepository('FaPaymentBundle:Payment')->getLastPaidAt($user->getId());
@@ -810,30 +876,16 @@ class DotmailerRepository extends EntityRepository
             }
 
             
-            if (!empty($dotmailer->getDotmailerNewsletterTypeId())) {
-                $newsletterTypeIds[] = $dotmailer->getDotmailerNewsletterTypeId();
-            }
+            $dotmailer = $this->doTouchPointEntryForNewsletterTypeByUser($dotmailer, $userId, $touchPoint, $user->getIsEmailAlertEnabled(), $user->getIsThirdPartyEmailAlertEnabled(), $container, $isNewToDotmailer);
             
-            if ($user->getIsThirdPartyEmailAlertEnabled() == 1) {
-                $newsletterTypeIds[] = 48;
-            }
-            if(!empty($newsletterTypeIds)) {
-                $dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
-            }
-
             $this->getEntityManager()->persist($dotmailer);
             $this->getEntityManager()->flush($dotmailer);
             
             //send to dotmailer instantly.
-            //if ($isNewToDotmailer) {
-                exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
-                /* $response = $this->sendOneContactToDotmailerRequest($dotmailer, $container);
-                if (isset($response['id']) && isset($response['email'])) {
-                    $retresponse = $this->sendUserForDotmailerEnrollmentProgramRequest($response['id'], $container);
-                } */
-            //}
+            exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+            
         }
-    }
+    }    
 
     /**
      * Send request to dotmailer.
