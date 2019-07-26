@@ -449,6 +449,7 @@
         });
 
         $(".boostad_selectall").parent('span').change(function () {
+            alert($(this).hasClass('checked'));
             if($(this).hasClass('checked')) {
                 $('.boostad').attr('checked', 'checked');
                 $('.boostad').parent('span').addClass('checked');
