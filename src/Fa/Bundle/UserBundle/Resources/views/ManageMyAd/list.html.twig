@@ -448,8 +448,7 @@
             }
         });
 
-        $(".boostad_selectall").parent('span').change(function () {
-            alert($(this).hasClass('checked'));
+        $(".boostad_selectall").parent('span').on('click', function (e) {
             if($(this).hasClass('checked')) {
                 $('.boostad').attr('checked', 'checked');
                 $('.boostad').parent('span').addClass('checked');
@@ -467,7 +466,7 @@
             }
         });
 
-        $("#boostad_selectall_inmodal").parent('span').change(function () {
+        $("#boostad_selectall_inmodal").parent('span').on('click', function (e) {
             if($(this).hasClass('checked')) {
                 $('.boostad').attr('checked', 'checked');
                 $('.boostad').parent('span').addClass('checked');
@@ -487,7 +486,7 @@
 
         
 
-        $(".boostad").parent('span').change(function(){
+        $(".boostad").parent('span').on('click', function (e) {
             if(checkAllBoostButtonEnabled()) {
                 if($(this).hasClass('checked')) {
                     $(this).find('.boostad').attr('checked', 'checked');
