@@ -234,7 +234,7 @@
             }
         }
 
-        $("#user_registration_is_third_party_email_alert_enabled").change(function () {
+        $("#user_registration_is_third_party_email_alert_enabled").on('click', function (e) {
             if ($('#user_registration_is_third_party_email_alert_enabled').parent().hasClass('checked')) {
                 $('#user_registration_is_third_party_email_alert_enabled').attr('checked', true);
             } else {
@@ -247,7 +247,7 @@
             }
         });
 
-        $("#user_registration_is_email_alert_enabled").change(function(){
+        $("#user_registration_is_email_alert_enabled").on('click', function (e) {
             if ($('#user_registration_is_email_alert_enabled').parent().hasClass('checked')) {
                 //$('#user_registration_is_third_party_email_alert_enabled').attr('disabled', false);
                 $('#user_registration_is_email_alert_enabled').attr('checked', true);

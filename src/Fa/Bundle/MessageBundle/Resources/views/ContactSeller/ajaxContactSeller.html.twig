@@ -224,7 +224,7 @@
 
 
     // add multiple select / deselect functionality
-    $("#fa_message_contact_seller_third_party_email_alert").change(function () {
+    $("#fa_message_contact_seller_third_party_email_alert").on('click', function (e) {
     	if ($('#fa_message_contact_seller_third_party_email_alert').parent().hasClass('checked')) {
             $('#fa_message_contact_seller_third_party_email_alert').attr('checked', true);
         } else {
@@ -237,7 +237,7 @@
         }
     });
 
-    $("#fa_message_contact_seller_email_alert").change(function(){
+    $("#fa_message_contact_seller_email_alert").on('click', function (e) {
         if ($('#fa_message_contact_seller_email_alert').parent().hasClass('checked')) {
         	$('#fa_message_contact_seller_email_alert').attr('checked', true);
         } else {
