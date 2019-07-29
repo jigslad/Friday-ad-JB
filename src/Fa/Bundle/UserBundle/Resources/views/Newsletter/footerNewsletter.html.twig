@@ -49,7 +49,7 @@
     	});*/   	
 
     	$("#fa_user_newsletter_third_party_email_alert").parent('span').on('click', function (e) {
-    		if ($('#fa_user_newsletter_third_party_email_alert').parent('span').hasClass('checked')) {
+    		if (!$('#fa_user_newsletter_third_party_email_alert').parent('span').hasClass('checked')) {
     		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', true);
     		} else {
     		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
@@ -62,7 +62,7 @@
     	});
 
     	$("#fa_user_newsletter_email_alert").parent('span').on('click', function (e) {
-    		if ($('#fa_user_newsletter_email_alert').parent('span').hasClass('checked')) {
+    		if (!$('#fa_user_newsletter_email_alert').parent('span').hasClass('checked')) {
     			$('#fa_user_newsletter_email_alert').attr('checked', true);
     		} else {
     			$('#fa_user_newsletter_email_alert').attr('checked', false);
