@@ -48,8 +48,8 @@
 			}
     	});*/
 
-    	$("#fa_user_newsletter_third_party_email_alert").change(function () {
-    		if ($('#fa_user_newsletter_third_party_email_alert').parent().hasClass('checked')) {
+    	$("#fa_user_newsletter_third_party_email_alert").parent('span').on('click', function (e) {
+    		if ($('#fa_user_newsletter_third_party_email_alert').parent('span').hasClass('checked')) {
     		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', true);
     		} else {
     		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
@@ -57,19 +57,19 @@
 
     		if ($('#fa_user_newsletter_third_party_email_alert').attr('checked')) {
     		    $('#fa_user_newsletter_email_alert').attr('checked', $('#fa_user_newsletter_third_party_email_alert').attr('checked'));
-    		    $('#fa_user_newsletter_email_alert').parent().addClass('checked');
+    		    $('#fa_user_newsletter_email_alert').parent('span').addClass('checked');
     		}
-    	});
+    	}); 
 
-    	$("#fa_user_newsletter_email_alert").change(function(){
-    		if ($('#fa_user_newsletter_email_alert').parent().hasClass('checked')) {
+    	$("#fa_user_newsletter_email_alert").parent('span').on('click', function (e) {
+    		if ($('#fa_user_newsletter_email_alert').parent('span').hasClass('checked')) {
     			$('#fa_user_newsletter_email_alert').attr('checked', true);
     		} else {
     			$('#fa_user_newsletter_email_alert').attr('checked', false);
     		}
     		if (!$('#fa_user_newsletter_email_alert').attr('checked')) {
     		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
-    		    $('#fa_user_newsletter_third_party_email_alert').parent().removeClass('checked');
+    		    $('#fa_user_newsletter_third_party_email_alert').parent('span').removeClass('checked');
     		} 
     	});
 	   
