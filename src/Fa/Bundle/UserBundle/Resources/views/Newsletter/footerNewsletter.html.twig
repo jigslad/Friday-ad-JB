@@ -46,7 +46,7 @@
 				$('#fa_user_newsletter_third_party_email_alert').prop('disabled', false);
 				$('#fa_user_newsletter_third_party_email_alert').css('cursor', 'pointer');
 			}
-    	});*/
+    	});*/   	
 
     	$("#fa_user_newsletter_third_party_email_alert").parent('span').on('click', function (e) {
     		if ($('#fa_user_newsletter_third_party_email_alert').parent('span').hasClass('checked')) {
@@ -59,9 +59,34 @@
     		    $('#fa_user_newsletter_email_alert').attr('checked', $('#fa_user_newsletter_third_party_email_alert').attr('checked'));
     		    $('#fa_user_newsletter_email_alert').parent('span').addClass('checked');
     		}
-    	}); 
+    	});
 
     	$("#fa_user_newsletter_email_alert").parent('span').on('click', function (e) {
+    		if ($('#fa_user_newsletter_email_alert').parent('span').hasClass('checked')) {
+    			$('#fa_user_newsletter_email_alert').attr('checked', true);
+    		} else {
+    			$('#fa_user_newsletter_email_alert').attr('checked', false);
+    		}
+    		if (!$('#fa_user_newsletter_email_alert').attr('checked')) {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+    		    $('#fa_user_newsletter_third_party_email_alert').parent('span').removeClass('checked');
+    		} 
+    	});
+
+    	$("#fa_user_newsletter_third_party_email_alert").parent('span').on('change', function (e) {
+    		if ($('#fa_user_newsletter_third_party_email_alert').parent('span').hasClass('checked')) {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', true);
+    		} else {
+    		    $('#fa_user_newsletter_third_party_email_alert').attr('checked', false);
+    		}
+
+    		if ($('#fa_user_newsletter_third_party_email_alert').attr('checked')) {
+    		    $('#fa_user_newsletter_email_alert').attr('checked', $('#fa_user_newsletter_third_party_email_alert').attr('checked'));
+    		    $('#fa_user_newsletter_email_alert').parent('span').addClass('checked');
+    		}
+    	});
+
+    	$("#fa_user_newsletter_email_alert").parent('span').on('change', function (e) {
     		if ($('#fa_user_newsletter_email_alert').parent('span').hasClass('checked')) {
     			$('#fa_user_newsletter_email_alert').attr('checked', true);
     		} else {
