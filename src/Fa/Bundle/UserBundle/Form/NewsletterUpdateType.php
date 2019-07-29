@@ -397,6 +397,7 @@ class NewsletterUpdateType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Fa\Bundle\DotMailerBundle\Entity\Dotmailer',
+            'csrf_protection' => false,
         ));
     }
     
