@@ -83,7 +83,7 @@
                 			{#<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>#}
                 		{% if isBoostEnabled==1 %}
                     			<li class="lightgreencircle">Boosts remaining: <span>{{ boostAdRemaining }}</span></li>
-                    			<li class="boostBtn"><a id="boost_ad_selected_all" class="xs-btn-1 button all-sel-texts">Boost All Actives</a></li>
+                    			<li class="boostBtn"><a id="boost_ad_selected_all" class="xs-btn-1 button all-sel-texts">Boost All Active Ads</a></li>
                     		{% endif %}
                 		</ul>                    	
 					</div>
@@ -103,8 +103,7 @@
                		   {% if userBusType is defined and userBusType == 'netsuite' and (currentRoute == 'manage_my_ads_active') %}
                    		<div class="manage-item-list top-selects-mma" style="border-top:0px">                      			
                        		<div class="select-diff-ads mb10"><select id="select-featureds" class="fa-select-white">
-                       			<option value=""  {{ (filterBy == 'ad_date')?'selected':'' }}>Select</option>
-                       			<option value="sel-all"  {{ (filterBy=='sel-all')?'selected':'' }}>All ads</option>
+                       			<option value="sel-all"  {{ (filterBy=='ad_date')?'selected':'' }}>All ads</option>
                        			<option value="sel-basic"  {{ (filterBy=='sel-basic')?'selected':'' }}>Basic ads</option>
                        			<option value="sel-featured"  {{ (filterBy=='sel-featured')?'selected':'' }}>Featured ads</option>
                        		</select></div>                           		

@@ -77,6 +77,8 @@ class UpsellRepository extends EntityRepository
     const UPSELL_TYPE_AUTO_RENEW_ID = 36;
     
     const UPSELL_FEATURED_TOP_7DAYS_ID = 5;
+    const UPSELL_FEATURED_TOP_14DAYS_ID = 54;
+    const UPSELL_FEATURED_TOP_28DAYS_ID = 51;
     
     /**
      * Prepare query builder.

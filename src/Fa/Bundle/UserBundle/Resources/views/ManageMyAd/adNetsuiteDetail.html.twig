@@ -39,11 +39,13 @@
 
 {% set featuredTopUpsell7days = constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID')  %}
 
-
+{% if not app.request.isXmlHttpRequest() %} 
 <div class="manage-item-list" id="item_card_{{adId}}">
+{% endif %}
+
 <div class="row">
-	<div class="small-8 medium-1 large-1 columns">	
-	{% if currentRoute == 'manage_my_ads_active' %}	
+	<div class="small-8 medium-1 large-1 columns">		
+	{% if currentRoute == 'manage_my_ads_active' or currentRoute=='ajax_manage_my_ads_get_status' %}	
         {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute == 'manage_my_ads_active' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
             <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet">Select</span>
         {% elseif isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 and currentRoute=='ajax_manage_my_ads_get_status' and (userBusinessCategory is defined and userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
@@ -327,5 +329,7 @@
     </div>  
 {# Mobile Version Ends here #}
 
-</div>     
+</div>  
+{% if not app.request.isXmlHttpRequest() %}    
 </div>
+{% endif %}

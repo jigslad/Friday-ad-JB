@@ -476,8 +476,14 @@ class ManageMyAdController extends CoreController
                     $adModerateArray      = $adModerateRepository->findResultsByAdIdsAndModerationResult($liveAdStatusArray, 'rejected');
                     $inModerationLiveAdIds = $adModerateRepository->getInModerationStatusForLiveAdIds($liveAdStatusArray);
 
+                    $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
+                    $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
+                    if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+                        $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
+                    }
+                    
                     foreach ($liveAds as $liveAd) {
-                        $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:ajaxGetStatus.html.twig', array('adId' => $liveAd['id'],'status_id' => $liveAd['status_id'], 'ad' => $liveAd, 'adCategoryIdArray' => $adCategoryIdArray, 'adImageArray' => $adImageArray, 'adViewCounterArray' => $adViewCounterArray, 'adPackageArray' => $adPackageArray, 'adModerateArray' => $adModerateArray, 'inModerationLiveAdIds' => $inModerationLiveAdIds, 'isBoostEnabled'  => $getBoostDetails['isBoostEnabled'],'boostMaxPerMonth'=> $getBoostDetails['boostMaxPerMonth'],'boostAdRemaining'=> $getBoostDetails['boostAdRemaining'], 'boostRenewDate'  => $getBoostDetails['boostRenewDate'],'userBusinessCategory' => $getBoostDetails['userBusinessCategory']));
+                        $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:ajaxGetStatus.html.twig', array('adId' => $liveAd['id'],'status_id' => $liveAd['status_id'], 'ad' => $liveAd, 'adCategoryIdArray' => $adCategoryIdArray, 'adImageArray' => $adImageArray, 'adViewCounterArray' => $adViewCounterArray, 'adPackageArray' => $adPackageArray, 'adModerateArray' => $adModerateArray, 'inModerationLiveAdIds' => $inModerationLiveAdIds, 'isBoostEnabled'  => $getBoostDetails['isBoostEnabled'],'boostMaxPerMonth'=> $getBoostDetails['boostMaxPerMonth'],'boostAdRemaining'=> $getBoostDetails['boostAdRemaining'], 'boostRenewDate'  => $getBoostDetails['boostRenewDate'],'userBusinessCategory' => $getBoostDetails['userBusinessCategory'],'modToolTipText'    => $moderationToolTipText, 'activeShopPackage' => $activeShopPackage, $sortBy => 'ad_date'));
                         $adStatusArray[$liveAd['id']] = $htmlContent;
                     }
                 }
