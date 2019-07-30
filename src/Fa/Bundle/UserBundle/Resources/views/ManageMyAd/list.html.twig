@@ -103,7 +103,7 @@
                		   {% if userBusType is defined and userBusType == 'netsuite' and (currentRoute == 'manage_my_ads_active') %}
                    		<div class="manage-item-list top-selects-mma" style="border-top:0px">                      			
                        		<div class="select-diff-ads mb10"><select id="select-featureds" class="fa-select-white">
-                       			<option value="sel-all"  {{ (filterBy=='ad_date')?'selected':'' }}>All ads</option>
+                       			<option value="ad_date"  {{ (filterBy=='ad_date')?'selected':'' }}>All ads</option>
                        			<option value="sel-basic"  {{ (filterBy=='sel-basic')?'selected':'' }}>Basic ads</option>
                        			<option value="sel-featured"  {{ (filterBy=='sel-featured')?'selected':'' }}>Featured ads</option>
                        		</select></div>                           		
