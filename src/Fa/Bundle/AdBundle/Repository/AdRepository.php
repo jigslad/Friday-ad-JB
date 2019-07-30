@@ -3548,7 +3548,7 @@ class AdRepository extends EntityRepository
         if($sortBy == 'sel-featured') {
             $qb->leftJoin('FaAdBundle:AdUserPackageUpsell', AdUserPackageUpsellRepository::ALIAS, 'WITH', AdUserPackageUpsellRepository::ALIAS.'.ad_id = '.self::ALIAS.'.id')
             ->andWhere(AdUserPackageUpsellRepository::ALIAS.'.upsell IN (:FeaturedId)')
-            ->setParameter('FeaturedId', UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID)
+            ->setParameter('FeaturedId', array(UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID,UpsellRepository::UPSELL_FEATURED_TOP_14DAYS_ID,UpsellRepository::UPSELL_FEATURED_TOP_28DAYS_ID))
             ->andWhere(AdUserPackageUpsellRepository::ALIAS.'.status = 1');
             $qb->groupBy(AdUserPackageUpsellRepository::ALIAS.'.ad_id');
         }
