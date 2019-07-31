@@ -28,6 +28,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Fa\Bundle\EntityBundle\Form\EventListener\AddCategoryChoiceFieldSubscriber;
 use Fa\Bundle\PromotionBundle\Entity\CategoryUpsell;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType; 
 
 /* Upsell search type form.
  *
@@ -94,7 +95,10 @@ class CategoryUpsellAdminType extends AbstractType
                 'message' => $this->translator->trans('Please select an upsell.', array(), 'validators')
             ))
         ))
-        ->add('show_in_filters')
+        ->add('show_in_filters', CheckboxType::class,
+            array(
+                'label'    => 'Status',
+            ))
         ->add('save', SubmitType::class)
         ->add('saveAndNew', SubmitType::class);
         
