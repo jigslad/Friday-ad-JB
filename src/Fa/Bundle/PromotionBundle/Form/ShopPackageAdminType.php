@@ -34,6 +34,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 /**
  * Shop package admin type form.
@@ -203,7 +204,7 @@ class ShopPackageAdminType extends AbstractType
             )
             ->add(
                 'ad_limit',
-                TextType::class,
+                NumberType::class,
                 array(
                     'label'    => 'Ad Limit',
                     'required' => false
