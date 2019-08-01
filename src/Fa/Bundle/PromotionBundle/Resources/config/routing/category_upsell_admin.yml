@@ -1,0 +1,25 @@
+category_upsell_admin:
+    path:     /
+    defaults: { _controller: "FaPromotionBundle:CategoryUpsellAdmin:index" }
+
+category_upsell_new_admin:
+    path:     /new
+    defaults: { _controller: "FaPromotionBundle:CategoryUpsellAdmin:new" }
+
+category_upsell_create_admin:
+    path:     /create
+    defaults: { _controller: "FaPromotionBundle:CategoryUpsellAdmin:create" }
+    requirements: { methods: post }
+
+category_upsell_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaPromotionBundle:CategoryUpsellAdmin:edit" }
+
+category_upsell_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaPromotionBundle:CategoryUpsellAdmin:update" }
+    requirements: { methods: post|put }
+
+category_upsell_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaPromotionBundle:CategoryUpsellAdmin:delete" }

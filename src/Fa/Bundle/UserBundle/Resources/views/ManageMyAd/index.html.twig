@@ -44,7 +44,9 @@
 //<![CDATA[
     var adIdToRemove = '';
     var statusIdToChange = '';
-
+    var featurredUpsellRemoveId = '';
+    var adIdsArray = "{{ adIdArray|join(',') }}";
+    
     function removeAdConfirmation(adId, currentAdStatus)
     {
     	adIdToRemove = adId;
@@ -77,15 +79,15 @@
             remainingCntAfterSelection = remainingCnt - selectedBoostAdCnt;
             if(selectedBoostAdCnt > remainingCnt) {
                 alert('Sorry! Your maximum boost count exceeds. Please select only '+ remainingCnt +'adverts ');
-                $("#boostad_selectall").parent('span').removeClass('checked');
-                $("#boostad_selectall").parent('span').trigger("change");                
+                $(".boostad_selectall").parent('span').removeClass('checked');
+                $(".boostad_selectall").parent('span').trigger("change");                
             } else if(selectedBoostAdCnt==0) {
                 $('#markAdAsBoostedModal').hide();
                 $('.boost_your_ad').addClass('ajaxboost_your_ad');
                 $("#markAdAsBoostedModal").removeClass('manage-my-ads-list-pad-bot');
             } else {
                 $('.selAdsCount').html(selectedBoostAdCnt);
-                $('.leftoutAdCount').html(remainingCntAfterSelection);
+                //$('.leftoutAdCount').html(remainingCntAfterSelection);
                 $('#markAdAsBoostedModal').show();
                 $('.boost_your_ad').removeClass('ajaxboost_your_ad');
                 $("#markAdAsBoostedModal").addClass('manage-my-ads-list-pad-bot');
@@ -133,6 +135,59 @@
             });
         }
     }
+    
+    var ajaxChangeAdStatusBulkLoading = false;
+    function changeAdStatusBulk(statusId)
+    {
+    	statusIdToChange = statusId;
+    	$('#stop-sel-ads-btn').prop("disabled", true);
+        var selectedStopAdIds = '';
+        $(".boostad").each(function(){
+            if($(this).parent('span').hasClass('checked')) {
+                selectedStopAdIds += $(this).val()+',';
+            }
+        });
+        if (!ajaxLoading && selectedStopAdIds != '') {
+        	ajaxChangeAdStatusBulkLoading = true;
+        	blockPage();
+        	blockElement('.db-right-part');
+        	$.ajax({
+                type: "POST",
+                url: '{{path("ajax_manage_my_ads_stop_multiple_ad")}}',
+                data: {'adIds':selectedStopAdIds, 'newStatusId':statusIdToChange},
+                cache:false,
+                asyn:false
+            })
+            .always(function(response) {
+                unblockPage();
+             })
+            .done(function(response) {
+                location.reload();
+            });
+        }
+    }
+
+    function deactivateFeatured()
+    {
+        if (!ajaxLoading && featurredUpsellRemoveId != '') {
+        	ajaxLoading = true;
+        	blockPage();
+        	blockElement('.db-right-part');
+        	$.ajax({
+                type: "POST",
+                url: '{{path("ajax_manage_my_ads_deactivate_featured")}}',
+                data: {'adId':featurredUpsellRemoveId},
+                cache:false,
+                asyn:false
+            })
+            .always(function(response) {
+                unblockPage();
+             })
+            .done(function(response) {
+                location.reload();
+            });
+        }
+    }
 
     function openSocialSharePopup(adId, adUrl, adTitle)
     {
@@ -162,23 +217,28 @@
             data: {'adIds':adIdArray, 'type': '{{app.request.get('type')}}'}
         })
         .done(function(response) {
-            $.each (response, function (key, value) {
-                /*$('#item_status_'+key).removeAttr("class");
-                $('#item_status_'+key).addClass("item-status "+value.class);
-                $('#item_status_'+key).html(value.status);
-                if (value.status == 'Live') {
-                    if ($('#item_detail_link_'+key).children('a').length < 1) {
-                        var item_title = $('#item_detail_link_'+key).html();
-                        var item_url   = Routing.generate('ad_detail_page_by_id', {'id':key});
-                        $('#item_detail_link_'+key).html('<a href="'+item_url+'" target="_blank">'+item_title+'</a>');
-                    }
-                }*/
+            $.each (response, function (key, value) {              
                 $('#item_card_'+key).html(value);
             });
+            window.location = '{{path("manage_my_ads_active")}}';
         });
     }
 
+    $('#select-featureds').change(function(e) {
+		var selFeaturedId = $('#select-featureds').val();
+		var setType = "{{app.request.get('type')}}";
 
+    	$.ajax({
+            type: "POST",
+            url: '{{path("ajax_manage_my_ads_get_featured_ads")}}',
+            data: {'selAdsOption': selFeaturedId }
+        })
+        .done(function(response) {
+            location.reload();
+        	/*$('#resulthtml_div').html(response);*/
+        }); 
+    });
+    
      $('#manage-my-ads-list-only').on('click','.ajaxboost_your_ad', function(e)
         {
             var boost_value = 1;
@@ -213,18 +273,18 @@
     $('#manage-my-ads-list-only').on('click','.ajaxcustom-checkbox', function() {
         if(checkAllBoostButtonEnabled()) {
             if($(".boostad").length == $(".boostad:checked").length) {
-                $("#boostad_selectall").attr("checked", "checked");
-                $('#boostad_selectall').parent('span').addClass('checked');
+                $(".boostad_selectall").attr("checked", "checked");
+                $('.boostad_selectall').parent('span').addClass('checked');
                 $("#boostad_selectall_inmodal").attr("checked", "checked");
                 $('#boostad_selectall_inmodal').parent('span').addClass('checked');
             } else if($(".boostad").length > $(".boostad:checked").length) {
                 $("#boostad_selectall_inmodal").attr("checked", "checked");
                 $('#boostad_selectall_inmodal').parent('span').addClass('checked');
-                $("#boostad_selectall").removeAttr("checked");
-                $('#boostad_selectall').parent('span').removeClass('checked');
+                $(".boostad_selectall").removeAttr("checked");
+                $('.boostad_selectall').parent('span').removeClass('checked');
             } else {
-                $("#boostad_selectall").removeAttr("checked");
-                $('#boostad_selectall').parent('span').removeClass('checked');
+                $(".boostad_selectall").removeAttr("checked");
+                $('.boostad_selectall').parent('span').removeClass('checked');
                 $("#boostad_selectall_inmodal").removeAttr("checked");
                 $('#boostad_selectall_inmodal').parent('span').removeClass('checked');
             }

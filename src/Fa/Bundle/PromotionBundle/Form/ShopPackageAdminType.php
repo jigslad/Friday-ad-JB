@@ -201,6 +201,14 @@ class ShopPackageAdminType extends AbstractType
                     'label'    => 'Boost button enabled',
                 )
             )
+            ->add(
+                'ad_limit',
+                TextType::class,
+                array(
+                    'label'    => 'Ad Limit',
+                    'required' => false
+                )
+            )
             ->add('save', SubmitType::class)
             ->add('saveAndNew', SubmitType::class);
 
@@ -390,6 +398,11 @@ class ShopPackageAdminType extends AbstractType
                 }
             }
         }
+        
+        if ($form->get('role')->getData()->getid()==9 && !$form->get('ad_limit')->getData()) {
+            $event->getForm()->get('ad_limit')->addError(new \Symfony\Component\Form\FormError('Please enter the ad limit.'));
+        }
+        
     }
 
     /**
