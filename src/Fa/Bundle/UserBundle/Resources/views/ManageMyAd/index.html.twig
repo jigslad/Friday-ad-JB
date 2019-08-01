@@ -217,20 +217,10 @@
             data: {'adIds':adIdArray, 'type': '{{app.request.get('type')}}'}
         })
         .done(function(response) {
-            $.each (response, function (key, value) {
-                /*$('#item_status_'+key).removeAttr("class");
-                $('#item_status_'+key).addClass("item-status "+value.class);
-                $('#item_status_'+key).html(value.status);
-                if (value.status == 'Live') {
-                    if ($('#item_detail_link_'+key).children('a').length < 1) {
-                        var item_title = $('#item_detail_link_'+key).html();
-                        var item_url   = Routing.generate('ad_detail_page_by_id', {'id':key});
-                        $('#item_detail_link_'+key).html('<a href="'+item_url+'" target="_blank">'+item_title+'</a>');
-                    }
-                }*/
+            $.each (response, function (key, value) {              
                 $('#item_card_'+key).html(value);
             });
-            location.reload();
+            window.location = '{{path("manage_my_ads_active")}}';
         });
     }
 
