@@ -11,6 +11,7 @@
 {% set userCreditCount = userCreditRepository.getActiveCreditCountForUser(app.user.getId()) %}
 {% set adUserPackageUpsellRepository = fetch_repository('FaAdBundle:AdUserPackageUpsell') %}
 {% set shopPackageCreditRepository = fetch_repository('FaPromotionBundle:ShopPackageCredit') %}
+{% set categoryUpsellRepository = fetch_repository('FaPromotionBundle:CategoryUpsell') %}
 
 {% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
 {% set adUrl = ''%}
@@ -42,13 +43,24 @@
 {% endif %}
 
 {% if pagination.getNbResults() %}
-    {% set adCategoryIdArray    = adRepository.getAdCategoryIdArrayByAdId(adIdArray) %}
+    {% set adCategoryIdArray    = adRepository.getAdCategoryIdArrayByAdId(adIdArray) %}    
     {% set adImageArray         = adImageRepository.getAdMainImageArrayByAdId(adIdArray) %}
     {% set adViewCounterArray   = adViewCounterRepository.getAdViewCounterArrayByAdId(adIdArray) %}
     {% set adPackageArray       = adUserPackageRepository.getAdPackageArrayByAdId(adIdArray, true) %}
     {% set adFeaturedUpsellArray = adUserPackageUpsellRepository.getAdFeaturedUpsellArrayByAdId(adIdArray) %}
     {% set adModerateArray      = adModerateRepository.findResultsByAdIdsAndModerationResult(adIdArray, 'rejected') %}
     {% set inModerationLiveAdIds = adModerateRepository.getInModerationStatusForLiveAdIds(adIdArray) %}
+    
+    {% set adCategoryIdValArray = {} %}
+    {% for key,value in adCategoryIdArray %}
+    	{%  set  adCategoryIdValArray = adCategoryIdValArray|merge([value])  %}
+    {% endfor %}
+    
+    {% if adCategoryIdValArray|length >0 %}
+    	{% set categoryUpsellArray    = categoryUpsellRepository.getCategoryUpsellForCategoryIds(adCategoryIdValArray) %}
+    {% endif %}
+    
+
 {% endif %}
 
 {{ include('FaUserBundle:ManageMyAd:manageMyAd-css.html.twig') }}
@@ -557,6 +569,7 @@
                 {% endif %}
               }else{
             	 featurredUpsellRemoveId = adId;
+            	 featuredUpsellId = upsellId;
             	 $('#featuredOffConfirmModal').foundation('reveal', 'open');
                 /*$(this).removeClass('toggle-on').addClass('toggle-off');*/
               }

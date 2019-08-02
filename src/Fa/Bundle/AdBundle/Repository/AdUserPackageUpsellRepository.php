@@ -199,10 +199,11 @@ class AdUserPackageUpsellRepository extends EntityRepository
      *
      * @return integer
      */
-    public function disableFeaturedAdUpsell($adId)
+    public function disableFeaturedAdUpsell($adId,$upsellId)
     {
         $adUserPackageUpsells = array();
-        $adUserPackageUpsells = $this->getFeaturedUpsellById($adId, 5);
+        $adUserPackageUpsells = $this->getFeaturedUpsellById($adId, $upsellId);
+        var_dump($adUserPackageUpsells);
         if(!empty($adUserPackageUpsells)) {
             $adUserPackageUpsell = $adUserPackageUpsells[0];
             $adUserPackageUpsell->setStatus(self::STATUS_EXPIRED);

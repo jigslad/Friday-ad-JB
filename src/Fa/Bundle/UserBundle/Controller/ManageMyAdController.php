@@ -315,16 +315,17 @@ class ManageMyAdController extends CoreController
             $error        = '';
             $successMsg   = '';
             $adId         = $request->get('adId', 0);
+            $upsellId         = $request->get('upsellId', 0);
 
             $ad = $this->getRepository('FaAdBundle:Ad')->find($adId);
             $this->checkIsValidAdUser($ad->getUser()->getId());
             
             $loggedinUser = $this->getLoggedInUser();
             $userId = $loggedinUser->getId();
-            $upsellObj = $this->getRepository('FaPromotionBundle:Upsell')->find('5');
+            $upsellObj = $this->getRepository('FaPromotionBundle:Upsell')->find($upsellId);
                         
-            $ans = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->disableFeaturedAdUpsell($adId);
-            $this->getRepository('FaUserBundle:UserCreditUsed')->redeemCreditUsedByUpsell($userId,$ad,$upsellObj,$this->container);
+            $ans = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->disableFeaturedAdUpsell($adId,$upsellId);
+            //$this->getRepository('FaUserBundle:UserCreditUsed')->redeemCreditUsedByUpsell($userId,$ad,$upsellObj,$this->container);
             
             if ($ans) {
                 $successMsg     = $this->get('translator')->trans('Featured upsell was removed successfully.', array(), 'frontend-manage-my-ad');
@@ -821,7 +822,7 @@ class ManageMyAdController extends CoreController
         $individualUpsellArr = $individualUpsellDetails = array();
         $isAdultAdvertPresent = 0;
         
-        if ($request->isXmlHttpRequest()) {
+        //if ($request->isXmlHttpRequest()) {
             $cyberSourceManager  = $this->get('fa.cyber.source.manager');
             $loggedinUser     = $this->getLoggedInUser();           
             $errorMsg	= null;
@@ -901,9 +902,9 @@ class ManageMyAdController extends CoreController
                 }
             }
             return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
-        } else {
+        /*} else {
             return new Response();
-        }
+        }*/
     }
     
     private function addUpsellInfoToCart($userId, $adId, $selectedUpsellId, $request = null, $categoryId)

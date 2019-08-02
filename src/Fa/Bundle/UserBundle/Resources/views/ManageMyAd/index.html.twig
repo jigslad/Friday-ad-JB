@@ -45,6 +45,7 @@
     var adIdToRemove = '';
     var statusIdToChange = '';
     var featurredUpsellRemoveId = '';
+    var featuredUpsellId = '';
     var adIdsArray = "{{ adIdArray|join(',') }}";
     
     function removeAdConfirmation(adId, currentAdStatus)
@@ -176,7 +177,7 @@
         	$.ajax({
                 type: "POST",
                 url: '{{path("ajax_manage_my_ads_deactivate_featured")}}',
-                data: {'adId':featurredUpsellRemoveId},
+                data: {'adId':featurredUpsellRemoveId, 'upsellId':featuredUpsellId },
                 cache:false,
                 asyn:false
             })
