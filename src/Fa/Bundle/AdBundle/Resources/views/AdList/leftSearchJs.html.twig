@@ -110,11 +110,12 @@
             return true;
         });*/
     });
-
+ 
     function setDefDistance() {
     	var defdist = $('#fa_left_search_default_distance').val();
     	$('#fa_left_search_item__distance option[value=""]').attr("selected", null);
     	var qryItemDistance = getUrlVars()['item__distance'];
+
     	if(qryItemDistance != undefined) {     	 	
     		$('#fa_left_search_item__distance option[value="'+qryItemDistance+'"]').attr("selected", "selected");
     		$('#distance-left-search').show();
@@ -156,7 +157,7 @@
                      type: "post",
                      dataType: "json",
                      url: "{{ path('fa_frontend_ajax_user_location') }}",
-                     data: {'location': searchLocation, 'catId' : catId},
+                     data: {'location': searchLocation, 'catId' : catId, 'distanceId' : distanceId},
                      success: function(data) {
                          if (!$.isEmptyObject(data)) {
                         	$('#fa_left_search_default_distance').val(data.default_distance);
@@ -166,7 +167,11 @@
                                 $('#distance-left-search').show();
                                 $('#fa_left_search_hide_distance_block').val(0);
                              } else {
-                                setDefDistance();
+                                 if(distanceId == data.default_distance) {
+                                	 $('#fa_left_search_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
+                                 } else {
+                                	 setDefDistance();
+                                 }                
                              }
 
                             if(data.slug=='uk') { $('#distance-left-search').hide(); }
