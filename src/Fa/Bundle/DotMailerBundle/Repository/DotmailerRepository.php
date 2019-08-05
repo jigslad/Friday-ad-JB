@@ -630,6 +630,9 @@ class DotmailerRepository extends EntityRepository
         }
         
         $data[] = $dotmailer->getDateOfBirth();// date_of_birth
+        $dotmailerGender = ($dotmailer->getGender()=='F')?'Female':(($dotmailer->getGender()=='M')?'Male':'');
+        $data[] = $dotmailerGender; // gender
+        
         // dotmailer newsletter info fields
         $dotmailerNewsletterTypeId = $dotmailer->getDotmailerNewsletterTypeId();
         $newsletterTypes = $this->getEntityManager()->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getKeyValueArray($container, 'name');
@@ -640,8 +643,6 @@ class DotmailerRepository extends EntityRepository
                 $data[] = 0;
             }
         }
-        $data[] = $dotmailer->getGender(); // gender
-        
         return $data;
     }
 
