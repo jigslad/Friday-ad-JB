@@ -157,7 +157,7 @@
                      type: "post",
                      dataType: "json",
                      url: "{{ path('fa_frontend_ajax_user_location') }}",
-                     data: {'location': searchLocation, 'catId' : catId, 'distanceId' : distanceId},
+                     data: {'location': searchLocation, 'catId' : catId},
                      success: function(data) {
                          if (!$.isEmptyObject(data)) {
                         	$('#fa_left_search_default_distance').val(data.default_distance);
