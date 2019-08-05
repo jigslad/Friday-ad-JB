@@ -23,6 +23,7 @@ use Fa\Bundle\PaymentBundle\Form\CyberSourceCheckoutType;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
+use Fa\Bundle\PromotionBundle\Repository\CategoryUpsellRepository;
 
 /**
  * This controller is used for user ads.
@@ -53,6 +54,9 @@ class ManageMyAdController extends CoreController
         $type            = $request->get('type', 'active');
         
         $sortBy = 'ad_date';
+        
+        //$res = $this->getRepository('FaPromotionBundle:CategoryUpsell')->getCategoryByUpsellId('51','3411');
+        //echo '<pre>';print_r($res);die;
         
         $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
         if($this->container->get('session')->has('filterBy') && $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
@@ -112,6 +116,8 @@ class ManageMyAdController extends CoreController
                 }                
             }
         }
+        
+        
          
         if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
@@ -325,7 +331,7 @@ class ManageMyAdController extends CoreController
             $upsellObj = $this->getRepository('FaPromotionBundle:Upsell')->find($upsellId);
                         
             $ans = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->disableFeaturedAdUpsell($adId,$upsellId);
-            //$this->getRepository('FaUserBundle:UserCreditUsed')->redeemCreditUsedByUpsell($userId,$ad,$upsellObj,$this->container);
+            $this->getRepository('FaUserBundle:UserCreditUsed')->redeemCreditUsedByUpsell($userId,$ad,$upsellObj,$this->container);
             
             if ($ans) {
                 $successMsg     = $this->get('translator')->trans('Featured upsell was removed successfully.', array(), 'frontend-manage-my-ad');
@@ -809,7 +815,7 @@ class ManageMyAdController extends CoreController
         return $dimension12;
     }
     
-    public function ajaxIndividualUpsellAction($adId, $upsellId, Request $request)
+    public function ajaxIndividualUpsellAction($adId, $upsellId, $catupsellId, Request $request)
     {
         $redirectToUrl = '';
         $error         = '';
@@ -822,7 +828,7 @@ class ManageMyAdController extends CoreController
         $individualUpsellArr = $individualUpsellDetails = array();
         $isAdultAdvertPresent = 0;
         
-        //if ($request->isXmlHttpRequest()) {
+        if ($request->isXmlHttpRequest()) {
             $cyberSourceManager  = $this->get('fa.cyber.source.manager');
             $loggedinUser     = $this->getLoggedInUser();           
             $errorMsg	= null;
@@ -831,18 +837,22 @@ class ManageMyAdController extends CoreController
                 if (!empty($user)) {                    
                     //Payment gateway form
                     $formManager = $this->get('fa.formmanager');
+                    $ad 			  = $this->getRepository('FaAdBundle:Ad')->find($adId);
                     $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => null));
 
-                    $individualUpsellDetails = $this->getRepository('FaPromotionBundle:Upsell')->findBy(array('id'=>$upsellId));
+                    $individualUpsellDetails = $this->getRepository('FaPromotionBundle:CategoryUpsell')->getCategoryByUpsellId($upsellId,$ad->getCategory());
+                    
                     if(!empty($individualUpsellDetails)) {
+                        $individualUpsellArr = $individualUpsellDetails;
+                    }
+                    /*if(!empty($individualUpsellDetails)) {
                         $individualUpsellArr['id'] =  $individualUpsellDetails[0]->getId();
                         $individualUpsellArr['title'] =  $individualUpsellDetails[0]->getTitle();
                         $individualUpsellArr['description'] =  $individualUpsellDetails[0]->getDescription();
                         $individualUpsellArr['price'] =  $individualUpsellDetails[0]->getPrice();
-                    }
-                    $individualUpsellModalDetails = CommonManager::getIndividualUpsellModalDetails($upsellId);
+                    }*/
                     
-                    $ad 			  = $this->getRepository('FaAdBundle:Ad')->find($adId);
+                    $individualUpsellModalDetails = CommonManager::getIndividualUpsellModalDetails($upsellId);
                     
                     $categoryId       = $ad->getCategory()->getId();
                     $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
@@ -902,9 +912,9 @@ class ManageMyAdController extends CoreController
                 }
             }
             return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
-        /*} else {
+        } else {
             return new Response();
-        }*/
+        }
     }
     
     private function addUpsellInfoToCart($userId, $adId, $selectedUpsellId, $request = null, $categoryId)

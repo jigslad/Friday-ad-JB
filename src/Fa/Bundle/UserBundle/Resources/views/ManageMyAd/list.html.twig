@@ -560,16 +560,15 @@
               var split_ad_id = elem_id.split("_");
               var adId = split_ad_id[1];
               var upsellId = split_ad_id[2];
+              var catupsellId = split_ad_id[3];
               if($(this).hasClass('toggle-off')){
                 $(this).removeClass('toggle-off').addClass('toggle-on');
-                {% if remainingFeaturedCredits > 0 %}
-                	useCreditForFeaturedUpsell(adId,upsellId);
-                {% else %}
-                	featuredTopUpsellBtn(adId,upsellId);
-                {% endif %}
+                	featuredTopUpsellBtn(adId, upsellId, catupsellId);
+
               }else{
             	 featurredUpsellRemoveId = adId;
             	 featuredUpsellId = upsellId;
+
             	 $('#featuredOffConfirmModal').foundation('reveal', 'open');
                 /*$(this).removeClass('toggle-on').addClass('toggle-off');*/
               }

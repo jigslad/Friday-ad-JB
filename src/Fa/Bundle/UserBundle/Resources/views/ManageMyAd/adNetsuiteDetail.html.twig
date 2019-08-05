@@ -44,10 +44,12 @@
 
 {% set featuredToggleFlag = 0 %}
 {% set featuredToggleUpsellId = 0 %}
+{% set featuredToggleCatUpsellId = 0 %}
 {% for categoryUpsell in categoryUpsellArray %}
     {% if parentCatIds is defined and categoryUpsell['category_id'] in parentCatIds %}
         {% set featuredToggleFlag = 1 %}
         {% set featuredToggleUpsellId = categoryUpsell['upsell_id'] %}
+        {% set featuredToggleCatUpsellId = categoryUpsell['id'] %}
     {% endif %}
 {% endfor %}
 
@@ -174,9 +176,9 @@
             	{% if ad['status_id'] == adStatusLive and featuredToggleFlag==1 %}
             	<div class="right-manage-buttons featuredBlock">
             		{% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-            			<div class="featured-switch toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}">
+            			<div class="featured-switch toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
             		{% else %}
-            			<div class="featured-switch toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}">
+            			<div class="featured-switch toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
             		{% endif %}
             			<div class="toggle-wrap">            
             				<div class="toggle-bg-on"></div>
@@ -215,9 +217,9 @@
         	<div class="featuredBlock1">
         		<a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>                
         		    {% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-            			<div class="featured-switch toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}">
+            			<div class="featured-switch toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
             		{% else %}
-            			<div class="featured-switch toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}">
+            			<div class="featured-switch toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
             		{% endif %}
 
         			<div class="toggle-wrap">            

@@ -319,4 +319,32 @@ class CategoryUpsellRepository extends EntityRepository
             return true;
         }
     }
+    
+    /**
+     * Get categories by upsell ids.
+     *
+     * @param array $upsellIds Array of upsell ids.
+     *
+     * @return CategoryUpsell[]
+     */
+    public function getCategoryByUpsellId($upsellId,$categoryId)
+    {
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id', self::ALIAS.'.price as upsell_price', UpsellRepository::ALIAS.'.id as upsell_id', UpsellRepository::ALIAS.'.title as upselltitle', UpsellRepository::ALIAS.'.description as upsell_description')
+        ->innerJoin(self::ALIAS . '.upsell', UpsellRepository::ALIAS)
+        ->where(UpsellRepository::ALIAS . '.id IN (:upsellId)')
+        ->setParameter('upsellId', $upsellId)
+        ->andWhere(self::ALIAS . '.category IN (:categoryId)')
+        ->setParameter('categoryId', $categoryId);   
+        
+        $categoryUpsells = $query->getQuery()->getResult();
+        
+        $categoryUpsellArr = array();
+        if (!empty($categoryUpsells)) {
+            foreach ($categoryUpsells as $categoryUpsell) {
+                $categoryUpsellArr = array('id'=>$categoryUpsell['upsell_id'], 'title' => $categoryUpsell['upselltitle'], 'description' => $categoryUpsell['upsell_description'], 'price' => $categoryUpsell['upsell_price']);
+            }
+        }      
+        return $categoryUpsellArr;
+    }
 }

@@ -187,9 +187,12 @@ class AdUserPackageUpsellRepository extends EntityRepository
         ->andWhere(self::ALIAS.'.ad_id = :adId')
         ->setParameter('adId', $adId)
         ->andWhere(self::ALIAS.'.upsell = :upsellId')
-        ->setParameter('upsellId', $upsellId);
-        
-        return $query->getQuery()->getResult();        
+        ->setParameter('upsellId', $upsellId)
+        ->andWhere(self::ALIAS.'.status = 1')
+        ->orderBy(self::ALIAS.'.id', 'desc');
+
+        $res = $query->getQuery()->getResult();
+        return $res;
     }
     
     /**
@@ -202,8 +205,9 @@ class AdUserPackageUpsellRepository extends EntityRepository
     public function disableFeaturedAdUpsell($adId,$upsellId)
     {
         $adUserPackageUpsells = array();
+        
         $adUserPackageUpsells = $this->getFeaturedUpsellById($adId, $upsellId);
-        var_dump($adUserPackageUpsells);
+
         if(!empty($adUserPackageUpsells)) {
             $adUserPackageUpsell = $adUserPackageUpsells[0];
             $adUserPackageUpsell->setStatus(self::STATUS_EXPIRED);
