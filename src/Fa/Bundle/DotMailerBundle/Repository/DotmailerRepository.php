@@ -714,6 +714,7 @@ class DotmailerRepository extends EntityRepository
                 $data[] = 0;
             }
         }
+        $data[] = $dotmailer->getGender(); // gender
         
         return $data;
     }
@@ -770,6 +771,7 @@ class DotmailerRepository extends EntityRepository
         $data[] = 'ti_user';
         $data[] = 'business_category';
         $data[] = 'date_of_birth';
+        $data[] = 'gender';
         
         // dotmailer newsletter info fields
         $newsletterTypes = $this->getEntityManager()->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getKeyValueArray($container, 'name', false);
