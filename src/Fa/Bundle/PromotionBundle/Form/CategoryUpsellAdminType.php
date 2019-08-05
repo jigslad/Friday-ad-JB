@@ -202,12 +202,12 @@ class CategoryUpsellAdminType extends AbstractType
         $categoryUpsellObj = $this->em->getRepository('FaPromotionBundle:CategoryUpsell')->findBy(
             [
                 'category' => $categoryId,
-                'upsell' => $form['upsell']->getData()
+                'upsell' => $form['upsell']->getData() 
             ]
         );
 
         if ((empty($data->getId()) && ! empty($categoryUpsellObj)) || (! empty($data->getId()) && ! empty($categoryUpsellObj) && $categoryUpsellObj[0]->getId() != $data->getId())) {
-            $form->get('upsell')->addError(new FormError('The category and upsell is already mapped.'));
+            $form->get('upsell')->addError(new FormError('An upsell has already been created for this category.'));
             return false;
         }
 
