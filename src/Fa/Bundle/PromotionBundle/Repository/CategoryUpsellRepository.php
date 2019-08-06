@@ -327,15 +327,15 @@ class CategoryUpsellRepository extends EntityRepository
      *
      * @return CategoryUpsell[]
      */
-    public function getCategoryByUpsellId($upsellId,$categoryId)
+    public function getCategoryByUpsellId($upsellId,$catUpsellId)
     {
         $query = $this->createQueryBuilder(self::ALIAS)
         ->select(self::ALIAS.'.id', self::ALIAS.'.price as upsell_price', UpsellRepository::ALIAS.'.id as upsell_id', UpsellRepository::ALIAS.'.title as upselltitle', UpsellRepository::ALIAS.'.description as upsell_description')
         ->innerJoin(self::ALIAS . '.upsell', UpsellRepository::ALIAS)
         ->where(UpsellRepository::ALIAS . '.id IN (:upsellId)')
         ->setParameter('upsellId', $upsellId)
-        ->andWhere(self::ALIAS . '.category IN (:categoryId)')
-        ->setParameter('categoryId', $categoryId);   
+        ->andWhere(self::ALIAS . '.id = (:catUpsellId)')
+        ->setParameter('catUpsellId', $catUpsellId);   
         
         $categoryUpsells = $query->getQuery()->getResult();
         

@@ -48,7 +48,7 @@
     </div>   
    
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }}  
-    {{ dump(individualUpsellArr) }}
+
     {% if individualUpsellArr|length %} 
     	{% set upsellPrice = format_currency(individualUpsellArr['price']) %}              
         <div class="columns upsell-pkg-box">
@@ -57,7 +57,7 @@
         		<div class="upsell-pkg-left"></div>
         		<div class="upsell-pkg-right">
         		    <div class="upsell-subtitle">{{ individualUpsellArr['description'] }}</div>
-        		    <div class="upsell-price">{{ individualUpsellArr['price'] }}</div>
+        		    <div class="upsell-price">{{ upsellPrice }}</div>
         		</div>
         	</div>
         </div>           

@@ -840,7 +840,7 @@ class ManageMyAdController extends CoreController
                     $ad 			  = $this->getRepository('FaAdBundle:Ad')->find($adId);
                     $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => null));
 
-                    $individualUpsellDetails = $this->getRepository('FaPromotionBundle:CategoryUpsell')->getCategoryByUpsellId($upsellId,$ad->getCategory());
+                    $individualUpsellDetails = $this->getRepository('FaPromotionBundle:CategoryUpsell')->getCategoryByUpsellId($upsellId,$catupsellId);
                     
                     if(!empty($individualUpsellDetails)) {
                         $individualUpsellArr = $individualUpsellDetails;
