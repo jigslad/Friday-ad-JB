@@ -42,6 +42,7 @@
 {% if not app.request.isXmlHttpRequest() %} 
 <div class="manage-item-list" id="item_card_{{adId}}">
 {% endif %}
+
 <div class="hide-for-small-only">
     <div class="row">       
         <div class="small-10 medium-6 large-6 columns medium-left-cols">
@@ -101,7 +102,7 @@
                 <div class="clearfix dtl-social-icons-desk-tab dtl-social-icons manage-list-social-icons show-for-small-up-only">
                     <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/facebook/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0','Facebook');" href="javascript:void(0);" title="{{'Facebook'|trans({}, 'frontend-show-ad')}}" class="dtl-fb" id="dtl-fb-id"></a>
                     <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/twitter/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Twitter');" href="javascript:void(0);" title="{{'Twitter'|trans({}, 'frontend-show-ad')}}" class="dtl-twi" id="dtl-twi-id"></a>
-                    <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/google_plusone_share/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'GooglePlus');" href="javascript:void(0);" title="{{'Google Plus'|trans({}, 'frontend-show-ad')}}" class="dtl-gpl" id="dtl-gpl-id"></a>
+                    <a onclick="return socialShare('{{ ad.id }}', 'https://plus.google.com/share?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'GooglePlus');" href="javascript:void(0);" title="{{'Google Plus'|trans({}, 'frontend-show-ad')}}" class="dtl-gpl" id="dtl-gpl-id"></a>
                     <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/pinterest/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Pinterest');" href="javascript:void(0);" title="{{'Pinterest'|trans({}, 'frontend-show-ad')}}" class="dtl-pin" id="dtl-pin-id"></a>
                     <a onclick="return socialShare('{{ ad.id }}', '{{container.getParameter('fa.social.share.url')}}/email/offer?url={{container.getParameter('base_url')}}{{adUrl}}&pubid={{container.getParameter('fa.add.this.pubid')}}&ct=1&title={% if ad['title'] is defined %}{{ad['title']}}{% endif %}&pco=tbxnj-1.0', 'Email');" href="javascript:void(0);" title="{{'Email'|trans({}, 'frontend-show-ad')}}" class="dtl-eml" id="dtl-eml-id"></a>
                </div>
@@ -187,7 +188,7 @@
                 {% endif %}
                 
                 {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null and adPackageArray[adId]['price'] > 0 %}
-                    <span class="item-status">{{adPackageArray[adId]['title']}}</span>
+                    <span class="item-status mma-pkg-title">{{adPackageArray[adId]['title']}}</span>
                 {% endif %}
             </div>
         </div>
@@ -313,27 +314,29 @@
                     {% endif %}
                </div>
             </div>
-            <div class="manage-item-btns text-right manage-item-btns-mobile">            	
+            <div class="manage-item-btns text-right manage-item-btns-mobile"> 
+                {% if ad.status_id != adStatusSold  and ad.status_id != adStatusExpired %}           	
                 <div class="right-manage-buttons adEditBlock1">
                     <a class="xs-btn-1 expand button" href="{{ path('ad_edit', {'id': adId})}}">{{'Edit'|trans({}, 'frontend-manage-my-ad')}}</a>                  
                 </div>
-                
+                 {% endif %}
+                 
                  {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
                         <div class="right-manage-buttons adEditBlock1"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                 {% endif %}
-                                
-                {% if adPackageArray[adId] is not defined and ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
+                
+                {% if (adPackageArray[adId] is defined and adPackageArray[adId]['price'] <=0)  and ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
                      {% if ((userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and upgradePackagesCount > 1) or (userRoleId != constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
                         <div class="right-manage-buttons adEditBlock1"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'promote'}) }}">{{'Upgrade'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                      {% endif %}
                 {% endif %}
-                
+                                
                 {% if ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_IN_MODERATION_ID') %}
                      <div class="right-manage-buttons adRemoveBlock"><a class="xs-red-btn expand button" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{{'Stop this ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                 {% endif %}
                 
                 {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null %}
-                    <span class="item-status">{{adPackageArray[adId]['title']}}</span>
+                    <span class="item-status mma-pkg-title">{{adPackageArray[adId]['title']}}</span>
                 {% endif %}
             </div>
         </div>
@@ -342,6 +345,7 @@
 </div>
 
 {# Mobile Version Ends here #}  
-{% if not app.request.isXmlHttpRequest() %}
+{% if not app.request.isXmlHttpRequest() %} 
 </div>
 {% endif %}
+

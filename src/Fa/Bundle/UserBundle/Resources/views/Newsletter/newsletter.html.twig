@@ -24,7 +24,7 @@
                             {{ form_row(form.email) }}
                             <div class="text-left">
                                 <p class="mb0">
-                                    <div class="image-tooltip-wrapper"><span class="info-icon">info</span><span class="newsletter_info_txt">Trying to change your email address? Please contact customer support who will help you out.</span></div>
+                                    <div class="image-tooltip-wrapper"><span class="info-icon">info</span><span class="newsletter_info_txt">Please <a href="{{ path('my_account') }}">log in</a> to your Friday-Ad account to update your email address.</span></div>
                                 </p>
                             </div>
                         </div>
@@ -206,7 +206,8 @@
             </div>
         </div>
     </div>
-    {% do userNewsletterPrefForm.dotmailer_newsletter_type_id.setRendered %}
+    
+    {# {% do userNewsletterPrefForm.dotmailer_newsletter_type_id.setRendered %}
 	<div class="homepage-row" id="unsubscribefrommails">
         <div class="row">
             <div class="medium-14 medium-push-5 large-14 large-push-5 columns text-center">
@@ -218,7 +219,7 @@
                 	We're sorry to see you go!
                 </h2>
                 <div class="medium-14 medium-push-5 large-12 large-push-6 columns mt40 p0 text-center">
-                    {# {{ form_widget(form.stop_third_party_emails, {'label': 'Stop third party emails'|trans, 'attr': {'class':'button expand primary-btn-2'}}) }} #}
+                    {{ form_widget(form.stop_third_party_emails, {'label': 'Stop third party emails'|trans, 'attr': {'class':'button expand primary-btn-2'}}) }} 
                      {{ form_row(form.email_dis) }}
                 	{{ form_widget(form.unsubscribe_from_all_emails, {'label': 'Unsubscribe'|trans, 'attr': {'class':'button expand primary-btn-1', 'onClick': "newsletterUpdate(this)"}}) }}
                 </div>
@@ -231,12 +232,12 @@
                 </div>
             </div>
         </div>
-    </div>
-    {{ form_widget(form.clickedElementValue) }}
-   {{ form_end(userNewsletterPrefForm) }}
+    </div>    
+   {{ form_end(userNewsletterPrefForm) }}#}
+   {{ form_widget(form.clickedElementValue) }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-	$('.parent_newsletter').on('click', function() {
+	/*$('.parent_newsletter').on('click', function() {
 		var parNewsId = $(this).val();
 		if($(this).is( ":checked" )) {
             $('.child_newsletter_'+parNewsId).parent('span').addClass('checked');
@@ -251,7 +252,7 @@
                         $('#'+id).removeAttr('checked');
                 });
         }
-	})
+	})*/
     function newsletterUpdate(e) {
         var clickedElement = $(e).attr('id');
         if(clickedElement =='user_newsletterupdate_update_newsletter_preferences') {

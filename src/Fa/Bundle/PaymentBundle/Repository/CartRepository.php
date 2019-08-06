@@ -136,6 +136,7 @@ class CartRepository extends EntityRepository
             $query = $this->filterParams($query, $params);
             $query->setMaxResults(1)
                 ->orderBy(self::ALIAS.'.id', 'DESC');
+            
             $cart  = $query->getQuery()->getOneOrNullResult();
         }
         

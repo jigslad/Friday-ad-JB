@@ -330,7 +330,7 @@ class DashboardController extends CoreController
         $loggedinUser = $this->getLoggedInUser();
         $activeAdCount   = 0;
         $type            = $request->get('type', 'both');
-        $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type);
+        $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(),$type);
         // initialize pagination manager service and prepare listing with pagination based of data
         $page = $request->get('page', 1);
         $this->get('fa.pagination.manager')->init($query, $page, 2);

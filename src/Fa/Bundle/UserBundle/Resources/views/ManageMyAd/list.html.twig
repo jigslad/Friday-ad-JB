@@ -27,12 +27,17 @@
 
 {% set totalFeaturedCredit = 0 %}
 {% set usedFeaturedCredits = 0 %}
+{% set remainingFeaturedCredits = 0 %}
 {% if (activeShopPackage and activeShopPackage.getPackage()) %}
     {% set shopPackageCreditArr = shopPackageCreditRepository.getFeaturedCreditsByPackageId(activeShopPackage.getPackage().getId()) %}
 	{% if shopPackageCreditArr|length >0 %}
         {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
         {% set remainingFeaturedCredits = userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) %}
-        {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
+        {% if  remainingFeaturedCredits > totalFeaturedCredit %}
+            {% set usedFeaturedCredits = totalFeaturedCredit %}
+        {% else %}
+            {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
+        {% endif %}
     {% endif %}
 {% endif %}
 
@@ -67,11 +72,18 @@
                     <h1 class="db-title">Manage ads</h1>                   
 					<div class="toplistdiv clearfix">                    	
                 		<ul class="toplistWithBullets">
-                			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
+                		{% if userBusType is defined and userBusType == 'netsuite' and adLimitCount!=0 %}
+                			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ adLimitCount }}</span></li>
                 			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}/{{ totalFeaturedCredit }}</span></li>
-                			{% if isBoostEnabled==1 %}
+                		{% elseif userBusType is defined and userBusType == 'business' %}
+                			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
+                			<li class="bluecircle">Featured ads: <span>{{ adFeaturedUpsellArray|length }}</span></li>
+				        {% endif %}
+                			
+                			{#<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>#}
+                		{% if isBoostEnabled==1 %}
                     			<li class="lightgreencircle">Boosts remaining: <span>{{ boostAdRemaining }}</span></li>
-                    			<li class="boostBtn"><a id="boost_ad_selected_all" class="xs-btn-1 button all-sel-texts">Boost All Actives</a></li>
+                    			<li class="boostBtn"><button id="boost_ad_selected_all" class="xs-btn-1 button all-sel-texts">Boost All Active Ads</button></li>
                     		{% endif %}
                 		</ul>                    	
 					</div>
@@ -79,23 +91,32 @@
                     <ul class="tab-menu manage-item-tabs clearfix">
                         <li {% if currentRoute == 'manage_my_ads_active' %} class="active" {% endif %}>
                         	<a href="{{path('manage_my_ads_active')}}" class="hide-for-small-only">{{ 'My Active Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
-                        	<a href="{{path('manage_my_ads_active')}}" class="show-for-small-only">{{ 'Active'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
+                        	<a href="{{path('manage_my_ads_active')}}" class="show-for-small-only">{{ 'Active ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{activeAdCount}}</span>)</a>
                         </li>                       
                         <li {% if currentRoute == 'manage_my_ads_inactive' %} class="active" {% endif %}>
                        		<a href="{{path('manage_my_ads_inactive')}}" class="hide-for-small-only">{{ 'My Inactive Ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
-                        	<a href="{{path('manage_my_ads_inactive')}}" class="show-for-small-only">{{ 'Inactive'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
+                        	<a href="{{path('manage_my_ads_inactive')}}" class="show-for-small-only">{{ 'Inactive ads'|trans({}, 'frontend-inbox') }} (<span id="unreadUserMsgCount_div">{{inActiveAdCount}}</span>)</a>
                         </li>
                     </ul>
-                 
+
                    <div class="manage-items-main">
-                       {% if pagination.getNbResults() %}  
-                       		{% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}
-                                <div class="manage-item-list" style="border-top:0px">
-                                    <span class="all-sel-chkbox custom-checkbox"><input type="checkbox" id="boostad_selectall"></span> <a id="boost_ad_selected_all" class="all-sel-text"> {% if currentRoute == 'manage_my_ads_active' %}
-                                        Select all ads <span class="hide-for-small-only">on this page</span> ({{ pagination.getNbResults()>10?10:pagination.getNbResults() }})
-                                    {% endif %} </a>                                    
-                                </div>
-                            {% endif %}                          
+               		   {% if userBusType is defined and userBusType == 'netsuite' and (currentRoute == 'manage_my_ads_active') %}
+                   		<div class="manage-item-list top-selects-mma" style="border-top:0px">                      			
+                       		<div class="select-diff-ads mb10"><select id="select-featureds" class="fa-select-white">
+                       			<option value="ad_date"  {{ (filterBy=='ad_date')?'selected':'' }}>All ads</option>
+                       			<option value="sel-basic"  {{ (filterBy=='sel-basic')?'selected':'' }}>Basic ads</option>
+                       			<option value="sel-featured"  {{ (filterBy=='sel-featured')?'selected':'' }}>Featured ads</option>
+                       		</select></div>                           		
+                   		    {% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}                                
+                                <div class="select-all-ads-active"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <a class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
+                                    Select all ads <span class="hide-for-small-only">on this page</span> ({{ onlyActiveAdInPageCount }})
+                                {% endif %} </a></div>                                                                    
+                            {% endif %}
+                       </div>
+                       {% endif %} 
+                           
+                       {% if pagination.getNbResults() %}                        	   
+                            <div id="resulthtml_div">                       
                             {% for ad in pagination.getCurrentPageResults() %}
                                 {% set adId = ad.id %}
                                 {% set adCategoryId = null %}
@@ -105,14 +126,16 @@
                                 {% if ad['status_id'] == adStatusLive %}
                                     {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
                                     {# {% set adUrl = adUrl|trim('/') %} #}
-                                {% endif %}
+                                {% endif %}                                
 								{% if userBusType is defined and userBusType == 'netsuite' %}
                                     {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
                                 {% else %}
                                     {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
-                                {% endif %}
+                                {% endif %}                                
                             {% endfor %}
+                            </div>
                         {% else %}
+                        <div class="manage-item-list">
                             <div class="row">
                                 <div class="columns">
                                     {% if app.request.attributes.get('type') == 'inactive' %}
@@ -122,6 +145,7 @@
                                     {% endif %}
                                 </div>
                             </div>
+                        </div>
                         {% endif %}
 
                         <div class="pagination-centered">
@@ -138,12 +162,15 @@
                                     <div class="db-left-part-boost" class="large-6 columns left-off-canvas-menu"></div>
                                     <div class="large-18 columns boostRightContentBox" id="db-right-part-boost">
                                             <div class="small-24 medium-24 large-24 columns fixdesktopwidth">
-                                            <div class="small-24 medium-18 large-18 columns">
-                                                <div><span class="custom-checkbox checked"><input type="checkbox" checked="checked" id="boostad_selectall_inmodal"></span> <span class="selAdContent"><span class="selAdsCount">0</span> Ads selected</span></div>
-                                                <div class="manage-list-desc">You will have <span class="leftoutAdCount">0</span> boosts left</div>
+                                            <div class="small-24 medium-12 large-12 columns">
+                                                <div class="manage-list-boost-txt"><span class="custom-checkbox checked"><input type="checkbox" checked="checked" id="boostad_selectall_inmodal"></span> <span class="selAdContent"><span class="selAdsCount">0</span> Ads selected</span></div>
+                                                {#<div class="manage-list-desc">You will have <span class="leftoutAdCount">0</span> boosts left</div>#}
                                             </div>
                                             <div class="small-24 medium-6 large-6 columns">
-                                                <button type="button" id="boost-sel-ads-btn" class="button primary-btn-2  expand" onclick="closeRevealModel('#markAdAsBoostedModal');boostSelectedAds();">{{'Boost Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
+                                                <button type="button" id="stop-sel-ads-btn" class="button xs-red-large-btn  expand" onclick="closeRevealModel('#markAdAsBoostedModal');stopAds();">{{'Stop Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
+                                            </div>
+                                            <div class="small-24 medium-6 large-6 columns">
+                                                <button type="button" id="boost-sel-ads-btn" class="button primary-btn-2 xs-green-large-btn expand" onclick="closeRevealModel('#markAdAsBoostedModal');boostSelectedAds();">{{'Boost Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
                                             </div>
                                         </div>
             </div>
@@ -160,7 +187,32 @@
 </div>
 
             
-           
+<div id="markAdAsSoldOrExpireBulkModal" class="reveal-modal tiny remove-item-modal" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Remove ad'|trans({}, 'frontend-manage-my-ad')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Was your advert successful?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-6 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsSoldOrExpireBulkModal');changeAdStatusBulk('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')}}');">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+                <div class="large-6 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeRevealModel('#markAdAsSoldOrExpireBulkModal');changeAdStatusBulk('{{constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')}}');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRemoveAdConfirmationBox('markAdAsSoldOrExpireBulkModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>          
                 
 <div id="markAdAsSoldOrExpireModal" class="reveal-modal tiny remove-item-modal" data-reveal>
     <a class="close-reveal-modal">&#215;</a>
@@ -314,6 +366,10 @@
         });
     }
 
+    function stopAds() {
+    	$('#markAdAsSoldOrExpireBulkModal').foundation('reveal', 'open');
+    }
+
     function unBoostSelectedAds() {
         var selectedBoostAdIds = '';
         $(".boostad").each(function(){
@@ -341,6 +397,28 @@
     
 
     $(function(){
+        $('#boost_ad_selected_all').on('click',function(e) {
+        	$('#boost_ad_selected_all').prop("disabled", true);
+            
+        	var activeAdIds = '{{ activeAdIds }}';
+        	$.ajax({
+                type: "POST",
+                url: '{{path("ajax_manage_my_ads_boost_multiple_ad")}}',
+                data: {'adIds':activeAdIds,boost_value:1},
+                asyn:false,
+                cache:false,
+                success:function(result)
+                        {
+                    if(result.error == "")
+                    {
+                            window.location.href = '{{ path('manage_my_ads_active') }}';
+                            $('#boost_ad_selected_all').prop("disabled", false);
+                            
+                        }
+                    }
+        	});            
+        });
+        
         $('.boost_your_ad').on('click',function(e)
         {
             var boost_value = 1;
@@ -373,7 +451,7 @@
             }
         });
 
-        $("#boostad_selectall").parent('span').change(function () {
+        $(".boostad_selectall").parent('span').on('click', function (e) {
             if($(this).hasClass('checked')) {
                 $('.boostad').attr('checked', 'checked');
                 $('.boostad').parent('span').addClass('checked');
@@ -391,19 +469,19 @@
             }
         });
 
-        $("#boostad_selectall_inmodal").parent('span').change(function () {
+        $("#boostad_selectall_inmodal").parent('span').on('click', function (e) {
             if($(this).hasClass('checked')) {
                 $('.boostad').attr('checked', 'checked');
                 $('.boostad').parent('span').addClass('checked');
-                $('#boostad_selectall').attr('checked', 'checked');
-                $('#boostad_selectall').parent('span').addClass('checked');
+                $('.boostad_selectall').attr('checked', 'checked');
+                $('.boostad_selectall').parent('span').addClass('checked');
                 $('.boost_your_ad').removeClass('ajaxboost_your_ad');
                 openMarkAdAsBoostedModal();
             } else {
                 $(".boostad").removeAttr("checked");
                 $('.boostad').parent('span').removeClass('checked');
-                $("#boostad_selectall").removeAttr("checked");
-                $('#boostad_selectall').parent('span').removeClass('checked');
+                $(".boostad_selectall").removeAttr("checked");
+                $('.boostad_selectall').parent('span').removeClass('checked');
                 $('#markAdAsBoostedModal').hide();
                 $('.boost_your_ad').addClass('ajaxboost_your_ad');
             }
@@ -411,7 +489,7 @@
 
         
 
-        $(".boostad").parent('span').change(function(){
+        $(".boostad").parent('span').on('click', function (e) {
             if(checkAllBoostButtonEnabled()) {
                 if($(this).hasClass('checked')) {
                     $(this).find('.boostad').attr('checked', 'checked');
@@ -419,18 +497,18 @@
                     $(this).find('.boostad').removeAttr("checked");
                 }
                 if($(".boostad").length == $(".boostad:checked").length) {
-                    $("#boostad_selectall").attr("checked", "checked");
-                    $('#boostad_selectall').parent('span').addClass('checked');
+                    $(".boostad_selectall").attr("checked", "checked");
+                    $('.boostad_selectall').parent('span').addClass('checked');
                     $("#boostad_selectall_inmodal").attr("checked", "checked");
                     $('#boostad_selectall_inmodal').parent('span').addClass('checked');
                 } else if($(".boostad").length > $(".boostad:checked").length) {
                     $("#boostad_selectall_inmodal").attr("checked", "checked");
                     $('#boostad_selectall_inmodal').parent('span').addClass('checked');
-                    $("#boostad_selectall").removeAttr("checked");
-                    $('#boostad_selectall').parent('span').removeClass('checked');
+                    $(".boostad_selectall").removeAttr("checked");
+                    $('.boostad_selectall').parent('span').removeClass('checked');
                 } else {
-                    $("#boostad_selectall").removeAttr("checked");
-                    $('#boostad_selectall').parent('span').removeClass('checked');
+                    $(".boostad_selectall").removeAttr("checked");
+                    $('.boostad_selectall').parent('span').removeClass('checked');
                     $("#boostad_selectall_inmodal").removeAttr("checked");
                     $('#boostad_selectall_inmodal').parent('span').removeClass('checked');
                 }
@@ -472,7 +550,11 @@
               var upsellId = split_ad_id[2];
               if($(this).hasClass('toggle-off')){
                 $(this).removeClass('toggle-off').addClass('toggle-on');
-                featuredTopUpsellBtn(adId,upsellId);
+                {% if remainingFeaturedCredits > 0 %}
+                	useCreditForFeaturedUpsell(adId,upsellId);
+                {% else %}
+                	featuredTopUpsellBtn(adId,upsellId);
+                {% endif %}
               }else{
             	 featurredUpsellRemoveId = adId;
             	 $('#featuredOffConfirmModal').foundation('reveal', 'open');

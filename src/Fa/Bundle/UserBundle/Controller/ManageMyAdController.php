@@ -51,24 +51,44 @@ class ManageMyAdController extends CoreController
         $inActiveAdCount = 0;
         $boostedAdCount  = $adsBoostedCount  =  0;
         $type            = $request->get('type', 'active');
+        $sortBy = 'ad_date';
+        
+        $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
+        if($this->container->get('session')->has('filterBy') && $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+            $sortBy = $this->container->get('session')->get('filterBy');
+        }
         
         $onlyActiveAdCount = 0;
+        $adLimitCount = 0;
+        $activeAdIdarr = $activeAdsarr = array();$activeAdIds = '';
+        $activeShopPackage = array();
 
-        $activeAdCountArray   = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'active', true)->getResult();
-        $inActiveAdCountArray = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'inactive', true)->getResult();
-        $onlyActiveAdCountArray   = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'onlyactive', true)->getResult();
-        $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type);
+        $activeAdCountArray         = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'active', 'ad_date', true)->getResult();
+        $inActiveAdCountArray       = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'inactive',  'ad_date', true)->getResult();
+        $onlyActiveAdCountArray     = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'onlyactive',  'ad_date', true)->getResult();
+        $query                      = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type, $sortBy);
+        
+        $activeAdsarr   = $this->getRepository('FaAdBundle:Ad')->getMyAdIdsQuery($loggedinUser->getId())->getResult();
+        if(!empty($activeAdsarr)) {
+            $activeAdIdarr  = array_column($activeAdsarr, 'id');
+            $activeAdIds    =  implode(',',$activeAdIdarr);
+        }
+        
+        $currentActivePackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
+        if($currentActivePackage && $currentActivePackage->getPackage())  {
+            $adLimitCount = $currentActivePackage->getPackage()->getAdLimit();
+        }        
         
         if (is_array($activeAdCountArray)) {
-            $activeAdCount = $activeAdCountArray[0]['total_ads'];
+            $activeAdCount = isset($activeAdCountArray[0])?$activeAdCountArray[0]['total_ads']:0;
         }
 
         if (is_array($inActiveAdCountArray)) {
-            $inActiveAdCount = $inActiveAdCountArray[0]['total_ads'];
+            $inActiveAdCount = isset($inActiveAdCountArray[0])?$inActiveAdCountArray[0]['total_ads']:0;
         }
         
         if(is_array($onlyActiveAdCountArray)) {
-            $onlyActiveAdCount = $onlyActiveAdCountArray[0]['total_ads'];
+            $onlyActiveAdCount = isset($onlyActiveAdCountArray[0])?$onlyActiveAdCountArray[0]['total_ads']:0;
         }
         $getBoostDetails = $this->getBoostDetails($loggedinUser);
 
@@ -82,35 +102,39 @@ class ManageMyAdController extends CoreController
         $this->get('fa.pagination.manager')->init($query, $page);
         $pagination = $this->get('fa.pagination.manager')->getPagination();
         $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
-
-        /*if ($pagination->getNbResults()) {
+        
+        $onlyActiveAdInPageCount = 0; 
+        if ($pagination->getNbResults()) {
             foreach ($pagination->getCurrentPageResults() as $ad) {                
                 if ($ad['status_id'] == EntityRepository::AD_STATUS_LIVE_ID) {
-                    $onlyActiveAdCount = $onlyActiveAdCount + 1;
+                    $onlyActiveAdInPageCount = $onlyActiveAdInPageCount + 1;
                 }                
             }
-        }*/ 
-        $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
+        }
+         
         if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
         }
-    
         
         $parameters = array(
-            'totalAdCount'    => $totalAdCount,
-            'activeAdCount'   => $activeAdCount,
-            'inActiveAdCount' => $inActiveAdCount,
-            'adsBoostedCount' => $adsBoostedCount,
-            'onlyActiveAdCount'=> $onlyActiveAdCount,
-            'pagination'      => $pagination,
-            'modToolTipText'  => $moderationToolTipText,
-            'boostedAdCount'  => $boostedAdCount,
-            'isBoostEnabled'  => $getBoostDetails['isBoostEnabled'],
-            'boostMaxPerMonth'=> $getBoostDetails['boostMaxPerMonth'],
-            'boostAdRemaining'=> $getBoostDetails['boostAdRemaining'],
-            'boostRenewDate'  => $getBoostDetails['boostRenewDate'],
+            'totalAdCount'      => $totalAdCount,
+            'activeAdCount'     => $activeAdCount,
+            'inActiveAdCount'   => $inActiveAdCount,
+            'onlyActiveAdInPageCount' => $onlyActiveAdInPageCount,
+            'activeAdIds'       => $activeAdIds,
+            'adsBoostedCount'   => $adsBoostedCount,
+            'onlyActiveAdCount' => $onlyActiveAdCount,
+            'adLimitCount'      => $adLimitCount,
+            'pagination'        => $pagination,
+            'modToolTipText'    => $moderationToolTipText,
+            'boostedAdCount'    => $boostedAdCount,
+            'isBoostEnabled'    => $getBoostDetails['isBoostEnabled'],
+            'boostMaxPerMonth'  => $getBoostDetails['boostMaxPerMonth'],
+            'boostAdRemaining'  => $getBoostDetails['boostAdRemaining'],
+            'boostRenewDate'    => $getBoostDetails['boostRenewDate'],
             'userBusinessCategory' => $getBoostDetails['userBusinessCategory'],
             'activeShopPackage' => $activeShopPackage,
+            'filterBy' => $sortBy,
         );
 
         $showCompetitionPopup = false;
@@ -142,7 +166,7 @@ class ManageMyAdController extends CoreController
         $getExipryDate = $boostRenewDate = '';
         $boostedAdCountArray = array();
 
-        $boostedAdCountArray  = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'boosted', true)->getResult();
+        $boostedAdCountArray  = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'boosted', 'ad_date', true)->getResult();
 
         if (!empty($boostedAdCountArray)) {
             $adsBoostedCount = $boostedAdCountArray[0]['total_ads'];
@@ -295,8 +319,11 @@ class ManageMyAdController extends CoreController
             $this->checkIsValidAdUser($ad->getUser()->getId());
             
             $loggedinUser = $this->getLoggedInUser();
+            $userId = $loggedinUser->getId();
+            $upsellObj = $this->getRepository('FaPromotionBundle:Upsell')->find('5');
                         
             $ans = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->disableFeaturedAdUpsell($adId);
+            $this->getRepository('FaUserBundle:UserCreditUsed')->redeemCreditUsedByUpsell($userId,$ad,$upsellObj,$this->container);
             
             if ($ans) {
                 $successMsg     = $this->get('translator')->trans('Featured upsell was removed successfully.', array(), 'frontend-manage-my-ad');
@@ -433,7 +460,7 @@ class ManageMyAdController extends CoreController
 
                 if (count($liveAdStatusArray)) {
                     $type                 = $request->get('type');
-                    $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type, false, $liveAdStatusArray);
+                    $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type, 'ad_date', false, $liveAdStatusArray);
                     $liveAds              = $query->getResult();
                     $adRepository         = $this->getRepository('FaAdBundle:Ad');
                     $adLocationRepository = $this->getRepository('FaAdBundle:AdLocation');
@@ -449,8 +476,14 @@ class ManageMyAdController extends CoreController
                     $adModerateArray      = $adModerateRepository->findResultsByAdIdsAndModerationResult($liveAdStatusArray, 'rejected');
                     $inModerationLiveAdIds = $adModerateRepository->getInModerationStatusForLiveAdIds($liveAdStatusArray);
 
+                    $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
+                    $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
+                    if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+                        $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
+                    }
+                    
                     foreach ($liveAds as $liveAd) {
-                        $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:ajaxGetStatus.html.twig', array('adId' => $liveAd['id'],'status_id' => $liveAd['status_id'], 'ad' => $liveAd, 'adCategoryIdArray' => $adCategoryIdArray, 'adImageArray' => $adImageArray, 'adViewCounterArray' => $adViewCounterArray, 'adPackageArray' => $adPackageArray, 'adModerateArray' => $adModerateArray, 'inModerationLiveAdIds' => $inModerationLiveAdIds, 'isBoostEnabled'  => $getBoostDetails['isBoostEnabled'],'boostMaxPerMonth'=> $getBoostDetails['boostMaxPerMonth'],'boostAdRemaining'=> $getBoostDetails['boostAdRemaining'], 'boostRenewDate'  => $getBoostDetails['boostRenewDate'],'userBusinessCategory' => $getBoostDetails['userBusinessCategory']));
+                        $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:ajaxGetStatus.html.twig', array('adId' => $liveAd['id'],'status_id' => $liveAd['status_id'], 'ad' => $liveAd, 'adCategoryIdArray' => $adCategoryIdArray, 'adImageArray' => $adImageArray, 'adViewCounterArray' => $adViewCounterArray, 'adPackageArray' => $adPackageArray, 'adModerateArray' => $adModerateArray, 'inModerationLiveAdIds' => $inModerationLiveAdIds, 'isBoostEnabled'  => $getBoostDetails['isBoostEnabled'],'boostMaxPerMonth'=> $getBoostDetails['boostMaxPerMonth'],'boostAdRemaining'=> $getBoostDetails['boostAdRemaining'], 'boostRenewDate'  => $getBoostDetails['boostRenewDate'],'userBusinessCategory' => $getBoostDetails['userBusinessCategory'],'modToolTipText'    => $moderationToolTipText, 'activeShopPackage' => $activeShopPackage, $sortBy => 'ad_date'));
                         $adStatusArray[$liveAd['id']] = $htmlContent;
                     }
                 }
@@ -633,7 +666,112 @@ class ManageMyAdController extends CoreController
         }
         return new Response();
     }
+    
+    /**
+     * Change ad status.
+     *
+     * @param Request $request
+     *        A Request object.
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxStopMultipleAdAction(Request $request)
+    {
+        if ($this->checkIsValidLoggedInUser($request) === true && $request->isXmlHttpRequest()) {
+            $error        = $successMsg =  '';
+            $errorVal = 0;
+            $adsArr = array();
+            $adIds         = $request->get('adIds');
+            $newStatusId  = (string) $request->get('newStatusId', 0);
+            
+            if($adIds) {
+                $adIds = rtrim($adIds,',');
+                $adsArr = explode(',',$adIds);
+            }
 
+            if(!empty($adsArr)) {
+                foreach ($adsArr as $adId ) {
+                    $objAd = $this->getRepository('FaAdBundle:Ad')->find($adId);
+                    $oldStatusId  = (($objAd && $objAd->getStatus()) ? (string) $objAd->getStatus()->getId() : null);
+                    
+                    $loggedinUser = $this->getLoggedInUser();
+                    $invalidNewStatus = false;
+                    
+                    switch ($oldStatusId) {
+                        case EntityRepository::AD_STATUS_LIVE_ID:
+                            if (!in_array($newStatusId, array(EntityRepository::AD_STATUS_SOLD_ID, EntityRepository::AD_STATUS_EXPIRED_ID))) {
+                                $invalidNewStatus = true;
+                            }
+                            break;
+                        case EntityRepository::AD_STATUS_IN_MODERATION_ID:
+                            $invalidNewStatus = true;
+                            break;
+                        case EntityRepository::AD_STATUS_SOLD_ID:
+                        case EntityRepository::AD_STATUS_EXPIRED_ID:
+                        case EntityRepository::AD_STATUS_DRAFT_ID:
+                        case EntityRepository::AD_STATUS_REJECTED_ID:
+                        case EntityRepository::AD_STATUS_REJECTEDWITHREASON_ID:
+                            if (!in_array($newStatusId, array(EntityRepository::AD_STATUS_INACTIVE_ID))) {
+                                $invalidNewStatus = true;
+                            }
+                            break;
+                    }
+                    
+                    if ($invalidNewStatus === true) {
+                        $errorVal = 1;
+                    } elseif ($invalidNewStatus === false) {
+                        //update ad status to sold
+                        //$ans = $this->getRepository('FaAdBundle:Ad')->changeAdStatus($adId, $newStatusId, $this->container);
+                        
+                        
+                        $objStatus = $this->_em->getRepository('FaEntityBundle:Entity')->find($newStatusId);
+                        
+                        if ($objAd && $objStatus) {
+                            if ($newStatusId == BaseEntityRepository::AD_STATUS_EXPIRED_ID) {
+                                $objAd->setExpiresAt(time());
+                                $this->getEntityManager()->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByOnlyAdId($objAd->getId());
+                            } else {
+                                $this->getEntityManager()->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByOnlyAdId($objAd->getId());
+                            }
+                            
+                            $objAd->setEditedAt(time());
+                            $objAd->setStatus($objStatus);
+                            $objAd->setIsBoosted(0);
+                            $objAd->setBoostedAt(null);
+                            $this->getEntityManager()->persist($objAd);
+                            $this->getEntityManager()->flush($objAd);
+                            $return = true;
+                            if ($container && $container->get('request_stack')->getCurrentRequest()) {
+                                $this->getEntityManager()->getRepository('FaAdBundle:AdIpAddress')->checkAndLogIpAddress($objAd, $container->get('request_stack')->getCurrentRequest()->getClientIp());
+                            }
+                            
+                            $disabledAdStusesArray = array(BaseEntityRepository::AD_STATUS_EXPIRED_ID, BaseEntityRepository::AD_STATUS_INACTIVE_ID, BaseEntityRepository::AD_STATUS_SOLD_ID);
+                            if (in_array($status_id, $disabledAdStusesArray)) {
+                                $this->getEntityManager()->getRepository('FaAdBundle:Ad')->doAfterAdCloseProcess($id, $this->container);
+                            }
+                        }
+                        
+                        if ($ans) { } else { $errorVal = 1; }
+                    }
+                }
+                
+                if ($errorVal == 1) {
+                    $error          = $this->get('translator')->trans('Invalid status supplied.', array(), 'frontend-manage-my-ad');
+                    $messageManager = $this->get('fa.message.manager');
+                    $messageManager->setFlashMessage($error, 'error');
+                } else {
+                    $successMsg     = $this->get('translator')->trans('Ad was removed successfully.', array(), 'frontend-manage-my-ad');
+                    $messageManager = $this->get('fa.message.manager');
+                    $messageManager->setFlashMessage($successMsg, 'success');
+                }
+                
+            }
+            return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg));
+        }
+        
+        return new Response();           
+    }
+    
     /**
      * @param array $transactions
      * @return string
@@ -720,7 +858,7 @@ class ManageMyAdController extends CoreController
                             if ($addCartInfo) {
                                 //make it cybersource payment
                                 $redirectUrl = $request->headers->get('referer');
-                                $this->addOrRemoveFeaturedCredits($user->getId(), $adId);
+                                //$this->addOrRemoveFeaturedCredits($user->getId(), $adId);
                                 $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
                                 $this->get('session')->set('upgrade_cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
                                 $htmlContent= array(
@@ -767,11 +905,7 @@ class ManageMyAdController extends CoreController
         }
     }
     
-    public function addOrRemoveFeaturedCredits($userId, $adId) {
-        
-    }
-    
-    private function addUpsellInfoToCart($userId, $adId, $selectedUpsellId, $request, $categoryId)
+    private function addUpsellInfoToCart($userId, $adId, $selectedUpsellId, $request = null, $categoryId)
     {
         //Add to the cart
         $cart            = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $this->container, false, false, true);
@@ -868,5 +1002,79 @@ class ManageMyAdController extends CoreController
                 }
             }
         }
-    }    
+    } 
+    
+    /**
+     * Upgrade To Featured Ad.
+     *
+     * @param Request $request A Request object.
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxCreditPaymentProcessForIndividualUpsellAction($upsellId, $adId, Request $request)
+    {
+        //$upsellId = 5;
+        //$adId = 17260111;
+        if ($request->isXmlHttpRequest()) {
+            $redirectToUrl = '';
+            $error         = '';
+            $htmlContent   = '';
+            $deadlockError = '';
+            $deadlockRetry = '';
+            $loggedinUser     = $this->getLoggedInUser();
+            $errorMsg	= null;
+            $selectedUpsellId = $upsellId;
+            
+            if (!empty($loggedinUser)) {
+                $user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
+                $ad        = $this->getRepository('FaAdBundle:Ad')->find($adId);
+                
+                if (!empty($user)) {
+                    $selectedUpsellObj = $this->getRepository('FaPromotionBundle:Upsell')->findOneBy(array('id' => $selectedUpsellId));
+                    if ($selectedUpsellObj->getDuration()) {
+                        $getLastCharacter = substr($selectedUpsellObj->getDuration(),-1);
+                        $noInDuration = substr($selectedUpsellObj->getDuration(),0, -1);
+                        if($getLastCharacter=='m') { $adExpiryDays = $noInDuration*28;   }
+                        elseif($getLastCharacter=='d') { $adExpiryDays = $noInDuration; }
+                        else { $adExpiryDays = $selectedUpsellObj->getDuration(); }
+                    }
+                    
+                    //Add to the cart
+                    $addCartInfo = $this->addUpsellInfoToCart($user->getId(), $adId, $selectedUpsellId, $request, $ad->getCategory()->getId());
+
+                    if ($addCartInfo) {
+                        $upsellObj = $this->getRepository('FaPromotionBundle:Upsell')->find($upsellId);
+                        $this->getRepository('FaAdBundle:AdUserPackageUpsell')->setAdUserIndividualUpsell($upsellObj, $ad);
+                        $this->getRepository('FaUserBundle:UserCreditUsed')->addCreditUsedByUpsell($user->getId(), $ad, $upsellObj);
+                        
+                        $redirectUrl = $request->headers->get('referer');
+                        $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
+                        
+                        $successMsg     = $this->get('translator')->trans('Featured upsell was added successfully.', array(), 'frontend-manage-my-ad');
+                        $messageManager = $this->get('fa.message.manager');
+                        $messageManager->setFlashMessage($successMsg, 'success');
+                        
+                        $htmlContent= array(
+                            'success' 		=> true,
+                            'redirectUrl' 	=> $redirectUrl
+                        );
+                    }
+
+                    return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
+                }
+            }
+        }
+    }  
+    
+    /**
+     * Get ad status action
+     *
+     * @param Request $request
+     */
+    public function ajaxGetFeaturedAdAction(Request $request)
+    {
+        $selAdsOption               = $request->get('selAdsOption','ad_date');
+        $this->container->get('session')->set('filterBy', $selAdsOption);
+        return new JsonResponse(array('filterBy' => $this->container->get('session')->get('filterBy')));               
+    }
 }

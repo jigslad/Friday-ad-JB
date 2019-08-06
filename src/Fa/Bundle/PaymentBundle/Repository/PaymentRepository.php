@@ -180,6 +180,17 @@ class PaymentRepository extends EntityRepository
         }
     }
 
+    public function prcocessCreditSuccess($userId, $adId, $container) {
+        $adObj = $this->_em->getRepository('FaAdBundle:Ad')->find($adId);
+        $cartObj            = $this->_em->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $container, false, false, true);
+        $paymentId = $this->_em->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cartObj->getCartCode(), null, $container);
+
+        if($paymentId) {
+            $transactions = $this->_em->getRepository('FaPaymentBundle:Transaction')->findBy(array('cart' => $cartObj->getId()));
+           
+            $this->getRepository('FaUserBundle:UserCreditUsed')->addUserCreditUsed($transaction, $paymentId);
+        }
+    }
     /**
      * Process payment using cart code.
      *

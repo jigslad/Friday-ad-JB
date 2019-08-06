@@ -8,6 +8,8 @@
         bindFloatFieldKeyupEvnet('fa_left_search_item_motors__boat_length_to');
         bindSeeMoreLinkEvents();
 
+        var qryItemDistance = getUrlVars()['item__distance'];
+
         if($('#fa_left_search_item__location').val()==2) {
         	$('#fa_left_search_item__location_autocomplete').val('United Kingdom');
         } 
@@ -15,6 +17,11 @@
         if($('#fa_left_search_default_distance').val()!='') {
         	setDefDistance();
         } 
+		
+        if(qryItemDistance != undefined) {     	 	
+    		$('#distance-left-search').show();
+    		$('#fa_left_search_hide_distance_block').val(0);
+        }
 
         if($('#fa_left_search_hide_distance_block').val()==1) {
             $('#distance-left-search').hide();
@@ -103,12 +110,21 @@
             return true;
         });*/
     });
-
+ 
     function setDefDistance() {
     	var defdist = $('#fa_left_search_default_distance').val();
-        $('#fa_left_search_item__distance option[value=""]').attr("selected", null);
-    	$('#fa_left_search_item__distance option[value="'+defdist+'"]').attr("selected", "selected");
+    	$('#fa_left_search_item__distance option[value=""]').attr("selected", null);
+    	var qryItemDistance = getUrlVars()['item__distance'];
+
+    	if(qryItemDistance != undefined) {     	 	
+    		$('#fa_left_search_item__distance option[value="'+qryItemDistance+'"]').attr("selected", "selected");
+    		$('#distance-left-search').show();
+    		$('#fa_left_search_hide_distance_block').val(0);
+        } else {
+    		$('#fa_left_search_item__distance option[value="'+defdist+'"]').attr("selected", "selected");
+        }
     	$('#fa_left_search_item__distance').selectmenu().selectmenu('refresh',true);
+    	
     }
 
     function clearModalDimensionAllCheckboxes(filterName)
@@ -135,6 +151,7 @@
     	{% else %}
     	   /* if (searchLocation && searchLocation != 2) {*/
     	    	var catId = $('#fa_left_search_item__category_id').val();
+    	    	var distanceId = $('#fa_left_search_item__distance').val();
     	    	
                 $.ajax({
                      type: "post",
@@ -144,7 +161,19 @@
                      success: function(data) {
                          if (!$.isEmptyObject(data)) {
                         	$('#fa_left_search_default_distance').val(data.default_distance);
-                        	setDefDistance();
+                        	
+                        	if(distanceId != data.default_distance) {
+                                $('#fa_left_search_item__distance option[value="'+distanceId+'"]').attr("selected", "selected");
+                                $('#distance-left-search').show();
+                                $('#fa_left_search_hide_distance_block').val(0);
+                             } else {
+                                 if(distanceId == data.default_distance) {
+                                	 $('#fa_left_search_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
+                                 } else {
+                                	 setDefDistance();
+                                 }                
+                             }
+
                             if(data.slug=='uk') { $('#distance-left-search').hide(); }
                             else { $('#distance-left-search').show(); }
                             $('form[name="fa_left_search"]').submit();
@@ -253,6 +282,19 @@
                 scrollTop: $('a.see_more').offset().top- 150
             }, 1000);
         });
+    }
+
+    function getUrlVars()
+    {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
     }
 
 //]]>

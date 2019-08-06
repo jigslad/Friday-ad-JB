@@ -65,16 +65,15 @@ class NewsletterController extends CoreController
                 $newRecord = 1;
             }
         }
-        
-      if(!empty($dotmailer)) {
-            //echo 'getDotmailerNewsletterTypeId===<pre>';print_r($dotmailer->getDotmailerNewsletterTypeId());die;
+         
+      /*if(!empty($dotmailer)) {
             if($dotmailer->getDotmailerNewsletterUnsubscribe()==1) {
                 return $this->redirect($this->generateUrl('newsletter_resubscribe').'?guid='.$request->query->get('guid'));
             }
             elseif($dotmailer->getDotmailerNewsletterUnsubscribe()==0 && empty($dotmailer->getDotmailerNewsletterTypeId()) && $dotmailer->getIsSuppressed()==0) { 
                 return $this->redirect($this->generateUrl('newsletter_subscribe').'?guid='.$request->query->get('guid'));
             }
-        }
+        }*/
        
         $formManager = $this->get('fa.formmanager');
         $form = $formManager->createForm(NewsletterUpdateType::class, $dotmailer, array('action' => $action));
@@ -85,10 +84,10 @@ class NewsletterController extends CoreController
             if ($form->isValid()) {
                 $getClickVal = $form->get('clickedElementValue')->getData(); 
                 
-                if ($getClickVal =='unsubscribe') {                    
+                /*if ($getClickVal =='unsubscribe') {                    
                     $feedbackUrl = $this->generateUrl('newsletter_feedback').'?guid='.$request->query->get('guid');
                     return $this->redirect($feedbackUrl);                                    
-                } else {
+                } else {*/
                     if($dotmailer->getDotmailerNewsletterUnsubscribe()==1) {
                         $resubscribeUrl = $this->generateUrl('newsletter_resubscribe').'?guid='.$request->query->get('guid');
                         return $this->redirect($resubscribeUrl);
@@ -96,9 +95,9 @@ class NewsletterController extends CoreController
                         $subscribeUrl = $this->generateUrl('newsletter_subscribe').'?guid='.$request->query->get('guid');
                         return $this->redirect($subscribeUrl);
                     } else {
-                        $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('You have successfully updated your account.'), 'success');
+                        $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('You have successfully updated your information and preferences.'), 'success');
                     }                   
-                }
+                //}
                 return $this->redirect($action);
             } else {
                 $this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Form is not validated properly.'), 'error');

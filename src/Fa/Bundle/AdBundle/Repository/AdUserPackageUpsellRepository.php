@@ -557,8 +557,8 @@ class AdUserPackageUpsellRepository extends EntityRepository
         ->select(self::ALIAS.'.id', UpsellRepository::ALIAS.'.id as upsell_id', UpsellRepository::ALIAS.'.duration as duration', UpsellRepository::ALIAS.'.title', UpsellRepository::ALIAS.'.price', self::ALIAS.'.ad_id')
         ->leftJoin(self::ALIAS.'.upsell', UpsellRepository::ALIAS)
         ->andWhere(self::ALIAS.'.upsell IN (:FeaturedId)')
-        ->setParameter('FeaturedId', UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID)
-        ->andWhere(self::ALIAS.'.status = 1');
+        ->setParameter('FeaturedId', array(UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID,UpsellRepository::UPSELL_FEATURED_TOP_14DAYS_ID,UpsellRepository::UPSELL_FEATURED_TOP_28DAYS_ID))
+        ->andWhere(self::ALIAS.'.status = 1'); 
         
         if (!is_array($adId)) {
             $adId = array($adId);
@@ -581,5 +581,48 @@ class AdUserPackageUpsellRepository extends EntityRepository
         }
         
         return $adUpsellArr;
+    }
+    
+    /**
+     * Get featured upsell for ad id.
+     *
+     * @param array   $userId              Ad id array.
+     * @param boolean $getTiPackageTitle Get ti package name flag.
+     *
+     * @return array
+     */
+    public function getAdFeaturedUpsellIdsByAdId($adId = array())
+    {
+        $adFeaturedUpsellIds = '';
+        $qb = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.ad_id')
+        ->leftJoin(self::ALIAS.'.upsell', UpsellRepository::ALIAS)
+        ->andWhere(self::ALIAS.'.upsell IN (:FeaturedId)')
+        ->setParameter('FeaturedId', array(UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID,UpsellRepository::UPSELL_FEATURED_TOP_14DAYS_ID,UpsellRepository::UPSELL_FEATURED_TOP_28DAYS_ID))
+        ->andWhere(self::ALIAS.'.status = 1');
+        $qb->groupBy(self::ALIAS.'.ad_id');
+        
+               
+        if (!is_array($adId)) {
+            $adId = array($adId);
+        }
+        
+        /*if (!empty($adId)) {
+            $qb->andWhere(self::ALIAS.'.ad_id IN (:adId)');
+            $qb->setParameter('adId', $adId);
+        }*/
+        
+        $adFeaturedUpsellArr   = $qb->getQuery()->getArrayResult();
+        
+        if(!empty($adFeaturedUpsellArr)) {
+           $adFeaturedUpsellIdArray = array_column($adFeaturedUpsellArr, 'ad_id');
+           if(!empty($adId)) {
+                $adFeaturedUpsellIds  = array_intersect($adFeaturedUpsellIdArray, $adId);
+           } else {
+                $adFeaturedUpsellIds  = $adFeaturedUpsellIdArray;
+           }
+        }
+
+        return $adFeaturedUpsellIds;
     }
 }
