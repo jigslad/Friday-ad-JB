@@ -58,7 +58,7 @@ function useCreditForFeaturedUpsell(adId, upsellId) {
         unblockPage();
     })
     .done(function(response) {
-    	return true;
+    	window.location.href = '{{ path('manage_my_ads_active') }}';
     });
 }
 

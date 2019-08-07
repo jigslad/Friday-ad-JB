@@ -563,14 +563,17 @@
               var catupsellId = split_ad_id[3];
               if($(this).hasClass('toggle-off')){
                 $(this).removeClass('toggle-off').addClass('toggle-on');
-                	featuredTopUpsellBtn(adId, upsellId, catupsellId);
-
+                {% if remainingFeaturedCredits > 0 %}
+                	useCreditForFeaturedUpsell(adId,upsellId);
+                {% else %}
+                	featuredTopUpsellBtn(adId,upsellId, catupsellId);
+                {% endif %}
               }else{
             	 featurredUpsellRemoveId = adId;
             	 featuredUpsellId = upsellId;
 
             	 $('#featuredOffConfirmModal').foundation('reveal', 'open');
-                /*$(this).removeClass('toggle-on').addClass('toggle-off');*/
+                /*$(this).removeClass('toggle-on').addClass('toggle-off');*/ 
               }
             })
         }
