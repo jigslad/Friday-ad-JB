@@ -66,14 +66,14 @@ class NewsletterController extends CoreController
             }
         }
          
-      /*if(!empty($dotmailer)) {
+      if(!empty($dotmailer)) {
             if($dotmailer->getDotmailerNewsletterUnsubscribe()==1) {
                 return $this->redirect($this->generateUrl('newsletter_resubscribe').'?guid='.$request->query->get('guid'));
             }
-            elseif($dotmailer->getDotmailerNewsletterUnsubscribe()==0 && empty($dotmailer->getDotmailerNewsletterTypeId()) && $dotmailer->getIsSuppressed()==0) { 
+           /* elseif($dotmailer->getDotmailerNewsletterUnsubscribe()==0 && empty($dotmailer->getDotmailerNewsletterTypeId()) && $dotmailer->getIsSuppressed()==0) { 
                 return $this->redirect($this->generateUrl('newsletter_subscribe').'?guid='.$request->query->get('guid'));
-            }
-        }*/
+            }*/
+        }
        
         $formManager = $this->get('fa.formmanager');
         $form = $formManager->createForm(NewsletterUpdateType::class, $dotmailer, array('action' => $action));
