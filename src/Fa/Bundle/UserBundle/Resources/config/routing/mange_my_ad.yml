@@ -45,7 +45,7 @@ ajax_manage_my_ads_boost_multiple_ad:
     defaults: { _controller: FaUserBundle:ManageMyAd:ajaxBoostMultipleAd }
     
 individual_upsell:
-    path:   /individual_upsell/{adId}/{upsellId}
+    path:   /individual_upsell/{adId}/{upsellId}/{catupsellId}
     defaults:  { _controller: "FaUserBundle:ManageMyAd:ajaxIndividualUpsell" }
     options:
         expose: true

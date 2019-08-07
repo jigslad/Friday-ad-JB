@@ -2312,4 +2312,70 @@ class CategoryRepository extends NestedTreeRepository
             return null;
         }
     }
+    
+    public function getChildrenIdsFromParentIds($categoryIds) {
+        $categories = $rescategories = $categoryPathArray = array();
+        $res_child_categories = $res_parent_categories = $categoriesRes = array();
+        $categoriesRes1 = array();
+        
+        $tableName = $this->_em->getClassMetadata('FaEntityBundle:Category')->getTableName();
+       
+        foreach($categoryIds as $categoryId) {
+            $res_child_categories = $this->getNestedChildrenIdsByCategoryId($categoryId);
+            
+            if ($categoryId) {
+                $categoryObj = $this->find($categoryId);
+                
+                if ($categoryObj) {
+                    $categories = $this->getPath($categoryObj);
+                    
+                    foreach ($categories as $category) {
+                        if ($category->getLvl() > 0 && $category->getStatus() ==1) {
+                            $res_parent_categories[] = $category->getId();
+                        }
+                    }
+                }
+            }  
+            $rescategories = array_merge($res_child_categories,$res_parent_categories);
+                        
+            if (!empty($rescategories)) {
+                $categoriesRes = array_unique($rescategories);    
+                $categoriesRes1 = array_merge($categoriesRes,$categoriesRes1);
+            }
+        }
+        
+        if(!empty($categoriesRes1)) {
+            $categories = array_unique($categoriesRes1);
+        }
+
+        return $categories;
+    }
+    
+    /**
+     * Get entity type array.
+     *
+     * @param integet $categoryId Category id.
+     *
+     * @return array
+     */
+    public function getCategoryParentArrayById($categoryId)
+    {
+        $categoryPathArray = array();
+        
+        if ($categoryId) {
+            $categoryObj = $this->find($categoryId);
+            
+            if ($categoryObj) {
+                $categories = $this->getPath($categoryObj);
+                
+                foreach ($categories as $category) {
+                    if ($category->getLvl() > 0 && $category->getStatus() ==1) {
+                        $categoryPathArray[] = $category->getId();
+                    }
+                }
+            }
+        }
+        
+        return $categoryPathArray;
+    }
 }

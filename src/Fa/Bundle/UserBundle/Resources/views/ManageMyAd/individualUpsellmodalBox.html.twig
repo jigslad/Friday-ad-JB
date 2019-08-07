@@ -48,7 +48,7 @@
     </div>   
    
     {{ form_start(form, {'attr': {'novalidate': '', 'id': 'cyber_source_form'}}) }}  
-        
+
     {% if individualUpsellArr|length %} 
     	{% set upsellPrice = format_currency(individualUpsellArr['price']) %}              
         <div class="columns upsell-pkg-box">
@@ -179,8 +179,7 @@
                     $('#card_detail').show();
                     $('#card_detail_save').show();
                 }
-            }
-            
+            }            
         });
     });
 
