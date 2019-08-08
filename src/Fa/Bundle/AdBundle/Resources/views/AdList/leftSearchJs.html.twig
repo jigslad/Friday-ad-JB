@@ -146,6 +146,7 @@
 
     function setLocaionCookieByLeftSearchLocationChange(searchLocation)
     {
+    	var qryItemDistance = getUrlVars()['item__distance'];
     	{% if isShopPage is defined and isShopPage %}
     	    $('form[name="fa_left_search"]').submit()
     	{% else %}
@@ -158,12 +159,13 @@
                      type: "post",
                      dataType: "json",
                      url: "{{ path('fa_frontend_ajax_user_location') }}",
-                     data: {'location': searchLocation, 'catId' : catId},
+                     data: {'location': searchLocation, 'catId' : catId },
                      success: function(data) {
                          if (!$.isEmptyObject(data)) {
                         	$('#fa_left_search_default_distance').val(data.default_distance);
-
-                        	if(defaultDist != data.default_distance) {
+                        	
+							
+                        	if(qryItemDistance == undefined && searchLocation != 2 && defaultDist == distanceId) {
                         		$('#fa_left_search_item__distance').val(data.default_distance);
                         		$('#fa_left_search_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
                                 $('#distance-left-search').show();
