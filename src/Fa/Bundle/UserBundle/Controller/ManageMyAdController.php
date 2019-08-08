@@ -54,7 +54,7 @@ class ManageMyAdController extends CoreController
         $type            = $request->get('type', 'active');
         
         $sortBy = 'ad_date';
-        
+                
         //$res = $this->getRepository('FaPromotionBundle:CategoryUpsell')->getCategoryByUpsellId('51','3411');
         //echo '<pre>';print_r($res);die;
         

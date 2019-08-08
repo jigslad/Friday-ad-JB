@@ -181,7 +181,7 @@ class AdUserPackageUpsellRepository extends EntityRepository
      */
     public function getFeaturedUpsellById($adId, $upsellId)
     {
-        $upsellArray = array();
+        $res = array();
         $query = $this->createQueryBuilder(self::ALIAS)
         ->select(self::ALIAS)
         ->andWhere(self::ALIAS.'.ad_id = :adId')
@@ -549,6 +549,29 @@ class AdUserPackageUpsellRepository extends EntityRepository
     }
     
     /**
+     *
+     * @return array
+     */
+    public function getFeaturedUpsellByAdId($ad_id)
+    {
+        $queryBuilder = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS, UpsellRepository::ALIAS)
+        ->innerJoin(self::ALIAS . '.upsell', UpsellRepository::ALIAS)
+        ->where(self::ALIAS . '.status=1')
+        ->andWhere(self::ALIAS . '.ad_id = :adId')
+        ->andWhere(UpsellRepository::ALIAS . '.type='.UpsellRepository::UPSELL_TYPE_TOP_ADVERT_ID)
+        ->setParameter('adId', $ad_id)
+        ->andWhere(self::ALIAS . '.ad_user_package IS NOT NULL')
+        ->orderBy(self::ALIAS . '.ad_id', 'asc');
+        $getFeaturedUpsellResults = $queryBuilder->getQuery()->getResult();
+        if (!empty($getFeaturedUpsellResults)) {
+            return $getFeaturedUpsellResults;
+        } else {
+            return array();
+        }
+    }
+    
+    /**
      * Get featured upsell for ad id.
      *
      * @param array   $adId              Ad id array.
@@ -561,8 +584,7 @@ class AdUserPackageUpsellRepository extends EntityRepository
         $qb = $this->createQueryBuilder(self::ALIAS)
         ->select(self::ALIAS.'.id', UpsellRepository::ALIAS.'.id as upsell_id', UpsellRepository::ALIAS.'.duration as duration', UpsellRepository::ALIAS.'.title', UpsellRepository::ALIAS.'.price', self::ALIAS.'.ad_id')
         ->leftJoin(self::ALIAS.'.upsell', UpsellRepository::ALIAS)
-        ->andWhere(self::ALIAS.'.upsell IN (:FeaturedId)')
-        ->setParameter('FeaturedId', array(UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID,UpsellRepository::UPSELL_FEATURED_TOP_14DAYS_ID,UpsellRepository::UPSELL_FEATURED_TOP_28DAYS_ID))
+        ->andWhere(UpsellRepository::ALIAS . '.type='.UpsellRepository::UPSELL_TYPE_TOP_ADVERT_ID)
         ->andWhere(self::ALIAS.'.status = 1'); 
         
         if (!is_array($adId)) {
@@ -602,8 +624,7 @@ class AdUserPackageUpsellRepository extends EntityRepository
         $qb = $this->createQueryBuilder(self::ALIAS)
         ->select(self::ALIAS.'.ad_id')
         ->leftJoin(self::ALIAS.'.upsell', UpsellRepository::ALIAS)
-        ->andWhere(self::ALIAS.'.upsell IN (:FeaturedId)')
-        ->setParameter('FeaturedId', array(UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID,UpsellRepository::UPSELL_FEATURED_TOP_14DAYS_ID,UpsellRepository::UPSELL_FEATURED_TOP_28DAYS_ID))
+        ->andWhere(UpsellRepository::ALIAS . '.type='.UpsellRepository::UPSELL_TYPE_TOP_ADVERT_ID)
         ->andWhere(self::ALIAS.'.status = 1');
         $qb->groupBy(self::ALIAS.'.ad_id');
         
