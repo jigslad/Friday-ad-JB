@@ -152,6 +152,7 @@
     	   /* if (searchLocation && searchLocation != 2) {*/
     	    	var catId = $('#fa_left_search_item__category_id').val();
     	    	var distanceId = $('#fa_left_search_item__distance').val();
+    	    	var defaultDist = $('#fa_left_search_default_distance').val();
     	    	
                 $.ajax({
                      type: "post",
@@ -161,8 +162,13 @@
                      success: function(data) {
                          if (!$.isEmptyObject(data)) {
                         	$('#fa_left_search_default_distance').val(data.default_distance);
-                        	
-                        	if(distanceId != data.default_distance) {
+
+                        	if(defaultDist != data.default_distance) {
+                        		$('#fa_left_search_item__distance').val(data.default_distance);
+                        		$('#fa_left_search_item__distance option[value="'+data.default_distance+'"]').attr("selected", "selected");
+                                $('#distance-left-search').show();
+                                $('#fa_left_search_hide_distance_block').val(0);
+                        	} else if(distanceId != data.default_distance) {
                                 $('#fa_left_search_item__distance option[value="'+distanceId+'"]').attr("selected", "selected");
                                 $('#distance-left-search').show();
                                 $('#fa_left_search_hide_distance_block').val(0);
