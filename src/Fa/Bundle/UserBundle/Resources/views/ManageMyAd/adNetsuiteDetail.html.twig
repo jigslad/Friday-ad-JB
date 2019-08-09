@@ -24,6 +24,13 @@
     {% set isAutoRenewAd = 0 %}
 {% endif %}
 
+{% set getFeaturedUpsellByAdId = adUserPackageUpsellRepository.getFeaturedUpsellByAdId(adId) %}
+{% if getFeaturedUpsellByAdId is not empty %}
+    {% set isFeaturedAd = 1 %}
+{% else %}
+    {% set isFeaturedAd = 0 %}
+{% endif %}
+
 {% set upgradePackagesCount = 0 %}
 {% set userRoleId = app.user.getRole().getId() %}
 {% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) and ( adPackageArray[adId] is defined and adPackageArray[adId] is not null) %}
@@ -68,6 +75,8 @@
             <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet">Select</span>
         {% elseif isBoostEnabled is defined and isBoostEnabled==1 and currentRoute == 'manage_my_ads_boosted' and (userBusinessCategory is defined and  userBusinessCategory == rootCategoryId) and ad.status_id == adStatusLive %}
             <span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet">Select</span>
+        {% elseif ad.status_id == adStatusLive and (currentRoute == 'manage_my_ads_active' or currentRoute=='ajax_manage_my_ads_get_status') %}    
+        	<span class="custom-checkbox ajaxcustom-checkbox"><input type="checkbox" class="boostad" value="{{adId}}" name="boostads[]"></span><span class="seladv-addet">Select</span>
         {% else %}
             <span class="dummychk"></span>
         {% endif %}
@@ -175,11 +184,15 @@
             <div class="manage-item-btns text-right">
             	{% if ad['status_id'] == adStatusLive and featuredToggleFlag==1 %}
             	<div class="right-manage-buttons featuredBlock">
-            		{% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-            			<div class="featured-switch toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
+            		{% if isFeaturedAd==1 %}
+            			<div class="featured-switch toggle-on">
             		{% else %}
-            			<div class="featured-switch toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
-            		{% endif %}
+                		{% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
+                			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
+                		{% else %}
+                			<div class="featured-switch featured-indiv-upsell toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
+                		{% endif %}
+                	{% endif %}
             			<div class="toggle-wrap">            
             				<div class="toggle-bg-on"></div>
             			</div>
@@ -216,12 +229,15 @@
         	{% if ad['status_id'] == adStatusLive and featuredToggleFlag==1 %}
         	<div class="featuredBlock1">
         		<a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>                
-        		    {% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-            			<div class="featured-switch toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
+        	    {% if isFeaturedAd==1 %}
+            			<div class="featured-switch toggle-on">
+            	{% else %}	    
+        	        {% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
+            			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
             		{% else %}
-            			<div class="featured-switch toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
+            			<div class="featured-switch featured-indiv-upsell toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
             		{% endif %}
-
+				{% endif %}
         			<div class="toggle-wrap">            
         				<div class="toggle-bg-on"></div>
         			</div>

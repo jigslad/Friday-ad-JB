@@ -24,6 +24,8 @@ use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Fa\Bundle\PromotionBundle\Repository\CategoryUpsellRepository;
+use Fa\Bundle\AdBundle\Repository\AdUserPackageUpsellRepository;
+use Fa\Bundle\AdBundle\Entity\AdUserPackageUpsell;
 
 /**
  * This controller is used for user ads.
@@ -53,7 +55,7 @@ class ManageMyAdController extends CoreController
         $boostedAdCount  = $adsBoostedCount  =  0;
         $type            = $request->get('type', 'active');
         $sortBy = 'ad_date';
-        
+                
         //$res = $this->getRepository('FaPromotionBundle:CategoryUpsell')->getCategoryByUpsellId('51','3411');
         //echo '<pre>';print_r($res);die;
         

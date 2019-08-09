@@ -29,18 +29,8 @@
 {% set totalFeaturedCredit = 0 %}
 {% set usedFeaturedCredits = 0 %}
 {% set remainingFeaturedCredits = 0 %}
-{% if (activeShopPackage and activeShopPackage.getPackage()) %}
-    {% set shopPackageCreditArr = shopPackageCreditRepository.getFeaturedCreditsByPackageId(activeShopPackage.getPackage().getId()) %}
-	{% if shopPackageCreditArr|length >0 %}
-        {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
-        {% set remainingFeaturedCredits = userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) %}
-        {% if  remainingFeaturedCredits > totalFeaturedCredit %}
-            {% set usedFeaturedCredits = totalFeaturedCredit %}
-        {% else %}
-            {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
-        {% endif %}
-    {% endif %}
-{% endif %}
+{% set adFeaturedCreditCnt = 0 %}
+{% set adFeaturedCreditCnt = adUserPackageUpsellRepository.getAdFeaturedUpsellCountByuserId(app.user.getId()) %}
 
 {% if pagination.getNbResults() %}
     {% set adCategoryIdArray    = adRepository.getAdCategoryIdArrayByAdId(adIdArray) %}    
@@ -60,6 +50,19 @@
     	{% set categoryUpsellArray    = categoryUpsellRepository.getCategoryUpsellForCategoryIds(adCategoryIdValArray) %}
     {% endif %}
     
+    {% if (activeShopPackage and activeShopPackage.getPackage()) %}
+        {% set shopPackageCreditArr = shopPackageCreditRepository.getFeaturedCreditsByPackageId(activeShopPackage.getPackage().getId()) %}
+    	{% if shopPackageCreditArr|length >0 %}
+            {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
+            {% set remainingFeaturedCredits = userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) %}
+            {% if  remainingFeaturedCredits > totalFeaturedCredit %}
+                {% set usedFeaturedCredits = totalFeaturedCredit %}
+            {% else %}
+                {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
 
 {% endif %}
 
@@ -86,7 +89,7 @@
                 		<ul class="toplistWithBullets">
                 		{% if userBusType is defined and userBusType == 'netsuite' and adLimitCount!=0 %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ adLimitCount }}</span></li>
-                			<li class="bluecircle">Featured ads: <span>{{ adFeaturedUpsellArray|length }}/{{ totalFeaturedCredit }}</span></li>
+                			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}/{{ totalFeaturedCredit }}</span></li>
                 		{% elseif userBusType is defined and userBusType == 'business' %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
                 			<li class="bluecircle">Featured ads: <span>{{ adFeaturedUpsellArray|length }}</span></li>
@@ -119,11 +122,11 @@
                        			<option value="sel-basic"  {{ (filterBy=='sel-basic')?'selected':'' }}>Basic ads</option>
                        			<option value="sel-featured"  {{ (filterBy=='sel-featured')?'selected':'' }}>Featured ads</option>
                        		</select></div>                           		
-                   		    {% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}                                
+               		   {# {% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}  #}                              
                                 <div class="select-all-ads-active"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <a class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
                                     Select all ads <span class="hide-for-small-only">on this page</span> ({{ onlyActiveAdInPageCount }})
                                 {% endif %} </a></div>                                                                    
-                            {% endif %}
+                                {# {% endif %} #}
                        </div>
                        {% endif %} 
                            
@@ -181,9 +184,11 @@
                                             <div class="small-24 medium-6 large-6 columns">
                                                 <button type="button" id="stop-sel-ads-btn" class="button xs-red-large-btn  expand" onclick="closeRevealModel('#markAdAsBoostedModal');stopAds();">{{'Stop Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
                                             </div>
+                                            {% if isBoostEnabled is defined and isBoostEnabled==1 and boostAdRemaining is defined and boostAdRemaining > 0 %}
                                             <div class="small-24 medium-6 large-6 columns">
                                                 <button type="button" id="boost-sel-ads-btn" class="button primary-btn-2 xs-green-large-btn expand" onclick="closeRevealModel('#markAdAsBoostedModal');boostSelectedAds();">{{'Boost Ads'|trans({}, 'frontend-manage-my-ad')}}</button>
                                             </div>
+                                            {% endif %}
                                         </div>
             </div>
         </div>
@@ -342,6 +347,47 @@
         </div>
     </div>
 </div>
+
+<div id="creditConfimBox" class="reveal-modal tiny remove-item-modal" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Use credit'|trans({}, 'frontend-ad-package')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'Are you sure you want to use a credit?'|trans({}, 'frontend-ad-package')}}</h5>
+                <div class="mt15" id="remaining_credit_text"></div>
+            </div>
+        </div>
+        <div class="mt20 remove-item-btn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="closeCreditBox('creditConfimBox');">{{'Cancel'|trans({}, 'frontend-ad-package')}}</button>
+                </div>
+                <div class="large-12 columns">
+                    <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRevealModel('#creditConfimBox');selectCredit();">{{'Continue'|trans({}, 'frontend-ad-package')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="unsufficientCreditBox" class="reveal-modal tiny remove-item-modal" data-reveal>
+    <a class="close-reveal-modal">&#215;</a>
+    <h5 class="modal-title">
+        {{'Use credit'|trans({}, 'frontend-ad-package')}}
+    </h5>
+    <div class="modal-content remove-modal">
+        <div class="row">
+            <div class="columns">
+                <h5>{{'You have insufficient credits.'|trans({}, 'frontend-ad-package')}}</h5>
+                <div class="mt15" >{{'Sorry! You only have enough credits.'|trans({}, 'frontend-ad-package')|raw}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+    
 
 <div id="featuredTopUpsellModal" class="reveal-modal tiny remove-item-modal featured-top-modal" data-reveal></div>
 {% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
@@ -555,7 +601,7 @@
 (function($) {
     $.fn.extend({
     	toggleSwitch: function(){
-            $('.featured-switch').on('click',function(){
+            $('.featured-indiv-upsell').on('click',function(){
               var elem_id = $(this).attr('id');
               var split_ad_id = elem_id.split("_");
               var adId = split_ad_id[1];
