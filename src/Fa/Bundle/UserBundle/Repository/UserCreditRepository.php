@@ -238,17 +238,16 @@ class UserCreditRepository extends EntityRepository
     public function getActiveFeaturedCreditCountForUser($userId)
     {
         $qb = $this->createQueryBuilder(self::ALIAS)
-        ->select('SUM('.self::ALIAS.'.credit) as total_credit')
+        ->select(self::ALIAS.'.credit as featured_credit')
         ->andWhere(self::ALIAS.'.user = '.$userId)
         ->andWhere(self::ALIAS.'.status = 1')
         ->andWhere(self::ALIAS.'.credit > 0')
         ->andWhere('FIND_IN_SET(6, '.self::ALIAS.'.package_sr_no) > 0 or FIND_IN_SET(3, '.self::ALIAS.'.package_sr_no) > 0')
         ->andWhere(self::ALIAS.'.expires_at IS NULL OR '.self::ALIAS.'.expires_at > '.time())
         ->setMaxResults(1);
-        
-        $activeUserCredits = $qb->getQuery()->getOneOrNullResult();
-        
-        return ($activeUserCredits['total_credit'] ? $activeUserCredits['total_credit'] : 0);
+
+        $activeUserCredits = $qb->getQuery()->getOneOrNullResult();        
+        return ($activeUserCredits['featured_credit'] ? $activeUserCredits['featured_credit'] : 0);
     }
     
     public function getActiveFeaturedCreditForUser($userId)

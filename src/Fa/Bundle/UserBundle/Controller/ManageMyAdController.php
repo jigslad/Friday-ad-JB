@@ -24,6 +24,8 @@ use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Fa\Bundle\PromotionBundle\Repository\CategoryUpsellRepository;
+use Fa\Bundle\AdBundle\Repository\AdUserPackageUpsellRepository;
+use Fa\Bundle\AdBundle\Entity\AdUserPackageUpsell;
 
 /**
  * This controller is used for user ads.

@@ -29,6 +29,8 @@
 {% set totalFeaturedCredit = 0 %}
 {% set usedFeaturedCredits = 0 %}
 {% set remainingFeaturedCredits = 0 %}
+{% set adFeaturedCreditCnt = 0 %}
+{% set adFeaturedCreditCnt = adUserPackageUpsellRepository.getAdFeaturedUpsellCountByuserId(app.user.getId()) %}
 
 {% if pagination.getNbResults() %}
     {% set adCategoryIdArray    = adRepository.getAdCategoryIdArrayByAdId(adIdArray) %}    
@@ -87,7 +89,7 @@
                 		<ul class="toplistWithBullets">
                 		{% if userBusType is defined and userBusType == 'netsuite' and adLimitCount!=0 %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ adLimitCount }}</span></li>
-                			<li class="bluecircle">Featured ads: <span>{{ adFeaturedUpsellArray|length }}/{{ totalFeaturedCredit }}</span></li>
+                			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}/{{ totalFeaturedCredit }}</span></li>
                 		{% elseif userBusType is defined and userBusType == 'business' %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
                 			<li class="bluecircle">Featured ads: <span>{{ adFeaturedUpsellArray|length }}</span></li>
