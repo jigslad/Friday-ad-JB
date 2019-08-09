@@ -65,11 +65,14 @@ class ManageMyAdController extends CoreController
             $sortBy = $this->container->get('session')->get('filterBy');
         }
         
+        //$userPackageAdLimit = $this->getRepository('FaUserBundle:UserPackage')->getUserPackageAdLimit($loggedinUser->getId());
+        //echo '<pre>'; print_r($userPackageAdLimit);die;
+        
         $onlyActiveAdCount = 0;
         $adLimitCount = 0;
         $activeAdIdarr = $activeAdsarr = array();$activeAdIds = '';
         $activeShopPackage = array();
-
+        
         $activeAdCountArray         = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'active', 'ad_date', true)->getResult();
         $inActiveAdCountArray       = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'inactive',  'ad_date', true)->getResult();
         $onlyActiveAdCountArray     = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'onlyactive',  'ad_date', true)->getResult();
