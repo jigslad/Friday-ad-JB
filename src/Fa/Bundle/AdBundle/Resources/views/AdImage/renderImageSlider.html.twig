@@ -53,21 +53,28 @@
                         <div class="item">
                             <img class="lazyOwl" id="big_image_{{loop.index}}" data-src="{{ adBigImageUrl }}" alt="{{ altString }}" />
                         </div>
-                    {% endfor %}
-                    
+                    {% endfor %}                    
                 </div>
-				<div class="details-img-icons clearfix">
-                        <a href="javascript:void(0);" onclick="showOriginalImage()" class="zoom-img hide-for-small">zoom image</a>
-                        {% if allowAdEdit is defined and allowAdEdit %}
-                            <a href="javascript:void(0);" onclick="showEditImagesPopup();" class="edit-item-img hide-for-small">edit image</a>
-                        {% endif %}
-                    </div>
-                {% if allowAdEdit is defined and allowAdEdit %}
-                    <div class="text-right show-for-small-only clearfix mt5">
-                        <a href="javascript:void(0)" onclick="showEditImagesPopup();" class="edit-advert">{{'Edit images'|trans({}, 'frontend-show-ad')}}</a>
-                    </div>
-                {% endif %}
-                
+                <div class="photos-block">
+                    {% if (adImages|length and isFinance == true) %}
+                      <div class="clearfix"></div>
+                      <div class="sticky-finance-btn">
+                           <a href="javascript:clickFinance('{{ financeDetails['finance_url'] }}');" class="hide finance-btn">{{ financeDetails['finance_title'] }}</a>
+            			   <div class="vif-overlay hide hide-for-small-only" id="financeOverlay">&nbsp;</div>
+                      </div>
+                      {% endif %}
+    				<div class="details-img-icons clearfix">
+                            <a href="javascript:void(0);" onclick="showOriginalImage()" class="zoom-img hide-for-small">zoom image</a>
+                            {% if allowAdEdit is defined and allowAdEdit %}
+                                <a href="javascript:void(0);" onclick="showEditImagesPopup();" class="edit-item-img hide-for-small">edit image</a>
+                            {% endif %}
+                        </div>
+                    {% if allowAdEdit is defined and allowAdEdit %}
+                        <div class="text-right show-for-small-only clearfix mt5">
+                            <a href="javascript:void(0)" onclick="showEditImagesPopup();" class="edit-advert">{{'Edit images'|trans({}, 'frontend-show-ad')}}</a>
+                        </div>
+                    {% endif %}
+                </div>
             {% endif %}
         
             {% if adImages|length > 1 or (adImages|length == 1 and allowAdEdit is defined and allowAdEdit) %}
@@ -84,11 +91,7 @@
                         <div class="add-photo-text">{{ 'Add a photo'|trans({}, 'frontend-show-ad') }}</div>
                     </div>
                 {% endif %}               
-        {% endif %}
-         {% if (adImages|length and isFinance == true) %}
-            <a href="javascript:clickFinance('{{ financeDetails['finance_url'] }}');" class="hide finance-btn">{{ financeDetails['finance_title'] }}</a>
-            <div class="vif-overlay hide hide-for-small-only" id="financeOverlay">&nbsp;</div>
-        {% endif %}
+        {% endif %}         
         </div>
        
     {% else %}
