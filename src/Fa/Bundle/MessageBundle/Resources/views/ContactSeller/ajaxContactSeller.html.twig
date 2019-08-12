@@ -252,8 +252,8 @@
     function tickUntickEmailAndThirdPartyAlertCheckbox()
     {
         if ($('#fa_message_contact_seller_third_party_email_alert').attr('checked') && !$('#fa_message_contact_seller_email_alert').attr('checked')) {
-        	$('#fa_message_contact_seller_email_alert').parent('span').removeClass('checked');
-            $('#fa_message_contact_seller_email_alert').attr('checked', false);
+        	$('#fa_message_contact_seller_email_alert').parent('span').addClass('checked');
+            $('#fa_message_contact_seller_email_alert').attr('checked', true);
         }
     }
     function showorhideEmailAndThirdPartyAlertOption() {
