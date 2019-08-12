@@ -467,7 +467,7 @@ class DotmailerRepository extends EntityRepository
             $this->getEntityManager()->getRepository('FaDotMailerBundle:DotmailerInfo')->doTouchPointEntry($dotmailer->getId(), $adId, $touchPoint);
 
             //send to dotmailer instantly.
-            if ($isNewToDotmailer) {
+            if ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1) {
                 exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
                 /* $response = $this->sendOneContactToDotmailerRequest($dotmailer, $container);
                 if (isset($response['id']) && isset($response['email'])) {
@@ -805,7 +805,6 @@ class DotmailerRepository extends EntityRepository
                 $isNewToDotmailer = true;
                 $dotmailer = new Dotmailer();
                 $dotmailer->setFadUser(1);
-                $dotmailer->setNewsletterSignupAt(time());
                 $dotmailer->setFirstTouchPoint($touchPoint);
             }
             
@@ -837,6 +836,9 @@ class DotmailerRepository extends EntityRepository
                 }
             }
             
+            if($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1) {
+                $dotmailer->setNewsletterSignupAt(time());
+            }
             
             $dotmailer = $this->doTouchPointEntryForNewsletterTypeByUser($dotmailer, $userId, $touchPoint, $user->getIsEmailAlertEnabled(), $user->getIsThirdPartyEmailAlertEnabled(), $container, $isNewToDotmailer);
             
@@ -844,7 +846,9 @@ class DotmailerRepository extends EntityRepository
             $this->getEntityManager()->flush($dotmailer);
             
             //send to dotmailer instantly.
-            exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+            if($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1) {
+                exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+            }
             
         }
     } 
