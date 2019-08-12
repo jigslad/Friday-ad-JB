@@ -222,10 +222,10 @@ class NewsletterResubscribeType extends AbstractType
     			
     			
     			if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
-    			    if ($dotmailer->getDotmailerNewsletterTypeId()) {
+    			   /* if ($dotmailer->getDotmailerNewsletterTypeId()) {
     			        $newsletterTypeIds = array_merge($newsletterTypeIds, $dotmailer->getDotmailerNewsletterTypeId());
     			        $newsletterTypeIds = array_unique($newsletterTypeIds);
-    			    }
+    			    } */
     			    
     			    $dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
     			}
@@ -244,10 +244,10 @@ class NewsletterResubscribeType extends AbstractType
         	    }
 
         	    if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
-        	        if ($dotMailer->getDotmailerNewsletterTypeId()) {
+        	       /* if ($dotMailer->getDotmailerNewsletterTypeId()) {
         	            $newsletterTypeIds = array_merge($newsletterTypeIds, $dotMailer->getDotmailerNewsletterTypeId());
         	            $newsletterTypeIds = array_unique($newsletterTypeIds);
-        	        }
+        	        }*/
         	        
         	        $dotMailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
         	    }
