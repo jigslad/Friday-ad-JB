@@ -29,9 +29,9 @@ $(window).on('load', function() {
     {% endif %}
 });
 	
-function featuredTopUpsellBtn(id,upsellId) {
+function featuredTopUpsellBtn(id,upsellId,catupsellId) {
     blockPage();
-    var route = Routing.generate('individual_upsell', { 'adId': id, 'upsellId': upsellId });
+    var route = Routing.generate('individual_upsell', { 'adId': id, 'upsellId': upsellId, 'catupsellId': catupsellId });
     $.ajax({
         type: "GET",
         url : route,
@@ -58,7 +58,7 @@ function useCreditForFeaturedUpsell(adId, upsellId) {
         unblockPage();
     })
     .done(function(response) {
-    	return true;
+    	window.location.href = '{{ path('manage_my_ads_active') }}';
     });
 }
 

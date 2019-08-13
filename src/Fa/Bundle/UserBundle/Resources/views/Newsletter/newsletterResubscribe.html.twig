@@ -8,7 +8,7 @@
         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
             <div class="medium-14 medium-push-5 large-14 large-push-5 columns text-center">
                 <h1 class="mb20">Looks like you are unsubscribed
-                	<span><img src="{{ asset_url('fafrontend/images/smile_emoji_icon.png') }}" width="30px"></span>
+                	{# <span><img src="{{ asset_url('fafrontend/images/smile_emoji_icon.png') }}" width="30px"></span>#}
                	</h1> 
                 <div class="medium-14 medium-push-5 large-14 large-push-5 columns text-left mt20">
                     <h2 class="text-center">You are unsubscribed from Friday-Ad email newsletters. </h2>
@@ -44,10 +44,71 @@
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){
-    	checkAnyOneClicked();
+    	$('#fa_user_newsletter_resubscribe_save').attr("disabled", true);
+    	$("#fa_user_newsletter_resubscribe_third_party_email_alert").parent('span').on('click', function (e) {
+            if ($('#fa_user_newsletter_resubscribe_third_party_email_alert').parent().hasClass('checked')) {
+                $('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('checked', true);
+            } else {
+                $('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('checked', false);
+            }
 
+            if ($('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('checked')) {
+                $('#fa_user_newsletter_resubscribe_email_alert').attr('checked', $('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('checked'));
+                $('#fa_user_newsletter_resubscribe_email_alert').parent().addClass('checked');
+                $('#fa_user_newsletter_resubscribe_save').attr("disabled", false);
+            }
+        });
 
-        function checkAnyOneClicked() {
+        $("#fa_user_newsletter_resubscribe_email_alert").parent('span').on('click', function (e) {
+            if ($('#fa_user_newsletter_resubscribe_email_alert').parent().hasClass('checked')) {
+                //$('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('disabled', false);
+                $('#fa_user_newsletter_resubscribe_save').attr("disabled", false);
+                $('#fa_user_newsletter_resubscribe_email_alert').attr('checked', true);
+            } else {
+                //$('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('disabled', true);
+                $('#fa_user_newsletter_resubscribe_email_alert').attr('checked', false);
+                $('#fa_user_newsletter_resubscribe_save').attr("disabled", true);
+            }
+            if (!$('#fa_user_newsletter_resubscribe_email_alert').attr('checked')) {
+                $('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('checked', false);
+                $('#fa_user_newsletter_resubscribe_third_party_email_alert').parent().removeClass('checked');
+            }
+        });
+        
+    	/*checkThirdPartCheck();
+
+    	function checkThirdPartCheck() {
+            if ($('#fa_user_newsletter_resubscribe_email_alert').parent('span').hasClass('checked')) {
+                $('#fa_user_newsletter_resubscribe_email_alert').attr('checked', true);
+                $("#fa_user_newsletter_resubscribe_third_party_email_alert").css('cursor','pointer');
+            } else {
+                $('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('checked', false);
+                $('#fa_user_newsletter_resubscribe_third_party_email_alert').parent('span').removeClass("checked");
+                $("#fa_user_newsletter_resubscribe_third_party_email_alert").css('cursor','not-allowed');
+            }
+        }
+       
+        $("#fa_user_newsletter_resubscribe_email_alert").on('click',function (e) {
+            if ($('#fa_user_newsletter_resubscribe_email_alert').parent('span').hasClass('checked')) {
+                $('#fa_user_newsletter_resubscribe_email_alert').attr('checked', true);
+            } else {
+                $('#fa_user_newsletter_resubscribe_email_alert').attr('checked', false);
+                $('#fa_user_newsletter_resubscribe_email_alert').parent('span').removeClass('checked');
+            }
+            checkThirdPartCheck();
+        });
+
+        $("#fa_user_newsletter_resubscribe_third_party_email_alert").on('click',function (e) {
+            if ($('#fa_user_newsletter_resubscribe_third_party_email_alert').parent('span').hasClass('checked')) {
+                $('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('checked', true);
+            } else {
+                $('#fa_user_newsletter_resubscribe_third_party_email_alert').attr('checked', false);
+                $('#fa_user_newsletter_resubscribe_third_party_email_alert').parent('span').removeClass('checked');
+            }
+            checkThirdPartCheck();      
+        });*/
+        
+        /*function checkAnyOneClicked() {
         	if ($('#fa_user_newsletter_resubscribe_email_alert').parent().hasClass('checked')) {
    	        	$('#fa_user_newsletter_resubscribe_email_alert').attr('checked', true);
         		$("#fa_user_newsletter_resubscribe_third_party_email_alert").css('cursor','pointer');
@@ -81,7 +142,7 @@
    	        	$('#fa_user_newsletter_resubscribe_third_party_email_alert').val('0');
    	        }
    			checkAnyOneClicked();
-    	});
+    	});*/
     });
 //]]>
 </script>

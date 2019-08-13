@@ -115,8 +115,8 @@ class NewsletterResubscribeType extends AbstractType
         		array(
 		        	'label' => $emailAlertLabel,
 		        	'mapped' => false,
-        		    'data' => ($user ? $user->getIsEmailAlertEnabled() : false),
-        		    'value'=>($user ? $user->getIsEmailAlertEnabled() : false),
+        		    //'data' => ($user ? $user->getIsEmailAlertEnabled() : false),
+        		    //'value'=>($user ? $user->getIsEmailAlertEnabled() : false),
         		)
         	)
 	        ->add(
@@ -125,8 +125,8 @@ class NewsletterResubscribeType extends AbstractType
 	        	array(
 	        		'label' => $thirdPartyEmailAlertLabel,
 	        		'mapped' => false,
-	        	    'data' => ($dotmailer ? $user->getIsThirdPartyEmailAlertEnabled() : false),
-	        	    'value' => ($user ? $user->getIsThirdPartyEmailAlertEnabled() : false),
+	        	    //'data' => ($dotmailer ? $user->getIsThirdPartyEmailAlertEnabled() : false),
+	        	    //'value' => ($user ? $user->getIsThirdPartyEmailAlertEnabled() : false),
 	        	)
 	        )
 	        ->add('save', SubmitType::class, array('label' => 'Create'));
@@ -144,6 +144,7 @@ class NewsletterResubscribeType extends AbstractType
     {
     	$form = $event->getForm();
     	$newsletterTypeIds = [];
+    	$dotmailerId = '';
     	if ($form->isValid()) {
     		$user = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('email')->getData()));
     		if (!$user) {
@@ -159,8 +160,8 @@ class NewsletterResubscribeType extends AbstractType
 
     			// set guid
     			$user->setGuid(CommonManager::generateGuid($form->get('email')->getData()));
-
-    			// manually added third party email alert
+    			
+    			// manually added email alert
     			if ($form->get('email_alert')->getData() == 1) {
     				$user->setIsEmailAlertEnabled(1);
     			}
@@ -197,7 +198,7 @@ class NewsletterResubscribeType extends AbstractType
     			$dotmailer = new Dotmailer();
     			$dotmailer->setOptIn(1);
     			$dotmailer->setFadUser(1);
-    			//$dotmailer->setDotmailerNewsletterUnsubscribe(0);
+    			$dotmailer->setDotmailerNewsletterUnsubscribe(0);
     			$dotmailer->setEmail($form->get('email')->getData());
     			$dotmailer->setGuid(CommonManager::generateGuid($form->get('email')->getData()));
     			$dotmailer->setIsSuppressed(0);
@@ -208,33 +209,49 @@ class NewsletterResubscribeType extends AbstractType
     			$dotmailer->setOptInType(DotmailerRepository::OPTINTYPE);
    			    $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_NEWSLETTER);
     			
-    			if($form->get('email_alert')->getData() == 1) {
+    			/*if($form->get('email_alert')->getData() == 1) {
     				$newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getAllNewsletterTypeByOrd($this->container, 48);
-    			}
+    			}*/
+    			
+    			
     			// manually added third party email alert
     			if ($form->get('third_party_email_alert')->getData() == 1) {
     				$newsletterTypeIds[] = 48;
     			}
 
     			if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
-    				$dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
+    			
+    			
+    			if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
+    			   /* if ($dotmailer->getDotmailerNewsletterTypeId()) {
+    			        $newsletterTypeIds = array_merge($newsletterTypeIds, $dotmailer->getDotmailerNewsletterTypeId());
+    			        $newsletterTypeIds = array_unique($newsletterTypeIds);
+    			    } */
+    			    
+    			    $dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
     			}
-
     			$this->em->persist($dotmailer);
                 file_put_contents('/var/www/html/newfriday-ad/web/uploads/testing.txt', 'newsletter resubscribe '.__LINE__.'|', FILE_APPEND);
     			$this->em->flush($dotmailer);
     			
+    			$dotmailerId = $dotmailer->getId();
+     			
         	} else {
-        	    //$dotMailer->setDotmailerNewsletterUnsubscribe(0);
-        	    if($form->get('email_alert')->getData() == 1) {
+        	    $dotMailer->setDotmailerNewsletterUnsubscribe(0);
+        	    /*if($form->get('email_alert')->getData() == 1) {
         	        $newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getAllNewsletterTypeByOrd($this->container, 47);
-        	    }
+        	    }*/
         	    // manually added third party email alert
         	    if ($form->get('third_party_email_alert')->getData() == 1) {
         	        $newsletterTypeIds[] = 48;
         	    }
 
         	    if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
+        	       /* if ($dotMailer->getDotmailerNewsletterTypeId()) {
+        	            $newsletterTypeIds = array_merge($newsletterTypeIds, $dotMailer->getDotmailerNewsletterTypeId());
+        	            $newsletterTypeIds = array_unique($newsletterTypeIds);
+        	        }*/
+        	        
         	        $dotMailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
         	    }
         	    
@@ -242,9 +259,11 @@ class NewsletterResubscribeType extends AbstractType
         	    $dotMailer->setOptInType(DotmailerRepository::OPTINTYPE);
 
         	    $this->em->persist($dotMailer);
-        	    $this->em->flush($dotMailer);       	    
+        	    $this->em->flush($dotMailer);
+       	        
+        	    $dotmailerId = $dotMailer->getId(); 
          	}
-
+         	exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailerId.' >/dev/null &');
         }
   }
 

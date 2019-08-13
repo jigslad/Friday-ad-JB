@@ -152,6 +152,65 @@ class CategoryUpsellRepository extends EntityRepository
 
         return $categoryUpsells;
     }
+    
+    
+    /**
+     * @param      $category
+     * @param null $container
+     * @return array|mixed
+     */
+    public function getCategoryUpsellForCategoryIds($category = array(), $container = null)
+    {
+        $cacheKey = $upsellcategoryIds = "";$categories = $upsellcategories = array();
+        $categoryUpsellsRes = array();
+        
+        if ($container) {
+            $culture = CommonManager::getCurrentCulture($container);
+            $tableName = $this->getTableName();
+            $cacheKey = $tableName . '|' . __FUNCTION__ . '|' . $category . '_' . $culture;
+            $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
+            
+            if ($cachedValue !== false) {
+                //return $cachedValue;
+            }
+        }
+        
+        if (!is_array($category)) {
+            $upsellcategories = array($category);
+        } else { $upsellcategories = $category; }
+        
+        if(!empty($upsellcategories)) { 
+            $upsellcategories = array_unique($upsellcategories); 
+            //$upsellcategoryIds = implode(',',$upsellcategories);
+            $upsellcategoryIds = $upsellcategories;
+        }
+        
+        $categories = $this->_em->getRepository('FaEntityBundle:Category')->getChildrenIdsFromParentIds($upsellcategoryIds);
+           
+        /*do {
+            $catResult = $this->_em->getRepository('FaEntityBundle:Category')->find($this->_em->getRepository('FaEntityBundle:Category')->find($category)->getParent()->getId());
+            $categories[] = $category = $catResult->getId();
+        } while ($catResult->getParent() && $catResult->getParent()->getId() > 1);*/
+        
+        $query = $this->createQueryBuilder(self::ALIAS)
+                ->innerJoin(self::ALIAS . '.upsell', UpsellRepository::ALIAS)
+                ->where(self::ALIAS . '.category IN (:category)')
+                ->andWhere(self::ALIAS . '.show_in_filters = 1')
+                ->setParameter('category', $categories)
+                ->addOrderBy(self::ALIAS . '.price', 'ASC');
+        
+        $categoryUpsells = $query->getQuery()->getResult();
+        
+        foreach ($categoryUpsells as $categoryUpsell) {
+            $categoryUpsellsRes[] = array('id' => $categoryUpsell->getId(), 'category_id' => $categoryUpsell->getCategory()->getId(), 'upsell_id' => $categoryUpsell->getUpsell()->getId(), 'price' => $categoryUpsell->getPrice());
+        }
+
+        if ($container) {
+            CommonManager::setCacheVersion($container, $cacheKey, $categoryUpsellsRes);
+        }
+        
+        return $categoryUpsellsRes;
+    }
 
     /**
      * @param           $categoryUpsellIds
@@ -259,5 +318,33 @@ class CategoryUpsellRepository extends EntityRepository
 
             return true;
         }
+    }
+    
+    /**
+     * Get categories by upsell ids.
+     *
+     * @param array $upsellIds Array of upsell ids.
+     *
+     * @return CategoryUpsell[]
+     */
+    public function getCategoryByUpsellId($upsellId,$catUpsellId)
+    {
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id', self::ALIAS.'.price as upsell_price', UpsellRepository::ALIAS.'.id as upsell_id', UpsellRepository::ALIAS.'.title as upselltitle', UpsellRepository::ALIAS.'.description as upsell_description')
+        ->innerJoin(self::ALIAS . '.upsell', UpsellRepository::ALIAS)
+        ->where(UpsellRepository::ALIAS . '.id IN (:upsellId)')
+        ->setParameter('upsellId', $upsellId)
+        ->andWhere(self::ALIAS . '.id = (:catUpsellId)')
+        ->setParameter('catUpsellId', $catUpsellId);   
+        
+        $categoryUpsells = $query->getQuery()->getResult();
+        
+        $categoryUpsellArr = array();
+        if (!empty($categoryUpsells)) {
+            foreach ($categoryUpsells as $categoryUpsell) {
+                $categoryUpsellArr = array('id'=>$categoryUpsell['upsell_id'], 'title' => $categoryUpsell['upselltitle'], 'description' => $categoryUpsell['upsell_description'], 'price' => $categoryUpsell['upsell_price']);
+            }
+        }      
+        return $categoryUpsellArr;
     }
 }

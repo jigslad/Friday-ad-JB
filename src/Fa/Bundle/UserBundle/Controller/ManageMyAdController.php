@@ -23,6 +23,9 @@ use Fa\Bundle\PaymentBundle\Form\CyberSourceCheckoutType;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\PaymentBundle\Repository\PaymentRepository;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
+use Fa\Bundle\PromotionBundle\Repository\CategoryUpsellRepository;
+use Fa\Bundle\AdBundle\Repository\AdUserPackageUpsellRepository;
+use Fa\Bundle\AdBundle\Entity\AdUserPackageUpsell;
 
 /**
  * This controller is used for user ads.
@@ -52,6 +55,9 @@ class ManageMyAdController extends CoreController
         $boostedAdCount  = $adsBoostedCount  =  0;
         $type            = $request->get('type', 'active');
         $sortBy = 'ad_date';
+                
+        //$res = $this->getRepository('FaPromotionBundle:CategoryUpsell')->getCategoryByUpsellId('51','3411');
+        //echo '<pre>';print_r($res);die;
         
         $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
         if($this->container->get('session')->has('filterBy') && $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
@@ -111,6 +117,8 @@ class ManageMyAdController extends CoreController
                 }                
             }
         }
+        
+        
          
         if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
@@ -314,15 +322,16 @@ class ManageMyAdController extends CoreController
             $error        = '';
             $successMsg   = '';
             $adId         = $request->get('adId', 0);
+            $upsellId         = $request->get('upsellId', 0);
 
             $ad = $this->getRepository('FaAdBundle:Ad')->find($adId);
             $this->checkIsValidAdUser($ad->getUser()->getId());
             
             $loggedinUser = $this->getLoggedInUser();
             $userId = $loggedinUser->getId();
-            $upsellObj = $this->getRepository('FaPromotionBundle:Upsell')->find('5');
+            $upsellObj = $this->getRepository('FaPromotionBundle:Upsell')->find($upsellId);
                         
-            $ans = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->disableFeaturedAdUpsell($adId);
+            $ans = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->disableFeaturedAdUpsell($adId,$upsellId);
             $this->getRepository('FaUserBundle:UserCreditUsed')->redeemCreditUsedByUpsell($userId,$ad,$upsellObj,$this->container);
             
             if ($ans) {
@@ -807,7 +816,7 @@ class ManageMyAdController extends CoreController
         return $dimension12;
     }
     
-    public function ajaxIndividualUpsellAction($adId, $upsellId, Request $request)
+    public function ajaxIndividualUpsellAction($adId, $upsellId, $catupsellId, Request $request)
     {
         $redirectToUrl = '';
         $error         = '';
@@ -829,18 +838,22 @@ class ManageMyAdController extends CoreController
                 if (!empty($user)) {                    
                     //Payment gateway form
                     $formManager = $this->get('fa.formmanager');
+                    $ad 			  = $this->getRepository('FaAdBundle:Ad')->find($adId);
                     $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => null));
 
-                    $individualUpsellDetails = $this->getRepository('FaPromotionBundle:Upsell')->findBy(array('id'=>$upsellId));
+                    $individualUpsellDetails = $this->getRepository('FaPromotionBundle:CategoryUpsell')->getCategoryByUpsellId($upsellId,$catupsellId);
+                    
                     if(!empty($individualUpsellDetails)) {
+                        $individualUpsellArr = $individualUpsellDetails;
+                    }
+                    /*if(!empty($individualUpsellDetails)) {
                         $individualUpsellArr['id'] =  $individualUpsellDetails[0]->getId();
                         $individualUpsellArr['title'] =  $individualUpsellDetails[0]->getTitle();
                         $individualUpsellArr['description'] =  $individualUpsellDetails[0]->getDescription();
                         $individualUpsellArr['price'] =  $individualUpsellDetails[0]->getPrice();
-                    }
-                    $individualUpsellModalDetails = CommonManager::getIndividualUpsellModalDetails($upsellId);
+                    }*/
                     
-                    $ad 			  = $this->getRepository('FaAdBundle:Ad')->find($adId);
+                    $individualUpsellModalDetails = CommonManager::getIndividualUpsellModalDetails($upsellId);
                     
                     $categoryId       = $ad->getCategory()->getId();
                     $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
