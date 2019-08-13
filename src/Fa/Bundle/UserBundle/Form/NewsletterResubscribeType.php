@@ -264,9 +264,9 @@ class NewsletterResubscribeType extends AbstractType
         	    $this->em->persist($dotMailer);
         	    $this->em->flush($dotMailer);
        	        
-        	    $dotmailerId = $dotMailer->getId();
+        	    $dotmailerId = $dotMailer->getId(); 
          	}
-         	exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailerId.' >/dev/null &');
+         	exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailerId.' >/dev/null &');
         }
   }
     
