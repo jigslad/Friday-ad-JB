@@ -144,6 +144,7 @@ class NewsletterResubscribeType extends AbstractType
     {
     	$form = $event->getForm();
     	$newsletterTypeIds = [];
+    	$dotmailerId = '';
     	if ($form->isValid()) {
     		$user = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('email')->getData()));
     		if (!$user) {
@@ -236,6 +237,7 @@ class NewsletterResubscribeType extends AbstractType
     			$this->em->persist($dotmailer);
     			$this->em->flush($dotmailer);
     			
+    			$dotmailerId = $dotmailer->getId();
      			
         	} else {
         	    $dotMailer->setDotmailerNewsletterUnsubscribe(0);
@@ -261,8 +263,10 @@ class NewsletterResubscribeType extends AbstractType
         	            	    
         	    $this->em->persist($dotMailer);
         	    $this->em->flush($dotMailer);
-       	    
+       	        
+        	    $dotmailerId = $dotMailer->getId();
          	}
+         	exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailerId.' >/dev/null &');
         }
   }
     
