@@ -25,6 +25,7 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Fa\Bundle\DotMailerBundle\Repository\DotmailerRepository;
 
 /**
  * This is newsletter form
@@ -159,6 +160,9 @@ class NewsletterType extends AbstractType
             $this->em->refresh($dotmailer);
         } else {
             $isNewToDotmailer = true;
+            $dotmailer = new Dotmailer();
+            $dotmailer->setFadUser(1);
+            $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_ACCOUNT); 
         }
 
         $dotmailerNewsletterTypeId       = $dotmailer->getDotmailerNewsletterTypeId();
@@ -238,7 +242,7 @@ class NewsletterType extends AbstractType
             }
 
             //send to dotmailer instantly.
-            if ($isNewToDotmailer) {
+            if ($isNewToDotmailer || $user->getIsEmailAlertEnabled() ==1) {
                 exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
             }
         }
