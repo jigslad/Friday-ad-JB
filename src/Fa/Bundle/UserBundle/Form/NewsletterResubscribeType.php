@@ -144,6 +144,7 @@ class NewsletterResubscribeType extends AbstractType
     {
     	$form = $event->getForm();
     	$newsletterTypeIds = [];
+    	$dotmailerId = '';
     	if ($form->isValid()) {
     		$user = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('email')->getData()));
     		if (!$user) {
@@ -233,6 +234,8 @@ class NewsletterResubscribeType extends AbstractType
                 file_put_contents('/var/www/html/newfriday-ad/web/uploads/testing.txt', 'newsletter resubscribe '.__LINE__.'|', FILE_APPEND);
     			$this->em->flush($dotmailer);
     			
+    			$dotmailerId = $dotmailer->getId();
+     			
         	} else {
         	    $dotMailer->setDotmailerNewsletterUnsubscribe(0);
         	    /*if($form->get('email_alert')->getData() == 1) {
@@ -256,9 +259,11 @@ class NewsletterResubscribeType extends AbstractType
         	    $dotMailer->setOptInType(DotmailerRepository::OPTINTYPE);
 
         	    $this->em->persist($dotMailer);
-        	    $this->em->flush($dotMailer);       	    
+        	    $this->em->flush($dotMailer);
+       	        
+        	    $dotmailerId = $dotMailer->getId();
          	}
-
+         	exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailerId.' >/dev/null &');
         }
   }
 
