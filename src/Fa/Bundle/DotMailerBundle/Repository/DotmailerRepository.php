@@ -407,6 +407,8 @@ class DotmailerRepository extends EntityRepository
     public function doTouchPointEntry($userId, $adId, $touchPoint, $container = null)
     {
         $isNewToDotmailer = false;
+        $insertFirstPoint = 0;
+        
         $user      = $this->getEntityManager()->getRepository('FaUserBundle:User')->findOneBy(array('id' => $userId));
         $dotmailer = null;
         if ($user && $user->getEmail()) {
@@ -419,8 +421,11 @@ class DotmailerRepository extends EntityRepository
                 $dotmailer = new Dotmailer();
                 $dotmailer->setOptIn(1);
                 $dotmailer->setFadUser(1);
-                $dotmailer->setDotmailerNewsletterUnsubscribe(0);
+                $dotmailer->setFirstTouchPoint($touchPoint);
             } else {
+                if ($user->getIsEmailAlertEnabled()==0 && $user->getIsThirdPartyEmailAlertEnabled()==0)  {
+                    $insertFirstPoint = 1;
+                }
                 // handle opted In
                 $dotmailer = $this->handleOptedIn($dotmailer, $touchPoint, $user->getIsEmailAlertEnabled());
             }
@@ -437,6 +442,7 @@ class DotmailerRepository extends EntityRepository
                 $dotmailer->setRoleId($user->getRole()->getId());
             }
             $dotmailer->setPhone($user->getPhone());
+            $dotmailer->setDotmailerNewsletterUnsubscribe(0);
 
             // update last_paid_at
             if (!$dotmailer->getLastPaidAt()) {
@@ -450,7 +456,7 @@ class DotmailerRepository extends EntityRepository
             if ($touchPoint == DotmailerRepository::TOUCH_POINT_PAA || ($touchPoint == DotmailerRepository::TOUCH_POINT_ENQUIRY && $user->getIsEmailAlertEnabled() == 1)) {
                 $dotmailer = $this->doTouchPointEntryForNewsletterType($dotmailer, $adId, $touchPoint, $user->getIsEmailAlertEnabled(), $user->getIsThirdPartyEmailAlertEnabled(), $container);
             }
-
+            
             // other fields
             $dotmailer = $this->doTouchPointEntryForOtherFields($dotmailer, $adId, $touchPoint, $container);
 
@@ -465,9 +471,17 @@ class DotmailerRepository extends EntityRepository
             }
 
             $this->getEntityManager()->getRepository('FaDotMailerBundle:DotmailerInfo')->doTouchPointEntry($dotmailer->getId(), $adId, $touchPoint);
-
+            
+            if ($insertFirstPoint== 1 && ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
+                $dotmailer->setFirstTouchPoint($touchPoint);
+            }
+            
             //send to dotmailer instantly.
             if ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1) {
+                $dotmailer->setNewsletterSignupAt(time());
+                $this->getEntityManager()->persist($dotmailer);
+                $this->getEntityManager()->flush($dotmailer);
+                
                 exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
                 /* $response = $this->sendOneContactToDotmailerRequest($dotmailer, $container);
                 if (isset($response['id']) && isset($response['email'])) {
@@ -787,12 +801,10 @@ class DotmailerRepository extends EntityRepository
     public function doTouchPointEntryByUser($userId, $touchPoint, $container = null)
     {
         $isNewToDotmailer = false;
+        $insertFirstPoint = 0;
+        
         $user = $this->getEntityManager()->getRepository('FaUserBundle:User')->findOneBy(array('id' => $userId));
         $touchPointOpted = ($touchPoint== self::TOUCH_POINT_CREATE_ALERT)?$touchPoint:self::OPTINTYPE;
-        
-        if (!$user->getIsEmailAlertEnabled()) {
-            return;
-        }
         
         $dotmailer = null;
         $newsletterTypeIds = null;
@@ -806,6 +818,10 @@ class DotmailerRepository extends EntityRepository
                 $dotmailer = new Dotmailer();
                 $dotmailer->setFadUser(1);
                 $dotmailer->setFirstTouchPoint($touchPoint);
+            } else {
+                if ($user->getIsEmailAlertEnabled()==0 && $user->getIsThirdPartyEmailAlertEnabled()==0)  {
+                    $insertFirstPoint = 1;
+                }
             }
             
             $dotmailer->setOptIn(1);
@@ -838,6 +854,10 @@ class DotmailerRepository extends EntityRepository
             
             if($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1) {
                 $dotmailer->setNewsletterSignupAt(time());
+            }
+            
+            if ($insertFirstPoint== 1 && ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
+                $dotmailer->setFirstTouchPoint($touchPoint);
             }
             
             $dotmailer = $this->doTouchPointEntryForNewsletterTypeByUser($dotmailer, $userId, $touchPoint, $user->getIsEmailAlertEnabled(), $user->getIsThirdPartyEmailAlertEnabled(), $container, $isNewToDotmailer);
