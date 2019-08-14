@@ -157,9 +157,13 @@ class NewsletterType extends AbstractType
         $user      = $this->container->get('security.token_storage')->getToken()->getUser();
         $dotmailer = $event->getData();
         
+        $insertFirstPoint = 0;
         // refresh dotmailer object
         if ($dotmailer->getId()) {
             $this->em->refresh($dotmailer);
+            if ($dotmailer->getIsContactSent()!=1)  {
+                $insertFirstPoint = 1;
+            }
         } else {
             $isNewToDotmailer = true;
             $dotmailer = new Dotmailer();
@@ -242,6 +246,13 @@ class NewsletterType extends AbstractType
                 $this->em->flush($user);
             }
             
+            if ($insertFirstPoint== 1 && ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
+                $dotmailer->setFirstTouchPoint($touchPoint);
+                $dotmailer->setIsContactSent(1);
+                $this->em->persist($dotmailer);
+                $this->em->flush($dotmailer);
+            }
+
             //send to dotmailer instantly.
             if ($isNewToDotmailer || $user->getIsEmailAlertEnabled() ==1) {
                 exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
