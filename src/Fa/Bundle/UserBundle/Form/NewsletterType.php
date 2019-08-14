@@ -162,7 +162,7 @@ class NewsletterType extends AbstractType
             $isNewToDotmailer = true;
             $dotmailer = new Dotmailer();
             $dotmailer->setFadUser(1);
-            $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_ACCOUNT); 
+            $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_ACCOUNT_PREFS); 
         }
 
         $dotmailerNewsletterTypeId       = $dotmailer->getDotmailerNewsletterTypeId();

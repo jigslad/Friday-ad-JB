@@ -61,6 +61,8 @@ class DotmailerRepository extends EntityRepository
     const TOUCH_POINT_GOOGLE_ID = 50;
     
     const TOUCH_POINT_FACEBOOK_ID = 51;
+    
+    const TOUCH_POINT_ACCOUNT_PREFS = 'ACCOUNT_PREFS'; 
 
     /**
      * Prepare query builder.
