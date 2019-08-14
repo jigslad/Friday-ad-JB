@@ -282,6 +282,13 @@ class Dotmailer
      * @ORM\Column(name="is_half_account", type="boolean", nullable=true, options={"default" = 0})
      */
     private $is_half_account = 0;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_contact_sent", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $is_contact_sent;
 
 
     /**
@@ -1230,5 +1237,27 @@ class Dotmailer
     public function getFirstTouchPoint()
     {
         return $this->firstTouchPoint;
+    } 
+    /**
+     * Set is_contact_sent.
+     *
+     * @param boolean $is_contact_sent
+     * @return Dotmailer
+     */
+    public function setIsContactSent($is_contact_sent)
+    {
+        $this->is_contact_sent = $is_contact_sent;
+        
+        return $this;
+    }
+     
+    /**
+     * Get is_contact_sent.
+     *
+     * @return boolean
+     */
+    public function getIsContactSent()
+    {
+        return $this->is_contact_sent;
     }
 }
