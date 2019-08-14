@@ -425,7 +425,7 @@ class DotmailerRepository extends EntityRepository
                 $dotmailer->setFadUser(1);
                 $dotmailer->setFirstTouchPoint($touchPoint);
             } else {
-                if ($dotmailer->getIsContactSent()==0)  {
+                if ($dotmailer->getIsContactSent()!=1)  {
                     $insertFirstPoint = 1;
                 }
                 // handle opted In
@@ -822,7 +822,7 @@ class DotmailerRepository extends EntityRepository
                 $dotmailer->setFadUser(1);
                 $dotmailer->setFirstTouchPoint($touchPoint);
             } else {
-                if ($dotmailer->getIsContactSent()==0)  {
+                if ($dotmailer->getIsContactSent()!=1)  {
                     $insertFirstPoint = 1;
                 }
             }
