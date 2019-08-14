@@ -423,7 +423,7 @@ class DotmailerRepository extends EntityRepository
                 $dotmailer->setFadUser(1);
                 $dotmailer->setFirstTouchPoint($touchPoint);
             } else {
-                if ($user->getIsEmailAlertEnabled()==0 && $user->getIsThirdPartyEmailAlertEnabled()==0)  {
+                if ($dotmailer->getIsContactSent()==0)  {
                     $insertFirstPoint = 1;
                 }
                 // handle opted In
@@ -474,6 +474,7 @@ class DotmailerRepository extends EntityRepository
             
             if ($insertFirstPoint== 1 && ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
                 $dotmailer->setFirstTouchPoint($touchPoint);
+                $dotmailer->setIsContactSent(1);
             }
             
             //send to dotmailer instantly.
@@ -819,7 +820,7 @@ class DotmailerRepository extends EntityRepository
                 $dotmailer->setFadUser(1);
                 $dotmailer->setFirstTouchPoint($touchPoint);
             } else {
-                if ($user->getIsEmailAlertEnabled()==0 && $user->getIsThirdPartyEmailAlertEnabled()==0)  {
+                if ($dotmailer->getIsContactSent()==0)  {
                     $insertFirstPoint = 1;
                 }
             }
@@ -858,6 +859,7 @@ class DotmailerRepository extends EntityRepository
             
             if ($insertFirstPoint== 1 && ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
                 $dotmailer->setFirstTouchPoint($touchPoint);
+                $dotmailer->setIsContactSent(1);
             }
             
             $dotmailer = $this->doTouchPointEntryForNewsletterTypeByUser($dotmailer, $userId, $touchPoint, $user->getIsEmailAlertEnabled(), $user->getIsThirdPartyEmailAlertEnabled(), $container, $isNewToDotmailer);
