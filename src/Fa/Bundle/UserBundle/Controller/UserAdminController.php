@@ -1071,11 +1071,18 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
                     $this->getEntityManager()->beginTransaction();
                     $userPackageId = $form->get('user_package_id')->getData();
                     $userBoostOveride = $form->get('boost_overide')->getData();
+                    $isResetBoostCount = $form->get('is_reset_boost_count')->getData();
 
                     $userPackage = $this->getRepository('FaUserBundle:UserPackage')->find($userPackageId);
                     if ($userPackage) {
                         $userPackage->setBoostOveride($userBoostOveride);
                         $this->getEntityManager()->persist($userPackage);
+                        
+                        $user = $this->getRepository('FaUserBundle:User')->find($userPackage->getUser()->getId());
+                        $user->setBoostOveride($userBoostOveride);
+                        $user->setIsResetBoostCount($isResetBoostCount);
+                        $this->getEntityManager()->persist($user);
+                        
                     }
                     $this->getEntityManager()->getConnection()->commit();
                 }
