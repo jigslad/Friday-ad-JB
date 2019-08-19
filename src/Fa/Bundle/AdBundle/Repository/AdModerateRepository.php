@@ -146,7 +146,8 @@ class AdModerateRepository extends EntityRepository
                     $this->handleAdFromModerationResult($adRef, self::MODERATION_RESULT_OKEY, $container);
 
                     // handle privacy yac number for ad.
-                    $this->handleAdPrivacyNumber($adRef, $container);
+                    //$this->handleAdPrivacyNumber($adRef, $container);
+                    // commented when we removed Yac FFR-3756
 
                     // handle ad edit live email send for private users only.
                     if ($ad && !$ad->getIsFeedAd() && $ad->getStatus() && $ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_LIVE_ID && $ad->getUser() && $ad->getUser()->getRole() && $ad->getUser()->getRole()->getId() == RoleRepository::ROLE_SELLER_ID) {

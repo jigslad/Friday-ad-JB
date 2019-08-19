@@ -27,13 +27,13 @@
                         {{ form_errors(form.phone) }}
                     </div>
                 </div>
-                <div class="row">
+                {#<div class="row">
                     <div class="large-12 columns">
                         {{ form_label(form.is_private_phone_number) }}
                         {{ form_widget(form.is_private_phone_number) }}
                         {{ form_errors(form.is_private_phone_number) }}
                     </div>
-                </div>
+                </div>#}
                 <div class="row"><div class="large-12 columns">&nbsp;</div></div>
                 <div class="row">
                     <div class="large-12 columns{% if form.contact_through_email.vars.errors|length %} error{% endif %}">

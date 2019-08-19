@@ -119,7 +119,7 @@ class UserAdminType extends AbstractType
             ->add('last_name', TextType::class, array('attr' => array('maxlength' => '100')))
             ->add('email', TextType::class, array('attr' => array('maxlength' => '255')))
             ->add('phone', TelType::class, array('attr' => array('autocomplete' => 'off', 'maxlength' => '25'), 'trim' => true))
-            ->add('is_private_phone_number', CheckboxType::class, array('label' => 'Keep my phone number private'))
+            //->add('is_private_phone_number', CheckboxType::class, array('label' => 'Keep my phone number private'))
             ->add('contact_through_phone', CheckboxType::class, array('label' => 'Contact me by phone'))
             ->add('contact_through_email', CheckboxType::class, array('label' => 'Contact me by email'))
             ->add('old_meta_xml', TextareaType::class, array('label' => 'Note', 'attr' => array('maxlength' => '500')))
@@ -374,9 +374,9 @@ class UserAdminType extends AbstractType
             $form->get('business_category_id')->addError(new FormError($this->translator->trans('Please select business category.', array(), 'validators')));
         }
 
-        if ($form->get('is_private_phone_number')->getData() && $form->get('phone')->getData() && substr($form->get('phone')->getData(), 0, 3) == UserRepository::YAC_PRIACY_NUM_PREFIX) {
+        /*if ($form->get('is_private_phone_number')->getData() && $form->get('phone')->getData() && substr($form->get('phone')->getData(), 0, 3) == UserRepository::YAC_PRIACY_NUM_PREFIX) {
             $form->get('is_private_phone_number')->addError(new FormError($this->translator->trans(' Please enter a different telephone numbers. We are unable to allocate privacy numbers to 070 numbers.', array(), 'validators')));
-        }
+        }*/
 
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
