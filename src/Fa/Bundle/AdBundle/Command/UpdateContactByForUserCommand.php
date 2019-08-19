@@ -112,11 +112,12 @@ EOF
                     $user->setContactThroughPhone(0);
                 }
 
-                if ($ad->getUsePrivacyNumber() == 1) {
+                /*if ($ad->getUsePrivacyNumber() == 1) {
                     $user->setIsPrivatePhoneNumber(1);
                 } else {
                     $user->setIsPrivatePhoneNumber(0);
-                }
+                }*/
+                $user->setIsPrivatePhoneNumber(0);  //made zero as default FFR-3756
             }
 
             $em->persist($user);
