@@ -815,6 +815,14 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="old_ti_user_slug", type="string", length=100, nullable=true)
      */
     private $old_ti_user_slug;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="old_is_private_phone_number", type="boolean", nullable=true, options={"default" = 0})
+     * @Gedmo\Versioned
+     */
+    private $old_is_private_phone_number;
 
     /**
      * Constructor
@@ -2852,5 +2860,28 @@ class User implements UserInterface, \Serializable
     public function getViaPaaLite()
     {
         return $this->via_Paa_Lite;
+    }
+    
+    /**
+     * Set old_is_private_phone_number
+     *
+     * @param boolean $oldIsPrivatePhoneNumber
+     * @return User
+     */
+    public function setOldIsPrivatePhoneNumber($oldIsPrivatePhoneNumber)
+    {
+        $this->old_is_private_phone_number = $oldIsPrivatePhoneNumber;
+        
+        return $this;
+    }
+    
+    /**
+     * Get old_is_private_phone_number
+     *
+     * @return boolean
+     */
+    public function getOldIsPrivatePhoneNumber()
+    {
+        return $this->old_is_private_phone_number;
     }
 }
