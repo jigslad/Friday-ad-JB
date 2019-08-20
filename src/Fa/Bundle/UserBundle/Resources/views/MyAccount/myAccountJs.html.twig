@@ -16,8 +16,7 @@
     $(document).ready(function(){
         bindCustomRadioEvent();
         unsubscribeFromAll();
-        showHideBusinessSellerFields();
-        showHidePrivatePhoneNumberField();
+        showHideBusinessSellerFields();        
         enableDisableContactThroughPhone();
         bindFormErrorEvents();
         {% if not userCardForm.vars.valid %}
@@ -25,9 +24,9 @@
         {% endif %}
         scrollToElement('#successMsgDiv', '1000', -150);
         bindEqualizerEvent('newsletter_equalizer');
+        showHidePrivatePhoneNumberField();
     });
-    
-    style="display:{% if userDetailForm.is_private_phone_number.vars.data %}block{% else %}none{% endif %}"
+        
     $('#my_account .accordion-navigation .content').each(function(){
         if ($(this).hasClass('active')) {
             $(this).siblings('a').find('span:eq(1)').addClass('dark-arrow-up');
@@ -71,20 +70,20 @@
     }
 
     function showHidePrivatePhoneNumberField() {
-    	{% if userDetailForm.is_private_phone_number.vars.data %}
-    		$('#fa_user_user_account_detail_is_private_phone_number').prop('disabled', false);
-    	{% else %}
-    		$('#fa_user_user_account_detail_is_private_phone_number').parent().addClass('checkbox-disabled');
-    		$('#fa_user_user_account_detail_is_private_phone_number').attr('checked', false);
-    		$('#fa_user_user_account_detail_is_private_phone_number').attr('disabled', 'disabled');
-    		$('#fa_user_user_account_detail_is_private_phone_number').parent().removeClass('checked');
-    	{% endif %}
+        {% if userDetailForm.is_private_phone_number.vars.data == 0 %}
+                $('#fa_user_user_account_detail_is_private_phone_number').parent().addClass('checkbox-disabled');
+                $('#fa_user_user_account_detail_is_private_phone_number').attr('checked', false);
+                $('#fa_user_user_account_detail_is_private_phone_number').attr('disabled', 'disabled');
+                $('#fa_user_user_account_detail_is_private_phone_number').parent().removeClass('checked');
+                $('#fa_user_user_account_detail_is_private_phone_number').val(0);
+        {% endif %}
     }
 
     $("#fa_user_user_account_detail_is_private_phone_number").click(function(event){
-    	{% if userDetailForm.is_private_phone_number.vars.data == 0 %}
-    	    event.stopPropagation();
-    	{% endif %}
+        {% if userDetailForm.is_private_phone_number.vars.data == 0 %}
+            event.stopPropagation();
+            showHidePrivatePhoneNumberField();
+        {% endif %}
     });
     
     function showHideBusinessSellerFields() {
