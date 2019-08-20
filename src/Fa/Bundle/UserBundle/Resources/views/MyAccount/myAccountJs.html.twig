@@ -72,9 +72,9 @@
 
     function showHidePrivatePhoneNumberField() {
     	{% if userDetailForm.is_private_phone_number.vars.data %}
-    		$('#fa_user_user_account_detail_is_private_phone_number').attr('disabled', true);
-    	{% else %}
     		$('#fa_user_user_account_detail_is_private_phone_number').attr('disabled', false);
+    	{% else %}
+    		$('#fa_user_user_account_detail_is_private_phone_number').attr('disabled', true);
     	{% endif %}
     }
     
