@@ -17,6 +17,7 @@
         bindCustomRadioEvent();
         unsubscribeFromAll();
         showHideBusinessSellerFields();
+        showHidePrivatePhoneNumberField();
         enableDisableContactThroughPhone();
         bindFormErrorEvents();
         {% if not userCardForm.vars.valid %}
@@ -25,6 +26,8 @@
         scrollToElement('#successMsgDiv', '1000', -150);
         bindEqualizerEvent('newsletter_equalizer');
     });
+    
+    style="display:{% if userDetailForm.is_private_phone_number.vars.data %}block{% else %}none{% endif %}"
     $('#my_account .accordion-navigation .content').each(function(){
         if ($(this).hasClass('active')) {
             $(this).siblings('a').find('span:eq(1)').addClass('dark-arrow-up');
@@ -65,6 +68,14 @@
             $('#fa_user_user_account_detail_new_password').attr('type', 'password');
             $('#fa_user_user_account_detail_old_password').attr('type', 'password');
         }
+    }
+
+    function showHidePrivatePhoneNumberField() {
+    	{% if userDetailForm.is_private_phone_number.vars.data %}
+    		$('#fa_user_user_account_detail_is_private_phone_number').attr('disabled', true);
+    	{% else %}
+    		$('#fa_user_user_account_detail_is_private_phone_number').attr('disabled', false);
+    	{% endif %}
     }
     
     function showHideBusinessSellerFields() {
