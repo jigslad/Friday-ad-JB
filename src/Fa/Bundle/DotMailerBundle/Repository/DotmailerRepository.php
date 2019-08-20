@@ -423,9 +423,8 @@ class DotmailerRepository extends EntityRepository
                 $dotmailer = new Dotmailer();
                 $dotmailer->setOptIn(1);
                 $dotmailer->setFadUser(1);
-                $dotmailer->setFirstTouchPoint($touchPoint);
             } else {
-                if ($dotmailer->getIsContactSent()!=1)  {
+                if (($dotmailer->getIsContactSent() == null) || ($dotmailer->getIsContactSent() !=1))  {                    
                     $insertFirstPoint = 1;
                 }
                 // handle opted In
@@ -479,7 +478,11 @@ class DotmailerRepository extends EntityRepository
             if ($insertFirstPoint== 1 && ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
                 $dotmailer->setFirstTouchPoint($touchPoint);
                 $dotmailer->setIsContactSent(1);
+            } else if($isNewToDotmailer==true && ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
+                $dotmailer->setFirstTouchPoint($touchPoint);
+                $dotmailer->setIsContactSent(1);
             }
+            
             
             //send to dotmailer instantly.
             if ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1) {
@@ -854,9 +857,8 @@ class DotmailerRepository extends EntityRepository
                 $isNewToDotmailer = true;
                 $dotmailer = new Dotmailer();
                 $dotmailer->setFadUser(1);
-                $dotmailer->setFirstTouchPoint($touchPoint);
             } else {
-                if ($dotmailer->getIsContactSent()!=1)  {
+                if (($dotmailer->getIsContactSent() == null) || ($dotmailer->getIsContactSent() !=1))  {                    
                     $insertFirstPoint = 1;
                 }
             }
@@ -897,7 +899,10 @@ class DotmailerRepository extends EntityRepository
             if ($insertFirstPoint== 1 && ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
                 $dotmailer->setFirstTouchPoint($touchPoint);
                 $dotmailer->setIsContactSent(1);
-            }
+            } else if($isNewToDotmailer==true && ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
+                $dotmailer->setFirstTouchPoint($touchPoint);
+                $dotmailer->setIsContactSent(1);
+            }            
             
             $dotmailer = $this->doTouchPointEntryForNewsletterTypeByUser($dotmailer, $userId, $touchPoint, $user->getIsEmailAlertEnabled(), $user->getIsThirdPartyEmailAlertEnabled(), $container, $isNewToDotmailer);
             
