@@ -502,21 +502,19 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
             $em->flush();
 
             // update yac number if phone number changes and user has set privacy number.
-            if ($form->get('is_private_phone_number')->getData() && $oldPhoneNumber != $form->get('phone')->getData()) {
-                //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number edit --user_id='.$id.' >/dev/null &');
-                //commented FFR-3756 
+            /*if ($form->get('is_private_phone_number')->getData() && $oldPhoneNumber != $form->get('phone')->getData()) {
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number edit --user_id='.$id.' >/dev/null &');                
             }
  
             // update yac number if privacy phone number setting is changes.
             if ($oldIsPrivatePhoneNumber != $form->get('is_private_phone_number')->getData()) {
                 if ($form->get('is_private_phone_number')->getData()) {
-                    //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number allocate --user_id='.$id.' >/dev/null &');
-                    //commented FFR-3756
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number allocate --user_id='.$id.' >/dev/null &');                   
                 } elseif (!$form->get('is_private_phone_number')->getData()) {
-                    //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number setsold --user_id='.$id.' >/dev/null &');
-                    //commented FFR-3756 
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number setsold --user_id='.$id.' >/dev/null &');                    
                 }
-            }
+            }*/
+            //commented FFR-3756
 
             $routeParams = array();
             $successMsg  = 'User was updated successfully.';
