@@ -46,6 +46,7 @@
                 
             {{ form_start(form, {'attr': {'novalidate': ''}}) }}
                 {{ form_row(form.boost_overide) }}
+                {{ form_row(form.is_reset_boost_count) }}
                 <ul class="button-group text-center">
                     <li>{{ form_widget(form.save, {'label': 'Save'|trans, 'attr': {'class':'tiny button mb0'}}) }}</li>
                     <li><button type="reset" class="tiny button mb0" onclick="javascript:window.location='{{ goBackUrl ? goBackUrl : path('user_admin') }}'">{{ 'Go back'|trans({}, 'messages') }}</button></li>
