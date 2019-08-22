@@ -81,7 +81,7 @@ EOF
             
             while ($row = $reader->getRow()) {
                 if (isset($row['email']) && $row['email']) {
-                    $this->getContainer->get('fa.mail.manager')->send($row['email'], 'private_numbers_change', array(), CommonManager::getCurrentCulture($this->getContainer));
+                    $this->getContainer()->get('fa.mail.manager')->send($row['email'], 'private_numbers_change', array(), CommonManager::getCurrentCulture($this->getContainer()));
                 }
             }
             
