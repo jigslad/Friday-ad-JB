@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Fa\Bundle\AdBundle\Command;
+namespace Fa\Bundle\UserBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -71,7 +71,7 @@ EOF
         
         echo "RUN TIME DATE IS: >>>>>>>>>> ".$date."\N";
         
-        if ($csvFile) {
+        //if ($csvFile) {
             $reader = new \EasyCSV\Reader(__DIR__."/FAD.csv");
             $reader->setDelimiter(';');
             $batchSize = 100;
@@ -87,7 +87,7 @@ EOF
             if ($returnVar !== 0) {
                 $output->writeln('Error occurred during subtask', true);
             }
-        }
+        //}
            
     }
 }
