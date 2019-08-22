@@ -65,7 +65,8 @@ EOF
         
         //get arguments passed in command
         $csvFile = '';
-        $csvFile = $input->getArgument('csv_file');
+        //$csvFile = $input->getArgument('csv_file');
+        $returnVar = 0;
         
         $date = date('d-m-Y');
         
