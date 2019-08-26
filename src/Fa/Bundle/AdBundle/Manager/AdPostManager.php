@@ -487,7 +487,7 @@ class AdPostManager
         }
 
         // Update ad yac number.
-        $this->updateAdYacNumber($ad, $isNewAd);
+        //$this->updateAdYacNumber($ad, $isNewAd);
         $this->setAdUserFreePackage($ad, $category->getId(), $user);
 
         if ($this->container->get('session')->get('redirect_to_cart')==0) {
