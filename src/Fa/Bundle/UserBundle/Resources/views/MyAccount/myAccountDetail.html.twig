@@ -16,6 +16,12 @@
                 
                 {{ form_row(userDetailForm.phone, {'attr': {'class': 'white-field'}}) }}
                 
+                {% if app.user.getIsPrivatePhoneNumber() %}
+                <div class="hlight-box clearfix pvt-phone-num white-checkbox">
+                <span style="color:#ff0000;font-weight:bold">Please note this privacy number feature will no longer exist from 1st September 2019. Read more <a href="https://help.friday-ad.co.uk/hc/en-us/articles/360034112434">here</a>.</span>
+                </div>
+                {% endif %}
+                
                 {# <div class="hlight-box clearfix pvt-phone-num white-checkbox {% if userDetailForm.is_private_phone_number.vars.errors|length %}mb0{% endif %}" style="display:{% if userDetailForm.is_private_phone_number.vars.data %}block{% else %}none{% endif %}">
                     {{ form_widget(userDetailForm.is_private_phone_number) }}
                     {{ form_label(userDetailForm.is_private_phone_number) }}

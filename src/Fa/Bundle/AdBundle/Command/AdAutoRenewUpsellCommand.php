@@ -192,7 +192,7 @@ EOF
                 $this->em->flush($ad);
 
                 // activate yac number
-                $this->em->getRepository('FaAdBundle:Ad')->handleAdPrivacyNumber($adId, $this->getContainer());
+                //$this->em->getRepository('FaAdBundle:Ad')->handleAdPrivacyNumber($adId, $this->getContainer());
             }
 
             $this->em->flush();

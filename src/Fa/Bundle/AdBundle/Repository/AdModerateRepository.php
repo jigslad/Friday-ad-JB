@@ -605,7 +605,7 @@ class AdModerateRepository extends EntityRepository
         }
 
         // handle privacy yac number for ad.
-        $this->handleAdPrivacyNumber($adId, $container);
+        //$this->handleAdPrivacyNumber($adId, $container);
 
         // Update ad data to solr
         $ad = $this->_em->getRepository('FaAdBundle:Ad')->find($adId);
