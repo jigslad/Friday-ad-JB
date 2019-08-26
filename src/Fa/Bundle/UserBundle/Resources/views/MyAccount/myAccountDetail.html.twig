@@ -16,12 +16,12 @@
                 
                 {{ form_row(userDetailForm.phone, {'attr': {'class': 'white-field'}}) }}
                 
-                <div class="hlight-box clearfix pvt-phone-num white-checkbox {% if userDetailForm.is_private_phone_number.vars.errors|length %}mb0{% endif %}">
+                {# <div class="hlight-box clearfix pvt-phone-num white-checkbox {% if userDetailForm.is_private_phone_number.vars.errors|length %}mb0{% endif %}" style="display:{% if userDetailForm.is_private_phone_number.vars.data %}block{% else %}none{% endif %}">
                     {{ form_widget(userDetailForm.is_private_phone_number) }}
                     {{ form_label(userDetailForm.is_private_phone_number) }}
                     <a href="#" class="help-icon" data-reveal-id="privacyNumberModal">{{'Help'|trans({}, 'frontend-register')}}</a>
                 </div>
-                {{ form_errors(userDetailForm.is_private_phone_number) }}
+                {{ form_errors(userDetailForm.is_private_phone_number) }}#}
 
                 
                 <div class="buyer-contact">

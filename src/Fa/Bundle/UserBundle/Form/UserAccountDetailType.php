@@ -100,7 +100,7 @@ class UserAccountDetailType extends AbstractType
                 )
             )
             ->add('phone', TelType::class, array('attr' => array('autocomplete' => 'off', 'maxlength' => '25'), 'trim' => true, 'label' => 'Telephone number (optional)'))
-            ->add('is_private_phone_number', CheckboxType::class, array('data' => (($loggedInUser->getIsPrivatePhoneNumber())?true:false),'label' => '<span style="color:#ff0000">Keep my phone number private <br /><br /> Please note this privacy number feature will no longer exist from 1st September 2019. Read more <a href="https://help.friday-ad.co.uk/hc/en-us/articles/360034112434" target="_blank">here</a>.</span>'))
+            //->add('is_private_phone_number', CheckboxType::class, array('data' => (($loggedInUser->getIsPrivatePhoneNumber())?true:false),'label' => '<span style="color:#ff0000">Keep my phone number private <br /><br /> Please note this privacy number feature will no longer exist from 1st September 2019. Read more <a href="">here</a>.</span>'))
             ->add('contact_through_phone', CheckboxType::class, array('label' => 'Contact by phone'))
             ->add('contact_through_email', CheckboxType::class, array('label' => 'Contact by email')) 
             ->add('save_changes', SubmitType::class, array('label' => 'Save changes'));
@@ -210,11 +210,11 @@ class UserAccountDetailType extends AbstractType
 
         /*if ($form->get('is_private_phone_number')->getData() && $form->get('phone')->getData() && substr($form->get('phone')->getData(), 0, 3) == UserRepository::YAC_PRIACY_NUM_PREFIX) {
             $form->get('is_private_phone_number')->addError(new FormError($this->translator->trans(' Please enter a different telephone numbers. We are unable to allocate privacy numbers to 070 numbers.', array(), 'validators')));
-        }*/
+        }
         
         if ($form->get('is_private_phone_number')->getData()!='') {
             $form->get('is_private_phone_number')->addError(new FormError($this->translator->trans(' Please uncheck privacy number.', array(), 'validators')));
-        }
+        }*/
 
         if ($form->has('old_password')) {
             $oldPasswordEncoded = $encoder->encodePassword($form->get('old_password')->getData(), $user->getSalt());
