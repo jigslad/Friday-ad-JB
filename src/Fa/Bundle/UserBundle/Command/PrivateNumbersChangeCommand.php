@@ -12,6 +12,7 @@
 namespace Fa\Bundle\UserBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,6 +36,7 @@ class PrivateNumbersChangeCommand extends ContainerAwareCommand
         $this
         ->setName('fa:change:private-numbers')
         ->setDescription("Change Private Numbers")
+        ->addArgument('csv_file', InputArgument::REQUIRED, 'CSV File')
         ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
         ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', "256M")
         ->addOption('csv_file', null, InputOption::VALUE_OPTIONAL, 'Csv File', null)
@@ -47,7 +49,7 @@ Actions:
 
 Command:
  - php bin/console fa:change:private-numbers
- - php bin/console fa:change:private-numbers --csv_file="FAD.csv"
+ - php bin/console fa:change:private-numbers FAD.csv
 EOF
         );
     }
@@ -65,30 +67,30 @@ EOF
         
         //get arguments passed in command
         $csvFile = '';
-        //$csvFile = $input->getArgument('csv_file');
+        $csvFile = $input->getArgument('csv_file');
         $returnVar = 0;
         
         $date = date('d-m-Y');
         
         echo "RUN TIME DATE IS: >>>>>>>>>> ".$date."\N";
         
-        //if ($csvFile) {
-            $reader = new \EasyCSV\Reader(__DIR__."/FAD.csv");
+        if ($csvFile) {
+            $reader = new \EasyCSV\Reader(__DIR__."/".$csvFile);
             $reader->setDelimiter(';');
             $batchSize = 100;
             $row = 0;
-            $parameters = array();
+            $parameters = array(); 
             
-            while ($row = $reader->getRow()) {
+            while ($row = $reader->getRow()) {                
                 if (isset($row['email']) && $row['email']) {
-                    $this->getContainer()->get('fa.mail.manager')->send($row['email'], 'private_numbers_change', array(), CommonManager::getCurrentCulture($this->getContainer()));
+                    $this->getContainer()->get('fa.mail.manager')->send($row['email'], 'private_numbers_change', array(), CommonManager::getCurrentCulture($this->getContainer()), null, array(), array(), array(), null,null, 1,0);
                 }
             }
             
             if ($returnVar !== 0) {
                 $output->writeln('Error occurred during subtask', true);
             }
-        //}
+        }
            
     }
 }
