@@ -290,16 +290,15 @@ class UserImageManager
     {
         // no need to generate thumbnail here. Since Amazon Lambda function is written to handle the same.
         $objAS3IM = AmazonS3ImageManager::getInstance($this->container);
-        return $objAS3IM->uploadImageToS3($uploadedFile->getRealPath(), $this->getAdImageDestination($imageName));
+        return $objAS3IM->uploadImageToS3($uploadedFile->getRealPath(), $this->getUserImageDestination($imageName));
     }
     
-    /**
+    /** 
      * Get the destination file path where the ia
      * @param string $imageName
      * @return string
-     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
      */
-    private function getAdImageDestination($imageName)
+    private function getUserImageDestination($imageName)
     {
         return $this->getOrgImagePath() . DIRECTORY_SEPARATOR . $imageName . '.jpg';
     }
