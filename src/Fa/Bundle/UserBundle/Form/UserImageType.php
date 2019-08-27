@@ -146,27 +146,43 @@ class UserImageType extends AbstractType
             }
 
             $webPath      = $this->container->get('kernel')->getRootDir().'/../web';
-            $orgImageName = $uploadedFile->getClientOriginalName();
-            $orgImageName = str_replace(array('"', "'"), '', $orgImageName);
-            $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imagePath;
-            $orgImageName = escapeshellarg($orgImageName);
-
-            //upload original image.
-            $uploadedFile->move($orgImagePath, $orgImageName);
-
-            $userImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
-
-            // remove image if its from profile page.
-            if ($profileImage) {
-                $userImageManager->removeImage();
+            
+            if($flagDirectS3Upload){
+                $userImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
+                $imageFileName = "";
+                
+                if (!empty($image->getImageName())) {
+                    $imageFileName = $image->getImageName();
+                } else {
+                    $imageFileName = CommonManager::generateImageFileName($adTitle, $adId, $maxOrder);
+                    $image->setImageName($imageFileName);
+                }
+                
+                $userImageS3Name = $userImageManager->uploadImageDirectlyToS3($uploadedFile, $imageFileName);
+                
+            } else {
+                $orgImageName = $uploadedFile->getClientOriginalName();
+                $orgImageName = str_replace(array('"', "'"), '', $orgImageName);
+                $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imagePath;
+                $orgImageName = escapeshellarg($orgImageName);
+    
+                //upload original image.
+                $uploadedFile->move($orgImagePath, $orgImageName);
+    
+                $userImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
+    
+                // remove image if its from profile page.
+                if ($profileImage) {
+                    $userImageManager->removeImage();
+                }
+                //save original jpg image.
+                //$userImageManager->saveOriginalJpgImage($orgImageName);
+    
+                //create thumbnails
+                $userImageManager->createThumbnail();
+    
+                //$userImageManager->uploadImagesToS3($image);
             }
-            //save original jpg image.
-            $userImageManager->saveOriginalJpgImage($orgImageName);
-
-            //create thumbnails
-            $userImageManager->createThumbnail();
-
-            //$userImageManager->uploadImagesToS3($image);
         }
     }
 

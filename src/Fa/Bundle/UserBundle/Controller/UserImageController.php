@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\UserBundle\Controller;
 
+use GuzzleHttp\Client;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -422,8 +423,42 @@ class UserImageController extends CoreController
                 } else {
                     $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imageObj->getImage();
                 }
+                
+                $imageRelpath = CommonManager::getImageRelativePath($userId, $imageObj->getPath(), $imageObj->getHash());
+                
+                // start of Lambda API call for altering image
+                $amazonAPIs = $this->container->getParameter("amazon.lambda.api");
+                if (isset($amazonAPIs['s3UploadImagePython']) && isset($amazonAPIs['s3UploadImagePython']['url'])) {
+                    // todo test x-api-key with test function available in BannerController and implement here later.
+                    $amazonAPIUrl = $amazonAPIs['s3UploadImagePython']['url'];
+                    $clientReqAPI = new Client();
+                    $resAPI = $clientReqAPI->request("GET", $amazonAPIUrl, [
+                        'query' => [
+                            'key' => $imageRelpath,
+                            'x' => $request->get('x'),
+                            'y' => $request->get('y'),
+                            'scale' => $request->get('scale'),
+                            'angle' => $request->get('angle'),
+                        ],
+                    ]);
+                    if ($resAPI->getStatusCode() == 200) {
+                        $resJsonBody = $resAPI->getBody()->getContents();
+                        $resArr = json_decode($resJsonBody, true);
+                        if (isset($resArr['error']) && $resArr['error'] == 0) {
+                            $successMsg = $this->get('translator')->trans('Photo has been edited successfully.');
+                        } else {
+                            $error = $this->get('translator')->trans('Problem in croping photo.');
+                        }
+                    } else {
+                        $error = $this->get('translator')->trans('Problem in croping photo.');
+                    }
+                } else {
+                    $error = $this->get('translator')->trans('Image not cropped due to Lambda unavailability. Set in parameter from My NMP Everything.');
+                }
+                // end of Lambda API call for altering image
+                
 
-                if (file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg')) {
+                /*if (file_exists($orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg')) {
                     exec('convert '.$orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg'.' -resize '.$request->get('profile_crop_real_w').'x'.$request->get('profile_crop_real_h').'^ -crop '.$request->get('profile_crop_w').'x'.$request->get('profile_crop_h').'+'.($request->get('profile_crop_x') < 0 ? 0 : $request->get('profile_crop_x')).'+'.($request->get('profile_crop_y') < 0 ? 0 : $request->get('profile_crop_y')).' '.$orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg');
 
                     if ($isCompany) {
@@ -440,7 +475,7 @@ class UserImageController extends CoreController
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userId.' >/dev/null &');
                 } else {
                     $error = $this->get('translator')->trans('Problem in loading image.');
-                }
+                }*/
 
                 return new JsonResponse(array('error' => $error, 'image' => $image));
             }

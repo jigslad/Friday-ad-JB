@@ -14,7 +14,12 @@ namespace Fa\Bundle\UserBundle\Manager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Fa\Bundle\CoreBundle\Manager\ThumbnailManager;
 use Fa\Bundle\AdBundle\Listener\AdListener;
-
+use Gedmo\Sluggable\Util\Urlizer;
+use Aws\S3\S3Client;
+use \Exception;
+use Fa\Bundle\UserBundle\Entity\UserImage;
+use Fa\Bundle\CoreBundle\Manager\AmazonS3ImageManager;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Ad image manager.
  *
@@ -274,4 +279,28 @@ class UserImageManager
             $adListner->handleSolr($image->getAd());
         }
     }*/
+    
+    /**
+     * Receives the input image object and uploads to S3.
+     * @param UploadedFile $uploadedFile
+     * @param string       $imageName
+     * @return string
+     */
+    public function uploadImageDirectlyToS3($uploadedFile, $imageName)
+    {
+        // no need to generate thumbnail here. Since Amazon Lambda function is written to handle the same.
+        $objAS3IM = AmazonS3ImageManager::getInstance($this->container);
+        return $objAS3IM->uploadImageToS3($uploadedFile->getRealPath(), $this->getAdImageDestination($imageName));
+    }
+    
+    /**
+     * Get the destination file path where the ia
+     * @param string $imageName
+     * @return string
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
+     */
+    private function getAdImageDestination($imageName)
+    {
+        return $this->getOrgImagePath() . DIRECTORY_SEPARATOR . $imageName . '.jpg';
+    }
 }
