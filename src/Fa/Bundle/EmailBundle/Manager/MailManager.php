@@ -105,6 +105,8 @@ class MailManager
                 $date = strtotime(date('Y-m-d'));
                 if($pixelTrack) {
                     $mailVars['pixel_track'] = '<img src="'.$this->container->get('router')->generate('pixel_track', array('gif' => CommonManager::encryptDecrypt('10101', $trackId)), true).'"></img>';
+                } else {
+                    $mailVars['pixel_track'] = '';
                 }
                 $this->setTo($to);
                 $this->setFrom($from);
