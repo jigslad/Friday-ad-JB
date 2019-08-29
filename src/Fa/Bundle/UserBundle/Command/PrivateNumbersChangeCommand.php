@@ -37,7 +37,7 @@ class PrivateNumbersChangeCommand extends ContainerAwareCommand
         ->setName('fa:change:private-numbers')
         ->setDescription("Change Private Numbers")
         ->addArgument('csv_file', InputArgument::REQUIRED, 'CSV File')
-        ->addOption('email_identifier', InputOption::REQUIRED, 'Email Identifier')
+        ->addOption('email_identifier', null, InputOption::VALUE_OPTIONAL, 'Email Identifier', null)        
         ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
         ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', "256M")
         ->addOption('csv_file', null, InputOption::VALUE_OPTIONAL, 'Csv File', null)
@@ -50,7 +50,7 @@ Actions:
 
 Command:
  - php bin/console fa:change:private-numbers
- - php bin/console fa:change:private-numbers FAD.csv --email_identifier=private_numbers_change_phase_two
+ - php bin/console fa:change:private-numbers --email_identifier=private_numbers_change_phase_two  FAD.csv 
 EOF
         );
     }
