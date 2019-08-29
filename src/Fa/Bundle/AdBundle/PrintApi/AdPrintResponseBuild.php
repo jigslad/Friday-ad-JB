@@ -151,6 +151,8 @@ class AdPrintResponseBuild
         
         if($ad->getUser()->getContactThroughPhone()) {
             $this->printApiResponse[AdPrintFieldMappingInterface::PHONE_NUMBER] = ($ad->getBusinessPhone() ? $ad->getBusinessPhone() : ($ad->getPrivacyNumber() ? $ad->getPrivacyNumber() : ($ad->getUser() ? $ad->getUser()->getPhone() : null)));
+        } else {
+            $this->printApiResponse[AdPrintFieldMappingInterface::PHONE_NUMBER] = null;
         }
    }
 
