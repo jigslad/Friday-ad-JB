@@ -90,7 +90,7 @@ EOF
             
             while ($row = $reader->getRow()) {                
                 if (isset($row['email']) && $row['email']) {
-                    $this->getContainer()->get('fa.mail.manager')->send($row['email'], $email_identifier , array(), CommonManager::getCurrentCulture($this->getContainer()), null, array(), array(), array(), null,null, 1,0);
+                    $this->getContainer()->get('fa.mail.manager')->send($row['email'], $email_identifier, array(), CommonManager::getCurrentCulture($this->getContainer()), array(), array(), array(), array(), null,null, 1,0);
                     echo 'Sent Mail to '.$row['email'].'<br>';
                 }
             }
