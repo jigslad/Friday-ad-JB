@@ -439,6 +439,7 @@ class UserImageController extends CoreController
                             'y' => $request->get('y'),
                             'scale' => $request->get('scale'),
                             'angle' => $request->get('angle'),
+                            'image_type'  => ($isCompany)?'company':'user' 
                         ],
                     ]);
                     if ($resAPI->getStatusCode() == 200) {

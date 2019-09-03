@@ -438,6 +438,7 @@ class AdImageController extends CoreController
                             'y' => $request->get('y'),
                             'scale' => $request->get('scale'),
                             'angle' => $request->get('angle'),
+                            'image_type'  => 'advert' 
                         ],
                     ]);
                     if ($resAPI->getStatusCode() == 200) {
