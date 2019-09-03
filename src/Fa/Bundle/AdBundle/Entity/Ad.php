@@ -579,6 +579,14 @@ class Ad
      * })
      */
     private $campaign;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="old_privacy_number", type="string", length=255, nullable=true)
+     * @Gedmo\Versioned
+     */
+    private $old_privacy_number;
 
     /**
      * Constructor
@@ -2417,5 +2425,28 @@ class Ad
     public function getBoostedAt()
     {
         return $this->boosted_at;
+    }
+    
+    /**
+     * Set old privacy number
+     *
+     * @param string $oldPrivacyNumber
+     * @return Ad
+     */
+    public function setOldPrivacyNumber($oldPrivacyNumber)
+    {
+        $this->old_privacy_number = $oldPrivacyNumber;
+        
+        return $this;
+    }
+    
+    /**
+     * Get Old privacy number
+     *
+     * @return string
+     */
+    public function getOldPrivacyNumber()
+    {
+        return $this->old_privacy_number;
     }
 }
