@@ -37,6 +37,7 @@ class PrivateNumbersChangeCommand extends ContainerAwareCommand
         ->setName('fa:change:private-numbers')
         ->setDescription("Change Private Numbers")
         ->addArgument('csv_file', InputArgument::REQUIRED, 'CSV File')
+        ->addOption('email_identifier', null, InputOption::VALUE_OPTIONAL, 'Email Identifier', null)        
         ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
         ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', "256M")
         ->addOption('csv_file', null, InputOption::VALUE_OPTIONAL, 'Csv File', null)
@@ -49,7 +50,7 @@ Actions:
 
 Command:
  - php bin/console fa:change:private-numbers
- - php bin/console fa:change:private-numbers FAD.csv
+ - php bin/console fa:change:private-numbers --email_identifier=private_numbers_change_phase_two  FAD.csv 
 EOF
         );
     }
@@ -68,6 +69,12 @@ EOF
         //get arguments passed in command
         $csvFile = '';
         $csvFile = $input->getArgument('csv_file');
+        
+        $email_identifier = '';
+        if ($input->hasOption("email_identifier") && $input->getOption("email_identifier")) {
+            $email_identifier = $input->getOption("email_identifier");
+        }
+        
         $returnVar = 0;
         
         $date = date('d-m-Y');
@@ -83,7 +90,8 @@ EOF
             
             while ($row = $reader->getRow()) {                
                 if (isset($row['email']) && $row['email']) {
-                    $this->getContainer()->get('fa.mail.manager')->send($row['email'], 'private_numbers_change', array(), CommonManager::getCurrentCulture($this->getContainer()), null, array(), array(), array(), null,null, 1,0);
+                    $this->getContainer()->get('fa.mail.manager')->send($row['email'], $email_identifier, array(), CommonManager::getCurrentCulture($this->getContainer()), array(), array(), array(), array(), null,null, 1,0);
+                    echo 'Sent Mail to '.$row['email'].'<br>';
                 }
             }
             
