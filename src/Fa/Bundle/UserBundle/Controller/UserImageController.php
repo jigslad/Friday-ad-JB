@@ -435,8 +435,8 @@ class UserImageController extends CoreController
                     $resAPI = $clientReqAPI->request("GET", $amazonAPIUrl, [
                         'query' => [
                             'key' => $imageRelpath,
-                            'x' => $request->get('x'),
-                            'y' => $request->get('y'),
+                            'x' => $request->get('profile_crop_real_w'), 
+                            'y' => $request->get('profile_crop_real_h'),
                             'scale' => $request->get('scale'),
                             'angle' => $request->get('angle'),
                             'image_type'  => ($isCompany)?'company':'user' 
@@ -445,6 +445,22 @@ class UserImageController extends CoreController
                     if ($resAPI->getStatusCode() == 200) {
                         $resJsonBody = $resAPI->getBody()->getContents();
                         $resArr = json_decode($resJsonBody, true);
+                        
+                        exec('convert '.$orgImagePath.DIRECTORY_SEPARATOR.$userId.'_org.jpg'.' -resize '.$request->get('profile_crop_real_w').'x'.$request->get('profile_crop_real_h').'^ -crop '.$request->get('profile_crop_w').'x'.$request->get('profile_crop_h').'+'.($request->get('profile_crop_x') < 0 ? 0 : $request->get('profile_crop_x')).'+'.($request->get('profile_crop_y') < 0 ? 0 : $request->get('profile_crop_y')).' '.$orgImagePath.DIRECTORY_SEPARATOR.$userId.'.jpg');
+                        
+                        if ($isCompany) {
+                            $imageObj = $this->getRepository('FaUserBundle:UserSite')->findOneBy(array('user'=> $userId));
+                            if ($imageObj && $imageObj->getPath()) {
+                                $image = CommonManager::getUserLogo($this->container, $imageObj->getPath(), $userId, null, null, true, $isCompany);
+                            }
+                        } else {
+                            $imageObj = $this->getRepository('FaUserBundle:User')->find($userId);
+                            if ($imageObj && $imageObj->getImage()) {
+                                $image = CommonManager::getUserLogo($this->container, $imageObj->getImage(), $userId, null, null, true);
+                            }
+                        }
+                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userId.' >/dev/null &');
+                        
                         if (isset($resArr['error']) && $resArr['error'] == 0) {
                             $successMsg = $this->get('translator')->trans('Photo has been edited successfully.');
                         } else {
