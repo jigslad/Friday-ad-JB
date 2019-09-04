@@ -121,11 +121,11 @@ class AdPrintController extends CoreController
         $em->clear();
         $count = $this->getRepository('FaAdBundle:AdPrint')->getAdPrintQueryBuilder($searchParam, $this->container)
             ->select('COUNT('.AdPrintRepository::ALIAS.'.id)')
-            ->getQuery()->getSingleScalarResult();
+            ->getQuery()->getOneOrNullResult();
         
         $printApiArray = array(
             'CurrentPage' => (int) $page,
-            'TotalPages'  => ceil($count / $limit),
+            'TotalPages'  => (!empty($count))?ceil($count[1] / $limit):0,            
             'Adverts'     => $printAdArray,
         );
 

@@ -950,10 +950,10 @@ class AdPostType extends AbstractType
                         }
                     }
                     if (isset($cookieLocation['town']) && $cookieLocation['town']) {
-                        if($locationId!='' && $locationId==2) { $locationText = $cookieLocation['town']; }
+                        if($locationId!='' && $locationId==2) { $locationText = ''; } else { $locationText = $cookieLocation['town']; }
                     }
                     if (isset($cookieLocation['paa_county']) && $cookieLocation['paa_county']) {
-                        if($locationId!='' && $locationId==2) { $locationText .= ', ' . $cookieLocation['paa_county']; }
+                        if($locationId!='' && $locationId==2) { $locationText = ''; } else { $locationText .= ', ' . $cookieLocation['paa_county']; }
                     }
                 }
             }

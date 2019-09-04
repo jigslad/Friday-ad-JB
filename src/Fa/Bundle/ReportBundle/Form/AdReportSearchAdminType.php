@@ -87,7 +87,7 @@ class AdReportSearchAdminType extends AbstractType
                         'Date posted' => 'ad_created_at',
                         'Date of last action' => 'created_at',
                         'Date of print insertion' => 'print_insert_date',
-                        'Payment date' => 'payment_date',
+                        //'Payment date' => 'payment_date',
                     ),
                 )
             )
@@ -195,13 +195,13 @@ class AdReportSearchAdminType extends AbstractType
                     'label' => 'Only ads booked through Admin',
                 )
             )
-            ->add(
+            /*->add(
                 'payment_date_chk',
                 CheckboxType::class,
                 array(
                     'label' => 'Payment date',
                 )
-            )
+            )*/
             ->addEventListener(FormEvents::SUBMIT, array($this, 'onSubmit'));
     }
 

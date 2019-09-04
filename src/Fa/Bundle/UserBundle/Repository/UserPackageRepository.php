@@ -143,7 +143,7 @@ class UserPackageRepository extends EntityRepository
                 $userPackage->setIsAutoRenew(0);
             }
             
-            if ($remark == 'package-renew-thourgh-recurring') {
+            if ($remark == 'package-renew-thourgh-recurring'  || $remark == 'auto-renew-package-backend') {                
                 $userPackage->setRenewedAt(time());
                 $userPackage->setIsRenewalMailSent(1);
             }
