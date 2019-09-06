@@ -363,4 +363,22 @@ class LocationController extends CoreController
         
         return new Response();
     }
+    
+    public function ajaxNurseryLocationGroupAction(Request $request)
+    {
+        $nurseryGroupCount = 0;
+        
+        if ($request->isXmlHttpRequest() && $request->get('term') != null) {
+            $townVal = $request->get('term');
+            if (!empty($townVal)) {
+                $nurseryGroupCount = $this->getRepository('FaEntityBundle:LocationGroupLocation')->checkIsNurseryGroup($townVal);
+            }
+            
+            if($nurseryGroupCount > 0) {
+                return new JsonResponse(array('response' => true, 'nurseryGroupCount' => $nurseryGroupCount));
+            }
+        }
+        
+        return new JsonResponse(array('response' => false, 'nurseryGroupCount' => $nurseryGroupCount));
+    }
 }
