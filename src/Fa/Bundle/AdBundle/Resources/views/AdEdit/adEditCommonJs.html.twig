@@ -98,7 +98,6 @@
                $('#'+formName+'_'+field).val(selectedId);
            } else if (fieldType == 'radio') { 
                $("input[name='"+formName+"["+field+"]']").attr('checked', false);
-               alert('radio');
 				if(!$( '#'+choiceId ).hasClass( "active" )) { 
 					$('.'+fieldChoice).removeClass('active');
                     $('#'+choiceId).addClass('active');
@@ -134,16 +133,35 @@
     
     function bindLocationEvents(formName)
     {
+    	var actualLocationId = $('#'+formName+'_location').val();
+        var actualLocIdIsNursery = false;
+        
+        if(checkIsNurseryGroup(actualLocationId)) {
+        	actualLocIdIsNursery = true;
+        }
+
         $('#change_location_link').click(function(){
             $('#location_field_div').show();
         });
 
         $('#find_on_map').click(function(){
             var locationVal = $('#'+formName+'_location_autocomplete').val();
+            var locationId = $('#'+formName+'_location').val();
+
             if (locationVal && locationVal != 'United Kingdom') {
             	 $('#location_map_div').addClass('show-location-mapfit');
             	 $('#location_map_div').removeClass('hide-location-mapfit');
-                showAddress(locationVal);
+				
+            	 if(actualLocIdIsNursery) {
+                	 if(checkIsNurseryGroup(locationId)) {
+                    		showAddress(locationVal);
+                	 } else {
+                		 $('#'+formName+'_location_error').html('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.');
+                    	 return false;
+                     }
+            	 } else {
+            		 showAddress(locationVal);
+                 }
             } else {
                 showAddress('United Kingdom');
                 $('#location_map_div').removeClass('show-location-mapfit');
