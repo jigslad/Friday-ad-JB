@@ -173,14 +173,12 @@ function showCustomMarkerAx(apikey, lat, lng, markerImage)
 	myMarker = L.marker([lat, lng], {icon: ajaxmyIcon}).addTo(map);
 }
 
-function checkIsNurseryGroup(townVal) {
-	$.ajax({
+function checkIsNurseryGroup(townVal,adId, callback) {
+    $.ajax({
         type: "GET",
         dataType: "json",
-        url: Routing.generate('ajax_nursery_location_group', { term: townVal }),
-        success: function(data) {
-            return data.response;
-        }
+        url: Routing.generate('ajax_nursery_location_group', { term: townVal, adId: adId }),
+        success: callback
     });
 }
 

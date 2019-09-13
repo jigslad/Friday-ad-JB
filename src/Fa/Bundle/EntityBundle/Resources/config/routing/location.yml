@@ -51,7 +51,7 @@ area_ajax_find_town_by_term:
         expose: true
         
 ajax_nursery_location_group:
-    path:     /location/ajax/nursery_location_group/{term}/
+    path:     /location/ajax/nursery_location_group/{term}/{adId}/
     defaults: { _controller: "FaEntityBundle:Location:ajaxNurseryLocationGroup" }
     options:
         expose: true
