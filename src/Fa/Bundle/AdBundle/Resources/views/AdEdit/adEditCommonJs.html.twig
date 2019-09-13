@@ -136,9 +136,9 @@
     	var actualLocationId = $('#'+formName+'_location').val();
         var actualLocIdIsNursery = false;
         
-        if(checkIsNurseryGroup(actualLocationId)) {
-        	actualLocIdIsNursery = true;
-        }
+        checkIsNurseryGroup(actualLocationId, {{ ad.id }}, function(data)  {
+        	actualLocIdIsNursery = data.response;
+        });
 
         $('#change_location_link').click(function(){
             $('#location_field_div').show();
@@ -153,15 +153,19 @@
             	 $('#location_map_div').removeClass('hide-location-mapfit');
 				
             	 if(actualLocIdIsNursery) {
-                	 if(checkIsNurseryGroup(locationId)) {
-                    		showAddress(locationVal);
-                	 } else {
-                		 $('#'+formName+'_location_error').html('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.');
-                    	 return false;
-                     }
-            	 } else {
-            		 showAddress(locationVal);
+                     checkIsNurseryGroup(locationId, {{ ad.id }}, function(locdata) {
+                        if(locdata.response == true) {
+                                showAddress(locationVal);
+                         } else {
+
+                             $('#'+formName+'_location_autocomplete').html().append('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.');
+                            return false;
+                          }
+                 	});
+                 } else {
+                     showAddress(locationVal);
                  }
+
             } else {
                 showAddress('United Kingdom');
                 $('#location_map_div').removeClass('show-location-mapfit');

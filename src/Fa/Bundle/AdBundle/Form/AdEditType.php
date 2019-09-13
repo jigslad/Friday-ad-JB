@@ -137,6 +137,7 @@ class AdEditType extends AdPostType
 
         $this->validatePrice($form);
         $this->validateAdLocation($form);
+        $this->validateNurseryLocation($form);
         $this->validateDescription($form);
         $this->validateBusinessAdField($form);
         $this->validateYoutubeField($form);
@@ -243,4 +244,26 @@ class AdEditType extends AdPostType
             }
         }
     }
+    
+    protected function validateNurseryLocation($form) {
+        $ad          = $this->ad;
+        $adIdArray   = array();
+        $adIdArray[] = $adId = $ad->getId();
+        $getPackageRuleArray = $getActivePackage = array();
+        if ($form->has('location') && $form->get('location')->getData()!='') {
+            $getLocationId = $form->get('location')->getData();
+            $getActivePackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
+            if ($getActivePackage) {
+                $getPackageRuleArray = $this->em->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+                if(!empty($getPackageRuleArray)) {
+                    if($getPackageRuleArray[0]['location_group_id']==14) {
+                        $nurseryGroupCount = $this->em->getRepository('FaEntityBundle:LocationGroupLocation')->checkIsNurseryGroup($getLocationId);
+                        if($nurseryGroupCount==0) {
+                            $form->get('location_autocomplete')->addError(new FormError('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.'));
+                        }
+                    }
+                }
+            }
+        }
+    }    
 }
