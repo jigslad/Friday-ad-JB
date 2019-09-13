@@ -35,6 +35,9 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\AdBundle\Repository\AdModerateRepository;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Fa\Bundle\AdBundle\Repository\AdUserPackage;
+use Fa\Bundle\PromotionBundle\Repository\PackageRule;
+use Fa\Bundle\EntityBundle\Repository\LocationGroupLocation;
 
 /**
  * AdEditType form.
@@ -121,7 +124,13 @@ class AdEditType extends AdPostType
         $form = $event->getForm();
 
         if ($form->isValid()) {
-            $this->saveAdOrSendForModeration($ad);
+            $isNotNurseryCount = $this->validateNurseryLocation($form,$ad);
+            if($isNotNurseryCount == 1) {
+                $form->get('location_autocomplete')->addError(new FormError($this->translator->trans('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.', array(), 'validators')));
+            } else {
+                $this->saveAdOrSendForModeration($ad);
+            }
+            
         }
     }
 
@@ -134,10 +143,9 @@ class AdEditType extends AdPostType
     {
         $ad   = $this->ad;
         $form = $event->getForm();
-
+        
         $this->validatePrice($form);
         $this->validateAdLocation($form);
-        $this->validateNurseryLocation($form);
         $this->validateDescription($form);
         $this->validateBusinessAdField($form);
         $this->validateYoutubeField($form);
@@ -245,11 +253,12 @@ class AdEditType extends AdPostType
         }
     }
     
-    protected function validateNurseryLocation($form) {
-        $ad          = $this->ad;
+    protected function validateNurseryLocation($form,$ad = null) {
         $adIdArray   = array();
         $adIdArray[] = $adId = $ad->getId();
         $getPackageRuleArray = $getActivePackage = array();
+        $isNotNurseryCount = 0;
+        
         if ($form->has('location') && $form->get('location')->getData()!='') {
             $getLocationId = $form->get('location')->getData();
             $getActivePackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
@@ -259,7 +268,7 @@ class AdEditType extends AdPostType
                     if($getPackageRuleArray[0]['location_group_id']==14) {
                         $nurseryGroupCount = $this->em->getRepository('FaEntityBundle:LocationGroupLocation')->checkIsNurseryGroup($getLocationId);
                         if($nurseryGroupCount==0) {
-                            $form->get('location_autocomplete')->addError(new FormError('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.'));
+                            $isNotNurseryCount = 1;
                         }
                     }
                 }

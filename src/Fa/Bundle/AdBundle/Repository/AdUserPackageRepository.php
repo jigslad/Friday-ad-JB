@@ -622,4 +622,21 @@ class AdUserPackageRepository extends BaseEntityRepository
         }
         return true;
     }
+    
+    public function checkIsNurseryPackageForAd($adId) {
+        $adIdArray = array();
+        $adIdArray[] = $adId;
+        $getPackageRuleArray = $getActivePackage = array();
+        
+        $getActivePackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
+        if ($getActivePackage) {
+            $getPackageRuleArray = $this->_em->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+            if(!empty($getPackageRuleArray)) {
+                if($getPackageRuleArray[0]['location_group_id']==14) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

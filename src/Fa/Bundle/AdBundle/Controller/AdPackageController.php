@@ -766,7 +766,7 @@ class AdPackageController extends CoreController
         return $townIds;
     }
     
-    public function ajaxNurseryLocationGroupPackageAction(Request $request)
+    public function nurseryLocationGroupPackageAction(Request $request)
     {
         $getPackageRuleArray = $getActivePackage = array();
         
@@ -774,18 +774,18 @@ class AdPackageController extends CoreController
         $adIdArray = array();
         $adIdArray[] = $adId;
         
-        if ($request->isXmlHttpRequest() && $request->get('adId') != null) {
+        if ($request->get('adId') != null) {
             $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
             if ($getActivePackage) {
                 $getPackageRuleArray = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
                 if(!empty($getPackageRuleArray)) {
                     if($getPackageRuleArray[0]['location_group_id']==14) {
-                        return new JsonResponse(array('response' => true));
+                        return true;
                     }
                 }
             }
         }
-        return new JsonResponse(array('response' => false));
+        return false;
     }
 
 }

@@ -1,12 +1,15 @@
+{% set advertIsNurseryPackage =  fetch_repository('FaAdBundle:AdUserPackage').checkIsNurseryPackageForAd(ad.id) %}
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
+	var packageIsNursery = {{advertIsNurseryPackage}};
+    
     $(document).ready(function(){
-        var globalformName;
+
         $('.textcounter').keyup(function(e){
             updateCharCounter($(this).attr('id'));
         });
-
+        
         $('#paa_step4_add_your_photos').click(function(e) {
             $('html, body').animate({
                 scrollTop: $('#upload_image_div').offset().top
@@ -63,7 +66,6 @@
 
     function bindElementToggleEvent(formName)
     {
-    	globalformName = formName;
         $('.element_toggle').click(function(){
             var targetElement = $(this).attr('id')+'_target';
             $(this).toggleClass("tab-down tab-up");
@@ -136,30 +138,35 @@
     function bindLocationEvents(formName)
     {
     	var actualLocationId = $('#'+formName+'_location').val();
-        var packageIsNursery = false;
+        var locationVal = $('#'+formName+'_location_autocomplete').val();
+        var locationId = $('#'+formName+'_location').val();
         
-        checkIsNurseryGroupPackage({{ ad.id }}, function(data)  {
-        	packageIsNursery = data.response;
-        });
-
         $('#change_location_link').click(function(){
             $('#location_field_div').show();
         });
 
+        if(packageIsNursery) {
+            checkIsNurseryGroup(locationId, {{ ad.id }}, function(locdata) {
+               if(locdata.response == false) {
+            	   $('#location_error_div').html('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.');
+                } 
+        	});
+        }
+
         $('#find_on_map').click(function(){
-            var locationVal = $('#'+formName+'_location_autocomplete').val();
-            var locationId = $('#'+formName+'_location').val();
+
+            var packageIsNursery = {{advertIsNurseryPackage?advertIsNurseryPackage:0}};
 
             if (locationVal && locationVal != 'United Kingdom') {
             	 $('#location_map_div').addClass('show-location-mapfit');
             	 $('#location_map_div').removeClass('hide-location-mapfit');
-				
+ 				
             	 if(packageIsNursery) {
                      checkIsNurseryGroup(locationId, {{ ad.id }}, function(locdata) {
                         if(locdata.response == true) {
                                 showAddress(locationVal);
                          } else {
-                             $('#'+formName+'_location_error_div').html('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.');
+                             $('#location_error_div').html('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.');
                             return false;
                           }
                  	});
@@ -182,20 +189,17 @@
               if (locationVal && locationVal != 'United Kingdom') {
                    $('#location_map_div').addClass('show-location-mapfit');
                    $('#location_map_div').removeClass('hide-location-mapfit');
-
-                   checkIsNurseryGroupPackage({{ ad.id }}, function(packagedata) { 	
-                       if(packagedata.response == true) {
-                           checkIsNurseryGroup(locationId, {{ ad.id }}, function(locdata) {
-                              if(locdata.response == false) {
-                                   $('#location_error_div').html('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.');
-                                   event.preventDefault();
-                                  return false;
-                                }
-                              });
-                       }
-                   });                 
-              }
-           return true;
+                   
+                   if(packageIsNursery) {
+                       checkIsNurseryGroup(locationId, {{ ad.id }}, function(locdata) {
+                          if(locdata.response == false) {
+                               $('#location_error_div').html('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.');
+                               event.preventDefault();
+                              return false;
+                            }
+                          });
+                   }  else { return true; }          
+              } else { return true; }           
       });
           
 
