@@ -7,3 +7,9 @@ ad_promote:
     defaults: { _controller: "FaAdBundle:AdPackage:promoteAd" }
     requirements:
         type:  promote|repost|renew
+        
+ajax_nursery_location_group_package:
+    path:     /location/ajax/nursery_location_group/{adId}/
+    defaults: { _controller: "FaAdBundle:AdPackage:ajaxNurseryLocationGroupPackage" }
+    options:
+        expose: true
