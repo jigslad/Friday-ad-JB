@@ -89,6 +89,14 @@ class AdEditController extends CoreController
             $form->handleRequest($request);
             if ($form->isValid()) {
                 //check user redirect from package page due to location missing
+                $isNotNurseryCount = $this->checkIsNurseryLocation($form, $ad);
+                if($isNotNurseryCount==1) {
+                    $form->get('location_autocomplete')->addError(new FormError('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.'));
+                    return $this->redirect($this->generateUrl('ad_edit', array('id' => $ad->getId())));
+                } 
+                
+                //echo '<pre>'; print_r($_POST);die;
+                
                 if ($this->container->get('session')->has('choose_package_location_missing_'.$id)) {
                     $redirectUrl = $this->container->get('session')->get('choose_package_location_missing_'.$id);
                     $this->container->get('session')->remove('choose_package_location_missing_'.$id);
@@ -115,6 +123,30 @@ class AdEditController extends CoreController
         );
 
         return $this->render($this->getTemplateName($adCategoryId), $parameters);
+    }
+    
+    public function checkIsNurseryLocation($form, $ad) {
+        $adIdArray   = array();
+        $adIdArray[] = $adId = $ad->getId();
+        $getPackageRuleArray = $getActivePackage = array();
+        $isNotNurseryCount = 0;
+        
+        if ($form->has('location') && $form->get('location')->getData()!='') {
+            $getLocationId = $form->get('location')->getData();
+            $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
+            if ($getActivePackage) {
+                $getPackageRuleArray = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+                if(!empty($getPackageRuleArray)) {
+                    if($getPackageRuleArray[0]['location_group_id']==14) {
+                        $nurseryGroupCount = $this->getRepository('FaEntityBundle:LocationGroupLocation')->checkIsNurseryGroup($getLocationId);
+                        if($nurseryGroupCount==0) {
+                            $isNotNurseryCount = 1;                            
+                        }
+                    }
+                }
+            }
+        }
+        return $isNotNurseryCount;
     }
 
     /**
