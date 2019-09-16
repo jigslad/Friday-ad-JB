@@ -144,7 +144,7 @@
         $('#change_location_link').click(function(){
             $('#location_field_div').show();
         });
-
+        $('#location_error_div').html('');
         if(packageIsNursery) {
             checkIsNurseryGroup(locationId, {{ ad.id }}, function(locdata) {
                if(locdata.response == false) {
@@ -156,13 +156,13 @@
         $('#find_on_map').click(function(){
 
             var packageIsNursery = {{advertIsNurseryPackage?advertIsNurseryPackage:0}};
-
+            var newlocationId = $('#'+formName+'_location').val();
             if (locationVal && locationVal != 'United Kingdom') {
             	 $('#location_map_div').addClass('show-location-mapfit');
             	 $('#location_map_div').removeClass('hide-location-mapfit');
- 				
+            	 $('#location_error_div').html('');
             	 if(packageIsNursery) {
-                     checkIsNurseryGroup(locationId, {{ ad.id }}, function(locdata) {
+                     checkIsNurseryGroup(newlocationId, {{ ad.id }}, function(locdata) {
                         if(locdata.response == true) {
                                 showAddress(locationVal);
                          } else {
@@ -189,7 +189,7 @@
               if (locationVal && locationVal != 'United Kingdom') {
                    $('#location_map_div').addClass('show-location-mapfit');
                    $('#location_map_div').removeClass('hide-location-mapfit');
-                   
+                   $('#location_error_div').html('');
                    if(packageIsNursery) {
                        checkIsNurseryGroup(locationId, {{ ad.id }}, function(locdata) {
                           if(locdata.response == false) {
