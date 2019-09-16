@@ -125,11 +125,11 @@ class BoostOverideType extends AbstractType
                 array(
                     'mapped' => false,
                     'required' => false,
-                    'label' => 'Overide boost count',
+                    'label' => 'Overide boost count', 
                     'data' => ($userPackageBoostDetails)?$userPackageBoostDetails['count']:0
                 )
             );
-            $form->add('is_reset_boost_count', CheckboxType::class, array('label' => 'Reset Boost Count', 'required' => false));
+            $form->add('is_reset_boost_count', CheckboxType::class, array('label' => 'Do not over write override boost count on renewal', 'required' => false));
         }
     }
 
