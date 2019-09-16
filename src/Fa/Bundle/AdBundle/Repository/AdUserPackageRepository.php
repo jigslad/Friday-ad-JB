@@ -630,10 +630,12 @@ class AdUserPackageRepository extends BaseEntityRepository
         
         $getActivePackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
         if ($getActivePackage) {
-            $getPackageRuleArray = $this->_em->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
-            if(!empty($getPackageRuleArray)) {
-                if($getPackageRuleArray[0]['location_group_id']==14) {
-                    return true;
+            if($getActivePackage[$adId]['package_price']==0) {
+                $getPackageRuleArray = $this->_em->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+                if(!empty($getPackageRuleArray)) {
+                    if($getPackageRuleArray[0]['location_group_id']==14) {
+                        return true;
+                    }
                 }
             }
         }
