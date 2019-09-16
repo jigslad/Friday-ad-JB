@@ -87,7 +87,7 @@ class AdPostLoginType extends AbstractType
             'username',
             EmailType::class,
             array(
-                'attr' => array('autocomplete' => 'off'),
+                'attr' => array('autocomplete' => 'off','class' => 'username_cls'), 
                 'label' => 'Email address',
                 'constraints' => array(
                     new Assert\NotBlank(array('groups'   => array('olduser', 'newuser'), 'message' => $this->translator->trans('Please enter email address.', array(), 'validators'))),
