@@ -63,7 +63,7 @@ class AdEditController extends CoreController
         }
         $loggedinUser = $this->getLoggedInUser();
         $ad           = $this->getRepository('FaAdBundle:Ad')->find($id);
-
+        
         if (!$ad) {
             return $this->handleMessage($this->get('translator')->trans('No ad exists which you want to edit.', array(), 'frontend-ad-edit'), 'manage_my_ads_active', array(), 'error');
         }
@@ -89,14 +89,6 @@ class AdEditController extends CoreController
             $form->handleRequest($request);
             if ($form->isValid()) {
                 //check user redirect from package page due to location missing
-                $isNotNurseryCount = $this->checkIsNurseryLocation($form, $ad);
-                if($isNotNurseryCount==1) {
-                    $form->get('location_autocomplete')->addError(new FormError('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.'));
-                    return $this->redirect($this->generateUrl('ad_edit', array('id' => $ad->getId())));
-                } 
-                
-                //echo '<pre>'; print_r($_POST);die;
-                
                 if ($this->container->get('session')->has('choose_package_location_missing_'.$id)) {
                     $redirectUrl = $this->container->get('session')->get('choose_package_location_missing_'.$id);
                     $this->container->get('session')->remove('choose_package_location_missing_'.$id);

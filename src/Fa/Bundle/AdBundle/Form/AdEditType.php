@@ -126,10 +126,10 @@ class AdEditType extends AdPostType
         if ($form->isValid()) {
             $isNotNurseryCount = $this->validateNurseryLocation($form,$ad);
             if($isNotNurseryCount == 1) {
-                $form->get('location_autocomplete')->addError(new FormError($this->translator->trans('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.', array(), 'validators')));
+                $form->get('location_autocomplete')->addError(new FormError($this->translator->trans('', array(), 'validators')));
             } else {
                 $this->saveAdOrSendForModeration($ad);
-            }
+           }
             
         }
     }
@@ -145,7 +145,7 @@ class AdEditType extends AdPostType
         $form = $event->getForm();
         
         $this->validatePrice($form);
-        $this->validateAdLocation($form);
+        $this->validateAdEditLocation($form,$ad);
         $this->validateDescription($form);
         $this->validateBusinessAdField($form);
         $this->validateYoutubeField($form);
@@ -263,16 +263,20 @@ class AdEditType extends AdPostType
             $getLocationId = $form->get('location')->getData();
             $getActivePackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
             if ($getActivePackage) {
-                $getPackageRuleArray = $this->em->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
-                if(!empty($getPackageRuleArray)) {
-                    if($getPackageRuleArray[0]['location_group_id']==14) {
-                        $nurseryGroupCount = $this->em->getRepository('FaEntityBundle:LocationGroupLocation')->checkIsNurseryGroup($getLocationId);
-                        if($nurseryGroupCount==0) {
-                            $isNotNurseryCount = 1;
+                if($getActivePackage[$adId]['package_price']==0) {
+                    $getPackageRuleArray = $this->em->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+                    if(!empty($getPackageRuleArray)) {
+                        if($getPackageRuleArray[0]['location_group_id']==14) {
+                            $nurseryGroupCount = $this->em->getRepository('FaEntityBundle:LocationGroupLocation')->checkIsNurseryGroup($getLocationId);
+                            if($nurseryGroupCount==0) {
+                                $isNotNurseryCount = 1;
+                                return $isNotNurseryCount;
+                            }
                         }
                     }
                 }
             }
         }
+        return $isNotNurseryCount;
     }    
 }

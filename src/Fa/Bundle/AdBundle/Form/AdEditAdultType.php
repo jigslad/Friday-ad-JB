@@ -121,28 +121,33 @@ class AdEditAdultType extends AdEditType
         $form = $event->getForm();
         
         if ($form->isValid()) {
-            $this->saveAdOrSendForModeration($ad);
+            $isNotNurseryCount = $this->validateNurseryLocation($form,$ad);
+            if($isNotNurseryCount == 1) {
+                $form->get('location_autocomplete')->addError(new FormError($this->translator->trans('', array(), 'validators')));
+            } else {
+                $this->saveAdOrSendForModeration($ad);
             
-            if ($form->has('payment_method_id')) {
-                // save paypal email address.
-                $paymentMethodId = $form->get('payment_method_id')->getData();
-                $paypalEmail     = $form->get('paypal_email')->getData();
-                $paypalFirstName = $form->get('paypal_first_name')->getData();
-                $paypalLastName  = $form->get('paypal_last_name')->getData();
-                if ($paypalEmail && $paypalFirstName && $paypalLastName && in_array($paymentMethodId, array(PaymentRepository::PAYMENT_METHOD_PAYPAL_ID, PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID))) {
-                    $adObj = $this->em->getRepository('FaAdBundle:Ad')->find($ad->getId());
-                    if ($adObj) {
-                        $userObj = $adObj->getUser();
-                        $userObj->setPaypalEmail($paypalEmail);
-                        $userObj->setPaypalFirstName($paypalFirstName);
-                        $userObj->setPaypalLastName($paypalLastName);
-                        $userObj->setIsPaypalVefiried(1);
-                        $this->em->persist($userObj);
-                        $this->em->flush($userObj);
+                if ($form->has('payment_method_id')) {
+                    // save paypal email address.
+                    $paymentMethodId = $form->get('payment_method_id')->getData();
+                    $paypalEmail     = $form->get('paypal_email')->getData();
+                    $paypalFirstName = $form->get('paypal_first_name')->getData();
+                    $paypalLastName  = $form->get('paypal_last_name')->getData();
+                    if ($paypalEmail && $paypalFirstName && $paypalLastName && in_array($paymentMethodId, array(PaymentRepository::PAYMENT_METHOD_PAYPAL_ID, PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID))) {
+                        $adObj = $this->em->getRepository('FaAdBundle:Ad')->find($ad->getId());
+                        if ($adObj) {
+                            $userObj = $adObj->getUser();
+                            $userObj->setPaypalEmail($paypalEmail);
+                            $userObj->setPaypalFirstName($paypalFirstName);
+                            $userObj->setPaypalLastName($paypalLastName);
+                            $userObj->setIsPaypalVefiried(1);
+                            $this->em->persist($userObj);
+                            $this->em->flush($userObj);
+                        }
                     }
-                }
+               }
             }
-        }
+         }
     }
     
     
@@ -182,7 +187,7 @@ class AdEditAdultType extends AdEditType
         $ad   = $this->ad;
         $form = $event->getForm();
 
-        $this->validateAdLocation($form);
+        $this->validateAdEditLocation($form,$ad);
         $this->validateDescription($form);
         $this->validateBusinessAdField($form);
         $this->validateYoutubeField($form);
@@ -230,4 +235,31 @@ class AdEditAdultType extends AdEditType
             }
         }
     }
+    
+    protected function validateNurseryLocation($form,$ad = null) {
+        $adIdArray   = array();
+        $adIdArray[] = $adId = $ad->getId();
+        $getPackageRuleArray = $getActivePackage = array();
+        $isNotNurseryCount = 0;
+        
+        if ($form->has('location') && $form->get('location')->getData()!='') {
+            $getLocationId = $form->get('location')->getData();
+            $getActivePackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
+            if ($getActivePackage) {
+                if($getActivePackage[$adId]['package_price']==0) {
+                    $getPackageRuleArray = $this->em->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+                    if(!empty($getPackageRuleArray)) {
+                        if($getPackageRuleArray[0]['location_group_id']==14) {
+                            $nurseryGroupCount = $this->em->getRepository('FaEntityBundle:LocationGroupLocation')->checkIsNurseryGroup($getLocationId);
+                            if($nurseryGroupCount==0) {
+                                $isNotNurseryCount = 1;
+                                return $isNotNurseryCount;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $isNotNurseryCount;
+    }   
 }
