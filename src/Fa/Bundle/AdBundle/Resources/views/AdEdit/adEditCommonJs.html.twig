@@ -2,7 +2,7 @@
 <script src="{{ asset_url('fafrontend/js/jquery.equalizer.min.js') }}"></script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-	var packageIsNursery = {{advertIsNurseryPackage}};
+	var packageIsNursery = {{advertIsNurseryPackage?advertIsNurseryPackage:0}};
     
     $(document).ready(function(){
 
@@ -159,7 +159,8 @@
 
             var packageIsNursery = {{advertIsNurseryPackage?advertIsNurseryPackage:0}};
             var newlocationId = $('#'+formName+'_location').val();
-            if (locationVal && locationVal != 'United Kingdom') {
+            var newlocationVal = $('#'+formName+'_location_autocomplete').val();
+            if (newlocationVal && newlocationVal != 'United Kingdom') {
             	 $('#location_map_div').addClass('show-location-mapfit');
             	 $('#location_map_div').removeClass('hide-location-mapfit');
             	 $('#location_error_div').html('');
@@ -167,14 +168,14 @@
             	 if(packageIsNursery) {
                      checkIsNurseryGroup(newlocationId, {{ ad.id }}, function(locdata) {
                         if(locdata.response == true) {
-                                showAddress(locationVal);
+                                showAddress(newlocationVal);
                          } else {
                              $('#location_error_div').html('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.');
                             return false;
                           }
                  	});
                  } else {
-                     showAddress(locationVal);
+                     showAddress(newlocationVal);
                  }
 
             } else {
