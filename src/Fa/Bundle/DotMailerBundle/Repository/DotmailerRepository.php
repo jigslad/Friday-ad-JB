@@ -845,6 +845,7 @@ class DotmailerRepository extends EntityRepository
         $user = $this->getEntityManager()->getRepository('FaUserBundle:User')->findOneBy(array('id' => $userId));
         $touchPointOpted = ($touchPoint== self::TOUCH_POINT_CREATE_ALERT)?$touchPoint:self::OPTINTYPE;
         
+
         $dotmailer = null;
         $newsletterTypeIds = null;
         if ($user && $user->getEmail()) {

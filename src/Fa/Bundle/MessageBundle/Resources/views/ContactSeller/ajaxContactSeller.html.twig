@@ -224,8 +224,8 @@
 
 
     // add multiple select / deselect functionality
-    $("#fa_message_contact_seller_third_party_email_alert").change(function () {
-    	if ($('#fa_message_contact_seller_third_party_email_alert').parent().hasClass('checked')) {
+    $("#fa_message_contact_seller_third_party_email_alert").parent('span').on('click', function (e) {
+    	if ($('#fa_message_contact_seller_third_party_email_alert').parent('span').hasClass('checked')) {
             $('#fa_message_contact_seller_third_party_email_alert').attr('checked', true);
         } else {
             $('#fa_message_contact_seller_third_party_email_alert').attr('checked', false);
@@ -233,27 +233,27 @@
         
         if ($('#fa_message_contact_seller_third_party_email_alert').attr('checked')) {
             $('#fa_message_contact_seller_email_alert').attr('checked', $('#fa_message_contact_seller_third_party_email_alert').attr('checked'));
-        	$('#fa_message_contact_seller_email_alert').parent().addClass('checked');
+        	$('#fa_message_contact_seller_email_alert').parent('span').addClass('checked');
         }
     });
 
-    $("#fa_message_contact_seller_email_alert").change(function(){
-        if ($('#fa_message_contact_seller_email_alert').parent().hasClass('checked')) {
+    $("#fa_message_contact_seller_email_alert").parent('span').on('click', function (e) {
+        if ($('#fa_message_contact_seller_email_alert').parent('span').hasClass('checked')) {
         	$('#fa_message_contact_seller_email_alert').attr('checked', true);
         } else {
         	$('#fa_message_contact_seller_email_alert').attr('checked', false);
         }
     	if (!$('#fa_message_contact_seller_email_alert').attr('checked')) {
     		$('#fa_message_contact_seller_third_party_email_alert').attr('checked', false);
-            $('#fa_message_contact_seller_third_party_email_alert').parent().removeClass('checked');
+            $('#fa_message_contact_seller_third_party_email_alert').parent('span').removeClass('checked');
         } 
     });
     
     function tickUntickEmailAndThirdPartyAlertCheckbox()
     {
         if ($('#fa_message_contact_seller_third_party_email_alert').attr('checked') && !$('#fa_message_contact_seller_email_alert').attr('checked')) {
-        	$('#fa_message_contact_seller_email_alert').parent().removeClass('checked');
-            $('#fa_message_contact_seller_email_alert').attr('checked', false);
+        	$('#fa_message_contact_seller_email_alert').parent('span').addClass('checked');
+            $('#fa_message_contact_seller_email_alert').attr('checked', true);
         }
     }
     function showorhideEmailAndThirdPartyAlertOption() {
@@ -314,17 +314,17 @@
             .done(function(response) {
                 resetEmailalertFlag = false;
                 if (response.isEmailAlertEnabled) {
-                    $('#fa_message_contact_seller_email_alert').parent().addClass('checked');
+                    $('#fa_message_contact_seller_email_alert').parent('span').addClass('checked');
                     $('#fa_message_contact_seller_email_alert').attr('checked', true);
                 } else if (!response.isEmailAlertEnabled) {
-                    $('#fa_message_contact_seller_email_alert').parent().removeClass('checked');
+                    $('#fa_message_contact_seller_email_alert').parent('span').removeClass('checked');
                     $('#fa_message_contact_seller_email_alert').attr('checked', false);
                 }
                 if (response.isThirdPartyEmailAlertEnabled) {
-                    $('#fa_message_contact_seller_third_party_email_alert').parent().addClass('checked');
+                    $('#fa_message_contact_seller_third_party_email_alert').parent('span').addClass('checked');
                     $('#fa_message_contact_seller_third_party_email_alert').attr('checked', true);
                 } else if (!response.isThirdPartyEmailAlertEnabled) {
-                    $('#fa_message_contact_seller_third_party_email_alert').parent().removeClass('checked');
+                    $('#fa_message_contact_seller_third_party_email_alert').parent('span').removeClass('checked');
                     $('#fa_message_contact_seller_third_party_email_alert').attr('checked', false);
                 }
             });
