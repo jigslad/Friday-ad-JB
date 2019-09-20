@@ -5,3 +5,7 @@ user_half_account_create_ajax:
 user_half_account_create_email_only_ajax:
     path:   /create_email_only_ajax
     defaults:  { _controller: FaAdBundle:AdList:createAlertBlock }
+    
+user_newsletter_ajax:
+    path:   /create_usernewsletter_ajax
+    defaults:  { _controller: FaUserBundle:Newsletter:footerNewsletter }

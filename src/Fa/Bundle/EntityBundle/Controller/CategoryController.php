@@ -118,12 +118,12 @@ class CategoryController extends CoreController
         $parameters['thirdPartyAdultModalBox'] = $thirdPartyAdultModalBox;
         
 
-        if ($is_mobile) {
+        /*if ($is_mobile) {
             ini_set('xdebug.max_nesting_level', 120);
             return $this->render('FaEntityBundle:Category:renderHeaderCategoriesForMobile.html.twig', $parameters);
-        } else {
+        } else {*/
             return $this->render('FaEntityBundle:Category:renderHeaderCategories.html.twig', $parameters);
-        }
+        //}
     }
 
     /**
