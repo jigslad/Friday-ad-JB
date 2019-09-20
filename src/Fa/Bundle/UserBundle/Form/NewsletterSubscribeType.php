@@ -219,6 +219,37 @@ class NewsletterSubscribeType extends AbstractType
     			if ($user->getIsEmailAlertEnabled() ==1) {
     			     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
     			}
+    		} else {
+    		    $dotMailer->setUpdatedAt(time());
+    		    
+    		    $categoryId = $user->getBusinessCategoryId();
+    		    
+    		    $categoryPathArray = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId);
+    		    $categoryPathArray = array_keys($categoryPathArray);
+    		    
+    		    $newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getNewsletterTypeIds($categoryPathArray);
+    		    
+    		    if ($user->getIsThirdPartyEmailAlertEnabled() == 1) {
+    		        $newsletterTypeIds[] = 48;
+    		    }    		   
+    		    
+    		    if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
+    		        if ($dotMailer->getDotmailerNewsletterTypeId()) {
+    		            $newsletterTypeIds = array_merge($newsletterTypeIds, $dotMailer->getDotmailerNewsletterTypeId());
+    		            $newsletterTypeIds = array_unique($newsletterTypeIds);
+    		        }
+    		        
+    		        $dotMailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
+    		    }
+    		    
+    		    $this->em->persist($dotMailer);
+    		    $this->em->flush($dotMailer);
+    		    
+    		    //send to dotmailer instantly.
+    		    if ($user->getIsEmailAlertEnabled() ==1) {
+    		        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotMailer->getId().' >/dev/null &');
+    		    }
+    		    
     		}
     	}
     }
