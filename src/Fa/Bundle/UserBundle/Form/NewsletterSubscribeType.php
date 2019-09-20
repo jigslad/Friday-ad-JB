@@ -194,7 +194,7 @@ class NewsletterSubscribeType extends AbstractType
     			
     			if (($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
     			    $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_NEWSLETTER);
-    			    $newsletterTypeIds[] = self::FIRST_TOUCH_POINT_ID;
+    			    $newsletterTypeIds[] = DotmailerRepository::FIRST_TOUCH_POINT_ID;
     			    $dotmailer->setIsContactSent(1);
     			}
 				
