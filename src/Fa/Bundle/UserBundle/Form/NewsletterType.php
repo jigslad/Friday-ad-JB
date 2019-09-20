@@ -155,8 +155,8 @@ class NewsletterType extends AbstractType
         $form      = $event->getForm();
         $user      = $this->container->get('security.token_storage')->getToken()->getUser();
         $dotmailer = $event->getData();
-        
         $insertFirstPoint = 0;
+
         // refresh dotmailer object
         if ($dotmailer->getId()) {
             $this->em->refresh($dotmailer);
@@ -244,7 +244,6 @@ class NewsletterType extends AbstractType
                 $this->em->persist($user);
                 $this->em->flush($user);
             }
-            
             if ($insertFirstPoint== 1 && ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
                 $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_ACCOUNT_PREFS);
                 $dotmailer->setIsContactSent(1);

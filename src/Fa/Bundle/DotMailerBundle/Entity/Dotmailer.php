@@ -290,7 +290,6 @@ class Dotmailer
      */
     private $is_contact_sent;
 
-
     /**
      * @var string
      *
@@ -1171,7 +1170,29 @@ class Dotmailer
     }
 
     /**
-     * Set gender.
+     * Set is_contact_sent.
+     *
+     * @param boolean $is_contact_sent
+     * @return Dotmailer
+     */
+    public function setIsContactSent($is_contact_sent)
+    {
+        $this->is_contact_sent = $is_contact_sent;
+        
+        return $this;
+    }
+     
+    /**
+     * Get is_contact_sent.
+     *
+     * @return boolean
+     */
+    public function getIsContactSent()
+    {
+        return $this->is_contact_sent;
+    }
+
+     /* Set gender.
      *
      * @param string $gender
      * @return Dotmailer
