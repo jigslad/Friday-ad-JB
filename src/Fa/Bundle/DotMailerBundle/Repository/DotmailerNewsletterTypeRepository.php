@@ -60,7 +60,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
      *
      * @return Doctrine\ORM\QueryBuilder The query builder
      */
-    public function getKeyValueArray($container = null, $column = 'label')
+    public function getKeyValueArray($container = null, $column = 'label', $orderGT0 = true )
     {
         if ($container) {
             $tableName   = $this->getTableName();
@@ -73,11 +73,12 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
         }
 
         $newsletterTypesArray = array();
-        $newsletterTypes      = $this->getBaseQueryBuilder()
+        $newsletterTypes      = $this->getBaseQueryBuilder();
+        if ($orderGT0) {
             /* FFR-2855 : added new newsletter types but these should not be visible to end users, hence updated their 'ord' to 0 and querying here accordingly */
-            ->Where(self::ALIAS.'.ord > 0')
-            ->orderBy(self::ALIAS.'.ord', 'ASC')
-            ->getQuery()->getResult();
+            $newsletterTypes->where(self::ALIAS . '.ord > 0');
+        }
+        $newsletterTypes = $newsletterTypes->orderBy(self::ALIAS.'.ord', 'ASC')->getQuery()->getResult();
 
         if ($newsletterTypes && count($newsletterTypes)) {
             foreach ($newsletterTypes as $newsletterType) {
