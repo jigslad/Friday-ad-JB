@@ -455,6 +455,7 @@ class ManageMyAdController extends CoreController
             $adIds         = $request->get('adIds', 0);
             $adStatusArray = array();
             $liveAdStatusArray = array();
+            $activeShopPackage = array();
 
             $getBoostDetails = $this->getBoostDetails($loggedinUser);
 
@@ -492,7 +493,7 @@ class ManageMyAdController extends CoreController
                     }
                     
                     foreach ($liveAds as $liveAd) {
-                        $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:ajaxGetStatus.html.twig', array('adId' => $liveAd['id'],'status_id' => $liveAd['status_id'], 'ad' => $liveAd, 'adCategoryIdArray' => $adCategoryIdArray, 'adImageArray' => $adImageArray, 'adViewCounterArray' => $adViewCounterArray, 'adPackageArray' => $adPackageArray, 'adModerateArray' => $adModerateArray, 'inModerationLiveAdIds' => $inModerationLiveAdIds, 'isBoostEnabled'  => $getBoostDetails['isBoostEnabled'],'boostMaxPerMonth'=> $getBoostDetails['boostMaxPerMonth'],'boostAdRemaining'=> $getBoostDetails['boostAdRemaining'], 'boostRenewDate'  => $getBoostDetails['boostRenewDate'],'userBusinessCategory' => $getBoostDetails['userBusinessCategory'],'modToolTipText'    => $moderationToolTipText, 'activeShopPackage' => $activeShopPackage, $sortBy => 'ad_date'));
+                        $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:ajaxGetStatus.html.twig', array('adId' => $liveAd['id'],'status_id' => $liveAd['status_id'], 'ad' => $liveAd, 'adCategoryIdArray' => $adCategoryIdArray, 'adImageArray' => $adImageArray, 'adViewCounterArray' => $adViewCounterArray, 'adPackageArray' => $adPackageArray, 'adModerateArray' => $adModerateArray, 'inModerationLiveAdIds' => $inModerationLiveAdIds, 'isBoostEnabled'  => $getBoostDetails['isBoostEnabled'],'boostMaxPerMonth'=> $getBoostDetails['boostMaxPerMonth'],'boostAdRemaining'=> $getBoostDetails['boostAdRemaining'], 'boostRenewDate'  => $getBoostDetails['boostRenewDate'],'userBusinessCategory' => $getBoostDetails['userBusinessCategory'],'modToolTipText'    => $moderationToolTipText, 'activeShopPackage' => $activeShopPackage, 'sortBy' => 'ad_date'));
                         $adStatusArray[$liveAd['id']] = $htmlContent;
                     }
                 }

@@ -3694,9 +3694,10 @@ class AdRepository extends EntityRepository
             $qb->setParameter('updated_at', strtotime('-29 days'));
             $qb->setParameter('created_at', strtotime('-29 days'));
         } elseif ($type == 'onlyactive') {
-            $qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at))');
-            $qb->setParameter('updated_at', strtotime('-29 days'));
-            $qb->setParameter('created_at', strtotime('-29 days'));
+            //$qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at))');
+            //$qb->setParameter('updated_at', strtotime('-29 days'));
+            //$qb->setParameter('created_at', strtotime('-29 days'));
+            $qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.')');            
         } elseif ($type == 'inactive') {
             $qb->andWhere('('.self::ALIAS.'.status IN (:other_status) AND (('.self::ALIAS.'.created_at < :created_at AND '.self::ALIAS.'.updated_at IS NULL) OR ('.self::ALIAS.'.updated_at < :updated_at AND '.self::ALIAS.'.updated_at IS NOT NULL))) OR '.self::ALIAS.'.status IN (:inactive_status)');
             $qb->setParameter('other_status', array(BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));

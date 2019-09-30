@@ -92,7 +92,7 @@
                 			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}/{{ totalFeaturedCredit }}</span></li>
                 		{% elseif userBusType is defined and userBusType == 'business' %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
-                			<li class="bluecircle">Featured ads: <span>{{ adFeaturedUpsellArray|length }}</span></li>
+                			{% if adFeaturedUpsellArray is defined %}<li class="bluecircle">Featured ads: <span>{{ adFeaturedUpsellArray|length }}</span></li>{% endif %}
 				        {% endif %}
                 			
                 			{#<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>#}

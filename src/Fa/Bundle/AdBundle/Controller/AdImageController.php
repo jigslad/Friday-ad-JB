@@ -446,10 +446,10 @@ class AdImageController extends CoreController
                         if (isset($resArr['error']) && $resArr['error'] == 0) {
                             $successMsg = $this->get('translator')->trans('Photo has been edited successfully.');
                         } else {
-                            $error = $this->get('translator')->trans('Problem in croping photo.');
+                            $error = $this->get('translator')->trans('Error in croping photo in AWS.'. $imageRelpath);
                         }
                     } else {
-                        $error = $this->get('translator')->trans('Problem in croping photo.');
+                        $error = $this->get('translator')->trans('Problem in croping photo in AWS.');
                     }
                 } else {
                     $error = $this->get('translator')->trans('Image not cropped due to Lambda unavailability. Set in parameter from My NMP Everything.');

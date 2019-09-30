@@ -522,18 +522,26 @@ class AdPostController extends ThirdPartyLoginController
 
         if ('POST' === $request->getMethod()) {
             $formData = $request->get('fa_paa_registration');
-
-            $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('username' => $formData['username'], 'is_half_account' => 0));
-            if (!$user) {
-                $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $formData['username'], 'is_half_account' => 0));
+            $user = array();
+            if(isset($formData['username'])) {                
+                $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('username' => $formData['username'], 'is_half_account' => 0));
+                if (!$user) {
+                    $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $formData['username'], 'is_half_account' => 0));
+                }
             }
-
-            if ($formData['user_type'] == 1 && !$user) {
-                return $this->handleMessage($this->get('translator')->trans('Invalid email/username or password.', array(), 'validators'), 'ad_post_login_step', array(), 'error');
-            } else if ($formData['user_type'] != 1 && $user) {
-                return $this->handleMessage($this->get('translator')->trans('This email address already has an account - please enter password below and login.', array(), 'validators'), 'ad_post_login_step', array(), 'error');
+            
+            if(!$user && isset($formData['email'])) {
+                $user = $this->getRepository('FaUserBundle:User')->findOneBy(array('email' => $formData['email'], 'is_half_account' => 0));
             }
-
+                        
+            if (isset($formData['user_type'])) {                
+                if ($formData['user_type'] == 1 && !$user) {
+                    return $this->handleMessage($this->get('translator')->trans('Invalid email/username or password.', array(), 'validators'), 'ad_post_login_step', array(), 'error');
+                } else if ($formData['user_type'] != 1 && $user) {
+                    return $this->handleMessage($this->get('translator')->trans('This email address already has an account - please enter password below and login.', array(), 'validators'), 'ad_post_login_step', array(), 'error');
+                }
+            }
+            
             if ($formData && isset($formData['user_roles']) && ($formData['user_roles'] == 'ROLE_BUSINESS_SELLER' || $formData['user_roles'] == 'ROLE_NETSUITE_SUBSCRIPTION')) {
                 $isCompany = 1;
             }
@@ -1514,7 +1522,7 @@ class AdPostController extends ThirdPartyLoginController
                                         $objAdCategoryRepository = $this->getRepository('FaAdBundle:Ad'.$className);
                                         $objAdCategory           = null;
                                         $objAdCategory           = $objAdCategoryRepository->findOneBy(array('ad' => $adId));
-                                        $metaData                = ($objAdCategory->getMetaData() ? unserialize($objAdCategory->getMetaData()) : null);
+                                        $metaData                = ($objAdCategory)?($objAdCategory->getMetaData() ? unserialize($objAdCategory->getMetaData()) : null):null;
                                     }
 
                                     if ($fieldType == 'text_autosuggest') {
@@ -1624,7 +1632,7 @@ class AdPostController extends ThirdPartyLoginController
                                         $objAdCategoryRepository = $this->getRepository('FaAdBundle:Ad'.$className);
                                         $objAdCategory           = null;
                                         $objAdCategory           = $objAdCategoryRepository->findOneBy(array('ad' => $adId));
-                                        $metaData                = ($objAdCategory->getMetaData() ? unserialize($objAdCategory->getMetaData()) : null);
+                                        $metaData                = ($objAdCategory)?($objAdCategory->getMetaData() ? unserialize($objAdCategory->getMetaData()) : null):null;
                                     }
 
                                     if ($fieldType == 'text_autosuggest') {

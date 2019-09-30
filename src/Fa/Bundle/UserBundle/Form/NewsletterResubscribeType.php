@@ -220,9 +220,6 @@ class NewsletterResubscribeType extends AbstractType
     			}
 
     			if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
-    			
-    			
-    			if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
     			   /* if ($dotmailer->getDotmailerNewsletterTypeId()) {
     			        $newsletterTypeIds = array_merge($newsletterTypeIds, $dotmailer->getDotmailerNewsletterTypeId());
     			        $newsletterTypeIds = array_unique($newsletterTypeIds);

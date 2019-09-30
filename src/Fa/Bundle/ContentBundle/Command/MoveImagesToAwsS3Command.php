@@ -57,10 +57,10 @@ class MoveImagesToAwsS3Command extends ContainerAwareCommand
         $imageDir = $this->getContainer()->get('kernel')->getRootDir().'/../web/uploads/'.$folderName;
         $client = new S3Client([
             'version'     => 'latest',
-            'region'      => $this->container->getParameter('fa.aws_region'),
+            'region'      => $this->getContainer()->getParameter('fa.aws_region'),
             'credentials' => [
-                'key'    => $this->container->getParameter('fa.aws_key'),
-                'secret' => $this->container->getParameter('fa.aws_secret'),
+                'key'    => $this->getContainer()->getParameter('fa.aws_key'),
+                'secret' => $this->getContainer()->getParameter('fa.aws_secret'),
             ],
         ]);
         
@@ -75,7 +75,7 @@ class MoveImagesToAwsS3Command extends ContainerAwareCommand
                 $sourcePath = $imageDir.'/'.$image;
                 
                 $result = $client->putObject(array(
-                    'Bucket'     => $this->container->getParameter('fa.aws_bucket'),
+                    'Bucket'     => $this->getContainer()->getParameter('fa.aws_bucket'),
                     'Key'        => $destinationPath,
                     'CacheControl' => 'max-age=21600',
                     'ACL'        => 'public-read',

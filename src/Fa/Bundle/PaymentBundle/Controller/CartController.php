@@ -86,7 +86,7 @@ class CartController extends CoreController
         if(!empty($cart)) {
             $cartDetails  = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
             $cartDetailsValues = unserialize($cartDetails[0]['value']);
-            $paymentFor = $cartDetailsValues['payment_for'];            
+            $paymentFor = isset($cartDetailsValues['payment_for'])?$cartDetailsValues['payment_for']:'';
         }
 
         $cartValue = unserialize($cart->getValue());

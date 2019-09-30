@@ -1259,26 +1259,5 @@ class Dotmailer
     {
         return $this->firstTouchPoint;
     } 
-    /**
-     * Set is_contact_sent.
-     *
-     * @param boolean $is_contact_sent
-     * @return Dotmailer
-     */
-    public function setIsContactSent($is_contact_sent)
-    {
-        $this->is_contact_sent = $is_contact_sent;
-        
-        return $this;
-    }
-     
-    /**
-     * Get is_contact_sent.
-     *
-     * @return boolean
-     */
-    public function getIsContactSent()
-    {
-        return $this->is_contact_sent;
-    }
+    
 }
