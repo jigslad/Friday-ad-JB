@@ -116,7 +116,6 @@ class NewsletterType extends AbstractType
         }
         
         $form->add('dotmailer_newsletter_type_id', ChoiceType::class, $fieldOptions);
-        
     }
     
     /**
@@ -226,6 +225,10 @@ class NewsletterType extends AbstractType
             
             $this->em->persist($dotmailer);
             $this->em->flush($dotmailer);
+            
+            if(in_array('48',$dotmailer->getDotmailerNewsletterTypeId())) {
+                $user->setIsThirdPartyEmailAlertEnabled(1);
+            }            
             
             if ($dotmailer->getOptIn() != 1) {
                 

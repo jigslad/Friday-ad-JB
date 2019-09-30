@@ -542,6 +542,7 @@ class DotmailerRepository extends EntityRepository
         $newsletterTypeIds = null;
 
         $ad         = $this->getEntityManager()->getRepository('FaAdBundle:Ad')->findOneBy(array('id' => $adId));
+        $user         = $this->getEntityManager()->getRepository('FaUserBundle:User')->findOneBy(array('email' => $dotmailer->getEmail()));
         $categoryId = $ad->getCategory()->getId();
 
         $categoryPathArray = $this->getEntityManager()->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId);
@@ -549,7 +550,7 @@ class DotmailerRepository extends EntityRepository
 
         $newsletterTypeIds = $this->getEntityManager()->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getNewsletterTypeIds($categoryPathArray);
         // manually added third party email alert
-        if ($isThirdPartyEmailAlertEnabled == 1) {
+        if ($isThirdPartyEmailAlertEnabled == 1 || $user->getIsThirdPartyEmailAlertEnabled()==1) {
             $newsletterTypeIds[] = 48;
         }
         /*if (in_array($touchPoint, array(self::TOUCH_POINT_ACCOUNT, self::TOUCH_POINT_FACEBOOK, self::TOUCH_POINT_GOOGLE, self::TOUCH_POINT_ENQUIRY, self::TOUCH_POINT_PAA))) {
