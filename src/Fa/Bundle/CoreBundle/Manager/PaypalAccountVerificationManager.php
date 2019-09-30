@@ -49,7 +49,7 @@ class PaypalAccountVerificationManager
      *
      * @return boolean
      */
-    public function verifyPaypalAccountByEmail($emailAddress, $matchCriteria = "NONE", $firstName = null, $lastName = null)
+    /*public function verifyPaypalAccountByEmail($emailAddress, $matchCriteria = "NONE", $firstName = null, $lastName = null)
     {
         $mode         = $this->container->getParameter('fa.paypal.mode');
         $paypalParams = $this->container->getParameter('fa.paypal.'.$mode);
@@ -89,6 +89,57 @@ class PaypalAccountVerificationManager
             return true;
         }
 
+        return false;
+    }*/
+    public function verifyPaypalAccountByEmail($emailAddress, $matchCriteria = "NONE", $firstName = null, $lastName = null)
+    {
+        $mode         = $this->container->getParameter('fa.paypal.mode');
+        $paypalParams = $this->container->getParameter('fa.paypal.'.$mode);
+        
+        $body['emailAddress']  = $emailAddress;
+        $body['matchCriteria'] = $matchCriteria;
+        if ($matchCriteria == 'NAME') {
+            $body['firstName'] = $firstName;
+            $body['lastName']  = $lastName;
+        }
+        $postData = json_encode($body);
+        // Build the HTTP Request Headers
+        $ch = curl_init();
+        
+        curl_setopt_array($ch, array(
+            CURLOPT_URL => $paypalParams['account_verification_url'],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => array(
+                "Accept: */*",
+                "Cache-Control: no-cache",
+                "Connection: keep-alive",
+                "Content-Length: ".strlen($postData),
+                "Content-Type: application/x-www-form-urlencoded",
+                "X-PAYPAL-APPLICATION-ID: ".$paypalParams['applicationid'],
+                "X-PAYPAL-REQUEST-DATA-FORMAT: JSON",
+                "X-PAYPAL-RESPONSE-DATA-FORMAT: JSON",
+                "X-PAYPAL-SECURITY-PASSWORD: ".$paypalParams['password'],
+                "X-PAYPAL-SECURITY-SIGNATURE: ".$paypalParams['signature'],
+                "X-PAYPAL-SECURITY-USERID: ".$paypalParams['userid'],
+            ),
+        ));
+        
+        $exeCurl = curl_exec($ch);
+        $err = curl_error($ch);
+        curl_close($ch);
+        $response = json_decode($exeCurl,true);
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        }
+        if (isset($response['responseEnvelope']) && isset($response['responseEnvelope']['ack']) && strtolower($response['responseEnvelope']['ack']) == 'success' && isset($response['accountStatus']) && strtolower($response['accountStatus']) == 'verified') {
+            return true;
+        }        
         return false;
     }
 }
