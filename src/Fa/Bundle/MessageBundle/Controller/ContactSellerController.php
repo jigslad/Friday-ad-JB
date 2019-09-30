@@ -103,7 +103,42 @@ class ContactSellerController extends CoreController
                                     $message = $this->getRepository('FaMessageBundle:Message')->updateContactSellerMessage($message, $parent, $loggedinUser, $ad, $request->getClientIp());
                                     $message = $formManager->save($message);
                                     CommonManager::updateCacheCounter($this->container, 'ad_enquiry_email_send_link_'.strtotime(date('Y-m-d')).'_'.$adId);
-
+                                    
+                                    //update email alerts
+                                    if ($form->get('email_alert')->getData()) {
+                                        $loggedinUser->setIsEmailAlertEnabled(1);
+                                    } else {
+                                        $loggedinUser->setIsEmailAlertEnabled(0);
+                                    }
+                                    
+                                    //update third party email alerts
+                                    if ($form->get('third_party_email_alert')->getData()) {
+                                        $loggedinUser->setIsThirdPartyEmailAlertEnabled(1);
+                                    } else {
+                                        $loggedinUser->setIsThirdPartyEmailAlertEnabled(0);
+                                    }
+                                    $this->getEntityManager()->persist($loggedinUser);
+                                    $this->getEntityManager()->flush($loggedinUser);
+                                    
+                                    $newsletterTypeIds = array();
+                                    $dotmailer = $this->getRepository('FaDotMailerBundle:Dotmailer')->findOneBy(array('email' => $form->get('sender_email')->getData()));
+                                    if($dotmailer && $loggedinUser->getIsThirdPartyEmailAlertEnabled()==1) {
+                                        $newsletterTypeIds[] = 48;
+                                        if ($dotmailer->getDotmailerNewsletterTypeId()) {
+                                            $newsletterTypeIds = array_merge($newsletterTypeIds, $dotmailer->getDotmailerNewsletterTypeId());
+                                            $newsletterTypeIds = array_unique($newsletterTypeIds);
+                                        }
+                                        
+                                        $dotmailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
+                                        $this->getEntityManager()->persist($dotmailer);
+                                        $this->getEntityManager()->flush($dotmailer);
+                                        
+                                        if ($loggedinUser->getIsEmailAlertEnabled()==1 || $loggedinUser->getIsThirdPartyEmailAlertEnabled()==1) {
+                                            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+                                        }
+                                    }
+                                    
+                                     
                                     $objUploader = $form->has('attachment') ? $form->get('attachment')->getData(): false;
                                     if ($objUploader) {
                                         $uploadDetailArray = $this->uploadAttachment($objUploader, $message);
@@ -129,21 +164,8 @@ class ContactSellerController extends CoreController
                                     //  in background to again send the request.
                                 }
 
-                                //update email alerts
-                                if ($form->get('email_alert')->getData()) {
-                                    $loggedinUser->setIsEmailAlertEnabled(1);
-                                } else {
-                                    $loggedinUser->setIsEmailAlertEnabled(0);
-                                }
-
-                                //update third party email alerts
-                                if ($form->get('third_party_email_alert')->getData()) {
-                                    $loggedinUser->setIsThirdPartyEmailAlertEnabled(1);
-                                } else {
-                                    $loggedinUser->setIsThirdPartyEmailAlertEnabled(0);
-                                }
                                 $this->getEntityManager()->persist($loggedinUser);
-                                $this->getEntityManager()->flush($loggedinUser);
+                                $this->getEntityManager()->flush($loggedinUser);                                
 
                                 //save search agent.
                                 if ($form->get('search_agent')->getData()) {
