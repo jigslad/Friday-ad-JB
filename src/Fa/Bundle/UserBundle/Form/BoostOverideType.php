@@ -25,6 +25,7 @@ use Fa\Bundle\UserBundle\Repository\UserPackageRepository;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  * This is user boost overide form.
@@ -124,10 +125,11 @@ class BoostOverideType extends AbstractType
                 array(
                     'mapped' => false,
                     'required' => false,
-                    'label' => 'Overide boost count',
+                    'label' => 'Overide boost count', 
                     'data' => ($userPackageBoostDetails)?$userPackageBoostDetails['count']:0
                 )
             );
+            $form->add('is_reset_boost_count', CheckboxType::class, array('label' => 'Do not over write override boost count on renewal', 'required' => false));
         }
     }
 

@@ -168,7 +168,7 @@ class NewsletterController extends CoreController
                     //send to dotmailer instantly.
                     $this->getRepository('FaDotMailerBundle:Dotmailer')->sendContactInfoToConsentDotmailerRequest($dotmailer,$this->container);
                     $this->getRepository('FaDotMailerBundle:Dotmailer')->sendContactInfoToResubscribeDotmailerRequest($dotmailer,$this->container);
-                    //exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');                   
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');                   
                                        
                     $newsletterSuccessUrl = $this->generateUrl('newsletter_resubscribe_success').'?guid='.$request->query->get('guid');
                     return $this->redirect($newsletterSuccessUrl);

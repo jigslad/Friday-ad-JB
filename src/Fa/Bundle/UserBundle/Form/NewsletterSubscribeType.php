@@ -174,6 +174,21 @@ class NewsletterSubscribeType extends AbstractType
 
     			$this->em->persist($user);
     			$this->em->flush($user);
+    		} else {
+    		    // manually added third party email alert
+    		    if ($form->get('email_alert')->getData() == 1) {
+    		        $user->setIsEmailAlertEnabled(1);
+    		    }
+    		    
+    		    // manually added third party email alert
+    		    if ($form->get('third_party_email_alert')->getData() == 1) {
+    		        $user->setIsThirdPartyEmailAlertEnabled(1);
+    		    }
+    		    
+    		    $user->setUpdatedAt(time());
+    		    
+    		    $this->em->persist($user);
+    		    $this->em->flush($user);
     		}
 
             //file_put_contents('/var/www/html/newfriday-ad/web/uploads/testing.txt', 'line '.__LINE__.$this->_em->getRepository('FaDotMailerBundle:Dotmailer')->dotmailerFindByEmail($user->getEmail()).'|', FILE_APPEND);
@@ -191,12 +206,13 @@ class NewsletterSubscribeType extends AbstractType
     			$dotmailer->setCreatedAt(time());
     			$dotmailer->setUpdatedAt(time());
     			$dotmailer->setOptInType(DotmailerRepository::OPTINTYPE);
-    			$dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_NEWSLETTER);
-				
-
-    			if($form->get('email_alert')->getData() == 1) {
-    				$newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getAllNewsletterTypeByOrd($this->container, 47);
+    			
+    			if (($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
+    			    $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_NEWSLETTER);
+    			    $newsletterTypeIds[] = DotmailerRepository::FIRST_TOUCH_POINT_ID;
+    			    $dotmailer->setIsContactSent(1);
     			}
+				
     			// manually added third party email alert
     			if ($form->get('third_party_email_alert')->getData() == 1) {
     				$newsletterTypeIds[] = 48;
@@ -212,7 +228,47 @@ class NewsletterSubscribeType extends AbstractType
 
     			//send to dotmailer instantly.
     			$this->em->getRepository('FaDotMailerBundle:Dotmailer')->sendContactInfoToConsentDotmailerRequest($dotmailer,$this->container);
-    			exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+    			if ($user->getIsEmailAlertEnabled() ==1  || ($user->getIsThirdPartyEmailAlertEnabled() == 1)) {
+    			     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+    			}
+    		} else {
+    		    $user = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('email' => $form->get('email')->getData()));
+    		    $dotMailer->setUpdatedAt(time());
+    		    
+    		    $categoryId = $user->getBusinessCategoryId();
+    		    
+    		    $categoryPathArray = $this->em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId);
+    		    $categoryPathArray = array_keys($categoryPathArray);
+    		    
+    		    $newsletterTypeIds = $this->em->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getNewsletterTypeIds($categoryPathArray);
+    		    
+    		    if ($user->getIsThirdPartyEmailAlertEnabled() == 1) {
+    		        $newsletterTypeIds[] = 48;
+    		    }  
+    		    
+    		    if (!$dotMailer->getFirstTouchPoint()) {
+    		        $newsletterTypeIds[] = DotmailerRepository::FIRST_TOUCH_POINT_ID;
+    		        $dotMailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_NEWSLETTER);
+    		        $dotMailer->setIsContactSent(1);
+    		    }  
+    		    
+    		    if (is_array($newsletterTypeIds) && count($newsletterTypeIds) > 0) {
+    		        if ($dotMailer->getDotmailerNewsletterTypeId()) {
+    		            $newsletterTypeIds = array_merge($newsletterTypeIds, $dotMailer->getDotmailerNewsletterTypeId());
+    		            $newsletterTypeIds = array_unique($newsletterTypeIds);
+    		        }
+    		        
+    		        $dotMailer->setDotmailerNewsletterTypeId($newsletterTypeIds);
+    		    }
+    		    
+    		    $this->em->persist($dotMailer);
+    		    $this->em->flush($dotMailer);
+    		    
+    		    //send to dotmailer instantly.
+    		    if ($user->getIsEmailAlertEnabled() ==1 || ($user->getIsThirdPartyEmailAlertEnabled() == 1)) {
+    		        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotMailer->getId().' >/dev/null &');
+    		    }
+    		    
     		}
     	}
     }

@@ -23,6 +23,7 @@ use Fa\Bundle\AdBundle\Repository\AdRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * This controller is used for ad package management.
@@ -769,6 +770,28 @@ class AdPackageController extends CoreController
             $townIds[] = $valLocation->getLocationTown()->getId();
         }
         return $townIds;
+    }
+    
+    public function nurseryLocationGroupPackageAction(Request $request)
+    {
+        $getPackageRuleArray = $getActivePackage = array();
+        
+        $adId = $request->get('adId');
+        $adIdArray = array();
+        $adIdArray[] = $adId;
+        
+        if ($request->get('adId') != null) {
+            $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
+            if ($getActivePackage) {
+                $getPackageRuleArray = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+                if(!empty($getPackageRuleArray)) {
+                    if($getPackageRuleArray[0]['location_group_id']==14) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

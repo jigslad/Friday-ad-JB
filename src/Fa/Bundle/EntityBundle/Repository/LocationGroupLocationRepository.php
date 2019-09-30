@@ -326,5 +326,21 @@ class LocationGroupLocationRepository extends BaseEntityRepository
         
         return $childrenArray;
     }
+    
+    public function checkIsNurseryGroup($locationId)
+    {
+        $locationGroupIds = array('14');
+        $locationIds = array($locationId);
+        $resCount = array();
+        
+        $query = $this->createQueryBuilder(self::ALIAS);
+        $query->select('COUNT('.self::ALIAS.'.id) as total');
+        $query->where(self::ALIAS.'.location_group IN (:locationGroupIds)');
+        $query->setParameter('locationGroupIds', $locationGroupIds);
+        $query->andWhere(self::ALIAS.'.location_town IN (:locationId)');
+        $query->setParameter('locationId', $locationIds);
+        $resCount = $query->getQuery()->getSingleResult();
+        return $resCount['total'];
+    }
 
 }

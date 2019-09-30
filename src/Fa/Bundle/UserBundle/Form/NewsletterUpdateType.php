@@ -29,6 +29,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Fa\Bundle\DotMailerBundle\Repository\DotmailerRepository;
 /**
  * This is newsletter form
  *
@@ -226,7 +227,8 @@ class NewsletterUpdateType extends AbstractType
         $form      = $event->getForm();
         $user      = $this->container->get('security.token_storage')->getToken()->getUser();
         $dotmailer = $event->getData();
-
+        $insertFirstPoint = 0;        
+        
         // refresh dotmailer object
         if ($dotmailer->getId()) {
             $this->em->refresh($dotmailer);
@@ -285,7 +287,17 @@ class NewsletterUpdateType extends AbstractType
                 $dotmailer->setOptIn(1);
                 $dotmailer->setDotmailerNewsletterUnsubscribe(0);
             }
-
+            
+            if ($dotmailer->getIsContactSent()!=1)  {
+                 $insertFirstPoint = 1;
+            }
+            
+            if (!$dotmailer->getFirstTouchPoint()) {
+                    $newsletterTypeIds[] = DotmailerRepository::FIRST_TOUCH_POINT_ID;
+                    $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_NEWSLETTER);
+                    $dotmailer->setIsContactSent(1);
+            } 
+            
             // update last_paid_at
             if (!$dotmailer->getLastPaidAt()) {
                 $lastPaidAt = $this->em->getRepository('FaPaymentBundle:Payment')->getLastPaidAt($user->getId());
@@ -314,7 +326,13 @@ class NewsletterUpdateType extends AbstractType
             $this->em->persist($dotmailer);
             file_put_contents('/var/www/html/newfriday-ad/web/uploads/testing.txt', 'newsletter update type|', FILE_APPEND);
             $this->em->flush($dotmailer);
-
+            
+            if(in_array('48',$dotmailer->getDotmailerNewsletterTypeId())) {                
+                $user->setIsThirdPartyEmailAlertEnabled(1);
+                $this->em->persist($user);
+                $this->em->flush($user);
+            }
+                
             if ($dotmailer->getOptIn() != 1) {
 
                 // opt out user
@@ -339,6 +357,10 @@ class NewsletterUpdateType extends AbstractType
             if ($isNewToDotmailer) {
                 exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
             } else if ($getClickVal == 'update' && $form->isValid()) {
+                if($insertFirstPoint == 1 && ($user->getIsEmailAlertEnabled() ==1 || $user->getIsThirdPartyEmailAlertEnabled() ==1)) { 
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
+                }                  
+                
                 //get Contact Id for update
                 $getConact = $this->container->get('fa.dotmailer.getcontactbyemail.resource');
                 $getConact->setDataToSubmit(array(0 => $dotmailer->getEmail()));

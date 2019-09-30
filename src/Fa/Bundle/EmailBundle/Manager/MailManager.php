@@ -94,7 +94,7 @@ class MailManager
      *
      * @throws Exception
      */
-    public function send($to, $emailIdentifier, $mailVars = array(), $locale = 'en_GB', $attachment = array(), $from = array(), $cc = array(), $bcc = array(), $sender = null, $replyTo = null, $priority = 1)
+    public function send($to, $emailIdentifier, $mailVars = array(), $locale = 'en_GB', $attachment = array(), $from = array(), $cc = array(), $bcc = array(), $sender = null, $replyTo = null, $priority = 1, $pixelTrack = 1)
     {
         $this->message = \Swift_Message::newInstance();
         $sendMailFlag = $this->container->hasParameter('fa.send.other.mails') ? $this->container->getParameter('fa.send.other.mails') : false;
@@ -103,7 +103,11 @@ class MailManager
             try {
                 $trackId = $this->historyEntityManager->getRepository('FaReportBundle:AutomatedEmailReportLog')->updateEmailLog($emailIdentifier, $to);
                 $date = strtotime(date('Y-m-d'));
-                $mailVars['pixel_track'] = '<img src="'.$this->container->get('router')->generate('pixel_track', array('gif' => CommonManager::encryptDecrypt('10101', $trackId)), true).'"></img>';
+                if($pixelTrack) {
+                    $mailVars['pixel_track'] = '<img src="'.$this->container->get('router')->generate('pixel_track', array('gif' => CommonManager::encryptDecrypt('10101', $trackId)), true).'"></img>';
+                } else {
+                    $mailVars['pixel_track'] = '';
+                }
                 $this->setTo($to);
                 $this->setFrom($from);
                 $this->setCc($cc);

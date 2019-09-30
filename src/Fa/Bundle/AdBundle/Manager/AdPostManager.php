@@ -267,7 +267,8 @@ class AdPostManager
             }
 
             $ad->setPhone($phone ? (str_replace(array(' '), '', $phone)) : null);
-            $ad->setUsePrivacyNumber($usePrivacyNumber);
+            //$ad->setUsePrivacyNumber($usePrivacyNumber);
+            $ad->setUsePrivacyNumber(0); // made zero when we removed Yac FFR-3756
 
             if (isset($data['email']) && $data['email']) {
                 $ad->setEmail($data['email']);
@@ -325,7 +326,8 @@ class AdPostManager
         }
 
         // Update ad yac number.
-        $this->updateAdYacNumber($ad, $isNewAd, $oldPhone, $oldUsePrivacyNumber, $isAssignUserToDetachedAd);
+        //$this->updateAdYacNumber($ad, $isNewAd, $oldPhone, $oldUsePrivacyNumber, $isAssignUserToDetachedAd);
+        // commented when we removed Yac FFR-3756
 
         if ($isAdmin) {
             $this->container->get('session')->set('admin_ad_id_'.(isset($data['admin_ad_counter']) ? $data['admin_ad_counter'] : ''), $ad->getId());
@@ -485,7 +487,7 @@ class AdPostManager
         }
 
         // Update ad yac number.
-        $this->updateAdYacNumber($ad, $isNewAd);
+        //$this->updateAdYacNumber($ad, $isNewAd);
         $this->setAdUserFreePackage($ad, $category->getId(), $user);
 
         if ($this->container->get('session')->get('redirect_to_cart')==0) {

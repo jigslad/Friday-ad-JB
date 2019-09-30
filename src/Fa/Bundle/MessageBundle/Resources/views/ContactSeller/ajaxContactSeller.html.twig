@@ -143,7 +143,7 @@
                     {{ form_widget(form.email_alert, {'attr':{'tabindex': 5}}) }}
                     {{ form_label(form.email_alert) }}
                 </li>
-                <li id="form_contact_seller_third_partyemail_alert" style="display:{{thirdpartyEmailAlertStyle}}">
+                <li id="form_contact_seller_third_party_email_alert" style="display:{{thirdpartyEmailAlertStyle}}">
                     {{ form_widget(form.third_party_email_alert, {'attr':{'tabindex': 6}}) }}
                     {{ form_label(form.third_party_email_alert) }}
                 </li>
@@ -257,10 +257,10 @@
         }
     }
     function showorhideEmailAndThirdPartyAlertOption() {
-        if ($('#form_contact_seller_third_partyemail_alert span').hasClass('checked')) {
-            $('#form_contact_seller_third_partyemail_alert').hide();
+        if ($('#form_contact_seller_third_party_email_alert span').hasClass('checked')) {
+            $('#form_contact_seller_third_party_email_alert').hide();
         } else {
-            $('#form_contact_seller_third_partyemail_alert').show();
+            $('#form_contact_seller_third_party_email_alert').show();
         }
         if ($('#form_contact_seller_email_alert span').hasClass('checked')) {
             $('#form_contact_seller_email_alert').hide();

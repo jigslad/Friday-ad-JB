@@ -363,4 +363,36 @@ class LocationController extends CoreController
         
         return new Response();
     }
+    
+    public function ajaxNurseryLocationGroupAction(Request $request)
+    {
+        $nurseryGroupCount = 0;
+        $getPackageRuleArray = $getActivePackage = array();
+        
+        if ($request->isXmlHttpRequest() && $request->get('term') != null) {
+            $townVal = $request->get('term');
+            $adId = $request->get('adId');
+            $adIdArray = array();
+            $adIdArray[] = $adId;
+            
+            if (!empty($townVal)) {
+                $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
+                if ($getActivePackage) {
+                    $getPackageRuleArray = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+                    if(!empty($getPackageRuleArray)) {
+                        if($getPackageRuleArray[0]['location_group_id']==14) {
+                            $nurseryGroupCount = $this->getRepository('FaEntityBundle:LocationGroupLocation')->checkIsNurseryGroup($townVal);
+                        }
+                    }
+                }
+                
+            }
+            if($nurseryGroupCount > 0) {
+                return new JsonResponse(array('response' => true, 'nurseryGroupCount' => $nurseryGroupCount));
+            }
+        }
+        
+        return new JsonResponse(array('response' => false, 'nurseryGroupCount' => $nurseryGroupCount));
+    }
+    
 }
