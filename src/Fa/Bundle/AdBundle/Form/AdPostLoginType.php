@@ -87,7 +87,7 @@ class AdPostLoginType extends AbstractType
             'username',
             EmailType::class,
             array(
-                'attr' => array('autocomplete' => 'off'),
+                'attr' => array('autocomplete' => 'off','class' => 'username_cls'), 
                 'label' => 'Email address',
                 'constraints' => array(
                     new Assert\NotBlank(array('groups'   => array('olduser', 'newuser'), 'message' => $this->translator->trans('Please enter email address.', array(), 'validators'))),
@@ -143,8 +143,12 @@ class AdPostLoginType extends AbstractType
         $form = $event->getForm();
 
         if ($form->isValid()) {
+            $user = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('username' => $data['username'], 'is_half_account' => 0));
+            if (!$user) {
+                $user = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('email' => $data['username'], 'is_half_account' => 0));
+            }
+
             if ($data['user_type'] == 1) {
-                $user = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('username' => $data['username']));
                 if (!$user) {
                     $form->addError(new FormError($this->translator->trans('Invalid email or password.', array(), 'validators')));
                 } elseif ($user && (!$user->getStatus() || $user->getStatus()->getId() != EntityRepository::USER_STATUS_ACTIVE_ID)) {
@@ -172,6 +176,8 @@ class AdPostLoginType extends AbstractType
                         $form->addError(new FormError($this->translator->trans('You do not have enough credential to login.', array(), 'validators')));
                     }
                 }
+            } else if ($data['user_type'] != 1 && $user) {
+                $form->get('username')->addError(new FormError($this->translator->trans('This email address already has an account - please enter password below and login.', array(), 'validators')));
             }
         }
     }
