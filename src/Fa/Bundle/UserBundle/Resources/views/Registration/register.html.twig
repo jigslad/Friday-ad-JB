@@ -233,6 +233,33 @@
                 $('#user_registration_password').attr('type', 'password');
             }
         }
+
+        $("#user_registration_is_third_party_email_alert_enabled").parent('span').on('click', function (e) {
+            if ($('#user_registration_is_third_party_email_alert_enabled').parent().hasClass('checked')) {
+                $('#user_registration_is_third_party_email_alert_enabled').attr('checked', true);
+            } else {
+                $('#user_registration_is_third_party_email_alert_enabled').attr('checked', false);
+            }
+
+            if ($('#user_registration_is_third_party_email_alert_enabled').attr('checked')) {
+                $('#user_registration_is_email_alert_enabled').attr('checked', $('#user_registration_is_third_party_email_alert_enabled').attr('checked'));
+                $('#user_registration_is_email_alert_enabled').parent().addClass('checked');
+            }
+        });
+
+        $("#user_registration_is_email_alert_enabled").parent('span').on('click', function (e) {
+            if ($('#user_registration_is_email_alert_enabled').parent().hasClass('checked')) {
+                //$('#user_registration_is_third_party_email_alert_enabled').attr('disabled', false);
+                $('#user_registration_is_email_alert_enabled').attr('checked', true);
+            } else {
+                //$('#user_registration_is_third_party_email_alert_enabled').attr('disabled', true);
+                $('#user_registration_is_email_alert_enabled').attr('checked', false);
+            }
+            if (!$('#user_registration_is_email_alert_enabled').attr('checked')) {
+                $('#user_registration_is_third_party_email_alert_enabled').attr('checked', false);
+                $('#user_registration_is_third_party_email_alert_enabled').parent().removeClass('checked');
+            }
+        });
         
         function showHideBusinessSellerFields() {
             if ($("input[name='user_registration[user_roles]']:checked").val() == "ROLE_BUSINESS_SELLER" || $("input[name='user_registration[user_roles]']:checked").val() == "ROLE_NETSUITE_SUBSCRIPTION") {
