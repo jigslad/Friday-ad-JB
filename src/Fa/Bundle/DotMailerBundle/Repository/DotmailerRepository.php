@@ -719,6 +719,9 @@ class DotmailerRepository extends EntityRepository
         }
         
         $data[] = $dotmailer->getDateOfBirth();// date_of_birth
+        $dotmailerGender = ($dotmailer->getGender()=='F')?'Female':(($dotmailer->getGender()=='M')?'Male':'');
+        $data[] = $dotmailerGender; // gender
+        
         // dotmailer newsletter info fields
         $dotmailerNewsletterTypeId = $dotmailer->getDotmailerNewsletterTypeId();
         $newsletterTypes = $this->getEntityManager()->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getKeyValueArray($container, 'name', false);
@@ -731,7 +734,6 @@ class DotmailerRepository extends EntityRepository
                 $data[] = 0;
             }
         }
-        
         return $data;
     }
 
@@ -787,12 +789,40 @@ class DotmailerRepository extends EntityRepository
         $data[] = 'ti_user';
         $data[] = 'business_category';
         $data[] = 'date_of_birth';
+        $data[] = 'gender';
         
         // dotmailer newsletter info fields
         $newsletterTypes = $this->getEntityManager()->getRepository('FaDotMailerBundle:DotmailerNewsletterType')->getKeyValueArray($container, 'name', false);
         foreach ($newsletterTypes as $key => $value) {
             $data[] = $value;
         }
+        
+        return $data;
+    }
+    
+    /**
+     * Generate array to send it to dotmailer.
+     * @param object $dotmailer
+     * @param object $container
+     */
+    public function generateDotmailerConsentArray($dotmailer, $container)
+    {
+        $data = array();
+        $contextTextVal = DotmailerRepository::EMAIL_ALERT_LABEL;
+        $contextUrl = '';$getCurrenturi='';
+        if(!empty($dotmailer->getDotmailerNewsletterTypeId()) && in_array('48',$dotmailer->getDotmailerNewsletterTypeId())) {
+            $contextTextVal .= ' AND '.DotmailerRepository::EMAIL_ALERT_LABEL;
+        }
+        $getCurrenturi = $container->get('request_stack')->getCurrentRequest()->getUri();
+        if($getCurrenturi) {
+            $explodeCurrentUri = explode('?',$getCurrenturi);
+            $contextUrl= $explodeCurrentUri[0];
+        }
+        $data['CONSENTTEXT'] = $contextTextVal;
+        $data['CONSENTURL'] = $contextUrl;
+        $data['CONSENTDATETIME'] = date("Y-m-d\TH:i:s");
+        $data['CONSENTIP'] = $container->get('request_stack')->getCurrentRequest()->getClientIp();
+        $data['CONSENTUSERAGENT'] = $container->get('request_stack')->getCurrentRequest()->headers->get('User-Agent');
         
         return $data;
     }
@@ -1039,5 +1069,174 @@ class DotmailerRepository extends EntityRepository
         }
 
         return false;
+    }
+    
+    /**
+     * Send request to dotmailer.
+     *
+     * @param object $dotmailer
+     * @param object $container
+     *
+     * @return boolean
+     */
+    public function sendUpdateContactInfoToDotmailerRequest($dotmailer, $dotmailerContactId, $container)
+    {
+        $masterId = $container->getParameter('fa.dotmailer.master.addressbook.id');
+        $url = $container->getParameter('fa.dotmailer.api.url').'/'.$container->getParameter('fa.dotmailer.api.version').'/';
+        
+        // build url by appending resource to it.
+        $url = $url.'contacts/'.$dotmailerContactId;
+        
+        $username = $container->getParameter('fa.dotmailer.api.username');
+        $password = $container->getParameter('fa.dotmailer.api.password');
+        $dataLabels = $this->generateDotmailerBulkImportLabelArray($container);
+        $dataValues = $this->generateDotmailerBulkImportArray($dotmailer, $container);
+        $data = array();
+        $data['email'] = $dataValues[0];
+        $data['emailType'] = 'Html';
+        $data['optInType'] = ($dotmailer->getOptInType())?ucwords($dotmailer->getOptInType()):"";
+        unset($dataLabels[0]);
+        foreach ($dataLabels as $index => $dataLabel) {
+            $data['dataFields'][] = array(
+                'key' => $dataLabel,
+                'value' => $dataValues[$index],
+            );
+        }
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch, CURLOPT_HTTPHEADER, array(
+                'Accept: application/json',
+                'Content-Type: application/json'
+            )
+            );
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLAUTH_BASIC, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD,$username . ':' . $password);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        
+        $response = json_decode(curl_exec($ch), true);
+        curl_close($ch);
+        
+        return $response;
+    }
+    
+    /**
+     * Send request to dotmailer.
+     *
+     * @param object $dotmailer
+     * @param object $container
+     *
+     * @return boolean
+     */
+    public function sendContactInfoToConsentDotmailerRequest($dotmailer,$container)
+    {       
+        $url = $container->getParameter('fa.dotmailer.api.url').'/'.$container->getParameter('fa.dotmailer.api.version').'/';
+        
+        // build url by appending resource to it.
+        $url = $url.'contacts/with-consent';
+        
+        $username = $container->getParameter('fa.dotmailer.api.username');
+        $password = $container->getParameter('fa.dotmailer.api.password');
+        $dataLabels = $this->generateDotmailerBulkImportLabelArray($container);
+        $dataValues = $this->generateDotmailerBulkImportArray($dotmailer, $container);
+        $data = array();$consentArray = array();
+        $data['email'] = $dataValues[0];
+        $data['emailType'] = 'Html';
+        $data['optInType'] = ($dotmailer->getOptInType())?ucwords($dotmailer->getOptInType()):"";
+        unset($dataLabels[0]);
+        foreach ($dataLabels as $index => $dataLabel) {
+            $data['dataFields'][] = array(
+                'key' => $dataLabel,
+                'value' => $dataValues[$index],
+            );
+        }
+        $consentArray = $this->generateDotmailerConsentArray($dotmailer, $container);
+        foreach ($consentArray as $consentKey => $consentValue) {
+            $data['consentFields']['fields'][] = array(
+                'key' => $consentKey,
+                'value' => $consentValue,
+            );
+        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch, CURLOPT_HTTPHEADER, array(
+                'Accept: application/json',
+                'Content-Type: application/json'
+            )
+            );
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLAUTH_BASIC, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD,$username . ':' . $password);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        
+        $response = json_decode(curl_exec($ch), true);
+        curl_close($ch);
+        
+        return $response;
+    }
+    
+    /**
+     * Send request to dotmailer.
+     *
+     * @param object $dotmailer
+     * @param object $container
+     *
+     * @return boolean
+     */
+    public function sendContactInfoToResubscribeDotmailerRequest($dotmailer, $container)
+    {
+        $masterId = $container->getParameter('fa.dotmailer.master.addressbook.id');
+        $url = $container->getParameter('fa.dotmailer.api.url').'/'.$container->getParameter('fa.dotmailer.api.version').'/';
+        $baseurl = $container->getParameter('base_url');
+        // build url by appending resource to it.
+        $url = $url.'address-books/'.$masterId.'/contacts/resubscribe';
+         
+        $username = $container->getParameter('fa.dotmailer.api.username');
+        $password = $container->getParameter('fa.dotmailer.api.password');
+        $dataLabels = $this->generateDotmailerBulkImportLabelArray($container);
+        $dataValues = $this->generateDotmailerBulkImportArray($dotmailer, $container);
+        $data = array();
+        $data['unsubscribedContact']['email'] = $dataValues[0];
+        unset($dataLabels[0]);
+       
+        $data['unsubscribedContact']['dataFields'][] = array(
+            'key' => 'FIRSTNAME',
+            'value' => ($dotmailer->getFirstName())?ucwords($dotmailer->getFirstName()):"",
+        );
+        $data['unsubscribedContact']['dataFields'][] = array(
+            'key' => 'LASTNAME',
+            'value' => ($dotmailer->getLastName())?ucwords($dotmailer->getLastName()):"",
+        );
+        
+        $data['ReturnUrlToUseIfChallenged'] = $baseurl.$container->get('router')->generate('newsletter_resubscribe_success_from_mail', array('guid' => $dotmailer->getGuid()), true);
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch, CURLOPT_HTTPHEADER, array('Accept: application/json',
+                'Content-Type: application/json')
+            );
+        curl_setopt($ch, CURLAUTH_BASIC, CURLAUTH_DIGEST);
+        curl_setopt(
+            $ch, CURLOPT_USERPWD,
+            $username . ':' . $password
+            );
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS,json_encode($data));
+        
+        $response = json_decode(curl_exec($ch), true);
+        curl_close($ch);
+        
+        return $response;
     }
 }
