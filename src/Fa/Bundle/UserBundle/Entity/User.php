@@ -823,6 +823,8 @@ class User implements UserInterface, \Serializable
      * @Gedmo\Versioned
      */
     private $old_is_private_phone_number;
+  
+    /**
      * @var integer
      *
      * @ORM\Column(name="boost_overide", type="integer", length=10, nullable=true)
