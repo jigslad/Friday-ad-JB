@@ -25,6 +25,7 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Fa\Bundle\DotMailerBundle\Repository\DotmailerRepository;
 
 /**
  * This is newsletter form
@@ -153,12 +154,19 @@ class NewsletterType extends AbstractType
         $form      = $event->getForm();
         $user      = $this->container->get('security.token_storage')->getToken()->getUser();
         $dotmailer = $event->getData();
+        $insertFirstPoint = 0;
 
         // refresh dotmailer object
         if ($dotmailer->getId()) {
             $this->em->refresh($dotmailer);
+            if ($dotmailer->getIsContactSent()!=1)  {
+                $insertFirstPoint = 1;
+            }
         } else {
             $isNewToDotmailer = true;
+            $dotmailer = new Dotmailer();
+            $dotmailer->setFadUser(1);
+            $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_ACCOUNT_PREFS); 
         }
 
         $dotmailerNewsletterTypeId       = $dotmailer->getDotmailerNewsletterTypeId();
@@ -236,9 +244,15 @@ class NewsletterType extends AbstractType
                 $this->em->persist($user);
                 $this->em->flush($user);
             }
+            if ($insertFirstPoint== 1 && ($user->getIsEmailAlertEnabled()==1 || $user->getIsThirdPartyEmailAlertEnabled()==1)) {
+                $dotmailer->setFirstTouchPoint(DotmailerRepository::TOUCH_POINT_ACCOUNT_PREFS);
+                $dotmailer->setIsContactSent(1);
+                $this->em->persist($dotmailer);
+                $this->em->flush($dotmailer);
+            }
 
             //send to dotmailer instantly.
-            if ($isNewToDotmailer) {
+            if ($isNewToDotmailer || $user->getIsEmailAlertEnabled() ==1) {
                 exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:dotmailer:subscribe-contact --id='.$dotmailer->getId().' >/dev/null &');
             }
         }

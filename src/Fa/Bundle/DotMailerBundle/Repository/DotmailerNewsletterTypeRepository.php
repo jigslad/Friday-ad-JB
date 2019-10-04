@@ -74,6 +74,8 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
 
         $newsletterTypesArray = array();
         $newsletterTypes      = $this->getBaseQueryBuilder()
+            /* FFR-2855 : added new newsletter types but these should not be visible to end users, hence updated their 'ord' to 0 and querying here accordingly */
+            ->where(self::ALIAS.'.ord > 0')
             ->orderBy(self::ALIAS.'.ord', 'ASC')
             ->getQuery()->getResult();
 
@@ -213,6 +215,7 @@ class DotmailerNewsletterTypeRepository extends EntityRepository
         $newsletterTypes      = $this->getBaseQueryBuilder()
         ->andWhere(self::ALIAS.'.parent_id = 0')
         ->andWhere(self::ALIAS.'.category_id = 0 OR '.self::ALIAS.'.category_id IS NULL')
+        ->andWhere(self::ALIAS.'.ord > 0')
         ->orderBy(self::ALIAS.'.ord', 'ASC')
         ->getQuery()->getResult();
 
