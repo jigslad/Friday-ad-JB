@@ -1186,8 +1186,7 @@ class Dotmailer
         return $this->is_contact_sent;
     }
 
-    /**     
-     * Set gender.
+     /* Set gender.
      *
      * @param string $gender
      * @return Dotmailer
