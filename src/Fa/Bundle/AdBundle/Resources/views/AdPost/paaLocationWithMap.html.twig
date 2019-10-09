@@ -5,7 +5,7 @@
 {% if is_edit is defined and is_edit is not null %}
     {% set formName = 'fa_paa_edit_'~categoryName|replace({' ':'_'})|lower %}
     {% set currentLocation = adLocationRepository.getLatestLocation(ad.id) %}
-    {% set curLocText = currentLocation.getLocationTown().getName() %}
+    {% set curLocText = (currentLocation)?currentLocation.getLocationTown().getName():'' %}
 {% endif %}
 {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}

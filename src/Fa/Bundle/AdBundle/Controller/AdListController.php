@@ -2209,15 +2209,15 @@ class AdListController extends CoreController
         if ($topBusiness) {
             $businessExposureTopUser = $this->getRepository('FaUserBundle:User')->getTopbusinessUserDetailForAdList($topBusiness, $this->container);           
             //$businessExposureTopUserAds = $this->getProfileExposureUserAds($businessExposureTopUser[0]['user_id'], $data);
-            //if(!empty($businessExposureTopUserAds)) {
+            if(!empty($businessExposureTopUserAds) && isset($businessExposureTopUser[0]['user_id'])) {
                 $businessTopExposureUserDetails[] = array(
                     //'businessExposureUserAds' => $businessExposureTopUserAds,
                     'businessUserId'          => $businessExposureTopUser[0]['user_id'],
                     'businessUserDetail'      => $this->getRepository('FaUserBundle:User')->getProfileExposureUserDetailForAdList($businessExposureTopUser[0]['user_id'], $this->container),
                 );
-           // }
+            }
             $parameters['businessTopExposureUsersDetailsWithoutAd'] = $businessTopExposureUserDetails;
-            $viewedBusinessExposureUserIds[] = !empty($businessExposureTopUser) ? $businessExposureTopUser[0]['user_id']:'';
+            $viewedBusinessExposureUserIds[] = (!empty($businessExposureTopUser) && isset($businessExposureTopUser[0]['user_id'])) ? $businessExposureTopUser[0]['user_id']:'';            
         }
        
         $businessExposureUsers = $businessExposureUsersWithoutAd = array();

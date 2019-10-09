@@ -306,6 +306,13 @@ class Dotmailer
     private $dateOfBirth;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="first_touch_point", type="string", nullable=true)
+     */
+    private $firstTouchPoint;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -1230,4 +1237,27 @@ class Dotmailer
     {
         return $this->dateOfBirth;
     }
+    
+    /**
+     * Set first touch point
+     *
+     * @param string $firstTouchPoint
+     * @return Dotmailer
+     */
+    public function setFirstTouchPoint($firstTouchPoint)
+    {
+        $this->firstTouchPoint = $firstTouchPoint;
+        
+        return $this;
+    }
+    
+    /**
+     * Get first touch point
+     *
+     * return string
+     */
+    public function getFirstTouchPoint()
+    {
+        return $this->firstTouchPoint;
+    } 
 }
