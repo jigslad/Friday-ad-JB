@@ -39,7 +39,7 @@
 </head>
 <body>
     <div class="lsize">
-        <img style="margin: 20px 0 0 0" src="{{ shared_url('/bundles/fafrontend/images/fad-logo.svg') }}">
+        <img style="margin: 20px 0 0 0" src="{{ shared_url('/bundles/fafrontend/images/new-fad-logo.svg') }}">
         <div class="receipt-item clearfix">
             <div class="col-1 order-no"><b>Order no.</b> {{ orderDetail['cart_code'] }}</div>
             <div class="col-2 order-no"><b>Order placed</b> {{ staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [orderDetail['created_at'], container]) }}</div>
