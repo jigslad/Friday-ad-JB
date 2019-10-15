@@ -13,10 +13,9 @@
     font-weight: normal;
     font-style: normal;
 }
-
 .get_online_decision {
     background: #fff;
-    background-image: url("/bundles/faad/images/Zuto_TP_Anton_Large.png");
+    background-image: linear-gradient( 70deg, #fff 0%, #fff 65%, #11c5ef 65%, #11c5ef 100%);
     background-repeat: no-repeat;
     background-position: right bottom;
     background-size: contain;
@@ -24,32 +23,44 @@
 }
 
 .get_online_decision .apply-new-block {
-    width: 100%;
+    width: 70%;
     display: inline-flex;
+    background: url(/bundles/faad/images/car2.png);
+    background-size: 31%;
+    background-position: -8% bottom;
+    background-repeat: no-repeat;
 }
 
 .get_online_decision .apply-new-block img{
     height: 56px;
 }
-
+.car_img{
+    margin :22px 0px -10px -13px;
+}
 .get_online_decision .apply-new-left {
-    width: 15%;
+    width: 20%;
     padding-top: 10px;
     padding-bottom: 10px;
     height: 100%;
 }
 
 .get_online_decision .apply-new-right {
-    width: 65%;
+    width: 80%;
     padding: 10px;
 }
 
 .get_online_decision h2.detail-head {
-    font-size: 26px;
+    font-size: 20px;
     line-height: 32px;
     margin: 0;
     font-family: 'ApaxThree-Bold';
-}
+}.get_online_decision h2.detail-foot {
+     font-size: 20px;
+     color:#11c5ef;
+     line-height: 32px;
+     margin: 0;
+     font-family: 'ApaxThree-Bold';
+ }
 
 .get_online_decision select {
     background-position: right 12px top 6px;
@@ -61,6 +72,9 @@
     padding: 0 10px;
     background-color: #fff;
     font-family: 'ApaxThree-Regular';
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border-radius: 5%;
 }
 
 .get_online_decision ul {
@@ -69,15 +83,16 @@
 }
 
 .get_online_decision ul li {
-    font-size: 16px;
+    font-size: 12px;
     line-height: 24px;
     list-style-type: disc;
+    font-weight: bold;
 }
 
 .get_online_decision .button {
     font-size: 14px;
     padding: 6px 30px;
-    background-color: #a8dc28;
+    background-color: #0BFF05;
     border-radius: 5px;
     font-weight: 700;
     position: relative;
@@ -86,16 +101,18 @@
 }
 
 .get_online_decision .button:hover, .get_online_decision .button:active {
-    background-color: #9bcc21;
+    background-color: #d56e2c;
 }
 
 .get_online_decision span {
-    text-align: right;
+    color: #fff;
+    flex-flow:row-reverse ;
     margin-top: 8px;
     display: flex;
     font-size: 13px;
     font-weight: bold;
     font-family: 'ApaxThree-Regular';
+    width: 50px;
 }
 
 .get_online_decision .button:after {
@@ -113,16 +130,16 @@
 }
 
 .get_online_decision .form-new-block {
-    width: 100%;
-    display: inline-flex;
+    width: 30%;
 }
 
 .get_online_decision .desktop-form-block {
-    width: 55% !important;
+    width: 100% !important;
+    margin-top: 4%;
 }
 
 .get_online_decision .form-block-1, .get_online_decision .form-block-2 {
-    width: 44%;
+    width: 100%;
     display: inline-flex;
     margin-right: 15px;
 }
@@ -131,7 +148,17 @@
     width: 100%;
     margin-left: 5px;
 }
+/* Changes needed in WB only */
+#zutoLoanCalcDiv {
+    border: 1px solid #e0ded8;
+}
 
+@media only screen and (min-width: 760px) {
+    .get_online_decision .apply-new-left {
+        display: inline-grid !important;
+    }
+}
+/* Changes needed in WB only */
 @media only screen and (min-width: 760px) and (max-width: 959px) {
     .get_online_decision .desktop-form-block {
         width: 70% !important;
@@ -155,8 +182,17 @@
 }
 
 @media only screen and (min-width: 320px) and (max-width: 640px) {
+    .get_online_decision .apply-new-block {
+        background: url(/bundles/faad/images/car.png);
+        background-position: 110% 15%;
+        background-size: 40%;
+        background-repeat: no-repeat;
+        width: 100%;
+    }
     .get_online_decision .form-new-block {
+        width: 100%;
         display: inline-block;
+        background: #11c5ef;
     }
 
     .get_online_decision {
@@ -164,6 +200,7 @@
     }
 
     .get_online_decision .apply-new-right {
+        background-position: top right;
         width: 100%;
     }
 
@@ -195,10 +232,10 @@
     }
 
     .get_online_decision .button {
-        font-size: 21px;
+        font-size: 16px;
         padding: 10px 10px;
-        background-color: #a8dc28;
-        border: #a8dc28;
+        background-color: #0BFF05;
+        border: #ff832e;
         border-radius: 5px;
         font-weight: 700;
         position: relative;
@@ -208,7 +245,7 @@
     }
 
     .get_online_decision .button:hover, .get_online_decision .button:active {
-        background-color: #9bcc21;
+        background-color: #d56e2c;
     }
 
     .get_online_decision .button:after {
