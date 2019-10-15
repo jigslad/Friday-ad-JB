@@ -334,6 +334,7 @@ class AdJobsRepository extends EntityRepository
                 if ($userSite && $userSite->getPath()) {
                     $sourcePath = $userSite->getPath();
                     $sourceName = $userSite->getUser()->getId().'_original.jpg';
+                    // todo this function is not written properly. It is used to copy business image. But the called function copies image from ad directory to same folder. Doesn't make sense.
                     $this->_em->getRepository('FaAdBundle:AdImage')->createImageFromSource($container, $sourcePath, $sourceName, $adId, $sessionId);
                 }
             }

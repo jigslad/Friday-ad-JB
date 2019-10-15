@@ -113,10 +113,12 @@ class AdImageType extends AbstractType
         $uploadedFile = $form->get('fileData')->getData();
 
         if ($form->isValid()) {
+            $flagDirectS3Upload = true;
             if ($form->get('session_id')->getData()) {
                 $adId = $form->get('session_id')->getData();
                 $imagePath = $this->container->getParameter('fa.ad.image.tmp.dir');
                 $maxOrder = $this->em->getRepository('FaAdBundle:AdImage')->getMaxOrder($form->get('session_id')->getData(), true);
+                $flagDirectS3Upload = false;
             } else {
                 $adId = $form->get('ad')->getData()->getId();
                 $imagePath = $this->container->getParameter('fa.ad.image.dir').'/'.CommonManager::getGroupDirNameById($adId);
@@ -129,27 +131,47 @@ class AdImageType extends AbstractType
             $image->setOrd($maxOrder);
 
             $ad = $this->em->getRepository('FaAdBundle:Ad')->find($adId);
+            $adTitle = "";
             if ($ad) {
+                $adTitle = $ad->getTitle();
                 $image->setImageName(Urlizer::urlize($ad->getTitle().'-'.$ad->getId().'-'.$maxOrder));
             }
             $image->setStatus('1');
             $image->setAws(0);
-            $orgImageName = $uploadedFile->getClientOriginalName();
-            $orgImageName = str_replace(array('"', "'"), '', $orgImageName);
-            $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imagePath;
-            $orgImageName = escapeshellarg($orgImageName);
 
-            //upload original image.
-            $uploadedFile->move($orgImagePath, $orgImageName);
+            if($flagDirectS3Upload){
+                $adImageManager = new AdImageManager($this->container, $adId, $hash, $imagePath);
+                $imageFileName = "";
+                if (!empty($image->getImageName())) {
+                    $imageFileName = $image->getImageName();
+                } else {
+                    $imageFileName = CommonManager::generateImageFileName($adTitle, $adId, $maxOrder);
+                    $image->setImageName($imageFileName);
+                }
+                $adImageS3Name = $adImageManager->uploadImageDirectlyToS3($uploadedFile, $imageFileName);
+                if (!empty($adImageS3Name)) {
+                    $image->setAws(1);
+                    $image->setStatus('1');
+                }
+            } else {
+                $orgImageName = $uploadedFile->getClientOriginalName();
+                $orgImageName = str_replace(array('"', "'"), '', $orgImageName);
+                $orgImagePath = $webPath . DIRECTORY_SEPARATOR . $imagePath;
+                $orgImageName = escapeshellarg($orgImageName);
 
-            $adImageManager = new AdImageManager($this->container, $adId, $hash, $orgImagePath);
-            //save original jpg image.
-            $adImageManager->saveOriginalJpgImage($orgImageName);
-            //create thumbnails
-            $adImageManager->createThumbnail();
-            //create cope thumbnails
-            $adImageManager->createCropedThumbnail();
+                //upload original image.
+                $uploadedFile->move($orgImagePath, $orgImageName);
 
+                $adImageManager = new AdImageManager($this->container, $adId, $hash, $orgImagePath);
+
+                //save original jpg image.
+                $adImageManager->saveOriginalJpgImage($orgImageName);
+                //create thumbnails
+                $adImageManager->createThumbnail();
+                //create cope thumbnails
+                $adImageManager->createCropedThumbnail();
+
+            }
             //$adImageManager->uploadImagesToS3($image);
         }
     }

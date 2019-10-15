@@ -150,23 +150,31 @@ class UserImageType extends AbstractType
             $orgImageName = str_replace(array('"', "'"), '', $orgImageName);
             $orgImagePath = $webPath.DIRECTORY_SEPARATOR.$imagePath;
             $orgImageName = escapeshellarg($orgImageName);
-
-            //upload original image.
-            $uploadedFile->move($orgImagePath, $orgImageName);
-
-            $userImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
-
-            // remove image if its from profile page.
-            if ($profileImage) {
-                $userImageManager->removeImage();
+            
+            if($flagDirectS3Upload){
+                $userImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
+                $imageFileName = "";
+                
+                $userImageS3Name = $userImageManager->uploadImageDirectlyToS3($uploadedFile, $orgImageName);
+                
+            } else {
+                //upload original image.
+                $uploadedFile->move($orgImagePath, $orgImageName);
+    
+                $userImageManager = new UserImageManager($this->container, $userId, $orgImagePath, $isCompany);
+    
+                // remove image if its from profile page.
+                if ($profileImage) {
+                    $userImageManager->removeImage();
+                }
+                //save original jpg image.
+                //$userImageManager->saveOriginalJpgImage($orgImageName);
+    
+                //create thumbnails
+                $userImageManager->createThumbnail();
+    
+                //$userImageManager->uploadImagesToS3($image);
             }
-            //save original jpg image.
-            $userImageManager->saveOriginalJpgImage($orgImageName);
-
-            //create thumbnails
-            $userImageManager->createThumbnail();
-
-            //$userImageManager->uploadImagesToS3($image);
         }
     }
 

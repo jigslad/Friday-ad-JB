@@ -27,6 +27,7 @@ use Doctrine\DBAL\Logging\EchoSQLLogger;
  * @author Janak Jadeja <janak@aspl.in>
  * @copyright 2014 Friday Media Group Ltd
  * @version 1.0
+ * @deprecated Command created in 2015. Not used now. Shouldn't be used since it will directly delete ad-images from NFS without any checks.
  */
 class CleanS3ImageFromLocalCommand extends ContainerAwareCommand
 {
@@ -106,6 +107,7 @@ class CleanS3ImageFromLocalCommand extends ContainerAwareCommand
                 if ($image->getAd()) {
                     $imagePath  = $this->adImageDir.CommonManager::getGroupDirNameById($image->getAd()->getId());
                     $adImageManager = new AdImageManager($this->getContainer(), $image->getAd()->getId(), null, $imagePath);
+                    // todo need to change to upload direct to AmazonS3 if this function is correct.
                     $adImageManager->removS3ImagesFromLocal($image);
                 }
             }

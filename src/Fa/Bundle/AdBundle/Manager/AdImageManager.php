@@ -17,6 +17,11 @@ use Fa\Bundle\AdBundle\Listener\AdListener;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Gedmo\Sluggable\Util\Urlizer;
 use Aws\S3\S3Client;
+use \Exception;
+use Fa\Bundle\AdBundle\Entity\AdImage;
+use Fa\Bundle\ArchiveBundle\Entity\ArchiveAdImage;
+use Fa\Bundle\CoreBundle\Manager\AmazonS3ImageManager;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Ad image manager.
@@ -44,7 +49,7 @@ class AdImageManager
     /**
      * Id of ad.
      *
-     * @var stirng $adId
+     * @var integer $adId
      */
     protected $adId = null;
 
@@ -75,7 +80,7 @@ class AdImageManager
     /**
      * Get ad id.
      *
-     * @return AdImageType
+     * @return integer
      */
     public function getAdId()
     {
@@ -95,7 +100,7 @@ class AdImageManager
     /**
      * Get image_name.
      *
-     * @return AdImageType
+     * @return string
      */
     public function getImageName()
     {
@@ -115,7 +120,7 @@ class AdImageManager
     /**
      * Get hash.
      *
-     * @return AdImageType
+     * @return string
      */
     public function getHash()
     {
@@ -170,6 +175,7 @@ class AdImageManager
      * @param integer            $hash
      * @param string             $orgImagePath
      * @param string             $imageName
+     * @param string             $imagePath
      */
     public function __construct(ContainerInterface $container, $adId, $hash, $orgImagePath, $imageName = null, $imagePath = null)
     {
@@ -187,6 +193,9 @@ class AdImageManager
      * Save original jpg from uploaded image.
      *
      * @param string $orgImageName Original image name.
+     * @param bool $keepOriginal
+     * @throws Exception
+     * @deprecated Not required since 14-June-2019. Since direct upload to S3 is done in uploadImageDirectlyToS3.
      */
     public function saveOriginalJpgImage($orgImageName, $keepOriginal = false)
     {
@@ -219,8 +228,8 @@ class AdImageManager
 
     /**
      * Create required thumbnails.
-     *
-     * @throws sfException
+     * @param bool $zoomFromCenter
+     * @throws Exception
      */
     public function createThumbnail($zoomFromCenter = true)
     {
@@ -238,7 +247,6 @@ class AdImageManager
                 exec('convert -define jpeg:size='.$dimension[0].'x'.$dimension[1].' '.$orig_image.' -thumbnail '.$bigImgSize.'^ \
                      -gravity center -extent '.$bigImgSize.' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'_'.$bigImgSize.'.jpg');
                 unset($thumbSize[0]);
-                $this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'_'.$bigImgSize.'.jpg';
             }
 
             try {
@@ -260,7 +268,7 @@ class AdImageManager
     }
 
     /**
-     * Create croped thumbnails.
+     * Create cropped thumbnails.
      *
      * @throws Exception
      */
@@ -270,7 +278,6 @@ class AdImageManager
         $cropSize = array_map('strtoupper', $cropSize);
 
         foreach ($cropSize as $value) {
-            $org_size      = array();
             $double_width  = null;
             $double_height = null;
             $sourceImg    = $this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.jpg';
@@ -297,6 +304,7 @@ class AdImageManager
      */
     public function removeImage($keepOriginal = false)
     {
+        // START of code not required. Image is uploaded only to S3 since FFR-3664. 14-June-2019.
         //remove original file
         if (!$keepOriginal && is_file($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.jpg')) {
             unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.jpg');
@@ -325,6 +333,7 @@ class AdImageManager
                 }
             }
         }
+        // END of code not required. Image is uploaded only to S3 since FFR-3664. 14-June-2019.
 
         try {
             $this->removeFromAmazoneS3($keepOriginal);
@@ -391,6 +400,9 @@ class AdImageManager
         ));
     }
 
+    /**
+     * @param AdImage $image
+     */
     public function uploadImagesToS3($image)
     {
         $em = $this->container->get('doctrine')->getManager();
@@ -473,6 +485,9 @@ class AdImageManager
         }
     }
 
+    /**
+     * @param AdImage $image
+     */
     public function removS3ImagesFromLocal($image)
     {
         $em = $this->container->get('doctrine')->getManager();
@@ -483,10 +498,10 @@ class AdImageManager
             $thumbSize = array_map('strtoupper', $thumbSize);
 
             $images = array();
-            
+
             foreach ($thumbSize as $d) {
                 $sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'_'.$image->getHash().'_'.$d.'.jpg';
-                
+
                 if (file_exists($sourceImg)) {
                     $images[$d] = $sourceImg;
                 }
@@ -497,14 +512,14 @@ class AdImageManager
             if (file_exists($sourceImg)) {
                 $images[''] = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'_'.$image->getHash().'.jpg';
             }
-            
+
             //for cropped Image
             $sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getAd()->getId().'_'.$image->getHash().'_org.jpg';
             if (file_exists($sourceImg)) {
                 $images['crop_org'] = $sourceImg;
             }
-            
-            
+
+
             if (count($images) > 0) {
                 foreach ($images as $key => $im) {
                     unlink($im);
@@ -521,39 +536,41 @@ class AdImageManager
             $em->flush();
         }
     }
-    
+
+    /**
+     * @param ArchiveAdImage $image
+     */
     public function removeArchiveAdImagesFromLocal($image)
     {
-        $em = $this->container->get('doctrine')->getManager();
         if ($image->getArchiveAd()) {
             $webPath = $this->container->get('kernel')->getRootDir().'/../web';
-            
+
             $thumbSize = $this->container->getParameter('fa.image.thumb_size');
             $thumbSize = array_map('strtoupper', $thumbSize);
-            
+
             $images = array();
-            
+
             foreach ($thumbSize as $d) {
                 $sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getArchiveAd()->getId().'_'.$image->getHash().'_'.$d.'.jpg';
-                
+
                 if (file_exists($sourceImg)) {
                     $images[$d] = $sourceImg;
                 }
             }
-            
+
             $sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getArchiveAd()->getId().'_'.$image->getHash().'.jpg';
-            
+
             if (file_exists($sourceImg)) {
                 $images[''] = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getArchiveAd()->getId().'_'.$image->getHash().'.jpg';
             }
-            
+
             //for cropped Image
             $sourceImg = $webPath.DIRECTORY_SEPARATOR.$image->getPath().DIRECTORY_SEPARATOR.$image->getArchiveAd()->getId().'_'.$image->getHash().'_org.jpg';
             if (file_exists($sourceImg)) {
                 $images['crop_org'] = $sourceImg;
             }
-            
-            
+
+
             if (count($images) > 0) {
                 foreach ($images as $key => $im) {
                     unlink($im);
@@ -566,12 +583,13 @@ class AdImageManager
             }
         }
     }
-    
-    
+
+
     /**
      * Check images exist on AWS
      *
-     * @param boolean $keepOriginal Flag for keep original image.
+     * @param string $imageUrl
+     * @return bool
      */
     public function checkImageExistOnAws($imageUrl)
     {
@@ -586,4 +604,34 @@ class AdImageManager
         $response = $client->doesObjectExist($this->container->getParameter('fa.aws_bucket'), $imageUrl);
         return $response;
     }
+
+    /**
+     * Receives the input image object and uploads to S3.
+     * @param UploadedFile|string $uploadedFile
+     * @param string       $imageName
+     * @return string
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
+     */
+    public function uploadImageDirectlyToS3($uploadedFile, $imageName)
+    {
+        // no need to generate thumbnail here. Since Amazon Lambda function is written to handle the same.
+        $sourcePath = $uploadedFile;
+        if($uploadedFile instanceof UploadedFile){
+            $sourcePath = $uploadedFile->getRealPath();
+        }
+        $objAS3IM = AmazonS3ImageManager::getInstance($this->container);
+        return $objAS3IM->uploadImageToS3($sourcePath, $this->getAdImageDestination($imageName));
+    }
+
+    /**
+     * Get the destination file path where the ia
+     * @param string $imageName
+     * @return string
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
+     */
+    private function getAdImageDestination($imageName)
+    {
+        return $this->getOrgImagePath() . DIRECTORY_SEPARATOR . $imageName . '.jpg';
+    }
+
 }
