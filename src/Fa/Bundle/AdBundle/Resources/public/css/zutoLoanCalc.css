@@ -15,7 +15,7 @@
 }
 .get_online_decision {
     background: #fff;
-    background-image: linear-gradient( 70deg, #fff 0%, #fff 65%, #11c5ef 65%, #11c5ef 100%);
+    background-image: linear-gradient( 70deg, #fff 0%, #fff 65%, #0da1e9 65%, #0da1e9 100%);
     background-repeat: no-repeat;
     background-position: right bottom;
     background-size: contain;
@@ -25,14 +25,18 @@
 .get_online_decision .apply-new-block {
     width: 70%;
     display: inline-flex;
-    background: url(/bundles/faad/images/car2.png);
-    background-size: 31%;
-    background-position: -8% bottom;
-    background-repeat: no-repeat;
+    overflow: hidden;
 }
-
-.get_online_decision .apply-new-block img{
-    height: 56px;
+.apply-new-car{
+    position: absolute;
+    bottom: 0;
+    left: -15px;
+}
+.apply-new-car img {
+    height: 70px;
+}
+.get_online_decision .apply-new-block .apply-new-logo img{
+    height: 40px;
 }
 .car_img{
     margin :22px 0px -10px -13px;
@@ -50,13 +54,15 @@
 }
 
 .get_online_decision h2.detail-head {
-    font-size: 20px;
+    font-size: 25px;
     line-height: 32px;
     margin: 0;
     font-family: 'ApaxThree-Bold';
-}.get_online_decision h2.detail-foot {
-     font-size: 20px;
-     color:#11c5ef;
+}
+
+.get_online_decision h2.detail-foot {
+     font-size: 18px;
+     color:#0da1e9;
      line-height: 32px;
      margin: 0;
      font-family: 'ApaxThree-Bold';
@@ -74,7 +80,6 @@
     font-family: 'ApaxThree-Regular';
     -webkit-appearance: none;
     -moz-appearance: none;
-    border-radius: 5%;
 }
 
 .get_online_decision ul {
@@ -86,13 +91,12 @@
     font-size: 12px;
     line-height: 24px;
     list-style-type: disc;
-    font-weight: bold;
 }
 
 .get_online_decision .button {
     font-size: 14px;
     padding: 6px 30px;
-    background-color: #0BFF05;
+    background-color: #9bcc21;
     border-radius: 5px;
     font-weight: 700;
     position: relative;
@@ -101,7 +105,7 @@
 }
 
 .get_online_decision .button:hover, .get_online_decision .button:active {
-    background-color: #d56e2c;
+    background-color: #9bcc21;
 }
 
 .get_online_decision span {
@@ -135,7 +139,7 @@
 
 .get_online_decision .desktop-form-block {
     width: 100% !important;
-    margin-top: 4%;
+    margin-top: 5%;
 }
 
 .get_online_decision .form-block-1, .get_online_decision .form-block-2 {
@@ -183,16 +187,21 @@
 
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .get_online_decision .apply-new-block {
-        background: url(/bundles/faad/images/car.png);
-        background-position: 110% 15%;
-        background-size: 40%;
-        background-repeat: no-repeat;
         width: 100%;
+        overflow: hidden;
+    }
+    .apply-new-car {
+        top: 30px;
+        right: -15px;
+        transform: rotateY(-180deg);
+    }
+    .apply-new-car img{
+        height: 75px;
     }
     .get_online_decision .form-new-block {
         width: 100%;
         display: inline-block;
-        background: #11c5ef;
+        background: #0da1e9;
     }
 
     .get_online_decision {
@@ -232,16 +241,10 @@
     }
 
     .get_online_decision .button {
-        font-size: 16px;
-        padding: 10px 10px;
-        background-color: #0BFF05;
-        border: #ff832e;
-        border-radius: 5px;
+        font-size: 15px;
         font-weight: 700;
         position: relative;
         height: 49px;
-        text-align: left;
-        margin: 0 15px;
     }
 
     .get_online_decision .button:hover, .get_online_decision .button:active {
