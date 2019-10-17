@@ -1,11 +1,13 @@
+{%  set ZutoLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getStaticImageUrl', [container, 'faad/images', 'Zuto-Logo-Strap-Stacked.png'])%}
+{%  set ZutoCar = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getStaticImageUrl', [container, 'faad/images', 'car.png'])%}
 <div id="zutoLoanCalcDiv">
     <div class="row get_online_decision">
         <div class="apply-new-block columns">
             <div class="apply-new-left apply-new-logo hide-for-small-only">
-                <img src="/bundles/faad/images/Zuto-Logo-Strap-Stacked.png" />
+                <img src="{{  ZutoLogo }}" />
             </div>
             <div class="apply-new-car">
-                <img src="/bundles/faad/images/car.png" />
+                <img src="{{ ZutoCar }}" />
             </div>
             <div class="apply-new-right">
                 <h2 class="detail-head hide-for-small-only">Car finance made simple</h2>
@@ -94,7 +96,7 @@
             </div>
             <div class="mobile-logo-button">
                 <div class="form-bottom-logo show-for-small-only">
-                    <img src="/bundles/faad/images/Zuto-Logo-Strap-Stacked.png" class="logo_img"/>
+                    <img src="{{ ZutoCar }}" class="logo_img"/>
                 </div>
                 <button class="secondary-btn-1 button expand" id="zuto_loan_calc">GET QUOTE NOW</button>
             </div>
