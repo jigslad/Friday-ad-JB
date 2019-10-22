@@ -13,6 +13,7 @@ namespace Fa\Bundle\ContentBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -70,7 +71,15 @@ class NativeBannerAdminType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('title', TextType::class,array('disabled'=>'true','empty_data'=>'Advertisement','attr' => array('value'=>'Advertisement')))
+        ->add('title', TextType::class,array(
+            'attr' => array(
+                'placeholder'=>'Advertisement',
+                'value'=>'Advertisement',
+                'readonly'=>true,
+            ),
+        ))
+            ->add('createdAt',DateType::class)
+            ->add('updatedAt',DateType::class)
         ->add('device', ChoiceType::class, array(
             'choices' => array(
                 'Desktop'=>0,
@@ -112,16 +121,6 @@ class NativeBannerAdminType extends AbstractType
             )
         );
         $builder
-            ->add('native_banner_ad',CollectionType::class,[
-                'entry_type' => NativeBannerAdType::class,
-                'entry_options' =>[
-                    'label' => false
-                ],
-                'by_reference'=>true,
-                'allow_add'=>true,
-                'allow_delete'=>true
-            ]);
-        $builder
             ->add('save', SubmitType::class)
             ->add('saveAndNew', SubmitType::class);
         $builder
@@ -139,9 +138,7 @@ class NativeBannerAdminType extends AbstractType
     {
         $data = $event->getData();
         $form = $event->getForm();
-        $native_bannerPagesArray = array();
         $this->addCategoryField($form, $data);
-
         $event->setData($data);
     }
 
@@ -154,8 +151,18 @@ class NativeBannerAdminType extends AbstractType
     {
         $data = $event->getData();
         $form = $event->getForm();
-
         $this->postValidation($event);
+        if ($form->isValid()) {
+            $categoryId = $this->getCategoryId($form);
+            if ($categoryId > 0) {
+                $data->setCategory($this->em->getReference('FaEntityBundle:Category', $categoryId));
+            } else {
+                $data->setCategory(null);
+            }
+        }
+        echo '<pre>';
+        var_dump($event->getData());
+        exit();
     }
 
     /**
@@ -169,16 +176,6 @@ class NativeBannerAdminType extends AbstractType
     {
         $data = $event->getData();
         $form = $event->getForm();
-
-        //Remove existing native_banner pages while updating
-        if ($data->getId()) {
-            $objBannerPages = $data->getBannerPages();
-            if ($objBannerPages) {
-                foreach ($objBannerPages as $objBannerPage) {
-                    $data->removeBannerPage($objBannerPage);
-                }
-            }
-        }
     }
 
     /**
@@ -301,7 +298,6 @@ class NativeBannerAdminType extends AbstractType
     {
         $data = $event->getData();
         $form = $event->getForm();
-
         $categoryId = $this->getCategoryId($form);
         $isValid       = true;
         return $isValid;

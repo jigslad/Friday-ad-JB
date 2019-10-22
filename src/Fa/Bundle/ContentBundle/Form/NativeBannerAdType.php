@@ -36,7 +36,10 @@ class NativeBannerAdType extends AbstractType
             ->add('title')
             ->add('description')
             ->add('button')
-            ->add('position');
+            ->add('position')
+            ->add('image')
+            ->add('status')
+        ;
     }
 
     /**
@@ -65,7 +68,4 @@ class NativeBannerAdType extends AbstractType
     {
         return 'fa_content_native_banner_ad';
     }
-
-
-
 }

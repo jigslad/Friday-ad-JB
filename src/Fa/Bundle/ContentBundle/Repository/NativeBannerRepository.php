@@ -18,6 +18,9 @@ class NativeBannerRepository extends EntityRepository
 {
     use \Fa\Bundle\CoreBundle\Search\Search;
     const ALIAS = 'bn';
+    const MOBILE = 0;
+    const DESKTOP = 1;
+
     /**
      * Prepare query builder.
      *

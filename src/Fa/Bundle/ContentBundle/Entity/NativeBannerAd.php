@@ -71,6 +71,22 @@ class NativeBannerAd
      */
     private $position;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="text")
+     * @Assert\NotBlank(message="image is required.")
+     */
+    private $image;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean")
+     * @Assert\NotBlank(message="status is required.")
+     */
+    private $status;
+
     /** @var date
      *
      * @ORM\Column(name="created_at", type="date", length=10)
@@ -83,6 +99,38 @@ class NativeBannerAd
      * @ORM\Column(name="updated_at", type="date", length=10, nullable=true)
      */
     private $updated_at;
+
+    /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param bool $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
 
     /**
      * NativeBannerAd constructor.
