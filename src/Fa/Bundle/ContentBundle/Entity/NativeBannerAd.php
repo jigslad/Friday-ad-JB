@@ -13,7 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @copyright 2014 Friday Media Group Ltd
  * @version 1.0
  *
- * @ORM\Table(name="banner_native_ad")
+ * @ORM\Table(name="native_banner_ad")
+ * @ORM\Entity(repositoryClass="Fa\Bundle\ContentBundle\Repository\NativeBannerAdRepository")
  */
 
 class NativeBannerAd
@@ -21,7 +22,7 @@ class NativeBannerAd
     /**
      * @var integer
      *
-     * @ORM\Column(name="banner_native_ad_id", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

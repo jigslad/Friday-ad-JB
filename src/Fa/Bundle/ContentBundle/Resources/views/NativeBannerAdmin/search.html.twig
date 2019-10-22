@@ -1,0 +1,100 @@
+{% block search_html %}
+<div class="row">
+    <div class="columns">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+        {{ form_errors(form) }}
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_widget(form.category_1, {'attr': {'class':'form-control', 'placeholder': 'Category 1'}}) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_widget(form.category_2, {'attr': {'class':'form-control', 'placeholder': 'Category 2'}}) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-6 columns">
+                    {{ form_widget(form.category_3, {'attr': {'class':'form-control', 'placeholder': 'Category 3'}}) }}
+                </div>
+                <div class="large-6 columns">
+                    {{ form_widget(form.category_4, {'attr': {'class':'form-control', 'placeholder': 'Category 4'}}) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-4 columns">
+                    {{ form_widget(form.search, {'attr': {'class':'small button mb0'}}) }}
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    var numberOfSelectedPages = 0;
+    {% if selectedPagesArray is defined %}
+      numberOfSelectedPages = {{ selectedPagesArray|length }}
+    {% endif %}
+    $(document).ready(function(){
+        $("#fa_content_native_banner_search_admin_category_1").change(function(){
+            loadCategoryByLevel($(this).val(), 2)
+            loadCategoryByLevel('', 3)
+            loadCategoryByLevel('', 4)
+        });
+        
+        $("#fa_content_native_banner_search_admin_category_2").change(function(){
+            loadCategoryByLevel($(this).val(), 3)
+            loadCategoryByLevel('', 4)
+        });
+        
+        $("#fa_content_native_banner_search_admin_category_3").change(function(){
+            loadCategoryByLevel($(this).val(), 4)
+        });
+        
+        $("form[name='fa_c0ontent_native_banner_search_admin']").submit(function()
+        {
+            var category4   = $("#fa_content_native_banner_search_admin_category_4").val();
+            var category3   = $("#fa_content_native_banner_search_admin_category_3").val();
+            var category2   = $("#fa_content_native_banner_search_admin_category_2").val();
+            var category1   = $("#fa_content_native_banner_search_admin_category_1").val();
+            var category_id = ''; 
+
+            if (category4)
+                category_id = category4;
+            else if (category3)
+                category_id = category3;
+            else if (category2)
+                category_id = category2;
+            else if (category1)
+                category_id = category1;
+
+            $("#fa_content_native_banner_search_admin_banner__category__id").val(category_id);
+
+           return true;
+        });
+    });
+    
+    function loadCategoryByLevel(id, level)
+    {
+        var category_selector = $('#fa_content_native_banner_search_admin_category_'+level);
+        category_selector.html('<option value="">Select Category '+level+'</option>');
+
+        if (id) {
+            var data = {
+                id: id
+            };
+            $.ajax({
+                type: 'post',
+                url: (level == 4) ? '{{ path("category_ajax_get_nested_node_json") }}' : '{{ path("category_ajax_get_node_json") }}',
+                data: data,
+                success: function(data) {
+                    for (var i=0, total = data.length; i < total; i++) {
+                        category_selector.append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                    }
+                }
+            });
+        }
+    }
+//]]>
+</script>
+{% endblock %}

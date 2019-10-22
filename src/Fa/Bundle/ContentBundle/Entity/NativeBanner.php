@@ -13,7 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @copyright 2014 Friday Media Group Ltd
  * @version 1.0
  *
- * @ORM\Table(name="banner_native")
+ * @ORM\Table(name="native_banner")
+ * @ORM\Entity(repositoryClass="Fa\Bundle\ContentBundle\Repository\NativeBannerRepository")
  */
 
 class NativeBanner
@@ -21,7 +22,7 @@ class NativeBanner
     /**
      * @var integer
      *
-     * @ORM\Column(name="banner_native_id", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -56,14 +57,14 @@ class NativeBanner
 
     /** @var date
      *
-     * @ORM\Column(name="created_at", type="date", length=10)
+     * @ORM\Column(name="created_at", type="datetime", length=10)
      */
     private $created_at;
 
     /**
      * @var date
      *
-     * @ORM\Column(name="updated_at", type="date", length=10, nullable=true)
+     * @ORM\Column(name="updated_at", type="datetime", length=10, nullable=true)
      */
     private $updated_at;
 

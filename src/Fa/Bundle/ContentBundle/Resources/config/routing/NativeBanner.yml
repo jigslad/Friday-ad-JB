@@ -1,0 +1,24 @@
+native_banner_admin:
+    path:     /
+    defaults: { _controller: "FaContentBundle:NativeBannerAdmin:index" }
+native_banner_new_admin:
+    path:     /new
+    defaults: { _controller: "FaContentBundle:NativeBannerAdmin:new" }
+
+native_banner_create_admin:
+    path:     /create
+    defaults: { _controller: "FaContentBundle:NativeBannerAdmin:create" }
+    requirements: { methods: post }
+
+native_banner_edit_admin:
+    path:     /{id}/edit
+    defaults: { _controller: "FaContentBundle:NativeBannerAdmin:edit" }
+
+native_banner_update_admin:
+    path:     /{id}/update
+    defaults: { _controller: "FaContentBundle:NativeBannerAdmin:update" }
+    requirements: { methods: post|put }
+
+native_banner_delete_admin:
+    path:     /{id}/delete
+    defaults: { _controller: "FaContentBundle:NativeBannerAdmin:delete" }

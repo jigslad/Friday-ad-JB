@@ -11,6 +11,8 @@
 
 namespace Fa\Bundle\AdminBundle\Controller;
 
+use Fa\Bundle\ContentBundle\Entity\NativeBanner;
+use Fa\Bundle\ContentBundle\Form\NativeBannerAdminType;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Fa\Bundle\UserBundle\Entity\Resource;
 use Symfony\Component\HttpFoundation\Request;
@@ -376,6 +378,8 @@ abstract class CrudController extends CoreController
             'fa_ad_print_deadline_admin' => PrintDeadlineAdminType::class,
             'fa_ad_location_radius_admin' => LocationRadiusAdminType::class,
             'fa_adfeed_ad_feed_mapping_admin' => AdFeedMappingAdminType::class,
+            'fa_content_native_banner_admin' => NativeBannerAdminType::class,
+            'fa_content_native_banner_ad_admin' => NativeBannerAdminTypeAd::class,
         ];
         $formName = isset($formClassArray[$formName]) ? $formClassArray[$formName] : $formName;
         return $formName;

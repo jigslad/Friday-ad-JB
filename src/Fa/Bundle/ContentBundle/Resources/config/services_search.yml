@@ -59,3 +59,8 @@ services:
         class: Doctrine\ORM\EntityRepository
         factory: ['@doctrine.orm.entity_manager', getRepository]
         arguments: [FaContentBundle:SeoToolOverride]
+
+    fa.native_banner.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaContentBundle:NativeBanner]

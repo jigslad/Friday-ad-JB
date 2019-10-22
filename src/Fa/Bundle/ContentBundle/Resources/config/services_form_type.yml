@@ -100,3 +100,15 @@ services:
         arguments: ['@service_container']
         tags:
             - { name: form.type, alias: fa_content_seo_tool_override_admin }
+
+    fa_content.form.type.native_banner_search_admin:
+        class: Fa\Bundle\ContentBundle\Form\NativeBannerSearchAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_native_banner_search_admin }
+
+    fa_content.form.type.native_banner_admin:
+        class: Fa\Bundle\ContentBundle\Form\NativeBannerAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_native_banner_admin }
