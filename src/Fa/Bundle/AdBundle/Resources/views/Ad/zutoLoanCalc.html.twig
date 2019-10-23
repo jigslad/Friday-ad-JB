@@ -1,5 +1,12 @@
 {%  set ZutoLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getStaticImageUrl', [container, 'faad/images', 'Zuto-Logo-Strap-Stacked.png'])%}
 {%  set ZutoCar = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getStaticImageUrl', [container, 'faad/images', 'car.png'])%}
+{%  set zutoLoanMin = 1000 %}
+{%  set zutoLoanMax = 50000 %}
+{%  set carPrice = attribute(adDetail, constant(solrMapping ~ 'PRICE')) %}
+{% if carPrice > zutoLoanMin %}
+
+{% endif %}
+
 <div id="zutoLoanCalcDiv">
     <div class="row get_online_decision">
         <div class="apply-new-block columns">
