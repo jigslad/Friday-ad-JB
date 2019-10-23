@@ -11,6 +11,9 @@
 
 namespace Fa\Bundle\ContentBundle\Form;
 
+use Fa\Bundle\ContentBundle\Entity\NativeBannerAd;
+use Fa\Bundle\EntityBundle\Entity\Category;
+use Fa\Bundle\PromotionBundle\Entity\Package;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -71,25 +74,45 @@ class NativeBannerAdminType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('title', TextType::class,array(
-            'attr' => array(
-                'placeholder'=>'Advertisement',
-                'value'=>'Advertisement',
-                'readonly'=>true,
-            ),
-        ))
-            ->add('createdAt',DateType::class)
-            ->add('updatedAt',DateType::class)
-        ->add('device', ChoiceType::class, array(
-            'choices' => array(
-                'Desktop'=>0,
-                'Mobile'=>1,
-                'Both'=>2,
-            ),
-            'multiple' => true,
-            'expanded' => true,
-            'required' => true
-        ));
+            ->add('title', TextType::class,array(
+                'attr' => array(
+                    'placeholder'=>'Advertisement',
+                    'value'=>'Advertisement',
+                    'readonly'=>true,
+                ),
+            ))
+            ->add('device', ChoiceType::class, array(
+                'choices' => array(
+                    'Desktop'=>0,
+                    'Mobile'=>1,
+                    'Both'=>2,
+                ),
+                'multiple' => true,
+                'expanded' => true,
+                'required' => true
+            ));
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function ($event) {
+                $bannerAd = $event->getData();
+                $form    = $event->getForm();
+
+                $isBannerAd = null;
+                if ($bannerAd->getId()) {
+                    $this->addBannerAdFields($form, $bannerAd);
+                }
+
+                $form->add(
+                    'native_banner_ad',
+                    CheckboxType::class,
+                    array(
+                        'required' => false,
+                        'label'    => 'Admin only banner',
+                        'data'     => (null)
+                    )
+                );
+            }
+        );
 
         //category fields
         $builder->addEventSubscriber(
@@ -130,6 +153,22 @@ class NativeBannerAdminType extends AbstractType
     }
 
     /**
+     * Add category fields.
+     *
+     * @param object $form    Form object.
+     * @param object $native_banner  NativeBanner object.
+     */
+    private function addCategoryField($form, $native_banner)
+    {
+        $categoryId = null;
+        $categoryId = $this->getCategoryId($form, true);
+        echo'<pre>';
+        var_dump($native_banner);
+        exit();
+
+    }
+
+    /**
      * This function is called on pre submit data event of form.
      *
      * @param FormEvent $event object.
@@ -142,6 +181,7 @@ class NativeBannerAdminType extends AbstractType
         $event->setData($data);
     }
 
+
     /**
      * This function is called on submit data event of form.
      *
@@ -149,20 +189,8 @@ class NativeBannerAdminType extends AbstractType
      */
     public function onSubmit(FormEvent $event)
     {
-        $data = $event->getData();
         $form = $event->getForm();
         $this->postValidation($event);
-        if ($form->isValid()) {
-            $categoryId = $this->getCategoryId($form);
-            if ($categoryId > 0) {
-                $data->setCategory($this->em->getReference('FaEntityBundle:Category', $categoryId));
-            } else {
-                $data->setCategory(null);
-            }
-        }
-        echo '<pre>';
-        var_dump($event->getData());
-        exit();
     }
 
     /**
@@ -176,6 +204,8 @@ class NativeBannerAdminType extends AbstractType
     {
         $data = $event->getData();
         $form = $event->getForm();
+        $form->addCategoryField($form,$data);
+        $form->setData($data);
     }
 
     /**
@@ -239,55 +269,9 @@ class NativeBannerAdminType extends AbstractType
         } elseif ($category1) {
             $categoryId = $category1;
         }
-
         return $categoryId;
     }
 
-    /**
-     * Add category fields.
-     *
-     * @param object $form    Form object.
-     * @param object $native_banner  NativeBanner object.
-     */
-    private function addCategoryField($form, $native_banner)
-    {
-        $categoryId = null;
-        if ($native_banner instanceof NativeBanner) {
-            if ($native_banner->getCategory()) {
-                $categoryId = $native_banner->getCategory()->getId();
-            }
-        } else {
-            $categoryId = $this->getCategoryId($native_banner, true);
-        }
-        //for category
-        if ($categoryId > 0) {
-            $categoryPath     = array_keys($this->em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, true, $this->container));
-            $categoryPathTemp = $categoryPath;
-
-            if (count($categoryPath) > 5) {
-                end($categoryPath);
-                $categoryPath[4] = $categoryPath[key($categoryPath)];
-            } elseif (count($categoryPath) < 5) {
-                $categoryPath[count($categoryPath)+1] = $categoryPath[count($categoryPath)-1];
-            }
-            $categoryPath = array_slice($categoryPath, 0, 5);
-
-            for ($i=1; $i < count($categoryPath); $i++) {
-                $choices = array('' => 'Select Category '.$i) + ($i == 4 ? $this->em->getRepository('FaEntityBundle:Category')->getNestedChildrenKeyValueArrayByParentId($categoryPathTemp[$i-1]) :$this->em->getRepository('FaEntityBundle:Category')->getChildrenKeyValueArrayByParentId($categoryPathTemp[$i-1]));
-                $choices = $this->em->getRepository('FaEntityBundle:Category')->showDuplicateCategoriesForSubscriber($choices);
-                $form->add(
-                    'category_'.$i,
-                    ChoiceType::class,
-                    array(
-                        'required' => false,
-                        'mapped'   => false,
-                        'choices'  => array_flip($choices),
-                        'data'     => isset($categoryPath[$i]) ? $categoryPath[$i] : null,
-                    )
-                );
-            }
-        }
-    }
 
     /**
      * Add location field validation.
@@ -299,7 +283,13 @@ class NativeBannerAdminType extends AbstractType
         $data = $event->getData();
         $form = $event->getForm();
         $categoryId = $this->getCategoryId($form);
-        $isValid       = true;
+        if($categoryId)
+        {
+            $isValid       = true;
+        } else{
+            $isValid       = false;
+        }
         return $isValid;
     }
+
 }
