@@ -112,3 +112,8 @@ services:
         arguments: ['@service_container']
         tags:
             - { name: form.type, alias: fa_content_native_banner_admin }
+    fa_content.form.type.native_banner_ad_admin:
+        class: Fa\Bundle\ContentBundle\Form\NativeBannerAdAdminType
+        arguments: ['@service_container']
+        tags:
+            - { name: form.type, alias: fa_content_native_banner_ad_admin }

@@ -193,7 +193,7 @@ class NativeBannerAd
     /**
      * @param NativeBanner $nativeBanner
      */
-    public function setNativeBanner($nativeBanner)
+    public function setNativeBanner(\Fa\Bundle\ContentBundle\Entity\NativeBanner  $nativeBanner)
     {
         $this->nativeBanner = $nativeBanner;
     }

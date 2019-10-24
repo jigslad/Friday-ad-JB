@@ -91,29 +91,6 @@ class NativeBannerAdminType extends AbstractType
                 'expanded' => true,
                 'required' => true
             ));
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function ($event) {
-                $bannerAd = $event->getData();
-                $form    = $event->getForm();
-
-                $isBannerAd = null;
-                if ($bannerAd->getId()) {
-                    $this->addBannerAdFields($form, $bannerAd);
-                }
-
-                $form->add(
-                    'native_banner_ad',
-                    CheckboxType::class,
-                    array(
-                        'required' => false,
-                        'label'    => 'Admin only banner',
-                        'data'     => (null)
-                    )
-                );
-            }
-        );
-
         //category fields
         $builder->addEventSubscriber(
             new AddCategoryChoiceFieldSubscriber(
