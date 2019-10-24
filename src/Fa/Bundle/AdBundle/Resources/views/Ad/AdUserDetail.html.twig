@@ -37,6 +37,8 @@
     {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
         {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adDetail['user']['image'], adDetail['user']['id'], null, null, true, false, adDetail['user']['status_id'], adDetail['user']['user_name']]) %}
     {% endif %}
+    
+userCompanyLogo==    {{ userCompanyLogo }}
 
     <div class="pvt-seller-img {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}bz-seller-img{% else %}seller-img-round{% endif %}">
         <div class="pvt-seller-wrapper" id="left_profile_image_div">
