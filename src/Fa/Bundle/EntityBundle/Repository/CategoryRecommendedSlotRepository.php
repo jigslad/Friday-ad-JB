@@ -193,11 +193,12 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                     'creative_ord' => $recommendedSlot->getCreativeOrd(),
                     'display_url' => $recommendedSlot->getDisplayUrl(),
                     'cta_text' => $recommendedSlot->getCtaText(),
-                    'mobile_title' => $recommendedSlot->getMobileTitle()
+                    'mobile_title' => $recommendedSlot->getMobileTitle(),
+                    'show_sponsored_lbl' => $recommendedSlot->getShowSponsoredLbl()
                 );
             }
         }
-       
+        
         if ($container && !empty($recommendedSlotArray)) {
             CommonManager::setCacheVersion($container, $cacheKey, $recommendedSlotArray);
         }
@@ -248,11 +249,12 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                     'creative_ord' => $recommendedSlot->getCreativeOrd(),
                     'display_url' => $recommendedSlot->getDisplayUrl(),
                     'cta_text' => $recommendedSlot->getCtaText(),
-                    'mobile_title' => $recommendedSlot->getMobileTitle(),                    
+                    'mobile_title' => $recommendedSlot->getMobileTitle(), 
+                    'show_sponsored_lbl' => $recommendedSlot->getShowSponsoredLbl(),
                 );
             }
-        }
-        
+        }        
+                
         if ($container && !empty($recommendedSlotArray)) {
             CommonManager::setCacheVersion($container, $cacheKey, $recommendedSlotArray);
         }

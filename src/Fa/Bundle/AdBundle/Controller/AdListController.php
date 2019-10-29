@@ -538,7 +538,7 @@ class AdListController extends CoreController
         $recommendedSlotArr = array();
         $recommendedSlotOrder = array();
         if (!empty($getRecommendedSrchSlots)) {
-            for ($arj=1;$arj<=6;$arj++) {
+            for ($arj=1;$arj<=8;$arj++) {
                 if (isset($getRecommendedSrchSlots[$arj])) {
                     $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
                     $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
