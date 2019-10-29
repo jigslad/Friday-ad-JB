@@ -78,7 +78,7 @@ class HomePopularImageRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -90,12 +90,16 @@ class HomePopularImageRepository extends EntityRepository
 
         $homePopularImages       = $query->getQuery()->getArrayResult();
         $homePopularImagesArray = array();
-
-        if (count($homePopularImages)) {
+        
+        if (!empty($homePopularImages)) {
             foreach ($homePopularImages as $homePopularImage) {
-                $homePopularBgImagePath      = $container->get('kernel')->getRootDir().'/../web/'.$homePopularImage['path'].'/'.$homePopularImage['file_name'];
-                $homePopularOverlayImagePath = $container->get('kernel')->getRootDir().'/../web/'.$homePopularImage['path'].'/'.$homePopularImage['overlay_file_name'];
-                if (is_file($homePopularBgImagePath) && is_file($homePopularOverlayImagePath)) {
+                //$homePopularBgImagePath      = $container->get('kernel')->getRootDir().'/../web/'.$homePopularImage['path'].'/'.$homePopularImage['file_name'];
+                //$homePopularOverlayImagePath = $container->get('kernel')->getRootDir().'/../web/'.$homePopularImage['path'].'/'.$homePopularImage['overlay_file_name'];
+                
+                $homePopularBgImagePath = CommonManager::getSharedImageUrl($container, $homePopularImage['path'], $homePopularImage['file_name']);
+                $homePopularOverlayImagePath = CommonManager::getSharedImageUrl($container, $homePopularImage['path'], $homePopularImage['overlay_file_name']);
+            
+                if (CommonManager::does_url_exists($homePopularBgImagePath) && CommonManager::does_url_exists($homePopularOverlayImagePath)) {
                     $imageSize = getimagesize($homePopularBgImagePath);
                     $homePopularImagesArray[] = array(
                         'bg_image' => CommonManager::getSharedImageUrl($container, $homePopularImage['path'], $homePopularImage['file_name']),

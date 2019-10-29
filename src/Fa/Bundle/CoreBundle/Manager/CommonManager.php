@@ -1431,6 +1431,30 @@ class CommonManager
         
         return $imageUrl;
     }
+    
+    public static function getLandingImageUrl($container, $filename)
+    {
+        $imageBaseUrl = $container->getParameter('fa.static.shared.url');
+        if(self::does_url_exists($container->getParameter('fa.static.aws.url').'/'.$filename)) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        
+        $imageUrl = $imageBaseUrl.'/'.$filename;
+        
+        return $imageUrl;
+    }
+    
+    public static function getOtherImageUrl($container, $foldername, $filename)
+    {
+        $imageBaseUrl = $container->getParameter('fa.static.shared.url');
+        if(self::does_url_exists($container->getParameter('fa.static.aws.url').'/uploads/'.$foldername.'/'.$filename)) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        
+        $imageUrl = $imageBaseUrl.'/uploads/'.$foldername.'/'.$filename;
+        
+        return $imageUrl;
+    }
 
     /**
      * Format price with currency.
@@ -1684,7 +1708,12 @@ class CommonManager
      */
     public static function getUserCompanyLogoUrl($container, $userId, $path, $size = null)
     {
-        return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.($size ? '_'.$size : '').'.jpg';
+        $imageBaseUrl = $container->getParameter('fa.static.shared.url');
+        if(self::does_url_exists($container->getParameter('fa.static.aws.url').'/'.$path.'/'.$userId.($size ? '_'.$size : '').'.jpg')) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        $imageUrl = $imageBaseUrl.'/'.$path.'/'.$userId.($size ? '_'.$size : '').'.jpg';
+        return $imageUrl;
     }
 
     /**
@@ -1698,7 +1727,12 @@ class CommonManager
      */
     public static function getUserImageUrl($container, $userId, $path, $size = null)
     {
-        return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.($size ? '_'.$size : '').'.jpg';
+        $imageBaseUrl = $container->getParameter('fa.static.shared.url');
+        if(self::does_url_exists($container->getParameter('fa.static.aws.url').'/'.$path.'/'.$userId.($size ? '_'.$size : '').'.jpg')) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        $imageUrl = $imageBaseUrl.'/'.$path.'/'.$userId.($size ? '_'.$size : '').'.jpg';
+        return $imageUrl;
     }
 
     /**
@@ -1978,7 +2012,12 @@ class CommonManager
      */
     public static function getSharedImageUrl($container, $path, $imageName)
     {
-        return $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$imageName;
+        $imageBaseUrl = $container->getParameter('fa.static.shared.url');
+        if(self::does_url_exists($container->getParameter('fa.static.aws.url').'/'.$path.'/'.$imageName)) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        $imageUrl = $imageBaseUrl.'/'.$path.'/'.$imageName;
+        return $imageUrl;
     }
 
     /**
@@ -1991,7 +2030,12 @@ class CommonManager
      */
     public static function getStaticImageUrl($container, $path, $imageName)
     {
-        return $container->getParameter('fa.static.url').'/'.$path.'/'.$imageName;
+        $imageBaseUrl = $container->getParameter('fa.static.url');
+        if(self::does_url_exists($container->getParameter('fa.static.aws.url').'/'.$path.'/'.$imageName)) {
+            $imageBaseUrl = $container->getParameter('fa.static.aws.url');
+        }
+        $imageUrl = $imageBaseUrl.'/'.$path.'/'.$imageName;
+        return $imageUrl;
     }
 
     /**

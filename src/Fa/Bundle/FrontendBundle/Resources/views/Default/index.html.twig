@@ -178,7 +178,7 @@
         {% endcache %}
     {% endif %}
 
-    {% cache 'home|page|'~locationId~'front/home_page_popular' 1800 %}
+    {# {% cache 'home|page|'~locationId~'front/home_page_popular' 1800 %} #} 
         <div class="homepage-row">
             <div class="row">
                 <div class="columns">
@@ -187,7 +187,7 @@
                 </div>
             </div>
         </div>
-    {% endcache %}
+                    {# {% endcache %} #}
 
     {% if featureAds|length %}
         <div class="homepage-row">
