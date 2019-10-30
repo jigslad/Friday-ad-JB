@@ -88,7 +88,6 @@ class CategoryAdminType extends AbstractType
             $recommendedSlotSearchArray = $this->em->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotSearchlistArrayByCategoryId($builder->getData()->getId(), $this->container);
         }
         
-        //echo '<pre>'; print_r($recommendedSlotSearchArray);die;
         $builder
             ->add('name')
             ->add('slug')
@@ -182,7 +181,7 @@ class CategoryAdminType extends AbstractType
             $builder->add('recommended_slot_display_url_'.$i, TextType::class, array('mapped' => false, 'label' => 'Display URL', 'data' => $recommendedSlotDisplayUrl[$i-1] ));
             $builder->add('recommended_slot_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['cta_text'] : '') ));
             $builder->add('recommended_slot_mobile_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Mobile Title', 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['mobile_title'] : '') ));
-            $builder->add('recommended_slot_show_sponsored_lbl_'.$i, CheckboxType::class, array('label' => 'Show Sponsored Text', 'required' => false, 'mapped' => false, 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['show_sponsored_lbl'] : '')));
+            $builder->add('recommended_slot_show_sponsored_lbl_'.$i, CheckboxType::class, array('label' => 'Show Sponsored Text', 'required' => false, 'mapped' => false, 'data' => (isset($recommendedSlotArray[$i-1]) ? $recommendedSlotArray[$i-1]['show_sponsored_lbl'] : false) ));
         }
 
         //recommended slots 
@@ -218,7 +217,7 @@ class CategoryAdminType extends AbstractType
                         $builder->add('recommended_slot_searchlist_display_url_'.$i, TextType::class, array('mapped' => false, 'label' => 'Display URL', 'data' => $recommendedSearchSlotDisplayUrl[$st] ));
                         $builder->add('recommended_slot_searchlist_cta_text_'.$i, TextType::class, array('mapped' => false, 'label' => 'CTA',  'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['cta_text'] : '')));
                         $builder->add('recommended_slot_searchlist_mobile_title_'.$i, TextType::class, array('mapped' => false, 'label' => 'Mobile Title', 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['mobile_title'] : '') ));
-                        $builder->add('recommended_slot_searchlist_show_sponsored_lbl_'.$i, CheckboxType::class, array('label' => 'Show Sponsored Text', 'required' => false, 'mapped' => false, 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['show_sponsored_lbl'] : '')));
+                        $builder->add('recommended_slot_searchlist_show_sponsored_lbl_'.$i, CheckboxType::class, array('label' => 'Show Sponsored Text', 'required' => false, 'mapped' => false, 'data' => (isset($recommendedSlotSearchArray[$st]) ? $recommendedSlotSearchArray[$st]['show_sponsored_lbl'] : false)));
                         if (count($recommendedSlotSearchArray)-1 > $st) {
                             $st++;
                         }
@@ -496,7 +495,7 @@ class CategoryAdminType extends AbstractType
                             'display_url' => $form->get('recommended_slot_display_url_'.$i)->getData(),
                             'cta_text' => $form->get('recommended_slot_cta_text_'.$i)->getData(),
                             'mobile_title' => $form->get('recommended_slot_mobile_title_'.$i)->getData(),
-                            'show_sponsored_lbl' => $form->get('recommended_slot_show_sponsored_lbl_'.$i)->getData(),
+                            'show_sponsored_lbl' => $form->get('recommended_slot_show_sponsored_lbl_'.$i)->getData()
                         );
                     }
                 }
@@ -525,7 +524,7 @@ class CategoryAdminType extends AbstractType
                             'display_url' => $form->get('recommended_slot_searchlist_display_url_'.$i)->getData(),
                             'cta_text' => $form->get('recommended_slot_searchlist_cta_text_'.$i)->getData(),
                             'mobile_title' => $form->get('recommended_slot_searchlist_mobile_title_'.$i)->getData(),
-                            'show_sponsored_lbl' => $form->get('recommended_slot_searchlist_show_sponsored_lbl_'.$i)->getData(),
+                            'show_sponsored_lbl' => $form->get('recommended_slot_searchlist_show_sponsored_lbl_'.$i)->getData()
                         );
                     }
                 }
