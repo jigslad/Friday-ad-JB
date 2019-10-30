@@ -129,7 +129,8 @@ class CategoryRecommendedSlotRepository extends BaseEntityRepository
                 'url' => $recommendedSlot->getUrl(),
                 'display_url' => $recommendedSlot->getDisplayUrl(),
                 'cta_text' => $recommendedSlot->getCtaText(),
-                'mobile_title' => $recommendedSlot->getMobileTitle()
+                'mobile_title' => $recommendedSlot->getMobileTitle(),
+                'show_sponsored_lbl' => $recommendedSlot->getShowSponsoredLbl()
             );
         }
 

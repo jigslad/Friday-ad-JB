@@ -29,9 +29,11 @@
                 {% endif %}
         </div>
         <div class="content-cls-recommend-1">
+            {%   if(recommendedSlot['show_sponsored_lbl']) %}
             <div class="recommendedtxt gray-text text-right sponsored-1">
-                Sponsored Ad
+                Sponsored Ad<span class="sponsored-ad-icon"></span>
             </div>
+            {% endif %}
             <div class="mt5 list-title"> 
               	<h3>{{ recommendedSlot['title'] }}</h3>
                 {% if recommendedSlot['display_url'] !='' %}
@@ -43,7 +45,7 @@
                     {{ recommendedSlot['sub_title']|length > 150 ? trim_text(recommendedSlot['sub_title'], 150)|raw ~ '...': recommendedSlot['sub_title'] }}
                 </div>
                 {% if recommendedSlot['cta_text'] !='' %}
-                <div class="outer-btn"><div class="button secondary-btn-1 right-block expand hide-for-small-only">{{ recommendedSlot['cta_text'] }}<span  class="btn-right-arrow"><i class="fi-arrow-right"></i></span></div></div>
+                <div class="outer-btn"><div class="button secondary-btn-1 right-block expand hide-for-small-only">{{ recommendedSlot['cta_text'] }}</div></div>
            		{% endif %}
            </div>                      
         </div>
