@@ -343,12 +343,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                 {% endif %}
             {% endif %}
 
-            {% set slotallocated = [] %}
-            {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 and totalAdCount > 0 and (recommendedSlotResult[1] is defined and recommendedSlotResult[1]|length >0) %}
-                {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 1 }) }}
-                {% set slotallocated = slotallocated|merge([1]) %}
-            {% endif %}
-            
             {% if businessTopExposureUsersDetailsWithoutAd is defined  %}
                 {#{ include('FaAdBundle:AdList:businessTopExposureSingleBlock.html.twig', {}) }#}
             {% endif %}
@@ -382,6 +376,12 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                         {% set adCount = adCount + 1 %}
                         {{ include('FaAdBundle:AdList:listDetail.html.twig', {'isTopAd': 1}) }}
                     {% endfor %}
+                {% endif %}
+                
+                {% set slotallocated = [] %}
+                {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 and totalAdCount > 0 and (recommendedSlotResult[1] is defined and recommendedSlotResult[1]|length >0) %}
+                    {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 1 }) }}
+                    {% set slotallocated = slotallocated|merge([1]) %}
                 {% endif %}
 
                 {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}

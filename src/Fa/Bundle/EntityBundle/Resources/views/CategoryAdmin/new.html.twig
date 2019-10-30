@@ -97,10 +97,14 @@ li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3
                                         <div class="large-2 columns">
                                             {{ form_label(form['recommended_slot_cta_text_'~i]) }}
                                         </div>
-                                        <div class="large-10 columns">
+                                        <div class="large-5 columns">
                                             {{ form_widget(form['recommended_slot_cta_text_'~i]) }}
                                             {{ form_errors(form['recommended_slot_cta_text_'~i]) }}
                                         </div>
+                                        <div class="large-5 columns">
+                                            {{ form_widget(form['recommended_slot_show_sponsored_lbl_'~i]) }}
+                                            {{ form_label(form['recommended_slot_show_sponsored_lbl_'~i]) }}
+                                        </div> 
                                     </div>
                                     <div class="row">
                                         <div class="large-2 columns">
