@@ -25,7 +25,7 @@ use Aws\S3\S3Client;
  * @version v1.0
  * @deprecated This command shouldn't be used since the direct image upload to S3 in PAA is implemented.
  */
-class MoveImagesToAwsS3Command extends ContainerAwareCommand
+class MoveSingleImageToAwsS3Command extends ContainerAwareCommand
 {
     /**
      * Configure.
@@ -33,11 +33,11 @@ class MoveImagesToAwsS3Command extends ContainerAwareCommand
     protected function configure()
     {
         $this
-        ->setName('fa:move:image-s3')
+        ->setName('fa:move:single-image-s3')
         ->setDescription('Move images to s3')
-        ->addOption('folder_name', null, InputOption::VALUE_OPTIONAL, 'Folder Name', null);
+        ->addOption('file_path', null, InputOption::VALUE_OPTIONAL, 'File Path', null);
     }
-    /*  php bin/console fa:move:image-s3 --folder_name=homepopular */
+    /*  php bin/console fa:move:single-image-s3 --file_path=category/app/category_animals_s.jpg */
     /**
      * Execute.
      *
@@ -52,9 +52,9 @@ class MoveImagesToAwsS3Command extends ContainerAwareCommand
         $start_time = time();
         echo "Command Started At: ".date('Y-m-d H:i:s', $start_time)."\n";
 	
-	    $folderName = $input->getOption('folder_name');
+        $filePath = $input->getOption('file_path');
 
-        $imageDir = $this->getContainer()->get('kernel')->getRootDir().'/../web/uploads/'.$folderName;
+        $imagePath = $this->getContainer()->get('kernel')->getRootDir().'/../web/uploads/'.$filePath;
         $client = new S3Client([
             'version'     => 'latest',
             'region'      => $this->getContainer()->getParameter('fa.aws_region'),
@@ -64,40 +64,34 @@ class MoveImagesToAwsS3Command extends ContainerAwareCommand
             ],
         ]);
         
-        if ($handle = opendir($imageDir)) {
-            while (false !== ($entry = readdir($handle))) {
-                $files[] = $entry;
-            }
-            $images = preg_grep('/\.(jpg|jpeg|png|gif|svg)(?:[\?\#].*)?$/i', $files);
+        if(file_exists($imagePath)) {
+		$destinationPath = 'uploads/'.$filePath;
+		$sourcePath = $imagePath;
+		
+		$result = $client->putObject(array(
+		    'Bucket'     => $this->getContainer()->getParameter('fa.aws_bucket'),
+		    'Key'        => $destinationPath,
+		    'CacheControl' => 'max-age=21600',
+		    'ACL'        => 'public-read',
+		    'SourceFile' => $sourcePath,
+		    'Metadata'   => array(
+		        'Last-Modified' => time(),
+		    )
+		));
+		
+		$resultData =  $result->get('@metadata');
+		if ($resultData['statusCode'] == 200) {
+		    echo "Uploaded to s3 image ".$filePath."\n";    
+		    unlink($imagePath);
+		} else {
+		    echo "Error in uploading to s3 image ".$filePath."\n";    
+		}
+       } else {
+		echo "File does not exists in this path ".$filePath."\n";  
+       }
             
-            foreach ($images as $image) {   
-                $destinationPath = 'uploads/'.$folderName.'/'.$image;
-                $sourcePath = $imageDir.'/'.$image;
-                
-                $result = $client->putObject(array(
-                    'Bucket'     => $this->getContainer()->getParameter('fa.aws_bucket'),
-                    'Key'        => $destinationPath,
-                    'CacheControl' => 'max-age=21600',
-                    'ACL'        => 'public-read',
-                    'SourceFile' => $sourcePath,
-                    'Metadata'   => array(
-                        'Last-Modified' => time(),
-                    )
-                ));
-                
-                $resultData =  $result->get('@metadata');
-                if ($resultData['statusCode'] == 200) {
-                    echo "Uploaded to s3 image ".$image."\n";  
-                    unlink($sourcePath);
-                } else {
-                    echo "Error in uploading to s3 image ".$image."\n";    
-                }
-            }
-            closedir($handle);
-        } else {
-            echo "Error in opening directory \n"; 
-        }
     }
 }
+
 
 
