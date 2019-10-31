@@ -3393,6 +3393,20 @@ HTML;
         curl_close($ch);
         return $status;
     }
+    
+    public static function path_exists($container, $path) {
+        $file_exists = false;
+        $explodePath = explode('/',$path);
+        if($explodePath[2]== $container->getParameter('fa.static.aws.path')) {
+            $awsPathExists = self::does_url_exists($path);
+            if($awsPathExists) { $file_exists = true; }
+        } else {
+            $localPathExists = self::checkFileExists($path);
+            if($localPathExists) { $file_exists = true; }
+        }
+        
+        return $file_exists; 
+    }
 
     /*
      *  Get mysql stop words.
