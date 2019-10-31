@@ -516,6 +516,7 @@ class HeaderImageAdminType extends AbstractType
     {
         if ($fileName) {
             $headerImage->getFile()->move($headerImage->getUploadRootDir(), $fileName);
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path='.$headerImage->getUploadRootDir().'/'.$fileName.' >/dev/null &');
             $headerImage->setFile(null);
         }
     }
@@ -532,6 +533,7 @@ class HeaderImageAdminType extends AbstractType
     {
         if ($fileName) {
             $headerImage->getPhoneFile()->move($headerImage->getUploadRootDir(), $fileName);
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path='.$headerImage->getUploadRootDir().'/'.$fileName.' >/dev/null &');
             $headerImage->setPhoneFile(null);
         }
     }
@@ -556,5 +558,10 @@ class HeaderImageAdminType extends AbstractType
                 unlink($file);
             }
         }
+    }
+    
+    public function removeAwsImage($headerImage, $fileName)
+    {
+        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path='.$headerImage->getUploadRootDir().'/'.$fileName.' >/dev/null &');
     }
 }

@@ -18,14 +18,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Aws\S3\S3Client;
 
 /**
- * This command is used to move from local to NFS.
+ * This command is used to remove image from aws.
  *
  * @author Rohini <rohini.subburam@fridaymediagroup.com>
  * @copyright 2019 Friday Media Group Ltd
  * @version v1.0
- * @deprecated This command shouldn't be used since the direct image upload to S3 in PAA is implemented.
  */
-class MoveSingleImageToAwsS3Command extends ContainerAwareCommand
+class RemoveSingleImageToAwsS3Command extends ContainerAwareCommand
 {
     /**
      * Configure.
@@ -33,11 +32,11 @@ class MoveSingleImageToAwsS3Command extends ContainerAwareCommand
     protected function configure()
     {
         $this
-        ->setName('fa:move:single-image-s3')
-        ->setDescription('Move images to s3')
+        ->setName('fa:remove:single-image-s3')
+        ->setDescription('Remove images to s3')
         ->addOption('file_path', null, InputOption::VALUE_OPTIONAL, 'File Path', null);
     }
-    /*  php bin/console fa:move:single-image-s3 --file_path=uploads/category/app/category_animals_s.jpg */
+    /*  php bin/console fa:remove:single-image-s3 --file_path=uploads/category/app/category_animals_s.jpg */
     /**
      * Execute.
      *
@@ -54,8 +53,7 @@ class MoveSingleImageToAwsS3Command extends ContainerAwareCommand
 	
         $filePath = $input->getOption('file_path');
 
-        $imagePath = $this->getContainer()->get('kernel')->getRootDir().'/../web/'.$filePath;
-        $client = new S3Client([
+	$client = new S3Client([
             'version'     => 'latest',
             'region'      => $this->getContainer()->getParameter('fa.aws_region'),
             'credentials' => [
@@ -64,34 +62,19 @@ class MoveSingleImageToAwsS3Command extends ContainerAwareCommand
             ],
         ]);
         
-        if(file_exists($imagePath)) {
-		$destinationPath = 'uploads/'.$filePath;
-		$sourcePath = $imagePath;
-		
-		$result = $client->putObject(array(
-		    'Bucket'     => $this->getContainer()->getParameter('fa.aws_bucket'),
-		    'Key'        => $destinationPath,
-		    'CacheControl' => 'max-age=21600',
-		    'ACL'        => 'public-read',
-		    'SourceFile' => $sourcePath,
-		    'Metadata'   => array(
-		        'Last-Modified' => time(),
-		    )
-		));
-		
-		$resultData =  $result->get('@metadata');
-		if ($resultData['statusCode'] == 200) {
-		    echo "Uploaded to s3 image ".$filePath."\n";    
-		    unlink($imagePath);
-		} else {
-		    echo "Error in uploading to s3 image ".$filePath."\n";    
-		}
-       } else {
+        $awsPath = $this->getContainer()->getParameter('fa.static.aws.url');
+        $awsSourceImg = $awsPath.'/'.$filePath;
+                         
+        $fileKeys[] = array('Key' => $filePath);
+               
+        if(!empty($fileKeys)) {
+            $result = $client->deleteObjects(array(
+                'Bucket'  => $this->container->getParameter('fa.aws_bucket'),
+                'Delete'  => array('Objects' => $fileKeys)
+            ));
+            echo "Deleted file successfully ".$filePath."\n"; 
+        } else {
 		echo "File does not exists in this path ".$filePath."\n";  
-       }
-            
+        } 
     }
 }
-
-
-

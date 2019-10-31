@@ -1362,6 +1362,12 @@ class CommonManager
         } else {
             $imageUrl = $container->getParameter('fa.static.shared.url').'/'.$imagePath.'/'.$adId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
         }
+        
+        if(self::does_url_exists($imageUrl)) {
+            $imageUrl = $imageUrl;
+        } else {
+            $imageUrl = ''; 
+        }
         return $imageUrl;
     }
 
@@ -1400,7 +1406,7 @@ class CommonManager
             $imageBaseUrl = $container->getParameter('fa.static.aws.url');
         }
         $imageUrl = $imageBaseUrl.'/'.$imagePath.'/'.$userSiteId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
-
+        
         return $imageUrl;
     }
     
@@ -3396,15 +3402,16 @@ HTML;
     
     public static function path_exists($container, $path) {
         $file_exists = false;
-        $explodePath = explode('/',$path);
-        if($explodePath[2]== $container->getParameter('fa.static.aws.path')) {
-            $awsPathExists = self::does_url_exists($path);
-            if($awsPathExists) { $file_exists = true; }
-        } else {
-            $localPathExists = self::checkFileExists($path);
-            if($localPathExists) { $file_exists = true; }
+        if($path) {
+            $explodePath = explode('/',$path);
+            if($explodePath[2]== $container->getParameter('fa.static.aws.path')) {
+                $awsPathExists = self::does_url_exists($path);
+                if($awsPathExists) { $file_exists = true; }
+            } else {
+                $localPathExists = self::checkFileExists($path);
+                if($localPathExists) { $file_exists = true; }
+            }
         }
-        
         return $file_exists; 
     }
 

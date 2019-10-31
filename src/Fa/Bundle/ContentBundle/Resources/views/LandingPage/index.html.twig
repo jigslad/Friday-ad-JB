@@ -272,7 +272,8 @@
                                         </div>
                                         <div class="explore-price">{{ adCount|number_format }}</div>
                                         {% if imageInfo.file_name is defined %}
-                                            <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                       	    {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
+                                            <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                         {% endif %}
                                     </div>
                                 </div>
@@ -321,7 +322,9 @@
                                     </a>
                                     <div class="explore-price">{{ adCount|number_format }}</div>
                                     {% if imageInfo.file_name is defined %}
-                                        <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                        {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
+                                    
+                                        <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                     {% endif %}
                                 </div>
                             </div>
@@ -365,7 +368,8 @@
                                         </div>
                                         <div class="explore-price">{{ adCount|number_format }}</div>
                                         {% if imageInfo.file_name is defined %}
-                                            <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                        	{% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
+                                            <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                         {% endif %}
                                     </div>
                                 </div>
@@ -574,7 +578,8 @@
                                 </a>
                                 <div class="explore-price">{{ adCount|number_format }}</div>
                                 {% if imageInfo.file_name is defined %}
-                                    <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                    {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
+                                    <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                 {% endif %}
                             </div>
                         </div>
@@ -615,7 +620,8 @@
                                 </a>
                                 <div class="explore-price">{{ adCount|number_format }}</div>
                                 {% if imageInfo.file_name is defined %}
-                                    <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                	{% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.file_name]) %}
+                                    <img alt="{{ imageInfo.file_name }}" src="{{ imageUrl }}">
                                 {% endif %}
                             </div>
                         </div>
