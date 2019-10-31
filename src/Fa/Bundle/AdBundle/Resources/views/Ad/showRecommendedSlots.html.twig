@@ -54,6 +54,7 @@
 {% else %}
 	<div class="clearfix">
     <div class="s-block clearfix">
+    {% for recommendedSlot in recommendedSlotArray%}
     	{%   if(recommendedSlot['show_sponsored_lbl']) %}
         <div class="small-24 columns">
             <div class="recommendedtxt gray-text text-right sponsored-{{ recommendedSlotCnt  }}">
@@ -61,8 +62,7 @@
             </div>
         </div>
         {% endif %}
-        <div class="t-s-block">             
-            {% for recommendedSlot in recommendedSlotArray%}
+        <div class="t-s-block">                         
                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
                 {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
                 {% set no_protocol = recommendedSlot['url']|split('//')[1] ?: recommendedSlot['url'] %}
@@ -83,9 +83,9 @@
                             <div class="outer-btn"><div class="button expand secondary-btn-1 recommended-2-slot-ad-detail-btn">{{ recommendedSlot['cta_text'] }}</div></div>
                        	{% endif %}
                     </div> 
-    			</div>
-           {% endfor %}
+    			</div>           
        </div>
+       {% endfor %}
     </div>
     </div>
  {% endif %}
