@@ -16,7 +16,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
-
+use Fa\Bundle\AdBundle\Manager\AdImageManager;
+use Gedmo\Sluggable\Util\Urlizer;
+use Aws\S3\S3Client;
 /**
  * This command is used to clean ad image data
  *
@@ -71,15 +73,18 @@ EOF
         $output->writeln('SCRIPT START TIME '.date('d-m-Y H:i:s', $stat_time), true);
 
         $webPath = $this->getContainer()->get('kernel')->getRootDir().'/../web';
+        $awsPath = $this->getContainer()->getParameter('fa.static.aws.url');
         $adImagePath = $webPath.'/uploads/image/';
         $adImageRepository  = $this->em->getRepository('FaAdBundle:AdImage');
 
         $action = $input->getOption('action');
         $path = $input->getOption('path');
+        
+        $imageDir = $this->getContainer()->getParameter('fa.ad.image.dir').'/';
 
         if ($action == 'remove-empty-folders') {
             $adImageFolders = glob($adImagePath.'*');
-            if (count($adImageFolders)) {
+            if (!empty($adImageFolders)) {
                 foreach ($adImageFolders as $adImageFolder) {
                     CommonManager::removeEmptySubFolders($adImageFolder, $output);
                 }
@@ -87,7 +92,7 @@ EOF
         } elseif ($action == 'remove-images') {
             if (!$path) {
                 $adImageFolders = glob($adImagePath.'*');
-                if (count($adImageFolders)) {
+                if (!empty($adImageFolders)) {
                     foreach ($adImageFolders as $adImageFolder) {
                         $this->removeAdImagesCommand($input, $output, $adImageFolder);
                     }
@@ -95,33 +100,92 @@ EOF
             } elseif ($path) {
                 $adImages = glob($path.'/*.jpg');
                 foreach ($adImages as $adImage) {
-                    $explodeRes = explode('_', basename($adImage));
+                    $imagePath = '';
+                    $explodeRes = explode('_', basename($adImage));                    
                     if ($explodeRes[0]) {
-                        $explodeRes[1] = str_replace('.jpg', '', $explodeRes[1]);
+                        $explodeRes[1] = str_replace('.jpg', '', $explodeRes[1]);                        
                         $adImageObj = $adImageRepository->findOneBy(array('ad' => $explodeRes[0], 'hash' => $explodeRes[1], 'aws' => 1, 'local' => 0));
-                        if (!$adImageObj) {
-                            $adImageObj = $adImageRepository->findOneBy(array('ad' => $explodeRes[0], 'hash' => $explodeRes[1]));
+                        if (!$adImageObj) {                           
+                            $adImageObj = $adImageRepository->findOneBy(array('ad' => $explodeRes[0], 'hash' => $explodeRes[1]));                           
                             if (!$adImageObj) {
                                 if (is_file($adImage)) {
-                                    if (unlink($adImage)) {
+                                   if (unlink($adImage)) {
                                         $output->writeln('Image deleted for : '.$adImage, true);
+                                        
+                                        $imagePath  = $imageDir.CommonManager::getGroupDirNameById($explodeRes[0]);
+                                        $imageUrl   = $imagePath.'/'.basename($adImage);
+                                        
+                                        $adImageManager 		= new AdImageManager($this->getContainer(), $explodeRes[0], $explodeRes[1], $imagePath);
+                                        $checkImageExistOnAWS 	= $adImageManager->checkImageExistOnAws($imageUrl);
+                                        
+                                        if ($checkImageExistOnAWS === true) {
+                                            $adImageManager->removeImageFromAmazoneS3($imageUrl);
+                                            $output->writeln('Image deleted from local and aws : '.$adImage, true);
+                                        }                                       
                                     } else {
-                                        $output->writeln('Problem in deleting image : '.$adImage, true);
-                                    }
+                                        $output->writeln('Problem in deleting image in local : '.$adImage, true);
+                                    } 
                                 } else {
                                     $output->writeln('Image not found for : '.$adImage, true);
                                 }
+                            } else {
+                                
+                                $imagePath  			= $imageDir.CommonManager::getGroupDirNameById($adImageObj->getAd()->getId());
+                                if ($adImageObj->getImageName() != '') {
+                                    $imageUrl = $adImageObj->getPath().'/'.$adImageObj->getImageName().'.jpg';                                    
+                                } else {
+                                    $imageUrl = $adImageObj->getPath().'/'.$adImageObj->getAd()->getId().'_'.$adImageObj->getHash().'.jpg';                  
+                                }
+                                $adImageManager 		= new AdImageManager($this->getContainer(), $adImageObj->getAd()->getId(), $adImageObj->getHash(), $imagePath);
+                                $checkImageExistOnAWS 	= $adImageManager->checkImageExistOnAws($imageUrl);
+                                
+                                if ($checkImageExistOnAWS === false) {
+                                    $adImageManager->uploadImagesToS3($adImageObj);
+                                    if (is_file($adImage)) {
+                                        if (unlink($adImage)) {
+                                            $output->writeln('Image uploaded to aws & deleted from local : '.$adImage, true);
+                                        } else {
+                                            $output->writeln('Problem in deleting image from local : '.$adImage, true);
+                                        }
+                                    } 
+                                } else {
+                                    if (is_file($adImage)) {
+                                        if (unlink($adImage)) {
+                                            $output->writeln('Image deleted from local since it exists in aws : '.$adImage, true);
+                                        } else {
+                                            $output->writeln('Image exists in aws and problem in deleting image from local : '.$adImage, true);
+                                        }
+                                    }
+                                }
                             }
                         } else {
-                            if (is_file($adImage)) {
-                                if (unlink($adImage)) {
-                                    $output->writeln('Image deleted for : '.$adImage, true);
-                                } else {
-                                    $output->writeln('Problem in deleting image : '.$adImage, true);
+                            $imagePath  			= $imageDir.CommonManager::getGroupDirNameById($adImageObj->getAd()->getId());
+                            if ($adImageObj->getImageName() != '') {
+                                $imageUrl = $adImageObj->getPath().'/'.$adImageObj->getImageName().'.jpg';
+                            } else {
+                                $imageUrl = $adImageObj->getPath().'/'.$adImageObj->getAd()->getId().'_'.$adImageObj->getHash().'.jpg';
+                            }
+                            $adImageManager 		= new AdImageManager($this->getContainer(), $adImageObj->getAd()->getId(), $adImageObj->getHash(), $imagePath);
+                            $checkImageExistOnAWS 	= $adImageManager->checkImageExistOnAws($imageUrl);
+                            
+                            if ($checkImageExistOnAWS === false) {
+                                $adImageManager->uploadImagesToS3($adImageObj);
+                                if (is_file($adImage)) {
+                                    if (unlink($adImage)) {
+                                        $output->writeln('Image uploaded to aws & deleted from local : '.$adImage, true);
+                                    } else {
+                                        $output->writeln('Problem in deleting image from local : '.$adImage, true);
+                                    }
                                 }
                             } else {
-                                $output->writeln('Image not found for : '.$adImage, true);
-                            }
+                                if (is_file($adImage)) {
+                                    if (unlink($adImage)) {
+                                        $output->writeln('Image deleted from local since it exists in aws : '.$adImage, true);
+                                    } else {
+                                        $output->writeln('Image exists in aws and problem in deleting image from local : '.$adImage, true);
+                                    }
+                                }
+                            }                            
                         }
                     }
                 }
@@ -130,6 +194,25 @@ EOF
 
         $output->writeln('SCRIPT END TIME '.date('d-m-Y H:i:s', time()), true);
         $output->writeln('TIME TAKEN TO EXECUTE SCRIPT '.((time() - $stat_time) / 60), true);
+    }
+    
+    /**
+     * Check images exist on AWS
+     *
+     * @param boolean $keepOriginal Flag for keep original image.
+     */
+    public function checkImageExistOnAws($imageUrl)
+    {
+        $client = new S3Client([
+            'version'     => 'latest',
+            'region'      => $this->getContainer()->getParameter('fa.aws_region'),
+            'credentials' => [
+                'key'    => $this->getContainer()->getParameter('fa.aws_key'),
+                'secret' => $this->getContainer()->getParameter('fa.aws_secret'),
+            ],
+        ]);
+        $response = $client->doesObjectExist($this->getContainer()->getParameter('fa.aws_bucket'), $imageUrl);
+        return $response;
     }
 
     /**
