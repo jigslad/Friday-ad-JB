@@ -54,14 +54,7 @@
 {% else %}
 	<div class="clearfix">
     <div class="s-block clearfix">
-    {% for recommendedSlot in recommendedSlotArray%}
-    	{%   if(recommendedSlot['show_sponsored_lbl']) %}
-        <div class="small-24 columns">
-            <div class="recommendedtxt gray-text text-right sponsored-{{ recommendedSlotCnt  }}">
-                Sponsored Ad<span class="sponsored-ad-icon"></span>
-            </div>
-        </div>
-        {% endif %}
+    {% for recommendedSlot in recommendedSlotArray%}   	
         <div class="t-s-block">                         
                 {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), recommendedSlot['user_id'], true, true]) %}
                 {% set userName = userRepository.getUserProfileName(recommendedSlot['user_id'], container)~' - Friday-Ad' %}
@@ -77,10 +70,15 @@
                             {% endif %}
                     </div>
                     <div class="small-14  medium-19 large-19 columns t-s-subblock-right content-cls-recommend-{{recommendedSlotCnt}}">
+                        {% if(recommendedSlot['show_sponsored_lbl']) %}
+                        <div class="recommendedtxt gray-text sponsored-2-3">
+                            Sponsored Ad<span class="sponsored-ad-icon"></span>
+                        </div>
+                        {% endif %}
                         <div class="list-title show-title-r-ad-det"> {{ recommendedSlot['title']|length > 50 ? trim_text(recommendedSlot['title'], 50)|raw ~ '...': recommendedSlot['title'] }}</div>
                         <div class="list-title show-mob-title-r-ad-det"> {{ recommendedSlot['mobile_title']|length > 50 ? trim_text(recommendedSlot['mobile_title'], 50)|raw ~ '...': recommendedSlot['mobile_title'] }}</div>
                         {% if recommendedSlot['cta_text'] !='' and recommendedSlotArray|length == 2 %}
-                            <div class="outer-btn"><div class="button expand secondary-btn-1 recommended-2-slot-ad-detail-btn">{{ recommendedSlot['cta_text'] }}</div></div>
+                            <div class="outer-btn"><div class="button expand secondary-btn-1 recommended-2-slot-ad-detail-btn recommended-2-3-slot-ad-detail-btn">{{ recommendedSlot['cta_text'] }}</div></div>
                        	{% endif %}
                     </div> 
     			</div>           
