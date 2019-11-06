@@ -165,8 +165,12 @@ class UserImageType extends AbstractType
 
             //create thumbnails
             $userImageManager->createThumbnail();
-
-            //$userImageManager->uploadImagesToS3($image);
+            
+            if($isCompany) {
+                $userImageManager->uploadImagesToS3($userId,'company');
+            } else {
+                $userImageManager->uploadImagesToS3($userId,'user');
+            }
         }
     }
 

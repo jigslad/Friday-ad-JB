@@ -390,6 +390,50 @@ class AdImageManager
                 'Delete'  => array('Objects' => $fileKyes)
         ));
     }
+    
+    
+    public function removeImageFromAmazoneS3($imageUrl)
+    {
+        $client = new S3Client([
+            'version'     => 'latest',
+            'region'      => $this->container->getParameter('fa.aws_region'),
+            'credentials' => [
+                'key'    => $this->container->getParameter('fa.aws_key'),
+                'secret' => $this->container->getParameter('fa.aws_secret'),
+            ],
+        ]);
+        
+        $fileKeys = array();
+        $fileKeys[] = array('Key' => $imageUrl);
+        
+        
+        //remove thumbnail
+       /* $thumbSize = $this->container->getParameter('fa.image.thumb_size');
+        $thumbSize = array_map('strtoupper', $thumbSize);
+        
+        if (is_array($thumbSize)) {
+            foreach ($thumbSize as $size) {
+                $key = $imageUrl.'/'.$imageName.'_'.$size.'.jpg';                
+                $fileKeys[] = array('Key' => $key);
+            }
+        }
+        
+        $cropSize = $this->container->getParameter('fa.image.crop_size');
+        $cropSize = array_map('strtoupper', $cropSize);
+        
+        //remove brand image
+        if (is_array($cropSize)) {
+            foreach ($cropSize as $size) {
+                $key = $imageUrl.'/'.$imageName.'_'.$size.'.jpg';               
+                $fileKeys[] = array('Key' => $key);
+            }
+        }*/
+        
+        $result = $client->deleteObjects(array(
+            'Bucket'  => $this->container->getParameter('fa.aws_bucket'),
+            'Delete'  => array('Objects' => $fileKeys)
+        ));
+    }
 
     public function uploadImagesToS3($image)
     {

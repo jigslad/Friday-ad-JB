@@ -151,6 +151,7 @@ class HomePopularImageAdminType extends AbstractType
             if ($file !== null && $fileName) {
                 if ($oldFile) {
                     $this->removeImage($oldFile);
+                    $this->removeAwsImage($oldFile);
                 }
                 $this->uploadImage($headerImage, $fileName);
             }
@@ -206,6 +207,7 @@ class HomePopularImageAdminType extends AbstractType
     {
         if ($fileName) {
             $headerImage->getOverlayFile()->move($headerImage->getUploadRootDir(), $fileName);
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path='.$headerImage->getUploadRootDir().'/'.$fileName.' >/dev/null &');
             $headerImage->setOverlayFile(null);
         }
     }
@@ -221,5 +223,10 @@ class HomePopularImageAdminType extends AbstractType
         if (file_exists($file)) {
             unlink($file);
         }
+    }
+    
+    public function removeAwsImage($fileName) 
+    {
+        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path='.$fileName.' >/dev/null &');
     }
 }
