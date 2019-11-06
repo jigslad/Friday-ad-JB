@@ -833,7 +833,6 @@ class DefaultController extends ThirdPartyLoginController
 
             $imageArray = array('image' => null);
             $key        = trim($key, '_');
-            echo '<pre>'; print_r($headerImagesArray);die;
             
             if (isset($headerImagesArray[$key])) {
                 if (isset($headerImagesArray[$key]['override_1'])) {
