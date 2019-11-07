@@ -758,7 +758,9 @@
                                 {% set otherFeatureIds = adMotorRepository.getOtherFeature(featureIds) %}
                                 {{ include('FaAdBundle:Ad:AdMotorDetailTabs.html.twig') }}
                                 <br>
-                                {{ include('FaAdBundle:Ad:zutoLoanCalc.html.twig') }}
+                                {% if secondLevelCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID')} %}
+                                    {{ include('FaAdBundle:Ad:zutoLoanCalc.html.twig') }}
+                                {% endif %}
 
                             {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
                                 {% set adPropertyDetail = {} %}
