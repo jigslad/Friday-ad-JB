@@ -102,4 +102,43 @@ class UserCreditUsedRepository extends EntityRepository
         $this->_em->persist($userCreditUsed);
         $this->_em->flush($userCreditUsed);
     }
+    
+    public function addCreditUsedByUpsell($userId,$adObj,$upsellObj) {
+        $userFeaturedCredits = $this->_em->getRepository('FaUserBundle:UserCredit')->getActiveFeaturedCreditForUser($userId);
+        $userObj = $this->_em->getRepository('FaUserBundle:User')->find($userId);        
+        
+        $userFeaturedCredits->setCredit($userFeaturedCredits->getCredit() - 1);
+        $this->_em->persist($userFeaturedCredits);
+        $this->_em->flush($userFeaturedCredits);
+        
+        $userCreditUsed = new UserCreditUsed();
+        $userCreditUsed->setUser($userObj);
+        $userCreditUsed->setUserCredit($userFeaturedCredits);
+        $userCreditUsed->setCredit(1);
+        $userCreditUsed->setAd($adObj);
+        $userCreditUsed->setUpsell($upsellObj);
+        $this->_em->persist($userCreditUsed);
+        $this->_em->flush($userCreditUsed);        
+    }
+    
+    public function redeemCreditUsedByUpsell($userId,$adId,$upsellId,$container) {
+        $userFeaturedCredits = $this->_em->getRepository('FaUserBundle:UserCredit')->getActiveFeaturedCreditForUser($userId);
+        $userObj = $this->_em->getRepository('FaUserBundle:User')->find($userId);
+        
+        $userFeaturedCredits->setCredit($userFeaturedCredits->getCredit() + 1);
+        $this->_em->persist($userFeaturedCredits);
+        $this->_em->flush($userFeaturedCredits);
+        
+        $userCreditUsed = $this->_em->getRepository('FaUserBundle:UserCreditUsed')->findOneBy(array('user' => $userId, 'user_credit' => $userFeaturedCredits->getId(), 'upsell' => $upsellId, 'ad' => $adId));
+        
+        if(!empty($userCreditUsed)) {
+            $this->createQueryBuilder(self::ALIAS)
+            ->delete()
+            ->andWhere(sprintf('%s.user_credit = %d', self::ALIAS, $userFeaturedCredits->getId()))
+            ->andWhere(sprintf('%s.upsell = %d', self::ALIAS, $upsellId))
+            ->andWhere(sprintf('%s.ad = %d', self::ALIAS, $adId))
+            ->getQuery()
+            ->execute();
+        }
+    }
 }

@@ -649,7 +649,16 @@ class UserPackageRepository extends EntityRepository
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result['is_auto_renew'];
     }
-
+    
+    public function getUserPackageAdLimit($userId)
+    {
+        $qb = $this->createQueryBuilder(self::ALIAS)->select(PackageRepository::ALIAS.'.ad_limit')
+        ->innerJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
+        ->andWhere(self::ALIAS.'.status = :status')->andWhere(self::ALIAS.'.user = :userId')
+        ->setParameter('status', 'A')->setParameter('userId', $userId)->orderBy(self::ALIAS.'.id', 'DESC')->setMaxResults(1);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result['ad_limit'];
+    }
     /**
      * Check User Has Boost Package by userId.
      *

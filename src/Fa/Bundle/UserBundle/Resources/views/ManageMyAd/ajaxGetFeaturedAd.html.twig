@@ -1,0 +1,42 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set container = fetch_container_instance() %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set adRepository         = fetch_repository('FaAdBundle:Ad') %}
+{% set adLocationRepository = fetch_repository('FaAdBundle:AdLocation') %}
+{% set adImageRepository = fetch_repository('FaAdBundle:AdImage') %}
+{% set adViewCounterRepository = fetch_repository('FaAdBundle:AdViewCounter') %}
+{% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
+{% set adModerateRepository = fetch_repository('FaAdBundle:AdModerate') %}
+{% set userCreditRepository = fetch_repository('FaUserBundle:UserCredit') %}
+{% set userCreditCount = userCreditRepository.getActiveCreditCountForUser(app.user.getId()) %}
+{% set adUserPackageUpsellRepository = fetch_repository('FaAdBundle:AdUserPackageUpsell') %}
+{% set shopPackageCreditRepository = fetch_repository('FaPromotionBundle:ShopPackageCredit') %}
+
+{% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
+{% set adUrl = ''%}
+
+{% set userRoleId = app.user.getRole().getId() %}
+{% set userBusType = 'private' %}
+{% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+	{% set userBusType = 'netsuite' %}
+{% elseif (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID')) %}
+	{% set userBusType = 'business' %}
+{% else %}
+	{% set userBusType = 'private' %}
+{% endif %}
+
+{% if adIdArray|length > 0 %}
+    {% set adCategoryIdArray    = adRepository.getAdCategoryIdArrayByAdId(adIdArray) %}
+    {% set adImageArray         = adImageRepository.getAdMainImageArrayByAdId(adIdArray) %}
+    {% set adViewCounterArray   = adViewCounterRepository.getAdViewCounterArrayByAdId(adIdArray) %}
+    {% set adPackageArray       = adUserPackageRepository.getAdPackageArrayByAdId(adIdArray, true) %}
+    {% set adFeaturedUpsellArray = adUserPackageUpsellRepository.getAdFeaturedUpsellArrayByAdId(adIdArray) %}
+    {% set adModerateArray      = adModerateRepository.findResultsByAdIdsAndModerationResult(adIdArray, 'rejected') %}
+    {% set inModerationLiveAdIds = adModerateRepository.getInModerationStatusForLiveAdIds(adIdArray) %}
+ {% endif %}
+
+{% if userBusType is defined and userBusType == 'netsuite' %}
+    {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
+{% else %}
+    {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+{% endif %}
