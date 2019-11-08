@@ -154,7 +154,7 @@ class AutoRenewSubscriptionCommand extends ContainerAwareCommand
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' bin/console fa:auto-renew-subscription '.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:auto-renew-subscription '.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 
