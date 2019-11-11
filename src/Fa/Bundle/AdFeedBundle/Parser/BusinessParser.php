@@ -74,8 +74,21 @@ class BusinessParser extends AdParser
         $this->advert['is_new'] = '';
         $this->advert['user']['role'] = RoleRepository::ROLE_BUSINESS_SELLER;
         $this->advert['is_trade_ad'] = 1;
-
-        $this->advert['category_id'] = $this->getCategoryId($adArray['Details']['Category']);
+  
+        $feedAd = null;
+        
+        if ($ad_feed_site_download) {
+            $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site_download->getAdFeedSite()->getId());
+        } else {
+            $ad_feed_site = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $siteID));
+            $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site->getId());
+        }
+        
+        if($feedAd) {
+            $this->advert['category_id'] = $this->getCategoryId($adArray['Details']['Category'], $feedAd->getRefSiteId());
+        } else {
+            $this->advert['category_id'] = $this->getCategoryId($adArray['Details']['Category'],10);
+        }                
 
         if (!$this->advert['category_id']) {
             $this->setRejectAd();
@@ -122,14 +135,14 @@ class BusinessParser extends AdParser
             $this->setRejectedReason('price is not specified');
         }
 
-        $feedAd = null;
+        /*$feedAd = null;
 
         if ($ad_feed_site_download) {
             $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site_download->getAdFeedSite()->getId());
         } else {
             $ad_feed_site = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $siteID));
             $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site->getId());
-        }
+        }*/
 
         if (!$feedAd && $adArray['EndDate'] != '0001-01-01T00:00:00Z' && strtotime($adArray['EndDate']) < time()) {
             return 'discard';
@@ -260,14 +273,17 @@ class BusinessParser extends AdParser
      *
      * @param string $string Category.
      */
-    public function getCategoryId($cat_name = null)
+    public function getCategoryId($cat_name = null, $ref_site_id = null)
     {
         if ($cat_name) {
             $matchedText = null;
+            $ad_feed_site   = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $this->advert['ref_site_id']));
             //$mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->findOneBy(array('text' => $cat_name));
-            $mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->getFeedMappingByText($cat_name,$this->advert['ref_site_id']);
+            $mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->getFeedMappingByText($cat_name,$ad_feed_site->getId());
             if ($mapping) {
-                $matchedText = $mapping->getTarget();
+                if($mapping->getTarget()!='') {
+                    $matchedText = $mapping->getTarget();
+                }
             } else {
                 $mapping = new AdFeedMapping();
                 $mapping->setText($cat_name);
