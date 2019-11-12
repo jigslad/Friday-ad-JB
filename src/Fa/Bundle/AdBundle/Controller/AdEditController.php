@@ -125,7 +125,7 @@ class AdEditController extends CoreController
         
         if ($form->has('location') && $form->get('location')->getData()!='') {
             $getLocationId = $form->get('location')->getData();
-            $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
+            $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActiveModerationPackageArrayByAdId($adIdArray);
             if ($getActivePackage) {
                 $getPackageRuleArray = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
                 if(!empty($getPackageRuleArray)) {

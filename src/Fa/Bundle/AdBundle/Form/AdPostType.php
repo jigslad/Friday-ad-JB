@@ -1521,7 +1521,7 @@ class AdPostType extends AbstractType
         $isNotNurseryCount = 0;
         
         if ($locationId !='') {
-            $getActivePackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
+            $getActivePackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getAdActiveModerationPackageArrayByAdId($adIdArray);
             if ($getActivePackage) {
                 if($getActivePackage[$adId]['package_price']==0) {
                     $getPackageRuleArray = $this->em->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);

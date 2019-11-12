@@ -376,7 +376,7 @@ class LocationController extends CoreController
             $adIdArray[] = $adId;
             
             if (!empty($townVal)) {
-                $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
+                $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActiveModerationPackageArrayByAdId($adIdArray);
                 if ($getActivePackage) {
                     $getPackageRuleArray = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
                     if(!empty($getPackageRuleArray)) {
