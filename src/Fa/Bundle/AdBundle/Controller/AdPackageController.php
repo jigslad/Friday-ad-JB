@@ -775,7 +775,7 @@ class AdPackageController extends CoreController
         $adIdArray[] = $adId;
         
         if ($request->get('adId') != null) {
-            $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
+            $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActiveModerationPackageArrayByAdId($adIdArray);
             if ($getActivePackage) {
                 $getPackageRuleArray = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
                 if(!empty($getPackageRuleArray)) {

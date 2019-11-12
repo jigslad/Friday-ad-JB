@@ -101,7 +101,7 @@ class AdEditAdultType extends AdEditType
         if (in_array($adStatusId, $this->em->getRepository('FaAdBundle:Ad')->getRepostButtonInEditAdStatus())) {
             $form->add('save', SubmitType::class, array('label' => 'Save and repost'));
         } elseif ($adStatusId == EntityRepository::AD_STATUS_DRAFT_ID) {
-            $form->add('save', SubmitType::class, array('label' => 'Save and publish'));
+            $form->add('save', SubmitType::class, array('label' => 'Save and publish')); 
         } else {
             $form->add('save', SubmitType::class, array('label' => 'Save'));
         }
@@ -244,7 +244,7 @@ class AdEditAdultType extends AdEditType
         
         if ($form->has('location') && $form->get('location')->getData()!='') {
             $getLocationId = $form->get('location')->getData();
-            $getActivePackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getAdActivePackageArrayByAdId($adIdArray);
+            $getActivePackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getAdActiveModerationPackageArrayByAdId($adIdArray);
             if ($getActivePackage) {
                 if($getActivePackage[$adId]['package_price']==0) {
                     $getPackageRuleArray = $this->em->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
