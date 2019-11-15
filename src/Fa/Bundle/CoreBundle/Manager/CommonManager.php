@@ -3376,7 +3376,7 @@ HTML;
     {
         //if(file_exists($path)) { return true; }
         //else { return false; }
-        $file_headers = @get_headers($url);
+        $file_headers = @get_headers($path);
         if ($file_headers[0] == 'HTTP/1.0 404 Not Found') { // or "HTTP/1.1 404 Not Found" etc.
             $file_exists = false;
         } else {
@@ -3451,5 +3451,25 @@ HTML;
         }
 
         return !is_bool(strpos($haystack, $needle));
+    }
+    
+    /**
+     * @param integer $adId
+     * @param string  $imagePath
+     * @param string  $imageHash
+     * @param string  $size
+     * @param string  $image_name
+     * @return string
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
+     */
+    public static function getImageRelativePath($adId, $imagePath, $imageHash, $size = null, $image_name = null)
+    {
+        $imgRelPath = "";
+        if ($image_name != '') {
+            $imgRelPath = $imagePath . '/' . $image_name . ($size ? '_' . $size : '') . '.jpg?' . $imageHash;
+        } else {
+            $imgRelPath = $imagePath . '/' . $adId . '_' . $imageHash . ($size ? '_' . $size : '') . '.jpg';
+        }
+        return $imgRelPath;
     }
 }
