@@ -41,7 +41,7 @@ class VehicleParser extends AdParser
         $this->advert = array();
         $this->advert['feed_type'] = 'VehicleAdvert';
         $this->advert['full_data'] = (string) serialize($adArray);
-        $this->advert['set_user']  = true;
+        $this->advert['set_user']  = false;
         $this->rejectedReason      = null;
         $this->advert['ad_status']  = true;
         $this->advert['status']    = 'A';
@@ -69,8 +69,30 @@ class VehicleParser extends AdParser
                 }
             }
         }
-        $this->setCommonData($adArray, $siteID);
-        $this->advert['user']['business_category_id'] = CategoryRepository::MOTORS_ID;
+        //$this->setCommonData($adArray, $siteID);
+        
+        
+        $feedAd = null;
+        
+        if ($ad_feed_site_download) {
+            $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site_download->getAdFeedSite()->getId());
+        } else {
+            $ad_feed_site = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $siteID));
+            $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site->getId());
+        }
+        
+        
+        $this->advert['category_id'] = $this->getCategoryId($adArray['Details']['VehicleType'],1);
+        
+        
+        if (!$this->advert['category_id']) {
+            $this->setRejectAd();
+            if (isset($adArray['Details']['Category'])) {
+                $this->setRejectedReason('category missing: '.$adArray['Details']['Category']);
+            } else {
+                $this->setRejectedReason('category not specified');
+            }
+        }
 
         $this->advert['personalized_title'] = isset($adArray['Details']['Summary']) ? $adArray['Details']['Summary'] : null;
 
@@ -103,94 +125,64 @@ class VehicleParser extends AdParser
             $this->setRejectedReason('Unknown vehicle type: '.$adArray['Details']['VehicleType']);
         }
 
-        $feedAd = null;
-        if ($ad_feed_site_download) {
-            $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site_download->getAdFeedSite()->getId());
-        } else {
-            $ad_feed_site = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $siteID));
-            $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site->getId());
-        }
-
         if (!$feedAd && $adArray['EndDate'] != '0001-01-01T00:00:00Z') {
             return 'discard';
         }
 
-        if (!isset($this->advert['category_id'])) {
+        if ($this->advert['user']['email'] == '' && $this->advert['set_user'] == true) {
             $this->setRejectAd();
-            $this->setRejectedReason('Category not found');
+            $this->setRejectedReason('email is blank');
         }
-
+        
         if ($feedAd) {
             $this->advert['feed_ad_id'] = $feedAd->getId();
         } else {
             $this->addToFeedAd($ad_feed_site_download);
         }
-/*        echo 'user status:'.$this->advert['set_user'];
-        if($this->advert['user']['email'] == '' && ($this->advert['set_user'] == true || $this->advert['set_user'] == 'true')){
-            $this->setRejectAd();
-            $this->setRejectedReason('email is blank');
-        }*/
-
+        
         $adImages = isset($adArray['AdvertImages']) && count($adArray['AdvertImages']) > 0 ? $adArray['AdvertImages'] : array();
-        $this->mapAdImages($adImages);
+        $this->mapAdImages($adImages, $this->advert['affiliate']);
     }
 
     public function addToFeedAd($ad_feed_site_download)
     {
         $ad_feed_site   = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $this->advert['ref_site_id']));
-        $user           = $this->getUser($this->advert['user']['email']);
+        if ($this->advert['set_user'] === true) {
+            $user = $this->getUser($this->advert['user']['email']);
+        }
+        
         $feedAd         = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site_download->getAdFeedSite()->getId());
-
-        if (preg_match('/@email_unknown_clickedit.com/', $this->advert['user']['email']) &&  $this->advert['user']['phone'] == '') {
+        
+        if (($this->advert['set_user'] === true) && $this->advert['user']['email'] == '') {
             $this->setRejectAd();
-            $this->setRejectedReason('email unknown click edit with no phone');
+            $this->setRejectedReason('user information: missing ');
         }
-
-        if ($this->advert['user']['email'] == '') {
-            $this->setRejectAd();
-            $this->setRejectedReason('email is blank');
+        
+        if ($this->advert['set_user'] === true) {
+            if (!$user && $this->advert['user']['email'] != '') {
+                $user = $this->setUser($user);
+            }
         }
-
-        if (!$user && $this->advert['user']['email'] != '') {
-            //$this->setRejectAd();
-            $user = $this->setUser($user);
-        }
-
+        
         if (!$feedAd) {
             $feedAd = new AdFeed();
         }
-
-        $getUserStatus = EntityRepository::USER_STATUS_ACTIVE_ID;
-        
-        if (!empty($user) && $this->advert['user']['email'] != '') {
-            $getUserStatus = $this->em->getRepository('FaUserBundle:User')->getUserStatusByEmail($this->advert['user']['email']);
-        }
-
-        $feedAd->setUser($user);
-        $feedAd->setIsUpdated(1);
         $feedAd->setTransId($this->advert['trans_id']);
         $feedAd->setUniqueId($this->advert['unique_id']);
+        $feedAd->setIsUpdated(1);
         $feedAd->setRefSiteId($ad_feed_site_download->getAdFeedSite()->getId());
         $feedAd->setAdText(serialize($this->advert));
         $feedAd->setLastModified($ad_feed_site_download->getModifiedSince());
-
+        
         if (isset($this->advert['status']) && $this->advert['status'] == 'R') {
             $feedAd->setStatus('R');
             if (implode(',', $this->advert['rejected_reason']) != '') {
                 $feedAd->setRemark(implode(',', $this->advert['rejected_reason']));
             }
-        } elseif ($getUserStatus != EntityRepository::USER_STATUS_ACTIVE_ID) {
-            $feedAd->setRemark('User account is blocked/inactive');
-            $feedAd->setUser($user);
-            $feedAd->setStatus('R');
-        } elseif (isset($this->advert['status']) && $this->advert['status'] == 'E') {
-            $feedAd->setStatus('E');
         } else {
             $feedAd->setStatus('A');
-            $feedAd->setUser($user);
-            $feedAd->setRemark('');
         }
-
+        
         $this->em->persist($feedAd);
         $this->em->flush();
         $this->advert['feed_ad_id'] = $feedAd->getId();
@@ -325,9 +317,9 @@ class VehicleParser extends AdParser
      * @return string
      */
     private function getMatchedText($text)
-    {
-        $mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->findOneBy(array('text' => $text));
-
+    {        
+        $mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->findOneBy(array('text' => $text));        
+        
         if ($mapping) {
             return $mapping->getTarget();
         } else {
@@ -335,7 +327,7 @@ class VehicleParser extends AdParser
             $mapping->setText($text);
             $this->em->persist($mapping);
             $this->em->flush();
-        }
+        }        
     }
 
     /**
@@ -769,9 +761,36 @@ class VehicleParser extends AdParser
      * @param string $string Category.
      * @return object category
      */
-    public function getCategoryId($cat_name = null)
+    public function getCategoryId($cat_name =  null, $ref_site_id = null)
     {
-        return $this->container->get('fa.entity.cache.manager')->getEntityIdByName('FaEntityBundle:Category', $cat_name);
+        //return $this->container->get('fa.entity.cache.manager')->getEntityIdByName('FaEntityBundle:Category', $cat_name);
+        if ($cat_name) {
+            $matchedText = null;
+            $ad_feed_site   = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $this->advert['ref_site_id']));
+            //$mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->findOneBy(array('text' => $cat_name));
+            $mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->getFeedMappingByText($cat_name,$ad_feed_site->getId());
+            if ($mapping) {
+                if($mapping->getTarget()!='') {
+                    $matchedText = $mapping->getTarget();
+                }
+            } else {
+                $mapping = new AdFeedMapping();
+                $mapping->setText($cat_name);
+                $mapping->setRefSiteId(9);
+                $this->em->persist($mapping);
+                $this->em->flush();
+            }
+            
+            if ($matchedText) {
+                $categoryDetail = $this->em->getRepository('FaEntityBundle:Category')->getCategoryByFullSlug($matchedText, $this->container);
+                if (isset($categoryDetail['id'])) {
+                    return $categoryDetail['id'];
+                }
+            }
+        }
+        
+        return null;
+    
     }
 
 
