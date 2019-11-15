@@ -69,31 +69,8 @@ class VehicleParser extends AdParser
                 }
             }
         }
-        //$this->setCommonData($adArray, $siteID);
-        
-        
-        $feedAd = null;
-        
-        if ($ad_feed_site_download) {
-            $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site_download->getAdFeedSite()->getId());
-        } else {
-            $ad_feed_site = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $siteID));
-            $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site->getId());
-        }
-        
-        
-        $this->advert['category_id'] = $this->getCategoryId($adArray['Details']['VehicleType'],1);
-        
-        
-        if (!$this->advert['category_id']) {
-            $this->setRejectAd();
-            if (isset($adArray['Details']['Category'])) {
-                $this->setRejectedReason('category missing: '.$adArray['Details']['Category']);
-            } else {
-                $this->setRejectedReason('category not specified');
-            }
-        }
-
+        $this->setCommonData($adArray, $siteID);
+                
         $this->advert['personalized_title'] = isset($adArray['Details']['Summary']) ? $adArray['Details']['Summary'] : null;
 
         $description = array();
@@ -124,11 +101,24 @@ class VehicleParser extends AdParser
             $this->setRejectAd();
             $this->setRejectedReason('Unknown vehicle type: '.$adArray['Details']['VehicleType']);
         }
-
+        
+        $feedAd = null;
+        if ($ad_feed_site_download) {
+            $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site_download->getAdFeedSite()->getId());
+        } else {
+            $ad_feed_site = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $siteID));
+            $feedAd = $this->getFeedAdByRef($this->advert['unique_id'], $ad_feed_site->getId());
+        }
+        
         if (!$feedAd && $adArray['EndDate'] != '0001-01-01T00:00:00Z') {
             return 'discard';
         }
-
+        
+        if (!isset($this->advert['category_id'])) {
+            $this->setRejectAd();
+            $this->setRejectedReason('Category not found');
+        }
+        
         if ($this->advert['user']['email'] == '' && $this->advert['set_user'] == true) {
             $this->setRejectAd();
             $this->setRejectedReason('email is blank');
@@ -763,8 +753,8 @@ class VehicleParser extends AdParser
      */
     public function getCategoryId($cat_name =  null, $ref_site_id = null)
     {
-        //return $this->container->get('fa.entity.cache.manager')->getEntityIdByName('FaEntityBundle:Category', $cat_name);
-        if ($cat_name) {
+        return $this->container->get('fa.entity.cache.manager')->getEntityIdByName('FaEntityBundle:Category', $cat_name);
+        /*if ($cat_name) {
             $matchedText = null;
             $ad_feed_site   = $this->em->getRepository('FaAdFeedBundle:AdFeedSite')->findOneBy(array('type' => $this->advert['feed_type'], 'ref_site_id' => $this->advert['ref_site_id']));
             //$mapping = $this->em->getRepository('FaAdFeedBundle:AdFeedMapping')->findOneBy(array('text' => $cat_name));
@@ -789,7 +779,7 @@ class VehicleParser extends AdParser
             }
         }
         
-        return null;
+        return null;*/ 
     
     }
 
