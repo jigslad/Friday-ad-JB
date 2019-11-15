@@ -23,7 +23,7 @@ use Fa\Bundle\UserBundle\Repository\UserRepository;
 /**
  * Car parser.
  *
- * @author Janak Jadeja <janak@aspl.in>
+ * @author Jigar Lad <jiagr@fridaymediagroup.com>
  * @copyright 2014 Friday Media Group Ltd
  * @version 1.0
  */
@@ -32,9 +32,9 @@ class VehicleParser extends AdParser
 
     /**
      * Map ad data.
-     *
      * @param array   $adArray Advert array.
      * @param integer $siteID  site id
+     * @return $this
      */
     public function mapAdData($adArray, $siteID, $ad_feed_site_download = null)
     {
@@ -96,7 +96,7 @@ class VehicleParser extends AdParser
             $this->setMotorhomesData($adArray);
         } elseif (isset($adArray['Details']['VehicleType']) && ($adArray['Details']['VehicleType'] == 'Caravan')) {
             $this->setCaravanData($adArray);
-        } elseif (isset($adArray['Details']['VehicleType']) && ($adArray['Details']['VehicleType'] == 'Motorbike' || $adArray['Details']['VehicleType'] == 'Bike')) {
+        } elseif (isset($adArray['Details']['VehicleType']) && ($adArray['Details']['VehicleType'] == 'Motorbike' || $adArray['Details']['VehicleType'] == 'Bike' || $adArray['Details']['VehicleType'] == 'bike')) {
             $this->setMotorbikeData($adArray);
         } else {
             $this->setRejectAd();
@@ -125,11 +125,11 @@ class VehicleParser extends AdParser
         } else {
             $this->addToFeedAd($ad_feed_site_download);
         }
-
-        if ($this->advert['user']['email'] == '') {
+/*        echo 'user status:'.$this->advert['set_user'];
+        if($this->advert['user']['email'] == '' && ($this->advert['set_user'] == true || $this->advert['set_user'] == 'true')){
             $this->setRejectAd();
             $this->setRejectedReason('email is blank');
-        }
+        }*/
 
         $adImages = isset($adArray['AdvertImages']) && count($adArray['AdvertImages']) > 0 ? $adArray['AdvertImages'] : array();
         $this->mapAdImages($adImages);
@@ -392,6 +392,7 @@ class VehicleParser extends AdParser
      *
      * @param unknown $string
      * @param unknown $make_id
+     * @return integer bikemodelid
      */
     public function getBikeModelId($string, $make_id)
     {
@@ -691,6 +692,7 @@ class VehicleParser extends AdParser
      *
      * @param unknown $string
      * @param unknown $make_id
+     * @return integer modelid
      */
     public function getModelId($string, $make_id)
     {
@@ -765,6 +767,7 @@ class VehicleParser extends AdParser
      * Get category id.
      *
      * @param string $string Category.
+     * @return object category
      */
     public function getCategoryId($cat_name = null)
     {
@@ -777,6 +780,7 @@ class VehicleParser extends AdParser
      *
      * @param string $bodyTypeText  Body type text received from source.
      * @param string $numberOfDoors Number of doors received from source.
+     * @return string bodyType related numbers of door.
      */
     public function getBodyTypeText($bodyTypeText, $numberOfDoors = null)
     {
