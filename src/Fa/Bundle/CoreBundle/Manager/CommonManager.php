@@ -1362,12 +1362,12 @@ class CommonManager
         } else {
             $imageUrl = $container->getParameter('fa.static.shared.url').'/'.$imagePath.'/'.$adId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
         }
-        
-        if(self::does_url_exists($imageUrl)) {
+                
+        /*if(self::does_url_exists($imageUrl)) {
             $imageUrl = $imageUrl;
         } else {
             $imageUrl = ''; 
-        }
+        }*/
         return $imageUrl;
     }
 
@@ -3376,7 +3376,7 @@ HTML;
     {
         //if(file_exists($path)) { return true; }
         //else { return false; }
-        $file_headers = @get_headers($url);
+        $file_headers = @get_headers($path);
         if ($file_headers[0] == 'HTTP/1.0 404 Not Found') { // or "HTTP/1.1 404 Not Found" etc.
             $file_exists = false;
         } else {
@@ -3465,4 +3465,57 @@ HTML;
         }
         return $upsellModalDetail;
     }
+    /**
+     * @param integer $adId
+     * @param string  $imagePath
+     * @param string  $imageHash
+     * @param string  $size
+     * @param string  $image_name
+     * @return string
+     * @author Akash M. Pai <akash.pai@fridaymediagroup.com>
+     */
+    public static function getImageRelativePath($adId, $imagePath, $imageHash, $size = null, $image_name = null)
+    {
+        $imgRelPath = "";
+        if ($image_name != '') {
+            $imgRelPath = $imagePath . '/' . $image_name . ($size ? '_' . $size : '') . '.jpg?' . $imageHash;
+        } else {
+            $imgRelPath = $imagePath . '/' . $adId . '_' . $imageHash . ($size ? '_' . $size : '') . '.jpg';
+        }
+        return $imgRelPath;
+    }
+    
+    public static function correctImageOrientation($filename) {
+        echo 'filename=='.$filename;
+        //if (function_exists('exif_read_data')) {
+            $exif = exif_read_data($filename);
+            if($exif && isset($exif['Orientation'])) {
+                $orientation = $exif['Orientation'];
+                if($orientation != 1){
+                    $img = imagecreatefromjpeg($filename);
+                    $deg = 0; 
+                    switch ($orientation) {
+                        case 3:
+                            $deg = 180;
+                            break;
+                        case 6:
+                            $deg = 270;
+                            break;
+                        case 8:
+                            $deg = 90;
+                            break;
+                    }
+                    if ($deg) {
+                        $img = imagerotate($img, $deg, 0);
+                    }
+                    
+                    echo 'ifinner';
+                    // then rewrite the rotated image back to the disk as $filename
+                    imagejpeg($img, $filename, 95);
+                } // if there is some rotation necessary
+                echo 'ifouter';
+            } // if have the exif orientation info
+        //} // if function exists
+    }
+    
 }
