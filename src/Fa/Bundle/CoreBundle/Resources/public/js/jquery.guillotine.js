@@ -277,7 +277,7 @@
       }
       w = this.width;
       h = this.height;
-      if (w * factor > 1 && h * factor > 1) {
+      if (w * factor > 0 && h * factor > 0) {
         this.width *= factor;
         this.height *= factor;
         this.canvas.style.width = (this.width * 100).toFixed(2) + '%';
