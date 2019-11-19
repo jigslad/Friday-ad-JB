@@ -447,7 +447,7 @@ class AdImageController extends CoreController
 
             $adImageManager = new AdImageManager($this->container, $adId, $newHash, $imagePath);
             //create thumbnails
-            $adImageManager->createThumbnail();
+            $adImageManager->createThumbnail(false); 
             //create cope thumbnails
             $adImageManager->createCropedThumbnail();
 

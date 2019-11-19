@@ -290,7 +290,7 @@
                         picture.guillotine({
                           width: gllW,
                           height: gllH,
-                          zoomStep: 0.2,
+                          zoomStep: 0.1,
                           onChange: function(data, action){
                             data.scale = parseFloat(data.scale.toFixed(4));
                             for(var k in data) { $('#'+k).val(data[k]); }
@@ -299,7 +299,7 @@
 
                         // Initialize plugin (with custom event)
                         picture.guillotine({eventOnChange: 'guillotinechange'});
-                        picture.guillotine('fit');
+                        //picture.guillotine('fit');
 
                         // Display inital data
                         var data = picture.guillotine('getData');
