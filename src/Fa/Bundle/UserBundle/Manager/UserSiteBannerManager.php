@@ -126,10 +126,12 @@ class UserSiteBannerManager
             $dimension = getimagesize($awsDefaultBannerUrl.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
             //convert original image to jpg
             $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
+            copy($awsDefaultBannerUrl.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename(), $siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
             $origImage->loadFile($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
             $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', 'image/jpeg');
             copy($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', $this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg');
             exec('convert -rotate 0 -resize 100% '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg'.' -crop 1190x400+0+'.($dimension[1]*45/100).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg');
+            unlink($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
         }
     }
 

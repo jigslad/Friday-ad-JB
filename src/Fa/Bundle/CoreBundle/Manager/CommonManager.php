@@ -1442,7 +1442,6 @@ class CommonManager
         if(self::does_url_exists($imageUrl1)) {
             $imageUrl = $imageUrl1;
         } else {
-            $userSiteBanner = $this->_em->getRepository('FaUserBundle:UserSiteBanner')->findOneBy(array('category_id' => $userObj->getBusinessCategoryId()));
             $imageUrl = null;
         }
         return $imageUrl;
