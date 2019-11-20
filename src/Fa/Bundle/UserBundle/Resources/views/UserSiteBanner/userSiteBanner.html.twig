@@ -1,5 +1,12 @@
 {% set bigImageRoute = "ajax_get_big_user_site_banner_image" %}
+{% set container = fetch_container_instance() %}
+{% set UserSiteBannerRepository = fetch_repository('FaUserBundle:UserSiteBanner') %}
+
 {% set userSiteBannerUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteBannerUrl', [fetch_container_instance(), userSiteObj.getId(), 1]) %}
+{% if userSiteBannerUrl is null %}
+   {% set userSiteBanner = UserSiteBannerRepository.findOneBy({'category_id': userSiteObj.getUser().getBusinessCategoryId()}) %}
+   {% set userSiteBannerUrl = container.getParameter('fa.static.aws.url')~'/'~container.getParameter('fa.user.site.banner.image.dir')~'/'~userSiteBanner.getFilename() %}
+{% endif %}
 {% if fromProfilePage is defined and fromProfilePage %}
     <img id="user_site_banner_img" src="{{ userSiteBannerUrl }}?{{ random(1000) }}" />
 {% else %}

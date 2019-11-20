@@ -60,8 +60,7 @@ class CleanS3LocalImagesCommand extends ContainerAwareCommand
         $QUERY_BATCH_SIZE = 100;
         $done             = false;
         $last_id          = 0;
-        //$last_updated     = strtotime('-2 hour');
-        $last_updated     = '';
+        $last_updated     = strtotime('-2 hour');
         
         $ids = $input->getOption('ad_id');
 
@@ -115,7 +114,7 @@ class CleanS3LocalImagesCommand extends ContainerAwareCommand
 
         $q->setParameter('id', $last_id);
         $q->setParameter('p', 1);
-        //$q->setParameter('updated_at', $last_updated);
+        $q->setParameter('updated_at', $last_updated);
         $q->addOrderBy(AdImageRepository::ALIAS.'.id');
         $q->setMaxResults($QUERY_BATCH_SIZE);
         $q->setFirstResult(0);
