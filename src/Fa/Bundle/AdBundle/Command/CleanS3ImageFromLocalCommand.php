@@ -63,7 +63,8 @@ class CleanS3ImageFromLocalCommand extends ContainerAwareCommand
         $QUERY_BATCH_SIZE = 500;
         $done             = false;
         $last_id          = 0;
-        $last_updated     = strtotime('-3 day');
+        //$last_updated     = strtotime('-3 day');
+        $last_updated     = '';
 
         $ids = $input->getOption('ad_id');
 
@@ -184,11 +185,11 @@ class CleanS3ImageFromLocalCommand extends ContainerAwareCommand
 
         $q->andWhere(AdImageRepository::ALIAS.'.aws = :p');
         $q->andWhere(AdImageRepository::ALIAS.'.local = :local');
-        $q->andWhere(AdImageRepository::ALIAS.'.created_at < :created_at');
+        //$q->andWhere(AdImageRepository::ALIAS.'.created_at < :created_at');
 
         $q->setParameter('p', 1);
         $q->setParameter('local', 1);
-        $q->setParameter('created_at', $last_updated);
+        //$q->setParameter('created_at', $last_updated);
 
         return $q;
     }
