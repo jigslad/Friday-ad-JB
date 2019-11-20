@@ -118,9 +118,12 @@ class UserSiteBannerManager
     public function assignDefaultCategoryBanner($userSiteBanner, $siteBannerImagePath)
     {
         $imageQuality = $this->container->getParameter('fa.image.quality');
+        $awsDefaultBannerUrl = $this->container->getParameter('fa.static.aws.url').DIRECTORY_SEPARATOR.$this->container->getParameter('fa.user.site.banner.image.dir');
+        
         if ($userSiteBanner) {
             $this->removeImage();
-            $dimension = getimagesize($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
+            //$dimension = getimagesize($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
+            $dimension = getimagesize($awsDefaultBannerUrl.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
             //convert original image to jpg
             $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
             $origImage->loadFile($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
@@ -173,7 +176,7 @@ class UserSiteBannerManager
         if (is_file($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg')) {
             unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg');
         }
-        removeFromAmazonS3();
+        $this->removeFromAmazonS3();
     }
     
     public function removeFromAmazonS3()

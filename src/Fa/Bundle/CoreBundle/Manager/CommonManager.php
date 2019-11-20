@@ -1405,8 +1405,12 @@ class CommonManager
         if(self::does_url_exists($container->getParameter('fa.static.aws.url').'/'.$imagePath.'/'.$userSiteId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg')) {
             $imageBaseUrl = $container->getParameter('fa.static.aws.url');
         }
-        $imageUrl = $imageBaseUrl.'/'.$imagePath.'/'.$userSiteId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
-        
+        $imageUrl1 = $imageBaseUrl.'/'.$imagePath.'/'.$userSiteId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
+        if(self::does_url_exists($imageUrl1)) {
+            $imageUrl = $imageUrl1;
+        } else {
+            $imageUrl = null;
+        }
         return $imageUrl;
     }
     
@@ -1433,8 +1437,14 @@ class CommonManager
         } else {
             $imageName = 'banner_'.$userSiteId.'.jpg';
         }
-        $imageUrl = $imageBaseUrl.'/'.$container->getParameter('fa.user.site.image.dir').'/'.$imageDir.'/'.$imageName;
+        $imageUrl1 = $imageBaseUrl.'/'.$container->getParameter('fa.user.site.image.dir').'/'.$imageDir.'/'.$imageName;
         
+        if(self::does_url_exists($imageUrl1)) {
+            $imageUrl = $imageUrl1;
+        } else {
+            $userSiteBanner = $this->_em->getRepository('FaUserBundle:UserSiteBanner')->findOneBy(array('category_id' => $userObj->getBusinessCategoryId()));
+            $imageUrl = null;
+        }
         return $imageUrl;
     }
     
@@ -1445,8 +1455,12 @@ class CommonManager
             $imageBaseUrl = $container->getParameter('fa.static.aws.url');
         }
         
-        $imageUrl = $imageBaseUrl.'/'.$filename;
-        
+        $imageUrl1 = $imageBaseUrl.'/'.$filename;
+        if(self::does_url_exists($imageUrl1)) {
+            $imageUrl = $imageUrl1;
+        } else {
+            $imageUrl = null;
+        }
         return $imageUrl;
     }
     
@@ -1457,8 +1471,12 @@ class CommonManager
             $imageBaseUrl = $container->getParameter('fa.static.aws.url');
         }
         
-        $imageUrl = $imageBaseUrl.'/uploads/'.$foldername.'/'.$filename;
-        
+        $imageUrl1 = $imageBaseUrl.'/uploads/'.$foldername.'/'.$filename;
+        if(self::does_url_exists($imageUrl1)) {
+            $imageUrl = $imageUrl1;
+        } else {
+            $imageUrl = null;
+        }
         return $imageUrl;
     }
 
