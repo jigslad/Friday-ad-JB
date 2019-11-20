@@ -6,8 +6,14 @@
     {% set currentDevice = 'T' %}
 {% endif %}
 
+{% set container = fetch_container_instance() %}
+{% set UserSiteBannerRepository = fetch_repository('FaUserBundle:UserSiteBanner') %}
 
-{% set userSiteBannerUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteBannerUrl', [fetch_container_instance(), userDetail['site_id']]) %}
+{% set userSiteBannerUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteBannerUrl', [fetch_container_instance(), userDetail['site_id'], 1]) %}
+{% if userSiteBannerUrl is null %}
+   {% set userSiteBanner = UserSiteBannerRepository.findOneBy({'category_id': userDetail['business_category_id']}) %}
+   {% set userSiteBannerUrl = container.getParameter('fa.static.aws.url')~'/'~container.getParameter('fa.user.site.banner.image.dir')~'/'~userSiteBanner.getFilename() %}
+{% endif %}
 
 {% set userSiteViewCounter = fetch_repository('FaUserBundle:UserSiteViewCounter').getUserSiteViewCounter(userDetail['id'], fetch_container_instance()) %}
 <div class="shops-header" id="shop_header_div">
