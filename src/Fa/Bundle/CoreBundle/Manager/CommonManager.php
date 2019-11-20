@@ -1441,7 +1441,7 @@ class CommonManager
         
         if(self::does_url_exists($imageUrl1)) {
             $imageUrl = $imageUrl1;
-        } else {
+        } else { 
             $imageUrl = null;
         }
         return $imageUrl;
