@@ -167,7 +167,20 @@
 
     function saveSearchAgent(userId, callFrom)
     {
-    	callFromGlobal = callFrom;
+        var gtmLabel = 'Top Button';
+        if (callFrom != '' && callFrom == 'ListingBottom') {
+            gtmLabel = 'Bottom Button';
+        }
+        var callFromGlobal = callFrom;
+        let SearchAlert= '{{ app.request.get('cat_full_slug') }}'+' - '+'{{ app.request.get('Location') }}'+' - '+gtmLabel;
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Search alert',
+            'eventCategory':  'Search Results',
+            'eventAction': 'Search Alert',
+            'eventLabel': SearchAlert
+        });
     	hideAlertMessage();
         blockPage();
         {% set searchResultVariables = get_variables('searchResult') %}
@@ -361,12 +374,21 @@
 
     function openAdDetail(catString, adPosition, pageNo)
     {
+
       if (parseInt(pageNo) == 1) {
           var asPosStr = adPosition;
           if (parseInt(adPosition) > 6) {
             asPosStr = '6+';
-          } 
+          }
           var eventAction = 'Click pos. '+asPosStr;
+          window.dataLayer = window.dataLayer || []
+          dataLayer.push({
+
+              'event' : 'Click Ad Position',
+              'eventCategory':  'Click Ad Position',
+              'eventAction': eventAction ,
+              'eventLabel': catString
+          });
           ga('send', 'event', 'Click Ad Position', eventAction, catString);
       }
     }

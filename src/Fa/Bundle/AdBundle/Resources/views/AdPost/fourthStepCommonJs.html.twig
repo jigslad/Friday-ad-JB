@@ -8,6 +8,13 @@
     {% elseif 'third_step_registration' in refererUrl %}
         ga('send', 'event', 'PAA - Step 3b', 'Next step', '');
     {% elseif (gaStr is defined and gaStr != '') %}
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'Form Error PAA',
+            'eventCategory':  'Step 4',
+            'eventAction': 'Form error',
+            'eventLabel': '{{gaStr}}'
+        });
         ga('send', 'event', 'PAA - Step 4', 'Form error', '{{gaStr}}');
     {% endif %}
     //GA Analytics code end

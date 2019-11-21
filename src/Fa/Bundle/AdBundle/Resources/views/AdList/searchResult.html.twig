@@ -668,6 +668,13 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
     function visitUserProfileOrAd(eventCategory, eventAction, eventLabel)
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'Featured Business',
+            'eventCategory':  'Click Ad Position',
+            'eventAction': 'Featured Business',
+            'eventLabel': eventLabel
+        });
       ga('send', 'event', eventCategory, eventAction, eventLabel);
     }
 

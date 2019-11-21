@@ -31,6 +31,7 @@ $(window).on('load', function() {
 	
 function upgradeToFeaturedBtn(id, rootCategoryId) {
 	blockPage();
+
 	ga('send', 'event', 'Search Results', 'Upgrade', 'Click');
     var route = Routing.generate('upgrade_to_featured_ad', { 'adId': id, 'rootCategoryId': rootCategoryId});
     $.ajax({

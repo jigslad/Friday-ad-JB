@@ -21,7 +21,15 @@
       userHash: '633f17171b8625504c46af1db007739a'
     });
     function runfrontchatfun() {
-    	ga('send', 'event', 'help widget', 'contact');
+		window.dataLayer = window.dataLayer || []
+		dataLayer.push({
+
+			'event' : 'Widget Nav',
+			'eventCategory':  'help widget',
+			'eventAction': 'Contact',
+			'eventLabel': null
+		});
+		ga('send', 'event', 'help widget', 'contact');
 		FrontChat('show');
     }
 </script>
@@ -30,7 +38,15 @@
 $(document).ready(function() {
   $(".custom_hc_widget_trigger").click(function(event){
     event.preventDefault();
-    ga('send', 'event', 'help widget', 'open');
+	  window.dataLayer = window.dataLayer || []
+	  dataLayer.push({
+
+		  'event' : 'Widget Nav',
+		  'eventCategory':  'help widget',
+		  'eventAction': 'Open',
+		  'eventLabel': null
+	  });
+	  ga('send', 'event', 'help widget', 'open');
     $(this).hide();
     $(".custom_hc_widget").addClass('expanded');
     $("body").addClass('noscroll');
@@ -38,7 +54,14 @@ $(document).ready(function() {
   
   $(".custom_hc_widget_close_trigger").click(function(event){
     event.preventDefault();
-    ga('send', 'event', 'help widget', 'close');
+	  window.dataLayer = window.dataLayer || []
+	  dataLayer.push({
+		  'event' : 'Widget Nav',
+		  'eventCategory':  'help widget',
+		  'eventAction': 'Close',
+		  'eventLabel': null
+	  });
+	  ga('send', 'event', 'help widget', 'close');
     $(".custom_hc_widget").removeClass('expanded');
     $("body").removeClass('noscroll');
     $(".custom_hc_widget_trigger").show();
