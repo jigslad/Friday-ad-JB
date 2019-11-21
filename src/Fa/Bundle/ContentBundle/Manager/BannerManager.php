@@ -73,12 +73,12 @@ class BannerManager
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $bannerVariables    = array('{page_type}', '{user_type}', '{user_location}', '{county}', '{edition_area}', '{target_id}', '{search_keyword}', '{width}', '{height}', '{hashed_email}');
         $categoryVariables  = array('{category}', '{class}', '{sub_class}', '{sub_sub_class}');
-        $allBannerVariables = array_merge($bannerVariables, $categoryVariables);
+        $allBannerVariables = array_merge($bannerVariables, $categoryVariables); 
 
-        if ($extraParams && isset($extraParams['cookieValues'])) {
+        if ($params && isset($params['item__location'])) {
+            $locationArray = $this->em->getRepository('FaEntityBundle:Location')->getCookieValueForBanner($params['item__location'], $this->container);
+        } elseif ($extraParams && isset($extraParams['cookieValues'])) {
             $locationArray = json_decode($extraParams['cookieValues'], true);
-        } elseif ($params && isset($params['item__location'])) {
-            $locationArray = $this->em->getRepository('FaEntityBundle:Location')->getCookieValue($params['item__location'], $this->container);
         } else {
             $locationArray = json_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('location'), true);
         }
@@ -262,10 +262,10 @@ class BannerManager
         $categoryVariables  = array('{category}', '{class}', '{sub_class}', '{sub_sub_class}');
         $allStaticBlockVariables = array_merge($staticBlockVariables, $categoryVariables);
         
-        if ($extraParams && isset($extraParams['cookieValues'])) {
+        if ($params && isset($params['item__location'])) {
+            $locationArray = $this->em->getRepository('FaEntityBundle:Location')->getCookieValueForBanner($params['item__location'], $this->container);            
+        } elseif ($extraParams && isset($extraParams['cookieValues'])) {
             $locationArray = json_decode($extraParams['cookieValues'], true);
-        } elseif ($params && isset($params['item__location'])) {
-            $locationArray = $this->em->getRepository('FaEntityBundle:Location')->getCookieValue($params['item__location'], $this->container);
         } else {
             $locationArray = json_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('location'), true);
         }
