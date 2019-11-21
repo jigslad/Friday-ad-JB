@@ -657,7 +657,7 @@ class LocationRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -676,11 +676,17 @@ class LocationRepository extends BaseEntityRepository
             $townInfoArray['latitude']  = $town->getLatitude();
             $townInfoArray['longitude'] = $town->getLongitude();
             $townInfoArray['town_id']   = $town->getId();
-            $townInfoArray['town']      = $town->getName();
-            $townInfoArray['county_id'] = $town->getParent()->getId();
-            $townInfoArray['county']    = $town->getParent()->getName();
+            $townInfoArray['town']      = $town->getName();            
             $townInfoArray['lvl']    	= $town->getLvl();
             
+            if($town->getLvl()==4) {
+                $townInfoArray['county_id'] = $town->getParent()->getParent()->getId();
+                $townInfoArray['county']    = $town->getParent()->getParent()->getName();
+            } else {
+                $townInfoArray['county_id'] = $town->getParent()->getId();
+                $townInfoArray['county']    = $town->getParent()->getName();
+            }
+             
             //if town is special than area behave as like town for SEO
             if (!$town->getIsSpecialArea() && $town->getLvl()==4) {
                 $townInfoArray['slug']  = $town->getParent()->getUrl();
