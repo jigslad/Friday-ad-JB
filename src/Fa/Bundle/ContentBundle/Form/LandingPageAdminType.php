@@ -349,6 +349,7 @@ class LandingPageAdminType extends AbstractType
                         if ($file !== null) {
                             if ($oldFile) {
                                 $this->removeImage($oldFile);
+                                $this->removeAwsImage($oldFile);
                             }
                             $fileName = uniqid().'.'.$file->guessExtension();
                             $landingPageInfo->setFile($file);
@@ -359,6 +360,7 @@ class LandingPageAdminType extends AbstractType
                         if ($overlayFile !== null) {
                             if ($oldOverLayFile) {
                                 $this->removeImage($oldOverLayFile);
+                                $this->removeAwsImage($oldOverLayFile);
                             }
                             $fileName = uniqid().'.'.$overlayFile->guessExtension();
                             $landingPageInfo->setOverLayFile($overlayFile);
@@ -392,9 +394,15 @@ class LandingPageAdminType extends AbstractType
                 $landingPageInfo->getFile()->move($landingPageInfo->getUploadRootDir(), $fileName);
                 $landingPageInfo->setFile(null);
             }
+            
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path='.$landingPageInfo->getUploadRootDir().'/'.$fileName.' >/dev/null &');
         }
     }
 
+    public function removeAwsImage($fileName)
+    {
+        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path='.$fileName.' >/dev/null &');
+    }
     /**
      * Remove image if image is not assign to any other rule.
      *

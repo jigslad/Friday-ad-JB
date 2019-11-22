@@ -137,6 +137,11 @@ class UserImageController extends CoreController
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="For sale" update >/dev/null &');
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:ad-solr-index --user_id="'.$userId.'" --category="Adult" update >/dev/null &');
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userId.' >/dev/null &');
+                    if($isCompany) {
+                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:upload-user:image-s3 --user_id='.$userId.' --image_type=company >/dev/null &');
+                    } else {
+                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:upload-user:image-s3 --user_id='.$userId.' --image_type=user >/dev/null &');
+                    }
                     $culture  = CommonManager::getCurrentCulture($this->container);
                     $cacheKey = 'user|isTrustedUser|'.$userId.'|'.$culture;
                     CommonManager::removeCache($this->container, $cacheKey);

@@ -192,6 +192,9 @@ class AdImageManager
     {
         $dimension = getimagesize($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
         $imageQuality = $this->container->getParameter('fa.image.quality');
+        
+        exec('convert -auto-orient '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.trim($orgImageName,"'"));
+        
         //convert original image to jpg
         if ($dimension['mime'] == 'image/png') {
             exec('convert -flatten '.escapeshellarg($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'.png');
@@ -235,7 +238,7 @@ class AdImageManager
             if ($zoomFromCenter) {
                 $dimension  = @getimagesize($orig_image);
                 $bigImgSize = $thumbSize[0];
-                exec('convert -define jpeg:size='.$dimension[0].'x'.$dimension[1].' '.$orig_image.' -thumbnail '.$bigImgSize.'^ \
+                exec('convert -auto-orient -define jpeg:size='.$dimension[0].'x'.$dimension[1].' '.$orig_image.' -thumbnail '.$bigImgSize.'^ \
                      -gravity center -extent '.$bigImgSize.' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'_'.$bigImgSize.'.jpg');
                 unset($thumbSize[0]);
                 $this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'_'.$bigImgSize.'.jpg';
@@ -283,7 +286,7 @@ class AdImageManager
                 $double_height = ($org_size[1] * 2);
 
                 $return = '';
-                passthru('convert '.$sourceImg.' -resize x'.$double_height.' -resize "'.$double_width.'x<" -resize 50% -gravity center  -crop '.$value.'+0+0 +repage '.$destImg, $return);
+                passthru('convert -auto-orient '.$sourceImg.' -resize x'.$double_height.' -resize "'.$double_width.'x<" -resize 50% -gravity center  -crop '.$value.'+0+0 +repage '.$destImg, $return);
             } else {
                 throw new \Exception('Source image '.$sourceImg.' to generate croped image could not be found');
             }
@@ -585,5 +588,48 @@ class AdImageManager
         ]);
         $response = $client->doesObjectExist($this->container->getParameter('fa.aws_bucket'), $imageUrl);
         return $response;
+    }
+    
+    public function removeImageFromAmazoneS3($imageUrl)
+    {
+        $client = new S3Client([
+            'version'     => 'latest',
+            'region'      => $this->container->getParameter('fa.aws_region'),
+            'credentials' => [
+                'key'    => $this->container->getParameter('fa.aws_key'),
+                'secret' => $this->container->getParameter('fa.aws_secret'),
+            ],
+        ]);
+        
+        $fileKeys = array();
+        $fileKeys[] = array('Key' => $imageUrl);
+        
+        
+        //remove thumbnail
+        /* $thumbSize = $this->container->getParameter('fa.image.thumb_size');
+         $thumbSize = array_map('strtoupper', $thumbSize);
+         
+         if (is_array($thumbSize)) {
+         foreach ($thumbSize as $size) {
+         $key = $imageUrl.'/'.$imageName.'_'.$size.'.jpg';
+         $fileKeys[] = array('Key' => $key);
+         }
+         }
+         
+         $cropSize = $this->container->getParameter('fa.image.crop_size');
+         $cropSize = array_map('strtoupper', $cropSize);
+         
+         //remove brand image
+         if (is_array($cropSize)) {
+         foreach ($cropSize as $size) {
+         $key = $imageUrl.'/'.$imageName.'_'.$size.'.jpg';
+         $fileKeys[] = array('Key' => $key);
+         }
+         }*/
+        
+        $result = $client->deleteObjects(array(
+            'Bucket'  => $this->container->getParameter('fa.aws_bucket'),
+            'Delete'  => array('Objects' => $fileKeys)
+        ));
     }
 }
