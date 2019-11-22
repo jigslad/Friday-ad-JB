@@ -32,7 +32,24 @@
         $('#frmPAA').submit();
       });
     }
-
+    $('[id^=fa_paa_fourth_step_][id$=_preview]').click(function(){
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'PAA Next step',
+            'eventCategory':  'PAA - Step 4',
+            'eventAction': 'Preview my ad',
+            'eventLabel': '{{gaStr}}'
+        });
+    });
+    $('[id^=fa_paa_fourth_step][id$=_save]').click(function(){
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'PAA Next step',
+            'eventCategory':  'PAA - Step 4',
+            'eventAction': 'Next step',
+            'eventLabel': '{{gaStr}}'
+        });
+    });
     {% if not fetch_container_instance().get('fa.mobile.detect.manager').isMobile() and not fetch_container_instance().get('fa.mobile.detect.manager').isTablet() %}
     window.onload = function () {
       if (typeof history.pushState === "function") {
