@@ -15,10 +15,10 @@
                     {% set userCompanyLogo = null %}
                     {% set userLogo = null %}
                     {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
-                        {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['company_logo'], userDetail['id'], null, null, true, true, userDetail['status_id'], userDetail['user_name']]) %}
+                        {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), userDetail['id'], true, false, userDetail['user_name']]) %}
                     {% endif %}
                     {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
-                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['image'], userDetail['id'], null, null, true, false , userDetail['status_id'], userDetail['user_name']]) %}
+                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), userDetail['id'], true, false , userDetail['user_name']]) %}
                     {% endif %}
                     
                     

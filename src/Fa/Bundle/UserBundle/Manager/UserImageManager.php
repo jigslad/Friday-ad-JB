@@ -331,10 +331,10 @@ class UserImageManager
                 $resultData =  $result->get('@metadata');
                 
                 if ($resultData['statusCode'] == 200) {
-                    echo 'Moved File to AWS is Successfull ## '.$imagekey ;
+                    //echo 'Moved File to AWS is Successfull ## '.$imagekey ;
                     unlink($im);
                 } else {
-                    echo 'Failed moving to AWS ## '.$imagekey ;
+                    //echo 'Failed moving to AWS ## '.$imagekey ;
                 }
             }
         }
