@@ -46,9 +46,9 @@
                     {% if allowProfileEdit %}
                         <div class="profile-img-overlay"> </div>
                     {% endif %}
-                    <span id="left_profile_image_div">
-                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['company_logo'], userDetail['id'], null, null, true, true, userDetail['status_id'], userDetail['user_name']]) %}
-                        {% if userLogo %}
+                    <span id="left_profile_image_div"> 
+                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), userDetail['id'], true, true, userDetail['user_name'] ]) %}
+                        {% if userLogo %} 
                             {{userLogo|raw}}
                         {% endif %}
                     </span>
