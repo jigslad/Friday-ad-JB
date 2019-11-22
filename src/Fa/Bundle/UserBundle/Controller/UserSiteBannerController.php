@@ -89,6 +89,7 @@ class UserSiteBannerController extends CoreController
 
             try {
                 if ($form->isValid()) {
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:upload-user-site-banner:image-s3 --user_site_id='.$userSiteId.' >/dev/null &');
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$user->getId().' >/dev/null &');
                 } else {
                     $error = $form->getErrors(true, false);
