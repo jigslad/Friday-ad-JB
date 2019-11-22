@@ -98,7 +98,7 @@
                                                     <div class="clearfix">
                                                         {% set userCompanyLogo = null %}
                                                         {% if userSiteObj %}
-                                                            {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userSiteObj.getPath(), app.user.getId(), null, null, true, true, app.user.getStatus().getId(), app.user.getProfileName()]) %}
+                                                            {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), app.user.getId(), true, false, app.user.getProfileName()]) %}
                                                         {% endif %}
                                                         <div class="profile-logo-img">
                                                             <div class="bz-profile-logo" id="profile_image_div">

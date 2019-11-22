@@ -8,10 +8,10 @@
                 {% set userProfileNameDetail = {'first_name': review.reviewer_first_name, 'last_name': review.reviewer_last_name, 'business_name': review.reviewer_business_name} %}
                 {% set profileName = fetch_repository('FaUserBundle:User').getProfileNameFromArray(userProfileNameDetail) %}
                 {% if (review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
-                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), review.reviewer_company_image, review.reviewer_id, null, null, true, true, review.reviewer_status_id, profileName]) %}
+                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), review.reviewer_id, true, false, profileName]) %}
                 {% endif %}
                 {% if review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
-                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), review.reviewer_image, review.reviewer_id, null, null, true, false, review.reviewer_status_id, profileName]) %}
+                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), review.reviewer_id, true, false, profileName]) %}
                 {% endif %}
                 <div class="my-msg-usericon {% if review.reviewer_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}rounded{% endif %}">
                     {% if userLogo %}
@@ -50,10 +50,10 @@
                             {% set userProfileNameDetail = {'first_name': respond.responder_first_name, 'last_name': respond.responder_last_name, 'business_name': respond.responder_business_name} %}
                             {% set profileName = fetch_repository('FaUserBundle:User').getProfileNameFromArray(userProfileNameDetail) %}
                             {% if (respond.responder_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or respond.responder_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
-                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), respond.responder_company_image, respond.responder_id, null, null, true, true, respond.responder_status_id, profileName]) %}
+                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), respond.responder_id, true, false, profileName]) %}
                             {% endif %}
                             {% if respond.responder_role_id == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
-                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), respond.responder_image, respond.responder_id, null, null, true, false, respond.responder_status_id, profileName]) %}
+                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), respond.responder_id, true, false, profileName]) %}
                             {% endif %}
                             <div class="my-msg-usericon respond-icon">
                                 {% if userLogo %}

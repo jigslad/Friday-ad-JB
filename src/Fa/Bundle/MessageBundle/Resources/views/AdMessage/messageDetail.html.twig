@@ -33,9 +33,9 @@
                 {% else %}
                     {% set isCompanyUser = false %}
                 {% endif %}
-                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userLogosArray[arrayMessage['receiver_id']]['user_image'], arrayMessage['receiver_id'], null, null, true, isCompanyUser, userLogosArray[arrayMessage['receiver_id']]['status_id'], userDisplayName]) %}
+                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), arrayMessage['receiver_id'], true, false, userDisplayName]) %}
             {% else %}
-                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userLogosArray[arrayMessage['sender_id']]['user_image'], arrayMessage['sender_id'], null, null, true, isCompanyUser, userLogosArray[arrayMessage['sender_id']]['status_id'], userDisplayName]) %}
+                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), arrayMessage['sender_id'], true, false, userDisplayName]) %}
             {% endif %}
             <div class="my-msg-usericon{% if isCompanyUser == false %} rounded{% endif %}">
                 {% if userLogo %}
