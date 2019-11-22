@@ -1,6 +1,6 @@
 {% extends 'FaAdminBundle::layout.html.twig' %}
 {% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
-
+{% set container = fetch_container_instance() %}
 {% block content -%}
 
 {{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
@@ -163,7 +163,8 @@ li.creative_tab { margin-right: 10px;background: #eee;padding: 2px 15px;color:#3
 
                                             <div class="large-5 columns">
                                                 {% if form['recommended_slot_searchlist_slot_filename_'~i].vars.value is not empty %}
-                                                    <img src="{{shared_url('uploads/category_recommended_slots/'~form['recommended_slot_searchlist_slot_filename_'~i].vars.value)}}?{{ random(1000) }}" width="100px" />
+                                                    {% set crsimageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getOtherImageUrl', [container, 'category_recommended_slots', form['recommended_slot_searchlist_slot_filename_'~i].vars.value]) %} 
+                                                    <img src="{{ crsimageUrl }}" width="100px" />
                                                 {% endif %}
                                             </div>
                                         </div>

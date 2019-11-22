@@ -61,7 +61,7 @@ class CleanS3LocalImagesCommand extends ContainerAwareCommand
         $done             = false;
         $last_id          = 0;
         $last_updated     = strtotime('-2 hour');
-
+        
         $ids = $input->getOption('ad_id');
 
         if ($ids) {

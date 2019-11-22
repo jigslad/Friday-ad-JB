@@ -13,6 +13,10 @@ namespace Fa\Bundle\UserBundle\Manager;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Fa\Bundle\CoreBundle\Manager\ThumbnailManager;
+use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Fa\Bundle\UserBundle\Repository\UserSiteImageRepository;
+use Gedmo\Sluggable\Util\Urlizer;
+use Aws\S3\S3Client;
 
 /**
  * User site image manager.
@@ -240,6 +244,81 @@ class UserSiteImageManager
             foreach ($cropSize as $size) {
                 if (is_file($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'_'.$size.'_c.jpg')) {
                     unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'_'.$this->getHash().'_'.$size.'_c.jpg');
+                }
+            }
+        }
+    }
+    
+    public function uploadImagesToS3($id)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        if ($id) {
+            $client = new S3Client([
+                'version'     => 'latest',
+                'region'      => $this->container->getParameter('fa.aws_region'),
+                'credentials' => [
+                    'key'    => $this->container->getParameter('fa.aws_key'),
+                    'secret' => $this->container->getParameter('fa.aws_secret'),
+                ],
+            ]);
+            
+            $webPath = $this->container->get('kernel')->getRootDir().'/../web/'.$this->container->getParameter('fa.user.site.image.dir').'/';
+            $thumbSize = $this->container->getParameter('fa.image.user.site.thumb_size');
+            $imageDir = CommonManager::getGroupDirNameById($id);
+            $imagePath  = $webPath.$imageDir;
+            
+            $images = array();
+            
+            $userSiteImagesById = $this->em->getRepository('FaUserBundle:UserSiteImage')->getUserSiteImages($id);
+            
+            echo '<pre>'; print_r($userSiteImagesById);die;
+            
+            $sourceImg = $imagePath.'/'.$id.'.jpg';
+            
+            if (file_exists($sourceImg)) {
+                $images[''] = $imagePath.'/'.$id.'.jpg';
+                $images['org'] = $imagePath.'/'.$id.'_org.jpg';
+                $images['original'] = $imagePath.'/'.$id.'_original.jpg';
+            }
+            
+            foreach ($images as $key => $im) {
+                $imagekey = '';
+                if ($key!='') {
+                    $imagekey = $this->container->getParameter('fa.user.site.image.dir').'/'.$imageDir.'/'.$id.'_'.$key.'.jpg';
+                } else {
+                    $imagekey = $this->container->getParameter('fa.user.site.image.dir').'/'.$imageDir.'/'.$id.'.jpg';
+                }
+                
+                if ($this->container->getParameter('fa.aws_bucket') == $this->container->getParameter('fa.aws_bucket_compare')) {
+                    $result = $client->putObject(array(
+                        'Bucket'     => $this->container->getParameter('fa.aws_bucket'),
+                        'Key'        => $imagekey,
+                        'CacheControl' => 'max-age=21600',
+                        'ACL'        => 'public-read',
+                        'SourceFile' => $im,
+                        'Metadata'   => array(
+                            'Last-Modified' => time(),
+                        )
+                    ));
+                } else {
+                    $result = $client->putObject(array(
+                        'Bucket'     => $this->container->getParameter('fa.aws_bucket'),
+                        'Key'        => $imagekey,
+                        'CacheControl' => 'max-age=21600',
+                        'SourceFile' => $im,
+                        'Metadata'   => array(
+                            'Last-Modified' => time(),
+                        )
+                    ));
+                }
+                
+                $resultData =  $result->get('@metadata');
+                
+                if ($resultData['statusCode'] == 200) {
+                    echo 'Moved File to AWS is Successfull ## '.$imagekey ;
+                    unlink($im);
+                } else {
+                    echo 'Failed moving to AWS ## '.$imagekey ;
                 }
             }
         }

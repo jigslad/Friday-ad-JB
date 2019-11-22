@@ -277,10 +277,20 @@
                     $( "#crop_big_image" ).load(function() {
                         $('#crop_image').show();
                         var picture = $('#crop_big_image');
+                        var imgW = $(picture).width();
+                        var imgH = $(picture).height();
+                        var gllW = 800;
+                        var gllH = 600;
+                        if(imgH > imgW){
+                            var tempW = gllW;
+                            gllW = gllH;
+                            gllH = tempW;
+                        }
+                        
                         picture.guillotine({
-                          width: 800,
-                          height: 600,
-                          zoomStep: 0.2,
+                          width: gllW,
+                          height: gllH,
+                          zoomStep: 0.1,
                           onChange: function(data, action){
                             data.scale = parseFloat(data.scale.toFixed(4));
                             for(var k in data) { $('#'+k).val(data[k]); }

@@ -6,14 +6,23 @@
     {% set currentDevice = 'T' %}
 {% endif %}
 
+{% set container = fetch_container_instance() %}
+{% set UserSiteBannerRepository = fetch_repository('FaUserBundle:UserSiteBanner') %}
+
+{% set userSiteBannerUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserSiteBannerUrl', [fetch_container_instance(), userDetail['site_id'], 1]) %}
+{% if userSiteBannerUrl is null %}
+   {% set userSiteBanner = UserSiteBannerRepository.findOneBy({'category_id': userDetail['business_category_id']}) %}
+   {% set userSiteBannerUrl = container.getParameter('fa.static.aws.url')~'/'~container.getParameter('fa.user.site.banner.image.dir')~'/'~userSiteBanner.getFilename() %}
+{% endif %}
+
 {% set userSiteViewCounter = fetch_repository('FaUserBundle:UserSiteViewCounter').getUserSiteViewCounter(userDetail['id'], fetch_container_instance()) %}
 <div class="shops-header" id="shop_header_div">
     {% if allowProfileEdit %}
         <div class="cover-img-overlay"> </div>
     {% endif %}
     <div class="shops-header-img text-center" id="user_site_banner_div">
-        <img id="user_site_banner_img" src="{{ shared_url(userDetail['banner_path']~'/banner_'~userDetail['site_id']~'.jpg')~'?'~random(1000) }}" alt="" />
-    </div>
+        <img id="user_site_banner_img" src="{{ userSiteBannerUrl }}" alt="" />
+    </div> 
     {% if allowProfileEdit %}
         {% set bigImageRoute = "ajax_get_big_user_site_banner_image" %}
         <div class="cover-img-box">
@@ -37,9 +46,9 @@
                     {% if allowProfileEdit %}
                         <div class="profile-img-overlay"> </div>
                     {% endif %}
-                    <span id="left_profile_image_div">
-                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['company_logo'], userDetail['id'], null, null, true, true, userDetail['status_id'], userDetail['user_name']]) %}
-                        {% if userLogo %}
+                    <span id="left_profile_image_div"> 
+                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), userDetail['id'], true, true, userDetail['user_name'] ]) %}
+                        {% if userLogo %} 
                             {{userLogo|raw}}
                         {% endif %}
                     </span>

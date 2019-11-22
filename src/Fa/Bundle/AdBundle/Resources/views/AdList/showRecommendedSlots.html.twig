@@ -6,8 +6,8 @@
     <div class="recommended-div listing mb20">           
         <div class="clearfix">
             <div class="list-col-1">
-                {% set imagePath = container.getParameter('fa.static.asset.url')~'/uploads/category_recommended_slots/'~recommendedSlotResult[slotIndex]['slot_filename'] %}
-
+                {% set imagePath = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getOtherImageUrl', [container, 'category_recommended_slots', recommendedSlotResult[slotIndex]['slot_filename']]) %}
+                
                 <div class="featured-bz-listimg">
                     {% if imagePath %}
                         <div class="img-cls-srchlist-recommend"><div class="list-placeholder"><img data-original="{{ imagePath }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" class="lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" /></div></div>

@@ -15,7 +15,7 @@
         <div class="large-6 columns" id="show_message_div">
             <div class="user-pro-pic rounded">
                 <span>
-                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userDetail['image'], userDetail['id'], null, null, true, false, userDetail['status_id'], userDetail['user_name']]) %}
+                    {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), userDetail['id'], true, false, userDetail['user_name']]) %}
                     {% if userLogo %}
                         {{userLogo|raw}}
                     {% endif %}

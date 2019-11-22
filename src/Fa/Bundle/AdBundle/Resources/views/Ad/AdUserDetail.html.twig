@@ -32,10 +32,10 @@
     {% set userCompanyLogo = null %}
     {% set userLogo = null %}
     {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}
-        {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adDetail['user']['company_logo'], adDetail['user']['id'], null, null, true, true, adDetail['user']['status_id'], adDetail['user']['user_name']]) %}
+        {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adDetail['user']['id'], true, false, adDetail['user']['user_name']]) %}
     {% endif %}
     {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}
-        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adDetail['user']['image'], adDetail['user']['id'], null, null, true, false, adDetail['user']['status_id'], adDetail['user']['user_name']]) %}
+        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adDetail['user']['id'], true, false, adDetail['user']['user_name']]) %}
     {% endif %}
 
     <div class="pvt-seller-img {% if (userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER') or userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION')) %}bz-seller-img{% else %}seller-img-round{% endif %}">

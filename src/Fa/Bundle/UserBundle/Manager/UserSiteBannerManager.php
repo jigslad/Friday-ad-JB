@@ -13,7 +13,9 @@ namespace Fa\Bundle\UserBundle\Manager;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Fa\Bundle\CoreBundle\Manager\ThumbnailManager;
-
+use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Gedmo\Sluggable\Util\Urlizer;
+use Aws\S3\S3Client;
 /**
  * User site banner manager.
  *
@@ -116,15 +118,20 @@ class UserSiteBannerManager
     public function assignDefaultCategoryBanner($userSiteBanner, $siteBannerImagePath)
     {
         $imageQuality = $this->container->getParameter('fa.image.quality');
+        $awsDefaultBannerUrl = $this->container->getParameter('fa.static.aws.url').DIRECTORY_SEPARATOR.$this->container->getParameter('fa.user.site.banner.image.dir');
+        
         if ($userSiteBanner) {
             $this->removeImage();
-            $dimension = getimagesize($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
+            //$dimension = getimagesize($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
+            $dimension = getimagesize($awsDefaultBannerUrl.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
             //convert original image to jpg
             $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, $imageQuality, 'ImageMagickManager');
+            copy($awsDefaultBannerUrl.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename(), $siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
             $origImage->loadFile($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
             $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', 'image/jpeg');
             copy($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', $this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg');
             exec('convert -rotate 0 -resize 100% '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg'.' -crop 1190x400+0+'.($dimension[1]*45/100).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg');
+            unlink($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
         }
     }
 
@@ -170,6 +177,114 @@ class UserSiteBannerManager
         //remove banner
         if (is_file($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg')) {
             unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg');
+        }
+        $this->removeFromAmazonS3();
+    }
+    
+    public function removeFromAmazonS3()
+    {
+        $client = new S3Client([
+            'version'     => 'latest',
+            'region'      => $this->container->getParameter('fa.aws_region'),
+            'credentials' => [
+                'key'    => $this->container->getParameter('fa.aws_key'),
+                'secret' => $this->container->getParameter('fa.aws_secret'),
+            ],
+        ]);
+        
+
+        $imageFolder = $this->container->getParameter('fa.user.site.image.dir');
+                
+        $awsPath = $this->container->getParameter('fa.static.aws.url');
+        $imageDir = CommonManager::getGroupDirNameById($this->getUserSiteId());
+        $awsSourceImg = $awsPath.'/'.$imageFolder.'/'.$imageDir.'/banner_'.$this->getUserSiteId().'.jpg';
+        
+        $images = $fileKeys = array();
+        
+        if (false!==file($awsSourceImg)) {
+            $images[''] = $imageFolder.'/'.$imageDir.'/banner_'.$this->getUserSiteId().'.jpg';
+            $images['org'] = $imageFolder.'/'.$imageDir.'/banner_'.$this->getUserSiteId().'_org.jpg';
+        }
+        
+        foreach ($images as $key => $im) {
+            $fileKeys[] = array('Key' => $im);
+        }
+        
+        if(!empty($fileKeys)) {
+            $result = $client->deleteObjects(array(
+                'Bucket'  => $this->container->getParameter('fa.aws_bucket'),
+                'Delete'  => array('Objects' => $fileKeys)
+            ));
+        }
+    }
+    
+    public function uploadImagesToS3($id)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        if ($id) {
+            $client = new S3Client([
+                'version'     => 'latest',
+                'region'      => $this->container->getParameter('fa.aws_region'),
+                'credentials' => [
+                    'key'    => $this->container->getParameter('fa.aws_key'),
+                    'secret' => $this->container->getParameter('fa.aws_secret'),
+                ],
+            ]);
+            
+            $webPath = $this->container->get('kernel')->getRootDir().'/../web/'.$this->container->getParameter('fa.user.site.image.dir').'/';
+            $imageDir = CommonManager::getGroupDirNameById($id);
+            $imagePath  = $webPath.$imageDir;
+            
+            $images = array();
+
+            
+            $sourceImg = $imagePath.'/banner_'.$id.'.jpg';
+            
+            if (file_exists($sourceImg)) {
+                $images[''] = $imagePath.'/banner_'.$id.'.jpg';
+                $images['org'] = $imagePath.'/banner_'.$id.'_org.jpg';
+            }
+            
+            foreach ($images as $key => $im) {
+                $imagekey = '';
+                if ($key!='') {
+                    $imagekey = $this->container->getParameter('fa.user.site.image.dir').'/'.$imageDir.'/banner_'.$id.'_'.$key.'.jpg';
+                } else {
+                    $imagekey = $this->container->getParameter('fa.user.site.image.dir').'/'.$imageDir.'/banner_'.$id.'.jpg';
+                }
+                
+                if ($this->container->getParameter('fa.aws_bucket') == $this->container->getParameter('fa.aws_bucket_compare')) {
+                    $result = $client->putObject(array(
+                        'Bucket'     => $this->container->getParameter('fa.aws_bucket'),
+                        'Key'        => $imagekey,
+                        'CacheControl' => 'max-age=21600',
+                        'ACL'        => 'public-read',
+                        'SourceFile' => $im,
+                        'Metadata'   => array(
+                            'Last-Modified' => time(),
+                        )
+                    ));
+                } else {
+                    $result = $client->putObject(array(
+                        'Bucket'     => $this->container->getParameter('fa.aws_bucket'),
+                        'Key'        => $imagekey,
+                        'CacheControl' => 'max-age=21600',
+                        'SourceFile' => $im,
+                        'Metadata'   => array(
+                            'Last-Modified' => time(),
+                        )
+                    ));
+                }
+                
+                $resultData =  $result->get('@metadata');
+                
+                if ($resultData['statusCode'] == 200) {
+                    echo 'Moved File to AWS is Successfull ## '.$imagekey ;
+                    unlink($im);
+                } else {
+                    echo 'Failed moving to AWS ## '.$imagekey ;
+                }
+            }
         }
     }
 }

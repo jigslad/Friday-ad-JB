@@ -50,6 +50,7 @@
                     {% for adImage in adImages %}
                         {% set adBigImageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageUrl', [container, adId, adImage.path, adImage.hash, '800X600', adImage.aws, adImage.image_name]) %}
                         {% set altString = imageAltStringArr['img_alt_'~((loop.index%8) == 0 ? 8 : (loop.index%8))] %}
+
                         <div class="item">
                             <img class="lazyOwl" id="big_image_{{loop.index}}" data-src="{{ adBigImageUrl }}" alt="{{ altString }}" />
                         </div>

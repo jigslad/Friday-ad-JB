@@ -576,6 +576,7 @@ class CategoryAdminType extends AbstractType
                             $slotFileName = uniqid().'.'.$slotFile->guessExtension();
                             $recommendedSlot->setSlotFile($slotFile);
                             $recommendedSlot->getSlotFile()->move($recommendedSlot->getUploadRootDir(), $slotFileName);
+                            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path=uploads/category_recommended_slots/'.$slotFileName.' >/dev/null &');
                             $recommendedSlot->setSlotFilename($slotFileName);
                         } else {
                             $existslotFileName = null;

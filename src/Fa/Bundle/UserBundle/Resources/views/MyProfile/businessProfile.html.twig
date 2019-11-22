@@ -98,7 +98,7 @@
                                                     <div class="clearfix">
                                                         {% set userCompanyLogo = null %}
                                                         {% if userSiteObj %}
-                                                            {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), userSiteObj.getPath(), app.user.getId(), null, null, true, true, app.user.getStatus().getId(), app.user.getProfileName()]) %}
+                                                            {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), app.user.getId(), true, false, app.user.getProfileName()]) %}
                                                         {% endif %}
                                                         <div class="profile-logo-img">
                                                             <div class="bz-profile-logo" id="profile_image_div">
@@ -237,8 +237,8 @@
                                                                     <div class="text-center">{{'Or choose from the options below'|trans({}, 'frontend-my-profile')}}</div>
                                                                     <ul class="cover-img-thumbs clearfix">
                                                                         {% for userSiteBannerOtherImage in userSiteBannerOtherImages%}
-                                                                            <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ shared_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
-                                                                        {% endfor %}
+                                                                            <li><a href="javascript:void(0);" onclick="return changeBanner('{{ userSiteBannerOtherImage.getId() }}');"><img src="{{ image_url(userSiteBannerOtherImage.getPath()~'/'~userSiteBannerOtherImage.getFilename()|replace({'.png':''})~'_68x55.jpg') }}" alt="" /></a></li>
+                                                                        {% endfor %} 
                                                                     </ul>
                                                                 </div>
                                                             </div>

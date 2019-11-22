@@ -107,6 +107,7 @@ class UserSiteImageController extends CoreController
                 try {
                     if ($form->isValid()) {
                         $formManager->save($userSiteImage);
+                        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:upload-user-site:image-s3 --user_id='.$userSite->getUser()->getId().' --image_type=company >/dev/null &');
                         exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:send:business-user-for-moderation --userId='.$userSite->getUser()->getId().' >/dev/null &');
                     } else {
                         $error = $form->getErrors(true, false);
