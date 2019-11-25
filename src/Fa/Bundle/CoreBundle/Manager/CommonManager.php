@@ -922,8 +922,11 @@ class CommonManager
         }
  
         if(self::checkImageExistOnAws($container,$path.'/'.$userId.'.jpg')) {
-            $newImagePath = $container->getParameter('fa.static.aws.url').'/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg'.($appendTime ? '?'.time() : null);
-            
+            if (($imageWidth==null && $imageHeight== null) || ($imageWidth =='' && $imageHeight=='') || ($imageWidth ==0 || $imageHeight==0)) {
+                $newImagePath = $container->getParameter('fa.static.aws.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null);
+            } else {
+                $newImagePath = $container->getParameter('fa.static.aws.url').'/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg'.($appendTime ? '?'.time() : null);
+            }
             if ($isCompany) {
                 return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$newImagePath.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />';
             } else {
@@ -1421,7 +1424,7 @@ class CommonManager
         
         $imageUrl = $imageBaseUrl.'/'.$newImageUrl;
         
-        return $imageUrl;
+        return $imageUrl; 
     }
     
     public static function getLandingImageUrl($container, $filename)

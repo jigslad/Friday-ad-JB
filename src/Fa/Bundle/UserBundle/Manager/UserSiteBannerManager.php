@@ -130,6 +130,7 @@ class UserSiteBannerManager
             $origImage->save($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', 'image/jpeg');
             copy($this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg', $this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg');
             exec('convert -rotate 0 -resize 100% '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'_org.jpg'.' -crop 1190x400+0+'.($dimension[1]*45/100).' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.'banner_'.$this->getUserSiteId().'.jpg');
+            $this->uploadImagesToS3($this->getUserSiteId());
             unlink($siteBannerImagePath.DIRECTORY_SEPARATOR.$userSiteBanner->getFilename());
         }
     }
@@ -278,10 +279,10 @@ class UserSiteBannerManager
                 $resultData =  $result->get('@metadata');
                 
                 if ($resultData['statusCode'] == 200) {
-                    echo 'Moved File to AWS is Successfull ## '.$imagekey ;
+                    //echo 'Moved File to AWS is Successfull ## '.$imagekey ;
                     unlink($im);
                 } else {
-                    echo 'Failed moving to AWS ## '.$imagekey ;
+                    //echo 'Failed moving to AWS ## '.$imagekey ;
                 }
             }
         }
