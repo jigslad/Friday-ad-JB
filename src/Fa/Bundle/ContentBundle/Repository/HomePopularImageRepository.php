@@ -100,7 +100,7 @@ class HomePopularImageRepository extends EntityRepository
                 $homePopularBgImagePath = CommonManager::getSharedImageUrl($container, $homePopularImage['path'], $homePopularImage['file_name']);
                 $homePopularOverlayImagePath = CommonManager::getSharedImageUrl($container, $homePopularImage['path'], $homePopularImage['overlay_file_name']);
                 
-                if (CommonManager::does_url_exists($homePopularBgImagePath) && CommonManager::does_url_exists($homePopularOverlayImagePath)) {                    
+                if (CommonManager::checkImageExistOnAws($container,$homePopularImage['path'].'/'.$homePopularImage['file_name']) && CommonManager::checkImageExistOnAws($container,$homePopularImage['path'].'/'.$homePopularImage['overlay_file_name'])) {                    
                     $imageSize = getimagesize($homePopularBgImagePath);
                     $homePopularImagesArray[] = array(
                         'bg_image' => CommonManager::getSharedImageUrl($container, $homePopularImage['path'], $homePopularImage['file_name']),
