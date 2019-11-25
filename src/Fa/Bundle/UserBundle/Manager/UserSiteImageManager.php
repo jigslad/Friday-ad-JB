@@ -167,6 +167,9 @@ class UserSiteImageManager
 
             passthru('rm '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getUserSiteId().'-*.jpg 2> /dev/null');
         }
+        if(is_file($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName)) {
+            $this->uploadImagesToS3($this->getUserSiteId(),$this->getHash(),$this->getOrgImagePath());
+        }
         if (!$keepOriginal && is_file($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName)) {
             unlink($this->getOrgImagePath().DIRECTORY_SEPARATOR.$orgImageName);
         }
@@ -246,11 +249,46 @@ class UserSiteImageManager
                 }
             }
         }
+        $this->removeFromAmazonS3($this->getUserSiteId(),$this->getHash(),$this->getOrgImagePath());
     }
     
-    public function uploadImagesToS3($id)
+    public function removeFromAmazonS3($userSiteId,$hash,$path)
     {
-        $em = $this->container->get('doctrine')->getManager();
+        $client = new S3Client([
+            'version'     => 'latest',
+            'region'      => $this->container->getParameter('fa.aws_region'),
+            'credentials' => [
+                'key'    => $this->container->getParameter('fa.aws_key'),
+                'secret' => $this->container->getParameter('fa.aws_secret'),
+            ],
+        ]);
+        
+        $awsPath = $this->container->getParameter('fa.static.aws.url');
+        $awsSourceImg = $awsPath.'/'.$path.'/'.$userSiteId.'_'.$hash.'.jpg';
+        
+        $images = $fileKeys = array();
+        
+        if (false!==file($awsSourceImg)) {
+            $images[''] = $path.'/'.$userSiteId.'_'.$hash.'.jpg';
+            $images['300X225'] = $path.'/'.$userSiteId.'_'.$hash.'_300X225.jpg';
+            $images['800X600'] = $path.'/'.$userSiteId.'_'.$hash.'_800X600.jpg';
+            $images['org'] = $path.'/'.$userSiteId.'_'.$hash.'_org.jpg';
+        }
+        
+        foreach ($images as $key => $im) {
+            $fileKeys[] = array('Key' => $im);
+        }
+        
+        if(!empty($fileKeys)) {
+            $result = $client->deleteObjects(array(
+                'Bucket'  => $this->container->getParameter('fa.aws_bucket'),
+                'Delete'  => array('Objects' => $fileKeys)
+            ));
+        }
+    }
+    
+    public function uploadImagesToS3($id, $hash, $path)
+    {
         if ($id) {
             $client = new S3Client([
                 'version'     => 'latest',
@@ -261,29 +299,26 @@ class UserSiteImageManager
                 ],
             ]);
             
-            $webPath = $this->container->get('kernel')->getRootDir().'/../web/'.$this->container->getParameter('fa.user.site.image.dir').'/';
+            $webPath = $this->container->get('kernel')->getRootDir().'/../web/';
             $thumbSize = $this->container->getParameter('fa.image.user.site.thumb_size');
-            $imageDir = CommonManager::getGroupDirNameById($id);
-            $imagePath  = $webPath.$imageDir;
+            $imagePath  = $webPath.$path;
             
             $images = array();
-            
-            $userSiteImagesById = $this->em->getRepository('FaUserBundle:UserSiteImage')->getUserSiteImages($id);
-            
-            $sourceImg = $imagePath.'/'.$id.'.jpg';
+                        
+            $sourceImg = $imagePath.'/'.$id.'_'.$hash.'.jpg';
             
             if (file_exists($sourceImg)) {
-                $images[''] = $imagePath.'/'.$id.'.jpg';
-                $images['org'] = $imagePath.'/'.$id.'_org.jpg';
-                $images['original'] = $imagePath.'/'.$id.'_original.jpg';
+                $images[''] = $imagePath.'/'.$id.'_'.$hash.'.jpg';
+                $images['300X225'] = $imagePath.'/'.$id.'_'.$hash.'_300X225.jpg';
+                $images['800X600'] = $imagePath.'/'.$id.'_'.$hash.'_800X600.jpg';
             }
             
             foreach ($images as $key => $im) {
                 $imagekey = '';
                 if ($key!='') {
-                    $imagekey = $this->container->getParameter('fa.user.site.image.dir').'/'.$imageDir.'/'.$id.'_'.$key.'.jpg';
+                    $imagekey = $path.'/'.$id.'_'.$hash.'_'.$key.'.jpg';
                 } else {
-                    $imagekey = $this->container->getParameter('fa.user.site.image.dir').'/'.$imageDir.'/'.$id.'.jpg';
+                    $imagekey = $path.'/'.$id.'_'.$hash.'.jpg';
                 }
                 
                 if ($this->container->getParameter('fa.aws_bucket') == $this->container->getParameter('fa.aws_bucket_compare')) {
@@ -312,10 +347,10 @@ class UserSiteImageManager
                 $resultData =  $result->get('@metadata');
                 
                 if ($resultData['statusCode'] == 200) {
-                    echo 'Moved File to AWS is Successfull ## '.$imagekey ;
+                    //echo 'Moved File to AWS is Successfull ## '.$imagekey ;
                     unlink($im);
                 } else {
-                    echo 'Failed moving to AWS ## '.$imagekey ;
+                    //echo 'Failed moving to AWS ## '.$imagekey ;
                 }
             }
         }

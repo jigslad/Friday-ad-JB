@@ -133,7 +133,6 @@ class UserSiteImageType extends AbstractType
             $usersiteImageManager->saveOriginalJpgImage($orgImageName);
             //create thumbnails
             $usersiteImageManager->createThumbnail();
-            $usersiteImageManager->uploadImagesToS3($userSiteId);
         }
     }
 

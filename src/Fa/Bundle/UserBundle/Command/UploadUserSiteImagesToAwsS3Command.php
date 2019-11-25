@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Fa\Bundle\UserBundle\Repository\UserImageRepository;
+use Fa\Bundle\UserBundle\Repository\UserSiteImageRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\UserBundle\Manager\UserSiteImageManager;
 
@@ -39,7 +39,7 @@ class UploadUserSiteImagesToAwsS3Command extends ContainerAwareCommand
         $this
         ->setName('fa:upload-user-site:image-s3')
         ->setDescription('Upload user images to s3')
-        ->addOption('user_id', null, InputOption::VALUE_OPTIONAL, 'User ID', null);
+        ->addOption('user_site_id', null, InputOption::VALUE_OPTIONAL, 'User Site ID', null);
     }
 
     /**
@@ -62,7 +62,7 @@ class UploadUserSiteImagesToAwsS3Command extends ContainerAwareCommand
         $done             = false;
         $last_id          = 0;
 
-        $ids = $input->getOption('user_id');
+        $ids = $input->getOption('user_site_id');
 
         if ($ids) {
             $ids = explode(',', $ids);
@@ -77,10 +77,12 @@ class UploadUserSiteImagesToAwsS3Command extends ContainerAwareCommand
             }
             
             if ($ids) {
-                foreach ($ids as $id) {
+                $userSiteImages = $this->getUserSiteImages($ids);
+                foreach ($userSiteImages as $userSiteImage) {
                     $imagePath  = $userImageDir.CommonManager::getGroupDirNameById($id, 5000);
-                    $userSiteImageManager = new UserSiteImageManager($this->getContainer(), $id, null, $imagePath);
-                    $userSiteImageManager->uploadImagesToS3($id,$image_type);
+                    $userSiteImageManager = new UserSiteImageManager($this->getContainer(), $userSiteImage->getUserSite()->getId(), $userSiteImage->getHash(), $userSiteImage->getPath());
+                    
+                    $userSiteImageManager->uploadImagesToS3($userSiteImage->getUserSite()->getId(), $userSiteImage->getHash(), $userSiteImage->getPath());
                     echo "Uploaded to s3 image Id".$id."\n";
                 }  
                 $done = true;
@@ -88,6 +90,15 @@ class UploadUserSiteImagesToAwsS3Command extends ContainerAwareCommand
                 $done = true;
             }
         }
+    }
+    
+    public function getUserSiteImages($ids)
+    {
+        $userSiteImageRepository  = $this->em->getRepository('FaUserBundle:UserSiteImage');
+        $qb = $userSiteImageRepository->createQueryBuilder(UserSiteImageRepository::ALIAS);
+        $qb->andWhere(UserSiteImageRepository::ALIAS.'.user_site IN (:user_sites)');
+        $qb->setParameter('user_sites', $ids);
+        return $qb->getQuery()->getResult();
     }
 
 }

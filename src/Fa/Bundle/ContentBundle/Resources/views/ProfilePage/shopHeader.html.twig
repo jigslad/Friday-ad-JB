@@ -12,7 +12,7 @@
         <div class="cover-img-overlay"> </div>
     {% endif %}
     <div class="shops-header-img text-center" id="user_site_banner_div">
-        <img id="user_site_banner_img" src="{{ shared_url(userDetail['banner_path']~'/banner_'~userDetail['site_id']~'.jpg')~'?'~random(1000) }}" alt="" />
+        <img id="user_site_banner_img" src="{{ image_url(userDetail['banner_path']~'/banner_'~userDetail['site_id']~'.jpg')~'?'~random(1000) }}" alt="" />
     </div>
     {% if allowProfileEdit %}
         {% set bigImageRoute = "ajax_get_big_user_site_banner_image" %}
