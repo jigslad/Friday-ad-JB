@@ -26,7 +26,8 @@
                                         <div class="overlay"></div>
                                         <div class="popular-graphic">
                                             {% if imageInfo.overlay_file_name is defined %}
-                                                <img alt="{{ adultSubCategoryName }}" src="{{ shared_url(imageInfo.overlay_file_name) }}">
+                                                {% set imageOverlayUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getLandingImageUrl', [container, imageInfo.overlay_file_name]) %}
+                                                <img alt="{{ adultSubCategoryName }}" src="{{ imageOverlayUrl }}">
                                             {% endif %}
                                         </div>
                                         {% if imageInfo.file_name is defined %}
