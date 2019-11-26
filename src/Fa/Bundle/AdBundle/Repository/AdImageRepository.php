@@ -542,8 +542,6 @@ class AdImageRepository extends EntityRepository
             $this->_em->flush();
             $this->updateImageToSolr($entity->getAd(), $container);
         }
-        
-        exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:upload:image-s3 --ad_id="'.$entity->getAd()->getId().'"');        
 
         return $entity;
     }
@@ -707,9 +705,7 @@ class AdImageRepository extends EntityRepository
                 //create cope thumbnails
                 $adImageManager->createCropedThumbnail();
             }
-            
-            exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:upload:image-s3 --ad_id="'.$adId);
-            
+            $adImageManager->uploadImagesToS3($image);
         }        
     }
 
