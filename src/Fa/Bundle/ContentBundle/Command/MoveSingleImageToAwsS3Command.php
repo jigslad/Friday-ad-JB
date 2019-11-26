@@ -54,7 +54,7 @@ class MoveSingleImageToAwsS3Command extends ContainerAwareCommand
 	
         $filePath = $input->getOption('file_path');
 
-        $imagePath = $this->getContainer()->get('kernel')->getRootDir().'/../web/'.$filePath;
+        $imagePath = $this->getContainer()->get('kernel')->getRootDir().'/../web/uploads/'.$filePath;
         $client = new S3Client([
             'version'     => 'latest',
             'region'      => $this->getContainer()->getParameter('fa.aws_region'),

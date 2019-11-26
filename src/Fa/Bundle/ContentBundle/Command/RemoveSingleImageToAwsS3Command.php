@@ -63,13 +63,13 @@ class RemoveSingleImageToAwsS3Command extends ContainerAwareCommand
         ]);
         
         $awsPath = $this->getContainer()->getParameter('fa.static.aws.url');
-        $awsSourceImg = $awsPath.'/'.$filePath;
+        $awsSourceImg = $awsPath.'/uploads/'.$filePath;
                          
         $fileKeys[] = array('Key' => $filePath);
                
         if(!empty($fileKeys)) {
             $result = $client->deleteObjects(array(
-                'Bucket'  => $this->container->getParameter('fa.aws_bucket'),
+                'Bucket'  => $this->getContainer()->getParameter('fa.aws_bucket'),
                 'Delete'  => array('Objects' => $fileKeys)
             ));
             echo "Deleted file successfully ".$filePath."\n"; 
