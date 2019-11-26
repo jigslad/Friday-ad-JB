@@ -233,7 +233,7 @@ class UserSiteBannerController extends CoreController
                 
                 $awsImagePath = $this->container->getParameter('fa.static.aws.url').DIRECTORY_SEPARATOR.$userSite->getBannerPath();
                 $orgawsurl = $awsImagePath.DIRECTORY_SEPARATOR.'banner_'.$userSiteId.'_org.jpg';
-                $orglocalimg = $orgImagePath.DIRECTORY_SEPARATOR.'banner_'.$userSiteId.'_org.jpg';
+                $orglocalimg = $imagePath.DIRECTORY_SEPARATOR.'banner_'.$userSiteId.'_org.jpg';
                 file_put_contents($orglocalimg, file_get_contents($orgawsurl));                
                 $fileExistsInAws = 1;
             } 

@@ -1430,7 +1430,7 @@ class CommonManager
     public static function getLandingImageUrl($container, $filename)
     {
         $imageBaseUrl = $container->getParameter('fa.static.shared.url');
-        $newImageUrl = 'uploads/landingpage/'.$filename;
+        $newImageUrl = $filename;
         if(self::checkImageExistOnAws($container,$newImageUrl)) {
             $imageBaseUrl = $container->getParameter('fa.static.aws.url');
         }
