@@ -323,6 +323,33 @@ function socialShare(adId, url, socialSite)
   }
 }
 </script>
+{% if ga_transaction.ID is defined %}
+    <!-- Google Tag Manager Start -->
+    <script>
+        var transactionstring = '{{ ga_transaction.ID }}';
+        var transactionarray = transactionstring.split('-');
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            "PAA":{
+                "transactionId": '{{ ga_transaction.ID }}',
+                "transactionTotal": {{ ga_transaction.Revenue }},
+                "transactionProducts": [
+                    {% for item in ga_transaction.items %}
+                    {
+                        'sku': '{{ item.SKU }}',
+                        'name': '{{ item.Name }}',
+                        'category': '{{ item.Category }}',
+                        'price': {{ item.Price }},
+                        'quantity': {{ item.Quantity }},
+                        'coupon': ((transactionarray.length = 3) ? transactionarray[2] : 'null'),
+                    },
+                    {% endfor %}
+                ]
+            }
+        });
+    </script>
+    <!-- Google Tag Manager End -->
+{% endif %}
 {% endblock %}
 
 {% block pushNotification %}
