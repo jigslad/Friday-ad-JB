@@ -1,6 +1,6 @@
 <!-- Core Scripts - Include with every page -->
 {% set container = fetch_container_instance() %}
-{% set Banners = 0 %}
+{% set Banners = bannersArray|length %}
 {% if app.user %}
     {% set ClientID = app.user.id %}
     {% set login_status = 'true' %}
@@ -221,7 +221,7 @@
             displayNotifications();
          });
     }
-
+{{ dump(bannersArray|length)}}
     var idClicked = '';var idFourthStepClicked = '';
     $("button[type=submit], input[type=submit]").click(function(e){
         var clickedId = $(this).attr('id');
