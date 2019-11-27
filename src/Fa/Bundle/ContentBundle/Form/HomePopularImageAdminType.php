@@ -147,7 +147,13 @@ class HomePopularImageAdminType extends AbstractType
             $headerImage->setUrl(urldecode($url));
             $this->em->persist($headerImage);
             $this->em->flush();
-
+            
+            $herofile = $form->get('file')->getData();
+            if($herofile !=null) {
+                $herofileName = $headerImage->getFileName();
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path=homepopular/'.$herofileName.' >/dev/null &');
+            }            
+ 
             if ($file !== null && $fileName) {
                 if ($oldFile) {
                     $this->removeImage($oldFile);
