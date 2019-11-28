@@ -338,13 +338,11 @@ class AdImageRepository extends EntityRepository
             $document = $this->addField($document, AdSolrFieldMapping::ORD, $image->getOrd());
             $document = $this->addField($document, AdSolrFieldMapping::HASH, $image->getHash());
             $document = $this->addField($document, AdSolrFieldMapping::AWS, $image->getAws());
-            
             if($image->getImageName()=='') {
                 $document = $this->addField($document, AdSolrFieldMapping::IMAGE_NAME, $image->getHash());
             } else {
                 $document = $this->addField($document, AdSolrFieldMapping::IMAGE_NAME, $image->getImageName());
             }
-
         }
 
         // Store total images counter.
