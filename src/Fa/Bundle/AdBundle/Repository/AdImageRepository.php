@@ -332,18 +332,23 @@ class AdImageRepository extends EntityRepository
         }
 
         $images = $this->findBy(array('ad' => $ad->getId(), 'status' => 1), array('ord' => 'ASC'), $imageLimit);
-
+        
         foreach ($images as $image) {
             $document = $this->addField($document, AdSolrFieldMapping::PATH, $image->getPath());
             $document = $this->addField($document, AdSolrFieldMapping::ORD, $image->getOrd());
             $document = $this->addField($document, AdSolrFieldMapping::HASH, $image->getHash());
             $document = $this->addField($document, AdSolrFieldMapping::AWS, $image->getAws());
-            $document = $this->addField($document, AdSolrFieldMapping::IMAGE_NAME, $image->getImageName());
+            
+            if($image->getImageName()=='') {
+                $document = $this->addField($document, AdSolrFieldMapping::IMAGE_NAME, $image->getHash());
+            } else {
+                $document = $this->addField($document, AdSolrFieldMapping::IMAGE_NAME, $image->getImageName());
+            }
+
         }
 
         // Store total images counter.
         $document = $this->addField($document, AdSolrFieldMapping::TOTAL_IMAGES, count($images));
-
         return $document;
     }
 

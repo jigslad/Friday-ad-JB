@@ -1347,7 +1347,7 @@ class CommonManager
     public static function getAdImageUrl($container, $adId, $imagePath, $imageHash, $size = null, $processed = 0, $image_name = null)
     {
         if ($processed == 1) {
-            if ($image_name != '') {
+            if ($image_name != '' && $image_name != $imageHash) {
                 $imageUrl = $container->getParameter('fa.static.aws.url').'/'.$imagePath.'/'.$image_name.($size ? '_'.$size : '').'.jpg?'.$imageHash;
             } else {
                 $imageUrl = $container->getParameter('fa.static.aws.url').'/'.$imagePath.'/'.$adId.'_'.$imageHash.($size ? '_'.$size : '').'.jpg';
