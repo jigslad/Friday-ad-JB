@@ -200,7 +200,7 @@ class CyberSourceCheckoutType extends AbstractType
             $builder->add('is_save_credit_card', HiddenType::class, array('required' => true, 'mapped' => false, 'data' => 1));
             $builder->add('save', SubmitType::class, array('label' => 'Pay now'));
         } else {
-            $builder->add('is_save_credit_card', CheckboxType::class, array('label' => 'Save my card securely','mapped' => false));
+            $builder->add('is_save_credit_card', CheckboxType::class, array('label' => 'Save my card securely','mapped' => false,'attr'=> array('class'=>'ga-saveCard')));
             $builder->add('save', SubmitType::class, array('label' => 'Pay now and place my ad'));
         }
 

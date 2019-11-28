@@ -127,12 +127,26 @@
 
     function fbLoginPopupLocal(facebookLoginUrl)
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'PAA - Step 3',
+            'eventCategory':  'login',
+            'eventAction': 'Next step',
+            'eventLabel': 'facebook'
+        });
       ga('send', 'event', 'PAA - Step 3', 'Next step', 'facebook');
       fbLoginPopup(facebookLoginUrl);
     }
 
     function googleLoginPopupLocal(googleLoginUrl)
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'PAA - Step 3',
+            'eventCategory':  'login',
+            'eventAction': 'Next step',
+            'eventLabel': 'google +'
+        });
       ga('send', 'event', 'PAA - Step 3', 'Next step', 'google +');
       googleLoginPopup(googleLoginUrl);
     }
