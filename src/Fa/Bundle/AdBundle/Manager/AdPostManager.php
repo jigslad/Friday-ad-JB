@@ -481,7 +481,7 @@ class AdPostManager
         
         $this->saveAdLocation($ad, $data);
 
-        if ($isSaveImage && (isset($data['photo_error']) && $data['photo_error']==1)) {
+        if ($isSaveImage && (isset($data['photo_error']) && $data['photo_error']>0)) {
             $this->saveAdImages($ad, false, $data);
         }
 

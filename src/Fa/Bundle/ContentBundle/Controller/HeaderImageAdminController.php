@@ -257,11 +257,6 @@ class HeaderImageAdminController extends CrudController implements ResourceAutho
         $oldPhoneFileName = $entity->getPhoneFileName();
         $phoneFile        = $entity->getPhoneFileAbsolutePath();
         
-        if(CommonManager::checkImageExistOnAws($this->container,'uploads/headerimage/'.$entity->getPhoneFileName())) {
-            echo 'File exists in aws';
-        }
-        die;
-        
         // Count how many rules found with same image, delete image if only one rule found
         $data['query_filters'] = array('header_image' => array('phone_file_name' => $oldPhoneFileName));
         $this->get('fa.sqlsearch.manager')->init($this->getRepository($this->getBundleName().':'.$this->getEntityName()), $data);
