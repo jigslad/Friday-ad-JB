@@ -222,6 +222,7 @@ class TradeitParser
                 
                 $adImgPath = $imagePath.'/'.$ad->getId().'_'.$hash.'.jpg';
                 if (file_exists($adImgPath)) {
+                    $adImageManager->uploadImagesToS3($image);
                     unlink($filePath);
                 } 
 
