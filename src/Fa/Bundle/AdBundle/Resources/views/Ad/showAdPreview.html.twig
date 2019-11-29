@@ -440,7 +440,7 @@
                                         <span class="contact-icon">contact</span></a>
                                     {% endif %}
                                     {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') and adDetail['payment_method_id'] is defined and adDetail['payment_method_id']  in {0: constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_ID'), 1: constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_PAYPAL_OR_CASH_ID')} %}
-                                        <a href="javascript:void(0);" class="primary-btn-1 button expand not-hover">{{'Buy now with'|trans({}, 'frontend-preview-ad')}}<span class="paypal-icon">contact</span></a>
+                                        <a href="javascript:void(0);" class="primary-btn-1 button expand not-hover">{{'Buy now with'|trans({}, 'frontend-preview-ad')}}<span class="paypal-icon ga-payPaypal">contact</span></a>
                                     {% endif %}
                                 </div>
 

@@ -163,14 +163,14 @@
                                         {% for k in 0..colCounter[i]-1 %}
                                             {% if subCategoryArray[ctr] is defined %}
                                                 {% if categoryArray['children'][subCategoryArray[ctr]]['is_static'] is defined and categoryArray['children'][subCategoryArray[ctr]]['is_static'] %}
-                                                    <div class="large-6 columns"><a href="{{ categoryArray['children'][subCategoryArray[ctr]]['link_url'] }}">{{ categoryArray['children'][subCategoryArray[ctr]]['link_text'] }}</a></div>
+                                                    <div class="large-6 columns"><a class="ga-navSubCategory" href="{{ categoryArray['children'][subCategoryArray[ctr]]['link_url'] }}">{{ categoryArray['children'][subCategoryArray[ctr]]['link_text'] }}</a></div>
                                                 {% else %}
                                                     {% if secondLevelCategoryArray['is_static'] is defined and secondLevelCategoryArray['is_static'] %}
                                                         {% set listurl1 = secondLevelCategoryArray['link_url'] %}
                                                     {% else %}
                                                         {% set listurl1 = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['children'][subCategoryArray[ctr]]['full_slug']) %}
                                                     {% endif %}
-                                                    <div class="large-6 columns"><a href="{{ listurl1 }}">{{categoryArray['children'][subCategoryArray[ctr]]['name']}}</a></div>
+                                                    <div class="large-6 columns"><a class="ga-navSubCategory" href="{{ listurl1 }}">{{categoryArray['children'][subCategoryArray[ctr]]['name']}}</a></div>
                                                 {% endif %}
                                             {% endif %}
                                             {% set ctr = ctr + 1 %}

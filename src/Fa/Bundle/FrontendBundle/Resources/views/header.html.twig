@@ -55,7 +55,7 @@
 
                         {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'menu' })) }}
 
-                        <li class="msg-link"><a href="{{ path('user_ad_message_all') }}" id="inbox-header-id">{{'Messages'|trans({}, 'frontend-header-usermenu')}} <span>({{totalUnreadMsg}})</span> <span class="unread-msg" id="total_unread_msg_icon_div" {% if totalUnreadMsg == 0 %} style="display:none" {% endif %}>&nbsp;</span></a>|</li>
+                        <li class="msg-link"><a href="{{ path('user_ad_message_all') }}" id="inbox-header-id" class="ga-widgetMessages">{{'Messages'|trans({}, 'frontend-header-usermenu')}} <span class="ga-widgetMessages">({{totalUnreadMsg}})</span> <span class="unread-msg ga-widgetMessages" id="total_unread_msg_icon_div" {% if totalUnreadMsg == 0 %} style="display:none" {% endif %}>&nbsp;</span></a>|</li>
                         
                         {% set userCart = fetch_repository('FaPaymentBundle:Cart').getUserCart(app.user.getId(), container) %}
                         {% set userDetail = fetch_repository('FaPaymentBundle:Transaction').getCartDetail(userCart.getId()) %}
@@ -130,7 +130,7 @@
                                 {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
                                 {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'mobile_menu' })) }}
                                 {% endif %}
-                                <li><a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
+                                <li><a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id" class="ga-widgetMessages">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit ga-widgetMessages">({{totalUnreadMsg}})</span>{% endif %}</a></li>
                                 
                                 {% if userDetail|length > 0 %}
 	                            <li>
@@ -144,8 +144,8 @@
                                 <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
                             {% endif %}
                         </ul>
-                        <ul class="right place-item">
-                            <li class="place-item-btn"><a href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a></li>
+                        <ul class="right place-item ga-buttonPAA">
+                            <li class="place-item-btn ga-buttonPAA"><a class="ga-buttonPAA" href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a></li>
                         </ul>
                     </section>
                 </nav>
