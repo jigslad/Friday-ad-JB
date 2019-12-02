@@ -259,8 +259,14 @@
               if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
                 eventLabel = eventLabel + ' - No';
               }
-
-              ga('send', 'event', 'PAA - Step 1', 'Category icon Next step', eventLabel);
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
+                    'event' : 'PAA Next Step',
+                    'eventCategory':  'Next Step',
+                    'eventAction': '',
+                    'eventLabel': category_id
+                });
+                ga('send', 'event', 'PAA - Step 1', 'Category icon Next step', eventLabel);
             }
             //GA Analytics code end
 
@@ -444,7 +450,7 @@
             window.dataLayer = window.dataLayer || []
             dataLayer.push({
 
-                'event' : 'PAA Category Selection',
+                'event' : 'PAA Category Search',
                 'eventCategory':  'PAA - Step 1',
                 'eventAction': 'Category icon click',
                 'eventLabel': selectedValue
