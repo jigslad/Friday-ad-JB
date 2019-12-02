@@ -1230,7 +1230,7 @@
         window.dataLayer = window.dataLayer || []
         dataLayer.push({
 
-            'event' : 'Contact',
+            'event' : 'Ad Action',
             'eventCategory':  'CTA',
             'eventAction': 'Contact Seller button',
             'eventLabel': type+' - '+id+' - '+'{{ catText }}'
@@ -1524,7 +1524,7 @@
         window.dataLayer = window.dataLayer || []
         dataLayer.push({
 
-            'event' : 'Ad Options',
+            'event' : 'Options',
             'eventCategory':  'Options',
             'eventAction': windowTitle,
             'eventLabel': adId
@@ -1604,7 +1604,7 @@
         window.dataLayer = window.dataLayer || []
         dataLayer.push({
 
-            'event' : 'Sponsored Ad',
+            'event' : 'Options',
             'eventCategory':  'Ad Details',
             'eventAction': 'Sponsored Ad',
             'eventLabel': {{ app.request.get('category_string') }}
