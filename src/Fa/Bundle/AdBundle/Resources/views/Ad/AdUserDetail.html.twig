@@ -57,7 +57,7 @@
                 <ul id="profile_image_upload" data-dropdown-content class="f-dropdown" aria-hidden="true">
                     <li><a href="javascript:void(0)" class="pickProfileFile needsclick" id="pickProfileFile">{{'Upload profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
                     <li><a href="javascript:getProfileBigImage('{{ path(getProfileBigImageRoute, {'userId': app.user.getId(), 'isCompany': isCompany}) }}')">{{'Edit profile photo'|trans({}, 'frontend-my-profile')}}</a></li>
-                    <li><a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': isCompany}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
+                    <li><a href="javascript:deleteProfileImage('{{ path(deleteRoute, {'userId': app.user.getId(), 'isCompany': isCompany}) }}')">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
                 </ul>
             </div>
             <div class="profile-box" id="profile_change_btn_without_opt" {% if hasUserLogo|length %}style="display:none;"{% endif %}>
