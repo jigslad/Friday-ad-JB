@@ -3,8 +3,10 @@
 {% set imageObj = '' %}
 {% if isCompany is defined and isCompany == true %}
     {% set imageObj = fetch_repository('FaUserBundle:UserSite').findOneBy({'user' : userId}) %}
+    {% set isBusinessUser = 1 %}
 {% else %}
     {% set imageObj = fetch_repository('FaUserBundle:User').find(userId) %}
+    {% set isBusinessUser = 0 %}
 {% endif %}
 {% set deleteRoute = "ajax_delete_user_image" %}
 {% if isAdminLoggedIn and isAdminLoggedIn.id %}
@@ -14,19 +16,19 @@
     <b>{{ 'Upload image'|trans({}, 'frontend-paa') }}</b>
 </div>
 <ul class="inline-list" id="userImageList">
-    {% if imageObj and imageObj.path %}
+    {% if imageObj %}
         <li class="thumb-img-wrap">
             <div class="adimg-thumb" style="position:relative">
-            {% if isCompany is defined and isCompany == true %}
+            {% if isCompany is defined and isCompany == true and imageObj.path %}
                 {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserCompanyLogoUrl', [container, userId, imageObj.path]) %}
                 <img alt="{{userId}}.jpg" src="{{ imageUrl }}?{{ random(1000) }}" />
             {% else %}
-                {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserImageUrl', [container, userId, imageObj.path]) %}
+                {% set imageUrl = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserImageUrl', [container, userId, imageObj.image]) %}
                 <img alt="{{userId}}.jpg" src="{{ imageUrl }}?{{ random(1000) }}" />
             {% endif %}
             </div>
             <div>
-                <a href="javascript:deleteImage('{{ path(deleteRoute, {'userId': userId, 'isCompany': isCompany}) }}')" class="xs-btn-2 button remove-logo-btn" id="remove_img"><span class="delete-icon"></span>{{ 'Remove'|trans({}, 'frontend-paa-fourth-step')}}</a>
+                <a href="javascript:deleteProfileImage('{{ path(deleteRoute, {'userId': userId, 'isCompany': isBusinessUser}) }}')" class="xs-btn-2 button remove-logo-btn" id="remove_img"><span class="delete-icon"></span>{{ 'Remove'|trans({}, 'frontend-paa-fourth-step')}}</a>
             </div>
         </li>
     {% else %}

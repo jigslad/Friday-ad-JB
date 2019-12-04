@@ -159,7 +159,7 @@ class HomePopularImageAdminController extends CrudController implements Resource
         if ($formManager->isValid($form)) {
             $messageManager = $this->get('fa.message.manager');
             $messageManager->setFlashMessage($this->get('translator')->trans('%displayword% was successfully updated.', array('%displayword%' => $this->getDisplayWord())), 'success');
-            if (empty($backUrl)) {
+            if (empty($backUrl)) { 
                 $backUrl = $this->generateUrl('home_popular_image_admin');
             }
             return $this->redirect($backUrl);
@@ -214,10 +214,12 @@ class HomePopularImageAdminController extends CrudController implements Resource
         if ($imageCount <= 1) {
             if (file_exists($file)) {
                 unlink($file);
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project      _path').'/console fa:remove:single-image-s3 --file_path=homepopular/'.$oldFileName.' >/dev/null &');
             }
             
             if (file_exists($overlayFile)) {
                 unlink($overlayFile);
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project      _path').'/console fa:remove:single-image-s3 --file_path=homepopular/'.$oldOverlayFileName.' >/dev/null &');
             }
             
         }
@@ -256,6 +258,7 @@ class HomePopularImageAdminController extends CrudController implements Resource
         if ($imageCount <= 1) {
             if (file_exists($overlayFile)) {
                 unlink($overlayFile);
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project      _path').'/console fa:remove:single-image-s3 --file_path=homepopular/'.$oldOverlayFileName.' >/dev/null &');
             }
         }
         
