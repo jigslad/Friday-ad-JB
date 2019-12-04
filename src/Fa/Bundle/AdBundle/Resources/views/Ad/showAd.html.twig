@@ -1651,7 +1651,11 @@
 
 //]]>
 </script>
-    {{ dump() }}
+    {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
+    {% set adPackage = adUserPackageRepository.getAdPackageArrayByAdId(adDetail.id) %}
+    {% for ad in adPackage %}
+        {% set adPackage = ad.package_id %}
+    {% endfor %}
     <script>
         {% set categoryArray = [] %}
         {% for category in categoryPath %}
@@ -1690,7 +1694,7 @@
                     "publishDate": finalpublishdate,
                     "expiryDate": finalexpireddate,
                     "price": '{{ adDetail.a_price_d is defined ? adDetail.a_price_d : 0 }}',
-                    "package": "XXXX",           //Package SKU selected for advert
+                    "package": "{{ adPackage }}",
                     "businessName": "{{ adDetail.a_s_business_name_s is defined ? adDetail.a_s_business_name_s :'Private seller'}}",
                     "businessType": "{{ userTypeText }}" ,
                     "responseType": "{{ responseType }}" ,
@@ -1701,6 +1705,7 @@
 
     </script>
 {% endblock %}
+
 
 {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(adCategoryId, false, fetch_container_instance()) %}
 {% if (adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adDetail['user']['role_id'] is defined and adDetail['user']['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
