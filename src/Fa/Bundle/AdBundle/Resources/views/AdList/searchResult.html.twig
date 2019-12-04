@@ -647,8 +647,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {% else %}
         {% set radius = 'default' %}
     {% endif %}
-    {{ dump(app.request.headers) }}
-    {{ dump(searchParams.item__distance) }}
     <!-- Google TAG Manager Start -->
     <script>
         window.dataLayer = window.dataLayer || [];
