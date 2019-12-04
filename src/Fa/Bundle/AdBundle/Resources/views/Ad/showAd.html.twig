@@ -1651,6 +1651,55 @@
 
 //]]>
 </script>
+    {{ dump() }}
+    <script>
+        {% set categoryArray = [] %}
+        {% for category in categoryPath %}
+            {% set categoryArray = categoryArray|merge([category]) %}
+        {% endfor %}
+        {% if adDetail.user.contact_through_phone == 'true' and adDetail.user.contact_through_email == 'true' %}
+            {% set responseType = 'both' %}
+        {% elseif adDetail.user.contact_through_phone == 'true' %}
+            {% set responseType = 'phone' %}
+        {% elseif adDetail.user.contact_through_email == 'true' %}
+            {% set responseType = 'email' %}
+        {% else %}
+            {% set responseType = 'node' %}
+        {% endif %}
+        var publishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
+        var finalpublishdate = (publishedDate.getMonth() + 1) + "/" + publishedDate.getDate() + "/" + publishedDate.getFullYear();
+        var expiredDate = new Date(1000*{{ adDetail.a_expires_at_i }});
+        var finalexpireddate = (expiredDate.getMonth() + 1) + "/" + expiredDate.getDate() + "/" + expiredDate.getFullYear();
+        $( document ).ready(function() {
+            window.dataLayer = window.dataLayer || [];
+            var pageObj = window.dataLayer.find(o => o['page']);
+            pageObj.page.adOwner = '{{ allowAdEdit }}';
+            dataLayer.push({
+                "adDetails":{
+                    "category": "{{ categoryArray.0 is defined ? categoryArray.0 : '' }}",
+                    "subCategory": "{{ categoryArray.1 is defined ? categoryArray.1 : '' }}",
+                    "subSubCategory": "{{ categoryArray.2 is defined ? categoryArray.2 : '' }}",
+                    "subSubSubCategory": "{{ categoryArray.3 is defined ? categoryArray.3 : '' }}",
+                    "id": {{ adId }},
+                    "photos": {{ adDetail.a_total_images_i }},
+                    "county": "{{ location_slug }}",
+                    "locationGroup": "XXXX",     //ad location group (Nursery, Non-Print, Print - (print location)
+                    "town": "{{ app.request.get('location') }}",              //ad town
+                    "video": '{{ youtubeVideoUrl is not  null ? 'True' : 'False' }}',
+                    "paypalEnabled": '{{ showBuyNowWithPaypal ? 'True' : 'False'}}',
+                    "publishDate": finalpublishdate,
+                    "expiryDate": finalexpireddate,
+                    "price": '{{ adDetail.a_price_d is defined ? adDetail.a_price_d : 0 }}',
+                    "package": "XXXX",           //Package SKU selected for advert
+                    "businessName": "{{ adDetail.a_s_business_name_s is defined ? adDetail.a_s_business_name_s :'Private seller'}}",
+                    "businessType": "{{ userTypeText }}" ,
+                    "responseType": "{{ responseType }}" ,
+                    "logo": '{{ adDetail.user.company_logo is defined ? 'true' : 'false' }}'    //True if showing logo/profile pic, False if nothing (showing default FAD)
+                },
+            });
+        });
+
+    </script>
 {% endblock %}
 
 {% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(adCategoryId, false, fetch_container_instance()) %}
