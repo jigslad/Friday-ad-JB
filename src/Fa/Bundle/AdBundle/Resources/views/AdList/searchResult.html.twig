@@ -212,7 +212,6 @@
 {% endblock %}
 
 {% block body %}
-
 <style>
 ul.fourlocationlist { margin: 10px auto 0px auto;text-align:center; }
 ul.fourlocationlist li { display:inline; list-style-type: none; }
@@ -268,8 +267,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 	.bus-shop-user-item-slider .owl-item .busad-item:last-child { margin-right:0px; }
 
    .bus-shop-user-item-slider .bus-det-box { width: 75%;text-align: center;margin: auto !important;float: none !important; }
-   .bus-shop-user-item-slider .exposure-logo, 
-   .bus-shop-user-item-slider .exposure-logo-thumb, 
+   .bus-shop-user-item-slider .exposure-logo,
+   .bus-shop-user-item-slider .exposure-logo-thumb,
    .bus-shop-user-item-slider .exposure-logo-thumb .profile-placeholder {
  	  width:175px !important;height:120px !important;margin:0 auto !important;float:none !important;
    }
@@ -622,7 +621,51 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {% if get_variables('SrchCatDetails') is not null and get_variables('SrchCatDetails').catSrchString is defined %}
         {% set catSrchText = get_variables('SrchCatDetails').catSrchString %}
     {% endif %}
+    <!-- Populer Search @Jigar Lad -->
+    {% set isPopulerSearch = 'false' %}
+    {% if seoFields.popular_search is defined %}
+        {% set isPopulerSearch = seoFields.popular_search %}
+    {% endif %}
 
+    {% if cookieLocationDetails.paa_county  is defined %}
+        {% set country = cookieLocationDetails.paa_county %}
+        {% set town =  cookieLocationDetails.town %}
+    {% else %}
+        {% set country = cookieLocationDetails.location_text %}
+        {% set town =  0 %}
+    {% endif %}
+
+
+    {% if app.request.headers.get('referer') == 'null' %}
+        {%  set serchMethod = 'Landed' %}
+    {% else %}
+        {%  set serchMethod = 'Others' %}
+    {% endif %}
+
+    {% if searchParams.item__distance is defined %}
+        {% set radius = searchParams.item__distance %}
+    {% else %}
+        {% set radius = 'default' %}
+    {% endif %}
+    {{ dump(app.request.headers) }}
+    {{ dump(searchParams.item__distance) }}
+    <!-- Google TAG Manager Start -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            "searchResults":{
+                "county": '{{ country }}',
+                "town": "{{ town }}",
+                "locationGroup": "XXXX",     //ad location group (Nursery, Non-Print, Print - (print location)
+                "searchKeyword": '{{ app.request.get('keywords') }}',
+                "searchResultMethod": "XXXX", //described below
+                "noOfResults": {{resultCount}},
+                "radius": '{{ radius }}',
+                "popularSearch": {{ isPopulerSearch }}
+            }
+        });
+    </script>
+    <!-- Google TAG Manager End -->
 
    <script language="javascript" type="text/javascript">
     //<![CDATA[
