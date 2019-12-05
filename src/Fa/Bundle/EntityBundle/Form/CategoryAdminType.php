@@ -130,7 +130,7 @@ class CategoryAdminType extends AbstractType
             ->add('is_oneclickenq_enabled', CheckboxType::class, array('label' => 'Enable One click enquire', 'required' => false));
             
         /* Upgreade option enabled for root category */
-        if (($builder->getData()->getLvl() == '1' && $builder->getData()->getRoot() == '1') || $this->container->get('request_stack')->getCurrentRequest()->get('parent_id', null) == '1') {
+        /*if (($builder->getData()->getLvl() == '1' && $builder->getData()->getRoot() == '1') || $this->container->get('request_stack')->getCurrentRequest()->get('parent_id', null) == '1') { */
             $builder->add('is_featured_upgrade_enabled', CheckboxType::class, array('label' => 'Featured upgrade', 'required' => false))
                     ->add(
                         'featured_upgrade_info',
@@ -148,7 +148,7 @@ class CategoryAdminType extends AbstractType
                             'required' => false
                         )
                     );
-        }
+       // }
         $builder
             ->add('has_recommended_slot_searchlist', CheckboxType::class, array('label' => 'Has sponsored slots for search list page?', 'required' => false))
             ->add('is_oneclickenq_enabled', CheckboxType::class, array('label' => 'Enable One click enquire', 'required' => false))
