@@ -276,7 +276,7 @@ class CampaignAdminController extends CrudController implements ResourceAuthoriz
             $this->getEntityManager()->flush();
             //$this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Ad status has been changed successfully.'), 'success');
             //return $this->redirect($formData['return_url']);
-            return parent::handleMessage($this->get('translator')->trans('Campaign was successfully updated.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'campaigns_new_admin' : $backUrl));
+            return parent::handleMessage($this->get('translator')->trans('Campaign was successfully updated.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'campaigns_new_admin' : 'campaigns_admin'));
         }
         
         $parameters = array(
