@@ -3724,7 +3724,8 @@ class AdRepository extends EntityRepository
     public function doAfterAdCloseProcess($adId, $container)
     {
         $objAd             = $this->find($adId);
-        $adStatus          = ($objAd->getStatus() ? $objAd->getStatus()->getId() : null);
+        $adStatus          = ($objAd->getStatus() ? $objAd->getStatus()->getId() : null);        
+        
         $objAdUserPackages = $this->_em->getRepository('FaAdBundle:AdUserPackage')->findBy(array('ad_id' => $adId, 'status' => AdUserPackageRepository::STATUS_ACTIVE), array('id' => 'DESC'), 1);
         if ($objAdUserPackages) {
             $adUserPackageStatus = AdUserPackageRepository::STATUS_EXPIRED;
@@ -3752,7 +3753,18 @@ class AdRepository extends EntityRepository
                 }
             }
         }
-
+        
+        $userPackageAdLimit    = $userBasicCreditCnt = 0;
+        if($objAd->getUser()->getId()!='') {
+            $userPackageAdLimit = $this->_em->getRepository('FaUserBundle:UserPackage')->getUserPackageAdLimit($objAd->getUser()->getId());
+            $userBasicCreditCnt = $this->_em->getRepository('FaUserBundle:UserCredit')->getActiveBasicCreditCountForUser($objAd->getUser()->getId());
+            
+            if($userPackageAdLimit > $userBasicCreditCnt) {
+                $userBasicCreditCnt = $this->_em->getRepository('FaUserBundle:UserCredit')->getActiveBasicCreditCountForUser($objAd->getUser()->getId());
+                
+            }
+        }
+        
         //remove yac number
         //exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:update:ad-yac-number setsold --ad_id='.$objAd->getId().' >/dev/null &');
         //commented FFR-3756
