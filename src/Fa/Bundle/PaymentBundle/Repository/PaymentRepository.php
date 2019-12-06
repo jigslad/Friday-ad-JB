@@ -180,6 +180,17 @@ class PaymentRepository extends EntityRepository
         }
     }
 
+    public function prcocessCreditSuccess($userId, $adId, $container) {
+        $adObj = $this->_em->getRepository('FaAdBundle:Ad')->find($adId);
+        $cartObj            = $this->_em->getRepository('FaPaymentBundle:Cart')->getUserCart($userId, $container, false, false, true);
+        $paymentId = $this->_em->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cartObj->getCartCode(), null, $container);
+
+        if($paymentId) {
+            $transactions = $this->_em->getRepository('FaPaymentBundle:Transaction')->findBy(array('cart' => $cartObj->getId()));
+           
+            $this->getRepository('FaUserBundle:UserCreditUsed')->addUserCreditUsed($transaction, $paymentId);
+        }
+    }
     /**
      * Process payment using cart code.
      *
@@ -276,68 +287,73 @@ class PaymentRepository extends EntityRepository
         $futureAdPostFlag  = false;
         $printPkg = null;
         $value = unserialize($transaction->getValue());
-
+        
         // set expires at
         if ($transaction->getAd()) {
             $ad = $transaction->getAd();
-
-            if ($ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_DRAFT_ID
-                || $ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_EXPIRED_ID || $ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_SOLD_ID) {
-                $expirationDays = '';
                 
-                $adPackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdPackageArrayByAdId($ad->getId());
-                $expirationDays = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($ad->getCategory()->getId(), $container);
-                if($expirationDays!='') { $expirationDays = $expirationDays.'d'; }
-                if(!empty($adPackage)) {
-                    if(!empty($adPackage[$ad->getId()]) && $adPackage[$ad->getId()]['duration']!='') {
-                        $expirationDays = $adPackage[$ad->getId()]['duration'];
+            if(isset($value['payment_for']) && $value['payment_for']=='UP') {
+                $upsell = $this->_em->getRepository('FaPromotionBundle:Upsell')->find($value['upsell']['id']);
+                $this->_em->getRepository('FaAdBundle:AdUserPackageUpsell')->setAdUserIndividualUpsell($upsell, $ad);
+            } else {    
+                if ($ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_DRAFT_ID
+                    || $ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_EXPIRED_ID || $ad->getStatus()->getId() == BaseEntityRepository::AD_STATUS_SOLD_ID) {
+                    $expirationDays = '';
+                    
+                    $adPackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdPackageArrayByAdId($ad->getId());
+                    $expirationDays = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($ad->getCategory()->getId(), $container);
+                    if($expirationDays!='') { $expirationDays = $expirationDays.'d'; }
+                    if(!empty($adPackage)) {
+                        if(!empty($adPackage[$ad->getId()]) && $adPackage[$ad->getId()]['duration']!='') {
+                            $expirationDays = $adPackage[$ad->getId()]['duration'];
+                        }
+                    }
+                        
+                    $ad->setExpiresAt($this->_em->getRepository('FaAdBundle:Ad')->getAdPrintExpiry($ad->getId(), CommonManager::getTimeFromDuration($expirationDays)));
+                    $this->_em->persist($ad);
+                    $this->_em->flush($ad);
+                }
+                
+                $adUserPackages = $this->_em->getRepository('FaAdBundle:AdUserPackage')->findOneBy(array('ad_id'=>$transaction->getAd()->getId()));
+                //$adUserPackageCount = !empty($adUserPackages) ? count($adUserPackages) : 0;
+                // handle is_paid_ad and is_paid_before
+                if ($transaction->getAmount() > 0 && $ad->getIsPaidAd() != 1) {
+                    $ad->setIsPaidAd(1);
+                    $this->_em->persist($ad);
+                    $this->_em->flush($ad);
+                    $user = $ad->getUser();
+                    if ($ad->getSource()=='paa_lite' && empty($adUserPackages)) {
+                        $paaLiteEmailNotification = new PaaLiteEmailNotification();
+                        $paaLiteEmailNotification->setAd($ad);
+                        $paaLiteEmailNotification->setUser($user);
+                        $paaLiteEmailNotification->setCreatedAt(time());
+                        $paaLiteEmailNotification->setIsAdConfirmationMailSent(0);
+                        $paaLiteEmailNotification->setIsAdConfirmationNotificationSent(0);
+                        $this->_em->persist($paaLiteEmailNotification);
+                        $this->_em->flush($paaLiteEmailNotification);
+    
+                        $this->_em->getRepository('FaAdBundle:Ad')->sendCompleteAdvertEmail($user, $ad, $paaLiteEmailNotification, $container, $transaction->getAmount());
+                        $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('complete_advert', $ad->getId(), $user->getId(), strtotime('+10 minute'), true);
                     }
                 }
-                    
-                $ad->setExpiresAt($this->_em->getRepository('FaAdBundle:Ad')->getAdPrintExpiry($ad->getId(), CommonManager::getTimeFromDuration($expirationDays)));
-                $this->_em->persist($ad);
-                $this->_em->flush($ad);
-            }
-            
-            $adUserPackages = $this->_em->getRepository('FaAdBundle:AdUserPackage')->findOneBy(array('ad_id'=>$transaction->getAd()->getId()));
-            //$adUserPackageCount = !empty($adUserPackages) ? count($adUserPackages) : 0;
-            // handle is_paid_ad and is_paid_before
-            if ($transaction->getAmount() > 0 && $ad->getIsPaidAd() != 1) {
-                $ad->setIsPaidAd(1);
-                $this->_em->persist($ad);
-                $this->_em->flush($ad);
-                $user = $ad->getUser();
-                if ($ad->getSource()=='paa_lite' && empty($adUserPackages)) {
-                    $paaLiteEmailNotification = new PaaLiteEmailNotification();
-                    $paaLiteEmailNotification->setAd($ad);
-                    $paaLiteEmailNotification->setUser($user);
-                    $paaLiteEmailNotification->setCreatedAt(time());
-                    $paaLiteEmailNotification->setIsAdConfirmationMailSent(0);
-                    $paaLiteEmailNotification->setIsAdConfirmationNotificationSent(0);
-                    $this->_em->persist($paaLiteEmailNotification);
-                    $this->_em->flush($paaLiteEmailNotification);
-
-                    $this->_em->getRepository('FaAdBundle:Ad')->sendCompleteAdvertEmail($user, $ad, $paaLiteEmailNotification, $container, $transaction->getAmount());
-                    $this->_em->getRepository('FaMessageBundle:NotificationMessageEvent')->setNotificationEvents('complete_advert', $ad->getId(), $user->getId(), strtotime('+10 minute'), true);
+                
+                if ($transaction->getAmount() > 0 && $ad->getUser() && $ad->getUser()->getIsPaidBefore() != 1) {
+                    $user = $ad->getUser();
+                    $user->setIsPaidBefore(1);
+                    $this->_em->persist($user);
+                    $this->_em->flush($user);
+                }
+    
+                // handle renewed and quantity
+                $this->_em->getRepository('FaAdBundle:Ad')->handleRenewAndQty($ad, $container);
+    
+                // handle credits
+                if (isset($value['user_credit_id']) && isset($value['user_credit'])) {
+                    $this->_em->getRepository('FaUserBundle:UserCreditUsed')->addUserCreditUsed($transaction, $paymentId);
                 }
             }
-            
-            if ($transaction->getAmount() > 0 && $ad->getUser() && $ad->getUser()->getIsPaidBefore() != 1) {
-                $user = $ad->getUser();
-                $user->setIsPaidBefore(1);
-                $this->_em->persist($user);
-                $this->_em->flush($user);
-            }
-
-            // handle renewed and quantity
-            $this->_em->getRepository('FaAdBundle:Ad')->handleRenewAndQty($ad, $container);
-
-            // handle credits
-            if (isset($value['user_credit_id']) && isset($value['user_credit'])) {
-                $this->_em->getRepository('FaUserBundle:UserCreditUsed')->addUserCreditUsed($transaction, $paymentId);
-            }
         }
-
+        
         // handle package.
         if (isset($value['package'])) {
             $adObj = $transaction->getAd();

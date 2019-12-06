@@ -263,8 +263,9 @@ class AdFeedReaderManager
             $cname = 'caravan';
         } elseif ($type == 'GeneralAdvert') {
             $cname = 'general';
+        } elseif ($type == 'VehicleAdvert') {
+            $cname = 'vehicle';
         }
-
         $class = 'Fa\Bundle\AdFeedBundle\Parser\\'.ucFirst($cname).'Parser';
         return new $class($this->container);
     }

@@ -3481,4 +3481,17 @@ HTML;
         }
         return $imgRelPath;
     }
+
+    public function getIndividualUpsellModalDetails($upsellId) {
+        $upsellModalDetail = array();
+        switch ($upsellId) {
+            case 5:
+            case 51:
+            case 54:
+                $upsellModalDetail['title'] = 'Featured ad';
+                $upsellModalDetail['name'] = 'featuredTopUpsellModal';
+                break;
+        }
+        return $upsellModalDetail;
+    }
 }

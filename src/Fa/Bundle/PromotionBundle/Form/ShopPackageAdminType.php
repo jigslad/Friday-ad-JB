@@ -34,6 +34,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 /**
  * Shop package admin type form.
@@ -199,6 +200,14 @@ class ShopPackageAdminType extends AbstractType
                 array(
                     'required' => false,
                     'label'    => 'Boost button enabled',
+                )
+            )
+            ->add(
+                'ad_limit',
+                NumberType::class,
+                array(
+                    'label'    => 'Ad Limit',
+                    'required' => false
                 )
             )
             ->add('save', SubmitType::class)
@@ -390,6 +399,11 @@ class ShopPackageAdminType extends AbstractType
                 }
             }
         }
+        
+        if ($form->get('role')->getData()->getid()==9 && !$form->get('ad_limit')->getData()) {
+            $event->getForm()->get('ad_limit')->addError(new \Symfony\Component\Form\FormError('Please enter the ad limit.'));
+        }
+        
     }
 
     /**

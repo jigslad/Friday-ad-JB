@@ -1039,7 +1039,7 @@ abstract class AdParser
             $this->setRejectedReason('Unique ID not found');
         }
 
-        if ($adArray['AdvertType'] == 'MotorhomeAdvert' || $adArray['AdvertType'] == 'ClickEditVehicleAdvert' || $adArray['AdvertType'] == 'JobAdvert') {
+        if ($adArray['AdvertType'] == 'MotorhomeAdvert' || $adArray['AdvertType'] == 'VehicleAdvert' || $adArray['AdvertType'] == 'ClickEditVehicleAdvert' || $adArray['AdvertType'] == 'JobAdvert') {
             $locationArray = array();
             if ($adArray['Advertiser']['Postcode']) {
                 $locationArray = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodInfoArrayByLocation($adArray['Advertiser']['Postcode'], $this->container, true);
