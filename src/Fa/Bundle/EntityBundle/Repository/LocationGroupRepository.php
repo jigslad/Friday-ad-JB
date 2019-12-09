@@ -174,4 +174,36 @@ class LocationGroupRepository extends BaseEntityRepository
 
         return $printEditionArray;
     }
+    /**
+     * Get location Group by location.
+     *
+     * @param integer $locationId Location id.
+     *
+     * @return array
+     */
+    public function getLocationGroupByLocation($locationId)
+    {
+        $location = $this->_em->getRepository('FaEntityBundle:Category')->getCategoriesByIds($locationId);
+        return $location;
+        return $locationId;
+//        $printEditionArray = array()
+//        ;
+//        if ($locationGroupId) {
+//            $locationGroup = $this->find($locationGroupId);
+//
+//
+//            if ($locationGroup) {
+//                $relatedPrintEditions = explode(',', $locationGroup->getRelatedPrintEdition());
+//                $printEditions = $this->_em->getRepository('FaAdBundle:PrintEdition')->getActiveOtherPrintEdition($relatedPrintEditions);
+//
+//                foreach ($printEditions as $printEdition) {
+//                    $printEditionArray[$printEdition->getId()] = $printEdition->getName();
+//                }
+//            }
+//        } else {
+//            $printEditionArray = $this->_em->getRepository('FaAdBundle:PrintEdition')->getActivePrintEditionArray();
+//        }
+//
+//        return $printEditionArray;
+    }
 }

@@ -621,6 +621,61 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {% if get_variables('SrchCatDetails') is not null and get_variables('SrchCatDetails').catSrchString is defined %}
         {% set catSrchText = get_variables('SrchCatDetails').catSrchString %}
     {% endif %}
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+
+        $(document).on("click", '.unsaved-item', function(event) {
+            ga('send', 'event', 'Top Widget', 'Like');
+        });
+
+        $(document).on("click", '.saved-item', function(event) {
+            ga('send', 'event', 'Top Widget', 'Unlike');
+        });
+
+
+
+        {% if userLiveBasicAd is defined and userLiveBasicAd and userLiveBasicAd|length %}
+        ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
+        {% endif %}
+
+        {% if successPaymentModalbox is defined and successPaymentModalbox %}
+        $('#upgradeSuccessPaymentModal').foundation('reveal', 'open');
+        {% endif %}
+
+        $(window).scroll(function () {
+            if ($("#banner_placeholder_2_4").length)
+            {
+                var rightBannerOffset = $(".right-banner").offset().top;
+                var rightBannerPos = rightBannerOffset - $(window).scrollTop();
+
+                if (rightBannerPos < 0) {
+                    $("#banner_placeholder_2_4").addClass("fixed-banner");
+                } else if (rightBannerPos > 0) {
+                    $("#banner_placeholder_2_4").removeClass("fixed-banner");
+                }
+
+                var footerOffset = $("#footer_tag").offset().top;
+                var footerPos = footerOffset - $(window).scrollTop();
+
+                if (parseInt(footerPos) <= 630) {
+                    $("#banner_placeholder_2_4").removeClass("fixed-banner");
+                }
+            }
+        });
+
+        function visitUserProfileOrAd(eventCategory, eventAction, eventLabel)
+        {
+            ga('send', 'event', eventCategory, eventAction, eventLabel);
+        }
+
+        function gaSendForRecommendedSlotSearch(url, domain, title,slotindex,creativeOrd)
+        {
+            ga('send', 'event', 'Search List Page', 'Recommended external ads', 'Slot'+slotindex + "-Creative"+ creativeOrd +"-{{ catSrchText|trim('-') }}-" + domain + "-" + title);
+            window.open(url, '_blank');
+        }
+
+        //]]>
+    </script>
     <!-- Populer Search @Jigar Lad -->
     {% set isPopulerSearch = 'false' %}
     {% if seoFields.popular_search is defined %}
@@ -635,7 +690,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         {% set town =  0 %}
     {% endif %}
 
-
     {% if app.request.headers.get('referer') == 'null' %}
         {%  set serchMethod = 'Landed' %}
     {% else %}
@@ -647,8 +701,18 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {% else %}
         {% set radius = 'default' %}
     {% endif %}
+    {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
+    {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(searchParams.item__location)%}
+    {{ dump() }}
     <!-- Google TAG Manager Start -->
     <script>
+        {{ app.request.headers.get('referer')}}git
+        var searchResultMethod = 'Other';
+        if (performance.navigation.type == 1) {
+            searchResultMethod = 'Refresh';
+        } else {
+
+        }
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
             "searchResults":{
@@ -664,62 +728,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         });
     </script>
     <!-- Google TAG Manager End -->
-
-   <script language="javascript" type="text/javascript">
-    //<![CDATA[
-
-    $(document).on("click", '.unsaved-item', function(event) {
-        ga('send', 'event', 'Top Widget', 'Like');
-    });
-
-    $(document).on("click", '.saved-item', function(event) {
-        ga('send', 'event', 'Top Widget', 'Unlike');
-    });
-	
-    
-
-    {% if userLiveBasicAd is defined and userLiveBasicAd and userLiveBasicAd|length %}
-    	ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
-    {% endif %}
-
-    {% if successPaymentModalbox is defined and successPaymentModalbox %}
-    	$('#upgradeSuccessPaymentModal').foundation('reveal', 'open');
-    {% endif %}
-
-    $(window).scroll(function () {
-        if ($("#banner_placeholder_2_4").length)
-        {
-        	var rightBannerOffset = $(".right-banner").offset().top;
-            var rightBannerPos = rightBannerOffset - $(window).scrollTop();
-
-            if (rightBannerPos < 0) {
-                $("#banner_placeholder_2_4").addClass("fixed-banner");
-            } else if (rightBannerPos > 0) {
-                $("#banner_placeholder_2_4").removeClass("fixed-banner");
-            }
-
-            var footerOffset = $("#footer_tag").offset().top;
-            var footerPos = footerOffset - $(window).scrollTop();
-
-            if (parseInt(footerPos) <= 630) {
-            	$("#banner_placeholder_2_4").removeClass("fixed-banner");
-            }
-        }
-    });
-
-    function visitUserProfileOrAd(eventCategory, eventAction, eventLabel)
-    {
-      ga('send', 'event', eventCategory, eventAction, eventLabel);
-    }
-
-    function gaSendForRecommendedSlotSearch(url, domain, title,slotindex,creativeOrd) 
-    {
-        ga('send', 'event', 'Search List Page', 'Recommended external ads', 'Slot'+slotindex + "-Creative"+ creativeOrd +"-{{ catSrchText|trim('-') }}-" + domain + "-" + title);
-        window.open(url, '_blank');
-    }
-
-    //]]>
-    </script>
     
 {% endblock %}
 
