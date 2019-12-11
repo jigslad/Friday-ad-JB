@@ -191,7 +191,7 @@
         
         {% if adCompanyInfo['website_link'] is defined %}
 		{% set websiteLabel = 'Visit Website'|trans({}, 'frontend-show-ad') %}		
-		<a rel="nofollow" onclick="openUserWebsite('{{(adDetail['ad_id'] is defined ? adDetail['ad_id'] : adDetail['id'])}}', '{{ companyWebSite }}','{{businessName}}')" href="javascript:void(0);" class="website-btn-1 button expand ga:visitWebsiteAd"><span class="website-icon ga:visitWebsiteAd"></span>{{ websiteLabel }}</a>
+		<a rel="nofollow" onclick="openUserWebsite('{{(adDetail['ad_id'] is defined ? adDetail['ad_id'] : adDetail['id'])}}', '{{ companyWebSite }}','{{businessName}}')" href="javascript:void(0);" class="website-btn-1 button expand ga-visitWebsiteAd"><span class="website-icon ga-visitWebsiteAd"></span>{{ websiteLabel }}</a>
 	    {% endif %}
 
         {% set otherItemLabel = "See seller's other items"|trans({}, 'frontend-show-ad') %}

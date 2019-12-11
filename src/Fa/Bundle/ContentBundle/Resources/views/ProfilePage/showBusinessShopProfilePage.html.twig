@@ -127,8 +127,8 @@
                             {% endif %}
                         </div>
                         <div id="business_about_us_div">
-                        	 {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide']) %}
-                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
+                        	 {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide','Profile']) %}
+                             {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide','Profile']) %}
                              {{ adDescWithReplacedPhoneAndEmail|raw }}
                         </div>
                     </div>
@@ -174,8 +174,8 @@
                             {% endif %}
                         </div>
                         <div id="business_about_us_div">
-                         {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide']) %}
-                         {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide']) %}
+                         {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [userDetail['about_us'], 'hide','Profile']) %}
+                         {% set adDescWithReplacedPhoneAndEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [userDetail['id'], adDescWithReplacedPhone, 'hide','Profile']) %}
                             {{ adDescWithReplacedPhoneAndEmail|raw }}
                         </div>
                     </div>
