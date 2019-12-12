@@ -68,7 +68,7 @@ class CyberSourceCheckoutController extends CoreController
         
         if(!empty($cartDetails)) {
             $cartDetailsValues = unserialize($cartDetails[0]['value']);
-            $paymentFor = $cartDetailsValues['payment_for'];
+            $paymentFor = isset($cartDetailsValues['payment_for'])?$cartDetailsValues['payment_for']:'';
         }
         
         //check for cart price and item

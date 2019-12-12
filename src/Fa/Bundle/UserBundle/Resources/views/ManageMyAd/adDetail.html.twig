@@ -51,12 +51,15 @@
 
 {% set featuredToggleFlag = 0 %}
 {% set featuredToggleUpsellId = 0 %}
+
+{% if categoryUpsellArray is defined and categoryUpsellArray|length %}
 {% for categoryUpsell in categoryUpsellArray %}
     {% if parentCatIds is defined and categoryUpsell['category_id'] in parentCatIds %}
         {% set featuredToggleFlag = 1 %}
         {% set featuredToggleUpsellId = categoryUpsell['upsell_id'] %}
     {% endif %}
 {% endfor %}
+{% endif %}
 
 {% set featuredTopUpsell7days = constant('Fa\\Bundle\\PromotionBundle\\Repository\\UpsellRepository::UPSELL_FEATURED_TOP_7DAYS_ID')  %}
 
