@@ -110,7 +110,11 @@ class UserAuthenticator implements SimpleFormAuthenticatorInterface, Authenticat
             foreach ($user->getRoles() as $userRole) {
                 $userRolesArray[] = $userRole->getName();
             }
-
+            
+            if(empty($userRolesArray)) {
+                $userRolesArray[] = $user->getRole()->getName();
+            }                
+                
             $roleToCheck = array();
             if ($this->container->get('request_stack')->getCurrentRequest()->get('_route') == 'admin_login_check') {
                 $roleToCheck = $this->container->get('doctrine')->getManager()->getRepository('FaUserBundle:Role')->getRoleArrayByType('A');
@@ -118,7 +122,7 @@ class UserAuthenticator implements SimpleFormAuthenticatorInterface, Authenticat
                 $roleToCheck = $this->container->get('doctrine')->getManager()->getRepository('FaUserBundle:Role')->getRoleArrayByType('C');
             }
 
-            if (!count(array_intersect($roleToCheck, $userRolesArray))) {
+            if (empty(array_intersect($roleToCheck, $userRolesArray))) {
                 throw new AuthenticationException($this->translator->trans('You do not have enough credential to login.', array(), 'messages'));
             }
 

@@ -1469,8 +1469,10 @@ class AdPostType extends AbstractType
      */
     protected function validateYoutubeField($form)
     {
-        $youtubeVideoUrl = trim($form->get('youtube_video_url')->getData());
-
+        $youtubeVideoUrl = '';
+        if ($form->has('youtube_video_url') && $form->get('youtube_video_url')->getData()) {
+            $youtubeVideoUrl = trim($form->get('youtube_video_url')->getData());
+        }
         // validate youtube video url.
         if ($youtubeVideoUrl) {
             $youtubeVideoId = CommonManager::getYouTubeVideoId($youtubeVideoUrl);
