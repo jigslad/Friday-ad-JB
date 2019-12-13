@@ -676,6 +676,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
         //]]>
     </script>
+    <!-- Google TAG Manager Start -->
     <!-- Populer Search @Jigar Lad -->
     {% set isPopulerSearch = 'false' %}
     {% if seoFields.popular_search is defined %}
@@ -690,12 +691,6 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         {% set town =  0 %}
     {% endif %}
 
-    {% if app.request.headers.get('referer') == 'null' %}
-        {%  set serchMethod = 'Landed' %}
-    {% else %}
-        {%  set serchMethod = 'Others' %}
-    {% endif %}
-
     {% if searchParams.item__distance is defined %}
         {% set radius = searchParams.item__distance %}
     {% else %}
@@ -703,24 +698,37 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {% endif %}
     {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
     {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(searchParams.item__location)%}
-    {{ dump() }}
-    <!-- Google TAG Manager Start -->
+    {% set url = app.request.headers.get('referer') %}
+{#    |slice(0,-1)#}
+    {% dump(url) %}
     <script>
-        {{ app.request.headers.get('referer')}}git
-        var searchResultMethod = 'Other';
         if (performance.navigation.type == 1) {
-            searchResultMethod = 'Refresh';
+            var searchResultMethod = 'Refresh';
         } else {
-
+            {% if (app.request.headers.get('referer') is null) or (app.request.headers.get('referer') == '') %}
+                var searchResultMethod = 'Landed';
+            {% else %}
+                {% set url = app.request.headers.get('referer')|split('/')|slice(0,-1)%}}
+                {% if 'page-' not in url|last  %}
+                    var searchResultMethod = 'Ad Details';
+                {% elseif app.request.get('keywords') is defined %}
+                    var searchResultMethod = 'Site Search';
+                {% elseif app.request.get('cat_full_slug') is defined %}
+                    var searchResultMethod = 'Category Click';
+                {% else %}
+                    var searchResultMethod = 'Other';
+                {% endif %}
+            {% endif %}
         }
+        console.log(searchResultMethod);
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
             "searchResults":{
                 "county": '{{ country }}',
                 "town": "{{ town }}",
-                "locationGroup": "XXXX",     //ad location group (Nursery, Non-Print, Print - (print location)
+                "locationGroup": "{{ locationGroup.name is defined ? locationGroup.name : locationGroup }}",     //ad location group (Nursery, Non-Print, Print - (print location)
                 "searchKeyword": '{{ app.request.get('keywords') }}',
-                "searchResultMethod": "XXXX", //described below
+                "searchResultMethod": searchResultMethod, //described below
                 "noOfResults": {{resultCount}},
                 "radius": '{{ radius }}',
                 "popularSearch": {{ isPopulerSearch }}

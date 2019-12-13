@@ -12,6 +12,7 @@
 namespace Fa\Bundle\EntityBundle\Repository;
 
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
+use Fa\Bundle\AdBundle\FaAdBundle;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 
 /**
@@ -183,27 +184,17 @@ class LocationGroupRepository extends BaseEntityRepository
      */
     public function getLocationGroupByLocation($locationId)
     {
-        $location = $this->_em->getRepository('FaEntityBundle:Category')->getCategoriesByIds($locationId);
-        return $location;
-        return $locationId;
-//        $printEditionArray = array()
-//        ;
-//        if ($locationGroupId) {
-//            $locationGroup = $this->find($locationGroupId);
-//
-//
-//            if ($locationGroup) {
-//                $relatedPrintEditions = explode(',', $locationGroup->getRelatedPrintEdition());
-//                $printEditions = $this->_em->getRepository('FaAdBundle:PrintEdition')->getActiveOtherPrintEdition($relatedPrintEditions);
-//
-//                foreach ($printEditions as $printEdition) {
-//                    $printEditionArray[$printEdition->getId()] = $printEdition->getName();
-//                }
-//            }
-//        } else {
-//            $printEditionArray = $this->_em->getRepository('FaAdBundle:PrintEdition')->getActivePrintEditionArray();
-//        }
-//
-//        return $printEditionArray;
+        $locationArry = [$locationId];
+        //$locationData = $this->_em->getRepository('FaEntityBundle:Category')->find($locationId);
+        $location = $this->getEntityManager()->getRepository('FaEntityBundle:LocationGroupLocation')->getLocationGroupIdByTownDomicile($locationArry);
+        if($location){
+            $locationGroup = $this->find($location[0]);
+            return $locationGroup;
+        }
+        else
+        {
+            return '';
+        }
+
     }
 }
