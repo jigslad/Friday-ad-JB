@@ -677,30 +677,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         //]]>
     </script>
     <!-- Google TAG Manager Start -->
-    <!-- Populer Search @Jigar Lad -->
-    {% set isPopulerSearch = 'false' %}
-    {% if seoFields.popular_search is defined %}
-        {% set isPopulerSearch = seoFields.popular_search %}
-    {% endif %}
-
-    {% if cookieLocationDetails.paa_county  is defined %}
-        {% set country = cookieLocationDetails.paa_county %}
-        {% set town =  cookieLocationDetails.town %}
-    {% else %}
-        {% set country = cookieLocationDetails.location_text %}
-        {% set town =  0 %}
-    {% endif %}
-
-    {% if searchParams.item__distance is defined %}
-        {% set radius = searchParams.item__distance %}
-    {% else %}
-        {% set radius = 'default' %}
-    {% endif %}
+    {# Location Group @Jigar Lad #}
     {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
     {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(searchParams.item__location)%}
-    {% set url = app.request.headers.get('referer') %}
-{#    |slice(0,-1)#}
-    {% dump(url) %}
     <script>
         if (performance.navigation.type == 1) {
             var searchResultMethod = 'Refresh';
@@ -708,8 +687,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             {% if (app.request.headers.get('referer') is null) or (app.request.headers.get('referer') == '') %}
                 var searchResultMethod = 'Landed';
             {% else %}
-                {% set url = app.request.headers.get('referer')|split('/')|slice(0,-1)%}}
-                {% if 'page-' not in url|last  %}
+                {% set urlEnd = app.request.headers.get('referer')|split('/')|slice(0,-1)|last|split('-') %}
+                {% if ('page' not in urlEnd) and (urlEnd|length > 2) %}
                     var searchResultMethod = 'Ad Details';
                 {% elseif app.request.get('keywords') is defined %}
                     var searchResultMethod = 'Site Search';
@@ -724,14 +703,14 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
             "searchResults":{
-                "county": '{{ country }}',
-                "town": "{{ town }}",
+                "county": '{{ cookieLocationDetails.paa_county  is defined ? cookieLocationDetails.paa_county : cookieLocationDetails.location_text }}',
+                "town": "{{ cookieLocationDetails.paa_county  is defined ? cookieLocationDetails.town : 0 }}",
                 "locationGroup": "{{ locationGroup.name is defined ? locationGroup.name : locationGroup }}",     //ad location group (Nursery, Non-Print, Print - (print location)
                 "searchKeyword": '{{ app.request.get('keywords') }}',
                 "searchResultMethod": searchResultMethod, //described below
                 "noOfResults": {{resultCount}},
-                "radius": '{{ radius }}',
-                "popularSearch": {{ isPopulerSearch }}
+                "radius": '{{ searchParams.item__distance is defined ? searchParams.item__distance : 'default' }}',
+                "popularSearch": {{ seoFields.popular_search is defined ? seoFields.popular_search : 'false' }}
             }
         });
     </script>
