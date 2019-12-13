@@ -156,7 +156,7 @@
                 </div>
             {% else %}
                 <button type="reset" class="signup-fb-btn ga-facebookLogin button expand" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"><span class="signup-fb-icon ga-facebookLogin">&nbsp;</span>{{ 'Sign Up with Facebook'|trans({}, 'frontend') }}</button>
-                <button type="reset" class="signup-google-btn ga-facebookLogin button expand" onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"><span class="signup-google-icon ga-googleLogin">&nbsp;</span>{{ 'Sign Up with Google'|trans({}, 'frontend') }}</button>
+                <button type="reset" class="signup-google-btn ga-googleLogin button expand" onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"><span class="signup-google-icon ga-googleLogin">&nbsp;</span>{{ 'Sign Up with Google'|trans({}, 'frontend') }}</button>
 
                 <span class="signup-ins">
                     {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('FaAdBundle:AdPost:paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}

@@ -63,7 +63,7 @@
                 </li>
             </ul>
 
-            {{ form_widget(form.save, {'attr': {'class':'ga-sendEmailProfile” secondary-btn-1 button expand mt20 mb0'}}) }}
+            {{ form_widget(form.save, {'attr': {'class':'ga-sendEmailProfile secondary-btn-1 button expand mt20 mb0'}}) }}
         {% else %}
             {% for fieldName, fieldValue in form.children %}
                 {% do attribute(form, fieldName).setRendered %}
