@@ -1651,28 +1651,40 @@
 
 //]]>
 </script>
+    <!-- Google TAG Manager Start -->
+    {# Ad Package @Jigar Lad #}
     {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
     {% set adPackage = adUserPackageRepository.getAdPackageArrayByAdId(adDetail.id) %}
     {% for ad in adPackage %}
         {% set adPackage = ad.package_id %}
     {% endfor %}
+
+    {# Location Group @Jigar Lad #}
+    {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
+    {% set locationGroup = locationGroupReposetry.getLocationGroupNameByAdID(adId)%}
+
+    {# Category @Jigar Lad #}
+    {% set categoryArray = [] %}
+    {% for category in categoryPath %}
+        {% set categoryArray = categoryArray|merge([category]) %}
+    {% endfor %}
+
+    {# Response Type @Jigar Lad #}
+    {% if adDetail.user.contact_through_phone == 'true' and adDetail.user.contact_through_email == 'true' %}
+        {% set responseType = 'both' %}
+    {% elseif adDetail.user.contact_through_phone == 'true' %}
+        {% set responseType = 'phone' %}
+    {% elseif adDetail.user.contact_through_email == 'true' %}
+        {% set responseType = 'email' %}
+    {% else %}
+        {% set responseType = 'node' %}
+    {% endif %}
     <script>
-        {% set categoryArray = [] %}
-        {% for category in categoryPath %}
-            {% set categoryArray = categoryArray|merge([category]) %}
-        {% endfor %}
-        {% if adDetail.user.contact_through_phone == 'true' and adDetail.user.contact_through_email == 'true' %}
-            {% set responseType = 'both' %}
-        {% elseif adDetail.user.contact_through_phone == 'true' %}
-            {% set responseType = 'phone' %}
-        {% elseif adDetail.user.contact_through_email == 'true' %}
-            {% set responseType = 'email' %}
-        {% else %}
-            {% set responseType = 'node' %}
-        {% endif %}
+        {# get date and create as new #}
         var publishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
-        var finalpublishdate = (publishedDate.getMonth() + 1) + "/" + publishedDate.getDate() + "/" + publishedDate.getFullYear();
         var expiredDate = new Date(1000*{{ adDetail.a_expires_at_i }});
+        {# convert date in format #}
+        var finalpublishdate = (publishedDate.getMonth() + 1) + "/" + publishedDate.getDate() + "/" + publishedDate.getFullYear();
         var finalexpireddate = (expiredDate.getMonth() + 1) + "/" + expiredDate.getDate() + "/" + expiredDate.getFullYear();
         $( document ).ready(function() {
             window.dataLayer = window.dataLayer || [];
@@ -1687,7 +1699,7 @@
                     "id": {{ adId }},
                     "photos": {{ adDetail.a_total_images_i }},
                     "county": "{{ location_slug }}",
-                    "locationGroup": "XXXX",     //ad location group (Nursery, Non-Print, Print - (print location)
+                    "locationGroup": "{{ locationGroup.name is defined ? locationGroup.name : locationGroup }}",     //ad location group (Nursery, Non-Print, Print - (print location)
                     "town": "{{ app.request.get('location') }}",              //ad town
                     "video": '{{ youtubeVideoUrl is not  null ? 'True' : 'False' }}',
                     "paypalEnabled": '{{ showBuyNowWithPaypal ? 'True' : 'False'}}',
@@ -1704,6 +1716,7 @@
         });
 
     </script>
+    <!-- Google TAG Manager End -->
 {% endblock %}
 
 

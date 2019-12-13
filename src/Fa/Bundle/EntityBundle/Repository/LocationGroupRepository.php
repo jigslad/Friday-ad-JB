@@ -174,4 +174,23 @@ class LocationGroupRepository extends BaseEntityRepository
 
         return $printEditionArray;
     }
+    /**
+     * Get Location Group By AdId.
+     *
+     * @param integer $AdId Ad id.
+     *
+     * @return array
+     */
+    public function getLocationGroupNameByAdID($AdId)
+    {
+        $location = $this->getEntityManager()->getRepository('FaAdBundle:AdLocation')->getLocationGroupByAdId($AdId);
+        if($location){
+            $locationGroup = $this->find($location[0]);
+            return $locationGroup;
+}
+        else
+        {
+            return '';
+        }
+    }
 }
