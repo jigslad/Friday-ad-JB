@@ -2665,10 +2665,10 @@ HTML;
                 foreach ($matches[0] as $index => $email) {
                     $gaclass = '';
                     if($pagetype = 'AdDetails') {
-                        $gaclass= 'ga-callNowAdDesc';
+                        $gaclass= 'ga-emailDescriptionAd';
                     }
                     elseif ($pagetype = 'Profile') {
-                        $gaclass= 'ga-callNowBusinessDesc';
+                        $gaclass= 'ga-emailDescriptionBusiness';
                     }
                     $string = str_replace($email, '<a class="'.$gaclass.'" href="javascript:contactSeller(\''.$adId.'\', \'Email contact click (Description)\');">click to contact</a>', $string);
                 }
