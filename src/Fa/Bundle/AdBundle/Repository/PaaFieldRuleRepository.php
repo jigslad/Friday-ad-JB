@@ -236,7 +236,7 @@ class PaaFieldRuleRepository extends EntityRepository
 
         $queryBuilder = $this->getPaaFieldRulesQueryBuilderByCategoryId($categoryId, $ordBy);
         if ($step) {
-            if($step=='admin') {
+            if($step=='admin' || $step=='edit') {
                 $queryBuilder->andWhere(self::ALIAS.'.step is not null');
             } else {                    
                 $queryBuilder->andWhere(self::ALIAS.'.step = :step')->setParameter('step', $step);

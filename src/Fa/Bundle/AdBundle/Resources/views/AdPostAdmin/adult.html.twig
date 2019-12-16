@@ -200,6 +200,10 @@
             updateCharCounter($(this).attr('id'));
         });
         showRateSection();
+
+        $('#fa_paa_adult_admin_travel_arrangements_id').on( "change", function() {
+            showRateSection();           
+       	});
     });
 
     function updateCharCounter(fieldId)
