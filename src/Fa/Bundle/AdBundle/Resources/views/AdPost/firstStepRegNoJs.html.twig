@@ -51,6 +51,14 @@
                }
                //GA Analytics code start
                var eventLabel = categoryPath + ' - Yes';
+               window.dataLayer = window.dataLayer || []
+               dataLayer.push({
+
+                   'event' : 'PAA Category Selection',
+                   'eventCategory':  'PAA - Step 1',
+                   'eventAction': 'Category icon click',
+                   'eventLabel': eventLabel
+               });
                ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
                //GA Analytics code end
            } else {
@@ -75,6 +83,14 @@
                //GA Analytics code start
                var eventLabel = categoryPath + ' - No';
                regLookupResult = ' - No';
+               window.dataLayer = window.dataLayer || []
+               dataLayer.push({
+
+                   'event' : 'PAA Category Selection',
+                   'eventCategory':  'PAA - Step 1',
+                   'eventAction': 'Category icon click',
+                   'eventLabel': eventLabel
+               });
                ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
                //GA Analytics code end
            }

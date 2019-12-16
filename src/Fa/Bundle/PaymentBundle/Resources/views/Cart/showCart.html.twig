@@ -203,13 +203,6 @@
             'eventAction': action,
             'eventLabel': label
         });
-        window.dataLayer = window.dataLayer || []
-        dataLayer.push({
-            'event' : 'PAA Cart',
-            'eventCategory':  'PAA - Step Cart',
-            'eventAction': action,
-            'eventLabel': label
-        });
         ga('send', 'event', 'PAA - Step Cart', action, label);
         window.location.href = redirectUrl;
     }
