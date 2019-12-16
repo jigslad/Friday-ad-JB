@@ -137,6 +137,63 @@ class ArchiveAdRepository extends EntityRepository
             //$this->removeArchiveAdFromSolr($adId, $container);
         }
     }
+    
+    
+    /**
+     * Move ad to archive.
+     *
+     * @param object $ad        Ad instance.
+     * @param object $container Container object.
+     */
+    public function removeAd($ad, $container = null)
+    {
+        // Get data from original tables
+        $categoryName   = ($ad && $ad->getCategory())?$this->getEntityManager()->getRepository('FaEntityBundle:Category')->getRootCategoryName($ad->getCategory()->getId(), $container, true):'';
+        $adData         = $this->getEntityManager()->getRepository('FaAdBundle:Ad')->getAdDataArray($ad);
+        $adVerticalData = $this->getEntityManager()->getRepository('FaAdBundle:'.'Ad'.$categoryName)->getAdVerticalDataArray($ad->getId());
+        $adLocationData = $this->getEntityManager()->getRepository('FaAdBundle:AdLocation')->getAdLocationDataArray($ad->getId());
+        $adModerateData = $this->getEntityManager()->getRepository('FaAdBundle:AdModerate')->getAdModerateDataArray($ad->getId());
+        $adViewCounterData  = $this->getEntityManager()->getRepository('FaAdBundle:AdViewCounter')->getAdViewCounterArrayByAdId($ad->getId());
+        
+        // Remove from original tables
+        if (!empty($adVerticalData)) {
+            $this->getEntityManager()->getRepository('FaAdBundle:'.'Ad'.$categoryName)->removeByAdId($ad->getId());
+        }
+        // Remove ad locations
+        if (!empty($adLocationData)) {
+            $this->getEntityManager()->getRepository('FaAdBundle:AdLocation')->removeByAdId($ad->getId());
+        }
+        // Remove ad moderate
+        if (!empty($adModerateData)) {
+            $this->getEntityManager()->getRepository('FaAdBundle:AdModerate')->removeByAdId($ad->getId());
+        }
+        // Remove ad view counter
+        $this->getEntityManager()->getRepository('FaAdBundle:AdViewCounter')->removeByAdId($ad->getId());
+        
+        // Remove from favorites
+        $this->getEntityManager()->getRepository('FaAdBundle:AdFavorite')->removeByAdId($ad->getId());
+        
+        // Remove from shortlists
+        $this->getEntityManager()->getRepository('FaAdBundle:AdShortlist')->removeByAdId($ad->getId());
+        
+        // Remove from ad prints
+        $this->getEntityManager()->getRepository('FaAdBundle:AdPrint')->removeByAdId($ad->getId());
+        
+        // Remove ad report
+        $this->getEntityManager()->getRepository('FaAdBundle:AdReport')->removeByAdId($ad->getId());
+        
+        // Remove ad contact
+        $this->getEntityManager()->getRepository('FaAdBundle:AdContact')->removeByAdId($ad->getId());
+        
+        // Remove ad user messages
+        $this->getEntityManager()->getRepository('FaMessageBundle:Message')->removeByAdId($ad->getId());
+        
+        // Remove ad user review
+        $this->getEntityManager()->getRepository('FaUserBundle:UserReview')->removeByAdId($ad->getId());
+        
+        // Remove ad 
+        $this->getEntityManager()->getRepository('FaAdBundle:Ad')->removeByAdId($ad->getId());
+    }
 
     /**
      * Get ad detail array from archive ad object.
