@@ -586,8 +586,8 @@
                                             {% else %}
                                         		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
                                     	    {% endif %}
-                                        {% else %}
-                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                    	    {# {% else %}
+                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b> #}
                                         {% endif %}
                                     </div>
                                 </div>
