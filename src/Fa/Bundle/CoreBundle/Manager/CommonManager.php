@@ -2350,6 +2350,7 @@ HTML;
             $class['trade-it.co.uk'] = 'tradeit-list-logo';
             $class['wightbay.com'] = 'wightbay-list-logo';
             $class['http://buildersbay.co.uk'] = 'buildersbay-list-logo';
+            $class['https://www.motorcyclenews.com'] = 'mcn-logo';
             if (isset($class[$string])) { 
                 return $class[$string];
             } else {
