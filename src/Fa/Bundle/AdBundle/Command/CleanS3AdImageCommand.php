@@ -93,6 +93,8 @@ EOF
     	        'Bucket' => $this->getContainer()->getParameter('fa.aws_bucket')
     		]); 
     	    
+    	    $awsBucket = $this->getContainer()->getParameter('fa.aws_bucket');
+    	    
     		# printing our data 
     		foreach($files as $file) { 
     			$awsKey = $file['Key']; 
@@ -103,23 +105,35 @@ EOF
         			$awsImageName = explode('_',$explodeAwsImageName[0]);
         			$awsImageDBName = $awsImageName[0];
         			$adImageObj = $adImageRepository->findOneBy(array('path' => $awsImageDBPath, 'image_name' => $awsImageDBName));
- 
+        			$awsDestKey = $this->getContainer()->getParameter('fa.ad.image.bin.dir').'/'.$explodeAwsKey[2].'/'.$explodeAwsKey[3];
          			if(!$adImageObj) {
-                                    $awsImageDBHash = $awsImageName[1];
-        			    $adImageObj = $adImageRepository->findOneBy(array('path' => $awsImageDBPath, 'hash' => $awsImageDBHash));
+         			    $awsImageDBHash = (isset($awsImageName) && isset($awsImageName[1]))?$awsImageName[1]:'';
+         			    if($awsImageDBHash) {         			        
+        			         $adImageObj = $adImageRepository->findOneBy(array('path' => $awsImageDBPath, 'hash' => $awsImageDBHash));
+         			    }
         			    if(!$adImageObj) {
         			        $fileKeys = array();
         			        $fileKeys[] = array('Key' => $awsKey);
-        			        $result = $client->deleteObjects(array(
+        			        /*$result = $client->deleteObjects(array(
         			            'Bucket'  => $this->getContainer()->getParameter('fa.aws_bucket'),
         			            'Delete'  => array('Objects' => $fileKeys)
         			        ));
         			        print_r($result);
-        			        $output->writeln('Image deleted from aws : '.$awsKey, true);
+        			        $output->writeln('Image deleted from aws : '.$awsKey, true);*/
+        			        
+        			        $result = $client->copyObject([
+        			            'Bucket'     => $awsBucket,
+        			            'Key'        => $awsDestKey,
+        			            'CopySource' => $awsBucket.'/'.$awsKey,
+        			            ]);
+        			        $this->getContainer()->get('images_exists_s3')->info('Image moved from image-folder to image-bin-folder ' . $awsKey);
+        			        $output->writeln('Image moved from '.$this->getContainer()->getParameter('fa.aws_bucket').' to '.$this->getContainer()->getParameter('fa.aws_bucket_bin').' : '.$awsKey, true);
+        			        
         			    }
         			} else {
-                                    $output->writeln('Image not deleted exists in database : '.$awsKey, true);
-                                }
+        			    $this->getContainer()->get('moved_s3_images_to_bin_logger')->info('Image not moved exists in database : '.$awsKey);
+                        $output->writeln('Image not moved exists in database : '.$awsKey, true);
+                   }
     			}
     		} 
     	} catch(\Exception $ex){ 
