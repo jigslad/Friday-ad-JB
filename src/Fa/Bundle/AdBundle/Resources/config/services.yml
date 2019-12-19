@@ -80,3 +80,24 @@ services:
     clean_local_images_handler:
         class: Monolog\Handler\StreamHandler
         arguments: ['%kernel.logs_dir%/%kernel.environment%.clean_local_images.log']
+        
+    moved_s3_images_to_bin_logger:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: [moved_s3_images_to_bin_logger]
+        calls:
+        - [pushHandler, ['@moved_s3_images_to_bin_handler']]
+        
+    moved_s3_images_to_bin_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: ['%kernel.logs_dir%/%kernel.environment%.moved_s3_images_to_bin.log']
+        
+    images_exists_s3_logger:
+        class: Symfony\Bridge\Monolog\Logger
+        arguments: [images_exists_s3_logger]
+        calls:
+        - [pushHandler, ['@images_exists_s3_handler']]
+        
+    images_exists_s3_handler:
+        class: Monolog\Handler\StreamHandler
+        arguments: ['%kernel.logs_dir%/%kernel.environment%.images_exists_s3.log']
+        
