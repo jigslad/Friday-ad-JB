@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\EntityBundle\Controller;
 
+use Fa\Bundle\AdBundle\FaAdBundle;
 use Symfony\Component\HttpFoundation\Request;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Symfony\Component\HttpFoundation\Response;
@@ -166,8 +167,13 @@ class CategoryController extends CoreController
             $catArray            = array();
             $catArray['more']    = false;
             $catArray['results'] = $this->getRepository('FaEntityBundle:Category')->getPostadCategoryArrayByText($request->get('term'), $this->container);
-
-            return new JsonResponse($catArray);
+            if(count($catArray['results']) == 0){
+                $data = $this->getRepository('FaAdBundle:PaaSearchKeyword')->addPaaSearchKeyword($request->get('term'));
+                return new JsonResponse($data);
+            }
+            else{
+                return new JsonResponse($catArray);
+            }
         }
 
         return new Response();
