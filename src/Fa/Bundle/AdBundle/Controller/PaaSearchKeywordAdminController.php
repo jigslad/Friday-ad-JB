@@ -22,7 +22,7 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\AdBundle\Form\PaaSearchKeywordUploadCsvAdminType;
 use Fa\Bundle\AdBundle\Form\PaaSearchKeywordSearchAdminType;
-
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 /**
  * This controller is used for Paa search keyword crud management.
  *
@@ -68,17 +68,29 @@ class PaaSearchKeywordAdminController extends CrudController implements Resource
 
         // initialize search filter manager service and prepare filter data for searching
 
-        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaEntityBundle:Category'), $this->getRepositoryTable('FaEntityBundle:Category'), '');
-        $data = $this->get('fa.searchfilters.manager')->getFiltersData();
+        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaEntityBundle:Category'), $this->getRepositoryTable('FaEntityBundle:Category'), 'fa_ad_paa_search_keyword_search_admin');
+        $data = $this->get('fa.searchfilters.manager')->getFiltersData(); 
 
-        $this->get('fa.sqlsearch.manager')->init($this->getRepository('FaEntityBundle:Category'), $data);
+        /*$this->get('fa.sqlsearch.manager')->init($this->getRepository('FaEntityBundle:Category'), $data);
         $queryBuilder = $this->get('fa.sqlsearch.manager')->getQueryBuilder();
         $queryBuilder = $queryBuilder->select('id');
         $queryBuilder = $queryBuilder->select('name');
         $queryBuilder = $queryBuilder->select('synonyms_keywords');
         $queryBuilder = $queryBuilder->orderBy($queryBuilder->getRootAlias().'.search_count', 'desc');
-        $query        = $queryBuilder->getQuery();
-
+        $query        = $queryBuilder->getQuery();*/
+        
+        $data['select_fields'] = array(            
+            'category'       => array('id','name','synonyms_keywords'),
+        );
+        
+        if ($data['search']) {
+            if (isset($data['search']['category__synonyms_keywords'])) {
+                $data['static_filters'] = CategoryRepository::ALIAS.".synonyms_keywords like '%".$data['search']['category__synonyms_keywords']."%'";                
+            }            
+        }        
+        
+        $this->get('fa.sqlsearch.manager')->init($this->getRepository('FaEntityBundle:Category'), $data);
+        $query = $this->get('fa.sqlsearch.manager')->getQuery();
 
         // initialize pagination manager service and prepare listing with pagination based of data
         $page = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page'] : 1;
@@ -86,16 +98,16 @@ class PaaSearchKeywordAdminController extends CrudController implements Resource
         $pagination = $this->get('fa.pagination.manager')->getPagination();
 
         // initialize form manager service
-        //$formManager = $this->get('fa.formmanager');
-        //$form        = $formManager->createForm(CategoryAdminType::class, null, array('action' => $this->generateUrl('paa_search_keyword_admin'), 'method' => 'GET'));
+        $formManager = $this->get('fa.formmanager');
+        $form        = $formManager->createForm(PaaSearchKeywordSearchAdminType::class, null, array('action' => $this->generateUrl('paa_search_keyword_admin'), 'method' => 'GET'));
 
-//        if ($data['search']) {
-//            $form->submit($data['search']);
-//        }
+        if ($data['search']) {
+            $form->submit($data['search']);
+        }
 
         $parameters = array(
             'heading'    => 'PAA Search Keywords',
-
+            'form' => $form->createView(),
             'pagination' => $pagination,
             'sorter'     => $data['sorter'],
         );

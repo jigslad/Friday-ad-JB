@@ -104,7 +104,7 @@ class PaaSearchKeywordAdminType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Fa\Bundle\AdBundle\Entity\PaaSearchKeyword'
+                'data_class' => 'Fa\Bundle\EntityBundle\Entity\Category'
             )
         );
     }

@@ -65,7 +65,7 @@ class PaaSearchKeywordSearchAdminType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('search_keyword__keyword_text', TextType::class)
+            ->add('category__synonyms_keywords', TextType::class)
             ->add('search', SubmitType::class);
     }
 
