@@ -126,12 +126,12 @@ EOF
         			            'Key'        => $awsDestKey,
         			            'CopySource' => $awsBucket.'/'.$awsKey,
         			            ]);
-        			        $this->getContainer()->get('images_exists_s3')->info('Image moved from image-folder to image-bin-folder ' . $awsKey);
+        			        $this->getContainer()->get('moved_s3_images_to_bin_logger')->info('Image moved from image-folder to image-bin-folder ' . $awsKey);
         			        $output->writeln('Image moved from '.$this->getContainer()->getParameter('fa.aws_bucket').' to '.$this->getContainer()->getParameter('fa.aws_bucket_bin').' : '.$awsKey, true);
         			        
         			    }
         			} else {
-        			    $this->getContainer()->get('moved_s3_images_to_bin_logger')->info('Image not moved exists in database : '.$awsKey);
+        			    $this->getContainer()->get('images_exists_s3_logger')->info('Image not moved exists in database : '.$awsKey);
                         $output->writeln('Image not moved exists in database : '.$awsKey, true);
                    }
     			}
