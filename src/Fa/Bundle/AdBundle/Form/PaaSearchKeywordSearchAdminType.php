@@ -66,6 +66,7 @@ class PaaSearchKeywordSearchAdminType extends AbstractType
     {
         $builder
             ->add('category__synonyms_keywords', TextType::class)
+            ->add('category__name', TextType::class)
             ->add('search', SubmitType::class);
     }
 
