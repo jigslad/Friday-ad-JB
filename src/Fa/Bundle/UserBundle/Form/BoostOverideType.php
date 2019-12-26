@@ -129,7 +129,7 @@ class BoostOverideType extends AbstractType
                     'data' => ($userPackageBoostDetails)?$userPackageBoostDetails['count']:0
                 )
             );
-            $form->add('is_reset_boost_count', CheckboxType::class, array('label' => 'Do not over write override boost count on renewal', 'required' => false));
+            $form->add('is_reset_boost_count', CheckboxType::class, array('label' => 'Revert to default on renewal date?', 'required' => false));
         }
     }
 

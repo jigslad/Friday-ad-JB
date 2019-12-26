@@ -1,0 +1,72 @@
+{% set queryParams = app.request.query.all %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{{ dump(queryParams) }}
+{% set userIdArray = {} %}
+{% if pagination.getNbResults() %}
+    {% for user in pagination.getCurrentPageResults() %}
+        {% set userIdArray = userIdArray|merge({0 : user.id}) %}
+    {% endfor %}
+    {% set userDataArray    = userRepository.getUserDataBoostDetailsArrayByUserId(userIdArray) %}
+    {% if queryParams is defined and queryParams['sort_field'] is defined  %}
+    	{% if queryParams['sort_field'] == 'date_of_next_renewal' %}
+    	{% endif %}
+    {% endif %}
+{% endif %}
+
+<div class="row">
+     <div class="columns">
+         <div class="outline">             
+             <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+             <table class="table table-striped table-bordered table-hover">
+                 <thead class="mb0">
+                     <tr>
+                         <th width="5%">User Id</th>
+                         <th width="10%">Customer name</th>
+                         <th width="10%">Email address</th>
+                         <th width="5%">Overide amount</th>
+                         <th width="5%">Revert to default on renewal?</th>
+                         <th width="5%">Used count</th>
+                         <th width="5%">Remaining count</th>
+                         <th width="5%">Date of next package renewal</th>
+                         <th width="10%"><i class="fa fa-gear"></i> Action</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for user in pagination.getCurrentPageResults() %}                                                   
+                          <tr class="gradeX">
+                              <td>{{ user.id }}</td>
+                              <td>
+                             		{% if (userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or userDataArray[user.id]['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+                                        {{ userDataArray[user.id]['business_name'] }}
+                                    {% else %} 
+                                        {{ userDataArray[user.id]['first_name'] }}  {{ userDataArray[user.id]['last_name'] }}
+                                     {% endif %}
+                              </td>
+                              <td>{{ userDataArray[user.id]['email'] }}</td>
+                              <td>{{ userDataArray[user.id]['max_boost_count'] }}</td>
+                              <td>{{ userDataArray[user.id]['is_reset_boost_count'] }}</td>
+                              <td>{{ userDataArray[user.id]['used_boost_count'] }}</td>
+                              <td>{{ userDataArray[user.id]['remaining_boost_count'] }}</td>
+                              <td>{{ userDataArray[user.id]['boost_renew_date'] }}</td>
+                              <td>
+                              <button data-dropdown="drop{{ user.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">{{ 'Select'|trans }}</button>
+                                  <ul id="drop{{ user.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                       {% if boostOverrideEditGrant %}
+                                         <li><a href="{{ path('user_boost_overide', {'id': user.id}) }}"><i class="fi-pencil"></i> Edit</a></li>
+                                       {% endif %}
+                                   </ul>
+                              </button>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="odd gradeX">
+                              <td colspan="4" align="center">{{ 'No record found'|trans({}, 'messages') }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+        </div>
+    </div>
+</div>

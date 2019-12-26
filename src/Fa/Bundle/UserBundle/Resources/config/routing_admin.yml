@@ -47,3 +47,9 @@ FaUserBundle_testimonials_admin:
 FaUserBundle_user_credit_admin:
       resource: '@FaUserBundle/Resources/config/routing/user_credit_admin.yml'
       prefix:   /user_credit
+      
+FaUserBundle_boost_override_admin:
+      resource: '@FaUserBundle/Resources/config/routing/boost_override_admin.yml'
+      prefix:   /boost_override
+      
+

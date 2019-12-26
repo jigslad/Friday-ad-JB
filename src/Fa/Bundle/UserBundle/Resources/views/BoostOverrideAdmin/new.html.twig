@@ -1,0 +1,25 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% block content -%}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+    <div class="columns">
+        <div class="panel">
+            <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+            <div class="row">
+                <div class="large-9 columns">
+                    {{ form_start(form, {'attr': {'novalidate': ''}}) }}
+                        {{ form_row(form.comment) }}
+                        {{ form_row(form.status) }}
+
+                        {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'testimonials_admin'}) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.row -->
+{% endblock %}
