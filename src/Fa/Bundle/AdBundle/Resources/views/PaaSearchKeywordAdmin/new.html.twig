@@ -1,0 +1,42 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% form_theme form 'FaAdminBundle:Form:adminFields.html.twig' %}
+{% set total_categories = 2 %}
+{% block content %}
+
+{{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
+
+<div class="row">
+   <div class="columns">
+       <div class="panel">
+           <p class="text-right"><span class="required">*</span> = mandatory fields</p>
+           {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+               {{ form_errors(form) }}
+                   {{ form_row(form.keyword) }}
+                   {{ form_row(form.search_count) }}
+                   {% for i in 1..total_categories %}
+                       {% if (attribute(form, 'category_'~i~'_autocomplete')) is defined %}
+                           {{ form_label(attribute(form, 'category_'~i~'_autocomplete')) }}
+                           <div class="relative">
+                               {{ form_widget(attribute(form, 'category_'~i~'_autocomplete'), {'attr': {'class': 'white-field'}}) }}
+                               <a href="javascript:void(0);" id="fa_ad_search_keyword_admin_category_{{ i }}_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                           </div>
+                           {{ form_errors(attribute(form, 'category_'~i~'_autocomplete')) }}
+                       {% endif %}
+                   {% endfor %}
+                   {{ form_widget(form.do_not_overwrite_category) }}
+                   {{ form_label(form.do_not_overwrite_category) }}
+                   {{ form_errors(form.do_not_overwrite_category) }}
+                   {{ include('FaAdminBundle:Default:saveButton.html.twig', {'cancelUrl': 'search_keyword_admin', 'isSaveAndNew': false}) }}
+           {{ form_end(form) }}
+       </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block scriptbottom %}
+{% for i in 1..total_categories %}
+    {% if (attribute(form, 'category_'~i~'_autocomplete')) is defined %}
+        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_ad_search_keyword_admin_category_'~i, 'placeHolder': 'Category '~i, 'route' : 'category_ajax_term_admin', 'dropdownCssClass': 'white-choices'}) }}
+    {% endif %}
+{% endfor %}
+{% endblock %}
