@@ -204,7 +204,7 @@ class CampaignController extends ThirdPartyLoginController
         $fbManager = $this->get('fa.facebook.manager');
         $fbManager->init('facebook_paa_lite_login', array('fbSuccess' => 1));
 
-        $facebookPermissions = array('email');
+        $facebookPermissions = array('email','user_location');
         $facebookLoginUrl = $fbManager->getFacebookHelper()->getLoginUrl($facebookPermissions);
 
         $session = $request->getSession();

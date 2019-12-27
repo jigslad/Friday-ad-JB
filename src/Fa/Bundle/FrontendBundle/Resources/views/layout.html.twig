@@ -211,6 +211,28 @@
         <section>
        
             {% block body %}{% endblock %}
+            {% if (app.user.facebookid is defined) and (app.session.get('fb_user_sesssion').user_facebook_id is defined) %}
+                {% if app.user.facebookid == app.session.get('fb_user_sesssion').user_facebook_id and app.user.locationTown != app.session.get('fb_user_sesssion').user_location %}
+                    {{ include('FaAdBundle:AdPost:facebookLocationPopup.html.twig') }}
+                    <script>
+                        $('#facebookLocation').foundation('reveal', 'open');
+                        function setFacebookLocationData(FBlocation)
+                        {
+                            var url = Routing.generate('ad_post_set_facebook_Location_data', { 'location': FBlocation });
+                            location.href = url;
+                        }
+                        function removeFacebookLocation(modelId)
+                        {
+                            if(modelId){
+                                {{ app.session.set('fb_user_sesssion','')  }}
+                            }
+                            closeRevealModel(modelId);
+                        }
+                    </script>
+                    {% else %}
+                        {{ app.session.set('fb_user_sesssion','')  }}
+                {% endif %}
+            {% endif %}
         </section>
 
         {{ include('FaFrontendBundle::scriptBottom.html.twig') }}
