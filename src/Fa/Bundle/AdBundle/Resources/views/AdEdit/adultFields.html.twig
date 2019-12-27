@@ -201,6 +201,7 @@
                                 {{ form_widget(attribute(form, 'paypal_email'), {'value': paypalUserEmail, 'attr': {'class' : 'white-field', 'placeholder': 'PayPal Email Address'|trans({}, 'frontend-paa-fourth-step')}}) }}
                                 <button type="button" class="secondary-btn-1 mb0" id="verify_paypal_email_button">{{'Verify'|trans({}, 'frontend-paa-fourth-step')}}</button><span class="error-icon" id="paypal_email_verify_status" style="display:none;">error</span>
                                 {{ form_errors(attribute(form, 'paypal_email')) }}
+                                <div id="paypal_err_id" class='paypallink error'></div>
                                 <div class="paypal-ins" id="paypal_text_id"></div>
                             </div>
                             {{ form_errors(attribute(form, field), {'attr': {'class' : 'error center'}}) }}
