@@ -586,13 +586,13 @@ class PaymentRepository extends EntityRepository
         if (is_null($categoryId) || $categoryId != CategoryRepository::PHONE_AND_CAM_CHAT_ID) {
             $optionArray = array(
                 self::PAYMENT_METHOD_CASH_ON_COLLECTION_ID  => $translator->trans('Cash on collection'),
-                self::PAYMENT_METHOD_PAYPAL_ID              => $translator->trans('Paypal'),
-                self::PAYMENT_METHOD_PAYPAL_OR_CASH_ID      => $translator->trans('Paypal or cash')
+                self::PAYMENT_METHOD_PAYPAL_ID              => $translator->trans('PayPal'),
+                self::PAYMENT_METHOD_PAYPAL_OR_CASH_ID      => $translator->trans('PayPal or cash')
             );
         } elseif ($categoryId == CategoryRepository::PHONE_AND_CAM_CHAT_ID) {
             $optionArray = array(
                     self::PAYMENT_METHOD_BANK_TRANSFER			=> $translator->trans('Bank Transfer'),
-                    self::PAYMENT_METHOD_PAYPAL_ID              => $translator->trans('Paypal')
+                    self::PAYMENT_METHOD_PAYPAL_ID              => $translator->trans('PayPal')
             );
         }
         return $optionArray;
