@@ -14,13 +14,13 @@
                         {% for searchKeyword in pagination.getCurrentPageResults() %}
                             <tr class="gradeX">
                                <td>                                   
-                                   <a href="{{ searchKeyword.id }}">{{ searchKeyword.synonyms_keywords }}</a>
+                                   <a href="{{ searchKeyword.id }}">{{ searchKeyword.keyword }}</a>
                                </td>
                                <td>
-                                   0
+                                   {{ searchKeyword.search_count }}
                                </td>
                                <td>
-                                    {{ searchKeyword.name }}
+                                    {{ searchKeyword.category_name }}
                                </td>                              
                             </tr>
                         {% endfor %}

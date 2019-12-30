@@ -12,7 +12,8 @@
 namespace Fa\Bundle\AdBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-
+use Fa\Bundle\AdBundle\Entity\PaaSearchKeyword;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 /**
  * Shortlist repository.
  *
@@ -40,6 +41,16 @@ class PaaSearchKeywordRepository extends EntityRepository
     {
         return $this->createQueryBuilder(self::ALIAS);
     }
+    
+    /**
+     * Add keyword filter.
+     *
+     * @param mixed $keyword Entity type
+     */
+    protected function addKeywordFilter($keyword = null)
+    {
+        $this->queryBuilder->andWhere(sprintf('%s.keyword LIKE \'%%%s%%\'', $this->getRepositoryAlias(), $keyword));
+    }
 
     /**
      * Add keyword partial text filter to existing query object.
@@ -47,6 +58,20 @@ class PaaSearchKeywordRepository extends EntityRepository
      * @param string $keyword Keyword.
      */
     public function addPaaSearchKeyword($keyword){
-        return $keyword ;
+        $paaSearchKeyword = $this->findOneBy(array('keyword' => $keyword));
+        if($paaSearchKeyword){
+            $paaSearchKeyword->setSearchCount($paaSearchKeyword->getSearchCount()+1);
+            $paaSearchKeyword->setUpdatedAt(time());
+            $paaSearchKeyword->setIsUpdated(1);
+        } else {
+            $paaSearchKeyword = new PaaSearchKeyword();
+            $paaSearchKeyword->setSearchCount(1);
+            $paaSearchKeyword->setKeyword($keyword);
+            $paaSearchKeyword->setCreatedAt(time());
+        }
+        if ($paaSearchKeyword) {
+            $this->_em->persist($paaSearchKeyword);
+            $this->_em->flush($paaSearchKeyword);
+        }
     }
 }

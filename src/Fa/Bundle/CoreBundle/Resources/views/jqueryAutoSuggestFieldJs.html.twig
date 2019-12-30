@@ -11,9 +11,17 @@ $(function() {
             {% if townIdForArea is defined %}
             	townId = {{ townIdForArea }};
         	{% endif %}
+
+        	if ( term in cache ) {
+                if(cache[term+'_error' ]!='' && '{{ field }}' == '#fa_paa_category_select_category_id') {
+                	$('#category_id_autocomplete_error').show();
+                } else {
+                	$('#category_id_autocomplete_error').hide(); 
+                }            
+        	}
             {% if parent_field is not defined %}
                 if ( term in cache ) {
-                    response( cache[ term ] );
+                     response( cache[ term ] );
                     return;
                 }
             {% else %}
@@ -30,7 +38,12 @@ $(function() {
                 {% else %}
                 data: { townId: townId, page_limit: 10, {% if dimension_field is defined %} cd_id: $('{{ dimension_field }}').val(),  {% endif %}},
                 {% endif %}
-                success: function(data) {
+                success: function(data) {                    
+                    if(data['error']!='' && '{{ field }}' == '#fa_paa_category_select_category_id') {
+                        $('#category_id_autocomplete_error').show();
+                    } else {
+                    	$('#category_id_autocomplete_error').hide(); 
+                    }
                     var result = $.map(data['results'], function(item) {
                         return {
                             label: item.text,
@@ -43,6 +56,7 @@ $(function() {
                         };
                     });
                     cache[ term ] = result;
+                    cache[term+'_error'] = data['error'];
                     response(result);
                 }
             });
@@ -134,7 +148,7 @@ $(function() {
             	$(areaId).val('');
             	$(areaTxt).val('');
             {% endif %}
-			
+
             var ans = ($("{{ field }}"+'_autocomplete').val() in cache);
             if ('{{ field }}' == '#fa_paa_category_select_category_id' && ans == false) {
                 if ($("{{ field }}"+'_autocomplete').val().length == 2) {
@@ -237,8 +251,7 @@ $(document).ready(function(){
     	
         if ($(this).val().length < 1) {
             $("{{ field }}"+'_close').hide();
-            $("{{ field }}").val("");
-            
+            $("{{ field }}").val("");            
             {% if child_field is defined %}
                 $("{{ child_field }}").val('');
                 $("{{ child_field~'_autocomplete' }}").val('');

@@ -167,13 +167,14 @@ class CategoryController extends CoreController
             $catArray            = array();
             $catArray['more']    = false;
             $catArray['results'] = $this->getRepository('FaEntityBundle:Category')->getPostadCategoryArrayByText($request->get('term'), $this->container);
-            if(count($catArray['results']) == 0){
+            $catArray['error'] = '';
+            //echo '<pre>'; print_r($catArray['results']);
+            if(empty($catArray['results'])){
                 $data = $this->getRepository('FaAdBundle:PaaSearchKeyword')->addPaaSearchKeyword($request->get('term'));
-                return new JsonResponse($data);
-            }
-            else{
-                return new JsonResponse($catArray);
-            }
+                $catArray['error'] = 'empty';
+            }            
+            return new JsonResponse($catArray);
+            
         }
 
         return new Response();

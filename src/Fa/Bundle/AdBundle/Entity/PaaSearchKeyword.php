@@ -5,7 +5,7 @@ namespace Fa\Bundle\AdBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Fa\Bundle\AdBundle\Entity\PaaSearchKeyword
  *
@@ -29,6 +29,16 @@ class PaaSearchKeyword
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+    
+    /**
+     * @var \Fa\Bundle\EntityBundle\Entity\Category
+     *
+     * @ORM\ManyToOne(targetEntity="Fa\Bundle\EntityBundle\Entity\Category")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * })
+     */
+     private $category;
 
     /**
      * @var string
@@ -59,13 +69,6 @@ class PaaSearchKeyword
      * @ORM\Column(name="updated_at", type="integer", length=10, nullable=true)
      */
     private $updated_at;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="do_not_overwrite_category", type="boolean", nullable=true, options={"default" = 0})
-     */
-    private $do_not_overwrite_category = 0;
 
     /**
      * @var boolean
@@ -104,7 +107,7 @@ class PaaSearchKeyword
      * Set keyword.
      *
      * @param string $keyword
-     * @return SearchKeyword
+     * @return PaaSearchKeyword
      */
     public function setKeyword($keyword)
     {
@@ -124,10 +127,33 @@ class PaaSearchKeyword
     }
 
     /**
+     * Set category
+     *
+     * @param \Fa\Bundle\EntityBundle\Entity\Category $category
+     * @return PaaSearchKeyword
+     */
+    public function setCategory(\Fa\Bundle\EntityBundle\Entity\Category $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \Fa\Bundle\EntityBundle\Entity\Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+    
+    /**
      * Set search_count.
      *
      * @param integer $search_count
-     * @return SearchKeyword
+     * @return PaaSearchKeyword
      */
     public function setSearchCount($search_count)
     {
@@ -150,7 +176,7 @@ class PaaSearchKeyword
      * Set created_at.
      *
      * @param string $created_at
-     * @return SearchKeyword
+     * @return PaaSearchKeyword
      */
     public function setCreatedAt($created_at)
     {
@@ -173,7 +199,7 @@ class PaaSearchKeyword
      * Set updated_at
      *
      * @param integer $updatedAt
-     * @return SearchKeyword
+     * @return PaaSearchKeyword
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -193,33 +219,10 @@ class PaaSearchKeyword
     }
 
     /**
-     * Set do_not_overwrite_category.
-     *
-     * @param boolean $do_not_overwrite_category
-     * @return SearchKeyword
-     */
-    public function setDoNotOverwriteCategory($do_not_overwrite_category)
-    {
-        $this->do_not_overwrite_category = $do_not_overwrite_category;
-
-        return $this;
-    }
-
-    /**
-     * Get do_not_overwrite_category.
-     *
-     * @return boolean
-     */
-    public function getDoNotOverwriteCategory()
-    {
-        return $this->do_not_overwrite_category;
-    }
-
-    /**
      * Set is_updated.
      *
      * @param boolean $is_updated
-     * @return SearchKeyword
+     * @return PaaSearchKeyword
      */
     public function setIsUpdated($is_updated)
     {

@@ -11,11 +11,7 @@
 
 namespace Fa\Bundle\AdBundle\Controller;
 
-use Fa\Bundle\EntityBundle\Form\CategoryAdminType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Fa\Bundle\AdBundle\Entity\PaaFieldRule;
-// use Fa\Bundle\AdBundle\Form\PaaFieldRuleType;
 use Fa\Bundle\AdminBundle\Controller\CrudController;
 use Fa\Bundle\CoreBundle\Controller\ResourceAuthorizationController;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
@@ -23,6 +19,9 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\AdBundle\Form\PaaSearchKeywordUploadCsvAdminType;
 use Fa\Bundle\AdBundle\Form\PaaSearchKeywordSearchAdminType;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
+use Fa\Bundle\AdBundle\Repository\PaaSearchKeywordRepository;
+use Doctrine\ORM\Query;
+
 /**
  * This controller is used for Paa search keyword crud management.
  *
@@ -65,13 +64,14 @@ class PaaSearchKeywordAdminController extends CrudController implements Resource
     {
 
         CommonManager::setAdminBackUrl($request, $this->container);
+        $fetchJoinCollection = true;
 
         // initialize search filter manager service and prepare filter data for searching
         // it can create object for data listing
-        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaEntityBundle:Category'), $this->getRepositoryTable('FaEntityBundle:Category'), 'fa_ad_paa_search_keyword_search_admin');
+        /*$this->get('fa.searchfilters.manager')->init($this->getRepository('FaEntityBundle:Category'), $this->getRepositoryTable('FaEntityBundle:Category'), 'fa_ad_paa_search_keyword_search_admin');
         $data = $this->get('fa.searchfilters.manager')->getFiltersData();
 
-        // add static serch field
+        // add static search field
         $data['select_fields'] = array(            
             'category'       => array('id','name','synonyms_keywords'),
         );
@@ -81,13 +81,31 @@ class PaaSearchKeywordAdminController extends CrudController implements Resource
             }
         }
 
-        $this->get('fa.sqlsearch.manager')->init($this->getRepository('FaEntityBundle:Category'), $data);
-        $query = $this->get('fa.sqlsearch.manager')->getQuery();
+        $this->get('fa.sqlsearch.manager')->init($this->getRepository('FaEntityBundle:Category'), $data);*/
+        
+        $this->get('fa.searchfilters.manager')->init($this->getRepository('FaAdBundle:PaaSearchKeyword'), $this->getRepositoryTable('FaAdBundle:PaaSearchKeyword'), 'fa_ad_paa_search_keyword_search_admin');
+        $data = $this->get('fa.searchfilters.manager')->getFiltersData();
+        
+        // initialize search manager service and fetch data based of filters
+        $data['select_fields'] = array(
+            'paa_search_keyword' => array('id','keyword','search_count'),
+            'category'       => array('name as category_name'),
+        );       
+ 
+        $data['query_joins']   = array(
+            'paa_search_keyword' => array(
+                'category' => array('type' => 'left', 'condition_type' => 'WITH'),
+            ),
+        );
+        
+        $this->get('fa.sqlsearch.manager')->init($this->getRepository('FaAdBundle:PaaSearchKeyword'), $data);
+        $queryBuilder = $this->get('fa.sqlsearch.manager')->getQueryBuilder();
+        $query = $queryBuilder->getQuery();
 
         // initialize pagination manager service and prepare listing with pagination based of data
         $page = isset($data['pager']['page']) && $data['pager']['page'] ? $data['pager']['page'] : 1;
         $this->get('fa.pagination.manager')->init($query, $page,20);
-        $pagination = $this->get('fa.pagination.manager')->getPagination();
+        $pagination = $this->get('fa.pagination.manager')->getPagination($fetchJoinCollection);
 
         // initialize form manager service
         $formManager = $this->get('fa.formmanager');

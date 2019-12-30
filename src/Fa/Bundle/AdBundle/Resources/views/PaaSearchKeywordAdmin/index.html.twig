@@ -6,7 +6,7 @@
     {% for searchKeyword in pagination.getCurrentPageResults() %}
         {% set keywordIdArray = keywordIdArray|merge({0 : searchKeyword.id}) %}
     {% endfor %}
-    {% set categoryIds = fetch_repository('FaAdBundle:PaaSearchKeywordCategory').getCategoryIdsByKeywordId(keywordIdArray) %}
+    {# {% set categoryIds = fetch_repository('FaAdBundle:PaaSearchKeywordCategory').getCategoryIdsByKeywordId(keywordIdArray) %} #}
 {% endif %}
 
 {% set keywordEditGrant = false %}

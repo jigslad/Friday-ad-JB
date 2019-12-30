@@ -21,6 +21,7 @@ use Fa\Bundle\EntityBundle\Repository\LocationGroupRepository;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 
 /**
  * PaaSearchKeywordSearchAdminType form
@@ -64,10 +65,14 @@ class PaaSearchKeywordSearchAdminType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
+        /*$builder
             ->add('category__synonyms_keywords', TextType::class)
             ->add('category__name', TextType::class)
-            ->add('search', SubmitType::class);
+            ->add('search', SubmitType::class);*/
+        $builder
+        ->add('paa_search_keyword__keyword', TextType::class)
+        ->add('category__name', TextType::class)
+        ->add('search', SubmitType::class);
     }
 
     /**
