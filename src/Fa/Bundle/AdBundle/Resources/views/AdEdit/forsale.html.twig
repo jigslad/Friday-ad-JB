@@ -31,7 +31,7 @@
                             <div class="big-wrapper">
                                 <div class="change-category clearfix">
                                     <div class="cat-name-wrap">
-                                        <span>{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|join('<span class="seperator"></span>')|raw }}
+                                        <span>{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
                                     </div>
                                 </div>
                                 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
