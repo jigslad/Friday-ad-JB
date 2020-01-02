@@ -50,7 +50,7 @@ class ThirdPartyLoginController extends CoreController
     {
         $fbManager = $this->get('fa.facebook.manager');
         $fbManager->init($returnUrl, array('fbSuccess' => 1));
-        $facebookPermissions = array('email');
+        $facebookPermissions = array('email','user_location');
         return $fbManager->getFacebookHelper()->getLoginUrl($facebookPermissions);
     }
 
@@ -98,89 +98,100 @@ class ThirdPartyLoginController extends CoreController
                 )
             );
         } elseif ($request->get('code') && $request->get('state')) {
+
             $em        = $this->getEntityManager();
             $fbManager = $this->get('fa.facebook.manager');
             $fbManager->init($redirectRoute, array('fbSuccess' => 1));
             if ($fbManager->getFacebookSession()) {
-                $response = (new FacebookRequest($fbManager->getFacebookSession(), 'GET', '/me?fields=id,first_name, last_name, email, verified, picture.type(large)'))->execute();
+                $response = (new FacebookRequest($fbManager->getFacebookSession(), 'GET', '/me?fields=id,first_name,last_name,email,location{location{city}},verified,picture.type(large)'))->execute();
                 $fbFieldArray = $response->getGraphObject()->asArray();
-
                 if (isset($fbFieldArray['first_name']) && $fbFieldArray['first_name'] && isset($fbFieldArray['last_name']) && $fbFieldArray['last_name'] && isset($fbFieldArray['email']) && $fbFieldArray['email']) {
-                    //Fetch user logo from facebook account.
-                    if (is_array($fbFieldArray) && isset($fbFieldArray['picture'])) {
-                        $fbPictureArray = (array) $fbFieldArray['picture'];
-                        if (is_array($fbPictureArray) && isset($fbPictureArray['data'])) {
-                            $fbPictureArray = (array) $fbPictureArray['data'];
-                            if (is_array($fbPictureArray) && isset($fbPictureArray['url'])) {
-                                if ($redirectRoute == 'facebook_paa_login') {
-                                    if (!$this->container->get('session')->has('tempUserIdAP')) {
-                                        $tempUserId = CommonManager::generateHash();
-                                        $this->container->get('session')->set('tempUserIdAP', $tempUserId);
+                    if(is_array($fbFieldArray)){
+                        //Fetch user Location from facebook account.
+                        $userLocation = '';
+                        if (isset($fbFieldArray['location'])) {
+                            $fbLocationArray = (array) $fbFieldArray['location'];
+                            $fbLocationArray = (array) $fbLocationArray['location'];
+                            if (is_array($fbLocationArray) && isset($fbLocationArray['city'])) {
+                                $userLocation = $fbLocationArray['city'];
+                            }
+                        }
+                        //Fetch user logo from facebook account.
+                        if (isset($fbFieldArray['picture'])) {
+                            $fbPictureArray = (array) $fbFieldArray['picture'];
+                            if (is_array($fbPictureArray) && isset($fbPictureArray['data'])) {
+                                $fbPictureArray = (array) $fbPictureArray['data'];
+                                if (is_array($fbPictureArray) && isset($fbPictureArray['url'])) {
+                                    if ($redirectRoute == 'facebook_paa_login') {
+                                        if (!$this->container->get('session')->has('tempUserIdAP')) {
+                                            $tempUserId = CommonManager::generateHash();
+                                            $this->container->get('session')->set('tempUserIdAP', $tempUserId);
+                                        } else {
+                                            $tempUserId = $this->container->get('session')->get('tempUserIdAP');
+                                        }
+                                    } elseif ($redirectRoute == 'facebook_paa_lite_login') {
+                                        if (!$this->container->get('session')->has('tempUserIdAPL')) {
+                                            $tempUserId = CommonManager::generateHash();
+                                            $this->container->get('session')->set('tempUserIdAPL', $tempUserId);
+                                        } else {
+                                            $tempUserId = $this->container->get('session')->get('tempUserIdAPL');
+                                        }
+                                    } elseif ($redirectRoute == 'facebook_paa_lite_register') {
+                                        if (!$this->container->get('session')->has('tempUserIdREGPL')) {
+                                            $tempUserId = CommonManager::generateHash();
+                                            $this->container->get('session')->set('tempUserIdREGPL', $tempUserId);
+                                        } else {
+                                            $tempUserId = $this->container->get('session')->get('tempUserIdREGPL');
+                                        }
                                     } else {
-                                        $tempUserId = $this->container->get('session')->get('tempUserIdAP');
+                                        if (!$this->container->get('session')->has('tempUserIdREG')) {
+                                            $tempUserId = CommonManager::generateHash();
+                                            $this->container->get('session')->set('tempUserIdREG', $tempUserId);
+                                        } else {
+                                            $tempUserId = $this->container->get('session')->get('tempUserIdREG');
+                                        }
                                     }
-                                } elseif ($redirectRoute == 'facebook_paa_lite_login') {
-                                    if (!$this->container->get('session')->has('tempUserIdAPL')) {
-                                        $tempUserId = CommonManager::generateHash();
-                                        $this->container->get('session')->set('tempUserIdAPL', $tempUserId);
-                                    } else {
-                                        $tempUserId = $this->container->get('session')->get('tempUserIdAPL');
-                                    }
-                                } elseif ($redirectRoute == 'facebook_paa_lite_register') {
-                                    if (!$this->container->get('session')->has('tempUserIdREGPL')) {
-                                        $tempUserId = CommonManager::generateHash();
-                                        $this->container->get('session')->set('tempUserIdREGPL', $tempUserId);
-                                    } else {
-                                        $tempUserId = $this->container->get('session')->get('tempUserIdREGPL');
-                                    }
-                                } else {
-                                    if (!$this->container->get('session')->has('tempUserIdREG')) {
-                                        $tempUserId = CommonManager::generateHash();
-                                        $this->container->get('session')->set('tempUserIdREG', $tempUserId);
-                                    } else {
-                                        $tempUserId = $this->container->get('session')->get('tempUserIdREG');
-                                    }
-                                }
-                                $imagePath = $this->container->get('kernel')->getRootDir().'/../web/uploads/tmp';
-                                $fileContent = file_get_contents($fbPictureArray['url']);
-                                $fileReturn = file_put_contents($imagePath.DIRECTORY_SEPARATOR.$tempUserId.'.jpg', $fileContent);
+                                    $imagePath = $this->container->get('kernel')->getRootDir().'/../web/uploads/tmp';
+                                    $fileContent = file_get_contents($fbPictureArray['url']);
+                                    $fileReturn = file_put_contents($imagePath.DIRECTORY_SEPARATOR.$tempUserId.'.jpg', $fileContent);
 
-                                if ($fileReturn) {
-                                    //upload original image.
-                                    $isCompany = 0;
-                                    $orgImagePath = $imagePath;
-                                    $orgImageName = $tempUserId.'.jpg';
+                                    if ($fileReturn) {
+                                        //upload original image.
+                                        $isCompany = 0;
+                                        $orgImagePath = $imagePath;
+                                        $orgImageName = $tempUserId.'.jpg';
 
-                                    $dimension = getimagesize($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
-                                    $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 90, 'ImageMagickManager');
-                                    $origImage->loadFile($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
-                                    $origImage->save($imagePath.DIRECTORY_SEPARATOR.$tempUserId.'_original.jpg', 'image/jpeg');
+                                        $dimension = getimagesize($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
+                                        $origImage = new ThumbnailManager($dimension[0], $dimension[1], true, false, 90, 'ImageMagickManager');
+                                        $origImage->loadFile($imagePath.DIRECTORY_SEPARATOR.$orgImageName);
+                                        $origImage->save($imagePath.DIRECTORY_SEPARATOR.$tempUserId.'_original.jpg', 'image/jpeg');
 
-                                    $userImageManager = new UserImageManager($this->container, $tempUserId, $orgImagePath, $isCompany);
-                                    $userImageManager->saveOriginalJpgImage($tempUserId.'_original.jpg');
+                                        $userImageManager = new UserImageManager($this->container, $tempUserId, $orgImagePath, $isCompany);
+                                        $userImageManager->saveOriginalJpgImage($tempUserId.'_original.jpg');
+                                    }
                                 }
                             }
                         }
                     }
-
                     $sessionData = array(
                         'user_email' => $fbFieldArray['email'],
                         'user_first_name' => $fbFieldArray['first_name'],
                         'user_last_name' => $fbFieldArray['last_name'],
                         'user_facebook_id' => $fbFieldArray['id'],
                         'user_is_facebook_verified' => isset($fbFieldArray['verified'])?$fbFieldArray['verified']:'',
+                        'user_location' => $userLocation,
                     );
-
+                    $this->container->get('session')->set('fb_user_sesssion',$sessionData);
                     if ($getFbDetail) {
                         return $sessionData;
                     }
-
                     if ($updateFbId && $this->isAuth()) {
                         $loggedinUser = $this->getLoggedInUser();
                         if ($sessionData['user_email'] != $loggedinUser->getEmail()) {
                             return $this->handleMessage($this->get('translator')->trans('Facebook email and your account email is different.', array(), 'frontend'), $loginRedirectRoute, array(), 'error');
                         }
                     }
+
                     //check user is already registered
                     $fbUserObj = $this->getRepository('FaUserBundle:User')->findOneBy(array('facebook_id' => $fbFieldArray['id'], 'is_half_account' => 0));
                     if ($fbUserObj) {
@@ -205,7 +216,6 @@ class ThirdPartyLoginController extends CoreController
                         //now dispatch the login event
                         $event = new InteractiveLoginEvent($request, $token);
                         $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
-
                         if ($redirectRoute == 'facebook_paa_lite_login' || $redirectRoute == 'facebook_paa_lite_register') {
                             return $this->redirect($this->generateUrl('paa-lite', array('campaign_name'=>$this->container->get('session')->get('campaign_name'))));
                         } elseif ($customLoginMsg) {
@@ -253,7 +263,6 @@ class ThirdPartyLoginController extends CoreController
                             }
                         }
                     }
-
                     return $sessionData;
                 } else {
                     return 'MISSINGDATA';

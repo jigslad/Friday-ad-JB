@@ -86,7 +86,7 @@ class SecurityController extends ThirdPartyLoginController
             $fbManager = $this->get('fa.facebook.manager');
             $fbManager->init('facebook_login', array('fbSuccess' => 1));
 
-            $facebookPermissions = array('email');
+            $facebookPermissions = array('email','user_location');
             $facebookLoginUrl = $fbManager->getFacebookHelper()->getLoginUrl($facebookPermissions);
 
             //google
@@ -139,9 +139,7 @@ class SecurityController extends ThirdPartyLoginController
         if ($this->container->get('request_stack')->getCurrentRequest()->cookies->has('frontend_redirect_after_login_path_info') && $this->container->get('request_stack')->getCurrentRequest()->cookies->get('frontend_redirect_after_login_path_info') != CommonManager::COOKIE_DELETED) {
             $redirectAfterLoginUrl = htmlspecialchars_decode($this->container->get('request_stack')->getCurrentRequest()->cookies->get('frontend_redirect_after_login_path_info'));
         }
-
         $response = $this->processFacebook($request, 'facebook_login', 'fa_frontend_homepage', true, null, false, $redirectAfterLoginUrl);
-
         if (is_array($response)) {
             $this->container->get('session')->set('register_user_info', $response);
             return $this->redirect($this->generateUrl('fa_user_register'));
@@ -151,6 +149,7 @@ class SecurityController extends ThirdPartyLoginController
             return $this->redirectToRoute('login');
         } else {
             return $response;
+
         }
     }
 

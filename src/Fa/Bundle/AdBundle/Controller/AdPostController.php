@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\AdBundle\Controller;
 
+use Fa\Bundle\EntityBundle\Entity\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
@@ -429,7 +430,7 @@ class AdPostController extends ThirdPartyLoginController
         $fbManager = $this->get('fa.facebook.manager');
         $fbManager->init('facebook_paa_login', array('fbSuccess' => 1));
 
-        $facebookPermissions = array('email');
+        $facebookPermissions = array('email','user_location');
         $facebookLoginUrl = $fbManager->getFacebookHelper()->getLoginUrl($facebookPermissions);
 
         //google
@@ -1174,6 +1175,29 @@ class AdPostController extends ThirdPartyLoginController
     {
         $this->container->get('session')->set('paa_'.$step.'_step_data', serialize($data));
     }
+
+    /**
+     * Set facebook location data
+     *
+     * @param integer $location location name.
+     * @return
+     */
+    public function setFacebookLocationDataAction(Request $request , $location)
+    {
+        $objLocation = $this->getRepository('FaEntityBundle:Location')->findOneBy(array('name'=>$location));
+        $this->container->get('session')->remove('fb_user_sesssion');
+        if($objLocation){
+            $this->getUser()->setLocationTown($objLocation);
+        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($this->getUser());
+        // actually executes the queries (i.e. the INSERT query)
+        $entityManager->flush();
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
+    }
+
+
 
     /**
      * Get the step wise data from session.
