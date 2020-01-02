@@ -7,7 +7,7 @@
         {% else %}
             {{ attribute(form, field).vars.label }}
         {% endif %}
-        <span>({#{{ 'required'|trans({}, 'frontend-paa-fourth-step') }}#})</span>
+        <span>{#({{ 'required'|trans({}, 'frontend-paa-fourth-step') }})#}</span>
     {% else %}
         {% set tabArrowClass = 'tab-down' %}
         {% if validationFields is defined and validationFields|length %}
