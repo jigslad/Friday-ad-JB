@@ -41,3 +41,7 @@ FaAdBundle_campaigns_admin:
 FaAdBundle_location_radius_admin:
     resource: '@FaAdBundle/Resources/config/routing/location_radius_admin.yml'
     prefix:   /location-radius
+
+FaAdBundle_paa_search_keyword_admin:
+    resource: '@FaAdBundle/Resources/config/routing/paa_search_keyword_admin.yml'
+    prefix:   /paa_search_keyword
