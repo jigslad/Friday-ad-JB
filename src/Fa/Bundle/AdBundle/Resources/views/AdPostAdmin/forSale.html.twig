@@ -226,9 +226,9 @@
                                                             {% set paypalLastName = app.request.get('fa_paa_for_sale_admin').paypal_last_name %}
                                                         {% endif %}
                                                     {% endif %}
-                                                    {{ form_widget(attribute(form, 'paypal_first_name'), {'value': paypalFirstName, 'attr': {'class' : 'white-field', 'placeholder': 'Paypal first name'|trans({}, 'frontend-paa-fourth-step')}}) }}
-                                                    {{ form_widget(attribute(form, 'paypal_last_name'), {'value': paypalLastName, 'attr': {'class' : 'white-field', 'placeholder': 'Paypal last name'|trans({}, 'frontend-paa-fourth-step')}}) }}
-                                                    {{ form_widget(attribute(form, 'paypal_email'), {'value': paypalUserEmail, 'attr': {'class' : 'white-field', 'placeholder': 'Paypal email address'|trans({}, 'frontend-paa-fourth-step')}}) }}
+                                                    {{ form_widget(attribute(form, 'paypal_first_name'), {'value': paypalFirstName, 'attr': {'class' : 'white-field', 'placeholder': 'PayPal first name'|trans({}, 'frontend-paa-fourth-step')}}) }}
+                                                    {{ form_widget(attribute(form, 'paypal_last_name'), {'value': paypalLastName, 'attr': {'class' : 'white-field', 'placeholder': 'PayPal last name'|trans({}, 'frontend-paa-fourth-step')}}) }}
+                                                    {{ form_widget(attribute(form, 'paypal_email'), {'value': paypalUserEmail, 'attr': {'class' : 'white-field', 'placeholder': 'PayPal email address'|trans({}, 'frontend-paa-fourth-step')}}) }}
                                                     <button type="button" class="secondary-btn-1" id="verify_paypal_email_button">{{'Verify'|trans({}, 'frontend-paa-fourth-step')}}</button><span class="error-icon" id="paypal_email_verify_status" style="display:none;">error</span>
                                                     {{ form_errors(attribute(form, 'paypal_email')) }}
                                                     <div class="paypal-ins" id="paypal_text_id"></div>
@@ -428,7 +428,7 @@
            unblockElement('#forsale_paypal_block');
         })
         .done(function(data) {
-            $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through Paypal.'|trans({}, 'frontend-paa-fourth-step')}}');
+            $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through PayPal.'|trans({}, 'frontend-paa-fourth-step')}}');
             if (showMessage) {
                 $("#paypal_text_id").prev('small').remove();
             }
@@ -455,13 +455,13 @@
                         if ($('#fa_paa_for_sale_admin_paypal_email').is(':visible') && $('#fa_paa_for_sale_admin_paypal_email').val().length) {
                             if (showMessage) {
                                 $('#fa_paa_for_sale_admin_paypal_email, #fa_paa_for_sale_admin_paypal_first_name, #fa_paa_for_sale_admin_paypal_last_name').addClass('error');
-                                $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                $("<small class='error'>{{'PayPal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
                                 $('#paypal_email_verify_status').show('inline-block');
                             }
                         } else {
                             if (showMessage) {
                                 $('#fa_paa_for_sale_admin_paypal_email, #fa_paa_for_sale_admin_paypal_first_name, #fa_paa_for_sale_admin_paypal_last_name').addClass('error');
-                                $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                $("<small class='error'>{{'PayPal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
                                 $('#paypal_email_verify_status').show('inline-block');
                             }
                         }

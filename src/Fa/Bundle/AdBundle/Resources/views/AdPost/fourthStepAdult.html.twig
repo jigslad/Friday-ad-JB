@@ -290,7 +290,7 @@
                unblockElement('#adult_paypal_block');
            })
            .done(function(data) {
-               $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through Paypal.'|trans({}, 'frontend-paa-fourth-step')}}');
+               $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through PayPal.'|trans({}, 'frontend-paa-fourth-step')}}');
                if (showMessage) {
                    $("#paypal_text_id").prev('small').remove();
                }
@@ -317,13 +317,13 @@
                           if ($('#fa_paa_fourth_step_adult_paypal_email').is(':visible') && $('#fa_paa_fourth_step_adult_paypal_email').val().length) {
                               if (showMessage) {
                                   $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                  $("<small class='error'>{{'PayPal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           } else {
                               if (showMessage) {
                                   $('#fa_paa_fourth_step_adult_paypal_email, #fa_paa_fourth_step_adult_paypal_first_name, #fa_paa_fourth_step_adult_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                  $("<small class='error'>{{'PayPal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           }

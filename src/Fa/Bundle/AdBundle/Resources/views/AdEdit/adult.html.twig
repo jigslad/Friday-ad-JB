@@ -20,6 +20,19 @@
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
 
 {% block body -%}
+    <style>
+        .paypallink.error {
+            font-weight: normal;
+            background: transparent;
+            margin-top: 10px;
+            font-family: "Helvetica Neue",Arial;
+            font-size: 12px;
+            font-style: normal;
+            padding-left: 0;
+            color: #f74d4d;
+            line-height: 15px;
+        }
+    </style>
     <div class="posting-bg">
         {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
         <div class="row d-board-main">
@@ -53,6 +66,17 @@
             </div>
         </div>
     </div>
+    <div id="paypalLinkModal" class="reveal-modal small" data-reveal>
+        <a class="close-reveal-modal">&#215;</a>
+        <h5 class="modal-title">&nbsp;</h5>
+        <div class="row">
+            <div class="columns">
+                <p>{{ 'Friday-Ad cares about the security of our sellers and buyers. To protect you we ask that you provide details for a verified PayPal account. You can find out more ' }}
+                    <a href="https://www.paypal.com/uk/smarthelp/article/how-do-i-verify-my-paypal-account-faq444" target="_blank"> {{ 'here' }}</a>
+                </p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scriptbottom %}
@@ -68,6 +92,10 @@
         bindCapsuleButtonEvent('fa_paa_edit_adult', 'experience_id', 'radio');
         showPaypalSection(true);
         showRateSection();
+
+        $('.paypallink').on('click', function(){
+            $('#paypalLinkModal').foundation('reveal','open');
+        });
 
         $('#fa_paa_edit_adult_paypal_email, #fa_paa_edit_adult_paypal_first_name, #fa_paa_edit_adult_paypal_last_name').focus(function(e){
             $(this).removeClass('error');
@@ -163,7 +191,7 @@
                unblockElement('#adult_paypal_block');
            })
            .done(function(data) {
-               $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through Paypal.'|trans({}, 'frontend-ad-edit')}}');
+               $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through PayPal.'|trans({}, 'frontend-ad-edit')}}');
                if (showMessage) {
                    $("#paypal_text_id").prev('small').remove();
                }
@@ -189,13 +217,14 @@
                           if ($('#fa_paa_edit_adult_paypal_email').is(':visible') && $('#fa_paa_edit_adult_paypal_email').val().length) {
                               if (showMessage) {
                                   $('#fa_paa_edit_adult_paypal_email, #fa_paa_edit_adult_paypal_first_name, #fa_paa_edit_adult_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-ad-edit')}}</small>").insertBefore('#paypal_text_id');
+                                  /*$("<small class='error'>{{'PayPal account is not verified.'|trans({}, 'frontend-ad-edit')}}</small>").insertBefore('#paypal_text_id');*/
+
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           } else {
                               if (showMessage) {
                                   $('#fa_paa_edit_adult_paypal_email, #fa_paa_edit_adult_paypal_first_name, #fa_paa_edit_adult_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-ad-edit')}}</small>").insertBefore('#paypal_text_id');
+                                  $("<small class='error'>{{'PayPal account is not verified.'|trans({}, 'frontend-ad-edit')}}</small>").insertBefore('#paypal_text_id');
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           }

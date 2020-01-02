@@ -1,15 +1,18 @@
 <dd class="accordion-navigation">
     <a href="#panel3b" class="section-head">
-        <span class="myacc-paypal-icon">{{ 'Paypal account'|trans({}, 'frontend-paypal-email') }}</span>
+        <span class="myacc-paypal-icon">{{ 'Paypal Account'|trans({}, 'frontend-paypal-email') }}</span>
         <span>&nbsp;</span>
     </a>
     <div id="panel3b" class="content">
-        {{ 'This is the account that will receive funds when you accept payment through Paypal. Please provide the first name, last name and the email address used for your Paypal account.'|trans({}, 'frontend-paypal-email') }}
+        {#{{ 'This is the account that will receive funds when you accept payment through PayPal. Please provide the first name, last name and the email address used for your PayPal account.'|trans({}, 'frontend-paypal-email') }}#}
+        {{'Please provide your PayPal details exactly as they appear on your PayPal account.'|trans({}, 'frontend-paa-lite-common')}}
+        <a class="paypallink">Why do we ask this?</a>
+
         <div class="myacc-paypal mb10" id="paypal_section_id">
-            <label>{{ 'Paypal details'|trans({}, 'frontend-paypal-email') }}</label>
-            <input type="text" class="white-field" name="paypal_first_name" id="paypal_first_name" value="{{ app.user.getPaypalFirstName() }}" placeholder="{{ 'Paypal first name'|trans({}, 'frontend-paypal-email') }}"/><br />
-            <input type="text" class="white-field" name="paypal_last_name" id="paypal_last_name" value="{{ app.user.getPaypalLastName() }}"  placeholder="{{ 'Paypal last name'|trans({}, 'frontend-paypal-email') }}"/><br />
-            <input type="text" class="white-field" name="paypal_email" id="paypal_email" value="{{ app.user.getPaypalEmail() }}"  placeholder="{{ 'Paypal email address'|trans({}, 'frontend-paypal-email') }}"/>
+            <label>{{ 'PayPal Details'|trans({}, 'frontend-paypal-email') }}</label>
+            <input type="text" class="white-field" name="paypal_first_name" id="paypal_first_name" value="{{ app.user.getPaypalFirstName() }}" placeholder="{{ 'PayPal First Name'|trans({}, 'frontend-paypal-email') }}"/><br />
+            <input type="text" class="white-field" name="paypal_last_name" id="paypal_last_name" value="{{ app.user.getPaypalLastName() }}"  placeholder="{{ 'PayPal Last Name'|trans({}, 'frontend-paypal-email') }}"/><br />
+            <input type="text" class="white-field" name="paypal_email" id="paypal_email" value="{{ app.user.getPaypalEmail() }}"  placeholder="{{ 'PayPal Email Address'|trans({}, 'frontend-paypal-email') }}"/>
         </div>
         <div class="myacc-details white-checkbox paypal-acc-btn">
             <div class="mt20">
