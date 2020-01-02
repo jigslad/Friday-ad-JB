@@ -19,6 +19,39 @@
 {% endblock %}
 
 {% block dimension2 %}
+    <!-- Google TAG Manager -->
+    {% if app.user %}
+        {% set ClientID = app.user.id %}
+        {% set login_status = 'true' %}
+        {% if app.user.role == 'ROLE_BUSINESS_SELLER' %}
+            {% set userType = 'Business' %}
+        {% else %}
+            {% set userType = 'Private' %}
+        {% endif %}
+    {% else %}
+        {% set ClientID = 'null' %}
+        {% set login_status = 'false' %}
+        {% set userType = 'null' %}
+    {% endif %}
+    <script>
+        let adBlocker = false;
+        if(isAdBlocker) {
+            adBlocker = true;
+        }
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            "page": {
+                "pageType": '_410_page',
+                "loggedInStatus": {{ login_status }},
+                "clientID": {{ ClientID }},
+                "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
+                "loggedInType": {{ userType }},
+                "adBlocker": adBlocker,
+                "banners": {{ bannersArray|length }}
+            },
+        });
+    </script>
+    <!-- Google TAG Manager -->
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     {% if app.user.getId() is not defined or app.user.getId() is null %}
