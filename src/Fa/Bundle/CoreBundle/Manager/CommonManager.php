@@ -3312,4 +3312,21 @@ HTML;
 
         return !is_bool(strpos($haystack, $needle));
     }
+    
+    public static function multisort($sortArray, $sortField,$sortAs) {
+        $sortColumn = array_column($sortArray, $sortField);
+        
+        //echo '<pre>'; print_r($sortColumn);die;
+        /*$sortColumn = array();
+        foreach($sortArray as $sortRow) {
+            $sortColumn[] = $sortRow[$sortField];
+        }*/       
+        if($sortAs=='desc') { 
+            array_multisort($sortColumn, SORT_DESC, $sortArray);
+        } else {
+            array_multisort($sortColumn, SORT_ASC, $sortArray);
+        }
+        
+        return $sortArray;
+    }
 }

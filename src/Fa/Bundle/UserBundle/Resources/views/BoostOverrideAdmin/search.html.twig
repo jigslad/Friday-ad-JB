@@ -1,39 +1,26 @@
 {% block search_html %}
 <div class="row">
     <div class="columns">        
-            <div class="row outline">
-             <div class="large-7 columns" style="padding: 0;">
-            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-            {{ form_errors(form) }}
-               <div class="large-3 columns">
+        <div class="row outline">
+            <div class="large-7 columns" style="padding: 0;">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                {{ form_errors(form) }}
+               	<div class="large-3 columns">
                    {{ form_widget(form.user__category_id, {'attr': {'class':'form-control', 'placeholder': 'Category'|trans }}) }}
-               </div>
-               <div class="large-7 columns">
+               	</div>
+               	<div class="large-7 columns">
                     {{ form_widget(form.user__user_email, {'attr': {'class':'form-control', 'placeholder': 'Email Address'|trans }}) }}
                 </div>
                 <div class="large-2 columns">
                     {{ form_widget(form.search, {'attr': {'class':'small button'}}) }}
                 </div>
                 {{ form_end(form) }}
-              </div>
-                <div class="large-5 columns" style="padding: 0;">
-                {% set sortField = {'user_id': 'User ID'|trans, 'date_of_next_renewal': 'Date of next renewal'|trans, 'override_amount': 'Override amount'|trans} %}
-                {{ sortable_combo('boost_override_admin', sortField) }}
-                {#<form class="sorting_form clearfix">
-                    <label>Sort By</label>
-                      <select name="sort_field" id="sort_field" class="form-control"> 
-                          <option value="user_id">User ID</option>
-                          <option value="date_of_next_renewal">Date of next renewal</option>
-                          <option value="override_amount">Override amount</option>                              
-                      </select>
-                      <select name="sort_ord" id="sort_ord" class="form-control">
-                        <option value="asc">Asc</option>
-                        <option value="desc">Desc</option>
-                       </select>
-                    <input type="button" name="btn_sort" class="tiny button" value="Sort" onclick="doSorting()">
-                </form>#}
-                </div>
-            </div>        
+            </div>
+            <div class="large-5 columns" style="padding: 0;">
+                {% set sortField = {'user_id': 'User ID'|trans, 'date_of_next_renewal': 'Date of next renewal'|trans, 'user_boost_overide': 'Override amount'|trans} %}
+                {{ sortable_combo('boost_override_admin', sortField) }}                
+            </div>
+       </div>        
     </div>
 </div>
 {% endblock %}

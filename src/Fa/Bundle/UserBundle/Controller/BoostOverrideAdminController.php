@@ -58,6 +58,7 @@ class BoostOverrideAdminController extends CoreController implements ResourceAut
         if (isset($data['search']['user__user_email']) && $data['search']['user__user_email']) {
             $data['static_filters'] .= ' AND '.UserRepository::ALIAS.".email like '%".$data['search']['user__user_email']."%'";
         }
+        
         //echo '<pre>'; print_r($data['sorter']);die;
         $this->get('fa.sqlsearch.manager')->init($this->getRepository('FaUserBundle:User'), $data);
         $qb = $this->get('fa.sqlsearch.manager')->getQueryBuilder();
@@ -67,6 +68,25 @@ class BoostOverrideAdminController extends CoreController implements ResourceAut
         $page = (isset($data['pager']['page']) && $data['pager']['page']) ? $data['pager']['page'] : 1;
         $this->get('fa.pagination.manager')->init($query, $page);
         $pagination = $this->get('fa.pagination.manager')->getPagination();
+        
+        $userIdArray = array();
+        
+        if ($pagination->getNbResults()) {
+            foreach ($qb->getQuery()->getArrayResult() as $userDet) {
+                $userIdArray[] = $userDet['id'];
+            }
+        }
+        $userDataArray    = $this->getRepository('FaUserBundle:User')->getUserDataBoostDetailsArrayByUserId($userIdArray);
+        
+        //var_dump($data['sorter']);
+        $sortFld = '';
+        if($data['sorter']) {
+            if($data['sorter']['sort_field']=='user_id') { $sortFld = 'user_id'; }
+            else if($data['sorter']['sort_field']=='user_boost_overide') { $sortFld = 'max_boost_count'; }
+            else if($data['sorter']['sort_field']=='date_of_next_renewal') { $sortFld = 'boost_renew_date'; }
+            
+            $userDataArray    = CommonManager::multisort($userDataArray,$sortFld,$data['sorter']['sort_ord']);
+        }
         
         // initialize form manager service
         $formManager = $this->get('fa.formmanager');
@@ -80,6 +100,7 @@ class BoostOverrideAdminController extends CoreController implements ResourceAut
             'heading'    => $this->get('translator')->trans('Boost users'),
             'form'       => $form->createView(),
             'pagination' => $pagination,
+            'userDataArray' => $userDataArray,
             'sorter'     => $data['sorter'],
         );
         
