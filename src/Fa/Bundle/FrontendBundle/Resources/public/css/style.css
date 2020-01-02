@@ -2264,7 +2264,7 @@ button.alert.closed, button.alert.closed:hover, button.alert.closed:focus{backgr
 .fad-shop-icon{background:url(/bundles/fafrontend/images/FAD-Shop-icon.svg) no-repeat;margin-right:10px;float:right;width:95px;height:19px;text-indent:-9999px;margin-top:-3px}
 .fa-shop-icon-small{display:none;float:none!important;margin:10px 0 0}
 .image-tooltip-wrapper{position:relative;display:inline-block}
-.image-tooltip{background:#fbfbfb;border:1px solid #a8a8a8;border-radius:3px;padding:10px;font-size:13px;color:#a8a8a8;line-height:21px;width:280px;min-height:80px;position:absolute;left:-128px;bottom:28px;z-index:2;box-shadow:0 0 10px rgba(0,0,0,.15);visibility:hidden;opacity:0;-webkit-transition:visibility 0.5s, opacity 0.5s linear;-moz-transition:visibility 0.5s, opacity 0.5s linear;-o-transition:visibility 0.5s, opacity 0.5s linear;transition:visibility 0.5s, opacity 0.5s linear}
+.image-tooltip{background:#fbfbfb;border:1px solid #a8a8a8;border-radius:3px;padding:10px;font-size:13px;color:#a8a8a8;line-height:21px;width:280px;min-height:80px;position:absolute;left:-128px;bottom:28px;z-index:2;box-shadow:0 0 10px rgba(0,0,0,.15);visibility:hidden;opacity:0;-webkit-transition:visibility 0.2s, opacity 0.2s linear;-moz-transition:visibility 0.2s, opacity 0.2s linear;-o-transition:visibility 0.2s, opacity 0.2s linear;transition:visibility 0.2s, opacity 0.2s linear}
 .image-tooltip:after{left:50%;bottom:-15px;content:" ";height:0;width:0;position:absolute;pointer-events:none;margin-left:-9px;border-style:solid;border-width:7px;border-color:#b3b3b3 transparent transparent transparent}
 .image-tooltip-wrapper:hover .image-tooltip{visibility:visible;opacity:1}
 
