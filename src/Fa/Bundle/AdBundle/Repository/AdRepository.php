@@ -4277,7 +4277,7 @@ class AdRepository extends EntityRepository
             'text_ad_description'      => $ad->getDescription(),
             'url_ad_main_photo'        => $this->getMainImageThumbUrlFromAd($ad, $container),
             'url_ad_mark_sold'         => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
-            'url_ad_upsell'            => $container->get('router')->generate('ad_promote', array('type' => 'promote', 'adId' => $ad->getId()), true),
+            'url_ad_upsell'            => $container->get('router')->generate('ad_promote', array('type' => 'all', 'adId' => $ad->getId()), true),
         );
         
         $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow_free', $parameters, CommonManager::getCurrentCulture($container));
@@ -4341,7 +4341,7 @@ class AdRepository extends EntityRepository
                 'text_ad_description'      => $ad->getDescription(),
                 'url_ad_main_photo'        => $this->getMainImageThumbUrlFromAd($ad, $container),
                 'url_ad_mark_sold'         => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
-                'url_ad_upsell'            => $container->get('router')->generate('ad_promote', array('type' => 'promote', 'adId' => $ad->getId()), true),
+                'url_ad_upsell'            => $container->get('router')->generate('ad_promote', array('type' => 'all', 'adId' => $ad->getId()), true),
                 'url_ad_view'               => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
                 'url_ad_preview'            => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
                 
