@@ -88,7 +88,11 @@ EOF
             $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:process-email-queue --email_identifier="ad_expires_tomorrow"';
             $output->writeln($command, true);
             passthru($command, $returnVar);
-
+            
+            $command1 = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:process-email-queue --email_identifier="ad_expires_tomorrow_free"';
+            $output->writeln($command1, true);
+            passthru($command1, $returnVar);
+            
             if ($returnVar !== 0) {
                 $output->writeln('Error occurred during subtask', true);
             }
@@ -119,8 +123,14 @@ EOF
             //send email only if ad has user and status is active.
             $userRoleId = ($ad->getUser() ? $ad->getUser()->getRole()->getId() : 0);
             if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
+                $adIdArray = array($ad->getId());
+                $adUserPackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getAdPackageArrayByAdId($adIdArray);
+                if($adUserPackage[$ad->getId()]['price'] == 0) {
+                    $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('ad_expires_tomorrow_free', $user, $ad, $this->getContainer());
+                } else {
+                    $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('ad_expires_tomorrow', $user, $ad, $this->getContainer());
+                }
                 //$this->em->getRepository('FaAdBundle:Ad')->sendExpireTomorrowAlertEmail($ad, $this->getContainer());
-                $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('ad_expires_tomorrow', $user, $ad, $this->getContainer());
             }
 
             $ad->setIsRenewalMailSent(2);
