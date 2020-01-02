@@ -48,7 +48,7 @@
                         {% set categories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
                         {% for categoryId, categoryName in categories %}
                             {% set catClass = 'cat-' ~ categoryName|lower|replace({' ' : ''}) %}
-                            <a href="javascript:void(0)" class="{{ catClass }} main_category" id="maincategory_{{ categoryId }}" onclick="changeMainCategory('{{ categoryId }}', '', '1');">{{ categoryName }}</a>
+                            <a href="javascript:void(0)" class="{{ catClass }} main_category" id="maincategory_{{ categoryId }}" onclick="changeMainCategory('{{ categoryId }}', '{{ categoryName }}', '1');">{{ categoryName }}</a>
                          {% endfor %}
                     </div>
                 </div>
@@ -228,7 +228,14 @@
              if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
                eventLabel = eventLabel + ' - No';
              }
+               window.dataLayer = window.dataLayer || []
+               dataLayer.push({
 
+                   'event' : 'PAA Category Selection',
+                   'eventCategory':  'PAA - Step 1',
+                   'eventAction': 'Category icon click',
+                   'eventLabel': eventLabel
+               });
              ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
            }
            //GA Analytics code end
@@ -260,8 +267,14 @@
               if ($("#fa_paa_category_select_has_reg_no > .checked >").val() == '0') {
                 eventLabel = eventLabel + ' - No';
               }
-
-              ga('send', 'event', 'PAA - Step 1', 'Category icon Next step', eventLabel);
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
+                    'event' : 'PAA Next Step',
+                    'eventCategory':  'Next Step',
+                    'eventAction': '',
+                    'eventLabel': category_id
+                });
+                ga('send', 'event', 'PAA - Step 1', 'Category icon Next step', eventLabel);
             }
             //GA Analytics code end
 
@@ -280,7 +293,7 @@
             catLevel = 1;
             {% for key in categoryPath|keys %}
               if (catLevel == 1) {
-                changeMainCategory('{{ key }}', catArray[1]);
+                changeMainCategory('{{ key }}','', catArray[1]);
                 if ($.inArray( parseInt(catArray[1]), regNoFieldCategoryIds) == -1) {
                     $('#motor_reg_fields').html('');
                     $(document).foundation('equalizer', 'reflow');
@@ -316,6 +329,14 @@
                    regLookupResult = ' - Lookup unsuccessful || '+regNo;
                  }
                  var eventLabel = categoryPath + regLookupResult;
+                 window.dataLayer = window.dataLayer || []
+                 dataLayer.push({
+
+                     'event' : 'PAA Category Selection',
+                     'eventCategory':  'PAA - Step 1',
+                     'eventAction': 'Category icon click',
+                     'eventLabel': eventLabel
+                 });
                  ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
                  //GA Analytics code end
              });
@@ -441,7 +462,15 @@
            		incrscroll = 80;
            	} else if(winwidth>=400 && winwidth<=500) {
            		incrscroll = 40;
-           	} 
+           	}
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+
+                'event' : 'PAA Category Selection',
+                'eventCategory':  'PAA - Step 1',
+                'eventAction': 'Category icon click',
+                'eventLabel': selectedValue
+            });
             ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
             //GA Analytics code end
             

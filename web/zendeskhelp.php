@@ -132,6 +132,13 @@ $(document).ready(function() {
 	} else if(isNaN(searchCount)) {
 		searchCount = 0;
 	}
+    window.dataLayer = window.dataLayer || []
+    dataLayer.push({
+        'event' : 'Widget Search',
+        'eventCategory':  'help widget',
+        'eventAction': 'Search',
+        'eventLabel': searchText+" | "+searchCount
+    });
 	ga('send', 'event', 'help widget', 'search', "'"+searchText+" | "+searchCount+"'");
 });
 </script>

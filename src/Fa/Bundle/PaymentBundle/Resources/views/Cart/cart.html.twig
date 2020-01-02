@@ -82,7 +82,7 @@
                                                         {% else %}
                                                             {% set editUrl = path('ad_package_purchase', {'adId': cartDetail['ad_id'], 'packageId': packageId, 'packagePrintId': packagePrintId, 'business': businessValue}) %} 
                                                         {% endif %}
-                                                        <a href="javascript:void(0);" onclick="return sendGaAndRedirect('{{ editUrl }}', 'Change', '{{categoryPath|e('js')}}');" class="secondary-btn-3 button expand">{{'Change'|trans({}, 'frontend-cart')}}</a>
+                                                        <a href="javascript:void(0);" onclick="return sendGaAndRedirect('{{ editUrl }}', 'Change', '{{categoryPath|e('js')}}');sendgtm('{{ editUrl }}', 'Change', '{{categoryPath|e('js')}}');" class="secondary-btn-3 button expand">{{'Change'|trans({}, 'frontend-cart')}}</a>
                                                     </div>
                                                 {% endif %}
                                                 <div class="large-12 columns">
@@ -295,6 +295,16 @@ function getApplePaySession(url) {
 
   });
 
+}
+function  sendgtm(redirectUrl, action, label)
+{
+    window.dataLayer = window.dataLayer || []
+    dataLayer.push({
+        'event' : 'PAA Cart',
+        'eventCategory':  'PAA - Step Cart',
+        'eventAction': action,
+        'eventLabel': label
+    });
 }
 </script>
 {% endblock %}

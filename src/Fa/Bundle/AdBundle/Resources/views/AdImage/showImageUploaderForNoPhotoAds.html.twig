@@ -84,10 +84,12 @@
 {% endblock %}
 
 {% block scriptbottom %}
+
     {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
     
     {{ set_variables('imageUploadJavascriptBottom', {'loaded':'true'}) }}
     {{ block('imageUploadJavascriptBottom') }}
+
     <script language="javascript" type="text/javascript">
     //<![CDATA[
     function addMorePhotos()
@@ -119,6 +121,14 @@
                 $('#adImgHash').val(response.adImgHash);
                 ga('send', 'event', 'Ad details', 'Add photo - autoemail');
             }
+        });
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Options',
+            'eventCategory':  'Ad Details',
+            'eventAction': 'add photo - autoemail',
+            'eventLabel': {{ app.request.get('id') }}
         });
     }
     //]]>

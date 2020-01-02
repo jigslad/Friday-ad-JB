@@ -673,10 +673,17 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
             }
         });
 
-        function visitUserProfileOrAd(eventCategory, eventAction, eventLabel)
-        {
-            ga('send', 'event', eventCategory, eventAction, eventLabel);
-        }
+    function visitUserProfileOrAd(eventCategory, eventAction, eventLabel)
+    {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'Position',
+            'eventCategory':  'Click Ad Position',
+            'eventAction': 'Featured Business',
+            'eventLabel': eventLabel
+        });
+      ga('send', 'event', eventCategory, eventAction, eventLabel);
+    }
 
         function gaSendForRecommendedSlotSearch(url, domain, title,slotindex,creativeOrd)
         {

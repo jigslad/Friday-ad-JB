@@ -31,6 +31,7 @@ $(window).on('load', function() {
 	
 function upgradeToFeaturedBtn(id, rootCategoryId) {
 	blockPage();
+
 	ga('send', 'event', 'Search Results', 'Upgrade', 'Click');
     var route = Routing.generate('upgrade_to_featured_ad', { 'adId': id, 'rootCategoryId': rootCategoryId});
     $.ajax({
@@ -59,7 +60,14 @@ function paypalPaymentProcess() {
         redirect_url = 'paypal_add_to_cart_ajax';
     {% else %}
         redirect_url = 'paypal_upgrade_to_featured_ad_ajax';
-        ga('send', 'event', 'Search Results', 'Upgrade', 'Pay - Paypal'); 
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'Options',
+            'eventCategory':  'Search Results',
+            'eventAction': 'Upgrade',
+            'eventLabel': 'Paypal'
+        });
+        ga('send', 'event', 'Search Results', 'Upgrade', 'Pay - Paypal');
     {% endif %}
 
     var route = Routing.generate(redirect_url);
