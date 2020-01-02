@@ -72,9 +72,9 @@
                 {% else %}
                     {% set optHideOrRemove = 'hide' %}
                 {% endif %}
-                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove, 'mob']) %}
+                {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [orgAdDesc, optHideOrRemove,'AdDetails', 'mob']) %}
                 {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), adDescWithReplacedPhone) %}
-                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, 'hide', 'mob'])) %}
+                {% set adDetail = replace_value_in_array(adDetail, constant(solrMapping ~ 'DESCRIPTION'), staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [adId, adDescWithReplacedPhone, 'hide','Profile', 'mob'])) %}
             {% endif %}
             {% if attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
                 <p>{{attribute(adDetail, constant(solrMapping ~ 'DESCRIPTION'))|replace({"\\n": "<br />", "&nbsp;": " "})|raw}}</p>
