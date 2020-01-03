@@ -45,8 +45,16 @@
                             <h1 class="text-center paa-title">{{ 'Edit your ad'|trans({}, 'frontend-ad-edit') }} </h1>
                             <div class="big-wrapper">
                                 <div class="change-category clearfix">
-                                    <div class="cat-name-wrap">
+                                    {#<div class="cat-name-wrap">
                                         <span>{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
+                                    </div>#}
+                                    <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
+                                        <div class="media-object-section">
+                                            <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span>
+                                        </div>
+                                        <div class="media-object-section">
+                                            {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
+                                        </div>
                                     </div>
                                 </div>
                                 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}

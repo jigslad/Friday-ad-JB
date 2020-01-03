@@ -1,10 +1,19 @@
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
+    {#<div class="left cat-name-wrap">
         {% set categoryId = ad.category.id %}
         <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
-    </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_first_step', {'is_edit' : 1}) }}');" title="{{ 'Change category'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>#}
+    <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
+        <div class="media-object-section">
+            <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-paa-fourth-step') }}:</span>
+        </div>
+        {% set categoryId = ad.category.id %}
+        <div class="media-object-section">
+            {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
+        </div>
+        <div class="right">
+            <a href="javascript:submitFormUsingAjax('{{ path('ad_post_first_step', {'is_edit' : 1}) }}');" title="{{ 'Change category'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+        </div>
     </div>
 </div>
 {% if ad.type.id is defined and ad.type.id %}
