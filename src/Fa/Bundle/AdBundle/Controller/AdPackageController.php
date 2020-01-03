@@ -472,6 +472,7 @@ class AdPackageController extends CoreController
         if ($type == 'promote' || $type == 'renew') {
             $activePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getActiveAdPackage($adId);
         }
+        
         if ($activePackage && $activePackage->getPackage()) {
             $activePackageArray[] = $activePackage->getPackage()->getId();
             if (!$selectedPackageId && $type == 'renew') {
@@ -549,9 +550,33 @@ class AdPackageController extends CoreController
         $adExpiryDays = $this->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $this->container);
         $packageIds   = array();
 
+        
+        //display all packages if active package price is zero
+        $typeAllActivePackage      = null;
+        $getFreePackageForCategory = null; $getFreePackageForCategoryId = null;
+        $typeAllActivePackageId = null;
+        $removeFreePackageId = false;
+        if($type == 'all') {
+            $typeAllActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getActiveAdPackage($adId);
+            $getFreePackageForCategory = $this->getRepository('FaPromotionBundle:PackageRule')->getFreeAdPackageByCategory($categoryId, $this->container);
+            //echo '<pre>'; var_dump($getFreePackageForCategory);die;
+            if ($typeAllActivePackage && $typeAllActivePackage->getPackage()) {
+                $typeAllActivePackageId = $typeAllActivePackage->getPackage()->getId();
+            }
+            if ($getFreePackageForCategory && isset($getFreePackageForCategory[0])) {
+                $getFreePackageForCategoryId = $getFreePackageForCategory[0]->getPackage()->getId();
+                if($getFreePackageForCategoryId!=$typeAllActivePackageId) {
+                    $removeFreePackageId = true;
+                }
+            }
+        }
         //loop through all show packages
         foreach ($packages as $package) {
-            $packageIds[] = $package->getPackage()->getId();
+            if($type == 'all' && $removeFreePackageId== true && $package->getPackage()->getId()==$typeAllActivePackageId) {
+                
+            } else {
+                $packageIds[] = $package->getPackage()->getId();
+            }
         }
 
         $printEditionLimits = $this->getRepository('FaPromotionBundle:Package')->getPrintEditionLimitForPackages($packageIds);

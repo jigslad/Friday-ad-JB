@@ -115,7 +115,38 @@ class PackageRuleRepository extends EntityRepository
         }
         return $packages;
     }
-
+    
+    public function getFreeAdPackageByCategory($categoryId,$container = null)
+    {
+        $getFreeAdPackage = array();
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS, PackageRepository::ALIAS)
+        ->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
+        ->andWhere(PackageRepository::ALIAS.'.status = 1')
+        ->andWhere(PackageRepository::ALIAS.'.package_for = :package_for')
+        ->setParameter('package_for', 'ad')
+        ->andWhere(PackageRepository::ALIAS.'.price IS NULL OR '.self::ALIAS.'.price < 0')
+        ->andWhere(self::ALIAS.'.category = :categoryId')
+        ->setParameter('categoryId', $categoryId);
+        
+        //echo 'category==='.$categoryId.'===query==='.$query->getQuery()->getSql();
+        $getFreeAdPackage =  $query->getQuery()->getResult();
+        
+        if (empty($getFreeAdPackage) && $categoryId) {
+            $parentCategoryIds = array_keys($this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container));
+            array_pop($parentCategoryIds);
+            $parentCategoryIds = array_reverse($parentCategoryIds);
+            if (count($parentCategoryIds)) {
+                foreach ($parentCategoryIds as $parentCategoryId) {
+                    return $this->getFreeAdPackageByCategory($parentCategoryId,$container);
+                }
+            }
+        }
+        
+        return $getFreeAdPackage;
+        
+    }
+    
     /**
      * Get active packages by category id, location group & user type.
      *
