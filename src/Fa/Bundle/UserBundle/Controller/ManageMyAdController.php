@@ -101,6 +101,10 @@ class ManageMyAdController extends CoreController
             'boostRenewDate'  => $getBoostDetails['boostRenewDate'],
             'userBusinessCategory' => $getBoostDetails['userBusinessCategory'],
         );
+        if ($request->get('limit')) {
+            $category = $this->getRepository('FaEntityBundle:Category')->find($request->get('category'));
+            $this->addFlash('notice','As a private user, you can only have up to '.$request->get('limit').' ads live in the '.$category->getName().' category at any time. If you wish to place your latest ad live for free, you must remove an existing live ad. Alternatively, become a business user to place unlimited ads.');
+        }
 
         $showCompetitionPopup = false;
 
