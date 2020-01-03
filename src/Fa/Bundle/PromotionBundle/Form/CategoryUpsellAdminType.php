@@ -89,6 +89,7 @@ class CategoryUpsellAdminType extends AbstractType
             'query_builder' => function (UpsellRepository $er) {
                 return $er->createQueryBuilder(UpsellRepository::ALIAS)
                 ->where(UpsellRepository::ALIAS . '.status = 1')
+                ->andWhere(UpsellRepository::ALIAS . '.type = '.UpsellRepository::UPSELL_TYPE_TOP_ADVERT_ID)
                 ->orderBy(UpsellRepository::ALIAS . '.title', 'ASC');
             },
             'required' => true,
