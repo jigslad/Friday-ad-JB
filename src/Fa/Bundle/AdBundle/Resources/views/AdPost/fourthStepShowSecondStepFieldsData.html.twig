@@ -3,7 +3,7 @@
         {% set categoryId = ad.category.id %}
         <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
     </div>#}
-    <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
+    <div class="left cat-name-wrap media-object" style="display: inline-flex;">
         <div class="media-object-section">
             <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-paa-fourth-step') }}:</span>
         </div>
