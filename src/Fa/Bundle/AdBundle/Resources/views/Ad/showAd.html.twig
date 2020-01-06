@@ -1726,8 +1726,8 @@
                     "subCategory": "{{ categoryArray.1 is defined ? categoryArray.1 : '' }}",
                     "subSubCategory": "{{ categoryArray.2 is defined ? categoryArray.2 : '' }}",
                     "subSubSubCategory": "{{ categoryArray.3 is defined ? categoryArray.3 : '' }}",
-                    "id": {{ adId }},
-                    "photos": {{ adDetail.a_total_images_i }},
+                    "id": '{{ adId }}',
+                    "photos": '{{ adDetail.a_total_images_i }}',
                     "county": "{{ location_slug }}",
                     "locationGroup": "{{ locationGroup.name is defined ? locationGroup.name : locationGroup }}",     //ad location group (Nursery, Non-Print, Print - (print location)
                     "town": "{{ app.request.get('location') }}",              //ad town
