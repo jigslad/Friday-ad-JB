@@ -39,12 +39,12 @@
         dataLayer.push({
             "page": {
                 "pageType": '_500_page',
-                "loggedInStatus": {{ login_status }},
-                "clientID": {{ ClientID }},
+                "loggedInStatus": '{{ login_status }}',
+                "clientID": '{{ ClientID }}',
                 "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
-                "loggedInType": {{ userType }},
+                "loggedInType": '{{ userType }}',
                 "adBlocker": adBlocker,
-                "banners": {{ bannersArray|length }}
+                "banners": '{{ bannersArray is defined ? bannersArray|length : '' }}'
             },
         });
     </script>
