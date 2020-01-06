@@ -295,13 +295,13 @@
     window.dataLayer = window.dataLayer || [];
     dataLayer.push({
         "page": {
-            "pageType": {{ pageType }},
-            "loggedInStatus": {{ login_status }},
-            "clientID": {{ ClientID }},
+            "pageType": '{{ pageType }}',
+            "loggedInStatus": '{{ login_status }}',
+            "clientID": '{{ ClientID }}',
             "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
-            "loggedInType": {{ userType }},
+            "loggedInType": '{{ userType }}',
             "adBlocker": adBlocker,
-            "banners": {{ bannersArray|length }}
+            "banners": '{{ bannersArray|length }}'
         },
     });
 </script>
