@@ -125,11 +125,11 @@ class PackageRuleRepository extends EntityRepository
         ->andWhere(PackageRepository::ALIAS.'.status = 1')
         ->andWhere(PackageRepository::ALIAS.'.package_for = :package_for')
         ->setParameter('package_for', 'ad')
-        ->andWhere(PackageRepository::ALIAS.'.price IS NULL OR '.self::ALIAS.'.price < 0')
+        //->andWhere(PackageRepository::ALIAS.'.price IS NULL OR '.self::ALIAS.'.price < 0')
+        ->andWhere(PackageRepository::ALIAS.'.price = 0')
         ->andWhere(self::ALIAS.'.category = :categoryId')
         ->setParameter('categoryId', $categoryId);
         
-        //echo 'category==='.$categoryId.'===query==='.$query->getQuery()->getSql();
         $getFreeAdPackage =  $query->getQuery()->getResult();
         
         if (empty($getFreeAdPackage) && $categoryId) {
@@ -230,6 +230,26 @@ class PackageRuleRepository extends EntityRepository
 
         return $packages;
     }
+    
+    public function getActivePackagesByPackageIds($packageIds)
+    {
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS, PackageRepository::ALIAS)
+        ->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
+        ->andWhere(PackageRepository::ALIAS.'.status = 1')
+        ->andWhere(PackageRepository::ALIAS.'.package_for = :package_for')
+        ->setParameter('package_for', 'ad')
+        ->andWhere(self::ALIAS.'.package IN (:packageIds)')
+        ->setParameter('packageIds', $packageIds)
+        ->addOrderBy(PackageRepository::ALIAS.'.role', 'DESC')
+        ->addOrderBy(PackageRepository::ALIAS.'.price', 'ASC')
+        ->addGroupBy(PackageRepository::ALIAS.'.id');
+        
+        $packages =  $query->getQuery()->getResult();
+        
+        return $packages;
+    }
+    
     
     /**
      * Get package rules based on package id.
