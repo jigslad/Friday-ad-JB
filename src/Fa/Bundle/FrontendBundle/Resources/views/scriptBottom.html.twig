@@ -300,7 +300,7 @@
             "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
             "loggedInType": '{{ userType }}',
             "adBlocker": adBlocker,
-            "banners": '{{ bannersArray|length }}'
+            "banners": '{{ bannersArray is defined ? bannersArray|length : '' }}'
         },
     });
 </script>
