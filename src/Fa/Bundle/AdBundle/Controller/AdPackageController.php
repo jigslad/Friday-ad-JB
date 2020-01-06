@@ -559,7 +559,6 @@ class AdPackageController extends CoreController
         if($type == 'all') {
             $typeAllActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getActiveAdPackage($adId);
             $getFreePackageForCategory = $this->getRepository('FaPromotionBundle:PackageRule')->getFreeAdPackageByCategory($categoryId, $this->container);
-            //echo '<pre>'; var_dump($getFreePackageForCategory);die;
             if ($typeAllActivePackage && $typeAllActivePackage->getPackage()) {
                 $typeAllActivePackageId = $typeAllActivePackage->getPackage()->getId();
             }
@@ -572,13 +571,17 @@ class AdPackageController extends CoreController
         }
         //loop through all show packages
         foreach ($packages as $package) {
-            if($type == 'all' && $removeFreePackageId== true && $package->getPackage()->getId()==$typeAllActivePackageId) {
+            if($type == 'all' && $removeFreePackageId== true && $package->getPackage()->getId()==$getFreePackageForCategoryId) {
                 
             } else {
                 $packageIds[] = $package->getPackage()->getId();
             }
         }
-
+        
+        if($type == 'all' && !empty($packageIds)) {
+            $packages = $this->getRepository('FaPromotionBundle:PackageRule')->getActivePackagesByPackageIds($packageIds);
+        }
+            
         $printEditionLimits = $this->getRepository('FaPromotionBundle:Package')->getPrintEditionLimitForPackages($packageIds);
 
         if (count($printEditionLimits) && 'POST' !== $request->getMethod()) {
