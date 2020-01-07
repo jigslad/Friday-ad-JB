@@ -48,7 +48,7 @@
                         {% set categories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
                         {% for categoryId, categoryName in categories %}
                             {% set catClass = 'cat-' ~ categoryName|lower|replace({' ' : ''}) %}
-                            <a href="javascript:void(0)" class="{{ catClass }} main_category" id="maincategory_{{ categoryId }}" onclick="changeMainCategory('{{ categoryId }}', '{{ categoryName }}', '1');">{{ categoryName }}</a>
+                            <a href="javascript:void(0)" class="{{ catClass }} main_category" id="maincategory_{{ categoryId }}" onclick="changeMainCategory('{{ categoryId }}', '', '1','');">{{ categoryName }}</a>
                          {% endfor %}
                     </div>
                 </div>
@@ -468,7 +468,7 @@
                 'event' : 'PAA Category Selection',
                 'eventCategory':  'PAA - Step 1',
                 'eventAction': 'Category icon click',
-                'eventLabel': selectedValue
+                'eventLabel': eventLabel
             });
             ga('send', 'event', 'PAA - Step 1', 'Category icon click', eventLabel);
             //GA Analytics code end
