@@ -12,6 +12,8 @@
 {% set adUserPackageUpsellRepository = fetch_repository('FaAdBundle:AdUserPackageUpsell') %}
 {% set shopPackageCreditRepository = fetch_repository('FaPromotionBundle:ShopPackageCredit') %}
 {% set categoryUpsellRepository = fetch_repository('FaPromotionBundle:CategoryUpsell') %}
+{% set activeIdCnt = (activeAdIds is defined)?activeAdIds|split(',')|length:0 %}
+
 
 {% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
 {% set adUrl = ''%}
@@ -96,7 +98,7 @@
 				        {% endif %}
                 			
                 			{#<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>#}
-                		{% if isBoostEnabled==1 %}
+                		{% if isBoostEnabled==1 and boostAdRemaining >0 %}
                     			<li class="lightgreencircle">Boosts remaining: <span>{{ boostAdRemaining }}</span></li>
                     			<li class="boostBtn"><button id="boost_ad_selected_all" class="xs-btn-1 button all-sel-texts">Boost All Active Ads</button></li>
                     		{% endif %}
@@ -457,24 +459,35 @@
     $(function(){
         $('#boost_ad_selected_all').on('click',function(e) {
         	$('#boost_ad_selected_all').prop("disabled", true);
-            
+
+        	var remainingCnt = {{(boostAdRemaining is defined and boostAdRemaining!='')?boostAdRemaining:0}};
         	var activeAdIds = '{{ activeAdIds }}';
-        	$.ajax({
-                type: "POST",
-                url: '{{path("ajax_manage_my_ads_boost_multiple_ad")}}',
-                data: {'adIds':activeAdIds,boost_value:1},
-                asyn:false,
-                cache:false,
-                success:function(result)
+        	var activeIdsCnt = {{ activeIdCnt }};
+        	
+            if(remainingCnt>0 && remainingCnt>=activeIdsCnt) {                        	
+            	$.ajax({
+                    type: "POST",
+                    url: '{{path("ajax_manage_my_ads_boost_multiple_ad")}}',
+                    data: {'adIds':activeAdIds,boost_value:1},
+                    asyn:false,
+                    cache:false,
+                    success:function(result)
+                            {
+                        if(result.error == "")
                         {
-                    if(result.error == "")
-                    {
-                            window.location.href = '{{ path('manage_my_ads_active') }}';
-                            $('#boost_ad_selected_all').prop("disabled", false);
-                            
+                                window.location.href = '{{ path('manage_my_ads_active') }}';
+                                $('#boost_ad_selected_all').prop("disabled", false);
+                                
+                            }
                         }
-                    }
-        	});            
+            	}); 
+            } else if(remainingCnt>0 && remainingCnt < activeIdsCnt) {
+            	alert('Sorry, you have remaining boost count as '+remainingCnt+', but you have selected '+activeIdsCnt+' ads.');
+            	$('#boost_ad_selected_all').prop("disabled", false);
+            } else {
+            	alert('Sorry, your maximum boost count has been exceeded.');
+            	$('#boost_ad_selected_all').prop("disabled", false);
+            }           
         });
         
         $('.boost_your_ad').on('click',function(e)

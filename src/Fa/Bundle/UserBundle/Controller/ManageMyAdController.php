@@ -54,11 +54,11 @@ class ManageMyAdController extends CoreController
         $inActiveAdCount = 0;
         $boostedAdCount  = $adsBoostedCount  =  0;
         $type            = $request->get('type', 'active');
+        if($type=='inactive') {
+            $route = 'manage_my_ads_inactive';
+        } else { $route = 'manage_my_ads_active'; }
         
         $sortBy = 'ad_date';
-                
-        //$res = $this->getRepository('FaPromotionBundle:CategoryUpsell')->getCategoryByUpsellId('51','3411');
-        //echo '<pre>';print_r($res);die;
         
         $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
         if($this->container->get('session')->has('filterBy') && $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
@@ -68,14 +68,16 @@ class ManageMyAdController extends CoreController
         //$userPackageAdLimit = $this->getRepository('FaUserBundle:UserPackage')->getUserPackageAdLimit($loggedinUser->getId());
         //echo '<pre>'; print_r($userPackageAdLimit);die;
         
-        $onlyActiveAdCount = 0;
+        $onlyActiveAdCount = $qryAdCount = 0;
         $adLimitCount = 0;
         $activeAdIdarr = $activeAdsarr = array();$activeAdIds = '';
         $activeShopPackage = array();
+        $queryCntArray = array();
         
         $activeAdCountArray         = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'active', 'ad_date', true)->getResult();
         $inActiveAdCountArray       = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'inactive',  'ad_date', true)->getResult();
         $onlyActiveAdCountArray     = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), 'onlyactive',  'ad_date', true)->getResult();
+        $queryCntArray              = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type, $sortBy, true)->getResult();
         $query                      = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type, $sortBy);
         
         $activeAdsarr   = $this->getRepository('FaAdBundle:Ad')->getMyAdIdsQuery($loggedinUser->getId())->getResult();
@@ -88,7 +90,17 @@ class ManageMyAdController extends CoreController
         if($currentActivePackage && $currentActivePackage->getPackage())  {
             $adLimitCount = $currentActivePackage->getPackage()->getAdLimit();
         }        
+       // var_dump($queryCntArray);
         
+        if(is_array($queryCntArray)) {
+            /*if($sortBy == 'sel-basic' || $sortBy == 'sel-featured') { 
+                echo 'if';
+                $qryAdCount = count($queryCntArray);
+            } else {*/
+                //echo 'else';
+                $qryAdCount = isset($queryCntArray[0])?$queryCntArray[0]['total_ads']:0;
+            //}
+        }
         if (is_array($activeAdCountArray)) {
             $activeAdCount = isset($activeAdCountArray[0])?$activeAdCountArray[0]['total_ads']:0;
         }
@@ -106,9 +118,16 @@ class ManageMyAdController extends CoreController
         $boostedAdCount = $getBoostDetails['boostedAdCount'];
 
         $totalAdCount = $activeAdCount + $inActiveAdCount + $adsBoostedCount;
-
-        // initialize pagination manager service and prepare listing with pagination based of data
+      
+        // initialize pagination manager service and prepare listing with pagination based of data        
         $page = $request->get('page', 1);
+        $pageResCnt = ($page-1)*10;
+        //echo 'qryAdCnt==='.$qryAdCount.'===page==='.$page.'===pageResCnt===='.$pageResCnt;
+        if($page>1 && ($pageResCnt > $qryAdCount)) {
+            $page = 1;
+            return $this->redirectToRoute($route);
+        }
+        
         $this->get('fa.pagination.manager')->init($query, $page);
         $pagination = $this->get('fa.pagination.manager')->getPagination();
         $moderationToolTipText = EntityRepository::inModerationTooltipMsg();
@@ -121,8 +140,6 @@ class ManageMyAdController extends CoreController
                 }                
             }
         }
-        
-        
          
         if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
@@ -415,11 +432,13 @@ class ManageMyAdController extends CoreController
                     $messageManager->setFlashMessage($error, 'error');
                 }
             }
-            sleep(2);
-            return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg));
+            
+            echo $invalidNewStatus;die;
+            //sleep(2);
+            //return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg));
         }
 
-        return new Response();
+        //return new Response();
     }
 
     /**
