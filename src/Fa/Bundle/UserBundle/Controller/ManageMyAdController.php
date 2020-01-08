@@ -122,7 +122,7 @@ class ManageMyAdController extends CoreController
         // initialize pagination manager service and prepare listing with pagination based of data        
         $page = $request->get('page', 1);
         $pageResCnt = ($page-1)*10;
-        //echo 'qryAdCnt==='.$qryAdCount.'===page==='.$page.'===pageResCnt===='.$pageResCnt;
+ 
         if($page>1 && ($pageResCnt > $qryAdCount)) {
             $page = 1;
             return $this->redirectToRoute($route);
@@ -433,12 +433,11 @@ class ManageMyAdController extends CoreController
                 }
             }
             
-            echo $invalidNewStatus;die;
-            //sleep(2);
-            //return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg));
+            sleep(2);
+            return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg));
         }
 
-        //return new Response();
+        return new Response();
     }
 
     /**
