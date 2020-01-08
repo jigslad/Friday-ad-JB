@@ -63,5 +63,14 @@ class ShopPackageCreditRepository extends EntityRepository
         ->getQuery()
         ->getResult();
     }
+    
+    public function getCreditByPackageCategoryType($packageId,$package_sr_no,$categoryId) {
+        return $this->createQueryBuilder(self::ALIAS)
+        ->andWhere(self::ALIAS.'.package = '.$packageId)
+        ->andWhere(self::ALIAS.'.package_sr_no = '.$package_sr_no)
+        ->andWhere(self::ALIAS.'.category = '.$categoryId)
+        ->getQuery()
+        ->getResult();
+    }
         
 }

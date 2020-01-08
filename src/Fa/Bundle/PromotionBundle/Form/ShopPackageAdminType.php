@@ -433,6 +433,7 @@ class ShopPackageAdminType extends AbstractType
             $this->em->persist($packageRule);
 
             //set category
+            $totalCredit = 0;
             for ($i = 1; $i <= $this->noOfCreditblocks; $i++) {
                 $shopPackageCredit = null;
                 if ($form->get('shop_package_credit_id_'.$i)->getData()) {
@@ -444,6 +445,7 @@ class ShopPackageAdminType extends AbstractType
                 if ($shopPackageCredit) {
                     if ($form->get('credit_'.$i)->getData()) {
                         $shopPackageCredit->setCredit($form->get('credit_'.$i)->getData());
+                        $totalCredit = $totalCredit + $form->get('credit_'.$i)->getData();
                     } else {
                         $shopPackageCredit->setCredit(null);
                     }
@@ -483,6 +485,33 @@ class ShopPackageAdminType extends AbstractType
             }
 
             $this->em->flush();
+            
+            
+            
+            if($form->get('ad_limit')->getData()) {
+                $remainingCredit = $form->get('ad_limit')->getData() - $totalCredit;                
+                if ($remainingCredit >0) {
+                    $shopPackageCreditObj = $this->em->getRepository('FaPromotionBundle:ShopPackageCredit')->getCreditByPackageCategoryType($package->getId(),1,$form->get('category_id_1')->getData());
+                    if (empty($shopPackageCreditObj)) {
+                        $shopPackageCredit = new ShopPackageCredit();
+                        $shopPackageCredit->setPackage($package);
+                    
+                        if ($form->get('category')->getData()) {
+                            $shopPackageCredit->setCategory($this->em->getReference('FaEntityBundle:Category', $form->get('category')->getData()));
+                        } 
+                        $shopPackageCredit->setCredit($remainingCredit);
+                        $shopPackageCredit->setPackageSrNo(1);      
+                        $shopPackageCredit->setPaidUserOnly(0);
+                        $shopPackageCredit->setDuration('1m');                       
+                    } else {
+                        $shopPackageCredit = $shopPackageCreditObj[0];
+                        $shopPackageCredit->setCredit($shopPackageCredit->getCredit()+$remainingCredit);                        
+                    }
+                    $this->em->persist($shopPackageCredit);
+                    $this->em->flush();
+                }
+            }
+            
         }
     }
 
