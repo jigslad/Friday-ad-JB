@@ -36,7 +36,7 @@
 .individual-upsell-payment-buttons .columns { padding-left:0px !important;  padding-right:0px !important; }
 .individual-upsell-payment-buttons .modal-paypal-box { background-color: #ffffff !important; border-color: #e3e3e3 !important; height:57px !important; }
 </style>
-<a class="close-reveal-modal" style="display:{% if popup_title is defined %}none{% else %}block{% endif %}">&#215;</a> 
+<a class="close-reveal-modal closeFeaturedUpsell" style="display:{% if popup_title is defined %}none{% else %}block{% endif %}">&#215;</a> 
 
 <h5 class="modal-title">{{ individualUpsellModalDetails['title'] }}</h5>
 
@@ -93,6 +93,7 @@
     
     <div id="payment-form">
    	    {{ include('FaAdBundle:Ad:upgradePaymentForm.html.twig', {'form': form }) }}
+   	    <div id="featuredAdIdWithUpsellCategory" data-selfeaturedid="0"></div>
 	</div>
 	<div id="card_detail_save" class="small-wrapper">
             <div class="payment-row">

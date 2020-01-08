@@ -327,8 +327,8 @@
 
 
 <div id="featuredOffConfirmModal" class="reveal-modal tiny remove-item-modal" data-reveal>
-    <a class="close-reveal-modal">&#215;</a>
-    <h5 class="modal-title">
+    <a class="close-reveal-modal closeFeaturedUpsell">&#215;</a>
+    <h5 class="modal-title"> 
         {{'Featured ad'|trans({}, 'frontend-manage-my-ad')}}
     </h5>
     <div class="modal-content remove-modal">
@@ -338,12 +338,12 @@
             </div>
         </div>
         <div class="mt20 remove-item-btn">
-            <div class="row">
+            <div class="row">                
                 <div class="large-12 columns">
                     <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="deactivateFeatured();">{{'Yes'|trans({}, 'frontend-manage-my-ad')}}</button>
                 </div>
                 <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand" onclick="closeRevealModel('#featuredOffConfirmModal');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
+                    <button type="button" class="button secondary-btn-1 thin-btn expand closeFeaturedUpsell" onclick="closeRevealModel('#featuredOffConfirmModal');">{{'No'|trans({}, 'frontend-manage-my-ad')}}</button>
                 </div>
             </div>
         </div>
@@ -391,7 +391,7 @@
 </div>
     
 
-<div id="featuredTopUpsellModal" class="reveal-modal tiny remove-item-modal featured-top-modal" data-reveal></div>
+<div id="featuredTopUpsellModal" class="reveal-modal tiny remove-item-modal featured-top-modal" data-reveal data-selfeaturedid></div>
 {% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
     {#  Featured Top Success Modal Box   #}
     {{ include('FaUserBundle:ManageMyAd:individualSuccessPaymentModal.html.twig') }}
@@ -622,10 +622,11 @@
               var catupsellId = split_ad_id[3];
               if($(this).hasClass('toggle-off')){
                 $(this).removeClass('toggle-off').addClass('toggle-on');
+                $('#featuredTopUpsellModal').data('selfeaturedid', elem_id);
                 {% if remainingFeaturedCredits > 0 %}
                 	useCreditForFeaturedUpsell(adId,upsellId);
                 {% else %}
-                	featuredTopUpsellBtn(adId,upsellId, catupsellId);
+                	featuredTopUpsellBtn(adId,upsellId, catupsellId);                 	             	
                 {% endif %}
               }else{
             	 featurredUpsellRemoveId = adId;

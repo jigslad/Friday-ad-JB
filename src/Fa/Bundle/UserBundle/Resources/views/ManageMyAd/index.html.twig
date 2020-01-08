@@ -243,6 +243,11 @@
         }); 
     });
     
+    $(document).on("click", '.closeFeaturedUpsell', function(event) {
+    	var getFeaturedId =  $('#featuredTopUpsellModal').data('selfeaturedid'); 
+    	$('#'+getFeaturedId).removeClass('toggle-on').addClass('toggle-off');
+    });
+    
      $('#manage-my-ads-list-only').on('click','.ajaxboost_your_ad', function(e)
         {
             var boost_value = 1;
