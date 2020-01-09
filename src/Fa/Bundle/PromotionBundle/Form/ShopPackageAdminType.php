@@ -34,6 +34,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 /**
  * Shop package admin type form.
@@ -199,6 +200,14 @@ class ShopPackageAdminType extends AbstractType
                 array(
                     'required' => false,
                     'label'    => 'Boost button enabled',
+                )
+            )
+            ->add(
+                'ad_limit',
+                NumberType::class,
+                array(
+                    'label'    => 'Ad Limit',
+                    'required' => false
                 )
             )
             ->add('save', SubmitType::class)
@@ -390,6 +399,11 @@ class ShopPackageAdminType extends AbstractType
                 }
             }
         }
+        
+        if ($form->get('role')->getData()->getid()==9 && !$form->get('ad_limit')->getData()) {
+            $event->getForm()->get('ad_limit')->addError(new \Symfony\Component\Form\FormError('Please enter the ad limit.'));
+        }
+        
     }
 
     /**
@@ -419,6 +433,7 @@ class ShopPackageAdminType extends AbstractType
             $this->em->persist($packageRule);
 
             //set category
+            $totalCredit = 0;
             for ($i = 1; $i <= $this->noOfCreditblocks; $i++) {
                 $shopPackageCredit = null;
                 if ($form->get('shop_package_credit_id_'.$i)->getData()) {
@@ -430,6 +445,7 @@ class ShopPackageAdminType extends AbstractType
                 if ($shopPackageCredit) {
                     if ($form->get('credit_'.$i)->getData()) {
                         $shopPackageCredit->setCredit($form->get('credit_'.$i)->getData());
+                        $totalCredit = $totalCredit + $form->get('credit_'.$i)->getData();
                     } else {
                         $shopPackageCredit->setCredit(null);
                     }
@@ -469,6 +485,33 @@ class ShopPackageAdminType extends AbstractType
             }
 
             $this->em->flush();
+            
+            
+            
+            if($form->get('ad_limit')->getData()) {
+                $remainingCredit = $form->get('ad_limit')->getData() - $totalCredit;                
+                if ($remainingCredit >0) {
+                    $shopPackageCreditObj = $this->em->getRepository('FaPromotionBundle:ShopPackageCredit')->getCreditByPackageCategoryType($package->getId(),1,$form->get('category_id_1')->getData());
+                    if (empty($shopPackageCreditObj)) {
+                        $shopPackageCredit = new ShopPackageCredit();
+                        $shopPackageCredit->setPackage($package);
+                    
+                        if ($form->get('category')->getData()) {
+                            $shopPackageCredit->setCategory($this->em->getReference('FaEntityBundle:Category', $form->get('category')->getData()));
+                        } 
+                        $shopPackageCredit->setCredit($remainingCredit);
+                        $shopPackageCredit->setPackageSrNo(1);      
+                        $shopPackageCredit->setPaidUserOnly(0);
+                        $shopPackageCredit->setDuration('1m');                       
+                    } else {
+                        $shopPackageCredit = $shopPackageCreditObj[0];
+                        $shopPackageCredit->setCredit($shopPackageCredit->getCredit()+$remainingCredit);                        
+                    }
+                    $this->em->persist($shopPackageCredit);
+                    $this->em->flush();
+                }
+            }
+            
         }
     }
 

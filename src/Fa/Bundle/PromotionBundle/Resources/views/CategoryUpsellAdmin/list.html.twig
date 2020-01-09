@@ -1,0 +1,61 @@
+<div class="row">
+     <div class="columns">
+         <div class="outline">
+             <p class="instruction">{{ 'Click on up and down arrow to sort result'|trans({}, 'messages') }}</p>
+             <table class="mb0">
+                 <thead>
+                     <tr>
+                         <th>
+                             {{ sortable_link('category_upsell_admin', 'category__name', 'Category'|trans, sorter) }}
+                         </th>
+                         <th>
+                             {{ sortable_link('category_upsell_admin', 'upsell__title', 'Upsell'|trans, sorter) }}
+                         </th>
+                         <th width="15%">
+                             {{ sortable_link('category_upsell_admin', 'category_upsell__price', 'Price'|trans, sorter) }}
+                         </th>
+                         <th width="15%">
+                            {{ 'Show in Filters'|trans({}, 'messages') }}
+                         </th>
+                         <th width="14%"><i class="fi-widget"></i> {{ 'Action'|trans({}, 'messages') }}</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% if pagination.getNbResults() %}
+                          {% for categoryupsell in pagination.getCurrentPageResults() %}
+                          <tr class="gradeX">
+                              <td>{{ categoryupsell.category_name }}</td>
+                              <td>{{ categoryupsell.upsell_name }}</td>
+                              <td>{{ categoryupsell.price }}</td>
+                              <td>
+                                  {% if categoryupsell.show_in_filters > 0 %}
+                                      {{ 'Yes'|trans({}, 'messages') }}
+                                  {% else %}
+                                      {{ 'No'|trans({}, 'messages') }}
+                                  {% endif %}
+                              </td>
+                              <td>
+                                  <button href="#" data-dropdown="drop{{ categoryupsell.id }}" aria-controls="drop1" aria-expanded="false" class="small button dropdown tools_btn">Select</button>
+                                  <br />
+                                  <ul id="drop{{ categoryupsell.id }}" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+                                      {% if upsellEditGrant %}
+                                         <li><a href="{{ path('category_upsell_edit_admin', {'id': categoryupsell.id}) }}"><i class="fi-pencil"></i> {{ 'Edit'|trans({}, 'messages') }}</a></li>
+                                      {% endif %}
+
+                                      {% if upsellDeleteGrant %}
+                                         <li><a href="{{ path('category_upsell_delete_admin', {'id': categoryupsell.id}) }}" onclick="javascript:return confirm('{{ 'Do you want to proceed deleting this category upsell?'|trans({}, 'messages') }}')"><i class="fi-trash"></i> {{ 'Delete'|trans({}, 'messages') }}</a></li>
+                                      {% endif %}
+                                  </ul>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                     {% else %}
+                          <tr class="gradeX">
+                              <td colspan="5" align="center">{{ 'No upsell found'|trans({}, 'messages') }}</td>
+                          </tr>
+                     {% endif %}
+                 </tbody>
+             </table>
+         </div>
+     </div>
+</div>

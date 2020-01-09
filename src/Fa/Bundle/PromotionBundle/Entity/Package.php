@@ -295,7 +295,13 @@ class Package
      * @ORM\Column(name="monthly_boost_count", type="smallint", length=4, nullable=true)
      */
     private $monthly_boost_count;
-
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ad_limit", type="integer", length=6, nullable=true)
+     */
+    private $ad_limit;
 
     /**
      * Constructor
@@ -949,8 +955,6 @@ class Package
         return $this->monthly_boost_count;
     }
 
-
-
     /**
      * Set new_ad_cta.
      *
@@ -995,5 +999,28 @@ class Package
     public function getRenewalAdCta()
     {
         return $this->renewal_ad_cta;
+    }
+    
+    /**
+     * Set ad_limit.
+     *
+     * @param integer $ad_limit
+     * @return Package
+     */
+    public function setAdLimit($ad_limit)
+    {
+        $this->ad_limit = $ad_limit;
+        
+        return $this;
+    }
+    
+    /**
+     * Get ad_limit.
+     *
+     * @return integer
+     */
+    public function getAdLimit()
+    {
+        return $this->ad_limit;
     }
 }

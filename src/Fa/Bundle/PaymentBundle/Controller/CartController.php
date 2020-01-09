@@ -76,10 +76,17 @@ class CartController extends CoreController
         }
         $loggedinUser = $this->getLoggedInUser();
         $cart         = $this->getRepository('FaPaymentBundle:Cart')->getUserCart($loggedinUser->getId(), $this->container);
-
+        $paymentFor = '';
+        
         $transactions = $this->getRepository('FaPaymentBundle:Transaction')->getTransactionsByCartId($cart->getId());
         if (!$transactions) {
             return $this->handleMessage($this->get('translator')->trans('You do not have any item in your cart.', array(), 'frontend-cart-payment'), 'fa_frontend_homepage', array(), 'error');
+        } 
+        
+        if(!empty($cart)) {
+            $cartDetails  = $this->getRepository('FaPaymentBundle:Transaction')->getCartDetail($cart->getId());
+            $cartDetailsValues = unserialize($cartDetails[0]['value']);
+            $paymentFor = isset($cartDetailsValues['payment_for'])?$cartDetailsValues['payment_for']:'';            
         }
 
         $cartValue = unserialize($cart->getValue());
@@ -115,14 +122,22 @@ class CartController extends CoreController
                 $this->getEntityManager()->flush($cart);
                 $paymentId = $this->getRepository('FaPaymentBundle:Payment')->processPaymentSuccess($cart->getCartCode(), null, $this->container);
                 $this->getEntityManager()->getConnection()->commit();
-
-                //send ads for moderation
-                $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
-
-                //redirect back to manage my ads active tab.
-                $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
-
-                return $this->handleMessage($this->get('translator')->trans('Your free advert posted successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
+                
+                if($paymentFor=='UP') { 
+                    //redirect back to manage my ads active tab.
+                    $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
+                    
+                    return $this->handleMessage($this->get('translator')->trans('Your featured upsell added to the advert successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');
+                    
+                } else {
+                    //send ads for moderation
+                    $this->getRepository('FaAdBundle:AdModerate')->sendAdsForModeration($paymentId, $this->container);
+                    
+                    //redirect back to manage my ads active tab.
+                    $this->container->get('session')->set('payment_success_redirect_url', $this->generateUrl('manage_my_ads_active'));
+                    
+                    return $this->handleMessage($this->get('translator')->trans('Your free advert posted successfully.', array(), 'frontend-cart-payment'), 'checkout_payment_success', array('cartCode' => $cart->getCartCode()), 'success');                    
+                }
             } catch (\Exception $e) {
                 $this->getEntityManager()->getConnection()->rollback();
                 CommonManager::sendErrorMail($this->container, 'Error: Problem in payment', $e->getMessage(), $e->getTraceAsString());

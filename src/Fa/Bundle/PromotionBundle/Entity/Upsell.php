@@ -131,6 +131,13 @@ class Upsell
      * @assert\NotBlank(message="Please select upsell status.")
      */
     private $status;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="individual_display", type="smallint", length=3, nullable=true)
+     */
+    private $individual_display;
 
     /**
      * Constructor
@@ -468,5 +475,28 @@ class Upsell
     public function getTranslations()
     {
         return $this->translations;
+    }
+    
+    /**
+     * Set individual_display.
+     *
+     * @param string $individual_display
+     * @return Upsell
+     */
+    public function setIndividualDisplay($individual_display)
+    {
+        $this->individual_display = $individual_display;
+        
+        return $this;
+    }
+    
+    /**
+     * Get individual_display.
+     *
+     * @return integer
+     */
+    public function getIndividualDisplay()
+    {
+        return $this->individual_display;
     }
 }
