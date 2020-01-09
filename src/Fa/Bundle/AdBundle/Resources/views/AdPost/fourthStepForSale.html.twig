@@ -17,6 +17,19 @@
 {% use "FaAdBundle:AdPost:fourthStepCommonPushNotification.html.twig" %}
 
 {% block body %}
+    <style>
+        .paypallink.error {
+            font-weight: normal;
+            background: transparent;
+            margin-top: 10px;
+            font-family: "Helvetica Neue",Arial;
+            font-size: 12px;
+            font-style: normal;
+            padding-left: 0;
+            color: #f74d4d;
+            line-height: 15px;
+        }
+    </style>
     <div class="posting-bg">
         <div class="fad-sign-bdr">&nbsp;</div>
         <div class="row paa-main">
@@ -45,6 +58,17 @@
             {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-for-sale-fourth-step'}) }}
         </div>
     </div>
+    <div id="paypalLinkModal" class="reveal-modal small" data-reveal>
+        <a class="close-reveal-modal">&#215;</a>
+        <h5 class="modal-title">&nbsp;</h5>
+        <div class="row">
+            <div class="columns">
+                <p>{{ 'Friday-Ad cares about the security of our sellers and buyers. To protect you we ask that you provide details for a verified PayPal account. You can find out more ' }}
+                    <a href="https://www.paypal.com/uk/smarthelp/article/how-do-i-verify-my-paypal-account-faq444" target="_blank"> {{ 'here' }}</a>
+                </p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scriptbottom %}
@@ -68,6 +92,11 @@
            });
            window.scrollTo(0, 0);
        }
+
+       $('.paypallink').on('click', function(){
+           $('#paypalLinkModal').foundation('reveal','open');
+       });
+
        handleReadMoreLess('paa_desc', 220);
        updateCharCounter('fa_paa_fourth_step_for_sale_personalized_title');
        handleDimensionLabelByUnit();
@@ -151,8 +180,9 @@
             showPostagePrice($(this).val());
         });
     });
-   
-   function showPostagePrice(deliveryMethodId)
+
+
+function showPostagePrice(deliveryMethodId)
    {
        if (!deliveryMethodId) {
            deliveryMethodId = $("input[name='fa_paa_fourth_step_for_sale[delivery_method_option_id]']:checked").val();
@@ -184,7 +214,7 @@
                unblockElement('#forsale_paypal_block');
            })
            .done(function(data) {
-               $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through Paypal.'|trans({}, 'frontend-paa-fourth-step')}}');
+               $('#paypal_text_id').html('{{'Friday-Ad will take a commission of %paypal_commission% of the final value if the item is sold through PayPal.'|trans({}, 'frontend-paa-fourth-step')}}');
                if (showMessage) {
                    $("#paypal_text_id").prev('small').remove();
                }
@@ -211,13 +241,13 @@
                           if ($('#fa_paa_fourth_step_for_sale_paypal_email').is(':visible') && $('#fa_paa_fourth_step_for_sale_paypal_email').val().length) {
                               if (showMessage) {
                                   $('#fa_paa_fourth_step_for_sale_paypal_email, #fa_paa_fourth_step_for_sale_paypal_first_name, #fa_paa_fourth_step_for_sale_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                  $('#paypal_err_id').html("This PayPal account is not verified. <u>What does this mean?</u>");
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           } else {
                               if (showMessage) {
                                   $('#fa_paa_fourth_step_for_sale_paypal_email, #fa_paa_fourth_step_for_sale_paypal_first_name, #fa_paa_fourth_step_for_sale_paypal_last_name').addClass('error');
-                                  $("<small class='error'>{{'Paypal account is not verified.'|trans({}, 'frontend-paa-fourth-step')}}</small>").insertBefore('#paypal_text_id');
+                                  $('#paypal_err_id').html("This PayPal account is not verified. <u>What does this mean?</u>");
                                   $('#paypal_email_verify_status').show('inline-block');
                               }
                           }
@@ -225,6 +255,7 @@
                    } else {
                        $('#paypal_section_id').hide();
                        $("#paypal_text_id").prev('small').remove();
+                       $('#paypal_err_id').html('');
                        $('#paypal_email_verify_status').hide();
                        $('#fa_paa_fourth_step_for_sale_paypal_email, #fa_paa_fourth_step_for_sale_paypal_first_name, #fa_paa_fourth_step_for_sale_paypal_last_name').removeClass('error');
                    }
@@ -294,6 +325,7 @@
     }
 //]]>
 </script>
+
 {% if (form.brand_id_autocomplete) is defined %}
     {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_paa_fourth_step_for_sale_brand_id', 'placeHolder': ((attribute(form, 'brand_id_autocomplete').vars.attr.placeholder is defined and attribute(form, 'brand_id_autocomplete').vars.attr.placeholder is not null) ? attribute(form, 'brand_id_autocomplete').vars.attr.placeholder : 'eg. Little Tikes or Playskool'|trans), 'route' : 'entity_ajax_find_by_term', 'dimension_field' : '#fa_paa_fourth_step_for_sale_brand_id_dimension_id'}) }}
 {% endif %}

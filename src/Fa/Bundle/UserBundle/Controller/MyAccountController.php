@@ -397,12 +397,12 @@ class MyAccountController extends ThirdPartyLoginController
                     $loggedinUser->setIsPaypalVefiried(1);
                     $this->getEntityManager()->persist($loggedinUser);
                     $this->getEntityManager()->flush($loggedinUser);
-                    $successMsg = $this->get('translator')->trans('Paypal details updated successfully.', array(), 'frontend-paypal-email');
+                    $successMsg = $this->get('translator')->trans('PayPal details updated successfully.', array(), 'frontend-paypal-email');
                 } else {
-                    $error = $this->get('translator')->trans('Paypal account is not verified.', array(), 'frontend-paypal-email');
+                    $error = $this->get('translator')->trans('PayPal account is not verified.', array(), 'frontend-paypal-email');
                 }
             } else {
-                $error = $this->get('translator')->trans('Paypal account is not verified.', array(), 'frontend-paypal-email');
+                $error = $this->get('translator')->trans('PayPal account is not verified.', array(), 'frontend-paypal-email');
             }
 
             return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg));
