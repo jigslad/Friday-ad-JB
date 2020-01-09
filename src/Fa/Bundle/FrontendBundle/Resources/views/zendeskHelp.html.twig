@@ -8,9 +8,20 @@
   			<img src="https://theme.zdassets.com/theme_assets/2200685/7900b669e336b6c5ae3928aa5f03967d3d715f62.svg" />
   			Close
   		</a>
-  	</div> 
-	<iframe class="chcw_content" src="{{'/zendeskhelp.php?url='~url }}"></iframe>
+  	</div>
+	{#{{'/zendeskhelp.php?url='~url }}#}
+	<iframe class="chcw_content" src=""></iframe>
 </div>
+
+<script type="text/javascript">
+	var help_link = "{{'/zendeskhelp.php?url='~url }}";
+	$(function(){
+		$('.custom_hc_widget_trigger').click(function(){
+			$('.chcw_content').attr('src',help_link);
+		});
+	});
+</script>
+
 <script language="javascript" type="text/javascript">
 	window.FCSP = '33f6a5cd6543e26d4aa9b6382adf4874';
 </script>
