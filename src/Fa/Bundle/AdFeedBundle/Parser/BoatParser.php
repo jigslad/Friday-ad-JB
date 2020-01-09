@@ -47,6 +47,10 @@ class BoatParser extends AdParser
         $this->advert['affiliate'] = 0;
         $this->rejectedReason      = null;
         $this->advert['rejected_reason'] = array();
+        $this->advert['is_trade_ad'] = 1;
+        if (isset($adArray['IsPrivateSeller']) && $adArray['IsPrivateSeller'] != null && $adArray['IsPrivateSeller'] == true) {
+            $this->advert['is_trade_ad'] = 0;
+        }
 
         if (isset($adArray['SiteVisibility']) && is_array($adArray['SiteVisibility'])) {
             foreach ($adArray['SiteVisibility'] as $site) {
