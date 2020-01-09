@@ -322,6 +322,16 @@ function socialShare(adId, url, socialSite)
     openWindow(url, 'email-share', '800', '600');
   }
 }
+function convertUserToBusiness(user,category) {
+    $.ajax({
+        type: "POST",
+        url: "{{path('convert_user_to_business')}}",
+        data: {userId:user, businessCategoryId:category }
+    })
+    .done(function(response) {
+       window.location="{{ path('user_package_choose_profile') }}";
+    });
+}
 </script>
 {% endblock %}
 
