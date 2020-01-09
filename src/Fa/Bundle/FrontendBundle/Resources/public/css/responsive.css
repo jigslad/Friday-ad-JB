@@ -652,7 +652,7 @@
     .choose-all-categories{margin:28px 0}
     .choose-all-categories a{margin:0 8px 20px 0}
     .choose-all-categories a:nth-child(2n){margin-right:0}
-    .change-category .cat-name-wrap{width:260px}
+    .change-category .cat-name-wrap{width:300px}
     .capsule-links a{margin:0 10px 8px -3px;}
     .similar-list li{float:left;width:171px}
     .similar-list li:nth-child(odd){margin-right:18px}
@@ -1911,7 +1911,7 @@
     .choose-all-categories a:nth-child(4), .choose-all-categories a:nth-child(8){margin-right:10px}
     .choose-all-categories a:last-child{margin-bottom:3px}
     .change-category:first-child{margin-top:34px}
-    .change-category .cat-name-wrap{width:205px}
+    .change-category .cat-name-wrap{width:300px}
     .kind-of-paa{padding-top:30px;border-bottom:1px solid #e5e5e5;box-shadow:0 1px 0 #f2f2f2}
     .ad-type-links a:nth-child(2){width:50px}
     .capsule-links{margin:20px 0}
