@@ -89,3 +89,9 @@ ad_post_ajax_mototrs_reg_no_fields:
 ad_post_change_adult_category_fourth_step:
     path:     /change_adult_category_fourth_step
     defaults: { _controller: "FaAdBundle:AdPost:changeAdultCategoryFourthStep" }
+
+ad_post_set_facebook_Location_data:
+    path:     /set_facebook_Location_data/{location}
+    defaults: { _controller: "FaAdBundle:AdPost:setFacebookLocationData" }
+    options:
+        expose: true
