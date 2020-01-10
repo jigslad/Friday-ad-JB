@@ -43,7 +43,8 @@
                                             <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-ad-edit') }}:</span>
                                         </div>
                                         <div class="media-object-section">
-                                            {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
+                                            {#{{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}#}
+                                            <p>{{ categoryPathArray|slice((categoryPathArray|length-2),categoryPathArray|length)|join('<span class="seperator"></span>')|raw }}</p>
                                         </div>
                                     </div>
                                 </div>
