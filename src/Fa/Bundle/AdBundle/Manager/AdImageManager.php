@@ -235,8 +235,7 @@ class AdImageManager
             if ($zoomFromCenter) {
                 $dimension  = @getimagesize($orig_image);
                 $bigImgSize = $thumbSize[0];
-                exec('convert -define jpeg:size='.$dimension[0].'x'.$dimension[1].' '.$orig_image.' -thumbnail '.$bigImgSize.'^ \
-                     -gravity center -extent '.$bigImgSize.' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'_'.$bigImgSize.'.jpg');
+                exec('convert -define jpeg:size='.$dimension[0].'x'.$dimension[1].' '.$orig_image.' -thumbnail '.$bigImgSize.' -gravity center -extent '.$bigImgSize.' '.$this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'_'.$bigImgSize.'.jpg');
                 unset($thumbSize[0]);
                 $this->getOrgImagePath().DIRECTORY_SEPARATOR.$this->getAdId().'_'.$this->getHash().'_'.$bigImgSize.'.jpg';
             }
