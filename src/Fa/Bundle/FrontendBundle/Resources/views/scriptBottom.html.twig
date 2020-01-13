@@ -170,7 +170,6 @@
             displayNotifications();
          });
     }
-
     var idClicked = '';var idFourthStepClicked = '';
     $("button[type=submit], input[type=submit]").click(function(e){
         var clickedId = $(this).attr('id');
@@ -246,3 +245,63 @@
 //]]>
 </script>
 {# <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{container.getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script> #}
+<!-- Google TAG Manager -->
+{% if app.user %}
+    {% set ClientID = app.user.id %}
+    {% set login_status = 'true' %}
+    {% if app.user.role == 'ROLE_BUSINESS_SELLER' %}
+        {% set userType = 'Business' %}
+    {% else %}
+        {% set userType = 'Private' %}
+    {% endif %}
+{% else %}
+    {% set ClientID = 'null' %}
+    {% set login_status = 'false' %}
+    {% set userType = 'null' %}
+{% endif %}
+{% if app.request.get('_route') in ['fa_frontend_homepage','landing_page_category'] %}
+    {% set pageType = 'Homepage' %}
+
+{% elseif app.request.get('_route') in ['ad_post_first_step', 'ad_post_second_step', 'ad_post_third_step','ad_post_third_step_registration','ad_post_fourth_step']%}
+    {% set pageType = 'PAA process page' %}
+
+{% elseif app.request.get('_route') in ['location_home_page','testimonials'] %}
+    {% set pageType = 'Peripheral Content' %}
+
+{% elseif app.request.get('_route') in ['login' ,'fa_user_register', 'facebook_paa_login','google_paa_login'] %}
+    {% set pageType = 'LoginRegister' %}
+
+{% elseif app.request.get('_route') == 'show_business_profile_page' %}
+    {% set pageType = 'Business Profile Page' %}
+
+{% elseif app.request.get('_route') == 'listing_page' %}
+    {% if app.request.get('keywords') %}
+        {% set pageType = 'Search Results Page' %} <!-- 'Search Results Page(keywords=' ~ app.request.get('keywords')' ~')' -->
+    {% else %}
+        {% set pageType = 'Category Results Page' %}
+    {% endif %}
+
+{% else %}
+    {% set pageType = 'Not Specified' %}
+
+{% endif %}
+
+<script>
+    let adBlocker = false;
+    if(isAdBlocker) {
+        adBlocker = true;
+    }
+    window.dataLayer = window.dataLayer || [];
+    dataLayer.push({
+        "page": {
+            "pageType": '{{ pageType }}',
+            "loggedInStatus": '{{ login_status }}',
+            "clientID": '{{ ClientID }}',
+            "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
+            "loggedInType": '{{ userType }}',
+            "adBlocker": adBlocker,
+            "banners": '{{ bannersArray is defined ? bannersArray|length : '' }}'
+        },
+    });
+</script>
+<!-- Google TAG Manager -->
