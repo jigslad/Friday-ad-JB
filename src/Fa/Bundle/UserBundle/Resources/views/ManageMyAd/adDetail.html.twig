@@ -154,7 +154,8 @@
                 {% set createdInwords = ad['ad_date'] |time_ago_in_words %}
                 {% if currentRoute == 'manage_my_ads_active' %}
                 <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
-                        {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords}}
+                    {% set createdInwords = (createdInwords=='less than 1 minute ago')?'1 minute ago':createdInwords %}
+                        {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords}} 
                 </div>
                 {% endif %}
                 
