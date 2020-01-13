@@ -16,7 +16,6 @@
 {% set adUrl = attribute(ad, constant(solrMapping ~ 'TRACK_BACK_URL'))  %}
 {% set affiliate_url  = 'target = _blank rel=nofollow ' %}
     {% if attribute(ad, constant(solrMapping ~ 'AD_SOURCE')) is defined %}
-    source==={{ attribute(ad, constant(solrMapping ~ 'AD_SOURCE')) }}
         {% set aff_icon_cls = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAffiliateClass', [attribute(ad, constant(solrMapping ~ 'AD_SOURCE'))]) %}
         {% if aff_icon_cls is not null %}
             {% set aff_desc_cls = ' list-desc-short' %}
