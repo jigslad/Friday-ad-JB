@@ -229,4 +229,15 @@ class CategoryController extends CoreController
 
         return new Response();
     }
+    
+    public function ajaxUpdatePostadCategoryAction(Request $request)
+    {        
+        if ($request->isXmlHttpRequest()) {
+            if($request->get('term')!='') {
+                $data = $this->getRepository('FaAdBundle:PaaSearchKeyword')->updatePaaSearchKeyword($request->get('term'),$request->get('catId'));                
+            }
+        }
+        
+        return new Response();
+    }
 }

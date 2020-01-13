@@ -74,4 +74,23 @@ class PaaSearchKeywordRepository extends EntityRepository
             $this->_em->flush($paaSearchKeyword);
         }
     }
+    
+    public function updatePaaSearchKeyword($keyword,$catId){
+        $paaSearchKeyword = $this->findOneBy(array('keyword' => $keyword,'category' =>$catId));
+        if($paaSearchKeyword){
+            $paaSearchKeyword->setSearchCount($paaSearchKeyword->getSearchCount()+1);
+            $paaSearchKeyword->setUpdatedAt(time());
+            $paaSearchKeyword->setIsUpdated(1);
+        } else {
+            $paaSearchKeyword = new PaaSearchKeyword();
+            $paaSearchKeyword->setSearchCount(1);
+            $paaSearchKeyword->setKeyword($keyword);
+            $paaSearchKeyword->setCategory($this->_em->getReference('FaEntityBundle:Category', $catId));
+            $paaSearchKeyword->setCreatedAt(time());
+        }
+        if ($paaSearchKeyword) {
+            $this->_em->persist($paaSearchKeyword);
+            $this->_em->flush($paaSearchKeyword);
+        }
+    }
 }

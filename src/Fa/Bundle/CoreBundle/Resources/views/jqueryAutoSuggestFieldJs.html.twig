@@ -124,6 +124,11 @@ $(function() {
             {% else %}
                 $("{{ field }}").val(ui.item.id);
                 {% if 'category_id' in field %}
+                    var keywordSearch = $("#fa_paa_category_select_category_id_autocomplete").val();
+                    var selCatIdFromAutoComplete = $("#fa_paa_category_select_category_id").val();
+                    if(keywordSearch.length > 0) {
+                    	updatePaaKeywordSearch(keywordSearch,selCatIdFromAutoComplete);
+                    }
                     onSelectAutoSuggestCategory();
                 {% endif %}
             {% endif %}
