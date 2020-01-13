@@ -32,6 +32,7 @@
 {% set usedFeaturedCredits = 0 %}
 {% set remainingFeaturedCredits = 0 %}
 {% set adFeaturedCreditCnt = 0 %}
+{% set adFeaturedUpsellArray = {} %}
 {% set adFeaturedCreditCnt = adUserPackageUpsellRepository.getAdFeaturedUpsellCountByuserId(app.user.getId()) %}
 
 {% if pagination.getNbResults() %}
@@ -93,7 +94,7 @@
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ adLimitCount }}</span></li>
                 			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}/{{ totalFeaturedCredit }}</span></li>
                 		{% elseif userBusType is defined and userBusType == 'business' %}
-                			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ totalAdCount }}</span></li>
+                			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}</span></li>
                 			<li class="bluecircle">Featured ads: <span>{{ adFeaturedUpsellArray|length }}</span></li>
 				        {% endif %}
                 			
