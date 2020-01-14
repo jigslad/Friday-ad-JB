@@ -65,16 +65,16 @@
             </div>
         </div>
     </div>
-    <div id="location_map_div" class="map-box">
-         {% set geolocation = attribute(form, 'location_lat_lng').vars.value|split(', ') %}
-         {% if geolocation[0] is defined and geolocation[1] is defined %}
-            {% set latitude = geolocation[0] %}
-            {% set longitude = geolocation[1] %}
-            {% set mapHeight = '127px' %}
-            {% set mapWidth =  '228px' %}
-            {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'mapOnLoad' : 'true', 'locationField': '#'~formName~'_location_autocomplete', 'latlngField': '#'~formName~'_location_lat_lng', 'isShowMap' : showHideLocationMap}) }}
-        {% endif %}
-        {{ block('googlemap_location_html') }}
-    </div>
+{#    <div id="location_map_div" class="map-box">#}
+{#         {% set geolocation = attribute(form, 'location_lat_lng').vars.value|split(', ') %}#}
+{#         {% if geolocation[0] is defined and geolocation[1] is defined %}#}
+{#            {% set latitude = geolocation[0] %}#}
+{#            {% set longitude = geolocation[1] %}#}
+{#            {% set mapHeight = '127px' %}#}
+{#            {% set mapWidth =  '228px' %}#}
+{#            {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'mapOnLoad' : 'true', 'locationField': '#'~formName~'_location_autocomplete', 'latlngField': '#'~formName~'_location_lat_lng', 'isShowMap' : showHideLocationMap}) }}#}
+{#        {% endif %}#}
+{#        {{ block('googlemap_location_html') }}#}
+{#    </div>#}
     <div><span id="location_error_div" class="error"></span></div>
 </div>

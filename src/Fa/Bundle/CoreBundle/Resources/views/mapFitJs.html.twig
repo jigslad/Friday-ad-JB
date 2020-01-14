@@ -8,38 +8,38 @@ $(window).on('load', function() {
 	streets = L.tileLayer.Unwired({key: apikey, scheme: "streets"});
 	myIcon = L.icon({className:"", iconUrl: "{{ asset_url('fafrontend/images/map-marker.png') }}"});
 });
-function showAddress(val) {
-    var latitude = '';
-    var longitude = '';
-    if(map && myMarker) {  
-        map.removeLayer(myMarker);
-    }
-    
-    let settings = {
-  		  "async": true,
-  		  "crossDomain": true,
-  		  "url": 'https://eu1.locationiq.com/v1/search.php?key={{ key|raw }}&q=="'+val+'"&format=json&countrycodes=gb&limit=1',
-  		  "method": "GET"
-  		}
+{#function showAddress(val) {#}
+{#    var latitude = '';#}
+{#    var longitude = '';#}
+{#    if(map && myMarker) {  #}
+{#        map.removeLayer(myMarker);#}
+{#    }#}
+{#    #}
+{#    let settings = {#}
+{#  		  "async": true,#}
+{#  		  "crossDomain": true,#}
+{#  		  "url": 'https://eu1.locationiq.com/v1/search.php?key={{ key|raw }}&q=="'+val+'"&format=json&countrycodes=gb&limit=1',#}
+{#  		  "method": "GET"#}
+{#  		}#}
 
-  		$.ajax(settings).done(function (response) {
-  			if(response && response.length > 0) {
-  				$.each(response, function (i, address_component) {
-  					if(typeof address_component.lat != 'undefined' && typeof address_component.lon != 'undefined') {
-  						if(map && myMarker) {  
-  					        map.removeLayer(myMarker);
-  					    }
-				 		latitude = address_component.lat;
-  	                    longitude = address_component.lon;							
-						map.setView(new L.LatLng(latitude, longitude), 10);
-						myMarker = L.marker([latitude, longitude], {icon: myIcon}).addTo(map);
-						map.flyTo([address_component.lat, address_component.lon]);
-  					}
-  				});
-  			}
-  		});
-     
-}
+{#  		$.ajax(settings).done(function (response) {#}
+{#  			if(response && response.length > 0) {#}
+{#  				$.each(response, function (i, address_component) {#}
+{#  					if(typeof address_component.lat != 'undefined' && typeof address_component.lon != 'undefined') {#}
+{#  						if(map && myMarker) {  #}
+{#  					        map.removeLayer(myMarker);#}
+{#  					    }#}
+{#				 		latitude = address_component.lat;#}
+{#  	                    longitude = address_component.lon;							#}
+{#						map.setView(new L.LatLng(latitude, longitude), 10);#}
+{#						myMarker = L.marker([latitude, longitude], {icon: myIcon}).addTo(map);#}
+{#						map.flyTo([address_component.lat, address_component.lon]);#}
+{#  					}#}
+{#  				});#}
+{#  			}#}
+{#  		});#}
+{#     #}
+{#}#}
 
 function initialize(lat, lng) { 
 	map = L.map('mapfit', {

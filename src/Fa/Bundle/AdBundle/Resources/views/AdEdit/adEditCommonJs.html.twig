@@ -168,19 +168,19 @@
             	 if(packageIsNursery) {
                      checkIsNurseryGroup(newlocationId, {{ ad.id }}, function(locdata) {
                         if(locdata.response == true) {
-                                showAddress(newlocationVal);
+                                // showAddress(newlocationVal);
                          } else {
-                        	 showAddress(newlocationVal);
+                        	 // showAddress(newlocationVal);
                              $('#location_error_div').html('You are not permitted to change the location of this advert. Please remove this ad and create a new ad in your desired location.');
                             return false;
                           }
                  	});
                  } else {
-                     showAddress(newlocationVal);
+                     // showAddress(newlocationVal);
                  }
 
             } else {
-                showAddress('United Kingdom');
+                // showAddress('United Kingdom');
                 $('#location_map_div').removeClass('show-location-mapfit');
                 $('#location_map_div').addClass('hide-location-mapfit');
             }
