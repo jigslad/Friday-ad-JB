@@ -513,18 +513,25 @@ class SeoToolRepository extends EntityRepository
     {
         if ($targetUrl != '') {
             $regYearsList = [];
-            $qb = $this->createQueryBuilder(self::ALIAS)
-            ->andWhere(self::ALIAS.'.target_url = :target_url')
-            ->setParameter('target_url', $targetUrl)
-            ->setMaxResults(1);
             
-            $customizedSourceUrl = $qb->getQuery()->getOneOrNullResult();
-            if ($customizedSourceUrl) {
-                list($key, $regYears) = explode("=", $customizedSourceUrl->getSourceUrl());
-                if ($regYears != '') {
-                    $regYearsList = explode("__", $regYears);
+            if($targetUrl == 'motors/classic-cars/') {
+                $regYearsList = CommonManager::getClassicCarsRegYearChoices();
+            } else {
+                $qb = $this->createQueryBuilder(self::ALIAS)
+                ->andWhere(self::ALIAS.'.target_url = :target_url')
+                ->setParameter('target_url', $targetUrl)
+                ->setMaxResults(1);
+                
+                $customizedSourceUrl = $qb->getQuery()->getOneOrNullResult();
+                if ($customizedSourceUrl) {
+                    list($key, $regYears) = explode("=", $customizedSourceUrl->getSourceUrl());
+                    if ($regYears != '') {
+                        $regYearsList = explode("__", $regYears);
+                    }
                 }
             }
+            
+            
             return $regYearsList;
         }
     }

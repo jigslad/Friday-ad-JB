@@ -1470,6 +1470,15 @@ class CommonManager
         return array_reverse($years, true);
     }
 
+    public static function getClassicCarsRegYearChoices()
+    {
+        $years     = array('pre-'.(date("Y")-30) => 'Pre '.(date("Y")-30));
+        $yearRange = range((date("Y")-30), (date("Y")-22));
+        $yearRange = array_combine($yearRange, $yearRange);
+        
+        $years = $years + $yearRange;
+        return array_reverse($years, true);
+    }
     /**
      * Get year range.
      *
