@@ -116,7 +116,7 @@ class ThirdPartyLoginController extends CoreController
                             }
                         }
                         //Fetch user logo from facebook account.
-                        if (isset($fbFieldArray['picture'])) {
+                        if (!isset($fbFieldArray['picture'])) {
                             $fbPictureArray = (array) $fbFieldArray['picture'];
                             if (is_array($fbPictureArray) && isset($fbPictureArray['data'])) {
                                 $fbPictureArray = (array) $fbPictureArray['data'];
@@ -180,7 +180,6 @@ class ThirdPartyLoginController extends CoreController
                         'user_is_facebook_verified' => isset($fbFieldArray['verified'])?$fbFieldArray['verified']:'',
                         'user_location' => $userLocation,
                     );
-                    $this->container->get('session')->set('fb_user_sesssion',$sessionData);
                     if ($getFbDetail) {
                         return $sessionData;
                     }
@@ -194,6 +193,8 @@ class ThirdPartyLoginController extends CoreController
                     //check user is already registered
                     $fbUserObj = $this->getRepository('FaUserBundle:User')->findOneBy(array('facebook_id' => $fbFieldArray['id'], 'is_half_account' => 0));
                     if ($fbUserObj) {
+                        // Sel location data Session
+                        $this->container->get('session')->set('fb_user_sesssion',$sessionData);
                         //If user does not have logo then upload his logo from facebook.
                         $userRoleName = $this->getRepository('FaUserBundle:User')->getUserRole($fbUserObj->getId());
                         if ($userRoleName == RoleRepository::ROLE_SELLER) {
@@ -499,6 +500,12 @@ class ThirdPartyLoginController extends CoreController
             }
             if (isset($sessionData['user_last_name'])) {
                 $user->setLastName($sessionData['user_last_name']);
+            }
+            if (isset($sessionData['user_location'])) {
+                $objLocation = $this->getRepository('FaEntityBundle:Location')->findOneBy(array('name'=>$sessionData['user_location']));
+                if($objLocation){
+                    $user->setLocationTown($objLocation);
+                }
             }
         }
 
