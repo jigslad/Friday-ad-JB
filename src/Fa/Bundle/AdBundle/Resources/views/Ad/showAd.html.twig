@@ -211,7 +211,7 @@
         {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
         {{ block('imageUploadStylesheets') }}
     {% endif %}
-    <link href="{{ asset_url('faad/css/zutoLoanCalc.css') }}" rel="stylesheet">
+    <link href="/bundles/faad/css/zutoLoanCalc.css" rel="stylesheet">
 {% endblock %}
 
 {% block meta_robots %}
@@ -345,6 +345,22 @@
 {% block body %}
 <style>
 .get_online_decision .apply-new-left img.logo_img { height:60px !important; }
+.details-img-icons { right: 1px !important; bottom: 0px !important;}
+.vif-overlay { bottom: 0px !important;z-index:1 }
+.sticky-finance-btn { bottom: 0px !important;}
+#big-image-slider .owl-item .item { position:relative; }
+.photos-block { position:relative; }
+.finance-btn { bottom:30px; z-index:2 !important }
+@media only screen and (min-width: 641px) and (max-width: 759px){	
+	.finance-btn:before { background:transparent !important;right: -14px !important; }
+	
+	.finance-btn {
+	    position: absolute;
+	    background:transparent !important;
+	    color: #9bcc21 !important;
+	}
+}
+
 @media only screen and (min-width:320px) and (max-width:640px) {
 	.get_online_decision .mobile-logo-button img.logo_img { height:48px !important; }
 }
@@ -566,8 +582,8 @@
                                             {% else %}
                                         		<b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
                                     	    {% endif %}
-                                        {% else %}
-                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b>
+                                    	    {# {% else %}
+                                            <b><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': attribute(adDetail, constant(solrMapping ~ 'CATEGORY_ID')), 'item__location': attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0}) }}">{{ entityCacheManager.getEntityNameById('FaEntityBundle:Location', attribute(adDetail, constant(solrMapping ~ 'TOWN_ID')).0) }}</a></b> #}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -742,7 +758,9 @@
                                 {% set otherFeatureIds = adMotorRepository.getOtherFeature(featureIds) %}
                                 {{ include('FaAdBundle:Ad:AdMotorDetailTabs.html.twig') }}
                                 <br>
-                                {{ include('FaAdBundle:Ad:zutoLoanCalc.html.twig') }}
+                                {% if secondLevelCategoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::CARS_ID')} %}
+                                    {{ include('FaAdBundle:Ad:zutoLoanCalc.html.twig') }}
+                                {% endif %}
 
                             {% elseif rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
                                 {% set adPropertyDetail = {} %}

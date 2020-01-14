@@ -1,7 +1,11 @@
 {% set field = 'location_autocomplete' %}
 {% set formName = 'fa_paa_fourth_step_'~categoryName|replace({' ':'_'})|lower %}
+{% set adLocationRepository = fetch_repository('FaAdBundle:AdLocation') %}
+{% set curLocText = '' %}
 {% if is_edit is defined and is_edit is not null %}
     {% set formName = 'fa_paa_edit_'~categoryName|replace({' ':'_'})|lower %}
+    {% set currentLocation = adLocationRepository.getLatestLocation(ad.id) %}
+    {% set curLocText = (currentLocation)?currentLocation.getLocationTown().getName():'' %}
 {% endif %}
 {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
@@ -30,6 +34,7 @@
         {% set showHideLocationMap   = 'false' %}
     {% endif %}
     <div class="text-center" style="display:{{ showHideLocationInst }}">{{ 'It looks like you\'re based in %location%. If this isn\'t right or not where you will be selling your item from'|trans({'%location%': '<b>' ~ selectedLocation ~ '</b>'}, 'frontend-paa-fourth-step')|raw }}, <a href="javascript:void(0)" id="change_location_link">{{ 'change location'|trans({}, 'frontend-paa-fourth-step')}}.</a></div>
+    <div id="dispEditNurseryLocation" style="display:none;padding-bottom:10px;">{{ 'It looks like you\'re based in %actuallocation%'|trans({'%actuallocation%': '<b>' ~ curLocText ~ '</b>'}, 'frontend-paa-fourth-step')|raw }}</div>
     <div id="location_field_div" class="map-location-field" style="display:{{ showHideLocationField }}">
         <div class="row">
             <div class="small-wrapper">
@@ -71,4 +76,5 @@
         {% endif %}
         {{ block('googlemap_location_html') }}
     </div>
+    <div><span id="location_error_div" class="error"></span></div>
 </div>

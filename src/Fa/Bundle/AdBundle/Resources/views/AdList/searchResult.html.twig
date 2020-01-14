@@ -284,6 +284,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
 #fa_left_search_item__distance-button { width:100% !important; }
 .buildersbay-list-logo { background:url(/bundles/fafrontend/images/Builders-Bay.png) 100% 100% no-repeat;width: 124px;height: 40px; }
+.mcn-logo { background:url(/bundles/fafrontend/images/MCN-logo-1.png) 100% 100% no-repeat;width: 124px;height: 58px; }
 </style>
 {% if displayRecommendedSlot is defined and displayRecommendedSlot==1 %}
     {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
@@ -348,13 +349,13 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
                 {% endif %}
             {% endif %}
-
+            
             {% set slotallocated = [] %}
             {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 and totalAdCount > 0 and (recommendedSlotResult[1] is defined and recommendedSlotResult[1]|length >0) %}
                 {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 1 }) }}
                 {% set slotallocated = slotallocated|merge([1]) %}
             {% endif %}
-            
+
             {% if businessTopExposureUsersDetailsWithoutAd is defined  %}
                 {#{ include('FaAdBundle:AdList:businessTopExposureSingleBlock.html.twig', {}) }#}
             {% endif %}
@@ -389,7 +390,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                         {{ include('FaAdBundle:AdList:listDetail.html.twig', {'isTopAd': 1}) }}
                     {% endfor %}
                 {% endif %}
-
+                
                 {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
                 	 {% if (adCount >= 2) %}
                 	 	{% set bannerStatus = false %}	
@@ -398,6 +399,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 	                  {% endif %}
 	             {% endif %} 
                 {% set slotAdCount = 0 %}{% set setExtendedHeading = 0 %}
+                {% set FeaturedAdCount = 0 %}
                 {% set getPagNum = (app.request.get('page'))?(app.request.get('page')):1 %}
                 {% set realAdCnt = (getPagNum-1)*20 %}
                 {% for ad in pagination.getCurrentPageResults() %}
@@ -406,6 +408,7 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% set slotAdCount = slotAdCount + 1 %}
 					{% set displayBusinessExposureBlock = 0 %}
 					{% set displayBusinessExposureSingleBlock = 0 %}
+					{% set FeaturedAdCount = FeaturedAdCount + 1 %}
 					
                     {% if ((realAdCnt > resultCount) and (setExtendedHeading==0)) %}
                         <div data-alert="" class="alert-box info radius">
@@ -416,32 +419,39 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
                     {% endif %}
 
                     {% if displayRecommendedSlot==1 and recommendedSlotsCount > 0 %}
-                        {% if slotAdCount== 3  and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0) %}
+                        {% if slotAdCount== 4  and (recommendedSlotResult[2] is defined and recommendedSlotResult[2]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 2 }) }}
                             {% set slotallocated = slotallocated|merge([2]) %}
                         {% elseif slotAdCount== 7  and (recommendedSlotResult[3] is defined and recommendedSlotResult[3]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 3 }) }}
                             {% set slotallocated = slotallocated|merge([3]) %}
-                        {% elseif slotAdCount== 13  and (recommendedSlotResult[4] is defined and recommendedSlotResult[4]|length >0) %}
+                        {% elseif slotAdCount== 10  and (recommendedSlotResult[4] is defined and recommendedSlotResult[4]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 4 }) }}
                             {% set slotallocated = slotallocated|merge([4]) %}
-                        {% elseif slotAdCount== 17  and (recommendedSlotResult[5] is defined and recommendedSlotResult[5]|length >0) %}
+                        {% elseif slotAdCount== 13  and (recommendedSlotResult[5] is defined and recommendedSlotResult[5]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 5 }) }}
                             {% set slotallocated = slotallocated|merge([5]) %}
-                        {% elseif slotAdCount== 20  and (recommendedSlotResult[6] is defined and recommendedSlotResult[6]|length >0) %}
+                        {% elseif slotAdCount== 16  and (recommendedSlotResult[6] is defined and recommendedSlotResult[6]|length >0) %}
                             {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 6 }) }}
                             {% set slotallocated = slotallocated|merge([6]) %}
+                        {% elseif slotAdCount== 18  and (recommendedSlotResult[7] is defined and recommendedSlotResult[7]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 7 }) }}
+                            {% set slotallocated = slotallocated|merge([7]) %}
+                        {% elseif slotAdCount== 20  and (recommendedSlotResult[8] is defined and recommendedSlotResult[8]|length >0) %}
+                            {{ include('FaAdBundle:AdList:showRecommendedSlots.html.twig', {'slotIndex': 8 }) }}
+                            {% set slotallocated = slotallocated|merge([8]) %}
                         {% endif %}
-                    {% endif %}
+                    {% endif %} 
                     
                 {% if businessExposureUsersDetails is defined and businessExposureUsersDetails|length > 0 and totalAdCount > 0  %}                       
-                    {% if adCount==5 or adCount==15 %} 
+                
+                {% if FeaturedAdCount==5 or FeaturedAdCount==15 %} 
                         {% set displayBusinessExposureBlock = 1 %}
-                    {% elseif adCount==10 %} 
+                    {% elseif FeaturedAdCount==10 %} 
                     	{% set displayBusinessExposureSingleBlock = 1 %}
                     {% endif %}
                     {% if displayBusinessExposureBlock ==1 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %} 
-                        {{ include('FaAdBundle:AdList:businessExposureSliderBlock.html.twig', {'blockposition': adCount }) }}
+                        {{ include('FaAdBundle:AdList:businessExposureSliderBlock.html.twig', {'blockposition': FeaturedAdCount }) }}
                 	{% endif %}
                 	{% if displayBusinessExposureSingleBlock ==1 and businessExposureUsersDetails is defined and  businessExposureUsersDetails|length > 0 %} 
                         {{ include('FaAdBundle:AdList:businessExposureSingleBlock.html.twig') }}

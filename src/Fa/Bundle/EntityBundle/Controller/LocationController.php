@@ -137,6 +137,87 @@ class LocationController extends CoreController
 
         return new Response();
     }
+    
+    /**
+     * Get ajax a location nodes in json format.
+     *
+     * @param Request $request Request instance
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxGetNodeJsonForLocationGroupByIdAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $nodeId = $request->get('id');
+            $locationGroupId = $request->get('locationGroupId');
+            $locationCountyId = $request->get('locationCountyId');
+            $locationField = $request->get('locationField');
+            if ($nodeId) {
+                //$childrens     = $this->getRepository('FaEntityBundle:Location')->getChildrenKeyValueArrayByParentId($nodeId);
+                $childrenArray  =  $domicileArray = $domicileGroupArray = array();
+                $townArray = $townGroupArray = array();
+                               
+                $domicileGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getDomicilesTownsOrArrayByLocationGroupId($locationGroupId, $locationField);
+                
+                if(!empty($domicileGroupArray)) {
+                    if($locationCountyId!='') {
+                        $townGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getTownsByLocationGroupDomicileId($locationGroupId,$locationCountyId);
+                    } else {
+                        $townGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getDomicilesTownsOrArrayByLocationGroupId($locationGroupId, 'town');
+                    }
+                    
+                    foreach ($domicileGroupArray as $id => $name) {
+                        $domicileArray[] = array('id' => $id, 'text' => $name);                    
+                    }
+                    $childrenArray['domicile'] = $domicileArray;
+                    if(!empty($townGroupArray)) {
+                        foreach ($townGroupArray as $id => $name) {
+                            $townArray[] = array('id' => $id, 'text' => $name);
+                        }
+                        $childrenArray['town'] = $townArray;
+                    }
+                }
+                
+                return new JsonResponse($childrenArray);
+            }
+        }
+        
+        return new Response();
+    }
+    
+    /**
+     * Get ajax a location nodes in json format.
+     *
+     * @param Request $request Request instance
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxGetNodeJsonForLocationTownByCountyAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $countyId = $request->get('id');
+            $locationGroupId = $request->get('locationGroupId');
+
+            if ($countyId) {
+                //$childrens     = $this->getRepository('FaEntityBundle:Location')->getChildrenKeyValueArrayByParentId($nodeId);
+                $childrenArray  =  array();
+                $townArray = $townGroupArray = array();
+                 
+                $townGroupArray = $this->getRepository('FaEntityBundle:LocationGroupLocation')->getTownsByLocationGroupDomicileId($locationGroupId,$countyId);
+               
+                if(!empty($townGroupArray)) {
+                    foreach ($townGroupArray as $id => $name) {
+                        $townArray[] = array('id' => $id, 'text' => $name);
+                    }
+                    $childrenArray['town'] = $townArray;
+                }
+                               
+                return new JsonResponse($childrenArray);
+            }
+        }
+        
+        return new Response();
+    }
 
     /**
      * Get towns with locality ajax action.
@@ -282,4 +363,36 @@ class LocationController extends CoreController
         
         return new Response();
     }
+    
+    public function ajaxNurseryLocationGroupAction(Request $request)
+    {
+        $nurseryGroupCount = 0;
+        $getPackageRuleArray = $getActivePackage = array();
+        
+        if ($request->isXmlHttpRequest() && $request->get('term') != null) {
+            $townVal = $request->get('term');
+            $adId = $request->get('adId');
+            $adIdArray = array();
+            $adIdArray[] = $adId;
+            
+            if (!empty($townVal)) {
+                $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActiveModerationPackageArrayByAdId($adIdArray);
+                if ($getActivePackage) {
+                    $getPackageRuleArray = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+                    if(!empty($getPackageRuleArray)) {
+                        if($getPackageRuleArray[0]['location_group_id']==14) {
+                            $nurseryGroupCount = $this->getRepository('FaEntityBundle:LocationGroupLocation')->checkIsNurseryGroup($townVal);
+                        }
+                    }
+                }
+                
+            }
+            if($nurseryGroupCount > 0) {
+                return new JsonResponse(array('response' => true, 'nurseryGroupCount' => $nurseryGroupCount));
+            }
+        }
+        
+        return new JsonResponse(array('response' => false, 'nurseryGroupCount' => $nurseryGroupCount));
+    }
+    
 }

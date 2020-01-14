@@ -64,7 +64,7 @@ class ParseAdFeedCommand extends ContainerAwareCommand
         $type           = $input->getOption('type');
         $site_id        = $input->getOption('site_id');
 
-        if (!in_array($type, array('BoatAdvert', 'ClickEditVehicleAdvert', 'HorseAdvert', 'PropertyAdvert', 'PetAdvert', 'MerchandiseAdvert', 'MotorhomeAdvert', 'LivestockAdvert', 'JobAdvert', 'TradeIt', 'Wightbay', 'BusinessAdvert', 'CaravanAdvert',  'GeneralAdvert'))) {
+        if (!in_array($type, array('BoatAdvert', 'ClickEditVehicleAdvert', 'HorseAdvert', 'PropertyAdvert', 'PetAdvert', 'MerchandiseAdvert', 'MotorhomeAdvert', 'LivestockAdvert', 'JobAdvert', 'TradeIt', 'Wightbay', 'BusinessAdvert', 'CaravanAdvert',  'GeneralAdvert', 'VehicleAdvert'))) {
             $output->writeln('Invalid ad type argument', true);
             return false;
         }

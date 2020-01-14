@@ -282,7 +282,36 @@ class Dotmailer
      * @ORM\Column(name="is_half_account", type="boolean", nullable=true, options={"default" = 0})
      */
     private $is_half_account = 0;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_contact_sent", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $is_contact_sent;
 
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=4, nullable=true)
+     */
+    private $gender;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="date_of_birth", type="string", length=20, nullable=true)
+     */
+    private $dateOfBirth;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="first_touch_point", type="string", nullable=true)
+     */
+    private $firstTouchPoint;
+    
     /**
      * Constructor
      */
@@ -1099,7 +1128,7 @@ class Dotmailer
      * Set business category id
      *
      * @param integer $businessCategoryId
-     * @return User
+     * @return Dotmailer
      */
     public function setBusinessCategoryId($businessCategoryId)
     {
@@ -1122,7 +1151,7 @@ class Dotmailer
      * Set is_half_account.
      *
      * @param string $is_half_account
-     * @return User
+     * @return Dotmailer
      */
     public function setIsHalfAccount($is_half_account)
     {
@@ -1140,4 +1169,95 @@ class Dotmailer
     {
         return $this->is_half_account;
     }
+    
+    /**
+     * Set is_contact_sent.
+     *
+     * @param boolean $is_contact_sent
+     * @return Dotmailer
+     */
+    public function setIsContactSent($is_contact_sent)
+    {
+        $this->is_contact_sent = $is_contact_sent;
+        
+        return $this;
+    }
+     
+    /**
+     * Get is_contact_sent.
+     *
+     * @return boolean
+     */
+    public function getIsContactSent()
+    {
+        return $this->is_contact_sent;
+    }
+
+     /* Set gender.
+     *
+     * @param string $gender
+     * @return Dotmailer
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+        
+        return $this;
+    }
+    
+    /**
+     * Get gender.
+     *
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+    
+    /**
+     * Set dateOfBirth.
+     *
+     * @param string $dateOfBirth
+     * @return Dotmailer
+     */
+    public function setDateOfBirth($dateOfBirth)
+    {
+        $this->dateOfBirth= $dateOfBirth;
+        
+        return $this;
+    }
+    
+    /**
+     * Get dateOfBirth.
+     *
+     * @return string
+     */
+    public function getDateOfBirth()
+    {
+        return $this->dateOfBirth;
+    }
+    
+    /**
+     * Set first touch point
+     *
+     * @param string $firstTouchPoint
+     * @return Dotmailer
+     */
+    public function setFirstTouchPoint($firstTouchPoint)
+    {
+        $this->firstTouchPoint = $firstTouchPoint;
+        
+        return $this;
+    }
+    
+    /**
+     * Get first touch point
+     *
+     * return string
+     */
+    public function getFirstTouchPoint()
+    {
+        return $this->firstTouchPoint;
+    } 
 }

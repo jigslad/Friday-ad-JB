@@ -100,7 +100,7 @@ class RegistrationType extends AbstractType
         ->add('last_name', TextType::class, array('label' => 'Last name'))
         ->add('email', EmailType::class, array('label' => 'Email address (not publicly displayed)'))
         ->add('phone', TelType::class, array('label' => 'Telephone number (optional)', 'attr' => array('maxlength' => '25')))
-        ->add('is_private_phone_number', CheckboxType::class, array('label' => 'Keep my phone number private <br /><b>(recommended)</b>'))
+        //->add('is_private_phone_number', CheckboxType::class, array('label' => 'Keep my phone number private <br /><b>(recommended)</b>'))
         ->add('contact_through_phone', CheckboxType::class, array('label' => 'Contact by phone'))
         ->add('contact_through_email', CheckboxType::class, array('label' => 'Contact by email', 'data' => true))
         ->add('business_name', TextType::class, array('label' => 'Business name'))
@@ -139,7 +139,7 @@ class RegistrationType extends AbstractType
             )
         )
         ->add('is_third_party_email_alert_enabled', CheckboxType::class, array(
-            'label' => false,
+            'label' => false,          
         ))
         ->add('is_email_alert_enabled', CheckboxType::class, array(
             'label' => false,
@@ -219,9 +219,9 @@ class RegistrationType extends AbstractType
             $form->get('phone')->addError(new FormError($this->translator->trans('Please enter phone number.', array(), 'validators')));
         }
 
-        if ($form->get('is_private_phone_number')->getData() && $form->get('phone')->getData() && substr($form->get('phone')->getData(), 0, 3) == UserRepository::YAC_PRIACY_NUM_PREFIX) {
+        /*if ($form->get('is_private_phone_number')->getData() && $form->get('phone')->getData() && substr($form->get('phone')->getData(), 0, 3) == UserRepository::YAC_PRIACY_NUM_PREFIX) {
             $form->get('is_private_phone_number')->addError(new FormError($this->translator->trans(' Please enter a different telephone numbers. We are unable to allocate privacy numbers to 070 numbers.', array(), 'validators')));
-        }
+        }*/
         
         if ($form->get('is_terms_agreed')->getData() && !trim($form->get('is_terms_agreed')->getData())) {
             $form->get('is_terms_agreed')->addError(new FormError($this->translator->trans("You must accept Friday-Ad's terms and conditions in order to register.", array(), 'validators')));

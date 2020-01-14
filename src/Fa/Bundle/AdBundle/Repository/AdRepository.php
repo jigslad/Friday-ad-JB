@@ -2148,7 +2148,8 @@ class AdRepository extends EntityRepository
         $this->_em->flush($object);
 
         // activate yac number
-        $this->handleAdPrivacyNumber($adId, $container);
+        //$this->handleAdPrivacyNumber($adId, $container); 
+        // commented when we removed Yac FFR-3756
 
         return array(
             'adUserPackageId' => $adUserPackageId,
@@ -2220,7 +2221,8 @@ class AdRepository extends EntityRepository
             } else {
                 // Detached ad
                 if ($ad->getUsePrivacyNumber() && $ad->getPhone()) {
-                    exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:update:ad-yac-number allocate --ad_id='.$ad->getId().' >/dev/null &');
+                    //exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:update:ad-yac-number allocate --ad_id='.$ad->getId().' >/dev/null &');
+                    //commented FFR-3756
                 }
             }
         } catch (\Exception $e) {
@@ -3635,7 +3637,8 @@ class AdRepository extends EntityRepository
         }
 
         //remove yac number
-        exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:update:ad-yac-number setsold --ad_id='.$objAd->getId().' >/dev/null &');
+        //exec('nohup'.' '.$container->getParameter('fa.php.path').' '.$container->getParameter('project_path').'/console fa:update:ad-yac-number setsold --ad_id='.$objAd->getId().' >/dev/null &');
+        //commented FFR-3756
         // No need to do anything with print ad status as we are checking ad status into account while sending advert for printing.
 
         /*$objAdPrints = $this->_em->getRepository('FaAdBundle:AdPrint')->findBy(array('ad' => $adId));

@@ -185,7 +185,7 @@ class AdPostType extends AbstractType
             }
 
             if ($showAllFields) {
-                $paaFieldRules = $this->em->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($categoryId, $this->container, null, 'both');
+                $paaFieldRules = $this->em->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($categoryId, $this->container, 'edit', 'both');
             } else {
                 $paaFieldRules = $this->em->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($categoryId, $this->container, $this->step);
             }
@@ -950,10 +950,10 @@ class AdPostType extends AbstractType
                         }
                     }
                     if (isset($cookieLocation['town']) && $cookieLocation['town']) {
-                        if($locationId!='' && $locationId==2) { $locationText = $cookieLocation['town']; }
+                        if($locationId!='' && $locationId==2) { $locationText = ''; } else { $locationText = $cookieLocation['town']; }                        
                     }
                     if (isset($cookieLocation['paa_county']) && $cookieLocation['paa_county']) {
-                        if($locationId!='' && $locationId==2) { $locationText .= ', ' . $cookieLocation['paa_county']; }
+                        if($locationId!='' && $locationId==2) { $locationText = ''; } else { $locationText .= ', ' . $cookieLocation['paa_county']; }
                     }
                 }
             }
@@ -1118,6 +1118,113 @@ class AdPostType extends AbstractType
             }
         }
     }
+    
+    
+    /**
+     * Add location field validation.
+     *
+     * @param object $form
+     *            Form instance.
+     */
+    protected function validateAdEditLocation($form,$ad)
+    {
+        $locationText = null;
+        $location = $form->get('location')->getData();
+        $errorMsg = 0;
+        
+        if ($location) {
+            $postCode = $this->em->getRepository('FaEntityBundle:Postcode')->getPostCodByLocation($location);
+            $town = null;
+            $locality = null;
+            
+            if (! $postCode || $postCode->getTownId() == null || $postCode->getTownId() == 0) {
+                if (preg_match('/^\d+$/', $location)) {
+                    $town = $this->em->getRepository('FaEntityBundle:Location')->getTownAndAreaById($location, $this->container);
+                } elseif (preg_match('/^([\d]+,[\d]+)$/', $location)) {
+                    $localityTown = explode(',', $location);
+                    $localityId = $localityTown[0];
+                    $townId = $localityTown[1];
+                    if ($localityId && $townId) {
+                        $town = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array(
+                            'id' => $townId,
+                            'lvl' => '3'
+                        ));
+                    }
+                } else {
+                    $town = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array(
+                        'name' => $location,
+                        'lvl' => '3'
+                    ));
+                    if (! $town) {
+                        $locality = $this->em->getRepository('FaEntityBundle:Locality')->findOneBy(array(
+                            'name' => $location
+                        ));
+                    }
+                }
+            }
+            
+            //for displaying the location name on form
+            if (!empty($town)) {
+                $locationText = $town->getName();
+            } elseif (!empty($locality)) {
+                $locationText = $locality->getName();
+            } elseif (!empty($postCode)) {
+                $locationText = $location;
+            }
+            
+            if ($locationText != '') {
+                $this->addLocationTxtField($form, $locationText);
+            }
+            
+            if (! $postCode && ! $town && ! $locality) {
+                $form->get('location_autocomplete')->addError(new FormError($this->translator->trans('Location is invalid.', array(), 'validators')));
+                $errorMsg = 1;
+            } 
+            
+            //validate Area for London Location
+            if ($postCode && $postCode->getId() != null) {
+                $town      = $this->em->getRepository('FaEntityBundle:Location')->find($postCode->getTownId());
+            }
+            
+            if ($town) {
+                //check area is based on London Location
+                if ($town && ($town->getId() == LocationRepository::LONDON_TOWN_ID || $town->getlvl() == 4)) {
+                    $locationArea = $form->get('area')->getData();
+                    
+                    if ($locationArea == null) {
+                        $form->get('area_autocomplete')->addError(new FormError($this->translator->trans('Area should not be blank.', array(), 'validators')));
+                    } else {
+                        $area = null;
+                        if (preg_match('/^\d+$/', $locationArea)) {
+                            $area = $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array('id'=>$locationArea, 'lvl'=>'4'));
+                        } /*else {
+                        $area= $this->em->getRepository('FaEntityBundle:Location')->findOneBy(array(
+                        'name' 	=> $locationArea,
+                        'lvl'	=>'4'
+                        ));
+                        }*/
+                        
+                        if (!$area) {
+                            $form->get('area_autocomplete')->addError(new FormError($this->translator->trans('Area is invalid.', array(), 'validators')));
+                            $errorMsg = 1;
+                        }
+                    }
+                }
+            }
+            
+            if($town && $errorMsg = 0) {
+                $locationId = $town->getId();
+                $adId = $ad->getId();
+                
+                $isNotNurseryCount = $this->validateNurseryLocation($locationId,$adId);
+                if($isNotNurseryCount == 1) {
+                    $form->get('location_autocomplete')->addError(new FormError($this->translator->trans('', array(), 'validators')));
+                    $errorMsg = 1;
+                }
+            }
+        }
+    }
+    
 
     /**
      * Validate price based on ad type selected.
@@ -1362,8 +1469,10 @@ class AdPostType extends AbstractType
      */
     protected function validateYoutubeField($form)
     {
-        $youtubeVideoUrl = trim($form->get('youtube_video_url')->getData());
-
+        $youtubeVideoUrl = '';
+        if ($form->has('youtube_video_url') && $form->get('youtube_video_url')->getData()) {
+            $youtubeVideoUrl = trim($form->get('youtube_video_url')->getData());
+        }
         // validate youtube video url.
         if ($youtubeVideoUrl) {
             $youtubeVideoId = CommonManager::getYouTubeVideoId($youtubeVideoUrl);
@@ -1406,4 +1515,30 @@ class AdPostType extends AbstractType
             }
         }
     }
+    
+    protected function validateNurseryLocation($locationId,$adId) {
+        $adIdArray   = array();
+        $adIdArray[] = $adId;
+        $getPackageRuleArray = $getActivePackage = array();
+        $isNotNurseryCount = 0;
+        
+        if ($locationId !='') {
+            $getActivePackage = $this->em->getRepository('FaAdBundle:AdUserPackage')->getAdActiveModerationPackageArrayByAdId($adIdArray);
+            if ($getActivePackage) {
+                if($getActivePackage[$adId]['package_price']==0) {
+                    $getPackageRuleArray = $this->em->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+                    if(!empty($getPackageRuleArray)) {
+                        if($getPackageRuleArray[0]['location_group_id']==14) {
+                            $nurseryGroupCount = $this->em->getRepository('FaEntityBundle:LocationGroupLocation')->checkIsNurseryGroup($locationId);
+                            if($nurseryGroupCount==0) {
+                                $isNotNurseryCount = 1;
+                                return $isNotNurseryCount;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $isNotNurseryCount;
+    }    
 }

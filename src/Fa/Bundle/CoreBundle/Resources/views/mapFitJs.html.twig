@@ -14,6 +14,7 @@ function showAddress(val) {
     if(map && myMarker) {  
         map.removeLayer(myMarker);
     }
+    
     let settings = {
   		  "async": true,
   		  "crossDomain": true,
@@ -37,6 +38,7 @@ function showAddress(val) {
   				});
   			}
   		});
+     
 }
 
 function initialize(lat, lng) { 
@@ -117,6 +119,15 @@ function showCustomMarker(lat, lng, markerImage)
 	    });
 	}
 	myMarker = L.marker([lat, lng], {icon: myIcon}).addTo(map);
+}
+
+function checkIsNurseryGroup(townVal,adId, callback) {
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: Routing.generate('ajax_nursery_location_group', { term: townVal, adId: adId }),
+        success: callback
+    });
 }
 
 //]]>

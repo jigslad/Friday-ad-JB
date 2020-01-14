@@ -159,8 +159,9 @@ class MyAccountController extends ThirdPartyLoginController
                 }
 
                 // update yac number if phone number changes and user has set privacy number.
-                if ($form->get('is_private_phone_number')->getData() && $oldPhoneNumber != $form->get('phone')->getData()) {
+                /*if ($form->get('is_private_phone_number')->getData() && $oldPhoneNumber != $form->get('phone')->getData()) {
                     exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number edit --user_id='.$loggedinUser->getId().' >/dev/null &');
+                    
                 }
 
                 // update yac number if privacy phone number setting is changes.
@@ -170,7 +171,8 @@ class MyAccountController extends ThirdPartyLoginController
                     } elseif (!$form->get('is_private_phone_number')->getData()) {
                         exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number setsold --user_id='.$loggedinUser->getId().' >/dev/null &');
                     }
-                }
+                }*/ 
+                //commented FFR-3756
 
                 $this->container->get('session')->getFlashBag()->add('account_detail_success', $this->get('translator')->trans('Your detail updated successfully.', array(), 'frontend-user-account-detail'));
                 return $this->redirectToRoute('my_account');

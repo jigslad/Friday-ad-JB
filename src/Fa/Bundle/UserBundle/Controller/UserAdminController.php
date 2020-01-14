@@ -502,18 +502,19 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
             $em->flush();
 
             // update yac number if phone number changes and user has set privacy number.
-            if ($form->get('is_private_phone_number')->getData() && $oldPhoneNumber != $form->get('phone')->getData()) {
-                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number edit --user_id='.$id.' >/dev/null &');
+            /*if ($form->get('is_private_phone_number')->getData() && $oldPhoneNumber != $form->get('phone')->getData()) {
+                exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number edit --user_id='.$id.' >/dev/null &');                
             }
-
+ 
             // update yac number if privacy phone number setting is changes.
             if ($oldIsPrivatePhoneNumber != $form->get('is_private_phone_number')->getData()) {
                 if ($form->get('is_private_phone_number')->getData()) {
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number allocate --user_id='.$id.' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number allocate --user_id='.$id.' >/dev/null &');                   
                 } elseif (!$form->get('is_private_phone_number')->getData()) {
-                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number setsold --user_id='.$id.' >/dev/null &');
+                    exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:update:user-ad-yac-number setsold --user_id='.$id.' >/dev/null &');                    
                 }
-            }
+            }*/
+            //commented FFR-3756
 
             $routeParams = array();
             $successMsg  = 'User was updated successfully.';
@@ -1071,11 +1072,17 @@ class UserAdminController extends CoreController implements ResourceAuthorizatio
                     $this->getEntityManager()->beginTransaction();
                     $userPackageId = $form->get('user_package_id')->getData();
                     $userBoostOveride = $form->get('boost_overide')->getData();
+                    $isResetBoostCount = $form->get('is_reset_boost_count')->getData();
 
                     $userPackage = $this->getRepository('FaUserBundle:UserPackage')->find($userPackageId);
                     if ($userPackage) {
                         $userPackage->setBoostOveride($userBoostOveride);
                         $this->getEntityManager()->persist($userPackage);
+                        
+                        $user = $this->getRepository('FaUserBundle:User')->find($userPackage->getUser()->getId());
+                        $user->setBoostOveride($userBoostOveride);
+                        $user->setIsResetBoostCount($isResetBoostCount);
+                        $this->getEntityManager()->persist($user);                         
                     }
                     $this->getEntityManager()->getConnection()->commit();
                 }

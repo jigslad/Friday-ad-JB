@@ -538,7 +538,7 @@ class AdListController extends CoreController
         $recommendedSlotArr = array();
         $recommendedSlotOrder = array();
         if (!empty($getRecommendedSrchSlots)) {
-            for ($arj=1;$arj<=6;$arj++) {
+            for ($arj=1;$arj<=8;$arj++) {
                 if (isset($getRecommendedSrchSlots[$arj])) {
                     $recommendedSlotArr[$arj] = $getRecommendedSrchSlots[$arj][0];
                     $recommendedSlotOrder[$arj] = $getRecommendedSrchSlots[$arj][0]['creative_ord'];
@@ -2209,15 +2209,15 @@ class AdListController extends CoreController
         if ($topBusiness) {
             $businessExposureTopUser = $this->getRepository('FaUserBundle:User')->getTopbusinessUserDetailForAdList($topBusiness, $this->container);           
             //$businessExposureTopUserAds = $this->getProfileExposureUserAds($businessExposureTopUser[0]['user_id'], $data);
-            //if(!empty($businessExposureTopUserAds)) {
+            if(!empty($businessExposureTopUserAds) && isset($businessExposureTopUser[0]['user_id'])) {
                 $businessTopExposureUserDetails[] = array(
                     //'businessExposureUserAds' => $businessExposureTopUserAds,
                     'businessUserId'          => $businessExposureTopUser[0]['user_id'],
                     'businessUserDetail'      => $this->getRepository('FaUserBundle:User')->getProfileExposureUserDetailForAdList($businessExposureTopUser[0]['user_id'], $this->container),
                 );
-           // }
+            }
             $parameters['businessTopExposureUsersDetailsWithoutAd'] = $businessTopExposureUserDetails;
-            $viewedBusinessExposureUserIds[] = !empty($businessExposureTopUser) ? $businessExposureTopUser[0]['user_id']:'';
+            $viewedBusinessExposureUserIds[] = (!empty($businessExposureTopUser) && isset($businessExposureTopUser[0]['user_id'])) ? $businessExposureTopUser[0]['user_id']:'';            
         }
        
         $businessExposureUsers = $businessExposureUsersWithoutAd = array();

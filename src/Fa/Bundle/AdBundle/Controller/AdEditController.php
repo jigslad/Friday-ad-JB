@@ -63,7 +63,7 @@ class AdEditController extends CoreController
         }
         $loggedinUser = $this->getLoggedInUser();
         $ad           = $this->getRepository('FaAdBundle:Ad')->find($id);
-
+        
         if (!$ad) {
             return $this->handleMessage($this->get('translator')->trans('No ad exists which you want to edit.', array(), 'frontend-ad-edit'), 'manage_my_ads_active', array(), 'error');
         }
@@ -115,6 +115,30 @@ class AdEditController extends CoreController
         );
 
         return $this->render($this->getTemplateName($adCategoryId), $parameters);
+    }
+    
+    public function checkIsNurseryLocation($form, $ad) {
+        $adIdArray   = array();
+        $adIdArray[] = $adId = $ad->getId();
+        $getPackageRuleArray = $getActivePackage = array();
+        $isNotNurseryCount = 0;
+        
+        if ($form->has('location') && $form->get('location')->getData()!='') {
+            $getLocationId = $form->get('location')->getData();
+            $getActivePackage = $this->getRepository('FaAdBundle:AdUserPackage')->getAdActiveModerationPackageArrayByAdId($adIdArray);
+            if ($getActivePackage) {
+                $getPackageRuleArray = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+                if(!empty($getPackageRuleArray)) {
+                    if($getPackageRuleArray[0]['location_group_id']==14) {
+                        $nurseryGroupCount = $this->getRepository('FaEntityBundle:LocationGroupLocation')->checkIsNurseryGroup($getLocationId);
+                        if($nurseryGroupCount==0) {
+                            $isNotNurseryCount = 1;                            
+                        }
+                    }
+                }
+            }
+        }
+        return $isNotNurseryCount;
     }
 
     /**

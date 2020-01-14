@@ -504,20 +504,50 @@ class AdUserPackageRepository extends BaseEntityRepository
             $adId = array($adId);
         }
 
-        if (count($adId)) {
+        if (!empty($adId)) {
             $qb->andWhere(self::ALIAS.'.ad_id IN (:adId)');
             $qb->setParameter('adId', $adId);
         }
-
+        
         $adPackages   = $qb->getQuery()->getArrayResult();
+
         $adPackageArr = array();
-        if (count($adPackages)) {
+        if (!empty($adPackages)) {
             foreach ($adPackages as $adPackage) {
                 $packageAarray = array('package_id' => $adPackage['package_id'], 'package_price' => $adPackage['price']);
                 $adPackageArr[$adPackage['ad_id']] = $packageAarray;
             }
         }
 
+        return $adPackageArr;
+    }
+    
+    public function getAdActiveModerationPackageArrayByAdId($adId = array())
+    {
+        $qb = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS.'.id', 'IDENTITY('.self::ALIAS.'.package) as package_id', self::ALIAS.'.ad_id', self::ALIAS.'.price')
+        ->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
+        ->andWhere(self::ALIAS.'.status = '.self::STATUS_ACTIVE.' OR '.self::ALIAS.'.status = '.self::STATUS_INACTIVE);
+        
+        if (!is_array($adId)) {
+            $adId = array($adId);
+        }
+        
+        if (!empty($adId)) {
+            $qb->andWhere(self::ALIAS.'.ad_id IN (:adId)');
+            $qb->setParameter('adId', $adId);
+        }
+
+        $adPackages   = $qb->getQuery()->getArrayResult();
+        //echo 'packages===<pre>'; print_r($adPackages);
+        $adPackageArr = array();
+        if (!empty($adPackages)) {
+            foreach ($adPackages as $adPackage) {
+                $packageAarray = array('package_id' => $adPackage['package_id'], 'package_price' => $adPackage['price']);
+                $adPackageArr[$adPackage['ad_id']] = $packageAarray;
+            }
+        }
+        
         return $adPackageArr;
     }
 
@@ -621,5 +651,26 @@ class AdUserPackageRepository extends BaseEntityRepository
             }
         }
         return true;
+    }
+    
+    public function checkIsNurseryPackageForAd($adId) {
+        $adIdArray = array();
+        $adIdArray[] = $adId;
+        $getPackageRuleArray = $getActivePackage = array();
+        
+        $getActivePackage = $this->_em->getRepository('FaAdBundle:AdUserPackage')->getAdActiveModerationPackageArrayByAdId($adIdArray);
+        //echo '<pre>'; print_r($getActivePackage);
+        
+        if ($getActivePackage) {
+            if($getActivePackage[$adId]['package_price']==0) {
+                $getPackageRuleArray = $this->_em->getRepository('FaPromotionBundle:PackageRule')->getPackageRuleArrayByPackageId($getActivePackage[$adId]['package_id']);
+                if(!empty($getPackageRuleArray)) {
+                    if($getPackageRuleArray[0]['location_group_id']==14) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
