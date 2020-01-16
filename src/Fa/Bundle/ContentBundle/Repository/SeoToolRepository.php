@@ -238,7 +238,7 @@ class SeoToolRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -358,7 +358,7 @@ class SeoToolRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -436,7 +436,7 @@ class SeoToolRepository extends EntityRepository
                 $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
                 if ($cachedValue !== false) {
-                    return $cachedValue;
+                    //return $cachedValue;
                 }
             }
 
@@ -452,6 +452,10 @@ class SeoToolRepository extends EntityRepository
             if ($customized_url) {
                 $data['source_url'] = $customized_url->getSourceUrl();
                 $data['target_url'] = $customized_url->getTargetUrl();
+                if(isset($data['target_url']) && $data['target_url']=='motors/classic-cars/') {
+                    $data['source_url'] = 'motors/cars/?item_motors__reg_year=';
+                    $data['source_url'] .= implode('__',CommonManager::getClassicCarsRegYearChoices());
+                }
 
                 if ($container) {
                     CommonManager::setCacheVersion($container, $cacheKey, $data);

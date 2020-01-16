@@ -98,7 +98,7 @@ class AdLeftSearchDimensionType extends AbstractType
         $dimensionSearchType = $this->request->get('dimensionSearchType');
 
         if ($dimensionField == 'item_motors__reg_year') {
-            $fieldChoices   = CommonManager::getRegYearChoices();
+            $fieldChoices   = CommonManager::getClassicCarsRegYearChoices();
         } else {
             $fieldChoices = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($dimensionId, $this->container);
         }
