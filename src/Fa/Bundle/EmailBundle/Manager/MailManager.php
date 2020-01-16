@@ -308,7 +308,7 @@ class MailManager
 
             //ex-TI user checking
             $coreExtObj = new CoreExtension($this->container);
-            $mailVars['site_logo_url'] = 'http:'.$coreExtObj->asset_url('fafrontend/images/fad-logo.png');
+            $mailVars['site_logo_url'] = 'http:'.$coreExtObj->asset_url('fafrontend/images/new-fad-logo.svg');
             $userObj = $this->em->getRepository('FaUserBundle:User')->findOneBy(array('email' => $to));
 
             $emailTemplateLayoutHtml = '';
