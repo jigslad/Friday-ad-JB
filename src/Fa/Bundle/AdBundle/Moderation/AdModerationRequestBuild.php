@@ -117,6 +117,10 @@ class AdModerationRequestBuild
         if(!$remoderation) {
             $baseUrl = $this->container->getParameter('base_url');
         } else { $baseUrl = ''; }
+        
+        if($priority==1 || $priority == true) { $priority = 1; } else { $priority = 0; }
+        if($isForManualModeration) { $isForManualModeration = true; } else { $isForManualModeration = false; }
+        
         $this->moderationRequest[AdModerationFieldMappingInterface::SITE_ID] = $this->container->getParameter('fa.ad.moderation.site.id');
 
         $this->moderationRequest[AdModerationFieldMappingInterface::CALLBACK_URL] = $baseUrl.$this->container->get('router')->generate('ad_moderation_response', array(), true);

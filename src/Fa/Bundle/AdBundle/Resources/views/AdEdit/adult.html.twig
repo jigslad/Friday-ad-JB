@@ -48,8 +48,7 @@
                                     {{ form_errors(form) }}
                                     {% set orderedFields = form.paa_ordered_fields.vars.value|split(',') %}
                                     {% if orderedFields|length  > 0 %}
-                                        {{ include('FaAdBundle:AdEdit:
-                                        adultFields.html.twig') }}
+                                        {{ include('FaAdBundle:AdEdit:adultFields.html.twig') }}
                                     {% endif %}
                                     <div class="small-wrapper">
                                         {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand mt30'}}) }}
