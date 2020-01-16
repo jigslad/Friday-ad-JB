@@ -194,6 +194,7 @@ class AdPostType extends AbstractType
                 // First: if field is defined in PAA field rules of parent category.
                 foreach ($paaFieldRules as $paaFieldRule) {
                     $paaField = $paaFieldRule['paa_field'];
+
                     // show only active fields from rule
                     if ($paaFieldRule['status'] && (! $this->step || ($paaFieldRule['step'] == $this->step))) {
                         if ($paaField['field'] == 'location') {
@@ -978,6 +979,11 @@ class AdPostType extends AbstractType
         if (isset($paaFieldRule['placeholder_text']) && $paaFieldRule['placeholder_text']) {
             $fieldOptions['attr']['placeholder'] = $paaFieldRule['placeholder_text'];
         }
+
+        if (isset($paaFieldRule['help_text']) && $paaFieldRule['help_text']) {
+            $fieldOptions['attr']['field-help'] = $paaFieldRule['help_text'];
+        }
+
 
         $form->add('location_autocomplete', TextType::class, $fieldOptions);
         $form->add('location_lat_lng', HiddenType::class, array(
