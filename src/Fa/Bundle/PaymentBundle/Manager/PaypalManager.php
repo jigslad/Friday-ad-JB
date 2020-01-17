@@ -145,7 +145,7 @@ class PaypalManager
         $paypalExpressCheckoutFields['cancelUrl']                      = $cacelUrl;
         $paypalExpressCheckoutFields['returnUrl']                      = $returnUrl;
         $paypalExpressCheckoutFields['METHOD']                         = 'SetExpressCheckout';
-        $paypalExpressCheckoutFields['LOGOIMG']                        = CommonManager::getStaticImageUrl($this->container, 'fafrontend/images', 'fad-logo.jpg');
+        $paypalExpressCheckoutFields['LOGOIMG']                        = CommonManager::getStaticImageUrl($this->container, 'fafrontend/images', 'new-fad-logo.svg');
         $paypalExpressCheckoutFields['PAYFLOWCOLOR']                   = 'e3e3e3';
         $paypalExpressCheckoutFields['CARTBORDERCOLOR']                = 'a8dc28';
         $paypalExpressCheckoutFields['REQCONFIRMSHIPPING']             = '0';

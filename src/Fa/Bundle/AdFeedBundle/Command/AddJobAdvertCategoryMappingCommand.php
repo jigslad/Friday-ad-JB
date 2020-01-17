@@ -128,6 +128,8 @@ EOF
                     } elseif (!$parentCatObj) {
                         echo "Mapping not inserted, Parent Category not found:".$row['fa_parent_category']."\n";
                     }
+                } elseif ($adFeedMapping) {
+                    echo "Mapping not inserted, Category already mapped:".$row['feed_category']."\n";
                 }
             }
         }

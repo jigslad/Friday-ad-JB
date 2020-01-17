@@ -148,7 +148,7 @@ class CategoryAdminType extends AbstractType
                             'required' => false
                         )
                     );
-       // }
+        //}
         $builder
             ->add('has_recommended_slot_searchlist', CheckboxType::class, array('label' => 'Has sponsored slots for search list page?', 'required' => false))
             ->add('is_oneclickenq_enabled', CheckboxType::class, array('label' => 'Enable One click enquire', 'required' => false))

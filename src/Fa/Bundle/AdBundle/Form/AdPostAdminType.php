@@ -169,7 +169,7 @@ abstract class AdPostAdminType extends AbstractType
                 $verticalObj = $this->getVerticalRepository()->setObjectFromModerationData($this->moderationValue['dimensions'][0]);
             }
 
-            $paaFieldRules = $this->em->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($categoryId, $this->container, null, 'both');
+            $paaFieldRules = $this->em->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($categoryId, $this->container, 'admin', 'both');
 
             if (count($paaFieldRules)) {
                 // First: if field is defined in PAA field rules of parent category.
@@ -1372,7 +1372,10 @@ abstract class AdPostAdminType extends AbstractType
      */
     protected function validateYoutubeField($form, $ad = null)
     {
-        $youtubeVideoUrl = trim($form->get('youtube_video_url')->getData());
+        $youtubeVideoUrl = '';
+        if ($form->has('youtube_video_url') && $form->get('youtube_video_url')->getData()) {
+            $youtubeVideoUrl = trim($form->get('youtube_video_url')->getData());
+        }
 
         // validate youtube video url.
         if ($youtubeVideoUrl) {
