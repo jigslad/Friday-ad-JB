@@ -45,15 +45,17 @@ class CleanS3AdImageCommand extends ContainerAwareCommand
         ->setDescription('Clean S3 ad image data')
         ->addOption('action', null, InputOption::VALUE_OPTIONAL, 'Action', null)
         ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'Path', null)
+        ->addOption('marker', null, InputOption::VALUE_OPTIONAL, 'starting point of image folder', null)
+        ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'number of images to be fetched', null)
         ->setHelp(
             <<<EOF
             Cron: To be setup to run at mid-night.
-                        
+            
             Actions:
             - Can be run to remove unwanted feed data.
-                        
+            
             Command:
-             - php bin/console fa:clean-s3-ad-image-data  --path="uploads/image/17587101_17587200"
+             - php bin/console fa:clean-s3-ad-image-data  --path="uploads/image/17587101_17587200" --marker="uploads/image/15549701_15549800/restaurant-with-coffee-shop-and-pub-in-dursley-for-sale-15549759-1.jpg"  --offset=1000
 EOF
             );
     }
@@ -70,14 +72,19 @@ EOF
         $stat_time = time();
         $output->writeln('SCRIPT START TIME '.date('d-m-Y H:i:s', $stat_time), true);
         $path = $input->getOption('path');
+        $marker = $input->getOption('marker');
+        $offset = $input->getOption('offset');
         
         if($path) {
             $checkFolder = $path;
         } else {
             $checkFolder = 'uploads/image';
         }
+        if($marker) { $marker = $marker; } else { $marker = ''; }
+        if($offset) { $offset = $offset; } else { $offset = 1000; }
+        
         $adImageRepository  = $this->em->getRepository('FaAdBundle:AdImage');
-
+        
         $client = new S3Client([
             'version'     => 'latest',
             'region'      => $this->getContainer()->getParameter('fa.aws_region'),
@@ -87,47 +94,62 @@ EOF
             ],
         ]);
         
-    	try{ 
-    		# initializing our object 
-    	    $files = $client->getIterator('ListObjects', [ # this is a Generator Object (its yields data rather than returning) 
-    	        'Bucket' => $this->getContainer()->getParameter('fa.aws_bucket')
-    		]); 
-    	    
-    		# printing our data 
-    		foreach($files as $file) { 
-    			$awsKey = $file['Key']; 
-                if(strpos($awsKey, $checkFolder) === 0) {
-        			$explodeAwsKey = explode('/',$awsKey);
-        			$awsImageDBPath = $explodeAwsKey[0].'/'.$explodeAwsKey[1].'/'.$explodeAwsKey[2];
-        			$explodeAwsImageName = explode('.',$explodeAwsKey[3]);
-        			$awsImageName = explode('_',$explodeAwsImageName[0]);
-        			$awsImageDBName = $awsImageName[0];
-        			$adImageObj = $adImageRepository->findOneBy(array('path' => $awsImageDBPath, 'image_name' => $awsImageDBName));
- 
-         			if(!$adImageObj) {
-                                    $awsImageDBHash = $awsImageName[1];
-        			    $adImageObj = $adImageRepository->findOneBy(array('path' => $awsImageDBPath, 'hash' => $awsImageDBHash));
-        			    if(!$adImageObj) {
-        			        $fileKeys = array();
-        			        $fileKeys[] = array('Key' => $awsKey);
-        			        $result = $client->deleteObjects(array(
-        			            'Bucket'  => $this->getContainer()->getParameter('fa.aws_bucket'),
-        			            'Delete'  => array('Objects' => $fileKeys)
-        			        ));
-        			        print_r($result);
-        			        $output->writeln('Image deleted from aws : '.$awsKey, true);
-        			    }
-        			} else {
-                                    $output->writeln('Image not deleted exists in database : '.$awsKey, true);
-                                }
-    			}
-    		} 
-    	} catch(\Exception $ex){ 
-    		echo "Error Occurred\n", $ex->getMessage(); 
-    	} 
+        try{
+            # initializing our object
+            $files = $client->getIterator('ListObjects', [ # this is a Generator Object (its yields data rather than returning)
+                'Bucket' => $this->getContainer()->getParameter('fa.aws_bucket'),
+                'Prefix' => $checkFolder.'/',
+                'Marker' => $marker,
+                'MaxKeys' => $offset
+            ]);
+            $awsBucket = $this->getContainer()->getParameter('fa.aws_bucket');
+            
+            # printing our data
+            foreach($files as $file) {
+                $awsKey = $file['Key'];
+                //if(strpos($awsKey, $checkFolder) === 0) {
+                    $explodeAwsKey = explode('/',$awsKey);
+                    $awsImageDBPath = $explodeAwsKey[0].'/'.$explodeAwsKey[1].'/'.$explodeAwsKey[2];
+                    $explodeAwsImageName = explode('.',$explodeAwsKey[3]);
+                    $awsImageName = explode('_',$explodeAwsImageName[0]);
+                    $awsImageDBName = $awsImageName[0];
+                    $adImageObj = $adImageRepository->findOneBy(array('path' => $awsImageDBPath, 'image_name' => $awsImageDBName));
+                    $awsDestKey = $this->getContainer()->getParameter('fa.ad.image.bin.dir').'/'.$explodeAwsKey[2].'/'.$explodeAwsKey[3];
+                    if(!$adImageObj) {
+                        $awsImageDBHash = (isset($awsImageName) && isset($awsImageName[1]))?$awsImageName[1]:'';
+                        if($awsImageDBHash) {
+                            $adImageObj = $adImageRepository->findOneBy(array('path' => $awsImageDBPath, 'hash' => $awsImageDBHash));
+                        }
+                        if(!$adImageObj) {
+                            $fileKeys = array();
+                            $fileKeys[] = array('Key' => $awsKey);
+                            /*$result = $client->deleteObjects(array(
+                             'Bucket'  => $this->getContainer()->getParameter('fa.aws_bucket'),
+                             'Delete'  => array('Objects' => $fileKeys)
+                             ));
+                             print_r($result);
+                             $output->writeln('Image deleted from aws : '.$awsKey, true);*/
+                            
+                            $result = $client->copyObject([
+                                'Bucket'     => $awsBucket,
+                                'Key'        => $awsDestKey,
+                                'CopySource' => $awsBucket.'/'.$awsKey,
+                            ]);
+                            $this->getContainer()->get('moved_s3_images_to_bin_logger')->info('Image moved from image-folder to image-bin-folder ' . $awsKey);
+                            $output->writeln('Image moved from image-folder to image-bin-folder : '.$awsKey, true);
+                            
+                        }
+                    } else {
+                        $this->getContainer()->get('images_exists_s3_logger')->info('Image not moved exists in database : '.$awsKey);
+                        $output->writeln('Image not moved exists in database : '.$awsKey, true);
+                    }
+                //}
+            }
+        } catch(\Exception $ex){
+            echo "Error Occurred\n", $ex->getMessage();
+        }
         
         $output->writeln('SCRIPT END TIME '.date('d-m-Y H:i:s', time()), true);
         $output->writeln('TIME TAKEN TO EXECUTE SCRIPT '.((time() - $stat_time) / 60), true);
-    }    
+    }
 }
-
