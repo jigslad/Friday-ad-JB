@@ -296,29 +296,33 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
     
     public function processRedirectBulkUpload($request, $data) 
     {
-        $importData = array();
-        $importData = $data;
-        if(!empty($importData)) {
-            foreach($importData as $singleData) {
-                $actualData = $dataArray = array();
-                $actualData = explode(':',$singleData);
-                
-                if(!empty($actualData)) {
-                    $dataArray['old'] = $actualData[0];
-                    $dataArray['new'] = $actualData[1];
-                    $dataArray['is_location'] = ($actualData[2]=='location')?1:($actualData[2]=='article'?2:0);
-                }
-                $getExistData = $this->getRepository('FaAdBundle:Redirects')->getRedirectByArray($dataArray);
-                if(empty($getExistData)) {
-                    $redirects = new Redirects;
-                    $redirects->setOld($dataArray['old']);
-                    $redirects->setNew($dataArray['new']);
-                    $redirects->setIsLocation($dataArray['is_location']);
-                    $this->updateEntity($redirects);
-                }
+        $type =strtolower($request->get('type'));
+        $format = strtolower($request->get('format'));
+        if ($type == 'bulk') {
+            if ($format && $format == 'file') {
+                $data = $this->getFileData($data);
             }
+            $this->insertNewRedirectsData($data);
         }
         return $this->dataTableRedirectConfigAction($request);
+    }
+    public function insertNewRedirectsData($data){
+        foreach ($data as $singleData) {
+            $actualData = explode(',',$singleData);
+            if(!empty($actualData)) {
+                $dataArray['old'] = $actualData[0];
+                $dataArray['new'] = $actualData[1];
+                $dataArray['is_location'] = ($actualData[2] == 'location')?1:0;
+            }
+            $getExistData = $this->getRepository('FaAdBundle:Redirects')->getRedirectByArray($dataArray);
+            if(empty($getExistData)) {
+                $redirects = new Redirects;
+                $redirects->setOld($dataArray['old']);
+                $redirects->setNew($dataArray['new']);
+                $redirects->setIsLocation($dataArray['is_location']);
+                $this->updateEntity($redirects);
+            }
+        }
     }
 
     /**
@@ -1103,6 +1107,8 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         if (empty($type = strtolower($request->get('type')))) {
             $this->saveData($configType, $data);
         } elseif ($type == 'bulk') {
+            var_dump($data);
+
 
             $existingData = data_get($this->seoConfig(false), "{$configType}.data", []);
 
@@ -1164,7 +1170,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
     public function validateRedirectsViewAction(Request $request)
     {
         $root = $request->server->get('DOCUMENT_ROOT') . '/../data/seo';
-        $website = $this->container->getParameter('site.name');
+        $website = $this->container->getParameter('base_url');
         $file = "{$root}/{$website}/redirect_rules.csv";
 
         $data = [];
@@ -1228,7 +1234,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             mkdir($root, 0777);
         }
 
-        $website = $this->container->getParameter('site.name');
+        $website = $this->container->getParameter('base_url');
 
         if (!is_dir("{$root}/{$website}")) {
             mkdir("{$root}/{$website}", 0777);
@@ -1652,7 +1658,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
                 
         return new JsonResponse([
             'changed' => false,
-            'ruleFrom' => $ruleFrom,
+            'ruleFrom' => $ruleId,
             'ruleTo' => $ruleTo,
         ]);
     }

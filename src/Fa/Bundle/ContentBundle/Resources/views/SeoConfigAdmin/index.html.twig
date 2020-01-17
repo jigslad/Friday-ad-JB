@@ -333,9 +333,9 @@
                             <b>Add Redirects</b>
                             <i class="fi-info" title="Added URLs will be redirects to corresponding URL"></i>
                             <br>
-                            <i>Eg: &lt;from_url_segment&gt;:&lt;to_url_segment&gt;[:&lt;replace_type&gt;]</i>
+                            <i>Eg: &lt;from_url_segment&gt;:&lt;to_url_segment&gt;:&lt;replace_type&gt;</i>
                             <br>
-                            <i>&lt;replace_type&gt; can be 'full' or 'partial'. Default value will be 'partial'</i>
+                            <i>&lt;replace_type&gt; can be 'location' or 'category'. Default value will be 'category'</i>
                             <div style="font-size: 15px; font-style: oblique; margin-top: 10px;">
                                 <div>article:list-all-adverts >> will convert &lt;domain&gt;/article_types?param=1 to &lt;domain&gt;/list-all-adverts_types?param=1</div>
                                 <div>article:list-all-adverts:full >> will convert &lt;domain&gt;/article_types?param=1 to &lt;domain&gt;/list-all-adverts</div>
@@ -653,11 +653,9 @@
                                 <label>Upload CSV File:</label>
                                 <input type="file" accept=".csv" style="width: auto !important;" id="mapping_file">
                             </div>
-
                             <br>
                             <div>OR</div>
                             <br>
-
                             <textarea placeholder="Paste the data here, separated by new-lines." rows="15" id="bulk-text"></textarea>
                             <input type="hidden" id="upload-type" value="">
 
