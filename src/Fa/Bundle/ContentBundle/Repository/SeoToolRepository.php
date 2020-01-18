@@ -238,7 +238,7 @@ class SeoToolRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -358,7 +358,7 @@ class SeoToolRepository extends EntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -436,7 +436,7 @@ class SeoToolRepository extends EntityRepository
                 $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
                 if ($cachedValue !== false) {
-                    return $cachedValue;
+                    //return $cachedValue;
                 }
             }
 
@@ -452,6 +452,10 @@ class SeoToolRepository extends EntityRepository
             if ($customized_url) {
                 $data['source_url'] = $customized_url->getSourceUrl();
                 $data['target_url'] = $customized_url->getTargetUrl();
+                if(isset($data['target_url']) && $data['target_url']=='motors/classic-cars/') {
+                    $data['source_url'] = 'motors/cars/?item_motors__reg_year=';
+                    $data['source_url'] .= implode('__',CommonManager::getClassicCarsRegYearChoices());
+                }
 
                 if ($container) {
                     CommonManager::setCacheVersion($container, $cacheKey, $data);
@@ -513,18 +517,25 @@ class SeoToolRepository extends EntityRepository
     {
         if ($targetUrl != '') {
             $regYearsList = [];
-            $qb = $this->createQueryBuilder(self::ALIAS)
-            ->andWhere(self::ALIAS.'.target_url = :target_url')
-            ->setParameter('target_url', $targetUrl)
-            ->setMaxResults(1);
             
-            $customizedSourceUrl = $qb->getQuery()->getOneOrNullResult();
-            if ($customizedSourceUrl) {
-                list($key, $regYears) = explode("=", $customizedSourceUrl->getSourceUrl());
-                if ($regYears != '') {
-                    $regYearsList = explode("__", $regYears);
+            if($targetUrl == 'motors/classic-cars/') {
+                $regYearsList = CommonManager::getClassicCarsRegYearChoices();
+            } else {
+                $qb = $this->createQueryBuilder(self::ALIAS)
+                ->andWhere(self::ALIAS.'.target_url = :target_url')
+                ->setParameter('target_url', $targetUrl)
+                ->setMaxResults(1);
+                
+                $customizedSourceUrl = $qb->getQuery()->getOneOrNullResult();
+                if ($customizedSourceUrl) {
+                    list($key, $regYears) = explode("=", $customizedSourceUrl->getSourceUrl());
+                    if ($regYears != '') {
+                        $regYearsList = explode("__", $regYears);
+                    }
                 }
             }
+            
+            
             return $regYearsList;
         }
     }

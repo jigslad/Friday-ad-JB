@@ -97,8 +97,16 @@ class AdLeftSearchDimensionType extends AbstractType
         $dimensionName       = $this->request->get('dimensionName');
         $dimensionSearchType = $this->request->get('dimensionSearchType');
 
+        $customizedUrlData = array();
+        $customizedUrlData = $this->request->get('customized_url');
+        $classicPageUrl = (!empty($customizedUrlData) && isset($customizedUrlData['target_url']))?$customizedUrlData['target_url']:'';
+        
         if ($dimensionField == 'item_motors__reg_year') {
-            $fieldChoices   = CommonManager::getRegYearChoices();
+            if($classicPageUrl == 'motors/classic-cars/') {
+                $fieldChoices   = CommonManager::getClassicCarsRegYearChoices();
+            } else {
+                $fieldChoices   = CommonManager::getRegYearChoices();
+            }    
         } else {
             $fieldChoices = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($dimensionId, $this->container);
         }
