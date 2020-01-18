@@ -257,6 +257,10 @@ class AdLeftSearchType extends AbstractType
             if ($rootCategoryName) {
                 $dimensionFieldPrefix = $dimensionFieldPrefix.'_'.$rootCategoryName;
             }
+            
+            $customizedUrlData = array();
+            $customizedUrlData = $this->request->get('customized_url');
+            $classicPageUrl = (!empty($customizedUrlData) && isset($customizedUrlData['target_url']))?$customizedUrlData['target_url']:'';
 
             foreach ($dimensions as $dimensionId => $dimension) {
                 $dimensionName  = $dimension['name'];
@@ -278,10 +282,14 @@ class AdLeftSearchType extends AbstractType
                     if (in_array($dimensionField, array('size_id', 'age_range_id', 'tonnage_id', 'berth_id', 'number_of_stalls_id', 'number_of_bathrooms_id', 'number_of_bedrooms_id', 'number_of_rooms_available_id', 'rent_per_id'))) {
                         $withSort = false;
                     }
-
+                    
                     if ($dimensionField == 'reg_year_id') {
                         $dimensionField = str_replace('_id', '', $dimensionField);
-                        $fieldChoices   = CommonManager::getRegYearChoices();
+                        if($classicPageUrl == 'motors/classic-cars/') {
+                            $fieldChoices   = CommonManager::getClassicCarsRegYearChoices();
+                        } else {
+                            $fieldChoices   = CommonManager::getRegYearChoices();
+                        }                        
                     } elseif ($dimensionField == 'mileage_id') {
                         $dimensionField = str_replace('_id', '', $dimensionField).'_range';
                         $fieldChoices   = CommonManager::getMileageChoices();
