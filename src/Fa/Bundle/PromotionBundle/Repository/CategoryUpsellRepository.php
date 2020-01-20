@@ -340,6 +340,9 @@ class CategoryUpsellRepository extends EntityRepository
         $categoryUpsells = $query->getQuery()->getResult();
         
         $categoryUpsellArr = array();
+        if(empty($categoryUpsells)) {
+            
+        }
         if (!empty($categoryUpsells)) {
             foreach ($categoryUpsells as $categoryUpsell) {
                 $categoryUpsellArr = array('id'=>$categoryUpsell['upsell_id'], 'title' => $categoryUpsell['upselltitle'], 'description' => $categoryUpsell['upsell_description'], 'price' => $categoryUpsell['upsell_price']);

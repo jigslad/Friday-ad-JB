@@ -67,7 +67,7 @@
     <div class="large-24 columns" >
           {% set ccUrl = path('process_payment', {'paymentMethod': constant('Fa\\Bundle\\PaymentBundle\\Repository\\PaymentRepository::PAYMENT_METHOD_CYBERSOURCE')}) %}
           {% set catPath = '' %}
-          
+
           {% if isAdultAdvertPresent is defined and isAdultAdvertPresent==0 %}
            	<ul class="payment-buttons-block upgrade-payments">
                 <li>
