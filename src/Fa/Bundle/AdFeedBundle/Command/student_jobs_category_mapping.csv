@@ -1,4 +1,18 @@
 feed_category,fa_parent_category,fa_leaf_category,fa_leaf_category_lvl
+Teaching / Instructors / Guides,Education Jobs,Tutoring Jobs,3
+Admin / Secretarial,"Office, Admin and PA Jobs",Admin Jobs,3
+Customer Service,"Sales, Retail and Customer Service Jobs",Customer Service Jobs,3
+Bar Staff / Waiters and Waitresses,Hospitality and Catering Jobs,Food and Beverage Jobs,3
+Accountancy,Accountancy and Finance Jobs,Accounts Assistant Jobs and Accountancy Apprenticeships,3
+ICT,Computing and IT Jobs,IT Support Jobs ,3
+Promotions,General Jobs,Promotional Jobs,3
+Management,"Office, Admin and PA Jobs",Office Manager Jobs,3
+Sales,"Sales, Retail and Customer Service Jobs",Sales Jobs,3
+Sport / Adventure,"Health, Beauty and Fitness Jobs",Sports and Healthclub Jobs,3
+Human Resources,Recruitment and HR Jobs,Graduate and Trainee HR Jobs,3
+Advertising / Marketing / PR,"Marketing, Media and PR Jobs",Marketing Jobs,3
+Scientific Services,"Marketing, Media and PR Jobs","Other Marketing, Media, and PR Jobs",3
+Online Marketing,"Marketing, Media and PR Jobs","Digital Marketing, SEO and PPC Jobs",3
 Home Care,Home and Social Care Jobs,Carer Jobs,3
 Advice,"Marketing, Media and PR Jobs","Other Marketing, Media, and PR Jobs",3
 Design / Fashion,"Marketing, Media and PR Jobs",Design and Creative Jobs,3
@@ -13,6 +27,8 @@ Receptionist,"Office, Admin and PA Jobs",Receptionist Jobs,3
 Technical,jobs,Computing and IT Jobs,2
 Legal,Law Jobs,Paralegal and Trainee Law Jobs,3
 Retail,"Sales, Retail and Customer Service Jobs",Retail Jobs,3
+Guest host,Hospitality and Catering Jobs,Other Hospitality and Catering Jobs,3
+Councelling and Social Services,Home and Social Care Jobs,Other Home and Social Care Jobs,3
 Account Management Jobs,Accountancy and Finance Jobs,Management Accountant and Financial Controller Jobs,3
 Admin Jobs,"Office, Admin and PA Jobs",Admin Jobs,3
 Administrator Jobs,"Office, Admin and PA Jobs",Admin Jobs,3
