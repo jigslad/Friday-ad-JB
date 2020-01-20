@@ -81,6 +81,30 @@ class MotorsRedirectsRepository extends EntityRepository
             return $field;
         }
     }
+    /**
+     * Get active Campaigns
+     */
+    public function getAllRedirects()
+    {
+        $results = $this->createQueryBuilder(self::ALIAS)
+            ->getQuery()
+            ->getArrayResult();
+        return $results;
+    }
+
+    public function deleteRecordById($Id)
+    {
+        if ($Id!='') {
+            $qb = $this->createQueryBuilder(self::ALIAS)
+                ->delete()
+                ->where(self::ALIAS.'.id = :Id')
+                ->setParameter('Id', $Id);
+
+            $result = $qb->getQuery()->execute();
+        }
+
+        return $result;
+    }
 
     /**
      * Get entity table name.

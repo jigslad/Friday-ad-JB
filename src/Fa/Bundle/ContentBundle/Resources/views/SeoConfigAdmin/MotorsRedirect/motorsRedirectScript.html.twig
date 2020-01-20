@@ -1,0 +1,132 @@
+<script>
+    $('#motors_redirects').DataTable( {
+        ajax: '{{ path('admin_seo_config_motors_redirects_datatable', {'config': 'motors_redirects'}) }}',
+        columns: [
+            { data:'from'},
+            { data:'Field'},
+            { data:'category'},
+            { data:'parent'},
+            { data:'parent category'},
+            { data: 'action' },
+        ],
+        "deferRender": true,
+        // "processing": true,
+        // "serverSide": true,
+        dom: 'Bfrtip',
+        buttons: [
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5',
+            'pageLength',
+        ]
+    } );
+    // Edit Action
+    $(document).on('click', '.datatable-action-list .fa.edit-motors', function () {
+        motorsEditRow($(this).parents('tr').first())
+    });
+
+    // Save Action
+    $(document).on('click', '.datatable-action-list .fa.motors-redirect-save', function () {
+        motorsRedirectSaveRow($(this).parents('tr').first())
+    });
+
+    // Delete Action
+    $(document).on('click', '.datatable-action-list .fa.motors-redirect-delete', function () {
+        motorsRedirectDeleteRow($(this).parents('tr').first())
+    });
+
+    // Edit Action
+    function motorsEditRow(row) {
+        $.each($(row).find('td'), function (key, td) {
+            var settings = $(td).find('span.datatable-action-list');
+            if (settings.length) {
+            $(settings).find('.save').removeClass('hidden');
+            $(settings).find('.motors-redirect-save').removeClass('hidden');
+            $(settings).find('.undo').removeClass('hidden');
+            $(settings).find('.edit').addClass('hidden');
+            }
+            else {
+                var text = $(td).text();
+                var html = $(td).html();
+                var textarea = $('<input>').css({width: '95%'}).attr('data-value', text).val(text);
+                $(td).html(textarea)
+            }
+        });
+    }
+
+    // Delete Action
+    function motorsRedirectDeleteRow(row) {
+        $(row).addClass('deleted');
+        var rule = $(row).find('.datatable-action-list .data').first().html();
+        var table = $(row).parents('table').first();
+        var config = $(table).data('rule');
+        blockPage('Removing Motors Redirect');
+        $.ajax({
+            type: "POST",
+            url: "{{path('admin_seo_config_datatable_motors_redirect_delete')}}",
+            data: {
+                config: config,
+                MotorsRedirectsID: rule
+            }
+        })
+        .done(function(response) {
+            unblockPage();
+            if (response.changed) {
+                $(row).remove();
+                $(table).DataTable().ajax.reload()
+            }
+            else {
+                alert('Motors Redirect not deleted')
+            }
+        });
+    }
+    // Edit Save Action
+    function motorsRedirectSaveRow(row) {
+        var ruleFrom = $(row).find('.datatable-action-list .data').first().html();
+        var table = $(row).parents('table').first();
+        var config = $(table).data('rule');
+        var ruleTo = [];
+        $.each($(row).find('input:not(.hidden)'), function (key, input) {
+            ruleTo.push($(input).val());
+        });
+        ruleTo = ruleTo.join(':');
+        console.log(ruleFrom);
+        console.log(ruleTo);
+        blockPage('Saving Motors Redirect');
+
+    {#$.ajax({#}
+            {#    type: "POST",#}
+            {#    url: "{{path('admin_seo_config_datatable_motors_redirect_edit')}}",#}
+            {#    data: {#}
+            {#        config: config,#}
+            {#        rule_from: ruleFrom,#}
+            {#        rule_to: ruleTo#}
+            {#    }#}
+            {#})#}
+            {#    .done(function(response) {#}
+            {#        unblockPage();#}
+
+            {#        if (response.changed) {#}
+            {#            $(table).DataTable().ajax.reload()#}
+            {#        } else {#}
+            {#            alert('Motors Redirect not Saved')#}
+            {#        }#}
+
+            {#    });#}
+
+    }
+
+    $(document).ready(function() {
+        $('#upload').click(function () {
+            if (uploadType == 'url_right_trim') {
+                url = "{{ path('seo_config_url_rght_trim') }}";
+            }
+            if (url != '') {
+                bulkUpload(url);
+            }
+        });
+    });
+
+</script>
+
+{{ include('@FaContent/SeoConfigAdmin/MotorsRedirect/motorsRedirectScript.html.twig') }}

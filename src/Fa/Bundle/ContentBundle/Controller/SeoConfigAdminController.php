@@ -276,12 +276,62 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
     }
 
     /**
+     * Add Motors Redirects data.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+
+    public function motorsRedirectsAction(Request $request)
+    {
+        $data = $request->get('data');
+
+        $data = $this->processMotorsRedirectBulkUpload($request, $data);
+
+        return new JsonResponse([
+            'status' => 1,
+            'data' => $data
+        ]);
+    }
+    public function processMotorsRedirectBulkUpload($request, $data){
+        $type =strtolower($request->get('type'));
+        $format = strtolower($request->get('format'));
+        if ($type == 'bulk') {
+            if ($format && $format == 'file') {
+                $data = $this->getFileData($data);
+            }
+            $this->insertNewMotorsRedirectsData($data);
+        }
+        return $this->dataTableRedirectConfigAction($request);
+    }
+    public function insertNewMotorsRedirectsData($motorsData){
+        foreach ($motorsData as $singleData) {
+            $actualData = explode(',',$singleData);
+            if(!empty($actualData)) {
+                $dataArray['old'] = $actualData[0];
+                $dataArray['new'] = $actualData[1];
+                $dataArray['is_location'] = ($actualData[2] == 'location')?1:0;
+            }
+            $getExistData = $this->getRepository('FaAdBundle:Redirects')->getRedirectByArray($dataArray);
+            if(empty($getExistData)) {
+                $redirects = new Redirects;
+                $redirects->setOld($dataArray['old']);
+                $redirects->setNew($dataArray['new']);
+                $redirects->setIsLocation($dataArray['is_location']);
+                $this->updateEntity($redirects);
+            }
+        }
+    }
+
+    /**
      * Add Redirects data.
      *
      * @param Request $request
      * @return JsonResponse
      * @throws \Doctrine\ORM\OptimisticLockException
      */
+
     public function redirectsAction(Request $request)
     {
         $data = $request->get('data');
@@ -1315,6 +1365,20 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         ]);
     }
 
+    public function dataTableMotorsRedirectConfigAction(Request $request)
+    {
+        $configSlug = $request->get('config');
+        $offset = $request->get('start');
+        $page = $request->get('draw');
+        $perPage = $request->get('length');
+
+        $configs = $this->getMotorsRedirectConfigData();
+
+        return new JsonResponse([
+            'data' => $configs,
+        ]);
+    }
+
     /**
      * Get the config data for the data-table.
      *
@@ -1363,6 +1427,48 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
     public function getRedirectConfigData() {
         $data = $this->getRepository('FaAdBundle:Redirects')->getAllRedirects();
         return $this->transformRedirects($data);
+    }
+
+    /**
+     * Get the config data for the data-table.
+     *
+     * @param $config
+     * @return array
+     */
+    public function getMotorsRedirectConfigData() {
+        $data = $this->getRepository('FaAdBundle:MotorsRedirects')->getAllRedirects();
+        return $this->transformMotorsRedirects($data);
+    }
+
+    /**
+     * Transform Redirect data.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function transformMotorsRedirects($data = [])
+    {
+        return array_map(function ($item) {
+            $action =
+                '<span class="datatable-action-list" style="list-style: none">
+                    <textarea class="data" style="display: none;">'. data_get($item, 'id', '') .'</textarea>
+                    <i class="fa fi-pencil small edit-motors"></i>
+                    <i class="fa fi-undo undo hidden"></i>
+                    <i class="fa fi-trash motors-redirect-delete"></i>
+                    <i class="fa fi-save motors-redirect-save hidden"></i>
+                </span>';
+
+
+            return [
+                'from'  => data_get($item, 'nval', ''),
+                'Field'    => data_get($item, 'field_name', ''),
+                'category'    => data_get($item, 'mapped_id', ''),
+                'parent'    => data_get($item, 'parent', ''),
+                'parent category'    => data_get($item, 'parent_cat_id', ''),
+                'action'  => $action,
+            ];
+
+        }, $data);
     }
     /**
      * Transform Redirect data.
@@ -1656,6 +1762,67 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             ]);
         }
                 
+        return new JsonResponse([
+            'changed' => false,
+            'ruleFrom' => $ruleId,
+            'ruleTo' => $ruleTo,
+        ]);
+    }
+
+    public function motorsRedirectRemoveAction(Request $request)
+    {
+        $motorsRedirectId = $request->get('MotorsRedirectsID');
+        $result = '';
+
+        $result = $this->getRepository('FaAdBundle:MotorsRedirects')->deleteRecordById($motorsRedirectId);
+
+        if ($result) {
+            return new JsonResponse([
+                'changed' => true,
+                'MotorsRedirectsID' => $motorsRedirectId,
+            ]);
+        }
+
+        return new JsonResponse([
+            'changed' => false,
+            'MotorsRedirectsID' => $motorsRedirectId,
+        ]);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function motorsRedirectEditAction(Request $request)
+    {
+        $ruleTo = $ruleArray = $getExistData = array();
+        $ruleId = $request->get('rule_from');
+        $ruleVal = $request->get('rule_to');
+        $ruleTo = explode(':',$ruleVal);
+
+        if(!empty($ruleTo)) {
+            $ruleArray['old'] = $ruleTo[0];
+            $ruleArray['new'] = $ruleTo[1];
+            $ruleArray['is_location'] = ($ruleTo[2]=='location')?1:($ruleTo[2]=='article'?2:0);
+        }
+
+        $getExistData = $this->getRepository('FaAdBundle:MotorsRedirects')->getRedirectByArray($ruleArray);
+        if(empty($getExistData)) {
+            $redirects = $this->getRepository('FaAdBundle:MotorsRedirects')->find($ruleId);
+            $redirects->setOld($ruleArray['old']);
+            $redirects->setNew($ruleArray['new']);
+            $redirects->setIsLocation($ruleArray['is_location']);
+            $this->updateEntity($redirects);
+
+            return new JsonResponse([
+                'changed' => true,
+                'ruleFrom' => $ruleId,
+                'ruleTo' => $ruleVal,
+            ]);
+        }
+
         return new JsonResponse([
             'changed' => false,
             'ruleFrom' => $ruleId,

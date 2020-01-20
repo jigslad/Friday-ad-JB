@@ -1,0 +1,37 @@
+<div id="MotorsRedirectDiv">
+    <b>Add Motors Redirects</b>
+    <i class="fi-info" title="Added Motors Sort URLs will be redirects to corresponding URL with filters"></i>
+    <br>
+    <i>Eg: &lt;from_url&gt;:&lt;field&gt;:&lt;category&gt;:&lt;parent&gt;:&ltparent_category&gt;</i>
+    <br>
+{#    <div style="font-size: 15px; font-style: oblique; margin-top: 10px;">#}
+{#        <div>article:list-all-adverts >> will convert &lt;domain&gt;/article_types?param=1 to &lt;domain&gt;/list-all-adverts_types?param=1</div>#}
+{#        <div>article:list-all-adverts:full >> will convert &lt;domain&gt;/article_types?param=1 to &lt;domain&gt;/list-all-adverts</div>#}
+{#    </div>#}
+{#    <div>#}
+{#        Click <a href="{{ path('admin_validate_redirects_view') }}" target="_blank">here</a> to upload & check the redirect status.#}
+{#    </div>#}
+    <div class="status-toggle">
+        <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="redirects" class="">-</button>
+    </div>
+    <div class="select">
+        <table id="motors_redirects" style="width: 100%" data-rule="motors_redirects" class="dataTable display">
+            <thead>
+            <tr>
+                <th>from</th>
+                <th>Field</th>
+                <th>category</th>
+                <th>parent</th>
+                <th>parent category</th>
+                <th class="action">Action</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+    <button class="bulk-upload-button" data-toggle-handle="motors_redirects">Bulk Upload</button>
+</div>
+
+<div id="MotorsRedirectTab" class="tab">
+    {{ include('@FaContent/SeoConfigAdmin/MotorsRedirect/motorsRedirect.html.twig') }}
+</div>
