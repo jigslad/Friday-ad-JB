@@ -258,6 +258,9 @@ class AdLeftSearchType extends AbstractType
                 $dimensionFieldPrefix = $dimensionFieldPrefix.'_'.$rootCategoryName;
             }
             
+            $searchParams = $this->request->get('searchParams');
+            $searchRegYear = isset($searchParams['item__reg_year_id'])?$searchParams['item__reg_year_id']:array();
+            
             $customizedUrlData = array();
             $customizedUrlData = $this->request->get('customized_url');
             $classicPageUrl = (!empty($customizedUrlData) && isset($customizedUrlData['target_url']))?$customizedUrlData['target_url']:'';
@@ -278,6 +281,7 @@ class AdLeftSearchType extends AbstractType
                     }
 
                     $fieldChoices = array();
+                    $fieldOptions = array();
                     $withSort = true;
                     if (in_array($dimensionField, array('size_id', 'age_range_id', 'tonnage_id', 'berth_id', 'number_of_stalls_id', 'number_of_bathrooms_id', 'number_of_bedrooms_id', 'number_of_rooms_available_id', 'rent_per_id'))) {
                         $withSort = false;
@@ -289,7 +293,8 @@ class AdLeftSearchType extends AbstractType
                             $fieldChoices   = CommonManager::getClassicCarsRegYearChoices();
                         } else {
                             $fieldChoices   = CommonManager::getRegYearChoices();
-                        }                        
+                        } 
+                        $fieldOptions['data'] = $searchRegYear;
                     } elseif ($dimensionField == 'mileage_id') {
                         $dimensionField = str_replace('_id', '', $dimensionField).'_range';
                         $fieldChoices   = CommonManager::getMileageChoices();
@@ -316,7 +321,7 @@ class AdLeftSearchType extends AbstractType
                         $fieldChoices = $this->em->getRepository('FaEntityBundle:Entity')->customFormatOptions($fieldChoices, 'for-endusers');
                     }
 
-                    $fieldOptions = array();
+                    
                     if (isset($searchTypeArray[1]) && $searchTypeArray[1] == 'radio') {
                         $fieldOptions['expanded'] = true;
                         $fieldOptions['multiple'] = false;
