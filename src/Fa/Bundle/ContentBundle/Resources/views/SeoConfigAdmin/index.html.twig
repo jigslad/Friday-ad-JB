@@ -380,7 +380,7 @@
                     </div>
 
                     <div id="MotorsRedirectTab" class="tab">
-                        {{ include('@FaContent/SeoConfigAdmin/MotorsRedirect/motorsRedirect.html.twig') }}
+                        {{ include('FaContentBundle:SeoConfigAdmin:MotorsRedirect/motorsRedirect.html.twig') }}
                     </div>
 
                     {#<div id="SitemapTab" class="tab">
@@ -855,10 +855,7 @@
         $(document).on('click', '.datatable-action-list .fa.redirectsave', function () {
         	redirectsaveRow($(this).parents('tr').first())
         });
-        $(document).on('click', '.datatable-action-list .fa.redirectsave', function () {
-            redirectsaveRow($(this).parents('tr').first())
-        });
-
+       
         $(document).ready(function() {
             $("#ForSaleExclusions").select2({placeholder: "Add Categories"});
             $("#MaxDimRules").select2({placeholder: "Add Max Dim Rules", formatSelection: maxDimTemplate});

@@ -95,7 +95,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             'heading'    => $this->get('translator')->trans('General SEO Config & Redirects'),
             'configs'    => $seoConfigs,
             'dimensions' => $this->getAllDimensions(),
-            'categories' => $categories = $this->getCategories(),
+            'categories' => $this->getCategories(),
             'shortList'  => $this->shortList,
         ];
 

@@ -112,7 +112,7 @@ admin_seo_config_datatable_delete:
 
 admin_seo_config_datatable_edit:
     path: /data-table/edit
-    defaults: { _controller: "seo_config_redirectsFaContentBundle:SeoConfigAdmin:editRule" }
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:editRule" } 
     
 admin_seo_config_datatable_redirectdelete:
     path: /data-table/redirectdelete
