@@ -34,7 +34,7 @@
                             </div>
 
                             <div class="media-object-section">
-                                <p>{{ categoryPathArray|join('<span class="seperator"></span>')|raw }}</p>
+                                <p>{{ categoryPathArray|slice((categoryPathArray|length-2),categoryPathArray|length)|join('<span class="seperator"></span>')|raw }}</p>
                             </div>
                         </div>
                         <div class="right">
