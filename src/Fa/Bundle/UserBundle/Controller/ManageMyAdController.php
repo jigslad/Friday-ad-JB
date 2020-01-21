@@ -353,7 +353,12 @@ class ManageMyAdController extends CoreController
             $upsellObj = $this->getRepository('FaPromotionBundle:Upsell')->find($upsellId);
                         
             $ans = $this->getRepository('FaAdBundle:AdUserPackageUpsell')->disableFeaturedAdUpsell($adId,$upsellId);
-            $this->getRepository('FaUserBundle:UserCreditUsed')->redeemCreditUsedByUpsell($userId,$ad,$upsellObj,$this->container);
+            $userCreditDetails = $this->getRepository('FaUserBundle:UserCredit')->getActiveCreditDetailForUser($userId);
+            $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($userId, $this->container);
+            
+            if(!empty($userCreditDetails) && $loggedinUser->getBusinessCategory()->getId() ==  ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION)) {
+                $this->getRepository('FaUserBundle:UserCreditUsed')->redeemCreditUsedByUpsell($userId,$ad,$upsellObj,$this->container);
+            }
             
             if ($ans) {
                 $successMsg     = $this->get('translator')->trans('Featured upsell was removed successfully.', array(), 'frontend-manage-my-ad');
