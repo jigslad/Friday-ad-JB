@@ -1,48 +1,99 @@
-<div id="UnnecessaryQueryParamsDiv">
-    <b>Add Unnecessary Query Params:</b>
-    <br>
-    <i>Eg URL: /P/all-adverts-for-sale/something?q=name&search=time </i>
-    <br>
-    <p style="padding-left: 10px">
-        OData: 'P', 'all-adverts-for-sale', 'something'
-        <br>
-        Query Param: 'q', 'search'
-    </p>
-    <div>
-        <div class="status-toggle">
-            <button type="button" data-on="Enabled" data-off="Disabled" class="">-</button>
-        </div>
-        <div class="select" style="margin-top: 52px;">
-            <b>Query Params</b>
-            <br>
-            <table id="unnecessary_query_params" style="width: 100%" data-rule="unnecessary_query_params" class="dataTable display">
-                <thead>
-                <tr>
-                    <th>Parameter</th>
-                    <th class="action">Action</th>
-                </tr>
-                </thead>
-            </table>
-        </div>
+<script>
+    $(document).on('click', '.datatable-action-list .fa.redirectdelete', function () {
+        redirectdeleteRow($(this).parents('tr').first())
+    });
+    $(document).on('click', '.datatable-action-list .fa.redirectsave', function () {
+        redirectsaveRow($(this).parents('tr').first())
+    });
+    $('#redirects').DataTable( {
+        ajax: '{{ path('admin_seo_config_redirects_datatable', {'config': 'redirects'}) }}',
+        columns: [
+            { data: 'from' },
+            { data: 'to' },
+            { data: 'type' },
+            { data: 'action' },
+        ],
+        "deferRender": true,
+        // "processing": true,
+        // "serverSide": true,
+        dom: 'Bfrtip',
+        buttons: [
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5',
+            'pageLength',
+        ]
+    } );
+    function editRow(row) {
+        $.each($(row).find('td'), function (key, td) {
 
-        <button class="bulk-upload-button" data-toggle-handle="unnecessary_query_params" data-tab="Unnecessary Query Params">Bulk Upload</button>
-    </div>
+            var settings = $(td).find('span.datatable-action-list');
+            if (settings.length) {
+                $(settings).find('.save').removeClass('hidden');
+                $(settings).find('.redirectsave').removeClass('hidden');
+                $(settings).find('.undo').removeClass('hidden');
+                $(settings).find('.edit').addClass('hidden');
+            } else {
+                var text = $(td).text();
+                var html = $(td).html();
 
-    <div>
-        <div class="select" style="margin-top: 52px;">
-            <b>OData Params</b>
-            <br>
-            <table id="unnecessary_odata_params" style="width: 100%" data-rule="unnecessary_odata_params" class="dataTable display">
-                <thead>
-                <tr>
-                    <th>Parameter</th>
-                    <th class="action">Action</th>
-                </tr>
-                </thead>
-            </table>
-        </div>
+                var textarea = $('<input>').css({width: '95%'}).attr('data-value', text).val(text);
+                $(td).html(textarea)
+            }
 
-        <button class="bulk-upload-button" data-toggle-handle="unnecessary_odata_params" data-tab="Unnecessary OData Params">Bulk Upload</button>
-    </div>
+        });
+    }
+    function redirectsaveRow(row) {
+        var ruleFrom = $(row).find('.datatable-action-list .data').first().html();
+        var table = $(row).parents('table').first();
+        var config = $(table).data('rule');
 
-</div>
+        var ruleTo = [];
+        $.each($(row).find('input:not(.hidden)'), function (key, input) {
+            ruleTo.push($(input).val());
+        });
+
+        ruleTo = ruleTo.join(':');
+
+        console.log(ruleFrom, ruleTo);
+        blockPage('Saving rule');
+
+        $.ajax({
+            type: "POST",
+            url: "{{path('admin_seo_config_datatable_redirectedit')}}",
+            data: {
+                config: config,
+                rule_from: ruleFrom,
+                rule_to: ruleTo
+            }
+        })
+            .done(function(response) {
+                unblockPage();
+
+                if (response.changed) {
+                    $(table).DataTable().ajax.reload()
+                } else {
+                    alert('Rule not Saved')
+                }
+
+            });
+
+    }
+    function update_redirects() {
+
+        var select = $('#Redirects');
+        blockPage();
+
+        $.ajax({
+            type: "POST",
+            url: "{{path('seo_config_redirects')}}",
+            data: {
+                "data": getData($(select).select2('data'))
+            }
+        })
+            .done(function() {
+                unblockPage();
+                $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
+            });
+    }
+</script>

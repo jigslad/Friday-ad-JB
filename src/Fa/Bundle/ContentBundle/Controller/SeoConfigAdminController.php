@@ -193,13 +193,15 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         ]);
 
         foreach ($allDimensions as $dimension) {
-
+            revert_slug(!empty($name = $dimension->getName()) ? $name : $dimension->getKeyword());
+            revert_slug(!empty($category = $dimension->getCategory()) ? $category->getName() : 'null');
             $dims[] = [
                 'id' => $dimension->getId(),
-                'name' => revert_slug(!empty($name = $dimension->getName()) ? $name : $dimension->getKeyword()),
+                'name' => $name,
+                'category'=>$category,
+                'status' => $dimension->getIsSearchable()
             ];
         }
-
         return $dims;
     }
 

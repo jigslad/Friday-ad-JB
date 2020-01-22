@@ -1,0 +1,35 @@
+<div id="MetaTagsDiv" style="margin: 65px 5px">
+    <b>Add Meta Robots Tags Info</b>
+    <i class="fi-info" title="For url matching added 'url-part', will have given 'options'"></i>
+    <br>
+    <br>
+    <i>
+        Syntax:
+        &lt;option-1&gt;[,&lt;option-2&gt;]:&lt;url-part&gt;
+        <br>
+        <br>
+        Eg:
+        <br>
+        noindex,follow:list-all-adverts
+        <br>
+        index,follow:list-all-adverts/cats
+    </i>
+    <br>
+
+    <div class="status-toggle">
+        <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="meta_robots" class="">-</button>
+    </div>
+    <div class="select">
+        <table id="meta_robots" style="width: 100%" data-rule="meta_robots" class="dataTable display">
+            <thead>
+            <tr>
+                <th>Meta Tags</th>
+                <th>Url Segment</th>
+                <th class="action">Action</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+
+    <button class="bulk-upload-button" data-toggle-handle="meta_robots" data-tab="Meta Tags">Bulk Upload</button>
+</div>

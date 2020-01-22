@@ -1,0 +1,158 @@
+<div id="CrawlDiv">
+    <b>Sitemap</b>
+    <i class="fi-info" title="Configure the combination of category/subcategory & dimensions for which the url should not be crawlable."></i>
+    <br>
+    <i>Configure the combination of category/subcategory & dimensions for which the url should not be crawlable.</i>
+    <br><br>
+
+    <ol class="crawl-settings-wrapper">
+
+        <li class="crawl-settings-clone">
+            <div class="category-dimension-types">
+                <select name="main-sub-category">
+                    <option value="">Select Category/Sub Category</option>
+                    {% for categoryGroup in categories %}
+                        {% if categoryGroup['children'] is defined %}
+                            <optgroup label="{{ categoryGroup['parent']['name'] }}">
+                                {% for children in categoryGroup['children'] %}
+                                    <option value="{{ children['id'] }}">{{ children['name'] }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% else %}
+                            <optgroup label="{{ categoryGroup['parent']['name'] }}">
+                                <option value="{{ categoryGroup['parent']['id'] }}">{{ categoryGroup['parent']['name'] }}</option>
+                            </optgroup>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <select name="dimensions" multiple style="margin-left: 70px">
+                    <option value="">Select Dimension</option>
+                    {% for dimension in dimensions %}
+                        <option value="{{ dimension['id'] }}">{{ dimension['name'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="region-types">
+                <input type="checkbox" name="region" id="region-select">
+                <label for="region-select">Region</label>
+
+                <input type="checkbox" name="county" id="county-select">
+                <label for="county-select">County</label>
+
+                <input type="checkbox" name="town" id="town-select">
+                <label for="town-select">Town</label>
+
+                <section>
+                    <span><i class="fa fi-trash remove" style="color: red"></i></span>
+                    <span><i class="fa fi-plus add-more" style="color: green"></i></span>
+                </section>
+            </div>
+        </li>
+
+        {% if configs['crawl_config']['data'] is defined and configs['crawl_config']['data'] %}
+            {% for crawlSetting in configs['crawl_config']['data'] %}
+                <li class="crawl-settings">
+                    <div class="category-dimension-types">
+                        <select name="main-sub-category">
+                            <option value="">Select Category/Sub Category</option>
+                            {% for categoryGroup in categories %}
+                                {% if categoryGroup['children'] is defined %}
+                                    <optgroup label="{{ categoryGroup['parent']['name'] }}">
+
+                                        {% set selected = categoryGroup['parent']['id'] == crawlSetting['category'] ? 'selected' : '' %}
+                                        <option value="{{ categoryGroup['parent']['id'] }}" {{ selected }}>{{ categoryGroup['parent']['name'] }}</option>
+                                        {% for children in categoryGroup['children'] %}
+                                            {% set selected = children['id'] == crawlSetting['category'] ? 'selected' : '' %}
+                                            <option value="{{ children['id'] }}" {{ selected }}>{{ children['name'] }}</option>
+                                        {% endfor %}
+                                    </optgroup>
+                                {% else %}
+                                    {% set selected = categoryGroup['parent']['id'] == crawlSetting['category'] ? 'selected' : '' %}
+                                    <optgroup label="{{ categoryGroup['parent']['name'] }}">
+                                        <option value="{{ categoryGroup['parent']['id'] }}" {{ selected }}>{{ categoryGroup['parent']['name'] }}</option>
+                                    </optgroup>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <select name="dimensions" multiple style="margin-left: 70px">
+                            <option value="">Select Dimension</option>
+                            {% for dimension in dimensions %}
+                                {% set selected = dimension['id'] in crawlSetting['dimension'] ? 'selected' : '' %}
+                                <option value="{{ dimension['id'] }}" {{ selected }}>{{ dimension['name'] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="region-types">
+                        {% set checked = crawlSetting['region'] ? 'checked' : '' %}
+                        <input type="checkbox" name="region" id="region-select" {{ checked }}>
+                        <label for="region-select">Region</label>
+
+                        {% set checked = crawlSetting['county'] ? 'checked' : '' %}
+                        <input type="checkbox" name="county" id="county-select" {{ checked }}>
+                        <label for="county-select">County</label>
+
+                        {% set checked = crawlSetting['town'] ? 'checked' : '' %}
+                        <input type="checkbox" name="town" id="town-select" {{ checked }}>
+                        <label for="town-select">Town</label>
+
+                        <section>
+                            <span><i class="fa fi-trash remove" style="color: red"></i></span>
+                            <span><i class="fa fi-plus add-more" style="color: green"></i></span>
+                        </section>
+                    </div>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li class="crawl-settings">
+                <div class="category-dimension-types">
+                    <select name="main-sub-category">
+                        <option value="">Select Category/Sub Category</option>
+                        {% for categoryGroup in categories %}
+                            {% if categoryGroup['children'] is defined %}
+                                <optgroup label="{{ categoryGroup['parent']['name'] }}">
+                                    <option value="{{ categoryGroup['parent']['id'] }}">{{ categoryGroup['parent']['name'] }}</option>
+                                    {% for children in categoryGroup['children'] %}
+                                        <option value="{{ children['id'] }}">{{ children['name'] }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% else %}
+                                <optgroup label="{{ categoryGroup['parent']['name'] }}">
+                                    <option value="{{ categoryGroup['parent']['id'] }}">{{ categoryGroup['parent']['name'] }}</option>
+                                </optgroup>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <select name="dimensions" multiple style="margin-left: 70px">
+                        <option value="">Select Dimension</option>
+                        {% for dimension in dimensions %}
+                            <option value="{{ dimension['id'] }}">{{ dimension['name'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="region-types">
+                    <input type="checkbox" name="region" id="region-select">
+                    <label for="region-select">Region</label>
+
+                    <input type="checkbox" name="county" id="county-select">
+                    <label for="county-select">County</label>
+
+                    <input type="checkbox" name="town" id="town-select">
+                    <label for="town-select">Town</label>
+
+                    <section>
+                        <span><i class="fa fi-trash remove" style="color: red"></i></span>
+                        <span><i class="fa fi-plus add-more" style="color: green"></i></span>
+                    </section>
+                </div>
+            </li>
+        {% endif %}
+
+
+    </ol>
+
+    <div class="status-toggle">
+        <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="crawl" class="">-</button>
+    </div>
+    <br><br><br><br>
+    <button type="button" onclick="update_crawl_settings();" style="float: right; margin-right: 5px">Update Crawl Settings</button>
+</div>

@@ -1,0 +1,23 @@
+<div id="MaxDimRuleDiv" style="margin: 65px 5px">
+    <b>Add Max Dim Rules</b>
+    <br>
+    <i>For Internal Urls exceeding the below 'conditions' will not have href tags.</i>
+    <br>
+    <div>
+        Available Keywords: location, category, filter
+        <br><br>Please add all variables at all times. Ex: 1:location+0:filter+2:category
+    </div>
+    <i>Ex: 1:location+1:filter+1:category</i>
+    <br>
+    <i>Understanding a URL:&nbsp;&nbsp; "/uk/kittens-for-sale/british-shorthairs/male/"  - Has 1 Location, 2 Categories & 1 filter</i>
+    <div class="status-toggle">
+        <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="max_dim_rules" class="">-</button>
+    </div>
+    <br> <br>
+    <div class="select">
+        <select id="MaxDimRules" multiple class="multi-select" data-prediction="off">
+        </select>
+    </div>
+
+    <button type="button" onclick="update_MaxDimRules();" style="float: right; width: 300px;">Update Max Dim Rules</button>
+</div>

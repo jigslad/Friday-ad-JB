@@ -14,7 +14,7 @@
                 {# Tab Control #}
                 <ul class="tab-menu clearfix">
                     <li class="active">
-                        <a href="javascript:" data-tab="#general">General</a>
+                        <a href="javascript:" data-tab="#GeneralTab">General</a>
                     </li>                    
                     <li>
                         <a href="javascript:" data-tab="#MetaTagsTab">Meta Tags</a>
@@ -57,56 +57,8 @@
                 {# Tab Content #}
                 <div class="tabs-content">
 
-                    <div id="general" class="tab active">
-
-                        <div id="UnnecessaryQueryParamsDiv">
-                            <b>Add Unnecessary Query Params:</b>
-                            <br>
-                            <i>Eg URL: /P/all-adverts-for-sale/something?q=name&search=time </i>
-                            <br>
-                            <p style="padding-left: 10px">
-                                OData: 'P', 'all-adverts-for-sale', 'something'
-                                <br>
-                                Query Param: 'q', 'search'
-                            </p>
-                            <div>
-                                <div class="status-toggle">
-                                    <button type="button" data-on="Enabled" data-off="Disabled" class="">-</button>
-                                </div>
-                                <div class="select" style="margin-top: 52px;">
-                                    <b>Query Params</b>
-                                    <br>
-                                    <table id="unnecessary_query_params" style="width: 100%" data-rule="unnecessary_query_params" class="dataTable display">
-                                        <thead>
-                                        <tr>
-                                            <th>Parameter</th>
-                                            <th class="action">Action</th>
-                                        </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-
-                                <button class="bulk-upload-button" data-toggle-handle="unnecessary_query_params" data-tab="Unnecessary Query Params">Bulk Upload</button>
-                            </div>
-
-                            <div>
-                                <div class="select" style="margin-top: 52px;">
-                                    <b>OData Params</b>
-                                    <br>
-                                    <table id="unnecessary_odata_params" style="width: 100%" data-rule="unnecessary_odata_params" class="dataTable display">
-                                        <thead>
-                                        <tr>
-                                            <th>Parameter</th>
-                                            <th class="action">Action</th>
-                                        </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-
-                                <button class="bulk-upload-button" data-toggle-handle="unnecessary_odata_params" data-tab="Unnecessary OData Params">Bulk Upload</button>
-                            </div>
-
-                        </div>
+                    <div id="GeneralTab" class="tab active">
+                        {{ include('FaContentBundle:SeoConfigAdmin/General:General.html.twig') }}
                     </div>
 
                     {#<div id="FiltersTab" class="tab">
@@ -263,124 +215,19 @@
                     </div>#}
 
                     <div id="MetaTagsTab" class="tab">
-
-                        <div id="MetaTagsDiv" style="margin: 65px 5px">
-                            <b>Add Meta Robots Tags Info</b>
-                            <i class="fi-info" title="For url matching added 'url-part', will have given 'options'"></i>
-                            <br>
-                            <br>
-                            <i>
-                                Syntax:
-                                    &lt;option-1&gt;[,&lt;option-2&gt;]:&lt;url-part&gt;
-                                <br>
-                                <br>
-                                Eg:
-                                <br>
-                                noindex,follow:list-all-adverts
-                                <br>
-                                index,follow:list-all-adverts/cats
-                            </i>
-                            <br>
-
-                            <div class="status-toggle">
-                                <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="meta_robots" class="">-</button>
-                            </div>
-                            <div class="select">
-                                <table id="meta_robots" style="width: 100%" data-rule="meta_robots" class="dataTable display">
-                                    <thead>
-                                    <tr>
-                                        <th>Meta Tags</th>
-                                        <th>Url Segment</th>
-                                        <th class="action">Action</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-
-                            <button class="bulk-upload-button" data-toggle-handle="meta_robots" data-tab="Meta Tags">Bulk Upload</button>
-                        </div>
-
+                        {{ include('FaContentBundle:SeoConfigAdmin/MetaTags:MetaTags.html.twig') }}
                     </div>
 
                     <div id="MaxDimRuleTab" class="tab">
-
-                        <div id="MaxDimRuleDiv" style="margin: 65px 5px">
-                            <b>Add Max Dim Rules</b>
-                            <br>
-                            <i>For Internal Urls exceeding the below 'conditions' will not have href tags.</i>
-                            <br>
-                            <div>
-                                Available Keywords: location, category, filter
-                                <br><br>Please add all variables at all times. Ex: 1:location+0:filter+2:category
-                            </div>
-                            <i>Ex: 1:location+1:filter+1:category</i>
-                            <br>
-                            <i>Understanding a URL:&nbsp;&nbsp; "/uk/kittens-for-sale/british-shorthairs/male/"  - Has 1 Location, 2 Categories & 1 filter</i>
-                            <div class="status-toggle">
-                                <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="max_dim_rules" class="">-</button>
-                            </div>
-                            <br> <br>
-                            <div class="select">
-                                <select id="MaxDimRules" multiple class="multi-select" data-prediction="off">
-                                </select>
-                            </div>
-
-                            <button type="button" onclick="update_MaxDimRules();" style="float: right; width: 300px;">Update Max Dim Rules</button>
-                        </div>
-
+                        {{ include('FaContentBundle:SeoConfigAdmin/MaxDimRule:MaxDimRule.html.twig') }}
                     </div>
 
                     <div id="RedirectTab" class="tab">
-
-                        <div id="RedirectDiv">
-                            <b>Add Redirects</b>
-                            <i class="fi-info" title="Added URLs will be redirects to corresponding URL"></i>
-                            <br>
-                            <i>Eg: &lt;from_url_segment&gt;:&lt;to_url_segment&gt;:&lt;replace_type&gt;</i>
-                            <br>
-                            <i>&lt;replace_type&gt; can be 'location' or 'category'. Default value will be 'category'</i>
-                            <div style="font-size: 15px; font-style: oblique; margin-top: 10px;">
-                                <div>article:list-all-adverts >> will convert &lt;domain&gt;/article_types?param=1 to &lt;domain&gt;/list-all-adverts_types?param=1</div>
-                                <div>article:list-all-adverts:full >> will convert &lt;domain&gt;/article_types?param=1 to &lt;domain&gt;/list-all-adverts</div>
-                            </div>
-                            <div>
-                                Click <a href="{{ path('admin_validate_redirects_view') }}" target="_blank">here</a> to upload & check the redirect status.
-                            </div>
-                            <div class="status-toggle">
-                                <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="redirects" class="">-</button>
-                            </div>
-                            <div class="select">
-                                <table id="redirects" style="width: 100%" data-rule="redirects" class="dataTable display">
-                                    <thead>
-                                        <tr>
-                                            <th>From</th>
-                                            <th>To</th>
-                                            <th>Type</th>
-                                            <th class="action">Action</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-
-                            <button class="bulk-upload-button" data-toggle-handle="redirects" data-tab="Redirects">Bulk Upload</button>
-
-{#                            <div class="select">#}
-{#                                <table id="url_right_trim" style="width: 100%" data-rule="url_right_trim" class="dataTable display">#}
-{#                                    <thead>#}
-{#                                    <tr>#}
-{#                                        <th>From</th>#}
-{#                                        <th class="action">Action</th>#}
-{#                                    </tr>#}
-{#                                    </thead>#}
-{#                                </table>#}
-{#                            </div>#}
-
-{#                            <button class="bulk-upload-button" data-toggle-handle="url_right_trim" data-tab="url_right_trim">Bulk Upload</button>#}
-                        </div>
+                        {{ include('FaContentBundle:SeoConfigAdmin/Redirects:Redirects.html.twig') }}
                     </div>
 
                     <div id="MotorsRedirectTab" class="tab">
-                        {{ include('FaContentBundle:SeoConfigAdmin:MotorsRedirect/motorsRedirect.html.twig') }}
+                        {{ include('FaContentBundle:SeoConfigAdmin/MotorsRedirect:MotorsRedirect.html.twig') }}
                     </div>
 
                     {#<div id="SitemapTab" class="tab">
@@ -405,241 +252,11 @@
                     </div>#}
 
                     <div id="CrawlTab" class="tab">
-
-                        <div id="CrawlDiv">
-                            <b>Sitemap</b>
-                            <i class="fi-info" title="Configure the combination of category/subcategory & dimensions for which the url should not be crawlable."></i>
-                            <br>
-                            <i>Configure the combination of category/subcategory & dimensions for which the url should not be crawlable.</i>
-                            <br><br>
-
-                            <ol class="crawl-settings-wrapper">
-
-                                <li class="crawl-settings-clone">
-                                    <div class="category-dimension-types">
-                                        <select name="main-sub-category">
-                                            <option value="">Select Category/Sub Category</option>
-                                            {% for categoryGroup in categories %}
-                                                {% if categoryGroup['children'] is defined %}
-                                                    <optgroup label="{{ categoryGroup['parent']['name'] }}">
-                                                        {% for children in categoryGroup['children'] %}
-                                                            <option value="{{ children['id'] }}">{{ children['name'] }}</option>
-                                                        {% endfor %}
-                                                    </optgroup>
-                                                {% else %}
-                                                    <optgroup label="{{ categoryGroup['parent']['name'] }}">
-                                                        <option value="{{ categoryGroup['parent']['id'] }}">{{ categoryGroup['parent']['name'] }}</option>
-                                                    </optgroup>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                        <select name="dimensions" multiple style="margin-left: 70px">
-                                            <option value="">Select Dimension</option>
-                                            {% for dimension in dimensions %}
-                                                <option value="{{ dimension['id'] }}">{{ dimension['name'] }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="region-types">
-                                        <input type="checkbox" name="region" id="region-select">
-                                        <label for="region-select">Region</label>
-
-                                        <input type="checkbox" name="county" id="county-select">
-                                        <label for="county-select">County</label>
-
-                                        <input type="checkbox" name="town" id="town-select">
-                                        <label for="town-select">Town</label>
-
-                                        <section>
-                                            <span><i class="fa fi-trash remove" style="color: red"></i></span>
-                                            <span><i class="fa fi-plus add-more" style="color: green"></i></span>
-                                        </section>
-                                    </div>
-                                </li>
-
-                                {% if configs['crawl_config']['data'] is defined and configs['crawl_config']['data'] %}
-                                    {% for crawlSetting in configs['crawl_config']['data'] %}
-                                        <li class="crawl-settings">
-                                            <div class="category-dimension-types">
-                                                <select name="main-sub-category">
-                                                    <option value="">Select Category/Sub Category</option>
-                                                    {% for categoryGroup in categories %}
-                                                        {% if categoryGroup['children'] is defined %}
-                                                            <optgroup label="{{ categoryGroup['parent']['name'] }}">
-
-                                                                {% set selected = categoryGroup['parent']['id'] == crawlSetting['category'] ? 'selected' : '' %}
-                                                                <option value="{{ categoryGroup['parent']['id'] }}" {{ selected }}>{{ categoryGroup['parent']['name'] }}</option>
-                                                                {% for children in categoryGroup['children'] %}
-                                                                    {% set selected = children['id'] == crawlSetting['category'] ? 'selected' : '' %}
-                                                                    <option value="{{ children['id'] }}" {{ selected }}>{{ children['name'] }}</option>
-                                                                {% endfor %}
-                                                            </optgroup>
-                                                        {% else %}
-                                                            {% set selected = categoryGroup['parent']['id'] == crawlSetting['category'] ? 'selected' : '' %}
-                                                            <optgroup label="{{ categoryGroup['parent']['name'] }}">
-                                                                <option value="{{ categoryGroup['parent']['id'] }}" {{ selected }}>{{ categoryGroup['parent']['name'] }}</option>
-                                                            </optgroup>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                </select>
-                                                <select name="dimensions" multiple style="margin-left: 70px">
-                                                    <option value="">Select Dimension</option>
-                                                    {% for dimension in dimensions %}
-                                                        {% set selected = dimension['id'] in crawlSetting['dimension'] ? 'selected' : '' %}
-                                                        <option value="{{ dimension['id'] }}" {{ selected }}>{{ dimension['name'] }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="region-types">
-                                                {% set checked = crawlSetting['region'] ? 'checked' : '' %}
-                                                <input type="checkbox" name="region" id="region-select" {{ checked }}>
-                                                <label for="region-select">Region</label>
-
-                                                {% set checked = crawlSetting['county'] ? 'checked' : '' %}
-                                                <input type="checkbox" name="county" id="county-select" {{ checked }}>
-                                                <label for="county-select">County</label>
-
-                                                {% set checked = crawlSetting['town'] ? 'checked' : '' %}
-                                                <input type="checkbox" name="town" id="town-select" {{ checked }}>
-                                                <label for="town-select">Town</label>
-
-                                                <section>
-                                                    <span><i class="fa fi-trash remove" style="color: red"></i></span>
-                                                    <span><i class="fa fi-plus add-more" style="color: green"></i></span>
-                                                </section>
-                                            </div>
-                                        </li>
-                                    {% endfor %}
-                                {% else %}
-                                    <li class="crawl-settings">
-                                        <div class="category-dimension-types">
-                                            <select name="main-sub-category">
-                                                <option value="">Select Category/Sub Category</option>
-                                                {% for categoryGroup in categories %}
-                                                    {% if categoryGroup['children'] is defined %}
-                                                        <optgroup label="{{ categoryGroup['parent']['name'] }}">
-                                                            <option value="{{ categoryGroup['parent']['id'] }}">{{ categoryGroup['parent']['name'] }}</option>
-                                                            {% for children in categoryGroup['children'] %}
-                                                                <option value="{{ children['id'] }}">{{ children['name'] }}</option>
-                                                            {% endfor %}
-                                                        </optgroup>
-                                                    {% else %}
-                                                        <optgroup label="{{ categoryGroup['parent']['name'] }}">
-                                                            <option value="{{ categoryGroup['parent']['id'] }}">{{ categoryGroup['parent']['name'] }}</option>
-                                                        </optgroup>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </select>
-                                            <select name="dimensions" multiple style="margin-left: 70px">
-                                                <option value="">Select Dimension</option>
-                                                {% for dimension in dimensions %}
-                                                    <option value="{{ dimension['id'] }}">{{ dimension['name'] }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div class="region-types">
-                                            <input type="checkbox" name="region" id="region-select">
-                                            <label for="region-select">Region</label>
-
-                                            <input type="checkbox" name="county" id="county-select">
-                                            <label for="county-select">County</label>
-
-                                            <input type="checkbox" name="town" id="town-select">
-                                            <label for="town-select">Town</label>
-
-                                            <section>
-                                                <span><i class="fa fi-trash remove" style="color: red"></i></span>
-                                                <span><i class="fa fi-plus add-more" style="color: green"></i></span>
-                                            </section>
-                                        </div>
-                                    </li>
-                                {% endif %}
-
-
-                            </ol>
-
-                            <div class="status-toggle">
-                                <button type="button" data-on="Enabled" data-off="Disabled" data-toggle-handle="crawl" class="">-</button>
-                            </div>
-                            <br><br><br><br>
-                            <button type="button" onclick="update_crawl_settings();" style="float: right; margin-right: 5px">Update Crawl Settings</button>
-                        </div>
+                        {{ include('FaContentBundle:SeoConfigAdmin/Crawl:Crawl.html.twig') }}
                     </div>
 
                     <div id="LHSFilterTab" class="tab">
-
-                        <div id="LHSFilterDiv" style="margin-bottom: 50px">
-                            <b>LHS Filter Ordering</b>
-                            <br>
-
-                            <div style="margin-top: 25px">
-
-                                <div style="width: 100%" class="filter-order-category">
-                                    <label for="filter-category">Category</label>
-                                    <select id="filter-category">
-                                        {% for categoryGroup in categories %}
-                                            {% if categoryGroup['children'] is defined %}
-                                                <optgroup label="{{ categoryGroup['parent']['name'] }}">
-                                                    <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>
-                                                    {% for children in categoryGroup['children'] %}
-                                                        <option value="{{ children['id'] }}">{{ children['name'] }}</option>
-                                                    {% endfor %}
-                                                </optgroup>
-                                            {% else %}
-                                                <optgroup label="{{ categoryGroup['parent']['name'] }}">
-                                                    <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>
-                                                </optgroup>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                </div>
-
-                                <label for="dimension-list"><h4>Filter Order</h4></label>
-                                <div class="table-wrapper" style="position: relative;">
-                                    <div class="table-scroll" style="height: 550px; width: 100%; overflow: auto;">
-                                        <table class="table" id="dimension-list" style="margin-top: 25px">
-                                            <thead>
-                                            <tr>
-                                                <th>Order</th>
-                                                <th>Filter</th>
-                                                <th>Enabled/Disabled</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for order,dimension in dimensions %}
-                                                <tr data-dimension-id="{{ dimension.id }}">
-                                                    <td class='priority'>{{ order + 1 }}</td>
-                                                    <td class="name">{{ dimension.name }}</td>
-                                                    <td class="action"><a class='btn'>Disabled</a></td>
-                                                </tr>
-                                            {% endfor %}
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <button type="button" onclick="update_filter_order();" style="float: right; width: 350px; margin-top: 25px">Update Filter Order</button>
-                        </div>
-
-                        <hr>
-
-                        <div id="LHSMoreFilter">
-
-                            <div style="margin-top: 25px">
-                                <label for="dimension-list"><h4>More Filters: Available Entities</h4></label>
-                                <br>
-                                <i style="font-size: 12px">Add entities in the order needed for LHS</i>
-                                <br>
-                                <select id="entity-list" multiple class="multi-select" data-prediction="on" data-type="entity" data-separator="" data-conditions="id-slug-pair" data-keep-order="1">
-                                </select>
-
-                            </div>
-
-                            <button type="button" onclick="update_more_filter_order();" style="float: right; width: 350px; margin-top: 25px">Update More Filters</button>
-                        </div>
+                        {{ include('FaContentBundle:SeoConfigAdmin/LHSFilter:LHSFilter.html.twig') }}
                     </div>
 
                 </div>
@@ -793,12 +410,6 @@
         a.btn:hover {
            color: #fff;
         }
-        #dimension-list th, #dimension-list td.action, #dimension-list td.priority {
-            text-align: center;
-        }
-        #dimension-list td.name {
-            padding-left: 35px;
-        }
         .filter-order-category .select2-container {
             width: 350px;
         }
@@ -834,9 +445,7 @@
             width: 100px !important;
         }
     </style>
-
     <script type="text/javascript">
-
         $(document).on('click', '.datatable-action-list .fa.edit', function () {
             editRow($(this).parents('tr').first())
         });
@@ -849,20 +458,11 @@
         $(document).on('click', '.datatable-action-list .fa.save', function () {
             saveRow($(this).parents('tr').first())
         });
-        $(document).on('click', '.datatable-action-list .fa.redirectdelete', function () {
-        	redirectdeleteRow($(this).parents('tr').first())
-        });
-        $(document).on('click', '.datatable-action-list .fa.redirectsave', function () {
-        	redirectsaveRow($(this).parents('tr').first())
-        });
-       
         $(document).ready(function() {
             $("#ForSaleExclusions").select2({placeholder: "Add Categories"});
             $("#MaxDimRules").select2({placeholder: "Add Max Dim Rules", formatSelection: maxDimTemplate});
             $("#filter-category").select2({placeholder: "Select Category"});
             $("#entity-list").select2({placeholder: "Add Entities"});
-
-            initSorting();
 
             $('#filter-category').change(function () {
                 get_category_filter_order();
@@ -921,59 +521,6 @@
 
             initAddRemove();
         });
-
-        function initAddRemove() {
-
-            $('.crawl-settings .fa.remove').first().parent().hide();
-
-            $(".crawl-settings .category-dimension-types [name=main-sub-category]select").select2({placeholder: "Select Category/Sub Category"});
-            $(".crawl-settings .category-dimension-types [name=dimensions]select").select2({placeholder: "Select Dimensions"});
-
-            $('.crawl-settings-wrapper .add-more').unbind('click');
-            $('.crawl-settings-wrapper .add-more').click(function () {
-                var clone = $('.crawl-settings-clone').clone().removeClass('crawl-settings-clone').addClass('crawl-settings');
-                $(clone).find('.select2-container').remove();
-                $(clone).find('select').show();
-                $('.crawl-settings-wrapper').append(clone);
-                initAddRemove();
-            });
-
-            $('.crawl-settings-wrapper .remove').unbind('click');
-            $('.crawl-settings-wrapper .remove').click(function () {
-                var row = $(this).parents('li.crawl-settings');
-
-                if ($('.crawl-settings-wrapper .crawl-settings').length > 1) {
-                    $(row).remove();
-                }
-
-            });
-        }
-
-        function initSorting() {
-
-            //Make diagnosis table sortable
-            $("#dimension-list tbody").sortable({
-                helper: sortingHelper,
-                stop: function(event, ui) {
-                    renumber_table('#dimension-list')
-                }
-            }).disableSelection();
-
-            // Enable/Disable button in table rows.
-            $('#dimension-list .action a.btn').click(function() {
-                $(this).toggleClass('active');
-                var is_active = $(this).hasClass('active');
-
-                if (is_active) {
-                    $(this).html('Enabled');
-                    $(this).parents('tr').addClass('active');
-                } else  {
-                    $(this).html('Disabled');
-                    $(this).parents('tr').removeClass('active');
-                }
-            });
-        }
-
         function sortingHelper (e, tr) {
             var originals = tr.children();
             var helper = tr.clone();
@@ -983,7 +530,6 @@
 
             return helper;
         }
-
         function renumber_table(table_id) {
             $(table_id + " tr").each(function() {
                 var count = $(this).parent().children().index($(this)) + 1;
@@ -991,7 +537,6 @@
                 $(this).attr('order', count);
             });
         }
-
         window.setTimeout(function () {
             addNewItemEvent('ForSaleExclusions');
             addNewItemEvent('MaxDimRules');
@@ -1011,35 +556,9 @@
             });
 
         }, 500);
-
         $('ul.tab-menu>li').click(function (event) {
             toggleTab(this)
         });
-
-        var entityOrder = '';
-        {% if  configs['lhs_filter_order'] is defined %}
-        	entityOrder = {{ configs['lhs_filter_order']['_more_filter_entities_']|raw }};
-        {% endif %}
-
-        $('#redirects').DataTable( {
-            ajax: '{{ path('admin_seo_config_redirects_datatable', {'config': 'redirects'}) }}',
-            columns: [
-                { data: 'from' },
-                { data: 'to' },
-                { data: 'type' },
-                { data: 'action' },
-            ],
-            "deferRender": true,
-            // "processing": true,
-            // "serverSide": true,
-            dom: 'Bfrtip',
-            buttons: [
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5',
-                'pageLength',
-            ]
-        } );
         $('#unnecessary_odata_params').DataTable( {
             ajax: '{{ path('admin_seo_config_datatable', {'config': 'unnecessary_odata_params'}) }}',
             columns: [
@@ -1199,41 +718,8 @@
                 'pageLength',
             ]
         } );
-
-		if (entityOrder) {
-        	loadSelect2Data('#entity-list', JSON.parse(entityOrder), 1);
-		}
-
-		var maxDimRul = '';
-		{% if configs['max_dim_rules'] is defined %}
-			maxDimRul = {{ configs['max_dim_rules']['data']|raw }};
-			loadSelect2Data('#MaxDimRules', JSON.parse(maxDimRul), 1);
-		{% endif %}               
-        
-
         enableToggler();
         loadTogglers();
-
-        function editRow(row) {
-            $.each($(row).find('td'), function (key, td) {
-
-                var settings = $(td).find('span.datatable-action-list');
-                if (settings.length) {
-                    $(settings).find('.save').removeClass('hidden');
-                    $(settings).find('.redirectsave').removeClass('hidden');
-                    $(settings).find('.undo').removeClass('hidden');
-                    $(settings).find('.edit').addClass('hidden');
-                } else {
-                    var text = $(td).text();
-                    var html = $(td).html();
-
-                    var textarea = $('<input>').css({width: '95%'}).attr('data-value', text).val(text);
-                    $(td).html(textarea)
-                }
-
-            });
-        }
-
         function revertRow(row) {
             $.each($(row).find('td'), function (key, td) {
                 var settings = $(td).find('span.datatable-action-list');
@@ -1247,7 +733,6 @@
                 }
             });
         }
-
         function deleteRow(row) {
             $(row).addClass('deleted');
             var rule = $(row).find('.datatable-action-list .data').first().html();
@@ -1277,7 +762,6 @@
             });
 
         }
-
         function saveRow(row) {
             var ruleFrom = $(row).find('.datatable-action-list .data').first().html();
             var table = $(row).parents('table').first();
@@ -1314,7 +798,6 @@
             });
 
         }
-
         function redirectdeleteRow(row) {
             $(row).addClass('deleted');
             var rule = $(row).find('.datatable-action-list .data').first().html();
@@ -1344,44 +827,6 @@
             });
 
         }
-
-        function redirectsaveRow(row) {
-            var ruleFrom = $(row).find('.datatable-action-list .data').first().html();
-            var table = $(row).parents('table').first();
-            var config = $(table).data('rule');
-
-            var ruleTo = [];
-            $.each($(row).find('input:not(.hidden)'), function (key, input) {
-                ruleTo.push($(input).val());
-            });
-
-            ruleTo = ruleTo.join(':');
-
-            console.log(ruleFrom, ruleTo);
-            blockPage('Saving rule');
-
-            $.ajax({
-                type: "POST",
-                url: "{{path('admin_seo_config_datatable_redirectedit')}}",
-                data: {
-                    config: config,
-                    rule_from: ruleFrom,
-                    rule_to: ruleTo
-                }
-            })
-            .done(function(response) {
-                unblockPage();
-
-                if (response.changed) {
-                    $(table).DataTable().ajax.reload()
-                } else {
-                    alert('Rule not Saved')
-                }
-
-            });
-
-        }
-        
         function read_url(input) {
 
             if (input.files && input.files[0]) {
@@ -1394,7 +839,6 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
-
         function bulkUpload(url) {
 
             blockPage();
@@ -1419,7 +863,6 @@
                 }
             });
         }
-
         function getBulkData() {
             var fileData = $('#mapping_file').data('src');
             var bulkText = $('#bulk-text').val();
@@ -1434,20 +877,17 @@
 
             return {data: [], format: ''}
         }
-
         function loadTogglers() {
             {% for type,config in configs %}
                 toggleTogglerHtml($(".status-toggle [data-toggle-handle='{{ type }}']"), {{ config['status'] ? 1 : 0 }});
             {% endfor %}
         }
-
         function enableToggler() {
             $('[data-toggle-handle]').click(function () {
                 toggleTogglerHtml(this, !$(this).hasClass('on'));
                 updateTogglerStatus(this);
             });
         }
-
         function updateTogglerStatus(elt) {
             blockPage();
 
@@ -1464,7 +904,6 @@
                 toggleTogglerHtml(elt, response.status);
             });
         }
-
         function toggleTogglerHtml(elt, status) {
             if (status) {
                 $(elt).removeClass('off').addClass('on').html($(elt).data('on'));
@@ -1472,7 +911,6 @@
                 $(elt).removeClass('on').addClass('off').html($(elt).data('off'));
             }
         }
-
         /**
          * Loads the given select2 with the data.
          * If clear flag is set, it will clear the existing options.
@@ -1504,7 +942,6 @@
             $(select).select2();
             $(select).select2('data', selected_options);
         }
-
         function toggleTab(elt) {
             var href = $(elt).find('a[data-tab]').attr('data-tab');
             $('.tabs-content>.tab').removeClass('active');
@@ -1513,7 +950,6 @@
             $('.tab-menu>li').removeClass('active');
             $(elt).addClass('active');
         }
-
         function addNewItemEvent(id) {
 
             var select = $('#'+id);
@@ -1561,7 +997,6 @@
                 $(select).parent().find('.select2-container').removeClass('saved').addClass('unsaved')
             });
         }
-
         function suggest(type, keyword, id, alias, conditions) {
 
             var is_more_filter = conditions == 'id-slug-pair';
@@ -1595,14 +1030,12 @@
                 });
             });
         }
-
         function addNewElement(id, item) {
             var select = $('#'+id);
             var current_data = $(select).select2('data');
             current_data.push({id: item, text: item});
             $(select).select2('data', current_data);
         }
-
         function update_UnnecessaryQueryParams() {
 
             var select = $('#UnnecessaryQueryParams');
@@ -1620,7 +1053,6 @@
                 $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
             });
         }
-
         function update_UnnecessaryODataParams() {
 
             var select = $('#UnnecessaryODataParams');
@@ -1638,7 +1070,6 @@
                 $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
             });
         }
-
         function update_CategoryAlias() {
 
             var select = $('#CategoryAlias');
@@ -1656,7 +1087,6 @@
                 $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
             });
         }
-
         function update_FilterAlias() {
 
             var select = $('#FilterAlias');
@@ -1674,7 +1104,6 @@
                 $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
             });
         }
-
         function update_RegionAlias() {
 
             var select = $('#RegionAlias');
@@ -1692,7 +1121,6 @@
                 $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
             });
         }
-
         function update_LocationAlias() {
 
             var select = $('#LocationAlias');
@@ -1710,7 +1138,6 @@
                 $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
             });
         }
-
         function update_AllCategoryAlias() {
 
             var select = $('#SubCategoryAlias');
@@ -1728,12 +1155,9 @@
                 $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
             });
         }
-
         function update_ForSaleExclusions() {
-
             var select = $('#ForSaleExclusions');
             blockPage();
-
             $.ajax({
                 type: "POST",
                 url: "{{path('seo_config_for_sale_exclusions')}}",
@@ -1746,12 +1170,9 @@
                 $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
             });
         }
-
         function update_MetaTags() {
-
             var select = $('#MetaTags');
             blockPage();
-
             $.ajax({
                 type: "POST",
                 url: "{{path('seo_config_meta_robots')}}",
@@ -1764,12 +1185,9 @@
                 $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
             });
         }
-
         function update_MaxDimRules() {
-
             var select = $('#MaxDimRules');
             blockPage();
-
             $.ajax({
                 type: "POST",
                 url: "{{path('seo_config_max_dim_rules')}}",
@@ -1782,168 +1200,8 @@
                     $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
                 });
         }
-
-        function update_redirects() {
-
-            var select = $('#Redirects');
-            blockPage();
-
-            $.ajax({
-                type: "POST",
-                url: "{{path('seo_config_redirects')}}",
-                data: {
-                    "data": getData($(select).select2('data'))
-                }
-            })
-                .done(function() {
-                    unblockPage();
-                    $(select).parent().find('.select2-container').removeClass('unsaved').addClass('saved')
-                });
-        }
-
-        function update_crawl_settings() {
-
-            var data = [];
-            var rows = $('.crawl-settings');
-            $.each(rows, function (key, row) {
-
-                var category = $(row).find('select[name=main-sub-category]').first().select2('data').id;
-                var dimensions = $.map($(row).find('select[name=dimensions]').first().select2('data'), function (object, key) {
-                    return object.id;
-                });
-                console.log(dimensions);
-                var region = $(row).find('input[name="region"]').first().is(':checked');
-                var county = $(row).find('input[name="county"]').first().is(':checked');
-                var town = $(row).find('input[name="town"]').first().is(':checked');
-
-                if (category || dimensions || region || county || town) {
-                    data.push({
-                        category: category,
-                        dimension: dimensions,
-                        region: region,
-                        county: county,
-                        town: town
-                    });
-                }
-
-            });
-
-            blockPage();
-
-            $.ajax({
-                type: "POST",
-                url: "{{path('crawl_settings')}}",
-                data: {
-                    "data": data
-                }
-            })
-            .done(function() {
-                unblockPage();
-            });
-        }
-
-        function update_filter_order() {
-
-            var categoryId = $('#filter-category').select2('data').id;
-            var rows = $('#dimension-list tbody tr');
-            var order = [];
-
-            $.each(rows, function (key, row) {
-
-                var dim_id = $(row).data('dimension-id');
-
-                if ($(row).hasClass('active')) {
-                    order.push(dim_id);
-                }
-            });
-
-            blockPage();
-
-            $.ajax({
-                type: "POST",
-                url: "{{path('lhs_filter_category_order_save')}}",
-                data: {
-                    "data": order,
-                    category_id: categoryId
-                }
-            })
-            .done(function() {
-                unblockPage();
-                get_category_filter_order();
-            });
-        }
-
-        function update_more_filter_order() {
-
-            var select = $('#entity-list');
-            var moreFilterEntities = [];
-                $.each($(select).select2('data'), function (key, value) {
-                moreFilterEntities.push(value.id)
-            });
-            blockPage();
-
-            $.ajax({
-                type: "POST",
-                url: "{{path('lhs_filter_category_order_save')}}",
-                data: {
-                    data: {'_more_filters_': moreFilterEntities }
-                }
-            })
-            .done(function() {
-                unblockPage();
-                $('#entity-list').parent().find('.multi-select.change-notify').removeClass('unsaved').addClass('saved');
-            });
-        }
-
-        function get_category_filter_order() {
-
-            var categoryId = $('#filter-category').select2('data').id;
-            blockPage();
-
-            $.ajax({
-                type: "POST",
-                url: "{{path('lhs_filter_category_order')}}",
-                data: {
-                    category_id: categoryId
-                }
-            })
-            .done(function(response) {
-                unblockPage();
-
-                var order = [];
-                var indexCount = 1;
-
-                if (response.order) {
-                    $.each(response.order.split(','), function (key, dimensionId) {
-                        var row = $('#dimension-list tr[data-dimension-id=' + dimensionId + ']');
-                        $(row).addClass('active').find('a.btn').addClass('active').html('Enabled');
-                        $(row).attr('order', indexCount).find('.priority').html(indexCount++);
-                        order.push(row);
-
-                        row.remove()
-                    });
-                }
-
-                var remainingRows = $('#dimension-list tr[data-dimension-id]');
-
-                $.each(remainingRows, function (index, row) {
-                    $(row).removeClass('active').find('a.btn').removeClass('active').html('Disabled');
-                    $(row).attr('order', indexCount).find('.priority').html(indexCount++);
-                    order.push(row);
-                });
-
-                remainingRows.remove();
-
-                $('#dimension-list tbody').append(order);
-                initSorting()
-
-            });
-        }
-
         function sitemapStat() {
-
             blockPage();
-
             $.ajax({
                 type: "POST",
                 url: "{{path('seo_tool_sitemap_stat')}}",
@@ -1951,18 +1209,15 @@
             })
             .done(function(response) {
                 unblockPage();
-
                 var html = '';
                 $.each(response.stat, function (key, item) {
                     html += key + ' : ' + item + '<br>'
                 });
-
                 $('#sitemap-status').html(html);
                 $('#sitemap-files').html(response.files)
 
             });
         }
-
         function sitemapAction(type) {
 
             blockPage();
@@ -1979,7 +1234,6 @@
                 sitemapStat();
             });
         }
-
         function getData(data) {
             var items = [];
 
@@ -1989,12 +1243,10 @@
 
             return items;
         }
-
         function categoryAliasTemplate(data) {
             var split = (data.text).split(':');
             return split.join(' <span style="color: green;">>></span> ');
         }
-
         function maxDimTemplate(data) {
             var split = (data.text).split('+');
             var out = [];
@@ -2006,6 +1258,12 @@
 
             return out.join(' <span style="color: green;">+</span> ');
         }
-
     </script>
-{% endblock %}
+    {{ include('FaContentBundle:SeoConfigAdmin/General:GeneralScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/MetaTags:MetaTagsScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/MaxDimRule:MaxDimRuleScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/Redirects:RedirectsScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/MotorsRedirect:MotorsRedirectScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/Crawl:CrawlScript.html.twig') }}
+{#    {{ include('FaContentBundle:SeoConfigAdmin/LHSFilter:LHSFilterScript.html.twig') }}#}
+{% endblock %}git <statu></statu>

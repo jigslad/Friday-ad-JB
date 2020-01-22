@@ -1,0 +1,129 @@
+<script>
+    $(document).ready(function() {
+        initSorting();
+    });
+    function update_filter_order() {
+
+        var categoryId = $('#filter-category').select2('data').id;
+        var rows = $('#dimension-list tbody tr');
+        var order = [];
+
+        $.each(rows, function (key, row) {
+
+            var dim_id = $(row).data('dimension-id');
+
+            if ($(row).hasClass('active')) {
+                order.push(dim_id);
+            }
+        });
+
+        blockPage();
+
+        $.ajax({
+            type: "POST",
+            url: "{{path('lhs_filter_category_order_save')}}",
+            data: {
+                "data": order,
+                category_id: categoryId
+            }
+        })
+            .done(function() {
+                unblockPage();
+                get_category_filter_order();
+            });
+    }
+    function update_more_filter_order() {
+
+        var select = $('#entity-list');
+        var moreFilterEntities = [];
+        $.each($(select).select2('data'), function (key, value) {
+            moreFilterEntities.push(value.id)
+        });
+        blockPage();
+
+        $.ajax({
+            type: "POST",
+            url: "{{path('lhs_filter_category_order_save')}}",
+            data: {
+                data: {'_more_filters_': moreFilterEntities }
+            }
+        })
+            .done(function() {
+                unblockPage();
+                $('#entity-list').parent().find('.multi-select.change-notify').removeClass('unsaved').addClass('saved');
+            });
+    }
+    function get_category_filter_order() {
+
+        var categoryId = $('#filter-category').select2('data').id;
+        blockPage();
+
+        $.ajax({
+            type: "POST",
+            url: "{{path('lhs_filter_category_order')}}",
+            data: {
+                category_id: categoryId
+            }
+        })
+            .done(function(response) {
+                unblockPage();
+
+                var order = [];
+                var indexCount = 1;
+
+                if (response.order) {
+                    $.each(response.order.split(','), function (key, dimensionId) {
+                        var row = $('#dimension-list tr[data-dimension-id=' + dimensionId + ']');
+                        $(row).addClass('active').find('a.btn').addClass('active').html('Enabled');
+                        $(row).attr('order', indexCount).find('.priority').html(indexCount++);
+                        order.push(row);
+
+                        row.remove()
+                    });
+                }
+
+                var remainingRows = $('#dimension-list tr[data-dimension-id]');
+
+                $.each(remainingRows, function (index, row) {
+                    $(row).removeClass('active').find('a.btn').removeClass('active').html('Disabled');
+                    $(row).attr('order', indexCount).find('.priority').html(indexCount++);
+                    order.push(row);
+                });
+
+                remainingRows.remove();
+
+                $('#dimension-list tbody').append(order);
+                initSorting()
+
+            });
+    }
+    {% if  configs['lhs_filter_order'] is defined %}
+        var entityOrder = {{ configs['lhs_filter_order']['_more_filter_entities_']|raw }};
+        // loadSelect2Data('#entity-list', JSON.parse(entityOrder), 1);
+    {% endif %}
+
+    function initSorting() {
+
+        //Make diagnosis table sortable
+        $("#dimension-list tbody").sortable({
+            helper: sortingHelper,
+            stop: function(event, ui) {
+                renumber_table('#dimension-list')
+            }
+        }).disableSelection();
+
+        // Enable/Disable button in table rows.
+        $('#dimension-list .action a.btn').click(function() {
+            $(this).toggleClass('active');
+            var is_active = $(this).hasClass('active');
+
+            if (is_active) {
+                $(this).html('Enabled');
+                $(this).parents('tr').addClass('active');
+            } else  {
+                $(this).html('Disabled');
+                $(this).parents('tr').removeClass('active');
+            }
+        });
+    }
+</script>

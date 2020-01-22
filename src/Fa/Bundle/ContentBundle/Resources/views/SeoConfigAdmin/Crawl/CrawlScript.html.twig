@@ -1,0 +1,68 @@
+<script>
+    function update_crawl_settings() {
+
+        var data = [];
+        var rows = $('.crawl-settings');
+        $.each(rows, function (key, row) {
+
+            var category = $(row).find('select[name=main-sub-category]').first().select2('data').id;
+            var dimensions = $.map($(row).find('select[name=dimensions]').first().select2('data'), function (object, key) {
+                return object.id;
+            });
+            console.log(dimensions);
+            var region = $(row).find('input[name="region"]').first().is(':checked');
+            var county = $(row).find('input[name="county"]').first().is(':checked');
+            var town = $(row).find('input[name="town"]').first().is(':checked');
+
+            if (category || dimensions || region || county || town) {
+                data.push({
+                    category: category,
+                    dimension: dimensions,
+                    region: region,
+                    county: county,
+                    town: town
+                });
+            }
+
+        });
+
+        blockPage();
+
+        $.ajax({
+            type: "POST",
+            url: "{{path('crawl_settings')}}",
+            data: {
+                "data": data
+            }
+        })
+            .done(function() {
+                unblockPage();
+            });
+    }
+    function initAddRemove() {
+
+        $('.crawl-settings .fa.remove').first().parent().hide();
+
+        $(".crawl-settings .category-dimension-types [name=main-sub-category]select").select2({placeholder: "Select Category/Sub Category"});
+        $(".crawl-settings .category-dimension-types [name=dimensions]select").select2({placeholder: "Select Dimensions"});
+
+        $('.crawl-settings-wrapper .add-more').unbind('click');
+        $('.crawl-settings-wrapper .add-more').click(function () {
+            var clone = $('.crawl-settings-clone').clone().removeClass('crawl-settings-clone').addClass('crawl-settings');
+            $(clone).find('.select2-container').remove();
+            $(clone).find('select').show();
+            $('.crawl-settings-wrapper').append(clone);
+            initAddRemove();
+        });
+
+        $('.crawl-settings-wrapper .remove').unbind('click');
+        $('.crawl-settings-wrapper .remove').click(function () {
+            var row = $(this).parents('li.crawl-settings');
+
+            if ($('.crawl-settings-wrapper .crawl-settings').length > 1) {
+                $(row).remove();
+            }
+
+        });
+    }
+</script>
