@@ -259,7 +259,7 @@ class AdLeftSearchType extends AbstractType
             }
             
             $searchParams = $this->request->get('searchParams');
-            $searchRegYear = isset($searchParams['item__reg_year_id'])?$searchParams['item__reg_year_id']:array();
+            $searchRegYear = isset($searchParams['item_motors__reg_year'])?$searchParams['item_motors__reg_year']:array();
             
             $customizedUrlData = array();
             $customizedUrlData = $this->request->get('customized_url');
