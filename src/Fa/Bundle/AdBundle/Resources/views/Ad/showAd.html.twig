@@ -1654,8 +1654,8 @@
     <!-- Google TAG Manager Start -->
     {# Ad Package @Jigar Lad #}
     {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
-    {% set adPackage = adUserPackageRepository.getAdPackageArrayByAdId(adDetail.id) %}
-    {% for ad in adPackage %}
+    {% set adUserPackage = adUserPackageRepository.getAdPackageArrayByAdId(adDetail.id) %}
+    {% for ad in adUserPackage %}
         {% set adPackage = ad.package_id %}
     {% endfor %}
 
@@ -1706,7 +1706,7 @@
                     "publishDate": finalpublishdate,
                     "expiryDate": finalexpireddate,
                     "price": '{{ adDetail.a_price_d is defined ? adDetail.a_price_d : 0 }}',
-                    "package": "{{ adPackage }}",
+                    "package": "{{ adPackage is defined ? adPackage : 0 }}",
                     "businessName": "{{ adDetail.a_s_business_name_s is defined ? adDetail.a_s_business_name_s :'Private seller'}}",
                     "businessType": "{{ userTypeText }}" ,
                     "responseType": "{{ responseType }}" ,
