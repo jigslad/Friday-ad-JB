@@ -13,6 +13,7 @@ namespace Fa\Bundle\ContentBundle\Controller;
 
 use Fa\Bundle\EntityBundle\Entity\Entity;
 use Fa\Bundle\EntityBundle\Entity\Category;
+use Fa\Bundle\LexikTranslationBundle\Util\DataGrid\DataGridFormatter;
 use function GuzzleHttp\headers_from_lines;
 use Fa\Bundle\ContentBundle\Entity\SeoConfig;
 use Symfony\Component\HttpFoundation\Request;
@@ -353,6 +354,9 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         if ($type == 'bulk') {
             if ($format && $format == 'file') {
                 $data = $this->getFileData($data);
+            }
+            if(!is_array($data)){
+                $data = array($data);
             }
             $this->insertNewRedirectsData($data);
         }

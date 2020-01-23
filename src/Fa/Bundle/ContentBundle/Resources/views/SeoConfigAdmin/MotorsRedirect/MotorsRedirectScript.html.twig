@@ -1,4 +1,7 @@
 <script>
+    $(document).ready(function() {
+
+    });
     $('#motors_redirects').DataTable( {
         ajax: '{{ path('admin_seo_config_motors_redirects_datatable', {'config': 'motors_redirects'}) }}',
         columns: [
@@ -116,15 +119,5 @@
 
     }
 
-    $(document).ready(function() {
-        $('#upload').click(function () {
-            if (uploadType == 'url_right_trim') {
-                url = "{{ path('seo_config_url_rght_trim') }}";
-            }
-            if (url != '') {
-                bulkUpload(url);
-            }
-        });
-    });
 
 </script>

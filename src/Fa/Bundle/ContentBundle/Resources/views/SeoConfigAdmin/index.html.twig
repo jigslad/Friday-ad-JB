@@ -2,6 +2,140 @@
 {% set queryParams = app.request.query.all %}
 
 {% block content %}
+    <style type="text/css">
+        .seo_config_div {
+            width:80%;
+            margin:auto;
+            text-align:center;
+        }
+        .tabs-content>div {
+            margin: 25px 5px;
+        }
+        .multi-select{
+            margin-right: 10px;
+            margin-top: 10px;
+            width: 100%
+        }
+        .tabs-content>.tab:not(.active) {
+            display: none;
+        }
+        .select2-input, .select2-search-field {
+            width: 90% !important;
+        }
+        .change-notify.saved {
+            border-color: green !important;
+            border: 1px solid;
+        }
+        .change-notify.unsaved {
+            border-color: red !important;
+            border: 1px solid;
+        }
+        .status-toggle {
+            float: right;
+        }
+        .status-toggle button.on {
+            background-color: green;
+        }
+        .status-toggle button.off {
+            background-color: #de4b4b;
+        }
+        .tab-menu {
+            margin-top: 5px;
+        }
+        .category-dimension-types .select2-container {
+            width: 40%;
+        }
+        .crawl-settings-clone, .crawl-settings {
+            border: solid 1px #eee;
+            padding: 5px 7px;
+            border-bottom-width: 2px;
+            border-bottom-color: #9e9595;
+            margin-bottom: 15px;
+        }
+        .crawl-settings-wrapper section {
+            float: right;
+        }
+        .crawl-settings-wrapper section span {
+            /*margin-left: 10px;*/
+            padding: 8px;
+            cursor: pointer;
+        }
+        .crawl-settings-clone {
+            display: none;
+        }
+        .crawl-settings .fa {
+            width: 25px;
+            height: 25px;
+            padding: 5px 5px;
+        }
+        .crawl-settings .fa:hover {
+            background: #eee;
+        }
+        .ui-sortable tr {
+            cursor:pointer;
+        }
+
+        .ui-sortable tr:hover {
+            background: rgba(251, 229, 207, 0.45);
+        }
+        .btn:not(.active) {
+            color: #fff;
+            background-color: #5bc0de;
+            border-color: #46b8da;
+        }
+        .btn.active {
+            color: #fff;
+            background-color: #5cb85c;
+            border-color: #4cae4c;
+        }
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            width: 90px;
+        }
+        a.btn:hover {
+            color: #fff;
+        }
+        .filter-order-category .select2-container {
+            width: 350px;
+        }
+        .row {
+            max-width: 93.5em;
+        }
+        .datatable-action-list .fa.hidden {
+            display: none;
+        }
+        .datatable-action-list .fa {
+            cursor: pointer;
+            padding: 5px;
+            margin: 5px;
+        }
+        .datatable-action-list .fa:hover {
+            background: #eee;
+            color: orange;
+        }
+        .datatable-action-list .fa.fi-trash:hover {
+            color: red;
+        }
+        .datatable-action-list .fa.fi-save:hover {
+            color: green;
+        }
+        tr.deleted td {
+            text-decoration: line-through;
+        }
+        .dataTables_wrapper {
+            width: 100%;
+        }
+
+        table[data-rule] th.action {
+            width: 100px !important;
+        }
+    </style>
 <div class="seo_config_div">
     {{ include('FaAdminBundle:Default:listSearchHeading.html.twig') }}
 
@@ -311,183 +445,37 @@
     <script type="text/javascript" src="/bundles/facontent/js/buttons.html5.min.js"></script>
     <script type="text/javascript" src="/bundles/facontent/js/dataTables.buttons.min.js"></script>
     {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
-    <style type="text/css">
-       .seo_config_div {
-       		width:80%;
-       		margin:auto;
-       		text-align:center;
-       }
-        .tabs-content>div {
-            margin: 25px 5px;
-        }
-        .multi-select{
-            margin-right: 10px;
-            margin-top: 10px;
-            width: 100%
-        }
-        .tabs-content>.tab:not(.active) {
-            display: none;
-        }
-        .select2-input, .select2-search-field {
-            width: 90% !important;
-        }
-        .change-notify.saved {
-            border-color: green !important;
-            border: 1px solid;
-        }
-        .change-notify.unsaved {
-            border-color: red !important;
-            border: 1px solid;
-        }
-        .status-toggle {
-            float: right;
-        }
-        .status-toggle button.on {
-            background-color: green;
-        }
-        .status-toggle button.off {
-            background-color: #de4b4b;
-        }
-        .tab-menu {
-            margin-top: 5px;
-        }
-        .category-dimension-types .select2-container {
-            width: 40%;
-        }
-        .crawl-settings-clone, .crawl-settings {
-            border: solid 1px #eee;
-            padding: 5px 7px;
-            border-bottom-width: 2px;
-            border-bottom-color: #9e9595;
-            margin-bottom: 15px;
-        }
-        .crawl-settings-wrapper section {
-            float: right;
-        }
-        .crawl-settings-wrapper section span {
-            /*margin-left: 10px;*/
-            padding: 8px;
-            cursor: pointer;
-        }
-        .crawl-settings-clone {
-            display: none;
-        }
-        .crawl-settings .fa {
-            width: 25px;
-            height: 25px;
-            padding: 5px 5px;
-        }
-        .crawl-settings .fa:hover {
-            background: #eee;
-        }
-        .ui-sortable tr {
-            cursor:pointer;
-        }
 
-        .ui-sortable tr:hover {
-            background: rgba(251, 229, 207, 0.45);
-        }
-        .btn:not(.active) {
-            color: #fff;
-            background-color: #5bc0de;
-            border-color: #46b8da;
-        }
-        .btn.active {
-            color: #fff;
-            background-color: #5cb85c;
-            border-color: #4cae4c;
-        }
-        .btn {
-            display: inline-block;
-            padding: 6px 12px;
-            font-weight: 400;
-            line-height: 1.42857143;
-            text-align: center;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            width: 90px;
-        }
-        a.btn:hover {
-           color: #fff;
-        }
-        .filter-order-category .select2-container {
-            width: 350px;
-        }
-        .row {
-            max-width: 93.5em;
-        }
-        .datatable-action-list .fa.hidden {
-            display: none;
-        }
-        .datatable-action-list .fa {
-            cursor: pointer;
-            padding: 5px;
-            margin: 5px;
-        }
-        .datatable-action-list .fa:hover {
-            background: #eee;
-            color: orange;
-        }
-        .datatable-action-list .fa.fi-trash:hover {
-            color: red;
-        }
-        .datatable-action-list .fa.fi-save:hover {
-            color: green;
-        }
-        tr.deleted td {
-            text-decoration: line-through;
-        }
-        .dataTables_wrapper {
-            width: 100%;
-        }
-        
-        table[data-rule] th.action {
-            width: 100px !important;
-        }
-    </style>
     <script type="text/javascript">
-        $(document).on('click', '.datatable-action-list .fa.edit', function () {
-            editRow($(this).parents('tr').first())
-        });
-        $(document).on('click', '.datatable-action-list .fa.undo', function () {
-            revertRow($(this).parents('tr').first())
-        });
-        $(document).on('click', '.datatable-action-list .fa.delete', function () {
-            deleteRow($(this).parents('tr').first())
-        });
-        $(document).on('click', '.datatable-action-list .fa.save', function () {
-            saveRow($(this).parents('tr').first())
-        });
         $(document).ready(function() {
+            {% if app.request.get('tab') %}
+            $('a[data-tab=#{{ app.request.get('tab') }}]').click();
+            {% endif %}
             $("#ForSaleExclusions").select2({placeholder: "Add Categories"});
             $("#MaxDimRules").select2({placeholder: "Add Max Dim Rules", formatSelection: maxDimTemplate});
-            $("#filter-category").select2({placeholder: "Select Category"});
             $("#entity-list").select2({placeholder: "Add Entities"});
+            $("#filter-category").select2({placeholder: "Select Category"});
+
+            initSorting();
 
             $('#filter-category').change(function () {
                 get_category_filter_order();
             }).change();
 
             $('.bulk-upload-button').click(function () {
-
                 var parent = $(this).parent();
                 var inputType = $(this).data('toggle-handle');
                 $('#upload-type').val(inputType);
-
                 $('#model-info').html($(this).data('tab'));
                 $('#bulk-upload').foundation('reveal', 'open');
-
             });
-
             $('#mapping_file').change(function () {
                 read_url(this);
             });
-
+            initAddRemove();
             $('#upload').click(function () {
-
                 var uploadType = $('#upload-type').val();
                 var url = '';
-
                 if (uploadType == 'redirects') {
                     url = "{{path('seo_config_redirects')}}";
                 } else if (uploadType == 'unnecessary_odata_params') {
@@ -509,17 +497,22 @@
                 } else if (uploadType == 'url_right_trim') {
                     url = "{{path('seo_config_url_rght_trim')}}";
                 }
-
                 if (url != '') {
                     bulkUpload(url);
                 }
             });
-
-            {% if app.request.get('tab') %}
-                $('a[data-tab=#{{ app.request.get('tab') }}]').click();
-            {% endif %}
-
-            initAddRemove();
+        });
+        $(document).on('click', '.datatable-action-list .fa.edit', function () {
+            editRow($(this).parents('tr').first())
+        });
+        $(document).on('click', '.datatable-action-list .fa.undo', function () {
+            revertRow($(this).parents('tr').first())
+        });
+        $(document).on('click', '.datatable-action-list .fa.delete', function () {
+            deleteRow($(this).parents('tr').first())
+        });
+        $(document).on('click', '.datatable-action-list .fa.save', function () {
+            saveRow($(this).parents('tr').first())
         });
         function sortingHelper (e, tr) {
             var originals = tr.children();

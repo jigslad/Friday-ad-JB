@@ -1,4 +1,7 @@
 <script>
+    $(document).ready(function() {
+
+    });
     {% if configs['max_dim_rules'] is defined %}
         var maxDimRul = {{ configs['max_dim_rules']['data']|raw }};
         loadSelect2Data('#MaxDimRules', JSON.parse(maxDimRul), 1);
