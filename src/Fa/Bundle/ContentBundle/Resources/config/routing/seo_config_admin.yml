@@ -137,3 +137,7 @@ admin_seo_config_datatable_motors_redirect_edit:
 seo_config_motors_redirects:
     path:     /motors/redirects/save
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:motorsRedirects" }
+
+lhs_filter_category_status_update:
+    path: /lhs-filter/category-status/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:LHSFilterCategoryStatusUpdate" }

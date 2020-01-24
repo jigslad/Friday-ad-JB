@@ -1835,4 +1835,31 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             'ruleTo' => $ruleTo,
         ]);
     }
+    /**
+     * Save LHS Filter status of a category.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function LHSFilterCategoryStatusUpdateAction(Request $request){
+        $data = $request->get('data');
+        $dim_id =$data['dimension'];
+        $status = $data['status'];
+
+        $dimension = $this->getRepository('FaEntityBundle:CategoryDimension')->find($dim_id);
+        if($dimension){
+            $dimension->setIsSearchable($status);
+            $this->getEntityManager()->persist($dimension);
+            $this->getEntityManager()->flush();
+            $dimension = $this->getRepository('FaEntityBundle:CategoryDimension')->find($dim_id);
+            return new JsonResponse([
+                'status' => 1,
+                'dimension_status' => $dimension->getIsSearchable(),
+            ]);
+        }
+        return new JsonResponse([
+            'status' => 0,
+            'error' => 'record not Found',
+        ]);
+    }
 }

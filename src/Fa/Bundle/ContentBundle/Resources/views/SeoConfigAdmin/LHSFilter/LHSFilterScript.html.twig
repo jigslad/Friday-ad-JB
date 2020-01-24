@@ -1,7 +1,8 @@
 <script>
     $(document).ready(function() {
-
+        initSorting();
     });
+
     function get_category_filter_order() {
         var categoryId = $('#filter-category').select2('data').id;
         blockPage();
@@ -36,8 +37,6 @@
                 initSorting()
             });
     }
-
-
     function update_filter_order() {
 
         var categoryId = $('#filter-category').select2('data').id;
@@ -89,14 +88,7 @@
                 $('#entity-list').parent().find('.multi-select.change-notify').removeClass('unsaved').addClass('saved');
             });
     }
-
-    {% if  configs['lhs_filter_order'] is defined %}
-        var entityOrder = {{ configs['lhs_filter_order']['_more_filter_entities_']|raw }};
-        loadSelect2Data('#entity-list', JSON.parse(entityOrder), 1);
-    {% endif %}
-
     function initSorting() {
-
         //Make diagnosis table sortable
         $("#dimension-list tbody").sortable({
             helper: sortingHelper,
@@ -109,7 +101,8 @@
         $('#dimension-list .action a.btn').click(function() {
             $(this).toggleClass('active');
             var is_active = $(this).hasClass('active');
-
+            var dim_id = $(this).parents('tr').data('dimension-id');
+            update_dimension(dim_id,is_active,$(this));
             if (is_active) {
                 $(this).html('Enabled');
                 $(this).parents('tr').addClass('active');
@@ -119,4 +112,30 @@
             }
         });
     }
+
+    function update_dimension(dimension,status){
+         blockPage();
+        $.ajax({
+            type: "POST",
+            url: "{{path('lhs_filter_category_status_update')}}",
+            data: {
+                data: {
+                    'dimension' : dimension,
+                    'status'    : status
+                }
+            }
+        })
+        .done(function() {
+            unblockPage();
+             $('#entity-list').parent().find('.multi-select.change-notify').removeClass('unsaved').addClass('saved');
+        });
+
+
+    }
+
+    {% if  configs['lhs_filter_order'] is defined %}
+        var entityOrder = {{ configs['lhs_filter_order']['_more_filter_entities_']|raw }};
+        loadSelect2Data('#entity-list', JSON.parse(entityOrder), 1);
+    {% endif %}
+
 </script>

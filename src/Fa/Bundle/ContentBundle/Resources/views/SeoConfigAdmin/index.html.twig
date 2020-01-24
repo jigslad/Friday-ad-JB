@@ -446,7 +446,7 @@
     <script type="text/javascript" src="/bundles/facontent/js/dataTables.buttons.min.js"></script>
     {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
 
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             {% if app.request.get('tab') %}
             $('a[data-tab=#{{ app.request.get('tab') }}]').click();
@@ -456,7 +456,7 @@
             $("#entity-list").select2({placeholder: "Add Entities"});
             $("#filter-category").select2({placeholder: "Select Category"});
 
-            initSorting();
+
 
             $('#filter-category').change(function () {
                 get_category_filter_order();
@@ -1251,6 +1251,7 @@
 
             return out.join(' <span style="color: green;">+</span> ');
         }
+
     </script>
     {{ include('FaContentBundle:SeoConfigAdmin/General:GeneralScript.html.twig') }}
     {{ include('FaContentBundle:SeoConfigAdmin/MetaTags:MetaTagsScript.html.twig') }}
@@ -1258,5 +1259,5 @@
     {{ include('FaContentBundle:SeoConfigAdmin/Redirects:RedirectsScript.html.twig') }}
     {{ include('FaContentBundle:SeoConfigAdmin/MotorsRedirect:MotorsRedirectScript.html.twig') }}
     {{ include('FaContentBundle:SeoConfigAdmin/Crawl:CrawlScript.html.twig') }}
-{#    {{ include('FaContentBundle:SeoConfigAdmin/LHSFilter:LHSFilterScript.html.twig') }}#}
+    {{ include('FaContentBundle:SeoConfigAdmin/LHSFilter:LHSFilterScript.html.twig') }}
 {% endblock %}
