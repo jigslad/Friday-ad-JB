@@ -171,7 +171,8 @@ class AdListController extends CoreController
         
         //get SEO Source URL for classic-car
         if (strpos($pageUrl, 'motors/classic-cars') !== false && !$request->query->has('item_motors__reg_year')) {
-            $getClassicCarRegYear = $this->getRepository('FaContentBundle:SeoTool')->findSeoSourceUrlMotorRegYear('motors/classic-cars/');
+            //$getClassicCarRegYear = $this->getRepository('FaContentBundle:SeoTool')->findSeoSourceUrlMotorRegYear('motors/classic-cars/');
+            $getClassicCarRegYear = $this->getSelectecRegYearChoice();
             if (!empty($getClassicCarRegYear)) {
                 $findersSearchParams['item_motors__reg_year'] = $getClassicCarRegYear;
             }
@@ -2855,5 +2856,21 @@ class AdListController extends CoreController
         }
 
         return $boostedAdResult;
+    }
+
+
+    /*
+     * Konda Reddy
+     * Classic cars Reg Year Auto checkbox
+     *
+     * */
+
+    public function getSelectecRegYearChoice(){
+        $years     = array('pre-1970');
+        $yearRange = range(1971, date("Y")-21);
+        //$yearRange = array_combine($yearRange, $yearRange);
+        $years = $years + $yearRange;
+        $years = array_map('strval', $years);
+        return array_reverse($years, true);
     }
 }

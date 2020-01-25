@@ -258,12 +258,12 @@ class AdLeftSearchType extends AbstractType
                 $dimensionFieldPrefix = $dimensionFieldPrefix.'_'.$rootCategoryName;
             }
             
-            $searchParams = $this->request->get('searchParams');
-            $searchRegYear = isset($searchParams['item_motors__reg_year'])?$searchParams['item_motors__reg_year']:array();
-            
-            $customizedUrlData = array();
-            $customizedUrlData = $this->request->get('customized_url');
-            $classicPageUrl = (!empty($customizedUrlData) && isset($customizedUrlData['target_url']))?$customizedUrlData['target_url']:'';
+//            $searchParams = $this->request->get('searchParams');
+//            $searchRegYear = isset($searchParams['item_motors__reg_year'])?$searchParams['item_motors__reg_year']:array();
+//
+//            $customizedUrlData = array();
+//            $customizedUrlData = $this->request->get('customized_url');
+//            $classicPageUrl = (!empty($customizedUrlData) && isset($customizedUrlData['target_url']))?$customizedUrlData['target_url']:'';
 
             foreach ($dimensions as $dimensionId => $dimension) {
                 $dimensionName  = $dimension['name'];
@@ -289,12 +289,13 @@ class AdLeftSearchType extends AbstractType
                     
                     if ($dimensionField == 'reg_year_id') {
                         $dimensionField = str_replace('_id', '', $dimensionField);
-                        if($classicPageUrl == 'motors/classic-cars/') {
-                            $fieldChoices   = CommonManager::getClassicCarsRegYearChoices();
-                        } else {
-                            $fieldChoices   = CommonManager::getRegYearChoices();
-                        } 
-                        $fieldOptions['data'] = $searchRegYear;
+//                        if($classicPageUrl == 'motors/classic-cars/') {
+//                            $fieldChoices   = CommonManager::getClassicCarsRegYearChoices();
+//                        } else {
+//                            $fieldChoices   = CommonManager::getRegYearChoices();
+//                        }
+                        $fieldChoices   = CommonManager::getRegYearChoices();
+//                        $fieldOptions['data'] = $searchRegYear;
                     } elseif ($dimensionField == 'mileage_id') {
                         $dimensionField = str_replace('_id', '', $dimensionField).'_range';
                         $fieldChoices   = CommonManager::getMileageChoices();

@@ -1462,8 +1462,8 @@ class CommonManager
      */
     public static function getRegYearChoices()
     {
-        $years     = array('pre-1970' => 'Pre 1970');
-        $yearRange = range(1971, date("Y"));
+        $years     = array('pre-'.(date("Y")-35) => 'Pre '.(date("Y")-35));
+        $yearRange = range((date("Y")-34), date("Y"));
         $yearRange = array_combine($yearRange, $yearRange);
 
         $years = $years + $yearRange;
