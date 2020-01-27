@@ -294,7 +294,7 @@ class AdLeftSearchType extends AbstractType
 //                        } else {
 //                            $fieldChoices   = CommonManager::getRegYearChoices();
 //                        }
-                        $fieldChoices   = CommonManager::getRegYearChoices();
+                        $fieldChoices   = CommonManager::getClassicCarsRegYearChoices();
 //                        $fieldOptions['data'] = $searchRegYear;
                     } elseif ($dimensionField == 'mileage_id') {
                         $dimensionField = str_replace('_id', '', $dimensionField).'_range';

@@ -2866,8 +2866,8 @@ class AdListController extends CoreController
      * */
 
     public function getSelectecRegYearChoice(){
-        $years     = array('pre-1970');
-        $yearRange = range(1971, date("Y")-21);
+        $years     = array('pre-'.(date("Y")-35));
+        $yearRange = range((date("Y")-34), (date("Y")-21));
         //$yearRange = array_combine($yearRange, $yearRange);
         $years = $years + $yearRange;
         $years = array_map('strval', $years);
