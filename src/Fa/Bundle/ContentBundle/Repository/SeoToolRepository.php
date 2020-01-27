@@ -530,7 +530,7 @@ class SeoToolRepository extends EntityRepository
                 if ($customizedSourceUrl) {
                     list($key, $regYears) = explode("=", $customizedSourceUrl->getSourceUrl());
                     if ($regYears != '') {
-                        $regYearsList = explode("__", $regYears);
+                        $regYearsList = explode("__", $key);
                     }
                 }
             }
