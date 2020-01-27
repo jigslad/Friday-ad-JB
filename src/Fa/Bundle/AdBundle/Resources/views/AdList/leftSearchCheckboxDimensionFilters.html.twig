@@ -64,9 +64,11 @@
                                 {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams, null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
                                 {{ form_widget(child) }}
                                 {% if dimensionIsIndexable and child.vars.value not in nonCrawlableDimensionValues %}
-                                    <a href="{{ listurl }}" class="crowable_checkbox_link" onclick="return false;" {% if app.request.get('searchQueryString') or getNoFollowLink or 'item_' in listurl %}rel="nofollow"{% endif %}>{{ child.vars.label~extraLabel }}</a>
+                                    {# added before#}
+                                    {# {% if app.request.get('searchQueryString') or getNoFollowLink or 'item_' in listurl %}rel="nofollow"{% endif %}#}
+                                    <a href="{{ listurl }}" class="crowable_checkbox_link" onclick="return false;" {{ dimension.is_not_crawlable is defined ? (( dimension.is_not_crawlable == true ) ? 'rel="nofollow"' : '') :'' }}>{{ child.vars.label~extraLabel }}</a>
                                 {% endif %}
-                                <label for="{{ child.vars.id }}" class="crowable_checkbox_link_label">{{ child.vars.label }}</label>
+                                <label for="{{ child.vars.id }}" class="crowable_checkbox_link_label" {{ dimension.is_not_crawlable is defined ? (( dimension.is_not_crawlable == true ) ? 'rel="nofollow"' : '') :'' }} >{{ child.vars.label }}</label>
                                 ({{ adCount }})
                                 {% set childCount = childCount + 1 %}
                             </li>

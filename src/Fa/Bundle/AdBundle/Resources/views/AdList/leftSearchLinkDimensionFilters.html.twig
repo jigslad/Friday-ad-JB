@@ -42,7 +42,10 @@
                                 {% set queryParams = dimensionParams|merge({(filter): (choice.value)}) %}
                                 {% set queryParams = queryParams|merge({(filter~'_open'): ''}) %}
                                 {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams, null, false, null, false, parentFullSlug, secondLevelParentFullSlug) %}
-                                <a href="{{ listurl }}" class="{{activeClass}}" {% if not dimensionIsIndexable or getNoFollowLink or app.request.get('searchQueryString') or 'item_' in listurl or choice.value in nonCrawlableDimensionValues %}rel="nofollow"{% endif %}>{{ choice.label }} ({{ adCount }})</a>
+                                <a href="{{ listurl }}" class="{{activeClass}}" {{ dimension.is_not_crawlable is defined ? (( dimension.is_not_crawlable == true ) ? 'rel="nofollow"' : '') :'' }} >
+{#                                    {% if not dimensionIsIndexable or getNoFollowLink or app.request.get('searchQueryString') or 'item_' in listurl or choice.value in nonCrawlableDimensionValues %}rel="nofollow"{% endif %}#}
+                                    {{ choice.label }} ({{ adCount }})
+                                </a>
                                 {% set childCount = childCount + 1 %}
                             </li>
                         {% endif %}
