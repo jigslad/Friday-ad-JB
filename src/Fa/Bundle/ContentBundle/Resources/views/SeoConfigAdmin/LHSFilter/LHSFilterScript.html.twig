@@ -103,6 +103,13 @@
             var is_active = $(this).hasClass('active');
             var dim_id = $(this).parents('tr').data('dimension-id');
             update_dimension(dim_id,is_active);
+            if (is_active) {
+                $(this).html('Enabled');
+                $(this).parents('tr').addClass('active');
+            } else  {
+                $(this).html('Disabled');
+                $(this).parents('tr').removeClass('active');
+            }
         });
     }
 
@@ -119,16 +126,7 @@
             }
         })
         .done(function(data) {
-            console.log(data);
             unblockPage();
-            if (status) {
-                $(this).html('Enabled');
-                $(this).parents('tr').addClass('active');
-            } else  {
-                $(this).html('Disabled');
-                $(this).parents('tr').removeClass('active');
-            }
-             //$('#entity-list').parent().find('.multi-select.change-notify').removeClass('unsaved').addClass('saved');
         });
 
 

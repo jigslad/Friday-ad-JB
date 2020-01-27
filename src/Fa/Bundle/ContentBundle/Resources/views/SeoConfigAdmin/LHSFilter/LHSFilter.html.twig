@@ -10,29 +10,29 @@
     }
 </style>
 <div id="LHSFilterDiv" style="margin-bottom: 50px">
-{#    <b>LHS Filter Ordering</b>#}
-{#    <br>#}
-{#    <div style="margin-top: 25px">#}
-{#        <div style="width: 100%" class="filter-order-category">#}
-{#            <label for="filter-category">Category</label>#}
-{#            <select id="filter-category">#}
-{#                {% for categoryGroup in categories %}#}
-{#                    {% if categoryGroup['children'] is defined %}#}
-{#                        <optgroup label="{{ categoryGroup['parent']['name'] }}">#}
-{#                            <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>#}
-{#                            {% for children in categoryGroup['children'] %}#}
-{#                                <option value="{{ children['id'] }}">{{ children['name'] }}</option>#}
-{#                            {% endfor %}#}
-{#                        </optgroup>#}
-{#                    {% else %}#}
-{#                        <optgroup label="{{ categoryGroup['parent']['name'] }}">#}
-{#                            <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>#}
-{#                        </optgroup>#}
-{#                    {% endif %}#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </div>#}
-{#    </div>#}
+    <b>LHS Filter Ordering</b>
+    <br>
+    <div style="margin-top: 25px">
+        <div style="width: 100%" class="filter-order-category">
+            <label for="filter-category">Category</label>
+            <select id="filter-category">
+                {% for categoryGroup in categories %}
+                    {% if categoryGroup['children'] is defined %}
+                        <optgroup label="{{ categoryGroup['parent']['name'] }}">
+                            <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>
+                            {% for children in categoryGroup['children'] %}
+                                <option value="{{ children['id'] }}">{{ children['name'] }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% else %}
+                        <optgroup label="{{ categoryGroup['parent']['name'] }}">
+                            <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>
+                        </optgroup>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    </div>
     <div style="margin-top: 25px">
         <label for="dimension-list"><h4>Filter Order</h4></label>
         <div class="table-wrapper" style="position: relative;">
@@ -52,7 +52,7 @@
                             <td class='priority'>{{ order + 1 }}</td>
                             <td class="name">{{ dimension.name }}</td>
                             <td class="category">{{ dimension.category }}</td>
-                            <td class="action">{{ dimension.status == 1 ? "<a class='btn active'>enabled</a>" : "<a class='btn'>Disabled</a>" }}</td>
+                            <td class="action">{{ dimension.status == 1 ? "<a class='btn active'>Enabled</a>" : "<a class='btn'>Disabled</a>" }}</td>
                         </tr>
                     {% endfor %}
 

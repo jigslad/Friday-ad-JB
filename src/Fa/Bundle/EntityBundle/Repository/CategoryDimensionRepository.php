@@ -458,7 +458,7 @@ class CategoryDimensionRepository extends BaseEntityRepository
             $qb = $this->createQueryBuilder(self::ALIAS)
                        ->andWhere(self::ALIAS.'.category IN (:category_id)')
                        ->setParameter('category_id', $categorieIds)
-                       ->andWhere(self::ALIAS.'.is_searchable=1')
+                       ->andWhere(self::ALIAS.'.is_searchable = 1')
                        ->addOrderBy(self::ALIAS.'.category', 'asc')
                        ->addOrderBy(self::ALIAS.'.ord', 'asc');
 
