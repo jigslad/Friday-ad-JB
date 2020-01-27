@@ -127,9 +127,9 @@ class CategoryDimension
      *
      * @var boolean
      *
-     * @ORM\Column(name="is__not_crawlable", type="boolean", options={"default" = 0})
+     * @ORM\Column(name="is_not_crawlable", type="boolean", options={"default" = 0})
      */
-    private $is__not_crawlable;
+    private $is_not_crawlable;
 
     /**
      * Constructor.
@@ -368,7 +368,7 @@ class CategoryDimension
      */
     public function getIsNotCrawlable()
     {
-        return $this->is__not_crawlable;
+        return $this->is_not_crawlable;
     }
 
     /**
@@ -380,7 +380,7 @@ class CategoryDimension
      */
     public function setIsNotCrawlable($is__not_crawlable)
     {
-        $this->is_searchable = $is__not_crawlable;
+        $this->is_not_crawlable = $is__not_crawlable;
         return $this;
     }
 }

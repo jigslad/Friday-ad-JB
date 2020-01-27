@@ -200,7 +200,8 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
                 'id' => $dimension->getId(),
                 'name' => $name,
                 'category'=>$category,
-                'status' => $dimension->getIsSearchable()
+                'status' => $dimension->getIsSearchable(),
+                'Crawlable' => $dimension->getIsNotCrawlable()
             ];
         }
         return $dims;
@@ -1855,6 +1856,35 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             return new JsonResponse([
                 'status' => 1,
                 'dimension_status' => $dimension->getIsSearchable(),
+            ]);
+        }
+        return new JsonResponse([
+            'status' => 0,
+            'error' => 'record not Found',
+        ]);
+    }
+
+    /**
+     * Save Crwal Setting for Category Dimension.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function crawlCategoryDimensionStatusUpdateAction(Request $request){
+        $data = $request->get('data');
+        $dim_id =$data['dimension'];
+        $status = $data['status'];
+
+        $dimension = $this->getRepository('FaEntityBundle:CategoryDimension')->find($dim_id);
+        if($dimension){
+            $dimension->setIsNotCrawlable($status);
+            $this->getEntityManager()->persist($dimension);
+            $this->getEntityManager()->flush();
+            $dimension = $this->getRepository('FaEntityBundle:CategoryDimension')->find($dim_id);
+            return new JsonResponse([
+                'status' => 1,
+                'dimension_id' => $dimension->getId(),
+                'dimension_crawl' => $dimension->getIsNotCrawlable(),
             ]);
         }
         return new JsonResponse([

@@ -141,3 +141,7 @@ seo_config_motors_redirects:
 lhs_filter_category_status_update:
     path: /lhs-filter/category-status/save
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:LHSFilterCategoryStatusUpdate" }
+
+crawl_category_dimension_status_update:
+    path: /crawl/category-status/save
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:crawlCategoryDimensionStatusUpdate" }

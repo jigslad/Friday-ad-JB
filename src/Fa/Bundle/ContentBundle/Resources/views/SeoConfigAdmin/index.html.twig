@@ -386,7 +386,7 @@
                     </div>#}
 
                     <div id="CrawlTab" class="tab">
-                        {{ include('FaContentBundle:SeoConfigAdmin/Crawl:Crawl.html.twig') }}
+                        {{ include('FaContentBundle:SeoConfigAdmin/Crawl:CrawlNew.html.twig') }}
                     </div>
 
                     <div id="LHSFilterTab" class="tab">
@@ -472,7 +472,7 @@
             $('#mapping_file').change(function () {
                 read_url(this);
             });
-            initAddRemove();
+
             $('#upload').click(function () {
                 var uploadType = $('#upload-type').val();
                 var url = '';
@@ -1258,6 +1258,6 @@
     {{ include('FaContentBundle:SeoConfigAdmin/MaxDimRule:MaxDimRuleScript.html.twig') }}
     {{ include('FaContentBundle:SeoConfigAdmin/Redirects:RedirectsScript.html.twig') }}
     {{ include('FaContentBundle:SeoConfigAdmin/MotorsRedirect:MotorsRedirectScript.html.twig') }}
-    {{ include('FaContentBundle:SeoConfigAdmin/Crawl:CrawlScript.html.twig') }}
+    {{ include('FaContentBundle:SeoConfigAdmin/Crawl:CrawlNewScript.html.twig') }}
     {{ include('FaContentBundle:SeoConfigAdmin/LHSFilter:LHSFilterScript.html.twig') }}
 {% endblock %}

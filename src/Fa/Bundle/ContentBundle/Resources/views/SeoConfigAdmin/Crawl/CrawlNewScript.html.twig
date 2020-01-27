@@ -1,0 +1,48 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        initCrawl()
+    });
+    function initCrawl() {
+        //Make diagnosis table sortable
+        $("#crawl-list tbody").sortable({
+            helper: sortingHelper,
+            stop: function(event, ui) {
+                renumber_table('#dimension-list')
+            }
+        }).disableSelection();
+
+        // Enable/Disable button in table rows.
+        $('#crawl-list .action a.btn').click(function() {
+            $(this).toggleClass('active');
+            var is_active = $(this).hasClass('active');
+            var dim_id = $(this).parents('tr').data('dimension-id');
+            update_crawl(dim_id,is_active);
+            if (is_active) {
+                $(this).html('Enabled');
+                $(this).parents('tr').addClass('active');
+            } else  {
+                $(this).html('Disabled');
+                $(this).parents('tr').removeClass('active');
+            }
+        });
+    }
+
+    function update_crawl(dimension,status){
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url: "{{path('crawl_category_dimension_status_update')}}",
+            data: {
+                data: {
+                    'dimension' : dimension,
+                    'status'    : ((status) ? 1 : 0),
+                }
+            }
+        })
+            .done(function(data) {
+                unblockPage();
+            });
+
+
+    }
+</script>
