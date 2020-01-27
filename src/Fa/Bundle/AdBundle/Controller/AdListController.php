@@ -2856,4 +2856,5 @@ class AdListController extends CoreController
 
         return $boostedAdResult;
     }
+   
 }

@@ -259,8 +259,8 @@ class AdLeftSearchType extends AbstractType
             }
             
             $searchParams = $this->request->get('searchParams');
-            $searchRegYear = isset($searchParams['item__reg_year_id'])?$searchParams['item__reg_year_id']:array();
-            
+            $searchRegYear = isset($searchParams['item_motors__reg_year'])?$searchParams['item_motors__reg_year']:array();
+
             $customizedUrlData = array();
             $customizedUrlData = $this->request->get('customized_url');
             $classicPageUrl = (!empty($customizedUrlData) && isset($customizedUrlData['target_url']))?$customizedUrlData['target_url']:'';
@@ -293,7 +293,8 @@ class AdLeftSearchType extends AbstractType
                             $fieldChoices   = CommonManager::getClassicCarsRegYearChoices();
                         } else {
                             $fieldChoices   = CommonManager::getRegYearChoices();
-                        } 
+                        }
+
                         $fieldOptions['data'] = $searchRegYear;
                     } elseif ($dimensionField == 'mileage_id') {
                         $dimensionField = str_replace('_id', '', $dimensionField).'_range';

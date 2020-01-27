@@ -1462,8 +1462,8 @@ class CommonManager
      */
     public static function getRegYearChoices()
     {
-        $years     = array('pre-1970' => 'Pre 1970');
-        $yearRange = range(1971, date("Y"));
+        $years     = array('pre-'.(date("Y")-35) => 'Pre '.(date("Y")-35));
+        $yearRange = range((date("Y")-34), date("Y"));
         $yearRange = array_combine($yearRange, $yearRange);
 
         $years = $years + $yearRange;
@@ -1472,8 +1472,8 @@ class CommonManager
 
     public static function getClassicCarsRegYearChoices()
     {
-        $years     = array('pre-'.(date("Y")-30) => 'Pre '.(date("Y")-30));
-        $yearRange = range((date("Y")-30), (date("Y")-22));
+        $years     = array('pre-'.(date("Y")-35) => 'Pre '.(date("Y")-35));
+        $yearRange = range((date("Y")-35), (date("Y")-21));
         $yearRange = array_combine($yearRange, $yearRange);
         
         $years = $years + $yearRange;
