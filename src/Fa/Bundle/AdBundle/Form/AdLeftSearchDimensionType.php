@@ -96,21 +96,16 @@ class AdLeftSearchDimensionType extends AbstractType
         $dimensionId         = $this->request->get('dimensionId');
         $dimensionName       = $this->request->get('dimensionName');
         $dimensionSearchType = $this->request->get('dimensionSearchType');
-
-        $customizedUrlData = array();
-        $customizedUrlData = $this->request->get('customized_url');
-        $classicPageUrl = (!empty($customizedUrlData) && isset($customizedUrlData['target_url']))?$customizedUrlData['target_url']:'';
-        
+                
+        $searchRegYear = isset($searchParams['item_motors__reg_year'])?$searchParams['item_motors__reg_year']:array();
+        $fieldSelectedData = array();
         if ($dimensionField == 'item_motors__reg_year') {
-            if($classicPageUrl == 'motors/classic-cars/') {
-                $fieldChoices   = CommonManager::getClassicCarsRegYearChoices();
-            } else {
-                $fieldChoices   = CommonManager::getRegYearChoices();
-            }    
+            $fieldChoices   = CommonManager::getRegYearChoices();                
+            $fieldSelectedData = array_flip($searchRegYear);
         } else {
             $fieldChoices = $this->em->getRepository('FaEntityBundle:Entity')->getEntityArrayByType($dimensionId, $this->container);
         }
-        $fieldOptions = array(/** @Ignore */'label' => $dimensionName, 'choices' => array_flip($fieldChoices));
+        $fieldOptions = array(/** @Ignore */'label' => $dimensionName, 'choices' => array_flip($fieldChoices),'data' => $fieldSelectedData);
         if ($dimensionSearchType == 'choice_checkbox') {
             $fieldOptions['expanded'] = true;
             $fieldOptions['multiple'] = true;
