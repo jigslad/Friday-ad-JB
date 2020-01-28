@@ -916,4 +916,26 @@ class CategoryDimensionRepository extends BaseEntityRepository
         
         return $searchableDimensionFieldArray;
     }
+
+    /**
+     * Get dimensions array by category id with child.
+     *
+     * @param array $categoryArray Category Array
+     *
+     * @return array
+     */
+    public function getDimesionsArrayByCategoryArray($categoryArray)
+    {
+        $dimensionArray = array();
+        if (count($categoryArray)) {
+            $qb = $this->createQueryBuilder(self::ALIAS)
+                ->select(self::ALIAS,CategoryRepository::ALIAS)
+                ->andWhere(self::ALIAS.'.category IN (:category_ids)')
+                ->setParameter('category_ids', $categoryArray)
+                ->leftJoin(self::ALIAS.'.category', CategoryRepository::ALIAS);
+            $dimensions = $qb->getQuery()->getArrayResult();
+            $dimensionArray = $dimensions;
+        }
+        return $dimensionArray;
+    }
 }

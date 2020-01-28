@@ -46,39 +46,11 @@
                         <th>Enabled/Disabled</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    {% for order,dimension in dimensions %}
-                        <tr data-dimension-id="{{ dimension.id }}">
-                            <td class='priority'>{{ order + 1 }}</td>
-                            <td class="name">{{ dimension.name }}</td>
-                            <td class="category">{{ dimension.category }}</td>
-                            <td class="action">{{ dimension.status == 1 ? "<a class='btn active'>Enabled</a>" : "<a class='btn'>Disabled</a>" }}</td>
-                        </tr>
-                    {% endfor %}
-
+                    <tbody id="dimension-list-body">
                     </tbody>
                 </table>
             </div>
         </div>
 
     </div>
-
-{#    <button type="button" onclick="update_filter_order();" style="float: right; width: 350px; margin-top: 25px">Update Filter Order</button>#}
 </div>
-
-{#<hr>#}
-
-{#<div id="LHSMoreFilter">#}
-
-{#    <div style="margin-top: 25px">#}
-{#        <label for="dimension-list"><h4>More Filters: Available Entities</h4></label>#}
-{#        <br>#}
-{#        <i style="font-size: 12px">Add entities in the order needed for LHS</i>#}
-{#        <br>#}
-{#        <select id="entity-list" multiple class="multi-select" data-prediction="on" data-type="entity" data-separator="" data-conditions="id-slug-pair" data-keep-order="1">#}
-{#        </select>#}
-
-{#    </div>#}
-
-{#    <button type="button" onclick="update_more_filter_order();" style="float: right; width: 350px; margin-top: 25px">Update More Filters</button>#}
-{#</div>#}

@@ -454,13 +454,8 @@
             $("#ForSaleExclusions").select2({placeholder: "Add Categories"});
             $("#MaxDimRules").select2({placeholder: "Add Max Dim Rules", formatSelection: maxDimTemplate});
             $("#entity-list").select2({placeholder: "Add Entities"});
-            $("#filter-category").select2({placeholder: "Select Category"});
 
 
-
-            $('#filter-category').change(function () {
-                get_category_filter_order();
-            }).change();
 
             $('.bulk-upload-button').click(function () {
                 var parent = $(this).parent();

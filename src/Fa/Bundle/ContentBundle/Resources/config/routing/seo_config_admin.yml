@@ -145,3 +145,7 @@ lhs_filter_category_status_update:
 crawl_category_dimension_status_update:
     path: /crawl/category-status/save
     defaults: { _controller: "FaContentBundle:SeoConfigAdmin:crawlCategoryDimensionStatusUpdate" }
+
+seo_dimension_list:
+    path: /crawl/category-filter
+    defaults: { _controller: "FaContentBundle:SeoConfigAdmin:getCategoryDimension" }

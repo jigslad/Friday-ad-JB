@@ -1,16 +1,39 @@
 <script type="text/javascript">
     $(document).ready(function() {
         initCrawl()
+        $("#crawl-filter-category").select2({placeholder: "Select Category"});
+        $('#crawl-filter-category').change(function () {
+            var categoryId = $('#crawl-filter-category').select2('data').id;
+            get_crawl_date(categoryId);
+        }).change();
     });
-    function initCrawl() {
-        //Make diagnosis table sortable
-        $("#crawl-list tbody").sortable({
-            helper: sortingHelper,
-            stop: function(event, ui) {
-                renumber_table('#dimension-list')
+    function get_crawl_date(categoryId) {
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url: "{{path('seo_dimension_list')}}",
+            data: {
+                category_id: categoryId,
             }
-        }).disableSelection();
-
+        })
+            .done(function(response) {
+                if(response){
+                    $("#crawl-list-body tr").remove();
+                    $.each(response, function(i, item) {
+                        $("#crawl-list-body").append(
+                            '<tr data-dimension-id="'+item.id+'">' +
+                            '<td class="priority">'+item.id+'</td>' +
+                            '<td class="name">'+item.name+'</td>'+
+                            '<td class="category">'+item.category.name+'</td>'+
+                            '<td class="action">' +  (item.is_not_crawlable == 1 ? '<a class="btn active">No-Crawl</a>' : '<a class="btn">Crawl</a>') + '</td></tr>'
+                        );
+                    });
+                }
+                unblockPage();
+                initCrawl();
+            });
+    }
+    function initCrawl() {
         // Enable/Disable button in table rows.
         $('#crawl-list .action a.btn').click(function() {
             $(this).toggleClass('active');
@@ -18,10 +41,10 @@
             var dim_id = $(this).parents('tr').data('dimension-id');
             update_crawl(dim_id,is_active);
             if (is_active) {
-                $(this).html('Enabled');
+                $(this).html('No-Crawl');
                 $(this).parents('tr').addClass('active');
             } else  {
-                $(this).html('Disabled');
+                $(this).html('Crawl');
                 $(this).parents('tr').removeClass('active');
             }
         });

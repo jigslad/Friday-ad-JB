@@ -12,27 +12,27 @@
 <div id="CrawlDiv" style="margin-bottom: 50px">
     <b>Crawl Setting</b>
     <br>
-{#    <div style="margin-top: 25px">#}
-{#        <div style="width: 100%" class="filter-order-category">#}
-{#            <label for="filter-category">Category</label>#}
-{#            <select id="filter-category">#}
-{#                {% for categoryGroup in categories %}#}
-{#                    {% if categoryGroup['children'] is defined %}#}
-{#                        <optgroup label="{{ categoryGroup['parent']['name'] }}">#}
-{#                            <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>#}
-{#                            {% for children in categoryGroup['children'] %}#}
-{#                                <option value="{{ children['id'] }}">{{ children['name'] }}</option>#}
-{#                            {% endfor %}#}
-{#                        </optgroup>#}
-{#                    {% else %}#}
-{#                        <optgroup label="{{ categoryGroup['parent']['name'] }}">#}
-{#                            <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>#}
-{#                        </optgroup>#}
-{#                    {% endif %}#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </div>#}
-{#    </div>#}
+    <div style="margin-top: 25px">
+        <div style="width: 100%" class="filter-order-category">
+            <label for="crawl-filter-category">Category</label>
+            <select id="crawl-filter-category">
+                {% for categoryGroup in categories %}
+                    {% if categoryGroup['children'] is defined %}
+                        <optgroup label="{{ categoryGroup['parent']['name'] }}">
+                            <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>
+                            {% for children in categoryGroup['children'] %}
+                                <option value="{{ children['id'] }}">{{ children['name'] }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% else %}
+                        <optgroup label="{{ categoryGroup['parent']['name'] }}">
+                            <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>
+                        </optgroup>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    </div>
     <div style="margin-top: 25px">
         <label for="crawl-list"><h4>Category dimension List</h4></label>
         <div class="table-wrapper" style="position: relative;">
@@ -46,15 +46,7 @@
                         <th>Enabled/Disabled</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    {% for order,dimension in dimensions %}
-                        <tr data-dimension-id="{{ dimension.id }}">
-                            <td class='priority'>{{ order + 1 }}</td>
-                            <td class="name">{{ dimension.name }}</td>
-                            <td class="category">{{ dimension.category }}</td>
-                            <td class="action">{{ dimension.Crawlable == 1 ? "<a class='btn active'>Enabled</a>" : "<a class='btn'>Disabled</a>" }}</td>
-                        </tr>
-                    {% endfor %}
+                    <tbody id="crawl-list-body">
                     </tbody>
                 </table>
             </div>

@@ -1892,4 +1892,17 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             'error' => 'record not Found',
         ]);
     }
+    /**
+     * Lists all Category dimensions.
+     *
+     * @param Request $request.
+     *
+     * @return JsonResponse
+     */
+    public function getCategoryDimensionAction(Request $request){
+        $category = $request->get('category_id');
+        $categoryList = $this->getRepository('FaEntityBundle:Category')->getNestedChildrenIdsByCategoryId($category);
+        $list = $dimension = $this->getRepository('FaEntityBundle:CategoryDimension')->getDimesionsArrayByCategoryArray($categoryList);
+        return new JsonResponse($list);
+    }
 }

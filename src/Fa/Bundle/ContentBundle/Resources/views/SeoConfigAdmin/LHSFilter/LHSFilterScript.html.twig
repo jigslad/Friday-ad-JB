@@ -1,7 +1,37 @@
 <script>
     $(document).ready(function() {
-        initSorting();
+        $("#filter-category").select2({placeholder: "Select Category"});
+        $('#filter-category').change(function () {
+            var categoryId = $('#filter-category').select2('data').id;
+            get_lhs_date(categoryId);
+        }).change();
     });
+    function get_lhs_date(categoryId) {
+        blockPage();
+        $.ajax({
+            type: "POST",
+            url: "{{path('seo_dimension_list')}}",
+            data: {
+                category_id: categoryId,
+            }
+        })
+        .done(function(response) {
+            if(response){
+                $("#dimension-list-body tr").remove();
+                $.each(response, function(i, item) {
+                    $("#dimension-list-body").append(
+                        '<tr data-dimension-id="'+item.id+'">' +
+                        '<td class="priority">'+item.id+'</td>' +
+                        '<td class="name">'+item.name+'</td>'+
+                        '<td class="category">'+item.category.name+'</td>'+
+                        '<td class="action">' +  (item.is_searchable == 1 ? '<a class="btn active">Enabled</a>' : '<a class="btn">Disabled</a>') + '</td></tr>'
+                    );
+                });
+            }
+            unblockPage();
+            initSorting();
+        });
+    }
 
     function get_category_filter_order() {
         var categoryId = $('#filter-category').select2('data').id;
@@ -37,66 +67,7 @@
                 initSorting()
             });
     }
-    function update_filter_order() {
-
-        var categoryId = $('#filter-category').select2('data').id;
-        var rows = $('#dimension-list tbody tr');
-        var order = [];
-
-        $.each(rows, function (key, row) {
-
-            var dim_id = $(row).data('dimension-id');
-
-            if ($(row).hasClass('active')) {
-                order.push(dim_id);
-            }
-        });
-
-        blockPage();
-
-        $.ajax({
-            type: "POST",
-            url: "{{path('lhs_filter_category_order_save')}}",
-            data: {
-                "data": order,
-                category_id: categoryId
-            }
-        })
-            .done(function() {
-                unblockPage();
-                get_category_filter_order();
-            });
-    }
-    function update_more_filter_order() {
-
-        var select = $('#entity-list');
-        var moreFilterEntities = [];
-        $.each($(select).select2('data'), function (key, value) {
-            moreFilterEntities.push(value.id)
-        });
-        blockPage();
-
-        $.ajax({
-            type: "POST",
-            url: "{{path('lhs_filter_category_order_save')}}",
-            data: {
-                data: {'_more_filters_': moreFilterEntities }
-            }
-        })
-            .done(function() {
-                unblockPage();
-                $('#entity-list').parent().find('.multi-select.change-notify').removeClass('unsaved').addClass('saved');
-            });
-    }
     function initSorting() {
-        //Make diagnosis table sortable
-        $("#dimension-list tbody").sortable({
-            helper: sortingHelper,
-            stop: function(event, ui) {
-                renumber_table('#dimension-list')
-            }
-        }).disableSelection();
-
         // Enable/Disable button in table rows.
         $('#dimension-list .action a.btn').click(function() {
             $(this).toggleClass('active');
@@ -112,7 +83,6 @@
             }
         });
     }
-
     function update_dimension(dimension,status){
          blockPage();
         $.ajax({
@@ -128,13 +98,5 @@
         .done(function(data) {
             unblockPage();
         });
-
-
     }
-
-    {% if  configs['lhs_filter_order'] is defined %}
-        var entityOrder = {{ configs['lhs_filter_order']['_more_filter_entities_']|raw }};
-        loadSelect2Data('#entity-list', JSON.parse(entityOrder), 1);
-    {% endif %}
-
 </script>
