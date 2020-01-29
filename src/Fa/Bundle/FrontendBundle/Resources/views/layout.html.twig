@@ -241,7 +241,9 @@
                     {% if searchParams is not defined %}
                         {% set searchParams = [] %}
                     {% endif %}
+
                     {{ include('FaFrontendBundle::mobile-footer.html.twig', {'searchParams':searchParams}) }}
+
                 {% endif %}
             {% endif %}
         {% else %}
