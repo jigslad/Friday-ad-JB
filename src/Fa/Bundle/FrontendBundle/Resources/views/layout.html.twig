@@ -227,23 +227,22 @@
 
         {% if status_code == 200 %}
             {% set showFooterFlag = true %}
-            {% set showMblFooterFlag = true %}
             {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() and currentRoute in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step', 5: 'show_draft_ad', 6: 'ad_package_purchase', 7: 'show_cart', 8: 'cybersource_checkout', 9: 'ad_edit', 10: 'ad_promote'} %}
-                {% set showMblFooterFlag = false %}
+                {% set showFooterFlag = false %}
             {% endif %}
-
-            {% if showMblFooterFlag %}
-                {% if searchParams is not defined %}
-                    {% set searchParams = [] %}
-                {% endif %}
-                {{ include('FaFrontendBundle::mobile-footer.html.twig', {'searchParams':searchParams}) }}
-            {% endif %}
-
             {% if showFooterFlag %}
             	{% if searchParams is not defined %}
             		{% set searchParams = [] %}
             	{% endif %}
                 {{ include('FaFrontendBundle::footer.html.twig', {'searchParams':searchParams}) }}
+            {% else %}
+                {% set showMblFooterFlag = true %}
+                {% if showMblFooterFlag %}
+                    {% if searchParams is not defined %}
+                        {% set searchParams = [] %}
+                    {% endif %}
+                    {{ include('FaFrontendBundle::mobile-footer.html.twig', {'searchParams':searchParams}) }}
+                {% endif %}
             {% endif %}
         {% else %}
             {{ include('FaFrontendBundle::userLocation.html.twig') }}
