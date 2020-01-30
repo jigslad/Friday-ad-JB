@@ -59,6 +59,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
      */
     public function indexAction(Request $request)
     {
+        $nestedCategory = $this->getNestedCategories();
         CommonManager::setAdminBackUrl($request, $this->container);
 
         if ($request->get('respond') == 'json' && ($configSlug = $request->get('config'))) {
@@ -97,6 +98,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             'configs'    => $seoConfigs,
             'dimensions' => $this->getAllDimensions(),
             'categories' => $this->getCategories(),
+            'Nestedcategories' => $nestedCategory,
             'shortList'  => $this->shortList,
         ];
 
@@ -161,7 +163,6 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         ];
 
         foreach ($allCategories as $category) {
-
             if (!empty($parent = $category->getParent()) && $parent->getSlug() != CategoryRepository::CATEGORY_ROOT_SLUG && $parent->getStatus()) {
                 $categories[$parent->getId()]['children'][] = [
                     'id' => $category->getId(),
@@ -178,6 +179,52 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         }
 
         return $categories;
+    }
+    /**
+     * Get all categories.
+     *
+     * @return array
+     */
+    protected function getNestedCategories()
+    {
+        /** @var Category[] $allCategories */
+//        $allCategories = $this->getRepository('FaEntityBundle:Category')->getChildrenById(0);
+        $mainCategory = $this->getRepository('FaEntityBundle:Category')->find(1);
+        $categories[$mainCategory->getId()] = [
+            'id' => $mainCategory->getId(),
+            'name' => 'All Categories',
+            'is_main' => true,
+        ];
+        //$categories[$mainCategory->getId()]['children'] = $this->getCategoryNestedByCategoryId($mainCategory->getId());
+        $this->getCategoryNestedByCategoryId($mainCategory->getId(),0);
+        //var_dump('done');
+        //exit();
+        return $categories;
+    }
+    protected function getCategoryNestedByCategoryId($category,$level){
+
+        $list = $this->getRepository('FaEntityBundle:Category')->findBy(['parent' => $category]);
+        if($level < 3) {
+            foreach ($list as $subCategory) {
+                $subCategoryList = $this->getRepository('FaEntityBundle:Category')->findBy(['parent' => $subCategory->getId()]);
+                //            $categories[$subCategory->getId()] =[
+                //                'id' => $subCategory->getId(),
+                //                'name' => $subCategory->getName(),
+                //            ];
+                echo $subCategory->getId() . '>>>' . $subCategory->getName() . '<br>';
+                if ($subCategoryList) {
+                    //                $categories[$subCategory['id']] = [
+                    //                    'is_main' => true,
+                    //                ];
+                    //                $categories[$subCategory->getId()]['children'] = $this->getCategoryNestedByCategoryId($subCategory->getId());
+                    $this->getCategoryNestedByCategoryId($subCategory->getId(),$level++);
+                } else {
+                    //                $categories[$subCategory->getId()] = [
+                    //                    'is_main' => false,
+                    //                ];
+                }
+            }
+        }
     }
 
     /**
