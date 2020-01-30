@@ -5,11 +5,14 @@
                 <h6 class="footer-head">Can we help?</h6>
                 <div style="column-count: 2;  margin-bottom: 5px!important;">
                     <a href="https://help.friday-ad.co.uk/hc/en-us" target="__blank">Help</a>
-                    <a href="/app_dev.php/about-us/">About Us</a>
+
+                        {{ render(controller('FaContentBundle:StaticPage:renderMobileStaticPageLink', {'currentRoute': currentRoute})) }}
+
+                    {#<a href="/app_dev.php/about-us/">About Us</a>
                     <a href="/app_dev.php/contact-us/">Contact us</a>
                     <a href="/app_dev.php/privacy-policy/">Privacy Policy</a>
                     <a href="/app_dev.php/terms-and-conditions/">Terms and Conditions</a>
-                    <a href="/app_dev.php/cookies-policy/">Cookies Policy</a>
+                    <a href="/app_dev.php/cookies-policy/">Cookies Policy</a>#}
                 </div>
             </div>
         </div>
