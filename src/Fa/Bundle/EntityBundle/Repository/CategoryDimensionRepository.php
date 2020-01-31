@@ -371,6 +371,27 @@ class CategoryDimensionRepository extends BaseEntityRepository
                         $dimensionFacetData = $selectedOptions + $nonSelectedOptions;
                     }
                 }
+                
+                if($dimensionField == 'reg_year') {
+                    $regFacetData = array();
+                    $preYearVal = 0;
+                    krsort($dimensionFacetData);
+                    foreach($dimensionFacetData as $key=>$value) {
+                        if(($key<=(int)date('Y')) && ($key > (int)(date('Y')-35))) {
+                            $regFacetData[$key] = $value;
+                        } else {
+                            if($key <= (int)(date('Y')-35)) {
+                                $preYearVal = $preYearVal+$value;
+                            } 
+                        }
+                    }
+                    if($preYearVal>0) {
+                        $regFacetData['pre-'.(date('Y')-35)] = $preYearVal;
+                    }
+                    if(!empty($regFacetData)) {
+                        $dimensionFacetData = $regFacetData;
+                    }
+                }
             }
         }
 
