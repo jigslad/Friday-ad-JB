@@ -1,12 +1,111 @@
 <script type="text/javascript">
     $(document).ready(function() {
         initCrawl()
-        $("#crawl-filter-category").select2({placeholder: "Select Category"});
-        $('#crawl-filter-category').change(function () {
-            var categoryId = $('#crawl-filter-category').select2('data').id;
-            get_crawl_date(categoryId);
-        }).change();
+        initCrawlFilter();
+        get_crawl_date(1);
     });
+    function initCrawlFilter(){
+        $("#crawl-filter-category-btn").click(function() {
+            var level1 = $('#crawl-filter-category-1').children("option:selected").val();
+            var level2 = $('#crawl-filter-category-2').children("option:selected").val();
+            var level3 = $('#crawl-filter-category-3').children("option:selected").val();
+            var level4 = $('#crawl-filter-category-4').children("option:selected").val();
+            if(level4 !=1){
+                get_crawl_date(level4);
+            }
+            else if(level3 !=1){
+                get_crawl_date(level3);
+            }
+            else if(level2 !=1){
+                get_crawl_date(level2);
+            }
+            else {
+                get_crawl_date(level1);
+            }
+        });
+        $('#crawl-filter-category-1').change(function () {
+            var level1 = $('#crawl-filter-category-1').children("option:selected").val();
+            if ((level1 != 1)) {
+                blockPage();
+                getCategoryByLevel(level1).then((result) => {
+                    $('#crawl-filter-category-2').empty();
+                    $('#crawl-filter-category-2').append("<option value='1'>Select Category</option>");
+                    $('#crawl-filter-category-3').empty();
+                    $('#crawl-filter-category-3').append("<option value='1'>Select Category</option>");
+                    $('#crawl-filter-category-4').empty();
+                    $('#crawl-filter-category-4').append("<option value='1'>Select Category</option>");
+                    result.forEach(function(item, index){
+                        $('#crawl-filter-category-2').append("<option value='"+ item.id +"'>" + item.text + "</option>");
+                    });
+                });
+                unblockPage();
+            } else {
+                blockPage();
+                getCategoryByLevel(level1).then((result) => {
+                    $('#crawl-filter-category-1').empty();
+                    $('#crawl-filter-category-1').append("<option value='1'>Select Category</option>");
+                    $('#crawl-filter-category-2').empty();
+                    $('#crawl-filter-category-2').append("<option value='1'>Select Category</option>");
+                    $('#crawl-filter-category-3').empty();
+                    $('#crawl-filter-category-3').append("<option value='1'>Select Category</option>");
+                    $('#crawl-filter-category-4').empty();
+                    $('#crawl-filter-category-4').append("<option value='1'>Select Category</option>");
+                    result.forEach(myFunction);
+                    function myFunction(item) {
+                        $('#crawl-filter-category-1').append("<option value='"+ item.id +"'>" + item.text + "</option>");
+                    }
+                });
+                unblockPage();
+            }
+        }).change();
+        $('#crawl-filter-category-2').change(function () {
+            var level1 = $('#crawl-filter-category-1').children("option:selected").val();
+            var level2 = $('#crawl-filter-category-2').children("option:selected").val();
+            if(level2 != 0) {
+                if (level2 != level1) {
+                    blockPage();
+                    getCategoryByLevel(level2).then((result) => {
+                        $('#crawl-filter-category-4').empty();
+                        $('#crawl-filter-category-4').append("<option value='1'>Select Category</option>");
+                        $('#crawl-filter-category-3').empty();
+                        $('#crawl-filter-category-3').append("<option value='1'>Select Category</option>");
+                        result.forEach(function(item, index){
+                            $('#crawl-filter-category-3').append("<option value='"+ item.id +"'>" + item.text + "</option>");
+                        });
+                    });
+                    unblockPage();
+                }
+            }
+        }).change();
+        $('#crawl-filter-category-3').change(function () {
+            var level2 = $('#crawl-filter-category-2').children("option:selected").val();
+            var level3 = $('#crawl-filter-category-3').children("option:selected").val();
+            if(level3 != 0) {
+                if (level3 != level2) {
+                    blockPage();
+                    getCategoryByLevel(level3).then((result) => {
+                        $('#crawl-filter-category-4').empty();
+                        $('#crawl-filter-category-4').append("<option value='1'>Select Category</option>");
+                        result.forEach(function(item, index){
+                            $('#crawl-filter-category-4').append("<option value='"+ item.id +"'>" + item.text + "</option>");
+                        });
+                    });
+                    unblockPage();
+                }
+            }
+        }).change();
+    }
+    function getCategoryByLevel(categoryId) {
+        return jQuery.ajax({
+            type: "POST",
+            url: "{{ path('category_ajax_get_node_json') }}",
+            data: {
+                id: categoryId,
+            }
+        });
+    }
+
+
     function get_crawl_date(categoryId) {
         blockPage();
         $.ajax({
