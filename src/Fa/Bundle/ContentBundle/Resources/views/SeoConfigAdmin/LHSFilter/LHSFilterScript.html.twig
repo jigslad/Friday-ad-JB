@@ -1,11 +1,9 @@
 <script type="text/javascript">
-    var result = null;
     $(document).ready(function() {
         initFilter();
         get_lhs_date(1);
         initSorting()
     });
-
     function initFilter(){
         $("#filter-category-btn").click(function() {
             var level1 = $('#filter-category-1').children("option:selected").val();
@@ -106,7 +104,6 @@
             }
         });
     }
-
     function get_lhs_date(categoryId) {
         blockPage();
         $.ajax({
@@ -133,53 +130,6 @@
 
             initSorting();
         });
-    }
-    function loadCategoryLevel1(categoryID) {
-
-    }
-    function loadCategoryLevel1(categoryID) {
-
-    }
-    function loadCategoryLevel1(categoryID) {
-
-    }
-    function loadCategoryLevel1(categoryID) {
-
-    }
-
-    function get_category_filter_order() {
-        var categoryId = $('#filter-category').select2('data').id;
-        blockPage();
-        $.ajax({
-            type: "POST",
-            url: "{{path('lhs_filter_category_order')}}",
-            data: {
-                category_id: categoryId
-            }
-        })
-            .done(function(response) {
-                unblockPage();
-                var order = [];
-                var indexCount = 1;
-                if (response.order) {
-                    $.each(response.order.split(','), function (key, dimensionId) {
-                        var row = $('#dimension-list tr[data-dimension-id=' + dimensionId + ']');
-                        $(row).addClass('active').find('a.btn').addClass('active').html('Enabled');
-                        $(row).attr('order', indexCount).find('.priority').html(indexCount++);
-                        order.push(row);
-                        row.remove()
-                    });
-                }
-                var remainingRows = $('#dimension-list tr[data-dimension-id]');
-                $.each(remainingRows, function (index, row) {
-                    $(row).removeClass('active').find('a.btn').removeClass('active').html('Disabled');
-                    $(row).attr('order', indexCount).find('.priority').html(indexCount++);
-                    order.push(row);
-                });
-                remainingRows.remove();
-                $('#dimension-list tbody').append(order);
-                initSorting()
-            });
     }
     function initSorting() {
         // Enable/Disable button in table rows.

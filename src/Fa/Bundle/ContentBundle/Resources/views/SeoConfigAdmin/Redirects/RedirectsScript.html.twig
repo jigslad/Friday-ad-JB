@@ -27,6 +27,35 @@
             'pageLength',
         ]
     } );
+    function redirectdeleteRow(row) {
+        $(row).addClass('deleted');
+        var rule = $(row).find('.datatable-action-list .data').first().html();
+        var table = $(row).parents('table').first();
+        var config = $(table).data('rule');
+
+        blockPage('Removing rule');
+
+        $.ajax({
+            type: "POST",
+            url: "{{path('admin_seo_config_datatable_redirectdelete')}}",
+            data: {
+                config: config,
+                rule: rule
+            }
+        })
+            .done(function(response) {
+                unblockPage();
+
+                if (response.changed) {
+                    $(row).remove();
+                    $(table).DataTable().ajax.reload()
+                } else {
+                    alert('Rule not deleted')
+                }
+
+            });
+
+    }
     function editRow(row) {
         $.each($(row).find('td'), function (key, td) {
 

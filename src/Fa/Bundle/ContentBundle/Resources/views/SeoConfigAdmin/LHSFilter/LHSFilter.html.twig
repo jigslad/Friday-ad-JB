@@ -51,27 +51,6 @@
             </div>
         </div>
     </div>
-{#<div style="margin-top: 25px">#}
-{#        <div style="width: 100%" class="filter-order-category">#}
-{#            <label for="filter-category">Category</label>#}
-{#            <select id="filter-category">#}
-{#                {% for categoryGroup in categories %}#}
-{#                    {% if categoryGroup['children'] is defined %}#}
-{#                        <optgroup label="{{ categoryGroup['parent']['name'] }}">#}
-{#                            <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>#}
-{#                            {% for children in categoryGroup['children'] %}#}
-{#                                <option value="{{ children['id'] }}">{{ children['name'] }}</option>#}
-{#                            {% endfor %}#}
-{#                        </optgroup>#}
-{#                    {% else %}#}
-{#                        <optgroup label="{{ categoryGroup['parent']['name'] }}">#}
-{#                            <option value="{{ categoryGroup['parent']['id'] }}">Main Category | {{ categoryGroup['parent']['name'] }}</option>#}
-{#                        </optgroup>#}
-{#                    {% endif %}#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </div>#}
-{#    </div>#}
     <hr>
     <div style="margin-top: 25px">
         <label for="dimension-list"><h4>Filter Order</h4></label>
