@@ -31,7 +31,8 @@
 
 {% if showRegNoFieldsFlag %}
     {% set regNoDetailsOrderedFields = {13 : 'colour_id_autocomplete', 0 : 'colour_id', 1 : 'body_type_id', 2 : 'reg_year', 3 : 'fuel_type_id', 4 : 'transmission_id', 5 : 'engine_size', 6 : 'no_of_doors', 7 : 'no_of_seats', 8: 'fuel_economy', 9 : '062mph', 10 : 'top_speed', 11 : 'ncap_rating', 12 : 'co2_emissions', '14': 'colour_id_dimension_id'} %}
-    {% set regNoDetailsHiddenFields = {0: 'fuel_economy', 1 : '062mph', 2 : 'top_speed', 3 : 'ncap_rating', 4 : 'co2_emissions', 5: 'colour_id_dimension_id', 6: 'first_step_ordered_fields'} %}
+    {# {% set regNoDetailsHiddenFields = {0: 'fuel_economy', 1 : '062mph', 2 : 'top_speed', 3 : 'ncap_rating', 4 : 'co2_emissions', 5: 'colour_id_dimension_id', 6: 'first_step_ordered_fields'} %} #}
+    {% set regNoDetailsHiddenFields = {0: 'colour_id_dimension_id', 1: 'first_step_ordered_fields'} %}
 {% endif %}
 
 {% block body %}
