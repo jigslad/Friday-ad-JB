@@ -9,10 +9,10 @@
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(window).on('load', function() {
-    var callFromGlobal = '';
-	var isDragging = false;
+        var callFromGlobal = '';
+	    var isDragging = false;
 	
-    $("img.lazy").lazyload();
+        $("img.lazy").lazyload();
         {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
             saveSearchAgent();
         {% endif %}
