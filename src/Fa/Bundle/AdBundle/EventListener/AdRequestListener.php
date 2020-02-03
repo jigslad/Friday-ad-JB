@@ -190,11 +190,11 @@ class AdRequestListener
             }
         }
         
-        $uri = $request->getUri();
-        
-        if ($this->_301($request)) {
-            return true;
-        }
+//        $uri = $request->getUri();
+//
+//        if ($this->_301($request)) {
+//            return true;
+//        }
         
         /*$tiUrl = $request->get('ti_url');
          if ($tiUrl) {
