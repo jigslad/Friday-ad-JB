@@ -58,7 +58,7 @@
         {% if shopPackageCreditArr|length >0 %}
             {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
             {% set remainingFeaturedCredits = userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) %}
-            remainingFeaturedCredits==={{ dump(remainingFeaturedCredits) }}
+            
             {% if  remainingFeaturedCredits > totalFeaturedCredit %}
                 {% set usedFeaturedCredits = totalFeaturedCredit %}
             {% else %}

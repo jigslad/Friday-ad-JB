@@ -482,7 +482,8 @@ class ManageMyAdController extends CoreController
             $adIds         = $request->get('adIds', 0);
             $adStatusArray = array();
             $liveAdStatusArray = array();
-
+            $activeShopPackage = array();
+            
             $getBoostDetails = $this->getBoostDetails($loggedinUser);
 
             if ($adIds) {
