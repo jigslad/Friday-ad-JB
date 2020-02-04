@@ -129,6 +129,7 @@ class PaaFieldAdminType extends AbstractType
             )
             ->add('status', CheckboxType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getStatus()) ? true : false))
             ->add('is_required', CheckboxType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getIsRequired()) ? true : false))
+            ->add('hide_field', CheckboxType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getHideField()) ? true : false))
             ->add('is_recommended', CheckboxType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getIsRecommended()) ? true : false))
             ->add('help_text', TextareaType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getHelpText()) ? $this->paaFieldRule->getHelpText() : ''))
             ->add('error_text', TextareaType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getErrorText()) ? $this->paaFieldRule->getErrorText() : ''))

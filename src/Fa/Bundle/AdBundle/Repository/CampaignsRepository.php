@@ -266,6 +266,7 @@ class CampaignsRepository extends EntityRepository
             $PaaLiteFieldRule->setPlaceholderText($newPaaLiteField->getPlaceholderText());
             $PaaLiteFieldRule->setStatus($newPaaLiteField->getStatus());
             $PaaLiteFieldRule->setIsRequired($newPaaLiteField->getIsRequired());
+            $PaaLiteFieldRule->setHideField($newPaaLiteField->getHideField());
             $PaaLiteFieldRule->setIsRecommended($newPaaLiteField->getIsRecommended());
             $PaaLiteFieldRule->setHelpText($newPaaLiteField->getHelpText());
             $PaaLiteFieldRule->setErrorText($newPaaLiteField->getErrorText());
