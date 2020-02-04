@@ -159,9 +159,9 @@
                     <li>
                         <a href="javascript:" data-tab="#RedirectTab">Redirects</a>
                     </li>
-                    <li>
-                        <a href="javascript:" data-tab="#MotorsRedirectTab">Motors Redirect</a>
-                    </li>
+{#                    <li>#}
+{#                        <a href="javascript:" data-tab="#MotorsRedirectTab">Motors Redirect</a>#}
+{#                    </li>#}
                     <li>
                         <a href="javascript:" data-tab="#CrawlTab">Crawl Settings</a>
                     </li>
@@ -358,11 +358,12 @@
 
                     <div id="RedirectTab" class="tab">
                         {{ include('FaContentBundle:SeoConfigAdmin/Redirects:Redirects.html.twig') }}
-                    </div>
-
-                    <div id="MotorsRedirectTab" class="tab">
                         {{ include('FaContentBundle:SeoConfigAdmin/MotorsRedirect:MotorsRedirect.html.twig') }}
                     </div>
+
+{#                    <div id="MotorsRedirectTab" class="tab">#}
+{#                        {{ include('FaContentBundle:SeoConfigAdmin/MotorsRedirect:MotorsRedirect.html.twig') }}#}
+{#                    </div>#}
 
                     {#<div id="SitemapTab" class="tab">
 

@@ -66,5 +66,10 @@ class SeoConfigRepository extends EntityRepository
     {
         return $this->createQueryBuilder(self::ALIAS);
     }
+    public function getMaxDimRules(){
+        return $this->findOneBy([
+            'type' => self::MAX_DIM_RULES
+        ]);
+    }
 
 }

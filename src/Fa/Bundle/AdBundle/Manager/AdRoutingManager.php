@@ -102,12 +102,20 @@ class AdRoutingManager
         $dimension_slug = null;
         $cookieLocationDetails = null;
         $url = '';
+        $maxDim = $this->em->getRepository('FaContentBundle:SeoConfig')->getMaxDimRules();
+        if($maxDim){
+            $maxDim = $maxDim->getData();
+            $maxDimArry = explode('+',$maxDim[0]);
+            foreach ($maxDimArry as &$item){
+                $item = explode(':',$item);
 
+            }
+        }
         $search_params = array_map(array($this, 'removeEmptyElement'), $search_params);
         if(isset($search_params['hide_distance_block'])) {
             unset($search_params['hide_distance_block']);
         }
-        
+
         if(isset($search_params['default_distance'])) {
             unset($search_params['default_distance']);
         }
@@ -184,6 +192,7 @@ class AdRoutingManager
 
             return rtrim($url, '?');
         }
+        var_dump($this->router);
 
         //to redirect user back to same category level
         if (isset($search_params['leafLevelCategoryId']) && $search_params['leafLevelCategoryId']) {
@@ -194,7 +203,6 @@ class AdRoutingManager
         if (!$categories && isset($search_params['item__category_id'])) {
             $categories = array_keys($this->em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($search_params['item__category_id'], false, $this->container));
         }
-
 
         //$category = $this->em->getRepository('FaEntityBundle:Category')->getCategoryArrayById($search_params['item__category_id'], $this->container);
         $categoryId   = (isset($search_params['item__category_id']) ? $search_params['item__category_id'] : null);
