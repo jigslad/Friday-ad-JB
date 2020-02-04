@@ -192,7 +192,7 @@ class AdRoutingManager
 
             return rtrim($url, '?');
         }
-        var_dump($this->router);
+
 
         //to redirect user back to same category level
         if (isset($search_params['leafLevelCategoryId']) && $search_params['leafLevelCategoryId']) {
