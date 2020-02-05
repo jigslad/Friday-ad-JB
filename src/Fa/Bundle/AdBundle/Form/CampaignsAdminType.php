@@ -509,7 +509,6 @@ class CampaignsAdminType extends AbstractType
                 $PaaLiteFieldRule->setCampaign($campaign);
                 $PaaLiteFieldRule->setPaaLiteField($PaaLiteField);
                 $PaaLiteFieldRule->setIsAdded($fieldRule['is_added']);
-                $PaaLiteFieldRule->setHideField($fieldRule['hide_field']);
                 if ($field == 'photo_error') {
                     $PaaLiteFieldRule->setMinMaxType(PaaLiteFieldRuleRepository::MIN_MAX_TYPE_RANGE);
                 }
@@ -547,7 +546,6 @@ class CampaignsAdminType extends AbstractType
                 $PaaLiteFieldRule->setStep($fieldRule['step']);
                 $PaaLiteFieldRule->setIsAdded($fieldRule['is_added']);
                 $PaaLiteFieldRule->setCampaign($campaign);
-                $PaaLiteFieldRule->setHideField($fieldRule['hide_field']);
                 $this->em->persist($PaaLiteFieldRule);
                 $this->em->flush();
             }

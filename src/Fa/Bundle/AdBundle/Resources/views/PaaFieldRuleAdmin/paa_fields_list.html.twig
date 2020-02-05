@@ -1,5 +1,5 @@
 {% set openField = {} %}
-{% set fieldProperties = {1: 'label', 2: 'status', 3: 'is_required', 4: 'is_recommended', 5: 'help_text', 6: 'default_value', 7: 'min_length', 8: 'max_length', 9: 'step', 10: 'ord', 11: 'error_text',12:'is_added',13:'hidde_field'} %}
+{% set fieldProperties = {1: 'label', 2: 'status', 3: 'is_required', 4: 'is_recommended', 5: 'help_text', 6: 'default_value', 7: 'min_length', 8: 'max_length', 9: 'step', 10: 'ord', 11: 'error_text',12:'is_added',13:'hide_field'} %}
 {% for fieldProperty in fieldProperties %}
     {% if attribute(attribute(form, field), fieldProperty) is defined and attribute(attribute(form, field), fieldProperty).vars.errors|length %}
         {% set openField = openField|merge({(field): true}) %}
@@ -30,11 +30,11 @@
         </div>
         
         <div class="checkbox-row">
-            {{ form_widget(attribute(form, field).is_required) }}
+            {{ form_widget(attribute(form, field).is_required,{'attr':{'class':'showHideReqisHide'}}) }}
             {{ form_label(attribute(form, field).is_required) }}
             {{ form_errors(attribute(form, field).is_required) }}
 
-            {{ form_widget(attribute(form, field).hide_field) }}
+            {{ form_widget(attribute(form, field).hide_field,{'attr':{'class':'showHideReqisHide'}}) }}
             {{ form_label(attribute(form, field).hide_field) }}
             {{ form_errors(attribute(form, field).hide_field) }}
         </div>
@@ -76,19 +76,9 @@
                 {{ form_errors(attribute(form, field).step) }}
             </div>
         </div>
-        
+
         {{ form_widget(attribute(form, field).ord, {'attr': {'style': 'display:none'} }) }}
         {{ form_errors(attribute(form, field).ord) }}
         {{ form_widget(attribute(form, field).is_added) }}
     </div>
 </li>
-{% block scriptbottom %}
-    <script language="javascript" type="text/javascript">
-        //<![CDATA[
-        $(document).ready(function(){
-            $('#fa_ad_paa_field_rule_admin_ad_type_id_is_required').on('change', function() {
-                $('#fa_ad_paa_field_rule_admin_ad_type_id_hide_field').not(this).prop('checked', false);
-            });
-        });
-    </script>
-{% endblock %}
