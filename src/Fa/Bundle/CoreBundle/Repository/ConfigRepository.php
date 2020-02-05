@@ -33,6 +33,7 @@ class ConfigRepository extends EntityRepository
     const ADZUNA_MOTORS_FEED_USER_IDS = 15;
     const DOTMAILER_ENROLLMENT_PROGRAM_ID = 16;
     const MAPFIT_API_KEY_ID = 17;
+    const LIMIT_SPONSORED_ADS = 18;
 
     const DEFAULT_LOW_ENQUIERY_LIMIT = 10;
     const DEFAULT_LOW_VIEW_LIMIT = 100;
@@ -67,6 +68,7 @@ class ConfigRepository extends EntityRepository
             self::ADZUNA_MOTORS_FEED_USER_IDS => 'Adzuna motors feed user ids',
             self::DOTMAILER_ENROLLMENT_PROGRAM_ID => 'Dotmailer enrollment program id',
             self::MAPFIT_API_KEY_ID				  => 'MapFit Key',
+            SELF::LIMIT_SPONSORED_ADS             => 'LIMIT_SPONSORED_ADS',
         );
     }
 
@@ -121,5 +123,16 @@ class ConfigRepository extends EntityRepository
         } else {
             return self::DEFAULT_VAT_AMOUNT;
         }
+    }
+    public function getSponsoredLimit(){
+
+        $configRule = $this->_em->getRepository('FaCoreBundle:ConfigRule')->getActiveConfigRulesByCategoryId(self::LIMIT_SPONSORED_ADS, null, 1);
+
+        if ($configRule) {
+            return (int)$configRule[0]->getValue();
+        } else {
+            return 0;
+        }
+
     }
 }

@@ -9,7 +9,9 @@
 {% set customized_url = app.request.get('customized_page')  %}
 {% set catSrchString = null %}
 {% set recommendedSlotsCount = recommendedSlotResult|length %}
-{% if recommendedSlotsCount > 0 %}
+{% set recommendedSlotsLimit = fetch_repository('FaCoreBundle:Config').getSponsoredLimit() %}
+
+{% if (recommendedSlotsCount > 0) and (resultCount > recommendedSlotsLimit|number_format) %}
     {% set displayRecommendedSlot = 1 %}
 {% else %}
     {% set displayRecommendedSlot = 0 %}
