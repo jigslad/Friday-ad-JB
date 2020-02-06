@@ -100,7 +100,6 @@ class AdListController extends CoreController
      */
     public function searchResultAction(Request $request)
     {
-        echo '<pre>';
         //$requestlocation = ($request->cookies->get('location')!='')?$request->cookies->get('location'):($request->get('location')!=''?$request->get('location'):($request->attributes->get('location')?$request->attributes->get('location'):'uk'));
         $requestlocation = $request->get('location');
         $successPaymentModalbox = false;
@@ -271,11 +270,7 @@ class AdListController extends CoreController
         }
 
         $mapFlag = $request->get('map', false);
-
         $data    = $this->setDefaultParameters($request, $mapFlag, 'finders', $cookieLocationDetails);
-
-        $locationUrl = $this->container->get('fa_ad.manager.ad_routing')->getListingUrl(array_merge($data['search'], array('item__location' => 2)));
-
 
         $extendlocation = '';
         $extendRadius = '';
