@@ -101,16 +101,7 @@ class AdRoutingManager
         $user_slug = null;
         $dimension_slug = null;
         $cookieLocationDetails = null;
-        $url = '';
-        $maxDim = $this->em->getRepository('FaContentBundle:SeoConfig')->getMaxDimRules();
-        if($maxDim){
-            $maxDim = $maxDim->getData();
-            $maxDimArry = explode('+',$maxDim[0]);
-            foreach ($maxDimArry as &$item){
-                $item = explode(':',$item);
 
-            }
-        }
         $search_params = array_map(array($this, 'removeEmptyElement'), $search_params);
         if(isset($search_params['hide_distance_block'])) {
             unset($search_params['hide_distance_block']);
@@ -182,15 +173,7 @@ class AdRoutingManager
             }
 
             $query = http_build_query(array_map(array($this, 'removeBlankElement'), $search_params));
-
-            $url = $this->router->generate('listing_page', array(
-                'location' => $location,
-                'page_string' => 'search',
-            ), true).'?'.$query;
-
-            //$url = preg_replace('/\/+/', '/', $url);
-
-            return rtrim($url, '?');
+            return $this->getMaxDim($location,'search',$query,null);
         }
 
 
@@ -391,26 +374,67 @@ class AdRoutingManager
             $targetUrl = $this->em->getRepository('FaContentBundle:SeoTool')->getCustomizedTargetUrl($pageString.'/?'.$query, $this->container);
             if ($targetUrl) {
                 $pageString = rtrim($targetUrl, '/');
-                return $this->router->generate('listing_page', array(
-                        'location' => $location,
-                        'page_string' => $pageString,
-                ), true);
+                return $this->getMaxDim($location,$pageString,null,null);
             }
         }
+        return $this->getMaxDim($location,$pageString,rawurldecode($query),$user_slug);
+    }
 
-        if ($user_slug != '') {
-            $url = $this->router->generate('show_business_user_ads_location', array(
-                'location' => $location,
-                'profileNameSlug' => $user_slug,
-                'page_string' => $pageString,
-            ), true).'?'.rawurldecode($query);
-        } else {
+    /**
+     * get Max Dim url based on search parameters
+     *
+     * @param string $location
+     * @param string $pageString
+     * @param string $query
+     * @param string $profileNameSlug
+     * @param string $url
+     *
+     * @return string
+     */
+    public function getMaxDim($location,$pageString,$query,$profileNameSlug){
+        $url = '';
+        $maxDim = $this->em->getRepository('FaContentBundle:SeoConfig')->getMaxDimRules();
+        $maxDimArray = '';
+        if($maxDim){
+            $maxDim = $maxDim->getData();
+            $maxDimArray = explode('+',$maxDim[0]);
+            foreach ($maxDimArray as &$item){
+                $tempitem = explode(':',$item);
+                $item = [];
+                $item[$tempitem[0]] = $tempitem[1];
+            }
+        }
+        if($query != null) {
+            if ($profileNameSlug != '') {
+                $url = $this->router->generate('show_business_user_ads_location', array(
+                        'location' => $location,
+                        'profileNameSlug' => $profileNameSlug,
+                        'page_string' => $pageString,
+                    ), true) . '?' . $query;
+            } else {
+                if($pageString='search'){
+                    $url = $this->router->generate('listing_page', array(
+                            'location' => $location,
+                            'page_string' => 'search',
+                        ), true).'?'.$query;
+
+                }
+                else{
+                    $url = $this->router->generate('listing_page', array(
+                            'location' => $location,
+                            'page_string' => $pageString,
+                        ), true) . '?' . $query;
+                }
+            }
+            return rtrim($url, '?');
+        }
+        else{
             $url = $this->router->generate('listing_page', array(
                 'location' => $location,
                 'page_string' => $pageString,
-            ), true).'?'.rawurldecode($query);
+            ), true);
+            return $url;
         }
-        return rtrim($url, '?');
     }
 
     /**
