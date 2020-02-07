@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\AdBundle\Repository;
 
+use SimpleXMLElement;
 use Doctrine\ORM\EntityRepository;
 use Fa\Bundle\UserBundle\Repository\UserRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
@@ -1595,9 +1596,12 @@ class AdRepository extends EntityRepository
                         $adDetailAndDimensionFields[$key][$adDetailFieldLabel] = $fieldValue.$unit;
                     }
                 }
-            } elseif (array_key_exists($adDetailField, $metaDataValues) && $adDetailField != 'RATES_ID') {
+            }
+            elseif (array_key_exists($adDetailField, $metaDataValues) && $adDetailField != 'RATES_ID') {
                 if ($repositoryName) {
                     $fieldValues = explode(',', $metaDataValues[$adDetailField]);
+                    var_dump($adDetailField);
+                    exit();
                     if (count($fieldValues) > 1) {
                         foreach ($fieldValues as $fieldVal) {
                             if ($seoFlag) {
@@ -1651,7 +1655,11 @@ class AdRepository extends EntityRepository
                 }
             }
         }
-
+        if(isset($adDetailAndDimensionFields['detail']['Ethnicity '])){
+            $link = new SimpleXMLElement($adDetailAndDimensionFields['detail']['Category']);
+            $newlink = $link['href'].$adDetailAndDimensionFields['detail']['Ethnicity '].'/';
+            $adDetailAndDimensionFields['detail']['Ethnicity '] = '<a href="'.$newlink.'">'.$adDetailAndDimensionFields['detail']['Ethnicity '].'</a>';
+        }
         return $adDetailAndDimensionFields;
     }
 
