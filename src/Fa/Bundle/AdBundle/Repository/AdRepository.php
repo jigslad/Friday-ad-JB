@@ -1600,8 +1600,6 @@ class AdRepository extends EntityRepository
             elseif (array_key_exists($adDetailField, $metaDataValues) && $adDetailField != 'RATES_ID') {
                 if ($repositoryName) {
                     $fieldValues = explode(',', $metaDataValues[$adDetailField]);
-                    var_dump($adDetailField);
-                    exit();
                     if (count($fieldValues) > 1) {
                         foreach ($fieldValues as $fieldVal) {
                             if ($seoFlag) {
