@@ -194,7 +194,6 @@ class AdPostType extends AbstractType
                 // First: if field is defined in PAA field rules of parent category.
                 foreach ($paaFieldRules as $paaFieldRule) {
                     $paaField = $paaFieldRule['paa_field'];
-
                     // show only active fields from rule
                     if ($paaFieldRule['status'] && (! $this->step || ($paaFieldRule['step'] == $this->step))) {
                         if ($paaField['field'] == 'location') {

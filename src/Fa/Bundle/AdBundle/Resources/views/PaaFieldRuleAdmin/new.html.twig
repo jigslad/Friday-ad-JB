@@ -94,6 +94,9 @@
     <script language="javascript" type="text/javascript">
     //<![CDATA[
     $(document).ready(function(){
+        var fieldList = document.querySelectorAll("[id$=_is_required]");
+        fieldList.forEach(onclickRequired);
+
         $("#fa_ad_paa_field_rule_admin_category_id").on("change", function(e) { 
             var category_id = e.val;
             var route = Routing.generate('paa_field_rule_new_admin');
@@ -127,35 +130,35 @@
                 }
               }
         });
-
-
-        $('input[type="checkbox"].showHideReqisHide').click(function(){
-            var clickedParentId = $(this).closest('div.sortable-content').attr('id');
-            var clickedId = $(this).attr('id');
-            var fieldId = clickedParentId.replace('paa_field_rule_div_','');
-            var exactDivId = 'fa_ad_paa_field_rule_admin_'+fieldId;
-            //$('input[type="checkbox"].showHideReqisHide').not(this).prop('checked', false);
-
-            //alert(exactDivId);
-
-            if('#'+clickedId == '#'+exactDivId+'_is_required') {
-
-                if($(this).prop("checked") == true){
-                    $('#'+exactDivId+'_hide_field').prop('checked', false);
-                } else {
-                    $('#'+exactDivId+'_hide_field').prop('checked', true);
-                }
-            }
-
-            if('#'+clickedId == '#'+exactDivId+'_hide_field') {
-                if($(this).prop("checked") == true){
-                    $('#'+exactDivId+'_is_required').prop('checked', false);
-                } else {
-                    $('#'+exactDivId+'_is_required').prop('checked', true);
-                }
-            }
-        });
     });
+
+    function onclickRequired(item, index) {
+        //console.log(index);
+        //console.log(item.checked);
+        var allIds = item.id;
+        var requiredId = allIds.replace('_is_required','');
+        var hideField = requiredId+'_hide_field';
+
+        if($('#'+requiredId+'_is_required').prop('checked') == true) {
+            $('#'+requiredId+'_hide_field').attr('checked',false);
+        }/*else{
+            $('#' + hideField + '').show();
+            $('label[for=' + hideField + ']').show();
+        }*/
+
+        /*$('#'+requiredId+'_is_required').click(function(){
+            if($('#'+requiredId+'_is_required').prop('checked') == false){
+                //console.log($(hideField));
+                $('#'+hideField+'').show();
+                $('label[for='+hideField+']').show();
+            }else {
+                /!*$('#'+hideField+'').hide();
+                $('label[for='+hideField+']').hide();*!/
+            }
+        });*/
+    }
+
+
     //]]>
     </script>
     {% if (form.category_id) is defined %}
