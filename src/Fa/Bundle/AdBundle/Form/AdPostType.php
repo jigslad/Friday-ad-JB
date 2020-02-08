@@ -195,7 +195,7 @@ class AdPostType extends AbstractType
                 foreach ($paaFieldRules as $paaFieldRule) {
                     $paaField = $paaFieldRule['paa_field'];
                     // show only active fields from rule
-                    if ($paaFieldRule['status'] && (! $this->step || ($paaFieldRule['step'] == $this->step))) {
+                    if (!$paaFieldRule['hide_field'] && $paaFieldRule['status'] && (! $this->step || ($paaFieldRule['step'] == $this->step))) {
                         if ($paaField['field'] == 'location') {
                             $this->addLocationAutoSuggestField($form, $ad, $paaFieldRule);
                         } elseif ($this->getPaaFieldType($paaField) == 'autosuggest') {
