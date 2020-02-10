@@ -1,18 +1,26 @@
-{{ include('FaFrontendBundle::main-css.html.twig') }}
-{{ include('FaFrontendBundle::jquery-js.html.twig') }}
+{# {% stylesheets filter='scssphp' output='bundles/css/compiled/fad-scss-main.css'
+    'bundles/fafrontend/scss/global.scss'
+%}
+    <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
+{% endstylesheets %} #}
+{{ include('FaFrontendBundle::newstyle.html.twig') }}
 
-{% javascripts filter='uglifyjs2' output='bundles/js/compiled/main.js'
-    'bundles/facore/js/common.js'
-    'bundles/fafrontend/js/vendor/modernizr.js'
+<link href="https://fonts.googleapis.com/css?family=Asap:400,400i,500,500i,600,600i,700,700i&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Bree+Serif&display=swap" rel="stylesheet"> 
+<link rel="stylesheet" href="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/assets/owl.theme.default.min.css">
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/10.0.0/nouislider.css">
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+{% javascripts filter='uglifyjs2' output='bundles/js/compiled/fad-scss-main.js'
+    'bundles/fafrontend/newjs/bootstrap.min.js'
     'bundles/fosjsrouting/js/router.js'
-    'bundles/fafrontend/js/vendor/select2.min.js'
-    'bundles/fafrontend/js/vendor/fastclick.js'
-    'bundles/fafrontend/js/foundation.min.js'
-    'bundles/fafrontend/js/foundation/foundation.datepicker.js'
-    'bundles/fafrontend/js/vendor/jquery-ui.min.js'
-    'bundles/fafrontend/js/vendor/jquery.nouislider.all.min.js'
-    'bundles/facore/js/jquery.blockUI.min.js'
+    'bundles/fafrontend/newjs/modernizr.custom.js'
+    'bundles/fafrontend/newjs/jquery.dlmenu.js'
+    'bundles/fafrontend/newjs/custom.js'
 %}
 <script src="{{ static_asset_url(asset_url) }}"></script>
-
 {% endjavascripts %}

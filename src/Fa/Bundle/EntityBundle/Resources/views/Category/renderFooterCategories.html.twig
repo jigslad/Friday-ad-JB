@@ -1,19 +1,16 @@
 {% set container = fetch_container_instance() %}
 {% cache 'home|page|'~location_id~'front/home_page_footer' (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 1800) %}
 {% set getNoFollowLink = fetch_repository('FaEntityBundle:Category').getCategoryNoFollowLink(app.request.get('searchQueryString')) %}
-<div class="large-18 columns">
+
 {% if footerCategories|length %}
     {% for categoryId, categoryArray in footerCategories %}
         <div class="category-links">
             {% if categoryArray['category_name'] is defined %}
-                <div class="row">
-                    {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['category_full_slug']) %}
-                    <div class="columns">
-                        <h6 class="footer-head">
-                            <a href="{{ listurl }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} >{{categoryArray['category_name']}}</a>
-                        </h6>
-                    </div>
-                </div>
+                {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['category_full_slug']) %}
+                <h6 class="footer-head">
+                    <a href="{{ listurl }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} >{{categoryArray['category_name']}}</a>
+                </h6>                    
+
                 {% if categoryArray['children'] is defined and categoryArray['children']|length %}
                     {% if categoryArray['root_category_id'] == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
                         {% set freeToCollectorUrl = container.get('fa_ad.manager.ad_routing').getListingUrl({'item__category_id': constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 'item__ad_type_id' : constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_TYPE_FREETOCOLLECTOR_ID'), 'item__location': location}) %}
@@ -43,11 +40,11 @@
                         {% endif %}
                     {% endfor %}
 
-                    <div class="row">
+                    <div class="list-parent-link">
+                    	<ul>
                         {% set subCategoryArray = categoryArray['children'] %}
-                        {% for i in 0..columns-1 %}
-                            {% if i == 0 %}<div class="large-16 columns">{% endif %}
-                            <div {% if i == 2 %}class="large-8 columns"{% else %}class="large-12 columns"{%endif%}>
+                        {% for i in 0..columns-1 %}                            
+                            <li class="list-child-link">
                                 {% for k in 0..colCounter[i]-1 %}
                                     {% if subCategoryArray[ctr] is defined %}
                                         {% if subCategoryArray[ctr]['is_static'] is defined and subCategoryArray[ctr]['is_static'] %}
@@ -59,14 +56,13 @@
                                     {% endif %}
                                     {% set ctr = ctr + 1 %}
                                 {% endfor %}
-                            </div>
-                            {% if i == 1 %}</div>{% endif %}
+                            </li>                            
                         {% endfor %}
+                        </ul>
                     </div>
                 {% endif %}
             {% endif %}
         </div>
     {% endfor %}
 {% endif %}
-</div>
 {% endcache %}

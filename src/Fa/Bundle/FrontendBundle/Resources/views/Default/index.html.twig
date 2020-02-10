@@ -38,7 +38,7 @@
     {% endif %}
 {% endblock %}
 {% block scripttop %}
-    {{ include('FaFrontendBundle:Default:home-css.html.twig') }}
+    {{ include('FaFrontendBundle:scss:homecontent-css.html.twig') }}
 {% endblock %}
 
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -50,7 +50,7 @@
 {% endif %}
     
 {% block body %}
-    <div class="{% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}homepage-hero{% endif %}">
+    <div class="container-fluid {% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}homepage-hero{% endif %}">
         <div class="hero-img">
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isHomeSearch': true } )) }}
             <div class="parallax-window" id="header_image_div"></div>
@@ -58,8 +58,9 @@
     </div>
 
     <div class="what-u-discover">
+        <div class="container">
         <div class="row">
-            <div class="columns">
+            <div class="col-md-24">
                 {% set forSaleId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
                 {% set motorsId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
                 {% set jobsId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
@@ -73,36 +74,36 @@
                     {% set locationId = cookieLocationDetails.location %}
                 {% endif %}
                 {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %}
-                <div class="discover-categories">
+                <ul class="discover-categories" style="margin-top: 0px;">
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': forSaleId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" class="discover-forsale">{{'For Sale'|trans({}, 'frontend-homepage')}}</a>
+                    <li class="discover-forsale"><a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}">{{'For Sale'|trans({}, 'frontend-homepage')}}</a></li>
 
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': motorsId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" class="discover-motors">{{'Motors'|trans({}, 'frontend-homepage')}}</a>
+                    <li class="discover-motors"><a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}">{{'Motors'|trans({}, 'frontend-homepage')}}</a></li>
 
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': jobsId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" class="discover-jobs">{{'Jobs'|trans({}, 'frontend-homepage')}}</a>
+                    <li class="discover-jobs"><a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}">{{'Jobs'|trans({}, 'frontend-homepage')}}</a></li>
 
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': servicesId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-services">{{'Services'|trans({}, 'frontend-homepage')}}</a>
+                    <li class="discover-services"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}">{{'Services'|trans({}, 'frontend-homepage')}}</a></li>
 
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': propertyId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" class="discover-property">{{'Property'|trans({}, 'frontend-homepage')}}</a>
+                    <li class="discover-property"><a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}">{{'Property'|trans({}, 'frontend-homepage')}}</a></li>
 
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': animalsId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}" class="discover-animals">{{'Animals'|trans({}, 'frontend-homepage')}}</a>
+                    <li class="discover-animals"><a href="{{ container.get('fa_ad.manager.ad_routing').getCategoryLandingPageUrl(linkParams) }}">{{'Animals'|trans({}, 'frontend-homepage')}}</a></li>
 
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': communityId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-community">{{'Community'|trans({}, 'frontend-homepage')}}</a>
+                    <li class="discover-community"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}">{{'Community'|trans({}, 'frontend-homepage')}}</a></li>
                     
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': adultId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-adult">{{'Adult'|trans({}, 'frontend-homepage')}}</a>
-                </div>
+                    <li class="discover-adult"><a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}">{{'Adult'|trans({}, 'frontend-homepage')}}</a></li>
+                </ul>
                 {% endcache %}
             </div>
         </div>
-    </div>
-
+    	</div>
+	</div>
     {% if recommendedAds|length >= 3 %}
         <div class="homepage-row">
             <div class="row">

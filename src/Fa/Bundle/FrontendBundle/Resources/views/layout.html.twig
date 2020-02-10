@@ -115,9 +115,6 @@
 
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
-    {{ include('FaFrontendBundle::fa-main-css.html.twig') }}
-    
-    {# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
   
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
@@ -339,5 +336,5 @@
         	{% set zendeskUrl = 'https://help.friday-ad.co.uk/hc/en-us/sections/360000432234-Managing-your-Adverts' %}
             {{ include('FaFrontendBundle::zendeskHelp.html.twig', {'url': zendeskUrl}) }}
         {% endif %}
-    </body>
+    </body>   
 </html>

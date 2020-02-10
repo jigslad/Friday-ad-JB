@@ -1,21 +1,29 @@
-<header class="relative">
-    {% if status_code == 200 %}
-        {% if currentRoute == 'ad_detail_page' %}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER_TABLET') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-        {% else %}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER_TABLET') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-        {% endif %}
+{% block stylesheets %}
+{# {% stylesheets filter='scssphp' output='bundles/css/compiled/fad-scss-header.css'
+    'bundles/fafrontend/scss/header.scss'
+%}
+    <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
+{% endstylesheets %} #}
+{% endblock %} 
+{{ include('FaFrontendBundle:scss:header.html.twig') }}
+{% if status_code == 200 %}
+    {% if currentRoute == 'ad_detail_page' %}
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER_TABLET') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+    {% else %}
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER_TABLET') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
     {% endif %}
-    <div class="top-links hide-for-small-only">
+{% endif %}
+<div class="top-links d-none d-sm-block">
+    <div class="container">
         <div class="row">
-            <div class="columns">
-                {% if app.user %}
+            <div class="col-xs-24 col-sm-24 col-md-24 pr0 pl0">
+            	{% if app.user %}
                     {% set messageRepository = fetch_repository('FaMessageBundle:Message') %}
                     {% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
                     {% set userRole = fetch_repository('FaUserBundle:User').getUserRole(app.user.getId(), container) %}
@@ -71,95 +79,102 @@
                     </ul>
                 {% else %}
                     <ul class="clearfix">
-                        <li><a href="{{ path('login') }}" id="login-header-id">{{'Log In'|trans({}, 'frontend-header-usermenu')}}</a>|</li>
-                        <li><a href="{{ path('fa_user_register') }}" id="register-header-id">{{'Register'|trans({}, 'frontend-header-usermenu')}}</a></li>
+                        <li><a href="/login/" id="login-header-id">Log In</a>|</li>
+                        <li><a href="/register/" id="register-header-id">Register</a></li>
                     </ul>
-                {% endif %}
-
-            </div>
-        </div>
-    </div>
-
-   {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
-   <div id="sticky_nav_top">
-    <div class="nav-bg {% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}homepage-nav{% endif %}">
-        <div class="row">
-            <div class="columns">
-                {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'}  and not app.request.attributes.get('static_page') %}
-                    <div id="sticky_nav" class="sticky">
-                {% endif %}
-                <nav class="top-bar" id="top_bar_nav" data-topbar="" data-options="sticky_on: large">
-                    <ul class="title-area">
-                        <li class="name">
-                        {% if currentRoute not in {0: 'landing_page_category', 1: 'landing_page_category_location', 2: 'listing_page', 3: 'motor_listing_page', 4: 'ad_detail_page'} %}
-                        <h1>
-                        {% endif %}
-                             <a href="{{ path('fa_frontend_homepage') }}" class="logo {% if showTiLogo %}tradeit-logo{% endif %}">{% if showTiLogo %}<img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% else %}<img src="{{ asset_url('fafrontend/images/fad-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% endif %}</a>
-                        {% if currentRoute not in {0: 'landing_page_category', 1: 'landing_page_category_location', 2: 'listing_page', 3: 'motor_listing_page', 4: 'ad_detail_page'} %}
-                        </h1>
-                        {% endif %}
-                        </li>
-                        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-                        <li class="toggle-topbar menu-icon" id="mobile_menu_li"><a href="javascript:void(0);"><span class="menu" id="top_bar_nav_menu_span"></span></a></li>
-                        {% if currentRoute not in {0: 'cybersource_checkout', 1: 'fa_frontend_homepage'} %}
-                            <li class="show-for-small-only search-icon" id="mobile_search_li"><a href="javascript:void(0)" class="search">Search</a></li>
-                        {% endif %}
-                    </ul>
-                    <section class="top-bar-section">
-                        <!-- Right Nav Section -->
-                       <div class="tablet-menu">
-                            {% if mobileDetectManager.isTablet() %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
-                            {% elseif mobileDetectManager.isMobile() %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
-                            {% else %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
-                            {% endif %}
-                        </div>
-                        <ul class="show-for-small-only login-menu">
-                            {% if app.user %}
-                                <li>
-                                    <a href="javascript:void(0);" class="logged-in-user">
-                                    {% if app.user.getFirstName() or  app.user.getLastName() %}
-                                        {{app.user.getFirstName()}} {{app.user.getLastName()}}
-                                    {% else %}
-                                        {{app.user.getUsername()}}
-                                    {% endif %}
-                                    </a>
-                                </li>
-                                {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
-                                {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'mobile_menu' })) }}
-                                {% endif %}
-                                <li><a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
-                                
-                                {% if userDetail|length > 0 %}
-	                            <li>
-                                    <a href="{{ path('show_cart') }}">Cart <span class="notification-digit">({{ userDetail|length }})</span></a>
-                                </li>
-                                {% endif %}
-                                
-                                <li><a href="{{ path('logout') }}" id="mob-logout-header-id">{{'Log Out'|trans({}, 'frontend-top-menu')}}</a></li>
-                            {% else %}
-                                <li><a href="{{ path('login') }}" id="mob-login-header-id">{{'Log In'|trans({}, 'frontend-top-menu')}}</a></li>
-                                <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
-                            {% endif %}
-                        </ul>
-                        <ul class="right place-item">
-                            <li class="place-item-btn"><a href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a></li>
-                        </ul>
-                    </section>
-                </nav>
-                {% if status_code == 200 and currentRoute is defined and currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}
-                    </div>
                 {% endif %}
             </div>
         </div>
-        <div class="dropdown-bg"></div>
     </div>
 </div>
-    {% if status_code == 200 %}
-        {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout'} %}
-            {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
+
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+<div id="sticky_nav_top" class="">
+<nav class="navbar navbar-expand-sm navbar-dark top-bar-section" id="top_bar_nav">
+    <div class="container row mob-container">
+    	<a href="{{ path('fa_frontend_homepage') }}" class="navbar-brand {% if showTiLogo %}tradeit-logo{% endif %}">{% if showTiLogo %}<img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% else %}<img src="{{ asset_url('fafrontend/images/fad-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% endif %}</a>   
+    <button  onclick="handleMobileMenu()" class="navbar-toggler nav-icon" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="menu" id="top_bar_nav_menu_span"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    	{% if mobileDetectManager.isTablet() %}
+    		<ul class="navbar-nav ml-auto t-navbar-block">
+            <li class="nav-item">
+                <a class="nav-link dropdown-toggle tab_cat_link" href="#" id="tab_cat_link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
+                <div class="dropdown-menu f-width" aria-labelledby="tab_cat_link">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+            {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        	</li>
+        	</ul>
+        {% elseif mobileDetectManager.isMobile() %}
+        	<div class="m-navbar-block">
+                <ul class="d-block d-md-none mobile-menu-items">
+                    <li class="m-list-menu">
+                    <div class="demo-2">
+            		<div class="main clearfix">
+            			<div id="dl-menu" class="dl-menuwrapper">
+            				<button class="dl-trigger" style="width:100%;">Menu</button>
+            				<ul class="dl-menu dl-menuopen">
+                    {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}                    
+                    		</ul>
+                    	</div>
+                    </div>
+                    </div>
+                    </li>
+                </ul>
+                <ul class="d-block d-md-none login-menu">
+                    {% if app.user %}
+                        <li>
+                            <a href="javascript:void(0);" class="logged-in-user">
+                            {% if app.user.getFirstName() or  app.user.getLastName() %}
+                                {{app.user.getFirstName()}} {{app.user.getLastName()}}
+                            {% else %}
+                                {{app.user.getUsername()}}
+                            {% endif %}
+                            </a>
+                        </li>
+                        {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+                        {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'mobile_menu' })) }}
+                        {% endif %}
+                        <li><a href="{{ path('user_ad_message') }}" id="mob-inbox-header-id">{{'MESSAGES'|trans({}, 'inbox')}}{% if totalUnreadMsg > 0 %}&nbsp;<span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</a></li>
+                        
+                        {% if userDetail|length > 0 %}
+                        <li>
+                            <a href="{{ path('show_cart') }}">Cart <span class="notification-digit">({{ userDetail|length }})</span></a>
+                        </li>
+                        {% endif %}
+                        
+                        <li><a href="{{ path('logout') }}" id="mob-logout-header-id">{{'Log Out'|trans({}, 'frontend-top-menu')}}</a></li>
+                    {% else %}
+                        <li><a href="{{ path('login') }}" id="mob-login-header-id">{{'Log In'|trans({}, 'frontend-top-menu')}}</a></li>
+                        <li><a href="{{ path('fa_user_register') }}" id="mob-register-header-id">{{'Register'|trans({}, 'frontend-top-menu')}}</a></li>
+                    {% endif %}                        
+                </ul>
+            </div>
+            {# { render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) } #}
+        {% else %}
+        	<ul class="navbar-nav ml-auto desktop-block">
+            {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+        	</ul>
         {% endif %}
+ 
+        <ul class="place-item">
+            <li class="place-item-btn text-center"><a href="{{ path('ad_post_first_step') }}" title="Place an ad">Place an ad</a></li>
+        </ul>
+  </div>
+</div>
+</nav>
+
+{% if status_code == 200 %}
+    {% if currentRoute not in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'cybersource_checkout'} %}
+        {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {} } )) }}
     {% endif %}
-</header>
+{% endif %}
+
