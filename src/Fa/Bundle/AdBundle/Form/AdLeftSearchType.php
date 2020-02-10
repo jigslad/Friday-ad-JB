@@ -439,7 +439,7 @@ class AdLeftSearchType extends AbstractType
 
         foreach ($data as $config) {
             $datum = json_decode($config['data'], true, 512);
-            $moreFilterEntityIds = explode(',', data_get($datum, '_more_filter_entities_', ''));
+            $moreFilterEntityIds = explode(',', CommonManager::data_get($datum, '_more_filter_entities_', ''));
         }
 
         if (!empty($moreFilterEntityIds)) {
@@ -471,7 +471,7 @@ class AdLeftSearchType extends AbstractType
         $values = [];
         foreach ($ids as $id) {
 
-            if (!empty($data = data_get($entities, $id))) {
+            if (!empty($data = CommonManager::data_get($entities, $id))) {
                 $values[$id] = $data;
             }
         }

@@ -1510,7 +1510,7 @@ class AdRequestListener
         : $this->querySeoConfigs();
         
         return $type
-        ? data_get($data, $type, [])
+        ? CommonManager::data_get($data, $type, [])
         : $data;
     }
     
@@ -1531,8 +1531,8 @@ class AdRequestListener
         
         $configs = [];
         foreach ($data as $config) {
-            $type = data_get($config, 'type');
-            $values = json_decode(data_get($config, 'data'), true, 512);
+            $type = CommonManager::data_get($config, 'type');
+            $values = json_decode(CommonManager::data_get($config, 'data'), true, 512);
             
             $forceFormat = false;
             if (in_array($type, [SeoConfigRepository::REDIRECTS])) {
@@ -1578,7 +1578,7 @@ class AdRequestListener
             } elseif (!is_array($item) && $forceFormat == 'assoc') {
                 // Forcing array to be assoc, where the first value before first ':' will be the key.
                 $items = explode(':', $item);
-                $key = array_first($items);
+                $key = CommonManager::array_first($items);
                 unset($items[0]);
                 $value = implode(':', $items);
                 $data[$key] = $value;
@@ -1629,14 +1629,14 @@ class AdRequestListener
         
         // Get the path & query Segments
         $segments = parse_url($url);
-        $query = parse_query(data_get($segments, 'query', ''));
-        $path = array_values(array_filter(explode('/', strtolower(data_get($segments, 'path', ''))), function ($item) {
+        $query = parse_query(CommonManager::data_get($segments, 'query', ''));
+        $path = array_values(array_filter(explode('/', strtolower(CommonManager::data_get($segments, 'path', ''))), function ($item) {
             return !empty($item) && !substr_exist($item, '.php');
         }));
             
             // Prep Location Name, Category Name
-            $location = strtolower(data_get($path, '0', ''));
-            $categoryName = str_replace('-for-sale', '', strtolower(data_get($path, '1', '')));
+            $location = strtolower(CommonManager::data_get($path, '0', ''));
+            $categoryName = str_replace('-for-sale', '', strtolower(CommonManager::data_get($path, '1', '')));
             $entities = array_slice($path, 2);
             
             // Expand the query param values.
@@ -1687,41 +1687,41 @@ class AdRequestListener
             foreach ($crawlConfigs as $crawlConfig) {
                 
                 // Is Category Filter enabled
-                if (!empty($categories = data_get($crawlConfig, 'category', []))) {
+                if (!empty($categories = CommonManager::data_get($crawlConfig, 'category', []))) {
                     
                     // Does Crawl Category config match with URL categories.
-                    if (empty(array_intersect(data_get($urlConfig, 'category', []), $categories))) {
+                    if (empty(array_intersect(CommonManager::data_get($urlConfig, 'category', []), $categories))) {
                         continue;
                     }
                 }
                 
                 
                 // Is Dimension Filter enabled
-                if (!empty($dimensions = data_get($crawlConfig, 'dimension'))) {
+                if (!empty($dimensions = CommonManager::data_get($crawlConfig, 'dimension'))) {
                     // Does Crawl Dimension config match with URL dimensions.
-                    $intersectDimensions = array_intersect(data_get($urlConfig, 'dimension', []), $dimensions);
+                    $intersectDimensions = array_intersect(CommonManager::data_get($urlConfig, 'dimension', []), $dimensions);
                     if (empty($intersectDimensions) || (!empty($intersectDimensions) && count($intersectDimensions) != count($dimensions))) {
                         continue;
                     }
                 }
                 
                 // Is region filter enabled
-                if (data_get($crawlConfig, 'region', false)) {
-                    if (!data_get($urlConfig, 'region', false)) {
+                if (CommonManager::data_get($crawlConfig, 'region', false)) {
+                    if (!CommonManager::data_get($urlConfig, 'region', false)) {
                         continue;
                     }
                 }
                 
                 // Is county filter enabled
-                if (data_get($crawlConfig, 'county', false)) {
-                    if (!data_get($urlConfig, 'county', false)) {
+                if (CommonManager::data_get($crawlConfig, 'county', false)) {
+                    if (!CommonManager::data_get($urlConfig, 'county', false)) {
                         continue;
                     }
                 }
                 
                 // Is town filter enabled
-                if (data_get($crawlConfig, 'town', false)) {
-                    if (!data_get($urlConfig, 'town', false)) {
+                if (CommonManager::data_get($crawlConfig, 'town', false)) {
+                    if (!CommonManager::data_get($urlConfig, 'town', false)) {
                         continue;
                     }
                 }
@@ -1749,17 +1749,17 @@ class AdRequestListener
         
         return array_map(function ($crawlConfig) {
             return [
-                'category' => array_filter(array_wrap(data_get($crawlConfig, 'category', [])), function (&$categoryId) {
+                'category' => array_filter(array_wrap(CommonManager::data_get($crawlConfig, 'category', [])), function (&$categoryId) {
                 $categoryId = (int)$categoryId;
                 return $categoryId > 0;
                 }),
-                'dimension' => array_filter(array_wrap(data_get($crawlConfig, 'dimension', [])), function (&$dimensionId) {
+                'dimension' => array_filter(array_wrap(CommonManager::data_get($crawlConfig, 'dimension', [])), function (&$dimensionId) {
                 $dimensionId = (int)$dimensionId;
                 return $dimensionId > 0;
                 }),
-                'region' => filter_var(data_get($crawlConfig, 'region', false), FILTER_VALIDATE_BOOLEAN),
-                'county' => filter_var(data_get($crawlConfig, 'county', false), FILTER_VALIDATE_BOOLEAN),
-                'town' => filter_var(data_get($crawlConfig, 'town', false), FILTER_VALIDATE_BOOLEAN),
+                'region' => filter_var(CommonManager::data_get($crawlConfig, 'region', false), FILTER_VALIDATE_BOOLEAN),
+                'county' => filter_var(CommonManager::data_get($crawlConfig, 'county', false), FILTER_VALIDATE_BOOLEAN),
+                'town' => filter_var(CommonManager::data_get($crawlConfig, 'town', false), FILTER_VALIDATE_BOOLEAN),
                 ];
         }, $crawlConfigs);
     }
@@ -1808,7 +1808,7 @@ class AdRequestListener
     {
         $pageStringParts = array_filter(explode('/', $request->get('page_string')));
         $categoryString = array_shift($pageStringParts);
-        $adStringAndAdIdParts = explode('-', array_first($pageStringParts));
+        $adStringAndAdIdParts = explode('-', CommonManager::array_first($pageStringParts));
         $adId = array_last($adStringAndAdIdParts);
         unset($adStringAndAdIdParts[count($adStringAndAdIdParts) - 1]);
         $adStringLength = strlen(implode('-', $adStringAndAdIdParts));
@@ -1816,7 +1816,7 @@ class AdRequestListener
         if (($adStringLength > 0 && $adStringLength < 7 && $this->isAd($adId)) || ($adStringLength >= 7 && $this->isAd($adId))) {
             
             $request->attributes->set('_route', 'ad_detail_page');
-            $adString = array_first($adStringAndAdIdParts);
+            $adString = CommonManager::array_first($adStringAndAdIdParts);
             $routeParams = [
                 'location' => $request->get('location'),
                 'category_string' => $categoryString,
@@ -1848,7 +1848,7 @@ class AdRequestListener
      */
     protected function isLegacyRegion($region)
     {
-        return data_get($this->getSeoConfigs(SeoConfigRepository::REGION_ALIAS), slug($region));
+        return CommonManager::data_get($this->getSeoConfigs(SeoConfigRepository::REGION_ALIAS), slug($region));
     }
     
     /**
@@ -1859,7 +1859,7 @@ class AdRequestListener
      */
     protected function isLegacyLocation($location)
     {
-        return data_get($this->getSeoConfigs(SeoConfigRepository::LOCATION_ALIAS), slug($location));
+        return CommonManager::data_get($this->getSeoConfigs(SeoConfigRepository::LOCATION_ALIAS), slug($location));
     }
     
     /**
@@ -1933,7 +1933,7 @@ class AdRequestListener
         $path = $this->cleanPath($path);
         
         if (substr_exist($path, '?')) {
-            $path = array_first(explode('?', $path), null, '');
+            $path = CommonManager::array_first(explode('?', $path), null, '');
         }
         
         $parts = explode('/', $path);
@@ -2078,7 +2078,7 @@ class AdRequestListener
         $uri = $request->getUri();
         $siteDomain = $this->container->getParameter('fa.main.host');
         $siteName = trim(strtolower($this->container->getParameter('service_name')));
-        $subDomain = array_first(explode('.', $siteDomain));
+        $subDomain = CommonManager::array_first(explode('.', $siteDomain));
         $isLiveSite = ($siteName == $subDomain) && !in_array($subDomain, ['fmtinew', 'stage', 'devnew']);
         
         // HTTP >> HTTPS for all sub-domains.
@@ -2112,7 +2112,7 @@ class AdRequestListener
         $fullList = $redirectSettings;
         
         $redirectSettings = array_filter($redirectSettings, function ($settings, $key) use ($fullUrl) {
-            return substr_exist($fullUrl, strtolower(array_first(explode(':', $settings)))) && !substr_exist($settings, ':absolute');
+            return substr_exist($fullUrl, strtolower(CommonManager::array_first(explode(':', $settings)))) && !substr_exist($settings, ':absolute');
         }, ARRAY_FILTER_USE_BOTH);
             
             uasort($redirectSettings, function ($a, $b) {
@@ -2128,23 +2128,23 @@ class AdRequestListener
                     });
                         
                         $absoluteRedirects = array_filter($fullList, function ($settings, $key) use ($fullUrl) {
-                            return substr_exist($settings, ':absolute') && ($fullUrl == strtolower(array_first(explode(':', $settings))));
+                            return substr_exist($settings, ':absolute') && ($fullUrl == strtolower(CommonManager::array_first(explode(':', $settings))));
                         }, ARRAY_FILTER_USE_BOTH);
                             
                             uasort($absoluteRedirects, function ($a, $b) {
                                 return strlen($b) - strlen($a);
                             });
                                 
-                                $absoluteRedirect = array_first($absoluteRedirects);
-                                $redirectSetting = array_first($redirectSettings);
+                                $absoluteRedirect = CommonManager::array_first($absoluteRedirects);
+                                $redirectSetting = CommonManager::array_first($redirectSettings);
                                 
                                 if (!empty($redirectSetting)) {
                                     $redirectSetting = strtolower($redirectSetting);
                                     $redirectSetting = explode(':', $redirectSetting);
                                     $fromSegment = array_shift($redirectSetting);
                                     $settings = array_values($redirectSetting);
-                                    $toSegment = array_first($settings);
-                                    $replaceType = data_get($settings, 1, 'partial');
+                                    $toSegment = CommonManager::array_first($settings);
+                                    $replaceType = CommonManager::data_get($settings, 1, 'partial');
                                     
                                     $route = $this->getRoute('location_home_page', [
                                         'location' => '',
@@ -2175,7 +2175,7 @@ class AdRequestListener
                                     $absoluteRedirect = strtolower($absoluteRedirect);
                                     $absoluteRedirect = explode(':', $absoluteRedirect);
                                     $settings = array_values($absoluteRedirect);
-                                    $toSegment = array_first($settings);
+                                    $toSegment = CommonManager::array_first($settings);
                                     
                                     $route = $this->getRoute('location_home_page', [
                                         'location' => '',
@@ -2264,7 +2264,7 @@ class AdRequestListener
             if ($possibleLocation = $this->getLocation($request)) {
                 $location = $possibleLocation;
             } else {
-                $possibleLocation = strtolower(array_first($pathParts));
+                $possibleLocation = strtolower(CommonManager::array_first($pathParts));
                 if ($this->isLocation($possibleLocation) || ($possibleLocation = $this->isLegacyLocation($possibleLocation))) {
                     $location = $possibleLocation;
                     array_shift($pathParts);
@@ -2370,7 +2370,7 @@ class AdRequestListener
             }
             
             $path = (!empty($request->get('location')) ? "{$request->get('location')}/" : '') . $request->get('page_string');
-            $path = data_get(parse_url($path), 'path', '');
+            $path = CommonManager::data_get(parse_url($path), 'path', '');
             $this->enableRedirect($request);
             $this->reBuildRequest($request, explode('/', $path));
         }

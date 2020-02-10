@@ -726,7 +726,7 @@ class SeoToolRepository extends EntityRepository
             });
                 $values = array_flip($values);
                 
-                return array_filter(array_map('trim', explode(',', array_first($values, null, ''))));
+                return array_filter(array_map('trim', explode(',', CommonManager::array_first($values, null, ''))));
     }
     
     /**
@@ -746,9 +746,9 @@ class SeoToolRepository extends EntityRepository
         ->getQuery()
         ->getArrayResult();
         
-        $config = array_first($config, null, []);
+        $config = CommonManager::array_first($config, null, []);
         
-        $values = json_decode(data_get($config, 'data'), true, 512);
+        $values = json_decode(CommonManager::data_get($config, 'data'), true, 512);
         
         if (empty($values)) {
             return [];

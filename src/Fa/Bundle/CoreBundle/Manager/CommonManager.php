@@ -3312,4 +3312,102 @@ HTML;
 
         return !is_bool(strpos($haystack, $needle));
     }
+    /**
+     * Return the first element in an array passing a given truth test.
+     *
+     * @param  array  $array
+     * @param  callable|null  $callback
+     * @param  mixed  $default
+     * @return mixed
+     */
+    public function array_first($array, callable $callback = null, $default = null)
+    {
+        if (is_null($callback)) {
+            if (empty($array)) {
+                return $this->value($default);
+            }
+            foreach ($array as $item) {
+                return $item;
+            }
+        }
+        foreach ($array as $key => $value) {
+            if (call_user_func($callback, $value, $key)) {
+                return $value;
+            }
+        }
+        return $this->value($default);
+    }
+    /**
+     * Get an item from an array or object using "dot" notation.
+     *
+     * @param  mixed   $target
+     * @param  string|array  $key
+     * @param  mixed   $default
+     * @return mixed
+     */
+    public function data_get($target, $key, $default = null)
+    {
+        if (is_null($key)) {
+            return $target;
+        }
+        $key = is_array($key) ? $key : explode('.', $key);
+        while (! is_null($segment = array_shift($key))) {
+            if ($segment === '*') {
+                if ($target instanceof Collection) {
+                    $target = $target->getValues();
+                } elseif (! is_array($target)) {
+                    return self::value($default);
+                }
+                $result = $this->array_pluck($target, $key);
+                return in_array('*', $key) ? array_collapse($result) : $result;
+            }
+            if (is_array($target) && array_key_exists($segment, $target)) {
+                $target = $target[$segment];
+            } elseif (is_object($target) && isset($target->{$segment})) {
+                $target = $target->{$segment};
+            } else {
+                return self::value($default);
+            }
+        }
+        return $target;
+    }
+    /**
+     * Return the default value of the given value.
+     *
+     * @param  mixed  $value
+     * @return mixed
+     */
+    public function value($value)
+    {
+        return $value instanceof Closure ? $value() : $value;
+    }
+    /**
+     * Pluck an array of values from an array.
+     *
+     * @param  array  $array
+     * @param  string|array  $value
+     * @param  string|array|null  $key
+     * @return array
+     */
+    public function array_pluck($array, $value, $key = null)
+    {
+        $results = [];
+        list($value, $key) = explode_pluck_parameters($value, $key);
+        foreach ($array as $item) {
+            $itemValue = data_get($item, $value);
+            // If the key is "null", we will just append the value to the array and keep
+            // looping. Otherwise we will key the array using the value of the key we
+            // received from the developer. Then we'll return the final array form.
+            if (is_null($key)) {
+                $results[] = $itemValue;
+            } else {
+                $itemKey = data_get($item, $key);
+                if (is_object($itemKey) && method_exists($itemKey, '__toString')) {
+                    $itemKey = (string) $itemKey;
+                }
+                $results[$itemKey] = $itemValue;
+            }
+        }
+        return $results;
+    }
 }

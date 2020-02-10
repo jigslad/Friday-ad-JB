@@ -412,29 +412,20 @@ class AdRoutingManager
                         'page_string' => $pageString,
                     ), true) . '?' . $query;
             } else {
-                if($pageString='search'){
-                    $url = $this->router->generate('listing_page', array(
-                            'location' => $location,
-                            'page_string' => 'search',
-                        ), true).'?'.$query;
-
-                }
-                else{
-                    $url = $this->router->generate('listing_page', array(
-                            'location' => $location,
-                            'page_string' => $pageString,
-                        ), true) . '?' . $query;
-                }
+                $url = $this->router->generate('listing_page', array(
+                        'location' => $location,
+                        'page_string' => $pageString,
+                    ), true) . '?' . $query;
             }
-            return rtrim($url, '?');
+            $url =  rtrim($url, '?');
         }
         else{
             $url = $this->router->generate('listing_page', array(
                 'location' => $location,
                 'page_string' => $pageString,
             ), true);
-            return $url;
         }
+        return $url;
     }
 
     /**

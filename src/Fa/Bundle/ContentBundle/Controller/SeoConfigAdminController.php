@@ -62,33 +62,33 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         CommonManager::setAdminBackUrl($request, $this->container);
 
         if ($request->get('respond') == 'json' && ($configSlug = $request->get('config'))) {
-            $data = data_get($this->seoConfig(false), "{$configSlug}.data", []);
+            $data = CommonManager::data_get($this->seoConfig(false), "{$configSlug}.data", []);
             return new JsonResponse($data);
         }
 
         $seoConfigs = $this->seoConfig(true, $request->get('short_list', true));
 
-        if (!empty($CrawlConfig = data_get($seoConfigs, SeoConfigRepository::CRAWL_CONFIG . '.data', []))) {
+        if (!empty($CrawlConfig = CommonManager::data_get($seoConfigs, SeoConfigRepository::CRAWL_CONFIG . '.data', []))) {
             $crawlConfigs = json_decode(json_decode($CrawlConfig), true, 512);
             $seoConfigs[SeoConfigRepository::CRAWL_CONFIG]['data'] = array_map(function ($crawlConfig) {
                 return [
-                    'category' => data_get($crawlConfig, 'category'),
-                    'dimension' => data_get($crawlConfig, 'dimension'),
-                    'region' => filter_var(data_get($crawlConfig, 'region', false), FILTER_VALIDATE_BOOLEAN),
-                    'county' => filter_var(data_get($crawlConfig, 'county', false), FILTER_VALIDATE_BOOLEAN),
-                    'town' => filter_var(data_get($crawlConfig, 'town', false), FILTER_VALIDATE_BOOLEAN),
+                    'category' => CommonManager::data_get($crawlConfig, 'category'),
+                    'dimension' => CommonManager::data_get($crawlConfig, 'dimension'),
+                    'region' => filter_var(CommonManager::data_get($crawlConfig, 'region', false), FILTER_VALIDATE_BOOLEAN),
+                    'county' => filter_var(CommonManager::data_get($crawlConfig, 'county', false), FILTER_VALIDATE_BOOLEAN),
+                    'town' => filter_var(CommonManager::data_get($crawlConfig, 'town', false), FILTER_VALIDATE_BOOLEAN),
                 ];
             }, $crawlConfigs);
         }
 
-        if (!empty($moreFilters = data_get($seoConfigs, SeoConfigRepository::LHS_FILTER_ORDER))) {
-            $entityOrder = json_decode(data_get($moreFilters, 'data'));
+        if (!empty($moreFilters = CommonManager::data_get($seoConfigs, SeoConfigRepository::LHS_FILTER_ORDER))) {
+            $entityOrder = json_decode(CommonManager::data_get($moreFilters, 'data'));
 
             if(!empty($entityOrder)) {
                 $entityOrder = json_decode($entityOrder, true, 512);
             }
 
-            $entityOrder = $this->getEntities(explode(',', data_get($entityOrder, '_more_filter_entities_', '')));
+            $entityOrder = $this->getEntities(explode(',', CommonManager::data_get($entityOrder, '_more_filter_entities_', '')));
             $seoConfigs[SeoConfigRepository::LHS_FILTER_ORDER]['_more_filter_entities_'] = json_encode(json_encode($entityOrder));
         }
 
@@ -119,7 +119,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         $data = $seoConfigRepository->getBaseQueryBuilder()->getQuery()->getArrayResult();
 
         foreach ($data as $config) {
-            $type = data_get($config, 'type');
+            $type = CommonManager::data_get($config, 'type');
             $jsonStringData = $config['data'];
 
             if (filter_var($shortList, FILTER_VALIDATE_BOOLEAN)) {
@@ -232,7 +232,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         $values = [];
         foreach ($ids as $id) {
 
-            if (!empty($data = data_get($entities, $id))) {
+            if (!empty($data = CommonManager::data_get($entities, $id))) {
                 $values[] = $data;
             }
         }
@@ -559,11 +559,11 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
      */
     public function sitemapStatAction()
     {
-        $process = array_first(explode("\n", shell_exec("ps -aux | grep sitemap")));
+        $process = CommonManager::array_first(explode("\n", shell_exec("ps -aux | grep sitemap")));
 
         if (substr_exist($process, 'url_type')) {
-            $urlType = array_first(explode(' ', substr($process, strpos($process, 'url_type=') + strlen('url_type='))));
-            $offset = array_first(explode(' ', substr($process, strpos($process, 'offset=') + strlen('offset='))));
+            $urlType = CommonManager::array_first(explode(' ', substr($process, strpos($process, 'url_type=') + strlen('url_type='))));
+            $offset = CommonManager::array_first(explode(' ', substr($process, strpos($process, 'offset=') + strlen('offset='))));
 
             return new JsonResponse([
                 'stat' => [
@@ -620,9 +620,9 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             ]);
         }
 
-        $filterOrderConfig = json_decode(json_decode(data_get($this->seoConfig(), SeoConfigRepository::LHS_FILTER_ORDER . '.data', ''), true, 512), true, 512);
+        $filterOrderConfig = json_decode(json_decode(CommonManager::data_get($this->seoConfig(), SeoConfigRepository::LHS_FILTER_ORDER . '.data', ''), true, 512), true, 512);
 
-        $config = data_get($filterOrderConfig, "category_id_{$categoryId}", '');
+        $config = CommonManager::data_get($filterOrderConfig, "category_id_{$categoryId}", '');
 
         return new JsonResponse([
             'status' => 1,
@@ -642,12 +642,12 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         $order = (array) $request->get('data', []);
         $categoryId = $request->get('category_id');
 
-        $filterOrderConfig = json_decode(json_decode(data_get($this->seoConfig(), SeoConfigRepository::LHS_FILTER_ORDER . '.data', ''), true, 512), true, 512);
+        $filterOrderConfig = CommonManager::json_decode(json_decode(data_get($this->seoConfig(), SeoConfigRepository::LHS_FILTER_ORDER . '.data', ''), true, 512), true, 512);
 
         if (!empty($categoryId)) {
             $filterOrderConfig["category_id_{$categoryId}"] = implode(',', $order);
         } else {
-            $moreFilterEntities = array_wrap(data_get($order, '_more_filters_'));
+            $moreFilterEntities = array_wrap(CommonManager::data_get($order, '_more_filters_'));
             $filterOrderConfig["_more_filter_entities_"] = implode(',', $moreFilterEntities);
         }
 
@@ -884,7 +884,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
                 ->prepare($query);
             $stmt->execute();
 
-            return data_get($stmt->fetchAll(), '*.slug');
+            return CommonManager::data_get($stmt->fetchAll(), '*.slug');
         } catch (\Exception $e) {
             return [];
         }
@@ -912,7 +912,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
                 ->prepare($query);
             $stmt->execute();
 
-            return data_get($stmt->fetchAll(), '*.url');
+            return CommonManager::data_get($stmt->fetchAll(), '*.url');
         } catch (\Exception $e) {
             return [];
         }
@@ -937,7 +937,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
                 ->prepare($query);
             $stmt->execute();
 
-            return data_get($stmt->fetchAll(), '*.url');
+            return CommonManager::data_get($stmt->fetchAll(), '*.url');
         } catch (\Exception $e) {
             return [];
         }
@@ -962,7 +962,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
                 ->prepare($query);
             $stmt->execute();
 
-            return data_get($stmt->fetchAll(), '*.slug');
+            return CommonManager::data_get($stmt->fetchAll(), '*.slug');
         } catch (\Exception $e) {
             return [];
         }
@@ -994,12 +994,12 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             if (!$conditions) {
                 return array_map(function ($item) {
                     return slug($item);
-                }, data_get($stmt->fetchAll(), '*.name'));
-            } elseif (array_first(array_wrap($conditions)) == 'id-slug-pair') {
+                }, CommonManager::data_get($stmt->fetchAll(), '*.name'));
+            } elseif (CommonManager::array_first(array_wrap($conditions)) == 'id-slug-pair') {
 
                 $entities = [];
                 foreach ($stmt->fetchAll() as $entity) {
-                    $entities[data_get($entity, 'id')] = slug(data_get($entity, 'slug'));
+                    $entities[CommonManager::data_get($entity, 'id')] = slug(data_get($entity, 'slug'));
                 }
 
                 return $entities;
@@ -1121,22 +1121,22 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         $data = array_map(function ($datum) {
 
             return [
-                'category' => data_get($datum, 'category'),
-                'dimension' => data_get($datum, 'dimension'),
-                'region' => filter_var(data_get($datum, 'region', false), FILTER_VALIDATE_BOOLEAN),
-                'county' => filter_var(data_get($datum, 'county', false), FILTER_VALIDATE_BOOLEAN),
-                'town' => filter_var(data_get($datum, 'town', false), FILTER_VALIDATE_BOOLEAN),
+                'category' => CommonManager::data_get($datum, 'category'),
+                'dimension' => CommonManager::data_get($datum, 'dimension'),
+                'region' => filter_var(CommonManager::data_get($datum, 'region', false), FILTER_VALIDATE_BOOLEAN),
+                'county' => filter_var(CommonManager::data_get($datum, 'county', false), FILTER_VALIDATE_BOOLEAN),
+                'town' => filter_var(CommonManager::data_get($datum, 'town', false), FILTER_VALIDATE_BOOLEAN),
             ];
 
         }, ((array) $request->get('data')));
 
         $data = array_filter($data, function ($item) {
 
-            $category = data_get($item, 'category');
-            $dimension = data_get($item, 'dimension');
-            $region = data_get($item, 'region');
-            $county = data_get($item, 'county');
-            $town = data_get($item, 'town');
+            $category = CommonManager::data_get($item, 'category');
+            $dimension = CommonManager::data_get($item, 'dimension');
+            $region = CommonManager::data_get($item, 'region');
+            $county = CommonManager::data_get($item, 'county');
+            $town = CommonManager::data_get($item, 'town');
 
             return !empty($category) || !empty($dimension) || $region || $county || $town;
         });
@@ -1166,7 +1166,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
             var_dump($data);
 
 
-            $existingData = data_get($this->seoConfig(false), "{$configType}.data", []);
+            $existingData = CommonManager::data_get($this->seoConfig(false), "{$configType}.data", []);
 
             // Convert Assoc array to Normal array
             if (is_associative_array($existingData)) {
@@ -1312,20 +1312,20 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         $script = basename($request->server->get('SCRIPT_NAME'));
 
         $baseUrl = rtrim(
-            data_get($uri, 'scheme')
+            CommonManager::data_get($uri, 'scheme')
             . '://'
-            . data_get($uri, 'host')
+            . CommonManager::data_get($uri, 'host')
             . '/'
             . ($script == 'app_dev.php' ? $script : ''), '/');
 
         foreach($redirectArray as &$redirectDatum) {
 
-            $fromUrl = rtrim("{$baseUrl}/" . ltrim(data_get($redirectDatum, 'from'), '/'), '/') . '/';
-            $expectedTo = ltrim(data_get($redirectDatum, 'expected_to'), '/');
+            $fromUrl = rtrim("{$baseUrl}/" . ltrim(CommonManager::data_get($redirectDatum, 'from'), '/'), '/') . '/';
+            $expectedTo = ltrim(CommonManager::data_get($redirectDatum, 'expected_to'), '/');
 
             $headers = $this->getResponseHeader($fromUrl);
 
-            $redirectTarget = array_first(data_get($headers, 'Location', []));
+            $redirectTarget = CommonManager::array_first(CommonManager::data_get($headers, 'Location', []));
 
             if (empty($redirectTarget)) {
                 $redirectDatum['redirect'] = 'No Redirect';
@@ -1393,7 +1393,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
      */
     public function getConfigData($config)
     {
-        $data = data_get($this->seoConfig(false), "{$config}.data", []);
+        $data = CommonManager::data_get($this->seoConfig(false), "{$config}.data", []);
 
         // Convert Assoc array to Normal array
         if (is_array($data) && is_associative_array($data)) {
@@ -1457,7 +1457,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         return array_map(function ($item) {
             $action =
                 '<span class="datatable-action-list" style="list-style: none">
-                    <textarea class="data" style="display: none;">'. data_get($item, 'id', '') .'</textarea>
+                    <textarea class="data" style="display: none;">'. CommonManager::data_get($item, 'id', '') .'</textarea>
                     <i class="fa fi-pencil small edit-motors"></i>
                     <i class="fa fi-undo undo hidden"></i>
                     <i class="fa fi-trash motors-redirect-delete"></i>
@@ -1466,11 +1466,11 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
 
 
             return [
-                'from'  => data_get($item, 'nval', ''),
-                'Field'    => data_get($item, 'field_name', ''),
-                'category'    => data_get($item, 'mapped_id', ''),
-                'parent'    => data_get($item, 'parent', ''),
-                'parent category'    => data_get($item, 'parent_cat_id', ''),
+                'from'  => CommonManager::data_get($item, 'nval', ''),
+                'Field'    => CommonManager::data_get($item, 'field_name', ''),
+                'category'    => CommonManager::data_get($item, 'mapped_id', ''),
+                'parent'    => CommonManager::data_get($item, 'parent', ''),
+                'parent category'    => CommonManager::data_get($item, 'parent_cat_id', ''),
                 'action'  => $action,
             ];
 
@@ -1487,7 +1487,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         return array_map(function ($item) {            
             $action =
                 '<span class="datatable-action-list" style="list-style: none">
-                    <textarea class="data" style="display: none;">'. data_get($item, 'id', '') .'</textarea>
+                    <textarea class="data" style="display: none;">'. CommonManager::data_get($item, 'id', '') .'</textarea>
                     <i class="fa fi-pencil small edit"></i>
                     <i class="fa fi-undo undo hidden"></i>
                     <i class="fa fi-trash redirectdelete"></i>
@@ -1496,9 +1496,9 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
 
 
             return [
-                'from'  => data_get($item, 'old', ''),
-                'to'    => data_get($item, 'new', ''),
-                'type'  => (data_get($item, 'is_location')==1) ? 'location' : ((data_get($item, 'is_location')==2)?'article':'category'),
+                'from'  => CommonManager::data_get($item, 'old', ''),
+                'to'    => CommonManager::data_get($item, 'new', ''),
+                'type'  => (CommonManager::data_get($item, 'is_location')==1) ? 'location' : ((CommonManager::data_get($item, 'is_location')==2)?'article':'category'),
                 'action'  => $action,
             ];
 
@@ -1555,8 +1555,8 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
 
 
             return [
-                'legacy'  => data_get($items, 0, ''),
-                'new'    => data_get($items, 1, ''),
+                'legacy'  => CommonManager::data_get($items, 0, ''),
+                'new'    => CommonManager::data_get($items, 1, ''),
                 'action'  => $action,
             ];
 
@@ -1585,8 +1585,8 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
 
 
             return [
-                'meta'   => data_get($items, 0, ''),
-                'url'    => data_get($items, 1, ''),
+                'meta'   => CommonManager::data_get($items, 0, ''),
+                'url'    => CommonManager::data_get($items, 1, ''),
                 'action' => $action,
             ];
 
@@ -1613,7 +1613,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
 
         parse_str(curl_exec($ch), $response);
 
-        $headers = array_first($response);
+        $headers = CommonManager::array_first($response);
         $headers = str_replace("\r", "", $headers);
         $headers = array_filter(explode("\n", $headers));
         $headers = headers_from_lines($headers);
@@ -1636,7 +1636,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         ];
 
         $changed = false;
-        $data = data_get($this->seoConfig(false), "{$configSlug}.data", []);
+        $data = CommonManager::data_get($this->seoConfig(false), "{$configSlug}.data", []);
         $isAssocArray = is_associative_array($data);
 
         foreach ($removeRules as $rule) {
@@ -1683,7 +1683,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         $ruleTo = $request->get('rule_to');
 
         $changed = false;
-        $data = data_get($this->seoConfig(false), "{$configSlug}.data", []);
+        $data = CommonManager::data_get($this->seoConfig(false), "{$configSlug}.data", []);
 
         $rulesToChange= [
             $ruleFrom => $ruleTo
