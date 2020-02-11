@@ -80,7 +80,20 @@ class AdRequestListener
                 $event->setResponse($response);
             }
         }
-        
+        // remove odata from url
+//        $Odata = $this->em->getRepository('FaContentBundle:SeoConfig')->getOdata();
+//        if($Odata){
+//            $oDataArray = $Odata->getData();
+//            foreach ($oDataArray as $item) {
+//                //if (strpos($uri, $url) !== FALSE) { // Yoshi version
+//                if (strstr(strtolower($uri), strtolower($item))) { // mine version
+//                    $newUrl = str_replace(strtolower($item).'/',"",strtolower($uri));
+//                    $response = new RedirectResponse($newUrl);
+//                    $event->setResponse($response);
+//                }
+//            }
+//        }
+
         // If the ad-detail page url is having an entity in string, then forward to Ad-listings
         /*if ($this->_route($request) == 'ad_detail_page') {
          $request = $this->redirectAdDetailPage($request);
@@ -95,63 +108,77 @@ class AdRequestListener
             $locationUrl = str_replace('for-sale/home-garden/aids/', 'for-sale/home-garden/health/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/for-sale\/business-office\/office\/stationary\//', $uri)) { //redirect aids FFR-2390
+        }
+
+        elseif (preg_match('/for-sale\/business-office\/office\/stationary\//', $uri))
+        { //redirect aids FFR-2390
             $locationUrl = str_replace('for-sale/business-office/office/stationary/', 'for-sale/business-office/office/stationery/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/for-sale\/([a-z\-]+)\/business-office\/office\/stationary\//', $uri, $matches)) {
+        }
+        elseif (preg_match('/for-sale\/([a-z\-]+)\/business-office\/office\/stationary\//', $uri, $matches)) {
             $locationUrl = str_replace('for-sale/'.$matches[1].'/business-office/office/stationary/', 'for-sale/'.$matches[1].'/business-office/office/stationery/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/for-sale\/antiques-collectables\/gramaphones-radiograms\//', $uri)) {
+        }
+        elseif (preg_match('/for-sale\/antiques-collectables\/gramaphones-radiograms\//', $uri)) {
             $locationUrl = str_replace('for-sale/antiques-collectables/gramaphones-radiograms/', 'for-sale/antiques-collectables/gramophones-radiograms/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/for-sale\/([a-z\-]+)\/antiques-collectables\/gramaphones-radiograms\//', $uri, $matches)) {
+        }
+        elseif (preg_match('/for-sale\/([a-z\-]+)\/antiques-collectables\/gramaphones-radiograms\//', $uri, $matches)) {
             $locationUrl = str_replace('for-sale/'.$matches[1].'/antiques-collectables/gramaphones-radiograms/', 'for-sale/'.$matches[1].'/antiques-collectables/gramophones-radiograms/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/community\/whats-on\/entertainment\/restaurants\//', $uri)) { //redirect aids FFR-2410
+        }
+        elseif (preg_match('/community\/whats-on\/entertainment\/restaurants\//', $uri)) { //redirect aids FFR-2410
             $locationUrl = str_replace('community/whats-on/entertainment/restaurants/', 'community/in-your-area/restaurants/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/jobs\/driving-warehouse\//', $uri)) { //FFR-2421
+        }
+        elseif (preg_match('/jobs\/driving-warehouse\//', $uri)) { //FFR-2421
             $locationUrl = str_replace('jobs/driving-warehouse/', 'jobs/automotive-jobs/driver-jobs/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/for-sale\/electronics\/cameras-photography\/non-digital-camera-accessories\//', $uri)) { //FFR-2222
+        }
+        elseif (preg_match('/for-sale\/electronics\/cameras-photography\/non-digital-camera-accessories\//', $uri)) { //FFR-2222
             $locationUrl = str_replace('for-sale/electronics/cameras-photography/non-digital-camera-accessories/', 'for-sale/electronics/cameras-photography/camera-accessories/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/for-sale\/electronics\/cameras-photography\/digital-camera-accessories\//', $uri)) {
+        }
+        elseif (preg_match('/for-sale\/electronics\/cameras-photography\/digital-camera-accessories\//', $uri)) {
             $locationUrl = str_replace('for-sale/electronics/cameras-photography/digital-camera-accessories/', 'for-sale/electronics/cameras-photography/camera-accessories/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/for-sale\/([a-z\-]+)\/electronics\/cameras-photography\/non-digital-camera-accessories\//', $uri, $matches)) {
+        }
+        elseif (preg_match('/for-sale\/([a-z\-]+)\/electronics\/cameras-photography\/non-digital-camera-accessories\//', $uri, $matches)) {
             $locationUrl = str_replace('for-sale/'.$matches[1].'/electronics/cameras-photography/non-digital-camera-accessories/', 'for-sale/'.$matches[1].'/electronics/cameras-photography/camera-accessories/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/for-sale\/([a-z\-]+)\/electronics\/cameras-photography\/digital-camera-accessories\//', $uri, $matches)) {
+        }
+        elseif (preg_match('/for-sale\/([a-z\-]+)\/electronics\/cameras-photography\/digital-camera-accessories\//', $uri, $matches)) {
             $locationUrl = str_replace('for-sale/'.$matches[1].'/electronics/cameras-photography/digital-camera-accessories/', 'for-sale/'.$matches[1].'/electronics/cameras-photography/camera-accessories/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/adult\/phone-cam-chat\//', $uri)) {
+        }
+        elseif (preg_match('/adult\/phone-cam-chat\//', $uri))
+        {
             $locationUrl = str_replace('adult/phone-cam-chat/', 'adult/', $uri);
             $response = new RedirectResponse($locationUrl, 301);
             $event->setResponse($response);
-        } elseif (preg_match('/car-hire/', $uri)) {
+        }
+        elseif (preg_match('/car-hire/', $uri)) {
             $uriSplit = explode('/', $uri);
             if (in_array("car-hire", $uriSplit)) {
                 $locationUrl = str_replace('car-hire', 'vehicle-hire', $uri);
                 $response = new RedirectResponse($locationUrl, 301);
                 $event->setResponse($response);
             }
-        } elseif (preg_match('/bristol\/celebrations-special-occasions\/20-years-old-male-prostitute-for-you-16359610/', $uri)) {
+        }
+        elseif (preg_match('/bristol\/celebrations-special-occasions\/20-years-old-male-prostitute-for-you-16359610/', $uri)) {
             throw new HttpException(410);
         }
-        
-        
-        
+
         if (preg_match('/cart\/process/', $uri) || preg_match('/checkout/', $uri)) {
             if ($this->container->get('session')->has('lastActivityTime')) {
                 $minutes = round(abs(time() - $this->container->get('session')->get('lastActivityTime')) / 60, 2);
@@ -1272,7 +1299,7 @@ class AdRequestListener
         $locationRepository = $this->em->getRepository('FaEntityBundle:Location');
         
         $location = $locationRepository->findOneBy([
-            'url' => slug($name),
+            'url' => CommonManager::slug($name),
             'lvl' => [1, 2, 3, 4],
         ]);
         
@@ -1335,7 +1362,7 @@ class AdRequestListener
         $locationRepository = $this->em->getRepository('FaEntityBundle:Location');
         
         $location = $locationRepository->findOneBy([
-            'url' => slug($location),
+            'url' => CommonManager::slug($location),
             'lvl' => $level,
         ]);
         
@@ -1358,7 +1385,7 @@ class AdRequestListener
         $regionRepository = $this->em->getRepository('FaEntityBundle:Region');
         
         return !empty($regionRepository->findOneBy([
-            'slug' => slug($name),
+            'slug' => CommonManager::slug($name),
         ]));
     }
     
@@ -1378,7 +1405,7 @@ class AdRequestListener
         $localityRepository = $this->em->getRepository('FaEntityBundle:Locality');
         
         return !empty($localityRepository->findOneBy([
-            'url' => slug($name),
+            'url' => CommonManager::slug($name),
         ]));
     }
     
@@ -1411,7 +1438,7 @@ class AdRequestListener
         $categoryRepository = $this->em->getRepository('FaEntityBundle:Category');
         
         return $categoryRepository->findOneBy([
-            'slug' => slug($name),
+            'slug' => CommonManager::slug($name),
             'lvl' => $levels,
             'status' => 1,
         ]);
@@ -1539,7 +1566,7 @@ class AdRequestListener
                 $forceFormat = 'normal';
             }
             
-            if (is_array($values) && !is_associative_array($values)) {
+            if (is_array($values) && !CommonManager::is_associative_array($values)) {
                 $values = $this->generateValueArray($values, $forceFormat);
             }
             
@@ -1631,7 +1658,7 @@ class AdRequestListener
         $segments = parse_url($url);
         $query = parse_query(CommonManager::data_get($segments, 'query', ''));
         $path = array_values(array_filter(explode('/', strtolower(CommonManager::data_get($segments, 'path', ''))), function ($item) {
-            return !empty($item) && !substr_exist($item, '.php');
+            return !empty($item) && !CommonManager::substr_exist($item, '.php');
         }));
             
             // Prep Location Name, Category Name
@@ -1749,11 +1776,11 @@ class AdRequestListener
         
         return array_map(function ($crawlConfig) {
             return [
-                'category' => array_filter(array_wrap(CommonManager::data_get($crawlConfig, 'category', [])), function (&$categoryId) {
+                'category' => array_filter(CommonManager::array_wrap(CommonManager::data_get($crawlConfig, 'category', [])), function (&$categoryId) {
                 $categoryId = (int)$categoryId;
                 return $categoryId > 0;
                 }),
-                'dimension' => array_filter(array_wrap(CommonManager::data_get($crawlConfig, 'dimension', [])), function (&$dimensionId) {
+                'dimension' => array_filter(CommonManager::array_wrap(CommonManager::data_get($crawlConfig, 'dimension', [])), function (&$dimensionId) {
                 $dimensionId = (int)$dimensionId;
                 return $dimensionId > 0;
                 }),
@@ -1848,7 +1875,7 @@ class AdRequestListener
      */
     protected function isLegacyRegion($region)
     {
-        return CommonManager::data_get($this->getSeoConfigs(SeoConfigRepository::REGION_ALIAS), slug($region));
+        return CommonManager::data_get($this->getSeoConfigs(SeoConfigRepository::REGION_ALIAS), CommonManager::slug($region));
     }
     
     /**
@@ -1859,7 +1886,7 @@ class AdRequestListener
      */
     protected function isLegacyLocation($location)
     {
-        return CommonManager::data_get($this->getSeoConfigs(SeoConfigRepository::LOCATION_ALIAS), slug($location));
+        return CommonManager::data_get($this->getSeoConfigs(SeoConfigRepository::LOCATION_ALIAS), CommonManager::slug($location));
     }
     
     /**
@@ -1932,7 +1959,7 @@ class AdRequestListener
         
         $path = $this->cleanPath($path);
         
-        if (substr_exist($path, '?')) {
+        if (CommonManager::substr_exist($path, '?')) {
             $path = CommonManager::array_first(explode('?', $path), null, '');
         }
         
@@ -2083,14 +2110,14 @@ class AdRequestListener
         
         // HTTP >> HTTPS for all sub-domains.
         // Non WWW to WWW version only for Live sites without sub-domain.
-        if (!$request->get('_redirect') && (substr_exist($uri, 'http://') || (!substr_exist($uri, 'www.') && $isLiveSite))) {
+        if (!$request->get('_redirect') && (CommonManager::substr_exist($uri, 'http://') || (!CommonManager::substr_exist($uri, 'www.') && $isLiveSite))) {
             $uri = str_replace('http://', 'https://', $uri);
             
-            if (!substr_exist($uri, 'www.') && $isLiveSite) {
+            if (!CommonManager::substr_exist($uri, 'www.') && $isLiveSite) {
                 $uri = str_replace('https://', 'https://www.', $uri);
             }
             
-            if (!substr_exist($uri, '?')) {
+            if (!CommonManager::substr_exist($uri, '?')) {
                 $uri = rtrim($uri, '/') . '/';
             }
             
@@ -2284,24 +2311,24 @@ class AdRequestListener
                 }
                 
                 if ($this->isCategory($pathPart, [1]) && empty($mainCategory)) {
-                    $mainCategory = slug($pathPart);
+                    $mainCategory = CommonManager::slug($pathPart);
                     unset($pathParts[$key]);
                     continue;
                 } elseif ($this->isCategory($pathPart, [2]) && !isset($subCategories[0])) {
-                    $subCategories[0] = slug($pathPart);
+                    $subCategories[0] = CommonManager::slug($pathPart);
                     unset($pathParts[$key]);
                     continue;
                 } elseif ($this->isCategory($pathPart, [3] && !isset($subCategories[1]))) {
-                    $subCategories[1] = slug($pathPart);
+                    $subCategories[1] = CommonManager::slug($pathPart);
                     unset($pathParts[$key]);
                     continue;
                 } elseif ($this->isCategory($pathPart, [4]) && !isset($subCategories[2])) {
-                    $subCategories[2] = slug($pathPart);
+                    $subCategories[2] = CommonManager::slug($pathPart);
                     unset($pathParts[$key]);
                     continue;
                 }
                 
-                if ($pathPart != ($slug = slug($pathPart))) {
+                if ($pathPart != ($slug = CommonManager::slug($pathPart))) {
                     $pathParts[$key] = $slug;
                     $changeFlag = true;
                 }

@@ -193,8 +193,8 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         ]);
 
         foreach ($allDimensions as $dimension) {
-            revert_slug(!empty($name = $dimension->getName()) ? $name : $dimension->getKeyword());
-            revert_slug(!empty($category = $dimension->getCategory()) ? $category->getName() : 'null');
+            CommonManager::revert_slug(!empty($name = $dimension->getName()) ? $name : $dimension->getKeyword());
+            CommonManager::revert_slug(!empty($category = $dimension->getCategory()) ? $category->getName() : 'null');
             $dims[] = [
                 'id' => $dimension->getId(),
                 'name' => $name,
@@ -561,7 +561,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
     {
         $process = CommonManager::array_first(explode("\n", shell_exec("ps -aux | grep sitemap")));
 
-        if (substr_exist($process, 'url_type')) {
+        if (CommonManager::substr_exist($process, 'url_type')) {
             $urlType = CommonManager::array_first(explode(' ', substr($process, strpos($process, 'url_type=') + strlen('url_type='))));
             $offset = CommonManager::array_first(explode(' ', substr($process, strpos($process, 'offset=') + strlen('offset='))));
 
@@ -647,7 +647,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         if (!empty($categoryId)) {
             $filterOrderConfig["category_id_{$categoryId}"] = implode(',', $order);
         } else {
-            $moreFilterEntities = array_wrap(CommonManager::data_get($order, '_more_filters_'));
+            $moreFilterEntities = CommonManager::array_wrap(CommonManager::data_get($order, '_more_filters_'));
             $filterOrderConfig["_more_filter_entities_"] = implode(',', $moreFilterEntities);
         }
 
@@ -977,7 +977,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
      */
     protected function findEntityBySlug($slug, $conditions = false)
     {
-        $slug = revert_slug($slug);
+        $slug = CommonManager::revert_slug($slug);
         $query = "select
               id,
               name,
@@ -993,13 +993,13 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
 
             if (!$conditions) {
                 return array_map(function ($item) {
-                    return slug($item);
+                    return CommonManager::slug($item);
                 }, CommonManager::data_get($stmt->fetchAll(), '*.name'));
-            } elseif (CommonManager::array_first(array_wrap($conditions)) == 'id-slug-pair') {
+            } elseif (CommonManager::array_first(CommonManager::array_wrap($conditions)) == 'id-slug-pair') {
 
                 $entities = [];
                 foreach ($stmt->fetchAll() as $entity) {
-                    $entities[CommonManager::data_get($entity, 'id')] = slug(data_get($entity, 'slug'));
+                    $entities[CommonManager::data_get($entity, 'id')] = CommonManager::slug(data_get($entity, 'slug'));
                 }
 
                 return $entities;
@@ -1163,57 +1163,43 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         if (empty($type = strtolower($request->get('type')))) {
             $this->saveData($configType, $data);
         } elseif ($type == 'bulk') {
-            var_dump($data);
-
-
             $existingData = CommonManager::data_get($this->seoConfig(false), "{$configType}.data", []);
-
             // Convert Assoc array to Normal array
-            if (is_associative_array($existingData)) {
+            if (CommonManager::is_associative_array($existingData)) {
                 $newArray = [];
                 foreach ($existingData as $key => $value) {
                     $newArray[] = "{$key}:{$value}";
                 }
                 $existingData = $newArray;
             }
-
             if (($format = strtolower($request->get('format'))) && $format == 'file') {
-
                 if (in_array($configType, [SeoConfigRepository::META_ROBOTS])) {
                     $data = $this->getFileData($data);
-
                     $newArray = [];
                     foreach ($data as $metaRule) {
                         $metaRule = str_replace("\",", ':', $metaRule);
                         $metaRule = str_replace("\"", '', $metaRule);
                         $newArray[] = $metaRule;
                     }
-
                     $data = $newArray;
-
                 } else {
                     $data = array_map(function ($value) {
                         return implode(':', explode(',', $value));
                     }, $this->getFileData($data));
                 }
-
             } elseif ($format == 'text') {
-
                 if (!in_array($configType, [SeoConfigRepository::META_ROBOTS])) {
                     $data = implode(",", $data);
                     $data = array_unique(array_filter(explode(',', $data)));
                 } else {
-                    $data = array_unique(array_filter(array_wrap($data)));
+                    $data = array_unique(array_filter(CommonManager::array_wrap($data)));
                 }
             }
-
             $data = array_merge($existingData, $data);
-
             if (!empty($data)) {
                 $this->saveData($configType, $data);
             }
         }
-
         return $data;
     }
 
@@ -1396,7 +1382,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
         $data = CommonManager::data_get($this->seoConfig(false), "{$config}.data", []);
 
         // Convert Assoc array to Normal array
-        if (is_array($data) && is_associative_array($data)) {
+        if (is_array($data) && CommonManager::is_associative_array($data)) {
             $newData = [];
             foreach ($data as $key => $value) {
                 $newData[] = "{$key}:{$value}";
@@ -1637,7 +1623,7 @@ class SeoConfigAdminController extends CrudController implements ResourceAuthori
 
         $changed = false;
         $data = CommonManager::data_get($this->seoConfig(false), "{$configSlug}.data", []);
-        $isAssocArray = is_associative_array($data);
+        $isAssocArray = CommonManager::is_associative_array($data);
 
         foreach ($removeRules as $rule) {
 

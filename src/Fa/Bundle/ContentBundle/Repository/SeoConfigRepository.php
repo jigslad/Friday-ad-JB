@@ -66,9 +66,25 @@ class SeoConfigRepository extends EntityRepository
     {
         return $this->createQueryBuilder(self::ALIAS);
     }
+
+    /**
+     * get Max Dim Rules For Generating url
+     * @return object|null
+     */
     public function getMaxDimRules(){
         return $this->findOneBy([
             'type' => self::MAX_DIM_RULES
+        ]);
+    }
+
+    /**
+     * get o data for removing from url
+     *
+     * @return object|null
+     */
+    public function getOdata(){
+        return $this->findOneBy([
+            'type' => self::UNNECESSARY_ODATA_PARAMS
         ]);
     }
 

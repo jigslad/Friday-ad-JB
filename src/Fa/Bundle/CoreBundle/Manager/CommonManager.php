@@ -21,6 +21,7 @@ use Fa\Bundle\UserBundle\Repository\RoleRepository;
 use Fa\Bundle\PromotionBundle\Repository\PackageDiscountCodeRepository;
 use Symfony\Component\HttpFoundation\Response;
 use ZipArchive;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * This manager is used to handle common functionalities.
@@ -3303,7 +3304,7 @@ HTML;
      * @param bool $caseSensitive
      * @return bool
      */
-    public function substr_exist($haystack, $needle, $caseSensitive = false)
+    public static function substr_exist($haystack, $needle, $caseSensitive = false)
     {
         if (!$caseSensitive) {
             $haystack = strtolower($haystack);
@@ -3320,11 +3321,11 @@ HTML;
      * @param  mixed  $default
      * @return mixed
      */
-    public function array_first($array, callable $callback = null, $default = null)
+    public static function array_first($array, callable $callback = null, $default = null)
     {
         if (is_null($callback)) {
             if (empty($array)) {
-                return $this->value($default);
+                return self::value($default);
             }
             foreach ($array as $item) {
                 return $item;
@@ -3335,7 +3336,7 @@ HTML;
                 return $value;
             }
         }
-        return $this->value($default);
+        return self::value($default);
     }
     /**
      * Get an item from an array or object using "dot" notation.
@@ -3345,7 +3346,7 @@ HTML;
      * @param  mixed   $default
      * @return mixed
      */
-    public function data_get($target, $key, $default = null)
+    public static function data_get($target, $key, $default = null)
     {
         if (is_null($key)) {
             return $target;
@@ -3358,8 +3359,8 @@ HTML;
                 } elseif (! is_array($target)) {
                     return self::value($default);
                 }
-                $result = $this->array_pluck($target, $key);
-                return in_array('*', $key) ? array_collapse($result) : $result;
+                $result = self::array_pluck($target, $key);
+                return in_array('*', $key) ? self::array_collapse($result) : $result;
             }
             if (is_array($target) && array_key_exists($segment, $target)) {
                 $target = $target[$segment];
@@ -3371,13 +3372,14 @@ HTML;
         }
         return $target;
     }
+
     /**
      * Return the default value of the given value.
      *
      * @param  mixed  $value
      * @return mixed
      */
-    public function value($value)
+    public static function value($value)
     {
         return $value instanceof Closure ? $value() : $value;
     }
@@ -3389,19 +3391,19 @@ HTML;
      * @param  string|array|null  $key
      * @return array
      */
-    public function array_pluck($array, $value, $key = null)
+    public static function array_pluck($array, $value, $key = null)
     {
         $results = [];
-        list($value, $key) = explode_pluck_parameters($value, $key);
+                        list($value, $key) = self::explode_pluck_parameters($value, $key);
         foreach ($array as $item) {
-            $itemValue = data_get($item, $value);
+            $itemValue = self::data_get($item, $value);
             // If the key is "null", we will just append the value to the array and keep
             // looping. Otherwise we will key the array using the value of the key we
             // received from the developer. Then we'll return the final array form.
             if (is_null($key)) {
                 $results[] = $itemValue;
             } else {
-                $itemKey = data_get($item, $key);
+                $itemKey = self::data_get($item, $key);
                 if (is_object($itemKey) && method_exists($itemKey, '__toString')) {
                     $itemKey = (string) $itemKey;
                 }
@@ -3410,4 +3412,273 @@ HTML;
         }
         return $results;
     }
+    /**
+     * @param $value
+     * @param $key
+     * @return array
+     */
+    public static function explode_pluck_parameters($value, $key)
+    {
+        $value = is_string($value) ? explode('.', $value) : $value;
+        $key = is_null($key) || is_array($key) ? $key : explode('.', $key);
+        return [$value, $key];
+    }
+    /**
+     * Revert a slug to non slug format.
+     *
+     * @param string $slug
+     * @param string $delimiter
+     * @param string $replacer
+     * @return bool
+     */
+    public static function revert_slug($slug, $delimiter = '-', $replacer = ' ')
+    {
+        if (empty($slug)) {
+            return '';
+        }
+
+        return ucwords(str_replace($delimiter, $replacer, $slug));
+    }
+    /**
+     * Check if the given array is an associative array.
+     *
+     * @param $array
+     * @return bool
+     */
+    public static function is_associative_array($array)
+    {
+        return is_array($array)
+            ? (array_keys($array) !== range(0, count($array) - 1))
+            : false;
+    }
+    /**
+     * Collapse an array of arrays into a single array.
+     *
+     * @param  array  $array
+     * @return array
+     */
+    public static function array_collapse($array)
+    {
+        $results = [];
+        foreach ($array as $values) {
+            if ($values instanceof Collection) {
+                $values = $values->all();
+            } elseif (! is_array($values)) {
+                continue;
+            }
+            $results = array_merge($results, $values);
+        }
+        return $results;
+    }
+
+    /**
+     * Wraps the given value in array, if not already an array.
+     *
+     * @param $value
+     * @return array
+     */
+    public static function array_wrap($value)
+    {
+        return is_array($value) ? $value : [$value];
+    }
+    /**
+     * Generate a URL friendly "slug" from a given string.
+     *
+     * @param  string  $title
+     * @param  string  $separator
+     * @param  string  $language
+     * @return string
+     */
+    public static function slug($title, $separator = '-', $language = 'en')
+    {
+        $title = self::ascii($title, $language);
+        // Convert all dashes/underscores into separator
+        $flip = $separator == '-' ? '_' : '-';
+        $title = preg_replace('!['.preg_quote($flip).']+!u', $separator, $title);
+        // Replace @ with the word 'at'
+        $title = str_replace('@', $separator.'at'.$separator, $title);
+        // Remove all characters that are not the separator, letters, numbers, or whitespace.
+        $title = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($title));
+        // Replace all separator characters and whitespace by a single separator
+        $title = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $title);
+        return trim($title, $separator);
+    }
+    /**
+     * Transliterate a UTF-8 value to ASCII.
+     *
+     * @param  string  $value
+     * @param  string  $language
+     * @return string
+     */
+    public static function ascii($value, $language = 'en')
+    {
+        $languageSpecific = self::languageSpecificCharsArray($language);
+        if (! is_null($languageSpecific)) {
+            $value = str_replace($languageSpecific[0], $languageSpecific[1], $value);
+        }
+        foreach (self::charsArray() as $key => $val) {
+            $value = str_replace($val, $key, $value);
+        }
+        return preg_replace('/[^\x20-\x7E]/u', '', $value);
+    }
+    /**
+     * Returns the replacements for the ascii method.
+     *
+     * Note: Adapted from Stringy\Stringy.
+     *
+     * @see https://github.com/danielstjules/Stringy/blob/3.1.0/LICENSE.txt
+     *
+     * @return array
+     */
+    public static function charsArray()
+    {
+        static $charsArray;
+        if (isset($charsArray)) {
+            return $charsArray;
+        }
+        return $charsArray = [
+            '0'    => ['°', '₀', '۰', '０'],
+            '1'    => ['¹', '₁', '۱', '１'],
+            '2'    => ['²', '₂', '۲', '２'],
+            '3'    => ['³', '₃', '۳', '３'],
+            '4'    => ['⁴', '₄', '۴', '٤', '４'],
+            '5'    => ['⁵', '₅', '۵', '٥', '５'],
+            '6'    => ['⁶', '₆', '۶', '٦', '６'],
+            '7'    => ['⁷', '₇', '۷', '７'],
+            '8'    => ['⁸', '₈', '۸', '８'],
+            '9'    => ['⁹', '₉', '۹', '９'],
+            'a'    => ['à', 'á', 'ả', 'ã', 'ạ', 'ă', 'ắ', 'ằ', 'ẳ', 'ẵ', 'ặ', 'â', 'ấ', 'ầ', 'ẩ', 'ẫ', 'ậ', 'ā', 'ą', 'å', 'α', 'ά', 'ἀ', 'ἁ', 'ἂ', 'ἃ', 'ἄ', 'ἅ', 'ἆ', 'ἇ', 'ᾀ', 'ᾁ', 'ᾂ', 'ᾃ', 'ᾄ', 'ᾅ', 'ᾆ', 'ᾇ', 'ὰ', 'ά', 'ᾰ', 'ᾱ', 'ᾲ', 'ᾳ', 'ᾴ', 'ᾶ', 'ᾷ', 'а', 'أ', 'အ', 'ာ', 'ါ', 'ǻ', 'ǎ', 'ª', 'ა', 'अ', 'ا', 'ａ', 'ä'],
+            'b'    => ['б', 'β', 'ب', 'ဗ', 'ბ', 'ｂ'],
+            'c'    => ['ç', 'ć', 'č', 'ĉ', 'ċ', 'ｃ'],
+            'd'    => ['ď', 'ð', 'đ', 'ƌ', 'ȡ', 'ɖ', 'ɗ', 'ᵭ', 'ᶁ', 'ᶑ', 'д', 'δ', 'د', 'ض', 'ဍ', 'ဒ', 'დ', 'ｄ'],
+            'e'    => ['é', 'è', 'ẻ', 'ẽ', 'ẹ', 'ê', 'ế', 'ề', 'ể', 'ễ', 'ệ', 'ë', 'ē', 'ę', 'ě', 'ĕ', 'ė', 'ε', 'έ', 'ἐ', 'ἑ', 'ἒ', 'ἓ', 'ἔ', 'ἕ', 'ὲ', 'έ', 'е', 'ё', 'э', 'є', 'ə', 'ဧ', 'ေ', 'ဲ', 'ე', 'ए', 'إ', 'ئ', 'ｅ'],
+            'f'    => ['ф', 'φ', 'ف', 'ƒ', 'ფ', 'ｆ'],
+            'g'    => ['ĝ', 'ğ', 'ġ', 'ģ', 'г', 'ґ', 'γ', 'ဂ', 'გ', 'گ', 'ｇ'],
+            'h'    => ['ĥ', 'ħ', 'η', 'ή', 'ح', 'ه', 'ဟ', 'ှ', 'ჰ', 'ｈ'],
+            'i'    => ['í', 'ì', 'ỉ', 'ĩ', 'ị', 'î', 'ï', 'ī', 'ĭ', 'į', 'ı', 'ι', 'ί', 'ϊ', 'ΐ', 'ἰ', 'ἱ', 'ἲ', 'ἳ', 'ἴ', 'ἵ', 'ἶ', 'ἷ', 'ὶ', 'ί', 'ῐ', 'ῑ', 'ῒ', 'ΐ', 'ῖ', 'ῗ', 'і', 'ї', 'и', 'ဣ', 'ိ', 'ီ', 'ည်', 'ǐ', 'ი', 'इ', 'ی', 'ｉ'],
+            'j'    => ['ĵ', 'ј', 'Ј', 'ჯ', 'ج', 'ｊ'],
+            'k'    => ['ķ', 'ĸ', 'к', 'κ', 'Ķ', 'ق', 'ك', 'က', 'კ', 'ქ', 'ک', 'ｋ'],
+            'l'    => ['ł', 'ľ', 'ĺ', 'ļ', 'ŀ', 'л', 'λ', 'ل', 'လ', 'ლ', 'ｌ'],
+            'm'    => ['м', 'μ', 'م', 'မ', 'მ', 'ｍ'],
+            'n'    => ['ñ', 'ń', 'ň', 'ņ', 'ŉ', 'ŋ', 'ν', 'н', 'ن', 'န', 'ნ', 'ｎ'],
+            'o'    => ['ó', 'ò', 'ỏ', 'õ', 'ọ', 'ô', 'ố', 'ồ', 'ổ', 'ỗ', 'ộ', 'ơ', 'ớ', 'ờ', 'ở', 'ỡ', 'ợ', 'ø', 'ō', 'ő', 'ŏ', 'ο', 'ὀ', 'ὁ', 'ὂ', 'ὃ', 'ὄ', 'ὅ', 'ὸ', 'ό', 'о', 'و', 'θ', 'ို', 'ǒ', 'ǿ', 'º', 'ო', 'ओ', 'ｏ', 'ö'],
+            'p'    => ['п', 'π', 'ပ', 'პ', 'پ', 'ｐ'],
+            'q'    => ['ყ', 'ｑ'],
+            'r'    => ['ŕ', 'ř', 'ŗ', 'р', 'ρ', 'ر', 'რ', 'ｒ'],
+            's'    => ['ś', 'š', 'ş', 'с', 'σ', 'ș', 'ς', 'س', 'ص', 'စ', 'ſ', 'ს', 'ｓ'],
+            't'    => ['ť', 'ţ', 'т', 'τ', 'ț', 'ت', 'ط', 'ဋ', 'တ', 'ŧ', 'თ', 'ტ', 'ｔ'],
+            'u'    => ['ú', 'ù', 'ủ', 'ũ', 'ụ', 'ư', 'ứ', 'ừ', 'ử', 'ữ', 'ự', 'û', 'ū', 'ů', 'ű', 'ŭ', 'ų', 'µ', 'у', 'ဉ', 'ု', 'ူ', 'ǔ', 'ǖ', 'ǘ', 'ǚ', 'ǜ', 'უ', 'उ', 'ｕ', 'ў', 'ü'],
+            'v'    => ['в', 'ვ', 'ϐ', 'ｖ'],
+            'w'    => ['ŵ', 'ω', 'ώ', 'ဝ', 'ွ', 'ｗ'],
+            'x'    => ['χ', 'ξ', 'ｘ'],
+            'y'    => ['ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ', 'ÿ', 'ŷ', 'й', 'ы', 'υ', 'ϋ', 'ύ', 'ΰ', 'ي', 'ယ', 'ｙ'],
+            'z'    => ['ź', 'ž', 'ż', 'з', 'ζ', 'ز', 'ဇ', 'ზ', 'ｚ'],
+            'aa'   => ['ع', 'आ', 'آ'],
+            'ae'   => ['æ', 'ǽ'],
+            'ai'   => ['ऐ'],
+            'ch'   => ['ч', 'ჩ', 'ჭ', 'چ'],
+            'dj'   => ['ђ', 'đ'],
+            'dz'   => ['џ', 'ძ'],
+            'ei'   => ['ऍ'],
+            'gh'   => ['غ', 'ღ'],
+            'ii'   => ['ई'],
+            'ij'   => ['ĳ'],
+            'kh'   => ['х', 'خ', 'ხ'],
+            'lj'   => ['љ'],
+            'nj'   => ['њ'],
+            'oe'   => ['ö', 'œ', 'ؤ'],
+            'oi'   => ['ऑ'],
+            'oii'  => ['ऒ'],
+            'ps'   => ['ψ'],
+            'sh'   => ['ш', 'შ', 'ش'],
+            'shch' => ['щ'],
+            'ss'   => ['ß'],
+            'sx'   => ['ŝ'],
+            'th'   => ['þ', 'ϑ', 'ث', 'ذ', 'ظ'],
+            'ts'   => ['ц', 'ც', 'წ'],
+            'ue'   => ['ü'],
+            'uu'   => ['ऊ'],
+            'ya'   => ['я'],
+            'yu'   => ['ю'],
+            'zh'   => ['ж', 'ჟ', 'ژ'],
+            '(c)'  => ['©'],
+            'A'    => ['Á', 'À', 'Ả', 'Ã', 'Ạ', 'Ă', 'Ắ', 'Ằ', 'Ẳ', 'Ẵ', 'Ặ', 'Â', 'Ấ', 'Ầ', 'Ẩ', 'Ẫ', 'Ậ', 'Å', 'Ā', 'Ą', 'Α', 'Ά', 'Ἀ', 'Ἁ', 'Ἂ', 'Ἃ', 'Ἄ', 'Ἅ', 'Ἆ', 'Ἇ', 'ᾈ', 'ᾉ', 'ᾊ', 'ᾋ', 'ᾌ', 'ᾍ', 'ᾎ', 'ᾏ', 'Ᾰ', 'Ᾱ', 'Ὰ', 'Ά', 'ᾼ', 'А', 'Ǻ', 'Ǎ', 'Ａ', 'Ä'],
+            'B'    => ['Б', 'Β', 'ब', 'Ｂ'],
+            'C'    => ['Ç', 'Ć', 'Č', 'Ĉ', 'Ċ', 'Ｃ'],
+            'D'    => ['Ď', 'Ð', 'Đ', 'Ɖ', 'Ɗ', 'Ƌ', 'ᴅ', 'ᴆ', 'Д', 'Δ', 'Ｄ'],
+            'E'    => ['É', 'È', 'Ẻ', 'Ẽ', 'Ẹ', 'Ê', 'Ế', 'Ề', 'Ể', 'Ễ', 'Ệ', 'Ë', 'Ē', 'Ę', 'Ě', 'Ĕ', 'Ė', 'Ε', 'Έ', 'Ἐ', 'Ἑ', 'Ἒ', 'Ἓ', 'Ἔ', 'Ἕ', 'Έ', 'Ὲ', 'Е', 'Ё', 'Э', 'Є', 'Ə', 'Ｅ'],
+            'F'    => ['Ф', 'Φ', 'Ｆ'],
+            'G'    => ['Ğ', 'Ġ', 'Ģ', 'Г', 'Ґ', 'Γ', 'Ｇ'],
+            'H'    => ['Η', 'Ή', 'Ħ', 'Ｈ'],
+            'I'    => ['Í', 'Ì', 'Ỉ', 'Ĩ', 'Ị', 'Î', 'Ï', 'Ī', 'Ĭ', 'Į', 'İ', 'Ι', 'Ί', 'Ϊ', 'Ἰ', 'Ἱ', 'Ἳ', 'Ἴ', 'Ἵ', 'Ἶ', 'Ἷ', 'Ῐ', 'Ῑ', 'Ὶ', 'Ί', 'И', 'І', 'Ї', 'Ǐ', 'ϒ', 'Ｉ'],
+            'J'    => ['Ｊ'],
+            'K'    => ['К', 'Κ', 'Ｋ'],
+            'L'    => ['Ĺ', 'Ł', 'Л', 'Λ', 'Ļ', 'Ľ', 'Ŀ', 'ल', 'Ｌ'],
+            'M'    => ['М', 'Μ', 'Ｍ'],
+            'N'    => ['Ń', 'Ñ', 'Ň', 'Ņ', 'Ŋ', 'Н', 'Ν', 'Ｎ'],
+            'O'    => ['Ó', 'Ò', 'Ỏ', 'Õ', 'Ọ', 'Ô', 'Ố', 'Ồ', 'Ổ', 'Ỗ', 'Ộ', 'Ơ', 'Ớ', 'Ờ', 'Ở', 'Ỡ', 'Ợ', 'Ø', 'Ō', 'Ő', 'Ŏ', 'Ο', 'Ό', 'Ὀ', 'Ὁ', 'Ὂ', 'Ὃ', 'Ὄ', 'Ὅ', 'Ὸ', 'Ό', 'О', 'Θ', 'Ө', 'Ǒ', 'Ǿ', 'Ｏ', 'Ö'],
+            'P'    => ['П', 'Π', 'Ｐ'],
+            'Q'    => ['Ｑ'],
+            'R'    => ['Ř', 'Ŕ', 'Р', 'Ρ', 'Ŗ', 'Ｒ'],
+            'S'    => ['Ş', 'Ŝ', 'Ș', 'Š', 'Ś', 'С', 'Σ', 'Ｓ'],
+            'T'    => ['Ť', 'Ţ', 'Ŧ', 'Ț', 'Т', 'Τ', 'Ｔ'],
+            'U'    => ['Ú', 'Ù', 'Ủ', 'Ũ', 'Ụ', 'Ư', 'Ứ', 'Ừ', 'Ử', 'Ữ', 'Ự', 'Û', 'Ū', 'Ů', 'Ű', 'Ŭ', 'Ų', 'У', 'Ǔ', 'Ǖ', 'Ǘ', 'Ǚ', 'Ǜ', 'Ｕ', 'Ў', 'Ü'],
+            'V'    => ['В', 'Ｖ'],
+            'W'    => ['Ω', 'Ώ', 'Ŵ', 'Ｗ'],
+            'X'    => ['Χ', 'Ξ', 'Ｘ'],
+            'Y'    => ['Ý', 'Ỳ', 'Ỷ', 'Ỹ', 'Ỵ', 'Ÿ', 'Ῠ', 'Ῡ', 'Ὺ', 'Ύ', 'Ы', 'Й', 'Υ', 'Ϋ', 'Ŷ', 'Ｙ'],
+            'Z'    => ['Ź', 'Ž', 'Ż', 'З', 'Ζ', 'Ｚ'],
+            'AE'   => ['Æ', 'Ǽ'],
+            'Ch'   => ['Ч'],
+            'Dj'   => ['Ђ'],
+            'Dz'   => ['Џ'],
+            'Gx'   => ['Ĝ'],
+            'Hx'   => ['Ĥ'],
+            'Ij'   => ['Ĳ'],
+            'Jx'   => ['Ĵ'],
+            'Kh'   => ['Х'],
+            'Lj'   => ['Љ'],
+            'Nj'   => ['Њ'],
+            'Oe'   => ['Œ'],
+            'Ps'   => ['Ψ'],
+            'Sh'   => ['Ш'],
+            'Shch' => ['Щ'],
+            'Ss'   => ['ẞ'],
+            'Th'   => ['Þ'],
+            'Ts'   => ['Ц'],
+            'Ya'   => ['Я'],
+            'Yu'   => ['Ю'],
+            'Zh'   => ['Ж'],
+            ' '    => ["\xC2\xA0", "\xE2\x80\x80", "\xE2\x80\x81", "\xE2\x80\x82", "\xE2\x80\x83", "\xE2\x80\x84", "\xE2\x80\x85", "\xE2\x80\x86", "\xE2\x80\x87", "\xE2\x80\x88", "\xE2\x80\x89", "\xE2\x80\x8A", "\xE2\x80\xAF", "\xE2\x81\x9F", "\xE3\x80\x80", "\xEF\xBE\xA0"],
+        ];
+    }
+
+    /**
+     * Returns the language specific replacements for the ascii method.
+     *
+     * Note: Adapted from Stringy\Stringy.
+     *
+     * @see https://github.com/danielstjules/Stringy/blob/3.1.0/LICENSE.txt
+     *
+     * @param  string  $language
+     * @return array|null
+     */
+    public static function languageSpecificCharsArray($language)
+    {
+        static $languageSpecific;
+        if (! isset($languageSpecific)) {
+            $languageSpecific = [
+                'bg' => [
+                    ['х', 'Х', 'щ', 'Щ', 'ъ', 'Ъ', 'ь', 'Ь'],
+                    ['h', 'H', 'sht', 'SHT', 'a', 'А', 'y', 'Y'],
+                ],
+                'de' => [
+                    ['ä',  'ö',  'ü',  'Ä',  'Ö',  'Ü'],
+                    ['ae', 'oe', 'ue', 'AE', 'OE', 'UE'],
+                ],
+            ];
+        }
+        return isset($languageSpecific[$language]) ? $languageSpecific[$language] : null;
+    }
+
 }
