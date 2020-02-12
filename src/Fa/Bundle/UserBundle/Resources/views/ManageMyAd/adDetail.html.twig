@@ -156,7 +156,7 @@
                 {% if currentRoute == 'manage_my_ads_active' %}
                 <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
                     {% set createdInwords = (createdInwords=='less than 1 minute ago')?'1 minute ago':createdInwords %}
-                        {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords}} 
+                        {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}} 
                 </div>
                 {% endif %}
                 
@@ -244,6 +244,7 @@
             <div class="featured-share-box-mobile">
             	<div class="featuredBlock1">            		
                    <a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>                    
+                   {% if featuredToggleFlag==1 %}        
                     {% if isFeaturedAd==1 %}
             			<div class="featured-switch toggle-on">
             		{% else %}        
@@ -258,7 +259,8 @@
             			</div>
             			<div class="toggle-handler"></div>
             		</div>
-            		<span class="featuredTxt">Featured</span>           		
+            		<span class="featuredTxt">Featured</span>  
+            		{% endif %}         		
             	</div>
             </div>
             {% endif %}

@@ -18,7 +18,7 @@
     {% set adPackageArray       = adUserPackageRepository.getAdPackageArrayByAdId(adIdArray, true) %}
     {% set inModerationLiveAdIds = adModerateRepository.getInModerationStatusForLiveAdIds(adIdArray) %}
 {% endif %}
-
+{{ include('FaUserBundle:ManageMyAd:manageMyAd-css.html.twig') }}
        {% if pagination.getNbResults() %}
             {% for ad in pagination.getCurrentPageResults() %}
                 {% set adId = ad.id %}
