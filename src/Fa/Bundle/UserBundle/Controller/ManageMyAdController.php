@@ -900,7 +900,7 @@ class ManageMyAdController extends CoreController
                                 //make it cybersource payment
                                 $redirectUrl = $request->headers->get('referer');
                                 //$this->addOrRemoveFeaturedCredits($user->getId(), $adId);
-                                $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
+                                $this->container->get('session')->set('mma_payment_success_redirect_url', $redirectUrl);
                                 $this->get('session')->set('upgrade_cybersource_params_'.$loggedinUser->getId(), array_merge($form->getData(), $request->get('fa_payment_cyber_source_checkout')));
                                 $htmlContent= array(
                                     'success' 		=> true,
@@ -1032,7 +1032,7 @@ class ManageMyAdController extends CoreController
                         $addCartInfo = $this->addUpsellInfoToCart($user->getId(), $adId, $selectedUpsellId, $request, $ad->getCategory()->getId());
                         if ($addCartInfo) {
                             $redirectUrl = $request->headers->get('referer');
-                            $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
+                            $this->container->get('session')->set('mma_payment_success_redirect_url', $redirectUrl);
                             $htmlContent= array(
                                 'success' 		=> true,
                                 'redirectUrl' 	=> $redirectUrl
@@ -1089,7 +1089,7 @@ class ManageMyAdController extends CoreController
                         $this->getRepository('FaUserBundle:UserCreditUsed')->addCreditUsedByUpsell($user->getId(), $ad, $upsellObj);
                         
                         $redirectUrl = $request->headers->get('referer');
-                        $this->container->get('session')->set('upgrade_payment_success_redirect_url', $redirectUrl);
+                        $this->container->get('session')->set('mma_payment_success_redirect_url', $redirectUrl);
                         
                         $successMsg     = $this->get('translator')->trans('Featured upsell was added successfully.', array(), 'frontend-manage-my-ad');
                         $messageManager = $this->get('fa.message.manager');

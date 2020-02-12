@@ -155,8 +155,8 @@
                 {% set createdInwords = ad['ad_date'] |time_ago_in_words %}
                 {% if currentRoute == 'manage_my_ads_active' %}
                 <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
-                    {% set createdInwords = (createdInwords=='less than 1 minute ago')?'1 minute ago':createdInwords %}
-                        {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}} 
+                     {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
+                     {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}
                 </div>
                 {% endif %}
                 
@@ -334,7 +334,8 @@
                     {% set createdInwords = ad['ad_date'] |time_ago_in_words %}
                     {% if currentRoute == 'manage_my_ads_active' %}
                     <div class="list-created-hours">
-                            {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords}}
+                     {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
+                     {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}                    
                     </div>
                     {% endif %}
                     
