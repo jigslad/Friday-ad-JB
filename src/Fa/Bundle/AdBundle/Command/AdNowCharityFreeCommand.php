@@ -37,8 +37,8 @@ class AdNowCharityFreeCommand extends ContainerAwareCommand
         $this
             ->setName('fa:charity:now-charity-free')
             ->setDescription("Send ad now in charity free.")
-            ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
-            ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', "256M")
+           // ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
+            //->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', "256M")
             ->setHelp(
                 <<<EOF
         Cron: To be setup.
@@ -105,8 +105,8 @@ EOF
 
             //send email only if ad has user and status is active.
             $userRoleId = ($ad->getUser() ? $ad->getUser()->getRole()->getId() : 0);
+
             if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
-                //$this->em->getRepository('FaAdBundle:Ad')->sendExpireTomorrowAlertEmail($ad, $this->getContainer());
                 $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('ad_expires_tomorrow', $user, $ad, $this->getContainer());
             }
 
@@ -197,7 +197,7 @@ EOF
      */
     protected function getAdCount()
     {
-        $query = 'SELECT count(a.id) as count FROM ad a left join ad_location al on a.id = al.ad_id where a.status_id = 25 AND al.town_id in (SELECT l.town_id from location_group_location l where l.location_group_id != 13)';
+        $query = 'SELECT count(a.id) as count FROM ad a left join ad_location al on a.id = al.ad_id where a.status_id = 25 AND al.town_id in (SELECT l.town_id from location_group_location l where l.location_group_id != 13) limit 5';
         $stmt = $this->em->getConnection()->prepare($query);
         $stmt->execute();
         $count = $stmt->fetchAll();

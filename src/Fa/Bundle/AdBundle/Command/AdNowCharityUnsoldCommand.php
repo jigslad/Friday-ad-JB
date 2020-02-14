@@ -21,13 +21,13 @@ use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
 
 /**
- * This command is used to send renew your ad alert to users for before given 1 day
+ * This command is used to send your unsold ad alert to users for before given 10 day
  *
  * @author Samir Amrutya <samiram@aspl.in>
  * @copyright 2014 Friday Media Group Ltd
  * @version 1.0
  */
-class AdNowCharityFreeCommand extends ContainerAwareCommand
+class AdNowCharityUnsoldCommand extends ContainerAwareCommand
 {
     /**
      * Configure.
@@ -35,8 +35,8 @@ class AdNowCharityFreeCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('fa:charity:now-charity-free')
-            ->setDescription("Send ad now in charity free.")
+            ->setName('fa:charity:now-charity-unsold')
+            ->setDescription("Send ad now in charity free unsold.")
             ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
             ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', "256M")
             ->setHelp(
@@ -44,10 +44,10 @@ class AdNowCharityFreeCommand extends ContainerAwareCommand
         Cron: To be setup.
         
         Actions:
-        - Send ad now charity free before two day.
+        - Send ad now charity free of unsold before ten day.
         
         Command:
-         - php app/console fa:charity:now-charity-free
+         - php app/console fa:charity:now-charity-unsold
 EOF
             );
     }
@@ -72,7 +72,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:process-email-queue --email_identifier="now_charity_free"';
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:process-email-queue --email_identifier="now_charity_unsold"';
             $output->writeln($command, true);
             passthru($command, $returnVar);
 
@@ -106,7 +106,6 @@ EOF
             //send email only if ad has user and status is active.
             $userRoleId = ($ad->getUser() ? $ad->getUser()->getRole()->getId() : 0);
             if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
-                //$this->em->getRepository('FaAdBundle:Ad')->sendExpireTomorrowAlertEmail($ad, $this->getContainer());
                 $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('ad_expires_tomorrow', $user, $ad, $this->getContainer());
             }
 
@@ -114,7 +113,7 @@ EOF
             $this->em->persist($ad);
             $this->em->flush($ad);
 
-            $output->writeln('Renewal email added to queue for AD ID: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
+            $output->writeln('unsold email added to queue for AD ID: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
         }
         $this->em->clear();
 
@@ -122,7 +121,7 @@ EOF
     }
 
     /**
-     * Send ad expiration alert before one day.
+     * Send ad Unsold alert before ten day.
      *
      * @param array  $searchParam Search parameters.
      * @param object $input       Input object.
@@ -159,7 +158,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:charity:now-charity-free '.$commandOptions;
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:charity:now-charity-unsold '.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 
