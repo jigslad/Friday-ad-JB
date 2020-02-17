@@ -51,7 +51,9 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
 .manage-item-list .dtl-social-icons { text-align:left;padding-top:5px;display:inline-block; }
 
 .manage-item-list .manage-list-social-icons a { width:25px !important;height:25px !important;background-size: 25px 25px !important;margin: 0 2px 0 0 !important; }
-.manage-item-list .manage-item-btns { min-height:120px !important;max-height:120px !important; }
+.manage-item-list .normal-user-mma .manage-item-btns { min-height:150px !important;max-height:150px !important; }
+.manage-item-list .netsuite-user-mma .manage-item-btns { min-height:120px !important;max-height:120px !important; }
+
 .manage-item-list .right-manage-buttons { width:100%;}
 .xs-red-btn, .xs-red-large-btn { background: #fff;border: 1px solid #ff0000;color: #ea4545;font-family: 'Asap',sans-serif;font-size: 14px;font-weight: 700;line-height: 16px;padding: 5px 20px 7px 20px;}
 .xs-red-btn:focus, .xs-red-btn:hover, .xs-red-large-btn:focus, .xs-red-large-btn:hover { background: #ea4545;border: 1px solid #ff0000;color: #ffffff; }
@@ -92,7 +94,7 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
 .top-selects-mma { display: inline-flex;width: 100%;}
 .select-diff-ads { right: 20px;position: absolute;top: 12px;width: 25%;}
 .seladv-addet {  display:none !important; }
-.mma-pkg-title { font-style: italic; /* overflow: hidden; white-space: nowrap; text-overflow: ellipsis;*/ }
+.mma-pkg-title { font-style: italic; position: absolute;width: 100%;right: 10px;bottom: 0; /* overflow: hidden; white-space: nowrap; text-overflow: ellipsis;*/ }
 .xs-red-large-btn { margin-top: 0px; padding-top:15px !important; padding-bottom:15px !important;font-size: 18px;font-weight: normal; font-family: 'Bree Serif',serif; }
 .xs-green-large-btn { padding-top:13px !important; padding-bottom:13px !important; }
 
@@ -286,15 +288,13 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
     .img-btns-blk { display:block; }
     .manage-list-img { float:left; }
     .manage-item-btns { width:45%; float:right; }
-    .manage-item-list .manage-item-btns { min-height:100px !important;max-height:100px !important; }
+    .manage-item-list .manage-item-btns { min-height:150px !important;max-height:150px !important; }
     .manage-list-img { width:120px !important;height:100px !important; }
     .manage-list-img img { width:100% !important;height:100% !important;object-fit:contain; }
     .manage-item-list .adEditBlock { margin-top:9px; }
     .img-status-overlay { max-height:100px !important; max-width:120px !important; }
     .img-status-overlay .img-status-overlay-text { font-size:12px !important; }
-    .manage-items-main { padding-bottom:20px; }
-    .manage-my-ads-list-pad-bot { margin-bottom:160px !important; }
-    .boostedModal .inner-wrap { margin-top:21px; }
+    .manage-items-main { padding-bottom:20px; }manage-my-ads-list-onlyp { margin-top:21px; }
     .created-box { clear:both !important; }
     .top-selects-mma { display: block; }
     .select-diff-ads { right: 0px;position: relative;top: 0px;width: 100%; }
@@ -303,5 +303,6 @@ ul.toplistWithBullets li.boostBtn::before { list-style: none;content: "";font-si
 	.featured-switch .toggle-handler { width: 17px; height: 17px; }
 	.manage-list-img .image-tooltip { left: 0% !important; }
 	.manage-list-img .image-tooltip:before { left: 20% !important; }
+	.manage-item-btn .adRemoveBlock .xs-red-btn:hover,  .manage-item-btn .adRemoveBlock .xs-red-btn:focus { background: #ffffff !important; }
 }
 </style>

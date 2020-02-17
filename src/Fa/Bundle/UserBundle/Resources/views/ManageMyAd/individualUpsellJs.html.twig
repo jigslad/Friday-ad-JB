@@ -46,9 +46,9 @@ function featuredTopUpsellBtn(id,upsellId,catupsellId) {
     });
 }
 
-function useCreditForFeaturedUpsell(adId, upsellId) {
+function useCreditForFeaturedAdPackage(adId, upsellId) {
 	blockPage();
-    var route = Routing.generate('credit_payment_process_for_individual_upsell', { 'upsellId': upsellId, 'adId': adId });
+    var route = Routing.generate('credit_payment_process_for_featured_ad_package', { 'adId': adId });
     $.ajax({
         type: "GET",
         url : route,

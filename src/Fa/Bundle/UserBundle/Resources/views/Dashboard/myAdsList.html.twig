@@ -6,19 +6,69 @@
 {% set adUserPackageRepository = fetch_repository('FaAdBundle:AdUserPackage') %}
 {% set adStatusLive   = constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %}
 {% set adModerateRepository = fetch_repository('FaAdBundle:AdModerate') %}
+{% set userCreditRepository = fetch_repository('FaUserBundle:UserCredit') %}
+{% set userCreditCount = userCreditRepository.getActiveCreditCountForUser(app.user.getId()) %}
+{% set adUserPackageUpsellRepository = fetch_repository('FaAdBundle:AdUserPackageUpsell') %}
+{% set shopPackageCreditRepository = fetch_repository('FaPromotionBundle:ShopPackageCredit') %}
+{% set categoryUpsellRepository = fetch_repository('FaPromotionBundle:CategoryUpsell') %}
 
 {% set adIdArray = {} %}
+{% set userRoleId = app.user.getRole().getId() %}
+{% set userBusinessCategory = app.user.getBusinessCategoryId() %}
+{% set userBusType = 'private' %}
+{% if (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+	{% set userBusType = 'netsuite' %}
+{% elseif (userRoleId == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID')) %}
+	{% set userBusType = 'business' %}
+{% else %}
+	{% set userBusType = 'private' %}
+{% endif %}
+
+{% set totalFeaturedCredit = 0 %}
+{% set usedFeaturedCredits = 0 %}
+{% set remainingFeaturedCredits = 0 %}
+{% set adFeaturedCreditCnt = 0 %}
+{% set adFeaturedUpsellArray = {} %}
+{% set adFeaturedCreditCnt = adUserPackageUpsellRepository.getAdFeaturedUpsellCountByuserId(app.user.getId()) %}
+
 {% if pagination.getNbResults() %}
     {% for ad in pagination.getCurrentPageResults() %}
         {% set adIdArray = adIdArray|merge({0 : ad.id}) %}
     {% endfor %}
-
+	
+	{% set adCategoryIdArray    = adRepository.getAdCategoryIdArrayByAdId(adIdArray) %} 
     {% set adImageArray         = adImageRepository.getAdMainImageArrayByAdId(adIdArray) %}
     {% set adViewCounterArray   = adViewCounterRepository.getAdViewCounterArrayByAdId(adIdArray) %}
     {% set adPackageArray       = adUserPackageRepository.getAdPackageArrayByAdId(adIdArray, true) %}
     {% set inModerationLiveAdIds = adModerateRepository.getInModerationStatusForLiveAdIds(adIdArray) %}
+    {% set adFeaturedUpsellArray = adUserPackageUpsellRepository.getAdFeaturedUpsellArrayByAdId(adIdArray) %}
+    {% set adModerateArray      = adModerateRepository.findResultsByAdIdsAndModerationResult(adIdArray, 'rejected') %}
+    
+    {% set adCategoryIdValArray = {} %}
+    {% for key,value in adCategoryIdArray %}
+    	{%  set  adCategoryIdValArray = adCategoryIdValArray|merge([value])  %}
+    {% endfor %}
+    
+    {% if adCategoryIdValArray|length >0 %}
+    	{% set categoryUpsellArray    = categoryUpsellRepository.getCategoryUpsellForCategoryIds(adCategoryIdValArray) %}
+    {% endif %}
+    
+    {% if (activeShopPackage and activeShopPackage.getPackage()) %}
+        {% set shopPackageCreditArr = shopPackageCreditRepository.getFeaturedCreditsByPackageId(activeShopPackage.getPackage().getId()) %}    	
+        {% if shopPackageCreditArr|length >0 %}
+            {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
+            {% set remainingFeaturedCredits = userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) %}
+            
+            {% if  remainingFeaturedCredits > totalFeaturedCredit %}
+                {% set usedFeaturedCredits = totalFeaturedCredit %}
+            {% else %}
+                {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
 {% endif %}
 {{ include('FaUserBundle:ManageMyAd:manageMyAd-css.html.twig') }}
+{{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}
        {% if pagination.getNbResults() %}
             {% for ad in pagination.getCurrentPageResults() %}
                 {% set adId = ad.id %}
@@ -27,7 +77,11 @@
                     {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
                     {# {% set adUrl = adUrl|trim('/') %} #}
                 {% endif %}
-                {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+                {% if userBusType is defined and userBusType == 'netsuite' %}
+                    {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
+                {% else %}
+                    {{ include('FaUserBundle:ManageMyAd:adDetail.html.twig') }}
+                {% endif %}  
             {% endfor %}
         {% endif %}
 

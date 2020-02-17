@@ -65,7 +65,7 @@
 {% if not app.request.isXmlHttpRequest() %} 
 <div class="manage-item-list" id="item_card_{{adId}}">
 {% endif %}
-
+<div class="netsuite-user-mma">
 <div class="row">
 	<div class="small-8 medium-1 large-1 columns">		
 	{% if currentRoute == 'manage_my_ads_active' or currentRoute=='ajax_manage_my_ads_get_status' %}	
@@ -188,9 +188,9 @@
             			<div class="featured-switch toggle-on">
             		{% else %}
                 		{% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-                			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
+                			<div class="featured-switch netsuite-featured-indiv-upsell toggle-on" id="netsuite_featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
                 		{% else %}
-                			<div class="featured-switch featured-indiv-upsell toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
+                			<div class="featured-switch netsuite-featured-indiv-upsell toggle-off" id="netsuite_featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
                 		{% endif %}
                 	{% endif %}
             			<div class="toggle-wrap">            
@@ -226,16 +226,17 @@
 {# Mobile Version Starts here #}
 <div class="show-for-small-only">
         <div class="small-16 columns">
-        	{% if ad['status_id'] == adStatusLive and featuredToggleFlag==1 %}
+        	{% if ad['status_id'] == adStatusLive %}
         	<div class="featuredBlock1">
         		<a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>                
+        	    {% if featuredToggleFlag==1 %}
         	    {% if isFeaturedAd==1 %}
             			<div class="featured-switch toggle-on">
             	{% else %}	    
         	        {% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-            			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
+            			<div class="featured-switch netsuite-featured-indiv-upsell toggle-on" id="netsuite_featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
             		{% else %}
-            			<div class="featured-switch featured-indiv-upsell toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
+            			<div class="featured-switch netsuite-featured-indiv-upsell toggle-off" id="netsuite_featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
             		{% endif %}
 				{% endif %}
         			<div class="toggle-wrap">            
@@ -244,6 +245,7 @@
         			<div class="toggle-handler"></div>
         		</div>
         		<span class="featuredTxt">Featured</span>
+        		{% endif %}
         	</div>
            {% endif %}
         </div>
@@ -362,6 +364,7 @@
 {# Mobile Version Ends here #}
 
 </div>  
+</div>
 {% if not app.request.isXmlHttpRequest() %}    
 </div>
 {% endif %}

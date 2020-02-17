@@ -67,7 +67,7 @@
 {% if not app.request.isXmlHttpRequest() %} 
 <div class="manage-item-list" id="item_card_{{adId}}">
 {% endif %}
-
+<div class="normal-user-mma">
 <div class="hide-for-small-only">
     <div class="row">       
         <div class="small-10 medium-6 large-6 columns medium-left-cols">
@@ -383,8 +383,9 @@
         <div class="small-24 columns"></div>
     </div>   
 </div>
-
 {# Mobile Version Ends here #}  
+
+</div>
 {% if not app.request.isXmlHttpRequest() %} 
 </div>
 {% endif %}

@@ -20,6 +20,10 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Fa\Bundle\UserBundle\Repository\UserSearchAgentRepository;
 use Fa\Bundle\EntityBundle\Repository\LocationRepository;
+use Fa\Bundle\UserBundle\Repository\RoleRepository;
+use Fa\Bundle\PromotionBundle\Repository\CategoryUpsellRepository;
+use Fa\Bundle\AdBundle\Repository\AdUserPackageUpsellRepository;
+use Fa\Bundle\AdBundle\Entity\AdUserPackageUpsell;
 
 /**
  * This controller is used for dashboard home page.
@@ -80,13 +84,20 @@ class DashboardController extends CoreController
         $boostMaxPerMonth = 0;
         $boostAdRemaining = 0;
         $getExipryDate = $boostRenewDate = '';
-
+        
+        $loggedinUser = $this->getLoggedInUser();
+        $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
+        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+            $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
+        }
+        
         $parameters = array('recentlyViewedAds' => $recentlyViewedAds, 'myAdsParameters' => $myAdsParameters, 'myMessagesParameters' => $myMessagesParameters, 'myFavouritesParameters' => $myFavouritesParameters, 'mySavedSearchesParameters' => $mySavedSearchesParameters, 'myReviewsParameters' => $myReviewsParameters, 'searchResultUrl' => $searchResultUrl, 'modToolTipText'  => $moderationToolTipText,
             'isBoostEnabled'  => $isBoostEnabled,
             'boostMaxPerMonth'=> $boostMaxPerMonth,
             'boostAdRemaining'=> $boostAdRemaining,
             'boostRenewDate'  => $remainingDaysToRenewBoost,
             'boostedAdCount'  => $boostedAdCount,
+            'activeShopPackage' => $activeShopPackage,
         );
         
         return $this->render('FaUserBundle:Dashboard:index.html.twig', $parameters);

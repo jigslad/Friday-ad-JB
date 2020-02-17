@@ -145,7 +145,14 @@
                                 {% if ad['status_id'] == adStatusLive %}
                                     {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
                                     {# {% set adUrl = adUrl|trim('/') %} #}
-                                {% endif %}                                
+                                {% endif %}        
+                                
+                                {# {% set upsellExpiry = individualUpsellArr.getUpsell().getDuration()|trim('d') %}
+                                {% set adExpiry = ad.getExpiresAt() %}
+                                {% if adExpiry is defined and adExpiry > 0 %}
+                                   {% set dateRemainingForExpiry = CommonManager::dateDiffInDays($adExpiry,now()) %}
+                                {% endif %} #}
+                                
 								{% if userBusType is defined and userBusType == 'netsuite' %}
                                     {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
                                 {% else %}
@@ -331,7 +338,7 @@
 <div id="featuredOffConfirmModal" class="reveal-modal tiny remove-item-modal" data-reveal>
     <a class="close-reveal-modal closeFeaturedUpsell">&#215;</a>
     <h5 class="modal-title"> 
-        {{'Featured ad'|trans({}, 'frontend-manage-my-ad')}}
+        {{'Are you sure?'|trans({}, 'frontend-manage-my-ad')}}
     </h5>
     <div class="modal-content remove-modal">
         <div class="row">
@@ -394,6 +401,7 @@
     
 
 <div id="featuredTopUpsellModal" class="reveal-modal tiny remove-item-modal featured-top-modal" data-reveal data-selfeaturedid></div>
+
 {% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
     {#  Featured Top Success Modal Box   #}
     {{ include('FaUserBundle:ManageMyAd:individualSuccessPaymentModal.html.twig') }}
@@ -625,19 +633,38 @@
               if($(this).hasClass('toggle-off')){
                 $(this).removeClass('toggle-off').addClass('toggle-on');
                 $('#featuredTopUpsellModal').data('selfeaturedid', elem_id);
-                {% if remainingFeaturedCredits > 0 %}
-                	useCreditForFeaturedUpsell(adId,upsellId);
-                {% else %}
-                	featuredTopUpsellBtn(adId,upsellId, catupsellId);                 	             	
-                {% endif %}
+                featuredTopUpsellBtn(adId,upsellId, catupsellId);                 	             	
               }else{
             	 featurredUpsellRemoveId = adId;
             	 featuredUpsellId = upsellId;
 
             	 $('#featuredOffConfirmModal').foundation('reveal', 'open');
-                /*$(this).removeClass('toggle-on').addClass('toggle-off');*/ 
+                 $(this).removeClass('toggle-on').addClass('toggle-off'); 
               }
-            })
+            });
+
+            $('.netsuite-featured-indiv-upsell').on('click',function(){
+                var elem_id = $(this).attr('id');
+                var split_ad_id = elem_id.split("_");
+                var adId = split_ad_id[1];
+                var upsellId = split_ad_id[2];
+                var catupsellId = split_ad_id[3];
+                if($(this).hasClass('toggle-off')){
+                  $(this).removeClass('toggle-off').addClass('toggle-on');
+                  $('#featuredTopUpsellModal').data('selfeaturedid', elem_id);
+                  {% if remainingFeaturedCredits > 0 %}                	
+                  		useCreditForFeaturedAdPackage(adId,upsellId);
+                  {% else %}
+                  	featuredTopUpsellBtn(adId,upsellId, catupsellId);                 	             	
+                  {% endif %}
+                }else{
+              	 featurredUpsellRemoveId = adId;
+              	 featuredUpsellId = upsellId;
+
+              	 $('#featuredOffConfirmModal').foundation('reveal', 'open');
+                 $(this).removeClass('toggle-on').addClass('toggle-off'); 
+                }
+              })
         }
     })
 })(jQuery)

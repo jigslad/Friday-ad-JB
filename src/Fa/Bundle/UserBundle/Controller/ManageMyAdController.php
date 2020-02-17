@@ -870,9 +870,13 @@ class ManageMyAdController extends CoreController
                     $form        = $formManager->createForm(CyberSourceCheckoutType::class, array('subscription' => null));
                     
                     $individualUpsellDetails = $this->getRepository('FaPromotionBundle:CategoryUpsell')->getCategoryByUpsellId($upsellId,$catupsellId);
+                    $upsellExpiry = 0; 
+                    $adExpiry = null;
+                    $dateRemainingForExpiry = 0;
                     
                     if(!empty($individualUpsellDetails)) {
                         $individualUpsellArr = $individualUpsellDetails;
+                        $upsellExpiry = trim($individualUpsellArr->getUpsell()->getDuration(),'d');
                     }
                     /*if(!empty($individualUpsellDetails)) {
                         $individualUpsellArr['id'] =  $individualUpsellDetails[0]->getId();
@@ -884,6 +888,11 @@ class ManageMyAdController extends CoreController
                     $individualUpsellModalDetails = CommonManager::getIndividualUpsellModalDetails($upsellId);
                     
                     $categoryId       = $ad->getCategory()->getId();
+                    $adExpiry = $ad->getExpiresAt();
+                    if($adExpiry) {
+                        $dateRemainingForExpiry = CommonManager::dateDiffInDays($adExpiry,now());
+                    }
+                    
                     $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
                     if ($adRootCategoryId == CategoryRepository::ADULT_ID) {
                         $isAdultAdvertPresent = 1;
@@ -926,16 +935,20 @@ class ManageMyAdController extends CoreController
                             $htmlContent = $this->renderView('FaAdBundle:Ad:upgradePaymentForm.html.twig', $parameters);
                         }
                     } else {
-                        $parameters = array(
-                            'adId' => $adId,
-                            'adRootCategoryId' => $adRootCategoryId,
-                            'form' => $form->createView(),
-                            'individualUpsellArr' => $individualUpsellArr,
-                            'isAdultAdvertPresent' => $isAdultAdvertPresent,
-                            'individualUpsellModalDetails' => $individualUpsellModalDetails,
-                         );
-                         $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:individualUpsellmodalBox.html.twig', $parameters);
-                    }
+                        if($dateRemainingForExpiry > (int)$upsellExpiry && $dateRemainingForExpiry>0 && (int)$upsellExpiry>0) {
+                            
+                        } else {
+                            $parameters = array(
+                                'adId' => $adId,
+                                'adRootCategoryId' => $adRootCategoryId,
+                                'form' => $form->createView(),
+                                'individualUpsellArr' => $individualUpsellArr,
+                                'isAdultAdvertPresent' => $isAdultAdvertPresent,
+                                'individualUpsellModalDetails' => $individualUpsellModalDetails,
+                             );
+                             $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:individualUpsellmodalBox.html.twig', $parameters);                    
+                        }
+                  }
                 } else {
                     $error = "Oops! Something went wrong.";
                 }
@@ -1101,6 +1114,51 @@ class ManageMyAdController extends CoreController
                         );
                     }
 
+                    return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
+                }
+            }
+        }
+    }  
+    
+    
+    public function ajaxCreditPaymentProcessForFeaturedAdPackage($adId, Request $request)
+    {
+        //$upsellId = 5;
+        //$adId = 17260111;
+        if ($request->isXmlHttpRequest()) {
+            $redirectToUrl = '';
+            $error         = '';
+            $htmlContent   = '';
+            $deadlockError = '';
+            $deadlockRetry = '';
+            $loggedinUser     = $this->getLoggedInUser();
+            $errorMsg	= null;
+            
+            if (!empty($loggedinUser)) {
+                $user        = $this->getRepository('FaUserBundle:User')->find($loggedinUser->getId());
+                $ad        = $this->getRepository('FaAdBundle:Ad')->find($adId);
+                
+                if (!empty($user)) {
+                    $categoryId = $ad->getCategory()->getId();
+                    $locationGroupIds = $this->getRepository('FaAdBundle:AdLocation')->getLocationGroupByAdId($adId);
+                    $availableFeaturedPackages = $this->getRepository('FaPromotionBundle:PackageRule')->getFeaturedPackageByCategoryId($categoryId, $locationGroupIds, $this->container);                    
+                    $adExpiryDays     = $this->getRepository('FaCoreBundle:ConfigRule')->getExpirationDays($categoryId, $this->container);
+                    
+                    //loop through all show packages
+                    foreach ($availableFeaturedPackages as $package) {
+                        $availableFeaturedPackagesIds[] = $package->getPackage()->getId();
+                    }
+                    $packages = $this->getRepository('FaPromotionBundle:PackageRule')->getPackageByCategoryId($availableFeaturedPackagesIds[0]);
+                    //get Print Edition if exist
+                    $printEditionLimits = $this->getRepository('FaPromotionBundle:Package')->getPrintEditionLimitForPackages($packageIds);
+                    
+                    if (!empty($printEditionLimits)) {
+                        $defaultSelectedPrintEditions = $this->getRepository('FaAdBundle:AdPrint')->getPrintEditionForAd(max($printEditionLimits), $adId, true, $locationGroupIds);
+                        if (count($defaultSelectedPrintEditions)) {
+                            $defaultSelectedPrintEditions = array_combine(range(1, count($defaultSelectedPrintEditions)), array_values($defaultSelectedPrintEditions));
+                        }
+                    }
+                    $selectedPrintEditions = $defaultSelectedPrintEditions;
                     return new JsonResponse(array('error' => $error, 'deadlockError' => $deadlockError, 'redirectToUrl' => $redirectToUrl, 'htmlContent' => $htmlContent, 'deadlockRetry' => $deadlockRetry));
                 }
             }
