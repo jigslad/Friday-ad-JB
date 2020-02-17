@@ -115,7 +115,38 @@ class PackageRuleRepository extends EntityRepository
         }
         return $packages;
     }
-
+    
+    public function getFreeAdPackageByCategory($categoryId,$container = null)
+    {
+        $getFreeAdPackage = array();
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS, PackageRepository::ALIAS)
+        ->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
+        ->andWhere(PackageRepository::ALIAS.'.status = 1')
+        ->andWhere(PackageRepository::ALIAS.'.package_for = :package_for')
+        ->setParameter('package_for', 'ad')
+        //->andWhere(PackageRepository::ALIAS.'.price IS NULL OR '.self::ALIAS.'.price < 0')
+        ->andWhere(PackageRepository::ALIAS.'.price = 0')
+        ->andWhere(self::ALIAS.'.category = :categoryId')
+        ->setParameter('categoryId', $categoryId);
+        
+        $getFreeAdPackage =  $query->getQuery()->getResult();
+        
+        if (empty($getFreeAdPackage) && $categoryId) {
+            $parentCategoryIds = array_keys($this->_em->getRepository('FaEntityBundle:Category')->getCategoryPathArrayById($categoryId, false, $container));
+            array_pop($parentCategoryIds);
+            $parentCategoryIds = array_reverse($parentCategoryIds);
+            if (count($parentCategoryIds)) {
+                foreach ($parentCategoryIds as $parentCategoryId) {
+                    return $this->getFreeAdPackageByCategory($parentCategoryId,$container);
+                }
+            }
+        }
+        
+        return $getFreeAdPackage;
+        
+    }
+    
     /**
      * Get active packages by category id, location group & user type.
      *
@@ -200,6 +231,26 @@ class PackageRuleRepository extends EntityRepository
         return $packages;
     }
     
+    public function getActivePackagesByPackageIds($packageIds)
+    {
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select(self::ALIAS, PackageRepository::ALIAS)
+        ->leftJoin(self::ALIAS.'.package', PackageRepository::ALIAS)
+        ->andWhere(PackageRepository::ALIAS.'.status = 1')
+        ->andWhere(PackageRepository::ALIAS.'.package_for = :package_for')
+        ->setParameter('package_for', 'ad')
+        ->andWhere(self::ALIAS.'.package IN (:packageIds)')
+        ->setParameter('packageIds', $packageIds)
+        ->addOrderBy(PackageRepository::ALIAS.'.role', 'DESC')
+        ->addOrderBy(PackageRepository::ALIAS.'.price', 'ASC')
+        ->addGroupBy(PackageRepository::ALIAS.'.id');
+        
+        $packages =  $query->getQuery()->getResult();
+        
+        return $packages;
+    }
+    
+    
     /**
      * Get package rules based on package id.
      *
@@ -282,7 +333,7 @@ class PackageRuleRepository extends EntityRepository
             $parentCategoryIds = array_reverse($parentCategoryIds);
             if (count($parentCategoryIds)) {
                 foreach ($parentCategoryIds as $parentCategoryId) {
-                    return $this->getFeaturedPackageByCategoryIdRoleId($parentCategoryId, $locationGroupIdArray, $container);
+                    return $this->getFeaturedPackageByCategoryId($parentCategoryId, $locationGroupIdArray, $container);
                 }
             }
         }
