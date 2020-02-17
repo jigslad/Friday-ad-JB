@@ -589,7 +589,7 @@ class AdPostManager
                 $adUserPackage->setPrice($selpackage->getPrice());
                 $adUserPackage->setDuration($selpackage->getDuration());
                 $this->em->persist($adUserPackage);
-                $this->em->flush();
+                $this->em->flush($adUserPackage);
 
                 foreach ($selpackage->getUpsells() as $upsell) {
                     $this->addAdUserPackageUpsell($ad, $adUserPackage, $upsell);
