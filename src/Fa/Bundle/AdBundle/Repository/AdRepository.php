@@ -3520,37 +3520,28 @@ class AdRepository extends EntityRepository
             $qb->andWhere(self::ALIAS.'.status IN (:status)');
             $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_LIVE_ID, BaseEntityRepository::AD_STATUS_EXPIRED_ID, BaseEntityRepository::AD_STATUS_SOLD_ID, BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
         } elseif ($type == 'active') {
-            //$qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' OR ('.self::ALIAS.'.status IN (:status)'.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at)))');
-            $qb->andWhere(self::ALIAS.'.status IN (:status)');
-            if($sortBy == 'sel-featured' || $sortBy == 'sel-basic') {
-                $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_LIVE_ID));
-            } else {                
-                //$qb->andWhere('('.self::ALIAS.'.is_boosted IS NULL OR '.self::ALIAS.'.is_boosted=0)');
-                $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_LIVE_ID, BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
-            }
-            //$qb->setParameter('updated_at', strtotime('-29 days'));
-            //$qb->setParameter('created_at', strtotime('-29 days'));
+            $qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' OR ('.self::ALIAS.'.status IN (:status)'.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at)))');
+            //$qb->andWhere('('.self::ALIAS.'.is_boosted IS NULL OR '.self::ALIAS.'.is_boosted=0)');
+            $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
+            $qb->setParameter('updated_at', strtotime('-29 days'));
+            $qb->setParameter('created_at', strtotime('-29 days'));
         } elseif ($type == 'onlyactive') {
-            $qb->andWhere(self::ALIAS.'.status IN (:status)');
-            $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_LIVE_ID));
-            //$qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at))');
-            //$qb->setParameter('updated_at', strtotime('-29 days'));
-            //$qb->setParameter('created_at', strtotime('-29 days'));
+            $qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at))');
+            $qb->setParameter('updated_at', strtotime('-29 days'));
+            $qb->setParameter('created_at', strtotime('-29 days'));
         } elseif ($type == 'inactive') {
-            $qb->andWhere('('.self::ALIAS.'.status IN (:other_status) OR '.self::ALIAS.'.status IN (:inactive_status))');
-            //$qb->andWhere('('.self::ALIAS.'.status IN (:other_status) AND (('.self::ALIAS.'.created_at < :created_at AND '.self::ALIAS.'.updated_at IS NULL) OR ('.self::ALIAS.'.updated_at < :updated_at AND '.self::ALIAS.'.updated_at IS NOT NULL))) OR '.self::ALIAS.'.status IN (:inactive_status)');
+            $qb->andWhere('('.self::ALIAS.'.status IN (:other_status) AND (('.self::ALIAS.'.created_at < :created_at AND '.self::ALIAS.'.updated_at IS NULL) OR ('.self::ALIAS.'.updated_at < :updated_at AND '.self::ALIAS.'.updated_at IS NOT NULL))) OR '.self::ALIAS.'.status IN (:inactive_status)');
             $qb->setParameter('other_status', array(BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
-            $qb->setParameter('inactive_status', array(BaseEntityRepository::AD_STATUS_EXPIRED_ID, BaseEntityRepository::AD_STATUS_SOLD_ID, BaseEntityRepository::AD_STATUS_INACTIVE_ID));
-            //$qb->setParameter('created_at', strtotime('-29 days'));
-            //$qb->setParameter('updated_at', strtotime('-29 days'));
+            $qb->setParameter('inactive_status', array(BaseEntityRepository::AD_STATUS_EXPIRED_ID, BaseEntityRepository::AD_STATUS_SOLD_ID));
+            $qb->setParameter('created_at', strtotime('-29 days'));
+            $qb->setParameter('updated_at', strtotime('-29 days'));
         } elseif ($type == 'boosted') {
-            $qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' OR ('.self::ALIAS.'.status IN (:status)))');
-            //$qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' OR ('.self::ALIAS.'.status IN (:status)'.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at)))');
+            $qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' OR ('.self::ALIAS.'.status IN (:status)'.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at)))');
             $qb->andWhere(self::ALIAS.'.is_boosted = 1');
             $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
-            //$qb->setParameter('updated_at', strtotime('-29 days'));
-           //$qb->setParameter('created_at', strtotime('-29 days'));
-        }
+            $qb->setParameter('updated_at', strtotime('-29 days'));
+            $qb->setParameter('created_at', strtotime('-29 days'));
+        }        
 
         if($sortBy == 'sel-featured') {
             $qb->leftJoin('FaAdBundle:AdUserPackageUpsell', AdUserPackageUpsellRepository::ALIAS, 'WITH', AdUserPackageUpsellRepository::ALIAS.'.ad_id = '.self::ALIAS.'.id')
@@ -3621,7 +3612,7 @@ class AdRepository extends EntityRepository
             $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
             $qb->setParameter('updated_at', strtotime('-29 days'));
             $qb->setParameter('created_at', strtotime('-29 days'));
-        }                
+        }       
         
         if($sortBy == 'sel-featured') {
             $qb->leftJoin('FaAdBundle:AdUserPackageUpsell', AdUserPackageUpsellRepository::ALIAS, 'WITH', AdUserPackageUpsellRepository::ALIAS.'.ad_id = '.self::ALIAS.'.id')
@@ -3663,7 +3654,7 @@ class AdRepository extends EntityRepository
         ->leftJoin(self::ALIAS.'.ad_locations', AdLocationRepository::ALIAS)
         ->leftJoin(self::ALIAS.'.type', BaseEntityRepository::ALIAS_ADTYPE)
         ->andWhere(self::ALIAS.'.future_publish_at IS NULL');
-
+        
         $qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at))');
         $qb->setParameter('updated_at', strtotime('-29 days'));
         $qb->setParameter('created_at', strtotime('-29 days'));

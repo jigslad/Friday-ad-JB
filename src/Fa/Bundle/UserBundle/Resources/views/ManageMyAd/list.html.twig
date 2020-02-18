@@ -412,28 +412,46 @@
 <script language="javascript" type="text/javascript">	
     function boostSelectedAds() {
         $('#boost-sel-ads-btn').prop("disabled", true);
+        $('#boost_ad_selected_all').prop("disabled", true);
         var selectedBoostAdIds = '';
+        var selectedBoostAdCnt = 0;
+        var remainingCnt = {{(boostAdRemaining is defined and boostAdRemaining!='')?boostAdRemaining:0}};
+        var remainingCntAfterSelection = 0;
+        
         $(".boostad").each(function(){
             if($(this).parent('span').hasClass('checked')) {
                 selectedBoostAdIds += $(this).val()+',';
+                selectedBoostAdCnt = selectedBoostAdCnt+1;
             }
         });
-
-        $.ajax({
-                type: "POST",
-                url: '{{path("ajax_manage_my_ads_boost_multiple_ad")}}',
-                data: {'adIds':selectedBoostAdIds,boost_value:1},
-                asyn:false,
-                cache:false,
-                success:function(result)
+        remainingCntAfterSelection = remainingCnt - selectedBoostAdCnt;
+        if(selectedBoostAdCnt > remainingCnt) {
+        	alert('Sorry, your maximum boost count has been exceeded.');
+            $(".boostad_selectall").parent('span').removeClass('checked');
+            $(".boostad").parent('span').removeClass('checked');
+            $(".boostad_selectall").parent('span').trigger("change");   
+            $('#markAdAsBoostedModal').hide();
+            $('.boost_your_ad').addClass('ajaxboost_your_ad');
+            $("#markAdAsBoostedModal").removeClass('manage-my-ads-list-pad-bot');
+            $('#boost-sel-ads-btn').prop("disabled", false); 
+            $('#boost_ad_selected_all').prop("disabled", false);            
+        } else
+            $.ajax({
+                    type: "POST",
+                    url: '{{path("ajax_manage_my_ads_boost_multiple_ad")}}',
+                    data: {'adIds':selectedBoostAdIds,boost_value:1},
+                    asyn:false,
+                    cache:false,
+                    success:function(result)
+                            {
+                        if(result.error == "")
                         {
-                    if(result.error == "")
-                    {
-                        ga('send','event','MMA', 'Multi-Boost Button', result.gaStr);
-                            window.location.href = '{{ path('manage_my_ads_active') }}';
-                        }
-                }
-        });
+                            ga('send','event','MMA', 'Multi-Boost Button', result.gaStr);
+                                window.location.href = '{{ path('manage_my_ads_active') }}';
+                            }
+                    }
+            });
+    	}
     }
 
     function stopAds() {
@@ -469,7 +487,8 @@
     $(function(){
         $('#boost_ad_selected_all').on('click',function(e) {
         	$('#boost_ad_selected_all').prop("disabled", true);
-
+        	$('#boost-sel-ads-btn').prop("disabled", true);
+        	
         	var remainingCnt = {{(boostAdRemaining is defined and boostAdRemaining!='')?boostAdRemaining:0}};
         	var activeAdIds = '{{ activeAdIds }}';
         	var activeIdsCnt = {{ activeIdCnt }};
@@ -487,16 +506,21 @@
                         {
                                 window.location.href = '{{ path('manage_my_ads_active') }}';
                                 $('#boost_ad_selected_all').prop("disabled", false);
-                                
+                                $('#boost-sel-ads-btn').prop("disabled", false);
                             }
                         }
             	}); 
             } else if(remainingCnt>0 && remainingCnt < activeIdsCnt) {
             	alert('Sorry, you have remaining boost count as '+remainingCnt+', but you have selected '+activeIdsCnt+' ads.');
             	$('#boost_ad_selected_all').prop("disabled", false);
+            	$('#boost-sel-ads-btn').prop("disabled", false);
             } else {
             	alert('Sorry, your maximum boost count has been exceeded.');
+            	$('#markAdAsBoostedModal').hide();
+                $('.boost_your_ad').addClass('ajaxboost_your_ad');
+                $("#markAdAsBoostedModal").removeClass('manage-my-ads-list-pad-bot');
             	$('#boost_ad_selected_all').prop("disabled", false);
+            	$('#boost-sel-ads-btn').prop("disabled", false);
             }           
         });
         

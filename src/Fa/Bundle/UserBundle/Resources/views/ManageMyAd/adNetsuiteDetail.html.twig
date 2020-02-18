@@ -172,7 +172,9 @@
                     
                     {% if isBoostEnabled is defined and isBoostEnabled==1 and ad.boosted_at is defined and ad.is_boosted==1 %}
                         <div class="list-boosted-hours list-boosted-hours-desk-tab show-for-small-up-only">
-                            {{ 'Boosted'|trans({}, 'frontend-manage-my-ad') }} {{ (ad.boosted_at|time_ago_in_words) }}
+                        {% set boostedInwords = ad.boosted_at |time_ago_in_words %}
+                    	{% set boostedInwords = (boostedInwords=='less than 1 minute ago' or boostedInwords=='less than a minute ago')?'1 minute ago':boostedInwords %}
+                        {{ 'Boosted'|trans({}, 'frontend-manage-my-ad') }} {{boostedInwords|replace({'minute': 'min','about' : ''})}}
                         </div>
                     {% endif %} 
                 </div>
@@ -278,7 +280,9 @@
             {% if ad['status_id'] == adStatusLive %}
                 {% if isBoostEnabled is defined and isBoostEnabled==1 and ad.boosted_at is defined and ad.is_boosted==1 %}
                     <div class="list-boosted-hours list-boosted-hours-desk-tab">
-                        {{ 'Boosted'|trans({}, 'frontend-manage-my-ad') }} {{ (ad.boosted_at|time_ago_in_words) }}
+                        {% set boostedInwords = ad.boosted_at |time_ago_in_words %}
+                    	{% set boostedInwords = (boostedInwords=='less than 1 minute ago' or boostedInwords=='less than a minute ago')?'1 minute ago':boostedInwords %}
+                        {{ 'Boosted'|trans({}, 'frontend-manage-my-ad') }} {{boostedInwords|replace({'minute': 'min','about' : ''})}}
                     </div>
                 {% endif %} 
             {% endif %}

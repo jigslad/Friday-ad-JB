@@ -761,10 +761,10 @@ class ManageMyAdController extends CoreController
                         //$ans = $this->getRepository('FaAdBundle:Ad')->changeAdStatus($adId, $newStatusId, $this->container);
                         
                         
-                        $objStatus = $this->_em->getRepository('FaEntityBundle:Entity')->find($newStatusId);
+                        $objStatus = $this->getEntityManager()->getRepository('FaEntityBundle:Entity')->find($newStatusId);
                         
                         if ($objAd && $objStatus) {
-                            if ($newStatusId == BaseEntityRepository::AD_STATUS_EXPIRED_ID) {
+                            if ($newStatusId == EntityRepository::AD_STATUS_EXPIRED_ID) {
                                 $objAd->setExpiresAt(time());
                                 $this->getEntityManager()->getRepository('FaMessageBundle:NotificationMessageEvent')->closeNotificationByOnlyAdId($objAd->getId());
                             } else {
@@ -777,18 +777,17 @@ class ManageMyAdController extends CoreController
                             $objAd->setBoostedAt(null);
                             $this->getEntityManager()->persist($objAd);
                             $this->getEntityManager()->flush($objAd);
-                            $return = true;
-                            if ($container && $container->get('request_stack')->getCurrentRequest()) {
-                                $this->getEntityManager()->getRepository('FaAdBundle:AdIpAddress')->checkAndLogIpAddress($objAd, $container->get('request_stack')->getCurrentRequest()->getClientIp());
+
+                            $status_id = $objAd->getStatus()->getId();
+                            if ($this->container && $this->container->get('request_stack')->getCurrentRequest()) {
+                                $this->getEntityManager()->getRepository('FaAdBundle:AdIpAddress')->checkAndLogIpAddress($objAd, $this->container->get('request_stack')->getCurrentRequest()->getClientIp());
                             }
                             
-                            $disabledAdStusesArray = array(BaseEntityRepository::AD_STATUS_EXPIRED_ID, BaseEntityRepository::AD_STATUS_INACTIVE_ID, BaseEntityRepository::AD_STATUS_SOLD_ID);
+                            $disabledAdStusesArray = array(EntityRepository::AD_STATUS_EXPIRED_ID, EntityRepository::AD_STATUS_INACTIVE_ID, EntityRepository::AD_STATUS_SOLD_ID);
                             if (in_array($status_id, $disabledAdStusesArray)) {
-                                $this->getEntityManager()->getRepository('FaAdBundle:Ad')->doAfterAdCloseProcess($id, $this->container);
+                                $this->getEntityManager()->getRepository('FaAdBundle:Ad')->doAfterAdCloseProcess($objAd->getId(), $this->container);
                             }
                         }
-                        
-                        if ($ans) { } else { $errorVal = 1; }
                     }
                 }
                 

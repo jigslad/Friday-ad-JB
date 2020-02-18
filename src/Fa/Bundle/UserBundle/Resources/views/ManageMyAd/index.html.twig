@@ -83,7 +83,10 @@
                 //alert('Sorry, your maximum boost count has been exceeded. Please select only '+ remainingCnt +' adverts ');
                 $(".boostad_selectall").parent('span').removeClass('checked');
                 $(".boostad").parent('span').removeClass('checked');
-                $(".boostad_selectall").parent('span').trigger("change");                
+                $(".boostad_selectall").parent('span').trigger("change");   
+                $('#markAdAsBoostedModal').hide();
+                $('.boost_your_ad').addClass('ajaxboost_your_ad');
+                $("#markAdAsBoostedModal").removeClass('manage-my-ads-list-pad-bot');             
             } else if(selectedBoostAdCnt==0) {
                 $('#markAdAsBoostedModal').hide();
                 $('.boost_your_ad').addClass('ajaxboost_your_ad');
