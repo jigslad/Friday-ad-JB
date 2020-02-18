@@ -78,7 +78,7 @@
                 }
              });
             remainingCntAfterSelection = remainingCnt - selectedBoostAdCnt;
-            if(selectedBoostAdCnt > remainingCnt) {
+            /*if(selectedBoostAdCnt > remainingCnt) {
             	alert('Sorry, your maximum boost count has been exceeded.');
                 //alert('Sorry, your maximum boost count has been exceeded. Please select only '+ remainingCnt +' adverts ');
                 $(".boostad_selectall").parent('span').removeClass('checked');
@@ -87,7 +87,9 @@
                 $('#markAdAsBoostedModal').hide();
                 $('.boost_your_ad').addClass('ajaxboost_your_ad');
                 $("#markAdAsBoostedModal").removeClass('manage-my-ads-list-pad-bot');             
-            } else if(selectedBoostAdCnt==0) {
+            } else*/
+
+            if(selectedBoostAdCnt==0) {
                 $('#markAdAsBoostedModal').hide();
                 $('.boost_your_ad').addClass('ajaxboost_your_ad');
                 $("#markAdAsBoostedModal").removeClass('manage-my-ads-list-pad-bot');
