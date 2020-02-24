@@ -131,9 +131,11 @@
                       <div class="image-tooltip-wrapper in-mod-tooltip">
                       	<span class="image-tooltip">{{ modToolTipText['inModeration'] }}</span>
                         <span class="info-icon">info</span>
+                        <p class="img-status-overlay-text">{{ statusText }}</p>
                       </div>
-                    {% endif %}
+                    {% else %}
                     <p class="img-status-overlay-text">{{ statusText }}</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -190,9 +192,9 @@
             			<div class="featured-switch toggle-on">
             		{% else %}
                 		{% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-                			<div class="featured-switch netsuite-featured-indiv-upsell toggle-on" id="netsuite_featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
+                			<div class="featured-switch netsuite-featured-indiv-upsell toggle-on" id="netsuiteFeaturedTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
                 		{% else %}
-                			<div class="featured-switch netsuite-featured-indiv-upsell toggle-off" id="netsuite_featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
+                			<div class="featured-switch netsuite-featured-indiv-upsell toggle-off" id="netsuiteFeaturedTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
                 		{% endif %}
                 	{% endif %}
             			<div class="toggle-wrap">            
@@ -236,9 +238,9 @@
             			<div class="featured-switch toggle-on">
             	{% else %}	    
         	        {% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-            			<div class="featured-switch netsuite-featured-indiv-upsell toggle-on" id="netsuite_featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
+            			<div class="featured-switch netsuite-featured-indiv-upsell toggle-on" id="netsuiteFeaturedTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
             		{% else %}
-            			<div class="featured-switch netsuite-featured-indiv-upsell toggle-off" id="netsuite_featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
+            			<div class="featured-switch netsuite-featured-indiv-upsell toggle-off" id="netsuiteFeaturedTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
             		{% endif %}
 				{% endif %}
         			<div class="toggle-wrap">            
@@ -336,9 +338,12 @@
                       <div class="image-tooltip-wrapper in-mod-tooltip">
                       	<span class="image-tooltip">{{ modToolTipText['inModeration'] }}</span>
                         <span class="info-icon">info</span>
+                        <p class="img-status-overlay-text">{{ statusText }}</p>
                       </div>
+                    {% else %}
+                    	<p class="img-status-overlay-text">{{ statusText }}</p>
                     {% endif %}
-                    <p class="img-status-overlay-text">{{ statusText }}</p>
+                    
                 </div>
             </div>
             <div class="manage-item-btns text-right">  

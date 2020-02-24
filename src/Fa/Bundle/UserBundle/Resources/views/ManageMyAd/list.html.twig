@@ -58,7 +58,6 @@
         {% if shopPackageCreditArr|length >0 %}
             {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
             {% set remainingFeaturedCredits = userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) %}
-            
             {% if  remainingFeaturedCredits > totalFeaturedCredit %}
                 {% set usedFeaturedCredits = totalFeaturedCredit %}
             {% else %}
@@ -681,7 +680,7 @@ Are you sure you wish to remove the Feature option?</h5>
                   $(this).removeClass('toggle-off').addClass('toggle-on');
                   $('#featuredTopUpsellModal').data('selfeaturedid', elem_id);
                   {% if remainingFeaturedCredits > 0 %}                	
-                  		useCreditForFeaturedAdPackage(adId,upsellId);
+                  	useCreditForFeaturedIndividualUpsell(adId,upsellId);
                   {% else %}
                   	featuredTopUpsellBtn(adId,upsellId, catupsellId);                 	             	
                   {% endif %}

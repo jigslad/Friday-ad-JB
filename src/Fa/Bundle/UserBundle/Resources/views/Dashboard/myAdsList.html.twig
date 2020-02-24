@@ -77,6 +77,13 @@
                     {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
                     {# {% set adUrl = adUrl|trim('/') %} #}
                 {% endif %}
+                
+                {% set dateRemainingForExpiry = 0 %}
+                {% set adExpiry = ad['expires_at'] %}
+                {% if adExpiry is defined and adExpiry > 0 %}
+                   {% set dateRemainingForExpiry = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager','dateDiffInDays', [adExpiry,date().timestamp]) %}
+                {% endif %}
+                                
                 {% if userBusType is defined and userBusType == 'netsuite' %}
                     {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
                 {% else %}

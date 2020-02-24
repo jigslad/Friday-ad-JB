@@ -118,9 +118,12 @@
                       <div class="image-tooltip-wrapper in-mod-tooltip">
                       	<span class="image-tooltip">{{ modToolTipText['inModeration'] }}</span>
                         <span class="info-icon">info</span>
+                        <p class="img-status-overlay-text">{{ statusText }}</p>
                       </div>
+                    {% else %}
+                    	<p class="img-status-overlay-text">{{ statusText }}</p>
                     {% endif %}
-                    <p class="img-status-overlay-text">{{ statusText }}</p>
+                    
                 </div>
             </div>
             {% if ad['status_id'] == adStatusLive %}                
@@ -325,14 +328,17 @@
                       <div class="image-tooltip-wrapper in-mod-tooltip">
                       	<span class="image-tooltip">{{ modToolTipText['inModeration'] }}</span>
                         <span class="info-icon">info</span>
+                        <p class="img-status-overlay-text">{{ statusText }}</p>
                       </div>
+                    {% else %}
+                    	<p class="img-status-overlay-text">{{ statusText }}</p>
                     {% endif %}
-                    <p class="img-status-overlay-text">{{ statusText }}</p>
+                    
                 </div>
                </div>
               <div class="created-box"> 
                     {% set createdInwords = ad['ad_date'] |time_ago_in_words %}
-                    {% if currentRoute == 'manage_my_ads_active' %}
+                    {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
                     <div class="list-created-hours">
                      {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
                      {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}                    

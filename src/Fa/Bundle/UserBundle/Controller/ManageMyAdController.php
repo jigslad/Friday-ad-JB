@@ -1091,6 +1091,7 @@ class ManageMyAdController extends CoreController
                 
                 if (!empty($user)) {
                     $selectedUpsellObj = $this->getRepository('FaPromotionBundle:Upsell')->findOneBy(array('id' => $selectedUpsellId));
+                    
                     if ($selectedUpsellObj->getDuration()) {
                         $getLastCharacter = substr($selectedUpsellObj->getDuration(),-1);
                         $noInDuration = substr($selectedUpsellObj->getDuration(),0, -1);
