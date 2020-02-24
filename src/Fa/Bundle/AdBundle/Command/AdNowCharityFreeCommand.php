@@ -37,8 +37,8 @@ class AdNowCharityFreeCommand extends ContainerAwareCommand
         $this
             ->setName('fa:charity:now-charity-free')
             ->setDescription("Send ad now in charity free.")
-           // ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
-            //->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', "256M")
+            ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
+            ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', "256M")
             ->setHelp(
                 <<<EOF
         Cron: To be setup.
@@ -63,6 +63,9 @@ EOF
         $this->em = $this->getContainer()->get('doctrine')->getManager();
         $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
 
+        //get options passed in command
+        $offset   = $input->getOption('offset');
+
         if (isset($offset)) {
             $this->adNowCharityFreeWithOffset($input, $output);
         } else {
@@ -72,7 +75,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:process-email-queue --email_identifier="now_charity_free"';
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:process-email-queue --email_identifier="furniture_now_charity"';
             $output->writeln($command, true);
             passthru($command, $returnVar);
 
@@ -93,29 +96,29 @@ EOF
     {
         $step        = 100;
         $offset      = $input->getOption('offset');
-
-        $qb          = $this->getAdQueryBuilder();
-        $qb->setFirstResult($offset);
-        $qb->setMaxResults($step);
-
-        $ads = $qb->getQuery()->getResult();
+        $ads          = $this->getAdQueryBuilder($offset, $step);
 
         foreach ($ads as $ad) {
-            $user = ($ad->getUser() ? $ad->getUser() : null);
+            $userId = ($ad['user_id'] ? $ad['user_id'] : null);
+            $userId = 1293153;
+            $user = $this->em->getRepository('FaUserBundle:User')->find($userId);
+            $ad = $this->em->getRepository('FaAdBundle:Ad')->find($ad['ad_id']);
 
             //send email only if ad has user and status is active.
-            $userRoleId = ($ad->getUser() ? $ad->getUser()->getRole()->getId() : 0);
+            $userRoleId = $this->adUserRoleId($userId);
+            $userRoleId = ($user ? $userRoleId : 0);
 
-            if ($user && CommonManager::checkSendEmailToUser($user->getId(), $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
-                $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('ad_expires_tomorrow', $user, $ad, $this->getContainer());
+            if ($user && CommonManager::checkSendEmailToUser($userId, $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
+                $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('furniture_now_charity', $user, $ad, $this->getContainer());
             }
 
             $ad->setIsRenewalMailSent(2);
             $this->em->persist($ad);
             $this->em->flush($ad);
 
-            $output->writeln('Renewal email added to queue for AD ID: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
+            $output->writeln('Email added to queue for AD ID: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
         }
+
         $this->em->clear();
 
         $output->writeln('Memory Allocated: '.((memory_get_peak_usage(true) / 1024) / 1024).' MB', true);
@@ -159,7 +162,8 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:charity:now-charity-free '.$commandOptions;
+
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:charity:now-charity-free'.$commandOptions;
             $output->writeln($command, true);
             passthru($command, $returnVar);
 
@@ -181,7 +185,12 @@ EOF
      */
     protected function getAdQueryBuilder()
     {
-        $query = 'SELECT a.id FROM ad a left join ad_location al on a.id = al.ad_id where a.status_id = 25 AND a.is_paid_ad =0 AND al.town_id in (SELECT l.town_id from location_group_location l where l.location_group_id != 13) ORDER BY a.id ASC';
+        $query = 'SELECT * from fridayad_prod_restore.ad as a
+        left join  fridayad_prod_restore.ad_location as al on al.ad_id=a.id
+        where a.status_id=25
+        and (a.is_paid_ad is null or a.is_paid_ad = 0)
+        AND a.category_id in (159,160,165,178,188,194,198,203,204,205,206,214,218,221,223,224,225,229,230,231,236,239,246,247,261,264,265,266,267,268,269,270,272,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,305,306,310,311,312,313,318,319,320,321,322,323,327,329,330,331,332,336,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,4277,57,71,84,88,95,98,102,58,59,60,64,65,66,67,68,69,70,72,73,74,75,76,77,78,79,80,81,82,83,85,86,87,89,90,91,92,93,96,97,99,100,101)
+        AND (al.town_id in (SELECT id from fridayad_prod_restore.location where id=326 or parent_id=326))';
         $stmt = $this->em->getConnection()->prepare($query);
         $stmt->execute();
         $ads = $stmt->fetchAll();
@@ -197,10 +206,23 @@ EOF
      */
     protected function getAdCount()
     {
-        $query = 'SELECT count(a.id) as count FROM ad a left join ad_location al on a.id = al.ad_id where a.status_id = 25 AND al.town_id in (SELECT l.town_id from location_group_location l where l.location_group_id != 13) limit 5';
+        $query = 'SELECT count(a.id) as count from fridayad_prod_restore.ad as a
+        left join  fridayad_prod_restore.ad_location as al on al.ad_id=a.id
+        where a.status_id=25
+        and (a.is_paid_ad is null or a.is_paid_ad = 0)
+        AND a.category_id in (159,160,165,178,188,194,198,203,204,205,206,214,218,221,223,224,225,229,230,231,236,239,246,247,261,264,265,266,267,268,269,270,272,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,305,306,310,311,312,313,318,319,320,321,322,323,327,329,330,331,332,336,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,4277,57,71,84,88,95,98,102,58,59,60,64,65,66,67,68,69,70,72,73,74,75,76,77,78,79,80,81,82,83,85,86,87,89,90,91,92,93,96,97,99,100,101)
+        AND (al.town_id in (SELECT id from fridayad_prod_restore.location where id=326 or parent_id=326))';
         $stmt = $this->em->getConnection()->prepare($query);
         $stmt->execute();
         $count = $stmt->fetchAll();
         return $count[0]['count'];
+    }
+
+    protected function adUserRoleId($userId){
+        $query = "SELECT role_id FROM fridayad_prod_restore.user as a WHERE a.id =".$userId;
+        $stmt = $this->em->getConnection()->prepare($query);
+        $stmt->execute();
+        $userRoleId = $stmt->fetch();
+        return $userRoleId;
     }
 }
