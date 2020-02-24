@@ -45,6 +45,7 @@
     var adIdToRemove = '';
     var statusIdToChange = '';
     var featurredUpsellRemoveId = '';
+    var featurredUpsellRemoveAttrId = '';
     var featuredUpsellId = '';
     var adIdsArray = "{{ adIdArray|join(',') }}";
     
@@ -175,6 +176,12 @@
         }
     }
 
+    function turnOnFeaturedToggle()
+    {
+    	if (featurredUpsellRemoveAttrId != '') {
+        	$('#'+featurredUpsellRemoveAttrId).addClass('toggle-on').removeClass('toggle-off');
+    	}
+    }
     function deactivateFeatured()
     {
         if (!ajaxLoading && featurredUpsellRemoveId != '') {
@@ -193,7 +200,7 @@
                 unblockPage();
              })
             .done(function(response) {
-            	window.location = '{{ path('manage_my_ads_active') }}';
+            	$('#'+featurredUpsellRemoveAttrId).removeClass('toggle-on').addClass('toggle-off');
             });
         }
     }

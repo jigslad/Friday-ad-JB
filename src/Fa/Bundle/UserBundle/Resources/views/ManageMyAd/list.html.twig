@@ -146,12 +146,12 @@
                                     {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
                                     {# {% set adUrl = adUrl|trim('/') %} #}
                                 {% endif %}        
-                                
-                                {# {% set upsellExpiry = individualUpsellArr.getUpsell().getDuration()|trim('d') %}
-                                {% set adExpiry = ad.getExpiresAt() %}
+                                {# { dump(ad) } #}
+                                {% set dateRemainingForExpiry = 0 %}
+                                 {% set adExpiry = ad['expires_at'] %}
                                 {% if adExpiry is defined and adExpiry > 0 %}
-                                   {% set dateRemainingForExpiry = CommonManager::dateDiffInDays($adExpiry,now()) %}
-                                {% endif %} #}
+                                   {% set dateRemainingForExpiry = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager','dateDiffInDays', [adExpiry,date().timestamp]) %}
+                                {% endif %} 
                                 
 								{% if userBusType is defined and userBusType == 'netsuite' %}
                                     {{ include('FaUserBundle:ManageMyAd:adNetsuiteDetail.html.twig') }}                                    
@@ -336,14 +336,15 @@
 
 
 <div id="featuredOffConfirmModal" class="reveal-modal tiny remove-item-modal mini-modal-box" data-reveal>
-    <a class="close-reveal-modal closeFeaturedUpsell">&#215;</a>
+    <a class="close-reveal-modal closeFeaturedUpsell" onclick="turnOnFeaturedToggle();closeRevealModel('#featuredOffConfirmModal');">&#215;</a>
     <h5 class="modal-title"> 
         {{'Are you sure?'|trans({}, 'frontend-manage-my-ad')}}
     </h5>
     <div class="modal-content remove-modal">
         <div class="row">
             <div class="columns">
-                <h5>{{'Are you sure that you want to remove featured from this advert?'|trans({}, 'frontend-manage-my-ad')}}</h5>
+                <h5>You have paid to Feature this Ad and it still has another <span id="leftdaysforexpiry"></span> days left of being featured.
+Are you sure you wish to remove the Feature option?</h5>
             </div>
         </div>
         <div class="mt20 remove-item-btn">
@@ -352,14 +353,14 @@
                     <button type="button" class="button secondary-btn-4 thin-btn expand" onclick="deactivateFeatured();">{{'End Feature'|trans({}, 'frontend-manage-my-ad')}}</button>
                 </div>
                 <div class="large-12 columns">
-                    <button type="button" class="button secondary-btn-1 thin-btn expand closeFeaturedUpsell" onclick="closeRevealModel('#featuredOffConfirmModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
+                    <button type="button" class="button secondary-btn-1 thin-btn expand closeFeaturedUpsell" onclick="turnOnFeaturedToggle();closeRevealModel('#featuredOffConfirmModal');">{{'Cancel'|trans({}, 'frontend-manage-my-ad')}}</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="creditConfimBox" class="reveal-modal tiny remove-item-modal" data-reveal>
+<div id="creditConfimBox" class="reveal-modal tiny remove-item-modal mini-modal-box" data-reveal>
     <a class="close-reveal-modal">&#215;</a>
     <h5 class="modal-title">
         {{'Use credit'|trans({}, 'frontend-ad-package')}}
@@ -384,7 +385,7 @@
     </div>
 </div>
 
-<div id="unsufficientCreditBox" class="reveal-modal tiny remove-item-modal" data-reveal>
+<div id="unsufficientCreditBox" class="reveal-modal tiny remove-item-modal mini-modal-box" data-reveal>
     <a class="close-reveal-modal">&#215;</a>
     <h5 class="modal-title">
         {{'Use credit'|trans({}, 'frontend-ad-package')}}
@@ -401,7 +402,6 @@
     
 
 <div id="featuredTopUpsellModal" class="reveal-modal tiny remove-item-modal featured-top-modal" data-reveal data-selfeaturedid></div>
-
 {% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
     {#  Featured Top Success Modal Box   #}
     {{ include('FaUserBundle:ManageMyAd:individualSuccessPaymentModal.html.twig') }}
@@ -435,7 +435,7 @@
             $("#markAdAsBoostedModal").removeClass('manage-my-ads-list-pad-bot');
             $('#boost-sel-ads-btn').prop("disabled", false); 
             $('#boost_ad_selected_all').prop("disabled", false);            
-        } else
+        } else {
             $.ajax({
                     type: "POST",
                     url: '{{path("ajax_manage_my_ads_boost_multiple_ad")}}',
@@ -641,6 +641,7 @@
 
     {% if successUpsellPaymentModalbox is defined and successUpsellPaymentModalbox %}
     	$('#featuredTopSuccessPaymentModal').foundation('reveal', 'open');
+    	gaEvent('','','Featured On');
     {% endif %}
 
 </script>
@@ -654,6 +655,7 @@
               var adId = split_ad_id[1];
               var upsellId = split_ad_id[2];
               var catupsellId = split_ad_id[3];
+              var leftDaysforExpire = split_ad_id[4];
               if($(this).hasClass('toggle-off')){
                 $(this).removeClass('toggle-off').addClass('toggle-on');
                 $('#featuredTopUpsellModal').data('selfeaturedid', elem_id);
@@ -661,9 +663,11 @@
               }else{
             	 featurredUpsellRemoveId = adId;
             	 featuredUpsellId = upsellId;
-
+            	 featurredUpsellRemoveAttrId = elem_id;
+            	 $('#leftdaysforexpiry').html(leftDaysforExpire);
             	 $('#featuredOffConfirmModal').foundation('reveal', 'open');
                  $(this).removeClass('toggle-on').addClass('toggle-off'); 
+                 gaEvent(adId,'','Featured Off');
               }
             });
 

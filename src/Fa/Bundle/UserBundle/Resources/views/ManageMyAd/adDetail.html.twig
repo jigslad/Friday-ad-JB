@@ -167,9 +167,9 @@
                         <div class="list-expired-hours">{{'Marked as sold  (%sold_date%)'|trans({'%sold_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.sold_at, container]) }, 'frontend-manage-my-ad')}}</div><br />
                     {% else %}
                         {% if date().timestamp > ad.expires_at %}
-                            <div class="list-expired-hours">{{'Expired %expire_in_word% (%expire_date%)'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp), '%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div><br />
+                            <div class="list-expired-hours">{{'Expired %expire_in_word% (%expire_date%)'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp), '%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div>
                         {% else %}
-                            <div class="list-expired-hours">{{'Expires %expire_in_word% (%expire_date%)'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp), '%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container])}, 'frontend-manage-my-ad')}}</div><br />
+                            <div class="list-expired-hours">{{'Expires %expire_in_word% (%expire_date%)'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp), '%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container])}, 'frontend-manage-my-ad')}}</div>
                         {% endif %}
                     {% endif %}
                 {% endif %}
@@ -186,9 +186,9 @@
             			<div class="featured-switch toggle-on">
             		{% else %} 
                 		{% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-                			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
+                			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
                 		{% else %}
-                			<div class="featured-switch featured-indiv-upsell toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}">
+                			<div class="featured-switch featured-indiv-upsell toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
                 		{% endif %}
                 	{% endif %}
             			<div class="toggle-wrap">            
@@ -240,7 +240,7 @@
                     {% endif %}
                 </div>                
             </div>
-            {% if ad['status_id'] == adStatusLive  and featuredToggleFlag==1 %}
+            {% if ad['status_id'] == adStatusLive %}
             <div class="featured-share-box-mobile">
             	<div class="featuredBlock1">            		
                    <a href="javascript:void(0);" onclick="openSocialSharePopup('{{ adId }}', '{{container.getParameter('base_url')}}{{adUrl}}', '{{ad['title']}}')" class="mobile-share"></a>                    
@@ -249,9 +249,9 @@
             			<div class="featured-switch toggle-on">
             		{% else %}        
                         {% if adFeaturedUpsellArray[adId] is defined and adFeaturedUpsellArray[adId] is not null %}
-                			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}">
+                			<div class="featured-switch featured-indiv-upsell toggle-on" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
                 		{% else %}
-                			<div class="featured-switch featured-indiv-upsell toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}">
+                			<div class="featured-switch featured-indiv-upsell toggle-off" id="featuredTopId_{{ adId }}_{{ featuredToggleUpsellId }}_{{ featuredToggleCatUpsellId }}_{{ dateRemainingForExpiry }}">
                 		{% endif %}
 					{% endif %}
             			<div class="toggle-wrap">            
@@ -346,9 +346,9 @@
                             <div class="list-expired-hours">{{'Marked as sold  (%sold_date%)'|trans({'%sold_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.sold_at, container]) }, 'frontend-manage-my-ad')}}</div><br />
                         {% else %}
                             {% if date().timestamp > ad.expires_at %}
-                                <div class="list-expired-hours">{{'Expired %expire_in_word%'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp)}, 'frontend-manage-my-ad')}}</div><br />
+                                <div class="list-expired-hours">{{'Expired %expire_in_word%'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp)}, 'frontend-manage-my-ad')}}</div>
                             {% else %}
-                                <div class="list-expired-hours">{{'Expires %expire_in_word%'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp)}, 'frontend-manage-my-ad')}}</div><br />
+                                <div class="list-expired-hours">{{'Expires %expire_in_word%'|trans({'%expire_in_word%': ad.expires_at|distance_of_time_in_words(date().timestamp)}, 'frontend-manage-my-ad')}}</div>
                             {% endif %}
                         {% endif %}
                     {% endif %}
@@ -375,7 +375,7 @@
                      <div class="right-manage-buttons adRemoveBlock"><a class="xs-red-btn expand button" href="javascript:void(0);" onclick="removeAdConfirmation('{{adId}}', '{{ad.status_id}}');">{% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') %} Stop this ad {% else %} Delete {% endif %}</a></div>
                 {% endif %}
                 
-                {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null %}
+                {% if adPackageArray[adId] is defined and adPackageArray[adId] is not null and adPackageArray[adId]['price'] > 0 %}
                     <span class="item-status mma-pkg-title">{{adPackageArray[adId]['title']}}</span>
                 {% endif %}
             </div>

@@ -28,7 +28,18 @@ $(window).on('load', function() {
 
     {% endif %}
 });
-	
+
+
+function gaEvent(adId,categories,featuredStatus) {
+	window.dataLayer = window.dataLayer || []
+	dataLayer.push({
+	  
+	'event' : 'Featured Toggle',
+	'eventCategory':  'Options',     
+	'eventAction': featuredStatus,
+	'eventLabel': adId+' - '+categories
+	});                
+}
 function featuredTopUpsellBtn(id,upsellId,catupsellId) {
     blockPage();
     var route = Routing.generate('individual_upsell', { 'adId': id, 'upsellId': upsellId, 'catupsellId': catupsellId });
@@ -41,8 +52,8 @@ function featuredTopUpsellBtn(id,upsellId,catupsellId) {
         unblockPage();
     })
     .done(function(response) {
-    	$('#featuredTopUpsellModal').html(response.htmlContent);
-        $('#featuredTopUpsellModal').foundation('reveal', 'open');
+        $('#featuredTopUpsellModal').html(response.htmlContent);
+        $('#featuredTopUpsellModal').foundation('reveal', 'open');       
     });
 }
 

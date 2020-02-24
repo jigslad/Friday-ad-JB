@@ -873,24 +873,24 @@ class ManageMyAdController extends CoreController
                     $adExpiry = null;
                     $dateRemainingForExpiry = 0;
                     
-                    if(!empty($individualUpsellDetails)) {
-                        $individualUpsellArr = $individualUpsellDetails;
-                        $upsellExpiry = trim($individualUpsellArr->getUpsell()->getDuration(),'d');
+                    $upsell = $this->getRepository('FaPromotionBundle:Upsell')->find($upsellId);
+                    $upsellExpiry = trim($upsell->getDuration(),'d');
+                    $adExpiry = $ad->getExpiresAt();
+                    if($adExpiry) {
+                        $dateRemainingForExpiry = CommonManager::dateDiffInDays($adExpiry,strtotime("now"));
                     }
-                    /*if(!empty($individualUpsellDetails)) {
-                        $individualUpsellArr['id'] =  $individualUpsellDetails[0]->getId();
-                        $individualUpsellArr['title'] =  $individualUpsellDetails[0]->getTitle();
-                        $individualUpsellArr['description'] =  $individualUpsellDetails[0]->getDescription();
-                        $individualUpsellArr['price'] =  $individualUpsellDetails[0]->getPrice();
-                    }*/
+
+                    if(!empty($individualUpsellDetails)) {
+                        $individualUpsellArr['id'] =  $individualUpsellDetails['id'];
+                        $individualUpsellArr['title'] =  $individualUpsellDetails['title'];
+                        $individualUpsellArr['description'] =  $individualUpsellDetails['description'];
+                        $individualUpsellArr['price'] =  $individualUpsellDetails['price'];
+                    }
                     
                     $individualUpsellModalDetails = CommonManager::getIndividualUpsellModalDetails($upsellId);
                     
                     $categoryId       = $ad->getCategory()->getId();
-                    $adExpiry = $ad->getExpiresAt();
-                    if($adExpiry) {
-                        $dateRemainingForExpiry = CommonManager::dateDiffInDays($adExpiry,now());
-                    }
+                    
                     
                     $adRootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $this->container);
                     if ($adRootCategoryId == CategoryRepository::ADULT_ID) {
@@ -933,9 +933,16 @@ class ManageMyAdController extends CoreController
                             
                             $htmlContent = $this->renderView('FaAdBundle:Ad:upgradePaymentForm.html.twig', $parameters);
                         }
-                    } else {
-                        if($dateRemainingForExpiry > (int)$upsellExpiry && $dateRemainingForExpiry>0 && (int)$upsellExpiry>0) {
-                            
+                    } else {                        
+                        if((int)$dateRemainingForExpiry < (int)$upsellExpiry) {
+                            $parameters = array(
+                                'adId' => $adId,
+                                'adRootCategoryId' => $adRootCategoryId,
+                                'form' => $form->createView(),
+                                'dateRemainingForExpiry'=> $dateRemainingForExpiry,
+                                'upsellExpiry' => $upsellExpiry
+                            );
+                            $htmlContent = $this->renderView('FaUserBundle:ManageMyAd:featuredTopNotApplicableModal.html.twig', $parameters);  
                         } else {
                             $parameters = array(
                                 'adId' => $adId,
