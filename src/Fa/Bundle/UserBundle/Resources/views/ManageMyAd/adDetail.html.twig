@@ -91,7 +91,7 @@
                 {% if ad.status_id is defined and ad.status_id is not null %}
                 	{% if ad.status_id == adStatusSold %}
                         {% set statusClass = 'successCls' %}
-                        {% set statusText = 'Success' %}
+                        {% set statusText = 'Successful' %}
                     {% elseif ad.status_id == adStatusRejectedWithReason or ad.status_id == adStatusRejected %}
                     	{% set statusClass = 'rejectedCls' %}
                     	{% set statusText = 'Rejected' %}
@@ -156,13 +156,14 @@
                 </h3>
                 
                 {% set createdInwords = ad['ad_date'] |time_ago_in_words %}
-                {% if currentRoute == 'manage_my_ads_active' %}
+                {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
                 <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
                      {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
                      {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}
                 </div>
                 {% endif %}
                 
+                {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
                 {% if ad.expires_at is defined and ad.expires_at is not null and ad.published_at is defined and ad.published_at is not null%}
                     {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
                         <div class="list-expired-hours">{{'Expired (%expire_date%)'|trans({'%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div><br />
@@ -176,7 +177,7 @@
                         {% endif %}
                     {% endif %}
                 {% endif %}
-                
+                {% endif %}
                 
             </div>
         </div>
@@ -209,7 +210,7 @@
                 {% endif %}
                 
                 {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
-                        <div class="right-manage-buttons adEditBlock1"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
+                        <div class="right-manage-buttons adEditBlock1"><a class="xs-btn-1 expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost this ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                 {% endif %}
                                 
                 {% if (adPackageArray[adId] is defined and adPackageArray[adId]['price'] <=0)  and ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
@@ -301,7 +302,7 @@
                 {% if ad.status_id is defined and ad.status_id is not null %}
                 	{% if ad.status_id == adStatusSold %}
                         {% set statusClass = 'successCls' %}
-                        {% set statusText = 'Success' %}
+                        {% set statusText = 'Successful' %}
                     {% elseif ad.status_id == adStatusRejectedWithReason or ad.status_id == adStatusRejected %}
                     	{% set statusClass = 'rejectedCls' %}
                     	{% set statusText = 'Rejected' %}
@@ -345,6 +346,7 @@
                     </div>
                     {% endif %}
                     
+                    {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
                     {% if ad.expires_at is defined and ad.expires_at is not null and ad.published_at is defined and ad.published_at is not null%}
                         {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
                             <div class="list-expired-hours">{{'Expired (%expire_date%)'|trans({'%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div><br />
@@ -358,6 +360,7 @@
                             {% endif %}
                         {% endif %}
                     {% endif %}
+                    {% endif %}
                </div>
             </div>
             <div class="manage-item-btns text-right manage-item-btns-mobile"> 
@@ -368,7 +371,7 @@
                  {% endif %}
                  
                  {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') or ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
-                        <div class="right-manage-buttons adEditBlock1"><a class="xs-blue-btn expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost Ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
+                        <div class="right-manage-buttons adEditBlock1"><a class="xs-btn-1 expand button" href="{{ path('ad_promote', {'adId': ad.id, 'type': 'repost'}) }}">{{'Repost this ad'|trans({}, 'frontend-manage-my-ad')}}</a></div>
                 {% endif %}
                 
                 {% if (adPackageArray[adId] is defined and adPackageArray[adId]['price'] <=0)  and ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_LIVE_ID') and ((adPackageArray[adId] is defined and adPackageArray[adId]['price'] == 0) or adPackageArray[adId] is not defined) %}
