@@ -157,10 +157,12 @@
                 
                 {% set createdInwords = ad['ad_date'] |time_ago_in_words %}
                 {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
+                {% if (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')) and (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')) %}                
                 <div class="list-created-hours show-for-small-up-only list-created-hours-desk-tab">
                      {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
                      {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}
                 </div>
+                {% endif %}
                 {% endif %}
                 
                 {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
@@ -340,10 +342,12 @@
               <div class="created-box"> 
                     {% set createdInwords = ad['ad_date'] |time_ago_in_words %}
                     {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
+                    {% if (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID')) and (ad.status_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID')) %}                    
                     <div class="list-created-hours">
                      {% set createdInwords = (createdInwords=='less than 1 minute ago' or createdInwords=='less than a minute ago')?'1 minute ago':createdInwords %}
                      {{ 'Created'|trans({}, 'frontend-manage-my-ad') }} {{createdInwords|replace({'minute': 'min'})}}                    
                     </div>
+                    {% endif %}
                     {% endif %}
                     
                     {% if currentRoute == 'manage_my_ads_active' or currentRoute == 'dashboard_home' %}
