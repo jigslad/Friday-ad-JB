@@ -169,7 +169,7 @@
                 {% if ad.expires_at is defined and ad.expires_at is not null and ad.published_at is defined and ad.published_at is not null%}
                     {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
                         {#<div class="list-expired-hours">{{'Expired (%expire_date%)'|trans({'%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div><br /> #}
-                    {% elseif ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') and ad.sold_at is defined and ad.sold_at is not null %}
+                    {% elseif ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
                         {# <div class="list-expired-hours">{{'Marked as sold  (%sold_date%)'|trans({'%sold_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.sold_at, container]) }, 'frontend-manage-my-ad')}}</div><br />#}
                     {% else %}
                         {% if date().timestamp > ad.expires_at %}
@@ -354,7 +354,7 @@
                     {% if ad.expires_at is defined and ad.expires_at is not null and ad.published_at is defined and ad.published_at is not null%}
                         {% if ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_EXPIRED_ID') %}
                             {# <div class="list-expired-hours">{{'Expired (%expire_date%)'|trans({'%expire_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.expires_at, container]) }, 'frontend-manage-my-ad')}}</div><br /> #}
-                        {% elseif ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') and ad.sold_at is defined and ad.sold_at is not null %}
+                        {% elseif ad.status_id == constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::AD_STATUS_SOLD_ID') %}
                             {# <div class="list-expired-hours">{{'Marked as sold  (%sold_date%)'|trans({'%sold_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [ad.sold_at, container]) }, 'frontend-manage-my-ad')}}</div><br /> #}
                         {% else %}
                             {% if date().timestamp > ad.expires_at %}
