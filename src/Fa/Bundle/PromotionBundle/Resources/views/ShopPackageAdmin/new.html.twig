@@ -45,6 +45,7 @@
                         </div>
                         
                         {% for z in 1..3 %}
+                        <div id="{{ 'credit-block-'~(loop.index)|trans }}">
                             <h4>{{ 'Credit'~' '~(loop.index)|trans }}</h4>
                             <div class="row">
                                 <div class="large-3 columns">
@@ -88,7 +89,7 @@
                                             {% for k in 0..colCounter[i]-1 %}
                                                 {% if choicesIdArray[ctr] is defined %}
                                                     {% set child = attribute(attribute(form, 'package_sr_no_'~(z)), ctr) %}
-                                                    <li>
+                                                    <li id="{{ 'li-'~child.vars.id }}">
                                                         {{ form_widget(child) }}
                                                         <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
                                                     </li>
@@ -103,6 +104,7 @@
                             
                             {{ form_row(attribute(form, 'paid_user_only_'~(loop.index))) }}
                             <hr class="hr_margin">
+                           </div>
                         {% endfor %}
                     </div>
                 </div>
@@ -120,10 +122,14 @@
     //<![CDATA[
     $(document).ready(function(){
         
-        if($('#fa_promotion_shop_package_admin_role').val()==9) {
+    	if($('#fa_promotion_shop_package_admin_role').val()==9) {
 			$('#ad_limit_div').show();
+			$('#credit-block-2').hide();
+			$('#credit-block-3').hide();
 		} else {
 			$('#ad_limit_div').hide();
+			$('#credit-block-2').show();
+			$('#credit-block-3').show();				
 		}
 		
     	{% for i in 1..3 %}
@@ -145,8 +151,12 @@
 		$('#fa_promotion_shop_package_admin_role').change(function() {
 			if($('#fa_promotion_shop_package_admin_role').val()==9) {
 				$('#ad_limit_div').show();
+				$('#credit-block-2').hide();
+				$('#credit-block-3').hide();
 			} else {
 				$('#ad_limit_div').hide();
+				$('#credit-block-2').show();
+				$('#credit-block-3').show();				
 			}
 		});
 	
