@@ -94,8 +94,8 @@
     <script language="javascript" type="text/javascript">
     //<![CDATA[
     $(document).ready(function(){
-        //var fieldList = document.querySelectorAll("[id$=_is_required]");
-        //fieldList.forEach(onclickRequired);
+        var fieldList = document.querySelectorAll("[id$=_is_required]");
+        fieldList.forEach(onclickRequired);
 
         $("#fa_ad_paa_field_rule_admin_category_id").on("change", function(e) { 
             var category_id = e.val;
@@ -133,29 +133,28 @@
     });
 
     function onclickRequired(item, index) {
-        //console.log(index);
-        //console.log(item.checked);
         var allIds = item.id;
         var requiredId = allIds.replace('_is_required','');
         var hideField = requiredId+'_hide_field';
 
         if($('#'+requiredId+'_is_required').prop('checked') == true) {
-            $('#'+requiredId+'_hide_field').attr('checked',false);
-        }/*else{
+            $('#'+hideField).hide();
+            $('label[for='+hideField+']').hide();
+            //$('#'+requiredId+'_hide_field').attr('checked',false);
+        }else{
             $('#' + hideField + '').show();
             $('label[for=' + hideField + ']').show();
-        }*/
+        }
 
-        /*$('#'+requiredId+'_is_required').click(function(){
+        $('#'+requiredId+'_is_required').click(function(){
             if($('#'+requiredId+'_is_required').prop('checked') == false){
-                //console.log($(hideField));
                 $('#'+hideField+'').show();
                 $('label[for='+hideField+']').show();
             }else {
-                /!*$('#'+hideField+'').hide();
-                $('label[for='+hideField+']').hide();*!/
+                $('#'+hideField+'').hide();
+                $('label[for='+hideField+']').hide();
             }
-        });*/
+        });
     }
 
 
