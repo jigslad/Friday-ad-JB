@@ -285,6 +285,8 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {{ include('FaAdBundle:AdList:recommended_slot_css.html.twig') }}
 {% endif %}
 
+ {% set showAdultAlert = 0 %}
+ {% set ADULT_CATEGORY_ID = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -292,6 +294,9 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
     {% set categorySrchPath = categoryRepository.getCategoryPathArrayById(searchParams.item__category_id, false, container) %}
     {% for categoryId,categoryName in categorySrchPath %}
         {% set catSrchString = catSrchString ~ '-' ~ categoryName %}
+        {% if (categoryId == ADULT_CATEGORY_ID) %}
+            {% set showAdultAlert = 1 %}
+        {% endif %}
     {% endfor %}
     {{ set_variables('SrchCatDetails', {'catSrchString':catSrchString}) }}
 {% endif %}

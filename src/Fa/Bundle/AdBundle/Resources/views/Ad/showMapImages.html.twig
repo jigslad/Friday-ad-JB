@@ -102,7 +102,7 @@
             <div class="clearfix">
                 <span id="fav_{{ adId }}">
                     {% if adId in adFavoriteAdIds %}
-                        <a href="javascript:void(0);" onclick="return removeFromFavorite('{{adId}}');" class="save-item-btn added-in-fav" id="save-item-btn-id"><span class="saved-icon">save</span>{{'Favourite'|trans({}, 'frontend-show-ad')}}</a>
+                        <a href="javascript:void(0);" onclick="return removeFromFavorite('{{adId}}');" class="save-item-btn added-in-fav" id="save-item-btn-id"><span class="favorite saved-icon">save</span>{{'Favourite'|trans({}, 'frontend-show-ad')}}</a>
                     {% else %}
                         <a href="javascript:void(0);" onclick="return addToFavorite('{{adId}}');" class="save-item-btn" id="save-item-btn-id"><span class="save-icon">save</span>{{'Favourite'|trans({}, 'frontend-show-ad')}}</a>
                     {% endif %}
