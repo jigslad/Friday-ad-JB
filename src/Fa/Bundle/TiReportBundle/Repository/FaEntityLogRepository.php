@@ -307,6 +307,7 @@ class FaEntityLogRepository extends LogEntryRepository
         $entity = null;
         if ($formName == 'fa_promotion_package_admin') {
             $entity = new Package();
+            $container->get('ti_package_created_log')->info('package created in Ti entity log getEntityFieldLabelArray function' . $entity->getId());
         } elseif ($formName == 'fa_core_config_rule_admin') {
             $entity = new ConfigRule();
         } elseif ($formName == 'fa_user_user_admin') {

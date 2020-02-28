@@ -113,7 +113,7 @@ class ShopPackageAdminController extends CoreController implements ResourceAutho
 
         if ($formManager->isValid($form)) {
             $formManager->save($entity);
-
+            $this->container->get('package_created_log')->info('shop package created in package admin create function' . $entity->getId());
             return parent::handleMessage($this->get('translator')->trans('Subscription was successfully added.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'shop_package_new_admin' : 'shop_package_admin'));
         }
 
