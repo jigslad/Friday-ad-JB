@@ -126,10 +126,14 @@
 			$('#ad_limit_div').show();
 			$('#credit-block-2').hide();
 			$('#credit-block-3').hide();
+			$('#li-fa_promotion_shop_package_admin_package_sr_no_1_0').hide();
+			$('#li-fa_promotion_shop_package_admin_package_sr_no_1_1').hide();
 		} else {
 			$('#ad_limit_div').hide();
 			$('#credit-block-2').show();
-			$('#credit-block-3').show();				
+			$('#credit-block-3').show();	
+			$('#li-fa_promotion_shop_package_admin_package_sr_no_1_0').show();
+			$('#li-fa_promotion_shop_package_admin_package_sr_no_1_1').show();							
 		}
 		
     	{% for i in 1..3 %}
@@ -153,13 +157,29 @@
 				$('#ad_limit_div').show();
 				$('#credit-block-2').hide();
 				$('#credit-block-3').hide();
+				$('#li-fa_promotion_shop_package_admin_package_sr_no_1_0').hide();
+				$('#li-fa_promotion_shop_package_admin_package_sr_no_1_1').hide();
 			} else {
 				$('#ad_limit_div').hide();
 				$('#credit-block-2').show();
-				$('#credit-block-3').show();				
+				$('#credit-block-3').show();	
+				$('#li-fa_promotion_shop_package_admin_package_sr_no_1_0').show();
+				$('#li-fa_promotion_shop_package_admin_package_sr_no_1_1').show();							
 			}
 		});
-	
+
+		/*$( "#fa_promotion_shop_package_admin_ad_limit" ).blur(function() {
+		  if(parseInt($("#fa_promotion_shop_package_admin_ad_limit").val()) < parseInt($("#fa_promotion_shop_package_admin_credit_1").val())) {
+			  alert('Credit limit is greater than total Ad limit');
+		  }
+		});
+
+		$( "#fa_promotion_shop_package_admin_credit_1" ).blur(function() {
+		  if(parseInt($("#fa_promotion_shop_package_admin_ad_limit").val()) < parseInt($("#fa_promotion_shop_package_admin_credit_1").val())) {
+			  alert('Credit limit is greater than total Ad limit');
+		  }
+		});*/
+		
         $('#fa_promotion_shop_package_admin_boost_ad_enabled').change(function() {
             if($(this).is(":checked")) {
                 $('#show_monthly_boost_count').css('display','inline-flex');

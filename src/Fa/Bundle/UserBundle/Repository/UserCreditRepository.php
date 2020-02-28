@@ -115,12 +115,8 @@ class UserCreditRepository extends EntityRepository
         if (count($shopPackageCredits)) {
             foreach ($shopPackageCredits as $shopPackageCredit) {
                 if ($shopPackageCredit->getCredit() && $shopPackageCredit->getCategory() && $shopPackageCredit->getPackageSrNo()) {
-                    $expiresAt = CommonManager::getTimeStampFromEndDate(date('Y-m-d', CommonManager::getTimeFromDuration($shopPackageCredit->getDuration())));
-                    
-                    if($shopPackageCredit->getPackageSrNo()==1 && $shopPackageCredit->getPackage()->getAdLimit() > 0) {
-                        $shopCreditCnt = $shopPackageCredit->getPackage()->getAdLimit();
-                    } else { $shopCreditCnt = $shopPackageCredit->getCredit(); }
-                    
+                    $expiresAt = CommonManager::getTimeStampFromEndDate(date('Y-m-d', CommonManager::getTimeFromDuration($shopPackageCredit->getDuration())));                    
+                    $shopCreditCnt = $shopPackageCredit->getCredit();                     
                     $userCredit = new UserCredit();
                     $userCredit->setUser($user);
                     $userCredit->setCategory($shopPackageCredit->getCategory());
