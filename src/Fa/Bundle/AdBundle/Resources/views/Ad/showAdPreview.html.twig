@@ -67,10 +67,7 @@
     {{ set_variables('adDetailMap', {'latitude':latitude, 'longitude': longitude, 'tabId': 'adDetailMainTabs', 'mapContentId': 'map_panel'}) }}
 {% endif %}
 
-<style>
-    .f-topbar-fixed footer{margin-bottom:100px}
-</style>
-
+{{ include('FaAdBundle:Ad:showAdPreview-css.html.twig') }}
 <div class="breadcrumb-area hide-for-small-only">
     <div class="row">
         <div class="columns">

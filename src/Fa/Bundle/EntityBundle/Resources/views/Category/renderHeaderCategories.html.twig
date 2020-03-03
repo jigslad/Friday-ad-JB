@@ -1,13 +1,7 @@
 {% set container = fetch_container_instance() %}
 {% set entityCacheManager = container.get('fa.entity.cache.manager') %}
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
-<style>
-#tablet-header-menus { display:none; }
-@media only screen and (min-width: 760px) and (max-width: 959px)  {
-	#tablet-header-menus { display:block; }
-	#desktop-header-menus { display:none; }
-}
-</style>
+{{ include('FaEntityBundle:Category:renderHeaderCategories-css.html.twig') }}
 <div id="tablet-header-menus">
     <a class="tab-cat-link" id="tab_cat_link">Categories</a>
 {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu_tablet' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %}
