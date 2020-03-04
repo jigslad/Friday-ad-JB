@@ -72,7 +72,7 @@ class AdController extends CoreController
         $adDetail = $this->getRepository('FaAdBundle:Ad')->getAdDetailArray($adId, $this->container);
         
         $paaFieldArray = array();
-        $paaFieldRules = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($adCategoryId);
+        $paaFieldRules = $this->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor(adDetail['category_id']);
         foreach ($paaFieldRules as $paaFieldRule) {
             $paaFieldArray[] = $paaFieldRule['paa_field']['field'];
         }
