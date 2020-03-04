@@ -1,11 +1,11 @@
 {% set showHideElement = 'none' %}
-{% set setAcordian = null %}
+{% set setAcordian = 0 %}
 {% if attribute(form, field).vars.attr.hide_field is defined %}
     {% set setAcordian = attribute(form, field).vars.attr.hide_field  %}
 {% endif %}
 <h3 class="text-center">
 
-    {% if attribute(form, field).vars.required or setAcordian==1 %}
+    {% if attribute(form, field).vars.required or setAcordian ==0 %}
         {% set showHideElement = 'block' %}
         {% if label is defined and label %}
             {{ label }}
