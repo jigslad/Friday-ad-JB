@@ -53,7 +53,7 @@
     	{% set categoryUpsellArray    = categoryUpsellRepository.getCategoryUpsellForCategoryIds(adCategoryIdValArray) %}
     {% endif %}
     
-    {% if (activeShopPackage and activeShopPackage.getPackage()) %}
+    {# {% if (activeShopPackage and activeShopPackage.getPackage()) %}
         {% set shopPackageCreditArr = shopPackageCreditRepository.getFeaturedCreditsByPackageId(activeShopPackage.getPackage().getId()) %}    	
         {% if shopPackageCreditArr|length >0 %}
             {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
@@ -65,7 +65,7 @@
                 {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
             {% endif %}
         {% endif %}
-    {% endif %}
+    {% endif %} #}
 {% endif %}
 {{ include('FaUserBundle:ManageMyAd:manageMyAd-css.html.twig') }}
 {{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}

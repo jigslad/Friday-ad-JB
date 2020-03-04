@@ -53,7 +53,7 @@
     	{% set categoryUpsellArray    = categoryUpsellRepository.getCategoryUpsellForCategoryIds(adCategoryIdValArray) %}
     {% endif %}
     
-    {% if (activeShopPackage and activeShopPackage.getPackage()) %}
+    {# {% if (activeShopPackage and activeShopPackage.getPackage()) %}
         {% set shopPackageCreditArr = shopPackageCreditRepository.getFeaturedCreditsByPackageId(activeShopPackage.getPackage().getId()) %}    	
         {% if shopPackageCreditArr|length >0 %}
             {% set totalFeaturedCredit = shopPackageCreditArr[0].getCredit() %}
@@ -64,7 +64,7 @@
                 {% set usedFeaturedCredits = totalFeaturedCredit - remainingFeaturedCredits %}
             {% endif %}
         {% endif %}
-    {% endif %}
+    {% endif %} #}
 
 
 {% endif %}
@@ -92,7 +92,7 @@
                 		<ul class="toplistWithBullets">
                 		{% if userBusType is defined and userBusType == 'netsuite' and adLimitCount!=0 %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ adLimitCount }}</span></li>
-                			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCredits }}/{{ totalFeaturedCredit }}</span></li>
+                			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCreditCount }}/{{ shopFeaturedPackageCredit }}</span></li>
                 		{% elseif userBusType is defined and userBusType == 'business' %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}</span></li>
                 			<li class="bluecircle">Featured ads: <span>{{ adFeaturedUpsellArray|length }}</span></li>

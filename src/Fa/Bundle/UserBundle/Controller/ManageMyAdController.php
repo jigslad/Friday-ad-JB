@@ -140,9 +140,20 @@ class ManageMyAdController extends CoreController
                 }                
             }
         }
-         
+        
+        $activeFeaturedCreditCount = 0; $activeBasicCreditCount=0;
+        $shopFeaturedPackageCredit = 0; $usedFeaturedCreditCount = 0;$remainingFeaturedCredits=0;
         if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
             $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
+        
+            if ($activeShopPackage && $activeShopPackage->getPackage()) {
+                $activeFeaturedCreditCount = $this->getRepository('FaUserBundle:UserCredit')->getActiveFeaturedCreditCountForUser($loggedinUser->getId());
+                $activeBasicCreditCount = $this->getRepository('FaUserBundle:UserCredit')->getActiveBasicCreditCountForUser($loggedinUser->getId());
+                $shopFeaturedPackageCreditArr = $this->getRepository('FaPromotionBundle:ShopPackageCredit')->getFeaturedCreditsByPackageId($activeShopPackage->getPackage()->getId());
+                if(!empty($shopFeaturedPackageCreditArr)) { $shopFeaturedPackageCredit = $shopFeaturedPackageCreditArr[0]->getCredit(); }
+                $usedFeaturedCreditCount = ((int)$shopFeaturedPackageCredit - (int)$activeFeaturedCreditCount);
+                $remainingFeaturedCredits = $activeFeaturedCreditCount;
+            }
         }
         
         $parameters = array(
@@ -163,6 +174,11 @@ class ManageMyAdController extends CoreController
             'boostRenewDate'    => $getBoostDetails['boostRenewDate'],
             'userBusinessCategory' => $getBoostDetails['userBusinessCategory'],
             'activeShopPackage' => $activeShopPackage,
+            'activeFeaturedCreditCount' => $activeFeaturedCreditCount,
+            'activeBasicCreditCount' => $activeBasicCreditCount,
+            'shopFeaturedPackageCredit'=> $shopFeaturedPackageCredit,
+            'usedFeaturedCreditCount' => $usedFeaturedCreditCount,
+            'remainingFeaturedCredits' => $remainingFeaturedCredits,
             'filterBy' => $sortBy,
         );
 
