@@ -83,7 +83,7 @@
                                             {% endif %}
                                         </div>
                                         <a href="{{ adUrl }}" onClick='javascript:visitUserProfileOrAd("Click Ad position", "Featured Business Ad", "{{ gaEventLabel }}");'>
-                                            <h3 style="color:#313133">{% if attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'TITLE')) is defined %}
+                                            <h3 style="color:#212527">{% if attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'TITLE')) is defined %}
                                                {{trim_text(attribute(businessExposureUserAd, constant(businessExposureUserAdsolrMapping ~ 'TITLE')), 65)|raw}}
                                             {% endif %}
                                         </h3></a>
