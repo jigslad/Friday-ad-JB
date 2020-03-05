@@ -336,9 +336,15 @@
             });
             </script>
         {% endif %}
+
+        {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
+            <!-- Help text widget removing from mobile view -->
+            {{ include('FaFrontendBundle::layout-css.html.twig') }}
+        {% endif %}
+
         {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration',4: 'show_draft_ad',5: 'ad_package_purchase',6: 'show_cart',7: 'cybersource_checkout'}) %}
             {% set zendeskUrl = 'https://help.friday-ad.co.uk/hc/en-us/sections/360000265514-Placing-an-Advert' %}
-            {#{{ include('FaFrontendBundle::zendeskHelp.html.twig', {'url': zendeskUrl}) }}#}
+            {{ include('FaFrontendBundle::zendeskHelp.html.twig', {'url': zendeskUrl}) }}
             
         {% elseif (currentRoute  in {0: 'dashboard_home', 1: 'user_ad_message_all', 2: 'user_review_list', 3: 'my_profile',4: 'my_orders',5: 'my_favourite',6: 'list_search_agent',7: 'my_purchases',8: 'my_account'}) %}
         	{% set zendeskUrl = 'https://help.friday-ad.co.uk/hc/en-us/sections/360000255873-My-Account' %}
