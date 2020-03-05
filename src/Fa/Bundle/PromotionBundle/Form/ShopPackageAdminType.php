@@ -392,11 +392,13 @@ class ShopPackageAdminType extends AbstractType
                 if (!count($form->get('package_sr_no_'.$i)->getData())) {
                     $event->getForm()->get('package_sr_no_'.$i)->addError(new \Symfony\Component\Form\FormError('Please select a package type or types.'));
                 }
-                if (!$form->get('duration_value_'.$i)->getData()) {
-                    $event->getForm()->get('duration_value_'.$i)->addError(new \Symfony\Component\Form\FormError('Please enter duration.'));
-                }
-                if (!$form->get('duration_type_'.$i)->getData()) {
-                    $event->getForm()->get('duration_type_'.$i)->addError(new \Symfony\Component\Form\FormError('Please select a duration type.'));
+                if ($form->get('role')->getData()->getid()!=9) {
+                    if (!$form->get('duration_value_'.$i)->getData()) {
+                        $event->getForm()->get('duration_value_'.$i)->addError(new \Symfony\Component\Form\FormError('Please enter duration.'));
+                    }
+                    if (!$form->get('duration_type_'.$i)->getData()) {
+                        $event->getForm()->get('duration_type_'.$i)->addError(new \Symfony\Component\Form\FormError('Please select a duration type.'));
+                    }
                 }
             }
         }
@@ -405,7 +407,7 @@ class ShopPackageAdminType extends AbstractType
             $event->getForm()->get('ad_limit')->addError(new \Symfony\Component\Form\FormError('Please enter the ad limit.'));
         }
         
-        if ($form->get('role')->getData()->getid()==9 && ($form->get('ad_limit')->getData() < ($form->get('credit_1')->getData() + $form->get('credit_2')->getData() + $form->get('credit_3')->getData()))) {
+        if ($form->get('role')->getData()->getid()==9 && ($form->get('ad_limit')->getData() < $form->get('credit_1')->getData())) {
             $event->getForm()->get('credit_1')->addError(new \Symfony\Component\Form\FormError('Credit limit is greater than total Ad limit.'));
         }
         
@@ -439,7 +441,6 @@ class ShopPackageAdminType extends AbstractType
 
             //set category
             $totalCredit = 0;
-            
             
             if($form->get('ad_limit')->getData()) {
                 if ($form->get('shop_package_credit_id_1')->getData()) {
