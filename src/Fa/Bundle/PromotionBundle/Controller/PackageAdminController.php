@@ -124,7 +124,7 @@ class PackageAdminController extends CoreController implements ResourceAuthoriza
 
         if ($formManager->isValid($form)) {
             $formManager->save($entity);
-
+            $this->container->get('package_created_log')->info('package created in package admin create function' . $entity->getId());
             return parent::handleMessage($this->get('translator')->trans('Package was successfully added.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'package_new_admin' : ($backUrl ? $backUrl : 'package_admin')));
         }
 

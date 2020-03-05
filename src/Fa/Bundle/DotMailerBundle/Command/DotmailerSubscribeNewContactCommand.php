@@ -67,7 +67,7 @@ EOF
                 $response = $em->getRepository('FaDotMailerBundle:Dotmailer')->sendOneContactToDotmailerRequest($dotmailer, $this->getContainer());
                 if (isset($response['id']) && isset($response['email'])) {
                     $output->writeln('Contact subscribed from dotmailer for id: '.$id, true);
-                    $em->getRepository('FaDotMailerBundle:Dotmailer')->sendUserForDotmailerEnrollmentProgramRequest($response['id'], $this->getContainer());
+                    //$em->getRepository('FaDotMailerBundle:Dotmailer')->sendUserForDotmailerEnrollmentProgramRequest($response['id'], $this->getContainer());
                 } else {
                     $output->writeln('Contact not subscribed from dotmailer for id: '.$id, true);
                 }

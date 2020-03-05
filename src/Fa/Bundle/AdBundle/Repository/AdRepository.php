@@ -1270,7 +1270,19 @@ class AdRepository extends EntityRepository
         $adDetailFields['qty']                                 = 'Quantity';
 
         //get category wise sorting parameters.
-        $paaFields = $this->_em->getRepository('FaAdBundle:PaaField')->getDimensionPaaFieldsWithLabel($categoryId, $container);
+        $paaFieldRuleFields = $paaFieldsOrg = array();
+        $paaFieldRules = array();
+        $paaFieldsOrg = $this->_em->getRepository('FaAdBundle:PaaField')->getDimensionPaaFieldsWithLabel($categoryId, $container);
+        $paaFieldRules = $this->_em->getRepository('FaAdBundle:PaaFieldRule')->getPaaFieldRulesArrayByCategoryAncestor($categoryId, $container, 'edit', 'both');
+        
+        if(!empty($paaFieldRules)) {
+            foreach($paaFieldRules as $paaFieldRule) {
+                $paaFieldRuleFields[$paaFieldRule['paa_field']['field']] = $paaFieldRule['paa_field']['label'];
+            }
+        }
+        if(!empty($paaFieldRuleFields)) {
+            $paaFields = array_intersect($paaFieldsOrg, $paaFieldRuleFields);
+        }
 
         //add auto suggest fields.
         $autoSuggestFields = $this->getAutoSuggestFields();
