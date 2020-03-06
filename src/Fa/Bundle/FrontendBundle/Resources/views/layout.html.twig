@@ -116,7 +116,8 @@
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
     {{ include('FaFrontendBundle::fa-main-css-new.html.twig') }}
-
+	
+	{{ include('FaFrontendBundle::new-fa-main-css.html.twig') }}
     {# { include('FaFrontendBundle::main-override-css.html.twig') } #}
     
     {% set showAdultCss = 0 %}
@@ -149,8 +150,6 @@
     
     {% if showAdultCss==1 %}
     	{{ include('FaFrontendBundle::adult-css.html.twig') }}
-    {% else %}
-    	{{ include('FaFrontendBundle::new-fa-main-css.html.twig') }}
     {% endif %}
     
     {% block blockGaCode%}
