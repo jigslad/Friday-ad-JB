@@ -41,11 +41,26 @@
         <div class="row paa-main paa-btm-space" {% if app.user and app.user.getRole() and app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}data-equalizer{% endif %}>
             {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 1}) }}
             <div id="middle-column" class="large-12 columns" data-equalizer-watch>
-                <h1 class="text-center paa-title">{{ 'what are you advertising?'|trans({}, 'frontend-paa-first-step') }}</h1>
+                <h1 class="text-center paa-title">{{ 'What are you advertising?'|trans({}, 'frontend-paa-first-step') }}</h1>
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                 {{ form_errors(form) }}
                 <div class="big-wrapper">
-                    <h2 class="text-center" id="choose_cat_msg">{{ 'choose from all categories'|trans({}, 'frontend-paa-first-step') }}</h2>
+                    <div class="category-search" id="category_autocomplete_div">
+                        <div class="disable-autocomplete"></div>
+                        <div class="relative text-center">
+                            {#<span id="field_arrow">#}
+                            {#<i class="fi-arrow-right large element-animation"></i>#}
+                            {#<i class="fi-arrow-down large element-animation"></i>#}
+                            {#</span>#}
+                            <span class="textbox-wrapper">
+                                {{ form_row(form.category_id_autocomplete) }}
+                                <a href="javascript:void(0);" id="fa_paa_category_select_category_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="big-wrapper">
+                    <h2 class="text-center" id="choose_cat_msg">{{ 'or Choose from all categories'|trans({}, 'frontend-paa-first-step') }}</h2>
                     <h3 class="text-center mt10" id="redirect_msg" style="display:none">{{ 'please wait…'|trans({}, 'frontend-paa-first-step') }}</h3>
                 </div>
                 <div class="big-wrapper">
@@ -129,7 +144,7 @@
     <div class="small-wrapper">
       {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand button disabled'}}) }}
     </div>
-    <div class="big-wrapper">
+    {#<div class="big-wrapper">
       <h2 class="text-center" id="or_msg">{{ 'OR'|trans({}, 'frontend-paa-first-step') }}</h2>
       <h2 class="text-center subtitle">{{ 'Tell us what it is and we\'ll help you find the category'|trans({}, 'frontend-paa-first-step') }}</h2>
       <div class="category-search" id="category_autocomplete_div">
@@ -145,7 +160,7 @@
               </span>
           </div>
       </div>
-    </div>
+    </div>#}
    
     {{ form_end(form) }}
   </div>
@@ -483,7 +498,18 @@
         var category_id = last_category_id ? last_category_id : autocomplete_category_id;
 
         if (category_id) {
-            $('#fa_paa_category_select_save').removeClass('disabled');
+            //$('#fa_paa_category_select_save').removeClass('disabled');
+
+            $('.category_choice_div').change(function(){
+                // Call submit() method on <form id='myform'>
+
+                //var formname = document.getElementsByName('fa_paa_category_select');
+                //$("form[name='fa_paa_category_select']").submit();
+                document.forms['fa_paa_category_select'].submit();
+            });
+
+            //location.href = "https://devnew.friday-ad.co.uk/app_dev.php/paa/second_step";
+
         } else {
             if (!$('#fa_paa_category_select_save').hasClass('disabled')) {
                 $('#fa_paa_category_select_save').addClass('disabled');
