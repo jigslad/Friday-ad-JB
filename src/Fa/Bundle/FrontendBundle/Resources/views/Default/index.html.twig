@@ -137,7 +137,20 @@
         </div>
         {% endcache %}
     {% endif %}
-    
+
+    {% cache 'home|page|'~locationId~'front/home_page_read_fridayad_online' 120 %}
+        <div class="homepage-row">
+            <div class="row">
+                <div class="columns">
+                    <h3 class="homepage-title">
+                        {{'Read the Friday-Ad Online'|trans({}, 'frontend-homepage')}}
+                    </h3>
+                    {{ include('FaFrontendBundle:Default:readFridayAdOnline.html.twig') }}
+                </div>
+            </div>
+        </div>
+    {% endcache %}
+
     {% if popularShopsSearchParams is defined and popularShopsSearchParams|length %}
         {% cache 'home|page|'~locationId~'front/home_page_popular_shops' 120 %}
             {% set popularShops = adForSaleRepository.getPopularShops(container, popularShopsSearchParams) %}
