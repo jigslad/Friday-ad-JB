@@ -1,7 +1,7 @@
 {% set paaFieldRepository = fetch_repository('FaAdBundle:PaaField') %}
 {% set adAdultRepository = fetch_repository('FaAdBundle:AdAdult') %}
 {% set solrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
-paaFieldArray==={{ dump(paaFieldArray) }}
+
 <div class="detail-tabpart-2" id="vif_tabs">
     <ul class="tabs hide-for-small-only" data-tab id="ad_property_tabs">
         {% if (adDetail['user']['about_us'] is defined and adDetail['user']['about_us'] is not null) %}
@@ -96,7 +96,7 @@ paaFieldArray==={{ dump(paaFieldArray) }}
                     <ul class="details-info">
                         {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
                         	{% if fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::TRAVEL_ARRANGEMENTS') and fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::INDEPENDENT_OR_AGENCY') and fieldName != 'Gender' and fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::MY_SERVICE_IS_FOR') and fieldName != 'Gender' and fieldName != constant('Fa\\Bundle\\EntityBundle\\Repository\\EntityRepository::LOOKING_FOR') %}
-                                {% if fieldName in paaFieldArray %}
+                                {% if fieldName in paaFieldLabelArray  or fieldName == 'Category' or fieldName == 'Sub category' %}
                                 <li class="clearfix">
                                     <div class="detail-text">{{fieldName}}</div>
                                     <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>

@@ -18,7 +18,7 @@
              <div class="content active" id="basic_info_panel">
                  <div class="hide-for-small-only">
                     <div id="ad_desc">
-                        {% if adForSaleDetail['description'] is defined %}
+                        {% if 'description' in paaFieldArray and adForSaleDetail['description'] is defined %}
                             {{ adForSaleDetail['description']|replace({"\\n": "<br />", "&nbsp;": " "})|raw|nl2br }}
                         {% endif %}
                     </div>
@@ -29,10 +29,12 @@
                      <h5>{{'The details'|trans({}, 'frontend-show-ad')}}</h5>
                         <ul class="details-info">
                             {% for fieldName, fieldValue in adDetailAndDimensionFields['detail'] %}
+                            {% if fieldName in paaFieldLabelArray  or fieldName == 'Category' or fieldName == 'Sub category' %}
                                 <li class="clearfix">
                                     <div class="detail-text">{{fieldName}}</div>
                                     <div class="detail-text">{{fieldValue|join(', ')|raw}}</div>
                                 </li>
+                             {% endif %}
                             {% endfor %}
                         </ul>
                  {% endif %}
@@ -41,7 +43,7 @@
              {% if adForSaleDetail['postage_payment'] is defined %}
                 <a href="#postage_payment_panel" class="show-for-small-only">{{'Postage & Payment'|trans({}, 'frontend-show-ad')}}<i class="fi-plus right"></i></a>
                  <div class="content" id="postage_payment_panel">
-                    {% if adForSaleDetail['postage_payment']['delivery_method'] is defined %}
+                    {% if 'delivery_method_option_id' in paaFieldArray and adForSaleDetail['postage_payment']['delivery_method'] is defined %}
                         <h5>{{'Delivery'|trans({}, 'frontend-show-ad')}}</h5>
                         <ul class="details-info">
                             <li class="clearfix">
@@ -51,7 +53,7 @@
                         </ul>
                     {% endif %}
                     
-                    {% if adForSaleDetail['postage_payment']['payment_method'] is defined %}
+                    {% if 'payment_method_id' in paaFieldArray and adForSaleDetail['postage_payment']['payment_method'] is defined %}
                         <h5 class="mt10">{{'Payment'|trans({}, 'frontend-show-ad')}}</h5>
                         <ul class="details-info">
                             <li class="clearfix">
@@ -75,10 +77,12 @@
                      <h5>{{'Item dimensions'|trans({}, 'frontend-show-ad')}}</h5>
                      <ul class="details-info">
                          {% for fieldName, fieldValue in adDetailAndDimensionFields['dimension'] %}
+                             {% if fieldName in paaFieldLabelArray  or fieldName == 'Category'  or fieldName == 'Sub category' %}
                              <li class="clearfix">
                                  <div class="detail-text">{{fieldName}}</div>
                                  <div class="detail-text">{{fieldValue}}</div>
                              </li>
+                            {% endif %}
                          {% endfor %}
                      </ul>
                 </div>
