@@ -25,10 +25,6 @@
 		{% set userType = 'null' %}
 	{% endif %}
 	<script>
-		let adBlocker = false;
-		if(isAdBlocker) {
-			adBlocker = true;
-		}
 		window.dataLayer = window.dataLayer || [];
 		dataLayer.push({
 			"page": {
@@ -37,7 +33,6 @@
 				"clientID": '{{ ClientID }}',
 				"ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
 				"loggedInType": '{{ userType }}',
-				"adBlocker": adBlocker,
 				"banners": '{{ bannersArray is defined ? bannersArray|length : '' }}'
 			},
 		});
