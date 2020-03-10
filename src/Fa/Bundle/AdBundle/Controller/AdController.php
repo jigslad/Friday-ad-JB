@@ -433,10 +433,9 @@ class AdController extends CoreController
             $parameters['relatedBusinessesHeading'] = $relatedBusinessesHeading;
         }
 
-        $recommendedSlotArray = $this->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getAdDetailCategoryRecommendedSlotArrayByCategoryId($adCategoryId, $this->container);
-        //print_r($recommendedSlotArray);exit;
+        $recommendedSlotArray = $this->getRepository('FaEntityBundle:CategoryRecommendedSlot')->getCategoryRecommendedSlotArrayByCategoryId($adCategoryId, $this->container);
         $parameters['recommendedSlotArray'] = $recommendedSlotArray;
-
+        
         return $this->render('FaAdBundle:Ad:showAd.html.twig', $parameters, $objResponse);
     }
 
