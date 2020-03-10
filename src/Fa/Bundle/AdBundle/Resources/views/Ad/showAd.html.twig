@@ -1679,6 +1679,11 @@
     {% else %}
         {% set responseType = 'node' %}
     {% endif %}
+    {% if userTypeText == 'Business ad' %}
+        {% set businessname = adDetail.a_s_business_name_s is defined ? adDetail.a_s_business_name_s :'Business advertiser' %}
+    {% else %}
+        {% set businessname = 'Private seller' %}
+    {% endif %}
     <script>
         {# get date and create as new #}
         var publishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
@@ -1705,8 +1710,8 @@
                     "expiryDate": expiredDate.getFullYear()  + "/" + (expiredDate.getMonth() + 1) + "/" + expiredDate.getDate(),
                     "price": '{{ adDetail.a_price_d is defined ? adDetail.a_price_d : 0 }}',
                     "package": "{{ adPackage is defined ? adPackage : 0 }}",
-                    "businessName": "{{ adDetail.a_s_business_name_s is defined ? adDetail.a_s_business_name_s :'Private seller'}}",
-                    "businessType": "{{ userTypeText }}" ,
+                    "businessName": "{{ businessname }}",
+                    "businessType": "{{ userTypeText == 'Business ad' ? 'Business': 'Private' }}" ,
                     "responseType": "{{ responseType }}" ,
                     "logo": '{{ adDetail.user.company_logo is defined ? 'true' : 'false' }}'    //True if showing logo/profile pic, False if nothing (showing default FAD)
                 },
