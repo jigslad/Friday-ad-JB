@@ -1689,7 +1689,7 @@
         $( document ).ready(function() {
             window.dataLayer = window.dataLayer || [];
             var pageObj = window.dataLayer.find(o => o['page']);
-            pageObj.page.adOwner = '{{ allowAdEdit }}';
+            pageObj.page.adOwner = {{ allowAdEdit ? 'true' : 'false' }};
             dataLayer.push({
                 "adDetails":{
                     "category": "{{ categoryArray.0 is defined ? categoryArray.0 : '' }}",
