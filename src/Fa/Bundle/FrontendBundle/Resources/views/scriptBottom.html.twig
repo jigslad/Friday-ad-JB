@@ -262,6 +262,9 @@
 {% if app.request.get('_route') in ['fa_frontend_homepage','landing_page_category'] %}
     {% set pageType = 'Homepage' %}
 
+{% elseif app.request.get('_route') in ['ad_detail_page']%}
+    {% set pageType = 'Ad Details' %}
+
 {% elseif app.request.get('_route') in ['ad_post_first_step', 'ad_post_second_step', 'ad_post_third_step','ad_post_third_step_registration','ad_post_fourth_step']%}
     {% set pageType = 'PAA process page' %}
 
@@ -286,6 +289,42 @@
 
 {% endif %}
 
+{#{% for banner in bannersArray %}#}
+{#    {% if zone_id is defined and bannersArray is defined %}#}
+{#        {% if zone_id in bannersArray|keys %}#}
+{#            {% set divStyle            = '' %}#}
+{#            {% set otherClass          = '' %}#}
+{#            {% set showBanner          = 0 %}#}
+{#            {% set currentDevice       = 'D' %}#}
+{#            {% set container           = fetch_container_instance() %}#}
+{#            {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}#}
+{#            {% set zone_above_header   = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}#}
+{#            {% set page_all_other      = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerPageRepository::PAGE_ALL_OTHER') %}#}
+{#            {% set current_route       = app.request.attributes.get('_route') %}#}
+
+{#            {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}#}
+{#                {% set currentDevice = 'M' %}#}
+{#            {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}#}
+{#                {% set currentDevice = 'T' %}#}
+{#            {% endif %}#}
+
+{#            {% if ((currentDevice == 'D' and bannersArray[zone_id]['is_desktop'] == 1) or (currentDevice == 'T' and bannersArray[zone_id]['is_tablet'] == 1) or (currentDevice == 'M' and bannersArray[zone_id]['is_mobile'] == 1)) %}#}
+{#                {% set showBanner = 1 %}#}
+{#            {% endif %}#}
+
+{#            {% if zone_id == zone_above_header and bannersArray[zone_id]['page_id'] == page_all_other %}#}
+{#                {% if not app.request.attributes.get('static_page') %}#}
+{#                    {% set showBanner = 0 %}#}
+{#                {% endif %}#}
+{#            {% endif %}#}
+
+{#            {% if (showBanner == 1) %}#}
+{#                {% set displayBannerCount = displayBannerCount + 1 %}#}
+{#            {% endif %}#}
+{#        {% endif %}#}
+{#    {% endif %}#}
+{#{% endfor %}#}
+
 <script>
     let adBlocker = false;
     if(isAdBlocker) {
@@ -300,7 +339,7 @@
             "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
             "loggedInType": '{{ userType }}',
             "adBlocker": adBlocker,
-            "banners": '{{ bannersArray is defined ? bannersArray|length : '' }}'
+            "banners": '{{ bannersArray is defined ? bannersArray|length : 0 }}'
         },
     });
 </script>
