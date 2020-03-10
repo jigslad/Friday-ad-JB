@@ -268,7 +268,7 @@
 {% elseif app.request.get('_route') in ['ad_post_first_step', 'ad_post_second_step', 'ad_post_third_step','ad_post_third_step_registration','ad_post_fourth_step']%}
     {% set pageType = 'PAA process page' %}
 
-{% elseif app.request.get('_route') in ['location_home_page','testimonials'] %}
+{% elseif app.request.get('_route') in ['location_home_page','testimonials','show_all_locations'] %}
     {% set pageType = 'Peripheral Content' %}
 
 {% elseif app.request.get('_route') in ['login' ,'fa_user_register', 'facebook_paa_login','google_paa_login'] %}
