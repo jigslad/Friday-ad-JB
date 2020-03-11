@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="112px" height="112px" viewBox="0 0 112 112" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Badge / Properties / Hover / Garages</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="26.4897959%" x2="252.959821%" y2="145.891195%" id="linearGradient-1">
+            <stop stop-color="#A8DC28" offset="0%"></stop>
+            <stop stop-color="#31C5F2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Badge-/-Properties-/-Hover-/-Garages" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Badge-/-Properties-/-Hover">
+            <g id="Badge-/-z.Base-/-Large">
+                <g id="Badge-/-z.Base-/-Shapes-/-Large" fill="#FFFFFF" fill-rule="evenodd" stroke="#CBD5D9" stroke-width="1">
+                    <rect id="Rectangle" x="0.5" y="0.5" width="111" height="111" rx="4"></rect>
+                </g>
+                <text id="Category-name" font-family="Poppins-SemiBold, Poppins" font-size="14" font-weight="500" fill="#82C148">
+                    <tspan x="25.424" y="81">Garages</tspan>
+                </text>
+                <g id="Icon-/-Category-/-Properties-/-Garages" transform="translate(32.000000, 21.000000)" fill-rule="evenodd" stroke-width="1">
+                    <g id="Imported-Layers" transform="translate(3.600000, 7.285714)">
+                        <polyline id="Fill-1" stroke="#EFEFEF" stroke-width="1.18708452" fill="#313133" points="43.2 2.31428571 43.2 32.3142857 42.0228444 32.3142857 42.0228444 3.33697745 2.37835431 3.33697745 2.37835431 32.3142857 1.2 32.3142857 1.2 2.31428571 43.2 2.31428571"></polyline>
+                        <path d="M42,1.11428571 L42,29.9142857 L38.8888889,29.9142857 L38.888,4.31428571 L3.111,4.31428571 L3.11111111,29.9142857 L-1.61648472e-14,29.9142857 L-1.79412041e-14,1.11428571 L42,1.11428571 Z M36.8319611,16.5814297 L36.8319611,20.3254688 L4.89237411,20.3254688 L4.89136861,16.5814297 L36.8319611,16.5814297 Z M36.8319611,11.3169135 L36.8319611,15.0609527 L4.89237411,15.0609527 L4.89136861,11.3169135 L36.8319611,11.3169135 Z M36.8319611,6.11378649 L36.8319611,9.85782565 L4.89237411,9.85782565 L4.89136861,6.11378649 L36.8319611,6.11378649 Z" id="Combined-Shape" fill="url(#linearGradient-1)"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

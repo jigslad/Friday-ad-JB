@@ -101,7 +101,7 @@ a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-
 #eighteenPlusWarnningModel .primary-btn-2 { background:linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;border: 0px solid transparent !important; }
 #eighteenPlusWarnningModel .primary-btn-2:hover { background:linear-gradient(135deg, #8645AA 0%, #9D086A 100%) !important; }
 .secondary-btn-1, .secondary-btn-2, .secondary-btn-3, .secondary-btn-4  { padding:8px 20px 8px 20px !important; }
-
+.interested-item a.button:hover { color: #82C249 !important; }
 
 /* Category Images */
 .discover-forsale, .cat-forsale { background: url(/bundles/fafrontend/images/categories/Ic-btn-For-Sale.svg) no-repeat !important; }
@@ -161,7 +161,7 @@ a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-
 /* Motors Images */
 .any-category { background: url(/bundles/fafrontend/images/Ic-btn-Any.svg) no-repeat !important; }
 .car-hatchback { background: url(/bundles/fafrontend/images/motors/Ic-btn-Hatchback.svg) no-repeat !important; }
-.car-coupes { background: url(/bundles/fafrontend/images/motors/Ic-btn-Coupes.svg) no-repeat !important; }
+.car-coupes { background: url(/bundles/fafrontend/images/motors/Ic-btn-Coupes1.svg) no-repeat !important; }
 .car-saloons { background: url(/bundles/fafrontend/images/motors/Ic-btn-Saloons.svg) no-repeat !important; }
 .car-convertibles { background: url(/bundles/fafrontend/images/motors/Ic-btn-Convertibles.svg) no-repeat !important; }
 .car-estates { background: url(/bundles/fafrontend/images/motors/Ic-btn-Estates.svg) no-repeat !important; }
@@ -185,6 +185,12 @@ a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-
 .car-estates.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-Estates-ON.svg) no-repeat !important;border-radius: 5px !important; }
 .car-mpvs.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-MPVs-ON.svg) no-repeat !important;border-radius: 5px !important; }
 .car-4x4.active { background: url(/bundles/fafrontend/images/motors/Ic-btn-4x4-ON.svg) no-repeat !important;border-radius: 5px !important; }
+
+/* Property Images */
+.discover-forsale, .cat-forsale { background: url(/bundles/fafrontend/images/categories/Ic-btn-For-Sale.svg) no-repeat !important; }
+
+
+
 
 /* other css */
 .recommended-div.listing .recommended-more .right-block {  padding:8px 5px 8px 5px !important; }
@@ -221,11 +227,23 @@ a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-
 }
 .capsule-links a:hover, .capsule-links a.active { color:#ffffff !important; }
 
+button.signup-fb-btn.expand {
+    padding: 17px 0px 22px 80px !important;
+}
+.landing-circles a, .landing-circles a:hover, .landing-circles a:focus, .landing-circles a:active, .landing-circles a.active {
+    background-size: 100% !important;
+}
+
 @media only screen and (max-width: 640px) {
     .help-links {
         margin: 10px 0px 0 !important !important;
         column-count: 1 !important !important;
         width: 100% !important !important;
+    }
+}
+@media only screen and (max-width: 759px) {
+    .discover-categories a {
+        background-size: cover !important;
     }
 }
 @media only screen and (min-width:960px) and (max-width: 1151px) {
