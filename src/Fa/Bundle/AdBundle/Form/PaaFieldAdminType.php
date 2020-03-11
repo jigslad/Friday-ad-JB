@@ -129,7 +129,6 @@ class PaaFieldAdminType extends AbstractType
             )
             ->add('status', CheckboxType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getStatus()) ? true : false))
             ->add('is_required', CheckboxType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getIsRequired()) ? true : false))
-            ->add('hide_field', CheckboxType::class, array('label' => 'Field collapsed by default', 'data' => ($this->paaFieldRule && $this->paaFieldRule->getHideField()) ? true : false))
             ->add('is_recommended', CheckboxType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getIsRecommended()) ? true : false))
             ->add('help_text', TextareaType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getHelpText()) ? $this->paaFieldRule->getHelpText() : ''))
             ->add('error_text', TextareaType::class, array('data' => ($this->paaFieldRule && $this->paaFieldRule->getErrorText()) ? $this->paaFieldRule->getErrorText() : ''))
@@ -170,6 +169,12 @@ class PaaFieldAdminType extends AbstractType
                 )
             )
             ->add('is_added', HiddenType::class);
+
+        if(($this->paaField->getField() != 'photo_error') && ($this->paaField->getField() != 'youtube_video_url')){
+            $builder->add('hide_field', CheckboxType::class, array('label' => 'Collapse field by default', 'data' => ($this->paaFieldRule && $this->paaFieldRule->getHideField()) ? true : false));
+        }else{
+            $builder->add('hide_field', HiddenType::class, array('label' => false, 'data' => ($this->paaFieldRule && $this->paaFieldRule->getHideField()) ? true : false));
+        }
 
         // allow admin to set default value
         if ($this->paaField->getCategoryDimensionId() && ($this->paaField->getFieldType() == 'choice_radio' || $this->paaField->getFieldType() == 'choice_single')) {

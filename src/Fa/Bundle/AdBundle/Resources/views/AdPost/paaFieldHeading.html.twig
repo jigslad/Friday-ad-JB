@@ -4,7 +4,6 @@
     {% set setAcordian = attribute(form, field).vars.attr.hide_field  %}
 {% endif %}
 <h3 class="text-center">
-
     {% if attribute(form, field).vars.required or setAcordian ==0 %}
         {% set showHideElement = 'block' %}
         {% if label is defined and label %}
@@ -12,6 +11,7 @@
         {% else %}
             {{ attribute(form, field).vars.label }}
         {% endif %}
+        <span>({{ field != 'rates_id'?'optional'|trans({}, 'frontend-paa-fourth-step'):'please add your basic rates' }})</span>
         <span>{#({{ 'required'|trans({}, 'frontend-paa-fourth-step') }})#}</span>
     {% else %}
         {% set tabArrowClass = 'tab-down' %}
@@ -31,7 +31,7 @@
             {% endif %}
         {% endif %}
 
-            <a href="javascript:void(0)" class="{{ tabArrowClass }} element_toggle" id="element_toggle_{{ field }}">
+        <a href="javascript:void(0)" class="{{ tabArrowClass }} element_toggle" id="element_toggle_{{ field }}">
             {% if label is defined and label %}
                 {{ label }}
             {% else %}

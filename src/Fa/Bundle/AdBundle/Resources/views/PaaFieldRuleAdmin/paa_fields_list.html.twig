@@ -33,16 +33,14 @@
             {{ form_label(attribute(form, field).is_required) }}
             {{ form_errors(attribute(form, field).is_required) }}
 
-            {% if field not in ['youtube_video_url','photo_error'] %}
+            {#{% if field not in ['youtube_video_url','photo_error'] %}#}
                 {{ form_widget(attribute(form, field).hide_field) }}
                 {{ form_label(attribute(form, field).hide_field) }}
                 {{ form_errors(attribute(form, field).hide_field) }}
-            {% endif %}
+            {#{% endif %}#}
         </div>
 
-
-
-    <div class="checkbox-row mb10">
+        <div class="checkbox-row mb10">
             {{ form_widget(attribute(form, field).is_recommended) }}
             {{ form_label(attribute(form, field).is_recommended) }}
             {{ form_errors(attribute(form, field).is_recommended) }}
