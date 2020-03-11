@@ -1655,8 +1655,16 @@ class AdRepository extends EntityRepository
         }
         if(isset($adDetailAndDimensionFields['detail']['Ethnicity '])){
             $link = new SimpleXMLElement($adDetailAndDimensionFields['detail']['Category']);
-            $newlink = $link['href'].$adDetailAndDimensionFields['detail']['Ethnicity '].'/';
-            $adDetailAndDimensionFields['detail']['Ethnicity '] = '<a href="'.$newlink.'">'.$adDetailAndDimensionFields['detail']['Ethnicity '].'</a>';
+            $nlink = $link['href'].$adDetailAndDimensionFields['detail']['Ethnicity '].'/';
+            $nlink = explode('/',$nlink);
+            if($nlink[1] === 'app_dev.php'){
+                $nlink[2] = 'uk';
+            }
+            else {
+                $nlink[1] = 'uk';
+            }
+            $nlink = implode('/',$nlink);
+            $adDetailAndDimensionFields['detail']['Ethnicity '] = '<a href="'.$nlink.'">'.$adDetailAndDimensionFields['detail']['Ethnicity '].'</a>';
         }
         return $adDetailAndDimensionFields;
     }
