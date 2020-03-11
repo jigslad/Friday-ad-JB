@@ -108,7 +108,16 @@
 
     function refreshParallax()
     {
-        $(window).trigger('resize').trigger('scroll');
+        /*$(window).trigger('resize').trigger('scroll');*/
+        $( window ).scroll(function() {
+            if ($("#sticky_nav").hasClass('fixed')) {
+                $("#sticky_nav_top").addClass('fixed');
+                $("#sticky_nav_top").addClass('top-bar-shadow');
+            } else {
+                $("#sticky_nav_top").removeClass('fixed');
+                $("#sticky_nav_top").removeClass('top-bar-shadow');
+            }
+        });
     }
 //]]>
 </script>
