@@ -329,11 +329,13 @@ class HeaderImageAdminType extends AbstractType
 
                 if ($file !== null && $fileName) {
                     $this->removeImage($headerImage, $oldFile, $oldFileName);
+                    $this->removeAwsImage($headerImage, $oldFileName);
                     $this->uploadImage($headerImage, $fileName);
                 }
 
                 if ($phoneFile !== null && $phoneFileName) {
                     $this->removeImage($headerImage, $oldPhoneFile, $oldPhoneFileName);
+                    $this->removeAwsImage($headerImage, $oldPhoneFileName);
                     $this->uploadPhoneImage($headerImage, $phoneFileName);
                 }
             }
@@ -516,6 +518,7 @@ class HeaderImageAdminType extends AbstractType
     {
         if ($fileName) {
             $headerImage->getFile()->move($headerImage->getUploadRootDir(), $fileName);
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path=headerimage/'.$fileName.' >/dev/null &');
             $headerImage->setFile(null);
         }
     }
@@ -532,6 +535,7 @@ class HeaderImageAdminType extends AbstractType
     {
         if ($fileName) {
             $headerImage->getPhoneFile()->move($headerImage->getUploadRootDir(), $fileName);
+            exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:move:single-image-s3 --file_path=headerimage/'.$fileName.' >/dev/null &');
             $headerImage->setPhoneFile(null);
         }
     }
@@ -553,8 +557,13 @@ class HeaderImageAdminType extends AbstractType
         // Delete image from directory
         if ($imageCount < 1) {
             if (file_exists($file)) {
-                unlink($file);
+                unlink($file);                
             }
         }
+    }
+    
+    public function removeAwsImage($headerImage, $fileName)
+    {
+        exec('nohup'.' '.$this->container->getParameter('fa.php.path').' '.$this->container->getParameter('project_path').'/console fa:remove:single-image-s3 --file_path=headerimage/'.$fileName.' >/dev/null &');
     }
 }

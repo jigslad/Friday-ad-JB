@@ -56,7 +56,7 @@
         //<![CDATA[
         $(document).ready(function(){
             initAttachmentUpload(true);
-            var mainDragDropUploader = setUpUploader('fa_message_message_ad_attachments', true, 'drag_drop_container');
+            var mainDragDropUploader = setUpMsgUploader('fa_message_message_ad_attachments', true, 'drag_drop_container');
             mainDragDropUploader.init();
             plupload.addI18n({
                 'File size error.' : "{{'Your files exceed the maximum capacity for one message.'|trans({}, 'frontend-paa')}}",
@@ -69,7 +69,7 @@
         {
             if ($('.pickfiles').length > 0) {
                 $('.pickfiles').each(function(e) {
-                    var mainUploader = setUpUploader($(this).attr('id'), removeFileList, '');
+                    var mainUploader = setUpMsgUploader($(this).attr('id'), removeFileList, '');
                     mainUploader.init();
                 });
             } else if (removeFileList) {
@@ -82,7 +82,7 @@
                 $('#drag_drop_text').removeClass('drag-ins-hr').addClass('drag-ins-vr');
             }
         }
-        function setUpUploader(id, removeFileList, dropElement)
+        function setUpMsgUploader(id, removeFileList, dropElement)
         {
             var errorFlag = false;
             var messageId = '{{messageId}}';
