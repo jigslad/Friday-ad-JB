@@ -657,7 +657,7 @@ class LocationRepository extends BaseEntityRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
 
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
 
@@ -676,11 +676,17 @@ class LocationRepository extends BaseEntityRepository
             $townInfoArray['latitude']  = $town->getLatitude();
             $townInfoArray['longitude'] = $town->getLongitude();
             $townInfoArray['town_id']   = $town->getId();
-            $townInfoArray['town']      = $town->getName();
-            $townInfoArray['county_id'] = $town->getParent()->getId();
-            $townInfoArray['county']    = $town->getParent()->getName();
+            $townInfoArray['town']      = $town->getName();            
             $townInfoArray['lvl']    	= $town->getLvl();
             
+            if($town->getLvl()==4) {
+                $townInfoArray['county_id'] = $town->getParent()->getParent()->getId();
+                $townInfoArray['county']    = $town->getParent()->getParent()->getName();
+            } else {
+                $townInfoArray['county_id'] = $town->getParent()->getId();
+                $townInfoArray['county']    = $town->getParent()->getName();
+            }
+             
             //if town is special than area behave as like town for SEO
             if (!$town->getIsSpecialArea() && $town->getLvl()==4) {
                 $townInfoArray['slug']  = $town->getParent()->getUrl();
@@ -958,6 +964,134 @@ class LocationRepository extends BaseEntityRepository
             $cookieValue['lvl']  		   = null;
         }
 
+        return $cookieValue;
+    }
+    
+    public function getCookieValueForBanner($location, $container, $slugFlag = false, $locationArea = null)
+    {
+        $postCode      = $this->_em->getRepository('FaEntityBundle:Postcode')->getPostCodInfoArrayByLocation($location, $container);
+        $town          = null;
+        $county        = null;
+        $locality      = null;
+        $cookieValue   = array();
+        $slugFlagValue = 'url';
+        
+        if (!$slugFlag) {
+            $slugFlagValue = 'name';
+        }
+        
+        if ($locationArea != null) {
+            $location = $locationArea;
+        }
+        
+        if (!$postCode || (isset($postCode['town_id']) && ($postCode['town_id'] == null || $postCode['town_id'] == 0))) {
+            if (preg_match('/^\d+$/', $location)) {
+                $town = $this->getTownInfoArrayById($location, $container);
+            } elseif (preg_match('/^([\d]+,[\d]+)$/', $location)) {
+                $localityTown = explode(',', $location);
+                $localityId = $localityTown[0];
+                $townId     = $localityTown[1];
+                if ($localityId && $townId) {
+                    $locality  = $this->_em->getRepository('FaEntityBundle:Locality')->getLocalityInfoArrayById($localityId, $container);
+                    $town = $this->getTownInfoArrayById($townId, $container);
+                }
+            } else {
+                $town = $this->getTownInfoArrayById($location, $container, $slugFlagValue);
+            }
+        }
+        
+        if (!$town) {
+            $county = $this->getCountyInfoArrayById($location, $container, $slugFlagValue);
+            
+            if (!$county) {
+                $localityObj = $this->_em->getRepository('FaEntityBundle:Locality')->findOneBy(array($slugFlagValue => $location));
+                if ($localityObj) {
+                    $locality  = $this->_em->getRepository('FaEntityBundle:Locality')->getLocalityInfoArrayById($localityObj->getId(), $container);
+                    $town      = $this->getTownInfoArrayById($locality['town_id'], $container);
+                }
+            }
+        }
+        
+        // FFR-1076
+        // Replace postcode with town in all URLs
+        if ($postCode) {
+            if (isset($postCode['locality_id']) && $postCode['locality_id'] > 0) {
+                $locality = $this->_em->getRepository('FaEntityBundle:Locality')->getLocalityInfoArrayById($postCode['locality_id'], $container);
+            } else {
+                $town = $this->getTownInfoArrayById($postCode['town_id'], $container);
+            }
+            $postCode = null;
+        }
+        
+        if ($postCode) {
+            $town     = $container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Location', $postCode['town_id']);
+            $county   = $container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Location', $postCode['county_id']);
+            $locality = $container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Locality', $postCode['locality_id']);
+            
+            $cookieValue['latitude']       = $postCode['latitude'];
+            $cookieValue['longitude']      = $postCode['longitude'];
+            $cookieValue['locality_id']    = $postCode['locality_id'];
+            $cookieValue['locality']       = $locality;
+            $cookieValue['town_id']        = $postCode['town_id'];
+            $cookieValue['town']           = $town;
+            $cookieValue['county']         = $county;
+            $cookieValue['postcode']       = strtolower($postCode['postcode_c']);
+            $cookieValue['location']       = $cookieValue['postcode'];
+            $cookieValue['paa_county']     = $cookieValue['county'];
+            $cookieValue['slug']           = $cookieValue['postcode'];
+            $cookieValue['location_text']  = $cookieValue['postcode'];
+            $cookieValue['location_area']  = null;
+            $cookieValue['lvl']  		   = null;
+        } elseif ($locality) {
+            $town = $container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Location', $locality['town_id']);
+            $county = $container->get('fa.entity.cache.manager')->getEntityNameById('FaEntityBundle:Location', $locality['county_id']); 
+            
+            $cookieValue['latitude']       = $locality['latitude'];
+            $cookieValue['longitude']      = $locality['longitude'];
+            $cookieValue['locality_id']    = $locality['locality_id'];
+            $cookieValue['locality']       = $locality['locality'];
+            $cookieValue['town_id']        = $locality['town_id'];
+            $cookieValue['town']           = $town;
+            $cookieValue['county']         = $county;
+            $cookieValue['postcode']       = null;
+            $cookieValue['location']       = $cookieValue['locality_id'].','.$locality['town_id'];
+            $cookieValue['paa_county']     = null;
+            $cookieValue['slug']           = $locality['slug'];
+            $cookieValue['location_text']  = $cookieValue['locality'];
+            $cookieValue['location_area']  = null;
+            $cookieValue['lvl']  		   = null;
+        } elseif ($town) {
+            $cookieValue['latitude']       = $town['latitude'];
+            $cookieValue['longitude']      = $town['longitude'];
+            $cookieValue['locality_id']    = null;
+            $cookieValue['locality']       = null;
+            $cookieValue['town_id']        = $town['town_id'];
+            $cookieValue['town']           = $town['town'];
+            $cookieValue['county']         = null;
+            $cookieValue['postcode']       = null;
+            $cookieValue['location']       = $cookieValue['town_id'];
+            $cookieValue['paa_county']     = $town['county'];
+            $cookieValue['slug']           = $town['slug'];
+            $cookieValue['location_text']  = $cookieValue['town'];
+            $cookieValue['location_area']  = null;
+            $cookieValue['lvl']  		   = $town['lvl'];
+        } elseif ($county) {
+            $cookieValue['latitude']       = $county['latitude'];
+            $cookieValue['longitude']      = $county['longitude'];
+            $cookieValue['locality_id']    = null;
+            $cookieValue['locality']       = null;
+            $cookieValue['town_id']        = null;
+            $cookieValue['town']           = null;
+            $cookieValue['county']         = $county['county'];
+            $cookieValue['postcode']       = null;
+            $cookieValue['location']       = $county['county'];
+            $cookieValue['paa_county']     = null;
+            $cookieValue['slug']           = $county['slug'];
+            $cookieValue['location_text']  = $cookieValue['county'];
+            $cookieValue['location_area']  = null;
+            $cookieValue['lvl']  		   = null;
+        }
+        
         return $cookieValue;
     }
 
