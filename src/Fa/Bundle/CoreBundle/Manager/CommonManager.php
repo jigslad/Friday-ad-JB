@@ -3460,6 +3460,7 @@ HTML;
                 self::pc_permute($newitems,$newperms);
             }
         }
+    }
     public static function checkImageExistOnAws($container, $imageUrl)
     {
         $client = new S3Client([
