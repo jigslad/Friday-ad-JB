@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="112px" height="112px" viewBox="0 0 112 112" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Badge / Properties / Hover / Houses</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="15.2777778%" x2="252.959821%" y2="191.621714%" id="linearGradient-1">
+            <stop stop-color="#A8DC28" offset="0%"></stop>
+            <stop stop-color="#31C5F2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Badge-/-Properties-/-Hover-/-Houses" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Badge-/-Properties-/-Hover">
+            <g id="Badge-/-z.Base-/-Large">
+                <g id="Badge-/-z.Base-/-Shapes-/-Large" fill="#FFFFFF" fill-rule="evenodd" stroke="#CBD5D9" stroke-width="1">
+                    <rect id="Rectangle" x="0.5" y="0.5" width="111" height="111" rx="4"></rect>
+                </g>
+                <text id="Category-name" font-family="Poppins-SemiBold, Poppins" font-size="14" font-weight="500" fill="#82C148">
+                    <tspan x="29.939" y="81">Houses</tspan>
+                </text>
+                <g id="Icon-/-Category-/-Properties-/-Houses" transform="translate(32.000000, 21.000000)" fill="url(#linearGradient-1)" fill-rule="evenodd">
+                    <path d="M24.4661952,12 L39.5996193,24.9081163 L39.5991393,40.8628011 C39.5895455,41.1065858 39.4821051,41.9598321 38.4480392,41.9598321 L38.4480392,41.9598321 L27.7100221,41.9598321 L27.7293224,33.3683246 C27.7293224,33.3683246 27.8340115,31.9475177 26.133179,31.9475177 L26.133179,31.9475177 L21.5816155,31.9475177 C20.14331,31.9475177 20.2979311,33.3683246 20.2979311,33.3683246 L20.2979311,33.3683246 L20.2817745,41.9876622 C20.2817745,41.9876622 10.4940743,42 9.31186233,42 C8.36154552,42 8.4,41.0671661 8.4,41.0671661 L8.4,41.0671661 L8.4,24.9081163 L24.4661952,12 Z M24.3549442,6 L45.6,24.0713455 C45.6,24.0713455 44.3193415,26.3863814 40.9011074,24.0713455 L40.9011074,24.0713455 L24.3549442,10.1391523 L6.70722752,24.1584353 C3.75417282,26.5019559 2.4,24.1584353 2.4,24.1584353 L2.4,24.1584353 L24.3549442,6 Z M40.8,9.6 L40.8,18 L36.0198066,14.550726 L36,9.6 L40.8,9.6 Z" id="Combined-Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

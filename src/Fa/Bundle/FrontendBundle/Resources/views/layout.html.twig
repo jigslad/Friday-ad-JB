@@ -115,10 +115,43 @@
 
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
-    {{ include('FaFrontendBundle::fa-main-css.html.twig') }}
+    {{ include('FaFrontendBundle::fa-main-css-new.html.twig') }}
+	
+	{{ include('FaFrontendBundle::new-fa-main-css.html.twig') }}
+    {# { include('FaFrontendBundle::main-override-css.html.twig') } #}
     
-    {# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
-  
+    {% set showAdultCss = 0 %}
+    {% set assignedCategoryId = 0 %}
+    {% if app.request.cookies.has('is_over_18') %}
+        {% if searchParams is defined and searchParams.item__category_id is defined and searchParams.item__category_id is not null  %}
+        	{% set assignedCategoryId = searchParams.item__category_id %}
+    	{% elseif currentRoute == 'ad_detail_page' and app.request.get('category_string') %}
+    		{% set assignedCategoryId = fetch_repository('FaEntityBundle:Category').getIdBySlug(app.request.get('category_string'), fetch_container_instance()) %}
+    	{% elseif (currentRoute == 'show_business_profile_page' or currentRoute == 'show_business_user_ads') and app.request.get('profileNameSlug') %}
+             {% set objUserSite = fetch_repository('FaUserBundle:UserSite').findOneBy({'slug':app.request.get('profileNameSlug')}) %}
+             {% set assignedCategoryId = objUserSite.getUser().getBusinessCategoryId() %}
+    	{% endif %}
+    	
+    	{% if assignedCategoryId!=0 %}
+        	{% set categoryPath = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(assignedCategoryId, false, fetch_container_instance()) %}
+            {% set catCnt = 0 %}
+            {% if categoryPath|length %}
+                {% for categoryId, categoryName in categoryPath %}
+                    {% if catCnt == 0 %}
+                        {% if (categoryId == ADULT_CATEGORY_ID) %}
+                            {% set showAdultCss = 1 %}
+                        {% endif %}
+                    {% endif %}
+                    {% set catCnt = catCnt + 1 %}
+                {% endfor %}
+            {% endif %}
+        {% endif %}	
+    {% endif %}
+    
+    {% if showAdultCss==1 %}
+    	{{ include('FaFrontendBundle::adult-css.html.twig') }}
+    {% endif %}
+    
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}
@@ -287,18 +320,7 @@
         </script>
 
         {% if(showTiPopup) %}
-           <style type="text/css">
-                .transbgtrade .reveal-modal-bg, body.transbgtrade {background: rgba(70,75,83,0.8)!important;}
-                body.transbgtrade { overflow-y:hidden; }
-                .transbgtrade .reveal-modal-bg { overflow-y:hidden !important;}
-                .r-product-modal {border: 0px solid #e3e3e3;box-shadow: none;}
-                .r-product-modal .modal-block {}
-                .r-product-modal .r-logo {margin-top: 3em;margin-bottom: 3em;}
-                .r-product-modal .para {color:#333333;padding: 0 15%;margin-bottom: 15px;font-family: 'Asap',sans-serif;font-size: 14px;}
-                .r-product-modal .btn-tellme{background-color: #a8dc28;border-color: #a8dc28;border-radius: 2px;text-align: center;padding: 8px 20px 8px 20px;font-size: 16px; line-height: 18px;}
-                .r-product-modal .btn-tellme a {font-size: 16px;color:#ffffff;font-weight: normal;font-family: 'Bree Serif',serif !important;}
-                .r-product-modal .r-close {background:none;text-indent: 0;z-index: 1;font-size: 2rem;font-weight:400;}
-            </style>
+           {{ include('FaFrontendBundle::tradeit-popup-css.html.twig') }}
            <div id="tradeitModal" class="reveal-modal tiny r-product-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
                 <div class="modal-block center">
                     <div class="center r-logo"><img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt=""></div>

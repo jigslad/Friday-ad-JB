@@ -72,7 +72,8 @@
 {{ include('FaUserBundle:ManageMyAd:manageMyAd-css.html.twig') }}
 {{ include('FaUserBundle:ManageMyAd:individualUpsellJs.html.twig') }}
 
-{# {% if adsBoostedCount>0 and isBoostEnabled==1 %}
+{{ include('FaUserBundle:ManageMyAd:list-css.html.twig') }}
+{% if adsBoostedCount>0 and isBoostEnabled==1 %}
     <style>.manage-item-tabs li { width:33.3% !important; }</style>
 {% else %}
     <style>.manage-item-tabs li { width:50% !important; }</style>

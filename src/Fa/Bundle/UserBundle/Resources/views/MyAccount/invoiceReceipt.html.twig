@@ -5,21 +5,7 @@
     <meta charset="utf-8" />
     <title>Invoice</title>
     <link rel="stylesheet" type="text/css" href="{{ static_asset_url('/bundles/fafrontend/css/google-fonts.css') }}" />
-    <style>
-        body{font-family: 'Asap', sans-serif;font-size:15px;line-height:24px}
-        .lsize{width:750px}
-        .mt10{margin-top:10px}
-        .clearfix:after{content:"";display:block;height:0;clear:both;visibility:hidden}
-        .invoice-street{line-height:normal;font-style:italic}
-        .receipt-item{border-top:2px dotted #313133;padding:17px 3px}
-        .receipt-item .col-1{width:257px;float:left;font-size:14px}
-        .receipt-item .col-2{width:207px;float:left;padding-left:50px;font-size:14px}
-        .receipt-item .col-2 p{margin:5px 0}
-        .receipt-item .col-1.order-no, .receipt-item .col-2.order-no{font-size:16px}
-        .receipt-item .col-1.order-no b, .receipt-item .col-2.order-no b{margin-right:8px}
-        .receipt-item .col-3{width:160px;float:left;font-size:14px;padding-left:70px}
-        .shipping-address{font-size:13px;line-height:normal;font-style:italic}
-    </style>
+    {{ include('FaUserBundle:MyAccount:invoiceReceipt-css.html.twig') }}
 </head>
 <body>
     <div class="lsize">

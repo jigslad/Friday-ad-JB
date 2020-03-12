@@ -4,11 +4,7 @@
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
 
 {{ include('FaAdminBundle:Default:addEditHeading.html.twig') }}
-<style>
-ul.ui-sortable ul { list-style-type:none !important; width:90% !important;margin:auto !important;}
-.ultitle { padding: 0px 15px;font-size: 16px;line-height: 40px;}
-.customerror { margin-top:-1rem !important}
-</style>
+    {{ include('FaAdBundle:CampaignAdmin:new-css.html.twig') }}
 <div class="row">
     <div class="columns">
         <div class="panel">
