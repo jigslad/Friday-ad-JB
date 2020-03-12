@@ -181,6 +181,12 @@ class ManageMyAdController extends CoreController
             'remainingFeaturedCredits' => $remainingFeaturedCredits,
             'filterBy' => $sortBy,
         );
+        if ($request->get('limit')) {
+            $category = $this->getRepository('FaEntityBundle:Category')->find($request->get('category'));
+            $Link= "<a onclick=convertUserToBusiness(".$this->getUser()->getId().",".$request->get('category').") >Become a business advertiser </a>";
+            $flash_message = "As a private user, you can only have up to ".$request->get('limit')." ads live in the ".$category->getName()." category at any time. If you wish to place your latest ad live for free, you must remove an existing live ad. Alternatively, ".$Link." to place unlimited ads.";
+            $this->addFlash('notice',$flash_message);
+        }
 
         $showCompetitionPopup = false;
 
