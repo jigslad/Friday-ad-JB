@@ -4908,4 +4908,23 @@ class AdRepository extends EntityRepository
        
         return $arrResources;
     }
+    
+    /**
+     * Remove ad moderate by ad id.
+     *
+     * @param integer $adId Ad id.
+     */
+    public function removeByAdId($adId)
+    {
+        $ad = $this->getBaseQueryBuilder()
+        ->andWhere(self::ALIAS.'.id = :adId')
+        ->setParameter('adId', $adId)
+        ->getQuery()
+        ->getOneOrNullResult();
+        
+        if ($ad) {
+            $this->_em->remove($ad);
+            $this->_em->flush($ad);
+        }
+    }
 }
