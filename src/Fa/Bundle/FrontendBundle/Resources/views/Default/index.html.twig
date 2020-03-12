@@ -239,7 +239,7 @@
             <div class="columns">
                 <h3 class="homepage-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</h3>
                 {% cache 'home|page|location|block'~currentDevice 3600 %}
-                    {{ render(controller('FaFrontendBundle:Default:showHomePageLocationBlocks')) }}
+                    {#{ render(controller('FaFrontendBundle:Default:showHomePageLocationBlocks')) }#}
                 {% endcache %}
             </div>
         </div>

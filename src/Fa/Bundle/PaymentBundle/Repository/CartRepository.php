@@ -136,6 +136,7 @@ class CartRepository extends EntityRepository
             $query = $this->filterParams($query, $params);
             $query->setMaxResults(1)
                 ->orderBy(self::ALIAS.'.id', 'DESC');
+            
             $cart  = $query->getQuery()->getOneOrNullResult();
         }
         
@@ -557,6 +558,88 @@ class CartRepository extends EntityRepository
                 $transactionDetail->setTransaction($transaction);
                 $transactionDetail->setPaymentFor(TransactionDetailRepository::PAYMENT_FOR_BUY_NOW);
                 $transactionDetail->setAmount($adObj->getPrice() + $postagePrice);
+                $transactionDetail->setValue(serialize($value));
+                $this->_em->persist($transactionDetail);
+                $this->_em->flush($transactionDetail);
+            }
+        }
+    }
+    
+    /**
+     * Add upsell into cart.
+     *
+     * @param integer $userId                    User id.
+     * @param integer $adId                      Ad id.
+     * @param integer $upsellId                  Upsell id.
+     * @param object  $container                 Continer indentifier.
+     *
+     */
+    public function addUpsellToCart($userId, $adId, $upsellId, $cart = null, $container, $privateUserAdParams = array())
+    {
+        $adRepository                = $this->_em->getRepository('FaAdBundle:Ad');
+        $userRepository              = $this->_em->getRepository('FaUserBundle:User');
+        $transactionRepository       = $this->_em->getRepository('FaPaymentBundle:Transaction');
+        $transactionDetailRepository = $this->_em->getRepository('FaPaymentBundle:TransactionDetail');
+        $upsellRepository            = $this->_em->getRepository('FaPromotionBundle:Upsell');
+        $cartObj                     = ($cart ? $cart : $this->getUserCart($userId, $container));
+        $transactions                = $transactionRepository->getTransactionsByCartIdAndAdId($cartObj->getId(), $adId);
+        
+        $adObj                       = $adRepository->find($adId);
+        $upsellObj                   = $upsellRepository->find($upsellId);
+        $userObj                     = ($adObj->getUser() ? $adObj->getUser() : null);
+        
+        $isAdminLoggedIn             = CommonManager::isAdminLoggedIn($container);
+        
+        if (!$isAdminLoggedIn && $adObj && $adObj->getSource() == AdRepository::SOURCE_ADMIN) {
+            $isAdminLoggedIn = true;
+        }
+        
+        $value = $upsellRepository->getUpsellInfoForTransaction($upsellObj, $adObj, $userObj, $isAdminLoggedIn);
+        
+        if (!empty($privateUserAdParams)) {
+            $value['privateUserAdParams'] = $privateUserAdParams;
+        }
+                
+        if ($cartObj && $adObj && $upsellObj) {
+            if ($transactions) {
+                foreach ($transactions as $transaction) {
+                    $transactionDetailObj = $transactionDetailRepository->getTransactionDetailByPaymentFor($cartObj->getId(), $transaction->getId(), $adId, TransactionDetailRepository::PAYMENT_FOR_UPSELL);
+                    if ($transactionDetailObj) {
+                        //update transaction detail value
+                        $transactionDetailObj->setAmount($upsellObj->getPrice());
+                        $transactionDetailObj->setValue(serialize($value));
+                        $this->_em->persist($transactionDetailObj);
+                        $this->_em->flush($transactionDetailObj);
+                        //update transaction value
+                        $transactionValue = unserialize($transaction->getValue());
+                        $transactionValue = serialize($transactionValue + $value);
+                        $transaction->setValue(serialize($value));
+                        $this->_em->persist($transaction);
+                        $this->_em->flush($transaction);
+                    } else {
+                        $transactionDetail = new TransactionDetail();
+                        $transactionDetail->setTransaction($transaction);
+                        $transactionDetail->setPaymentFor(TransactionDetailRepository::PAYMENT_FOR_UPSELL);
+                        $transactionDetail->setAmount($upsellObj->getPrice());
+                        $transactionDetail->setValue(serialize($value));
+                        $this->_em->persist($transactionDetail);
+                        $this->_em->flush($transactionDetail);
+                    }
+                }
+            } else {
+                $transaction = new Transaction();
+                $transaction->setTransactionId(CommonManager::generateHash());
+                $transaction->setAd($adObj);
+                $transaction->setUser($userObj);
+                $transaction->setCart($cartObj);
+                $transaction->setValue(serialize($value));
+                $this->_em->persist($transaction);
+                $this->_em->flush($transaction);
+                
+                $transactionDetail = new TransactionDetail();
+                $transactionDetail->setTransaction($transaction);
+                $transactionDetail->setPaymentFor(TransactionDetailRepository::PAYMENT_FOR_UPSELL);
+                $transactionDetail->setAmount($upsellObj->getPrice());
                 $transactionDetail->setValue(serialize($value));
                 $this->_em->persist($transactionDetail);
                 $this->_em->flush($transactionDetail);

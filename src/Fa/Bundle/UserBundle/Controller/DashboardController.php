@@ -20,6 +20,10 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Fa\Bundle\UserBundle\Repository\UserSearchAgentRepository;
 use Fa\Bundle\EntityBundle\Repository\LocationRepository;
+use Fa\Bundle\UserBundle\Repository\RoleRepository;
+use Fa\Bundle\PromotionBundle\Repository\CategoryUpsellRepository;
+use Fa\Bundle\AdBundle\Repository\AdUserPackageUpsellRepository;
+use Fa\Bundle\AdBundle\Entity\AdUserPackageUpsell;
 
 /**
  * This controller is used for dashboard home page.
@@ -80,13 +84,37 @@ class DashboardController extends CoreController
         $boostMaxPerMonth = 0;
         $boostAdRemaining = 0;
         $getExipryDate = $boostRenewDate = '';
-
+        
+        $loggedinUser = $this->getLoggedInUser();
+        $userRole     = $this->getRepository('FaUserBundle:User')->getUserRole($loggedinUser->getId(), $this->container);
+        
+        $activeFeaturedCreditCount = 0; $activeBasicCreditCount=0;
+        $shopFeaturedPackageCredit = 0; $usedFeaturedCreditCount = 0;$remainingFeaturedCredits=0;
+        if ($userRole == RoleRepository::ROLE_BUSINESS_SELLER || $userRole == RoleRepository::ROLE_NETSUITE_SUBSCRIPTION) {
+            $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
+            
+            if ($activeShopPackage && $activeShopPackage->getPackage()) {
+                $activeFeaturedCreditCount = $this->getRepository('FaUserBundle:UserCredit')->getActiveFeaturedCreditCountForUser($loggedinUser->getId());
+                $activeBasicCreditCount = $this->getRepository('FaUserBundle:UserCredit')->getActiveBasicCreditCountForUser($loggedinUser->getId());
+                $shopFeaturedPackageCreditArr = $this->getRepository('FaPromotionBundle:ShopPackageCredit')->getFeaturedCreditsByPackageId($activeShopPackage->getPackage()->getId());
+                if(!empty($shopFeaturedPackageCreditArr)) { $shopFeaturedPackageCredit = $shopFeaturedPackageCreditArr[0]->getCredit(); }
+                $usedFeaturedCreditCount = ((int)$shopFeaturedPackageCredit - (int)$activeFeaturedCreditCount);
+                $remainingFeaturedCredits = $activeFeaturedCreditCount;
+            }
+        }
+        
         $parameters = array('recentlyViewedAds' => $recentlyViewedAds, 'myAdsParameters' => $myAdsParameters, 'myMessagesParameters' => $myMessagesParameters, 'myFavouritesParameters' => $myFavouritesParameters, 'mySavedSearchesParameters' => $mySavedSearchesParameters, 'myReviewsParameters' => $myReviewsParameters, 'searchResultUrl' => $searchResultUrl, 'modToolTipText'  => $moderationToolTipText,
             'isBoostEnabled'  => $isBoostEnabled,
             'boostMaxPerMonth'=> $boostMaxPerMonth,
             'boostAdRemaining'=> $boostAdRemaining,
             'boostRenewDate'  => $remainingDaysToRenewBoost,
             'boostedAdCount'  => $boostedAdCount,
+            'activeShopPackage' => $activeShopPackage,
+            'activeFeaturedCreditCount' => $activeFeaturedCreditCount,
+            'activeBasicCreditCount' => $activeBasicCreditCount,
+            'shopFeaturedPackageCredit'=> $shopFeaturedPackageCredit,
+            'usedFeaturedCreditCount' => $usedFeaturedCreditCount,
+            'remainingFeaturedCredits' => $remainingFeaturedCredits,
         );
         
         return $this->render('FaUserBundle:Dashboard:index.html.twig', $parameters);
@@ -330,7 +358,7 @@ class DashboardController extends CoreController
         $loggedinUser = $this->getLoggedInUser();
         $activeAdCount   = 0;
         $type            = $request->get('type', 'both');
-        $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(), $type);
+        $query                = $this->getRepository('FaAdBundle:Ad')->getMyAdsQuery($loggedinUser->getId(),$type);
         // initialize pagination manager service and prepare listing with pagination based of data
         $page = $request->get('page', 1);
         $this->get('fa.pagination.manager')->init($query, $page, 2);
