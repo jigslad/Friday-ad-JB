@@ -18,6 +18,7 @@ use Fa\Bundle\PaymentBundle\Repository\TransactionDetailRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository as BaseEntityRepository;
 use Fa\Bundle\UserBundle\Repository\RoleRepository;
+use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 
 /**
  * This repository is used for ad moderate.
@@ -692,7 +693,18 @@ class AdModerateRepository extends EntityRepository
                 'url_account_dashboard' => $container->get('router')->generate('dashboard_home', array(), true),
             );
             
-            $container->get('fa.mail.manager')->send($receiverEmail, $template, $parameters, CommonManager::getCurrentCulture($container), null, array(), array(), array(), null);
+            $adultEmailer = '';
+            
+            $categoryId = $objAd->getCategory()->getId();
+            if($categoryId!='') {
+                $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+            }
+            
+            $emailIdentifier = $template;
+            if($adultEmailer=='yes') { $emailIdentifier = $template.'_adult'; }            
+            
+            $container->get('fa.mail.manager')->send($receiverEmail, $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container), null, array(), array(), array(), null);
         }
     }
 

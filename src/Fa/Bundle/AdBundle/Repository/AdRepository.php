@@ -2407,6 +2407,7 @@ class AdRepository extends EntityRepository
 
         $ads = array();
         $emailQueueIds = array();
+        $adultEmailer = '';
         $emailQueues = $this->_em->getRepository('FaEmailBundle:EmailQueue')->findBy(array('user' => $user->getId(), 'identifier' => 'ad_needs_renewing_4_days_left', 'status' => 1));
         foreach ($emailQueues as $emailQueue) {
             $emailQueueIds[] = $emailQueue->getId();
@@ -2421,6 +2422,12 @@ class AdRepository extends EntityRepository
                 'url_ad_view' => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
                 'url_ad_renew_early' => $container->get('router')->generate('ad_promote', array('type' => 'renew', 'adId' => $ad->getId()), true),
             );
+            
+            $categoryId = $ad->getCategory()->getId();
+            if($categoryId!='') {
+                $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+            }
         }
 
         if (count($ads)) {
@@ -2432,9 +2439,11 @@ class AdRepository extends EntityRepository
                 'total_ads' => (count($ads) - 1),
                 'url_account_dashboard' => '',
             );
-
-            $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_needs_renewing_4_days_left', $parameters, CommonManager::getCurrentCulture($container));
-            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue('ad_needs_renewing_4_days_left', $user, $emailQueueIds);
+            $emailIdentifier = 'ad_needs_renewing_4_days_left';
+            if($adultEmailer=='yes') { $emailIdentifier = 'ad_needs_renewing_4_days_left_adult'; }
+            
+            $container->get('fa.mail.manager')->send($user->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
+            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($emailIdentifier, $user, $emailQueueIds);
         }
     }
 
@@ -2471,6 +2480,7 @@ class AdRepository extends EntityRepository
 
         $emailQueueIds = array();
         $ads = array();
+        $adultEmailer = '';
         $emailQueues = $this->_em->getRepository('FaEmailBundle:EmailQueue')->findBy(array('user' => $user->getId(), 'identifier' => 'ad_is_expired', 'status' => 1));
         foreach ($emailQueues as $emailQueue) {
             $emailQueueIds[] = $emailQueue->getId();
@@ -2489,7 +2499,13 @@ class AdRepository extends EntityRepository
                 'url_ad_edit' => $container->get('router')->generate('ad_edit', array('id' => $ad->getId()), true),
                 'url_ad_mark_sold' => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
             );
-
+            
+            $categoryId = $ad->getCategory()->getId();
+            if($categoryId!='') {
+                $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+            }
+            
             //send push notifications
             CommonManager::sendPushNotificationMessage('Your ad has expired. Repost it today!', 'Expired', $container->get('router')->generate('ad_promote', array('type' => 'repost', 'adId' => $ad->getId()), true), $user, $container);
         }
@@ -2503,8 +2519,12 @@ class AdRepository extends EntityRepository
                 'total_ads' => (count($ads) - 1),
                 'url_account_dashboard' => '',
             );
-            $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_is_expired', $parameters, CommonManager::getCurrentCulture($container));
-            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue('ad_is_expired', $user, $emailQueueIds);
+            
+            $emailIdentifier = 'ad_is_expired';
+            if($adultEmailer=='yes') { $emailIdentifier = 'ad_is_expired_adult'; }
+            
+            $container->get('fa.mail.manager')->send($user->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
+            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($emailIdentifier, $user, $emailQueueIds);
         }
     }
 
@@ -2629,8 +2649,19 @@ class AdRepository extends EntityRepository
                         $parameters['url_ad_upsell'] = $container->get('router')->generate('ad_promote', array('adId' => $adId, 'type' => 'promote'), true);
                     }
                 }
-
-                $container->get('fa.mail.manager')->send($userObj->getEmail(), $template, $parameters, CommonManager::getCurrentCulture($container));
+                
+                $adultEmailer = '';
+                
+                $categoryId = $adObj->getCategory()->getId();
+                if($categoryId!='') {
+                    $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                    if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+                }
+                
+                $emailIdentifier = $template;
+                if($adultEmailer=='yes') { $emailIdentifier = $template.'_adult'; }
+                
+                $container->get('fa.mail.manager')->send($userObj->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
             }
         }
     }
@@ -2647,6 +2678,7 @@ class AdRepository extends EntityRepository
         $entityCache = $container->get('fa.entity.cache.manager');
         $emailQueueIds = array();
         $ads = array();
+        $adultEmailer = '';
         $emailQueues = $this->_em->getRepository('FaEmailBundle:EmailQueue')->findBy(array('user' => $user->getId(), 'identifier' => $template, 'status' => 1));
         foreach ($emailQueues as $emailQueue) {
             $emailQueueIds[] = $emailQueue->getId();
@@ -2691,9 +2723,14 @@ class AdRepository extends EntityRepository
                 'text_lowest_category_package_price' => $text_lowest_category_package_price,
                 'url_ad_upsell' => $url_ad_upsell,
             );
+            $categoryId = $ad->getCategory()->getId();
+            if($categoryId!='') {
+                $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+            }
         }
 
-        if (count($ads)) {
+        if (!empty($ads)) {
             $parameters = array(
                 'user_first_name' => $user->getFirstName(),
                 'user_last_name' => $user->getLastName(),
@@ -2701,9 +2738,12 @@ class AdRepository extends EntityRepository
                 'total_ads' => (count($ads) - 1),
                 'url_account_dashboard' => $container->get('router')->generate('dashboard_home', array(), true),
             );
-
-            $container->get('fa.mail.manager')->send($user->getEmail(), $template, $parameters, CommonManager::getCurrentCulture($container));
-            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($template, $user, $emailQueueIds);
+            
+            $emailIdentifier = $template;            
+            if($adultEmailer=='yes' && $template != 'ad_is_received_live_adult_private') { $emailIdentifier = $template.'_adult'; }
+                    
+            $container->get('fa.mail.manager')->send($user->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
+            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($emailIdentifier, $user, $emailQueueIds);
         }
     }
 
@@ -2721,8 +2761,19 @@ class AdRepository extends EntityRepository
             $userObj = $adObj->getUser();
             $parameters = $this->generateAdPackageParameters($adObj, $userObj, $container);
             $parameters['text_rejection_message'] = $reason;
-
-            $container->get('fa.mail.manager')->send($userObj->getEmail(), 'ad_is_rejected', $parameters, CommonManager::getCurrentCulture($container));
+            
+            $adultEmailer = '';
+            
+            $categoryId = $adObj->getCategory()->getId();
+            if($categoryId!='') {
+                $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+            }
+            
+            $emailIdentifier = 'ad_is_rejected';
+            if($adultEmailer=='yes') { $emailIdentifier = 'ad_is_rejected_adult'; } 
+            
+            $container->get('fa.mail.manager')->send($userObj->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
         }
     }
 
@@ -3086,6 +3137,7 @@ class AdRepository extends EntityRepository
 
             $emailQueueIds = array();
             $ads = array();
+            $adultEmailer = '';
             $emailQueues = $this->_em->getRepository('FaEmailBundle:EmailQueue')->findBy(array('user' => $user->getId(), 'identifier' => $refreshEmailTemplate, 'status' => 1));
             foreach ($emailQueues as $emailQueue) {
                 $emailQueueIds[] = $emailQueue->getId();
@@ -3135,9 +3187,15 @@ class AdRepository extends EntityRepository
                     'manual_refresh_url' => $refreshAdUrl,
                     'text_lowest_category_package_price' => $text_lowest_category_package_price,
                 );
+                
+                $categoryId = $ad->getCategory()->getId();
+                if($categoryId!='') {
+                    $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                    if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+                }
             }
 
-            if (count($ads)) {
+            if (!empty($ads)) {
                 $parameters = array(
                     'user_first_name' => $user->getFirstName(),
                     'user_last_name' => $user->getLastName(),
@@ -3146,9 +3204,12 @@ class AdRepository extends EntityRepository
                     'total_ads' => (count($ads) - 1),
                     'url_account_dashboard' => $dashBoardUrl,
                 );
+                
+                $emailIdentifier = $refreshEmailTemplate;
+                if($adultEmailer=='yes') { $emailIdentifier = $refreshEmailTemplate.'_adult'; }
 
-                $container->get('fa.mail.manager')->send($user->getEmail(), $refreshEmailTemplate, $parameters, CommonManager::getCurrentCulture($container));
-                $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($refreshEmailTemplate, $user, $emailQueueIds);
+                $container->get('fa.mail.manager')->send($user->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
+                $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($emailIdentifier, $user, $emailQueueIds);
             }
         }
     }
@@ -3168,6 +3229,7 @@ class AdRepository extends EntityRepository
 
             $emailQueueIds = array();
             $ads = array();
+            $adultEmailer = '';
             $emailQueues = $this->_em->getRepository('FaEmailBundle:EmailQueue')->findBy(array('user' => $user->getId(), 'identifier' => $renewalReminderEmailTemplate, 'status' => 1));
             foreach ($emailQueues as $emailQueue) {
                 $emailQueueIds[] = $emailQueue->getId();
@@ -3204,9 +3266,15 @@ class AdRepository extends EntityRepository
                     'url_ad_view' => $adViewUrl,
                     'text_lowest_category_package_price' => $text_lowest_category_package_price,
                 );
+                
+                $categoryId = $ad->getCategory()->getId();
+                if($categoryId!='') {
+                    $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                    if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+                }
             }
 
-            if (count($ads)) {
+            if (!empty($ads)) {
                 $parameters = array(
                     'user_first_name' => $user->getFirstName(),
                     'user_last_name' => $user->getLastName(),
@@ -3215,9 +3283,12 @@ class AdRepository extends EntityRepository
                     'total_ads' => (count($ads) - 1),
                     'url_account_dashboard' => $dashBoardUrl,
                 );
-
-                $container->get('fa.mail.manager')->send($user->getEmail(), $renewalReminderEmailTemplate, $parameters, CommonManager::getCurrentCulture($container));
-                $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($renewalReminderEmailTemplate, $user, $emailQueueIds);
+                
+                $emailIdentifier = $renewalReminderEmailTemplate;
+                if($adultEmailer=='yes') { $emailIdentifier = 'renewal_reminder_adult'; }
+                
+                $container->get('fa.mail.manager')->send($user->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
+                $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($emailIdentifier, $user, $emailQueueIds);
             }
         }
     }
@@ -3370,9 +3441,20 @@ class AdRepository extends EntityRepository
                                     }
                                 }
                             }
+                            
+                            $adultEmailer = '';
+                            
+                            $categoryId = $ad->getCategory()->getId();
+                            if($categoryId!='') {
+                                $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                                if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+                            }
+                            
+                            $emailIdentifier = 'advert_receipt';
+                            if($adultEmailer=='yes') { $emailIdentifier = 'advert_receipt_adult'; }
                         }
 
-                        $container->get('fa.mail.manager')->send($adUserObj->getEmail(), 'advert_receipt', $parameters, CommonManager::getCurrentCulture($container));
+                        $container->get('fa.mail.manager')->send($adUserObj->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
                     }
                 }
             }
@@ -4003,8 +4085,19 @@ class AdRepository extends EntityRepository
                            'text_ad_description'        => $ad->getDescription(),
                            'url_edit_incomplete_advert' => $container->get('router')->generate('ad_edit', array('id' => $ad->getId()), true)
                        );
+        
+        $adultEmailer = '';
+        
+        $categoryId = $ad->getCategory()->getId();
+        if($categoryId!='') {
+            $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+            if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+        }
+        
+        $emailIdentifier = 'ad_abandoned';
+        if($adultEmailer=='yes') { $emailIdentifier = 'ad_abandoned_adult'; }
 
-        $container->get('fa.mail.manager')->send($adUser->getEmail(), 'ad_abandoned', $parameters, CommonManager::getCurrentCulture($container));
+        $container->get('fa.mail.manager')->send($adUser->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
     }
 
     /**
@@ -4051,6 +4144,7 @@ class AdRepository extends EntityRepository
 
         $emailQueueIds = array();
         $ads = array();
+        $adultEmailer = '';
         $emailQueues = $this->_em->getRepository('FaEmailBundle:EmailQueue')->findBy(array('user' => $user->getId(), 'identifier' => 'print_your_ad_upsell', 'status' => 1));
         foreach ($emailQueues as $emailQueue) {
             $emailQueueIds[] = $emailQueue->getId();
@@ -4069,17 +4163,26 @@ class AdRepository extends EntityRepository
                 'url_ad_mark_sold'    => $container->get('router')->generate('manage_my_ads_mark_as_sold', array('adId' => $ad->getId()), true),
                 'url_ad_view'         => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true)
             );
+            
+            $categoryId = $ad->getCategory()->getId();
+            if($categoryId!='') {
+                $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+            }
         }
-        if (count($ads)) {
+        if (!empty($ads)) {
             $parameters = array(
                 'user_first_name'          => $user->getFirstName(),
                 'user_last_name'           => $user->getLastName(),
                 'ads' => $ads,
                 'total_ads' => (count($ads) - 1),
             );
-
-            $container->get('fa.mail.manager')->send($user->getEmail(), 'print_your_ad_upsell', $parameters, CommonManager::getCurrentCulture($container));
-            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue('print_your_ad_upsell', $user, $emailQueueIds);
+            
+            $emailIdentifier = 'print_your_ad_upsell';
+            if($adultEmailer=='yes') { $emailIdentifier = 'print_your_ad_upsell_adult'; }
+            
+            $container->get('fa.mail.manager')->send($user->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
+            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($emailIdentifier, $user, $emailQueueIds);
         }
     }
 
@@ -4304,6 +4407,8 @@ class AdRepository extends EntityRepository
         $entityCache = $container->get('fa.entity.cache.manager');
         $ads = array();
         $emailQueueIds = array();
+        $adultEmailer = '';
+        
         $emailQueues = $this->_em->getRepository('FaEmailBundle:EmailQueue')->findBy(array('user' => $user->getId(), 'identifier' => 'ad_expires_tomorrow', 'status' => 1));
         foreach ($emailQueues as $emailQueue) {
             $emailQueueIds[] = $emailQueue->getId();
@@ -4319,19 +4424,29 @@ class AdRepository extends EntityRepository
                 'url_ad_preview'            => $container->get('router')->generate('ad_detail_page_by_id', array('id' => $ad->getId()), true),
                 
             );
+            
+            $categoryId = $ad->getCategory()->getId();
+            if($categoryId!='') {
+                $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+            }
+            
             //send push notifications
             CommonManager::sendPushNotificationMessage('Your ad expires tomorrow. Repost it today!', 'Expires-tomorrow', $container->get('router')->generate('ad_promote', array('type' => 'renew', 'adId' => $ad->getId()), true), $user, $container);
         }
-        if (count($ads)) {
+        if (!empty($ads)) {
             $parameters = array(
                 'user_first_name'          => $user->getFirstName(),
                 'user_last_name'           => $user->getLastName(),
                 'ads' => $ads,
                 'total_ads' => (count($ads) - 1),
             );
-
-            $container->get('fa.mail.manager')->send($user->getEmail(), 'ad_expires_tomorrow', $parameters, CommonManager::getCurrentCulture($container));
-            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue('ad_expires_tomorrow', $user, $emailQueueIds);
+            
+            $emailIdentifier = 'ad_expires_tomorrow';
+            if($adultEmailer=='yes') { $emailIdentifier = 'ad_expires_tomorrow_adult'; }
+            
+            $container->get('fa.mail.manager')->send($user->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
+            $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($emailIdentifier, $user, $emailQueueIds);
         }
     }
     
@@ -4574,8 +4689,18 @@ class AdRepository extends EntityRepository
 
                 $parameters['add_photo_url'] = $container->get('router')->generate('show_ad_image_upload_no_photo', array('adIdUserId' => CommonManager::encryptDecrypt($container->getParameter('add_a_photo_encryption_key'), $adObj->getId().'||'.$userObj->getId())), true);
             }
+            
+            $adultEmailer = '';            
+            $categoryId = $adObj->getCategory()->getId();
+            if($categoryId!='') {
+                $rootCategoryId = $this->_em->getRepository('FaEntityBundle:Category')->getRootCategoryId($categoryId, $container);
+                if($rootCategoryId == CategoryRepository::ADULT_ID) { $adultEmailer = 'yes'; }
+            }
+            
+            $emailIdentifier = 'add_a_photo';
+            if($adultEmailer=='yes') { $emailIdentifier = 'add_a_photo_adult'; }
 
-            $container->get('fa.mail.manager')->send($userObj->getEmail(), 'add_a_photo', $parameters, CommonManager::getCurrentCulture($container));
+            $container->get('fa.mail.manager')->send($userObj->getEmail(), $emailIdentifier, $parameters, CommonManager::getCurrentCulture($container));
         }
     }
     
