@@ -94,6 +94,9 @@
     <script language="javascript" type="text/javascript">
     //<![CDATA[
     $(document).ready(function(){
+        var fieldList = document.querySelectorAll("[id$=_is_required]");
+        fieldList.forEach(onclickRequired);
+
         $("#fa_ad_paa_field_rule_admin_category_id").on("change", function(e) { 
             var category_id = e.val;
             var route = Routing.generate('paa_field_rule_new_admin');
@@ -103,7 +106,6 @@
 
             window.location.replace(route);
         });
-        
         $("#paa_field_rule_sortable").sortable({
             items: "li:not(.ui-state-disabled)",
             placeholder: "ui-state-highlight",
@@ -129,6 +131,33 @@
               }
         });
     });
+
+    function onclickRequired(item, index) {
+        var allIds = item.id;
+        var requiredId = allIds.replace('_is_required','');
+        var hideField = requiredId+'_hide_field';
+
+        if($('#'+requiredId+'_is_required').prop('checked') == true) {
+            $('#'+hideField).hide();
+            $('label[for='+hideField+']').hide();
+            //$('#'+requiredId+'_hide_field').attr('checked',false);
+        }else{
+            $('#' + hideField + '').show();
+            $('label[for=' + hideField + ']').show();
+        }
+
+        $('#'+requiredId+'_is_required').click(function(){
+            if($('#'+requiredId+'_is_required').prop('checked') == false){
+                $('#'+hideField+'').show();
+                $('label[for='+hideField+']').show();
+            }else {
+                $('#'+hideField+'').hide();
+                $('label[for='+hideField+']').hide();
+            }
+        });
+    }
+
+
     //]]>
     </script>
     {% if (form.category_id) is defined %}
