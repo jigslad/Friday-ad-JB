@@ -143,6 +143,7 @@
                   {{ form_row(form.category_id_autocomplete) }}
                   <a href="javascript:void(0);" id="fa_paa_category_select_category_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
               </span>
+              <span id="category_id_autocomplete_error" class="error" style="display:none">No matching categories found. Try a different search or use the category icons to navigate to find your category.</span>
           </div>
       </div>
     </div>
@@ -500,7 +501,7 @@
 
     function onSelectAutoSuggestCategory()
     {
-        if($("#fa_paa_category_select_category_id_autocomplete").val().length > 0) {
+         if($("#fa_paa_category_select_category_id_autocomplete").val().length > 0) {
             //$('#fa_paa_category_select_colour_id_dimension_id').remove();
             $('#motor_reg_fields').html('');
             var selCatId = $('#fa_paa_category_select_category_id').val();
@@ -516,13 +517,13 @@
                 
                 $('.main_category').removeClass('active');
                 $('#fa_paa_category_select_category_1').val('');
-                loadCategoryByLevel('', 2);
+                //loadCategoryByLevel('', 2);
 
                 //ga('send', 'event', 'PAA - Step 1', 'Start searching bar', '');
                 // submit the form after selection category from auto-complete
-                $('form[name="fa_paa_category_select"]').submit();
+                //$('form[name="fa_paa_category_select"]').submit();
             }
-        }
+        } 
     }
 
     function onRemoveAutoSuggestCategory()
@@ -603,6 +604,17 @@
         }
     }
 
+    function updatePaaKeywordSearch(keyword,catId)
+    {
+		//alert(keyword+'==='+catId);
+        var ajxurl = "/category/ajax/update/paakeywordsearch/"+keyword+"/"+catId;
+        $.ajax({
+            type: 'GET',
+            url: ajxurl,
+            async: false,
+        });
+    }
+    
     function getCategoryPath(catLevel)
     {
       var categoryPath = $('.choose-all-categories > .active').html();

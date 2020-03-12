@@ -141,3 +141,8 @@ services:
         class: Doctrine\ORM\EntityRepository
         factory: ['@doctrine.orm.entity_manager', getRepository]
         arguments: [FaAdBundle:LocationRadius]
+
+    fa.paa_search_keyword.search:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments: [FaAdBundle:PaaSearchKeyword]
