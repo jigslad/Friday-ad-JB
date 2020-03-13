@@ -399,10 +399,10 @@ class MyAccountController extends ThirdPartyLoginController
                     $this->getEntityManager()->flush($loggedinUser);
                     $successMsg = $this->get('translator')->trans('Paypal details updated successfully.', array(), 'frontend-paypal-email');
                 } else {
-                    $error = $this->get('translator')->trans('Paypal account is not verified.', array(), 'frontend-paypal-email');
+                    $error = $this->get('translator')->trans("<div class='text-center'><p class='mt20'><div id='paa_paypal_mail_tips'>This PayPal account is not verified. <div class='image-tooltip-wrapper'><span class='image-tooltip'>Friday-Ad cares about the security of our sellers and buyers. To protect you we ask that you provide details for a verified PayPal account. You can find out more <a href='https://www.paypal.com/uk/smarthelp/article/how-do-i-verify-my-paypal-account-faq444\' target='_blank'>here</a></span><span><a class='error' style='color: #f74d4d;'><u>What does this mean?</u></a></span></div></p></div></div>", array(), 'frontend-paypal-email');
                 }
             } else {
-                $error = $this->get('translator')->trans('Paypal account is not verified.', array(), 'frontend-paypal-email');
+                $error = $this->get('translator')->trans("<div class='text-center'><p class='mt20'><div id='paa_paypal_mail_tips'>This PayPal account is not verified. <div class='image-tooltip-wrapper'><span class='image-tooltip'>Friday-Ad cares about the security of our sellers and buyers. To protect you we ask that you provide details for a verified PayPal account. You can find out more <a href='https://www.paypal.com/uk/smarthelp/article/how-do-i-verify-my-paypal-account-faq444\' target='_blank'>here</a></span><span><a class='error' style='color: #f74d4d;'><u>What does this mean?</u></a></span></div></p></div></div>", array(), 'frontend-paypal-email');
             }
 
             return new JsonResponse(array('error' => $error, 'successMsg' => $successMsg));
