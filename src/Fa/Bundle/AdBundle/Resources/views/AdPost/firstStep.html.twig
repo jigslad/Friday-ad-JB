@@ -499,17 +499,9 @@
 
         if (category_id) {
             //$('#fa_paa_category_select_save').removeClass('disabled');
-
-            $('.category_choice_div').change(function(){
-                // Call submit() method on <form id='myform'>
-
-                //var formname = document.getElementsByName('fa_paa_category_select');
-                //$("form[name='fa_paa_category_select']").submit();
-                document.forms['fa_paa_category_select'].submit();
-            });
-
-            //location.href = "https://devnew.friday-ad.co.uk/app_dev.php/paa/second_step";
-
+            // save selected category
+            $('#fa_paa_category_select_category_id').val(category_id);
+            document.forms['fa_paa_category_select'].submit();
         } else {
             if (!$('#fa_paa_category_select_save').hasClass('disabled')) {
                 $('#fa_paa_category_select_save').addClass('disabled');
