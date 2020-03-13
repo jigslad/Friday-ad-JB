@@ -37,7 +37,7 @@
 {% endif %}
 
 {% set youtubeVideoUrl = null %}
-{% if ad.getYoutubeVideoUrl() %}
+{% if 'youtube_video_url' in paaFieldArray and ad.getYoutubeVideoUrl() %}
     {% set youtubeVideoUrl = ad.getYoutubeVideoUrl() %}
 {% endif %}
 
