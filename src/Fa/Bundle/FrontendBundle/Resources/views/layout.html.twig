@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,target-densityDpi=medium-dpi" />
-    
+
 	{% set blockPageTitle = block('page_title') is defined ? block('page_title')|replace({' in UK': ''})|trim : false %}
     {% set blockMetaRobots = block('meta_robots') is defined ? block('meta_robots')|trim : false %}
     {% set blockMetaDescription = block('meta_description') is defined ? block('meta_description')|replace({' in UK': ''})|trim : false %}

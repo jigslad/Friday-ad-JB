@@ -580,64 +580,99 @@
     {% if get_variables('SrchCatDetails') is not null and get_variables('SrchCatDetails').catSrchString is defined %}
         {% set catSrchText = get_variables('SrchCatDetails').catSrchString %}
     {% endif %}
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+
+        $(document).on("click", '.unsaved-item', function(event) {
+            ga('send', 'event', 'Top Widget', 'Like');
+        });
+
+        $(document).on("click", '.saved-item', function(event) {
+            ga('send', 'event', 'Top Widget', 'Unlike');
+        });
 
 
-   <script language="javascript" type="text/javascript">
-    //<![CDATA[
 
-    $(document).on("click", '.unsaved-item', function(event) {
-        ga('send', 'event', 'Top Widget', 'Like');
-    });
+        {% if userLiveBasicAd is defined and userLiveBasicAd and userLiveBasicAd|length %}
+        ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
+        {% endif %}
 
-    $(document).on("click", '.saved-item', function(event) {
-        ga('send', 'event', 'Top Widget', 'Unlike');
-    });
-	
-    
+        {% if successPaymentModalbox is defined and successPaymentModalbox %}
+        $('#upgradeSuccessPaymentModal').foundation('reveal', 'open');
+        {% endif %}
 
-    {% if userLiveBasicAd is defined and userLiveBasicAd and userLiveBasicAd|length %}
-    	ga('send', 'event', 'Search Results', 'Upgrade', 'View', { nonInteraction: true });
-    {% endif %}
+        $(window).scroll(function () {
+            if ($("#banner_placeholder_2_4").length)
+            {
+                var rightBannerOffset = $(".right-banner").offset().top;
+                var rightBannerPos = rightBannerOffset - $(window).scrollTop();
 
-    {% if successPaymentModalbox is defined and successPaymentModalbox %}
-    	$('#upgradeSuccessPaymentModal').foundation('reveal', 'open');
-    {% endif %}
+                if (rightBannerPos < 0) {
+                    $("#banner_placeholder_2_4").addClass("fixed-banner");
+                } else if (rightBannerPos > 0) {
+                    $("#banner_placeholder_2_4").removeClass("fixed-banner");
+                }
 
-    $(window).scroll(function () {
-        if ($("#banner_placeholder_2_4").length)
+                var footerOffset = $("#footer_tag").offset().top;
+                var footerPos = footerOffset - $(window).scrollTop();
+
+                if (parseInt(footerPos) <= 630) {
+                    $("#banner_placeholder_2_4").removeClass("fixed-banner");
+                }
+            }
+        });
+
+        function visitUserProfileOrAd(eventCategory, eventAction, eventLabel)
         {
-        	var rightBannerOffset = $(".right-banner").offset().top;
-            var rightBannerPos = rightBannerOffset - $(window).scrollTop();
-
-            if (rightBannerPos < 0) {
-                $("#banner_placeholder_2_4").addClass("fixed-banner");
-            } else if (rightBannerPos > 0) {
-                $("#banner_placeholder_2_4").removeClass("fixed-banner");
-            }
-
-            var footerOffset = $("#footer_tag").offset().top;
-            var footerPos = footerOffset - $(window).scrollTop();
-
-            if (parseInt(footerPos) <= 630) {
-            	$("#banner_placeholder_2_4").removeClass("fixed-banner");
-            }
+            ga('send', 'event', eventCategory, eventAction, eventLabel);
         }
-    });
 
-    function visitUserProfileOrAd(eventCategory, eventAction, eventLabel)
-    {
-      ga('send', 'event', eventCategory, eventAction, eventLabel);
-    }
+        function gaSendForRecommendedSlotSearch(url, domain, title,slotindex,creativeOrd)
+        {
+            ga('send', 'event', 'Search List Page', 'Recommended external ads', 'Slot'+slotindex + "-Creative"+ creativeOrd +"-{{ catSrchText|trim('-') }}-" + domain + "-" + title);
+            window.open(url, '_blank');
+        }
 
-    function gaSendForRecommendedSlotSearch(url, domain, title,slotindex,creativeOrd) 
-    {
-        ga('send', 'event', 'Search List Page', 'Recommended external ads', 'Slot'+slotindex + "-Creative"+ creativeOrd +"-{{ catSrchText|trim('-') }}-" + domain + "-" + title);
-        window.open(url, '_blank');
-    }
-
-    //]]>
+        //]]>
     </script>
-
+    <!-- Google TAG Manager Start -->
+    {# Location Group @Jigar Lad #}
+    {% set locationGroupReposetry = fetch_repository('FaEntityBundle:LocationGroup') %}
+    {% set locationGroup = locationGroupReposetry.getLocationGroupByLocation(searchParams.item__location)%}
+    <script>
+        if (performance.navigation.type == 1) {
+            var searchResultMethod = 'Refresh';
+        } else {
+            {% if (app.request.headers.get('referer') is null) or (app.request.headers.get('referer') == '') %}
+                var searchResultMethod = 'Landed';
+            {% else %}
+                {% set urlEnd = app.request.headers.get('referer')|split('/')|slice(0,-1)|last|split('-') %}
+                {% if ('page' not in urlEnd) and (urlEnd|length > 2) %}
+                    var searchResultMethod = 'Ad Details';
+                {% elseif app.request.get('keywords') is defined %}
+                    var searchResultMethod = 'Site Search';
+                {% elseif app.request.get('cat_full_slug') is defined %}
+                    var searchResultMethod = 'Category Click';
+                {% else %}
+                    var searchResultMethod = 'Other';
+                {% endif %}
+            {% endif %}
+        }
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            "searchResults":{
+                "county": '{{ cookieLocationDetails.paa_county  is defined ? cookieLocationDetails.paa_county : cookieLocationDetails.location_text }}',
+                "town": "{{ cookieLocationDetails.paa_county  is defined ? cookieLocationDetails.town : 0 }}",
+                "locationGroup": "{{ locationGroup.name is defined ? locationGroup.name : locationGroup }}",     //ad location group (Nursery, Non-Print, Print - (print location)
+                "searchKeyword": '{{ app.request.get('keywords') }}',
+                "searchResultMethod": searchResultMethod, //described below
+                "noOfResults": {{resultCount}},
+                "radius": '{{ searchParams.item__distance is defined ? searchParams.item__distance : 'default' }}',
+                "popularSearch": {{ seoFields.popular_search is defined ? seoFields.popular_search : 'false' }}
+            }
+        });
+    </script>
+    <!-- Google TAG Manager End -->
 {% endblock %}
 
 {% block pushNotification %}
