@@ -92,15 +92,15 @@
                 		<ul class="toplistWithBullets">
                 		{% if userBusType is defined and userBusType == 'netsuite' and adLimitCount!=0 %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}/{{ adLimitCount }}</span></li>
-                			<li class="bluecircle">Featured ads: <span>{{ usedFeaturedCreditCount }}/{{ shopFeaturedPackageCredit }}</span></li>
+                			<li class="lightgreencircle">Featured ads: <span>{{ usedFeaturedCreditCount }}/{{ shopFeaturedPackageCredit }}</span></li>
                 		{% elseif userBusType is defined and userBusType == 'business' %}
                 			<li class="greencircle">Live ads: <span>{{onlyActiveAdCount}}</span></li>
-                			<li class="bluecircle">Featured ads: <span>{{ adFeaturedUpsellArray|length }}</span></li>
+                			<li class="lightgreencircle">Featured ads: <span>{{ adFeaturedUpsellArray|length }}</span></li>
 				        {% endif %}
                 			
                 			{#<li class="bluecircle">Featured ads: <span>{{ userCreditRepository.getActiveFeaturedCreditCountForUser(app.user.getId()) }}/{{ userCreditRepository.getActiveCreditCountForUser(app.user.getId()) }}</span></li>#}
                 		{% if isBoostEnabled==1 and boostAdRemaining >0 %}
-                    			<li class="lightgreencircle">Boosts remaining: <span>{{ boostAdRemaining }}</span></li>
+                    			<li class="purplecircle">Boosts remaining: <span>{{ boostAdRemaining }}</span></li>
                     			<li class="boostBtn"><button id="boost_ad_selected_all" class="xs-btn-1 button all-sel-texts">Boost All Active Ads</button></li>
                     		{% endif %}
                 		</ul>                    	
@@ -126,9 +126,9 @@
                        			<option value="sel-featured"  {{ (filterBy=='sel-featured')?'selected':'' }}>Featured ads</option>
                        		</select></div>                           		
                		   {# {% if isBoostEnabled==1 and boostAdRemaining > 0 and (currentRoute == 'manage_my_ads_active') %}  #}                              
-                                <div class="select-all-ads-active"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <a class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
+                                <div class="select-all-ads-active"><span class="all-sel-chkbox custom-checkbox"><input type="checkbox" class="boostad_selectall"></span> <span class="all-sel-text boostad_selectall"> {% if currentRoute == 'manage_my_ads_active' %}
                                     Select all ads <span class="hide-for-small-only">on this page</span> ({{ onlyActiveAdInPageCount }})
-                                {% endif %} </a></div>                                                                    
+                                {% endif %} </span></div>                                                                    
                                 {# {% endif %} #}
                        </div>
                        {% endif %} 
