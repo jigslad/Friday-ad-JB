@@ -498,6 +498,7 @@ class AdPostType extends AbstractType
             $fieldOptions['placeholder'] = false;
         } elseif ($paaField['field'] == 'ad_type_id') {
             $fieldOptions['data'] = EntityRepository::AD_TYPE_FORSALE_ID;
+            $fieldOptions['attr']['class'] = 'choice-display-flex';
         } elseif ($paaField['field'] == 'delivery_method_option_id') {
             $fieldOptions['choices'] = array_flip($this->em->getRepository('FaPaymentBundle:DeliveryMethodOption')->getDeliveryMethodOptionArray($this->container));
             $fieldOptions['data'] = DeliveryMethodOptionRepository::COLLECTION_ONLY_ID;
