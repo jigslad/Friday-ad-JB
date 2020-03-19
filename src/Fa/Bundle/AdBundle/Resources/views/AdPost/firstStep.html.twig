@@ -56,6 +56,7 @@
                                 {{ form_row(form.category_id_autocomplete) }}
                                 <a href="javascript:void(0);" id="fa_paa_category_select_category_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                             </span>
+                            <span id="category_id_autocomplete_error" class="error" style="display:none">No matching categories found. Try a different search or use the category icons to navigate to find your category.</span>
                         </div>
                     </div>
                 </div>
@@ -499,10 +500,10 @@
         var category_id = last_category_id ? last_category_id : autocomplete_category_id;
 
         if (category_id) {
-            //$('#fa_paa_category_select_save').removeClass('disabled');
+            $('#fa_paa_category_select_save').removeClass('disabled');
             // save selected category
-            $('#fa_paa_category_select_category_id').val(category_id);
-            document.forms['fa_paa_category_select'].submit();
+            //$('#fa_paa_category_select_category_id').val(category_id);
+            //document.forms['fa_paa_category_select'].submit();
         } else {
             if (!$('#fa_paa_category_select_save').hasClass('disabled')) {
                 $('#fa_paa_category_select_save').addClass('disabled');
