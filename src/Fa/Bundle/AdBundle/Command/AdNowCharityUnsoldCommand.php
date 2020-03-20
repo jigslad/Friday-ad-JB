@@ -23,7 +23,7 @@ use Fa\Bundle\UserBundle\Repository\RoleRepository;
 /**
  * This command is used to send your unsold ad alert to users for before given 10 day
  *
- * @author Samir Amrutya <samiram@aspl.in>
+ * @author Konda Reddy <konda.reddy@fridaymediagroup.com>
  * @copyright 2014 Friday Media Group Ltd
  * @version 1.0
  */
@@ -38,7 +38,7 @@ class AdNowCharityUnsoldCommand extends ContainerAwareCommand
             ->setName('fa:charity:now-charity-unsold')
             ->setDescription("Send ad now in charity free 10 day ago ads.")
             ->addOption('offset', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', null)
-            ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Offset of the query', "256M")
+            ->addOption('memory_limit', null, InputOption::VALUE_OPTIONAL, 'Memory limit of the query', "256M")
             ->setHelp(
                 <<<EOF
         Cron: To be setup.
@@ -183,12 +183,19 @@ EOF
      */
     protected function getAdQueryBuilder()
     {
-        $query = 'SELECT * from fridayad_prod_restore.ad as a
-        left join  fridayad_prod_restore.ad_location as al on al.ad_id=a.id
-        where a.status_id=25
-        and (a.is_paid_ad is null or a.is_paid_ad = 0)
+        $query = 'SELECT u.*,a.id as adid
+        from fridayad_prod_restore.user as u
+        inner join fridayad_prod_restore.ad as a on a.user_id = u.id
+        inner join  fridayad_prod_restore.ad_location as al on al.ad_id = a.id
+        inner join fridayad_prod_restore.ad_user_package as aup on aup.user_id = u.id
+        where a.status_id = 25
+        AND aup.price = 0
+        AND a.type_id = 4
         AND a.category_id in (159,160,165,178,188,194,198,203,204,205,206,214,218,221,223,224,225,229,230,231,236,239,246,247,261,264,265,266,267,268,269,270,272,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,305,306,310,311,312,313,318,319,320,321,322,323,327,329,330,331,332,336,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,4277,57,71,84,88,95,98,102,58,59,60,64,65,66,67,68,69,70,72,73,74,75,76,77,78,79,80,81,82,83,85,86,87,89,90,91,92,93,96,97,99,100,101)
-        AND (al.town_id in (SELECT id from fridayad_prod_restore.location where id=326 or parent_id=326))';
+        AND (al.town_id in (SELECT id from fridayad_prod_restore.location where id = 326 or parent_id = 326))
+        AND a.created_at >= DATE(NOW()) + INTERVAL -7 DAY
+        AND a.created_at <  DATE(NOW()) + INTERVAL  2 DAY 
+        group by u.id';
         $stmt = $this->em->getConnection()->prepare($query);
         $stmt->execute();
         $ads = $stmt->fetchAll();
@@ -204,12 +211,19 @@ EOF
      */
     protected function getAdCount()
     {
-        $query = 'SELECT count(a.id) as count from fridayad_prod_restore.ad as a
-        left join  fridayad_prod_restore.ad_location as al on al.ad_id=a.id
-        where a.status_id=25
-        and (a.is_paid_ad is null or a.is_paid_ad = 0)
+        $query = 'SELECT u.*,a.id as adid
+        from fridayad_prod_restore.user as u
+        inner join fridayad_prod_restore.ad as a on a.user_id = u.id
+        inner join  fridayad_prod_restore.ad_location as al on al.ad_id = a.id
+        inner join fridayad_prod_restore.ad_user_package as aup on aup.user_id = u.id
+        where a.status_id = 25
+        AND aup.price = 0
+        AND a.type_id = 4
         AND a.category_id in (159,160,165,178,188,194,198,203,204,205,206,214,218,221,223,224,225,229,230,231,236,239,246,247,261,264,265,266,267,268,269,270,272,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,305,306,310,311,312,313,318,319,320,321,322,323,327,329,330,331,332,336,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,4277,57,71,84,88,95,98,102,58,59,60,64,65,66,67,68,69,70,72,73,74,75,76,77,78,79,80,81,82,83,85,86,87,89,90,91,92,93,96,97,99,100,101)
-        AND (al.town_id in (SELECT id from fridayad_prod_restore.location where id=326 or parent_id=326))';
+        AND (al.town_id in (SELECT id from fridayad_prod_restore.location where id = 326 or parent_id = 326))
+        AND a.created_at >= DATE(NOW()) + INTERVAL -7 DAY
+        AND a.created_at <  DATE(NOW()) + INTERVAL  2 DAY
+        group by u.id';
         $stmt = $this->em->getConnection()->prepare($query);
         $stmt->execute();
         $count = $stmt->fetchAll();
