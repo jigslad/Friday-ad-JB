@@ -1,0 +1,28 @@
+{% extends 'FaAdminBundle::layout.html.twig' %}
+{% set queryParams = app.request.query.all %}
+
+{% set entityRepository = fetch_repository('FaEntityBundle:Entity') %}
+{% set statusArray = entityRepository.getStatusArray1(fetch_container_instance(), false) %}
+{% set userRepository = fetch_repository('FaUserBundle:User') %}
+{% set boostOverrideEditGrant = false %}
+{% set boostOverrideDeleteGrant = false %}
+{% if fa_resource_authorization_manager.isGranted('boost_override_edit_admin') %}
+  {% set boostOverrideEditGrant = true %}
+{% endif %}
+
+{% if fa_resource_authorization_manager.isGranted('boost_override_delete_admin') %}
+  {% set boostOverrideDeleteGrant = true %}
+{% endif %}
+
+{% block content %}
+    {{ include('FaAdminBundle:Default:listSearchHeading.html.twig', {'isAddNew': false}) }}
+
+    {% use "FaUserBundle:BoostOverrideAdmin:search.html.twig" %}
+    {{ block('search_html') }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaUserBundle:BoostOverrideAdmin:list.html.twig', {'pagination': pagination}) }}
+
+    {{ include('FaAdminBundle:Default:pager.html.twig', {'pagination': pagination}) }}
+{% endblock %}
