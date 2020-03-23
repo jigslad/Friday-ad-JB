@@ -148,7 +148,10 @@ EOF
                             $this->em->getRepository('FaAdBundle:Ad')->sendRenewalReminderEmailByUser($user, 'renewal_reminder', $this->getContainer());
                             $output->writeln('Renewal Reminder email has sent to the User ID: '.$user->getId(), true);
                             break;
-                            
+                        case 'furniture_now_charity':
+                            $this->em->getRepository('FaAdBundle:Ad')->sendFurnitureCharityEmailByUser($user, 'furniture_now_charity', $this->getContainer());
+                            $output->writeln('Furniture Charity email has sent to the User ID: '.$user->getId(), true);
+                            break;
                         case 'ad_is_received_live_paid_print':
                         case 'ad_is_received_live_paid_online_only':
                         case 'ad_is_received_live_free_ad':
