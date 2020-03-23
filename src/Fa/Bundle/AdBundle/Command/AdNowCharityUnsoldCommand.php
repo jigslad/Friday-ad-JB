@@ -75,7 +75,7 @@ EOF
             if ($input->hasOption("memory_limit") && $input->getOption("memory_limit")) {
                 $memoryLimit = ' -d memory_limit='.$input->getOption("memory_limit");
             }
-            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:process-email-queue --email_identifier="furniture_now_charity"';
+            $command = $this->getContainer()->getParameter('fa.php.path').$memoryLimit.' '.$this->getContainer()->getParameter('project_path').'/console fa:process-email-queue --email_identifier="now_charity_unsold"';
             $output->writeln($command, true);
             passthru($command, $returnVar);
 
@@ -109,7 +109,7 @@ EOF
             $userRoleId = ($user ? $userRoleId : 0);
 
             if ($user && CommonManager::checkSendEmailToUser($userId, $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
-                $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('furniture_now_charity', $user, $ad, $this->getContainer());
+                $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('now_charity_unsold', $user, $ad, $this->getContainer());
             }
 
             $output->writeln('unsold email added to queue for AD ID: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
