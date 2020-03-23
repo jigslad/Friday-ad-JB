@@ -4726,4 +4726,28 @@ class AdRepository extends EntityRepository
        
         return $arrResources;
     }
+    
+    public function sendFurnitureCharityEmailByUser($user, $furnitureCharityEmailTemplate, $container)
+    {
+        if ($user) {
+            $dashBoardUrl    = $container->get('router')->generate('dashboard_home', array(), true);
+            
+            $emailQueueIds = array();
+            $emailQueues = $this->_em->getRepository('FaEmailBundle:EmailQueue')->findBy(array('user' => $user->getId(), 'identifier' => $furnitureCharityEmailTemplate, 'status' => 1));
+            foreach ($emailQueues as $emailQueue) {
+                $emailQueueIds[] = $emailQueue->getId();
+                
+                $parameters = array(
+                    'user_first_name' => $user->getFirstName(),
+                    'user_last_name' => $user->getLastName(),
+                    'user_email_address' => $user->getEmail(),
+                    'url_account_dashboard' => $dashBoardUrl,
+                );
+                
+                $container->get('fa.mail.manager')->send($user->getEmail(), $furnitureCharityEmailTemplate, $parameters, CommonManager::getCurrentCulture($container));
+                $this->_em->getRepository('FaEmailBundle:EmailQueue')->removeFromEmailQueue($furnitureCharityEmailTemplate, $user, $emailQueueIds);           
+            }
+        }
+    }
+    
 }

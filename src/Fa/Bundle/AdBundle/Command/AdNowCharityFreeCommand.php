@@ -48,7 +48,7 @@ class AdNowCharityFreeCommand extends ContainerAwareCommand
         - Send ad now charity free before two day.
         
         Command:
-         - php app/console fa:charity:now-charity-free
+         - php bin/console fa:charity:now-charity-free
 EOF
                 );
     }
@@ -111,10 +111,6 @@ EOF
             if ($user && CommonManager::checkSendEmailToUser($userId, $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                 $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('furniture_now_charity', $user, $ad, $this->getContainer());
             }
-
-            $ad->setIsRenewalMailSent(2);
-            $this->em->persist($ad);
-            $this->em->flush($ad);
 
             $output->writeln('Email added to queue for AD ID: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
         }

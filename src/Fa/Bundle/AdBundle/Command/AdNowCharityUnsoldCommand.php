@@ -112,10 +112,6 @@ EOF
                 $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('furniture_now_charity', $user, $ad, $this->getContainer());
             }
 
-            $ad->setIsRenewalMailSent(2);
-            $this->em->persist($ad);
-            $this->em->flush($ad);
-
             $output->writeln('unsold email added to queue for AD ID: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
         }
         $this->em->clear();
