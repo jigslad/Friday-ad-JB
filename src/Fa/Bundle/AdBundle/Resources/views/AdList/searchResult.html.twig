@@ -169,8 +169,15 @@
         {% set HomePagePath = container.getParameter('base_url')~path('location_home_page', {'location': app.request.get('location')}) %} 
     {% else %}
         {% set HomePagePath =  container.getParameter('base_url')~path('fa_frontend_homepage') %}  
-    {% endif %} 
-    
+    {% endif %}
+
+    {% set locationName = '' %}
+    {% if location_id == 2 %}
+        {% set locationName = 'Homepage' %}
+    {% else %}
+        {% set locationName = app.request.get('location')|capitalize %}
+    {% endif %}
+
 	<script type="application/ld+json">
 	{
   		"@context": "https://schema.org",
@@ -178,7 +185,7 @@
   		"itemListElement": [{
     	"@type": "ListItem",
     	"position": 1,
-    	"name": "Homepage",
+    	"name": "{{locationName}}",
     	"item": "{{HomePagePath}}"
   	},
     {% set categoryPath = {} %}
