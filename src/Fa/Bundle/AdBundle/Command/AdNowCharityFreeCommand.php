@@ -99,7 +99,7 @@ EOF
 
         foreach ($ads as $ad) {
             $userId = ($ad['id'] ? $ad['id'] : null);
-            $userId = 1293152;
+            //$userId = 1293152;
             $user = $this->em->getRepository('FaUserBundle:User')->find($userId);
             $ad = $this->em->getRepository('FaAdBundle:Ad')->find($ad['adid']);
 
