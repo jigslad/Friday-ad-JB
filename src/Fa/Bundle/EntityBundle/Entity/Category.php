@@ -333,6 +333,15 @@ class Category
      * @ORM\Column(name="header_sort_order", type="smallint", length=6, nullable=true)
      */
     private $header_sort_order;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="datagrid_advert_type", type="string", length=255, nullable=true)
+     */
+    private $datagrid_advert_type;
+    
 
     /**
      * Constructor
@@ -1279,5 +1288,29 @@ class Category
     public function getHeaderSortOrder()
     {
         return $this->header_sort_order;
+    }
+    
+    /**
+     * Get datagrid_advert_type.
+     *
+     * @return string
+     */
+    public function getDatagridAdvertType()
+    {
+        return $this->datagrid_advert_type;
+    }
+    
+    /**
+     * Set datagrid_advert_type.
+     *
+     * @param string $datagrid_advert_type
+     *
+     * @return Category
+     */
+    public function setDatagridAdvertType($datagrid_advert_type)
+    {
+        $this->datagrid_advert_type = $datagrid_advert_type;
+        
+        return $this;
     }
 }
