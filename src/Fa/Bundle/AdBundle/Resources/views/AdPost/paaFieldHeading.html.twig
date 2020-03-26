@@ -11,7 +11,6 @@
         {% else %}
             {{ attribute(form, field).vars.label }}
         {% endif %}
-        <span>({{ field != 'rates_id'?'optional'|trans({}, 'frontend-paa-fourth-step'):'please add your basic rates' }})</span>
         <span>{#({{ 'required'|trans({}, 'frontend-paa-fourth-step') }})#}</span>
     {% else %}
         {% set tabArrowClass = 'tab-down' %}
