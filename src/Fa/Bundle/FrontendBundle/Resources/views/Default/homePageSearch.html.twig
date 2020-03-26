@@ -1,3 +1,6 @@
+<style>
+.newtext-tagline { font-family:'Bree';font-weight:400;font-size:36px;line-height:46px;color:#313133}
+</style>
 {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_top_search'}}) }}
     {{ form_errors(form) }}
     <div class="home-slider-content">
@@ -9,8 +12,10 @@
                            {{ include('FaCoreBundle::message.html.twig') }}
                         </div>
                     </div>
-                    <div class="tagline"><img src="{{ asset_url('fafrontend/images/Tagline.svg') }}" alt="" /></div>
-                    <h2 class="tagline-text">{{ 'What are you searching for? Whether it’s a bargain bicycle or an emergency<br /> electrician, there’s all sorts of gems to be discovered. Get browsing today ...'|trans({}, 'frontend-homepage')|raw }}</h2>
+                    {# <div class="tagline"><img src="{{ asset_url('fafrontend/images/tagline.svg') }}" alt="" /></div>
+                    <h2 class="tagline-text">{{ 'What are you searching for? Whether it’s a bargain bicycle or an emergency<br /> electrician, there’s all sorts of gems to be discovered. Get browsing today ...'|trans({}, 'frontend-homepage')|raw }}</h2> #}
+                    <div class="tagline newtext-tagline">Coronavirus Community Support Scheme</div>
+                    <h2 class="tagline-text">{{ 'Here to connect the community in a crisis!<br /> Look for local support or advertise your services to help locals who may need you.'|trans({}, 'frontend-homepage')|raw }}</h2>
                     <div id="home-search" class="large-14 columns">
                         <table>
                             <tr>

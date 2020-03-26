@@ -77,7 +77,12 @@ class HeaderImageAdminType extends AbstractType
     {
         if (!$builder->getForm()->getData()->getId()) {
             $builder
-                ->add('file', FileType::class, array('label' => 'Image'))
+                ->add('file', FileType::class, array('label' => 'Main Image'))
+                ->add(
+                    'main_image_url',
+                    TextType::class,
+                    array('label' => 'Main Image url')
+                    )
                 ->add('phone_file', FileType::class, array('label' => 'Right-Hand-Side Image'))
                 ->add(
                     'right_hand_image_url',
@@ -134,7 +139,12 @@ class HeaderImageAdminType extends AbstractType
             
             
             $builder
-            ->add('file', FileType::class, array('label' => 'Image'))
+            ->add('file', FileType::class, array('label' => 'Main Image'))
+            ->add(
+                'main_image_url',
+                TextType::class,
+                array('label' => 'Main Image url')
+                )
             ->add('phone_file', FileType::class, array('label' => 'Right-Hand-Side Image'))
             ->add(
                 'right_hand_image_url',
