@@ -1,0 +1,958 @@
+@import "global";
+
+
+.site-search {
+    background: $common-bg-color;
+    border-bottom: 1px solid $form-border-color;
+    border-top: 1px solid $form-border-color;
+    box-shadow: 0 1px 0 $white;
+    padding: 11px 0 10px;
+    position: relative;
+}
+.site-search .change-location {
+    font-family: $font-family-secondary;
+    margin-left: 16px;
+    color: $common-text-color;
+    height: 38px;
+    line-height: 38px;
+    font-size: 16px;
+}
+.site-search .change-location .btn {
+    width: 49%;
+    height: auto !important;
+}
+.site-search .search-icon {
+    width: 45px;
+	height: 40px;
+	text-indent: -9999px;
+	border: 1px solid $secondary-h-color;
+    border-left-color: rgb(155, 204, 33);
+    border-left-style: solid;
+    border-left-width: 1px;
+	border-radius: 0 2px 2px 0;
+	border-left: 0;
+	color: $white;
+	fill: currentColor;
+	float: left;
+	background: $secondary-color url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2215.3%22%20height%3D%2215.3%22%20viewBox%3D%22-4226.7%201392.2%2015.3%2015.3%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3ESEARCH%20ICON%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-4211.4%201406l-3.6-3.6c0.8-1.1%201.3-2.4%201.3-3.8%200-1.7-0.7-3.4-1.9-4.6%20-2.5-2.5-6.7-2.5-9.2%200%20-1.2%201.2-1.9%202.9-1.9%204.6s0.7%203.4%201.9%204.6c1.3%201.3%202.9%201.9%204.6%201.9%201.3%200%202.7-0.4%203.8-1.3l3.6%203.6L-4211.4%201406zM-4223.5%201401.7c-0.9-0.9-1.3-2-1.3-3.2%200-1.2%200.5-2.3%201.3-3.2%200.9-0.9%202-1.3%203.2-1.3%201.2%200%202.3%200.4%203.2%201.3%200.9%200.8%201.3%202%201.3%203.2%200%201.2-0.5%202.3-1.3%203.2C-4218.8%201403.5-4221.7%201403.5-4223.5%201401.7z%22/%3E%3C/svg%3E') no-repeat center center;
+    background-size: auto;
+	background-size: 16px 16px;
+}
+.site-search .ui-autocomplete-input {
+    margin: 0 0 5px;
+    background: $white;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: normal;
+    font-family: $font-family-default;
+    border-radius: 2px;
+}
+.site-search .ad-category-list .btn-outline-secondary {
+	background: $white;
+	border: 1px solid $form-border-color;
+	border-radius: 2px;
+	color: $common-text-color;
+    font-family: $font-family-default;
+    font-size: 14px;
+    font-weight: 700;
+}
+.site-search .ad-category-list .btn-outline-secondary:active {
+    color: $common-text-color;
+    background-color: $white;
+    border-color: $form-border-color;
+}
+.site-search .ad-category-list .btn-outline-secondary:active:focus {
+    box-shadow: none;
+}
+.site-search .input-group input {
+	font-size:13px;
+}
+.site-search .change-location a.edit-location {
+	color: $secondary-color;
+}
+.site-search .change-location a.edit-location:hover, .site-search .change-location a.edit-location:focus {
+	color: $secondary-h-color;
+}
+.site-search .show > .btn-outline-secondary.dropdown-toggle {
+    color: $common-text-color;
+    background-color: $white;
+    border-color: $form-border-color;
+}
+.site-search .show > .btn-outline-secondary.dropdown-toggle:focus {
+    box-shadow: none;
+}
+.ad-list-block #top_search_location {
+    display: block;
+    background: $form-border-color;
+    padding: 5px;
+    position: absolute;
+    top: 0;
+}
+
+.ad-list-block {
+  .search-pref {
+    text-align: right;
+    float: right;
+    a {
+      &.expand-search {
+        background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20id%3D%22Layer_1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2227%22%20height%3D%2227%22%20viewBox%3D%22-466%20267%2027%2027%22%20xml%3Aspace%3D%22preserve%22%20enable-background%3D%22new%20-466%20267%2027%2027%22%3E%0D%0A%20%20%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%20%20%20%20%0D%0A%09.st0%7Bfill%3A%23A8DC28%3Bstroke%3A%239BCC21%3B%7D%0D%0A%09.st1%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%0D%0A%20%20%3C/style%3E%0D%0A%20%20%3Ctitle%3E%0D%0A%20%20%20%20Oval+%20hover%0D%0A%20%20%3C/title%3E%0D%0A%20%20%3Cdesc%3E%0D%0A%20%20%20%20Created%20with%20Sketch%20Beta.%0D%0A%20%20%3C/desc%3E%0D%0A%20%20%3Cg%20id%3D%22Search-results-list%22%20sketch%3Atype%3D%22MSPage%22%3E%0D%0A%20%20%20%20%3Cg%20id%3D%22Desktop-HD-For-sale-3%22%20transform%3D%22translate%28-1087.000000%2C%20-229.000000%29%22%20sketch%3Atype%3D%22MSArtboardGroup%22%3E%0D%0A%20%20%20%20%20%20%3Cg%20id%3D%22Search-bar-3-_x2B_-Navigation-Menu-3%22%20transform%3D%22translate%28-2.000000%2C%200.000000%29%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Search-bar-3%22%20transform%3D%22translate%280.000000%2C%20212.000000%29%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Oval_x2B_-hover%22%20transform%3D%22translate%281090.000000%2C%2018.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22Oval-6%22%20class%3D%22st0%22%20d%3D%22M-453.5%20292c6.9%200%2012.5-5.6%2012.5-12.5s-5.6-12.5-12.5-12.5%20-12.5%205.6-12.5%2012.5S-460.4%20292-453.5%20292z%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22_x2B_%22%20class%3D%22st1%22%20d%3D%22M-458.3%20280.8c-0.5%200-0.7-0.4-0.7-1.2v-0.2c0-0.8%200.2-1.2%200.7-1.2h3.5v-3.6c0-0.5%200.4-0.7%201.2-0.7h0.3c0.8%200%201.2%200.2%201.2%200.7v3.6h3.5c0.5%200%200.7%200.4%200.7%201.2v0.2c0%200.8-0.2%201.2-0.7%201.2h-3.5v3.5c0%200.5-0.4%200.7-1.2%200.7h-0.3c-0.8%200-1.2-0.2-1.2-0.7v-3.5H-458.3z%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%3C/g%3E%0D%0A%20%20%3C/g%3E%0D%0A%3C/svg%3E%0D%0A') no-repeat left center;
+        &:hover {
+          background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20id%3D%22Layer_1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2227%22%20height%3D%2227%22%20viewBox%3D%22-466%20267%2027%2027%22%20xml%3Aspace%3D%22preserve%22%20enable-background%3D%22new%20-466%20267%2027%2027%22%3E%0D%0A%20%20%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%20%20%20%20%0D%0A%09.st0%7Bfill%3A%239BCC21%3Bstroke%3A%239BCC21%3B%7D%0D%0A%09.st1%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%0D%0A%20%20%3C/style%3E%0D%0A%20%20%3Ctitle%3E%0D%0A%20%20%20%20Oval+%20hover%0D%0A%20%20%3C/title%3E%0D%0A%20%20%3Cdesc%3E%0D%0A%20%20%20%20Created%20with%20Sketch%20Beta.%0D%0A%20%20%3C/desc%3E%0D%0A%20%20%3Cg%20id%3D%22Search-results-list%22%20sketch%3Atype%3D%22MSPage%22%3E%0D%0A%20%20%20%20%3Cg%20id%3D%22Desktop-HD-For-sale-3%22%20transform%3D%22translate%28-1087.000000%2C%20-229.000000%29%22%20sketch%3Atype%3D%22MSArtboardGroup%22%3E%0D%0A%20%20%20%20%20%20%3Cg%20id%3D%22Search-bar-3-_x2B_-Navigation-Menu-3%22%20transform%3D%22translate%28-2.000000%2C%200.000000%29%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Search-bar-3%22%20transform%3D%22translate%280.000000%2C%20212.000000%29%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Oval_x2B_-hover%22%20transform%3D%22translate%281090.000000%2C%2018.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22Oval-6%22%20class%3D%22st0%22%20d%3D%22M-453.5%20292c6.9%200%2012.5-5.6%2012.5-12.5s-5.6-12.5-12.5-12.5%20-12.5%205.6-12.5%2012.5S-460.4%20292-453.5%20292z%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22_x2B_%22%20class%3D%22st1%22%20d%3D%22M-458.3%20280.8c-0.5%200-0.7-0.4-0.7-1.2v-0.2c0-0.8%200.2-1.2%200.7-1.2h3.5v-3.6c0-0.5%200.4-0.7%201.2-0.7h0.3c0.8%200%201.2%200.2%201.2%200.7v3.6h3.5c0.5%200%200.7%200.4%200.7%201.2v0.2c0%200.8-0.2%201.2-0.7%201.2h-3.5v3.5c0%200.5-0.4%200.7-1.2%200.7h-0.3c-0.8%200-1.2-0.2-1.2-0.7v-3.5H-458.3z%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%3C/g%3E%0D%0A%20%20%3C/g%3E%0D%0A%3C/svg%3E%0D%0A') no-repeat left center;
+        }
+        &.expand-search.expanded {
+          background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20id%3D%22Layer_1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2227%22%20height%3D%2227%22%20viewBox%3D%22-386%20222%2027%2027%22%20xml%3Aspace%3D%22preserve%22%20enable-background%3D%22new%20-386%20222%2027%2027%22%3E%0D%0A%20%20%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%20%20%20%20%0D%0A%09.st0%7Bfill%3A%23A8DC28%3Bstroke%3A%239BCC21%3B%7D%0D%0A%09.st1%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%0D%0A%20%20%3C/style%3E%0D%0A%20%20%3Ctitle%3E%0D%0A%20%20%20%20Oval-%0D%0A%20%20%3C/title%3E%0D%0A%20%20%3Cdesc%3E%0D%0A%20%20%20%20Created%20with%20Sketch%20Beta.%0D%0A%20%20%3C/desc%3E%0D%0A%20%20%3Cg%20id%3D%22Search-results-list%22%20sketch%3Atype%3D%22MSPage%22%3E%0D%0A%20%20%20%20%3Cg%20id%3D%22Desktop-HD-For-sale-3%22%20transform%3D%22translate%28-1087.000000%2C%20-229.000000%29%22%20sketch%3Atype%3D%22MSArtboardGroup%22%3E%0D%0A%20%20%20%20%20%20%3Cg%20id%3D%22Search-bar-3-_x2B_-Navigation-Menu-3%22%20transform%3D%22translate%28-2.000000%2C%200.000000%29%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Search-bar-3%22%20transform%3D%22translate%280.000000%2C%20212.000000%29%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Oval-%22%20transform%3D%22translate%281090.000000%2C%2018.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22Oval-6%22%20class%3D%22st0%22%20d%3D%22M-373.5%20247c6.9%200%2012.5-5.6%2012.5-12.5s-5.6-12.5-12.5-12.5%20-12.5%205.6-12.5%2012.5S-380.4%20247-373.5%20247z%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22_x2B_%22%20class%3D%22st1%22%20d%3D%22M-378.3%20235.8c-0.5%200-0.7-0.4-0.7-1.2v-0.2c0-0.8%200.2-1.2%200.7-1.2h3.5%202.6%203.5c0.5%200%200.7%200.4%200.7%201.2v0.2c0%200.8-0.2%201.2-0.7%201.2h-3.5%20-2.6H-378.3z%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%3C/g%3E%0D%0A%20%20%3C/g%3E%0D%0A%3C/svg%3E%0D%0A') no-repeat left center;
+        }
+      }
+      color: $common-text-color;
+      height: 38px;
+      line-height: 38px;
+      display: inline-block;
+      padding-left: 37px;
+      font-size: 14px;
+    }
+  }
+  .sortby-area {
+    margin: 10px 0;
+    h2, h1 {
+      display: inline-block;
+      margin-top: 10px;
+      font-family: $font-family-default;
+      font-size: 20px;
+      font-weight: 400;
+      color: $common-text-color;
+      line-height: 27px;
+      vertical-align: top;
+    }
+  }
+  .sortby-fields {
+    float: right;
+    width: 50%;
+    text-align: right;
+  }
+  .sortby-area {
+    .s-by-filters {
+      display: flex;
+      float: right;
+    }
+    .ad-category-list {
+      width: 173px;
+      margin: 0 22px 0 0 !important;
+    }
+  }
+  .list-view {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+    border-radius: 2px;
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='41' height='41' viewBox='-379 215 41 41' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23FFFFFF;stroke:%23A8DC28;%7d .st1%7bfill:%23A8DC28;%7d %3c/style%3e%3ctitle%3eList view HOVER/ON%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-1167.000000, -562.000000)'%3e%3cg transform='translate(-42.000000, 406.000000)'%3e%3cg transform='translate(1168.000000, 156.000000)'%3e%3cg transform='translate(41.000000, 0.000000)'%3e%3cpath class='st0' d='M-376.5 215.5h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-378.5 216.4-377.6 215.5-376.5 215.5z'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3cg transform='translate(1168.000000, 156.000000)'%3e%3cg transform='translate(41.000000, 0.000000)'%3e%3crect x='-1572.6' y='68' class='st1' width='18' height='5'/%3e%3crect x='-1572.6' y='77' class='st1' width='18' height='5'/%3e%3crect x='-1572.6' y='86' class='st1' width='18' height='5'/%3e%3crect x='-1580.4' y='68' class='st1' width='5' height='5'/%3e%3crect x='-1580.4' y='77' class='st1' width='5' height='5'/%3e%3crect x='-1580.4' y='86' class='st1' width='5' height='5'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat ;
+    background-size: 40px 40px;
+    background-position: 0 0;
+    &:hover, &.active {
+      background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='41' height='41' viewBox='-379 215 41 41' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23FFFFFF;stroke:%23A8DC28;%7d .st1%7bfill:%23A8DC28;%7d %3c/style%3e%3ctitle%3eList view HOVER/ON%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-1167.000000, -562.000000)'%3e%3cg transform='translate(-42.000000, 406.000000)'%3e%3cg transform='translate(1168.000000, 156.000000)'%3e%3cg transform='translate(41.000000, 0.000000)'%3e%3cpath class='st0' d='M-376.5 215.5h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-378.5 216.4-377.6 215.5-376.5 215.5z'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3cg transform='translate(1168.000000, 156.000000)'%3e%3cg transform='translate(41.000000, 0.000000)'%3e%3crect x='-1572.6' y='68' class='st1' width='18' height='5'/%3e%3crect x='-1572.6' y='77' class='st1' width='18' height='5'/%3e%3crect x='-1572.6' y='86' class='st1' width='18' height='5'/%3e%3crect x='-1580.4' y='68' class='st1' width='5' height='5'/%3e%3crect x='-1580.4' y='77' class='st1' width='5' height='5'/%3e%3crect x='-1580.4' y='86' class='st1' width='5' height='5'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat;
+      background-size: 40px 40px;
+      background-position: 0 0;
+    }
+  }
+  .map-view {
+    display: inline-block;
+    margin-left: 7px;
+    width: 40px;
+    height: 40px;
+    text-indent: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+    border-radius: 2px;
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns:sketch='http://www.bohemiancoding.com/sketch/ns' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Layer_1' x='0' y='0' width='40' height='40' viewBox='-459 261 40 40' xml:space='preserve' enable-background='new -459 261 40 40'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23FBFBFB;stroke:%23E3E3E3;%7d .st1%7bfill:%23E3E3E3;%7d %3c/style%3e%3ctitle%3e Map view OFF %3c/title%3e%3cdesc%3e Created with Sketch. %3c/desc%3e%3cg id='Search-results-list' sketch:type='MSPage'%3e%3cg id='Desktop-Search-results-7' transform='translate(-1217.000000, -562.000000)' sketch:type='MSArtboardGroup'%3e%3cg id='Top-bar' transform='translate(-42.000000, 406.000000)' sketch:type='MSLayerGroup'%3e%3cg id='View-type' transform='translate(1168.000000, 156.000000)' sketch:type='MSShapeGroup'%3e%3cg id='Map-view-OFF' transform='translate(91.000000, 0.000000)'%3e%3cpath id='Rectangle-153' class='st0' d='M-457 261h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-459 261.9-458.1 261-457 261z'/%3e%3cpath class='st1' d='M-439 270c-4.4 0-8 3.6-8 8.1 0.1 6 8.4 13.3 8.4 12.9 -0.1 0.1 7.4-6.5 7.6-12.9C-431 273.7-434.6 270-439 270zM-439 280c-1.6 0-3-1.3-3-3s1.3-3 3-3c1.6 0 3 1.3 3 3S-437.3 280-439 280z'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat;
+    background-size: 40px 40px;
+    background-position: 0 0;
+    &:hover, &.active {
+      background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns:sketch='http://www.bohemiancoding.com/sketch/ns' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Layer_1' x='0' y='0' width='40' height='40' viewBox='-459 261 40 40' xml:space='preserve' enable-background='new -459 261 40 40'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23FFFFFF;stroke:%23A8DC28;%7d .st1%7bfill:%23A8DC28;%7d %3c/style%3e%3ctitle%3e Map view HOVER/ON %3c/title%3e%3cdesc%3e Created with Sketch. %3c/desc%3e%3cg id='Search-results-list' sketch:type='MSPage'%3e%3cg id='Desktop-Search-results-7' transform='translate(-1217.000000, -562.000000)' sketch:type='MSArtboardGroup'%3e%3cg id='Top-bar' transform='translate(-42.000000, 406.000000)' sketch:type='MSLayerGroup'%3e%3cg id='View-type' transform='translate(1168.000000, 156.000000)' sketch:type='MSShapeGroup'%3e%3cg id='Map-view-HOVER_x2F_ON' transform='translate(91.000000, 0.000000)'%3e%3cpath id='Rectangle-153' class='st0' d='M-457 261h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-459 261.9-458.1 261-457 261z'/%3e%3cpath class='st1' d='M-439 270c-4.4 0-8 3.6-8 8.1 0.1 6 8.4 13.3 8.4 12.9 -0.1 0.1 7.4-6.5 7.6-12.9C-431 273.7-434.6 270-439 270zM-439 280c-1.6 0-3-1.3-3-3s1.3-3 3-3c1.6 0 3 1.3 3 3S-437.3 280-439 280z'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e ") no-repeat;
+      background-size: 40px 40px;
+      background-position: 0 0;
+    }
+  }
+  .sortby-fields label {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 12px;
+    vertical-align: top;
+  }
+  
+  .sortby-fields .ui-selectmenu-button {
+    margin: 0 22px 0 0;
+  }
+  .white-select .ui-selectmenu-button, .ui-selectmenu-menu .ui-menu.white-dropdown {
+    background: $white;
+  }
+  .ui-selectmenu-button {
+    font-family: $font-family-default;
+    font-size: 13px;
+    color: $dark-gray;
+    font-weight: normal;
+    border-radius: 2px;
+    background: $common-bg-color;
+    border: 1px solid $form-border-color;
+    margin-bottom: 10px;
+    height: 40px;
+    span.ui-icon {
+      background: url(/bundles/fafrontend/images/select-arrow.png) no-repeat center center;
+      background-size: auto;
+      background-size: 11px 8px;
+      margin-top: -7px;
+      right: .5em;
+      left: auto;
+      margin-top: -8px;
+      position: absolute;
+      top: 50%;
+    }
+  }
+  .ui-icon {
+    width: 16px;
+    height: 16px;
+    display: block;
+    text-indent: -99999px;
+    overflow: hidden;
+  }
+  .ui-selectmenu-button span.ui-selectmenu-text {
+    text-align: left;
+    padding: 10px 30px 10px 14px;
+    display: block;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+//left block
+.ad-list-block {
+  .results-main, .map-results-main {
+    padding: 20px 0 40px;
+  }
+  .search-filters {
+    background: $form-bg-color;
+    border: 1px solid $form-border-color;
+    border-radius: 2px;
+  }
+  .alert-btn-wrapper {
+    margin: 10px;
+    position: relative;
+    .button {
+      padding-bottom: 10px;
+    }
+    &:hover .alert-tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+  .alert-white-icon {
+    display: inline-block;
+    width: 33px;
+    height: 18px;
+    margin: 2px 0 0 8px;
+    vertical-align: top;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2019.2.0%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20width%3D%2233px%22%20height%3D%2218px%22%20viewBox%3D%220%200%2033%2018%22%20style%3D%22enable-background%3Anew%200%200%2033%2018%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cstyle%20type%3D%22text/css%22%3E%0A%09.st0%7Bfill%3A%23FEFEFE%3B%7D%0A%3C/style%3E%0A%3Ctitle%3Ealert%20white%3C/title%3E%0A%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%3Cg%20id%3D%22Page-1%22%3E%0A%09%3Cg%20id%3D%22Create-alert%22%20transform%3D%22translate%28-355.000000%2C%20-407.000000%29%22%3E%0A%09%09%3Cg%20id%3D%22Filters%22%20transform%3D%22translate%28182.000000%2C%20385.000000%29%22%3E%0A%09%09%09%3Cg%20id%3D%22create-alert%22%20transform%3D%22translate%2811.000000%2C%2011.000000%29%22%3E%0A%09%09%09%09%3Cg%20id%3D%22Group-2%22%20transform%3D%22translate%2835.000000%2C%208.000000%29%22%3E%0A%09%09%09%09%09%3Cg%20id%3D%22alert-white%22%20transform%3D%22translate%28127.000000%2C%203.000000%29%22%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-1%22%20class%3D%22st0%22%20d%3D%22M24.1%2C13.3c0%2C0-3-4.8-3-8.7c0-2.5-2.2-4.6-4.9-4.6c-2.7%2C0-4.9%2C2.1-4.9%2C4.6c0%2C3.9-3%2C8.7-3%2C8.7%0A%09%09%09%09%09%09%09c-0.2%2C0.3-0.2%2C0.6%2C0%2C0.8c0.2%2C0.3%2C0.4%2C0.4%2C0.7%2C0.4h14.3c0.3%2C0%2C0.6-0.2%2C0.7-0.4C24.2%2C13.9%2C24.2%2C13.6%2C24.1%2C13.3%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-3%22%20class%3D%22st0%22%20d%3D%22M16.2%2C17.8c-1.1%2C0-2.1-0.8-2.2-1.9h4.4C18.2%2C17%2C17.3%2C17.8%2C16.2%2C17.8%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-5%22%20class%3D%22st0%22%20d%3D%22M6.9%2C5.2c0-0.2-0.1-0.3-0.2-0.5c-0.3-0.3-0.7-0.3-1%2C0C4.3%2C6.1%2C3.5%2C7.9%2C3.5%2C9.9%0A%09%09%09%09%09%09%09c0%2C2%2C0.8%2C3.8%2C2.2%2C5.2c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.2%2C0%2C0.4-0.1%2C0.5-0.2c0.3-0.3%2C0.3-0.7%2C0-1c-1.2-1.1-1.8-2.6-1.8-4.2%0A%09%09%09%09%09%09%09c0-1.6%2C0.6-3.1%2C1.8-4.2C6.8%2C5.5%2C6.9%2C5.4%2C6.9%2C5.2%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-7%22%20class%3D%22st0%22%20d%3D%22M1.4%2C9.9c0-2.6%2C1-5%2C2.9-6.8c0.3-0.3%2C0.3-0.7%2C0-1c-0.3-0.3-0.7-0.3-1%2C0C1.2%2C4.2%2C0%2C6.9%2C0%2C9.9%0A%09%09%09%09%09%09%09c0%2C2.9%2C1.2%2C5.7%2C3.3%2C7.7c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.1%2C0%2C0.3%2C0%2C0.5-0.2c0.1-0.1%2C0.2-0.3%2C0.2-0.5c0-0.2-0.1-0.4-0.2-0.5%0A%09%09%09%09%09%09%09C2.4%2C14.8%2C1.4%2C12.4%2C1.4%2C9.9%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-10%22%20class%3D%22st0%22%20d%3D%22M26.6%2C4.7c-0.3-0.3-0.7-0.3-1%2C0c-0.3%2C0.3-0.3%2C0.7%2C0%2C1c1.2%2C1.1%2C1.8%2C2.6%2C1.8%2C4.2%0A%09%09%09%09%09%09%09c0%2C1.6-0.6%2C3.1-1.8%2C4.2c-0.3%2C0.3-0.3%2C0.7%2C0%2C1c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.2%2C0%2C0.4-0.1%2C0.5-0.2c1.4-1.4%2C2.2-3.2%2C2.2-5.2%0A%09%09%09%09%09%09%09C28.8%2C7.9%2C28.1%2C6.1%2C26.6%2C4.7%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-12%22%20class%3D%22st0%22%20d%3D%22M29%2C2.1c-0.3-0.3-0.7-0.3-1%2C0c-0.1%2C0.1-0.2%2C0.3-0.2%2C0.5c0%2C0.2%2C0.1%2C0.4%2C0.2%2C0.5%0A%09%09%09%09%09%09%09c1.9%2C1.8%2C2.9%2C4.2%2C2.9%2C6.8c0%2C2.6-1%2C5-2.9%2C6.8c-0.1%2C0.1-0.2%2C0.3-0.2%2C0.5c0%2C0.2%2C0.1%2C0.3%2C0.2%2C0.5c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2%0A%09%09%09%09%09%09%09c0.2%2C0%2C0.4-0.1%2C0.5-0.2c2.1-2.1%2C3.3-4.8%2C3.3-7.7C32.3%2C6.9%2C31.2%2C4.2%2C29%2C2.1%22/%3E%0A%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%3C/g%3E%0A%09%09%09%3C/g%3E%0A%09%09%3C/g%3E%0A%09%3C/g%3E%0A%3C/g%3E%0A%3C/svg%3E%0A') no-repeat;
+  }
+  .alert-tooltip {
+    background: $white url("https://www.friday-ad.co.uk/bundles/fafrontend/images/alert-illustration.svg") no-repeat 90% 10px;
+    background-size: auto;
+    background-size: 137px 94px;
+    border: 1px solid $secondary-color;
+    border-radius: 3px;
+    padding: 10px 170px 10px 15px;
+    font-size: 13px;
+    color: $form-text-color;
+    line-height: 21px;
+    width: 340px;
+    min-height: 130px;
+    position: absolute;
+    right: -350px;
+    top: -40px;
+    z-index: 2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transition: visibility .5s,opacity .5s linear;
+    -moz-transition: visibility .5s,opacity .5s linear;
+    -o-transition: visibility .5s,opacity .5s linear;
+    transition: visibility .5s,opacity .5s linear;
+    &::after {
+      right: 100%;
+      top: 50%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-color: rgba(164, 216, 22, 0);
+      border-right-color: $secondary-color;
+      border-width: 7px;
+      margin-top: -12px;
+    }
+  }
+  .alert-btn-wrapper .button {
+    padding-bottom: 10px;
+  }
+  .accordion {
+    .accordion-navigation > .content, dd > .content {
+      padding: .625em;
+    }
+    .accordion-navigation, dd {
+      border-bottom: solid 1px $white;
+      box-shadow: 0 1px 0 $form-border-color;
+      display: block;
+      margin-bottom: 0 !important;
+    }
+    margin-bottom: 0;
+    .accordion-navigation > a, dd > a {
+      background: 0;
+      padding: 11px 10px !important;
+      color: $common-text-color;
+      padding: 1rem;
+      display: block;
+      font-family: "Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;
+      font-size: 1rem;
+    }
+  }
+  .search-filters ul {
+    margin: 0;
+    list-style-type: none;
+    padding-left: 0px;
+    li {
+      a {
+        color: $form-text-color;
+        &:hover, &:focus {
+          color: $secondary-color;
+        }
+      }
+    }
+  }
+  .search-cat-sub-list {
+    margin: 10px 0 0 40px;
+    font-size: 13px;
+    li {
+      line-height: 18px;
+      label {
+        font-weight: 700;
+        color: $common-text-color;
+        line-height: 16px;
+        margin-bottom: 10px;
+      }
+      a {
+        color: $form-text-color;
+        font-size: 13px;
+      }
+    }
+  }
+  .towns-list li a:hover, .search-cat-list li a:hover, .search-cat-sub-list li a:hover {
+    color: $secondary-color;
+  }
+  .budget-box li, .distance-search li {
+    float: left;
+    position: relative;
+  }
+  .budget-field {
+    width: 66px;
+    span {
+      padding: 7px 0 0 6px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+  .budget-box li {
+    input {
+      margin: 0;
+      padding-left: 1rem;
+    }
+    float: left;
+    position: relative;
+  }
+  .distance-search li {
+    float: left;
+    position: relative;
+  }
+  .budget-to-caption {
+    width: 32px;
+    text-align: center;
+    padding-top: 0;
+    height: 40px;
+    line-height: 40px;
+  }
+  .budget-go-btn {
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='40' height='40' viewBox='-459 261 40 40' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23A8DC28;stroke:%239BCC21;%7d .st1%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d .st2%7bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;%7d %3c/style%3e%3ctitle%3ebutton filters%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-362.000000, -910.000000)'%3e%3cg transform='translate(182.000000, 627.000000)'%3e%3cg transform='translate(1.000000, 243.000000)'%3e%3cg transform='translate(179.000000, 40.000000)'%3e%3cpath class='st0' d='M-457 261h36c1.1 0 2 0.9 2 2v36c0 1.1-0.9 2-2 2h-36c-1.1 0-2-0.9-2-2v-36C-459 261.9-458.1 261-457 261z'/%3e%3cg transform='translate(15.000000, 16.000000)'%3e%3cg transform='translate(8.000000, 0.000000)'%3e%3cpath class='st1' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3cpath class='st2' d='M-459 261l4 5 -4 5'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat !important;
+    width: 40px;
+    height: 40px;
+    margin: 0 0 0 7px;
+    vertical-align: top;
+    border-radius: 2px !important;
+  }
+  .distance-search li.col {
+    width: 164px;
+    padding: 0;
+  }
+  .ui-autocomplete-input {
+    padding-right: 30px !important;
+  }
+  .select2-search-choice-close {
+    display: inline-block;
+    width: .75rem;
+    height: .75rem;
+    position: absolute;
+    font-size: 1px;
+    right: 10px;
+    top: 15px;
+    outline: 0;
+    opacity: .5;
+    background: transparent;
+  }
+  .ui-autocomplete-input:focus::after {
+    background: transparent !important;
+  }
+  .towns-list {
+    padding-top: 5px;
+    li {
+      line-height: 18px;
+    }
+  }
+  .seller-link li {
+    line-height: 18px;
+  }
+  .towns-list li a {
+    font-size: 13px;
+  }
+  .see-more {
+    font-size: 14px;
+    a {
+      color: $secondary-color;
+    }
+  }
+  .search-type {
+    font-size: 13px;
+    color: $common-text-color;
+  }
+  .img-attachments ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .seller-link a {
+    font-size: 13px;
+  }
+  .reset-search {
+    margin: 0;
+    padding: 14px 9px 20px;
+    a {
+      background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2215%22%20height%3D%2215%22%20viewBox%3D%22-1410%20464.9%2015%2015%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23A8DC28%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ereset%20icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-812.000000%2C%20-980.000000%29%22%3E%3Cg%20transform%3D%22translate%28689.000000%2C%20-952.000000%29%22%3E%3Cg%20transform%3D%22translate%28123.000000%2C%201932.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1397.4%20472.5c0-2.8-2.3-5.1-5.2-5.1%20-1.2%200-2.4%200.4-3.2%201.1l2.6%202.2%20-6.8%201%200-6.8%202.4%202c1.3-1.2%203.1-1.9%205.1-1.9%204.2%200%207.6%203.3%207.6%207.4%200%204.1-3.4%207.4-7.6%207.4%20-3.3%200-6.1-2.1-7.1-4.9l2.4-0.4c0.8%201.7%202.6%202.9%204.7%202.9C-1399.7%20477.6-1397.4%20475.3-1397.4%20472.5z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') 0 3px no-repeat;
+      padding-left: 20px;
+      float: right;
+      color: $secondary-color;
+      font-size: 14px;
+    }
+  }
+}
+
+.row-block {
+  margin-bottom: 30px;
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      list-style: none;
+      margin-bottom: 20px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.listing {
+  .media-left img {
+    width: 185px;
+  }
+  .media-body {
+    margin-left: 20px;
+  }
+}
+.row-block .listing {
+  background: $white;
+  border: 1px solid $form-border-color;
+  padding: 20px 20px;
+  border-radius: 2px;
+  box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+.featured .featured-ribbon {
+  background: url("https://www.friday-ad.co.uk/bundles/fafrontend/images/featured-ribbon.svg") no-repeat;
+  display: block;
+  width: 67px;
+  height: 67px;
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  text-indent: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.listing {
+  h3 a {
+    color: $common-text-color;
+  }
+  &:hover {
+    border-color: $secondary-color;
+    h3 a {
+      color: $secondary-color;
+    }
+  }
+  .list-img {
+    width: 184px;
+    height: 138px;
+    margin-bottom: 10px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px solid $common-bg-color;
+    img {
+      max-width: 184px;
+      max-height: 138px;
+    }
+  }
+  .list-img-num {
+    float: left;
+    display: block;
+    height: 17px;
+    line-height: 17px;
+    padding-left: 26px;
+    font-size: 14px;
+    color: $secondary-h-color;
+    margin-top: 10px;
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='20' height='16' viewBox='-1407 463.9 20 16' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23A8A8A8;%7d %3c/style%3e%3ctitle%3ephoto icon%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-45.000000, -1321.000000)'%3e%3cg transform='translate(19.000000, 21.000000)'%3e%3cg transform='translate(5.000000, 1130.000000)'%3e%3cg transform='translate(21.000000, 21.000000)'%3e%3cg transform='translate(0.000000, 149.000000)'%3e%3cpath class='st0' d='M-1392 473.7c-0.2 1.5-1.5 2.8-3.1 3 -2.5 0.4-4.7-1.7-4.3-4.1 0.2-1.5 1.5-2.8 3.1-3C-1393.8 469.2-1391.7 471.3-1392 473.7L-1392 473.7zM-1387 467.8v10.7c0 0.8-0.7 1.5-1.5 1.5h-17c-0.8 0-1.5-0.7-1.5-1.5v-10.7c0-0.8 0.7-1.5 1.5-1.5h0.1V466c0-0.3 0.2-0.5 0.5-0.5h2.3c0.3 0 0.5 0.2 0.5 0.5v0.3h1.3l1-2c0.1-0.2 0.4-0.4 0.6-0.4h6.6c0.3 0 0.5 0.1 0.6 0.4l1 2h2.3C-1387.7 466.3-1387 467-1387 467.8L-1387 467.8zM-1402.6 467.9c0-0.6-0.5-1-1-1 -0.6 0-1 0.4-1 1 0 0.6 0.5 1 1 1C-1403.1 468.9-1402.6 468.5-1402.6 467.9L-1402.6 467.9zM-1397 468.1c-2 0.4-3.6 2-4 3.9 -0.9 3.8 2.6 7.1 6.5 6.3 2-0.4 3.6-2 4-3.9C-1389.6 470.5-1393 467.2-1397 468.1L-1397 468.1z'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat 0 16px;
+    background-size: 20px 16px;
+    background-position: 0 0;
+  }
+  .unsaved-item, .saved-item {
+    float: right;
+    display: block;
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='21' height='20' viewBox='-1407 461.9 21 20' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23A8A8A8;%7d %3c/style%3e%3ctitle%3eHeart%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-213.000000, -1241.000000)'%3e%3cg transform='translate(183.000000, 447.000000)'%3e%3cg transform='translate(0.000000, 22.000000)'%3e%3cg transform='translate(0.000000, 762.000000)'%3e%3cg transform='translate(30.000000, 10.000000)'%3e%3cpath class='st0' d='M-1390.7 462c2.1 0.2 4.4 2.1 4.7 5.7v1.2c-0.3 3.5-2.9 7.7-10.5 13.1 -7.6-5.3-10.2-9.6-10.5-13.1v-1.2c0.3-3.6 2.7-5.5 4.7-5.7 0.3 0 0.7 0 1 0 2.4 0 3.5 1 4.8 2.6 1.3-1.6 2.4-2.6 4.8-2.6C-1391.4 461.9-1391.1 462-1390.7 462z'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat;
+    width: 21px;
+    height: 20px;
+    text-indent: -9999px;
+    margin-top: 10px;
+  }
+  .unsaved-item:hover, .saved-item:focus {
+    background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' x='0' y='0' width='21' height='20' viewBox='-1407 461.9 21 20' xml:space='preserve'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23A8DC28;%7d %3c/style%3e%3ctitle%3eHeart%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg transform='translate(-213.000000, -1241.000000)'%3e%3cg transform='translate(183.000000, 447.000000)'%3e%3cg transform='translate(0.000000, 22.000000)'%3e%3cg transform='translate(0.000000, 762.000000)'%3e%3cg transform='translate(30.000000, 10.000000)'%3e%3cpath class='st0' d='M-1390.7 462c2.1 0.2 4.4 2.1 4.7 5.7v1.2c-0.3 3.5-2.9 7.7-10.5 13.1 -7.6-5.3-10.2-9.6-10.5-13.1v-1.2c0.3-3.6 2.7-5.5 4.7-5.7 0.3 0 0.7 0 1 0 2.4 0 3.5 1 4.8 2.6 1.3-1.6 2.4-2.6 4.8-2.6C-1391.4 461.9-1391.1 462-1390.7 462z'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") no-repeat;
+  }
+  h3 {
+    margin-top: -5px;
+    float: left;
+    height: 26px;
+    width: 70%;
+  }
+  .list-title {
+    max-height: 48px;
+    overflow: hidden;
+    padding: 0px;
+    font-family: $font-family-secondary;
+    font-size: 18px;
+    font-weight: 400;
+    color: $dark-gray;
+  }
+  .list-price {
+    float: right;
+    font-size: 30px;
+    color: $secondary-color;
+    line-height: 32px;
+    font-family: $font-family-secondary;
+    text-align: right;
+    margin-top: -5px;
+    word-wrap: break-word;
+    padding: 0px;
+    width: 30%;
+  }
+  .list-dimensions {
+    margin: 12px 0 11px;
+    font-size: 12px;
+    line-height: 18px;
+    color: $form-text-color;
+    span {
+      &:first-child {
+        margin-left: 0;
+      }
+      padding-left: 12px;
+      margin-left: 3px;
+      display: inline-block;
+      background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20id%3D%22Layer_1%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%225px%22%20height%3D%225px%22%20viewBox%3D%220%200%205%205%22%20xml%3Aspace%3D%22preserve%22%20enable-background%3D%22new%200%200%205%205%22%3E%0D%0A%20%20%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%20%20%20%20%0D%0A%09.st0%7Bfill%3A%23A4A4A4%3B%7D%0D%0A%0D%0A%20%20%3C/style%3E%0D%0A%20%20%3Ctitle%3E%0D%0A%20%20%20%20dot%0D%0A%20%20%3C/title%3E%0D%0A%20%20%3Cdesc%3E%0D%0A%20%20%20%20Created%20with%20Sketch.%0D%0A%20%20%3C/desc%3E%0D%0A%20%20%3Cg%20id%3D%22PAA%22%20sketch%3Atype%3D%22MSPage%22%3E%0D%0A%20%20%20%20%3Cg%20id%3D%22Desktop-HD-For-sale-2%22%20transform%3D%22translate%28-677.000000%2C%20-1589.000000%29%22%20sketch%3Atype%3D%22MSArtboardGroup%22%3E%0D%0A%20%20%20%20%20%20%3Cg%20id%3D%22Phase-1%22%20transform%3D%22translate%28-2.000000%2C%20-127.000000%29%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%22_x32_-Describe-your-item%22%20transform%3D%22translate%28459.000000%2C%20414.000000%29%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22similar-ads%22%20transform%3D%22translate%280.000000%2C%201163.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22similar-ad-1%22%20transform%3D%22translate%280.000000%2C%2032.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Used------Good-Condi-_x2B_-Oval-197-_x2B_-Oval-198%22%20transform%3D%22translate%28183.000000%2C%20102.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cellipse%20id%3D%22dot%22%20class%3D%22st0%22%20cx%3D%2239.5%22%20cy%3D%227.5%22%20rx%3D%222.5%22%20ry%3D%222.5%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%3C/g%3E%0D%0A%20%20%3C/g%3E%0D%0A%3C/svg%3E%0D%0A') no-repeat 0 6px;
+    }
+  }
+  .list-desc {
+    height: 45px;
+    word-wrap: break-word;
+    overflow: hidden;
+    margin: 7px 0 0;
+    font-size: 14px;
+    line-height: 22px;
+    color: $common-text-color;
+    font-family: $font-family-default;
+  }
+  .list-distance {
+    font-size: 12px;
+    margin: 20px 0 0 0;
+    position: relative;
+    bottom: 0;
+  }
+  .list-miles {
+    float: left;
+    padding-left: 17px;
+    min-height: 15px;
+    line-height: 14px;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2212%22%20height%3D%2215%22%20viewBox%3D%22-473%20273%2012%2015%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%234A4A4A%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Elocation%20pin%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-467%20273c-3.3%200-6%202.6-6%205.8%200%204.3%206%209.2%206%209.2s5.9-4.6%206-9.2C-461%20275.6-463.7%20273-467%20273zM-467%20281c-1.1%200-2-0.9-2-2%200-1.1%200.9-2%202-2%201.1%200%202%200.9%202%202C-465%20280.1-465.9%20281-467%20281z%22/%3E%3C/svg%3E') no-repeat;
+    b {
+      font-size: 14px;
+    }
+  }
+  .list-hr-ago {
+    float: right;
+    color: $form-text-color;
+    font-style: italic;
+    font-weight: 400;
+  }
+}
+
+@media (min-width: 960px) and (max-width:1151px) {
+    .ad-list-block {
+        .left-search-block {
+            max-width: 28% !important;
+            flex: 0 0 28% !important;
+        }
+        .right-search-block {
+            max-width: 72% !important;
+            flex: 0 0 72% !important;
+        }
+    }
+}
+@media (min-width: 760px) and (max-width:959px) {
+    .ad-list-block {
+        .sortby-fields {
+            width: 55%;
+        }
+    }
+    .sortby-area h2 {
+        margin-bottom: 10px;
+    }
+}
+@media (min-width: 320px) and (max-width:759px) {
+    .listing {
+      .media-left {
+        align-self: flex-start !important;
+      }
+      .list-img {
+        width: 100px;
+        height: auto;
+        img {
+          max-width: 100px;
+          max-height: 80px;
+        }
+      }
+      .media-left img {
+        width: 100px;
+      }
+      h3.list-title {
+        margin-top: 0;
+        float: none;
+        width: auto;
+        min-height: 30px;
+        font-family: $font-family-default;
+        font-size: 14px;
+        font-weight: 700;
+        color: $dark-gray;
+        line-height: 15px;
+      }
+      .list-price {
+        float: left;
+        text-align: left;
+        margin-top: 0;
+        width: auto;
+        font-size: 20px;
+        margin-top: 0px;
+        text-align: left;
+        line-height: 21px;
+      }
+      .list-distance {
+        margin: 10px 0 0 0;
+      }
+      &::after {
+        background: url("https://www.friday-ad.co.uk/bundles/fafrontend/images/arrow1.svg") no-repeat;
+        content: " ";
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        margin-top: -14px;
+        width: 8px;
+        height: 14px;
+      }
+    }
+    .ad-list-block {
+        .mobile-refine {
+            display: block!important;
+        }
+        .sortby-fields {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .mobile-create-alert-box {
+            margin-bottom: 20px;
+        }
+        .mobile-refine .m-sort-btn { 
+            background: $white;
+            width: 79px;
+            border-color: 1px solid $secondary-color;
+        }
+    }
+}
+
+.ad-list-block {
+    .custom-modal .save-search-title {
+        background: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2019.2.0%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20width%3D%2233px%22%20height%3D%2218px%22%20viewBox%3D%220%200%2033%2018%22%20style%3D%22enable-background%3Anew%200%200%2033%2018%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cstyle%20type%3D%22text/css%22%3E%0A%09.st0%7Bfill%3A%23A8DC28%3B%7D%0A%09.st1%7Bfilter%3Aurl%28%23Adobe_OpacityMaskFilter%29%3B%7D%0A%09.st2%7Bfill%3A%23FFFFFF%3B%7D%0A%09.st3%7Bmask%3Aurl%28%23mask-2%29%3Bfill%3A%23A8DC28%3B%7D%0A%3C/style%3E%0A%3Ctitle%3EBell-white%3C/title%3E%0A%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%3Cg%20id%3D%22Page-1%22%3E%0A%09%3Cg%20id%3D%22Create-alert%22%20transform%3D%22translate%28-355.000000%2C%20-407.000000%29%22%3E%0A%09%09%3Cg%20id%3D%22Filters%22%20transform%3D%22translate%28182.000000%2C%20385.000000%29%22%3E%0A%09%09%09%3Cg%20id%3D%22create-alert-hover%22%20transform%3D%22translate%2811.000000%2C%2011.000000%29%22%3E%0A%09%09%09%09%3Cg%20id%3D%22Group-2%22%20transform%3D%22translate%2835.000000%2C%208.000000%29%22%3E%0A%09%09%09%09%09%3Cg%20id%3D%22Bell-white%22%20transform%3D%22translate%28127.000000%2C%203.000000%29%22%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-1%22%20class%3D%22st0%22%20d%3D%22M24.1%2C13.3c0%2C0-3-4.8-3-8.7c0-2.5-2.2-4.6-4.9-4.6c-2.7%2C0-4.9%2C2.1-4.9%2C4.6c0%2C3.9-3%2C8.7-3%2C8.7%0A%09%09%09%09%09%09%09c-0.2%2C0.3-0.2%2C0.6%2C0%2C0.8c0.2%2C0.3%2C0.4%2C0.4%2C0.7%2C0.4h14.3c0.3%2C0%2C0.6-0.2%2C0.7-0.4C24.2%2C13.9%2C24.2%2C13.6%2C24.1%2C13.3%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-3%22%20class%3D%22st0%22%20d%3D%22M16.2%2C17.8c-1.1%2C0-2.1-0.8-2.2-1.9h4.4C18.2%2C17%2C17.3%2C17.8%2C16.2%2C17.8%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-5%22%20class%3D%22st0%22%20d%3D%22M6.9%2C5.2c0-0.2-0.1-0.3-0.2-0.5c-0.3-0.3-0.7-0.3-1%2C0C4.3%2C6.1%2C3.5%2C7.9%2C3.5%2C9.9%0A%09%09%09%09%09%09%09c0%2C2%2C0.8%2C3.8%2C2.2%2C5.2c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.2%2C0%2C0.4-0.1%2C0.5-0.2c0.3-0.3%2C0.3-0.7%2C0-1c-1.2-1.1-1.8-2.6-1.8-4.2%0A%09%09%09%09%09%09%09c0-1.6%2C0.6-3.1%2C1.8-4.2C6.8%2C5.5%2C6.9%2C5.4%2C6.9%2C5.2%22/%3E%0A%09%09%09%09%09%09%3Cg%20id%3D%22Group-9%22%20transform%3D%22translate%280.000000%2C%201.702007%29%22%3E%0A%09%09%09%09%09%09%09%3Cg%20id%3D%22Clip-8%22%3E%0A%09%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%09%09%3Cdefs%3E%0A%09%09%09%09%09%09%09%09%3Cfilter%20id%3D%22Adobe_OpacityMaskFilter%22%20filterUnits%3D%22userSpaceOnUse%22%20x%3D%220%22%20y%3D%220.2%22%20width%3D%224.5%22%20height%3D%2215.9%22%3E%0A%09%09%09%09%09%09%09%09%09%3CfeColorMatrix%20%20type%3D%22matrix%22%20values%3D%221%200%200%200%200%20%200%201%200%200%200%20%200%200%201%200%200%20%200%200%200%201%200%22/%3E%0A%09%09%09%09%09%09%09%09%3C/filter%3E%0A%09%09%09%09%09%09%09%3C/defs%3E%0A%09%09%09%09%09%09%09%3Cmask%20maskUnits%3D%22userSpaceOnUse%22%20x%3D%220%22%20y%3D%220.2%22%20width%3D%224.5%22%20height%3D%2215.9%22%20id%3D%22mask-2%22%3E%0A%09%09%09%09%09%09%09%09%3Cg%20class%3D%22st1%22%3E%0A%09%09%09%09%09%09%09%09%09%3Cpath%20id%3D%22path-1%22%20class%3D%22st2%22%20d%3D%22M0%2C16.1h4.5V0.2H0V16.1L0%2C16.1z%22/%3E%0A%09%09%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%09%09%3C/mask%3E%0A%09%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-7%22%20class%3D%22st3%22%20d%3D%22M1.4%2C8.1c0-2.6%2C1-5%2C2.9-6.8c0.3-0.3%2C0.3-0.7%2C0-1c-0.3-0.3-0.7-0.3-1%2C0C1.2%2C2.5%2C0%2C5.2%2C0%2C8.1%0A%09%09%09%09%09%09%09%09c0%2C2.9%2C1.2%2C5.7%2C3.3%2C7.7c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.1%2C0%2C0.3%2C0%2C0.5-0.2c0.1-0.1%2C0.2-0.3%2C0.2-0.5c0-0.2-0.1-0.4-0.2-0.5%0A%09%09%09%09%09%09%09%09C2.4%2C13.1%2C1.4%2C10.7%2C1.4%2C8.1%22/%3E%0A%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-10%22%20class%3D%22st0%22%20d%3D%22M26.6%2C4.7c-0.3-0.3-0.7-0.3-1%2C0c-0.3%2C0.3-0.3%2C0.7%2C0%2C1c1.2%2C1.1%2C1.8%2C2.6%2C1.8%2C4.2%0A%09%09%09%09%09%09%09c0%2C1.6-0.6%2C3.1-1.8%2C4.2c-0.3%2C0.3-0.3%2C0.7%2C0%2C1c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2c0.2%2C0%2C0.4-0.1%2C0.5-0.2c1.4-1.4%2C2.2-3.2%2C2.2-5.2%0A%09%09%09%09%09%09%09C28.8%2C7.9%2C28.1%2C6.1%2C26.6%2C4.7%22/%3E%0A%09%09%09%09%09%09%3Cpath%20id%3D%22Fill-12%22%20class%3D%22st0%22%20d%3D%22M29%2C2.1c-0.3-0.3-0.7-0.3-1%2C0c-0.1%2C0.1-0.2%2C0.3-0.2%2C0.5c0%2C0.2%2C0.1%2C0.4%2C0.2%2C0.5%0A%09%09%09%09%09%09%09c1.9%2C1.8%2C2.9%2C4.2%2C2.9%2C6.8c0%2C2.6-1%2C5-2.9%2C6.8c-0.1%2C0.1-0.2%2C0.3-0.2%2C0.5c0%2C0.2%2C0.1%2C0.3%2C0.2%2C0.5c0.1%2C0.1%2C0.3%2C0.2%2C0.5%2C0.2%0A%09%09%09%09%09%09%09c0.2%2C0%2C0.4-0.1%2C0.5-0.2c2.1-2.1%2C3.3-4.8%2C3.3-7.7C32.3%2C6.9%2C31.2%2C4.2%2C29%2C2.1%22/%3E%0A%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%3C/g%3E%0A%09%09%09%3C/g%3E%0A%09%09%3C/g%3E%0A%09%3C/g%3E%0A%3C/g%3E%0A%3C/svg%3E%0A') no-repeat 21px 10px;
+        background-size: 29px 20px;
+        padding: 9px 25px 10px 60px;
+    }
+}
+
+.search-sliders {
+    background: $common-bg-color;
+    width: 100%;
+    z-index: 10;
+    padding: 30px 0 30px 0;
+    border-top: 1px solid $form-border-color;
+    margin: 10px 0 0 0;
+    position: absolute;
+    top: 51px;
+    left: 0;
+    transition: all .75s ease;
+}
+.search-sliders .fa-range-slider {
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid $white;
+    box-shadow: 0 1px 0 $form-border-color;
+}
+.search-sliders .fa-range-slider h5 {
+    margin-bottom: 20px;
+}
+.search-sliders .slider-text-top {
+    color: $form-text-color;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.search-sliders .noUi-horizontal {
+    height: 10px !important;
+    margin: 15px 20px 15px 0px;  
+}
+.search-sliders .noUi-origin {
+    position: absolute;
+    width: 0;
+    margin: 0;
+    border-radius: 0;
+    height: 2px;
+    background: $form-border-color;
+}
+.search-sliders .noUi-horizontal .noUi-handle {
+    background-color: $slider-noui-handle-color;
+    border-radius: 50px;
+    width: 24px;
+    height: 24px;
+    top: -0.5em;
+    left: -1px;
+    box-shadow: none;
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    cursor: pointer;
+    border: 0px;
+}
+.search-sliders .noUi-connect {
+    background-color: $slider-noui-color;
+    border-radius: 0px;
+}
+.noUi-connect {
+    background: $slider-noui-color;
+}
+.search-sliders .noUi-base{
+    height: 10px;
+    top: -1px;
+    background: $chat-btn-color;
+    box-shadow: none;
+}
+.search-sliders .noUi-handle::before, .noUi-handle::after {
+    content: none;
+}
+.alert-block .list-img {
+    background: $common-bg-color;
+    border: 1px solid $form-border-color;
+}
+.alert-block .list-img img {
+    max-width: 166px;
+    max-height: 125px;
+}
+.notify-me .btn {
+    width: 180px;
+}
+.alert-block .list-desc {
+    height: auto !important;
+}
+@media only screen and (min-width:960px) { 
+    .ad-list-block .site-search .ad-category-list {
+        min-width: 130px;
+    }
+}
+@media (min-width: 760px) and (max-width:959px) {
+  .notify-me .btn {
+      width: auto;
+  }
+}
+@media (min-width: 320px) and (max-width:759px) {
+    .listing.alert-block::after {
+        background: none;
+    }
+    .notify-me .form-control {
+        margin-top: 10px; 
+        margin-bottom: 10px !important;
+    }
+    .notify-me .input-group-append, .notify-me .btn {
+        width: 100%;
+    }
+}
+
+.md-refine .btn {
+  min-width: 180px;
+}
+@media only screen and (min-width: 960px) {
+    .ad-list-block .left-search-block {
+        position: relative !important;
+        margin-left: 0 !important;
+        transition: all 0s ease-in 0s !important;
+    }
+}
+@media only screen and (min-width: 760px) and (max-width: 959px){
+  .left-search-block {
+    position: absolute !important;
+    z-index: 999;
+    margin-top: -21px;
+    margin-left: -100%;
+    width: 40% !important;
+  }
+  .left-search-block.open {
+    position: absolute !important;
+    z-index: 999;
+    margin-top: -21px;
+    margin-left: -20px;
+  }
+  .left-search-block .reset-search {
+      background: $white;
+      border: 1px solid $form-border-color;
+      border-top: 0px;
+  }
+}
+@media only screen and (min-width: 320px) and (max-width: 759px){
+  .left-search-block {
+    position: absolute !important;
+    z-index: 999;
+    margin-top: -21px;
+    margin-left: -100%;
+    width: 100% !important;
+    padding: 0px !important;
+  }
+  .left-search-block.open {
+    position: absolute !important;
+    z-index: 999;
+    margin-top: -21px;
+    margin-left: -20px;
+  }
+}
+.hide_sort_menu {
+  position: relative; 
+  right: 0px; 
+  top: 0px; 
+  float: right; 
+  width: 100%; 
+  text-align: right; 
+  padding: 10px;
+}
+.search-close {
+    display: block;
+    padding: 9px;
+    text-indent: -9999px;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23D8D8D8%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ecross%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-204.000000%2C%20-448.000000%29%22%3E%3Cg%20transform%3D%22translate%28-12.000000%2C%20438.000000%29%22%3E%3Cg%20transform%3D%22translate%28225.500000%2C%2019.500000%29%20rotate%28-45.000000%29%20translate%28-225.500000%2C%20-19.500000%29%20translate%28215.000000%2C%209.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M2.6%207.1h16c1.1%200%202%200.9%202%202v2c0%201.1-0.9%202-2%202h-16c-1.1%200-2-0.9-2-2v-2C0.6%208%201.5%207.1%202.6%207.1zM7.6%2018.1v-16c0-1.1%200.9-2%202-2h2c1.1%200%202%200.9%202%202v16c0%201.1-0.9%202-2%202h-2C8.5%2020.1%207.6%2019.2%207.6%2018.1z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat 96% center;
+}
+
+
+.sortDropdownContent ul {
+  background: $common-bg-color;
+  border: 1px solid $form-border-color;
+  box-shadow: 0 2px 12px 0 $form-border-color;
+  border-radius: 2px;
+  position: absolute;
+  left: 60px;
+  top: 104px;
+  z-index: 5;
+  width: 160px;
+}
+.sortDropdownContent ul li {
+  display: block;
+  color: $common-text-color;
+  padding: 5px 10px;
+  border-bottom: 1px solid $white;
+  position: relative;
+  text-align: left;
+  background-color: transparent !important;
+  border: 0px !important;
+}
+.sortDropdownContent ul li a {
+  color: $common-text-color;
+}
+.sortDropdownContent ul li.active {
+  z-index: 2;
+  color:  $white;
+  background-color: $form-bg-color !important;
+  border-color: $form-bg-color !important;
+}
+.sortDropdownContent ul::after {
+  display: block;
+  width: 9px;
+  height: 8px;
+  content: " ";
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  margin-left: -4px;
+  background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%229%22%20height%3D%228%22%20viewBox%3D%220%200%209%208%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23B3B3B3%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Earrow3%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-138.000000%2C%20-194.000000%29%22%3E%3Cg%20transform%3D%22translate%2869.000000%2C%20150.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%2043.000000%29%22%3E%3Cpolygon%20class%3D%22st0%22%20points%3D%2273.3%201%2069%208.5%2077.7%208.5%20%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat;
+}
+
+@media only screen and (max-width: 640px) {
+  .m-search-left {
+    width: 85% !important;
+  }
+  .m-search-right {
+    width: 15% !important;
+    float: right;
+  }
+  .ad-list-block .reset-search{
+    background:$white;
+    margin: 0;
+    padding: 14px 9px 20px;
+    border-bottom: 1px solid $form-border-color;
+    border-left: 1px solid $form-border-color;
+    border-right: 1px solid $form-border-color;
+  }
+}

@@ -1,0 +1,651 @@
+@import "global";
+
+/* Header */
+.top-links {
+    background: $dark-gray;
+    color: $white;
+    a {
+        color: $common-bg-color;
+        font-family: $font-family-default;
+        &:hover {
+            color: $secondary-color;
+        }
+    }
+}
+.top-bar-section {
+   li.place-item-btn {
+        background: $primary-color;
+        a {
+            background: $primary-color;
+            font-family: $font-family-secondary;
+            color: $white;
+        }
+    }
+}
+.navbar {
+   .dropdown-menu {
+        background-color: $common-bg-color !important;
+    }
+}
+.navbar-dark .navbar-nav {
+    .nav-link {
+        color: $common-text-color !important;
+        font-family: $font-family-default;
+        &:hover, &:focus, &:active {
+          color: $common-text-color;
+        }
+    }
+}
+
+.parent-link {
+    a {
+        color: $common-text-color;
+        font-family: $font-family-default;
+        &:hover, &:focus, &:active {
+            color: $secondary-color;
+            transition: all .2s ease-out;
+        }
+    }
+}
+
+.nav-icon span {
+  background: $black;
+}
+
+@media screen and (min-width: 992px) {
+    .navbar {
+        .nav-item {
+            &:hover {
+                background-color: $common-bg-color !important;
+            }
+        }
+	.dropdown-menu {
+	    background-color: $white;
+	}
+    }
+}
+
+@media (min-width:320px) and (max-width: 640px) {
+    .mobile-menu-items li, .login-menu li {
+        background: $common-text-color;
+        border-bottom: 1px solid $black;
+        box-shadow: 0 1px 0 $common-text-color;
+    }
+    .mobile-menu-items li a, .login-menu li a {
+        color: $white;
+    }
+}
+
+
+@media (min-width: 641px) and (max-width: 959px) {   
+    .t-navbar-block {
+      .nav-item {
+        padding: 0.9rem 0rem !important;
+        &.show {
+          background: $common-bg-color;
+        }
+        &.active {
+          background: $common-bg-color;
+        }
+      }
+      .category-links {
+        border-bottom: 1px solid $white;
+        box-shadow: 0 1px 0 $form-border-color;
+      }
+      .link-head {
+        color: $common-text-color;
+        background: $common-bg-color;
+        a {
+          font-family: $font-family-default;
+          color: $common-text-color;
+        }
+      }
+    }
+
+}
+.dl-menuwrapper button {
+    color: $white;
+}
+.dl-menuwrapper button:after {
+    background: $white;
+    box-shadow:
+        0 10px 0 $white,
+        0 20px 0 $white;
+}
+.dl-menuwrapper li a {
+    color: $white;
+    border-bottom: 1px solid $black;
+    box-shadow: 0 1px 0 $common-text-color;
+}
+.dl-menuwrapper li > a::after {
+    color: $form-border-color;
+}
+.dl-menuwrapper .dl-menu li a {
+    background: $dark-gray;
+}
+.demo-2 .dl-menuwrapper button {
+    background: $common-text-color;
+}
+.demo-2 .dl-menuwrapper button:hover,
+.demo-2 .dl-menuwrapper button.dl-active {
+    background: $common-text-color;
+}
+.demo-2 .dl-menuwrapper ul {
+    background: $dark-gray;
+}
+.count-ads {
+    color: $form-text-color;
+}
+
+/* Footer */
+.footer_ul_amrc li a{ color:$form-text-color;}
+.footer_ul_amrc li a:hover{ color:$white; }
+footer {
+  	background: $dark-gray;
+  	font-family: $font-family-default;
+  	border-top: 1px solid $black;
+  	box-shadow: inset 0 1px 0 $common-text-color;
+  	.top_border {
+  	 	border-top: 1px solid $black;
+  	 	box-shadow: inset 0 1px 0 $common-text-color;
+  	}
+	.footer-head {
+	    font-family: $font-family-default;
+	    a {
+	      	font-family: $font-family-default;
+	      	color: $common-bg-color;
+	      	&:hover, &:focus {
+	      		color: $secondary-color;
+	      	}
+	    }
+	}
+	a {
+	    color: $form-text-color;
+	}
+	.category-links {
+	    border-bottom: 1px solid $black;
+	    box-shadow: 0 1px 0 $common-text-color;	    
+	}	
+}
+
+/* HomeContent */
+.homepage-hero {
+  .tagline-text {
+    color: $dark-gray;
+  }  
+}
+.home-search {
+  .btn-outline-secondary {
+    color: $common-text-color;
+    background-color: $form-bg-color;
+    border-color: $form-border-color;
+    &:hover, &:focus, &:active {
+      color: $common-text-color;
+      background-color: $form-bg-color;
+      border-color: $form-border-color;
+    }
+    &:not(:disabled):not(.disabled) {
+      &:active, &.active {
+        color: $common-text-color;
+        background-color: $form-bg-color;
+        border-color: $form-border-color;
+      }
+    }
+  }
+  .show > .btn-outline-secondary.dropdown-toggle {
+    color: $common-text-color;
+    background-color: $form-bg-color;
+    border-color: $form-border-color;
+  }
+}
+
+.home-category-list {
+  .dropdown-menu {
+    a {
+      border-bottom: 1px solid $form-border-color;
+      color: $dark-gray;
+    }
+  }
+}
+
+.home-search {
+  .location {
+    font-family: $font-family-secondary;
+    color: $white;
+  }
+  #header_search_editable_location_a {
+    color: $secondary-color;
+  }
+  #top_search_location .ui-autocomplete-input {
+    background: $white;
+    font-family: $font-family-default;
+  }
+}
+.what-u-discover {
+  background: $dark-gray;
+}
+
+@media (min-width:320px) and (max-width: 640px) {
+    .home-search {
+      .search-btn {
+	background: $secondary-color url(https://www.friday-ad.co.uk/bundles/fafrontend/images/search-icon.svg) no-repeat center (center / 16px) 16px;
+        border: 1px solid $secondary-h-color;
+        color: $white;
+      }
+    }
+}
+
+.homepage-title, .homepage-title-small {
+  font-family: $font-family-secondary;
+  color: $dark-gray;
+}
+#popular_shops_slider .list-img {
+  border-bottom: 1px solid $form-border-color;
+}
+.sub-head-text {
+  color: $common-text-color;
+}
+
+.fa-slider {
+  .member-info {
+    background: $form-bg-color;
+    color: $form-text-color;
+    border-top: 1px solid $form-border-color;
+    border-bottom: 1px solid $form-border-color;
+  }
+  .fa-price {
+    h4 {
+      color: $dark-gray;
+      span {
+       color: $secondary-color;
+      }
+    }
+  }
+}
+
+/* ad-deatils */
+.ad-detail .breadcrumb-area{
+	background: $form-bg-color;
+	border-bottom: 1px solid $form-border-color;
+  border-top: 1px solid $form-border-color;
+}
+.details-wrapper {
+  .detail-head {
+    font-family: $font-family-secondary;
+    color: $dark-gray;
+  }
+  .detail-location a {
+    color: $common-text-color;
+    &:hover, &:focus {
+      color: $common-text-color;
+    }
+  }
+  .report {
+    color: $white;
+     background: $form-text-color url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2217%22%20height%3D%2216%22%20viewBox%3D%22-1409%20463.9%2017%2016%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3Bstroke%3A%23FFFFFF%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%09.st1%7Bfill%3A%23D8D8D8%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ereport%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-815.000000%2C%20-518.000000%29%22%3E%3Cg%20transform%3D%22translate%28-1.000000%2C%20272.000000%29%22%3E%3Cg%20transform%3D%22translate%28184.000000%2C%2076.000000%29%22%3E%3Cg%20transform%3D%22translate%281.000000%2C%20158.000000%29%22%3E%3Cg%20transform%3D%22translate%28625.000000%2C%208.000000%29%22%3E%3Cg%20transform%3D%22translate%286.000000%2C%204.000000%29%22%3E%3Cg%20transform%3D%22translate%280.923077%2C%200.307692%29%22%3E%3Cpolygon%20class%3D%22st0%22%20points%3D%22-1401.4%20464.6%20-1393.9%20478.6%20-1408.9%20478.6%20%22/%3E%3Crect%20x%3D%22-1402.1%22%20y%3D%22466.9%22%20class%3D%22st1%22%20width%3D%221.6%22%20height%3D%227.4%22/%3E%3Crect%20x%3D%22-1402.1%22%20y%3D%22475.8%22%20class%3D%22st1%22%20width%3D%221.6%22%20height%3D%221.5%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat 6px 4px;
+  }
+}
+.save-item-btn, .saved-item-btn {
+    background: $white;
+    border: 1px solid $form-border-color;
+    color: $form-text-color;
+}
+.saved-item-btn, 
+.saved-item-btn:hover, 
+.saved-item-btn:focus, 
+.save-item-btn:hover, 
+.save-item-btn:focus {
+    border-color: $secondary-color;
+    color: $secondary-color;
+}
+.detail-tabpart-2 {
+  .custom-tabs .nav-link {
+    background: $white;
+  }
+  .tab-content {
+    background: $white;
+  }
+}
+
+.details-info {
+    margin: 10px 0 0 0;
+    list-style: none;
+    border: 1px solid $common-bg-color;
+    border-radius: 2px;
+    background: $common-bg-color;
+    li {
+      &:nth-child(2n) .detail-text {
+        background: $form-bg-color;
+      }
+      &:nth-child(2n+1) .detail-text {
+        background: $common-bg-color;
+      }
+      &:first-child {
+        border-radius: 2px 2px 0 0;
+      }
+      .detail-text {
+        float: left;
+        width: 50%;
+        padding: 7px 19px;
+        font-size: 14px;
+        a {
+          color: $secondary-color;
+        }
+        &:first-child {
+          color: $form-text-color;
+          font-weight: 700;
+        }
+        &:last-child {
+          border-left: 1px solid $white;
+        }
+      }
+    }
+  .detail-tabpart-2 .tab-content h5 {
+    margin-top: 26px;
+  }
+}
+.nimber-box-bdr {
+    background: $form-bg-color;
+    border: 1px solid $form-border-color;
+}
+.nimber-text {
+    color: $common-text-color;
+}
+.nimber-text a {
+	color: $secondary-color;
+}
+.ad-detail .details-similar-item {
+    border-top: 1px solid $white;
+    box-shadow: inset 0 1px 0 $form-border-color;
+}
+.details-similar-item-title {
+    font-family: $font-family-secondary;
+    color: $dark-gray;
+}
+#similar-item-slider {
+  .list-dimensions {
+    color: $form-text-color;
+  }
+}
+
+
+/* PAA */
+.paa-block {
+  .posting-bg {
+    background: -moz-linear-gradient(left, $dark-gray 0, $dark-gray 50%, $common-bg-color 50%, $common-bg-color 100%);
+    background: -webkit-linear-gradient(left, $dark-gray 0, $dark-gray 50%, $common-bg-color 50%, $common-bg-color 100%);
+    background: -o-linear-gradient(left, $dark-gray 0, $dark-gray 50%, $common-bg-color 50%, $common-bg-color 100%);
+    background: -ms-linear-gradient(left, $dark-gray 0, $dark-gray 50%, $common-bg-color 50%, $common-bg-color 100%);
+    background: linear-gradient(to right, $dark-gray 0, $dark-gray 50%, $common-bg-color 50%, #eeeeeee8 100%);
+  }
+  .step-instruction h3 {
+    color: $common-bg-color;
+  }
+  .step-to-complete {
+    color: $form-label-color;
+    span {
+      color: $white;
+    }
+  }
+  .step-nav {
+    li {
+      color: $common-bg-color;
+    }
+  }
+  .medium-col {
+    background: $white;
+  }
+  .change-category {
+    background: $common-bg-color;
+    border: 1px solid $form-border-color;
+    span {
+      color: $form-text-color;
+    }
+  }
+  .paa-bdr-box {
+    border-bottom: 1px solid $form-text-color;
+    h3 {
+      color: $dark-gray;
+      span {
+        font-family: $font-family-default;
+        color: $common-text-color;
+      }
+    }
+  }
+  .paa-features {
+    li {
+      &:hover {
+        background: $form-border-color;
+      }
+      &.active {
+        background: $form-border-color;
+        border-color: $secondary-color;
+      }
+      background: $white;
+      border: 1px solid $form-border-color;
+      label {
+        color: $common-text-color;
+      }
+    }
+  }
+  .paa-title-char {
+    color: $form-text-color;
+  }
+  .paa-help-text {
+    color: $form-text-color;
+    p {
+      color: $form-text-color;
+    }
+    h4 {
+      color: $form-text-color;
+    }
+  }
+  .paa-back-arrow {
+    color: $form-text-color;
+    &:focus, &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+@media (min-width: 320px) and (max-width: 759px) {
+  .paa-block {
+    .posting-bg {
+      background: $dark-gray;
+    }
+  }
+}
+
+
+// Step 3
+.paa-block .step-login {
+  .paa-user-type {
+    label {
+      color: $form-label-color !important;
+    }
+  }
+  .connect-text {
+    color: $dark-gray;
+  }
+  .gplus-btn {
+    background-color: $gplus-bg-color;
+    &:hover {
+      background-color: $gplus-bg-color;
+    }
+  }
+  .post-info {
+    color: $form-label-color;
+  }
+}
+
+//Step 4
+.paa-block {
+  .paa-gray-box {
+    background: $common-bg-color;
+    border: 1px solid $secondary-color;
+    h3 {
+      color: $dark-gray;
+    }
+  }
+  .panel-heading {
+    .arrow-block {
+      color: $dark-gray;
+    }
+    &:hover {
+      .arrow-block, h3, .optional-text {
+        color: $secondary-h-color;
+      }
+    }
+  }
+  .drag-drop-box {
+    background: $common-bg-color;
+    border: 1px dashed $form-text-color;
+    &:hover {
+      background: $white;
+      border-color: $secondary-color;
+    }
+  }
+  .drag-drop-box-hover {
+    background: $white;
+    border-color: $secondary-color;
+  }
+  .drag-ins-hr {
+    color: $form-text-color;
+  }
+}
+
+
+#uploaded_images_div .main-photo {
+    border: 5px solid $secondary-color;
+}
+#uploaded_images_div .main-photo b {
+    background: $secondary-color;
+    color: $white;
+}
+.adimg-thumb {
+    background: $white;
+}
+
+//Choose Package
+.paa-block {
+  .paa-pkg-bg {
+    background: $common-bg-color;
+    border: 1px solid $form-border-color;
+  }
+  .pkg-title {
+    color: $white;
+    background-color: $form-text-color;
+  }
+  .pkg-subtitle {
+    background: $dark-gray;
+    border-bottom: 1px solid $dark-gray;
+    box-shadow: 0 1px 0 $common-text-color;
+    color: $white;
+    font-family: $font-family-secondary;
+  }
+  .pkg-pricing {
+    background: $dark-gray;
+  }
+  .pkg-pricing h4 {
+    color: $secondary-color;
+  }
+  .primary-btn-grey {
+    background: $form-text-color;
+    border-color: $form-text-color;
+  }
+  .pkg-blue-head {
+    background: $primary-color;
+  }
+  .pkg-ins {
+    border-bottom: 1px solid $white;
+    box-shadow: 0 1px 0 $form-text-color;
+    color: $dark-gray;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 759px) {
+  .paa-block {
+    .pkg-active {
+      box-shadow: inset 0 0 0 0px $secondary-color;
+    }
+  }
+}
+
+//Cart Block
+.paa-block {
+  .cart-list {
+    li {
+      border-bottom: solid 1px $white;
+      box-shadow: 0 1px 0 $form-text-color;
+    }
+  }
+  .cart-item {
+    background: $white;
+    border: solid 1px $form-border-color;
+  }
+  .cart-item-info h4 {
+    color: $form-text-color;
+  }
+  .cart-item-price h4 {
+    color: $secondary-color;
+  }
+  .credit-cards-box {
+    border: solid 1px $form-border-color;
+    &:focus, &:hover {
+      border: solid 1px $secondary-color;
+    }
+  }
+  .paypal-box {
+    background: $paypal-bg-color url(https://www.friday-ad.co.uk/bundles/fafrontend/images/paypal-payment.png) no-repeat center center;
+    border: solid 1px $paypal-border-color;
+    &:focus, &:hover {
+      background-color: $paypal-h-bg-color;
+    }
+  }
+}
+
+//Payment
+
+#field_arrow {
+    color: $secondary-color;
+}
+.fad-sign-bdr {
+    border-bottom: 1px solid $black;
+    box-shadow: 0 1px 0 $common-text-color;
+}
+
+/* Create a custom radio button */
+.horizontal-radio .checkmark {
+    background-color: $form-border-color;
+}
+/* On mouse-over, add a grey background color */
+.horizontal-radio:hover input ~ .checkmark {
+    background-color: $form-border-color;
+}
+/* When the radio button is checked, add a blue background */
+.horizontal-radio input:checked ~ .checkmark {
+    background-color: $form-border-color;
+}
+/* Style the indicator (dot/circle) */
+.horizontal-radio .checkmark:after {
+    background: $secondary-color;
+}
+
+//Login-Register
+.simple-header {
+    background: $white;
+}
+.login-left {
+    border-right: 1px solid $form-border-color;
+    box-shadow: inset -1px 0 0 $white;
+}
+.signup-ins {
+    color: $form-text-color;
+}
+.bz-profile-logo {
+    background: $white;
+}
+.simple-footer {
+    background: $common-bg-color;
+}
+

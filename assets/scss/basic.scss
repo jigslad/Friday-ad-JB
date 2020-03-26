@@ -1,0 +1,74 @@
+.row { width:100% !important; }
+/* Category Images */
+.discover-forsale, .cat-forsale {
+  background: url('/Frontend/images/categories/Ic-btn-For-Sale.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/categories/Ic-btn-For-Sale-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/categories/Ic-btn-For-Sale-ON.svg') no-repeat;
+  }
+}
+.discover-motors, .cat-motors {
+  background: url('/Frontend/images/categories/Ic-btn-Motors.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/categories/Ic-btn-Motors-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/categories/Ic-btn-Motors-ON.svg') no-repeat;
+  }
+}
+.discover-jobs, .cat-jobs {
+  background: url('/Frontend/images/categories/Ic-btn-Jobs.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/categories/Ic-btn-Jobs-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/categories/Ic-btn-Jobs-ON.svg') no-repeat;
+  }
+}
+.discover-services, .cat-services {
+  background: url('/Frontend/images/categories/Ic-btn-Services.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/categories/Ic-btn-Services-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/categories/Ic-btn-Services-ON.svg') no-repeat;
+  }
+}
+.discover-property, .cat-property {
+  background: url('/Frontend/images/categories/Ic-btn-Property.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/categories/Ic-btn-Property-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/categories/Ic-btn-Property-ON.svg') no-repeat;
+  }
+}
+.discover-animals, .cat-animals {
+  background: url('/Frontend/images/categories/Ic-btn-Animals.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/categories/Ic-btn-Animals-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/categories/Ic-btn-Animals-ON.svg') no-repeat;
+  }
+}
+.discover-community, .cat-community {
+  background: url('/Frontend/images/categories/Ic-btn-Community.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/categories/Ic-btn-Community-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/categories/Ic-btn-Community-ON.svg') no-repeat;
+  }
+}
+.discover-adult, .cat-adult  {
+  background: url('/Frontend/images/categories/Ic-btn-Adult.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/categories/Ic-btn-Adult-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/categories/Ic-btn-Adult-ON.svg') no-repeat;
+  }
+}

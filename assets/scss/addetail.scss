@@ -1,0 +1,1057 @@
+@import "global";
+
+.ad-detail .breadcrumb-area{
+	background: $form-bg-color;
+	border-bottom: 1px solid $form-border-color;
+  border-top: 1px solid $form-border-color;
+}
+.ad-detail .breadcrumb {
+	list-style: none;
+	display: inherit;
+	margin-bottom: 0px;
+	display: inline-flex;
+	padding: 8px 0 4px !important;
+}
+@media (min-width: 760px) {
+    .details-wrapper .two-grid-col {
+        width: 100%;
+        display: flex;
+    }
+}
+.details-wrapper {
+  .detail-head {
+    margin: 13px 0;
+    font-family: $font-family-secondary;
+    font-size: 36px;
+    font-weight: 400;
+    color: $dark-gray;
+    line-height: 46px;
+  }
+  .left-col {
+    width: 50%;
+    text-align: left;
+  }
+  .right-col {
+    width: 50%;
+    text-align: right;
+  }
+  .detail-location {
+    padding-left: 32px;
+    font-size: 20px;
+    min-height: 25px;
+    margin-bottom: 24px;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2220%22%20height%3D%2225%22%20viewBox%3D%220%200%2020%2025%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%234A4A4A%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EBig%20pin%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M10%200C4.5%200%200%204.3%200%209.6%200.1%2016.8%2010%2025%2010%2025c-0.1%200%209.8-7.7%2010-15.4C20%204.3%2015.5%200%2010%200zM10%2013.3c-1.8%200-3.3-1.5-3.3-3.3S8.2%206.7%2010%206.7s3.3%201.5%203.3%203.3S11.8%2013.3%2010%2013.3z%22/%3E%3C/svg%3E') no-repeat;
+  }
+  .detail-location a {
+    color: $common-text-color;
+    &:hover, &:focus {
+      color: $common-text-color;
+    }
+  }
+  .report-tab {
+    position: absolute;
+    margin-top: 6px;
+    right: 15px;
+  }
+  .report {
+    border-radius: 2px;
+    color: $white;
+    display: inline-block;
+    font-size: 14px;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 10px 0 0;
+    text-align: right;
+    width: 80px;
+    cursor: pointer;
+    background: $form-text-color url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2217%22%20height%3D%2216%22%20viewBox%3D%22-1409%20463.9%2017%2016%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3Bstroke%3A%23FFFFFF%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%09.st1%7Bfill%3A%23D8D8D8%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ereport%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-815.000000%2C%20-518.000000%29%22%3E%3Cg%20transform%3D%22translate%28-1.000000%2C%20272.000000%29%22%3E%3Cg%20transform%3D%22translate%28184.000000%2C%2076.000000%29%22%3E%3Cg%20transform%3D%22translate%281.000000%2C%20158.000000%29%22%3E%3Cg%20transform%3D%22translate%28625.000000%2C%208.000000%29%22%3E%3Cg%20transform%3D%22translate%286.000000%2C%204.000000%29%22%3E%3Cg%20transform%3D%22translate%280.923077%2C%200.307692%29%22%3E%3Cpolygon%20class%3D%22st0%22%20points%3D%22-1401.4%20464.6%20-1393.9%20478.6%20-1408.9%20478.6%20%22/%3E%3Crect%20x%3D%22-1402.1%22%20y%3D%22466.9%22%20class%3D%22st1%22%20width%3D%221.6%22%20height%3D%227.4%22/%3E%3Crect%20x%3D%22-1402.1%22%20y%3D%22475.8%22%20class%3D%22st1%22%20width%3D%221.6%22%20height%3D%221.5%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat 6px 4px;
+  }
+}
+
+
+
+.save-item-btn, .saved-item-btn {
+    background: $white;
+    border: 1px solid $form-border-color;
+    vertical-align: middle;
+    color: $form-text-color;
+    font-weight: 700;
+    font-size: 14px;
+    display: inline-block;
+    height: 40px;
+    line-height: 36px;
+    border-radius: 30px;
+    min-width: 157px;
+    text-align: center;
+}
+.saved-item-btn, 
+.saved-item-btn:hover, 
+.saved-item-btn:focus, 
+.save-item-btn:hover, 
+.save-item-btn:focus {
+    border-color: $secondary-color;
+    color: $secondary-color;
+}
+.save-icon, .saved-icon {
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2221%22%20height%3D%2220%22%20viewBox%3D%22-1407%20461.9%2021%2020%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23A8A8A8%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EHeart%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-213.000000%2C%20-1241.000000%29%22%3E%3Cg%20transform%3D%22translate%28183.000000%2C%20447.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%2022.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%20762.000000%29%22%3E%3Cg%20transform%3D%22translate%2830.000000%2C%2010.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1390.7%20462c2.1%200.2%204.4%202.1%204.7%205.7v1.2c-0.3%203.5-2.9%207.7-10.5%2013.1%20-7.6-5.3-10.2-9.6-10.5-13.1v-1.2c0.3-3.6%202.7-5.5%204.7-5.7%200.3%200%200.7%200%201%200%202.4%200%203.5%201%204.8%202.6%201.3-1.6%202.4-2.6%204.8-2.6C-1391.4%20461.9-1391.1%20462-1390.7%20462z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 10px 0 0;
+    width: 21px;
+    height: 20px;
+    background-size: 21px 20px;
+    text-indent: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.save-item-btn:hover span {
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2221%22%20height%3D%2220%22%20viewBox%3D%22-1407%20461.9%2021%2020%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23A8DC28%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EHeart%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-213.000000%2C%20-1241.000000%29%22%3E%3Cg%20transform%3D%22translate%28183.000000%2C%20447.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%2022.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%20762.000000%29%22%3E%3Cg%20transform%3D%22translate%2830.000000%2C%2010.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1390.7%20462c2.1%200.2%204.4%202.1%204.7%205.7v1.2c-0.3%203.5-2.9%207.7-10.5%2013.1%20-7.6-5.3-10.2-9.6-10.5-13.1v-1.2c0.3-3.6%202.7-5.5%204.7-5.7%200.3%200%200.7%200%201%200%202.4%200%203.5%201%204.8%202.6%201.3-1.6%202.4-2.6%204.8-2.6C-1391.4%20461.9-1391.1%20462-1390.7%20462z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat center center;
+}
+.save-item-btn span, .saved-item-btn span {
+    width: 22px;
+    height: 31px;
+    background-position: center center;
+}
+
+
+
+.detail-tabpart-2 {
+  .custom-tabs .nav-link {
+    background: $white;
+  }
+  .nav-tabs .nav-item {
+    margin-bottom: 0px;
+  }
+  .tab-content {
+    background: $white;
+    padding: 18px 25px;
+    font-size: 14px;
+  }
+  #ad_desc p {
+    margin: 14px 0 0 0;
+    word-wrap: break-word;
+  }
+  .tab-content {
+    p {
+      font-size: 14px !important;
+    }
+    h5 {
+      margin-top: 26px;
+    }
+  }
+  .details-info {
+    margin: 10px 0 0 0;
+    list-style: none;
+    border: 1px solid $common-bg-color;
+    border-radius: 2px;
+    background: $common-bg-color;
+    li {
+      &:nth-child(2n) .detail-text {
+        background: $form-bg-color;
+      }
+      &:nth-child(2n+1) .detail-text {
+        background: $common-bg-color;
+      }
+      &:first-child {
+        border-radius: 2px 2px 0 0;
+      }
+      .detail-text {
+        float: left;
+        width: 50%;
+        padding: 7px 19px;
+        font-size: 14px;
+        a {
+          color: $secondary-color;
+        }
+        &:first-child {
+          color: $form-text-color;
+          font-weight: 700;
+        }
+        &:last-child {
+          border-left: 1px solid $white;
+        }
+      }
+    }
+  }
+  .detail-tabpart-2 .tab-content h5 {
+    margin-top: 26px;
+  }
+}
+.nimber-box {
+    margin-top: 40px;
+}
+.nimber-box-bdr {
+    background: $form-bg-color;
+    border: 1px solid $form-border-color;
+    border-radius: 2px;
+    padding: 17px 20px;
+}
+.nimber-logo {
+    background: url("https://www.friday-ad.co.uk/bundles/fafrontend/images/nimber-logo.png") no-repeat 0 0 / 132px 28px;
+    display: block;
+    width: 132px;
+    height: 28px;
+    float: left;
+}
+.nimber-text {
+    color: $common-text-color;
+    padding: 0 0 0 20px;
+    float: left;
+    width: 482px;
+}
+.nimber-text a {
+	color: $secondary-color;
+}
+.nimber-fields {
+    margin-top: 13px;
+}
+.nimber-postcode {
+    float: left;
+    width: 300px;
+}
+.nimber-postcode input, .nimber-postcode small.error {
+    margin-bottom: 0;
+}
+.nimber-fields button, .nimber-price button {
+    float: right;
+    width: 300px;
+}
+
+
+
+.ad-detail .details-similar-item {
+    margin: 39px 0 39px 0;
+    padding: 53px 0 0 0;
+    border-top: 1px solid $white;
+    box-shadow: inset 0 1px 0 $form-border-color;
+}
+.details-similar-item-title {
+	font-family: $font-family-secondary;
+	font-size: 36px;
+	font-weight: 400;
+	color: $dark-gray;
+	line-height: 46px;
+	text-align: center;
+	margin-bottom: 49px;
+}
+#similar-item-slider {
+  .item {
+    width: 250px;
+    min-height: 248px;
+    padding: 20px;
+  }
+  .list-img {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    img {
+      max-width: 248px;
+      max-height: 187px;
+    }
+  }
+  h3 {
+    margin: 4px 0 9px;
+    font-size: 16px;
+    line-height: 21px;
+    margin: 4px 0 9px;
+    height: 48px;
+    overflow: hidden;
+  }
+  .list-dimensions {
+    margin: 0;
+    width: 50%;
+    line-height: normal;
+    height: 47px;
+    overflow: hidden;
+    font-size: 12px;
+    color: $form-text-color;
+  }
+  .two-grid-col {
+    display: inline-flex;
+    width: 100%;
+  }
+  .list-dimensions span {
+    padding-left: 12px;
+    mmargin: 0 0 3px 0;
+    display: block;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20id%3D%22Layer_1%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%225px%22%20height%3D%225px%22%20viewBox%3D%220%200%205%205%22%20xml%3Aspace%3D%22preserve%22%20enable-background%3D%22new%200%200%205%205%22%3E%0D%0A%20%20%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%20%20%20%20%0D%0A%09.st0%7Bfill%3A%23A4A4A4%3B%7D%0D%0A%0D%0A%20%20%3C/style%3E%0D%0A%20%20%3Ctitle%3E%0D%0A%20%20%20%20dot%0D%0A%20%20%3C/title%3E%0D%0A%20%20%3Cdesc%3E%0D%0A%20%20%20%20Created%20with%20Sketch.%0D%0A%20%20%3C/desc%3E%0D%0A%20%20%3Cg%20id%3D%22PAA%22%20sketch%3Atype%3D%22MSPage%22%3E%0D%0A%20%20%20%20%3Cg%20id%3D%22Desktop-HD-For-sale-2%22%20transform%3D%22translate%28-677.000000%2C%20-1589.000000%29%22%20sketch%3Atype%3D%22MSArtboardGroup%22%3E%0D%0A%20%20%20%20%20%20%3Cg%20id%3D%22Phase-1%22%20transform%3D%22translate%28-2.000000%2C%20-127.000000%29%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%22_x32_-Describe-your-item%22%20transform%3D%22translate%28459.000000%2C%20414.000000%29%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22similar-ads%22%20transform%3D%22translate%280.000000%2C%201163.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22similar-ad-1%22%20transform%3D%22translate%280.000000%2C%2032.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Used------Good-Condi-_x2B_-Oval-197-_x2B_-Oval-198%22%20transform%3D%22translate%28183.000000%2C%20102.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cellipse%20id%3D%22dot%22%20class%3D%22st0%22%20cx%3D%2239.5%22%20cy%3D%227.5%22%20rx%3D%222.5%22%20ry%3D%222.5%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%3C/g%3E%0D%0A%20%20%3C/g%3E%0D%0A%3C/svg%3E%0D%0A') no-repeat 0 6px;
+  }
+  .list-price {
+    margin: 0;
+    width: 50%;
+    font-size: 20px;
+    line-height: 22px;
+    float: right;
+    text-align: right;
+    color: $secondary-color;
+    font-family: $font-family-secondary;
+    word-wrap: break-word;
+  }
+  .list-hr-ago {
+    width: 50%;
+    font-size: 12px;
+    margin-right: 0;
+    float: right;
+    color: $form-text-color;
+    font-style: italic;
+    font-weight: 400;
+  }
+}
+.details-list-location-box {
+    margin-bottom: 40px;
+}
+
+/* Right Block */
+.ad-detail {
+  .detail-right-pane {
+    border: 1px solid $form-border-color;
+    border-top: 0;
+    background: $white;
+    text-align: center;
+    padding-bottom: 20px;
+  }
+  .listed-date {
+    font-size: 14px;
+    padding: 18px 0 9px 0;
+    color: $form-text-color;
+    font-weight: 700;
+    font-style: italic;
+    margin: 0;
+  }
+  .ago-icon {
+    display: inline-block;
+    margin-right: 5px;
+    width: 15px;
+    height: 15px;
+    text-indent: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: middle;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2214.1%22%20height%3D%2214.1%22%20viewBox%3D%22-453.1%20267.1%2014.1%2014.1%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23A8A8A8%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EFill%201%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-446.1%20267.1c-3.9%200-7%203.1-7%207s3.1%207%207%207c3.9%200%207-3.1%207-7S-442.2%20267.1-446.1%20267.1zM-443%20277.3c-0.3%200.3-0.6%200.2-0.8%200.1l-2.4-2c0%200-0.1%200-0.1%200%20-0.7%200-1.2-0.5-1.2-1.2%200-0.4%200.2-0.7%200.5-0.9l0.2-3.7c0-0.2%200.2-0.5%200.5-0.5%200.4%200%200.5%200.3%200.5%200.5l0.2%203.7c0.3%200.2%200.5%200.6%200.5%201%200%200%200%200%200%200.1l2.1%202.3C-442.8%20276.7-442.7%20277-443%20277.3z%22/%3E%3C/svg%3E') no-repeat;
+  }
+  .detail-right-pane {
+    text-align: center;
+  }
+  .item-price {
+    display: block;
+    font-size: 49px;
+    color: $secondary-color;
+    line-height: 49px;
+    margin-bottom: 20px;
+  }
+  .person-collection, .pvt-seller-cap span {
+    background: $white;
+    border: 1px solid $form-border-color;
+    display: inline-block;
+    border-radius: 20px;
+    font-family: $font-family-default;
+    font-size: 13px;
+    color: $form-text-color;
+    height: 23px;
+    line-height: 20px;
+    padding: 0 10px;
+    margin: 0 0 20px;
+  }
+  .details-price {
+    margin: 0;
+    padding: 0px 20px;
+  }
+  .cont-seller-btn {
+    padding: 15px 0 17px !important;
+    background: $primary-color !important;
+    border: 1px solid $primary-h-color !important;
+    height: 60px !important;
+    border-radius: 2px !important;
+    font-family: $font-family-secondary;
+    font-size: 18px !important;
+    line-height: 20px;
+    color: $white;
+    &:hover {
+      background: $primary-h-color !important;
+      border: 1px solid $primary-h-color !important;
+      color: $white !important;
+    }
+  }
+  .contact-phone-icon {
+    display: inline-block;
+    width: 20px;
+    height: 26px;
+    margin-left: 10px;
+    text-indent: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: text-bottom;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2019.2.0%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20width%3D%2220px%22%20height%3D%2220px%22%20viewBox%3D%220%200%2020%2020%22%20style%3D%22enable-background%3Anew%200%200%2020%2020%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cstyle%20type%3D%22text/css%22%3E%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0A%3C/style%3E%0A%3Ctitle%3Econtact-message%3C/title%3E%0A%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%3Cg%20id%3D%22Ad-details%22%3E%0A%09%3Cg%20id%3D%22Property-share---1st-tab-4%22%20transform%3D%22translate%28-1112.000000%2C%20-27.000000%29%22%3E%0A%09%09%3Cg%20id%3D%22Top-header%22%20transform%3D%22translate%280.000000%2C%20-1.000000%29%22%3E%0A%09%09%09%3Cg%20id%3D%22Blue--CTA-Contact_3%22%20transform%3D%22translate%28937.000000%2C%2010.000000%29%22%3E%0A%09%09%09%09%3Cg%20id%3D%22contact%22%20transform%3D%22translate%28175.000000%2C%2018.000000%29%22%3E%0A%09%09%09%09%09%3Cpath%20id%3D%22contact-phone%22%20class%3D%22st0%22%20d%3D%22M18.7%2C14.1c-2.8-2.2-3.8-1.1-5.1%2C0.3c-0.9%2C1-3.2-0.9-5.2-2.8c-2-2-3.8-4.2-2.8-5.2%0A%09%09%09%09%09%09C6.9%2C5%2C8.1%2C4.2%2C5.8%2C1.3C3.5-1.5%2C2%2C0.8%2C0.6%2C2.1c-1.6%2C1.5-0.3%2C7%2C4.9%2C12.3c5.3%2C5.3%2C10.7%2C6.5%2C12.3%2C4.9C19.2%2C18%2C21.5%2C16.4%2C18.7%2C14.1%0A%09%09%09%09%09%09%22/%3E%0A%09%09%09%09%3C/g%3E%0A%09%09%09%3C/g%3E%0A%09%09%3C/g%3E%0A%09%3C/g%3E%0A%3C/g%3E%0A%3C/svg%3E%0A') no-repeat left center;
+  }
+  .pvt-seller-box {
+    margin: 20px auto 0;
+    width: 100%;
+    border: 1px solid $form-border-color;
+    border-radius: 2px;
+    background: $form-bg-color;
+    position: relative;
+    z-index: 1;
+  }
+  .pvt-seller-cap {
+    background: $common-text-color;
+    height: 106px;
+    border-bottom: 1px solid $form-border-color;
+    padding-top: 12px;
+  }
+  .pvt-seller-img {
+    width: 115px;
+    height: 115px;
+    line-height: 101px;
+    padding: 4px;
+    background: $white;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+    position: absolute;
+    left: 50%;
+    margin-left: -57.5px;
+    top: 45px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  .pvt-seller-wrapper {
+    height: 110px;
+    overflow: hidden;
+  }
+  .pvt-seller-img img.pvt-no-img {
+    width: 107px;
+    height: 107px;
+    border-radius: 50%;
+  }
+  .pvt-seller-info {
+    padding: 60px 26px 15px 26px;
+    h2 {
+      color: $dark-gray;
+      margin: 1px auto 10px;
+      width: 100%;
+      word-wrap: break-word;
+    }
+  }
+  .seller-location {
+    padding: 10px 0 20px 0;
+    font-size: 13px;
+    .posting-year {
+      border-top: 2px solid $form-border-color;
+      border-bottom: 2px solid $form-border-color;
+      display: inline-block;
+      padding: 7px 14px;
+      margin-bottom: 10px;
+      line-height: 15px;
+      font-style: italic;
+      color: $form-text-color;
+    }
+  }
+  .pvt-seller-info .secondary-btn-1 {
+    margin: 0 0 1rem;
+  }
+  .interested-item {
+    padding: 29px 0 0 0;
+    width: 246px;
+    margin: auto;
+    h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 24px;
+    }
+  }
+  .related-busines h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+  .property-alert {
+    padding: 16px 20px 20px;
+  }
+  .create-alert {
+    background: $common-bg-color url("https://www.friday-ad.co.uk/bundles/fafrontend/images/alert-illustration.svg?v=1") no-repeat center 33px;
+    border: 1px solid $form-border-color;
+    border-radius: 2px;
+    padding: 218px 24px 24px;
+    h5 {
+      margin-bottom: 24px;
+    }
+    .alert-btn {
+      margin-bottom: 0;
+    }
+  }
+  .related-busines {
+    margin: 0;
+    padding: 0px 20px;
+    .small-slider .item {
+      width: 130px !important;
+      margin: 0 auto !important;
+    }
+    .item {
+      .small-img {
+        width: 130px;
+        height: 90px;
+      }
+      img {
+        max-width: 130px;
+        max-height: 90px;
+      }
+    }
+    .small-content {
+      max-width: 130px;
+      max-height: 90px;
+    }
+  }
+  #contactSellerModal .contact-box-2, #profilePageContactUserModal .contact-box-2 {
+    padding: 4px 15px 10px;
+  }
+  #contactSellerModal .contact-box, #profilePageContactUserModal .contact-box {
+    background: $common-bg-color;
+    text-align: center;
+    padding: 4px 0 10px;
+    margin-bottom: 20px;
+  }
+  #contactSellerModal .contact-box-2 h1, #profilePageContactUserModal .contact-box-2 h1 {
+    display: inline-block;
+  }
+  #contactSellerModal .contact-box h1, #profilePageContactUserModal .contact-box h1 {
+    margin-bottom: 4px;
+  }
+  #contactSellerModal .contact-box-2 .phone-icon, #profilePageContactUserModal .contact-box-2 .phone-icon {
+    margin-right: 0;
+  }
+  .phone-icon {
+    width: 31px;
+    height: 31px;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 10px 4px 0;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2231%22%20height%3D%2231%22%20viewBox%3D%22-1402%20456.9%2031%2031%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23A8DC28%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ephone%20icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-594.000000%2C%20-556.000000%29%22%3E%3Cg%20transform%3D%22translate%28505.000000%2C%20470.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1282.6%20568.6l-4.3%204.3c-0.2%200.2-0.5%200.4-0.8%200.6%20-0.3%200.2-0.6%200.3-0.9%200.3%200%200-0.1%200-0.2%200%20-0.1%200-0.3%200-0.4%200%20-0.4%200-1.1-0.1-2-0.2%20-0.9-0.1-2.1-0.5-3.4-1%20-1.3-0.6-2.9-1.4-4.6-2.5s-3.5-2.6-5.4-4.6c-1.5-1.5-2.8-2.9-3.8-4.3%20-1-1.4-1.8-2.6-2.4-3.8%20-0.6-1.2-1.1-2.2-1.4-3.2%20-0.3-0.9-0.5-1.8-0.6-2.5%20-0.1-0.7-0.2-1.2-0.1-1.6%200-0.4%200-0.6%200-0.7%200-0.3%200.1-0.6%200.3-0.9%200.2-0.3%200.3-0.6%200.6-0.8l4.3-4.3c0.3-0.3%200.7-0.5%201-0.5%200.3%200%200.5%200.1%200.8%200.2%200.2%200.2%200.4%200.4%200.6%200.6l3.5%206.6c0.2%200.3%200.3%200.7%200.2%201.1%20-0.1%200.4-0.3%200.8-0.6%201l-1.6%201.6c0%200-0.1%200.1-0.1%200.2%200%200.1%200%200.2%200%200.2%200.1%200.5%200.3%201%200.6%201.6%200.3%200.5%200.7%201.2%201.2%201.9%200.5%200.8%201.3%201.6%202.3%202.6%201%201%201.9%201.8%202.6%202.3%200.8%200.6%201.4%201%201.9%201.2%200.5%200.3%200.9%200.4%201.2%200.5l0.4%200.1c0%200%200.1%200%200.2%200%200.1%200%200.2-0.1%200.2-0.1l1.9-1.9c0.4-0.3%200.9-0.5%201.4-0.5%200.4%200%200.7%200.1%200.9%200.2l6.3%203.7c0.5%200.3%200.7%200.6%200.8%201.1C-1282.1%20567.8-1282.2%20568.2-1282.6%20568.6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat;
+  }
+  #contactSellerModal .contact-box-2 span span, #profilePageContactUserModal .contact-box-2 span span {
+    color: $secondary-color;
+  }
+  #contactSellerModal .contact-box-2 .xs-btn-1, #profilePageContactUserModal .contact-box-2 .xs-btn-1 {
+    margin: 10px 0 0 10px;
+    padding: 5px 10px 7px;
+    vertical-align: top;
+  }
+  .btn-white-arrow {
+    display: inline-block;
+    width: 8px;
+    height: 12px;
+    text-indent: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 2px 5px 0 0;
+    vertical-align: top;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%228%22%20height%3D%2212%22%20viewBox%3D%220%200%208%2012%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23FFFFFF%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EButton-white-arrow%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-819.000000%2C%20-576.000000%29%22%3E%3Cg%20transform%3D%22translate%28505.000000%2C%20470.000000%29%22%3E%3Cg%20transform%3D%22translate%2827.000000%2C%2068.000000%29%22%3E%3Cg%20transform%3D%22translate%28278.000000%2C%2029.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M15%2011l-4%204%204%204%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat;
+  }
+}
+
+.seller-location b {
+    display: inline-block;
+    padding-left: 15px;
+    font-size: 14px;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%20standalone%3D%22no%22%3F%3E%0A%3Csvg%20width%3D%2225px%22%20height%3D%2236px%22%20viewBox%3D%220%200%2025%2036%22%20version%3D%221.1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%3E%0A%20%20%20%20%3C%21--%20Generator%3A%20Sketch%20Beta%203.2%20%289961%29%20-%20http%3A//www.bohemiancoding.com/sketch%20--%3E%0A%20%20%20%20%3Ctitle%3Elocation%20pin%3C/title%3E%0A%20%20%20%20%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%0A%20%20%20%20%3Cdefs%3E%3C/defs%3E%0A%20%20%20%20%3Cg%20id%3D%22PAA%22%20stroke%3D%22none%22%20stroke-width%3D%221%22%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%20sketch%3Atype%3D%22MSPage%22%3E%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Desktop-HD-For-sale-5%22%20sketch%3Atype%3D%22MSArtboardGroup%22%20transform%3D%22translate%28-691.000000%2C%20-1693.000000%29%22%20fill%3D%22%23313133%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Phase-1%22%20sketch%3Atype%3D%22MSLayerGroup%22%20transform%3D%22translate%28-2.000000%2C%20260.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%224-Add-more-details-2%22%20transform%3D%22translate%28459.000000%2C%2021.000000%29%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Add-Location%22%20transform%3D%22translate%281.000000%2C%201250.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22MAP%22%20transform%3D%22translate%28148.000000%2C%20123.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22location-pin%22%20transform%3D%22translate%2885.000000%2C%2039.000000%29%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M12.5%2C36%20C12.5%2C36%2025%2C19.3121059%2025%2C12.4410846%20C25%2C5.5700633%2019.4035594%2C0%2012.5%2C0%20C5.59644063%2C0%200%2C5.5700633%200%2C12.4410846%20C0%2C19.3121059%2012.5%2C36%2012.5%2C36%20Z%20M12.5%2C18%20C16.0898509%2C18%2019%2C15.3137085%2019%2C12%20C19%2C8.6862915%2016.0898509%2C6%2012.5%2C6%20C8.91014913%2C6%206%2C8.6862915%206%2C12%20C6%2C15.3137085%208.91014913%2C18%2012.5%2C18%20Z%22%20id%3D%22Oval-82%22%3E%3C/path%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%20%20%20%20%3C/g%3E%0A%20%20%20%20%3C/g%3E%0A%3C/svg%3E') no-repeat;
+    background-size: 10px 14px;
+    background-position: 0px 4px;
+}
+@media (min-width: 960px) and (max-width:1150px) {
+	.ad-detail {
+        #similar-item-slider .item {
+    		width: 215px;
+    	}
+    }
+}
+@media (min-width: 760px) and (max-width:959px) {
+	.ad-detail {
+      #similar-item-slider .item {
+        width: 225px;
+      }
+      .interested-item {
+        padding: 0;
+        width: 100%;
+      }
+      .pvt-seller-info {
+        padding: 60px 15px 15px 15px;
+      }
+    }
+	.nimber-postcode {
+	    width: 45%;
+	}
+	.nimber-fields button {
+	    width: 53%;
+	}
+	.nimber-logo {
+	    float: none;
+	    margin: 0 auto 13px;
+	}
+	.nimber-text {
+	    float: none;
+	    width: 100%;
+	    text-align: center;
+	    padding: 0;
+	}
+}
+@media (min-width: 320px) and (max-width:759px) {
+	.ad-detail {
+      #similar-item-slider .item {
+        margin: 0 auto;
+      }
+      .two-grid-col.dtl-user-links {
+        dispaly: block !important;
+      }
+      .dtl-user-links {
+        .left-col, .right-col {
+          width: 100%;
+          text-align: left;
+          margin-bottom: 20px;
+        }
+        .left-col .dtl-social-icons, .right-col .dtl-social-icons {
+          text-align: left;
+        }
+      }
+      .details-wrapper .report-tab {
+        margin-top: -35px;
+        right: 20px;
+      }
+      .details-info li .detail-text {
+        font-size: 13px;
+        padding: 8px;
+      }
+      .item-price {
+          font-size: 38px;
+          line-height: 38px;
+      }
+    }
+	.nimber-logo {
+	    float: none;
+	    margin: 0 auto 13px;
+	}
+	.nimber-text {
+	    float: none;
+	    width: 100%;
+	    text-align: center;
+	    padding: 0;
+	}
+	.nimber-postcode {
+	    float: none;
+	    width: 100%;
+	    padding: 5px 0 0px;
+	}
+	.nimber-fields button, .nimber-price button {
+	    float: none;
+	    width: 100%;
+	}
+}
+
+.details-top-banner {
+  background: rgba(255, 255, 255, 0.95);
+  height: 80px;
+  border: 1px solid $form-border-color;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 102;
+  .back-to-list {
+    display: block;
+    float: left;
+    width: 19px;
+    height: 80px;
+    text-indent: -9999px;
+    margin: 0 13px 0 0;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2219%22%20height%3D%2236%22%20viewBox%3D%22-1408%20453.9%2019%2036%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23a8a8a8%3Bstroke-width%3A5%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ephoto%20prev%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-205.000000%2C%20-963.000000%29%22%3E%3Cg%20transform%3D%22translate%28183.000000%2C%20447.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%2022.000000%29%22%3E%3Cg%20transform%3D%22translate%281.000000%2C%20207.000000%29%22%3E%3Cg%20transform%3D%22translate%2823.000000%2C%20289.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1393.6%20454.4l-13.9%2015.5%2014%2015.5%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat center (center / 12px) 23px;
+  }
+  h3 {
+    margin: 8px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 18px;
+    font-weight: 400;
+    color: $dark-gray;
+    line-height: 24px;
+  }
+  .detail-location {
+    margin: 3px 0 0 0;
+    float: left;
+    padding-left: 30px;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2220%22%20height%3D%2225%22%20viewBox%3D%220%200%2020%2025%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%234A4A4A%3B%7D%0D%0A%3C/style%3E%3Ctitle%3EBig%20pin%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M10%200C4.5%200%200%204.3%200%209.6%200.1%2016.8%2010%2025%2010%2025c-0.1%200%209.8-7.7%2010-15.4C20%204.3%2015.5%200%2010%200zM10%2013.3c-1.8%200-3.3-1.5-3.3-3.3S8.2%206.7%2010%206.7s3.3%201.5%203.3%203.3S11.8%2013.3%2010%2013.3z%22/%3E%3C/svg%3E') no-repeat;
+  }
+}
+
+.detail-location a {
+  color: $common-text-color;
+  font-size: 20px;
+  &:hover, &:focus {
+    color: $common-text-color;
+    font-size: 20px;
+  }
+}
+
+.details-top-banner {
+  .item-price {
+    font-size: 36px;
+    color: $secondary-color;
+    float: right;
+    font-weight: 700;
+    margin: -8px 0 0 0;
+    line-height: normal;
+  }
+  .button {
+    margin: 9px 0 0 0;
+  }
+}
+
+.contact-email-icon {
+  display: inline-block;
+  width: 20px;
+  height: 26px;
+  margin-left: 10px;
+  text-indent: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: text-bottom;
+  background: url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2019.2.0%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%09%20width%3D%2220px%22%20height%3D%2214px%22%20viewBox%3D%220%200%2020%2014%22%20style%3D%22enable-background%3Anew%200%200%2020%2014%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cstyle%20type%3D%22text/css%22%3E%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0A%3C/style%3E%0A%3Ctitle%3Econtact-message%3C/title%3E%0A%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%3Cg%20id%3D%22Ad-details%22%3E%0A%09%3Cg%20id%3D%22Property-share---1st-tab-4%22%20transform%3D%22translate%28-1113.000000%2C%20-31.000000%29%22%3E%0A%09%09%3Cg%20id%3D%22Top-header%22%20transform%3D%22translate%280.000000%2C%20-1.000000%29%22%3E%0A%09%09%09%3Cg%20id%3D%22Blue--CTA-Contact_3%22%20transform%3D%22translate%28937.000000%2C%2010.000000%29%22%3E%0A%09%09%09%09%3Cg%20id%3D%22contact%22%20transform%3D%22translate%28175.000000%2C%2018.000000%29%22%3E%0A%09%09%09%09%09%3Cpath%20id%3D%22contact-message%22%20class%3D%22st0%22%20d%3D%22M11%2C12.4L11%2C12.4c0.2%2C0%2C0.3%2C0%2C0.4-0.1l0%2C0c0%2C0%2C0%2C0%2C0%2C0l0.4-0.3L21%2C4c0%2C0-0.1%2C0-0.1%2C0%0A%09%09%09%09%09%09H1.1c0%2C0%2C0%2C0-0.1%2C0l9.5%2C8.2C10.7%2C12.3%2C10.8%2C12.4%2C11%2C12.4L11%2C12.4z%20M1%2C5.1v11.6L7.8%2C11L1%2C5.1L1%2C5.1z%20M14.2%2C11l6.8%2C5.7V5.2%0A%09%09%09%09%09%09L14.2%2C11L14.2%2C11z%20M12%2C12.9c-0.3%2C0.2-0.6%2C0.4-1%2C0.4c-0.4%2C0-0.7-0.1-1-0.4l-1.6-1.3L1%2C17.9v0C1%2C17.9%2C1%2C18%2C1.1%2C18h19.8%0A%09%09%09%09%09%09c0.1%2C0%2C0.1-0.1%2C0.1-0.1v0l-7.5-6.3L12%2C12.9L12%2C12.9z%22/%3E%0A%09%09%09%09%3C/g%3E%0A%09%09%09%3C/g%3E%0A%09%09%3C/g%3E%0A%09%3C/g%3E%0A%3C/g%3E%0A%3C/svg%3E%0A') no-repeat left center;
+}
+
+.details-top-banner .sticky-cont-seller-btn {
+  margin-top: 10px;
+}
+
+$change-widht: 100%;
+// height sizes fixed
+* {
+    box-sizing: border-box;
+}
+.photo-panel-in {
+    .all {
+        width: $change-widht;
+        height: auto;
+        display: inline-block;
+        .slider-photo {
+            .owl-nav, .owl-dots {
+                display: none;
+            }
+            width: auto;
+            height: auto;
+            overflow: hidden;
+            border-radius: 0px;
+            position: relative;
+            background: $form-border-color;
+            &:hover {
+                .left {
+                    visibility: visible;
+                    opacity: 1;
+                    left: 20px;
+                }
+                .right {
+                    visibility: visible;
+                    opacity: 1;
+                    right: 20px;
+                }
+            }
+            .item-box {
+                padding: 20px;
+                overflow: hidden;
+          
+                &:after {
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                    position: absolute;
+                    content: "";
+                    display: block;
+                }
+                width: 100%;
+                height: 400px;
+                position: relative;
+                border-radius: 0px;
+                background: no-repeat url(http://www.cyw51.com/file/upload/201302/22/18-49-19-74-127.jpg) center center;
+                background-size: contain;
+            }
+            .left {
+                position: absolute;
+                z-index: 1;
+                top: 167px;
+                left: -20px;
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+                visibility: hidden;
+                opacity: 0;
+                transition: left ease .25s;
+                transform: rotate(0deg);
+                background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-prev.svg") center center;
+                background-repeat: no-repeat;
+                &:hover {
+                    visibility: visible;
+                    opacity: 1;
+                    left: 20px;
+                    background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-prev.svg") center center;
+                    transform: rotate(0deg);
+                    background-repeat: no-repeat;
+                }
+            }
+            .left.nonl {
+                left: -20px;
+                opacity: 0;
+                visibility: hidden;
+            }
+            .right {
+                cursor: pointer;
+                position: absolute;
+                z-index: 1;
+                top: 167px;
+                right: -20px;
+                width: 40px;
+                height: 40px;
+                visibility: hidden;
+                opacity: 0;
+                transition: right ease .25s;
+                background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-next.svg") center center;
+                transform: rotate(0deg);
+                background-repeat: no-repeat;
+                &:hover {
+                    visibility: visible;
+                    opacity: 1;
+                    right: 20px;
+                    background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-next.svg") center center;
+                    transform: rotate(0deg);
+                    background-repeat: no-repeat;
+                }
+            }
+            .right.nonr {
+                right: -20px;
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        .slider-two {
+            .owl-nav, .owl-dots {
+                display: none;
+            }
+            width: auto;
+            height: auto;
+            overflow: hidden;
+            position: relative;
+            &:hover {
+                .left-t {
+                    visibility: visible;
+                    opacity: 1;
+                    left: 0px;
+                }
+                .right-t {
+                    visibility: visible;
+                    opacity: 1;
+                    right: 0px;
+                }
+            }
+            .owl-stage {
+                padding: 4px 0;
+            }
+            .item {
+                transition: all ease .25s;
+                height: 84px;
+                border-radius: 0px;
+                border: 0;
+                cursor: pointer;
+                background: no-repeat url(http://www.cyw51.com/file/upload/201302/22/18-49-19-74-127.jpg) center center;
+                background-size: cover;
+                opacity: 0.5;
+            }
+            .item.active {
+                opacity: 1;
+            }
+            .left-t {
+                transform: rotate(0deg);
+                cursor: pointer;
+                position: absolute;
+                z-index: 1;
+                top: 0px;
+                visibility: hidden;
+                opacity: 0;
+                transition: all ease .25s;
+                width: 40px;
+                height: 100%;
+                background: no-repeat rgba(239, 239, 239, 0.5) url("http://static.friday-ad.co.uk/bundles/fafrontend/images/small-slider-prev.svg") center center;
+                left: -40px;
+                &:hover {
+                    visibility: visible;
+                    opacity: 1;
+                    left: 0px;
+                }
+            }
+            .left-t.nonl-t {
+                left: -40px;
+                opacity: 0;
+                visibility: hidden;
+            }
+            .right-t {
+                background: no-repeat rgba(239, 239, 239, 0.5) url("http://static.friday-ad.co.uk/bundles/fafrontend/images/small-slider-next.svg") center center;
+                cursor: pointer;
+                position: absolute;
+                z-index: 1;
+                top: 0px;
+                right: -40px;
+                visibility: hidden;
+                opacity: 0;
+                transition: all ease .25s;
+                width: 40px;
+                height: 100%;
+                background-color: rgba(239, 239, 239, 0.5);
+                &:hover {
+                    visibility: visible;
+                    opacity: 1;
+                    right: 0px;
+                }
+            }
+            .right-t.nonr-t {
+                right: -40px;
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+    }
+}
+.slider-zoom-photo {
+    .owl-nav, .owl-dots {
+        display: none;
+    }
+    width: auto;
+    height: auto;
+    overflow: hidden;
+    border-radius: 0px;
+    position: relative;
+    background: $form-border-color;
+    &:hover {
+        .left {
+            visibility: visible;
+            opacity: 1;
+            left: 20px;
+        }
+        .right {
+            visibility: visible;
+            opacity: 1;
+            right: 20px;
+        }
+    }
+    .item-box {
+        padding: 20px;
+        overflow: hidden;
+  
+        &:after {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            position: absolute;
+            content: "";
+            display: block;
+        }
+        width: 100%;
+        height: 400px;
+        position: relative;
+        border-radius: 0px;
+        background: no-repeat url(http://www.cyw51.com/file/upload/201302/22/18-49-19-74-127.jpg) center center;
+        background-size: contain;
+    }
+    .left {
+        position: absolute;
+        z-index: 1;
+        top: 167px;
+        left: -20px;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        visibility: hidden;
+        opacity: 0;
+        transition: left ease .25s;
+        transform: rotate(0deg);
+        background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-prev.svg") center center;
+        background-repeat: no-repeat;
+        &:hover {
+            visibility: visible;
+            opacity: 1;
+            left: 20px;
+            background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-prev.svg") center center;
+            transform: rotate(0deg);
+            background-repeat: no-repeat;
+        }
+    }
+    .left.nonl {
+        left: -20px;
+        opacity: 0;
+        visibility: hidden;
+    }
+    .right {
+        cursor: pointer;
+        position: absolute;
+        z-index: 1;
+        top: 167px;
+        right: -20px;
+        width: 40px;
+        height: 40px;
+        visibility: hidden;
+        opacity: 0;
+        transition: right ease .25s;
+        background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-next.svg") center center;
+        transform: rotate(0deg);
+        background-repeat: no-repeat;
+        &:hover {
+            visibility: visible;
+            opacity: 1;
+            right: 20px;
+            background: url("//static.friday-ad.co.uk/bundles/fafrontend/images/photo-next.svg") center center;
+            transform: rotate(0deg);
+            background-repeat: no-repeat;
+        }
+    }
+    .right.nonr {
+        right: -20px;
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+.zoomphotoModal .modal-content {
+  background-color: transparent;
+  border: 0;
+}
+.zoomphotoModal .modal-header {
+  border-bottom: 0;
+}
+.zoomphotoModal .close, .zoomphotoModal .close:hover, .zoomphotoModal .close:focus {
+  color: $white;
+  font-size: 60px;
+  opacity: 1;
+  padding: 0 !important;
+}
+.zoomphotoModal.fade.show {
+    background: rgba(49,49,51,0.9);
+}
+.details-img-icons {
+    position: absolute;
+    right: 0 !important;
+    bottom: 0;
+    z-index: 999;
+}
+.zoom-img {
+    display: block;
+    float: left;
+    width: 40px;
+    height: 40px;
+    text-indent: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    background: rgba(74,74,74,0.5) url('data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%0A%3C%21--%20Generator%3A%20Adobe%20Illustrator%2019.2.0%2C%20SVG%20Export%20Plug-In%20.%20SVG%20Version%3A%206.00%20Build%200%29%20%20--%3E%0A%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%0A%09%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20x%3D%220px%22%20y%3D%220px%22%20width%3D%2227px%22%20height%3D%2228px%22%0A%09%20viewBox%3D%220%200%2027%2028%22%20style%3D%22enable-background%3Anew%200%200%2027%2028%3B%22%20xml%3Aspace%3D%22preserve%22%3E%0A%3Cstyle%20type%3D%22text/css%22%3E%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23FFFFFF%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0A%3C/style%3E%0A%3Ctitle%3Ezoom-ad%3C/title%3E%0A%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%0A%3Cg%20id%3D%22Ad-details%22%20sketch%3Atype%3D%22MSPage%22%3E%0A%09%3Cg%20id%3D%22Property-share---1st-tab%22%20transform%3D%22translate%28-856.000000%2C%20-1213.000000%29%22%20sketch%3Atype%3D%22MSArtboardGroup%22%3E%0A%09%09%3Cg%20id%3D%22Ad-preview%22%20transform%3D%22translate%28183.000000%2C%20447.000000%29%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0A%09%09%09%3Cg%20id%3D%22ad%22%20transform%3D%22translate%280.000000%2C%2022.000000%29%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0A%09%09%09%09%3Cg%20id%3D%22photos-and-map%22%20transform%3D%22translate%281.000000%2C%20207.000000%29%22%3E%0A%09%09%09%09%09%3Cg%20id%3D%22Zoom-ad%22%20transform%3D%22translate%28666.000000%2C%20530.000000%29%22%3E%0A%09%09%09%09%09%09%0A%09%09%09%09%09%09%09%3Cg%20id%3D%22zoom-ad%22%20transform%3D%22translate%2821.681981%2C%2021.717514%29%20rotate%28-45.000000%29%20translate%28-21.681981%2C%20-21.717514%29%20translate%2811.681981%2C%206.717514%29%22%3E%0A%09%09%09%09%09%09%09%0A%09%09%09%09%09%09%09%09%3Cellipse%20id%3D%22Oval-40%22%20transform%3D%22matrix%28-1%202.535182e-06%20-2.535182e-06%20-1%2019.9645%2020.0062%29%22%20class%3D%22st0%22%20cx%3D%2210%22%20cy%3D%2210%22%20rx%3D%229.6%22%20ry%3D%229.9%22/%3E%0A%09%09%09%09%09%09%09%3Cpath%20id%3D%22Line%22%20class%3D%22st0%22%20d%3D%22M9%2C22.7v7.1%22/%3E%0A%09%09%09%09%09%09%09%0A%09%09%09%09%09%09%09%09%3Cg%20id%3D%22_x2B_%22%20transform%3D%22translate%289.684008%2C%209.817524%29%20rotate%28-45.000000%29%20translate%28-9.684008%2C%20-9.817524%29%20translate%285.684008%2C%205.317524%29%22%3E%0A%09%09%09%09%09%09%09%09%3Cpath%20id%3D%22Line_1_%22%20class%3D%22st0%22%20d%3D%22M4.2%2C8.7V1%22/%3E%0A%09%09%09%09%09%09%09%09%3Cpath%20id%3D%22Line-9%22%20class%3D%22st0%22%20d%3D%22M7.9%2C5H0.4%22/%3E%0A%09%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%09%3C/g%3E%0A%09%09%09%09%3C/g%3E%0A%09%09%09%3C/g%3E%0A%09%09%3C/g%3E%0A%09%3C/g%3E%0A%3C/g%3E%0A%3C/svg%3E%0A') no-repeat center center / 20px 20px;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 759px) {
+    .details-top-banner {
+      background: rgba(0,0,0,0.5);
+      border: 0px;
+    }
+}

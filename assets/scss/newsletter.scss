@@ -1,0 +1,108 @@
+@import "global";
+
+
+.newsletter-block {
+    position: absolute;
+    float: right;
+    right: 0 !important;
+    top: 0;
+    width: 100%;
+}
+.newsletter-img {
+    position: absolute;
+    right: 0;
+}
+.preference-center .form-section {
+    margin-top: 40px;
+}
+.image-tooltip-wrapper {
+    display: inline-flex !important;
+    position: relative;
+}
+.info-icon {
+    margin-right: 5px;
+    display: inline-block;
+    width: 21px;
+    height: 19px;
+    vertical-align: middle;
+    text-indent: -9999px;
+    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2221%22%20height%3D%2219%22%20viewBox%3D%22-389%20226%2021%2019%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23A8A8A8%3B%7D%0D%0A%09.st1%7Benable-background%3Anew%20%20%20%20%3B%7D%0D%0A%09.st2%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Einfo%20icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-726.000000%2C%20-1133.000000%29%22%3E%3Cg%20transform%3D%22translate%28-2.000000%2C%20-127.000000%29%22%3E%3Cg%20transform%3D%22translate%28465.000000%2C%20451.000000%29%22%3E%3Cg%20transform%3D%22translate%28111.000000%2C%20745.000000%29%22%3E%3Cg%20transform%3D%22translate%28153.000000%2C%2064.000000%29%22%3E%3Cellipse%20class%3D%22st0%22%20cx%3D%22-379.4%22%20cy%3D%22235.5%22%20rx%3D%229.9%22%20ry%3D%229.5%22/%3E%3Cg%20class%3D%22st1%22%3E%3Cpath%20class%3D%22st2%22%20d%3D%22M-378.9%20238.9h0.7v1h-3.1v-1h0.4c0.2%200%200.4-0.1%200.4-0.4v-3.6c0-0.3-0.1-0.4-0.3-0.4h-0.5v-1h2.3v5.4H-378.9zM-379.8%20230.7c0.6%200%201%200.4%201%201%200%200.6-0.4%200.9-1%200.9%20-0.6%200-1-0.4-1-0.9S-380.4%20230.7-379.8%20230.7z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat;
+    background-size: contain;
+}
+.newsletter_info_txt {
+    color: $form-text-color;
+    font-size: 12px;
+    line-height: 18px;
+}
+.news-form-l {
+	border-right: 1px solid $form-border-color;
+	box-shadow: inset -1px 0 0 $white;
+}
+.pr100 {
+	padding-right: 100px;
+}
+.pl100 {
+	padding-left: 100px;
+}
+.gap-h {
+	padding-top: 125px;
+}
+.l-slect, .m-slect, .r-slect {
+	width: 31%;
+	margin-right: 10px;
+}
+.r-select {
+	margin-right: 0px;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 759px) {
+	.newsletter-img {
+	    position: relative;
+	    right: 0;
+	}
+	.pr100 {
+		padding-right: 0px;
+	}
+	.pl100 {
+		padding-left: 0px;
+	}
+	.gap-h {
+		padding-top: 0px;
+	}
+	.newsletter-main-section .ul-news-blk {
+		display: inline-block !important;
+		width: 100%;
+	}
+}
+.detail-location.icon-forsale {
+    background: url(https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/forsale.svg) no-repeat;
+    background-size: 100%;
+    padding-left: 25px;
+    background-position: center center;
+}
+.border-btm {
+    border-bottom: 1px solid $form-border-color;
+}
+.newsletter-main-section .arrow-block {
+    color: $dark-gray;
+    position: relative !important;
+    top: 0 !important;
+}
+.paa-bdr-box {
+    padding: 26px 0 30px 0;
+}
+.paa-block .panel-heading .fa-chevron-up, .paa-block .panel-heading.collapsed .fa-chevron-down {
+    display: inline-block;
+}
+.paa-block .panel-heading .fa-chevron-up, .paa-block .panel-heading.collapsed .fa-chevron-down {
+    display: inline-block;
+}
+.paa-block .panel-heading .fa-chevron-down, .paa-block .panel-heading.collapsed .fa-chevron-up {
+    display: none;
+}
+.paa-block .panel-heading .fa-chevron-down, .paa-block .panel-heading.collapsed .fa-chevron-up {
+    display: none;
+}
+.privacy-pol {
+	margin-left: 25px;
+}

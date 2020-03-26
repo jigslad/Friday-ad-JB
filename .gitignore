@@ -30,3 +30,5 @@
 /.buildpath
 /.settings
 /.idea
+/web/build
+/node_modules/
