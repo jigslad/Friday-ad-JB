@@ -20,6 +20,11 @@
                        <img src="{{shared_url(entity.getPath()~'/'~entity.getFileName())}}?{{ random(1000) }}" width="100px" /><br /><br />
                    {% endif %}
                </div>
+               <div class="form-group{% if form.main_image_url.vars.errors|length %} has-error{% endif %}">
+                   {{ form_label(form.main_image_url) }}
+                   {{ form_widget(form.main_image_url) }}
+                   {{ form_errors(form.main_image_url) }}
+               </div>
                <div class="form-group{% if form.phone_file.vars.errors|length %} has-error{% endif %}">
                    {{ form_label(form.phone_file) }}
                    {{ form_widget(form.phone_file) }}

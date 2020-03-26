@@ -148,6 +148,13 @@ class HeaderImage
     private $right_hand_image_url;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="main_image_url", type="string", length=255, nullable=true)
+     */
+    private $main_image_url;
+    
+    /**
      * @var boolean
      *
      * @ORM\Column(name="override_image", type="boolean", nullable=true, options={"default" = 0})
@@ -583,6 +590,29 @@ class HeaderImage
     public function getRightHandImageUrl()
     {
         return $this->right_hand_image_url;
+    }
+    
+    /**
+     * Set main image url.
+     *
+     * @param string $main_image_url
+     * @return HomePopularImage
+     */
+    public function setMainImageUrl($main_image_url)
+    {
+        $this->main_image_url = $main_image_url;
+        
+        return $this;
+    }
+    
+    /**
+     * Get main image url.
+     *
+     * @return string
+     */
+    public function getMainImageUrl()
+    {
+        return $this->main_image_url;
     }
     
     /**
