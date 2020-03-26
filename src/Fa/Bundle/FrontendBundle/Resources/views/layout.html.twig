@@ -162,6 +162,12 @@
     	{{ include('FaFrontendBundle::adult-css.html.twig') }}
     {% endif %}
     
+    <style>
+    .choice-display-flex { display:inline-flex !important; }
+    .choice-display-flex label { margin-right:10px !important; line-height:25px !important; }
+    </style>
+    {# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
+  
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}
