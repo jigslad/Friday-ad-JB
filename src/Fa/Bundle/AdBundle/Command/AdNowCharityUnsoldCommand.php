@@ -99,7 +99,7 @@ EOF
         $ads          = $this->getAdQueryBuilder($offset, $step);
 
         foreach ($ads as $ad) {
-            $userId = ($ad['user_id'] ? $ad['user_id'] : null);
+            $userId = ($ad['userid'] ? $ad['userid'] : null);
             //$userId = 1293153;
             $user = $this->em->getRepository('FaUserBundle:User')->find($userId);
             $ad = $this->em->getRepository('FaAdBundle:Ad')->find($ad['ad_id']);
@@ -179,19 +179,27 @@ EOF
      */
     protected function getAdQueryBuilder()
     {
-        $query = 'SELECT u.*,a.id as adid
+        $categoryIdForElectronics = '56';
+        $categoryIdForHomeGarden = '158';
+        $sub_category_electronic = $this->em->getRepository('FaEntityBundle:Category')->getNestedLeafChildrenIdsByCategoryId($categoryIdForElectronics, $container = null);
+        $sub_category_homegarden = $this->em->getRepository('FaEntityBundle:Category')->getNestedLeafChildrenIdsByCategoryId($categoryIdForHomeGarden, $container = null);
+        $cat_ids = array_merge($sub_category_electronic,$sub_category_homegarden);
+        $cat_ids = implode(',', $cat_ids);
+
+        $locationId = '326';
+        $sub_location = $this->em->getRepository('FaEntityBundle:Location')->getChildrenKeyValueArrayByParentId($locationId, $container = null);
+        $loc_ids = implode(',', array_keys($sub_location));
+
+        $query = 'SELECT u.id as userid, a.id as adid
         from fridayad_prod_restore.user as u
         inner join fridayad_prod_restore.ad as a on a.user_id = u.id
         inner join  fridayad_prod_restore.ad_location as al on al.ad_id = a.id
         inner join fridayad_prod_restore.ad_user_package as aup on aup.user_id = u.id
-        where a.status_id = 25
-        AND aup.price = 0
-        AND a.type_id = 4
-        AND a.category_id in (159,160,165,178,188,194,198,203,204,205,206,214,218,221,223,224,225,229,230,231,236,239,246,247,261,264,265,266,267,268,269,270,272,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,305,306,310,311,312,313,318,319,320,321,322,323,327,329,330,331,332,336,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,4277,57,71,84,88,95,98,102,58,59,60,64,65,66,67,68,69,70,72,73,74,75,76,77,78,79,80,81,82,83,85,86,87,89,90,91,92,93,96,97,99,100,101)
-        AND (al.town_id in (SELECT id from fridayad_prod_restore.location where id = 326 or parent_id = 326))
-        AND a.created_at >= DATE(NOW()) + INTERVAL -7 DAY
-        AND a.created_at <  DATE(NOW()) + INTERVAL  2 DAY 
-        group by u.id';
+        where a.status_id = 25 AND aup.price = 0 AND a.type_id = 4 AND a.category_id in ('.$cat_ids.')
+        AND al.town_id in ('.$loc_ids.')
+        AND from_unixtime(a.created_at) >= DATE(NOW()) + INTERVAL -10 DAY
+        AND from_unixtime(a.created_at) <  DATE(NOW()) + INTERVAL  2 DAY 
+        group by a.id';
         $stmt = $this->em->getConnection()->prepare($query);
         $stmt->execute();
         $ads = $stmt->fetchAll();
@@ -207,19 +215,27 @@ EOF
      */
     protected function getAdCount()
     {
-        $query = 'SELECT u.*,a.id as adid
+        $categoryIdForElectronics = '56';
+        $categoryIdForHomeGarden = '158';
+        $sub_category_electronic = $this->em->getRepository('FaEntityBundle:Category')->getNestedLeafChildrenIdsByCategoryId($categoryIdForElectronics, $container = null);
+        $sub_category_homegarden = $this->em->getRepository('FaEntityBundle:Category')->getNestedLeafChildrenIdsByCategoryId($categoryIdForHomeGarden, $container = null);
+        $cat_ids = array_merge($sub_category_electronic,$sub_category_homegarden);
+        $cat_ids = implode(',', $cat_ids);
+
+        $locationId = '326';
+        $sub_location = $this->em->getRepository('FaEntityBundle:Location')->getChildrenKeyValueArrayByParentId($locationId, $container = null);
+        $loc_ids = implode(',', array_keys($sub_location));
+
+        $query = 'SELECT count(distinct u.id) as count
         from fridayad_prod_restore.user as u
         inner join fridayad_prod_restore.ad as a on a.user_id = u.id
         inner join  fridayad_prod_restore.ad_location as al on al.ad_id = a.id
         inner join fridayad_prod_restore.ad_user_package as aup on aup.user_id = u.id
-        where a.status_id = 25
-        AND aup.price = 0
-        AND a.type_id = 4
-        AND a.category_id in (159,160,165,178,188,194,198,203,204,205,206,214,218,221,223,224,225,229,230,231,236,239,246,247,261,264,265,266,267,268,269,270,272,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,305,306,310,311,312,313,318,319,320,321,322,323,327,329,330,331,332,336,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,4277,57,71,84,88,95,98,102,58,59,60,64,65,66,67,68,69,70,72,73,74,75,76,77,78,79,80,81,82,83,85,86,87,89,90,91,92,93,96,97,99,100,101)
-        AND (al.town_id in (SELECT id from fridayad_prod_restore.location where id = 326 or parent_id = 326))
-        AND a.created_at >= DATE(NOW()) + INTERVAL -7 DAY
-        AND a.created_at <  DATE(NOW()) + INTERVAL  2 DAY
-        group by u.id';
+        where a.status_id = 25 AND aup.price = 0 AND a.type_id = 4 AND a.category_id in ('.$cat_ids.')
+        AND al.town_id in ('.$loc_ids.')
+        AND from_unixtime(a.created_at) >= DATE(NOW()) + INTERVAL -10 DAY
+        AND from_unixtime(a.created_at) <  DATE(NOW()) + INTERVAL  2 DAY 
+        group by a.id';
         $stmt = $this->em->getConnection()->prepare($query);
         $stmt->execute();
         $count = $stmt->fetchAll();
