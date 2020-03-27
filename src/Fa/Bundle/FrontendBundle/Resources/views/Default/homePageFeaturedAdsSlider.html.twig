@@ -1,4 +1,4 @@
-<div class="owl-carousel fa-slider" id="{{ divId }}" data-equalizer>
+<div class="owl-carousel owl-theme fa-slider" id="{{ divId }}" data-equalizer>
     {% set categoryBadgeArray = categoryRepository.getCategoryBadgeClassArray() %}
     {% for featureAd in featureAds %}
         {% set adCategoryId = attribute(featureAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
@@ -36,44 +36,42 @@
                 {% endif %}
             </div>
             <div class="member-info">
-                <div class="clearfix">
-                    <div class="large-17 columns">
-                        <a href="javascript:void(0);">
-                            {% if adUserDetail|length and adUserDetail['user_name'] is defined %}
-                                {{adUserDetail['user_name']}}
-                            {% endif %}
-                            {% if adUserDetail|length and adUserDetail['town_name'] is defined and adUserDetail['town_name'] is not null%}
-                                , {{adUserDetail['town_name']}}
-                            {% endif %}
-                        </a>
-                        {% if adUserDetail|length and adUserDetail['created_at'] is defined and adUserDetail['created_at'] is not null %}
-                            <span class="posting-year">{{'Verified member since %posting_date%'|trans({'%posting_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [adUserDetail['created_at'], container, null, null, 'MMM dd']) }, 'frontend-homepage')}}</span>
+                <div class="left-block">
+                    <a href="javascript:void(0);">
+                        {% if adUserDetail|length and adUserDetail['user_name'] is defined %}
+                            {{adUserDetail['user_name']}}
                         {% endif %}
-                    </div>
-                    <div class="large-7 columns text-right">
-                        {% set userCompanyLogo = null %}
-                        {% set userLogo = null %}
-                        {% if adUserDetail|length %}
-                            {% if (adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
-                                {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['company_logo'], adUserDetail['id'], null, null, true, true, adUserDetail['status_id'], adUserDetail['user_name']]) %}
-                            {% endif %}
-                            {% if adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
-                                {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['image'], adUserDetail['id'], 'null', 'null', true, false, adUserDetail['status_id'], adUserDetail['user_name']]) %}
-                            {% endif %}
+                        {% if adUserDetail|length and adUserDetail['town_name'] is defined and adUserDetail['town_name'] is not null%}
+                            , {{adUserDetail['town_name']}}
                         {% endif %}
-                        <div class="member-icon {% if (adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}member-logo{% endif %}">
-                            {% if userCompanyLogo %}
-                                {{userCompanyLogo|raw}}
-                            {% elseif userLogo %}
-                                {{userLogo|raw}}
-                            {% endif %}
-                        </div>
+                    </a>
+                    {% if adUserDetail|length and adUserDetail['created_at'] is defined and adUserDetail['created_at'] is not null %}
+                        <span class="posting-year">{{'Verified member since %posting_date%'|trans({'%posting_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [adUserDetail['created_at'], container, null, null, 'MMM dd']) }, 'frontend-homepage')}}</span>
+                    {% endif %}
+                </div>
+                <div class="right-block text-right">
+                    {% set userCompanyLogo = null %}
+                    {% set userLogo = null %}
+                    {% if adUserDetail|length %}
+                        {% if (adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+                            {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['company_logo'], adUserDetail['id'], null, null, true, true, adUserDetail['status_id'], adUserDetail['user_name']]) %}
+                        {% endif %}
+                        {% if adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
+                            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['image'], adUserDetail['id'], 'null', 'null', true, false, adUserDetail['status_id'], adUserDetail['user_name']]) %}
+                        {% endif %}
+                    {% endif %}
+                    <div class="member-icon {% if (adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}member-logo{% endif %}">
+                        {% if userCompanyLogo %}
+                            {{userCompanyLogo|raw}}
+                        {% elseif userLogo %}
+                            {{userLogo|raw}}
+                        {% endif %}
                     </div>
                 </div>
             </div>
             
             <div class="fa-price">
-                <div class="large-24 columns">
+                <div class="col-md-24 col-lg-24">
                     <h4>
                         {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'PRICE')) is defined %}
                             <span>

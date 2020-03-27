@@ -1,7 +1,7 @@
 {% if homePopularImagesArray|length %}
     <div id="homepage-populars" class="row popular-items">
         {% for homePopularImage in homePopularImagesArray %}
-            <div class="large-6 columns">
+            <div class="col-md-6 col-lg-6">
                 <div class="item-box">
                     <a href="{{ homePopularImage['url'] }}" class="tricky-link">{{ homePopularImage['bg_image'] }}</a>
                     <div class="overlay"></div>

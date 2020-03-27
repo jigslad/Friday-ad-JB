@@ -4,24 +4,7 @@
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/10.0.0/nouislider.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css"/>
-<link rel="stylesheet" href="{{ asset_url('build/css/general.css') }}">
-<link rel="stylesheet" href="{{ asset_url('build/css/header.css') }}">
-<link rel="stylesheet" href="{{ asset_url('build/css/basic.css') }}">
-<link rel="stylesheet" href="{{ asset_url('build/css/footer.css') }}">
-
-{% javascripts filter='uglifyjs2' output='bundles/js/compiled/main.js'
-    'bundles/facore/js/common.js'
-    'bundles/fafrontend/js/vendor/modernizr.js'
-    'bundles/fosjsrouting/js/router.js'
-    'bundles/fafrontend/js/vendor/select2.min.js'
-    'bundles/fafrontend/js/vendor/fastclick.js'
-    'bundles/fafrontend/js/foundation.min.js'
-    'bundles/fafrontend/js/foundation/foundation.datepicker.js'
-    'bundles/fafrontend/js/vendor/jquery-ui.min.js'
-    'bundles/fafrontend/js/vendor/jquery.nouislider.all.min.js'
-    'bundles/facore/js/jquery.blockUI.min.js'
-%}
-<script src="{{ static_asset_url(asset_url) }}"></script>
-
-{% endjavascripts %}
+<link rel="stylesheet" href="{{ asset('/build/css/general.css') }}">
+<link rel="stylesheet" href="{{ asset('/build/css/header.css') }}">
+<link rel="stylesheet" href="{{ asset('/build/css/basic.css') }}">
+<link rel="stylesheet" href="{{ asset('/build/css/footer.css') }}">

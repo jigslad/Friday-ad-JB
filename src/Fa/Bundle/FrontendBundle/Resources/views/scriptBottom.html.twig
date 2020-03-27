@@ -1,4 +1,29 @@
 <!-- Core Scripts - Include with every page -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script rel="script" type="application/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/owl.carousel.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/10.0.0/nouislider.js"></script>
+
+<script type="text/javascript" src="{{ asset('js/modernizr.custom.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/jquery.dlmenu.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/common.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/jquery.equalizer.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/jquery.blockUI.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
+
+
+{% javascripts filter='uglifyjs2' output='bundles/js/compiled/main.js'
+    'bundles/fosjsrouting/js/router.js'
+    'bundles/fafrontend/js/vendor/select2.min.js'
+    'bundles/fafrontend/js/vendor/fastclick.js'
+%}
+<script src="{{ static_asset_url(asset_url) }}"></script>
+
+{% endjavascripts %}
+
 {% set container = fetch_container_instance() %}
 <script>var isAdBlocker;isAdBlocker = false;</script>
 <script language="javascript" type="text/javascript">

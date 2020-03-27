@@ -1,4 +1,4 @@
-<div class="owl-carousel fa-slider" id="{{ divId }}" data-equalizer>
+<div class="owl-carousel owl-theme fa-slider" id="{{ divId }}" data-equalizer>
     {% set categoryBadgeArray = categoryRepository.getCategoryBadgeClassArray() %}
     {% for latestAd in latestAds %}
         {% set adCategoryId = attribute(latestAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
