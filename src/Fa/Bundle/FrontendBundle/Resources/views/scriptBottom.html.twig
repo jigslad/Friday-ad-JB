@@ -288,43 +288,33 @@
     {% set pageType = 'Not Specified' %}
 
 {% endif %}
-
-{#{% for banner in bannersArray %}#}
-{#    {% if zone_id is defined and bannersArray is defined %}#}
-{#        {% if zone_id in bannersArray|keys %}#}
-{#            {% set divStyle            = '' %}#}
-{#            {% set otherClass          = '' %}#}
-{#            {% set showBanner          = 0 %}#}
-{#            {% set currentDevice       = 'D' %}#}
-{#            {% set container           = fetch_container_instance() %}#}
-{#            {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}#}
-{#            {% set zone_above_header   = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}#}
-{#            {% set page_all_other      = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerPageRepository::PAGE_ALL_OTHER') %}#}
-{#            {% set current_route       = app.request.attributes.get('_route') %}#}
-
-{#            {% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}#}
-{#                {% set currentDevice = 'M' %}#}
-{#            {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}#}
-{#                {% set currentDevice = 'T' %}#}
-{#            {% endif %}#}
-
-{#            {% if ((currentDevice == 'D' and bannersArray[zone_id]['is_desktop'] == 1) or (currentDevice == 'T' and bannersArray[zone_id]['is_tablet'] == 1) or (currentDevice == 'M' and bannersArray[zone_id]['is_mobile'] == 1)) %}#}
-{#                {% set showBanner = 1 %}#}
-{#            {% endif %}#}
-
-{#            {% if zone_id == zone_above_header and bannersArray[zone_id]['page_id'] == page_all_other %}#}
-{#                {% if not app.request.attributes.get('static_page') %}#}
-{#                    {% set showBanner = 0 %}#}
-{#                {% endif %}#}
-{#            {% endif %}#}
-
-{#            {% if (showBanner == 1) %}#}
-{#                {% set displayBannerCount = displayBannerCount + 1 %}#}
-{#            {% endif %}#}
-{#        {% endif %}#}
-{#    {% endif %}#}
-{#{% endfor %}#}
-
+{% set bannerCount = 0 %}
+{% set bannerCurrentDevice       = 'D' %}
+{% set container           = fetch_container_instance() %}
+{% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
+{% set zone_above_header   = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
+{% set page_all_other      = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerPageRepository::PAGE_ALL_OTHER') %}
+{% if mobileDetectManager.isMobile() and not mobileDetectManager.isTablet() %}
+    {% set bannerCurrentDevice = 'M' %}
+{% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
+    {% set bannerCurrentDevice = 'T' %}
+{% endif %}
+{% for banner in bannersArray %}
+    {% set showBanner = 0 %}
+    {% if ((bannerCurrentDevice == 'D' and banner['is_desktop'] == 1) or (bannerCurrentDevice == 'T' and banner['is_tablet'] == 1) or (bannerCurrentDevice == 'M' and banner['is_mobile'] == 1)) %}
+        {% set showBanner = 1 %}
+    {% else %}
+        {% set showBanner = 0 %}
+    {% endif %}
+    {% if banner['zone_id'] == zone_above_header and banner['page_id'] == page_all_other %}
+        {% if not app.request.attributes.get('static_page') %}
+            {% set showBanner = 0 %}
+        {% endif %}
+    {% endif %}
+    {% if (showBanner == 1) %}
+        {% set bannerCount = bannerCount + 1 %}
+    {% endif %}
+{% endfor %}
 <script>
     window.dataLayer = window.dataLayer || [];
     dataLayer.push({
@@ -334,7 +324,7 @@
             "clientID": '{{ ClientID }}',
             "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
             "loggedInType": '{{ userType }}',
-            "banners": '{{ bannersArray is defined ? bannersArray|length : 0 }}'
+            "banners": '{{ bannerCount }}'
         },
     });
 </script>
