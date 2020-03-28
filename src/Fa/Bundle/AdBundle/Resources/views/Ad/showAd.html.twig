@@ -1685,6 +1685,11 @@
     {% else %}
         {% set businessname = 'Private seller' %}
     {% endif %}
+
+    {# Location @Jigar Lad #}
+    {% set locationReposetry = fetch_repository('FaEntityBundle:Location') %}
+    {% set Town = locationReposetry.find(adDetail.a_l_main_town_id_i)%}
+    {% set Country = locationReposetry.getCountyByTownId(adDetail.a_l_main_town_id_i)%}
     <script>
         {# get date and create as new #}
         var publishedDate = new Date(1000*{{ adDetail.a_published_at_i }});
@@ -1700,9 +1705,9 @@
                     "subSubSubCategory": "{{ (categoryArray.3 is defined ? categoryArray.3 : '')|raw }}",
                     "id": '{{ adId }}',
                     "photos": '{{ adDetail.a_total_images_i }}',
-                    "county": "{{ location_slug }}",
+                    "county": "{{ Country|raw }}",
                     "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw}}",
-                    "town": "{{ app.request.get('location')|title }}",
+                    "town": "{{ Town.name|raw }}",
                     "video": '{{ youtubeVideoUrl is not  null ? 'True' : 'False' }}',
                     "paypalEnabled": '{{ showBuyNowWithPaypal ? 'True' : 'False'}}',
                     "publishDate": publishedDate.getFullYear() + "/" + (publishedDate.getMonth() + 1) + "/" + publishedDate.getDate(),
