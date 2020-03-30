@@ -113,7 +113,6 @@ EOF
                 $insertSql = 'insert into '.$this->mainDbName.'.furniture_auto (user_id, email_sent_date) values($userId, "'.$cur_date.'")';
                 $this->executeRawQuery($insertSql, $this->entityManager);
             }
-
             $output->writeln('Email added to queue for AD ID: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);
         }
 
