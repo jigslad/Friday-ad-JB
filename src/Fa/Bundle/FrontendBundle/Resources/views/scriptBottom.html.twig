@@ -316,6 +316,12 @@
     {% endif %}
 {% endfor %}
 <script>
+    if(dataLayerPageType){
+        console.log(dataLayerPageType);
+    }
+    else {
+        console.log({{ pageType }});
+    }
     window.dataLayer = window.dataLayer || [];
     dataLayer.push({
         "page": {

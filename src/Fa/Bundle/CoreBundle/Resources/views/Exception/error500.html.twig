@@ -17,31 +17,8 @@
 
 {% block dimension2 %}
     <!-- Google TAG Manager -->
-    {% if app.user %}
-        {% set ClientID = app.user.id %}
-        {% set login_status = 'true' %}
-        {% if app.user.role == 'ROLE_BUSINESS_SELLER' %}
-            {% set userType = 'Business' %}
-        {% else %}
-            {% set userType = 'Private' %}
-        {% endif %}
-    {% else %}
-        {% set ClientID = 'null' %}
-        {% set login_status = 'false' %}
-        {% set userType = 'null' %}
-    {% endif %}
     <script>
-        window.dataLayer = window.dataLayer || [];
-        dataLayer.push({
-            "page": {
-                "pageType": '_500_page',
-                "loggedInStatus": '{{ login_status }}',
-                "clientID": '{{ ClientID }}',
-                "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
-                "loggedInType": '{{ userType }}',
-                "banners": '{{ bannersArray is defined ? bannersArray|length : '' }}'
-            },
-        });
+        let dataLayerPageType = '_500_page';
     </script>
     <!-- Google TAG Manager -->
 <script language="javascript" type="text/javascript">
