@@ -79,7 +79,22 @@
             </div>
         </div>
     </div>
-
+   {# FFR-4031 starts Here #}
+   {% set isSetCovidSession =0 %}
+   {% if container.get('session').has('CovidSession') %}
+   		{% set isSetCovidSession = container.get('session').get('CovidSession') %}
+   {% endif %}
+   {% if isSetCovidSession==0 %}
+   <div class="covid-19-block top-border">
+        <div class="row">
+            <div class="columns text-center">
+                <div class="medium-17 large-18 columns align-text"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-all-pages">Coronavirus Support section</a></span></div></div>
+                <div class="medium-7 large-6 columns mt-space"><a href="https://www.friday-ad.co.uk/paa/first_step?categoryName=Coronavirus%20Support" class="button place-free-ad-btn thin-btn ga-covid-19-paa-link-all-pages">Place FREE ad now</a><span class="cross-btn align-text" onclick="setCovidSession()"></span></div>
+            </div>
+        </div>
+    </div>
+   {% endif %}
+   {# FFR-4031 Ends Here #}
    {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
    <div id="sticky_nav_top">
     <div class="nav-bg {% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2: 'listing_page', 3: 'landing_page_category_location', 4: 'landing_page_category'} %}homepage-nav{% endif %}">

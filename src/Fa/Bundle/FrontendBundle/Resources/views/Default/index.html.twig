@@ -50,27 +50,14 @@
 {% endif %}
     
 {% block body %}
-<style>
-    .covid-19-block { background: #212527;padding: 15px 0;border-bottom: 4px solid #FFBE09; }
-    .covid-19-block .head {color: #FFFFFF; font-family: Asap; font-size: 20px;font-weight: bold; letter-spacing: 0.83px;line-height: 23px; }
-    .ask-for-offer-help { color: #FFFFFF;font-weight: normal !important;font-family: Asap; font-size: 18px;letter-spacing: 0; line-height: 21px;text-align: center;  }
-    .ask-for-offer-help a, .ask-for-offer-help a:hover, .ask-for-offer-help a:focus { color: #FFBE09 !important;text-decoration: underline !important; }
-    .place-free-ad-btn, .place-free-ad-btn:hover, .place-free-ad-btn:focus, a:hover.button.place-free-ad-btn, a:focus.button.place-free-ad-btn { height: 30px; width: 162px; background-color: #FFBE09;color: #343738 !important; font-family: "Bree Serif"; font-size: 14px; letter-spacing: 0;line-height: 16px;text-align: center; margin-bottom: 0px;padding: 6px 0px; }
-    .align-text { text-align: right; }
-    @media only screen and (max-width: 640px) {
-        .align-text { text-align: center; }
-        .mt-space { margin-top: 20px; }
-        .home-slider-content, .hero-img { min-height: 430px !important;height: 430px !important; }
-    }
-</style>
-
     <div class="{% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}homepage-hero{% endif %}">
         <div class="hero-img">
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isHomeSearch': true } )) }}
             <div class="parallax-window" id="header_image_div"></div>
         </div>
     </div>
-    <div class="covid-19-block">
+    {# FFR-4030 starts Here #}
+    <div class="covid-19-block bottom-border">
         <div class="row">
             <div class="columns text-center">
                 <div class="medium-17  large-18 columns align-text"><div class="head">Covid-19. <span class="ask-for-offer-help">Ask for & Offer Help in our <a href="https://www.friday-ad.co.uk/uk/community/coronavirus-support/" class="ga-covid-19-support-link-homepage">Coronavirus Support section</a></span></div></div>
@@ -78,6 +65,7 @@
             </div>
         </div>
     </div>
+    {# FFR-4030 ends Here #}
     <div class="what-u-discover">
         <div class="row">
             <div class="columns">
