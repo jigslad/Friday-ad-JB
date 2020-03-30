@@ -35,130 +35,145 @@
     {% set regNoDetailsHiddenFields = {0: 'colour_id_dimension_id', 1: 'first_step_ordered_fields'} %}
 {% endif %}
 
+{% block scripttop %}
+    <link rel="stylesheet" href="{{ asset('/build/css/paa.css') }}">
+{% endblock %}
+
 {% block body %}
-    <div class="posting-bg">
-        <div class="fad-sign-bdr">&nbsp;</div>
-        <div class="row paa-main paa-btm-space" {% if app.user and app.user.getRole() and app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}data-equalizer{% endif %}>
-            {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 1}) }}
-            <div id="middle-column" class="large-12 columns" data-equalizer-watch>
-                <h1 class="text-center paa-title">{{ 'what are you advertising?'|trans({}, 'frontend-paa-first-step') }}</h1>
-                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                {{ form_errors(form) }}
-                <div class="big-wrapper">
-                    <h2 class="text-center" id="choose_cat_msg">{{ 'choose from all categories'|trans({}, 'frontend-paa-first-step') }}</h2>
-                    <h3 class="text-center mt10" id="redirect_msg" style="display:none">{{ 'please wait…'|trans({}, 'frontend-paa-first-step') }}</h3>
-                </div>
-                <div class="big-wrapper">
-                    <div class="choose-all-categories">
-                        {% set categories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
-                        {% for categoryId, categoryName in categories %}
-                            {% set catClass = 'cat-' ~ categoryName|lower|replace({' ' : ''}) %}
-                            <a href="javascript:void(0)" class="{{ catClass }} main_category" id="maincategory_{{ categoryId }}" onclick="changeMainCategory('{{ categoryId }}', '', '1');">{{ categoryName }}</a>
-                         {% endfor %}
-                    </div>
-                </div>
-                <div class="small-wrapper" id="main_div">
-                    <div id="motor_reg_fields">
-                        {% if showRegNoFieldsFlag %}
-                            <div id="reg_no_fields" class="paa-bdr-box">
-                                    {% if attribute(form, 'has_reg_no') is defined %}
-                                        <h3 class="text-center">{{ attribute(form, 'has_reg_no').vars.label }}</h3>
-                                        <div class="text-center label-inline reg-yes-no">
-                                            {{ form_widget(attribute(form, 'has_reg_no')) }}
-                                            {{ form_errors(attribute(form, 'has_reg_no')) }}
-                                        </div>
-                                    {% endif %}
-                                <div id="reg_no_field">
-                                    {% if attribute(form, 'reg_no') is defined %}
-                                        <div class="small-wrapper">
-                                            <label for="fa_paa_category_select_reg_no">{{ 'Enter it here'|trans({}, 'frontend-paa-second-step')}}:</label>
-                                            {{ form_widget(attribute(form, 'reg_no')) }}
-                                            {{ form_errors(attribute(form, 'reg_no')) }}
-                                            <span class="error" id="reg_no_error_msg"></span>
-                                            <button class="secondary-btn-1 expand mt10" id="lookup_vehicle" type="button">{{ 'Lookup Vehicle'|trans({}, 'frontend-paa-second-step')}}</button>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                <div id="reg_no_details_fields" style="display:none">
-                                    {% if regNoDetailsOrderedFields|length %}
-                                        {% if attribute(form, 'has_reg_no').vars.data == 1 %}
-                                            {% if attribute(form, 'reg_no').vars.data is not null and attribute(form, 'reg_no').vars.errors|length < 1 %}
-                                                <h5 class="text-center" id="add_vehicle_msg">{{ 'Confirm your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
-                                            {% else %}
-                                                <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
-                                            {% endif %}
-                                        {% else %}
-                                            <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
-                                        {% endif %}
-                                        <div id="reg_no_category_div"></div>
-                                        <div class="small-wrapper">
-                                        {% for field in regNoDetailsOrderedFields %}
-                                            {% if attribute(form, field) is defined %}
-                                                {% if field in regNoDetailsHiddenFields %}
-                                                    {{ form_widget(attribute(form, field), {'attr': {'style':'display:none'}}) }}
-                                                {% elseif 'engine_size' in field %}
-                                                    <label for="fa_paa_category_select_engine_size">{{ attribute(form, field).vars.label }}{{fetch_repository('FaAdBundle:AdMotors').getUnitByField('engine_size', true)}}</label>
-                                                    {{ form_widget(attribute(form, field)) }}
-                                                    {{ form_errors(attribute(form, field)) }}
-                                                {% else %}
-                                                    {{ form_row(attribute(form, field)) }}
-                                                {% endif %}
-                                            {% endif %}
-                                        {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-                    {% set totalLevel = fetch_repository('FaEntityBundle:Category').getMaxLevel(fetch_container_instance()) %}
-                    {{ set_variables('paa_category_select', {'totalLevel' : totalLevel }) }}
-                    {% if totalLevel %}
-                        <div id="category_choices_div" style="display:none">
-                            <div class="admin_cat_search list_style_none">
-                                {% for i in 1..totalLevel %}
-                                    <div id="category_choice_div_{{ i }}" class="category_choice_div">
-                                        {% set field = 'category_' ~ i %}
-                                        {{ form_widget(attribute(form, field)) }}
-                                    </div>
-                                {% endfor %}
-                            </div>
+    <section class="paa-block">
+        <div class="posting-bg">
+            <div class="container">
+                <div class="row paa-main paa-btm-space" {% if app.user and app.user.getRole() and app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}data-equalizer{% endif %}>
+                    {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 1}) }}
+
+                    <div id="middle-column" class="col-md-12 medium-col step-one" data-equalizer-watch>
+                        <div class="col-md-24 d-flex justify-content-center">
+                            <h1 class="s-h1 paa-title col-md-24 col-lg-18 text-center">{{ 'what are you advertising?'|trans({}, 'frontend-paa-first-step') }}</h1>
                         </div>
-                    {% endif %}
-    </div>
-    <div class="small-wrapper">
-      {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand button disabled'}}) }}
-    </div>
-    <div class="big-wrapper">
-      <h2 class="text-center" id="or_msg">{{ 'OR'|trans({}, 'frontend-paa-first-step') }}</h2>
-      <h2 class="text-center subtitle">{{ 'Tell us what it is and we\'ll help you find the category'|trans({}, 'frontend-paa-first-step') }}</h2>
-      <div class="category-search" id="category_autocomplete_div">
-          <div class="disable-autocomplete"></div>
-          <div class="relative text-center">
-              <span id="field_arrow">
-                  <i class="fi-arrow-right large element-animation"></i>
-                  <i class="fi-arrow-down large element-animation"></i>
-              </span>
-              <span class="textbox-wrapper">
-                  {{ form_row(form.category_id_autocomplete) }}
-                  <a href="javascript:void(0);" id="fa_paa_category_select_category_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-              </span>
-          </div>
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_errors(form) }}
+                            <div class="col-md-24 d-flex justify-content-center">
+                                <h2 class="s-h2 col-md-24 col-lg-18 text-center" id="choose_cat_msg">{{ 'choose from all categories'|trans({}, 'frontend-paa-first-step') }}</h2>
+                                <h3 class="s-h3 col-md-24 col-lg-18 text-center" id="redirect_msg" style="display:none">{{ 'please wait…'|trans({}, 'frontend-paa-first-step') }}</h3>
+                            </div>
+                            <div class="choose-all-categories">
+                                {% set categories = fetch_repository('FaEntityBundle:Category').getCategoryByLevelArray(1, fetch_container_instance()) %}
+                                {% for categoryId, categoryName in categories %}
+                                    {% set catClass = 'cat-' ~ categoryName|lower|replace({' ' : ''}) %}
+                                    <a href="javascript:void(0)" class="{{ catClass }} main_category" id="maincategory_{{ categoryId }}" onclick="changeMainCategory('{{ categoryId }}', '', '1');">{{ categoryName }}</a>
+                                 {% endfor %}
+                            </div>
+                            <div class="col-md-24 d-flex justify-content-center" id="main_div">
+                                <div id="motor_reg_fields">
+                                    {% if showRegNoFieldsFlag %}
+                                        <div id="reg_no_fields" class="paa-bdr-box">
+                                                {% if attribute(form, 'has_reg_no') is defined %}
+                                                    <h3 class="text-center">{{ attribute(form, 'has_reg_no').vars.label }}</h3>
+                                                    <div class="text-center label-inline reg-yes-no">
+                                                        {{ form_widget(attribute(form, 'has_reg_no')) }}
+                                                        {{ form_errors(attribute(form, 'has_reg_no')) }}
+                                                    </div>
+                                                {% endif %}
+                                            <div id="reg_no_field">
+                                                {% if attribute(form, 'reg_no') is defined %}
+                                                    <div class="small-wrapper">
+                                                        <label for="fa_paa_category_select_reg_no">{{ 'Enter it here'|trans({}, 'frontend-paa-second-step')}}:</label>
+                                                        {{ form_widget(attribute(form, 'reg_no')) }}
+                                                        {{ form_errors(attribute(form, 'reg_no')) }}
+                                                        <span class="error" id="reg_no_error_msg"></span>
+                                                        <button class="secondary-btn-1 expand mt10" id="lookup_vehicle" type="button">{{ 'Lookup Vehicle'|trans({}, 'frontend-paa-second-step')}}</button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div id="reg_no_details_fields" style="display:none">
+                                                {% if regNoDetailsOrderedFields|length %}
+                                                    {% if attribute(form, 'has_reg_no').vars.data == 1 %}
+                                                        {% if attribute(form, 'reg_no').vars.data is not null and attribute(form, 'reg_no').vars.errors|length < 1 %}
+                                                            <h5 class="text-center" id="add_vehicle_msg">{{ 'Confirm your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                                                        {% else %}
+                                                            <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <h5 class="text-center" id="add_vehicle_msg">{{ 'Add your vehicle details:'|trans({}, 'frontend-paa-second-step') }}</h5>
+                                                    {% endif %}
+                                                    <div id="reg_no_category_div"></div>
+                                                    <div class="small-wrapper">
+                                                    {% for field in regNoDetailsOrderedFields %}
+                                                        {% if attribute(form, field) is defined %}
+                                                            {% if field in regNoDetailsHiddenFields %}
+                                                                {{ form_widget(attribute(form, field), {'attr': {'style':'display:none'}}) }}
+                                                            {% elseif 'engine_size' in field %}
+                                                                <label for="fa_paa_category_select_engine_size">{{ attribute(form, field).vars.label }}{{fetch_repository('FaAdBundle:AdMotors').getUnitByField('engine_size', true)}}</label>
+                                                                {{ form_widget(attribute(form, field)) }}
+                                                                {{ form_errors(attribute(form, field)) }}
+                                                            {% else %}
+                                                                {{ form_row(attribute(form, field)) }}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                {% set totalLevel = fetch_repository('FaEntityBundle:Category').getMaxLevel(fetch_container_instance()) %}
+                                {{ set_variables('paa_category_select', {'totalLevel' : totalLevel }) }}
+                                {% if totalLevel %}
+                                    <div id="main_div">
+                                        <div id="category_choices_div">
+                                            {% for i in 1..totalLevel %}
+                                                <div class="col-md-24 d-flex justify-content-center mt20 mb20" style="">
+                                                    <div id="category_choice_div_{{ i }}" class="col-md-24 col-lg-16 pad-none" style="display:none">
+                                                        <div class="gray-bg">
+                                                            {% set field = 'category_' ~ i %}
+                                                            {{ form_widget(attribute(form, field)) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-24 d-flex justify-content-center">
+                              {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block disabled col-md-24 col-lg-16 next-btn'}}) }}
+                            </div>
+                            <div class="col-md-24 d-flex justify-content-center">
+                                <h2 class="s-h2 text-center col-md-24 col-lg-18" id="or_msg">{{ 'OR'|trans({}, 'frontend-paa-first-step') }}</h2>
+                            </div>
+                            <div class="col-md-24 d-flex justify-content-center mb20s">
+                                <h2 class="s-h2 text-center col-md-24 col-lg-18 subtitle">{{ 'Tell us what it is and we\'ll help you find the category'|trans({}, 'frontend-paa-first-step') }}</h2>
+                            </div>
+                            <div class="col-md-24 d-flex justify-content-center mt20">
+                                <div class="category-search" id="category_autocomplete_div">
+                                    <div class="disable-autocomplete"></div>
+                                    <div class="relative text-center">
+                                        <span id="field_arrow">
+                                            <i class="fi-arrow-right large element-animation"></i>
+                                            <i class="fi-arrow-down large element-animation"></i>
+                                        </span>
+                                        <span class="textbox-wrapper">
+                                            {{ form_row(form.category_id_autocomplete) }}
+                                            <a href="javascript:void(0);" id="fa_paa_category_select_category_id_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                    {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {}) }}
+                </div>
+            </div>
       </div>
-    </div>
-   
-    {{ form_end(form) }}
-  </div>
-  {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {}) }}
-  </div>
-  </div>
-  {% if (objDraftAd is defined and objDraftAd is not null and not app.request.cookies.has('draft_ad_popup')) %}
-      {{ include('FaAdBundle:AdPost:draftAdPopup.html.twig') }}
-  {% endif %}
-  <div id="carweb_category_msg_modal" class="reveal-modal tiny" data-reveal>
-      <a class="close-reveal-modal">&#215;</a>
-      <h5 class="modal-title">&nbsp;</h5>
-  </div>
+        {% if (objDraftAd is defined and objDraftAd is not null and not app.request.cookies.has('draft_ad_popup')) %}
+          {{ include('FaAdBundle:AdPost:draftAdPopup.html.twig') }}
+        {% endif %}
+        <div id="carweb_category_msg_modal" class="reveal-modal tiny" data-reveal style="display: none">
+          <a class="close-reveal-modal">&#215;</a>
+          <h5 class="modal-title">&nbsp;</h5>
+      </div>
+    </section>
 {% endblock %}
 
 {% block scriptbottom %}
@@ -208,7 +223,7 @@
                getMotorsRegNoFields($(this).val(), loadRegNofields);
            } else if (level == 2 && $.inArray( parseInt($(this).val()), regNoFieldCategoryIds) == -1) {
                $('#motor_reg_fields').html('');
-               $(document).foundation('equalizer', 'reflow');
+               $(document).equalizer();
            }
 
            if ($('#reg_no_details_fields').is(':visible')) {
@@ -287,7 +302,7 @@
                 changeMainCategory('{{ key }}', catArray[1]);
                 if ($.inArray( parseInt(catArray[1]), regNoFieldCategoryIds) == -1) {
                     $('#motor_reg_fields').html('');
-                    $(document).foundation('equalizer', 'reflow');
+                    $(document).equalizer();
                 }
               } else {
                 if (catLevel == 2 && $.inArray( parseInt(catArray[1]), regNoFieldCategoryIds) != -1 && '{{app.request.get('is_edit')}}' != '1') {
@@ -400,7 +415,7 @@
             }
         }
 
-        $(document).foundation('equalizer', 'reflow');
+        $(document).equalizer();
     }
 
     function resetAndHideCategoryChoiceFields(removeRegFields)
@@ -412,7 +427,7 @@
 
         if (removeRegFields) {
             $('#motor_reg_fields').html('');
-            $(document).foundation('equalizer', 'reflow');
+            $(document).equalizer();
         }
 
         enableDisableNextBtn();
@@ -463,7 +478,7 @@
         }
 
         if (typeof removeRegNo != 'undefined' && removeRegNo == 1) {
-            $('#motor_reg_fields').html('');$(document).foundation('equalizer', 'reflow');
+            $('#motor_reg_fields').html('');$(document).equalizer();
         }
         resetCategoryAutocompleteField();
 
@@ -576,7 +591,7 @@
                     }
                 }
                 $('#motor_reg_fields').html(data);
-                $(document).foundation('equalizer', 'reflow');
+                $(document).equalizer();
                 if (!loadRegNofields && regNo) {
                     $('#fa_paa_category_select_reg_no').val(regNo);
                     $('#lookup_vehicle').trigger('click');
@@ -584,7 +599,7 @@
             });
         } else {
             $('#motor_reg_fields').html('');
-            $(document).foundation('equalizer', 'reflow');
+            $(document).equalizer();
         }
     }
 

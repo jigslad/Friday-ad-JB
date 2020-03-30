@@ -26,10 +26,10 @@
 {% if currentRoute == 'ad_post_fourth_step' %}
     {{ include('FaAdBundle:AdPost:dragDropMessage.html.twig') }}
 {% endif %}
-<div id="left-column" class="large-6 columns" data-equalizer-watch>
-    <div class="step-instruction hide-for-small-only">
+<div id="left-column" class="col-md-6 left-col" data-equalizer-watch>
+    <div class="step-instruction d-none d-md-block">
         <div class="f-ad-sign">F-ad</div>
-        <h3 id="paa_steps_title">
+        <h3 id="paa_steps_title" class="s-h3">
         {% if rootCategoryId == forSaleCategoryId %}
             {{ 'Sell your items on Friday-Ad'|trans({}, 'frontend-paa') }}
         {% else %}
@@ -38,7 +38,9 @@
         </h3>
         <div class="step-to-complete"><span>{{ '%step_count% steps to complete your ad'|trans({'%step_count%' : (totalSteps - step + 1)}, 'frontend-paa') }}</span></div>
     </div>
-    <ul class="step-nav">
+    <div class="fad-sign-bdr">&nbsp;</div>
+    <div class="clearfix">
+        <ul class="step-nav">
         {% set step1Class = 'step-off' %}
         {% set step2Class = 'step-off' %}
         {% set step3Class = 'step-off' %}
@@ -64,31 +66,32 @@
 
         <li class="clearfix {{ step1Class }}">
             <div class="step-num step-1">1</div>
-            <div class="step-text">{{ 'Let\'s get started'|trans({}, 'frontend-paa') }}</div>
+            <div class="step-text d-none d-md-block">{{ 'Let\'s get started'|trans({}, 'frontend-paa') }}</div>
         </li>
 
         <li class="clearfix {{ step2Class }}">
             <div class="step-num step-2">2</div>
-            <div class="step-text">{{ 'Describe your item'|trans({}, 'frontend-paa') }}</div>
+            <div class="step-text d-none d-md-block">{{ 'Describe your item'|trans({}, 'frontend-paa') }}</div>
         </li>
 
         {% if totalSteps == 3 %}
             <li class="clearfix {{ step4Class }}">
                 <div class="step-num step-3">3</div>
-                <div class="step-text">{{ 'Add more details'|trans({}, 'frontend-paa') }}</div>
+                <div class="step-text d-none d-md-block">{{ 'Add more details'|trans({}, 'frontend-paa') }}</div>
             </li>
         {% else %}
             <li class="clearfix {{ step3Class }}">
                 <div class="step-num step-3">3</div>
-                <div class="step-text">{{ 'Add your details'|trans({}, 'frontend-paa') }}</div>
+                <div class="step-text d-none d-md-block">{{ 'Add your details'|trans({}, 'frontend-paa') }}</div>
             </li>
     
             <li class="clearfix {{ step4Class }}">
                 <div class="step-num step-4">4</div>
-                <div class="step-text">{{ 'Almost there!'|trans({}, 'frontend-paa') }}</div>
+                <div class="step-text d-none d-md-block">{{ 'Almost there!'|trans({}, 'frontend-paa') }}</div>
             </li>
         {% endif %}
     </ul>
+    </div>
     {% if step == 1 and app.user and app.user.getRole() and (app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
         <div class="paaLeftContainer">
             <div class="dpaa-section text-center hide-for-small-only" id="paaLeftPrintItem">

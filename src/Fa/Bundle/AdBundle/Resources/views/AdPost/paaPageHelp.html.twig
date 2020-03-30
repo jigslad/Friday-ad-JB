@@ -2,7 +2,7 @@
 {% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
 {% set paaBlock = staticPageRepository.getStaticBlockDetailArray(paaBlockSlug, fetch_container_instance()) %}
 {% endif %}
-<div id="right-column" class="large-6 columns" data-equalizer-watch>
+<div id="right-column" class="col-md-6 right-col" data-equalizer-watch>
     <div class="paa-help-text">
         {% if paaBlock['title'] is defined %}
             {% set twoLineClass = '' %}
