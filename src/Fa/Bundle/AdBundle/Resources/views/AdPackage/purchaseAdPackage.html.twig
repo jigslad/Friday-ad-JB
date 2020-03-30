@@ -93,9 +93,6 @@
                     {% endif %}
                     {% if packages|length %}
                         <div class="row fa-equalizer" id="package_equalizer">
-                        {% if packages|length < 4 %}
-                        	<div style="display: flex;">                        	
-                        {% endif %}
                         <div style="margin: 0px auto !important; height: 776px;" class="{% if packages|length ==3 %} large-18 {% elseif packages|length ==2 %} large-12 {% elseif packages|length ==1 %} large-6 {% else %} large-24 {% endif %}">
                             {% for package in packages %}
                                 {% set packageValues = array_unserialize(package.getPackage().getValue()) %}
@@ -259,9 +256,6 @@
                                 </div>                               
                             {% endfor %}
                             </div>
-                            {% if packages|length < 4 %}
-                             </div>
-                            {% endif %}
                         </div>
                         <div class="avail-payment-box">
                             <div class="text-center p-b-20">Pay on the next page with...</div>
