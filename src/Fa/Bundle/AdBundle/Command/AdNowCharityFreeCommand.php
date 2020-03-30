@@ -109,6 +109,9 @@ EOF
 
             if ($user && CommonManager::checkSendEmailToUser($userId, $this->getContainer()) && $userRoleId!=RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID) {
                 $this->em->getRepository('FaEmailBundle:EmailQueue')->addEmailToQueue('now_charity_free', $user, $ad, $this->getContainer());
+                $cur_date = date("Y-m-d");
+                $insertSql = 'insert into '.$this->mainDbName.'.furniture_auto (user_id, email_sent_date) values($userId, "'.$cur_date.'")';
+                $this->executeRawQuery($insertSql, $this->entityManager);
             }
 
             $output->writeln('Email added to queue for AD ID: '.$ad->getId().' User Id:'.($user ? $user->getId() : null), true);

@@ -47,7 +47,7 @@ class AdNowCharityUnsoldCommand extends ContainerAwareCommand
         - Send ad now charity free of unsold before ten day.
         
         Command:
-         - php app/console fa:charity:now-charity-unsold
+         - php bin/console fa:charity:now-charity-unsold
 EOF
             );
     }
@@ -102,7 +102,7 @@ EOF
             $userId = ($ad['userid'] ? $ad['userid'] : null);
             //$userId = 1293153;
             $user = $this->em->getRepository('FaUserBundle:User')->find($userId);
-            $ad = $this->em->getRepository('FaAdBundle:Ad')->find($ad['ad_id']);
+            $ad = $this->em->getRepository('FaAdBundle:Ad')->find($ad['adid']);
 
             //send email only if ad has user and status is active.
             $userRoleId = $this->adUserRoleId($userId);
