@@ -40,7 +40,7 @@
 {% endblock %}
 
 {% block body %}
-    <section class="paa-block">
+    <div class="paa-block">
         <div class="posting-bg">
             <div class="container">
                 <div class="row paa-main paa-btm-space" {% if app.user and app.user.getRole() and app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') %}data-equalizer{% endif %}>
@@ -173,7 +173,7 @@
           <a class="close-reveal-modal">&#215;</a>
           <h5 class="modal-title">&nbsp;</h5>
       </div>
-    </section>
+    </div>
 {% endblock %}
 
 {% block scriptbottom %}

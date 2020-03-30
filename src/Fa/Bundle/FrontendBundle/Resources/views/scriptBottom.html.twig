@@ -9,25 +9,18 @@
 
 <script type="text/javascript" src="{{ asset('js/modernizr.custom.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/jquery.dlmenu.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/common.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/jquery.equalizer.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/jquery.blockUI.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/custom.js') }}"></script>
-
+<script type="text/javascript" src="{{ asset('bundles/facore/js/common.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/jquery.equalizer.min.js') }}"></script>
-
-
-{% javascripts filter='uglifyjs2' output='bundles/js/compiled/main.js'
-    'bundles/fosjsrouting/js/router.js'
-    'bundles/fafrontend/js/vendor/select2.min.js'
-    'bundles/fafrontend/js/vendor/fastclick.js'
-%}
-<script src="{{ static_asset_url(asset_url) }}"></script>
-
-{% endjavascripts %}
-
+<script type="text/javascript" src="{{ asset('bundles/facore/js/jquery.blockUI.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/facontent/fileman/js/custom.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/fafrontend/js/vendor/select2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/fafrontend/js/vendor/fastclick.js') }}"></script>
 {% set container = fetch_container_instance() %}
-<script>var isAdBlocker;isAdBlocker = false;</script>
+<script>
+    let isAdBlocker;
+    isAdBlocker = false;
+</script>
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $.ajax({
