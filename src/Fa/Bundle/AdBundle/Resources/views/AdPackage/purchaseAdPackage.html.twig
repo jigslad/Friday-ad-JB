@@ -93,6 +93,9 @@
                     {% endif %}
                     {% if packages|length %}
                         <div class="row fa-equalizer" id="package_equalizer">
+                        {% if packages|length < 4 %}
+                        	<div style="display: flex;">
+                        {% endif %}
                             {% for package in packages %}
                                 {% set packageValues = array_unserialize(package.getPackage().getValue()) %}
                                 {% set packageActualPrice = 0 %}
@@ -131,8 +134,7 @@
                                     {% set packagePrice = format_currency(packageActualPrice) %}
                                 {% else %}
                                     {% set packagePrice = 'Free'|trans({}, 'frontend-ad-package')%}
-                                {% endif %}
-								<div style="display: flex;">
+                                {% endif %}								
                                 <div class="large-6 columns" style="margin: 0 auto !important;">
                                     <div class="paa-pkg-bg">
                                         <span class="pkg-selection" id="package_selection_{{package.getPackage().getId()}}">Select Package</span>
@@ -222,7 +224,7 @@
                                                     {% endif %}
                                                 </div>
                                                 {% set userCreditId = fetch_repository('FaPromotionBundle:Package').isPackageValidForCredit(package.getPackage(), userActiveCredits, activeShopPackageDetail) %}
-                                                <button type="button" class="{% if pkgButtonColorClass is defined and pkgButtonColorClass != '' %}{{pkgButtonColorClass}}{% else %}primary-btn-2{% endif %} expand{% if not userCreditId or (userCreditId and package.getPackage().getPrice() <= 0) %} free-button-spacing{% endif %} choose_btn" onclick="return selectPackage({{package.getPackage().getId()}}, '{{ package.getPackage().getPrice() }}');" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
+                                                <button type="button" class="{% if pkgButtonColorClass is defined and pkgButtonColorClass != '' %}{{pkgButtonColorClass}}{% else %}primary-btn-2{% endif %} expand{% if not userCreditId or (userCreditId and package.getPackage().getPrice() <= 0) %} free-button-spacing{% endif %} choose_btn thin-btn" onclick="return selectPackage({{package.getPackage().getId()}}, '{{ package.getPackage().getPrice() }}');" onmouseover="$('#package_selection_{{package.getPackage().getId()}}').attr('style', 'opacity:1');" onmouseout="$('#package_selection_{{package.getPackage().getId()}}').attr('style', '');">
                                                 {% if package.getPackage().getPrice() > 0 and userCreditId %}
                                                     {{'Pay for advert'|trans({}, 'frontend-ad-package')}}
                                                 {% else %}
@@ -253,9 +255,11 @@
                                             </ul>
                                         </div>
                                     </div>
-                                </div>
-                                </div>
+                                </div>                               
                             {% endfor %}
+                            {% if packages|length < 4 %}
+                             </div>
+                            {% endif %}
                         </div>
                         <div class="avail-payment-box">
                             <div class="text-center p-b-20">Pay on the next page with...</div>
