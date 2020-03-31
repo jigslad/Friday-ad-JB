@@ -661,14 +661,14 @@
         window.dataLayer = window.dataLayer || [];
         dataLayer.push({
             "searchResults":{
-                "county": '{{ cookieLocationDetails.paa_county  is defined ? cookieLocationDetails.paa_county : cookieLocationDetails.location_text }}',
-                "town": "{{ cookieLocationDetails.paa_county  is defined ? cookieLocationDetails.town : 0 }}",
-                "locationGroup": "{{ locationGroup.name is defined ? locationGroup.name : locationGroup }}",     //ad location group (Nursery, Non-Print, Print - (print location)
-                "searchKeyword": '{{ app.request.get('keywords') }}',
+                "county": '{{ (cookieLocationDetails.paa_county  is defined ? cookieLocationDetails.paa_county : cookieLocationDetails.location_text)|raw }}',
+                "town": "{{ (cookieLocationDetails.paa_county  is defined ? cookieLocationDetails.town : 0)|raw }}",
+                "locationGroup": "{{ (locationGroup.name is defined ? locationGroup.name : locationGroup)|raw }}",
+                "searchKeyword": '{{ app.request.get('keywords')|raw }}',
                 "searchResultMethod": searchResultMethod, //described below
                 "noOfResults": {{resultCount}},
                 "radius": '{{ searchParams.item__distance is defined ? searchParams.item__distance : 'default' }}',
-                "popularSearch": {{ seoFields.popular_search is defined ? seoFields.popular_search : 'false' }}
+                "popularSearch": {{ seoFields.popular_search is defined ? 'true' : 'false' }}
             }
         });
     </script>
