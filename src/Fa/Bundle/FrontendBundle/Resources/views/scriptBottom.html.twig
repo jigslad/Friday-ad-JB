@@ -299,33 +299,35 @@
 {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
     {% set bannerCurrentDevice = 'T' %}
 {% endif %}
-{% for banner in bannersArray %}
-    {% set showBanner = 0 %}
-    {% if ((bannerCurrentDevice == 'D' and banner['is_desktop'] == 1) or (bannerCurrentDevice == 'T' and banner['is_tablet'] == 1) or (bannerCurrentDevice == 'M' and banner['is_mobile'] == 1)) %}
-        {% set showBanner = 1 %}
-    {% else %}
+{% if bannersArray is defined %}
+    {% for banner in bannersArray %}
         {% set showBanner = 0 %}
-    {% endif %}
-    {% if banner['zone_id'] == zone_above_header and banner['page_id'] == page_all_other %}
-        {% if not app.request.attributes.get('static_page') %}
+        {% if ((bannerCurrentDevice == 'D' and banner['is_desktop'] == 1) or (bannerCurrentDevice == 'T' and banner['is_tablet'] == 1) or (bannerCurrentDevice == 'M' and banner['is_mobile'] == 1)) %}
+            {% set showBanner = 1 %}
+        {% else %}
             {% set showBanner = 0 %}
         {% endif %}
-    {% endif %}
-    {% if (showBanner == 1) %}
-        {% set bannerCount = bannerCount + 1 %}
-    {% endif %}
-{% endfor %}
+        {% if banner['zone_id'] == zone_above_header and banner['page_id'] == page_all_other %}
+            {% if not app.request.attributes.get('static_page') %}
+                {% set showBanner = 0 %}
+            {% endif %}
+        {% endif %}
+        {% if (showBanner == 1) %}
+            {% set bannerCount = bannerCount + 1 %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
 <script>
     if(dataLayerPageType){
-        console.log(dataLayerPageType);
+        var pagType = dataLayerPageType;
     }
     else {
-        console.log({{ pageType }});
+        var pagType = "{{ pageType }}";
     }
     window.dataLayer = window.dataLayer || [];
     dataLayer.push({
         "page": {
-            "pageType": '{{ pageType }}',
+            "pageType": pagType,
             "loggedInStatus": '{{ login_status }}',
             "clientID": '{{ ClientID }}',
             "ipAddress": '{{ app.request.server.get("REMOTE_ADDR") }}',
