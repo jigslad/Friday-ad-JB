@@ -194,14 +194,25 @@ class UserSiteBannerManager
         
         
         $imageFolder = $this->container->getParameter('fa.user.site.image.dir');
-        
-        $awsPath = $this->container->getParameter('fa.static.aws.url');
+
         $imageDir = CommonManager::getGroupDirNameById($this->getUserSiteId());
-        $awsSourceImg = $awsPath.'/'.$imageFolder.'/'.$imageDir.'/banner_'.$this->getUserSiteId().'.jpg';
+        
+        $userSiteBannerBaseImagePath = $this->container->get('kernel')->getRootDir().'/../web/'.$imageFolder;
+        
+        $awsUrl = $imageFolder.'/'.$imageDir.'/banner_'.$this->getUserSiteId().'.jpg';
+        
+        $fileexistsInAws = 0;
+        if(CommonManager::checkImageExistOnAws($this->container,$awsUrl)) {
+            $userSiteBannerBaseImagePath = $this->container->getParameter('fa.static.aws.url').'/'.$imageFolder;
+            $fileexistsInAws = 1;
+        }
+        
+        $userSiteBannerImagePath = $userSiteBannerBaseImagePath. '/'.$imageDir.'/banner_'.$this->getUserSiteId().'.jpg';
+        
         
         $images = $fileKeys = array();
         
-        if (false!==file($awsSourceImg)) {
+        if (is_file($userSiteBannerImagePath) || $fileexistsInAws == 1) {
             $images[''] = $imageFolder.'/'.$imageDir.'/banner_'.$this->getUserSiteId().'.jpg';
             $images['org'] = $imageFolder.'/'.$imageDir.'/banner_'.$this->getUserSiteId().'_org.jpg';
         }
