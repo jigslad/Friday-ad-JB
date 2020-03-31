@@ -22,7 +22,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @version 1.0
  *
  * @ORM\Table(name="furniture_auto")
- * @ORM\Entity(repositoryClass="Fa\Bundle\AdBundle\Repository\AdNimberRepository")
  */
 class AdFurnitureAutoEmail
 {
@@ -38,19 +37,7 @@ class AdFurnitureAutoEmail
     private $id;
 
     /**
-     * Ad.
-     *
-     * @var \Fa\Bundle\AdBundle\Entity\Ad
-     *
-     * @ORM\ManyToOne(targetEntity="Fa\Bundle\AdBundle\Entity\Ad")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     * })
-     */
-    private $user;
-
-    /**
-     * Buyer user id.
+     *  user id.
      *
      * @var integer
      *
@@ -60,7 +47,7 @@ class AdFurnitureAutoEmail
 
 
     /**
-     * Date.
+     * Email Sent Date.
      *
      * @var string
      *
@@ -85,7 +72,7 @@ class AdFurnitureAutoEmail
      *
      * @return UserId
      */
-    public function setUser(\Fa\Bundle\AdBundle\Entity\User $user_id = null)
+    public function setUserId(\Fa\Bundle\AdBundle\Entity\User $user_id = null)
     {
         $this->user = $user_id;
 

@@ -198,7 +198,7 @@ EOF
         where a.status_id = 25 AND aup.price = 0 AND a.type_id = 4 AND a.category_id in ('.$cat_ids.')
         AND al.town_id in ('.$loc_ids.')
         AND from_unixtime(a.created_at) >= DATE(NOW()) + INTERVAL -10 DAY
-        AND from_unixtime(a.created_at) <  DATE(NOW()) + INTERVAL  2 DAY 
+        AND from_unixtime(a.created_at) <  DATE(NOW()) + INTERVAL  -2 DAY 
         group by a.id';
         $stmt = $this->em->getConnection()->prepare($query);
         $stmt->execute();
@@ -234,7 +234,7 @@ EOF
         where a.status_id = 25 AND aup.price = 0 AND a.type_id = 4 AND a.category_id in ('.$cat_ids.')
         AND al.town_id in ('.$loc_ids.')
         AND from_unixtime(a.created_at) >= DATE(NOW()) + INTERVAL -10 DAY
-        AND from_unixtime(a.created_at) <  DATE(NOW()) + INTERVAL  2 DAY 
+        AND from_unixtime(a.created_at) <  DATE(NOW()) + INTERVAL  -2 DAY 
         group by a.id';
         $stmt = $this->em->getConnection()->prepare($query);
         $stmt->execute();
