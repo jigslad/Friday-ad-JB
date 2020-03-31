@@ -59,6 +59,13 @@ function paypalPaymentProcess() {
         redirect_url = 'paypal_add_to_cart_ajax';
     {% else %}
         redirect_url = 'paypal_upgrade_to_featured_ad_ajax';
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'Options',
+            'eventCategory':  'Search Results',
+            'eventAction': 'Upgrade',
+            'eventLabel': 'Paypal'
+        });
         ga('send', 'event', 'Search Results', 'Upgrade', 'Pay - Paypal'); 
     {% endif %}
 

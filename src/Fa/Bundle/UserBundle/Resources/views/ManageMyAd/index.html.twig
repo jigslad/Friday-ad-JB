@@ -200,6 +200,13 @@
                         {
                             if(result.error == "")
                             {
+                                window.dataLayer = window.dataLayer || []
+                                dataLayer.push({
+                                    'event' : 'Options',
+                                    'eventCategory':  'Options',
+                                    'eventAction': 'Boost Button',
+                                    'eventLabel': adIdToBoost+' - '+result.gaStr
+                                });
                                 ga('send','event','MMA','Boost Button', result.gaStr);
                             }
                         },

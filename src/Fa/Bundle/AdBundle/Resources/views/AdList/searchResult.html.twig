@@ -686,6 +686,13 @@ ul.fourlocationlist li + li:before { content: "|";padding:0 10px; }
 
     function visitUserProfileOrAd(eventCategory, eventAction, eventLabel)
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+            'event' : 'Position',
+            'eventCategory':  eventCategory,
+            'eventAction': eventAction,
+            'eventLabel': eventLabel
+        });
       ga('send', 'event', eventCategory, eventAction, eventLabel);
     }
 
