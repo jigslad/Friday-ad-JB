@@ -318,7 +318,7 @@
     {% endfor %}
 {% endif %}
 <script>
-    if(dataLayerPageType){
+    if(typeof dataLayerPageType !== 'undefined'){
         var pagType = dataLayerPageType;
     }
     else {
