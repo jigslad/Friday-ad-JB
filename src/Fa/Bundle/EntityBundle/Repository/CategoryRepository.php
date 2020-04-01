@@ -126,6 +126,8 @@ class CategoryRepository extends NestedTreeRepository
     const ADULT_TOP_LOCATION_AT_DETAIL_BY_DISTANCE = 50;
     const GAY_MALE_ESCORT_NAME = 'Gay Male Escorts';
     const ADULT_CONTACTS_ID = 3412;
+    const GAY_MALE_ESCORT_ID = 4521;
+    const ADULT_INDUSTRY_JOBS_ID = 4522;
     
     //For Distance
     const MOTORS_DISTANCE = 30;

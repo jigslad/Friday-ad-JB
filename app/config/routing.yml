@@ -187,6 +187,12 @@ show_business_user_ads_location:
     schemes:  [https]
     requirements:
         page_string: '.+'
+        
+fa_adult_homepage:
+    path:     /adult-services/
+    host: '%fa.main.host%'
+    schemes:  [https]
+    defaults: { _controller: FaFrontendBundle:Default:adultHome }
 
 listing_page:
     path: /{location}/{page_string}/
@@ -367,3 +373,4 @@ FaUserBundle_user_address_book_admin:
     resource: '@FaUserBundle/Resources/config/routing/user_address_book_admin.yml'
     prefix:   /admin/user_address_book
     schemes:  [http|https]
+    
