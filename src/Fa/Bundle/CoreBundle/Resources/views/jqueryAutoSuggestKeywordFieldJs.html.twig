@@ -39,6 +39,13 @@ $(function() {
                 keywordCategoryText = keywordCategoryTextRes[1];
                 keywordCategoryText = keywordCategoryText.replace("</span>", "");
             }
+            window.dataLayer = window.dataLayer || []
+            dataLayer.push({
+                'event' : 'Position',
+                'eventCategory':  'Site Search',
+                'eventAction': 'Suggestion Position '+ui.item.position,
+                'eventLabel': userKeywordText+' - '+keywordCategoryId[0]+(keywordCategoryText ? ' - '+keywordCategoryText : '')
+            });
             ga('send', 'event', 'Site Search', 'Suggestion Position '+ui.item.position, userKeywordText+' - '+keywordCategoryId[0]+(keywordCategoryText ? ' - '+keywordCategoryText : ''));
             if (keywordCategoryId.length > 1) {
                 $("{{ field }}").val(keywordCategoryId[0]);

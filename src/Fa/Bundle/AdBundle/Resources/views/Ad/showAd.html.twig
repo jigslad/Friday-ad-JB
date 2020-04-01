@@ -410,7 +410,7 @@
                         {% if not isSoldExpiredAdFlag and ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) or (adDetail['user'] is defined and showBuyNowWithPaypal)) %}
                             <div class="clearfix {% if ((adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined)) and (adDetail['user'] is defined and showBuyNowWithPaypal) or (isOneclickenqbutton == true) %}double-buttons{% endif %}">
                                 {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
-                                    <a href="javascript:void(0);" onclick="return contactSeller('{{ adId }}', 'Contact Seller button');" id="fixed_contact_button_anchor" class="primary-btn-1 button cont-seller-btn{% if (isOneclickenqbutton == false) %} expand{% endif %}">
+                                    <a href="javascript:void(0);" onclick="return contactSeller('{{ adId }}', 'Contact Seller button','Sticky');" id="fixed_contact_button_anchor" class="primary-btn-1 button cont-seller-btn{% if (isOneclickenqbutton == false) %} expand{% endif %}">
                                         <span class="btn-txt">
                                             {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                                                 {{'Apply'|trans({}, 'frontend-show-ad')}}
@@ -835,7 +835,7 @@
 
                         {% if (adDetail['user'] is defined and (adDetail['user']['contact_through_phone'] == 1 or adDetail['user']['contact_through_email'] == 1)) or (adDetail['user'] is not defined and attribute(adDetail, constant(solrMapping ~ 'USER_PHONE_NUMBER')) is defined) %}
                             <div class="{{ contactBtnWidthClass }} columns">
-                                <a href="javascript:void(0);" id="contact_seller_btn_mob" onclick="return contactSeller('{{ adId }}', 'Contact Seller button');" class="primary-btn-1 button expand">
+                                <a href="javascript:void(0);" id="contact_seller_btn_mob" onclick="return contactSeller('{{ adId }}', 'Contact Seller button','Sticky');" class="primary-btn-1 button expand">
                                     {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                                         {{'Apply'|trans({}, 'frontend-show-ad')}}
                                     {% else %}
@@ -1012,7 +1012,7 @@
             reportAd({{app.request.get('id')}});
         {% endif %}
         {% if app.user and app.request.cookies.has('contact_seller_flag') and app.request.cookies.get('contact_seller_flag') and app.request.cookies.get('contact_seller_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') and app.request.get('id') %}
-            contactSeller({{app.request.get('id')}}, 'Contact Seller button');
+            contactSeller({{app.request.get('id')}}, 'Contact Seller button', 'Sticky');
         {% endif %}
         {% if app.user and app.request.cookies.has('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') and app.request.cookies.get('save_search_agent_flag') != constant('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager::COOKIE_DELETED') %}
             createAlert({{app.request.get('id')}});
@@ -1212,8 +1212,16 @@
         });
     }
 
-    function contactSeller(id, callFrom)
+    function contactSeller(id, callFrom,type)
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Ad Action',
+            'eventCategory':  'CTA',
+            'eventAction': 'Contact Seller button',
+            'eventLabel': type+' - '+id+'{{ catText }}'
+        });
         ga('send', 'event', 'CTA', callFrom, '{{ adId }}{{ catText }}');
         {% if adImages|length %}
             $.fancybox.close();
@@ -1501,6 +1509,22 @@
     function socialShare(adId, windowUrl, windowTitle, windowWidth, windowHeight)
     {
         openWindow(windowUrl, windowTitle, windowWidth, windowHeight);
+        let eventAction;
+        if (windowTitle == 'fb-share') {
+            eventAction = 'Facebook';
+        } else if (windowTitle == 'twitter-share') {
+            eventAction = 'Twitter';
+        } else {
+            eventAction = windowTitle;
+        }
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Options',
+            'eventCategory':  'Options',
+            'eventAction': eventAction,
+            'eventLabel': adId
+        });
         adEnquiryIncrement('social_share', adId);
         if (windowTitle == 'fb-share') {
             OneSignal.push(["sendTags", {'Facebook': 'share'}]);
@@ -1572,6 +1596,14 @@
 
     function gaSendForRecommendedSlot(url, domain, title) 
     {
+        window.dataLayer = window.dataLayer || []
+        dataLayer.push({
+
+            'event' : 'Options',
+            'eventCategory':  'Ad Details',
+            'eventAction': 'Sponsored Ad',
+            'eventLabel': {{ app.request.get('category_string') }}
+        });
         ga('send', 'event', 'Ad details', 'Recommended external ads', '{{ catText|trim('-') }}-'+domain+'-'+title);
         window.open(url, '_blank');
     }

@@ -118,6 +118,13 @@
                 $('#saveAddPhotoModal').foundation('reveal', 'open');
                 $('#adImgHash').val(response.adImgHash);
                 ga('send', 'event', 'Ad details', 'Add photo - autoemail');
+                window.dataLayer = window.dataLayer || []
+                dataLayer.push({
+                    'event' : 'Options',
+                    'eventCategory':  'Ad Details',
+                    'eventAction': 'add photo - autoemail',
+                    'eventLabel': {{ app.request.get('id') }}
+                });
             }
         });
     }
