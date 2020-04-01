@@ -28,13 +28,10 @@
                         {#<div class="left cat-name-wrap">
                             <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span> {{ categoryPathArray|last('<span class="seperator"></span>')|raw }}
                         </div>#}
-                        <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
+                        <div class=" left cat-name-wrap media-object" style="display: inline-flex;">                            
                             <div class="media-object-section">
-                                <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
-                            </div>
-
-                            <div class="media-object-section">
-                                <p>{{ categoryPathArray|slice((categoryPathArray|length-2),categoryPathArray|length)|join('<span class="seperator"></span>')|raw }}</p>
+                                <div class="breadcrumb">
+		    <div class="clearfix">{{ categoryPathArray|slice((categoryPathArray|length-2),categoryPathArray|length)|join('<span class="seperator"></span>')|raw }}</div></div>
                             </div>
                         </div>
                         <div class="right">
