@@ -340,11 +340,11 @@ class AdRequestListener
         if ($currentRoute == 'landing_page_category' || $currentRoute == 'landing_page_category_location') {
             $catObj = $this->getMatchedCategory($request->get('category_string'));
 
-            if ($catObj && $catObj['id'] == CategoryRepository::ADULT_ID) {
+            /*if ($catObj && $catObj['id'] == CategoryRepository::ADULT_ID) {
                 $location = ($request->get('location') ? $request->get('location') : 'uk');
                 $url = $this->container->get('router')->generate('listing_page', array('location' => $location, 'page_string' => $request->get('category_string')), true);
                 $event->setResponse(new RedirectResponse($url, 301));
-            }
+            }*/
 
             if (isset($params['path'])) {
                 $this->redirectOldUrls(ltrim($params['path'], '/'), 'uk', $request, $event, 'location_home');

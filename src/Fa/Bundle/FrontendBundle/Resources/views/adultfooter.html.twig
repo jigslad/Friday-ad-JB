@@ -1,0 +1,146 @@
+{% set container = fetch_container_instance() %}
+<footer id="footer_tag">
+    {% if currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'facebook_paa_login', 4: 'ad_post_third_step_registration', 5: 'ad_post_fourth_step', 6: 'ad_edit', 7: 'ad_package_purchase', 8: 'show_cart'} %}
+        <div class="row show-for-small-only">
+            <div class="columns">
+                <a href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}" class="primary-btn-1 button expand">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+        {{ render(controller('FaEntityBundle:Category:renderFooterCategories', {'location': (currentRoute == 'listing_page' ? app.request.get('location') : null), 'searchParams': searchParams})) }}
+        <div class="large-6 columns">
+        	{% if app.request.attributes.get('_route') != 'my_account_newsletter'  and app.request.attributes.get('_route') != 'newsletter_feedback' and app.request.attributes.get('_route') != 'newsletter_feedback_success' %}
+            	<div class="clearfix"></div>
+                {{ render(controller('FaUserBundle:Newsletter:footerNewsletter')) }}
+            {% endif %}           
+            <h6 class="footer-head">{{ 'Find us on'|trans({}, 'frontend-footer') }}:</h6>
+            <div class="footer-icons">
+                <a href="{{container.getParameter('fa.footer.facebook.page.link')}}" class="facebook" target="_blank" title="{{ 'Facebook'|trans({}, 'frontend-footer') }}">{{ 'Facebook'|trans({}, 'frontend-footer') }}</a>
+                <a href="{{container.getParameter('fa.footer.twitter.page.link')}}" class="twitter" target="_blank" title="{{ 'Twitter'|trans({}, 'frontend-footer') }}">{{ 'Twitter'|trans({}, 'frontend-footer') }}</a>
+                <a href="{{container.getParameter('fa.footer.instagram.page.link')}}" class="instagram" target="_blank" title="{{ 'Instagram'|trans({}, 'frontend-footer') }}">{{ 'Instagram'|trans({}, 'frontend-footer') }}</a>
+            </div>
+            <div class="help-links">
+                <h6 class="footer-head">{{ 'Can we help?'|trans({}, 'frontend-footer') }}</h6>
+                <a href="https://blog.friday-ad.co.uk/" target="_blank">{{ 'Blog'|trans({}, 'frontend-footer') }}</a>
+                {{ render(controller('FaContentBundle:StaticPage:renderStaticPageLink', {'currentRoute': currentRoute})) }}
+                <a href="{{ path('show_all_locations') }}">{{ 'Locations'|trans({}, 'frontend-footer') }}</a>
+                <a href="{{ path('testimonials') }}">{{ 'Testimonials'|trans({}, 'frontend-footer') }}</a>
+                {# <a href="https://www.yumpu.com/user/EDITORFAD" target="__blank">{{ 'Read this week\'s Friday-Ad'|trans({}, 'frontend-footer') }}</a> #}
+            </div>
+
+            <!-- Start
+                FFR-3986: FAD Print mag online
+                added footer links for reading FAD online -->
+            {% if currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'facebook_paa_login', 4: 'ad_post_third_step_registration', 5: 'ad_post_fourth_step', 6: 'ad_edit', 7: 'ad_package_purchase', 8: 'show_cart'} %}
+                <div class="help-links hide-for-small-only ga-fadPrintWidget">
+                    <h6 class="footer-head">{{ 'Read the Friday-Ad Online / '|trans({},'frontend-footer') }}</h6>
+                    <h6 class="footer-head">{{ 'Choose a location'|trans({},'frontend-footer') }}</h6>
+                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=c50972b1-d10a-4356-84e2-8d09a3530b93" target="_blank">Brighton</a>
+                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=398dcec4-2114-410f-8484-943e89602ad0" target="_blank">Crawley</a>
+                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=7297cfac-ef93-4fba-95af-dd8a02f632fd" target="__blank">Eastbourne</a>
+                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=8fb5f3d9-7213-417f-9b15-bae6c6daad59" target="_blank">Hastings</a>
+                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=207e2563-a527-43a0-add9-d15eb349790f" target="_blank">Seaford</a>
+                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=32dc5305-7502-4d5e-8ea3-938521ae57db" target="__blank">Tunbridge Wells</a>
+                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=2e098523-cbbf-4254-8f7c-f73b46aaa4c4" target="_blank">Uckfield</a>
+                    <a href="http://edition.pagesuite-professional.co.uk/Launch.aspx?PBID=26c9ade6-0fd7-464c-9944-88bd7b54f8bf" target="_blank">Worthing</a>
+                </div>
+            {% endif %}
+            <!-- End
+                FFR-3986: FAD Print mag online
+                added footer links for reading FAD online -->
+        </div>
+    </div>
+
+    <div class="fad-logo">
+        <span>F-Ad</span>
+    </div>
+
+    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_PIXEL_TRACKING_DESKTOP') %}
+    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_PIXEL_TRACKING_TABLET') %}
+    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_PIXEL_TRACKING_MOBILE') %}
+    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+
+    {% if app.user and app.session.get('login_pixel_tracking') is null %}
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_LOGIN_PIXEL_TRACKING') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+    {% endif %}
+</footer>
+
+{{ include('FaFrontendBundle::userLocation.html.twig') }}
+
+{% block scriptbottom %}
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+
+    $('#manage-my-ad-id').on('click', function() {
+        ga('send', 'event', 'Top Widget', 'MMM');
+    });
+
+    $('#login-header-id, #mob-login-header-id').on('click', function() {
+        ga('send', 'event', 'Top Widget', 'Sign In');
+    });
+
+    $('#logout-header-id, #mob-logout-header-id').on('click', function() {
+        ga('send', 'event', 'Top Widget', 'Sign Out');
+    });
+
+    $('#account-header-id, #mob-account-header-id').on('click', function() {
+        ga('send', 'event', 'Top Widget', 'My Account');
+    });
+
+    $('#register-header-id, #mob-register-header-id').on('click', function() {
+        ga('send', 'event', 'Top Widget', 'Register');
+    });
+
+    $('#saved-header-id').on('click', function() {
+        ga('send', 'event', 'Top Widget', 'Saved Ads');
+    });
+
+    $('#saved-search-header-id').on('click', function() {
+        ga('send', 'event', 'Top Widget', 'Email alerts');
+    });
+
+    $('#place-item-btn-id').on('click', function() {
+        ga('send', 'event', 'PAA', 'mobile');
+    });
+
+    $('#inbox-header-id, #mob-inbox-header-id').on('click', function() {
+        ga('send', 'event', 'Top Widget', 'Messaging');
+    });
+
+    $(document).ready(function() {
+        if (!checkCookie('FAD')) {
+            $('#cookie_notification_bar').show();
+        }
+    });
+
+    function setCookiePolicy()
+    {
+        var expiration_date = new Date();
+        expiration_date.setFullYear(expiration_date.getFullYear() + 10);
+        var domain = '.'+'{{ app.request.host }}';
+        document.cookie = "FAD=1; expires=" + expiration_date.toGMTString() + "; path=/; domain="+ domain +";";
+    }
+
+    function refreshParallax()
+    {
+        /*$(window).trigger('resize').trigger('scroll');*/
+        $( window ).scroll(function() {
+            if ($("#sticky_nav").hasClass('fixed')) {
+                $("#sticky_nav_top").addClass('fixed');
+                $("#sticky_nav_top").addClass('top-bar-shadow');
+            } else {
+                $("#sticky_nav_top").removeClass('fixed');
+                $("#sticky_nav_top").removeClass('top-bar-shadow');
+            }
+        });
+    }
+//]]>
+</script>
+{% endblock %}
+
