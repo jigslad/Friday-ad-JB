@@ -1,18 +1,5 @@
-{{ include('FaFrontendBundle::adult-css.html.twig') }}
+{{ include('FaFrontendBundle:Adult:adult-css.html.twig') }}
 <header class="relative">
-    {% if status_code == 200 %}
-        {% if currentRoute == 'ad_detail_page' %}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER_TABLET') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-        {% else %}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_ABOVE_HEADER_TABLET') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-        {% endif %}
-    {% endif %}
     <div class="top-links hide-for-small-only">
         <div class="row">
             <div class="columns">
@@ -109,11 +96,11 @@
                         <!-- Right Nav Section -->
                        <div class="tablet-menu">
                             {% if mobileDetectManager.isTablet() %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                                {{ render(controller('FaEntityBundle:Category:renderAdultHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                             {% elseif mobileDetectManager.isMobile() %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                                {{ render(controller('FaEntityBundle:Category:renderAdultHeaderCategories', {'is_tablet':0, 'is_mobile':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                             {% else %}
-                                {{ render(controller('FaEntityBundle:Category:renderHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
+                                {{ render(controller('FaEntityBundle:Category:renderAdultHeaderCategories', {'is_tablet':0, 'is_mobile':0, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'} ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                             {% endif %}
                         </div>
                         <ul class="show-for-small-only login-menu">
