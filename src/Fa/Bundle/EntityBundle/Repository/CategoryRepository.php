@@ -296,6 +296,27 @@ class CategoryRepository extends NestedTreeRepository
             }
         }
         return $catArray;
+    }/**
+     * Get category array by id for landing page.
+     *
+     * @param integer $id
+     *
+     * @return multitype:multitype:string NULL
+     */
+    public function getCategoryArraySimpleById($id)
+    {
+        $categories = $this->createQueryBuilder(self::ALIAS)
+        ->andWhere(self::ALIAS.'.parent = :id')
+        ->andWhere(self::ALIAS.'.status = 1')
+        ->setParameter('id', $id.'%')
+        ->getQuery()->getResult();
+
+
+        $catArray = array(''=> 'Select Category');
+        foreach ($categories as $cat) {
+            $catArray[$cat->getId()] = $cat->getName();
+        }
+        return $catArray;
     }
 
     /**

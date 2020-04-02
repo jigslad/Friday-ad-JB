@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\AdBundle\Form;
 
+use Fa\Bundle\CoreBundle\Form\Type\JsChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -84,27 +85,15 @@ class LandingPageAdultSearchType extends AbstractType
                 'attr'    => array('class' => 'fa-select-white')
             )
         )
-        /*->add(
-            'item_adult__travel_arrangements_id',
-            ChoiceType::class,
+        ->add(
+            'item__category_id',
+            JsChoiceType::class,
             array(
-                'choices' => array(),
-                'data'    => 15,
-                'attr'    => array('class' => 'fa-select-white'),
-                'label' => 'Travel Arrangements',
+                'choices'     => array_flip($this->em->getRepository('FaEntityBundle:Category')->getCategoryArraySimpleById(CategoryRepository::ADULT_ID)),
+                'label'       => 'Service Type',
+                'attr'        => array('class' => 'fa-select-white')
             )
         )
-        ->add(
-            'item_adult__independent_or_agency_id',
-            ChoiceType::class,
-            array(
-                'choices' => array(),
-                'data'    => 15,
-                'attr'    => array('class' => 'fa-select-white'),
-                'label' => 'Independent or Agency',
-            )
-        )*/
-        ->add('item__category_id', HiddenType::class, array('data' => CategoryRepository::ADULT_ID))
         ->add('item__location', HiddenType::class)
         ->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false));
     }
