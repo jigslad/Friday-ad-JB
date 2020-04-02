@@ -316,7 +316,7 @@ class AdultController extends ThirdPartyLoginController
             'searchParams'    => $searchParams,
         );
         
-        return $this->render('FaFrontendBundle:Default:showAdultHomePageLocationBlocks.html.twig', $parameters);
+        return $this->render('FaFrontendBundle:Adult:showAdultHomePageLocationBlocks.html.twig', $parameters);
     }
     
     /**
