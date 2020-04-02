@@ -306,7 +306,7 @@
         {% endif %}
         
         {% if showAdultPages==1 %}
-            {{ include('FaFrontendBundle::adultheader.html.twig', {'status_code': status_code}) }}
+            {{ include('FaFrontendBundle:Adult:header.html.twig', {'status_code': status_code}) }}
         {% else %}
         	{{ include('FaFrontendBundle::header.html.twig', {'status_code': status_code}) }}
         {% endif %}
@@ -347,9 +347,8 @@
             	{% if searchParams is not defined %}
             		{% set searchParams = [] %}
             	{% endif %}
-                
-                {% if showAdultPages==1 %}
-                    {{ include('FaFrontendBundle::adultfooter.html.twig', {'searchParams':searchParams}) }}
+            	{% if showAdultPages==1 %}
+                    {{ include('FaFrontendBundle:Adult:footer.html.twig', {'searchParams':searchParams}) }}
                 {% else %}
                     {{ include('FaFrontendBundle::footer.html.twig', {'searchParams':searchParams}) }}
                 {% endif %}

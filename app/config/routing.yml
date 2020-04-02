@@ -192,7 +192,7 @@ fa_adult_homepage:
     path:     /adult-services/
     host: '%fa.main.host%'
     schemes:  [https]
-    defaults: { _controller: FaFrontendBundle:Default:adultHome }
+    defaults: { _controller: FaFrontendBundle:Adult:index }
 
 listing_page:
     path: /{location}/{page_string}/

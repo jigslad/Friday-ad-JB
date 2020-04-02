@@ -101,7 +101,7 @@
         <div class="row">
             <div class="columns">
                 <h3 class="homepage-title">{{'Popular searches'|trans({}, 'frontend-homepage')}}</h3>
-                {{ include('FaFrontendBundle:Default:adultHomePopularSearches.html.twig', {'divId': 'recommended-item-slider', 'ads': recommendedAds}) }}
+                {{ include('FaFrontendBundle:Adult:homePopularSearches.html.twig', {'divId': 'recommended-item-slider', 'ads': ''}) }}
             </div>
         </div>
     </div>
@@ -134,7 +134,7 @@
         <div class="row">
             <div class="columns">
                 <h3 class="homepage-title">{{'Featured Advertisers'|trans({}, 'frontend-homepage')}}</h3>
-                {{ include('FaFrontendBundle:Default:adultHomePageFeaturedAdvertisers.html.twig', {'divId': 'featured-item-slider'}) }}
+                {{ include('FaFrontendBundle:Adult:homePageFeaturedAdvertisers.html.twig', {'divId': 'featured-item-slider'}) }}
             </div>
         </div>
     </div>
@@ -143,7 +143,7 @@
         <div class="row">
             <div class="columns">
                 <h3 class="homepage-title">{{'Latest from the blog'|trans({}, 'frontend-homepage')}}</h3>
-                {{ include('FaFrontendBundle:Default:adultHomePageLatestBlog.html.twig', {'divId': 'recently-viwed-item-slider', 'ads': recentlyViewedAds, noImageColor:'grey'}) }}
+                {{ include('FaFrontendBundle:Adult:homePageLatestBlog.html.twig', {'divId': 'recently-viwed-item-slider', 'ads': '', noImageColor:'grey'}) }}
             </div>
         </div>
     </div>
@@ -153,7 +153,7 @@
             <div class="columns">
                 <h3 class="homepage-title">{{'Browse adverts in popular locations'|trans({}, 'frontend-homepage')}}</h3>
                 {# {% cache 'home|page|location|block'~currentDevice 3600 %} #}
-                    {{ render(controller('FaFrontendBundle:Default:showAdultHomePageLocationBlocks')) }}
+                    {{ render(controller('FaFrontendBundle:Adult:showAdultHomePageLocationBlocks')) }}
                 {# {% endcache %} #}
             </div>
         </div>
