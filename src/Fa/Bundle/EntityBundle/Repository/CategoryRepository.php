@@ -2350,7 +2350,7 @@ class CategoryRepository extends NestedTreeRepository
             $cachedValue = CommonManager::getCacheVersion($container, $cacheKey);
             
             if ($cachedValue !== false) {
-                return $cachedValue;
+                //return $cachedValue;
             }
         }
         
@@ -2368,6 +2368,7 @@ class CategoryRepository extends NestedTreeRepository
             if ($locationId && $locationId != LocationRepository::COUNTY_ID) {
                 $data['query_filters']['item']['location'] = $locationId.'|15';
             }
+            $data['query_filters']['item']['category_id'] = self::ADULT_ID;
             if (!empty($locationDetails)) {
                 if (isset($locationDetails['latitude']) && isset($locationDetails['longitude'])) {
                     $geoDistParams = array('sfield' => 'store', 'pt' => $locationDetails['latitude'].', '.$locationDetails['longitude']);
@@ -2400,61 +2401,63 @@ class CategoryRepository extends NestedTreeRepository
         $stmt = $this->_em->getConnection()->prepare($query);
         $stmt->execute();
         $categories         = $stmt->fetchAll();
-        $categoryClassArray[self::ADULT_ID] = 'mob-adult';;
         
         if (count($categories)) {
+            
             foreach ($categories as $index => $category) {
-                $count = (isset($categoryCountArray[$category['id']]) ? $categoryCountArray[$category['id']] : 0);
-                
-                if ($count < 1) {
-                    $count = (isset($leafLevelCategoryCount[$category['id']]) ? $leafLevelCategoryCount[$category['id']] : 0);
+                if ($category['parent_id'] == self::ADULT_ID || $category['id'] == self::ADULT_ID) {
+                    $count = (isset($categoryCountArray[$category['id']]) ? $categoryCountArray[$category['id']] : 0);
+                    
                     if ($count < 1) {
-                        continue;
+                        $count = (isset($leafLevelCategoryCount[$category['id']]) ? $leafLevelCategoryCount[$category['id']] : 0);
+                        if ($count < 1) {
+                            continue;
+                        }
                     }
-                }
-                
-                $categoryArray = array('name' => $category['name'], 'id' => $category['id'], 'slug' => $category['slug'], 'count' => $count, 'full_slug' => $category['full_slug'], 'children' => array(),'header_sortable'=>$category['is_children_header_sortable'],'sort_ord'=> $category['header_sort_order'] );
-                
-                if ($category['lvl'] == 1 && !array_key_exists($category['id'], $headerCategoryArray)) {
-                    if (isset($categoryClassArray[$category['id']])) {
-                        $categoryArray['class'] = $categoryClassArray[$category['id']];
+                    
+                    $categoryArray = array('name' => $category['name'], 'id' => $category['id'], 'slug' => $category['slug'], 'count' => $count, 'full_slug' => $category['full_slug'], 'children' => array(),'header_sortable'=>$category['is_children_header_sortable'],'sort_ord'=> $category['header_sort_order'] );
+                    
+                    if ($category['lvl'] == 1 && !array_key_exists($category['id'], $headerCategoryArray)) {
+                        if (isset($categoryClassArray[$category['id']])) {
+                            $categoryArray['class'] = $categoryClassArray[$category['id']];
+                        }
+                        $headerCategoryArray[$category['id']] = $categoryArray;
+                        $categoryId1 = $category['id'];
+                    } elseif (($category['lvl'] == 2 || ($category['lvl'] == 3 && $category['include_as_main_category_in_header'] == 1)) && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'])) {
+                        $headerCategoryArray[$categoryId1]['children'][$category['id']] = $categoryArray;
+                        $categoryId2 = $category['id'];
+                    } elseif ($category['lvl'] == 3 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'])) {
+                        $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$category['id']] = $categoryArray;
+                        $categoryId3 = $category['id'];
+                        asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children']);
+                    } elseif ($category['lvl'] == 4 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'])) {
+                        $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$category['id']] = $categoryArray;
+                        $categoryId4 = $category['id'];
+                        asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children']);
+                    } elseif ($category['lvl'] == 5 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'])) {
+                        $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$category['id']] = $categoryArray;
+                        $categoryId5 = $category['id'];
+                        asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children']);
+                    } elseif ($category['lvl'] == 6 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children'])) {
+                        $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children'][$category['id']] = $categoryArray;
+                        $categoryId6 = $category['id'];
+                        asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children']);
                     }
-                    $headerCategoryArray[$category['id']] = $categoryArray;
-                    $categoryId1 = $category['id'];
-                } elseif (($category['lvl'] == 2 || ($category['lvl'] == 3 && $category['include_as_main_category_in_header'] == 1)) && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'])) {
-                    $headerCategoryArray[$categoryId1]['children'][$category['id']] = $categoryArray;
-                    $categoryId2 = $category['id'];
-                } elseif ($category['lvl'] == 3 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'])) {
-                    $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$category['id']] = $categoryArray;
-                    $categoryId3 = $category['id'];
-                    asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children']);
-                } elseif ($category['lvl'] == 4 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'])) {
-                    $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$category['id']] = $categoryArray;
-                    $categoryId4 = $category['id'];
-                    asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children']);
-                } elseif ($category['lvl'] == 5 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'])) {
-                    $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$category['id']] = $categoryArray;
-                    $categoryId5 = $category['id'];
-                    asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children']);
-                } elseif ($category['lvl'] == 6 && !array_key_exists($category['id'], $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children'])) {
-                    $headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children'][$category['id']] = $categoryArray;
-                    $categoryId6 = $category['id'];
-                    asort($headerCategoryArray[$categoryId1]['children'][$categoryId2]['children'][$categoryId3]['children'][$categoryId4]['children'][$categoryId5]['children']);
                 }
             }
         }
-        
+        //echo '<pre>'; print_r($headerCategoryArray);die;
         //check for all main categories
-        $mainCategories = $this->getCategoryByLevelArray(1, $container);
+        /*$mainCategories = $this->getCategoryByLevelArray(1, $container);
         foreach ($mainCategories as $mainCategoryId => $mainCategoryName) {
-            if (!isset($headerCategoryArray[$mainCategoryId])) {
+            if (!isset($headerCategoryArray[$mainCategoryId]) ) {
                 $headerCategoryArray[$mainCategoryId]['name'] = $mainCategoryName;
                 $headerCategoryArray[$mainCategoryId]['children'] = array();
                 $headerCategoryArray[$mainCategoryId]['id'] = $mainCategoryId;
                 $headerCategoryArray[$mainCategoryId]['slug'] = $this->getSlugById($mainCategoryId, $container);
                 $headerCategoryArray[$mainCategoryId]['full_slug'] = $this->getFullSlugById($mainCategoryId, $container);
             }
-        }
+        }*/
         
         ksort($headerCategoryArray);
         
