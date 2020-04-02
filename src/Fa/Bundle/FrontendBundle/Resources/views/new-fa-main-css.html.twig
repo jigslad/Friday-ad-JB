@@ -135,6 +135,10 @@ a:hover.primary-btn-1, a:focus.primary-btn-1 { font-size: 18px !important; line-
     width: 10px;height: 20px;padding-right: 15px !important;
  }
 .category-text { font-size: 12px;line-height: 22px; }
+.find-all .select2-choice, .find-all .select2-choice:hover, .find-all .select2-choice:focus, .find-all .select2-choice:active {
+    color: #ACB0B7 !important;border-top-left-radius: 4px !important;border-bottom-left-radius: 4px !important;
+}
+.primary-btn-1.disabled, .btn-disabled { background: #EAEFF0 !important; }
     
 /* Category Images */
 .discover-forsale, .cat-forsale { background: url(/bundles/fafrontend/images/categories/Ic-btn-For-Sale.svg) no-repeat !important; }
@@ -377,6 +381,8 @@ button.signup-fb-btn.expand {
 #home-search .looking-for input[type="text"], .site-search .search-box input[type="text"] {
     border-radius: 0 !important;
 }
+.paa-footer-links {column-count: 4;} 
+
 
 @media only screen and (max-width: 640px) {
     .help-links {
@@ -384,6 +390,8 @@ button.signup-fb-btn.expand {
         column-count: 1 !important !important;
         width: 100% !important !important;
     }
+   .paa-footer-links { column-count: 2; }                   
+   .big-wrapper { width: auto !important;}  
 }
 @media only screen and (min-width: 520px) and (max-width: 759px) {
     .paa-user-type label, .buyer-contact label {
@@ -399,12 +407,20 @@ button.signup-fb-btn.expand {
     	border:0px !important;
     }
 }
+@media only screen and (min-width: 641px) and (max-width: 959px) {  
+  .big-wrapper { width: auto !important;}                
+} 
 @media only screen and (min-width:760px) and (max-width: 959px) {
 	#home-search .search-btn button { text-indent:unset !important; }
 }
 @media only screen and (min-width:960px) and (max-width: 1151px) {
     .top-bar-section .real-desktop .has-dropdown a {
     	padding: 0 12px 0px 5px !important;
+    }
+}
+@media only screen and (min-width: 1152px) {
+    .big-wrapper.choose-list {
+        width: 100% !important;
     }
 }
 </style>
