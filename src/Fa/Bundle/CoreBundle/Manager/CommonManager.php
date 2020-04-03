@@ -3604,4 +3604,81 @@ HTML;
         }
         return $blogDetails;
     }
+    
+    public static function getUserLogoForCarousel($container, $path, $userId, $imageWidth = "88", $imageHeight = '88', $appendTime = false, $isCompany = false, $userStatus = null, $userName = null)
+    {
+        if (!$userStatus) {
+            $userStatus = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getUserStatus($userId, $container);
+        }
+        
+        if (!$userName) {
+            $userName = $container->get('doctrine')->getManager()->getRepository('FaUserBundle:User')->getUserProfileName($userId, $container);
+        }
+        
+        $userName .= ' - Friday-Ad';
+        
+        $imagePath = null;
+        
+        if ($userId) {
+            if (!is_numeric($userId)) {
+                if (is_file($container->get('kernel')->getRootDir().'/../web/uploads/tmp/'.$userId.'.jpg')) {
+                    if ($isCompany) {
+                        return '<img class="lazyOwl" data-src="'.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'"  />';
+                    } else {
+                        return '<img class="lazyOwl" data-src="'.$container->getParameter('fa.static.shared.url').'/uploads/tmp/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" title="'.$userName.'" />';
+                    }
+                } else {
+                    $noImageName = 'user-icon.svg';
+                    if ($isCompany) {
+                        $noImageName = 'user-no-logo.svg';
+                    }
+                    
+                    if (!$imageWidth && !$imageHeight) {
+                        return ($isCompany ? '<img class="lazyOwl profile-placeholder" data-src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'" />');
+                    } else {
+                        return ($isCompany ? '<img class="lazyOwl profile-placeholder" data-src="'.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />');
+                    }
+                }
+            } else {
+                $imagePath  = $container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'.jpg';
+            }
+        }
+        
+        if (is_file($imagePath)) {
+            if (($imageWidth==null && $imageHeight== null) || ($imageWidth =='' && $imageHeight=='') || ($imageWidth ==0 || $imageHeight==0)) {
+                if ($isCompany) {
+                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img src="'.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).'" alt="'.$userName.'" />';
+                } else {
+                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'.jpg'.($appendTime ? '?'.time() : null).')" title="'.$userName.'" />';
+                }
+            } else {
+                if (!file_exists($container->get('kernel')->getRootDir().'/../web/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg')) {
+                    if ($isCompany) {
+                        $orgImagPath = $container->getParameter('fa.company.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
+                    } else {
+                        $orgImagPath = $container->getParameter('fa.user.image.dir').'/'.CommonManager::getGroupDirNameById($userId, 5000);
+                    }
+                    exec('convert '.$orgImagPath.DIRECTORY_SEPARATOR.$userId.'.jpg -resize '.$imageWidth.'X'.$imageHeight.' -background white -gravity center -extent '.$imageWidth.'X'.$imageHeight.' '.$orgImagPath.DIRECTORY_SEPARATOR.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg');
+                }
+                
+                $newImagePath = $container->getParameter('fa.static.shared.url').'/'.$path.'/'.$userId.'_'.$imageWidth.'X'.$imageHeight.'.jpg'.($appendTime ? '?'.time() : null);
+                
+                if ($isCompany) {
+                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img class="lazyOwl" data-src='.$newImagePath.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'" />';
+                } else {
+                    return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<span style="background-image: url('.$newImagePath.')" title="'.$userName.'"></span>';
+                }
+            }
+        } else {
+            $noImageName = 'user-icon.svg';
+            if ($isCompany) {
+                $noImageName = 'user-no-logo.svg';
+            }
+            if (!$imageWidth && !$imageHeight) {
+                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img class="lazyOwl profile-placeholder" data-src='.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" alt="'.$userName.'"  />');
+            } else {
+                return ($userStatus == EntityRepository::USER_STATUS_INACTIVE_ID ? '<span class="inactive-profile">Inactive</span>': null).'<img class="lazyOwl profile-placeholder" data-src='.$container->getParameter('fa.static.url').'/fafrontend/images/'.$noImageName.'" width="'.$imageWidth.'" height="'.$imageHeight.'" alt="'.$userName.'"  />');
+            }
+        }
+    }
 }

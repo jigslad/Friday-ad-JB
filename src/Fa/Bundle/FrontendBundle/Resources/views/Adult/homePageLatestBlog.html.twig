@@ -1,13 +1,18 @@
-<div class="blog-block large-17 columns">
-    {% for externalSiteBlogDetail in externalSiteBlogDetails %}
-        <div class="blog-item-block" data-equalizer-watch>
-        	<div class="blog-item">
-            	<div class="list-img"><img src="{{ externalSiteBlogDetail['mediaUrl'] }}"></div>
-            	<div class="list-title">{{ externalSiteBlogDetail['title'] }}</div>
-            	<div class="list-author-pub-date">by {{ externalSiteBlogDetail['author'] }} - {{ externalSiteBlogDetail['publishdate']|date("F jS Y") }} }}</div>
-            	{# <div class="list-desc">{{ externalSiteBlogDetail['desc'] }}</div> #}
-        	</div>
-        	<div><button class="primary-btn-1 button">{{ externalSiteBlogDetail['buttonLabel'] }}</button></div>
+<div class="blog-block medium-20 medium-offset-2 large-18 large-offset-3 columns">
+ 	{% for externalSiteBlogDetail in externalSiteBlogDetails %}
+        <div class="medium-12 columns">
+            <div class="blog-item-block">
+                <div class="blog-item active">
+                    <div class="list-img">
+                        <img src="{{ externalSiteBlogDetail['mediaUrl'] }}" class="lazyOwl">
+                    </div>
+                    <div class="blog-cont">
+                        <div class="list-title">{{ externalSiteBlogDetail['title'] }}</div>
+                        <div class="list-author-pub-date">by {{ externalSiteBlogDetail['author']|title }} - {{ externalSiteBlogDetail['publishdate']|date("d M, Y") }}</div>
+                    </div>
+                </div>
+                <div class="text-center"><button class="xs-btn-1 thin-btn button">{{ externalSiteBlogDetail['buttonLabel'] }}</button></div>
+            </div>
         </div>
     {% endfor %}
 </div>
