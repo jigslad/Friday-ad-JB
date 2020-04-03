@@ -24,11 +24,11 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
-use Fa\Bundle\ContentBundle\Repository\StaticPageRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
+use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;
 
 /**
  * This is adult controller for front side.
@@ -74,7 +74,7 @@ class AdultController extends ThirdPartyLoginController
         list($latestAds, $locationName, $searchResultUrl) = $this->getLatestAds($request, $cookieLocationDetails);
         
         //get featured advertisers
-        $featuredAdvertisers = $this->getBusinessUserBySearchCriteria($request, $cookieLocationDetails);
+        $featuredAdvertisers = $this->getFeaturedAdvertisers($request, $cookieLocationDetails);
         
         // get home popular image array.
         $homePopularImagesArray = $this->getRepository('FaContentBundle:HomePopularImage')->getHomePopularImageArray($this->container);
@@ -106,7 +106,13 @@ class AdultController extends ThirdPartyLoginController
             $userDetails = $this->getRepository('FaUserBundle:User')->getHomePageFeatureAdUserDetail($userIds);
         }
         
-       
+        //get blog details from external site
+        $blogArray = array(
+            '0'=>array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL1,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN1),
+            '1'=> array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL2,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN2)            
+        );
+        $externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);
+        
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $seoLocationName    = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', LocationRepository::COUNTY_ID);
         
@@ -131,11 +137,12 @@ class AdultController extends ThirdPartyLoginController
             'seoLocationName' => $seoLocationName,
             'businessExposureUsersDetails' => $featuredAdvertisers,
             'form' => $form->createView(),
+            'externalSiteBlogDetails' => $externalSiteBlogDetails,
         );
         return $this->render('FaFrontendBundle:Adult:index.html.twig', $parameters);
     }
     
-    private function getBusinessUserBySearchCriteria($request,$cookieLocationDetails)
+    private function getFeaturedAdvertisers($request,$cookieLocationDetails)
     {
         $businessExposureUsers = array();
         $businessExposureMiles = array();

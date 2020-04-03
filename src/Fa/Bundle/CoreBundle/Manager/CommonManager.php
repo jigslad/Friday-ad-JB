@@ -3314,4 +3314,50 @@ HTML;
 
         return !is_bool(strpos($haystack, $needle));
     }
+    
+    public static function fetchDataByUrl($sourceUrl)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $sourceUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return $data;
+    }    
+    
+    public static function getWordpressBlogDetails($blogArray) {
+        $wordpressPostsUrl = '/wp-json/wp/v2/posts?per_page=1&status=publish';
+        $wordpressMediaUrl = '/wp-json/wp/v2/media/';
+        $wordpressUserUrl = '/wp-json/wp/v2/users/';
+        $blogDetails = array();
+        foreach($blogArray as $blog) {
+            $blogPostUrl = $blog['url'].$wordpressPostsUrl;
+            $blogData = self::fetchDataByUrl($blogPostUrl);
+            $blogData = json_decode($blogData);
+            $blogTitle = $blogData[0]->title->rendered;
+            $blogLink = $blogData[0]->link;
+            $blogPublishDate = $blogData[0]->date;
+            //$blogDesc = $blogData[0]->content->rendered;
+            $blogAuthorId = $blogData[0]->author;
+            $blogAuthorUrl = $blog['url'].$wordpressUserUrl.$blogAuthorId;
+            $blogAuthorData = self::fetchDataByUrl($blogAuthorUrl);
+            $blogAuthorData = json_decode($blogAuthorData);
+            $blogAuthorName = $blogAuthorData->name;
+            $blogFeaturedMedia = $blogData[0]->featured_media;
+            $blogMediaUrl = $blog['url'].$wordpressMediaUrl.$blogFeaturedMedia;
+            $blogMediaData = self::fetchDataByUrl($blogMediaUrl);
+            $blogMediaData = json_decode($blogMediaData);
+            $blogFeaturedMediaUrl = $blogMediaData->guid->rendered;
+            $blogDetails[] = array(
+                'title'=>$blogTitle,
+                'link'=>$blogLink,
+                'mediaUrl'=>$blogFeaturedMediaUrl,
+                'publishdate' => $blogPublishDate,
+                //'desc' => htmlentities($blogDesc),
+                'author' => $blogAuthorName,
+                'buttonLabel'=>$blog['btn']
+            );
+        }
+        return $blogDetails;
+    }
 }
