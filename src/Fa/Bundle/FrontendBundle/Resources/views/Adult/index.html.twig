@@ -134,7 +134,7 @@
         <div class="row">
             <div class="columns">
                 <h3 class="homepage-title">{{'Featured Advertisers'|trans({}, 'frontend-homepage')}}</h3>
-                {{ include('FaFrontendBundle:Adult:homePageFeaturedAdvertisers.html.twig', {'divId': 'featured-item-slider'}) }}
+                {{ include('FaFrontendBundle:Adult:homePageFeaturedAdvertisers.html.twig') }}
             </div>
         </div>
     </div>
@@ -204,20 +204,8 @@
     $(document).ready(function() {
         $('div.homepage-row:even').addClass('white-bg');
         getHeaderImage();
-        var recommendedItemSlider = $("#recommended-item-slider");
-        recommendedItemSlider.owlCarousel({
-            items : 6,
-            itemsCustom:[[320, 1], [568, 3], [768, 4], [1024, 5], [1151, 6]],
-            navigation: true,
-            pagination:false,
-            responsiveRefreshRate : 100,
-            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
-            lazyLoad: true,
-            scrollPerPage: true,
-        });
-
-        /*var latestItemSlider = $("#latest-item-slider");
-        latestItemSlider.owlCarousel({
+        var featuredAdvertisersItemSlider = $("#featured_advertisers_slider");
+        featuredAdvertisersItemSlider.owlCarousel({
             items : 4,
             itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 4]],
             navigation: true,
@@ -226,7 +214,9 @@
             navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
             lazyLoad: true,
             scrollPerPage: true,
-        });*/
+        });
+
+        
 
         var featuredItemSlider = $("#featured-item-slider");
         featuredItemSlider.owlCarousel({
