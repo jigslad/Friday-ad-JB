@@ -138,7 +138,6 @@
         </div>
     </div>
     
-
     {% if latestAds|length %}
         <div class="homepage-row latest-items">
             <div class="row">
@@ -161,7 +160,7 @@
         </div>
     {% endif %}
 
-
+	{% if businessExposureUsersDetails|length %}
     <div class="homepage-row">
         <div class="row">
             <div class="columns">
@@ -172,7 +171,9 @@
             </div>
         </div>
     </div>
-
+	{% endif %}
+	
+	{% if externalSiteBlogDetails|length %}
     <div class="homepage-row">
         <div class="row">
             <div class="columns">
@@ -182,7 +183,18 @@
             </div>
         </div>
     </div>
-
+	{% endif %}
+	
+	<div class="homepage-row white-bg">
+    {% if mobileDetectManager.isMobile() %}
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_RECTANGLE_BLOCK_MOBILE') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+    {% else %}
+        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_RECTANGLE_BLOCK') %}
+        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}    	
+    {% endif %}
+    </div>
+	
     <div class="homepage-row">
         <div class="row">
             <div class="columns">
@@ -193,7 +205,6 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 
