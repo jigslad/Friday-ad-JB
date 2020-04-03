@@ -3574,33 +3574,43 @@ HTML;
         $wordpressMediaUrl = '/wp-json/wp/v2/media/';
         $wordpressUserUrl = '/wp-json/wp/v2/users/';
         $blogDetails = array();
-        foreach($blogArray as $blog) {
-            $blogPostUrl = $blog['url'].$wordpressPostsUrl;
-            $blogData = self::fetchDataByUrl($blogPostUrl);
-            $blogData = json_decode($blogData);
-            $blogTitle = $blogData[0]->title->rendered;
-            $blogLink = $blogData[0]->link;
-            $blogPublishDate = $blogData[0]->date;
-            //$blogDesc = $blogData[0]->content->rendered;
-            $blogAuthorId = $blogData[0]->author;
-            $blogAuthorUrl = $blog['url'].$wordpressUserUrl.$blogAuthorId;
-            $blogAuthorData = self::fetchDataByUrl($blogAuthorUrl);
-            $blogAuthorData = json_decode($blogAuthorData);
-            $blogAuthorName = $blogAuthorData->name;
-            $blogFeaturedMedia = $blogData[0]->featured_media;
-            $blogMediaUrl = $blog['url'].$wordpressMediaUrl.$blogFeaturedMedia;
-            $blogMediaData = self::fetchDataByUrl($blogMediaUrl);
-            $blogMediaData = json_decode($blogMediaData);
-            $blogFeaturedMediaUrl = $blogMediaData->guid->rendered;
-            $blogDetails[] = array(
-                'title'=>$blogTitle,
-                'link'=>$blogLink,
-                'mediaUrl'=>$blogFeaturedMediaUrl,
-                'publishdate' => $blogPublishDate,
-                //'desc' => htmlentities($blogDesc),
-                'author' => $blogAuthorName,
-                'buttonLabel'=>$blog['btn']
-            );
+        if(!empty($blogArray)) {
+            foreach($blogArray as $blog) {
+                $blogPostUrl = $blog['url'].$wordpressPostsUrl;
+                $blogData = self::fetchDataByUrl($blogPostUrl);
+                if(!empty($blogData)) {
+                    $blogData = json_decode($blogData);
+                    $blogTitle = $blogData[0]->title->rendered;
+                    $blogLink = $blogData[0]->link;
+                    $blogPublishDate = $blogData[0]->date;
+                    //$blogDesc = $blogData[0]->content->rendered;
+                    $blogAuthorId = $blogData[0]->author;
+                    $blogAuthorUrl = $blog['url'].$wordpressUserUrl.$blogAuthorId;
+                    $blogAuthorData = self::fetchDataByUrl($blogAuthorUrl);
+                    $blogAuthorName = '';
+                    if(!empty($blogAuthorData)) {
+                        $blogAuthorData = json_decode($blogAuthorData);
+                        $blogAuthorName = $blogAuthorData->name;
+                    }
+                    $blogFeaturedMedia = $blogData[0]->featured_media;
+                    $blogMediaUrl = $blog['url'].$wordpressMediaUrl.$blogFeaturedMedia;
+                    $blogMediaData = self::fetchDataByUrl($blogMediaUrl);
+                    $blogFeaturedMediaUrl = '';
+                    if(!empty($blogMediaData)) {                        
+                        $blogMediaData = json_decode($blogMediaData);
+                        $blogFeaturedMediaUrl = $blogMediaData->guid->rendered;
+                    }
+                    $blogDetails[] = array(
+                        'title'=>$blogTitle,
+                        'link'=>$blogLink,
+                        'mediaUrl'=>$blogFeaturedMediaUrl,
+                        'publishdate' => $blogPublishDate,
+                        //'desc' => htmlentities($blogDesc),
+                        'author' => $blogAuthorName,
+                        'buttonLabel'=> isset($blog['btn'])?$blog['btn']:'',
+                    );
+                }
+            }
         }
         return $blogDetails;
     }

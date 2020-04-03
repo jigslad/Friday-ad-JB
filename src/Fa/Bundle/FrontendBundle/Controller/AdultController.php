@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
 use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;
 
+
 /**
  * This is adult controller for front side.
  *
@@ -123,6 +124,9 @@ class AdultController extends ThirdPartyLoginController
         } elseif (is_array($cookieLocationDetails) && isset($cookieLocationDetails['town']) && $cookieLocationDetails['town']) {
             $seoLocationName = $cookieLocationDetails['town'];
         }
+        
+        $bannersArray = $this->getRepository("FaContentBundle:Banner")->getBannersArrayByPage('homepage', $this->container);
+        
         $formManager  = $this->get('fa.formmanager');
         $form               = $formManager->createForm(LandingPageAdultSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
         $parameters = array(
@@ -138,6 +142,7 @@ class AdultController extends ThirdPartyLoginController
             'businessExposureUsersDetails' => $featuredAdvertisers,
             'form' => $form->createView(),
             'externalSiteBlogDetails' => $externalSiteBlogDetails,
+            'bannersArray' => $bannersArray,
         );
         return $this->render('FaFrontendBundle:Adult:index.html.twig', $parameters);
     }
