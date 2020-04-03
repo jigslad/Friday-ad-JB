@@ -56,7 +56,40 @@
             <div class="parallax-window" id="header_image_div"></div>
         </div>
     </div>
-    
+
+    <div class="advance-search" style="background-color: #313133;padding-bottom: 35px;">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_errors(form) }}
+            <div class="row">
+                <div class="large-12 columns">
+                    <div class="mt20">
+                        {{ form_label(attribute(form, 'item__category_id')) }}
+                        {{ form_widget(attribute(form, 'item__category_id')) }}
+                    </div>
+                </div>
+                <div class="large-12 columns">
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <div class="mt20">
+                                <label>.</label>
+                                {{ form_widget(form.item__distance) }}
+                            </div>
+                        </div>
+                        <div class="large-12 columns">
+                            <div class="mt20">
+                                <label>{{ 'from'|trans({}, 'frontend')}}</label>
+                                {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="small-wrapper">
+                    <button class="secondary-btn-1 expand button mb0 landing-search-btn" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
+                </div>
+            </div>
+        {{ form_end(form) }}
+    </div>
+
     <div class="what-u-discover">
         <div class="row">
             <div class="columns">
@@ -96,7 +129,6 @@
         </div>
     </div>
 
-    
     <div class="homepage-row">
         <div class="row">
             <div class="columns">

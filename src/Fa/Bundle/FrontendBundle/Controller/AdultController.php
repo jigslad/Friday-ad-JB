@@ -11,6 +11,7 @@
 
 namespace Fa\Bundle\FrontendBundle\Controller;
 
+use Fa\Bundle\AdBundle\Form\LandingPageAdultSearchType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Symfony\Component\HttpFoundation\Request;
@@ -116,7 +117,8 @@ class AdultController extends ThirdPartyLoginController
         } elseif (is_array($cookieLocationDetails) && isset($cookieLocationDetails['town']) && $cookieLocationDetails['town']) {
             $seoLocationName = $cookieLocationDetails['town'];
         }
-        
+        $formManager  = $this->get('fa.formmanager');
+        $form               = $formManager->createForm(LandingPageAdultSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
         $parameters = array(
             'latestAds'       => $latestAds,
             'locationName'    => $locationName,
@@ -128,8 +130,8 @@ class AdultController extends ThirdPartyLoginController
             'cookieLocationDetails' => $cookieLocationDetails,
             'seoLocationName' => $seoLocationName,
             'businessExposureUsersDetails' => $featuredAdvertisers,
+            'form' => $form->createView(),
         );
-        
         return $this->render('FaFrontendBundle:Adult:index.html.twig', $parameters);
     }
     
@@ -397,7 +399,6 @@ class AdultController extends ThirdPartyLoginController
             ),
         );
         
-        $data['facet_fields'] = array();
         $data['facet_fields'] = array(
             AdSolrFieldMapping::DOMICILE_ID => array('limit' => $blocks[AdSolrFieldMapping::DOMICILE_ID]['facet_limit'], 'min_count' => 1),
             AdSolrFieldMapping::TOWN_ID     => array('limit' => $blocks[AdSolrFieldMapping::TOWN_ID]['facet_limit'], 'min_count' => 1),
