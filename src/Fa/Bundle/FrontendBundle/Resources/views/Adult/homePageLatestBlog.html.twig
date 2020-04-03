@@ -1,0 +1,13 @@
+<div class="blog-block large-17 columns">
+    {% for externalSiteBlogDetail in externalSiteBlogDetails %}
+        <div class="blog-item-block" data-equalizer-watch>
+        	<div class="blog-item">
+            	<div class="list-img"><img src="{{ externalSiteBlogDetail['mediaUrl'] }}"></div>
+            	<div class="list-title">{{ externalSiteBlogDetail['title'] }}</div>
+            	<div class="list-author-pub-date">by {{ externalSiteBlogDetail['author'] }} - {{ externalSiteBlogDetail['publishdate']|date("F jS Y") }} }}</div>
+            	{# <div class="list-desc">{{ externalSiteBlogDetail['desc'] }}</div> #}
+        	</div>
+        	<div><button class="primary-btn-1 button">{{ externalSiteBlogDetail['buttonLabel'] }}</button></div>
+        </div>
+    {% endfor %}
+</div>
