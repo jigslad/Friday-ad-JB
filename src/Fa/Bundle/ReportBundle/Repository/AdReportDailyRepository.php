@@ -502,13 +502,10 @@ class AdReportDailyRepository extends EntityRepository
             ->setMaxResults(1)
             ->orderBy(self::ALIAS.'.created_at', 'DESC')
             ->getQuery()->getArrayResult();
-        $recentAdByCatArr = array();
         if (count($adList)) {
-            foreach ($adList as $adReportId) {
-                $recentAdByCatArr = array('category_id' => $adReportId['category_id'], 'ad_id' => $adReportId['ad_id']);
-            }
-        }        
-        return $recentAdByCatArr;
+            return $adList[0];
+        }
+        return null;
     }
 
     /** getRecentAdByCategoryArray
@@ -522,7 +519,7 @@ class AdReportDailyRepository extends EntityRepository
         foreach ($categoryList as $category){
             $recentAdByCatArr = $this->getRecentAdByCategory($category);
             if(!empty($recentAdByCatArr)) {
-                $recentAd[$recentAdByCatArr['category_id']] = $recentAdByCatArr['ad_id'];
+                $recentAd[$category] = $recentAdByCatArr;
             }
         }
         return $recentAd;

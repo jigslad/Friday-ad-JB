@@ -48,6 +48,7 @@ class AdultController extends ThirdPartyLoginController
      * @param Request $request A Request object.
      *
      * @param Response A Response object.
+     * @return Response
      */
     public function indexAction(Request $request)
     {
@@ -117,7 +118,9 @@ class AdultController extends ThirdPartyLoginController
         }
         
         $bannersArray = $this->getRepository("FaContentBundle:Banner")->getBannersArrayByPage('homepage', $this->container);
-        
+
+        $featureAds  = $this->getAdultFeatureAds($request, $cookieLocationDetails);
+
         $formManager  = $this->get('fa.formmanager');
         $form               = $formManager->createForm(LandingPageAdultSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
         $parameters = array(
@@ -130,6 +133,7 @@ class AdultController extends ThirdPartyLoginController
             'externalSiteBlogDetails' => $externalSiteBlogDetails,
             'bannersArray' => $bannersArray,
             'latestAdultAds' => $latestAdultAds,
+            'featureAds' => $featureAds,
         );
         return $this->render('FaFrontendBundle:Adult:index.html.twig', $parameters);
     }
@@ -298,12 +302,13 @@ class AdultController extends ThirdPartyLoginController
         
         return $this->render('FaFrontendBundle:Adult:showAdultHomePageLocationBlocks.html.twig', $parameters);
     }
-    
+
     /**
      * Set location for home page in cookie.
      *
-     * @param Request $request  A Request object.
+     * @param Request $request A Request object.
      *
+     * @return false|string|null
      * @throws NotFoundHttpException
      */
     private function setLocationInCookie(Request $request)
@@ -352,6 +357,67 @@ class AdultController extends ThirdPartyLoginController
         }
         
         return null;
+    }
+
+    /**
+     * Get feature ads.
+     *
+     * @param Request $request A Request object.
+     * @param array $cookieLocationDetails Location cookie array.
+     * @return array $featureAds Feature ad list.
+     */
+    private function getAdultFeatureAds($request, $cookieLocationDetails)
+    {
+        // get location from cookie
+        $location = null;
+        if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
+            $location = $cookieLocationDetails['location'];
+        }
+        $featureAds = $this->getFeatureAdsSolrResult($location, $cookieLocationDetails, 30);
+        if ($location && count($featureAds) < 12) {
+            $featureAds = $this->getFeatureAdsSolrResult($location, $cookieLocationDetails, 200);
+        }
+        if (count($featureAds) < 12) {
+            $featureAds = $this->getFeatureAdsSolrResult();
+        }
+        return $featureAds;
+    }
+
+    /**
+     * Get feature ads by distance & location.
+     *
+     * @param string $location Location of user.
+     *
+     * @param number $cookieLocationDetails Cookie location detail.
+     * @param int $distanceRange Distance limit range.
+     * @return array
+     */
+    private function getFeatureAdsSolrResult($location = null, $cookieLocationDetails = null, $distanceRange = 30)
+    {
+        $data           = array();
+        $keywords       = null;
+        $page           = 1;
+        $recordsPerPage = 12;
+
+        //set ad criteria to search
+        $data['query_filters']['item']['status_id']              = EntityRepository::AD_STATUS_LIVE_ID;
+        $data['query_filters']['item']['is_homepage_feature_ad'] = '1';
+        $data['query_filters']['item']['parent_category_lvl_1_id'] = CategoryRepository::ADULT_ID;
+        if ($location) {
+            $data['query_filters']['item']['location'] = $location.'|'.$distanceRange;
+        }
+        $data['query_sorter']                   = array();
+        $data['query_sorter']['item']['random'] = array('sort_ord' => 'desc', 'field_ord' => 1);
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+        $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
+        if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
+            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].', '.$cookieLocationDetails['longitude']);
+            $solrSearchManager->setGeoDistQuery($geoDistParams);
+        }
+        $solrResponse = $solrSearchManager->getSolrResponse();
+
+        return $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
     }
 }
 
