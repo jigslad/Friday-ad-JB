@@ -50,73 +50,6 @@
 {% endif %}
     
 {% block body %}
-    <style>
-        /* Select 2 css */
-        .select2-container-multi, .select-control {
-            width: 100% !important;
-        }
-        .select-control {
-            margin-bottom: 30px;
-        }
-        .select2-container-multi .select2-choices, .select2-container .select2-choice, .select-control, .select-control:hover, .select-control:focus, .select-control:active   {
-            border-radius: 4px !important;
-        }
-        .select2-search-choice {
-            height: 30px !important;
-            margin: 4px 0 0 4px !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
-            letter-spacing: 0 !important;
-            line-height: 21px !important;
-            text-align: right !important;
-            color: #ffffff !important;
-            background: linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;
-            border: 0px solid #9C1F9F !important;
-            padding: .1875rem 1.5rem .1875rem 0.5rem !important;
-        }
-        .select2-search-choice-close {
-            margin-right: 0px !important;
-            float: right !important;
-            margin-left: 4px !important;
-            font-size: 24px !important;
-            font-weight: bold !important;
-            color: #ffffff !important;
-            left: auto !important;
-            background: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='24px' height='24px' viewBox='0 0 24 24' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3c!-- Generator: Sketch 63.1 (92452) - https://sketch.com --%3e%3ctitle%3eIcon / 24 / Functional / Cross%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg id='Icon-/-24-/-Functional-/-Cross' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3e%3cpolygon id='Shape' fill='%23ffffff' points='19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12'/%3e%3c/g%3e%3c/svg%3e") no-repeat !important;
-            background-size: 18px 18px !important;
-            width: 18px !important;
-            height: 18px !important;
-            right: 2px !important;
-            top: 6px !important;
-            opacity: 1 !important;
-        }
-        .select2-results .select2-result-label {
-            padding: 10px 10px !important;
-        }
-        ul.select2-choices:after, .select2-choice:after {
-            content: "";
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            border-top: 8px solid #CBD5D9;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-        }
-        @media only screen and (max-width: 759px) {
-            .mobile-p-0 {
-                padding:0px !important;
-            }
-        }
-        @media only screen and (min-width: 320px) and (max-width: 420px) {
-            .discover-categories a {
-                margin: 8px 8px 8px 8px !important;
-                width: 27% !important;
-                height: 80px !important;
-            }
-        }
-        /* Select 2 css */
-    </style>
     <div class="{% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}homepage-hero{% endif %}">
         <div class="hero-img">
             {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isHomeSearch': true } )) }}
@@ -124,88 +57,8 @@
         </div>
     </div>
 
-    <div class="choose-cat-block" style="background: #212527; padding: 15px 0 40px;">
-        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-        {{ form_errors(form) }}
-        <div class="row">
-            <div class="columns">
-                {{ form_label(attribute(form, 'item__category_id', { 'attr' : {'class':'browse-by-category mt20' } } ) ) }}
-                <div>
-                    <div class="medium-12 columns mobile-p-0" style="padding-left: 0px;">
-                        {{ form_widget(attribute(form, 'item__category_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
-                    </div>
-                    <div class="medium-5 columns mobile-p-0">
-                        {{ form_widget(form.item__distance,{'attr':{'class':'form-control select-control'}}) }}
-                    </div>
-                    <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
-                        <label style="padding: 10px 10px 10px 0px; color: #ffffff !important;">{{ 'from'|trans({}, 'frontend')}}</label>
-                        {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'form-control select-control'}}) }}
-                    </div>
-                </div>
-                <div>
-                    <div class="medium-10 columns mobile-p-0" style="padding-left: 0px;">
-                        <select id="menu">
-                                <option>Pizza</option>
-                                <option data-selected>Spaghetti</option>
-                                <option>Mozzarella</option>
-                                <option>Eggs</option>
-                                <option data-selected>Eggs 2</option>
-                                <option>Eggs 3</option>
-                                <option>Water</option>
-                                <option>Beer</option>
-                                <option>Coke</option>
-                                <option>Gin</option>
-                        </select>
-                        <script>
-                            $("#menu").zmultiselect({
-
-                                filter: true,
-                                filterResult: true,
-                                selectAll: true,
-                                //locale: 'it-IT',
-
-                                //REPLACE WITH CUSTOM TEXT:
-                                //selectAllText: ['Check All', 'Uncheck All'],
-                                //selectedText: ['Selected', 'of'],
-                                //filterPlaceholder: 'What are your searching for?',
-                                //filterResultText: "Showed",
-                                //filterPlaceholder: 'MyFilter...',
-
-                                get: "zmultiselect",
-                                placeholder: "I'm a MultiSelect",
-                                live: '#menu_live'
-                            });
-                        </script>
-
-
-                        <select class="form-control select-control" id="multipleSelectExample" data-placeholder="Choose services" multiple="">
-                            <option value="">Choose services</option>
-                            <option value="1">Option 1</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                            <option value="3">Option 3</option>
-                            <option value="4">Option 4</option>
-                            <option value="5">Option 5</option>
-                        </select>
-                    </div>
-                    <div class="medium-7 columns mobile-p-0">
-                        <input type="radio" id="indepandent" name="type" value="indepandent">
-                        <label for="indepandent">indepandent</label>
-                        <input type="radio" id="agency" name="type" value="agency">
-                        <label for="agency">agency</label>
-                    </div>
-                    <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
-                        {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="small-wrapper">
-                <button class="secondary-btn-1 expand button mb0 mt20" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
-            </div>
-        </div>
-        {{ form_end(form) }}
-    </div>
+    {{ include('FaFrontendBundle:Adult:homePageAdultSearch.html.twig') }}
+    
     <div class="what-u-discover">
         <div class="row">
             <div class="columns">
@@ -254,28 +107,17 @@
         </div>
     </div>
     
-    {% if latestAds|length %}
-        <div class="homepage-row latest-items">
-            <div class="row">
-                <div class="columns">
-                    <h3 class="homepage-title">
-                        {% if locationName is not null %}
-                            {{'Latest in %locationName%'|trans({'%locationName%': locationName}, 'frontend-homepage')}}
-                        {% else %}
-                            {{'Latest ads'|trans({}, 'frontend-homepage')}}
-                        {% endif %}
-                    </h3>
-                    {{ include('FaFrontendBundle:Default:homePageLatestAdsSlider.html.twig', {'divId': 'latest-item-slider'}) }}
-                    {% if searchResultUrl is not null%}
-                        <div class="small-wrapper">
-                            <a href="{{ searchResultUrl }}" class="secondary-btn-1 expand button mb0" rel="nofollow">{{'View all'|trans({}, 'frontend-homepage')}}</a>
-                        </div>
-                    {% endif %}
-                </div>
+    {% if latestAdultAds|length %}
+    <div class="homepage-row">
+        <div class="row">
+            <div class="columns">
+                <h3 class="homepage-title">{{'Latest Ads'|trans({}, 'frontend-homepage')}}</h3>
+                {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-item-slider'}) }}
             </div>
         </div>
+    </div>
     {% endif %}
-
+    
 	{% if businessExposureUsersDetails|length %}
     <div class="homepage-row">
         <div class="row">
@@ -290,15 +132,6 @@
 	{% endif %}
 	
 	{% if externalSiteBlogDetails|length %}
-    <div class="homepage-row">
-        <div class="row">
-            <div class="columns">
-                <h3 class="homepage-title">{{'Latest Ads'|trans({}, 'frontend-homepage')}}</h3>
-                {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-item-slider'}) }}
-            </div>
-        </div>
-    </div>
-
     <div class="homepage-row">
         <div class="row">
             <div class="columns">

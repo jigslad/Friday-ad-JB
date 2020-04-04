@@ -497,11 +497,18 @@ class AdReportDailyRepository extends EntityRepository
      */
     private function getRecentAdByCategory($category){
         $adList = $this->createQueryBuilder(self::ALIAS)
-//        $adList =  $this->getBaseQueryBuilder()
             ->andWhere(self::ALIAS.'.category_id = (:catId)')
             ->setParameter('catId', $category)
-            ->orderBy(self::ALIAS.'.created_at', 'DESC');
-        return $adList->getQuery()->getFirstResult();
+            ->setMaxResults(1)
+            ->orderBy(self::ALIAS.'.created_at', 'DESC')
+            ->getQuery()->getArrayResult();
+        $recentAdByCatArr = array();
+        if (count($adList)) {
+            foreach ($adList as $adReportId) {
+                $recentAdByCatArr = array('category_id' => $adReportId['category_id'], 'ad_id' => $adReportId['ad_id']);
+            }
+        }        
+        return $recentAdByCatArr;
     }
 
     /** getRecentAdByCategoryArray
@@ -511,10 +518,13 @@ class AdReportDailyRepository extends EntityRepository
      */
     public function getRecentAdByCategoryArray($categoryList){
 
-        $adArray = array();
+        $recentAd = $recentAdByCatArr = array();
         foreach ($categoryList as $category){
-            $recentAd[] = $this->getRecentAdByCategory($category);
+            $recentAdByCatArr = $this->getRecentAdByCategory($category);
+            if(!empty($recentAdByCatArr)) {
+                $recentAd[$recentAdByCatArr['category_id']] = $recentAdByCatArr['ad_id'];
+            }
         }
-        return $adArray;
+        return $recentAd;
     }
 }
