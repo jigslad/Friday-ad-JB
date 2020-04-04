@@ -69,16 +69,17 @@ class BoostOverrideAdminController extends CoreController implements ResourceAut
         $this->get('fa.pagination.manager')->init($query, $page);
         $pagination = $this->get('fa.pagination.manager')->getPagination();
         
-        $userIdArray = array();
+        /*$userIdArray = array();
         
         if ($pagination->getNbResults()) {
             foreach ($qb->getQuery()->getArrayResult() as $userDet) {
                 $userIdArray[] = $userDet['id'];
             }
         }
+        
+        echo '<pre>'; print_r($userIdArray);die;
         $userDataArray    = $this->getRepository('FaUserBundle:User')->getUserDataBoostDetailsArrayByUserId($userIdArray);
         
-        //var_dump($data['sorter']);
         $sortFld = '';
         if($data['sorter']) {
             if($data['sorter']['sort_field']=='user_id') { $sortFld = 'user_id'; }
@@ -86,7 +87,7 @@ class BoostOverrideAdminController extends CoreController implements ResourceAut
             else if($data['sorter']['sort_field']=='date_of_next_renewal') { $sortFld = 'boost_renew_date'; }
             
             $userDataArray    = CommonManager::multisort($userDataArray,$sortFld,$data['sorter']['sort_ord']);
-        }
+        }*/
         
         // initialize form manager service
         $formManager = $this->get('fa.formmanager');
@@ -100,7 +101,7 @@ class BoostOverrideAdminController extends CoreController implements ResourceAut
             'heading'    => $this->get('translator')->trans('Boost users'),
             'form'       => $form->createView(),
             'pagination' => $pagination,
-            'userDataArray' => $userDataArray,
+            //'userDataArray' => $userDataArray,
             'sorter'     => $data['sorter'],
         );
         
