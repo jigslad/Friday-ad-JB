@@ -277,6 +277,7 @@ class FaEntityLogRepository extends LogEntryRepository
         if ($formName == 'fa_promotion_package_admin') {
             $formName = PackageAdminType::class;
             $entity = new Package();
+            $container->get('fa_package_created_log')->info('package created in fa entity log getEntityFieldLabelArray function' . $entity->getId());
         } elseif ($formName == 'fa_core_config_rule_admin') {
             $formName = ConfigRuleAdminType::class;
             $entity = new ConfigRule();

@@ -59,7 +59,8 @@ class PaaFieldRuleRepository extends EntityRepository
         $queryBuilder = $this->getBaseQueryBuilder()
                         ->select(self::ALIAS, PaaFieldRepository::ALIAS)
                         ->leftJoin(self::ALIAS.'.paa_field', PaaFieldRepository::ALIAS)
-                        ->where(self::ALIAS.'.category = '.$categoryId);
+                        ->where(self::ALIAS.'.category = '.$categoryId)
+                        ->andWhere(self::ALIAS.'.status = 1');
 
         if ($ordBy == 'both' || $ordBy == 'bothWithNullLast') {
             $queryBuilder->addOrderBy(self::ALIAS.'.step', 'asc')

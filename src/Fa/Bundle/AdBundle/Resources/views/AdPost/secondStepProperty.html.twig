@@ -15,11 +15,23 @@
                 <h1 class="text-center paa-title">{{ 'Describe your item and choose your price'|trans({}, 'frontend-paa-second-step') }} </h1>
                 <div class="big-wrapper">
                     <div class="change-category clearfix">
-                        <div class="left cat-name-wrap">
+                        {#<div class="left cat-name-wrap">
                             {% set categoryId = attribute(first_step_data, 'category_id') %}
                             {% set categoryPathArray = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance()) %}
                             {% set categorykeys = categoryPathArray|keys %}
-                            <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span> {{ categoryPathArray|join('<span class="seperator"></span>')|raw }}
+                            <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span> {{ categoryPathArray|last('<span class="seperator"></span>')|raw }}
+                        </div>#}
+                        <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
+                            {% set categoryId = attribute(first_step_data, 'category_id') %}
+                            {% set categoryPathArray = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance()) %}
+                            {% set categorykeys = categoryPathArray|keys %}
+                            <div class="media-object-section">
+                                <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
+                            </div>
+
+                            <div class="media-object-section">
+                                <p>{{ categoryPathArray|last('<span class="seperator"></span>')|raw }}</p>
+                            </div>
                         </div>
                         <div class="right">
                             <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
