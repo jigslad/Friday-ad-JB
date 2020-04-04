@@ -57,39 +57,8 @@
         </div>
     </div>
 
-    <div class="advance-search" style="background-color: #313133;padding-bottom: 35px;">
-        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-        {{ form_errors(form) }}
-            <div class="row">
-                <div class="large-12 columns">
-                    <div class="mt20">
-                        {{ form_label(attribute(form, 'item__category_id')) }}
-                        {{ form_widget(attribute(form, 'item__category_id')) }}
-                    </div>
-                </div>
-                <div class="large-12 columns">
-                    <div class="row">
-                        <div class="large-12 columns">
-                            <div class="mt20">
-                                <label>.</label>
-                                {{ form_widget(form.item__distance) }}
-                            </div>
-                        </div>
-                        <div class="large-12 columns">
-                            <div class="mt20">
-                                <label>{{ 'from'|trans({}, 'frontend')}}</label>
-                                {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="small-wrapper">
-                    <button class="secondary-btn-1 expand button mb0 landing-search-btn" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
-                </div>
-            </div>
-        {{ form_end(form) }}
-    </div>
-
+    {{ include('FaFrontendBundle:Adult:homePageAdultSearch.html.twig') }}
+    
     <div class="what-u-discover">
         <div class="row">
             <div class="columns">
@@ -138,28 +107,17 @@
         </div>
     </div>
     
-    {% if latestAds|length %}
-        <div class="homepage-row latest-items">
-            <div class="row">
-                <div class="columns">
-                    <h3 class="homepage-title">
-                        {% if locationName is not null %}
-                            {{'Latest in %locationName%'|trans({'%locationName%': locationName}, 'frontend-homepage')}}
-                        {% else %}
-                            {{'Latest ads'|trans({}, 'frontend-homepage')}}
-                        {% endif %}
-                    </h3>
-                    {{ include('FaFrontendBundle:Default:homePageLatestAdsSlider.html.twig', {'divId': 'latest-item-slider'}) }}
-                    {% if searchResultUrl is not null%}
-                        <div class="small-wrapper">
-                            <a href="{{ searchResultUrl }}" class="secondary-btn-1 expand button mb0" rel="nofollow">{{'View all'|trans({}, 'frontend-homepage')}}</a>
-                        </div>
-                    {% endif %}
-                </div>
+    {% if latestAdultAds|length %}
+    <div class="homepage-row">
+        <div class="row">
+            <div class="columns">
+                <h3 class="homepage-title">{{'Latest Ads'|trans({}, 'frontend-homepage')}}</h3>
+                {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-item-slider'}) }}
             </div>
         </div>
+    </div>
     {% endif %}
-
+    
 	{% if businessExposureUsersDetails|length %}
     <div class="homepage-row">
         <div class="row">

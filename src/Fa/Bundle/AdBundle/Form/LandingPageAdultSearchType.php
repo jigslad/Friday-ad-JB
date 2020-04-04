@@ -90,8 +90,23 @@ class LandingPageAdultSearchType extends AbstractType
             JsChoiceType::class,
             array(
                 'choices'     => array_flip($this->em->getRepository('FaEntityBundle:Category')->getCategoryArraySimpleById(CategoryRepository::ADULT_ID)),
-                'label'       => 'Service Type',
-                'attr'        => array('class' => 'fa-select-white')
+                'label'       => 'Choose a category',
+            )
+        )
+        ->add(
+            'item_adult__ethnicity_id',
+            JsChoiceType::class,
+            array(
+                'choices'     => array(),
+                'data'        =>'Ethnicity'
+            )
+        )
+        ->add(
+            'item_adult__services_id',
+            JsChoiceType::class,
+            array(
+                'choices'     => array(),
+                'data'        =>'Service'
             )
         )
         ->add('item__location', HiddenType::class)

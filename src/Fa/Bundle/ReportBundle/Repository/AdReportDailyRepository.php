@@ -490,4 +490,41 @@ class AdReportDailyRepository extends EntityRepository
         return $adReportIdsArr;
     }
 
+    /** getRecentAdByCategory
+     *  find one last created ad by category from history
+     * @param $category
+     * @return mixed
+     */
+    private function getRecentAdByCategory($category){
+        $adList = $this->createQueryBuilder(self::ALIAS)
+            ->andWhere(self::ALIAS.'.category_id = (:catId)')
+            ->setParameter('catId', $category)
+            ->setMaxResults(1)
+            ->orderBy(self::ALIAS.'.created_at', 'DESC')
+            ->getQuery()->getArrayResult();
+        $recentAdByCatArr = array();
+        if (count($adList)) {
+            foreach ($adList as $adReportId) {
+                $recentAdByCatArr = array('category_id' => $adReportId['category_id'], 'ad_id' => $adReportId['ad_id']);
+            }
+        }        
+        return $recentAdByCatArr;
+    }
+
+    /** getRecentAdByCategoryArray
+     * find one last created ad by category list from history
+     * @param $categoryList
+     * @return array
+     */
+    public function getRecentAdByCategoryArray($categoryList){
+
+        $recentAd = $recentAdByCatArr = array();
+        foreach ($categoryList as $category){
+            $recentAdByCatArr = $this->getRecentAdByCategory($category);
+            if(!empty($recentAdByCatArr)) {
+                $recentAd[$recentAdByCatArr['category_id']] = $recentAdByCatArr['ad_id'];
+            }
+        }
+        return $recentAd;
+    }
 }

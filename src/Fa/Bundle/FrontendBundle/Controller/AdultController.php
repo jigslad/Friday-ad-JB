@@ -12,6 +12,7 @@
 namespace Fa\Bundle\FrontendBundle\Controller;
 
 use Fa\Bundle\AdBundle\Form\LandingPageAdultSearchType;
+use Fa\Bundle\ReportBundle\Entity\AdReportDaily;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +28,7 @@ use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Fa\Bundle\ReportBundle\Repository\AdReportDailyRepository;
 use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
 use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;
 
@@ -49,6 +51,8 @@ class AdultController extends ThirdPartyLoginController
      */
     public function indexAction(Request $request)
     {
+        $recentAd = array();
+
         // init facebook
         $facebookLoginUrl = null;
         $loggedInUser     = null;
@@ -71,8 +75,9 @@ class AdultController extends ThirdPartyLoginController
             $cookieLocationDetails = json_decode($request->cookies->get('location'), true);
         }
         
-        // get latest ads.
-        list($latestAds, $locationName, $searchResultUrl) = $this->getLatestAds($request, $cookieLocationDetails);
+        //get latest adult ads
+        $categoryList = $this->getRepository('FaEntityBundle:Category')->getNestedLeafChildrenIdsByCategoryId(CategoryRepository::ADULT_ID);
+        $latestAdultAds = $this->getHistoryRepository('FaReportBundle:AdReportDaily')->getRecentAdByCategoryArray($categoryList);
         
         //get featured advertisers
         $featuredAdvertisers = $this->getFeaturedAdvertisers($request, $cookieLocationDetails);
@@ -91,20 +96,6 @@ class AdultController extends ThirdPartyLoginController
                     $homePopularImagesArray[$key]['url'] = str_ireplace('{location}', $locationSlug, $homePopularImagesArray[$key]['url']);
                 }
             }
-        }
-        
-        // get getFeatureAds ads.
-        $featureAds  = $this->getFeatureAds($request, $cookieLocationDetails);
-        $userDetails = array();
-        if (count($featureAds)) {
-            $userIds = array();
-            foreach ($featureAds as $featureAd) {
-                if (isset($featureAd[AdSolrFieldMapping::USER_ID]) && $featureAd[AdSolrFieldMapping::USER_ID]) {
-                    $userIds[] = $featureAd[AdSolrFieldMapping::USER_ID];
-                }
-            }
-            array_unique($userIds);
-            $userDetails = $this->getRepository('FaUserBundle:User')->getHomePageFeatureAdUserDetail($userIds);
         }
         
         //get blog details from external site
@@ -130,12 +121,7 @@ class AdultController extends ThirdPartyLoginController
         $formManager  = $this->get('fa.formmanager');
         $form               = $formManager->createForm(LandingPageAdultSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
         $parameters = array(
-            'latestAds'       => $latestAds,
-            'locationName'    => $locationName,
-            'searchResultUrl' => $searchResultUrl,
             'facebookLoginUrl' => $facebookLoginUrl,
-            'featureAds' => $featureAds,
-            'userDetails' => $userDetails,
             'homePopularImagesArray' => $homePopularImagesArray,
             'cookieLocationDetails' => $cookieLocationDetails,
             'seoLocationName' => $seoLocationName,
@@ -143,10 +129,11 @@ class AdultController extends ThirdPartyLoginController
             'form' => $form->createView(),
             'externalSiteBlogDetails' => $externalSiteBlogDetails,
             'bannersArray' => $bannersArray,
+            'latestAdultAds' => $latestAdultAds,
         );
         return $this->render('FaFrontendBundle:Adult:index.html.twig', $parameters);
     }
-    
+        
     private function getFeaturedAdvertisers($request,$cookieLocationDetails)
     {
         $businessExposureUsers = array();
@@ -254,134 +241,7 @@ class AdultController extends ThirdPartyLoginController
         
         return $result;
     }
-    
-    /**
-     * Get latest ads.
-     *
-     * @param Request $request               A Request object.
-     * @param array   $cookieLocationDetails Location cookie array.
-     *
-     * @return array
-     */
-    private function getLatestAds($request, $cookieLocationDetails)
-    {
         
-        $location     = null;
-        $locationName = null;
-        
-        if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
-            $location = $cookieLocationDetails['location'];
-        }
-        if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['locality']) && $cookieLocationDetails['locality']) {
-            $locationName = $cookieLocationDetails['locality'];
-        } elseif (is_array($cookieLocationDetails) && isset($cookieLocationDetails['county']) && $cookieLocationDetails['county']) {
-            $locationName = $cookieLocationDetails['county'];
-        } elseif (is_array($cookieLocationDetails) && isset($cookieLocationDetails['town']) && $cookieLocationDetails['town']) {
-            $locationName = $cookieLocationDetails['town'];
-        }
-        
-        $data           = array();
-        $keywords       = null;
-        $page           = 1;
-        $recordsPerPage = 12;
-        
-        //set ad criteria to search
-        $data['query_filters']['item']['status_id'] = EntityRepository::AD_STATUS_LIVE_ID;
-        if ($location) {
-            $data['query_filters']['item']['location'] = $location.'|15';
-        }
-        
-        $data['query_sorter']                         = array();
-        $data['query_sorter']['item']['published_at'] = array('sort_ord' => 'desc', 'field_ord' => 1);
-        $data['static_filters']                       = ' AND -'.AdSolrFieldMapping::ROOT_CATEGORY_ID.':'.CategoryRepository::ADULT_ID;
-        
-        // List ads only with images and no affliate
-        $data['query_filters']['item']['total_images_from_to'] = '1|';
-        $data['query_filters']['item']['is_affiliate_ad']      = 0;
-        
-        // initialize solr search manager service and fetch data based of above prepared search options
-        $solrSearchManager = $this->get('fa.solrsearch.manager');
-        $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
-        if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].', '.$cookieLocationDetails['longitude']);
-            $solrSearchManager->setGeoDistQuery($geoDistParams);
-        }
-        $solrResponse = $solrSearchManager->getSolrResponse();
-        
-        $routeManager    = $this->container->get('fa_ad.manager.ad_routing');
-        $searchResultUrl = $routeManager->getListingUrl(array('item__location' => ($location ? $location : LocationRepository::COUNTY_ID)));
-        // fetch result set from solr
-        return array(
-            $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse),
-            $locationName,
-            $searchResultUrl,
-        );
-    }
-    
-    /**
-     * Get feature ads.
-     *
-     * @param Request $request               A Request object.
-     * @param array   $cookieLocationDetails Location cookie array.
-     *
-     * @return array
-     */
-    private function getFeatureAds($request, $cookieLocationDetails)
-    {
-        // get location from cookie
-        $location = null;
-        
-        if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
-            $location = $cookieLocationDetails['location'];
-        }
-        
-        $featureAds = $this->getFeatureAdsSolrResult($location, $cookieLocationDetails, 30);
-        
-        if ($location && count($featureAds) < 12) {
-            $featureAds = $this->getFeatureAdsSolrResult($location, $cookieLocationDetails, 200);
-        }
-        
-        if (count($featureAds) < 12) {
-            $featureAds = $this->getFeatureAdsSolrResult();
-        }
-        
-        return $featureAds;
-    }
-    /**
-     * Get feature ads by distance & location.
-     *
-     * @param number $distanceRange         Distance limit range.
-     * @param number $cookieLocationDetails Cookie location detail.
-     * @param string $location              Location of user.
-     *
-     * @return array
-     */
-    private function getFeatureAdsSolrResult($location = null, $cookieLocationDetails = null, $distanceRange = 30)
-    {
-        $data           = array();
-        $keywords       = null;
-        $page           = 1;
-        $recordsPerPage = 12;
-        
-        //set ad criteria to search
-        $data['query_filters']['item']['status_id']              = EntityRepository::AD_STATUS_LIVE_ID;
-        $data['query_filters']['item']['is_homepage_feature_ad'] = '1';
-        if ($location) {
-            $data['query_filters']['item']['location'] = $location.'|'.$distanceRange;
-        }
-        $data['query_sorter']                   = array();
-        $data['query_sorter']['item']['random'] = array('sort_ord' => 'desc', 'field_ord' => 1);
-        // initialize solr search manager service and fetch data based of above prepared search options
-        $solrSearchManager = $this->get('fa.solrsearch.manager');
-        $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
-        if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['latitude']) && isset($cookieLocationDetails['longitude'])) {
-            $geoDistParams = array('sfield' => 'store', 'pt' => $cookieLocationDetails['latitude'].', '.$cookieLocationDetails['longitude']);
-            $solrSearchManager->setGeoDistQuery($geoDistParams);
-        }
-        $solrResponse = $solrSearchManager->getSolrResponse();
-        
-        return $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
-    }
     /**
      * Show Adult home page location blocks.
      *
