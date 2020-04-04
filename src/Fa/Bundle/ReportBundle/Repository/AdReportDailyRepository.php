@@ -490,4 +490,31 @@ class AdReportDailyRepository extends EntityRepository
         return $adReportIdsArr;
     }
 
+    /** getRecentAdByCategory
+     *  find one last created ad by category from history
+     * @param $category
+     * @return mixed
+     */
+    private function getRecentAdByCategory($category){
+        $adList = $this->createQueryBuilder(self::ALIAS)
+//        $adList =  $this->getBaseQueryBuilder()
+            ->andWhere(self::ALIAS.'.category_id = (:catId)')
+            ->setParameter('catId', $category)
+            ->orderBy(self::ALIAS.'.created_at', 'DESC');
+        return $adList->getQuery()->getFirstResult();
+    }
+
+    /** getRecentAdByCategoryArray
+     * find one last created ad by category list from history
+     * @param $categoryList
+     * @return array
+     */
+    public function getRecentAdByCategoryArray($categoryList){
+
+        $adArray = array();
+        foreach ($categoryList as $category){
+            $recentAd[] = $this->getRecentAdByCategory($category);
+        }
+        return $adArray;
+    }
 }

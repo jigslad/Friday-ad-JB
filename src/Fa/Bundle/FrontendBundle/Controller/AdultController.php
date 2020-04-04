@@ -12,6 +12,7 @@
 namespace Fa\Bundle\FrontendBundle\Controller;
 
 use Fa\Bundle\AdBundle\Form\LandingPageAdultSearchType;
+use Fa\Bundle\ReportBundle\Entity\AdReportDaily;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Fa\Bundle\CoreBundle\Controller\CoreController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +29,7 @@ use Fa\Bundle\ContentBundle\Repository\StaticPageRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Fa\Bundle\ReportBundle\Repository\AdReportDailyRepository;
 
 /**
  * This is adult controller for front side.
@@ -47,6 +49,11 @@ class AdultController extends ThirdPartyLoginController
      */
     public function indexAction(Request $request)
     {
+        $recentAd = array();
+        $categoryRepo = $this->getRepository('FaEntityBundle:Category');
+        $categoryList = $categoryRepo->getNestedLeafChildrenIdsByCategoryId($categoryRepo::ADULT_ID);
+        $recentAd = CommonManager::getHistoryRepository($this->container, 'FaReportBundle:AdReportDaily')->getRecentAdByCategoryArray($categoryList);
+//        $recentAd = $this->getHistoryRepository('FaReportBundle:AdReportDaily')->getRecentAdByCategoryArray($categoryList);
         // init facebook
         $facebookLoginUrl = null;
         $loggedInUser     = null;
