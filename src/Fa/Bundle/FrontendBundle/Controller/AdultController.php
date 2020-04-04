@@ -25,11 +25,13 @@ use Fa\Bundle\EntityBundle\Repository\EntityRepository;
 use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
-use Fa\Bundle\ContentBundle\Repository\StaticPageRepository;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Fa\Bundle\ReportBundle\Repository\AdReportDailyRepository;
+use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
+use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;
+
 
 /**
  * This is adult controller for front side.
@@ -79,6 +81,8 @@ class AdultController extends ThirdPartyLoginController
         // get latest ads.
         list($latestAds, $locationName, $searchResultUrl) = $this->getLatestAds($request, $cookieLocationDetails);
         
+        //get featured advertisers
+        $featuredAdvertisers = $this->getFeaturedAdvertisers($request, $cookieLocationDetails);
         
         // get home popular image array.
         $homePopularImagesArray = $this->getRepository('FaContentBundle:HomePopularImage')->getHomePopularImageArray($this->container);
@@ -110,7 +114,13 @@ class AdultController extends ThirdPartyLoginController
             $userDetails = $this->getRepository('FaUserBundle:User')->getHomePageFeatureAdUserDetail($userIds);
         }
         
-       
+        //get blog details from external site
+        $blogArray = array(
+            '0'=>array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL1,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN1),
+            '1'=> array('url'=>AdultHomepageRepository::EXTERNAL_BLOG_URL2,'btn'=>AdultHomepageRepository::EXTERNAL_BLOG_BTN2)            
+        );
+        $externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);
+        
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $seoLocationName    = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', LocationRepository::COUNTY_ID);
         
@@ -121,6 +131,9 @@ class AdultController extends ThirdPartyLoginController
         } elseif (is_array($cookieLocationDetails) && isset($cookieLocationDetails['town']) && $cookieLocationDetails['town']) {
             $seoLocationName = $cookieLocationDetails['town'];
         }
+        
+        $bannersArray = $this->getRepository("FaContentBundle:Banner")->getBannersArrayByPage('homepage', $this->container);
+        
         $formManager  = $this->get('fa.formmanager');
         $form               = $formManager->createForm(LandingPageAdultSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
         $parameters = array(
@@ -133,9 +146,120 @@ class AdultController extends ThirdPartyLoginController
             'homePopularImagesArray' => $homePopularImagesArray,
             'cookieLocationDetails' => $cookieLocationDetails,
             'seoLocationName' => $seoLocationName,
+            'businessExposureUsersDetails' => $featuredAdvertisers,
             'form' => $form->createView(),
+            'externalSiteBlogDetails' => $externalSiteBlogDetails,
+            'bannersArray' => $bannersArray,
         );
         return $this->render('FaFrontendBundle:Adult:index.html.twig', $parameters);
+    }
+    
+    private function getFeaturedAdvertisers($request,$cookieLocationDetails)
+    {
+        $businessExposureUsers = array();
+        $businessExposureMiles = array();
+        $categoryId            =  CategoryRepository::ADULT_ID;
+        
+        $location     = null;
+        
+        if (is_array($cookieLocationDetails) && isset($cookieLocationDetails['location']) && $cookieLocationDetails['location']) {
+            $location = $cookieLocationDetails['location'];
+        }
+        
+        $data           = array();
+        if ($location) {
+            $data['query_filters']['item']['location'] = $location.'|15';
+        }
+        $data['query_filters']['item']['category_id'] = $categoryId;
+        
+        // for showing profile page.
+        $businessExposureMiles = $this->getRepository('FaPromotionBundle:Package')->getShopPackageProfileExposureUpsellByCategory($categoryId, $this->container);
+           
+        
+        $businessExposureUserDetails = array();
+        
+        $businessExposureUsers       = array();
+        if (count($businessExposureMiles)) {
+            foreach ($businessExposureMiles as $businessExposureMile) {
+                foreach ($this->getBusinessExposureUser($data, $businessExposureMile) as $businessExposureUser) {
+                    $businessExposureUsers[] = $businessExposureUser;
+                }
+            }
+            
+            if (!count($businessExposureUsers)) {
+                foreach ($businessExposureMiles as $businessExposureMile) {
+                    foreach ($this->getBusinessExposureUser($data, $businessExposureMile) as $businessExposureUser) {
+                        $businessExposureUsers[] = $businessExposureUser;
+                    }
+                }
+            }
+            
+            if (!empty($businessExposureUsers)) {
+                shuffle($businessExposureUsers);
+                $businessPageLimit = count($businessExposureUsers);
+                for ($i = 0; $i < $businessPageLimit; $i++) {
+                    if (isset($businessExposureUsers[$i])) {
+                        $businessExposureUser = $businessExposureUsers[$i];
+                        $businessExposureUserDetails[] = array(
+                            'user_id' => $businessExposureUser[UserShopDetailSolrFieldMapping::ID],
+                            'company_welcome_message' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::COMPANY_WELCOME_MESSAGE]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::COMPANY_WELCOME_MESSAGE] : null),
+                            'about_us' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::ABOUT_US]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::ABOUT_US] : null),
+                            'company_logo' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_COMPANY_LOGO_PATH] : null),
+                            'status_id' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_STATUS_ID] : null),
+                            'user_name' => (isset($businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME]) ? $businessExposureUser[UserShopDetailSolrFieldMapping::USER_PROFILE_NAME] : null),
+                        );
+                    }
+                }
+                if($businessExposureUserDetails) {
+                    $businessExposureUserDetails = array_map("unserialize", array_unique(array_map("serialize", $businessExposureUserDetails)));;
+                }
+            }
+        }
+        
+        return $businessExposureUserDetails;
+    }
+    
+    private function getBusinessExposureUser($searchParams, $exposureMiles)
+    {
+        $data               = array();
+        $categoryId         = (isset($searchParams['query_filters']) && isset($searchParams['query_filters']['item']['category_id']) && $searchParams['query_filters']['item']['category_id'] ? $searchParams['query_filters']['item']['category_id'] : null);
+        $page               = 1;
+        $recordsPerPage     = 10;
+        $additionaldistance = $distance = 0;
+        
+        //set ad criteria to search
+        if (isset($searchParams['query_filters']) && isset($searchParams['query_filters']['item']['location']) && $searchParams['query_filters']['item']['location']!='') {
+            //list($locationId, $distance) = explode('|', $searchParams['query_filters']['item']['location']);
+            $varExplodeLoc = explode('|', $searchParams['query_filters']['item']['location']);
+            if(!empty($varExplodeLoc)) {
+                if(isset($varExplodeLoc[0])  && $varExplodeLoc[0]!='') { $locationId = $varExplodeLoc[0]; }
+                if(isset($varExplodeLoc[1]) && $varExplodeLoc[1]!='' ) { $distance = $varExplodeLoc[1]; }
+            }
+            if ($exposureMiles === 'national') {
+                $additionaldistance = 100000;
+            } else {
+                $additionaldistance = $exposureMiles;
+            }
+            $data['query_filters']['user_shop_detail']['location'] = $locationId.'|'.($distance+$additionaldistance);
+        }
+        
+        //set ad criteria to search
+        $data['static_filters'] = ' AND '.UserShopDetailSolrFieldMapping::PROFILE_EXPOSURE_MILES.':'.$exposureMiles;
+        if ($categoryId) {
+            $data['query_filters']['user_shop_detail']['profile_exposure_category_id'] = $categoryId;
+        }
+        
+        
+        
+        $data['query_sorter']   = array();
+        $data['query_sorter']['user_shop_detail']['random'] = array('sort_ord' => 'desc', 'field_ord' => 2);
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+        $solrSearchManager->init('user.shop.detail', null, $data, $page, $recordsPerPage, 0, true);
+        $solrResponse = $solrSearchManager->getSolrResponse();
+        $result = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
+        
+        return $result;
     }
     
     /**
@@ -148,11 +272,6 @@ class AdultController extends ThirdPartyLoginController
      */
     private function getLatestAds($request, $cookieLocationDetails)
     {
-        return array(
-            array(),
-            null,
-            null
-        );
         
         $location     = null;
         $locationName = null;
