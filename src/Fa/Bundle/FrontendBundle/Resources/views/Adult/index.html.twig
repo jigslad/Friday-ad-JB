@@ -389,7 +389,7 @@
         var viewPort = getViewport();
         $.ajax({
             type: "POST",
-            url : '{{ path('ajax_get_header_image') }}',
+            url : '{{ path('ajax_get_adul_header_image') }}',
             data : {'screenWidth': viewPort.width, 'location': '{{ app.request.get('location') }}'},
         })
         .done(function(response) {
