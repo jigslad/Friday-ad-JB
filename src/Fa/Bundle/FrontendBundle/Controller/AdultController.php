@@ -401,7 +401,7 @@ class AdultController extends ThirdPartyLoginController
 
         //set ad criteria to search
         $data['query_filters']['item']['status_id']              = EntityRepository::AD_STATUS_LIVE_ID;
-        $data['query_filters']['item']['is_homepage_feature_ad'] = '1';
+        $data['query_filters']['item']['is_top_ad'] = '1';
         $data['query_filters']['item']['root_category_id'] = CategoryRepository::ADULT_ID;
         if ($location) {
             $data['query_filters']['item']['location'] = $location.'|'.$distanceRange;
