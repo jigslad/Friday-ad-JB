@@ -171,6 +171,76 @@
         'bundles/facore/js/owl.carousel.min.js'
         'bundles/fafrontend/js/parallax.min.js'
     %}
+        <script>
+            $('#fa_landing_page_adult_search_item__category_id').change(function(event){
+                loadEthnicityByCategoryId($(this).val());
+                loadServicesByCategoryId($(this).val());
+                //fa_landing_page_adult_search_item_adult__ethnicity_id
+            });
+            function loadEthnicityByCategoryId(CategoryId)
+            {
+                var selectedEthnicityId = $('#fa_landing_page_adult_search_item_adult__ethnicity_id').val();
+                if (!CategoryId) {
+                    CategoryId = $('#fa_landing_page_adult_search_item__category_id').val();
+                }
+                $('#fa_landing_page_adult_search_item_adult__ethnicity_id').empty();
+                $('#fa_landing_page_adult_search_item_adult__ethnicity_id').html('<option value="">{{ 'Any Ethnicity'|trans({}, 'frontend-landing-page') }}</option>');
+                if (CategoryId) {
+                    var data = {
+                        id: CategoryId
+                    };
+                    $.ajax({
+                        type: 'post',
+                        url: '{{ path("category_ajax_get_node_json") }}',
+                        data: data,
+                        success: function(data) {
+                            if (data.length > 0) {
+                                for (var i=0, total = data.length; i < total; i++) {
+                                    if (selectedEthnicityId == data[i].id) {
+                                        $('#fa_landing_page_adult_search_item_adult__ethnicity_id').append('<option value="' + data[i].id + '" selected="selected">' + data[i].text + '</option>');
+                                    } else {
+                                        $('#fa_landing_page_adult_search_item_adult__ethnicity_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                                    }
+                                }
+                                $('#fa_landing_page_adult_search_item_adult__ethnicity_id').selectmenu().selectmenu('refresh',true);
+                            }
+                        }
+                    });
+                }
+            }
+            function loadServicesByCategoryId(CategoryId)
+            {
+                var selectedServiceId = $('#fa_landing_page_adult_search_item_adult__services_id').val();
+                if (!CategoryId) {
+                    CategoryId = $('#fa_landing_page_adult_search_item__category_id').val();
+                }
+
+                $('#fa_landing_page_adult_search_item_adult__services_id').html('<option value="">{{ 'Any Ethnicity'|trans({}, 'frontend-landing-page') }}</option>');
+                if (CategoryId) {
+                    var data = {
+                        id: CategoryId
+                    };
+                    $.ajax({
+                        type: 'post',
+                        url: '{{ path("category_ajax_get_node_json") }}',
+                        data: data,
+                        success: function(data) {
+                            if (data.length > 0) {
+                                for (var i=0, total = data.length; i < total; i++) {
+                                    if (selectedServiceId == data[i].id) {
+                                        $('#fa_landing_page_adult_search_item_adult__services_id').append('<option value="' + data[i].id + '" selected="selected">' + data[i].text + '</option>');
+                                    } else {
+                                        $('#fa_landing_page_adult_search_item_adult__services_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                                    }
+                                }
+                                $('#fa_landing_page_adult_search_item_adult__services_id').selectmenu().selectmenu('refresh',true);
+                            }
+                        }
+                    });
+                }
+            }
+        </script>
+
     <script defer src="{{ static_asset_url(asset_url) }}"></script>
     {% endjavascripts %}
     
