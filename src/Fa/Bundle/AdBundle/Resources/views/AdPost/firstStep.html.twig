@@ -269,7 +269,7 @@
 
             // save selected category
             $('#fa_paa_category_select_category_id').val(category_id);
-            
+
           //GA Analytics code start
             if (parseInt(lastLevel) > 1) {
               
@@ -401,6 +401,7 @@
                     } else {
                         lastLevel = parseInt(level) - 1;
                     }
+                    $('.ui-selectmenu-button').hide();
                     $('.ui-selectmenu-button').removeClass('active');
                     $('#fa_paa_category_select_category_'+level+'-button').addClass('active');
                     resetAndHideCategoryChoiceFields(false);
@@ -444,7 +445,7 @@
     function changeMainCategory(categoryId, selectedValue, removeRegNo)
     {
         $("#category_choices_div").prependTo("#main_div");
-        
+
         if ($('#maincategory_' + categoryId).hasClass('active')) {
             $('.main_category').removeClass('active');
             $('#fa_paa_category_select_category_1').val('');
