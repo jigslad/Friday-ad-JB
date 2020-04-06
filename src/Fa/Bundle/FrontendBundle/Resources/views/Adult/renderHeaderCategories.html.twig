@@ -9,7 +9,7 @@
 }
 </style>
 <div id="tablet-header-menus">
-<a class="tab-cat-link" id="tab_cat_link">Categories</a>
+<a class="tab-cat-link" id="tab_cat_link">Adult Categories</a>
 {# {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu_tablet' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %} #}
     <div id="top_category_menu" class="real-tablet">
     	<div class="row main-row">
@@ -83,6 +83,9 @@
 {% if headerCategories|length %}
 {# {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %} #}
     <ul class="left hide-for-small-only real-desktop" id="top_category_menu">
+    	<li class="">
+			<a href="{{ path('fa_frontend_homepage') }}" class="main_category backtofad">Back to Friday ad</a>
+		</li>
         {% for categoryId, categoryArray in headerCategories %}
         {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
         {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
@@ -91,7 +94,7 @@
             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
         {% endif %}
             <li class="has-dropdown">
-                <a href="{{ listurl }}" class="main_category">Categories</a>
+                <a href="{{ listurl }}" class="main_category">Adult Categories</a>
                 {% if categoryArray['children'] is defined and categoryArray['children']|length %}                    
                     <ul class="dropdown">
                         <li>

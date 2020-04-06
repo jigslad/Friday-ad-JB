@@ -1,40 +1,56 @@
-<div class="choose-cat-block" style="background: #212527; padding: 15px 0 40px;">
-        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-        {{ form_errors(form) }}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_top_search'}}) }}
+    {{ form_errors(form) }}
+    <div class="home-slider-content">
         <div class="row">
             <div class="columns">
-                {{ form_label(attribute(form, 'item__category_id', { 'attr' : {'class':'browse-by-category mt20' } } ) ) }}
-                <div>
-                    <div class="medium-12 columns mobile-p-0" style="padding-left: 0px;">
-                        {{ form_widget(attribute(form, 'item__category_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
+                <div class="relative">
+                    <div class="row top-msg">
+                        <div class="columns">
+                           {{ include('FaCoreBundle::message.html.twig') }}
+                        </div>
                     </div>
-                    <div class="medium-5 columns mobile-p-0">
-                        {{ form_widget(form.item__distance,{'attr':{'class':'form-control select-control'}}) }}
+                    <div class="tagline"><h1 class="tagline-text">What you are looking for?</h1></div>
+                    <div id="home-search" class="large-14 columns">
+                        <div class="adult-search">
+			                <div class="search-input-box">
+                            <table>
+                                <tr>
+                                    <td class="all-cat-select" style="display:none">{{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}</td>
+                                    <td class="looking-for relative">
+                                        <input type="text" id="fa_top_search_keywords" name="fa_top_search[keywords]" required="required" class="white-field mb0" placeholder="Looking for..." />
+				                        <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                    </td>
+                                    <td class="search-btn"><button class="button secondary-btn-1 mb0 expand" type="submit">{{'Search'|trans({}, 'frontend-homepage')}}</button></td>
+                                </tr>
+                            </table>
+                            </div>
+                            <div class="advanced-search-option"><a class="adult-color homepage-advance-srch">Advanced</a></div>
+                        </div>
+                        <div id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal>
+                            {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}
+                        </div>
+                        <div class="location">
+                            <span class="search-pin"></span>
+                            <span id="in_text_span">{{ 'in'|trans({}, 'frontend-homepage') }}</span> <span id="header_search_editable_location_span">United Kingdom</span>
+                            <a href="javascript:void(0)" rel="nofollow" id="header_search_editable_location_a"> ({{ 'change'|trans({}, 'frontend-homepage') }})</a>
+                            <div id="top_search_location" class="white-autocomplete">
+                                {{ form_widget(form.item__location_autocomplete) }}
+                                <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                <div class="clearfix">
+                                    <button class="button xs-btn-1 expand left" type="button" id="top_search_location_homepage_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</button>
+                                    <button class="button xs-btn-1 expand right" type="button" id="top_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
-                        <label style="padding: 10px 10px 10px 0px; color: #ffffff !important;">{{ 'from'|trans({}, 'frontend')}}</label>
-                        {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'form-control select-control'}}) }}
-                    </div>
+                    <div class="forsale-phone"></div>
                 </div>
-                <div>
-                    <div class="medium-10 columns mobile-p-0" style="padding-left: 0px;">
-                        {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
-                    </div>
-                    <div class="medium-7 columns mobile-p-0">
-                        <input type="radio" id="indepandent" name="type" value="indepandent">
-                        <label for="indepandent">indepandent</label>
-                        <input type="radio" id="agency" name="type" value="agency">
-                        <label for="agency">agency</label>
-                    </div>
-                    <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
-                        {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="small-wrapper">
-                <button class="secondary-btn-1 expand button mb0 mt20" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
             </div>
         </div>
-        {{ form_end(form) }}
+        <div class="row show-for-small-only text-center">
+            <div class="columns">
+                <a class="primary-btn-1 button" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}" href="{{ path('ad_post_first_step') }}">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a>
+            </div>
+        </div>
     </div>
+{{ form_end(form) }}

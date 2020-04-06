@@ -1,0 +1,40 @@
+<div class="choose-cat-block" style="background: #212527; padding: 15px 0 40px;">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_errors(form) }}
+        <div class="row">
+            <div class="columns">
+                {{ form_label(attribute(form, 'item__category_id', { 'attr' : {'class':'browse-by-category mt20' } } ) ) }}
+                <div>
+                    <div class="medium-12 columns mobile-p-0" style="padding-left: 0px;">
+                        {{ form_widget(attribute(form, 'item__category_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
+                    </div>
+                    <div class="medium-5 columns mobile-p-0">
+                        {{ form_widget(form.item__distance,{'attr':{'class':'form-control select-control'}}) }}
+                    </div>
+                    <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
+                        <label style="padding: 10px 10px 10px 0px; color: #ffffff !important;">{{ 'from'|trans({}, 'frontend')}}</label>
+                        {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'form-control select-control'}}) }}
+                    </div>
+                </div>
+                <div>
+                    <div class="medium-10 columns mobile-p-0" style="padding-left: 0px;">
+                        {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
+                    </div>
+                    <div class="medium-7 columns mobile-p-0">
+                        <input type="radio" id="indepandent" name="type" value="indepandent">
+                        <label for="indepandent">indepandent</label>
+                        <input type="radio" id="agency" name="type" value="agency">
+                        <label for="agency">agency</label>
+                    </div>
+                    <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
+                        {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="small-wrapper">
+                <button class="secondary-btn-1 expand button mb0 mt20" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>

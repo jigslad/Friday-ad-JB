@@ -50,18 +50,21 @@
 {% endif %}
     
 {% block body %}
-    <div class="{% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page'} %}homepage-hero{% endif %}">
+    <div class="{% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2:'fa_adult_homepage'} %}homepage-hero{% endif %}">
         <div class="hero-img">
-            {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isHomeSearch': true } )) }}
+            {{ render(controller('FaAdBundle:AdList:topSearch', { 'searchParams': searchParams is defined ? searchParams : {}, 'isAdultHomeSearch': true } )) }}
             <div class="parallax-window" id="header_image_div"></div>
         </div>
     </div>
 
-    {{ include('FaFrontendBundle:Adult:homePageAdultSearch.html.twig') }}
+    <div id="adult_search_form">
+    	{{ include('FaFrontendBundle:Adult:homePageAdultSearchForm.html.twig') }}
+    </div>
     
     <div class="what-u-discover">
         <div class="row">
             <div class="columns">
+            	<div class="browse-by-category">Browse by category</div>
                 {% set adultContactId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_CONTACTS_ID') %}
                 {% set escortsId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ESCORT_SERVICES_ID') %}
                 {% set fetishRoleplayId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FETISH_AND_ROLE_PLAY_ID') %}
@@ -74,7 +77,7 @@
                     {% set locationId = cookieLocationDetails.location %}
                 {% endif %}
                 {# {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %} #}
-                <div class="discover-categories large-20 discover-adult-categories">
+                <div class="discover-categories large-20 discover-adult-categories text-center">
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': adultContactId } %}
                     <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-adult-contacts">{{'Adult Contacts'|trans({}, 'frontend-homepage')}}</a>
 
@@ -112,8 +115,30 @@
         <div class="row">
             <div class="columns">
                 <h3 class="homepage-title">{{'Latest Ads'|trans({}, 'frontend-homepage')}}</h3>
-                {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-item-slider'}) }}
             </div>
+	        <div class="medium-15 columns">
+                {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig') }}
+            </div>
+            <div class="medium-9 columns">
+	        	<div class="mb20">
+	        		{% if mobileDetectManager.isMobile() %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                    {% else %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK') %}
+                        {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+                    {% endif %}
+	        	</div>
+	        	<div class="mt0">
+	        	{% if mobileDetectManager.isMobile() %}
+                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE_2') %}
+                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                {% else %}
+                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_2') %}
+                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+                {% endif %}
+	        	</div>
+	        </div>
         </div>
     </div>
     {% endif %}
@@ -278,6 +303,9 @@
     $(document).ready(function() {
         $('div.homepage-row:even').addClass('white-bg');
         getHeaderImage();
+
+        $('#fa_landing_page_adult_search_item_adult__services_id, .select-control').select2();
+        
         var featuredAdvertisersItemSlider = $("#featured_advertisers_slider");
         featuredAdvertisersItemSlider.owlCarousel({
             items : 4,
