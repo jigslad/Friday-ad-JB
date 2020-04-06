@@ -239,7 +239,7 @@ class UserCreditRepository extends EntityRepository
         ->andWhere(self::ALIAS.'.status = 1')
         ->andWhere(self::ALIAS.'.credit > 0')
         ->andWhere('FIND_IN_SET(6, '.self::ALIAS.'.package_sr_no) > 0 or FIND_IN_SET(3, '.self::ALIAS.'.package_sr_no) > 0')
-        ->andWhere(self::ALIAS.'.expires_at IS NULL OR '.self::ALIAS.'.expires_at > '.time())
+        ->orderBy(self::ALIAS.'.id','desc')
         ->setMaxResults(1);
 
         $activeUserCredits = $qb->getQuery()->getOneOrNullResult();        
