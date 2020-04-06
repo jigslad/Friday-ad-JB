@@ -49,7 +49,8 @@ class UserCreditUsedRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder(self::ALIAS)
             ->select(UserCreditRepository::ALIAS.'.id as user_credit_id, COUNT('.self::ALIAS.'.id) as cnt')
-            ->innerJoin(self::ALIAS.'.user_credit', UserCreditRepository::ALIAS, 'WITH', self::ALIAS.'.user_credit = '.UserCreditRepository::ALIAS.'.id');
+            ->innerJoin(self::ALIAS.'.user_credit', UserCreditRepository::ALIAS, 'WITH', self::ALIAS.'.user_credit = '.UserCreditRepository::ALIAS.'.id')
+            ->groupBy(UserCreditRepository::ALIAS.'.id');
 
         if (!is_array($userCreditIds)) {
             $userCreditIds = array($userCreditIds);
