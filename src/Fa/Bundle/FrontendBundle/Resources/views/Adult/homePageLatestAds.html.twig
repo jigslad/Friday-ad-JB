@@ -1,134 +1,152 @@
 <div class="row">
     <div class="large-18 column">
         <div class="row">
-            owl-carousel
-            <div class="owl-carousel fa-slider">
-{#                {% set userRepository = fetch_repository('FaUserBundle:User') %}#}
-{#                {% for popularShop in popularShops %}#}
-{#                    {% set adUserId = popularShop['id'] %}#}
-{#                    {% set shopName = popularShop['shop_name'] %}#}
-{#                    {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(adUserId) %}#}
-{#                    <div class="item" data-equalizer-watch>#}
-{#                        <a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a>#}
-{#                        {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adUserId, true, true]) %}#}
-{#                        {% set userName = userRepository.getUserProfileName(adUserId, container)~' - Friday-Ad' %}#}
-{#                        <div class="list-img">#}
-{#                            {% if userLogo %}#}
-{#                                <img class="lazyOwl" data-src="{{ userLogo }}" alt="{{ userName }}" />#}
-{#                            {% else %}#}
-{#                                <img class="lazyOwl" data-src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />#}
-{#                            {% endif %}#}
-{#                        </div>#}
-{#                        <h3>#}
-{#                            {{ shopName }}#}
-{#                        </h3>#}
-{#                    </div>#}
-{#                {% endfor %}#}
+            <div class="owl-carousel fa-slider" data-equalizer>
+                {{ dump(featureAds) }}
+                {% set categoryBadgeArray = categoryRepository.getCategoryBadgeClassArray() %}
+                {% for featureAd in featureAds %}
+                    {% set adCategoryId = attribute(featureAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
+                    {% set rootCategoryId = attribute(featureAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+                    {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+                    {% set featureAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+                    {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(featureAd) %}
+                    {% set adUserDetail = null %}
+                    {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'USER_ID')) is defined and userDetails[attribute(featureAd, constant(featureAdSolrMapping ~ 'USER_ID'))] is defined %}
+                        {% set adUserDetail = userDetails[attribute(featureAd, constant(featureAdSolrMapping ~ 'USER_ID'))] %}
+                    {% endif %}
+                    {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(featureAd, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+                    {% set imageAltString = null %}
+                    {% if seoRule['image_alt'] is defined %}
+                        {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], featureAd]) %}
+                    {% endif %}
+                    <div class="item" data-equalizer-watch>
+                        {% if categoryBadgeArray[rootCategoryId] is defined %}
+                            <span class="fa-slider-badge {{categoryBadgeArray[rootCategoryId]}}">Category</span>
+                        {% endif %}
+                        <a class="tricky-link" href="{{ adUrl }}">
+                            {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')) is defined %}
+                                {{trim_text(attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')), 30)|raw}}
+                            {% endif %}
+                        </a>
+                        {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, featureAd, '300X225', 1) %}
+
+                        {% set imagePathExists = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'checkFileExists', [imagePath]) %}
+
+                        <div class="list-img {% if not imagePath  or not imagePathExists %}similar-placeholder{% endif %}">
+                            {% if imagePath and imagePathExists %}
+                                <img class="lazyOwl" src="#empty" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                            {% else %}
+                                <img class="lazyOwl" src="#empty" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                            {% endif %}
+                        </div>
+                        <div class="member-info">
+                            <div class="clearfix">
+                                <div class="large-17 columns">
+                                    <a href="javascript:void(0);">
+                                        {% if adUserDetail|length and adUserDetail['user_name'] is defined %}
+                                            {{adUserDetail['user_name']}}
+                                        {% endif %}
+                                        {% if adUserDetail|length and adUserDetail['town_name'] is defined and adUserDetail['town_name'] is not null%}
+                                            , {{adUserDetail['town_name']}}
+                                        {% endif %}
+                                    </a>
+                                    {% if adUserDetail|length and adUserDetail['created_at'] is defined and adUserDetail['created_at'] is not null %}
+                                        <span class="posting-year">{{'Verified member since %posting_date%'|trans({'%posting_date%': staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'formatDate', [adUserDetail['created_at'], container, null, null, 'MMM dd']) }, 'frontend-homepage')}}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="large-7 columns text-right">
+                                    {% set userCompanyLogo = null %}
+                                    {% set userLogo = null %}
+                                    {% if adUserDetail|length %}
+                                        {% if (adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+                                            {% set userCompanyLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['company_logo'], adUserDetail['id'], null, null, true, true, adUserDetail['status_id'], adUserDetail['user_name']]) %}
+                                        {% endif %}
+                                        {% if adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER_ID') %}
+                                            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogo', [fetch_container_instance(), adUserDetail['image'], adUserDetail['id'], 'null', 'null', true, false, adUserDetail['status_id'], adUserDetail['user_name']]) %}
+                                        {% endif %}
+                                    {% endif %}
+                                    <div class="member-icon {% if (adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or adUserDetail|length and adUserDetail['role_id'] == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}member-logo{% endif %}">
+                                        {% if userCompanyLogo %}
+                                            {{userCompanyLogo|raw}}
+                                        {% elseif userLogo %}
+                                            {{userLogo|raw}}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fa-price">
+                            <div class="large-24 columns">
+                                <h4>
+                                    {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'PRICE')) is defined %}
+                                        <span>
+                                {{ format_currency(attribute(featureAd, constant(featureAdSolrMapping ~ 'PRICE'))) }}
+                                            {% if rootCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') and attribute(featureAd, constant(featureAdSolrMapping ~ 'RENT_PER_ID')) is defined %}
+                                                {{ adPropertyRepository.getRentPostFixText(attribute(featureAd, constant(featureAdSolrMapping ~ 'RENT_PER_ID')), container)}}
+                                            {% endif %}
+                            </span>
+                                    {% endif %}
+
+                                    {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')) is defined %}
+                                        {{trim_text(attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')), 30)|raw}}
+                                    {% endif %}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
         <div class="row">
-            <div class="large-8 columns">
-                <div class="item-box">
-                    <a class="tricky-link" href="/uk/motors/commercial-vehicles/">
-                        uploads/landingpage/5e85b956878de.jpeg
-                    </a>
-                    <div class="overlay"></div>
-                    <div class="popular-graphic">
-                        <img alt="uploads/landingpage/5551915d191c7.svg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/5551915d191c7.svg">
+            {% for latestAdultAd in latestAdultAds  %}
+{#                {% set adCategoryId = attribute(latestAdultAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}#}
+{#                {% set rootCategoryId = attribute(latestAdultAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}#}
+{#                {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}#}
+{#                {% set latestAdultAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}#}
+{#                {% set adUserDetail = null %}#}
+{#                {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID')) is defined and userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] is defined %}#}
+{#                    {% set adUserDetail = userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] %}#}
+{#                {% endif %}#}
+{#                {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(latestAdultAd, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}#}
+{#                {% set imageAltString = null %}#}
+{#                {% if seoRule['image_alt'] is defined %}#}
+{#                    {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], latestAdultAd]) %}#}
+{#                {% endif %}#}
+                <div class="large-8 columns">
+                    <div class="item-box">
+                        {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl('',latestAdultAd.ad_id) %}
+                        <a class="tricky-link" href="{{ adUrl }}">
+{#                            {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')) is defined %}#}
+{#                                {{trim_text(attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')), 30)|raw}}#}
+{#                            {% endif %}#}
+                        </a>
+                        <div class="explore-price">{{ adUrl }}</div>
+                        <img alt="uploads/landingpage/5e85b956878de.jpeg" src="http://fadtest-images.friday-ad.co.uk/uploads/landingpage/5e85b956878de.jpeg">
                     </div>
-                    <div class="explore-price">9,807</div>
-                    <img alt="uploads/landingpage/5e85b956878de.jpeg" src="http://fadtest-images.friday-ad.co.uk/uploads/landingpage/5e85b956878de.jpeg">
                 </div>
-            </div>
-            <div class="large-8 columns">
-                <div class="item-box">
-                    <a class="tricky-link" href="/uk/motors/motorbikes/">
-                        uploads/landingpage/55c0ba8b26ea6.jpeg
-                    </a>
-                    <div class="overlay"></div>
-                    <div class="popular-graphic">
-                        <img alt="uploads/landingpage/5551915d1a199.svg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/5551915d1a199.svg">
-                    </div>
-                    <div class="explore-price">17,619</div>
-                    <img alt="uploads/landingpage/55c0ba8b26ea6.jpeg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/55c0ba8b26ea6.jpeg">
-                </div>
-            </div>
-            <div class="large-8 columns">
-                <div class="item-box">
-                    <a class="tricky-link" href="/uk/motors/motorhomes-caravans/">
-                        uploads/landingpage/55c0ba8b299e3.jpeg
-                    </a>
-                    <div class="overlay"></div>
-                    <div class="popular-graphic">
-                        <img alt="uploads/landingpage/5551915d1b206.svg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/5551915d1b206.svg">
-                    </div>
-                    <div class="explore-price">14,822</div>
-                    <img alt="uploads/landingpage/55c0ba8b299e3.jpeg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/55c0ba8b299e3.jpeg">
-                </div>
-            </div>
-            <div class="large-8 columns">
-                <div class="item-box">
-                    <a class="tricky-link" href="/uk/motors/boats/">
-                        uploads/landingpage/55c0ba8b2c881.jpeg
-                    </a>
-                    <div class="overlay"></div>
-                    <div class="popular-graphic">
-                        <img alt="uploads/landingpage/5551915d1c1fd.svg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/5551915d1c1fd.svg">
-                    </div>
-                    <div class="explore-price">6,866</div>
-                    <img alt="uploads/landingpage/55c0ba8b2c881.jpeg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/55c0ba8b2c881.jpeg">
-                </div>
-            </div>
-            <div class="large-8 columns">
-                <div class="item-box">
-                    <a class="tricky-link" href="/uk/motors/farm/">
-                        uploads/landingpage/55c0ba8b2fb07.jpeg
-                    </a>
-                    <div class="overlay"></div>
-                    <div class="popular-graphic">
-                        <img alt="uploads/landingpage/5551915d1d18b.svg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/5551915d1d18b.svg">
-                    </div>
-                    <div class="explore-price">32</div>
-                    <img alt="uploads/landingpage/55c0ba8b2fb07.jpeg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/55c0ba8b2fb07.jpeg">
-                </div>
-            </div>
-            <div class="large-8 columns">
-                <div class="item-box">
-                    <a class="tricky-link" href="/uk/motors/horseboxes-trailers/">
-                        uploads/landingpage/55c0ba8b32773.jpeg
-                    </a>
-                    <div class="overlay"></div>
-                    <div class="popular-graphic">
-                        <img alt="uploads/landingpage/5551915d1e14a.svg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/5551915d1e14a.svg">
-                    </div>
-                    <div class="explore-price">54</div>
-                    <img alt="uploads/landingpage/55c0ba8b32773.jpeg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/55c0ba8b32773.jpeg">
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
     <div class="large-6 column">
-        <div class="item-box">
-            <a class="tricky-link" href="/uk/motors/commercial-vehicles/">
-                uploads/landingpage/5e85b956878de.jpeg
-            </a>
-            <div class="overlay"></div>
-            <div class="popular-graphic">
-                <img alt="uploads/landingpage/5551915d191c7.svg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/5551915d191c7.svg">
-            </div>
-            <div class="explore-price">9,807</div>
-            <img alt="uploads/landingpage/5e85b956878de.jpeg" src="http://fadtest-images.friday-ad.co.uk/uploads/landingpage/5e85b956878de.jpeg">
+        <div class="row">
+            {% if mobileDetectManager.isMobile() %}
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            {% else %}
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+            {% endif %}
         </div>
-        <div class="item-box">
-            <a class="tricky-link" href="/uk/motors/commercial-vehicles/">
-                uploads/landingpage/5e85b956878de.jpeg
-            </a>
-            <div class="overlay"></div>
-            <div class="popular-graphic">
-                <img alt="uploads/landingpage/5551915d191c7.svg" src="https://fmtinew.friday-ad.co.uk/uploads/landingpage/5551915d191c7.svg">
-            </div>
-            <div class="explore-price">9,807</div>
-            <img alt="uploads/landingpage/5e85b956878de.jpeg" src="http://fadtest-images.friday-ad.co.uk/uploads/landingpage/5e85b956878de.jpeg">
+        <br>
+        <div class="row">
+            {% if mobileDetectManager.isMobile() %}
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE_2') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+            {% else %}
+                {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_2') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
+            {% endif %}
         </div>
     </div>
 </div>

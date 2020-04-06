@@ -18,49 +18,7 @@
                 </div>
                 <div>
                     <div class="medium-10 columns mobile-p-0" style="padding-left: 0px;">
-                        <select id="menu">
-                                <option>Pizza</option>
-                                <option data-selected>Spaghetti</option>
-                                <option>Mozzarella</option>
-                                <option>Eggs</option>
-                                <option data-selected>Eggs 2</option>
-                                <option>Eggs 3</option>
-                                <option>Water</option>
-                                <option>Beer</option>
-                                <option>Coke</option>
-                                <option>Gin</option>
-                        </select>
-                        <script>
-                            $("#menu").zmultiselect({
-
-                                filter: true,
-                                filterResult: true,
-                                selectAll: true,
-                                //locale: 'it-IT',
-
-                                //REPLACE WITH CUSTOM TEXT:
-                                //selectAllText: ['Check All', 'Uncheck All'],
-                                //selectedText: ['Selected', 'of'],
-                                //filterPlaceholder: 'What are your searching for?',
-                                //filterResultText: "Showed",
-                                //filterPlaceholder: 'MyFilter...',
-
-                                get: "zmultiselect",
-                                placeholder: "I'm a MultiSelect",
-                                live: '#menu_live'
-                            });
-                        </script>
-
-
-                        <select class="form-control select-control" id="multipleSelectExample" data-placeholder="Choose services" multiple="">
-                            <option value="">Choose services</option>
-                            <option value="1">Option 1</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                            <option value="3">Option 3</option>
-                            <option value="4">Option 4</option>
-                            <option value="5">Option 5</option>
-                        </select>
+                        {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
                     </div>
                     <div class="medium-7 columns mobile-p-0">
                         <input type="radio" id="indepandent" name="type" value="indepandent">
