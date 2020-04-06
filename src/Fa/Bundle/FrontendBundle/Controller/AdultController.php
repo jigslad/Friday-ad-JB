@@ -419,6 +419,88 @@ class AdultController extends ThirdPartyLoginController
 
         return $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
     }
+    
+    /**
+     * Get heade image.
+     *
+     * @param Request $request Request instance.
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxHomePageGetHeaderImageAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $cookies        = $request->cookies;
+            $width          = $request->get('screenWidth');
+            $key            = null;
+            $rootCategoryId = null;
+            $screenType     = null;
+            // get header image array.
+            $headerImagesArray = $this->getRepository('FaContentBundle:HeaderImage')->getHeaderImageArrayByCatId(CategoryRepository::ADULT_ID, $this->container);
+            // get screen type.
+            $screenType = $this->getRepository('FaContentBundle:HeaderImage')->getScreenTypeFromResolutionWidth($width);
+            // get location from cookie
+            $cookieLocationDetails = CommonManager::getLocationDetailFromParamsOrCookie($request->get('location'), $request, $this->container);
+            
+            // append domicile & town.
+            if (isset($cookieLocationDetails['town_id']) && $cookieLocationDetails['town_id']) {
+                //$key .= $cookieLocationDetails['town_id'].'_';
+                $townInfoArray = $this->getRepository('FaEntityBundle:Location')->getTownInfoArrayById($cookieLocationDetails['town_id'], $this->container);
+                if (isset($townInfoArray['county_id']) && $townInfoArray['county_id']) {
+                    $key .= $townInfoArray['county_id'].'_';
+                }
+            }
+            
+            // append category id
+            if ($cookies->has('home_page_search_params')) {
+                $searchParams   = unserialize($cookies->get('home_page_search_params'));
+                if (isset($searchParams['item']['category_id']) && $searchParams['item']['category_id']) {
+                    $rootCategoryId = $this->getRepository('FaEntityBundle:Category')->getRootCategoryId($searchParams['item']['category_id'], $this->container);
+                    if ($rootCategoryId) {
+                        $key .= $rootCategoryId.'_';
+                    }
+                }
+            }
+            // append screen type.
+            if ($screenType) {
+                $key .= $screenType.'_';
+            }
+            
+            $imageArray = array('image' => null);
+            $key        = trim($key, '_');
+            
+            
+            if (isset($headerImagesArray[$key])) {
+                if (isset($headerImagesArray[$key]['override_1'])) {
+                    $randomKey  = array_rand($headerImagesArray[$key]['override_1'], 1);
+                    $imageArray = $headerImagesArray[$key]['override_1'][$randomKey];
+                } else {
+                    $randomKey  = array_rand($headerImagesArray[$key]['override_'], 1);
+                    $imageArray = $headerImagesArray[$key]['override_'][$randomKey];
+                }
+            } elseif ($rootCategoryId && $screenType && isset($headerImagesArray[$rootCategoryId.'_'.$screenType])) {
+                if ($rootCategoryId && $screenType && isset($headerImagesArray[$rootCategoryId.'_'.$screenType]['override_1'])) {
+                    $randomKey  = array_rand($headerImagesArray[$rootCategoryId.'_'.$screenType]['override_1'], 1);
+                    $imageArray = $headerImagesArray[$rootCategoryId.'_'.$screenType]['override_1'][$randomKey];
+                } else {
+                    $randomKey  = array_rand($headerImagesArray[$rootCategoryId.'_'.$screenType]['override_'], 1);
+                    $imageArray = $headerImagesArray[$rootCategoryId.'_'.$screenType]['override_'][$randomKey];
+                }
+            } elseif ($screenType && isset($headerImagesArray['all'][$screenType])) {
+                if ($screenType && isset($headerImagesArray['all'][$screenType]['override_1'])) {
+                    $randomKey  = array_rand($headerImagesArray['all'][$screenType]['override_1'], 1);
+                    $imageArray = $headerImagesArray['all'][$screenType]['override_1'][$randomKey];
+                } else {
+                    $randomKey  = array_rand($headerImagesArray['all'][$screenType]['override_'], 1);
+                    $imageArray = $headerImagesArray['all'][$screenType]['override_'][$randomKey];
+                }
+            }
+            
+            return new JsonResponse($imageArray);
+        }
+        
+        return new Response();
+    }
 }
 
     
