@@ -143,7 +143,7 @@ class HeaderImageRepository extends EntityRepository
                 $awsUrl = $headeImage['path'].'/'.$headeImage['file_name'];
                 $fileexistsInAws = 0;
                 if(CommonManager::checkImageExistOnAws($container,$awsUrl)) {
-                    $headerBaseImagePath = $container->getParameter('fa.static.aws.url');
+                    $headerBaseImagePath = $container->getParameter('fa.static.aws.url').'/'.$headeImage['path'];
                     $fileexistsInAws = 1;
                 }
                 
