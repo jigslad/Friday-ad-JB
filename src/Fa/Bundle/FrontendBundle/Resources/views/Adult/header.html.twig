@@ -96,9 +96,6 @@
                         <!-- Right Nav Section -->
                         
                        <div class="tablet-menu adul-tablet-menu">
-                       		<div>
-                            	<a href="{{ path('fa_frontend_homepage') }}">Back to Friday ad</a>
-                            </div>
                             {% if mobileDetectManager.isTablet() %}
                                 {{ render(controller('FaEntityBundle:Category:renderAdultHeaderCategories', {'is_tablet':1, 'location': (currentRoute in {0: 'listing_page', 1: 'landing_page_category_location', 2: 'location_home_page'}  ? app.request.get('location') : null), 'searchParams': searchParams is defined ? searchParams : {}})) }}
                             {% elseif mobileDetectManager.isMobile() %}
