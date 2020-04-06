@@ -58,7 +58,7 @@
     </div>
 
     <div id="adult_search_form">
-    	{{ include('FaFrontendBundle:Adult:homePageAdultSearchForm.html.twig') }}
+    	{# { include('FaFrontendBundle:Adult:homePageAdultSearchForm.html.twig') } #}
     </div>
     
     <div class="what-u-discover">
@@ -117,10 +117,10 @@
                 <h3 class="homepage-title">{{'Latest Ads'|trans({}, 'frontend-homepage')}}</h3>
             </div>
 	        <div class="medium-15 columns">
-                {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-item-slider', 'ads': ''}) }}
+                {{ include('FaFrontendBundle:Adult:homePageLatestAds.html.twig', {'divId': 'featured-top-item-slider', 'ads': ''}) }}
             </div>
             <div class="medium-9 columns">
-	        	<div class="mb20">
+	        	<div class="mb20 square-block-img">
 	        		{% if mobileDetectManager.isMobile() %}
                         {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE') %}
                         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
@@ -129,7 +129,7 @@
                         {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'class':'hide-for-small-only'}}) }}
                     {% endif %}
 	        	</div>
-	        	<div class="mt0">
+	        	<div class="mt0 square-block-img">
 	        	{% if mobileDetectManager.isMobile() %}
                     {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_HOMEPAGE_SQUARE_BLOCK_MOBILE_2') %}
                     {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
@@ -320,10 +320,10 @@
 
         
 
-        var featuredItemSlider = $("#featured-item-slider");
+        var featuredItemSlider = $("#featured-top-item-slider");
         featuredItemSlider.owlCarousel({
             items : 3,
-            itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 3]],
+            itemsCustom:[[320, 1], [568, 2], [768, 2], [1024, 3]],
             navigation: true,
             pagination:false,
             responsiveRefreshRate : 100,
