@@ -9,7 +9,7 @@
 }
 </style>
 <div id="tablet-header-menus">
-<a class="tab-cat-link" id="tab_cat_link">Adult Categories</a>
+<a class="tab-cat-link ga-ahpCatDropdown" id="tab_cat_link">Adult Categories</a>
 {# {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu_tablet' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %} #}
     <div id="top_category_menu" class="real-tablet">
     	<div class="row main-row">
@@ -84,7 +84,7 @@
 {# {% cache 'header|menu|'~location_id|replace({' ':''})~'front/header_menu' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0 ) (staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'isBot', [container]) ? 600 : 86400) %} #}
     <ul class="left hide-for-small-only real-desktop" id="top_category_menu">
     	<li class="">
-			<a href="{{ path('fa_frontend_homepage') }}" class="main_category backtofad">Back to Friday ad</a>
+			<a href="{{ path('fa_frontend_homepage') }}" class="main_category backtofad">Friday-Ad Homepage</a>
 		</li>
         {% for categoryId, categoryArray in headerCategories %}
         {% set linkParam = { 'item__location': location_id, 'item__category_id': categoryId} %}
@@ -94,7 +94,7 @@
             {% set listurl = container.get('fa_ad.manager.ad_routing').getCategoryUrl(location_id, categoryArray['full_slug']) %}
         {% endif %}
             <li class="has-dropdown">
-                <a href="{{ listurl }}" class="main_category">Adult Categories</a>
+                <a href="{{ listurl }}" class="main_category ga-ahpCatDropdown">Adult Categories</a>
                 {% if categoryArray['children'] is defined and categoryArray['children']|length %}                    
                     <ul class="dropdown">
                         <li>
@@ -157,7 +157,7 @@
     {% if headerCategories|length %}
     {# {% cache 'header|menu|'~location_id~'front/header_menu_mobile' ~ (thirdPartyAdultModalBox is defined and thirdPartyAdultModalBox?1:0) 86400 %} #}
     <dd class="accordion-navigation">
-        <a href="#cat-mob-menu">MENU</a>
+        <a href="#cat-mob-menu ga-ahpCatDropdown">MENU</a>
         <div id="cat-mob-menu" class="content active">
             <ul class="show-for-small-only">
                 {% for categoryId, categoryArray in headerCategories %}
