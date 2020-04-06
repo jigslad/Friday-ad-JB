@@ -1,4 +1,4 @@
-<div class="owl-carousel fa-slider" data-equalizer id="featured-item-slider">
+<div class="owl-carousel fa-slider" id="{{ divId }}" data-equalizer style="display: block">  {# id="popular_shops_slider1" #}
     {% set categoryBadgeArray = categoryRepository.getCategoryBadgeClassArray() %}
     {% for featureAd in featureAds %}
         {% set adCategoryId = attribute(featureAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}
@@ -16,9 +16,6 @@
             {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], featureAd]) %}
         {% endif %}
         <div class="item" data-equalizer-watch>
-            {% if categoryBadgeArray[rootCategoryId] is defined %}
-                <span class="fa-slider-badge {{categoryBadgeArray[rootCategoryId]}}">Category</span>
-            {% endif %}
             <a class="tricky-link" href="{{ adUrl }}">
                 {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')) is defined %}
                     {{trim_text(attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')), 30)|raw}}
@@ -35,40 +32,36 @@
                     <img class="lazyOwl" src="#empty" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
                 {% endif %}
             </div>
-            <h3>                
-                {% if adUserDetail|length and adUserDetail['user_name'] is defined %}
-                    {{adUserDetail['user_name']}}
+            <h3>
+                {% if attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')) is defined %}
+                    {{trim_text(attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')), 30)|raw}}
                 {% endif %}
-                {% if adUserDetail|length and adUserDetail['town_name'] is defined and adUserDetail['town_name'] is not null%}
-                    , {{adUserDetail['town_name']}}
-                {% endif %}
-            </h3>                 
+            </h3>
         </div>
     {% endfor %}
 </div>
-
 <div class="row">
     {% for latestAdultAd in latestAdultAds  %}
-{#                {% set adCategoryId = attribute(latestAdultAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}#}
-{#                {% set rootCategoryId = attribute(latestAdultAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}#}
-{#                {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}#}
-{#                {% set latestAdultAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}#}
-{#                {% set adUserDetail = null %}#}
-{#                {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID')) is defined and userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] is defined %}#}
-{#                    {% set adUserDetail = userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] %}#}
-{#                {% endif %}#}
-{#                {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(latestAdultAd, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}#}
-{#                {% set imageAltString = null %}#}
-{#                {% if seoRule['image_alt'] is defined %}#}
-{#                    {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], latestAdultAd]) %}#}
-{#                {% endif %}#}
+        {#                {% set adCategoryId = attribute(latestAdultAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}#}
+        {#                {% set rootCategoryId = attribute(latestAdultAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}#}
+        {#                {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}#}
+        {#                {% set latestAdultAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}#}
+        {#                {% set adUserDetail = null %}#}
+        {#                {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID')) is defined and userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] is defined %}#}
+        {#                    {% set adUserDetail = userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] %}#}
+        {#                {% endif %}#}
+        {#                {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(latestAdultAd, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}#}
+        {#                {% set imageAltString = null %}#}
+        {#                {% if seoRule['image_alt'] is defined %}#}
+        {#                    {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], latestAdultAd]) %}#}
+        {#                {% endif %}#}
         <div class="large-8 columns">
             <div class="item-box">
                 {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl('',latestAdultAd.ad_id) %}
                 <a class="tricky-link" href="{{ adUrl }}">
-{#                            {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')) is defined %}#}
-{#                                {{trim_text(attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')), 30)|raw}}#}
-{#                            {% endif %}#}
+                    {#                            {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')) is defined %}#}
+                    {#                                {{trim_text(attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')), 30)|raw}}#}
+                    {#                            {% endif %}#}
                 </a>
                 <div class="explore-price">{{ adUrl }}</div>
                 <img alt="uploads/landingpage/5e85b956878de.jpeg" src="http://fadtest-images.friday-ad.co.uk/uploads/landingpage/5e85b956878de.jpeg">
@@ -76,4 +69,3 @@
         </div>
     {% endfor %}
 </div>
-
