@@ -36,7 +36,7 @@
             {{ form_errors(attribute(form, field)) }}
         </div>
     {% elseif field == 'description' %}
-        <div class="paa-bdr-box">
+        <div class="paa-bdr-box bdr-none">
             <h3 class="text-center">{{ attribute(form, field).vars.label }}</h3>
             <div class="paa-title-ins">
                 {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}

@@ -5,44 +5,49 @@
     {{'Describe your item'|trans({}, 'frontend-paa')}}
 {% endblock %}
 
-{% block body %}
-    <div class="posting-bg">
-        <div class="fad-sign-bdr">&nbsp;</div>
-        <div class="row paa-main">
-            {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 2}) }}
-            <div id="middle-column" class="large-12 columns">
-                <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
-                <h1 class="text-center paa-title">{{ 'Describe your item and choose your price'|trans({}, 'frontend-paa-second-step') }} </h1>
-                <div class="big-wrapper">
-                    <div class="change-category clearfix">
-                        {#<div class="left cat-name-wrap">#}
-                        <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
-                            <div class="media-object-section">
-                                <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
-                            </div>
-                            {% set categoryId = attribute(first_step_data, 'category_id') %}
-                            <div class="media-object-section">
-                                <p>{{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}</p>
-                            </div>
-                        </div>
-                        <div class="right">
-                            <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
-                        </div>
-                    </div>
+{% block scripttop %}
+    <link rel="stylesheet" href="{{ asset('/build/css/paa.css') }}">
+{% endblock %}
 
-                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                        {{ form_errors(form) }}
-                        {% set orderedFields = form.second_step_ordered_fields.vars.value|split(',') %}
-                        {% if orderedFields|length  > 0 %}
-                            {{ include('FaAdBundle:AdPost:secondStepJobsFields.html.twig') }}
-                        {% endif %}
-                        <div class="small-wrapper">
-                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+{% block body %}
+    <div class="paa-block">
+        <div class="posting-bg">
+            <div class="container">
+                <div class="row">
+                    {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 2}) }}
+                    <div id="middle-column" class="col-md-12 medium-col step-one">
+                        <div>
+                            <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
                         </div>
-                    {{ form_end(form) }}
+                        <div class="col-md-24 d-flex justify-content-center">
+                            <h1 class="s-h1 paa-title col-md-24 col-lg-18 text-center">{{ 'Describe your item and choose your price'|trans({}, 'frontend-paa-second-step') }} </h1>
+                        </div>
+                        <div class="change-category mt30">
+                            <div class="text-left cat-name-wrap">
+                                {#<div class="left cat-name-wrap">#}
+                                <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
+                                {% set categoryId = attribute(first_step_data, 'category_id') %}
+                                {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
+                            </div>
+                            <div class="text-right edit-category">
+                                <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
+                            </div>
+                        </div>
+
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_errors(form) }}
+                            {% set orderedFields = form.second_step_ordered_fields.vars.value|split(',') %}
+                            {% if orderedFields|length  > 0 %}
+                                {{ include('FaAdBundle:AdPost:secondStepJobsFields.html.twig') }}
+                            {% endif %}
+                            <div class="col-md-24 d-flex justify-content-center">
+                                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block col-md-24 col-lg-16 next-btn'}}) }}
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                    {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-jobs-second-step'}) }}
                 </div>
             </div>
-            {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-jobs-second-step'}) }}
         </div>
     </div>
 {% endblock %}

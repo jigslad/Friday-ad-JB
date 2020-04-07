@@ -5,35 +5,39 @@
     {{'Describe your item'|trans({}, 'frontend-paa')}}
 {% endblock %}
 
+{% block scripttop %}
+    <link rel="stylesheet" href="{{ asset('/build/css/paa.css') }}">
+{% endblock %}
+
 {% block body %}
-    <div class="posting-bg">
-        <div class="fad-sign-bdr">&nbsp;</div>
-        <div class="row paa-main">
-            {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 2}) }}
-            <div id="middle-column" class="large-12 columns">
-                <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
-                {% set categoryId = attribute(first_step_data, 'category_id') %}
-                {% set whatsOnCategoryId = fetch_repository('FaEntityBundle:Category').getCategoryIdByLevel(categoryId, 1, fetch_container_instance()) %}
-                {% if whatsOnCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') %}
-                    <h1 class="text-center paa-title">{{ 'Describe your event and choose event dates'|trans({}, 'frontend-paa-second-step') }} </h1>
-                {% else %}
-                    <h1 class="text-center paa-title">{{ 'Add a title and description to your ad'|trans({}, 'frontend-paa-second-step') }} </h1>
-                {% endif %}
-                <div class="big-wrapper">
-                    <div class="change-category clearfix">
+    <div class="paa-block">
+        <div class="posting-bg">
+            <div class="container">&nbsp;
+                <div class="row">
+                {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 2}) }}
+                <div id="middle-column" class="col-md-12 medium-col step-one">
+                    <div>
+                        <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
+                    </div>
+                    <div class="col-md-24 d-flex justify-content-center">
+                        {% set categoryId = attribute(first_step_data, 'category_id') %}
+                        {% set whatsOnCategoryId = fetch_repository('FaEntityBundle:Category').getCategoryIdByLevel(categoryId, 1, fetch_container_instance()) %}
+                        {% if whatsOnCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') %}
+                            <h1 class="s-h1 paa-title col-md-24 col-lg-18 text-center">{{ 'Describe your event and choose event dates'|trans({}, 'frontend-paa-second-step') }} </h1>
+                        {% else %}
+                            <h1 class="s-h1 paa-title col-md-24 col-lg-18 text-center">{{ 'Add a title and description to your ad'|trans({}, 'frontend-paa-second-step') }} </h1>
+                        {% endif %}
+                    </div>
+                    <div class="change-category mt30">
                         {#<div class="left cat-name-wrap">
                             <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span> {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
                         </div>#}
-                        <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
-                            <div class="media-object-section">
-                                <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
-                            </div>
+                        <div class="text-left cat-name-wrap" style="display: inline-flex;">
+                            <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
                             {% set categoryId = attribute(first_step_data, 'category_id') %}
-                            <div class="media-object-section">
-                                <p>{{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}</p>
-                            </div>
+                            {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
                         </div>
-                        <div class="right">
+                        <div class="text-right edit-category">
                             <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
                         </div>
                     </div>
@@ -43,13 +47,14 @@
                         {% if orderedFields|length  > 0 %}
                             {{ include('FaAdBundle:AdPost:secondStepCommunityFields.html.twig') }}
                         {% endif %}
-                        <div class="small-wrapper">
-                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
+                        <div class="col-md-24 d-flex justify-content-center">
+                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block col-md-24 col-lg-16 next-btn'}}) }}
                         </div>
                     {{ form_end(form) }}
                 </div>
+                {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-community-second-step'}) }}
             </div>
-            {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-community-second-step'}) }}
+            </div>
         </div>
     </div>
 {% endblock %}

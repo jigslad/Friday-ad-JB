@@ -5,6 +5,10 @@
     {{'Describe your item'|trans({}, 'frontend-paa')}}
 {% endblock %}
 
+{% block scripttop %}
+    <link rel="stylesheet" href="{{ asset('/build/css/paa.css') }}">
+{% endblock %}
+
 {% set categoryId = attribute(first_step_data, 'category_id') %}
 {% set categoryPathArray = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance()) %}
 {% set categorykeys = categoryPathArray|keys %}
@@ -16,46 +20,48 @@
     {% set secondRootMotorsCategoryId = '' %}
 {% endif %}
 {% block body %}
-    <div class="posting-bg">
-        <div class="fad-sign-bdr">&nbsp;</div>
-        <div class="row paa-main">
-            {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 2}) }}
-            <div id="middle-column" class="large-12 columns">
-                <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
-                <h1 class="text-center paa-title">{{ 'Describe your item and choose your price'|trans({}, 'frontend-paa-second-step') }} </h1>
-                <div class="big-wrapper">
-                    <div class="change-category clearfix">
-                        {#<div class="left cat-name-wrap">
-                            <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span> {{ categoryPathArray|last('<span class="seperator"></span>')|raw }}
-                        </div>#}
-                        <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
-                            <div class="media-object-section">
-                                <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
-                            </div>
+    <div class="paa-block">
+        <div class="posting-bg">
+            <div class="container">
+                <div class="row">
+                    {{ include('FaAdBundle:AdPost:paaStepsList.html.twig', {'step' : 2}) }}
+                    <div id="middle-column" class="col-md-12 medium-col step-one">
+                        <div>
+                            <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" class="paa-back-arrow" title="{{ 'Go back'|trans({}, 'frontend-paa') }}">{{ 'Go back'|trans({}, 'frontend-paa') }}</a>
+                        </div>
+                        <div class="col-md-24 d-flex justify-content-center">
+                            <h1 class="s-h1 paa-title col-md-24 col-lg-18 text-center">{{ 'Describe your item and choose your price'|trans({}, 'frontend-paa-second-step') }} </h1>
+                        </div>
 
-                            <div class="media-object-section">
-                                <p>{{ categoryPathArray|slice((categoryPathArray|length-2),categoryPathArray|length)|join('<span class="seperator"></span>')|raw }}</p>
+                        <div class="change-category mt30">
+                            {#<div class="left cat-name-wrap">
+                                <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span> {{ categoryPathArray|last('<span class="seperator"></span>')|raw }}
+                            </div>#}
+                            <div class="text-left cat-name-wrap">
+                                <span>{{ 'Category'|trans({}, 'frontend-paa-second-step') }}:</span>
+                                {{ categoryPathArray|slice((categoryPathArray|length-2),categoryPathArray|length)|join('<span class="seperator"></span>')|raw }}
+                            </div>
+                            <div class="text-right edit-category">
+                                <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
                             </div>
                         </div>
-                        <div class="right">
-                            <a href="{{ path('ad_post_first_step', {'is_edit' : 1}) }}" title="{{ 'Change category'|trans({}, 'frontend-paa-second-step') }}">{{ 'Change'|trans({}, 'frontend-paa-second-step') }}</a>
-                        </div>
-                    </div>
-                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                        {{ form_errors(form) }}
-                        {% if categoryId is not null %}
-                            {% set orderedFields = form.second_step_ordered_fields.vars.value|split(',') %}
-                            {% if orderedFields|length  > 0 %}
-                                {{ include('FaAdBundle:AdPost:secondStepMotorsFields.html.twig') }}
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                            {{ form_errors(form) }}
+                            {% if categoryId is not null %}
+                                {% set orderedFields = form.second_step_ordered_fields.vars.value|split(',') %}
+                                {% if orderedFields|length  > 0 %}
+                                    {{ include('FaAdBundle:AdPost:secondStepMotorsFields.html.twig') }}
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                        <div class="small-wrapper">
-                            {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 expand'}}) }}
-                        </div>
-                    {{ form_end(form) }}
+                            <div class="col-md-24 d-flex justify-content-center">
+                                {{ form_widget(form.save, {'attr': {'class':'primary-btn-1 btn btn-block col-md-24 col-lg-16 next-btn'}}) }}
+                            </div>
+                        {{ form_end(form) }}
+
+                    </div>
+                    {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-motors-second-step'}) }}
                 </div>
             </div>
-            {{ include('FaAdBundle:AdPost:paaPageHelp.html.twig', {'paaBlockSlug': 'paa-motors-second-step'}) }}
         </div>
     </div>
 {% endblock %}
