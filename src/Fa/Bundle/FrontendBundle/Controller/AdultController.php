@@ -52,21 +52,7 @@ class AdultController extends ThirdPartyLoginController
      */
     public function indexAction(Request $request)
     {
-        $recentAd = array();
-
-        // init facebook
-        $facebookLoginUrl = null;
-        $loggedInUser     = null;
-        if ($this->isAuth()) {
-            $loggedInUser = $this->getLoggedInUser();
-        }
-        
-        if (!$loggedInUser || ($loggedInUser && !$loggedInUser->getFacebookId())) {
-            $facebookLoginUrl = $this->initFacebook('home_page_facebook_login_register');
-            $this->container->get('session')->set('fbHomePageLoginUrl', $facebookLoginUrl);
-        }
-        
-        // set location in cookie.
+         // set location in cookie.
         $cookieValue = $this->setLocationInCookie($request);
         
         // get location from cookie
@@ -82,22 +68,6 @@ class AdultController extends ThirdPartyLoginController
         
         //get featured advertisers
         $featuredAdvertisers = $this->getFeaturedAdvertisers($request, $cookieLocationDetails);
-        
-        // get home popular image array.
-        $homePopularImagesArray = $this->getRepository('FaContentBundle:HomePopularImage')->getHomePopularImageArray($this->container);
-        
-        if (count($homePopularImagesArray)) {
-            $locationSlug = 'uk';
-            if (isset($cookieLocationDetails['slug'])) {
-                $locationSlug = $cookieLocationDetails['slug'];
-            }
-            
-            foreach ($homePopularImagesArray as $key => $homePopularImage) {
-                if (isset($homePopularImagesArray[$key]) && isset($homePopularImagesArray[$key]['url'])) {
-                    $homePopularImagesArray[$key]['url'] = str_ireplace('{location}', $locationSlug, $homePopularImagesArray[$key]['url']);
-                }
-            }
-        }
         
         //get blog details from external site
         $blogArray = array(
@@ -119,13 +89,12 @@ class AdultController extends ThirdPartyLoginController
         
         $bannersArray = $this->getRepository("FaContentBundle:Banner")->getBannersArrayByPage('homepage', $this->container);
 
+        $featureAds  = array();
         $featureAds  = $this->getAdultFeatureAds($request, $cookieLocationDetails);
 
         $formManager  = $this->get('fa.formmanager');
         $form               = $formManager->createForm(LandingPageAdultSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
         $parameters = array(
-            'facebookLoginUrl' => $facebookLoginUrl,
-            'homePopularImagesArray' => $homePopularImagesArray,
             'cookieLocationDetails' => $cookieLocationDetails,
             'seoLocationName' => $seoLocationName,
             'businessExposureUsersDetails' => $featuredAdvertisers,
