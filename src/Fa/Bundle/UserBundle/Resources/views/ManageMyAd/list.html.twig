@@ -146,7 +146,7 @@
                                     {% set adUrl = container.get('router').generate('ad_detail_page_by_id', {'id': adId}, true) %}
                                     {# {% set adUrl = adUrl|trim('/') %} #}
                                 {% endif %}        
-                                {# { dump(ad) } #}
+
                                 {% set dateRemainingForExpiry = 0 %}
                                  {% set adExpiry = ad['expires_at'] %}
                                 {% if adExpiry is defined and adExpiry > 0 %}
