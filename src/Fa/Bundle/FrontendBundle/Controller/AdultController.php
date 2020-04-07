@@ -501,6 +501,60 @@ class AdultController extends ThirdPartyLoginController
         
         return new Response();
     }
+
+    /**
+     * Get ajax a Ethnicity in json format.
+     *
+     * @param Request $request Request instance.
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxGetEthnicityAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $nodeId = (int) trim($request->get('id'));
+            if ($nodeId) {
+                $dimension = $this->getRepository('FaEntityBundle:CategoryDimension')->findOneBy(array('category'=>$nodeId,'name'=>'ethnicity'));
+                $dimensionsArray = array();
+                if(!empty($dimension)){
+                    $dimensionslist = $this->getRepository('FaEntityBundle:Entity')->findby(array('category_dimension'=>$dimension->getId()));
+                    foreach ($dimensionslist as $dimension){
+                        $dimensionsArray[] = array('id' => $dimension->getId(), 'text' => $dimension->getName());
+                    }
+                    return new JsonResponse($dimensionsArray);
+                }
+                return new Response('Category Not Found');
+            }
+        }
+        return new Response("You Don't have Access");
+    }
+
+    /**
+     * Get ajax a Services in json format.
+     *
+     * @param Request $request Request instance.
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxGetServicesAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $nodeId = (int) trim($request->get('id'));
+            if ($nodeId) {
+                $dimension = $this->getRepository('FaEntityBundle:CategoryDimension')->findOneBy(array('category'=>$nodeId,'name'=>'services'));
+                $dimensionsArray = array();
+                if(!empty($dimension)){
+                    $dimensionslist = $this->getRepository('FaEntityBundle:Entity')->findby(array('category_dimension'=>$dimension->getId()));
+                    foreach ($dimensionslist as $dimension){
+                        $dimensionsArray[] = array('id' => $dimension->getId(), 'text' => $dimension->getName());
+                    }
+                    return new JsonResponse($dimensionsArray);
+                }
+                return new Response('Category Not Found');
+            }
+        }
+        return new Response("You Don't have Access");
+    }
 }
 
     

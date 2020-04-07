@@ -1,4 +1,4 @@
-<div class="choose-cat-block" style="background: #212527; padding: 15px 0 40px;">
+<div class="choose-cat-block" style="background: #313133; padding: 15px 0 40px;">
         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
         {{ form_errors(form) }}
         <div class="row">
@@ -13,7 +13,13 @@
                     </div>
                     <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
                         <label style="padding: 10px 10px 10px 0px; color: #ffffff !important;">{{ 'from'|trans({}, 'frontend')}}</label>
+{#                        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_adult_home_page_search_item__location_autocomplete', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}#}
                         {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'form-control select-control'}}) }}
+{#                        <a href="javascript:void(0);" id="fa_adult_home_page_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>#}
+{#                        <div class="clearfix">#}
+{#                            <button class="button xs-btn-1 expand left" type="button" id="fa_adult_home_page_search_item__location_homepage_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</button>#}
+{#                            <button class="button xs-btn-1 expand right" type="button" id="fa_adult_home_page_search_item__location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</button>#}
+{#                        </div>#}
                     </div>
                 </div>
                 <div>

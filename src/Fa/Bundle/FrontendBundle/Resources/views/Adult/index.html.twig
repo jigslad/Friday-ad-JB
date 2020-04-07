@@ -39,6 +39,11 @@
 {% endblock %}
 {% block scripttop %}
     {{ include('FaFrontendBundle:Default:home-css.html.twig') }}
+    <style>
+        .adult-search-form-hide{
+            display: none;
+        }
+    </style>
 {% endblock %}
 
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -57,8 +62,8 @@
         </div>
     </div>
 
-    <div id="adult_search_form">
-    	{# { include('FaFrontendBundle:Adult:homePageAdultSearchForm.html.twig') } #}
+    <div id="adult_search_form" style="display: none">
+        {{ include('FaFrontendBundle:Adult:homePageAdultSearchForm.html.twig') }}
     </div>
     
     <div class="what-u-discover">
@@ -196,69 +201,85 @@
         'bundles/facore/js/owl.carousel.min.js'
         'bundles/fafrontend/js/parallax.min.js'
     %}
-        <script>
-            $('#fa_landing_page_adult_search_item__category_id').change(function(event){
-                loadEthnicityByCategoryId($(this).val());
-                loadServicesByCategoryId($(this).val());
-                //fa_landing_page_adult_search_item_adult__ethnicity_id
-            });
-            function loadEthnicityByCategoryId(CategoryId)
-            {
-                var selectedEthnicityId = $('#fa_landing_page_adult_search_item_adult__ethnicity_id').val();
-                if (!CategoryId) {
-                    CategoryId = $('#fa_landing_page_adult_search_item__category_id').val();
+        <script language="javascript" type="text/javascript">
+            function showHideAdvanceSearch() {
+                var x = document.getElementById("adult_search_form");
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                } else {
+                    x.style.display = "none";
                 }
-                $('#fa_landing_page_adult_search_item_adult__ethnicity_id').empty();
-                $('#fa_landing_page_adult_search_item_adult__ethnicity_id').html('<option value="">{{ 'Any Ethnicity'|trans({}, 'frontend-landing-page') }}</option>');
+            }
+            $('#fa_adult_home_page_search_item__category_id').change(function(event){
+                if($(this).val() == 3413){
+                    loadEthnicityByCategoryId($(this).val());
+                    loadServicesByCategoryId($(this).val());
+                }
+                else {
+                    resetAndHideOtherOptions();
+                }
+            });
+            function resetAndHideOtherOptions() {
+                var selectedEthnicityId = $('#fa_adult_home_page_search_item_adult__ethnicity_id').val();
+                var selectedServiceId = $('#fa_adult_home_page_search_item_adult__services_id').val();
+
+            }
+            function loadEthnicityByCategoryId(CategoryId) {
+                var selectedEthnicityId = $('#fa_adult_home_page_search_item_adult__ethnicity_id').val();
+                if (!CategoryId) {
+                    CategoryId = $('#fa_adult_home_page_search_item__category_id').val();
+                }s
+                $('#fa_adult_home_page_search_item_adult__ethnicity_id').empty();
+                $('#fa_adult_home_page_search_item_adult__ethnicity_id').html('<option value="">{{ 'Any Ethnicity'|trans({}, 'frontend-landing-page') }}</option>');
                 if (CategoryId) {
                     var data = {
                         id: CategoryId
                     };
                     $.ajax({
                         type: 'post',
-                        url: '{{ path("category_ajax_get_node_json") }}',
+                        url: '{{ path("ajax_get_ethnicity_json") }}',
                         data: data,
                         success: function(data) {
                             if (data.length > 0) {
                                 for (var i=0, total = data.length; i < total; i++) {
                                     if (selectedEthnicityId == data[i].id) {
-                                        $('#fa_landing_page_adult_search_item_adult__ethnicity_id').append('<option value="' + data[i].id + '" selected="selected">' + data[i].text + '</option>');
+                                        $('#fa_adult_home_page_search_item_adult__ethnicity_id').append('<option value="' + data[i].id + '" selected="selected">' + data[i].text + '</option>');
                                     } else {
-                                        $('#fa_landing_page_adult_search_item_adult__ethnicity_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                                        $('#fa_adult_home_page_search_item_adult__ethnicity_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
                                     }
                                 }
-                                $('#fa_landing_page_adult_search_item_adult__ethnicity_id').selectmenu().selectmenu('refresh',true);
+                                $('#fa_adult_home_page_search_item_adult__ethnicity_id').selectmenu().selectmenu('refresh',true);
+                                $('#fa_adult_home_page_search_item_adult__ethnicity_id').hide();
                             }
                         }
                     });
                 }
             }
-            function loadServicesByCategoryId(CategoryId)
-            {
-                var selectedServiceId = $('#fa_landing_page_adult_search_item_adult__services_id').val();
+            function loadServicesByCategoryId(CategoryId) {
+                var selectedServiceId = $('#fa_adult_home_page_search_item_adult__services_id').val();
                 if (!CategoryId) {
-                    CategoryId = $('#fa_landing_page_adult_search_item__category_id').val();
+                    CategoryId = $('#fa_adult_home_page_search_item__category_id').val();
                 }
 
-                $('#fa_landing_page_adult_search_item_adult__services_id').html('<option value="">{{ 'Any Ethnicity'|trans({}, 'frontend-landing-page') }}</option>');
+                $('#fa_adult_home_page_search_item_adult__services_id').html('<option value="">{{ 'Any Services'|trans({}, 'frontend-landing-page') }}</option>');
                 if (CategoryId) {
                     var data = {
                         id: CategoryId
                     };
                     $.ajax({
                         type: 'post',
-                        url: '{{ path("category_ajax_get_node_json") }}',
+                        url: '{{ path("ajax_get_services_json") }}',
                         data: data,
                         success: function(data) {
                             if (data.length > 0) {
                                 for (var i=0, total = data.length; i < total; i++) {
                                     if (selectedServiceId == data[i].id) {
-                                        $('#fa_landing_page_adult_search_item_adult__services_id').append('<option value="' + data[i].id + '" selected="selected">' + data[i].text + '</option>');
+                                        $('#fa_adult_home_page_search_item_adult__services_id').append('<option value="' + data[i].id + '" selected="selected">' + data[i].text + '</option>');
                                     } else {
-                                        $('#fa_landing_page_adult_search_item_adult__services_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                                        $('#fa_adult_home_page_search_item_adult__services_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
                                     }
                                 }
-                                $('#fa_landing_page_adult_search_item_adult__services_id').selectmenu().selectmenu('refresh',true);
+                                $('#fa_adult_home_page_search_item_adult__services_id').selectmenu().selectmenu('refresh',true);
                             }
                         }
                     });
@@ -304,8 +325,9 @@
         $('div.homepage-row:even').addClass('white-bg');
         getHeaderImage();
 
-        $('#fa_landing_page_adult_search_item_adult__services_id, .select-control').select2();
-        
+        $('#fa_adult_home_page_search_item_adult__services_id, .select-control').select2();
+        $('#fa_adult_home_page_search_item__location_autocomplete').select2();
+
         var featuredAdvertisersItemSlider = $("#featured_advertisers_slider");
         featuredAdvertisersItemSlider.owlCarousel({
             items : 4,
