@@ -94,8 +94,8 @@ class DashboardController extends CoreController
             $activeShopPackage = $this->getRepository('FaUserBundle:UserPackage')->getCurrentActivePackage($loggedinUser);
             
             if ($activeShopPackage && $activeShopPackage->getPackage()) {
-                $activeFeaturedCreditCount = $this->getRepository('FaUserBundle:UserCredit')->getActiveFeaturedCreditCountForUser($loggedinUser->getId());
-                $activeBasicCreditCount = $this->getRepository('FaUserBundle:UserCredit')->getActiveBasicCreditCountForUser($loggedinUser->getId());
+                $activeFeaturedCreditCount = $this->getRepository('FaUserBundle:UserCreditUsed')->getActiveFeaturedCreditCountForUser($loggedinUser->getId());
+                $activeBasicCreditCount = $this->getRepository('FaUserBundle:UserCreditUsed')->getActiveBasicCreditCountForUser($loggedinUser->getId());
                 $shopFeaturedPackageCreditArr = $this->getRepository('FaPromotionBundle:ShopPackageCredit')->getFeaturedCreditsByPackageId($activeShopPackage->getPackage()->getId());
                 if(!empty($shopFeaturedPackageCreditArr)) { $shopFeaturedPackageCredit = $shopFeaturedPackageCreditArr[0]->getCredit(); }
                 $usedFeaturedCreditCount = ((int)$shopFeaturedPackageCredit - (int)$activeFeaturedCreditCount);

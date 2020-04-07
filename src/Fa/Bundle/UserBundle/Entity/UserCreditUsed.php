@@ -109,7 +109,13 @@ class UserCreditUsed
      */
     private $upsell;
 
-
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean", nullable=true, options={"default" = 1})
+     */
+    private $status;
+    
     /**
      * Get id
      *
@@ -313,5 +319,28 @@ class UserCreditUsed
     public function getUpsell()
     {
         return $this->upsell;
+    }
+    
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     * @return UserCreditUsed
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        
+        return $this;
+    }
+    
+    /**
+     * Get status
+     *
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

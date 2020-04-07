@@ -142,4 +142,34 @@ class UserCreditUsedRepository extends EntityRepository
             ->execute();
         }
     }
+    
+    public function getActiveFeaturedCreditCountForUser($userId)
+    {
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select('COUNT('.self::ALIAS.'.id) as cnt')
+        ->innerJoin(self::ALIAS.'.user_credit', UserCreditRepository::ALIAS, 'WITH', self::ALIAS.'.user_credit = '.UserCreditRepository::ALIAS.'.id')
+        ->andWhere(UserCreditRepository::ALIAS.'.user = '.$userId)
+        ->andWhere(UserCreditRepository::ALIAS.'.status = 1')
+        ->andWhere(self::ALIAS.'.status = 1')
+        ->andWhere('FIND_IN_SET(6, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0 or FIND_IN_SET(3, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0')
+        ->groupBy(UserCreditRepository::ALIAS.'.id');
+        
+        $objResources = $query->getQuery()->getSingleResult();
+        return $objResources['cnt'];
+    }
+    
+    public function getActiveBasicCreditCountForUser($userId)
+    {
+        $query = $this->createQueryBuilder(self::ALIAS)
+        ->select('COUNT('.self::ALIAS.'.id) as cnt')
+        ->innerJoin(self::ALIAS.'.user_credit', UserCreditRepository::ALIAS, 'WITH', self::ALIAS.'.user_credit = '.UserCreditRepository::ALIAS.'.id')
+        ->andWhere(UserCreditRepository::ALIAS.'.user = '.$userId)
+        ->andWhere(UserCreditRepository::ALIAS.'.status = 1')
+        ->andWhere(self::ALIAS.'.status = 1')
+        ->andWhere('FIND_IN_SET(1, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0')
+        ->groupBy(UserCreditRepository::ALIAS.'.id');
+        
+        $objResources = $query->getQuery()->getSingleResult();
+        return $objResources['cnt'];
+    }
 }
