@@ -3520,7 +3520,7 @@ class AdRepository extends EntityRepository
             $qb->andWhere(self::ALIAS.'.status IN (:status)');
             $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_LIVE_ID, BaseEntityRepository::AD_STATUS_EXPIRED_ID, BaseEntityRepository::AD_STATUS_SOLD_ID, BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
         } elseif ($type == 'active') {
-            $qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' OR ('.self::ALIAS.'.status IN (:status)'.' AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at)))');
+            $qb->andWhere('('.self::ALIAS.'.status = '.BaseEntityRepository::AD_STATUS_LIVE_ID.' OR ('.self::ALIAS.'.status IN (:status)) AND ('.self::ALIAS.'.created_at >= :created_at OR '.self::ALIAS.'.updated_at >= :updated_at))');
             //$qb->andWhere('('.self::ALIAS.'.is_boosted IS NULL OR '.self::ALIAS.'.is_boosted=0)');
             $qb->setParameter('status', array(BaseEntityRepository::AD_STATUS_DRAFT_ID, BaseEntityRepository::AD_STATUS_REJECTED_ID, BaseEntityRepository::AD_STATUS_REJECTEDWITHREASON_ID, BaseEntityRepository::AD_STATUS_IN_MODERATION_ID));
             $qb->setParameter('updated_at', strtotime('-29 days'));
