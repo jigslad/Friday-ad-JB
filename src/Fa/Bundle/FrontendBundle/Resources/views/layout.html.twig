@@ -116,7 +116,11 @@
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
     {# { include('FaFrontendBundle::fa-main-css.html.twig') } #}
-    
+
+    {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration'}) %}
+        <link rel="stylesheet" href="{{ asset('build/css/paa.css') }}">
+    {% endif %}
+
     <style>
     .choice-display-flex { display:inline-flex !important; }
     .choice-display-flex label { margin-right:10px !important; line-height:25px !important; }
