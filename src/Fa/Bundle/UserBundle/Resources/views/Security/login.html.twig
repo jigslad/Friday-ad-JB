@@ -1,59 +1,97 @@
 {% extends 'FaFrontendBundle::simpleLayout.html.twig' %}
 
 {% block body %}
-    <div class="simple-wrapper">
-        <div id="login-dialog">
-            <h1 class="simple-heading">{{'Log In'|trans({}, 'frontend-login')}}</h1>
-            {{ include('FaCoreBundle::message.html.twig') }}
-            
-                {% if error %}
-                    <div data-alert class="alert-box alert radius">
-                        <span class="alert-icon">&nbsp;</span>
-                        {{ error.message }}
-                        <a href="javascript:void(0)" class="close">&times;</a>
+    <div class="container">
+        <div id="forgotPasswordModal" class="modal custom-modal">
+            <div class="clearfix">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            {#<a href="{{ path('forgot_password') }}" data-reveal-id="forgotPasswordModal" data-reveal-ajax="true" class="right">{{'Forgotten password?'|trans({}, 'frontend-login')}}</a>#}
+                            <h5 class="modal-title save-search-title">{{'Forgot password?'|trans({}, 'frontend-login')}}</h5>
+                            <button class="close-modal" class="close" data-dismiss="modal">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="forgotpasswordModalForm">
+                                <form name="" method="post" novalidate="novalidate" class="outline">
+                                    <div class="mb20">
+                                        <div class="m-form-space">
+                                            <label for="" class="required">Email</label>
+                                            <input type="email" class="form-control" id="" required="required" maxlength="255">
+                                        </div>
+                                        <button type="submit" id="" name="" class="secondary-btn-1 btn btn-block">Reset password</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ include('FaCoreBundle::message.html.twig') }}
+        {% if error %}
+            <div data-alert class="alert-box alert radius">
+                <span class="alert-icon">&nbsp;</span>
+                {{ error.message }}
+                <a href="javascript:void(0)" class="close">&times;</a>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-24 pad-none">
+                <h1 class="s-h1 mt30 mb30 text-center">{{'Log In'|trans({}, 'frontend-login')}}</h1>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-11 col-lg-8 login-left reg-process">
+                <form action="{{ path('login_check') }}" method="post">
+                    <div>
+                        <label>{{'Email address'|trans({}, 'frontend-login')}}</label>
+                        <input placeholder="Email address" id="username" name="_username" type="email" autofocus value="{{ last_username }}" tabindex="1" />
+                    </div>
+                    <div>
+                        <label class="left">{{'Password'|trans({}, 'frontend-login')}}</label>
+                        <input placeholder="{{'Password'|trans({}, 'frontend-login')}}" id="user_login_password" name="_password" type="password" value="" tabindex="2" class="mb0" />
+                    </div>
+                    <div>
+                        <div class="label-inline">
+                            <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
+                                <li>
+                                    <input type="checkbox" value="1" class="form-control" name="show_password" id="user_login_show_password">
+                                    <label for="user_login_show_password">{{'Show password'|trans({}, 'frontend-login')}}</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt20">
+                        <button type="submit" class="primary-btn-1 button expand" tabindex="3">{{'Log In'|trans({}, 'frontend-login')}}</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-11 col-lg-8 login-right">
+                {% if facebookLoginUrl %}
+                    <div>
+                        <button type="reset" class="signup-fb-btn button expand" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"><span class="signup-fb-icon">&nbsp;</span>{{ 'Sign In with Facebook'|trans({}, 'frontend') }}</button>
                     </div>
                 {% endif %}
-                
-                <div class="clearfix">
-                    <div class="login-left reg-process">
-                        <form action="{{ path('login_check') }}" method="post">
-                            <label>{{'Email address'|trans({}, 'frontend-login')}}</label>
-                            <input placeholder="Email address" id="username" name="_username" type="email" autofocus value="{{ last_username }}" tabindex="1" />
-                            
-                            <div class="clearfix">
-                                <label class="left">{{'Password'|trans({}, 'frontend-login')}}</label>
-                                <a href="{{ path('forgot_password') }}" data-reveal-id="forgotPasswordModal" data-reveal-ajax="true" class="right">{{'Forgotten password?'|trans({}, 'frontend-login')}}</a><br />
-                            </div>
-                            <input placeholder="{{'Password'|trans({}, 'frontend-login')}}" id="user_login_password" name="_password" type="password" value="" tabindex="2" class="mb0" />
-                            <div class="label-inline white-checkbox mt10 mb10">
-                                <span class="custom-checkbox">
-                                    <input type="checkbox" value="1" class="form-control" name="show_password" id="user_login_show_password">
-                                </span>
-                                <label for="user_login_show_password">{{'Show password'|trans({}, 'frontend-login')}}</label>
-                            </div>
-                            <button type="submit" class="primary-btn-1 button expand" tabindex="3">{{'Log In'|trans({}, 'frontend-login')}}</button>
-                        </form>
+                {% if googleLoginUrl %}
+                    <div>
+                        <button type="reset" class="signup-google-btn button expand" onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"><span class="signup-google-icon">&nbsp;</span>{{ 'Sign In with Google'|trans({}, 'frontend') }}</button>
                     </div>
-                    <div class="login-right">
-                        {% if facebookLoginUrl %}
-                            <button type="reset" class="signup-fb-btn button expand" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"><span class="signup-fb-icon">&nbsp;</span>{{ 'Sign In with Facebook'|trans({}, 'frontend') }}</button>
-                        {% endif %}
-                        {% if googleLoginUrl %}
-                            <button type="reset" class="signup-google-btn button expand" onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"><span class="signup-google-icon">&nbsp;</span>{{ 'Sign In with Google'|trans({}, 'frontend') }}</button>
-                        {% endif %}
-                        <span class="signup-ins">
-                            {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('FaAdBundle:AdPost:paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}
-                        </span>
-                    </div>
-                </div>
-                
+                {% endif %}
+                <span class="signup-ins">
+                    {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('FaAdBundle:AdPost:paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}
+                </span>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-8">
                 <div class="reg-here">
-                    <h2>{{'Don\'t have an account?'|trans({}, 'frontend-login')}}</h2>
-                    <a href="{{ path('fa_user_register') }}" class="secondary-btn-1 button button">{{'Register here'|trans({}, 'frontend-login')}}</a>
+                    <h2 class="s-h2 mb20">{{'Don\'t have an account?'|trans({}, 'frontend-login')}}</h2>
+                    <a href="{{ path('fa_user_register') }}" class="secondary-btn-1 btn register-btn">{{'Register here'|trans({}, 'frontend-login')}}</a>
                 </div>
+            </div>
         </div>
     </div>
-<div id="forgotPasswordModal" class="reveal-modal small" data-reveal>
 {% endblock %}
 
 {% block scriptbottom %}
