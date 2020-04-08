@@ -6,9 +6,9 @@
 {% else  %}
     {% set userId = tempUserId %}
 {% endif %}
-{% use "FaUserBundle:UserImage:showProfileImageUploader.html.twig" %}
+{# {% use "\\App\\Entity\\User\\UserImage/showProfileImageUploader.html.twig" %} #}
 {% block scripttop %}
-    {{ block('profileImageUploadStylesheets') }}
+    {# { block('profileImageUploadStylesheets') } #}
     {{ set_variables('profileImageUploadStylesheets', {'loaded':'true'}) }}
 {% endblock %}
 {% set getProfileBigImageRoute = "ajax_get_profile_big_image_registration" %}
@@ -43,62 +43,102 @@
 {% set businessLogoLabel = 'Upload a logo image:'|trans({}, 'frontend-paa-register') %}
 
 {% block body %}
-<div class="simple-wrapper">
-    <h1 class="simple-heading">{{'Create an account'|trans({}, 'frontend-register')}}</h1>
-    <div class="clearfix">
-        <div class="login-left reg-process white-checkbox white-radio reg-form">
-            {% if socialSiteName is defined %}
-                <div class="confirm-fb show-for-small-only">
-                    <h2 class="titile-one">{{'These are the details we got from %socialSiteName%, please confirm or change them.'|trans({'%socialSiteName%': socialSiteName}, 'frontend-register')|raw}}</h2>
-                    <h5>{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-register')}}</h5>
+<section class="login-register-block">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-24 pad-none">
+                <h1 class="s-h1 mt30 mb30 text-center">{{'Create an account'|trans({}, 'frontend-register')}}</h1>
+            </div>
+        </div>
+	   {% if socialSiteName is defined %}
+            <div class="confirm-fb col-md-24 d-block d-md-none">
+                <h2 class="titile-one">{{'These are the details we got from %socialSiteName%, please confirm or change them.'|trans({'%socialSiteName%': socialSiteName}, 'frontend-register')|raw}}</h2>
+                <h5>{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-register')}}</h5>
+            </div>
+       {% endif %}
+        <div class="row justify-content-center">        	
+            <div class="col-md-24 d-block d-md-none">
+                <button type="submit" id="" onclick="handleRegEmail()" class="primary-btn-1 btn btn-block btn-fad-blue-large mb20 mobile-reg-with-email-btn">Register with email</button>
+            </div>
+            <div class="col-md-11 col-lg-8 login-left reg-process mobile-block-reg mobile-form-view">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                <div>
+                    {{ form_label(form.first_name) }}
+                    {{ form_widget(form.first_name, {'attr': {'class': 'form-control white-field'}}) }}
                 </div>
-            {% endif %}
-            
-            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                {{ form_row(form.first_name) }}
-                {{ form_row(form.last_name) }}
-                {{ form_row(form.email) }}
+                <div>
+                    {{ form_label(form.last_name) }}
+                    {{ form_widget(form.last_name, {'attr': {'class': 'form-control white-field'}}) }}
+                </div>
+                <div>
+                    {{ form_label(form.email) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control white-field'}}) }}
+                </div>
+                <div>
+                    {{ form_label(form.password) }}
+                    {{ form_widget(form.password, {'attr': {'class': 'form-control white-field'}}) }}
+                </div>
                 {% if form.password is defined %}
-                    <div class="reg-pwd">
-                        {{ form_row(form.password) }}
-                        <div class="label-inline">
-                            {{ form_row(form.show_password) }}
-                        </div>
+                <div class="mb10">
+                    <div class="label-inline">
+                        <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
+                            <li>
+                               {{ form_row(form.show_password) }}
+                            </li>
+                        </ul>              
                     </div>
+                </div>
                 {% endif %}
-                {{ form_row(form.phone) }}
-                {#<div class="hlight-box clearfix pvt-phone-num white-checkbox {% if form.is_private_phone_number.vars.errors|length %}mb0{% endif %}">
-                    {{ form_widget(form.is_private_phone_number) }}
-                    {{ form_label(form.is_private_phone_number) }}
-                    <a href="#" class="help-icon" data-reveal-id="privacyNumberModal">{{'Help'|trans({}, 'frontend-register')}}</a>
+                <div>
+                    {{ form_label(form.phone) }}
+                    {{ form_widget(form.phone, {'attr': {'class': 'form-control white-field'}}) }}
                 </div>
-                {{ form_errors(form.is_private_phone_number) }} #}
-                <div class="buyer-contact">
-                     <label>{{'I would like buyers to contact me by:'|trans({}, 'frontend-paa-register')}}</label>
-                     <div class="label-inline">
-                         {{ form_row(form.contact_through_phone) }}
-                         {{ form_row(form.contact_through_email) }}
-                     </div>
-                 </div>
-               
-                <div class="paa-role">
-                  {{ form_row(form.user_roles, {'attr': {'add-br': true}}) }}
+                <div class="mb20">
+                    <label>{{'I would like buyers to contact me by:'|trans({}, 'frontend-paa-register')}}</label>
+                    <div class="label-inline d-inline-flex">
+                        <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
+                            <li>
+                            	{{ form_widget(form.contact_through_phone, {'attr': {'class': 'custom-control-input'}}) }}
+                            	<label class="custom-control-label" for="{{ form.contact_through_phone.vars.id }}">Contact through phone</label>                            
+                            </li>
+                        </ul> 
+                        <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
+                            <li>
+                            	{{ form_widget(form.contact_through_email, {'attr': {'class': 'custom-control-input'}}) }}
+                            	<label class="custom-control-label" for="{{ form.contact_through_email.vars.id }}">Contact by email</label>                            
+                             </li>
+                        </ul>              
+                    </div>
                 </div>
-                <div class="paa-role">
-                  {% set logoLabel = privateLogoLabel %}
-                  {% if isCompany == 1 %}
-                    {% set logoLabel = businessLogoLabel %}
-                  {% endif %}
-                  <label class="required" id="logo_label">{{logoLabel}}</label>
 
-                  <div id="logo_uploader_div">
-                    {{ include('FaUserBundle:UserImage:registrationImageUploader.html.twig', {'userId': userId, 'isCompany': isCompany, 'profileImage': ''}) }}
-                  </div>
-                  <div class="clearfix">
+                <div class="mb20 paa-role">
+                    {{ form_row(form.user_roles, {'attr': {'add-br': true}}) }}
+                    {#<div class="label-inline mb10">                    	
+                        <ul class="custom-control custom-radio white-radio search-type crawlable-checkbox">
+                            <li>                            	
+                            	{{ form_row(form.user_roles, {'attr': {'class': 'custom-control-input'}}) }}                        
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="label-inline mb10">
+                        <ul class="custom-control custom-radio white-radio search-type crawlable-checkbox">
+                            <li>
+                            	{{ form_widget(form.contact_through_email, {'attr': {'class': 'custom-control-input'}}) }}
+                            	<label class="custom-control-label" for="{{ form.contact_through_email.vars.id }}">Contact by email</label>                            
+                           </li>
+                        </ul>
+                    </div> #}
+                </div>
+                <div>
+                	{% set logoLabel = privateLogoLabel %}
+                    {% if isCompany == 1 %}
+                       {% set logoLabel = businessLogoLabel %}
+                    {% endif %}
+                    <div><label>{{ logoLabel }}:</label></div>
+
+                    <div class="d-inline-flex mb20">
                         <div class="profile-logo-img">
-                            <div class="bz-profile-logo{% if isCompany == 0 %} rounded{% endif %}" id="profile_image_div">
-
-                            </div>
+                            <div class="bz-profile-logo {% if isCompany == 0 %} rounded{% endif %}" id="profile_image_div"></div>
                         </div>
                         <div class="profile-logo-ins private-profile reg-profile-btn {% if isCompany == 1 %}bz-profile-btn{% endif %}">
                             <div id="profile_change_btn_with_opt" {% if logoUploaded == 0 %}style="display:none;"{% endif %}>
@@ -109,70 +149,70 @@
                                     <li><a href="javascript:removeImage()">{{'Remove'|trans({}, 'frontend-my-profile')}}</a></li>
                                 </ul>
                             </div>
-                            <div id="profile_change_btn_without_opt" {% if logoUploaded == 1 %}style="display:none;"{% endif %}>
-                                <a href="javascript:void(0);" id="pickProfileFile1" class="primary-btn-2 button pickProfileFile needsclick thin-btn">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a><br />
+                            <div id="profile_change_btn_without_opt" style="position: relative;{% if logoUploaded == 1 %}display:none;{% endif %}">
+                                <a href="javascript:void(0);" id="pickProfileFile1" class="secondary-btn-1 btn pickProfileFile needsclick thin-btn" style="z-index: 1;">{{'Upload image'|trans({}, 'frontend-my-profile')}}</a>
                             </div>
                         </div>
                     </div>
+				   <div class="business_seller_fields white-select" style="display:none;">
+                        {{ form_row(form.business_name) }}
+                        {{ form_row(form.business_category_id, {'attr': {'class':'fa-select-white'}}) }}
+                    </div>
+                    <div class="label-inline">
+                        <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
+                            <li>
+                            	{{ form_widget(form.is_email_alert_enabled, {'attr': {'class': 'custom-control-input'}}) }}
+                            	<label class="custom-control-label" for="{{ form.is_email_alert_enabled.vars.id }}">I'd like to receive news, offers and promotions by email from Friday-Ad</label>                            
+                            </li>
+                        </ul> 
+                        <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
+                            <li>
+                            	{{ form_widget(form.is_third_party_email_alert_enabled, {'attr': {'class': 'custom-control-input'}}) }}
+                            	<label class="custom-control-label" for="{{ form.is_third_party_email_alert_enabled.vars.id }}">I'd like to receive offers and promotions by email on behalf of carefully chosen partners</label>                            
+                            </li>
+                        </ul> 
+                        <ul class="custom-control custom-checkbox search-type crawlable-checkbox">
+                            <li>
+                            	{{ form_widget(form.is_terms_agreed, {'attr': {'class': 'custom-control-input'}}) }}
+                            	<label class="custom-control-label" for="{{ form.is_terms_agreed.vars.id }}">I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a></label>                            
+                           </li>
+                        </ul> 
+                    </div>
                 </div>
-                <div class="business_seller_fields white-select" style="display:none;">
-                    {{ form_row(form.business_name) }}
-                    {{ form_row(form.business_category_id, {'attr': {'class':'fa-select-white'}}) }}
+                <div class="mt20 mb20">
+                      We will use your data to help us create your account. Please take a look at our <a href="/privacy-policy/" target="_blank">Privacy Policy</a> for more information about how we use your data.
                 </div>
-
-                <div class="label-inline regchkbox-label" style="display:inline-flex">
-                    {{ form_widget(form.is_email_alert_enabled) }}
-                    <label>I'd like to receive news, offers and promotions by email from Friday-Ad</label>
+                <div class="mt20">
+                	{{ form_widget(form.Register, {'attr': {'class':'primary-btn-1 btn btn-block btn-fad-blue-large'}}) }}
                 </div>
-                <div class="label-inline regchkbox-label" style="display:inline-flex">
-                    {{ form_widget(form.is_third_party_email_alert_enabled) }}
-                    <label>I'd like to receive offers and promotions by email on behalf of carefully chosen partners</label>
+             {{ form_end(form) }}
+            </div>
+            
+            <div class="col-md-11 col-lg-8 login-right">
+                <div class="mobile-block-reg">
+                    <div>
+                        <button type="reset" class="signup-fb-btn button expand" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');">
+                            <span class="signup-fb-icon">&nbsp;</span>{{ 'Sign Up with Facebook'|trans({}, 'frontend') }}
+                        </button>
+                    </div>
+                    <div>
+                        <button type="reset" class="signup-google-btn button expand" onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');">
+                            <span class="signup-google-icon">&nbsp;</span>{{ 'Sign Up with Google'|trans({}, 'frontend') }}
+                        </button>
+                    </div>
+                    <span class="signup-ins">
+                        {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('Ad/AdPost/paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}</b>            
+                    </span>
                 </div>
-                <div class="label-inline regchkbox-label" style="display:inline-flex">
-                    {{ form_widget(form.is_terms_agreed) }}
-                    <label class="form-control">I have read and agree to the <a href="/terms-and-conditions/" target="_blank">terms and conditions</a></label><br>
-                    
+                <div class="reg-here">
+                    <h2 class="s-h2 mb20">{{'Already have an account?'|trans({}, 'frontend-register')}}</h2>
+                    <a href="{{ path('login') }}" class="secondary-btn-1 btn register-btn">{{'Log In here'|trans({}, 'frontend-register')}}</a>
                 </div>
-                <div>{{ form_errors(attribute(form, 'is_terms_agreed')) }}</div>
-                <div class="mt20 mb20" style="color: #a4a4a4;">
-                    We will use your data to help us create your account. Please take a look at our <a href="/privacy-policy/" target="_blank">Privacy Policy</a> for more information about how we use your data.
-                </div>
-                {{ form_widget(form.Register, {'attr': {'class':'primary-btn-1 button expand'}}) }}
-            {{ form_end(form) }}
-    
-             <div class="reg-here show-for-small-only">
-                <h2>{{'Already have an account?'|trans({}, 'frontend-register')}}</h2>
-                <a href="{{ path('login') }}" class="secondary-btn-1 button button">{{'Log In here'|trans({}, 'frontend-register')}}</a>
+            </div>
             </div>
         </div>
-        
-        <div class="login-right">
-            <a href="javascript:void(0)" class="primary-btn-1 button expand reg-email-btn show-for-small-only" id="register_with_email">{{ 'Register with email'|trans({}, 'frontend-register') }}</a>
-
-            {% if socialSiteName is defined %}
-                <div class="confirm-fb">
-                    <h2 class="titile-one">{{'These are the details we got from %socialSiteName%,<br /> please confirm or change them.'|trans({'%socialSiteName%': socialSiteName}, 'frontend-register')|raw}}</h2>
-                    <h5>{{'This is the contact info buyers will use to get in touch.'|trans({}, 'frontend-register')}}</h5>
-                </div>
-            {% else %}
-                <button type="reset" class="signup-fb-btn button expand" onclick="javascript:fbLoginPopup('{{ facebookLoginUrl }}');"><span class="signup-fb-icon">&nbsp;</span>{{ 'Sign Up with Facebook'|trans({}, 'frontend') }}</button>
-                <button type="reset" class="signup-google-btn button expand" onclick="javascript:googleLoginPopup('{{ googleLoginUrl }}');"><span class="signup-google-icon">&nbsp;</span>{{ 'Sign Up with Google'|trans({}, 'frontend') }}</button>
-
-                <span class="signup-ins">
-                    {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('FaAdBundle:AdPost:paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}
-                </span>
-            {% endif %}
-
-
-            <div class="reg-here mob-reg-here {% if socialSiteName is defined %}confirm-fb-reg{% endif %}">
-                <h2>{{'Already have an account?'|trans({}, 'frontend-register')}}</h2>
-                <a href="{{ path('login') }}" class="secondary-btn-1 button button">{{'Log in here'|trans({}, 'frontend-register')}}</a>
-            </div>
-
-        </div>
-    </div>
-</div>
-<div id="privacyNumberModal" class="reveal-modal" data-reveal>
+</section>
+<div id="privacyNumberModal" class="reveal-modal" data-reveal style="display:none">
     {% set privacyNumberBlock = staticPageRepository.getStaticBlockDetailArray('privacy-number-block', fetch_container_instance()) %}
     <a class="close-reveal-modal">&#215;</a>
     {% if privacyNumberBlock['title'] is defined %}
@@ -186,17 +226,9 @@
 {% endblock %}
 
 {% block scriptbottom %}
-{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
-{% javascripts filter='uglifyjs2' output='bundles/js/compiled/showProfileImageUploader.js'
-    'bundles/facore/js/plupload.full.min.js'
-    'bundles/fafrontend/js/jquery.Jcrop.min.js'
-    'bundles/facore/js/jquery.ui.touch-punch.min.js'
-%}
-<script src="{{ static_asset_url(asset_url) }}"></script>
-{% endjavascripts %}
+{{ include('Core/Default/blockJs.html.twig') }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
-
     $(document).ready(function(){
         showHideBusinessSellerFields();
         enableDisableContactThroughPhone();

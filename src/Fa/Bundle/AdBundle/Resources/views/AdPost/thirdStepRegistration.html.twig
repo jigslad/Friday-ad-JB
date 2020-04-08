@@ -1,6 +1,6 @@
 {% extends 'FaFrontendBundle::layout.html.twig' %}
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
-{% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
+{% set staticPageRepository = fetch_repository('\\App\\Entity\\Content\\StaticPage') %}
 {% if (app.user.getId() is defined) %}
     {% set userId = app.user.getId() %}
 {% else  %}
@@ -42,7 +42,7 @@
                     <h2 class="text-center subtitle paa-title">{{'We just need a few details so that we know how buyers can contact you.'|trans({}, 'frontend-paa-register')}}</h2>
                 {% endif %}
                 
-                <div class="small-wrapper">
+                <div class="col-md-24 d-flex justify-content-center">
                     <div class="your-details">
                         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                             {{ form_row(form.first_name) }}
