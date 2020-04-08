@@ -13,24 +13,20 @@
                     </div>
                     <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
                         <label style="padding: 10px 10px 10px 0px; color: #ffffff !important;">{{ 'from'|trans({}, 'frontend')}}</label>
-{#                        {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_adult_home_page_search_item__location_autocomplete', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}#}
                         {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'form-control select-control'}}) }}
-{#                        <a href="javascript:void(0);" id="fa_adult_home_page_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>#}
-{#                        <div class="clearfix">#}
-{#                            <button class="button xs-btn-1 expand left" type="button" id="fa_adult_home_page_search_item__location_homepage_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</button>#}
-{#                            <button class="button xs-btn-1 expand right" type="button" id="fa_adult_home_page_search_item__location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</button>#}
-{#                        </div>#}
+                        <a href="javascript:void(0);" id="fa_adult_home_page_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                        <div class="clearfix">
+                            <button class="button xs-btn-1 expand left" type="button" id="fa_adult_home_page_search_item__location_homepage_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</button>
+                            <button class="button xs-btn-1 expand right" type="button" id="fa_adult_home_page_search_item__location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</button>
+                        </div>
                     </div>
                 </div>
-                <div>
+                <div id="more_options" style="display: none">
                     <div class="medium-10 columns mobile-p-0" style="padding-left: 0px;">
                         {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
                     </div>
                     <div class="medium-7 columns mobile-p-0">
-                        <input type="radio" id="indepandent" name="type" value="indepandent">
-                        <label for="indepandent">indepandent</label>
-                        <input type="radio" id="agency" name="type" value="agency">
-                        <label for="agency">agency</label>
+                        {{ form_widget(form.item_adult__independent_or_agency_id, {'attr': {'class': 'form-control select-control'}}) }}
                     </div>
                     <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
                         {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
