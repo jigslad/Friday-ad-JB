@@ -1,6 +1,6 @@
 {% extends 'FaFrontendBundle::layout.html.twig' %}
 {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
-{% set staticPageRepository = fetch_repository('\\App\\Entity\\Content\\StaticPage') %}
+{% set staticPageRepository = fetch_repository('FaContentBundle:StaticPage') %}
 {% if (app.user.getId() is defined) %}
     {% set userId = app.user.getId() %}
 {% else  %}

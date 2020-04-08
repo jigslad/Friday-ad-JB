@@ -115,6 +115,11 @@
 
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
     {% block scripttop %}{% endblock %}
+
+    {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration'}) %}
+    	<link rel="stylesheet" href="{{ asset('build/css/paa.css') }}">
+    {% endif %}
+
     {# { include('FaFrontendBundle::fa-main-css.html.twig') } #}
     
     <style>

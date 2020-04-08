@@ -201,7 +201,7 @@
                         </button>
                     </div>
                     <span class="signup-ins">
-                        {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('Ad/AdPost/paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}</b>            
+                        {{'We won\'t post anything <b>without your permission.</b>'|trans({}, 'frontend-login')|raw}}{{ include('FaAdBundle:AdPost:paaToolTipHelp.html.twig', {'paaBlockSlug': 'registration-login-help'}) }}</b>            
                     </span>
                 </div>
                 <div class="reg-here">
@@ -226,7 +226,7 @@
 {% endblock %}
 
 {% block scriptbottom %}
-{{ include('Core/Default/blockJs.html.twig') }}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
 <script language="javascript" type="text/javascript">
 //<![CDATA[
     $(document).ready(function(){

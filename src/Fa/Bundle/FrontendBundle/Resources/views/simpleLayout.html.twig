@@ -42,8 +42,9 @@
     {% endif %}
     
     {{ include('FaFrontendBundle::scriptTop.html.twig') }}
+    <link rel="stylesheet" href="{{ asset('/build/css/login-register.css') }}">
     {% block scripttop %}{% endblock %}
-    {{ include('FaFrontendBundle::fa-main-css.html.twig') }}
+    {# { include('FaFrontendBundle::fa-main-css.html.twig') } #}
     
     {# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
     

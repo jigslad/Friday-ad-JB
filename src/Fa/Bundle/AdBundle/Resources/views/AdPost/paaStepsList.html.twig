@@ -12,8 +12,8 @@
 {% if container.get('session').has('paa_first_step_data') %}
     {% set first_step_data = array_unserialize(container.get('session').get('paa_first_step_data')) %}
     {% set categoryId = attribute(first_step_data, 'category_id') %}
-    {% set rootCategoryId = fetch_repository('\\App\\Entity\\Entity\\Category').getRootCategoryId(categoryId, container) %}
-    {% set rootCategoryName = fetch_repository('\\App\\Entity\\Entity\\Category').getRootCategoryName(categoryId, container) %}
+    {% set rootCategoryId = fetch_repository('FaEntityBundle:Category').getRootCategoryId(categoryId, container) %}
+    {% set rootCategoryName = fetch_repository('FaEntityBundle:Category').getRootCategoryName(categoryId, container) %}
 {% endif %}
 
 {% if container.has('security.authorization_checker') and container.get('security.authorization_checker').isGranted("IS_AUTHENTICATED_REMEMBERED")%}
