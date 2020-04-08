@@ -5,10 +5,6 @@
     {{'Describe your item'|trans({}, 'frontend-paa')}}
 {% endblock %}
 
-{% block scripttop %}
-    <link rel="stylesheet" href="{{ asset('/build/css/paa.css') }}">
-{% endblock %}
-
 {% set categoryId = attribute(first_step_data, 'category_id') %}
 {% set categoryPathArray = fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance()) %}
 {% set categorykeys = categoryPathArray|keys %}
