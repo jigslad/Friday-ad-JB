@@ -11,10 +11,7 @@
 
 namespace Fa\Bundle\FrontendBundle\Controller;
 
-use Fa\Bundle\AdBundle\Form\LandingPageAdultSearchType;
-use Fa\Bundle\ReportBundle\Entity\AdReportDaily;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Fa\Bundle\CoreBundle\Controller\CoreController;
+use Fa\Bundle\AdBundle\Form\AdultHomePageSearchType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,9 +23,6 @@ use Fa\Bundle\AdBundle\Solr\AdSolrFieldMapping;
 use Fa\Bundle\EntityBundle\Repository\CategoryRepository;
 use Fa\Bundle\UserBundle\Controller\ThirdPartyLoginController;
 use Fa\Bundle\CoreBundle\Manager\CommonManager;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Fa\Bundle\ReportBundle\Repository\AdReportDailyRepository;
 use Fa\Bundle\UserBundle\Solr\UserShopDetailSolrFieldMapping;
 use Fa\Bundle\FrontendBundle\Repository\AdultHomepageRepository;
 
@@ -52,21 +46,7 @@ class AdultController extends ThirdPartyLoginController
      */
     public function indexAction(Request $request)
     {
-        $recentAd = array();
-
-        // init facebook
-        $facebookLoginUrl = null;
-        $loggedInUser     = null;
-        if ($this->isAuth()) {
-            $loggedInUser = $this->getLoggedInUser();
-        }
-        
-        if (!$loggedInUser || ($loggedInUser && !$loggedInUser->getFacebookId())) {
-            $facebookLoginUrl = $this->initFacebook('home_page_facebook_login_register');
-            $this->container->get('session')->set('fbHomePageLoginUrl', $facebookLoginUrl);
-        }
-        
-        // set location in cookie.
+         // set location in cookie.
         $cookieValue = $this->setLocationInCookie($request);
         
         // get location from cookie
@@ -77,27 +57,9 @@ class AdultController extends ThirdPartyLoginController
         }
         
         //get latest adult ads
-        $categoryList = $this->getRepository('FaEntityBundle:Category')->getNestedLeafChildrenIdsByCategoryId(CategoryRepository::ADULT_ID);
-        $latestAdultAds = $this->getHistoryRepository('FaReportBundle:AdReportDaily')->getRecentAdByCategoryArray($categoryList);
-        
+        $latestAdultAds = $this->getLatestAds();
         //get featured advertisers
         $featuredAdvertisers = $this->getFeaturedAdvertisers($request, $cookieLocationDetails);
-        
-        // get home popular image array.
-        $homePopularImagesArray = $this->getRepository('FaContentBundle:HomePopularImage')->getHomePopularImageArray($this->container);
-        
-        if (count($homePopularImagesArray)) {
-            $locationSlug = 'uk';
-            if (isset($cookieLocationDetails['slug'])) {
-                $locationSlug = $cookieLocationDetails['slug'];
-            }
-            
-            foreach ($homePopularImagesArray as $key => $homePopularImage) {
-                if (isset($homePopularImagesArray[$key]) && isset($homePopularImagesArray[$key]['url'])) {
-                    $homePopularImagesArray[$key]['url'] = str_ireplace('{location}', $locationSlug, $homePopularImagesArray[$key]['url']);
-                }
-            }
-        }
         
         //get blog details from external site
         $blogArray = array(
@@ -122,10 +84,8 @@ class AdultController extends ThirdPartyLoginController
         $featureAds  = $this->getAdultFeatureAds($request, $cookieLocationDetails);
 
         $formManager  = $this->get('fa.formmanager');
-        $form               = $formManager->createForm(LandingPageAdultSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
+        $form               = $formManager->createForm(AdultHomePageSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
         $parameters = array(
-            'facebookLoginUrl' => $facebookLoginUrl,
-            'homePopularImagesArray' => $homePopularImagesArray,
             'cookieLocationDetails' => $cookieLocationDetails,
             'seoLocationName' => $seoLocationName,
             'businessExposureUsersDetails' => $featuredAdvertisers,
@@ -137,8 +97,13 @@ class AdultController extends ThirdPartyLoginController
         );
         return $this->render('FaFrontendBundle:Adult:index.html.twig', $parameters);
     }
-        
-    private function getFeaturedAdvertisers($request,$cookieLocationDetails)
+
+    /**
+     * @param $request
+     * @param $cookieLocationDetails
+     * @return array
+     */
+    private function getFeaturedAdvertisers($request, $cookieLocationDetails)
     {
         $businessExposureUsers = array();
         $businessExposureMiles = array();
@@ -500,6 +465,105 @@ class AdultController extends ThirdPartyLoginController
         }
         
         return new Response();
+    }
+
+    /**
+     * Get ajax a Ethnicity in json format.
+     *
+     * @param Request $request Request instance.
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxGetEthnicityAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $nodeId = (int) trim($request->get('id'));
+            if ($nodeId) {
+                $dimension = $this->getRepository('FaEntityBundle:CategoryDimension')->findOneBy(array('category'=>$nodeId,'name'=>'ethnicity'));
+                $dimensionsArray = array();
+                if(!empty($dimension)){
+                    $dimensionsList = $this->getRepository('FaEntityBundle:Entity')->findby(array('category_dimension'=>$dimension->getId()));
+                    foreach ($dimensionsList as $dimension){
+                        $dimensionsArray[] = array('id' => $dimension->getId(), 'text' => $dimension->getName());
+                    }
+                }
+                return new JsonResponse(array('error'=>'Category Not Found'));
+            }
+            return new JsonResponse(array('error'=>'id Require'));
+        }
+        return new JsonResponse(array('error'=>"You Don't have Access"));
+    }
+
+    /**
+     * Get ajax a Services in json format.
+     *
+     * @param Request $request Request instance.
+     *
+     * @return Response|JsonResponse A Response or JsonResponse object.
+     */
+    public function ajaxGetServicesAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $nodeId = (int) trim($request->get('id'));
+            if ($nodeId) {
+                $dimension = $this->getRepository('FaEntityBundle:CategoryDimension')->findOneBy(array('category'=>$nodeId,'name'=>'services'));
+                $dimensionsArray = array();
+                if(!empty($dimension)){
+                    $dimensionsList = $this->getRepository('FaEntityBundle:Entity')->findby(array('category_dimension'=>$dimension->getId()));
+                    foreach ($dimensionsList as $dimension){
+                        $dimensionsArray[] = array('id' => $dimension->getId(), 'text' => $dimension->getName());
+                    }
+                    return new JsonResponse($dimensionsArray);
+                }
+                return new JsonResponse(array('error'=>'Category Not Found'));
+            }
+            return new JsonResponse(array('error'=>'id Require'));
+        }
+        return new JsonResponse(array('error'=>"You Don't have Access"));
+    }
+
+    /**
+     * @return array
+     */
+    private function getLatestAds()
+    {
+        $latestAdultAds = array();
+        $categoryList = $this->getRepository('FaEntityBundle:Category')->getNestedLeafChildrenIdsByCategoryId(CategoryRepository::ADULT_ID);
+        $latestAdultAdsList = $this->getHistoryRepository('FaReportBundle:AdReportDaily')->getRecentAdByCategoryArray($categoryList);
+        if(!empty($latestAdultAdsList)){
+            foreach ($latestAdultAdsList as $latestAd){
+                $solrData = $this->getlatestAdSolrResultbyId($latestAd);
+                if($solrData !== null){
+                    $latestAdultAds[] = $solrData;
+                }
+            }
+        }
+        return $latestAdultAds;
+    }
+
+    /**
+     * @param $id
+     * @return |null
+     */
+    private function getlatestAdSolrResultbyId($id)
+    {
+        $data           = array();
+        $keywords       = null;
+        $page           = 1;
+        $recordsPerPage = 1;
+        //set ad criteria to search
+        $data['query_filters']['item']['id'] = $id;
+
+        // initialize solr search manager service and fetch data based of above prepared search options
+        $solrSearchManager = $this->get('fa.solrsearch.manager');
+        $solrSearchManager->init('ad', $keywords, $data, $page, $recordsPerPage);
+        $solrResponse = $solrSearchManager->getSolrResponse();
+
+        $data = $this->get('fa.solrsearch.manager')->getSolrResponseDocs($solrResponse);
+        if(!empty($data)){
+            return $data[0];
+        }
+        return null;
     }
 }
 

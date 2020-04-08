@@ -1,3 +1,18 @@
+<style>
+    .featured-ribbon {
+        background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/featured-ribbon.svg) no-repeat;
+        display: block;
+        width: 67px;
+        height: 67px;
+        position: absolute;
+        left: -6px;
+        top: -6px;
+        text-indent: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        z-index: 1;
+    }
+</style>
 <div class="owl-carousel fa-slider" id="{{ divId }}" data-equalizer style="display: block">  {# id="popular_shops_slider1" #}
     {% set categoryBadgeArray = categoryRepository.getCategoryBadgeClassArray() %}
     {% for featureAd in featureAds %}
@@ -21,15 +36,16 @@
                     {{trim_text(attribute(featureAd, constant(featureAdSolrMapping ~ 'TITLE')), 30)|raw}}
                 {% endif %}
             </a>
+            <div class="featured-ribbon">featured</div>
             {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, featureAd, '300X225', 1) %}
 
             {% set imagePathExists = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'checkFileExists', [imagePath]) %}
 
             <div class="list-img {% if not imagePath  or not imagePathExists %}similar-placeholder{% endif %}">
                 {% if imagePath and imagePathExists %}
-                    <img class="lazyOwl" src="#empty" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                    <img class="lazyOwl" src="{{ imagePath }}" alt="{{ imageAltString }}" />
                 {% else %}
-                    <img class="lazyOwl" src="#empty" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                    <img class="lazyOwl" src="{{ asset_url('fafrontend/images/no-image.svg') }}"  alt="{{ imageAltString }}" />
                 {% endif %}
             </div>
             <h3>
@@ -40,31 +56,44 @@
         </div>
     {% endfor %}
 </div>
-<div class="row">
+<div class="mt20 latest-ads">
     {% for latestAdultAd in latestAdultAds  %}
-        {#                {% set adCategoryId = attribute(latestAdultAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::CATEGORY_ID')) %}#}
-        {#                {% set rootCategoryId = attribute(latestAdultAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}#}
-        {#                {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}#}
-        {#                {% set latestAdultAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}#}
-        {#                {% set adUserDetail = null %}#}
-        {#                {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID')) is defined and userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] is defined %}#}
-        {#                    {% set adUserDetail = userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] %}#}
-        {#                {% endif %}#}
-        {#                {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(latestAdultAd, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}#}
-        {#                {% set imageAltString = null %}#}
-        {#                {% if seoRule['image_alt'] is defined %}#}
-        {#                    {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], latestAdultAd]) %}#}
-        {#                {% endif %}#}
-        <div class="large-8 columns">
-            <div class="item-box">
-                {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl('',latestAdultAd.ad_id) %}
-                <a class="tricky-link" href="{{ adUrl }}">
-                    {#                            {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')) is defined %}#}
-                    {#                                {{trim_text(attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')), 30)|raw}}#}
-                    {#                            {% endif %}#}
-                </a>
-                <div class="explore-price">{{ adUrl }}</div>
-                <img alt="uploads/landingpage/5e85b956878de.jpeg" src="http://fadtest-images.friday-ad.co.uk/uploads/landingpage/5e85b956878de.jpeg">
+        {% set rootCategoryId = attribute(latestAdultAd, constant('Fa\\Bundle\\AdBundle\\Solr\\AdSolrFieldMapping::ROOT_CATEGORY_ID')) %}
+        {% set rootCategoryName =  staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getCategoryClassNameById', [rootCategoryId, true]) %}
+        {% set latestAdultAdSolrMapping = 'Fa\\Bundle\\AdBundle\\Solr\\Ad' ~ rootCategoryName ~ 'SolrFieldMapping::' %}
+        {% set adUserDetail = null %}
+        {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID')) is defined and userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] is defined %}
+            {% set adUserDetail = userDetails[attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'USER_ID'))] %}
+        {% endif %}
+        {% set adUrl = container.get('fa_ad.manager.ad_routing').getDetailUrl(latestAdultAd) %}
+        {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, latestAdultAd, '300X225', 1) %}
+        {% set imagePathExists = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'checkFileExists', [imagePath]) %}
+        {% set seoRule = seoToolRepository.getSeoPageRuleDetailForSolrResult(latestAdultAd, constant('Fa\\Bundle\\ContentBundle\\Repository\\SeoToolRepository::ADVERT_IMG_ALT'), container) %}
+        {% set imageAltString = null %}
+        {% if seoRule['image_alt'] is defined %}
+            {% set imageAltString = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getAdImageAlt', [container, seoRule['image_alt'], latestAdultAd]) %}
+        {% endif %}
+        <div class="small-12 medium-12 large-8 columns mb20 list">
+            <div class="card">
+                <div class="item" data-equalizer-watch>
+                    <a class="tricky-link" href="{{ adUrl }}">
+                        {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')) is defined %}
+                            {{trim_text(attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')), 30)|raw}}
+                        {% endif %}
+                    </a>
+                    <div class="list-img {% if not imagePath  or not imagePathExists %}similar-placeholder{% endif %}">
+                        {% if imagePath and imagePathExists %}
+                            <img class="lazyOwl" src="#empty" data-src="{{ imagePath }}" alt="{{ imageAltString }}" />
+                        {% else %}
+                            <img class="lazyOwl" src="#empty" data-src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                        {% endif %}
+                    </div>
+                    <h3>
+                        {% if attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')) is defined %}
+                            {{trim_text(attribute(latestAdultAd, constant(latestAdultAdSolrMapping ~ 'TITLE')), 30)|raw}}
+                        {% endif %}
+                    </h3>
+                </div>
             </div>
         </div>
     {% endfor %}

@@ -57,8 +57,8 @@
         </div>
     </div>
 
-    <div id="adult_search_form">
-    	{# { include('FaFrontendBundle:Adult:homePageAdultSearchForm.html.twig') } #}
+    <div id="adult_search_form" style="display: none">
+{#        {{ include('FaFrontendBundle:Adult:homePageAdultSearchForm.html.twig') }}#}
     </div>
     
     <div class="what-u-discover">
@@ -165,7 +165,6 @@
                 {{ include('FaFrontendBundle:Adult:homePageLatestBlog.html.twig', {'divId': 'recently-viwed-item-slider', 'ads': '', noImageColor:'grey'}) }}
             </div>
         </div>
-    </div>
 	{% endif %}
 	
 	<div class="homepage-row white-bg">
@@ -196,76 +195,6 @@
         'bundles/facore/js/owl.carousel.min.js'
         'bundles/fafrontend/js/parallax.min.js'
     %}
-        <script>
-            $('#fa_landing_page_adult_search_item__category_id').change(function(event){
-                loadEthnicityByCategoryId($(this).val());
-                loadServicesByCategoryId($(this).val());
-                //fa_landing_page_adult_search_item_adult__ethnicity_id
-            });
-            function loadEthnicityByCategoryId(CategoryId)
-            {
-                var selectedEthnicityId = $('#fa_landing_page_adult_search_item_adult__ethnicity_id').val();
-                if (!CategoryId) {
-                    CategoryId = $('#fa_landing_page_adult_search_item__category_id').val();
-                }
-                $('#fa_landing_page_adult_search_item_adult__ethnicity_id').empty();
-                $('#fa_landing_page_adult_search_item_adult__ethnicity_id').html('<option value="">{{ 'Any Ethnicity'|trans({}, 'frontend-landing-page') }}</option>');
-                if (CategoryId) {
-                    var data = {
-                        id: CategoryId
-                    };
-                    $.ajax({
-                        type: 'post',
-                        url: '{{ path("category_ajax_get_node_json") }}',
-                        data: data,
-                        success: function(data) {
-                            if (data.length > 0) {
-                                for (var i=0, total = data.length; i < total; i++) {
-                                    if (selectedEthnicityId == data[i].id) {
-                                        $('#fa_landing_page_adult_search_item_adult__ethnicity_id').append('<option value="' + data[i].id + '" selected="selected">' + data[i].text + '</option>');
-                                    } else {
-                                        $('#fa_landing_page_adult_search_item_adult__ethnicity_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
-                                    }
-                                }
-                                $('#fa_landing_page_adult_search_item_adult__ethnicity_id').selectmenu().selectmenu('refresh',true);
-                            }
-                        }
-                    });
-                }
-            }
-            function loadServicesByCategoryId(CategoryId)
-            {
-                var selectedServiceId = $('#fa_landing_page_adult_search_item_adult__services_id').val();
-                if (!CategoryId) {
-                    CategoryId = $('#fa_landing_page_adult_search_item__category_id').val();
-                }
-
-                $('#fa_landing_page_adult_search_item_adult__services_id').html('<option value="">{{ 'Any Ethnicity'|trans({}, 'frontend-landing-page') }}</option>');
-                if (CategoryId) {
-                    var data = {
-                        id: CategoryId
-                    };
-                    $.ajax({
-                        type: 'post',
-                        url: '{{ path("category_ajax_get_node_json") }}',
-                        data: data,
-                        success: function(data) {
-                            if (data.length > 0) {
-                                for (var i=0, total = data.length; i < total; i++) {
-                                    if (selectedServiceId == data[i].id) {
-                                        $('#fa_landing_page_adult_search_item_adult__services_id').append('<option value="' + data[i].id + '" selected="selected">' + data[i].text + '</option>');
-                                    } else {
-                                        $('#fa_landing_page_adult_search_item_adult__services_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
-                                    }
-                                }
-                                $('#fa_landing_page_adult_search_item_adult__services_id').selectmenu().selectmenu('refresh',true);
-                            }
-                        }
-                    });
-                }
-            }
-        </script>
-
     <script defer src="{{ static_asset_url(asset_url) }}"></script>
     {% endjavascripts %}
     
@@ -279,74 +208,36 @@
         {% endjavascripts %}
     {% endif %}
     <script language="javascript" type="text/javascript">
-    //<![CDATA[
-    {% if mobileDetectManager.is('IE') %}
-        $(function(){   
-            var $window = $(window);
-            var scrollTime = 1.2;
-            var scrollDistance = 250;
-            $window.on("mousewheel DOMMouseScroll", function(event){
-                event.preventDefault(); 
-                var delta = event.originalEvent.wheelDelta/120 || -event.originalEvent.detail/3;
-                var scrollTop = $window.scrollTop();
-                var finalScroll = scrollTop - parseInt(delta*scrollDistance);
-                TweenMax.to($window, scrollTime, {
-                    scrollTo : { y: finalScroll, autoKill:true },
-                        ease: Power1.easeOut,
-                        overwrite: 1                            
-                    });
+        //<![CDATA[
+        {% if mobileDetectManager.is('IE') %}
+            $(function(){
+                var $window = $(window);
+                var scrollTime = 1.2;
+                var scrollDistance = 250;
+                $window.on("mousewheel DOMMouseScroll", function(event){
+                    event.preventDefault();
+                    var delta = event.originalEvent.wheelDelta/120 || -event.originalEvent.detail/3;
+                    var scrollTop = $window.scrollTop();
+                    var finalScroll = scrollTop - parseInt(delta*scrollDistance);
+                    TweenMax.to($window, scrollTime, {
+                        scrollTo : { y: finalScroll, autoKill:true },
+                            ease: Power1.easeOut,
+                            overwrite: 1
+                        });
+                });
             });
-        });
-    {% endif %}
+        {% endif %}
 
-    var headerParallax;
-    $(document).ready(function() {
-        $('div.homepage-row:even').addClass('white-bg');
-        getHeaderImage();
+        var headerParallax;
+        $(document).ready(function() {
+            $('div.homepage-row:even').addClass('white-bg');
+            getHeaderImage();
 
-        $('#fa_landing_page_adult_search_item_adult__services_id, .select-control').select2();
-        
-        var featuredAdvertisersItemSlider = $("#featured_advertisers_slider");
-        featuredAdvertisersItemSlider.owlCarousel({
-            items : 4,
-            itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 4]],
-            navigation: true,
-            pagination:false,
-            responsiveRefreshRate : 100,
-            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
-            lazyLoad: true,
-            scrollPerPage: true,
-        });
+            $('#fa_adult_home_page_search_item_adult__services_id, .select-control').select2();
+            $('#fa_adult_home_page_search_item__location').select2();
 
-        
-
-        var featuredItemSlider = $("#featured-top-item-slider");
-        featuredItemSlider.owlCarousel({
-            items : 3,
-            itemsCustom:[[320, 1], [568, 2], [768, 2], [1024, 3]],
-            navigation: true,
-            pagination:false,
-            responsiveRefreshRate : 100,
-            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
-            lazyLoad: true,
-            scrollPerPage: true,
-        });
-
-        var recentlyViwedItemSlider = $("#recently-viwed-item-slider");
-        recentlyViwedItemSlider.owlCarousel({
-            items : 6,
-            itemsCustom:[[320, 1], [568, 3], [768, 4], [1024, 5], [1151, 6]],
-            navigation: true,
-            pagination:false,
-            responsiveRefreshRate : 100,
-            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
-            lazyLoad: true,
-            scrollPerPage: true,
-        });
-
-        var popularShopsSlider = $("#popular_shops_slider");
-        if (popularShopsSlider) {
-            popularShopsSlider.owlCarousel({
+            var featuredAdvertisersItemSlider = $("#featured_advertisers_slider");
+            featuredAdvertisersItemSlider.owlCarousel({
                 items : 4,
                 itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 4]],
                 navigation: true,
@@ -356,67 +247,209 @@
                 lazyLoad: true,
                 scrollPerPage: true,
             });
-        }
 
-        $(document).foundation({
-            accordion: {
-                multi_expand: true,
-                callback : function (accordion) {
-                    accordionCallback(accordion);
+
+
+            var featuredItemSlider = $("#featured-top-item-slider");
+            featuredItemSlider.owlCarousel({
+                items : 3,
+                itemsCustom:[[320, 1], [568, 2], [768, 2], [1024, 3]],
+                navigation: true,
+                pagination:false,
+                responsiveRefreshRate : 100,
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                lazyLoad: true,
+                scrollPerPage: true,
+            });
+
+            var recentlyViwedItemSlider = $("#recently-viwed-item-slider");
+            recentlyViwedItemSlider.owlCarousel({
+                items : 6,
+                itemsCustom:[[320, 1], [568, 3], [768, 4], [1024, 5], [1151, 6]],
+                navigation: true,
+                pagination:false,
+                responsiveRefreshRate : 100,
+                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                lazyLoad: true,
+                scrollPerPage: true,
+            });
+
+            var popularShopsSlider = $("#popular_shops_slider");
+            if (popularShopsSlider) {
+                popularShopsSlider.owlCarousel({
+                    items : 4,
+                    itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 4]],
+                    navigation: true,
+                    pagination:false,
+                    responsiveRefreshRate : 100,
+                    navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                    lazyLoad: true,
+                    scrollPerPage: true,
+                });
+            }
+
+            $(document).foundation({
+                accordion: {
+                    multi_expand: true,
+                    callback : function (accordion) {
+                        accordionCallback(accordion);
+                    }
                 }
-            }
+            });
         });
-    });
 
-    $( window ).scroll(function() {
-        if ($("#sticky_nav").hasClass('fixed')) {
-            $("#sticky_nav_top").addClass('fixed');
-            $("#sticky_nav_top").addClass('top-bar-shadow');
-        } else {
-            $("#sticky_nav_top").removeClass('fixed');
-            $("#sticky_nav_top").removeClass('top-bar-shadow');
-        }
-    });
-
-    function accordionCallback(accordion)
-    {
-        $(accordion).siblings('a').find('i').toggleClass("fi-plus fi-minus");
-        $(accordion).find('select.fa-select').selectmenu().selectmenu('refresh',true);
-    }
-    
-    function getHeaderImage()
-    {
-        var viewPort = getViewport();
-        $.ajax({
-            type: "POST",
-            url : '{{ path('ajax_get_adul_header_image') }}',
-            data : {'screenWidth': viewPort.width, 'location': '{{ app.request.get('location') }}'},
-        })
-        .done(function(response) {
-            if (response.image) {
-                headerParallax = $('#header_image_div').parallax({imageSrc: response.image, naturalWidth: response.width, naturalHeight: response.height});
-                if (response.phone_image && response.phone_image_url)
-                    $(".forsale-phone").html('<a href="'+response.phone_image_url+'"><img src="'+response.phone_image+'"></a>');
-                else if (response.phone_image)
-                    $(".forsale-phone").html('<img src="'+response.phone_image+'">');
+        $( window ).scroll(function() {
+            if ($("#sticky_nav").hasClass('fixed')) {
+                $("#sticky_nav_top").addClass('fixed','top-bar-shadow');
             } else {
-                $('#header_image_div').parallax({imageSrc: "{{ asset_url('/fafrontend/images/home-slider.png') }}" });
+                $("#sticky_nav_top").removeClass('fixed','top-bar-shadow');
             }
         });
-    }
-    //]]>
+
+        function accordionCallback(accordion) {
+            $(accordion).siblings('a').find('i').toggleClass("fi-plus fi-minus");
+            $(accordion).find('select.fa-select').selectmenu().selectmenu('refresh',true);
+        }
+
+        function getHeaderImage() {
+            var viewPort = getViewport();
+            $.ajax({
+                type: "POST",
+                url : '{{ path('ajax_get_adul_header_image') }}',
+                data : {'screenWidth': viewPort.width, 'location': '{{ app.request.get('location') }}'},
+            })
+            .done(function(response) {
+                if (response.image) {
+                    headerParallax = $('#header_image_div').parallax({imageSrc: response.image, naturalWidth: response.width, naturalHeight: response.height});
+                    if (response.phone_image && response.phone_image_url)
+                        $(".forsale-phone").html('<a href="'+response.phone_image_url+'"><img src="'+response.phone_image+'"></a>');
+                    else if (response.phone_image)
+                        $(".forsale-phone").html('<img src="'+response.phone_image+'">');
+                } else {
+                    $('#header_image_div').parallax({imageSrc: "{{ asset_url('/fafrontend/images/home-slider.png') }}" });
+                }
+            });
+        }
+        //]]>
+        function showHideAdvanceSearch() {
+            var x = document.getElementById("adult_search_form");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+        var selectedCategory = $("#fa_adult_home_page_search_item__category_id");
+        selectedCategory.change(function(){
+            if($(this).val() == 3413){
+                $("#more_options").css("display", "block");
+                loadEthnicityByCategoryId($(this).val());
+                loadServicesByCategoryId($(this).val());
+            }
+            else {
+                $("#more_options").css("display", "none");
+                $('#fa_adult_home_page_search_item_adult__ethnicity_id').html('<option value="">{{ 'Any Ethnicity'|trans({}, 'frontend-landing-page') }}</option>');
+                $('#fa_adult_home_page_search_item_adult__services_id').html('<option value="">{{ 'Any Services'|trans({}, 'frontend-landing-page') }}</option>');
+            }
+        });
+        function loadEthnicityByCategoryId(CategoryId) {
+            $('#fa_adult_home_page_search_item_adult__ethnicity_id').val();
+            if (!CategoryId) {
+                CategoryId = selectedCategory.val();
+            }s
+            $('#fa_adult_home_page_search_item_adult__ethnicity_id').empty();
+            $('#fa_adult_home_page_search_item_adult__ethnicity_id').html('<option value="">{{ 'Any Ethnicity'|trans({}, 'frontend-landing-page') }}</option>');
+            if (CategoryId) {
+                var data = {
+                    id: CategoryId
+                };
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("ajax_get_ethnicity_json") }}',
+                    data: data,
+                    success: function(data) {
+                        if (data.length > 0) {
+                            $.each(data, function(id, value) {console.log(id,value)});
+                            for (var i=0, total = data.length; i < total; i++) {
+                                $('#fa_adult_home_page_search_item_adult__ethnicity_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                            }
+                            $('#fa_adult_home_page_search_item_adult__ethnicity_id').selectmenu().selectmenu('refresh',true);
+                        }
+                    }
+                });
+            }
+        }
+        function loadServicesByCategoryId(CategoryId) {
+            $('#fa_adult_home_page_search_item_adult__services_id').val();
+            if (!CategoryId) {
+                CategoryId = selectedCategory.val();
+            }
+
+            $('#fa_adult_home_page_search_item_adult__services_id').html('<option value="">{{ 'Any Services'|trans({}, 'frontend-landing-page') }}</option>');
+            if (CategoryId) {
+                var data = {
+                    id: CategoryId
+                };
+                $.ajax({
+                    type: 'post',
+                    url: '{{ path("ajax_get_services_json") }}',
+                    data: data,
+                    success: function(data) {
+                        if (data.length > 0) {
+                            for (var i=0, total = data.length; i < total; i++) {
+                                $('#fa_adult_home_page_search_item_adult__services_id').append('<option value="' + data[i].id + '">' + data[i].text + '</option>');
+                            }
+                            $('#fa_adult_home_page_search_item_adult__services_id').selectmenu().selectmenu('refresh',true);
+                        }
+                    }
+                });
+            }
+        }
+        function setDistance() {
+            var catId = selectedCategory.val();
+            var searchLocation = $('#fa_adult_home_page_search_item__location').val();
+            searchLocation = (searchLocation)?searchLocation:2;
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: "{{ path('fa_frontend_ajax_user_location') }}",
+                data: {'location': searchLocation, 'catId' : catId},
+                success: function(data) {
+                    if (!$.isEmptyObject(data)) {
+                        $('#distance_slider').val(data.default_distance);
+                        $('#fa_adult_home_page_search_item__distance').val(data.default_distance);
+                        setAndMoveSliderCaption('distance_slider', 'lower', 'distance', false);
+                    }
+                }
+            });
+        }
+        selectedCategory.change(function() {
+            setDistance();
+        });
+        $('#fa_adult_home_page_search_item__location_homepage_ok').click(function(e) {
+            setDistance();
+        });
+        $('#fa_adult_home_page_search_item__location_autocomplete').keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            event.preventDefault();
+            $('#fa_adult_home_page_search_item__location_homepage_ok').click();
+        }
+
+    });
     </script>
+    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_adult_home_page_search_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
 {% endblock %}
 {% block dimension2 %}
-<script language="javascript" type="text/javascript">
-//<![CDATA[
-{% if app.user.getId() is not defined or app.user.getId() is null %}
-	ga('set', 'dimension9', 'not logged in');
-{% else %}
-	ga('set', 'dimension9', 'logged in');
-{% endif %}
-           
-    ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Homepage'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
-//]]>
-</script>
+    <script language="javascript" type="text/javascript">
+        //<![CDATA[
+        {% if app.user.getId() is not defined or app.user.getId() is null %}
+            ga('set', 'dimension9', 'not logged in');
+        {% else %}
+            ga('set', 'dimension9', 'logged in');
+        {% endif %}
+
+            ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Homepage'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
+        //]]>
+    </script>
 {% endblock %}

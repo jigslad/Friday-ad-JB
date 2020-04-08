@@ -31,7 +31,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  * @copyright 2014 Friday Media Group Ltd
  * @version v1.0
  */
-class LandingPageAdultSearchType extends AbstractType
+class AdultHomePageSearchType extends AbstractType
 {
     /**
      * Container service class object.
@@ -85,10 +85,77 @@ class LandingPageAdultSearchType extends AbstractType
                 'attr'    => array('class' => 'fa-select-white')
             )
         )
-        ->add('item__category_id',HiddenType::class)
+        ->add(
+            'item__category_id',
+            JsChoiceType::class,
+            array(
+                'choices'     => array_flip($this->em->getRepository('FaEntityBundle:Category')->getCategoryArraySimpleById(CategoryRepository::ADULT_ID)),
+                'label'       => 'Choose a category',
+            )
+        )
+        ->add(
+            'item_adult__ethnicity_id',
+            JsChoiceType::class,
+            array(
+                'choices'     => array(),
+                'data'        =>'Ethnicity'
+            )
+        )
+        ->add(
+            'item_adult__services_id',
+            JsChoiceType::class,
+            array(
+                'choices'     => array(),
+                'data'        =>'Service'
+            )
+        )
+        ->add(
+            'item_adult__independent_or_agency_id',
+            JsChoiceType::class,
+            array(
+                'choices'     => array_flip(array(7317 => 'Agency',7318 => 'Independent')),
+                'expanded' => true
+            )
+        )
         ->add('item__location', HiddenType::class)
-        ->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false));
+        ->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false))
+        ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
     }
+
+    /**
+     * Callbak method for PRE_SET_DATA form event.
+     *
+     * @param object $event Event instance.
+     */
+    public function preSetData(FormEvent $event)
+    {
+        $form = $event->getForm();
+        $defDistance = '';
+        $getDefaultRadius = $searchParams = array();
+
+        $categoryId   = '';
+        if ($this->request->get('category_id')) {
+            $searchParams['item__category_id'] = $this->request->get('category_id');
+        }
+        if ($this->request->get('location')) {
+            $searchParams['item__location'] = $this->request->get('location');
+        }
+
+        $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
+        $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
+
+        $form->add(
+            'item__distance',
+            ChoiceType::class,
+            array(
+                'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
+                'placeholder' => $defDistance,
+                'data' => $defDistance,
+                'attr'    => array('class' => 'fa-select-white')
+            )
+        );
+    }
+
 
     /**
      * Set default form options.
@@ -113,11 +180,11 @@ class LandingPageAdultSearchType extends AbstractType
      */
     public function getName()
     {
-        return 'fa_landing_page_adult_search';
+        return 'fa_adult_home_page_search';
     }
     
     public function getBlockPrefix()
     {
-        return 'fa_landing_page_adult_search';
+        return 'fa_adult_home_page_search';
     }
 }

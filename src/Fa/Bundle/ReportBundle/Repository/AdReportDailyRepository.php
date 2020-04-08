@@ -519,7 +519,7 @@ class AdReportDailyRepository extends EntityRepository
         foreach ($categoryList as $category){
             $recentAdByCatArr = $this->getRecentAdByCategory($category);
             if(!empty($recentAdByCatArr)) {
-                $recentAd[$category] = $recentAdByCatArr;
+                $recentAd[$category] = $recentAdByCatArr['ad_id'];
             }
         }
         return $recentAd;

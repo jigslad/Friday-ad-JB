@@ -460,3 +460,10 @@ services:
         arguments: ['@service_container', '@request_stack']
         tags:
             - { name: form.type, alias: fa_ad_paa_search_keyword_upload_csv_admin }
+
+    fa_ad.form.type.adult_home_page_search:
+        class: Fa\Bundle\AdBundle\Form\AdultHomePageSearchType
+        arguments: ['@service_container', '@request_stack']
+        tags:
+            - { name: form.type, alias: fa_adult_home_page_search }
+
