@@ -154,7 +154,7 @@ class UserCreditUsedRepository extends EntityRepository
         ->andWhere('FIND_IN_SET(6, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0 or FIND_IN_SET(3, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0')
         ->groupBy(UserCreditRepository::ALIAS.'.id');
         
-        $objResources = $query->getQuery()->getSingleResult();
+        $objResources = $query->getQuery()->getSingleScalarResult();
         return $objResources['cnt'];
     }
     
@@ -169,7 +169,7 @@ class UserCreditUsedRepository extends EntityRepository
         ->andWhere('FIND_IN_SET(1, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0')
         ->groupBy(UserCreditRepository::ALIAS.'.id');
         
-        $objResources = $query->getQuery()->getSingleResult();
+        $objResources = $query->getQuery()->getSingleScalarResult();
         return $objResources['cnt'];
     }
 }
