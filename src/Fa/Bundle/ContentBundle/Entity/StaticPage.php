@@ -187,6 +187,13 @@ class StaticPage
     private $include_in_footer;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="include_in_mobile_footer", type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $include_in_mobile_footer;
+
+    /**
      * Validate canonical url.
      *
      * @param ExecutionContextInterface $context
@@ -693,6 +700,30 @@ class StaticPage
     public function getIncludeInFooter()
     {
         return $this->include_in_footer;
+    }
+
+    /**
+     * Set include in mobile footer.
+     *
+     * @param boolean $include_in_mobile_footer
+     *
+     * @return Object
+     */
+    public function setIncludeInMobileFooter($include_in_mobile_footer)
+    {
+        $this->include_in_mobile_footer = $include_in_mobile_footer;
+
+        return $include_in_mobile_footer;
+    }
+
+    /**
+     * Get include in mobile footer.
+     *
+     * @return boolean
+     */
+    public function getIncludeInMobileFooter()
+    {
+        return $this->include_in_mobile_footer;
     }
 
     /**
