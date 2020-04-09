@@ -9,7 +9,8 @@
 {% endif %}
 {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
-<div class="paa-gray-box" id="location_div">
+<div class="col-md-24 d-flex justify-content-center paa-box">
+    <div class="paa-gray-box" id="location_div">
     {#{ attribute(attribute(form, field).vars.attr, 'field-help') }#}
     <h3 class="text-center">
         {{ attribute(form, field).vars.label }}
@@ -19,16 +20,15 @@
             <span class="black-text">({{ 'optional'|trans({}, 'frontend-paa-fourth-step') }})</span>
         {% endif %#}
     </h3>
-    <div class="text-center">
-        <p class="mb0">
-            <span id="paa_location_autocomplete_tips">{{ 'Enter your postcode or town.'|trans({}, 'frontend-paa-fourth-step')}}</span>
-            {% if form.location_autocomplete.vars.attr['field-help'] is defined and form.location_autocomplete.vars.attr['field-help'] is not null %}&nbsp;
-            <div class="image-tooltip-wrapper">
-                <span class="image-tooltip">{{ form.location_autocomplete.vars.attr['field-help']|raw }}</span>
-                <span class="info-icon">info</span>
-            </div>
-            {% endif %}
-        </p>
+    <div class="mall-wrapper">
+        {#<span id="paa_location_autocomplete_tips">{{ 'Enter your postcode or town.'|trans({}, 'frontend-paa-fourth-step')}}</span>#}
+        <input type="text" class="form-control white-field" placeholder="Type postal code or town">
+        {#{% if form.location_autocomplete.vars.attr['field-help'] is defined and form.location_autocomplete.vars.attr['field-help'] is not null %}&nbsp;
+        <div class="image-tooltip-wrapper">
+            <span class="image-tooltip">{{ form.location_autocomplete.vars.attr['field-help']|raw }}</span>
+            <span class="info-icon">info</span>
+        </div>
+        {% endif %}#}
     </div>
     {% set selectedLocation      = 'United Kingdom' %}
     {% set showHideLocationInst  = 'none' %}
@@ -89,4 +89,5 @@
         {{ block('googlemap_location_html') }}
     </div>
     <div><span id="location_error_div" class="error"></span></div>
+</div>
 </div>
