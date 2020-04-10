@@ -58,11 +58,11 @@ class AdultController extends ThirdPartyLoginController
         
         //get latest adult ads
         $latestAdultAds = array();
-        //$latestAdultAds = $this->getLatestAds();
+        $latestAdultAds = $this->getLatestAds();
         
         //get featured advertisers
         $featuredAdvertisers = array();
-        //$featuredAdvertisers = $this->getFeaturedAdvertisers($request, $cookieLocationDetails);
+        $featuredAdvertisers = $this->getFeaturedAdvertisers($request, $cookieLocationDetails);
         
         //get blog details from external site
         $blogArray = array(
@@ -71,7 +71,7 @@ class AdultController extends ThirdPartyLoginController
         );
         
         $externalSiteBlogDetails = array();
-        //$externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);
+        $externalSiteBlogDetails  = CommonManager::getWordpressBlogDetails($blogArray);
         
         $entityCacheManager = $this->container->get('fa.entity.cache.manager');
         $seoLocationName    = $entityCacheManager->getEntityNameById('FaEntityBundle:Location', LocationRepository::COUNTY_ID);
@@ -87,7 +87,7 @@ class AdultController extends ThirdPartyLoginController
         $bannersArray = $this->getRepository("FaContentBundle:Banner")->getBannersArrayByPage('homepage', $this->container);
 
         $featureAds =array();
-        //$featureAds  = $this->getAdultFeatureAds($request, $cookieLocationDetails);
+        $featureAds  = $this->getAdultFeatureAds($request, $cookieLocationDetails);
 
         $formManager  = $this->get('fa.formmanager');
         $form               = $formManager->createForm(AdultHomePageSearchType::class, null, array('method' => 'GET', 'action' => $this->generateUrl('ad_landing_page_search_result')));
