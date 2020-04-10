@@ -29,7 +29,7 @@
 <div id="left-column" class="col-md-6 left-col" data-equalizer-watch>
     <div class="step-instruction d-none d-md-block">
         <div class="f-ad-sign">F-ad</div>
-        <h3 class="s-h3" id="paa_steps_title">
+        <h3 class="s-h2" id="paa_steps_title">
         {% if rootCategoryId == forSaleCategoryId %}
             {{ 'Sell your items on Friday-Ad'|trans({}, 'frontend-paa') }}
         {% else %}
@@ -92,7 +92,7 @@
         {% endif %}
     </ul>
     </div>
-    {% if step == 1 and app.user and app.user.getRole() and (app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_BUSINESS_SELLER_ID') or app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
+    {% if step == 1 and app.user and app.user.getRole() and (app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepo   sitory::ROLE_BUSINESS_SELLER_ID') or app.user.getRole().getId() == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_NETSUITE_SUBSCRIPTION_ID')) %}
         <div class="paaLeftContainer">
             <div class="dpaa-section text-center hide-for-small-only" id="paaLeftPrintItem">
                 <span class="self-service-img">&nbsp;</span>

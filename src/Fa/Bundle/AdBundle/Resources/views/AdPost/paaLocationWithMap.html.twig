@@ -21,14 +21,13 @@
         {% endif %#}
     </h3>
     <div class="mall-wrapper">
-        {#<span id="paa_location_autocomplete_tips">{{ 'Enter your postcode or town.'|trans({}, 'frontend-paa-fourth-step')}}</span>#}
-        <input type="text" class="form-control white-field" placeholder="Type postal code or town">
-        {#{% if form.location_autocomplete.vars.attr['field-help'] is defined and form.location_autocomplete.vars.attr['field-help'] is not null %}&nbsp;
+        <span id="paa_location_autocomplete_tips">{{ 'Enter your postcode or town.'|trans({}, 'frontend-paa-fourth-step')}}</span>
+        {% if form.location_autocomplete.vars.attr['field-help'] is defined and form.location_autocomplete.vars.attr['field-help'] is not null %}&nbsp;
         <div class="image-tooltip-wrapper">
             <span class="image-tooltip">{{ form.location_autocomplete.vars.attr['field-help']|raw }}</span>
             <span class="info-icon">info</span>
         </div>
-        {% endif %}#}
+        {% endif %}
     </div>
     {% set selectedLocation      = 'United Kingdom' %}
     {% set showHideLocationInst  = 'none' %}

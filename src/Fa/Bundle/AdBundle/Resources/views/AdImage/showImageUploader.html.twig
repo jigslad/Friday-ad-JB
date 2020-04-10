@@ -21,11 +21,12 @@
     </div>
     {% if showDragDropFlag %}
     <div class="drag-drop-box text-center" id="drag_drop_hover">
-        <div id="drag_drop_text" class="{% if adImgCount %}drag-ins-hr{% else %}drag-ins-vr{% endif %}">
-            Drag and drop images here or <a href="javascript:void(0);" id="drag_dop_anchor">browse</a> your images
+        <div id="drag_drop_text" style="position: relative;">
+            <div class="{% if adImgCount %}drag-ins-hr{% else %}drag-ins-vr{% endif %}"></div>
+            Drag and drop images here or <a href="javascript:void(0);" id="drag_dop_anchor" style="position: relative; z-index: 1;">browse</a> your images
         </div>
     {% endif %}
-        <div id="uploaded_images_div">
+        <div id="uploaded_images_div" class="mt20">
             {{ include('FaAdBundle:AdImage:renderUploadedImage.html.twig', {'adId': adId, 'vertical': vertical }) }}
         </div>
     {% if showDragDropFlag %}

@@ -15,7 +15,7 @@
 </div>
 {% if ad.type.id is defined and ad.type.id %}
 <div class="change-category">
-    <div class="left cat-name-wrap">
+    <div class="text-left cat-name-wrap">
         <span>{{ 'Advertised as'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', ad.type.id) }}
     </div>
     <div class="text-right edit-category">
