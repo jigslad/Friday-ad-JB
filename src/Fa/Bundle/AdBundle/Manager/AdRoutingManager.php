@@ -198,7 +198,9 @@ class AdRoutingManager
 
         //$category = $this->em->getRepository('FaEntityBundle:Category')->getCategoryArrayById($search_params['item__category_id'], $this->container);
         $categoryId   = (isset($search_params['item__category_id']) ? $search_params['item__category_id'] : null);
-
+        if($categoryId == CategoryRepository::ADULT_ID) {
+            $categoryId = CategoryRepository::ESCORT_SERVICES_ID;
+        }
         $parentId = null;
         if (isset($categories[0])) {
             $parentId = $categories[0];
