@@ -81,12 +81,12 @@ class AdRequestListener
         if($lastChrUri=='/') {
             $adulturi = substr($uri, -7);
             if($adulturi === '/adult/') {
-                $uri = substr($uri,0,-7).'/adult-services/escorts/';
+                $redirectEscortUri = substr($uri,0,-7).'/adult-services/escorts/';
             }
         } else {
             $adulturi = substr($uri, -6);
             if($adulturi === '/adult') {
-                $uri = substr($uri,0,-6).'/adult-services/escorts/';
+                $redirectEscortUri = substr($uri,0,-6).'/adult-services/escorts/';
             }            
         }
         if($redirectEscortUri!='') {
