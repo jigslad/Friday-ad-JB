@@ -75,16 +75,7 @@ class AdultHomePageSearchType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-        ->add(
-            'item__distance',
-            ChoiceType::class,
-            array(
-                'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
-                'data'    => 15,
-                'attr'    => array('class' => 'fa-select-white')
-            )
-        )
+        $builder        
         ->add(
             'item__category_id',
             JsChoiceType::class,
@@ -92,31 +83,7 @@ class AdultHomePageSearchType extends AbstractType
                 'choices'     => array_flip($this->em->getRepository('FaEntityBundle:Category')->getCategoryArraySimpleById(CategoryRepository::ADULT_ID)),
                 'label'       => 'Choose by category',
             )
-        )
-        ->add(
-            'item_adult__ethnicity_id',
-            JsChoiceType::class,
-            array(
-                'choices'     => array(),
-                'data'        =>'Ethnicity'
-            )
-        )
-        ->add(
-            'item_adult__services_id',
-            JsChoiceType::class,
-            array(
-                'choices'     => array(),
-                'data'        =>'Service'
-            )
-        )
-        ->add(
-            'item_adult__independent_or_agency_id',
-            JsChoiceType::class,
-            array(
-                'choices'     => array_flip(array(7317 => 'Agency',7318 => 'Independent')),
-                'expanded' => true
-            )
-        )
+        )    
         ->add('item__location', HiddenType::class)
         ->add('item__location_autocomplete', TextType::class, array(/** @Ignore */'label' => false))
         ->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
@@ -140,7 +107,57 @@ class AdultHomePageSearchType extends AbstractType
         if ($this->request->get('location')) {
             $searchParams['item__location'] = $this->request->get('location');
         }
-
+        
+        $dimensionIdsArray = $indOrAgencyArray = $ethinicityArray = $servicesArray = array();
+        $ethinicityArray[''] = 'Any Ethinicity';
+        $servicesArray[''] = 'Any Service';
+        $dimensionIdsArray = $this->em->getRepository('FaEntityBundle:CategoryDimension')->getDimesionIdsByCategoryIdAndName(CategoryRepository::ESCORT_SERVICES_ID, array('Ethnicity', 'Services','Independent or Agency'), $this->container);
+        if (!empty($dimensionIdsArray)) {
+            foreach ($dimensionIdsArray as $dimensionId => $dimensionName) {
+                if ($dimensionName == 'Ethnicity') {
+                    $dimensionsList = $this->em->getRepository('FaEntityBundle:Entity')->findby(array('category_dimension'=>$dimensionId));
+                    foreach ($dimensionsList as $dimension){
+                        $ethinicityArray[$dimension->getId()] = $dimension->getName();
+                    }
+                } elseif ($dimensionName == 'Services') {
+                    $dimensionsList = $this->em->getRepository('FaEntityBundle:Entity')->findby(array('category_dimension'=>$dimensionId));
+                    foreach ($dimensionsList as $dimension){
+                        $servicesArray[$dimension->getId()] = $dimension->getName();
+                    }
+                } elseif ($dimensionName == 'Independent or Agency') {
+                    $dimensionsList = $this->em->getRepository('FaEntityBundle:Entity')->findby(array('category_dimension'=>$dimensionId));
+                    foreach ($dimensionsList as $dimension){
+                        $indOrAgencyArray[$dimension->getId()] = $dimension->getName();
+                    }
+                }
+            }
+        }
+        
+        $form->add(
+            'item_adult__independent_or_agency_id',
+            JsChoiceType::class,
+            array(
+                'choices'     => array_flip($indOrAgencyArray),
+                'expanded' => true
+            )
+        );
+        $form->add(
+            'item_adult__ethnicity_id',
+            JsChoiceType::class,
+            array(
+                'choices'     => array_flip($ethinicityArray),
+                'placeholder' => 'Ethnicity',
+            )
+        );
+        $form->add(
+            'item_adult__services_id',
+            JsChoiceType::class,
+            array(
+                'choices'     => array_flip($servicesArray),
+                'placeholder' => 'Services',
+            )
+        );
+        
         $getDefaultRadius = $this->em->getRepository('FaEntityBundle:Category')->getDefaultRadiusBySearchParams($searchParams, $this->container);
         $defDistance = ($getDefaultRadius)?$getDefaultRadius:'';
 
