@@ -216,4 +216,9 @@
     {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_top_search_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true', 'submitFormAfterSelect': 'fa_top_search'}) }}
 {% endif %}
 
-{{ include('FaCoreBundle::jqueryAutoSuggestKeywordFieldJs.html.twig', {'field' : '#fa_top_search_keywords', 'placeHolder': 'Looking for...'|trans({}, 'frontend-homepage'), 'route' : 'search_keyword_ajax_get_keywords_json', 'dropdownCssClass': 'keyword-choices category-choices'}) }}
+{% if currentRoute in {0: 'fa_adult_homepage'} %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestKeywordFieldJs.html.twig', {'field' : '#fa_top_search_keywords', 'placeHolder': 'Looking for...'|trans({}, 'frontend-homepage'), 'route' : 'search_keyword_ajax_get_keywords_by_cat_json', 'dropdownCssClass': 'keyword-choices category-choices'}) }}
+{% else %}
+    {{ include('FaCoreBundle::jqueryAutoSuggestKeywordFieldJs.html.twig', {'field' : '#fa_top_search_keywords', 'placeHolder': 'Looking for...'|trans({}, 'frontend-homepage'), 'route' : 'search_keyword_ajax_get_keywords_json', 'dropdownCssClass': 'keyword-choices category-choices'}) }}
+{% endif %}
+

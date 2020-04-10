@@ -986,70 +986,44 @@ footer a:hover{
         background:#760F62 !important;
     }
 }
+/* Advancded search form */
+.adul-search-form input[type="text"] { border-radius:4px }
+.adul-search-form .location-col { float: left; position: relative; }
+.adul-search-form .select2-search-choice-close, .select2-search-choice-close { right:10px !important;top:10px !important;background: transparent url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjlweCIgaGVpZ2h0PSI5cHgiIHZpZXdCb3g9Ii0xIC0xIDkgOSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAtMSAtMSA5IDkiIHhtbDpzcGFjZT0icHJlc2VydmUiPjxwb2x5Z29uIHBvaW50cz0iNy41LDAuOTU1IDYuMDQ2LC0wLjUgMy41LDIuMDQ1IDAuOTU1LC0wLjUgLTAuNSwwLjk1NSAyLjA0NSwzLjUgLTAuNSw2LjA0NCAwLjk1NSw3LjUgMy41LDQuOTU0IDYuMDQ2LDcuNSA3LjUsNi4wNDQgNC45NTQsMy41ICIvPjwvc3ZnPg==') 50% 50% no-repeat !important; }
 /* select 2 */
- /* Select 2 css */
-        .select2-container-multi, .select-control {
-            width: 100% !important;
-        }
-        .select-control {
-            margin-bottom: 30px;
-        }
-        .select2-container-multi .select2-choices, .select2-container .select2-choice, .select-control, .select-control:hover, .select-control:focus, .select-control:active   {
-            border-radius: 4px !important;
-        }
-        .select2-search-choice {
-            height: 30px !important;
-            margin: 4px 0 0 4px !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
-            letter-spacing: 0 !important;
-            line-height: 21px !important;
-            text-align: right !important;
-            color: #ffffff !important;
-            background: linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;
-            border: 0px solid #9C1F9F !important;
-            padding: .1875rem 1.5rem .1875rem 0.5rem !important;
-        }
-        .select2-search-choice-close {
-            margin-right: 0px !important;
-            float: right !important;
-            margin-left: 4px !important;
-            font-size: 24px !important;
-            font-weight: bold !important;
-            color: #ffffff !important;
-            left: auto !important;
-            background: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='24px' height='24px' viewBox='0 0 24 24' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3c!-- Generator: Sketch 63.1 (92452) - https://sketch.com --%3e%3ctitle%3eIcon / 24 / Functional / Cross%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg id='Icon-/-24-/-Functional-/-Cross' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3e%3cpolygon id='Shape' fill='%23ffffff' points='19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12'/%3e%3c/g%3e%3c/svg%3e") no-repeat !important;
-            background-size: 18px 18px !important;
-            width: 18px !important;
-            height: 18px !important;
-            right: 2px !important;
-            top: 6px !important;
-            opacity: 1 !important;
-        }
-        .select2-results .select2-result-label {
-            padding: 10px 10px !important;
-        }
-        ul.select2-choices:after, .select2-choice:after {
-            content: "";
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            border-top: 8px solid #CBD5D9;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-        }
-        @media only screen and (max-width: 759px) {
-            .mobile-p-0 {
-                padding:0px !important;
-            }
-        }
-        @media only screen and (min-width: 320px) and (max-width: 420px) {
-            .discover-categories a {
-                margin: 8px 8px 8px 8px !important;
-                width: 27% !important;
-                height: 80px !important;
-            }
-        }
-        /* Select 2 css */
+.select2-container-multi, .select-control { width: 100% !important; }
+.select-control { margin-bottom: 30px; }
+.select2-container-multi .select2-choices, .select2-container .select2-choice,  .select-control, .select-control:hover,  .select-control:focus, .select-control:active   {
+     border-radius: 4px !important;
+}
+.select2-search-choice {
+     height: 30px !important; margin: 4px 0 0 4px !important; font-size: 14px !important; font-weight: 600 !important; letter-spacing: 0 !important; line-height: 21px !important; text-align: right !important; color: #ffffff !important; background: linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important; border: 0px solid #9C1F9F !important; padding: .1875rem 1.5rem .1875rem 0.5rem !important;
+}
+.select2-results .select2-result-label { padding: 10px 10px !important; }
+ ul.select2-choices:after,  .select2-choice:after {
+    content: ""; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); border-top: 8px solid #CBD5D9; border-left: 5px solid transparent; border-right: 5px solid transparent;
+}
+ .select2-results { column-count: 2; }
+.select2-results li { padding-right: 0px; vertical-align: middle;display: inline-flex;width: 100%; }
+.select2-results li .select2-match:before {
+     content: "";display: inline-block;position: relative;height: 20px;width: 20px;border: 1px solid #CBD5D9;margin-right: 10px;vertical-align: middle;
+}
+.select2-result-selectable .select2-match:after { background-color: green; }
+
+.select2-search-choice-close {
+    margin-right: 0px !important; float: right !important; margin-left: 4px !important; font-size: 24px !important; font-weight: bold !important; color: #ffffff !important; left: auto !important; 
+	background: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8'?%3e%3csvg width='24px' height='24px' viewBox='0 0 24 24' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3c!-- Generator: Sketch 63.1 (92452) - https://sketch.com --%3e%3ctitle%3eIcon / 24 / Functional / Cross%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cg id='Icon-/-24-/-Functional-/-Cross' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3e%3cpolygon id='Shape' fill='%23ffffff' points='19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12'/%3e%3c/g%3e%3c/svg%3e") no-repeat !important; 
+    background-size: 18px 18px !important; width: 18px !important; height: 18px !important; right: 2px !important; top: 6px !important; opacity: 1 !important;
+}
+@media only screen and (max-width: 759px) {
+    .mobile-p-0 {
+        padding:0px !important;
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 420px) {
+    .discover-categories a {
+        margin: 8px 8px 8px 8px !important;width: 27% !important;height: 80px !important;
+    }
+} 
+/* Select 2 css */
 </style>

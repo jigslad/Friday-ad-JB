@@ -1,9 +1,9 @@
-<div class="choose-cat-block" style="background: #313133; padding: 15px 0 40px;">
+<div class="adul-search-form choose-cat-block" style="background: #313133; padding: 15px 0 40px;">
         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
         {{ form_errors(form) }}
         <div class="row">
             <div class="columns">
-                {{ form_label(attribute(form, 'item__category_id', { 'attr' : {'class':'browse-by-category mt20' } } ) ) }}
+                <div class="browse-by-category mt20">Choose by category</div>
                 <div>
                     <div class="medium-12 columns mobile-p-0" style="padding-left: 0px;">
                         {{ form_widget(attribute(form, 'item__category_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
@@ -13,20 +13,18 @@
                     </div>
                     <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
                         <label style="padding: 10px 10px 10px 0px; color: #ffffff !important;">{{ 'from'|trans({}, 'frontend')}}</label>
-                        {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'form-control select-control'}}) }}
-                        <a href="javascript:void(0);" id="fa_adult_home_page_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-                        <div class="clearfix">
-                            <button class="button xs-btn-1 expand left" type="button" id="fa_adult_home_page_search_item__location_homepage_ok">{{ 'Ok'|trans({}, 'frontend-homepage') }}</button>
-                            <button class="button xs-btn-1 expand right" type="button" id="fa_adult_home_page_search_item__location_cancel">{{ 'Cancel'|trans({}, 'frontend-homepage') }}</button>
+                        <div class="location-col">
+                        {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
+                        <a href="javascript:void(0);" id="fa_adult_home_page_search_item__location_close" class="adul-loc-close ui-autocomplete-close select2-search-choice-close"></a>
                         </div>
-                    </div>
+                     </div>
                 </div>
                 <div id="more_options" style="display: none">
                     <div class="medium-10 columns mobile-p-0" style="padding-left: 0px;">
                         {{ form_widget(attribute(form, 'item_adult__services_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
                     </div>
                     <div class="medium-7 columns mobile-p-0">
-                        {{ form_widget(form.item_adult__independent_or_agency_id, {'attr': {'class': 'form-control select-control'}}) }}
+                        {{ form_widget(form.item_adult__independent_or_agency_id, {'attr': {'class': 'form-control'}}) }}
                     </div>
                     <div class="medium-7 columns mobile-p-0" style="display: inline-flex;">
                         {{ form_widget(attribute(form, 'item_adult__ethnicity_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
@@ -40,3 +38,13 @@
         </div>
         {{ form_end(form) }}
     </div>
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        setDefaultLocatonFromCookie();
+    });
+//]]>
+</script>
+{{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_adult_home_page_search_item__location', 'placeHolder': 'City'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
+ 
+    
