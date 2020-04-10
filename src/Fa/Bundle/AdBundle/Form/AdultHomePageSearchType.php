@@ -154,7 +154,8 @@ class AdultHomePageSearchType extends AbstractType
             JsChoiceType::class,
             array(
                 'choices'     => array_flip($servicesArray),
-                'placeholder' => 'Services',
+                'placeholder' => 'Any Service',
+                'multiple' => true,
             )
         );
         
