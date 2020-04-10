@@ -45,7 +45,7 @@
                                                 {% for k in 0..colCounter[i]-1 %}
                                                     {% if facetIdArray[ctr] is defined %}
                                                         {% set facetId = facetIdArray[ctr] %}
-                                                        {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl({ (block['search_field_name']): facetId},'adult') %}
+                                                        {% set searchResultUrl = container.get('fa_ad.manager.ad_routing').getCustomListingUrl({ (block['search_field_name']): facetId},'adult-services/escorts') %}
                                                         {# {% set searchResultUrl =  path('location_home_page', {'location': entityCacheManager.getEntitySlugById('FaEntityBundle:Location', facetId)}) %} #}
                                                         <a href="{{ searchResultUrl }}">{{ entityCacheManager.getEntityNameById(block['repository'], facetId) }} {# ({{ block['facet'][facetId] }}) #}</a>
                                                     {% endif %}

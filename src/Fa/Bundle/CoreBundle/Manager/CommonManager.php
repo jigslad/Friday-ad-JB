@@ -32,7 +32,7 @@ use ZipArchive;
 class CommonManager
 {
     const COOKIE_DELETED = 'deleted';
-    public static $SeoHardCodeForUrl = ['/bristol/', '/bristol/motors/cars/', '/bristol/for-sale/free-to-collector/', '/swindon/', '/bristol/animals/pets/cats-kittens/', '/bristol/animals/pets/', '/gloucester/', '/bristol/animals/pets/dogs-puppies/', '/bristol/adult/'];
+    public static $SeoHardCodeForUrl = ['/bristol/', '/bristol/motors/cars/', '/bristol/for-sale/free-to-collector/', '/swindon/', '/bristol/animals/pets/cats-kittens/', '/bristol/animals/pets/', '/gloucester/', '/bristol/animals/pets/dogs-puppies/', '/bristol/adult-services/escorts/'];
 
     /**
      * Converts and returns timestamp from given start date string.
@@ -731,7 +731,7 @@ class CommonManager
                 case '/bristol/animals/pets/dogs-puppies/':
                     $seoFieldArray['meta_description'] = 'Dogs and Puppies in Bristol. Find your perfect puppy from private sellers and ethical breeders in the Friday-Ad (formerly Trade It) pets section.';
                     break;
-                case '/bristol/adult/':
+                case '/bristol/adult-services/escorts/':
                     $seoFieldArray['meta_description'] = 'Find Adult Services in Bristol. There are thousands of adult services on Friday-Ad (formerly Trade It) and you can place an ad for free!';
                     break;
             }
