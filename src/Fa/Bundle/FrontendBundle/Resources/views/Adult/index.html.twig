@@ -48,6 +48,8 @@
 {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
     {% set currentDevice = 'T' %}
 {% endif %}
+
+ {% set categoryAdultId = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
     
 {% block body %}
     <div class="{% if currentRoute in {0: 'fa_frontend_homepage', 1: 'location_home_page', 2:'fa_adult_homepage'} %}homepage-hero{% endif %}">
@@ -58,7 +60,7 @@
     </div>
 
     <div id="adult_search_form" style="display: none">
-{#        {{ include('FaFrontendBundle:Adult:homePageAdultSearchForm.html.twig') }}#}
+        {{ include('FaFrontendBundle:Adult:homePageAdultSearchForm.html.twig') }}       
     </div>
     
     <div class="what-u-discover">
@@ -191,6 +193,7 @@
 
 
 {% block scriptbottom %}
+{{ include('FaCoreBundle:Default:blockJs.html.twig') }}
     {% javascripts filter='uglifyjs2' output='bundles/js/compiled/home.js'
         'bundles/facore/js/owl.carousel.min.js'
         'bundles/fafrontend/js/parallax.min.js'
@@ -233,9 +236,11 @@
             $('div.homepage-row:even').addClass('white-bg');
             getHeaderImage();
 
-            $('#fa_adult_home_page_search_item_adult__services_id, .select-control').select2();
-            $('#fa_adult_home_page_search_item__location').select2();
+            $('#fa_top_search_item__category_id').val({{ categoryAdultId }});
 
+            $('#fa_adult_home_page_search_item__category_id, .select-control').select2();
+            $('#fa_adult_home_page_search_item_adult__services_id, .select-control').select2();
+			
             var featuredAdvertisersItemSlider = $("#featured_advertisers_slider");
             featuredAdvertisersItemSlider.owlCarousel({
                 items : 4,
@@ -332,11 +337,11 @@
         }
         //]]>
         function showHideAdvanceSearch() {
-            var x = document.getElementById("adult_search_form");
-            if (x.style.display === "none") {
-                x.style.display = "block";
+            var x = $("#adult_search_form");
+            if (x.is(":visible")) {
+                x.hide();
             } else {
-                x.style.display = "none";
+                x.show();
             }
         }
         var selectedCategory = $("#fa_adult_home_page_search_item__category_id");
@@ -437,8 +442,15 @@
         }
 
     });
+    function setDefaultLocatonFromCookie()
+    {
+        if (checkCookie('location')) {
+            var locationCookie = $.parseJSON(decodeURIComponent(getCookie('location')));
+            $('#fa_adult_home_page_search_item__location').val(locationCookie.location);
+            $('#fa_adult_home_page_search_item__location_autocomplete').val(locationCookie.location_text);
+        }
+    }
     </script>
-    {{ include('FaCoreBundle::jqueryAutoSuggestFieldJs.html.twig', {'field' : '#fa_adult_home_page_search_item__location', 'placeHolder': 'Type postal code or town'|trans, 'route' : 'town_ajax_find_town_by_term', 'displayOnlyTown' : 'true'}) }}
 {% endblock %}
 {% block dimension2 %}
     <script language="javascript" type="text/javascript">

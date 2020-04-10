@@ -297,19 +297,8 @@ class HeaderImageRepository extends EntityRepository
         
         if (count($headeImages)) {
             foreach ($headeImages as $index => $headeImage) {
-                $headerBaseImagePath = $container->get('kernel')->getRootDir().'/../web/';
-                
-                $awsUrl = $headeImage['path'].'/'.$headeImage['file_name'];
-                
-                $fileexistsInAws = 0;
-                if(CommonManager::checkImageExistOnAws($container,$awsUrl)) {
-                    $headerBaseImagePath = $container->getParameter('fa.static.aws.url');
-                    $fileexistsInAws = 1;
-                }
-                
-                $headerImagePath = $headerBaseImagePath. '/'.$headeImage['path'].'/'.$headeImage['file_name'];
-                
-                if (is_file($headerImagePath) || $fileexistsInAws==1) {
+                $headerImagePath = $container->get('kernel')->getRootDir().'/../web/'.$headeImage['path'].'/'.$headeImage['file_name'];
+                if (is_file($headerImagePath)) {
                     $key = '';
                     /* if ($headeImage['town_id']) {
                      $key .= $headeImage['town_id'].'_';

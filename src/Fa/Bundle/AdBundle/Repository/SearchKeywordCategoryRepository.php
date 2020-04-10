@@ -156,4 +156,60 @@ class SearchKeywordCategoryRepository extends EntityRepository
 
         return $keywordsArray;
     }
+    
+    public function getKeywordsArrayByTextCat($term,$catId,$container = null)
+    {
+        $nestedLeafChildrenIds = $this->_em->getRepository('FaEntityBundle:Category')->getNestedChildrenIdsByCategoryId($catId,$container);        
+        $keywords = $this->getBaseQueryBuilder()
+        ->andWhere(self::ALIAS.'.keyword LIKE :term')
+        ->setParameter('term', $term.'%')
+        ->andWhere(self::ALIAS.'.category_id IN (:category_ids)')
+        ->setParameter('category_ids', $nestedLeafChildrenIds)
+        ->orderBy(self::ALIAS.'.search_count', 'desc')
+        ->addOrderBy(self::ALIAS.'.id', 'asc')
+        ->setMaxResults(3)
+        ->getQuery()->getResult();
+        
+        $keywordsArray = array();
+        $keywordIds    = array();
+        $position      = 1;
+        foreach ($keywords as $keyword) {
+            $keywordIds[]    = $keyword->getId();
+            $keywordCategory = explode(' in ', $keyword->getKeyword());
+            $keywordText     = '<b>';
+            for ($i = 0; $i <= (count($keywordCategory) -2); $i++) {
+                $keywordText .= $keywordCategory[$i].' in ';
+            }
+            $keywordText = trim($keywordText, ' in ');
+            $keywordText .= '</b>';
+            
+            if (isset($keywordCategory[count($keywordCategory) -1]) && $keywordCategory[count($keywordCategory) -1]) {
+                $keywordText .= ' in '.$keywordCategory[count($keywordCategory) -1];
+            }
+            
+            $keywordsArray[] = array('id'=> ($keywordCategory[0].'--'.$keyword->getCategoryId()), 'position' => $position, 'text' => $keywordText);
+            $position++;
+        }
+        
+        // Skip above 3 suggestions and find another three suggestion without category.
+        if (count($keywordIds)) {
+            $keywords = $this->getBaseQueryBuilder()
+            ->andWhere(self::ALIAS.'.keyword LIKE :term')
+            ->setParameter('term', $term.'%')
+            ->andWhere(self::ALIAS.'.category_id IS NULL')
+            ->orderBy(self::ALIAS.'.search_count', 'desc')
+            ->addOrderBy(self::ALIAS.'.id', 'asc')
+            ->setMaxResults(3)
+            ->andWhere(self::ALIAS.'.id NOT IN (:keywordIds)')
+            ->setParameter('keywordIds', $keywordIds)
+            ->getQuery()->getResult();
+            
+            foreach ($keywords as $keyword) {
+                $keywordsArray[] = array('id'=> ($keyword->getKeyword().'--'), 'position' => $position, 'text' => '<b>'.$keyword->getKeyword().'</b>');
+                $position++;
+            }
+        }
+        
+        return $keywordsArray;
+    }
 }

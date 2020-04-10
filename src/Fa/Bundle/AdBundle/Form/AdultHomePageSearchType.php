@@ -90,7 +90,7 @@ class AdultHomePageSearchType extends AbstractType
             JsChoiceType::class,
             array(
                 'choices'     => array_flip($this->em->getRepository('FaEntityBundle:Category')->getCategoryArraySimpleById(CategoryRepository::ADULT_ID)),
-                'label'       => 'Choose a category',
+                'label'       => 'Choose by category',
             )
         )
         ->add(
