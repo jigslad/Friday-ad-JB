@@ -155,7 +155,7 @@ class UserCreditUsedRepository extends EntityRepository
         ->groupBy(UserCreditRepository::ALIAS.'.id');
         
         $objResources = $query->getQuery()->getSingleScalarResult();
-        return $objResources['cnt'];
+        return $objResources;
     }
     
     public function getActiveBasicCreditCountForUser($userId)
@@ -170,6 +170,6 @@ class UserCreditUsedRepository extends EntityRepository
         ->groupBy(UserCreditRepository::ALIAS.'.id');
         
         $objResources = $query->getQuery()->getSingleScalarResult();
-        return $objResources['cnt'];
+        return $objResources;
     }
 }
