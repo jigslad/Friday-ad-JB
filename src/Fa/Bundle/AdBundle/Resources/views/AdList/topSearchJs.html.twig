@@ -217,7 +217,7 @@
 {% endif %}
 
 {% if currentRoute in {0: 'fa_adult_homepage'} %}
-    {{ include('FaCoreBundle::jqueryAutoSuggestKeywordFieldJs.html.twig', {'field' : '#fa_top_search_keywords', 'placeHolder': 'Looking for...'|trans({}, 'frontend-homepage'), 'route' : 'search_keyword_ajax_get_keywords_by_cat_json', 'dropdownCssClass': 'keyword-choices category-choices'}) }}
+    {{ include('FaCoreBundle::jqueryAutoSuggestKeywordFieldJs.html.twig', {'field' : '#fa_top_search_keywords', 'placeHolder': 'Looking for...'|trans({}, 'frontend-homepage'), 'route' : 'search_keyword_ajax_get_keywords_by_cat_json', 'dropdownCssClass': 'keyword-choices category-choices','addGtm':'yes'}) }}
 {% else %}
     {{ include('FaCoreBundle::jqueryAutoSuggestKeywordFieldJs.html.twig', {'field' : '#fa_top_search_keywords', 'placeHolder': 'Looking for...'|trans({}, 'frontend-homepage'), 'route' : 'search_keyword_ajax_get_keywords_json', 'dropdownCssClass': 'keyword-choices category-choices'}) }}
 {% endif %}
