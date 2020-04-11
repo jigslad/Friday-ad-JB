@@ -402,6 +402,20 @@
             ga('set', 'dimension9', 'logged in');
         {% endif %}
 
+        $('#adul-hp-adv-srch').on('click', function(){
+			var adulSrchCat = $('#fa_adult_home_page_search_item__category_id option:selected').html();
+		    var adulSrchDist = $('#fa_adult_home_page_search_item__distance option:selected').html();
+		    var adulSrchCity = $('#fa_adult_home_page_search_item__location_autocomplete').val();
+			    
+        	window.dataLayer = window.dataLayer || []
+            dataLayer.push({              
+            'event' : 'ahp-search',
+            'eventCategory':  'Site Search',     
+            'eventAction': 'Adult Homepage Advanced',
+            'eventLabel': adulSrchCat+' : '+adulSrchDist+' : '+adulSrchCity
+            }); 
+        });
+
             ga('send', 'pageview', {'dimension1': defLocationText, 'dimension2':  'Homepage'{% if app.request.get('ti_url') %} ,'dimension8': '{{ app.request.get('ti_url') }}' {% endif %}});
         //]]>
     </script>
