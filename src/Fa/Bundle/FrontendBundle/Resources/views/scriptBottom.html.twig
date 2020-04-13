@@ -40,7 +40,7 @@
         {% endif %}
         customSelectOpenCloseEvents(false);
 
-        $('.fdatepicker').fdatepicker({format: 'dd/mm/yyyy'});
+        $('.fdatepicker').datepicker({format: 'dd/mm/yyyy'});
 
         $('.custom_select').select2({
             dropdownCssClass: 'custom_select_options',
@@ -262,6 +262,90 @@
             }
         }
     }
+
+    $('.select-ctrl').each(function(){
+        var $this = $(this), numberOfOptions = $(this).children('option').length;
+      
+        $this.addClass('select-hidden'); 
+        $this.wrap('<div class="select"></div>');
+        $this.after('<div class="select-styled"></div>');
+
+        var $styledSelect = $this.next('div.select-styled');
+        $styledSelect.text($this.children('option').eq(0).text());
+      
+        var $list = $('<ul />', {
+            'class': 'select-options'
+        }).insertAfter($styledSelect);
+      
+        for (var i = 0; i < numberOfOptions; i++) {
+            $('<li />', {
+                text: $this.children('option').eq(i).text(),
+                rel: $this.children('option').eq(i).val()
+            }).appendTo($list);
+        }
+      
+        var $listItems = $list.children('li');
+      
+        $styledSelect.click(function(e) {
+            e.stopPropagation();
+            $('div.select-styled.active').not(this).each(function(){
+                $(this).removeClass('active').next('ul.select-options').hide();
+            });
+            $(this).toggleClass('active').next('ul.select-options').toggle();
+        });
+      
+        $listItems.click(function(e) {
+            e.stopPropagation();
+            $styledSelect.text($(this).text()).removeClass('active');
+            $this.val($(this).attr('rel'));
+            $list.hide();
+            //console.log($this.val());
+        });
+      
+        $(document).click(function() {
+            $styledSelect.removeClass('active');
+            $list.hide();
+        });
+
+    });
+
+    $(document).ready(function(){
+    	$("form[name='fa_user_half_account_email_only']").submit(function(event) {
+            // Stop form from submitting normally
+            event.preventDefault();
+
+            bindHalfAccountSubmitFormEventEmailOnly('', 'ListingBottom');
+        });
+    	bindFormErrorEvents();
+    });
+
+    function bindHalfAccountSubmitFormEventEmailOnly(ad_id, callFrom)
+    {
+    	blockPage();
+    	$.ajax({
+            type: "POST",
+            url: "{{path('user_half_account_create_email_only_ajax')}}",
+            data: $('form[name="fa_user_half_account_email_only"]').serialize()
+        })
+        .done(function(response) {
+            unblockPage();
+            if (response.success.length && response.user_id) {
+                saveSearchAgent(response.user_id, callFrom);
+                $("#fa_user_half_account_email_only_email").val("");
+            } else {
+                $('#createAlertBlockError').remove();
+                if (response.errorMessage.length) {
+                    $("#fa_user_half_account_email_only_email").addClass("error");
+                    $("<small id='createAlertBlockError' class='error'>"+response.errorMessage+"</span>").insertAfter('#fa_user_half_account_email_only_save');
+                }
+            }
+        });
+    }   
+	$("#search_preferences_link").on('click', function(){
+        $('.search-sliders').toggle();
+    });  
+
+   
 //]]>
 </script>
 {# <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key={{container.getParameter('fa.googlemap.api.key')}}&sensor=true&libraries=adsense"></script> #}

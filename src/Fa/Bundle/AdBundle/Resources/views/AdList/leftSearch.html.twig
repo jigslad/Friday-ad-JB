@@ -136,7 +136,7 @@
 
         <dd class="accordion-navigation keep-shown">
             <div class="content active label-inline">
-                <ul class="white-checkbox search-type crawlable-checkbox" />
+                <ul class="custom-control custom-checkbox search-type crawlable-checkbox" />
                     <li>
                         {% set itemsWithPhoto = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionFacetBySearchParams('id', searchParams|merge({'items_with_photo': 1}), {}, fetch_container_instance(), false, null, null, false, {}, true) %}
                         {{ form_widget(attribute(form, 'items_with_photo')) }}
@@ -152,7 +152,7 @@
         {% if isShopPage is not defined or (isShopPage is defined and not isShopPage) %}
             <dd class="accordion-navigation keep-shown">
                 <div class="content active label-inline">
-                    <ul class="white-checkbox search-type crawlable-checkbox" />
+                    <ul class="custom-control custom-checkbox search-type crawlable-checkbox" />
                         <li>
                             {{ form_widget(attribute(form, 'expired_ads')) }}
                             {{ form_label(attribute(form, 'expired_ads')) }}
@@ -168,8 +168,8 @@
         {% endif %}
     </dl>
 {{ form_end(form) }}
-<div id="left_search_dimension_modal" class="reveal-modal" data-reveal></div>
-<div id="removeSavedSearch" class="reveal-modal tiny" data-reveal>
+<div id="left_search_dimension_modal" class="modal custom-modal"></div>
+<div id="removeSavedSearch" class="modal custom-modal">
     <a class="close-reveal-modal" rel="nofollow" href="javascript:void(0);" onclick="cancleRemoveSearchAgentPopup();">&#215;</a>
     <h5 class="modal-title">
         {{'Stop search alert'|trans({}, 'frontend-my-saved-searches')}}
