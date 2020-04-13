@@ -1,162 +1,154 @@
 <div class="change-category clearfix">
-    <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
-        <div class="media-object-section">
-            <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-paa-fourth-step') }}:</span>
-        </div>
-        <div class="media-object-section">
-            {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
-        </div>
+    <div class="text-left cat-name-wrap" style="display: inline-flex;">
+        <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-paa-fourth-step') }}:</span>
+        {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_first_step', {'is_edit' : 1}) }}');" title="{{ 'Change category'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_first_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change category'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% if ad.title is defined and ad.title %}
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Ad title'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ ad.title }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Ad title'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ ad.title }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change ad title'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change ad title'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if ad.description is defined and ad.description %}
 <div class="change-category clearfix">
-    <div class="clearfix">
-        <div class="desc-col-1">
-            <div class="clearfix">
-                <span class="cat-caption left">{{ 'Description'|trans({}, 'frontend-paa-fourth-step') }}:</span>
-                <div class="paa-desc">
-                    <div id="paa_desc">{{ ad.description|raw }}</div>
-                    <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend') }}</a>
-                    <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend') }}</a>
-               </div>
-            </div>
-        </div>
-        <div class="desc-col-2">
-            <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change description'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
-        </div>
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Description'|trans({}, 'frontend-paa-fourth-step') }}:</span>
+    </div>
+
+    <div id="paa_desc">{{ ad.description|raw }}</div>
+    <a href="javascript:void(0);" class="read-more a-tag" style="display:none;">{{ 'Read more'|trans({}, 'frontend') }}</a>
+    <a href="javascript:void(0);" class="read-less a-tag" style="display:none;">{{ 'Read less'|trans({}, 'frontend') }}</a>
+
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change description'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if ad.price is defined and ad.price %}
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Sale price'|trans({}, 'frontend-paa-fourth-step') }}:</span>&pound;{{ ad.price}}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Sale price'|trans({}, 'frontend-paa-fourth-step') }}:</span>&pound;{{ ad.price}}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change price'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right cat-name-wrap">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change price'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if adMotorsMetaData.reg_no is defined and adMotorsMetaData.reg_no %}
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Registration'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.reg_no }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Registration'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.reg_no }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change registration'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right cat-name-wrap">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change registration'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if adMotors.manufacturer_id is defined and adMotors.manufacturer_id %}
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Manufacturer'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.manufacturer_id) }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Manufacturer'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.manufacturer_id) }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right cat-name-wrap">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if adMotorsMetaData.manufacturer is defined and adMotorsMetaData.manufacturer %}
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Manufacturer'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.manufacturer }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Manufacturer'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.manufacturer }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right cat-name-wrap">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if adMotors.make_id is defined and adMotors.make_id %}
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Make'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.make_id) }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Make'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.make_id) }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change make'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right cat-name-wrap">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change make'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if adMotorsMetaData.make is defined and adMotorsMetaData.make %}
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Make'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.make }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Make'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.make }}
     </div>
-    <div class="right">
+    <div class="text-right edit-category">
         <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change make'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if adMotors.model_id is defined and adMotors.model_id %}
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Model'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.model_id) }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Model'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.model_id) }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if adMotorsMetaData.model is defined and adMotorsMetaData.model %}
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Model'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.model }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Model'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.model }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change model'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change model'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if adMotors.part_of_vehicle_id is defined and adMotors.part_of_vehicle_id %}
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Part of vehicle'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.part_of_vehicle_id) }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Part of vehicle'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.part_of_vehicle_id) }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change part of the vehicle'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change part of the vehicle'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if adMotorsMetaData.part_of_vehicle is defined and adMotorsMetaData.part_of_vehicle %}
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Part of vehicle'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.part_of_vehicle }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Part of vehicle'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.part_of_vehicle }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change part of the vehicle'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change part of the vehicle'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if adMotors.part_manufacturer_id is defined and adMotors.part_manufacturer_id %}
 <div class="change-category clearfix">
-    <div class="left">
-        <span class="cat-caption">{{ 'Part manufacturer'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.part_manufacturer_id) }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Part manufacturer'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', adMotors.part_manufacturer_id) }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change part manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change part manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
 {% if adMotorsMetaData.part_manufacturer is defined and adMotorsMetaData.part_manufacturer %}
 <div class="change-category clearfix">
-    <div class="left">
+    <div class="text-left cat-name-wrap">
         <span class="cat-caption">{{ 'Part manufacturer'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ adMotorsMetaData.part_manufacturer }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change part manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change part manufacturer'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
@@ -174,12 +166,12 @@ adMotorsMetaData.top_speed is defined or adMotorsMetaData.co2_emissions is defin
 
 <div class="change-category">
     <div class="clearfix">
-        <div class="left cat-name-wrap">
-            <span class="cat-caption">{{ '%vehicle% details'|trans({'%vehicle%' : rootMotorsCategoryName|slice(0, ((rootMotorsCategoryName|length) -1))}, 'frontend-paa-fourth-step') }}</span>
+        <div class="text-left cat-name-wrap">
+            <span>{{ '%vehicle% details'|trans({'%vehicle%' : rootMotorsCategoryName|slice(0, ((rootMotorsCategoryName|length) -1))}, 'frontend-paa-fourth-step') }}</span>
         </div>
-        <div class="right">
+        <div class="text-right edit-category">
             <a href="javascript:void(0)" title="{{ 'Show details'|trans({}, 'frontend-paa-fourth-step') }}" id="show_all_details_link" >{{ 'Show'|trans({}, 'frontend-paa-fourth-step') }}</a> | 
-            <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change details'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+            <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change details'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
         </div>
     </div>
     <div id="all_details" style="display:none">
