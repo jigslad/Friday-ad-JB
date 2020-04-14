@@ -151,8 +151,7 @@ class UserCreditUsedRepository extends EntityRepository
         ->andWhere(UserCreditRepository::ALIAS.'.user = '.$userId)
         ->andWhere(UserCreditRepository::ALIAS.'.status = 1')
         ->andWhere(self::ALIAS.'.status = 1')
-        ->andWhere('FIND_IN_SET(6, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0 or FIND_IN_SET(3, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0')
-        ->groupBy(UserCreditRepository::ALIAS.'.id');
+        ->andWhere('FIND_IN_SET(6, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0 or FIND_IN_SET(3, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0');
         
         $objResources = $query->getQuery()->getSingleScalarResult();
         return $objResources;
@@ -166,8 +165,7 @@ class UserCreditUsedRepository extends EntityRepository
         ->andWhere(UserCreditRepository::ALIAS.'.user = '.$userId)
         ->andWhere(UserCreditRepository::ALIAS.'.status = 1')
         ->andWhere(self::ALIAS.'.status = 1')
-        ->andWhere('FIND_IN_SET(1, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0')
-        ->groupBy(UserCreditRepository::ALIAS.'.id');
+        ->andWhere('FIND_IN_SET(1, '.UserCreditRepository::ALIAS.'.package_sr_no) > 0');
         
         $objResources = $query->getQuery()->getSingleScalarResult();
         return $objResources;
