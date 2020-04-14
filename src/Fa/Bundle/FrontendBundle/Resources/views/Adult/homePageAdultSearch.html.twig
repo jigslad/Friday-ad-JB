@@ -17,7 +17,7 @@
                                 <tr>
                                     <td class="all-cat-select" style="display:none">{{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}</td>
                                     <td class="looking-for relative">
-                                        <input type="text" id="fa_top_search_keywords" name="fa_top_search[keywords]" required="required" class="white-field mb0" placeholder="Looking for..." />
+                                        {{ form_widget(attribute(form, 'keywords'), {'attr': {'class':'white-field mb0','placeholder':'Looking for...' }}) }}                                        
 				                        <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
                                     </td>
                                     <td class="search-btn"><button class="button secondary-btn-1 mb0 expand" id="adul-top-srch-btn" type="submit">{{'Search'|trans({}, 'frontend-homepage')}}</button></td>
