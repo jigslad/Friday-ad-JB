@@ -82,11 +82,11 @@
             	<div class="browse-by-category large-19 discover-adult-categories ">Browse by category</div>
                 {# {% cache 'home|page|'~locationId~'front/home_page_discover' 1800 %} #}
                 <div class="discover-categories large-20 discover-adult-categories text-center">
-                    {% set linkParams = { 'item__location': locationId, 'item__category_id': adultContactId } %}
-                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-adult-contacts ga-ahpDiscover">{{'Adult Contacts'|trans({}, 'frontend-homepage')}}</a>
-
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': escortsId } %}
                     <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-escorts ga-ahpDiscover">{{'Escorts'|trans({}, 'frontend-homepage')}}</a>
+                	
+                    {% set linkParams = { 'item__location': locationId, 'item__category_id': adultContactId } %}
+                    <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-adult-contacts ga-ahpDiscover">{{'Adult Contacts'|trans({}, 'frontend-homepage')}}</a>
 
                     {% set linkParams = { 'item__location': locationId, 'item__category_id': fetishRoleplayId } %}
                     <a href="{{ container.get('fa_ad.manager.ad_routing').getListingUrl(linkParams) }}" class="discover-fetish-and-roleplay ga-ahpDiscover">{{'Fetish and Role Play'|trans({}, 'frontend-homepage')}}</a>
@@ -236,6 +236,7 @@
         var headerParallax;
         $(document).ready(function() {
             $('div.homepage-row:even').addClass('white-bg');
+            $('#fa_top_search_keywords').css('visibility','hidden');
             getHeaderImage();
 
             $('#fa_top_search_item__category_id').val({{ categoryAdultId }});
@@ -243,14 +244,14 @@
             
             var featuredAdvertisersItemSlider = $("#featured_advertisers_slider");
             featuredAdvertisersItemSlider.owlCarousel({
-            	items : 3,
-                itemsCustom:[[320, 2], [568, 3], [641, 2], [960, 3]],
+            	items : 4,
+                itemsCustom:[[320, 2], [568, 3], [768, 3], [1024, 4]],
                 navigation: true,
                 pagination:false,
                 responsiveRefreshRate : 100,
                 navigationText: ['<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-prev.svg" alt="" />', '<img src="https://fmtinew.friday-ad.co.uk/bundles/fafrontend/images/small-slider-next.svg" alt="" />'],
                 lazyLoad: true,
-                scrollPerPage: true
+                scrollPerPage: true,
             });
 
             var featuredItemSlider = $("#featured-top-item-slider");
