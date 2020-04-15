@@ -202,7 +202,7 @@ class LandingPageCarSearchType extends AbstractType
                 'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
                 'placeholder' => $defDistance,
                 'data' => $defDistance,
-                'attr'    => array('class' => 'fa-select-white')
+                'attr'    => array('class' => 'select-styled')
             )
         );
     }

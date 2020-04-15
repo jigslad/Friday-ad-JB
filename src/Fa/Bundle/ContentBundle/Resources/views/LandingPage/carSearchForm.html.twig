@@ -6,36 +6,46 @@
 {{ form_errors(form) }}
 
 <div class="landing-divider find-car">
-    <div class="row">
-        <div class="large-8 columns">
-            {{ form_label(attribute(form, 'item__make_id')) }}
-            <div class="white-select car-lading-field">{{ form_widget(attribute(form, 'item__make_id')) }}</div>
-        </div>
-        <div class="large-8 columns">
-            <div class="car-budget car-mid-column">
-                <label>{{ 'My budget is from'|trans({}, 'frontend-landing-page')}}</label>
-                <ul class="budget-box clearfix">
-                    <li class="budget-field">
-                        <span>&pound;</span>{{ form_widget(form.item__price_from, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
-                    </li>
-                    <li class="budget-to-caption">{{ 'to'|trans({}, 'frontend')}}</li>
-                    <li class="budget-field">
-                        <span>&pound;</span>{{ form_widget(form.item__price_to, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
-                    </li>
-                </ul>
+    <div class="container">
+        <div class="row mt20 mb20">
+            <div class="col-md-7 col-lg-8">
+                {{ form_label(attribute(form, 'item__make_id')) }}
+                <div class="mb20">
+                    <div class="select">
+                        {{ form_widget(attribute(form, 'item__make_id')) }}
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="large-8 columns">
-            <div class="car-distance car-last-column">
-                <label>{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-landing-page')}}</label>
-                <ul class="clearfix">
-                    <li class="miles-col white-select">{{ form_widget(form.item__distance) }}</li>
-                    <li class="from-col">{{ 'from'|trans({}, 'frontend')}}</li>
-                    <li class="location-col">
-                        {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
-                        <a href="javascript:void(0);" id="fa_landing_page_car_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-                    </li>
-                </ul>
+            <div class="col-md-8 col-lg-8">
+                <label>{{ 'My budget is from'|trans({}, 'frontend-landing-page')}}</label>
+                <div>
+                    <ul class="budget-box clearfix d-inline-flex f-width">
+                        <li class="budget-field">
+                            <span>&pound;</span>{{ form_widget(form.item__price_from, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
+                        </li>
+                        <li class="budget-to-caption">{{ 'to'|trans({}, 'frontend')}}</li>
+                        <li class="budget-field">
+                            <span>&pound;</span>{{ form_widget(form.item__price_to, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9 col-lg-8">
+                <label class="required">{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-landing-page')}}</label>
+                <div>
+                    <ul class="budget-box clearfix d-inline-flex f-width">
+                        <li class="budget-field">
+                            <div class="select">
+                                {{ form_widget(form.item__distance) }}
+                            </div>
+                        </li>
+                        <li class="budget-to-caption">{{ 'from'|trans({}, 'frontend')}}</li>
+                        <li >
+                            {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
+                            <a href="javascript:void(0);" id="fa_landing_page_car_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -71,14 +81,14 @@
         <div id="more_options" style="display:none">
             <div class="white-select">
                 <div class="row">
-                    <div class="large-8 columns">
+                    <div class="col-md-7 col-lg-8">
                         <div class="car-lading-field">
                             {{ form_label(attribute(form, 'item__model_id')) }}
                             {{ form_widget(attribute(form, 'item__model_id')) }}
                         </div>
                     </div>
 
-                    <div class="large-8 columns">
+                    <div class="col-md-7 col-lg-8">
                         <div class="options-mid-column">
                             <div class="car-lading-field2">
                                 {{ form_label(attribute(form, 'keywords')) }}
@@ -87,7 +97,7 @@
                         </div>
                     </div>
 
-                    <div class="large-8 columns">
+                    <div class="col-md-7 col-lg-8">
                         <div class="options-last-column">
                             {{ form_label(attribute(form, 'item_motors__mileage_range')) }}
                             {{ form_widget(attribute(form, 'item_motors__mileage_range')) }}
@@ -96,14 +106,14 @@
                 </div>
 
                 <div class="row">
-                    <div class="large-8 columns">
+                    <div class="col-md-7 col-lg-8">
                         <div class="car-lading-field">
                             {{ form_label(attribute(form, 'item_motors__transmission_id')) }}
                             {{ form_widget(attribute(form, 'item_motors__transmission_id')) }}
                         </div>
                     </div>
 
-                    <div class="large-8 columns">
+                    <div class="col-md-7 col-lg-8">
                         <div class="options-mid-column">
                             <div class="car-lading-field2">
                                 {{ form_label(attribute(form, 'item_motors__colour_id')) }}
@@ -112,7 +122,7 @@
                         </div>
                     </div>
 
-                    <div class="large-8 columns">
+                    <div class="col-md-7 col-lg-8">
                         <div class="options-last-column">
                             {{ form_label(attribute(form, 'item_motors__fuel_type_id')) }}
                             {{ form_widget(attribute(form, 'item_motors__fuel_type_id')) }}
