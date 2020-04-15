@@ -344,29 +344,6 @@
 {% endif %}          
 
 {% block body %}
-<style>
-.get_online_decision .apply-new-left img.logo_img { height:60px !important; }
-.details-img-icons { right: 1px !important; bottom: 0px !important;}
-.vif-overlay { bottom: 0px !important;z-index:1 }
-.sticky-finance-btn { bottom: 0px !important;}
-#big-image-slider .owl-item .item { position:relative; }
-.photos-block { position:relative; }
-.finance-btn { bottom:30px; z-index:2 !important }
-@media only screen and (min-width: 641px) and (max-width: 759px){	
-	.finance-btn:before { background:transparent !important;right: -14px !important; }
-	
-	.finance-btn {
-	    position: absolute;
-	    background:transparent !important;
-	    color: #9bcc21 !important;
-	}
-}
-
-@media only screen and (min-width:320px) and (max-width:640px) {
-	.get_online_decision .mobile-logo-button img.logo_img { height:48px !important; }
-}
-</style>
-
 {% set imageZoomeZoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_AD_DETAIL_IN_IMAGE_ZOOM') %}
 {% set imageZoomBannerExist = false %}
 {% if (imageZoomeZoneId in bannersArray|keys) %}
@@ -463,12 +440,12 @@
 {% endif %}
 
 <div class="breadcrumb-area">
-    <div class="row">
-        <div class="columns">
-            <div class="breadcrumb details-breadcrumb">
-                <ul class="clearfix">
+	<div class="container">
+	    <div class="row">
+	        <div class="col-md-24">
+                <ul class="breadcrumb details-breadcrumb">
                     {% if app.session.has('back_to_search_url') %}
-                        <li><a href="{{app.session.get('back_to_search_url')}}" class="back-link">{{'Back to search results'|trans({}, 'frontend-show-ad')}}</a></li>
+                    <li><a href="{{app.session.get('back_to_search_url')}}" class="back-link">{{'Back to search results'|trans({}, 'frontend-show-ad')}}</a></li>
                     {% endif %}
                     <li class="hide-for-small-only {% if not app.session.has('back_to_search_url') %}breadcrumb-full{% endif %}">
                         <a href="{% if location_id and location_slug and location_id is not null and location_slug is not null and location_id != constant('Fa\\Bundle\\EntityBundle\\Repository\\LocationRepository::COUNTY_ID') %} {{ path('location_home_page', {'location': location_slug}) }} {% else %}{{ path('fa_frontend_homepage') }} {% endif %}">{{'Home'|trans({}, 'frontend-show-ad')}}</a>
@@ -487,14 +464,14 @@
                             <span>{{attribute(adDetail, constant(solrMapping ~ 'TITLE'))}}</span>
                         {% endif %}
                     </li>
-                </ul>
-            </div>
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_IN_HEADER') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_IN_HEADER_TABLET') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
-        </div>
-    </div>
+				</ul>
+			   {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_IN_HEADER') %}
+               {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+               {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_IN_HEADER_TABLET') %}
+               {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}					
+			</div>
+		</div>
+	</div>
 </div>
 
 {% if isSoldExpiredAdFlag %}
@@ -503,12 +480,32 @@
     </div>
 {% endif %}
 
+<div class="details-wrapper">
+    <div class="container">
+        <div class="row">
+        	<div class="col-md-16">
+        		{% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
+                {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
+        		<p class="listed-date d-block d-md-none">
+            		{% if attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT')) is defined %}
+                        <span class="float-left"><span class="ago-icon">ago</span>{{attribute(adDetail, constant(solrMapping ~ 'PUBLISHED_AT'))|time_ago_in_words}}</span>
+                    {% endif %}
+                    {% if allowAdEdit is defined and allowAdEdit %}
+                        <span class="float-right"><a id ="edit_advert_link1" href="javascript:void(0);" class="edit-advert mt10">{{ 'Edit Advert'|trans({}, 'frontend-show-ad') }}</a></span>
+                    {% endif %}
+                </p>
+                
+        	</div>
+        	<div class="col-md-8">
+        	</div>
+		</div>
+    </div>
+</div>
+
 <div class="banner-wrapper clearfix">
 
     <div class="row relative details-wrapper banner-mid-column">
     	<div class="left-banner">
-            {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_MARGIN_LEFT') %}
-            {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId, 'otherParams':{'ad':adDetail}}) }}
         </div>
         <div class="">
             <div class="">

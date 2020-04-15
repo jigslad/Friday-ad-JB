@@ -897,3 +897,242 @@ footer {
   }
 }
 
+/* Ad Detail Page */
+.ad-detail .breadcrumb-area{
+  background: $form-bg-color;
+  border-bottom: 1px solid $form-border-color;
+  border-top: 1px solid $form-border-color;
+}
+.details-wrapper {
+  .detail-head {
+    font-family: $font-family-secondary;
+    color: $dark-gray;
+  }
+  .detail-location a {
+    color: $common-text-color;
+    &:hover, &:focus {
+      color: $common-text-color;
+    }
+  }
+  .report {
+    color: $white;
+    background: $form-text-color url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2217%22%20height%3D%2216%22%20viewBox%3D%22-1409%20463.9%2017%2016%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3Bstroke%3A%23FFFFFF%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%09.st1%7Bfill%3A%23D8D8D8%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Ereport%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-815.000000%2C%20-518.000000%29%22%3E%3Cg%20transform%3D%22translate%28-1.000000%2C%20272.000000%29%22%3E%3Cg%20transform%3D%22translate%28184.000000%2C%2076.000000%29%22%3E%3Cg%20transform%3D%22translate%281.000000%2C%20158.000000%29%22%3E%3Cg%20transform%3D%22translate%28625.000000%2C%208.000000%29%22%3E%3Cg%20transform%3D%22translate%286.000000%2C%204.000000%29%22%3E%3Cg%20transform%3D%22translate%280.923077%2C%200.307692%29%22%3E%3Cpolygon%20class%3D%22st0%22%20points%3D%22-1401.4%20464.6%20-1393.9%20478.6%20-1408.9%20478.6%20%22/%3E%3Crect%20x%3D%22-1402.1%22%20y%3D%22466.9%22%20class%3D%22st1%22%20width%3D%221.6%22%20height%3D%227.4%22/%3E%3Crect%20x%3D%22-1402.1%22%20y%3D%22475.8%22%20class%3D%22st1%22%20width%3D%221.6%22%20height%3D%221.5%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat 6px 4px;
+  }
+}
+
+
+
+.save-item-btn, .saved-item-btn {
+    background: $white;
+    border: 1px solid $form-border-color;
+    color: $form-text-color;
+}
+.saved-item-btn, 
+.saved-item-btn:hover, 
+.saved-item-btn:focus, 
+.save-item-btn:hover, 
+.save-item-btn:focus {
+    border-color: $secondary-color;
+    color: $secondary-color;
+}
+.detail-tabpart-2 {
+  .custom-tabs .nav-link {
+    background: $white;
+  }
+  .tab-content {
+    background: $white;
+  }
+  .details-info {
+    border: 1px solid $common-bg-color;
+    background: $common-bg-color;
+    li {
+      &:nth-child(2n) .detail-text {
+        background: $form-bg-color;
+      }
+      &:nth-child(2n+1) .detail-text {
+        background: $common-bg-color;
+      }
+      .detail-text {
+        a {
+          color: $secondary-color;
+        }
+        &:first-child {
+          color: $form-text-color;
+        }
+        &:last-child {
+          border-left: 1px solid $white;
+        }
+      }
+    }
+  }
+}
+.nimber-box-bdr {
+    background: $form-bg-color;
+    border: 1px solid $form-border-color;
+}
+.nimber-text {
+    color: $common-text-color;
+}
+.nimber-text a {
+	color: $secondary-color;
+}
+.ad-detail .details-similar-item {
+    border-top: 1px solid $white;
+    box-shadow: inset 0 1px 0 $form-border-color;
+}
+.details-similar-item-title {
+	font-family: $font-family-secondary;
+	color: $dark-gray;
+}
+#similar-item-slider {
+  .list-dimensions {
+    color: $form-text-color;
+  }
+  .list-price {
+    color: $secondary-color;
+    font-family: $font-family-secondary;
+  }
+  .list-hr-ago {
+    color: $form-text-color;
+  }
+}
+/* Right Block */
+.ad-detail {
+  .detail-right-pane {
+    border: 1px solid $form-border-color;
+    background: $white;
+  }
+  .listed-date {
+    color: $form-text-color;
+  }
+  .item-price {
+    color: $secondary-color;
+  }
+  .person-collection, .pvt-seller-cap span {
+    background: $white;
+    border: 1px solid $form-border-color;
+    font-family: $font-family-default;
+    color: $form-text-color;
+  }
+  .cont-seller-btn {
+    background: $primary-color !important;
+    border: 1px solid $primary-h-color !important;
+    font-family: $font-family-secondary;
+    color: $white;
+    &:hover {
+      background: $primary-h-color !important;
+      border: 1px solid $primary-h-color !important;
+      color: $white !important;
+    }
+  }
+  .pvt-seller-box {
+    border: 1px solid $form-border-color;
+    background: $form-bg-color;
+  }
+  .pvt-seller-cap {
+    background: $common-text-color;
+    border-bottom: 1px solid $form-border-color;
+  }
+  .pvt-seller-img {
+    background: $white;
+  }
+  .pvt-seller-info {
+    h2 {
+      color: $dark-gray;
+    }
+  }
+  .seller-location {
+    .posting-year {
+      border-top: 2px solid $form-border-color;
+      border-bottom: 2px solid $form-border-color;
+      color: $form-text-color;
+    }
+  }
+  .create-alert {
+    background: $common-bg-color url("https://www.friday-ad.co.uk/bundles/fafrontend/images/alert-illustration.svg?v=1") no-repeat center 33px;
+    border: 1px solid $form-border-color;
+  }
+  #contactSellerModal .contact-box, #profilePageContactUserModal .contact-box {
+    background: $common-bg-color;
+  }
+  #contactSellerModal .contact-box-2 span span, #profilePageContactUserModal .contact-box-2 span span {
+    color: $secondary-color;
+  }
+}
+.details-top-banner {
+  border: 1px solid $form-border-color;
+  h3 {
+    color: $dark-gray;
+  }
+}
+
+.detail-location a {
+  color: $common-text-color;
+  &:hover, &:focus {
+    color: $common-text-color;
+  }
+}
+
+.details-top-banner {
+  .item-price {
+    color: $secondary-color;
+  }
+}
+$change-width: 100%;
+// height sizes fixed
+.photo-panel-in {
+    .all {
+        width: $change-width;
+        .slider-photo {            
+            background: $form-border-color;            
+        }
+    }
+}
+.slider-zoom-photo {
+    background: $form-border-color;
+}
+.zoomphotoModal .close, .zoomphotoModal .close:hover, .zoomphotoModal .close:focus {
+  color: $white;
+}
+
+/* Landing Page */
+.landing-header h1 {
+    color: $white;
+    font-family: $font-family-secondary;
+}
+.intro-text {
+    font-family: $font-family-secondary;
+    color: $white;
+}
+.intro-text .item-count {
+    color: $secondary-color;
+}
+.explore-price {
+    font-family: $font-family-secondary;
+    color: $secondary-color;
+}
+.homepage-more-items {
+    background: $white;
+    border: 1px solid $form-border-color;
+}
+.landing-divider {
+    border-bottom: solid 1px $form-border-color;
+    box-shadow: 0 1px 0 $white;
+}
+.border-botttom {
+    border-bottom: 1px solid $form-border-color;
+}
+// For sale
+.border-botttom {
+    border-bottom: 1px solid $form-border-color;
+}
+// Property
+.find-property .capsule-links a {
+    color: $white;
+    background: $form-text-color;
+}
+.capsule-links a:hover, .capsule-links a.active {
+    background: $secondary-color;
+}
+
+

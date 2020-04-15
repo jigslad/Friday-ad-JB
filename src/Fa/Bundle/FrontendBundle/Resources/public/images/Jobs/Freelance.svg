@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="112px" height="112px" viewBox="0 0 112 112" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Badge / Jobs / Normal / Freelance</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="11.209628%" x2="252.959821%" y2="208.214498%" id="linearGradient-1">
+            <stop stop-color="#A8DC28" offset="0%"></stop>
+            <stop stop-color="#31C5F2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Badge-/-Jobs-/-Normal-/-Freelance" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Badge-/-z.Base-/-Large">
+            <g id="Badge-/-z.Base-/-Shapes-/-Large" fill="#FFFFFF" fill-rule="evenodd" stroke="#CBD5D9" stroke-width="1">
+                <rect id="Rectangle" x="0.5" y="0.5" width="111" height="111" rx="4"></rect>
+            </g>
+            <text id="Category-name" font-family="Poppins-SemiBold, Poppins" font-size="14" font-weight="500" fill="#313133">
+                <tspan x="20.972" y="81">Freelance</tspan>
+            </text>
+            <g id="Icon-/-Category-/-Jobs-/-Freelance" transform="translate(32.000000, 21.000000)" fill="url(#linearGradient-1)" fill-rule="evenodd">
+                <path d="M43.4238067,4.24303777 C45.1557988,3.59354073 46.9802602,5.00335183 46.5307737,6.79656666 L46.5307737,6.79656666 L39.0709242,43.2372954 C38.6331064,44.7696577 36.852694,45.4373123 35.4940899,44.5308474 L35.4940899,44.5308474 L24.2904,36.5424 L19.1908249,41.1220331 C18.0447951,42.077058 16.524787,41.7327837 15.723507,40.5685547 L15.723507,40.5685547 L15.623158,40.4120881 C15.507946,40.1816641 15.4417301,39.9462296 15.4108847,39.6994668 C15.4012067,39.6220427 15.3955535,39.5572773 15.3923199,39.4858571 L15.3923199,39.4858571 L15.388272,39.2323185 L15.4045961,39.0323761 L15.4432597,38.7941005 L10.6092597,28.3311005 L1.77524369,25.3173138 C-0.15957942,24.6723728 -0.298251803,22.1186635 1.35390342,21.1396838 L1.50903261,21.0551207 L1.60150639,21.0135459 Z M35.6904,13.9368 L13.0822597,27.8051005 L16.1552597,34.4561005 L16.6512,31.44 L16.6546154,31.3969798 C16.6979903,30.9630183 16.8923816,30.5674683 17.2266476,30.1911632 L17.2266476,30.1911632 L17.3784356,30.031012 L35.6904,13.9368 Z" id="Combined-Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>
