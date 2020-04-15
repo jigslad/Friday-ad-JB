@@ -89,7 +89,13 @@
         {% set setBodyCls = setBodyCls ~' ad-list-block' %}
     {% elseif (currentRoute is defined and currentRoute == 'ad_detail_page' ) %}
     	{% set addBodyClass = 1 %}
-        {% set setBodyCls = setBodyCls ~' ad-detail' %}    
+        {% set setBodyCls = setBodyCls ~' ad-detail' %}  
+    {% elseif (currentRoute is defined and (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step'})) %}
+        {% set addBodyClass = 1 %}
+        {% set setBodyCls = setBodyCls ~' paa-block' %}
+    {% elseif (currentRoute is defined and currentRoute == 'landing_page_category' ) %}
+    	{% set addBodyClass = 1 %}
+        {% set setBodyCls = setBodyCls ~' landing-block' %}   
     {% endif %}
 
     <title>{% block title %}{% if blockPageTitle %}{{blockPageTitle|raw}}{% else %}{{'Friday-Ad'|trans}}{% endif %}{% endblock %}</title>
