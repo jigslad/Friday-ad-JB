@@ -10,7 +10,7 @@
     {% set categoryId = ad.category.id %}
     {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
     <div class="text-right edit-category">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_first_step', {'is_edit' : 1}) }}');" title="{{ 'Change category'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_first_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change category'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% if ad.type.id is defined and ad.type.id %}
@@ -19,7 +19,7 @@
         <span>{{ 'Advertised as'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', ad.type.id) }}
     </div>
     <div class="text-right edit-category">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change ad type'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change ad type'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
@@ -28,7 +28,7 @@
         <span>{{ 'Ad title'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ ad.title }}
     </div>
     <div class="text-right edit-category">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change ad title'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change ad title'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 <div class="change-category">
@@ -39,7 +39,7 @@
     <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend') }}</a>
     <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend') }}</a>#}
     <div class="text-right edit-category">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change description'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change description'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% if ad.price is defined and ad.price %}
@@ -53,7 +53,7 @@
         {% endif %}
     </div>
     <div class="text-right edit-category">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change price'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change price'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 {% endif %}
