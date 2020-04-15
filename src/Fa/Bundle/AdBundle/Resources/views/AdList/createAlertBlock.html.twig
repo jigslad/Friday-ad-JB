@@ -7,98 +7,56 @@
 {% elseif mobileDetectManager.isMobile() and mobileDetectManager.isTablet() %}
     {% set currentDevice = 'T' %}
 {% endif %}
-<div class="listing alert-block">
-    <div class="clearfix">
-        <div class="list-col-1">
-            <div class="list-img">
-                <img src="{{ asset_url('fafrontend/images/alert-illustration.svg') }}" alt="alert-illustration" />
-            </div>
+<div class="media listing alert-block">
+    <div class="media-left align-self-center">
+        <div class="list-img">
+            <img class="img-responsive" src="{{ asset_url('fafrontend/images/alert-illustration.svg') }}" alt="alert-illustration" />
         </div>
-        <div class="list-col-2">
-            <div class="clearfix">
-                <h3 class="hide-for-small-only list-title">
-                    {{ "Can't find what you're looking for?"|trans({}, 'frontend-create-alert-block')}}
-                </h3>
-                <h5 class="show-for-small-only list-title">
-                    {{ "Can't find what you're looking for?"|trans({}, 'frontend-create-alert-block')}}
-                </h5>
-            </div>
-            <div class="list-desc  hide-for-small-only">
-                {{ 'Get new email alerts for new ads matching this search:'|trans({}, 'frontend-create-alert-block')}}
-            </div>
-            <div class="list-dimensions hide-for-small-only">
-                {% set searchParams = {} %}
-                {% set searchResultVariables = get_variables('searchResult') %}
-                {% if searchResultVariables.searchAgentData is defined %}
-                    {% set searchAgentCriteria = searchResultVariables.searchAgentData %}
-                    {% if searchAgentCriteria['search'] is defined %}
-                        {% set searchParams = searchParams|merge(searchAgentCriteria['search']) %}
-                    {% endif %}
-                    {% if searchAgentCriteria['sorter'] is defined %}
-                        {% set searchParams = searchParams|merge(searchAgentCriteria['sorter']) %}
-                    {% endif %}
-
-                    {% set displayCriteriaArray = userSearchAgentRepository.getSearchAgentDisplayCriteriaArray(searchParams, container) %}
-
-                    {% for displayCriteria in displayCriteriaArray %}
-                        <span>{{ displayCriteria }}</span>
-                    {% endfor %}
+    </div>
+    <div class="media-body">
+        <h3 class="list-title">
+            {{ "Can't find what you're looking for?"|trans({}, 'frontend-create-alert-block')}}
+        </h3>
+        <div class="clearfix"></div>    
+        <div class="list-desc clearfix d-none d-md-block">
+            {{ 'Get new email alerts for new ads matching this search:'|trans({}, 'frontend-create-alert-block')}}
+        </div>
+        <div class="list-dimensions d-none d-md-block">
+            {% set searchParams = {} %}
+            {% set searchResultVariables = get_variables('searchResult') %}
+            {% if searchResultVariables.searchAgentData is defined %}
+                {% set searchAgentCriteria = searchResultVariables.searchAgentData %}
+                {% if searchAgentCriteria['search'] is defined %}
+                    {% set searchParams = searchParams|merge(searchAgentCriteria['search']) %}
                 {% endif %}
-            </div>
-            <div class="clearfix notify-me opened">
-
-            {% if (container.has('security.authorization_checker') and container.get('security.authorization_checker').isGranted("IS_AUTHENTICATED_REMEMBERED")) %}
-                    {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0', 'onclick': "return saveSearchAgent('', 'ListingBottom');"}}) }}
-            {% else %}
-                {% if currentDevice == 'M' %}
-                    {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0', 'onclick': "return createHalfAccount('', 'ListingBottom');"}}) }}
-                {% else %}
-                    {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
-                    {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
-                        {{ form_errors(form) }}
-                        <div style="display:none">{{ form_row(form.email_alert) }}{{ form_row(form.third_party_email_alert) }}</div>
-                        {{ form_widget(form.email, {'attr': {'placeholder': 'Enter your email address', 'maxlength': '255'} }) }}
-                        {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0'}}) }}
-                    {{ form_end(form) }}
+                {% if searchAgentCriteria['sorter'] is defined %}
+                    {% set searchParams = searchParams|merge(searchAgentCriteria['sorter']) %}
                 {% endif %}
+
+                {% set displayCriteriaArray = userSearchAgentRepository.getSearchAgentDisplayCriteriaArray(searchParams, container) %}
+
+                {% for displayCriteria in displayCriteriaArray %}
+                    <span>{{ displayCriteria }}</span>
+                {% endfor %}
             {% endif %}
-            </div>
+        </div>
+        <div class="input-group mb-3 notify-me">
+
+        {% if (container.has('security.authorization_checker') and container.get('security.authorization_checker').isGranted("IS_AUTHENTICATED_REMEMBERED")) %}
+                {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0', 'onclick': "return saveSearchAgent('', 'ListingBottom');"}}) }}
+        {% else %}
+            {% if currentDevice == 'M' %}
+                {{ form_widget(form.save, {'attr': {'class': 'secondary-btn-1 button mb0', 'onclick': "return createHalfAccount('', 'ListingBottom');"}}) }}
+            {% else %}
+                {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'outline'}}) }}
+                    {{ form_errors(form) }}
+                    <div style="display:none">{{ form_row(form.email_alert) }}{{ form_row(form.third_party_email_alert) }}</div>
+                    {{ form_widget(form.email, {'attr': {'class':'form-control', 'placeholder': 'Enter your email address', 'maxlength': '255'} }) }}
+                    <div class="input-group-append">{{ form_widget(form.save, {'attr': {'class': 'btn btn-success secondary-btn-1'}}) }}</div>
+                {{ form_end(form) }}
+            {% endif %}
+        {% endif %}
         </div>
     </div>
 </div>
-<script language="javascript" type="text/javascript">
-//<![CDATA[
-$(document).ready(function(){
-	$("form[name='fa_user_half_account_email_only']").submit(function(event) {
-        // Stop form from submitting normally
-        event.preventDefault();
-
-        bindHalfAccountSubmitFormEventEmailOnly('', 'ListingBottom');
-    });
-	bindFormErrorEvents();
-});
-
-function bindHalfAccountSubmitFormEventEmailOnly(ad_id, callFrom)
-{
-	blockPage();
-	$.ajax({
-        type: "POST",
-        url: "{{path('user_half_account_create_email_only_ajax')}}",
-        data: $('form[name="fa_user_half_account_email_only"]').serialize()
-    })
-    .done(function(response) {
-        unblockPage();
-        if (response.success.length && response.user_id) {
-            saveSearchAgent(response.user_id, callFrom);
-            $("#fa_user_half_account_email_only_email").val("");
-        } else {
-            $('#createAlertBlockError').remove();
-            if (response.errorMessage.length) {
-                $("#fa_user_half_account_email_only_email").addClass("error");
-                $("<small id='createAlertBlockError' class='error'>"+response.errorMessage+"</span>").insertAfter('#fa_user_half_account_email_only_save');
-            }
-        }
-    });
-}
-//]]>
-</script>

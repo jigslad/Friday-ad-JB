@@ -77,6 +77,17 @@
             {% endif %}
         {% endif %}
     {% endif %}
+    
+    {% set addBodyClass = 0 %}
+    {% set setBodyCls = '' %}
+    {% if (showAdultPopup == 1) %} 
+    	{% set addBodyClass = 1 %}
+        {% set setBodyCls = 'transbox' %}
+    {% endif %}
+    {% if (currentRoute is defined and currentRoute == 'listing_page' ) %} 
+    	{% set addBodyClass = 1 %}
+        {% set setBodyCls = setBodyCls ~' ad-list-block' %}
+    {% endif %}
 
     <title>{% block title %}{% if blockPageTitle %}{{blockPageTitle|raw}}{% else %}{{'Friday-Ad'|trans}}{% endif %}{% endblock %}</title>
     {% if blockMetaRobots and (not app.request.get('advertgone') or app.request.get('expired_ads')) %}
@@ -198,7 +209,7 @@
 	</script>
 	{% endif %}
 </head>
-<body {% if (showAdultPopup == 1) %} class="transbox" {% endif %}>
+<body class="{% if (addBodyClass == 1) %} {{ setBodyCls }} {% endif %}">
         {% if status_code is not defined %}
             {% set status_code = 200 %}
         {% endif %}
@@ -256,11 +267,11 @@
 
         <script type="text/javascript">
         $(window).on('load', function() {
-            $(document).foundation({
+            /*$(document).foundation({
               accordion: {
                 multi_expand: true,
               }
-            });
+            });*/
             $(document).on('open.fndtn.offcanvas', '[data-offcanvas]', function () {
             	$('#menu_off_canvas_anchor').addClass('db-menu-close');
                 $('#menu_off_canvas_anchor').text('{{'Close menu'|trans({}, 'frontend-dashboard-left-menu')}}');

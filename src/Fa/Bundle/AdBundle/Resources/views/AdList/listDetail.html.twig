@@ -70,7 +70,7 @@
 {% endfor %}
 {% set adCount = (adCount is defined)?adCount:1 %} 
 {% set getCurrentPage = (pagination is defined)?pagination.getCurrentPage():1 %}
-<div class="listing{{ isUrgentClass }} {{isBoostedClass}} {{ isFeaturedClass }} {% if isLiveBasicAd is defined and isLiveBasicAd == 1 %} featured-upgrade-border {% endif %} {{ isExtendedRadiusClass }}">
+<div class="media listing{{ isUrgentClass }} {{isBoostedClass}} {{ isFeaturedClass }} {% if isLiveBasicAd is defined and isLiveBasicAd == 1 %} featured-upgrade-border {% endif %} {{ isExtendedRadiusClass }}">
     {% set updateCountOnFeedAdView = '' %}
     {% if fromSimilarAdverts is not defined and aff_icon_cls is not null %}
         {% set updateCountOnFeedAdView = 'onclick=javascript:updateCountOnFeedAdView(' ~ ad.id ~ ');' %}
@@ -79,65 +79,63 @@
     <div class="featured-ribbon">featured</div>
     <div class="urgent-ribbon">urgent</div>
     {#<div class="boost-ribbon"></div>#}
-    <div class="clearfix">
-        <div class="list-col-1">
-            {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, ad, '300X225', 1) %}
-            <div class="list-img {% if not imagePath %}list-placeholder{% endif %}">
-                {% if imagePath %}
-                    {% if fromSimilarAdverts is defined %}
-                        <img alt="{{ imageAltString }}" src="{{ imagePath }}" />
+
+    <div class="media-left align-self-center">
+        {% set imagePath = fetch_repository('FaAdBundle:AdImage').getImagePath(container, ad, '300X225', 1) %}
+        <div class="list-img {% if not imagePath %}list-placeholder{% endif %}">
+            {% if imagePath %}
+                {% if fromSimilarAdverts is defined %}
+                    <img class="img-responsive" alt="{{ imageAltString }}" src="{{ imagePath }}" />
+                {% else %}
+                    <img data-original="{{ imagePath }}" alt="{{ imageAltString }}" class="img-responsive lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" />
+                {% endif %}
+            {% else %}
+                {% if fromSimilarAdverts is defined %}
+                    <img class="img-responsive" src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
+                {% else %}
+                    <img class="img-responsive" src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="clearfix list-mob-icons d-none d-md-block">
+            <span class="list-img-num">
+                {% if attribute(ad, constant(solrMapping ~ 'ORD')) is defined %}
+                    {% if attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) is defined and attribute(ad, constant(solrMapping ~ 'IMAGE_COUNT')) is defined %}
+                     {{ attribute(ad, constant(solrMapping ~ 'IMAGE_COUNT')) }}
                     {% else %}
-                        <img data-original="{{ imagePath }}" alt="{{ imageAltString }}" class="lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" />
+                        {{ attribute(ad, constant(solrMapping ~ 'ORD'))|length }}
                     {% endif %}
                 {% else %}
-                    {% if fromSimilarAdverts is defined %}
-                        <img src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ imageAltString }}" />
-                    {% else %}
-                        <img src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ imageAltString }}" />
-                    {% endif %}
+                    0
+                {% endif %}
+            </span>
+            <span id="fav_{{ad.id}}">
+                {% if adFavoriteAdIds is defined and ad.id in adFavoriteAdIds %}
+                    <a href="javascript:void(0)" onclick="return removeFromFavorite('{{ad.id}}');" class="saved-item outside-tricky">FA</a>
+                {% else %}
+                    <a href="javascript:void(0)" onclick="return addToFavorite('{{ad.id}}');" class="unsaved-item outside-tricky">FA</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+        
+        
+        <div class="media-body">
+            <h3 class="list-title">
+                <a href="{{ adUrl }}" {{affiliate_url}}>{% if attribute(ad, constant(solrMapping ~ 'TITLE')) is defined %}{{trim_text(attribute(ad, constant(solrMapping ~ 'TITLE')), 80)|raw}}{% endif %}</a>
+            </h3>
+             <div class="list-price">
+                {% if attribute(ad, constant(solrMapping ~ 'PRICE')) is defined and attribute(ad, constant(solrMapping ~ 'PRICE')) > 0 and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') %}
+                    {{ format_currency(attribute(ad, constant(solrMapping ~ 'PRICE'))) }}
+                {% endif %}
+                {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(ad, constant(solrMapping ~ 'EVENT_START')) is defined %}
+                    {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(ad, constant(solrMapping ~ 'EVENT_START')), (attribute(ad, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(ad, constant(solrMapping ~ 'EVENT_END')) : null), container) %}
+                    <span class="whats-on">{{ eventStartDate }}</span>
                 {% endif %}
             </div>
-            <div class="clearfix list-mob-icons">
-                <span class="list-img-num">
-                    {% if attribute(ad, constant(solrMapping ~ 'ORD')) is defined %}
-                        {% if attribute(ad, constant(solrMapping ~ 'IS_AFFILIATE_AD')) is defined and attribute(ad, constant(solrMapping ~ 'IMAGE_COUNT')) is defined %}
-                         {{ attribute(ad, constant(solrMapping ~ 'IMAGE_COUNT')) }}
-                        {% else %}
-                            {{ attribute(ad, constant(solrMapping ~ 'ORD'))|length }}
-                        {% endif %}
-                    {% else %}
-                        0
-                    {% endif %}
-                </span>
-                <span id="fav_{{ad.id}}">
-                    {% if adFavoriteAdIds is defined and ad.id in adFavoriteAdIds %}
-                        <a href="javascript:void(0)" onclick="return removeFromFavorite('{{ad.id}}');" class="saved-item outside-tricky">FA</a>
-                    {% else %}
-                        <a href="javascript:void(0)" onclick="return addToFavorite('{{ad.id}}');" class="unsaved-item outside-tricky">FA</a>
-                    {% endif %}
-                </span>
-            </div>
-        </div>
-        <div class="list-col-2">
-            <div class="clearfix">
-                <h3 class="hide-for-small-only list-title">
-                    <a href="{{ adUrl }}" {{affiliate_url}}>{% if attribute(ad, constant(solrMapping ~ 'TITLE')) is defined %}{{trim_text(attribute(ad, constant(solrMapping ~ 'TITLE')), 80)|raw}}{% endif %}</a>
-                </h3>
-                <h5 class="show-for-small-only list-title">
-                    <a href="{{ adUrl }}" {{affiliate_url}}>{% if attribute(ad, constant(solrMapping ~ 'TITLE')) is defined %}{{trim_text(attribute(ad, constant(solrMapping ~ 'TITLE')), 80)|raw}}{% endif %}</a>
-                </h5>
-                <div class="list-price">
-                    {% if attribute(ad, constant(solrMapping ~ 'PRICE')) is defined and attribute(ad, constant(solrMapping ~ 'PRICE')) > 0 and secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') %}
-                        {{ format_currency(attribute(ad, constant(solrMapping ~ 'PRICE'))) }}
-                    {% endif %}
-                    {% if secondLevelCategoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and attribute(ad, constant(solrMapping ~ 'EVENT_START')) is defined %}
-                        {% set eventStartDate = fetch_repository('FaAdBundle:AdCommunity').getEventDateForListing(attribute(ad, constant(solrMapping ~ 'EVENT_START')), (attribute(ad, constant(solrMapping ~ 'EVENT_END')) is defined ? attribute(ad, constant(solrMapping ~ 'EVENT_END')) : null), container) %}
-                        <span class="whats-on">{{ eventStartDate }}</span>
-                    {% endif %}
-                </div>
-            </div>
+            <div class="clearfix"></div>
             {% if adListFields|length %}
-                <div class="list-dimensions hide-for-small-only">
+                <div class="list-dimensions d-none d-md-block">
                     {% for adFieldName, adListFieldValue in adListFields %}
                         {% set adFieldClass = adRepository.getListingClass(adFieldName) %}
                         {% if adListFieldValue is iterable %}
@@ -150,7 +148,7 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            <div class="list-desc {{aff_desc_cls}} hide-for-small-only">
+            <div class="list-desc {{aff_desc_cls}} clearfix d-none d-md-block">
                 {% if attribute(ad, constant(solrMapping ~ 'DESCRIPTION')) is defined %}
                     {% set adDescWithReplacedPhone = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemovePhoneNumber', [attribute(ad, constant(solrMapping ~ 'DESCRIPTION')), 'remove']) %}
                     {% set adDescWithReplacedEmail = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'hideOrRemoveEmail', [ad.id, adDescWithReplacedPhone, 'remove']) %}
@@ -164,7 +162,7 @@
             </div>
             {% endif %}
 
-            <div class="list-distance">
+            <div class="list-distance clearfix">
                 <div class="clearfix">
                     <div {% if attribute(ad, constant(solrMapping ~ 'TOWN_ID')) is defined %} class="list-miles" {% endif %}>
                         {% if attribute(ad, constant(solrMapping ~ 'LOCALITY_ID')) is defined %}
@@ -184,7 +182,7 @@
                             <span class="away-from-location">{{ (attribute(ad, 'away_from_location') / 1.60934)|round }} {{ 'miles away'|trans({}, 'frontend-search-result')}}</span>
                         {% endif %}
                     </div>
-                    <div class="list-hr-ago">
+                    <div class="list-hr-ago d-none d-md-block">
                         {% if secondLevelCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::WHATS_ON_ID') and rootCategoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::SERVICES_ID') and attribute(ad, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT')) is defined %}
                             {% if attribute(ad, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT'))>attribute(ad, constant(solrMapping ~ 'CREATED_AT'))  %}
                             {{attribute(ad, constant(solrMapping ~ 'WEEKLY_REFRESH_PUBLISHED_AT'))|time_ago_in_words}}
@@ -197,11 +195,9 @@
                         <div class="fad-shop-icon hide-for-small-only">AD SHOP</div>
                     {% endif %}
                 </div>
-                
-                
             </div>
         </div>
-    </div>
+
     {% if isLiveBasicAd is defined and isLiveBasicAd == 1 %}
         <div class="one-click-upsell parent text-right">
             <div class="child">

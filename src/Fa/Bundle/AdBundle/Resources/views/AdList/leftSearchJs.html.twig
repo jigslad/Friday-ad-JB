@@ -42,14 +42,14 @@
             }
         });
 
-        $(document).foundation({
+        /*$(document).foundation({
             accordion: {
                 multi_expand: true,
                 callback : function (accordion) {
                     accordionCallback(accordion);
                 }
             }
-        });
+        });*/
 
         /*
         $('.crowable_checkbox_link').click(function(event){
@@ -219,7 +219,7 @@
         var nowTemp = new Date();
         var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-        $('.fdatepicker_search').fdatepicker({
+        $('.fdatepicker_search').datepicker({
             format: 'dd/mm/yyyy',
             onRender: function (date) {
                 return date.valueOf() < now.valueOf() ? 'disabled' : '';

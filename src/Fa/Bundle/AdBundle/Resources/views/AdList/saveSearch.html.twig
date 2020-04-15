@@ -1,16 +1,16 @@
-<div id="alertButtonDiv" class="alert-btn-wrapper">
-    {% if container.has('security.authorization_checker') and container.get('security.authorization_checker').isGranted("IS_AUTHENTICATED_REMEMBERED")%}
-      <a id="alertButton" rel="nofollow" href="javascript:void(0);" onclick="return saveSearchAgent('', 'ListingTop');" class="alertButton secondary-btn-1 expand button mb0">{{ 'Create new alert'|trans({}, 'frontend-save-search') }}<span class="alert-white-icon">&nbsp;</span></a>
+<div id="alertButtonDiv" class="alert-btn-wrapper d-none d-md-none d-lg-block">
+	{% if container.has('security.authorization_checker') and container.get('security.authorization_checker').isGranted("IS_AUTHENTICATED_REMEMBERED")%}
+      <a id="alertButton" rel="nofollow" href="javascript:void(0);" onclick="return saveSearchAgent('', 'ListingTop');" class="btn btn-block alertButton secondary-btn-1">{{ 'Create new alert'|trans({}, 'frontend-save-search') }}<span class="alert-white-icon">&nbsp;</span></a>
     {% else %}
-      <a id="alertButton" rel="nofollow" href="javascript:void(0);" onclick="return createHalfAccount('', 'ListingTop');" class="alertButton secondary-btn-1 expand button mb0">{{ 'Create new alert'|trans({}, 'frontend-save-search') }}<span class="alert-white-icon">&nbsp;</span></a>
+      <a id="alertButton" rel="nofollow" href="javascript:void(0);" onclick="return createHalfAccount('', 'ListingTop');" class="btn btn-block alertButton secondary-btn-1">{{ 'Create new alert'|trans({}, 'frontend-save-search') }}<span class="alert-white-icon">&nbsp;</span></a>
     {% endif %}
-    <div class="alert-tooltip">
+	<div class="alert-tooltip">
         {% if container.has('security.authorization_checker') and container.get('security.authorization_checker').isGranted("IS_AUTHENTICATED_REMEMBERED")%}
             {{'Receive email alerts with similar ads to this search. This search will be saved to "Alerts and searches".'|trans({}, 'frontend-save-search')|raw }}
         {% else %}
             {{'Receive email alerts with similar ads to this search'|trans({}, 'frontend-save-search')|raw }}
         {% endif %}
     </div>
-    <div id="savedSearchAgentModal" class="reveal-modal small" data-reveal></div>
-    <div id="createHalfAccountModal" class="reveal-modal small" data-reveal></div>
+    <div id="savedSearchAgentModal" class="modal custom-modal"></div>
+    <div id="createHalfAccountModal" class="modal custom-modal"></div>
 </div>

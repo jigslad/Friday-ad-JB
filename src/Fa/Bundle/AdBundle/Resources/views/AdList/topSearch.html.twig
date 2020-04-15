@@ -1,76 +1,77 @@
-<div class="site-search hide-for-small-only" id="top_search">
+<div class="site-search d-none d-sm-block" id="top_search">
     {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'fa_top_search'}}) }}
     {{ form_errors(form) }}
     {% set showInSearch = true %}
     {% if searchParams.item__category_id is defined and searchParams.item__category_id is not null %}
         {% set showInSearch = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'showPriceInSearchFilter', [searchParams.item__category_id, fetch_container_instance()]) %}
     {% endif %}
-    <div class="row">
-    	<div class="columns">
-	        <div class="find-label hide-for-small-only">{{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'find-all custom_select' }}) }}</div>
-	        <div class="search-box-col">
-	           <div class="clearfix">
-	               <div class="search-box">
-	                   {{ form_widget(form.keywords, {'attr': {'placeholder':'Looking for...'|trans({}, 'frontend-header-search') }}) }}
-	                   <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-	               </div>
-	               <input type="submit" class="button postfix search-icon" value="Go" />
-	                <div class="change-location hide-for-small-only">
-	                    <span class="left">{{ 'in'|trans({}, 'frontend-header-search') }}</span>
-                        <span id="header_search_editable_location_span">United Kingdom</span>
-	                    <a href="javascript:void(0)" rel="nofollow" id="header_search_editable_location_a"> ({{ 'change'|trans({}, 'frontend-header-search') }})</a>
-	                    <div id="top_search_location" class="white-autocomplete">
-	                        {{ form_widget(form.item__location_autocomplete) }}
-	                        <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-	                        <div class="clearfix">
-	                            <button class="button xs-btn-1 expand left" type="button" id="top_search_location_ok">{{ 'Ok'|trans({}, 'frontend-header-search') }}</button>
-	                            <button class="button xs-btn-1 expand right" type="cancel" id="top_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-header-search') }}</button>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal>
-                        {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}
-	                </div>
-	            </div>
-	        </div>
-	        <div class="search-pref">
-	            <a href="javascript:void(0)" rel="nofollow" id="search_preferences_link" class="expand-search">{{ 'Set search preferences'|trans({}, 'frontend-header-search')}}</a>
-	        </div>
-        </div>
-    </div>
-    <div class="search-sliders">
+    <div class="container">
         <div class="row">
-            <div class="columns">
-                <div class="fa-range-slider">
-                    <div class="row">
-                        {% if showInSearch %}
-                            <div class="large-10 columns budget-slider">
-                              <h5>{{ 'My budget is'|trans({}, 'frontend-header-search') }}</h5>
-                              <div class="slider-text-top">
-                                  <div class="clearfix">
-                                      <div class="left" id="price_from"></div>
-                                      <div class="right" id="price_to"></div>
-                                  </div>
-                              </div>
-                              <div id="price_slider" class="slider-padding"></div>
+            <div class="col-md-16 m-search-left">
+                <div class="input-group">
+                    <div class="input-group-prepend ad-category-list d-none d-sm-block">
+                        {{ form_widget(attribute(form, 'item__category_id'), {'attr': {'class':'select-ctrl'}}) }}
+                    </div>
+                    {{ form_widget(form.keywords, {'attr': {'class':'form-control white-field', 'placeholder':'Looking for...'|trans({}, 'frontend-header-search') }}) }}
+	                <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_keywords_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                    <div class="input-group-append">
+                    	<a href=""><input type="submit" class="button postfix search-icon" value="Go"></a>
+                    </div>
+                    <div class="change-location d-none d-sm-block">
+                        <span id="in_text_span" style="display: inline;">in</span> 
+                        <span id="header_search_editable_location_span" style="display: inline;" claass="location-name">United Kingdom</span>
+                        <a href="javascript:void(0)" rel="nofollow" id="header_search_editable_location_a" style="display: inline;" class="edit-location"> (change)</a>
+                        <div id="top_search_location" class="white-autocomplete" style="display: none;">
+                            {{ form_widget(form.item__location_autocomplete, {'attr': {'class':'ui-autocomplete-input form-control white-field'}}) }}
+                            <a href="javascript:void(0);" rel="nofollow" id="fa_top_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close" style="display: none;">Close</a>
+                            <div class="clearfix">
+                                <button class="btn xs-btn-1 left" type="button" id="top_search_location_ok">Ok</button>
+                                <button class="btn xs-btn-1 right" type="button" id="top_search_location_cancel">Cancel</button>
                             </div>
-                        {% endif %}
-                        <div class="large-10 columns distance-slider">
-                          <h5>{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-header-search') }}</h5>
-                          <div class="slider-text-top">
-                              <div class="clearfix">
-                                  <div class="left" id="distance">{{ '0 mile'|trans({}, 'frontend-header-search') }}</div>
-                              </div>
-                          </div>
-                          <div id="distance_slider" class="slider-padding"></div>
                         </div>
                     </div>
-                </div>
-                <div class="small-wrapper">
-                    <button class="secondary-btn-1 expand" type="submit" id="fa_top_search_submit">Search</button>
+                    <div id="header_search_editable_location_reveal_modal" class="reveal-modal tiny" data-reveal style="display:none">
+                        {{ include('FaCoreBundle:Default:invalidLocationModal.html.twig', {'modalId': 'header_search_editable_location_reveal_modal'}) }}
+	                </div>
                 </div>
             </div>
-        </div>
+            <div class="col-md-8 m-search-right">
+            	<div class="search-pref">
+		            <a href="javascript:void(0)" rel="nofollow" id="search_preferences_link" class="expand-search"><span class="d-none d-sm-block">Set search preferences</span></a>
+		        </div>
+            </div>
+       	</div>
+    </div>
+    
+    <div class="search-sliders" style="display: none;">
+    	<div class="container">
+    		<div class="row fa-range-slider">
+    			 {% if showInSearch %}
+                    <div class="col-md-10 budget-slider float-left">
+                      <h5>{{ 'My budget is'|trans({}, 'frontend-header-search') }}</h5>
+                      <div class="slider-text-top">
+                          <div class="d-flex">
+                              <div class="float-left" id="price_from"></div>
+                              <div class="float-right ml-auto" id="price_to"></div>
+                          </div>
+                      </div>
+                      <div id="price_slider" class="slider slider-info"></div>
+                    </div>
+                {% endif %}
+                <div class="col-md-10 distance-slider float-right ml-auto">
+                  <h5>{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-header-search') }}</h5>
+                  <div class="slider-text-top">
+                      <div class="d-flex">
+                          <div class="float-left" id="distance">{{ '0 mile'|trans({}, 'frontend-header-search') }}</div>
+                      </div>
+                  </div>
+                  <div id="distance_slider" class="slider slider-info"></div>
+                </div>    			
+    		</div>
+			<div class="col-md-24 text-center">
+				<button class="secondary-btn-1 btn col-md-6" type="submit" id="fa_top_search_submit">Search</button>
+			</div>
+    	</div>
     </div>
     {{ form_end(form) }}
 </div>

@@ -25,6 +25,7 @@ Encore
     .addStyleEntry('css/readFridayAdOnline', './assets/scss/readFridayAdOnline.scss')
     .addStyleEntry('css/paa', './assets/scss/paa.scss')
     .addStyleEntry('css/login-register', './assets/scss/login-register.scss')
+    .addStyleEntry('css/adlist', './assets/scss/adlist.scss')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

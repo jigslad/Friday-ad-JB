@@ -72,3 +72,17 @@
     background: url('/Frontend/images/categories/Ic-btn-Adult-ON.svg') no-repeat;
   }
 }
+
+.custom-checkbox label, .custom-checkbox label.custom-control-label {
+    margin: 5px 5px 5px 22px;
+    padding-left: 5px;
+}
+.custom-checkbox .custom-control-label::after {
+    top: 0 !important;
+    left: -20px !important;
+    border: 0px solid #e3e3e3;
+}
+custom-checkbox .custom-control-label::before {
+    top: 0 !important;
+    border: 0px solid #e3e3e3 !important;
+}

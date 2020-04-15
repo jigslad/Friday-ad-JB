@@ -649,3 +649,251 @@ footer {
     background: $common-bg-color;
 }
 
+/* Ad Listing Page */
+.site-search {
+    background: $common-bg-color;
+    border-bottom: 1px solid $form-border-color;
+    border-top: 1px solid $form-border-color;
+    box-shadow: 0 1px 0 $white;
+}
+.site-search .change-location {
+    font-family: $font-family-secondary;
+    color: $common-text-color;
+}
+
+.site-search .search-icon {
+	border: 1px solid $secondary-h-color;
+	color: $white;
+	background: $secondary-color url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2215.3%22%20height%3D%2215.3%22%20viewBox%3D%22-4226.7%201392.2%2015.3%2015.3%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3ESEARCH%20ICON%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch%20Beta.%3C/desc%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-4211.4%201406l-3.6-3.6c0.8-1.1%201.3-2.4%201.3-3.8%200-1.7-0.7-3.4-1.9-4.6%20-2.5-2.5-6.7-2.5-9.2%200%20-1.2%201.2-1.9%202.9-1.9%204.6s0.7%203.4%201.9%204.6c1.3%201.3%202.9%201.9%204.6%201.9%201.3%200%202.7-0.4%203.8-1.3l3.6%203.6L-4211.4%201406zM-4223.5%201401.7c-0.9-0.9-1.3-2-1.3-3.2%200-1.2%200.5-2.3%201.3-3.2%200.9-0.9%202-1.3%203.2-1.3%201.2%200%202.3%200.4%203.2%201.3%200.9%200.8%201.3%202%201.3%203.2%200%201.2-0.5%202.3-1.3%203.2C-4218.8%201403.5-4221.7%201403.5-4223.5%201401.7z%22/%3E%3C/svg%3E') no-repeat center center;
+}
+.site-search .ui-autocomplete-input {
+    background: $white;
+    font-family: $font-family-default;
+}
+.site-search .ad-category-list .btn-outline-secondary {
+    background: $white;
+    border: 1px solid $form-border-color;
+    color: $common-text-color;
+    font-family: $font-family-default;
+}
+.site-search .ad-category-list .btn-outline-secondary:active {
+    color: $common-text-color;
+    background-color: $white;
+    border-color: $form-border-color;
+}
+.site-search .change-location a.edit-location {
+	color: $secondary-color;
+}
+.site-search .change-location a.edit-location:hover, .site-search .change-location a.edit-location:focus {
+	color: $secondary-h-color;
+}
+.site-search .show > .btn-outline-secondary.dropdown-toggle {
+    color: $common-text-color;
+    background-color: $white;
+    border-color: $form-border-color;
+}
+.ad-list-block #top_search_location {
+    background: $form-border-color;
+}
+
+.ad-list-block {
+  .search-pref {
+    a {
+      color: $common-text-color;
+    }
+  }
+  .sortby-area {
+    h2, h1 {
+      font-family: $font-family-default;
+      color: $common-text-color;
+    }
+  }
+  .white-select .ui-selectmenu-button, .ui-selectmenu-menu .ui-menu.white-dropdown {
+    background: $white;
+  }
+  .ui-selectmenu-button {
+    font-family: $font-family-default;
+    color: $dark-gray;
+     background: $common-bg-color;
+    border: 1px solid $form-border-color;
+  }
+}
+
+//left block
+.ad-list-block {
+  .search-filters {
+    background: $form-bg-color;
+    border: 1px solid $form-border-color;
+  }
+  .alert-tooltip {
+    background: $white url("/bundles/fafrontend/images/alert-illustration.svg") no-repeat 90% 10px;
+    border: 1px solid $secondary-color;
+    color: $form-text-color;
+    &::after {
+      border-right-color: $secondary-color;
+    }
+  }
+  .accordion {
+    .accordion-navigation, dd {
+      border-bottom: solid 1px $white;
+      box-shadow: 0 1px 0 $form-border-color;
+    }
+    .accordion-navigation > a, dd > a {
+      color: $common-text-color;
+    }
+  }
+  .search-filters ul {
+    li {
+      a {
+        color: $form-text-color;
+        &:hover, &:focus {
+          color: $secondary-color;
+        }
+      }
+    }
+  }
+  .search-cat-sub-list {
+    li {
+      label {
+        color: $common-text-color;
+      }
+      a {
+        color: $form-text-color;
+      }
+    }
+  }
+  .towns-list li a:hover, .search-cat-list li a:hover, .search-cat-sub-list li a:hover {
+    color: $secondary-color;
+  }
+  .see-more {
+    a {
+      color: $secondary-color;
+    }
+  }
+  .search-type {
+    color: $common-text-color;
+  }
+  .reset-search {
+    a {
+       color: $secondary-color;
+    }
+  }
+}
+.row-block .listing {
+  background: $white;
+  border: 1px solid $form-border-color;
+}
+.listing {
+  h3 a {
+    color: $common-text-color;
+  }
+  &:hover {
+    border-color: $secondary-color;
+    h3 a {
+      color: $secondary-color;
+    }
+  }
+  .list-img {
+    border: 1px solid $common-bg-color;
+  }
+  .list-img-num {
+     color: $secondary-h-color;
+  }
+  .list-title {
+    font-family: $font-family-secondary;
+    color: $dark-gray;
+  }
+  .list-price {
+    color: $secondary-color;
+    font-family: $font-family-secondary;
+  }
+  .list-dimensions {
+    color: $form-text-color;
+  }
+  .list-desc {
+    color: $common-text-color;
+    font-family: $font-family-default;
+  }
+  .list-hr-ago {
+    color: $form-text-color;
+  }
+}
+
+
+@media (min-width: 320px) and (max-width:759px) {
+    .listing {     
+      h3.list-title {
+        font-family: $font-family-default;
+        color: $dark-gray;
+      }      
+    }
+    .ad-list-block {
+        .mobile-refine .m-sort-btn { 
+            background: $white;
+            border-color: 1px solid $secondary-color;
+        }
+    }
+}
+.search-sliders {
+    background: $common-bg-color;
+    border-top: 1px solid $form-border-color;
+}
+.search-sliders .fa-range-slider {
+    border-bottom: 1px solid $white;
+    box-shadow: 0 1px 0 $form-border-color;
+}
+.search-sliders .slider-text-top {
+    color: $form-text-color;
+}
+.search-sliders .noUi-origin {
+    background: $form-border-color;
+}
+.search-sliders .noUi-horizontal .noUi-handle {
+    background-color: $slider-noui-handle-color;
+}
+.search-sliders .noUi-connect {
+    background-color: $slider-noui-color;
+}
+.noUi-connect {
+    background: $slider-noui-color;
+}
+.search-sliders .noUi-base{
+    background: $chat-btn-color;
+}
+.alert-block .list-img {
+    background: $common-bg-color;
+    border: 1px solid $form-border-color;
+}
+@media only screen and (min-width: 760px) and (max-width: 959px){
+  .left-search-block .reset-search {
+      background: $white;
+      border: 1px solid $form-border-color;
+  }
+}
+.sortDropdownContent ul {
+  background: $common-bg-color;
+  border: 1px solid $form-border-color;
+  box-shadow: 0 2px 12px 0 $form-border-color;
+}
+.sortDropdownContent ul li {
+  color: $common-text-color;
+  border-bottom: 1px solid $white;
+}
+.sortDropdownContent ul li a {
+  color: $common-text-color;
+}
+.sortDropdownContent ul li.active {
+  z-index: 2;
+  color:  $white;
+  background-color: $form-bg-color !important;
+  border-color: $form-bg-color !important;
+}
+@media only screen and (max-width: 640px) { 
+  .ad-list-block .reset-search{
+    background:$white;
+    border-bottom: 1px solid $form-border-color;
+    border-left: 1px solid $form-border-color;
+    border-right: 1px solid $form-border-color;
+  }
+}
+
