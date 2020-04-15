@@ -87,6 +87,9 @@
     {% if (currentRoute is defined and currentRoute == 'listing_page' ) %} 
     	{% set addBodyClass = 1 %}
         {% set setBodyCls = setBodyCls ~' ad-list-block' %}
+    {% elseif (currentRoute is defined and currentRoute == 'ad_detail_page' ) %}
+    	{% set addBodyClass = 1 %}
+        {% set setBodyCls = setBodyCls ~' ad-detail' %}    
     {% endif %}
 
     <title>{% block title %}{% if blockPageTitle %}{{blockPageTitle|raw}}{% else %}{{'Friday-Ad'|trans}}{% endif %}{% endblock %}</title>
