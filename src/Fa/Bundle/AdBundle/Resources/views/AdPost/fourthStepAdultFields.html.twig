@@ -13,101 +13,110 @@
             {% elseif field == 'business_phone' %}
                 {{ include('FaAdBundle:AdPost:businessPhoneField.html.twig') }}
             {% elseif field == 'personalized_title' %}
-                <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
-                    {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
-                    {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                    <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
-                        <div class="row">
-                          <div class="large-12 columns subtitle-ins">
-                            {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
-                                <p>{{ attribute(attribute(form, field).vars.attr, 'field-help') }}</p>
-                            {% else %}
-                                <p>{{ 'Add some personality to your ad with a short quote statement that tells readers what makes your advert special'|trans({}, 'frontend-paa-fourth-step')}}</p>
+                <div class="col-md-24 d-flex justify-content-center paa-box">
+                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
+                        {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
+                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                            <div class="row">
+                              <div class="large-12 columns subtitle-ins">
+                                {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                                    <p>{{ attribute(attribute(form, field).vars.attr, 'field-help') }}</p>
+                                {% else %}
+                                    <p>{{ 'Add some personality to your ad with a short quote statement that tells readers what makes your advert special'|trans({}, 'frontend-paa-fourth-step')}}</p>
+                                {% endif %}
+                              </div>
+                              <div class="large-12 columns">
+                                  {{ include('FaAdBundle:AdPost:adSubtitleImage.html.twig', {'categoryId':ad.category.id}) }}
+                              </div>
+                            </div>
+                            {{ form_widget(attribute(form, field), {'attr': {'class': 'textcounter','autocomplete': 'off'}}) }}
+                            {% if attribute(form, field).vars.attr.maxlength is defined and attribute(form, field).vars.attr.maxlength %}
+                                <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-paa-fourth-step') }}</div>
                             {% endif %}
-                          </div>
-                          <div class="large-12 columns">
-                              {{ include('FaAdBundle:AdPost:adSubtitleImage.html.twig', {'categoryId':ad.category.id}) }}
-                          </div>
+                            {{ form_errors(attribute(form, field)) }}
                         </div>
-                        {{ form_widget(attribute(form, field), {'attr': {'class': 'textcounter','autocomplete': 'off'}}) }}
-                        {% if attribute(form, field).vars.attr.maxlength is defined and attribute(form, field).vars.attr.maxlength %}
-                            <div class="paa-title-char" id="{{ attribute(form, field).vars.id }}_textcounter" >{{ '(%textCount% characters left)'|trans({'%textCount%' : attribute(form, field).vars.attr.maxlength }, 'frontend-paa-fourth-step') }}</div>
-                        {% endif %}
-                        {{ form_errors(attribute(form, field)) }}
                     </div>
                 </div>
-            {% elseif field == 'services_id' %} 
-                <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
-                    {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
-                    {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                    <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
-                        {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
-                            <div class="paa-title-ins">
-                                {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
-                            </div>
-                        {% endif %}
-                        <ul class="paa-features clearfix fa-equalizer" id="{{ field }}_equalizer">
-                            {% set selectedValues = attribute(form, field).vars.data %}
-                            {% for child in attribute(form, field) %}
-                                {% set activeClass = '' %}
-                                {% if child.vars.value in selectedValues %}
-                                    {% set activeClass = 'active' %}
-                                {% endif %}
-                                <li class="{{ activeClass }}">
-                                    {{ form_widget(child) }}
-                                    <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
-                                </li>
-                            {% endfor %}
-                        </ul>
+            {% elseif field == 'services_id' %}
+                <div class="col-md-24 d-flex justify-content-center paa-box">
+                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
+                        {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
+                        <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                            {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                                <div class="paa-title-ins">
+                                    {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
+                                </div>
+                            {% endif %}
+                            <ul class="paa-features clearfix fa-equalizer" id="{{ field }}_equalizer">
+                                {% set selectedValues = attribute(form, field).vars.data %}
+                                {% for child in attribute(form, field) %}
+                                    {% set activeClass = '' %}
+                                    {% if child.vars.value in selectedValues %}
+                                        {% set activeClass = 'active' %}
+                                    {% endif %}
+                                    <li class="{{ activeClass }}">
+                                        {{ form_widget(child) }}
+                                        <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             {% elseif field == 'position_preference_id' %}
-                <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
-                	{{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
-                    {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                    <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
-                        <div id="position_preference_choice_div" style="display:none">
-                            {{ form_widget(attribute(form, field)) }}
+                <div class="col-md-24 d-flex justify-content-center paa-box">
+                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
+                        {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
+                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                            <div id="position_preference_choice_div" style="display:none">
+                                {{ form_widget(attribute(form, field)) }}
+                            </div>
+                            <div class="capsule-links ad-type-links capsule-width-none">
+                                {% set selectedAdTypeId = attribute(form, field).vars.data %}
+                                {% for choice in attribute(form, field).vars.choices %}
+                                    {% set activeClass = '' %}
+                                    {% if choice.value == selectedAdTypeId %}
+                                        {% set activeClass = 'active' %}
+                                    {% endif %}
+                                    <a href="javascript:void(0)" class="position_preference_choice {{ activeClass }}" id="position_preference_choice_{{ choice.value }}">{{ choice.label }}</a>
+                                {% endfor %}
+                            </div>
+                            {{ form_errors(attribute(form, field)) }}
                         </div>
-                        <div class="capsule-links ad-type-links capsule-width-none">
-                            {% set selectedAdTypeId = attribute(form, field).vars.data %}
-                            {% for choice in attribute(form, field).vars.choices %}
-                                {% set activeClass = '' %}
-                                {% if choice.value == selectedAdTypeId %}
-                                    {% set activeClass = 'active' %}
-                                {% endif %}
-                                <a href="javascript:void(0)" class="position_preference_choice {{ activeClass }}" id="position_preference_choice_{{ choice.value }}">{{ choice.label }}</a>
-                            {% endfor %}
-                        </div>
-                        {{ form_errors(attribute(form, field)) }}
-                    </div>
-               	 </div>
+                     </div>
+                </div>
            	{% elseif field == 'experience_id' %}
-                <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
-                	{{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
-                    {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                    <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
-                        <div id="experience_choice_div" style="display:none">
-                            {{ form_widget(attribute(form, field)) }}
+                <div class="col-md-24 d-flex justify-content-center paa-box">
+                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
+                        {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
+                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                            <div id="experience_choice_div" style="display:none">
+                                {{ form_widget(attribute(form, field)) }}
+                            </div>
+                            <div class="capsule-links ad-type-links capsule-width-none">
+                                {% set selectedAdTypeId = attribute(form, field).vars.data %}
+                                {% for choice in attribute(form, field).vars.choices %}
+                                    {% set activeClass = '' %}
+                                    {% if choice.value == selectedAdTypeId %}
+                                        {% set activeClass = 'active' %}
+                                    {% endif %}
+                                    <a href="javascript:void(0)" class="experience_choice {{ activeClass }}" id="experience_choice_{{ choice.value }}">{{ choice.label }}</a>
+                                {% endfor %}
+                            </div>
+                            {{ form_errors(attribute(form, field)) }}
                         </div>
-                        <div class="capsule-links ad-type-links capsule-width-none">
-                            {% set selectedAdTypeId = attribute(form, field).vars.data %}
-                            {% for choice in attribute(form, field).vars.choices %}
-                                {% set activeClass = '' %}
-                                {% if choice.value == selectedAdTypeId %}
-                                    {% set activeClass = 'active' %}
-                                {% endif %}
-                                <a href="javascript:void(0)" class="experience_choice {{ activeClass }}" id="experience_choice_{{ choice.value }}">{{ choice.label }}</a>
-                            {% endfor %}
-                        </div>
-                        {{ form_errors(attribute(form, field)) }}
-                    </div>
-               	 </div>
+                     </div>
+                </div>
            	{% elseif field == 'payment_method_id' %}
+                <div class="col-md-24 d-flex justify-content-center paa-box">
                     <div class="paa-gray-box btm-pa-0 paa-bdr-box paa-bdr-lbl" id="adult_paypal_block">
                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}                        
-                        <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
                         	<div class="text-center">
                             	<p class="mb0">
                                 	<span id="paa_image_upload_tips">Let clients know how they can pay for your service.</span>
@@ -148,60 +157,65 @@
                             {{ form_errors(attribute(form, field), {'attr': {'class' : 'error center'}}) }}
                         </div>
                     </div>
+                </div>
             {% elseif field == 'rates_id' %}
-                <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}"  style="display:none;" >
-                	 {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
-                    {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                    <div class="pb30 in-out-calls-block" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
-                        {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
-                            <div class="paa-title-ins">
-                                {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
-                            </div>
-                        {% endif %}     
-                                           
-                        {{ include('FaAdBundle:AdPost:paaFieldRates.html.twig') }}                   
+                <div class="col-md-24 d-flex justify-content-center paa-box">
+                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}"  style="display:none;" >
+                         {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
+                        {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
+                        <div class="collapse collapse-body-content pb30 in-out-calls-block" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                            {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                                <div class="paa-title-ins">
+                                    {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
+                                </div>
+                            {% endif %}
+
+                            {{ include('FaAdBundle:AdPost:paaFieldRates.html.twig') }}
+                        </div>
                     </div>
                 </div>
             {% else %}
                 {% set fieldClass = 'paa-bdr-box-btm-hd' %}
             	 {% if field != 'independent_or_agency_id' %}
             		{% set fieldClass = 'paa-bdr-box-btm-hd' %}
-            	{% endif %} 
-                <div class="paa-bdr-box {{ fieldClass }} btm-pa-0" id="element_{{ field }}{% if field == 'gender_id' %}_g{% endif %}"> 
-                	{% if (field != 'travel_arrangements_id' and field != 'gender_id' and field != 'ethnicity_id' and field != 'travel_arrangements_id' and field != 'my_service_id')  %}
-                        {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
-                        {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
-                            {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
-                                <div class="paa-title-ins">
-                                    {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
+            	{% endif %}
+                <div class="col-md-24 d-flex justify-content-center paa-box">
+                    <div class="paa-bdr-box {{ fieldClass }} btm-pa-0" id="element_{{ field }}{% if field == 'gender_id' %}_g{% endif %}">
+                        {% if (field != 'travel_arrangements_id' and field != 'gender_id' and field != 'ethnicity_id' and field != 'travel_arrangements_id' and field != 'my_service_id')  %}
+                            {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
+                            {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
+                            <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                                {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                                    <div class="paa-title-ins">
+                                        {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
+                                    </div>
+                                {% endif %}
+                                <div class="small-wrapper {{ field == 'my_service_id'?'custom-checkbox-main':'' }} {{ field == 'independent_or_agency_id'?'label-inline':'' }}  text-center">
+                                    {{ form_widget(attribute(form, field)) }}
+                                    {{ form_errors(attribute(form, field)) }}
                                 </div>
-                            {% endif %}
-                            <div class="small-wrapper {{ field == 'my_service_id'?'custom-checkbox-main':'' }} {{ field == 'independent_or_agency_id'?'label-inline':'' }}  text-center"> 
-                                {{ form_widget(attribute(form, field)) }}
-                                {{ form_errors(attribute(form, field)) }}
                             </div>
-                        </div>
-                    {% else %}
-                    	{% if (field == 'gender_id' or field == 'my_service_id') and cntFld == '0'  %}
-                    		<div id="adult_top_label">
-                    			<h5 class="text-center" >{{ 'Your details'|trans({}, 'frontend-paa-fourth-step')}} {{ '(required):'|trans({}, 'frontend-paa-fourth-step')}}</h5>
-                			</div>
-                			{% set cntFld = 1 %}
-                		{% endif %}
-                    	<div class="small-wrapper rm-pad" id="element_toggle_{{ field }}_target" >
-                            <label>{{ attribute(form, field).vars.label }}</label>
-                            {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
-                                <div class="paa-title-ins">
-                                    {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
+                        {% else %}
+                            {% if (field == 'gender_id' or field == 'my_service_id') and cntFld == '0'  %}
+                                <div id="adult_top_label">
+                                    <h5 class="text-center" >{{ 'Your details'|trans({}, 'frontend-paa-fourth-step')}} {{ '(required):'|trans({}, 'frontend-paa-fourth-step')}}</h5>
                                 </div>
+                                {% set cntFld = 1 %}
                             {% endif %}
-                            <div class="small-wrapper {{ field == 'my_service_id'?'custom-checkbox-main':'' }} {{ field == 'independent_or_agency_id'?'label-inline':'' }}  text-center"> 
-                                {{ form_widget(attribute(form, field)) }}
-                                {{ form_errors(attribute(form, field)) }}
+                            <div class="small-wrapper rm-pad" id="element_toggle_{{ field }}_target" >
+                                <label>{{ attribute(form, field).vars.label }}</label>
+                                {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                                    <div class="paa-title-ins">
+                                        {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
+                                    </div>
+                                {% endif %}
+                                <div class="small-wrapper {{ field == 'my_service_id'?'custom-checkbox-main':'' }} {{ field == 'independent_or_agency_id'?'label-inline':'' }}  text-center">
+                                    {{ form_widget(attribute(form, field)) }}
+                                    {{ form_errors(attribute(form, field)) }}
+                                </div>
                             </div>
-                        </div>
-                	{% endif %}
+                        {% endif %}
+                    </div>
                 </div>
             {% endif %}
         {% endif %}
