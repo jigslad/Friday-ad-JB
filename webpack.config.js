@@ -27,6 +27,7 @@ Encore
     .addStyleEntry('css/login-register', './assets/scss/login-register.scss')
     .addStyleEntry('css/adlist', './assets/scss/adlist.scss')
     .addStyleEntry('css/addetail', './assets/scss/addetail.scss')
+    .addStyleEntry('css/landing', './assets/scss/landing.scss')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
