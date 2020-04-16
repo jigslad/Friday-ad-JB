@@ -9,7 +9,7 @@
             setAndMoveSliderCaption('distance_slider', 'lower', 'distance');
         });
 
-        if ($('#price_slider').length) {
+       /* if ($('#price_slider').length) {
             var slider1 = document.getElementById('price_slider');
     
             if (slider1 != undefined) {
@@ -57,51 +57,7 @@
                 }
             });
           }
-        } 
-        /*if ($('#price_slider').length) {
-            $('#price_slider').noUiSlider({
-                connect: true,
-                snap: true,
-                start: [ 0, 500000 ],
-                range: {
-                    'min': 0,
-                    '5%': 5,
-                    '10%': 10,
-                    '15%': 20,
-                    '20%': 50,
-                    '30%': 100,
-                    '40%': 250,
-                    '50%': 500,
-                    '60%': 1000,
-                    '70%': 2000,
-                    '80%': 5000,
-                    '90%': 10000,
-                    'max': 500000
-                },
-                format: wNumb({
-                    decimals: 0
-                })
-            });
-        }
-    
-        $('#distance_slider').noUiSlider({
-            start: [ 15 ],
-            range: {
-                'min': [0, 2],
-                '5%':  [2, 3],
-                '10%': [5, 5],
-                '20%': [20, 10],
-                '25%': [30, 20],
-                '35%': [50, 25],
-                '55%': [100, 50],
-                '85%': [200, 100000],
-                'max': 100000
-            },
-            connect: 'lower',
-            format: wNumb({
-                decimals: 0
-            })
-        }); */
+        } */        
 
         $("#price_slider").on({
             slide: function(){

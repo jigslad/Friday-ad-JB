@@ -1,55 +1,69 @@
 {% block jobsSearchForm_html %}
-
-<h3 class="homepage-title landing-divider jobs-landing-title">{{ 'Find a job'|trans({}, 'frontend-landing-page') }} </h3>
+<div class="landing-divider">
+    <h3 class="homepage-title">{{ 'Find a job'|trans({}, 'frontend-landing-page') }} </h3>
+</div>
 
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 {{ form_errors(form) }}
 
 <div class="landing-divider">
-    <div class="row">
-        <div class="large-16 columns">
-            {{ form_label(attribute(form, 'item_jobs__contract_type_id')) }}
-            <div id="body_type_choices" class="white-select show-for-small-only">
-                {{ form_widget(attribute(form, 'item_jobs__contract_type_id')) }}
-            </div>
-            <div id="body-type-circles" class="clearfix landing-circles hide-for-small-only job-circles">
-                <a href="javascript:void(0)" class="any-category body_type_choice active" id="body_type_choice_">{{ 'Any'|trans({}, 'frontend-landing-page') }}</a>
-                {% set selectedBodyTypeId = attribute(form, 'item_jobs__contract_type_id').vars.data %}
-                {% for choice in attribute(form, 'item_jobs__contract_type_id').vars.choices %}
-                    {% set activeClass = '' %}
-                    {% if choice.value == selectedBodyTypeId %}
-                        {% set activeClass = 'active' %}
-                    {% endif %}
-                    <a href="javascript:void(0)" class="job-{{ choice.label|lower|replace({' ': '-'}) }} body_type_choice {{ activeClass }}" id="body_type_choice_{{ choice.value }}">{{ choice.label }}</a>
-                {% endfor %}
-            </div>
-
-        </div>
-
-        <div class="large-8 columns property-distance jobs-category-row">
-            <div class="landing-divider">
-                <div class="travel-distance white-select job-categories">
-                    {{ form_label(attribute(form, 'item__category_id')) }}
-                    {{ form_widget(attribute(form, 'item__category_id')) }}
+    <div class="container">
+        <div class="row mb20 mt20">
+            <div class="col-lg-16 col-md-24">
+                {{ form_label(attribute(form, 'item_jobs__contract_type_id')) }}
+                <div id="body_type_choices" class="d-block d-md-none mb20">
+                    <div class="select">
+                        {{ form_widget(attribute(form, 'item_jobs__contract_type_id')) }}
+                    </div>
                 </div>
-            </div>
-            <div class="travel-distance">
-                <label>{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</label>
-                <ul class="clearfix">
-                    <li class="miles-col white-select">{{ form_widget(form.item__distance) }}</li>
-                    <li class="from-col">{{ 'from'|trans({}, 'frontend')}}</li>
-                    <li class="location-col">
-                        {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
-                        <a href="javascript:void(0);" id="fa_landing_page_jobs_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                <div id="body-type-circles" class="discover-categories landing-circles d-none d-md-block">
+                    <li class="any-category body_type_choice active" id="body_type_choice_">
+                        <a href="javascript:void(0)">{{ 'Any'|trans({}, 'frontend-landing-page') }}</a>
                     </li>
-                </ul>
+                    {% set selectedBodyTypeId = attribute(form, 'item_jobs__contract_type_id').vars.data %}
+                    {% for choice in attribute(form, 'item_jobs__contract_type_id').vars.choices %}
+                        {% set activeClass = '' %}
+                        {% if choice.value == selectedBodyTypeId %}
+                            {% set activeClass = 'active' %}
+                        {% endif %}
+                        <li class="job-{{ choice.label|lower|replace({' ': '-'}) }} body_type_choice {{ activeClass }}">
+                            <a id="body_type_choice_{{ choice.value }}" href="javascript:void(0)">{{ choice.label }}</a>
+                        </li>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <div class="col-lg-8 col-md-24 property-distance jobs-category-row">
+                <div class="landing-divider">
+                    <div class="travel-distance white-select job-categories">
+                        {{ form_label(attribute(form, 'item__category_id')) }}
+                        {{ form_widget(attribute(form, 'item__category_id')) }}
+                    </div>
+                </div>
+                <div class="travel-distance">
+                    <label>{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</label>
+                    <ul class="clearfix">
+                        <li class="miles-col white-select">{{ form_widget(form.item__distance) }}</li>
+                        <li class="from-col">{{ 'from'|trans({}, 'frontend')}}</li>
+                        <li class="location-col">
+                            {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
+                            <a href="javascript:void(0);" id="fa_landing_page_jobs_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="small-wrapper">
-    <button class="secondary-btn-1 expand button mb0 landing-search-btn" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
+<div class="container mt20">
+    <div class="row">
+        <div class="col-md-24">
+            <div class="col-md-8 offset-md-8 mt20">
+                <button class="secondary-btn-1 btn btn-block landing-search-btn" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
+            </div>
+        </div>
+    </div>
 </div>
 {{ form_end(form) }}
 {% endblock %}

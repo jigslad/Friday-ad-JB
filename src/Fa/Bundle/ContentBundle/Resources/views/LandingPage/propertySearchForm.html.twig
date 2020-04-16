@@ -3,19 +3,24 @@
 {% set property_for_sale_id = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_FOR_SALE_ID') %}
 {% set property_for_rent_id = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_FOR_RENT_ID') %}
 {% set property_share_id    = constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_SHARE_ID') %}
-
-<h3 class="homepage-title">{{ 'Find a property'|trans({}, 'frontend-landing-page') }} </h3>
+<div>
+    <h3 class="homepage-title">{{ 'Find a property'|trans({}, 'frontend-landing-page') }} </h3>
+</div>
 
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 {{ form_errors(form) }}
 
-<div class="landing-divider">
-    <div class="row">
-        <div class="columns">
-            <div class="find-property">
-                <div class="capsule-links clearfix">
+<div class="find-property landing-divider">
+    <div class="container">
+        <div class="row mt20 mb20 capsule-links">
+            <div class="d-flex justify-content-center f-width">
+                <div class="left-cap all-cap">
                     <a href="javascript:void(0)" class="property_choice active" id="property_choice_{{ property_for_sale_id }}">{{ 'For sale'|trans({}, 'frontend-landing-page') }}</a>
+                </div>
+                <div class="middle-cap all-cap">
                     <a href="javascript:void(0)" class="property_choice" id="property_choice_{{ property_for_rent_id }}">{{ 'For rent'|trans({}, 'frontend-landing-page') }}</a>
+                </div>
+                <div class="right-cap all-cap">
                     <a href="javascript:void(0)" class="property_choice" id="property_choice_{{ property_share_id }}">{{ 'To share'|trans({}, 'frontend-landing-page') }}</a>
                 </div>
             </div>
@@ -24,56 +29,79 @@
 </div>
 
 <div class="landing-divider">
-    <div class="row">
-        <div class="large-16 columns">
-            <div class="mt20">
+    <div class="container">
+        <div class="row mt20 mb20">
+            <div class="col-lg-16 col-md-24">
                 {{ form_label(attribute(form, 'item__property_type_id')) }}
-                <div id="property-type-circles" class="clearfix landing-circles hide-for-small-only"></div>
-            </div>
-
-            <div id="property_type_choices" class="show-for-small-only white-select">
-                {{ form_widget(attribute(form, 'item__property_type_id')) }}
-            </div>
-
-        </div>
-
-        <div class="large-8 columns property-distance">
-            <div class="landing-divider">
-                <div class="travel-distance">
-                    <label>{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</label>
-                    <ul class="clearfix">
-                        <li class="miles-col white-select">{{ form_widget(form.item__distance) }}</li>
-                        <li class="from-col">{{ 'from'|trans({}, 'frontend')}}</li>
-                        <li class="location-col">
-                            {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
-                            <a href="javascript:void(0);" id="fa_landing_page_property_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-                        </li>
-                    </ul>
+                <div id="property-type-circles" class="d-clock d-md-none">
+                    {{ form_widget(attribute(form, 'item__property_type_id')) }}
                 </div>
-            </div>
-
-            <div class="property-budget">
-                <label>{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</label>
-                <ul class="budget-box clearfix">
-                    <li class="budget-field">
-                        <span>&pound;</span>{{ form_widget(form.item__price_from, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
+                <ul id="property-type-circles" class="discover-categories landing-circles d-none d-md-block">
+                    <li class="any-category body_type_choice active" id="body_type_choice_">
+                        <a href="javascript:void(0)">{{ 'Any'|trans({}, 'frontend-landing-page') }}</a>
                     </li>
-                    <li class="budget-to-caption">{{ 'to'|trans({}, 'frontend')}}</li>
-                    <li class="budget-field">
-                        <span>&pound;</span>{{ form_widget(form.item__price_to, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
-                    </li>
-                    <li id="rent_per_container" style="display:none" class="white-select">
-                        {{ form_widget(form.item_property__rent_per_id) }}
-                    </li>
+                    {% set selectedPropertyTypeId = attribute(form, 'item__property_type_id').vars.data %}
+                    {% for choice in attribute(form, 'item__property_type_id').vars.choices %}
+                        {% set activeClass = '' %}
+                        {% if choice.value == selectedPropertyTypeId %}
+                            {% set activeClass = 'active' %}
+                        {% endif %}
+                        <li class="property-{{ choice.label|lower }} body_type_choice {{ activeClass }}" id="property_type_choice_{{ choice.value }}">
+                            <a href="javascript:void(0)" >{{ choice.label }}</a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
-
+            <div class="col-lg-8 col-md-24 distance-budget-md-block">
+                <div class="col-sm-24 col-md-12 col-lg-24 pad-none">
+                    <label>{{ 'Distance I\'m happy to travel'|trans({}, 'frontend-left-search')}}</label>
+                    <div>
+                        <ul class="budget-box clearfix d-inline-flex f-width">
+                            <li class="budget-field">
+                                <div class="select">
+                                    {{ form_widget(form.item__distance) }}
+                                </div>
+                            </li>
+                            <li class="budget-to-caption">
+                                {{ 'from'|trans({}, 'frontend')}}
+                            </li>
+                            <li>
+                                {{ form_widget(form.item__location_autocomplete, {'attr': {'class': 'white-field'}}) }}
+                                <a href="javascript:void(0);" id="fa_landing_page_property_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="landing-divider clearfix mt20 mb20 d-md-none d-lg-block"></div>
+                <div class="col-sm-24 col-md-12 col-lg-24 pad-none">
+                    <label>{{ 'My budget is from'|trans({}, 'frontend-left-search')}}</label>
+                    <div>
+                        <ul class="budget-box clearfix d-inline-flex f-width">
+                            <li class="budget-field">
+                                <span>&pound;</span>{{ form_widget(form.item__price_from, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
+                            </li>
+                            <li class="budget-to-caption">{{ 'to'|trans({}, 'frontend')}}</li>
+                            <li class="budget-field">
+                                <span>&pound;</span>{{ form_widget(form.item__price_to, {'attr': {'class': 'white-field', 'autocomplete': 'off'}}) }}
+                            </li>
+                            <li id="rent_per_container" style="display:none" >
+                                {{ form_widget(form.item_property__rent_per_id) }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-<div class="small-wrapper">
-    <button class="secondary-btn-1 expand button mb0 landing-search-btn" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
+<div class="container mt20">
+    <div class="row">
+        <div class="col-md-24">
+            <div class="col-md-8 offset-md-8 mt20">
+                <button class="secondary-btn-1 btn btn-block landing-search-btn" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
+            </div>
+        </div>
+    </div>
 </div>
 {{ form_end(form) }}
 {% endblock %}
