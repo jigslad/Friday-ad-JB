@@ -1,6 +1,13 @@
+@import "global";
+
 .paa-block {
   .posting-bg {
     position: relative;
+    background: -moz-linear-gradient(left, $dark-gray 0, $dark-gray 50%, $common-bg-color 50%, $common-bg-color 100%);
+    background: -webkit-linear-gradient(left, $dark-gray 0, $dark-gray 50%, $common-bg-color 50%, $common-bg-color 100%);
+    background: -o-linear-gradient(left, $dark-gray 0, $dark-gray 50%, $common-bg-color 50%, $common-bg-color 100%);
+    background: -ms-linear-gradient(left, $dark-gray 0, $dark-gray 50%, $common-bg-color 50%, $common-bg-color 100%);
+    background: linear-gradient(to right, $dark-gray 0, $dark-gray 50%, $common-bg-color 50%, #eeeeeee8 100%);
   }
   .step-instruction {
     min-height: 145px;
@@ -14,14 +21,19 @@
     background: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns:sketch='http://www.bohemiancoding.com/sketch/ns' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' id='Layer_1' x='0' y='0' width='88' height='36' viewBox='0 0 88 36' xml:space='preserve' enable-background='new 0 0 88 36'%3e%3cstyle type='text/css'%3e .st0%7bfill:%23FFFFFF;%7d .st1%7bfill:%23A8DC28;%7d .st2%7bfill:%23313133;%7d %3c/style%3e%3ctitle%3e FAD signature %3c/title%3e%3cdesc%3e Created with Sketch. %3c/desc%3e%3cg id='PAA' sketch:type='MSPage'%3e%3cg id='Desktop-HD-For-sale-11' transform='translate(-183.000000, -289.000000)' sketch:type='MSArtboardGroup'%3e%3cg id='Phase-1' transform='translate(-2.000000, 260.000000)' sketch:type='MSLayerGroup'%3e%3cg id='side-navigation' sketch:type='MSShapeGroup'%3e%3cg id='FAD-signature' transform='translate(185.000000, 29.000000)'%3e%3cpath id='Fill-1' class='st0' d='M55.5 19.9l2.7-8.5h0.1l2.6 8.5H55.5L55.5 19.9zM66.4 25l-6-16.7h-6.4v2.3l1.7 0.2 -4.8 13.5c-0.2 0.5-0.3 0.8-0.8 0.8L49 25.1v2.4h6.9V25L54 25.1l0.8-2.4h6.9l0.6 1.6c0.2 0.6 0.1 0.7-0.5 0.7l-0.9 0v2.4h7.5V25L66.4 25 66.4 25 66.4 25z'/%3e%3cpath id='Fill-2' class='st0' d='M78.6 25h-2.7V11.2h2.3c3.2 0 5.7 1.5 5.7 6.7C83.9 22.5 81.9 25 78.6 25M78.4 8.3h-8v2.4l1.7 0.1v13.4c0 0.6-0.3 0.8-0.8 0.8l-0.9 0.1v2.4h8.1c4.7 0 9-2.7 9-10.3C87.5 11.2 84 8.3 78.4 8.3'/%3e%3cpath id='Fill-3' class='st1' d='M40.9 17.8c0 1.4-1.1 2.4-2.5 2.4 -1.4 0-2.5-1.1-2.5-2.4s1.1-2.4 2.5-2.4C39.8 15.4 40.9 16.5 40.9 17.8M44.9 15.3L33.6 1.9c-0.8-0.9-1.9-1.4-3.1-1.4H0.3v35.3h30.3c1.5 0 2.8-0.8 3.5-2l11-13.5C46.2 18.8 46.2 16.8 44.9 15.3'/%3e%3cpath id='Fill-4' class='st2' d='M11.8 25.5l1-0.1c0.5-0.1 0.9-0.2 0.9-0.8V11l-1.7-0.1V8.4h14.3v4.8l-3 0.2v-1.2c0-0.6-0.1-0.9-0.9-0.9h-5.1v5.2h7.3v3h-7.3v5.7l2.6 0.1v2.5h-8.1V25.5'/%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e ") no-repeat;
   }
   .step-instruction h3 {
+    color: $common-bg-color;
     margin-bottom: 18px;
     width: 140px;
   }
   .step-to-complete {
     font-size: 13px;
+    color: $form-label-color;
     position: absolute;
     left: 0;
     top: 112px;
+    span {
+      color: $white;
+    }
   }
   .step-nav {
     margin: 14px 0 0 0;
@@ -30,6 +42,7 @@
     li {
       margin-bottom: 25px;
       font-size: 18px;
+      color: $common-bg-color;
       line-height: 21px;
     }
   }
@@ -91,6 +104,7 @@
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%22-1405%20459.9%2024%2024%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23EFEFEF%3Bfill-opacity%3A0.15%3B%7D%0D%0A%09.st1%7Bfill%3Anone%3Bstroke%3A%23313133%3Bstroke-width%3A3%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3ETick%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-390.000000%2C%20-464.000000%29%22%3E%3Cg%20transform%3D%22translate%28-2.000000%2C%20-127.000000%29%22%3E%3Cg%20transform%3D%22translate%280.000000%2C%20387.000000%29%22%3E%3Cg%20transform%3D%22translate%28392.000000%2C%20204.000000%29%22%3E%3Ccircle%20class%3D%22st0%22%20cx%3D%22-1393%22%20cy%3D%22471.9%22%20r%3D%2212%22/%3E%3Cpath%20class%3D%22st1%22%20d%3D%22M-1398%20471.9l3.8%204%206.2-8%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat 100% 15px;
   }
   .medium-col {
+    background: $white;
     padding-top: 15px;
     padding-bottom: 60px;
   }
@@ -116,7 +130,7 @@
       width: auto;
       height: auto;
       text-indent: -9999px;
-      border-radius: 5px;
+      border-radius: 100%;
       background-size: cover;
       background-position: center;
       flex: 0 0 calc(16.66% - 20px);
@@ -140,6 +154,8 @@
   }
   .change-category {
     padding: 8px 19px;
+    background: $common-bg-color;
+    border: 1px solid $form-border-color;
     border-radius: 2px;
     box-shadow: none;
     font-size: 14px;
@@ -149,6 +165,7 @@
     margin-bottom: 10px;
     span {
       font-weight: 700;
+      color: $form-text-color;
       padding-right: 10px;
       display: inline-block;
       &:first-child {
@@ -178,15 +195,19 @@
     padding: 0px !important;
   }
   .paa-bdr-box {
+    border-bottom: 1px solid $form-text-color;
     padding: 26px 0 15px 0;
     width: 100%;
     h3 {
       margin-bottom: 24px;
       font-size: 18px;
       font-weight: 400;
+      color: $dark-gray;
       line-height: 24px;
       span {
+        font-family: $font-family-default;
         font-size: 14px;
+        color: $common-text-color;
       }
     }
   }
@@ -194,9 +215,16 @@
     list-style: none;
     margin: 0 17px 20px;
     li {
+      &:hover {
+        background: $form-border-color;
+      }
       &.active {
+        background: $form-border-color;
+        border-color: $secondary-color;
         z-index: 1;
       }
+      background: $white;
+      border: 1px solid $form-border-color;
       float: left;
       width: 50%;
       margin: 0 -1px -1px 0;
@@ -217,6 +245,7 @@
         margin-bottom: 0;
         font-size: 14px;
         line-height: 16px;
+        color: $common-text-color;
         font-weight: 400;
         padding: 11px 5px 11px 50px;
         cursor: pointer;
@@ -226,14 +255,17 @@
   }
   .paa-title-char {
     text-align: right;
+    color: $form-text-color;
     font-size: 12px;
   }
   .paa-help-text {
     line-height: 19px;
+    color: $form-text-color;
     font-family: "Helvetica Neue",Arial;
     font-size: 13px;
     p {
       line-height: 19px;
+      color: $form-text-color;
       font-family: "Helvetica Neue",Arial;
       font-size: 13px;
     }
@@ -242,6 +274,7 @@
       min-height: 46px;
       margin-bottom: 33px;
       padding-left: 65px;
+      color: $form-text-color;
       font-family: "Helvetica Neue",Arial;
       font-size: 18px;
       line-height: 24px;
@@ -250,10 +283,14 @@
   }
   .paa-back-arrow {
     font-weight: bold;
+    color: $form-text-color;
     padding-left: 12px;
     margin: 0 0 10px 10px;
     display: inline-block;
     background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%226%22%20height%3D%2212%22%20viewBox%3D%22-1414%20465.9%206%2012%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3Anone%3Bstroke%3A%23A8A8A8%3Bstroke-width%3A2%3Bstroke-linecap%3Around%3Bstroke-linejoin%3Around%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Eselected%2011%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-23.000000%2C%20-521.000000%29%22%3E%3Cg%20transform%3D%22translate%28-12.000000%2C%20438.000000%29%22%3E%3Cg%20transform%3D%22translate%2826.000000%2C%2046.000000%29%22%3E%3Cpath%20class%3D%22st0%22%20d%3D%22M-1400%20503.9l-4%205%204%205%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') 0 4px no-repeat;
+    &:focus, &:hover {
+      color: $primary-color;
+    }
   }
 }
 
@@ -265,6 +302,9 @@
 }
 @media (min-width: 320px) and (max-width: 759px) {
   .paa-block {
+    .posting-bg {
+      background: $dark-gray;
+    }
     .paa-features li {
       width: 100%;
     }
@@ -301,6 +341,7 @@
     padding: 5px 0 25px 0;
     label {
       font-size: 13px !important;
+      color: $form-label-color !important;
       margin-right: 0px !important;
     }
   }
@@ -323,6 +364,7 @@
     margin: 5px 0 32px 0;
     text-align: center;
     font-size: 20px;
+    color: $dark-gray;
   }
   .fb-btn, .gplus-btn {
     width: 46%;
@@ -340,15 +382,18 @@
   .gplus-btn {
     background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/google_signin.png) no-repeat;
     margin-left: 18px;
+    background-color: $gplus-bg-color;
     &:hover {
       background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/google_signin.png) no-repeat;
       margin-left: 20px;
+      background-color: $gplus-bg-color;
     }
   }
   .post-info {
     text-align: center;
     margin-bottom: 0;
     font-size: 13px;
+    color: $form-label-color;
   }
 }
 
@@ -374,6 +419,8 @@
 //Step 4
 .paa-block {
   .paa-gray-box {
+    background: $common-bg-color;
+    border: 1px solid $secondary-color;
     padding: 20px 15px 20px;
     margin-top: 30px;
     border-radius: 2px;
@@ -382,6 +429,7 @@
       margin-bottom: 14px;
       font-size: 18px;
       font-weight: 400;
+      color: $dark-gray;
       line-height: 24px;
     }
     .small-wrapper {
@@ -396,7 +444,8 @@
       text-indent: -9999px;
       background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%2221%22%20height%3D%2219%22%20viewBox%3D%22-389%20226%2021%2019%22%20xml%3Aspace%3D%22preserve%22%3E%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%09.st0%7Bfill%3A%23A8A8A8%3B%7D%0D%0A%09.st1%7Benable-background%3Anew%20%20%20%20%3B%7D%0D%0A%09.st2%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%3C/style%3E%3Ctitle%3Einfo%20icon%3C/title%3E%3Cdesc%3ECreated%20with%20Sketch.%3C/desc%3E%3Cg%20transform%3D%22translate%28-726.000000%2C%20-1133.000000%29%22%3E%3Cg%20transform%3D%22translate%28-2.000000%2C%20-127.000000%29%22%3E%3Cg%20transform%3D%22translate%28465.000000%2C%20451.000000%29%22%3E%3Cg%20transform%3D%22translate%28111.000000%2C%20745.000000%29%22%3E%3Cg%20transform%3D%22translate%28153.000000%2C%2064.000000%29%22%3E%3Cellipse%20class%3D%22st0%22%20cx%3D%22-379.4%22%20cy%3D%22235.5%22%20rx%3D%229.9%22%20ry%3D%229.5%22/%3E%3Cg%20class%3D%22st1%22%3E%3Cpath%20class%3D%22st2%22%20d%3D%22M-378.9%20238.9h0.7v1h-3.1v-1h0.4c0.2%200%200.4-0.1%200.4-0.4v-3.6c0-0.3-0.1-0.4-0.3-0.4h-0.5v-1h2.3v5.4H-378.9zM-379.8%20230.7c0.6%200%201%200.4%201%201%200%200.6-0.4%200.9-1%200.9%20-0.6%200-1-0.4-1-0.9S-380.4%20230.7-379.8%20230.7z%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E') no-repeat;
   }
-  .youtube-icon {    
+  .youtube-icon {
+    background: $white url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='UTF-8' standalone='no'?%3e%3csvg width='60px' height='25px' viewBox='0 0 60 25' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3c!-- Generator: Sketch 3.8.3 (29802) - http://www.bohemiancoding.com/sketch --%3e%3ctitle%3ePage 1%3c/title%3e%3cdesc%3eCreated with Sketch.%3c/desc%3e%3cdefs%3e%3c/defs%3e%3cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' opacity='0.2'%3e%3cg id='Desktop---PAA-with-youtube' transform='translate(-799.000000, -1292.000000)' fill='%2312100C'%3e%3cg id='5-Add-more-details-2' transform='translate(457.000000, -43.000000)'%3e%3cg id='Group'%3e%3cg transform='translate(0.000000, 525.000000)' id='Add-photos-2'%3e%3cg transform='translate(0.000000, 683.000000)'%3e%3cg id='field' transform='translate(113.000000, 119.000000)'%3e%3cg id='Page-1' transform='translate(229.000000, 8.000000)'%3e%3cpath d='M22.3505976,20.142381 L20.0796813,20.142381 L20.0796813,18.8328571 C19.2187649,19.8157143 18.4889641,20.3121429 17.6934263,20.3121429 C16.9954183,20.3121429 16.510757,19.9841667 16.268008,19.3916667 C16.1205179,19.0313095 16.0159363,18.4688095 16.0159363,17.642381 L16.0159363,8.11857143 L18.2868526,8.11857143 L18.2868526,17.0471429 L18.2868526,17.8804762 C18.3398008,18.2146429 18.4822709,18.3366667 18.7710359,18.3366667 C19.2057371,18.3366667 19.5990837,17.9604762 20.0796813,17.2852381 L20.0796813,8.11857143 L22.3505976,8.11857143 L22.3505976,20.142381' id='Fill-1'%3e%3c/path%3e%3cpath d='M12.0717131,16.5709524 C12.1912351,17.7614286 11.8204781,18.3521429 11.1152988,18.3521429 C10.410239,18.3521429 10.0398406,17.7614286 10.1593625,16.5709524 L10.1593625,11.8090476 C10.0398406,10.6185714 10.4103586,10.0605952 11.1155378,10.0605952 C11.8207171,10.0605952 12.1924303,10.6185714 12.0729084,11.8090476 L12.0717131,16.5709524 Z M14.3426295,12.0471429 C14.3426295,10.7622619 14.083506,9.79738095 13.625498,9.19 C13.0204781,8.36761905 12.0717131,8.03095238 11.1155378,8.03095238 C10.0332669,8.03095238 9.20964143,8.36761905 8.60557769,9.19 C8.14027888,9.79738095 7.89071713,10.7727381 7.89071713,12.057619 L7.88844622,16.3328571 C7.88844622,17.6105952 8.11039841,18.4934524 8.57581673,19.094881 C9.17988048,19.9147619 10.1593625,20.3491667 11.1155378,20.3491667 C12.0717131,20.3491667 13.0684064,19.9147619 13.6733068,19.094881 C14.1313147,18.4934524 14.3426295,17.6105952 14.3426295,16.3328571 L14.3426295,12.0471429 L14.3426295,12.0471429 Z' id='Fill-3'%3e%3c/path%3e%3cpath d='M5.37848606,13.5947619 L5.37848606,20.142381 L2.98804781,20.142381 L2.98804781,13.5947619 C2.98804781,13.5947619 0.510956175,5.5672619 0,4.07095238 L2.50996016,4.07095238 L4.1874502,10.3419048 L5.85657371,4.07095238 L8.36653386,4.07095238 L5.37848606,13.5947619' id='Fill-5'%3e%3c/path%3e%3cpath d='M54.6215139,11.4619048 C54.6215139,10.3615476 54.3359761,10.0309524 53.6186056,10.0309524 C52.8959761,10.0309524 52.5896414,10.3344048 52.5896414,11.4470238 L52.5896414,12.7636905 L54.6215139,12.7614286 L54.6215139,11.4619048 Z' id='Fill-7'%3e%3c/path%3e%3cpath d='M45.7078088,10.0309524 C45.3515139,10.0309524 44.9434661,10.2182143 44.5816733,10.5739286 L44.5791633,17.7936905 C44.9410757,18.1540476 45.3515139,18.3366667 45.7078088,18.3366667 C46.3318327,18.3366667 46.6135458,17.8804762 46.6135458,16.69 L46.6135458,11.5709524 C46.6135458,10.3804762 46.3318327,10.0309524 45.7078088,10.0309524' id='Fill-9'%3e%3c/path%3e%3cpath d='M53.6386853,18.3366667 C54.1713944,18.3366667 54.4819124,18.0480952 54.6053785,17.4720238 C54.6254582,17.3545238 54.6216335,16.8404762 54.6216335,15.9757143 L56.8924303,15.9757143 L56.8924303,16.3130952 C56.8924303,17.007619 56.8350598,17.4991667 56.8155777,17.715 C56.7425498,18.1927381 56.5725896,18.625 56.3095219,19.0063095 C55.7109562,19.870119 54.8230279,20.2958333 53.6924701,20.2958333 C52.5604781,20.2958333 51.6988446,19.890119 51.0732669,19.0772619 C50.6135857,18.4820238 50.3187251,17.5970238 50.3187251,16.3328571 L50.3187251,12.1661905 C50.3187251,10.8947619 50.5869323,9.91190476 51.0466135,9.3102381 C51.6724303,8.49619048 52.5340637,8.06535714 53.6386853,8.06535714 C54.7241833,8.06535714 55.5858167,8.49619048 56.1923904,9.3102381 C56.6447809,9.91190476 56.8961355,10.8420238 56.8961355,12.1134524 L56.8966135,14.5471429 L52.5896414,14.5471429 L52.5896414,16.685 C52.5822311,17.7835714 52.8959761,18.3366667 53.6386853,18.3366667 L53.6386853,18.3366667 Z M48.8844622,16.5709524 C48.8844622,17.6711905 48.7899203,18.447619 48.6454183,18.9519048 C48.3566534,19.8364286 47.727012,20.2958333 46.8653785,20.2958333 C46.0960159,20.2958333 45.3076494,19.8347619 44.5846614,18.9438095 L44.5816733,20.142381 L42.4302789,20.142381 L42.4302789,4.19 L44.5816733,4.19 L44.5791633,9.39095238 C45.2781275,8.53428571 46.0693625,8.04666667 46.8653785,8.04666667 C47.727012,8.04666667 48.3062151,8.54238095 48.5949801,9.43345238 C48.7394821,9.91190476 48.8844622,10.6822619 48.8844622,11.8090476 L48.8844622,16.5709524 Z M40.6374502,20.142381 L38.3665339,20.142381 L38.3665339,18.8328571 C37.5056175,19.8157143 36.7758167,20.3121429 35.9802789,20.3121429 C35.2822709,20.3121429 34.7976096,19.9841667 34.5548606,19.3916667 C34.4073705,19.0313095 34.3027888,18.4688095 34.3027888,17.642381 L34.3027888,8.23761905 L36.5737052,8.23761905 L36.5737052,17.0471429 L36.5737052,17.8804762 C36.6266534,18.2146429 36.7691235,18.3366667 37.0578884,18.3366667 C37.4925896,18.3366667 37.8859363,17.9604762 38.3665339,17.2852381 L38.3665339,8.23761905 L40.6374502,8.23761905 L40.6374502,20.142381 Z M32.0318725,20.142381 L29.6414343,20.142381 L29.6414343,6.45190476 L27.1314741,6.45190476 L27.1314741,4.1925 L34.6613546,4.19 L34.6613546,6.45190476 L32.0318725,6.45190476 L32.0318725,20.142381 Z M58.1079681,1.85690476 C56.7509163,0.4475 55.2294024,0.440357143 54.5318725,0.35797619 C49.6156972,0.0055952381 42.2795618,0.000119047619 42.0515139,0 L42.0460159,0 L42.0303586,0 L42.0248606,0 C41.7968127,0.000119047619 34.4605578,0.0055952381 29.5443825,0.35797619 C28.8466135,0.440357143 27.3256972,0.4475 25.9682869,1.85690476 C24.8980876,2.93083333 24.5498008,5.36952381 24.5498008,5.36952381 C24.5498008,5.36952381 24.1929084,8.23321429 24.1929084,11.0971429 L24.1929084,13.7820238 C24.1929084,16.6455952 24.5498008,19.5092857 24.5498008,19.5092857 C24.5498008,19.5092857 24.8980876,21.9478571 25.9682869,23.0219048 C27.3256972,24.4316667 29.1094422,24.3867857 29.9035458,24.5344048 C32.7588048,24.8061905 42.0381275,24.890119 42.0381275,24.890119 C42.0381275,24.890119 49.5376494,24.8789286 54.5318725,24.5211905 C55.2294024,24.4385714 56.7509163,24.4316667 58.1079681,23.0219048 C59.1780478,21.9478571 59.5268127,19.5092857 59.5268127,19.5092857 C59.5268127,19.5092857 59.8832271,16.6455952 59.8832271,13.7820238 L59.8832271,11.0971429 C59.8832271,8.23321429 59.5268127,5.36952381 59.5268127,5.36952381 C59.5268127,5.36952381 59.1780478,2.93083333 58.1079681,1.85690476 L58.1079681,1.85690476 Z' id='Fill-11'%3e%3c/path%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/g%3e%3c/svg%3e") 97% 6px no-repeat !important;
     padding-right: 72px !important;
   }
   .panel-heading {
@@ -410,6 +459,12 @@
       position: absolute;
       width: 100%;
       top: 55px;
+      color: $dark-gray;
+    }
+    &:hover {
+      .arrow-block, h3, .optional-text {
+        color: $secondary-h-color;
+      }
     }
   }
   .collapse-body-content {
@@ -420,10 +475,21 @@
     margin-top: 20px;
   }
   .drag-drop-box {
+    background: $common-bg-color;
+    border: 1px dashed $form-text-color;
     padding: 17px 10px;
+    &:hover {
+      background: $white;
+      border-color: $secondary-color;
+    }
+  }
+  .drag-drop-box-hover {
+    background: $white;
+    border-color: $secondary-color;
   }
   .drag-ins-hr {
     font-weight: bold;
+    color: $form-text-color;
     background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/upload-image.png) no-repeat;
     padding: 0 0 0 26px;
     margin-bottom: 10px;
@@ -438,6 +504,7 @@
     padding: 30px 0 0 0;
 }
 #uploaded_images_div .main-photo {
+    border: 5px solid $secondary-color;
     position: absolute;
     left: -1px;
     top: 2px;
@@ -445,9 +512,11 @@
     height: 137px;
 }
 #uploaded_images_div .main-photo b {
+    background: $secondary-color;
     height: 30px;
     line-height: 30px;
     text-align: center;
+    color: $white;
     display: block;
     margin-top: -3px;
 }
@@ -477,6 +546,7 @@
     touch-action: none;
 }
 .adimg-thumb {
+    background: $white;
     height: 100px;
     position: relative;
     text-align: center;
@@ -577,6 +647,8 @@
     padding: 0px !important;
   }
   .paa-pkg-bg {
+    background: $common-bg-color;
+    border: 1px solid $form-border-color;
     border-radius: 0 0 2px 2px;
     margin-bottom: 13px;
     position: relative;
@@ -604,6 +676,8 @@
     line-height: 40px;
     text-align: center;
     text-transform: uppercase;
+    color: $white;
+    background-color: $form-text-color;
     margin: -1px;
   }
   .pkg-subtitle {
@@ -611,12 +685,18 @@
     line-height: normal;
     min-height: 60px;
     padding: 20px 10px 10px;
+    background: $dark-gray;
+    border-bottom: 1px solid $dark-gray;
+    box-shadow: 0 1px 0 $common-text-color;
     position: relative;
     text-align: center;
+    color: $white;
     font-size: 18px;
+    font-family: $font-family-secondary;
     margin: -1px;
   }
   .pkg-pricing {
+    background: $dark-gray;
     padding: 0 20px 4px 20px;
     margin: -1px;
   }
@@ -624,6 +704,7 @@
     min-height: 150px;
   }
   .pkg-pricing h4 {
+    color: $secondary-color;
     font-size: 36px;
     line-height: 46px;
     text-align: center;
@@ -631,21 +712,28 @@
     text-transform: uppercase;
   }
   .primary-btn-grey {
+    background: $form-text-color;
+    border-color: $form-text-color;
     border-radius: 2px;
   }
   .choose_btn {
     height: 60px !important;
     margin-bottom: 20px;
   }
-
+  .pkg-blue-head {
+    background: $primary-color;
+  }
   .paa-pkg-bg button {
     z-index: 2;
   }
   .pkg-ins {
+    border-bottom: 1px solid $white;
+    box-shadow: 0 1px 0 $form-text-color;
     padding: 13px 15px;
     text-align: center;
     font-weight: 700;
     line-height: 16px;
+    color: $dark-gray;
   }
   .pkg-points {
     padding: 10px 23px;
@@ -705,6 +793,7 @@
       padding: 15px 0 15px;
     }
     .pkg-active {
+      box-shadow: inset 0 0 0 0px $secondary-color;
       padding: 0 0px 0px;
     }
     .pkg-includes {
@@ -731,6 +820,8 @@
       list-style: none;
     }
     li {
+      border-bottom: solid 1px $white;
+      box-shadow: 0 1px 0 $form-text-color;
       padding: 19px 0;
       &:last-child {
         border-bottom: 0px;
@@ -739,6 +830,8 @@
     }
   }
   .cart-item {
+    background: $white;
+    border: solid 1px $form-border-color;
     border-radius: 2px;
     .cart-item-img {
       width: 126px;
@@ -767,10 +860,12 @@
     }
   }
   .cart-item-info h4 {
+    color: $form-text-color;
     font-size: 32px;
     padding: 12px 0;
   }
   .cart-item-price h4 {
+    color: $secondary-color;
     font-size: 36px;
     line-height: 46px;
     padding: 14px 0 0;
@@ -792,15 +887,24 @@
   .credit-cards-box {
     background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/credit-cards.svg) no-repeat center center;
     height: 144px;
+    border: solid 1px $form-border-color;
     border-radius: 2px;
     cursor: pointer;
+    &:focus, &:hover {
+      border: solid 1px $secondary-color;
+    }
   }
   .paypal-box {
+    background: $paypal-bg-color url(https://www.friday-ad.co.uk/bundles/fafrontend/images/paypal-payment.png) no-repeat center center;
     height: 144px;
     margin-bottom: 0px;
+    border: solid 1px $paypal-border-color;
     border-radius: 2px;
     cursor: pointer;
     margin-left: 15px;
+    &:focus, &:hover {
+      background-color: $paypal-h-bg-color;
+    }
   }
   .or-caption {
     text-align: center;
@@ -912,6 +1016,7 @@
     left: 50px;
     margin: 0 4px 0 0;
     padding: .3rem 0 .3rem .5rem;
+    color: $secondary-color;
     font-size: 30px;
 }
 .element-animation {
@@ -933,6 +1038,8 @@
     -ms-transform-origin: 50% 50%;
 }
 .fad-sign-bdr {
+    border-bottom: 1px solid $black;
+    box-shadow: 0 1px 0 $common-text-color;
     position: absolute;
     top: 171px;
     left: -140px;
@@ -1026,9 +1133,18 @@
     top: 0;
     height: 24px;
     width: 24px;
+    background-color: $form-border-color;
     border-radius: 50%;
     left: calc(50% - 17%);
     left: -webkit-calc(50% - 17%);
+}
+/* On mouse-over, add a grey background color */
+.horizontal-radio:hover input ~ .checkmark {
+    background-color: $form-border-color;
+}
+/* When the radio button is checked, add a blue background */
+.horizontal-radio input:checked ~ .checkmark {
+    background-color: $form-border-color;
 }
 /* Create the indicator (the dot/circle - hidden when not checked) */
 .horizontal-radio .checkmark:after {
@@ -1047,6 +1163,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
+    background: $secondary-color;
 }
 .horizontal-radio .label-text {
     height: 100%;

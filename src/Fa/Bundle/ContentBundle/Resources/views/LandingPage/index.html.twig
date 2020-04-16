@@ -46,15 +46,8 @@
 {% if form is defined %}
     {% form_theme form 'FaFrontendBundle:Form:fields.html.twig' %}
 {% endif %}
-
-{% block scripttop %}
-    {% stylesheets filter='uglifycss' output='bundles/css/compiled/landingPage.css'
-        'bundles/facore/css/owl.carousel.css'
-        'bundles/facore/css/owl.theme.css'
-          %}
-        <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
-    {% endstylesheets %}
-    <link rel="stylesheet" href="{{ asset('build/css/landing.css') }}"/>
+{% block stylesheet %}
+	<link rel="stylesheet" href="{{ asset('/build/css/landing.css') }}">
 {% endblock %}
 
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}

@@ -13,6 +13,7 @@
     {% set blockTwitterMeta = block('twitter_meta') is defined ? block('twitter_meta')|trim : false %}
     {% set blockGaCode = block('google_ga_code') is defined ? block('google_ga_code')|trim : false %}
     {% set blockBreadcrumbCode = block('breadcrumb_script') is defined ? block('breadcrumb_script')|trim : false %}
+    {% set blockStylesheet = block('stylesheet') is defined ? block('stylesheet')|trim : false %}
 
     {% set container = fetch_container_instance() %}
     {% set currentRoute = app.request.attributes.get('_route') %}
@@ -132,13 +133,21 @@
     {% if blockTwitterMeta %}
         {{blockTwitterMeta|raw}}
     {% endif %}
-
-    {{ include('FaFrontendBundle::scriptTop.html.twig') }}
-    {% block scripttop %}{% endblock %}
-
+    
+    {{ include('FaFrontendBundle::styleTop.html.twig') }}  
+      
+    {% if blockStylesheet %}
+    	{{ blockStylesheet|raw }}
+    {% endif %}
+    
     {% if (currentRoute  in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'ad_post_third_step_registration', 4: 'ad_post_fourth_step'}) %}
     	<link rel="stylesheet" href="{{ asset('build/css/paa.css') }}">
     {% endif %}
+    
+    {{ include('FaFrontendBundle::scriptTop.html.twig') }}
+        
+    {% block scripttop %}{% endblock %}
+
 
     {# { include('FaFrontendBundle::fa-main-css.html.twig') } #}
     
@@ -147,7 +156,7 @@
     .choice-display-flex label { margin-right:10px !important; line-height:25px !important; }
     </style>
     {# { include('FaFrontendBundle::new-fa-main-css.html.twig') } #}
-  
+    
     {% block blockGaCode%}
         {{ include('FaFrontendBundle::gaCode.html.twig') }}
     {% endblock %}
