@@ -3,7 +3,7 @@
     {% if currentRoute not in {0: 'ad_post_first_step', 1: 'ad_post_second_step', 2: 'ad_post_third_step', 3: 'facebook_paa_login', 4: 'ad_post_third_step_registration', 5: 'ad_post_fourth_step', 6: 'ad_edit', 7: 'ad_package_purchase', 8: 'show_cart'} %}
         <div class="row show-for-small-only">
             <div class="columns">
-                <a href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}" class="primary-btn-1 button expand">{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}</a>
+                <a href="{{ path('ad_post_first_step') }}" title="{{ 'Place an ad'|trans({}, 'frontend-top-menu') }}" class="primary-btn-1 button expand mobpaabtn">{{ 'Place An Ad'|trans({}, 'frontend-top-menu') }}</a>
             </div>
         </div>
     {% endif %}
