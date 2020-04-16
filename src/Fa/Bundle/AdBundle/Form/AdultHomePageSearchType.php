@@ -135,7 +135,7 @@ class AdultHomePageSearchType extends AbstractType
         
         $form->add(
             'item_adult__independent_or_agency_id',
-            JsChoiceType::class,
+            ChoiceType::class,
             array(
                 'choices'     => array_flip($indOrAgencyArray),
                 'expanded' => true
