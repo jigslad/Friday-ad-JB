@@ -300,73 +300,73 @@ $(document).ready(function(){
 
 });
 $(document).ready(function() {
-
-    $("#search_preferences_link").on('click', function(){
-        $('.search-sliders').toggle();
-    });
-
-        var slider1 = document.getElementById('price_slider');
-
-        if (slider1 != undefined) {
-        noUiSlider.create(slider1, {
-            snap: true,
-            connect: true,
-            start: [ 0, 500000 ],
-            range: {
-                'min': 0,
-                '5%': 5,
-                '10%': 10,
-                '15%': 20,
-                '20%': 50,
-                '30%': 100,
-                '40%': 250,
-                '50%': 500,
-                '60%': 1000,
-                '70%': 2000,    
-                '80%': 5000,
-                '90%': 10000,
-                'max': 500000
-            }
-        });
-      }
-
-        var slider2 = document.getElementById('distance_slider');
-
-        if (slider2 != undefined) {
-        noUiSlider.create(slider2, {
-            snap: true,
-            connect: true,
-            start: [ 0, 500000 ],
-            range: {
-                'min': 0,
-                '5%': 5,
-                '10%': 10,
-                '15%': 20,
-                '20%': 50,
-                '30%': 100,
-                '40%': 250,
-                '50%': 500,
-                '60%': 1000,
-                '70%': 2000,    
-                '80%': 5000,
-                '90%': 10000,
-                'max': 500000
-            }
-            // start: [ 15 ],
-            // connect: true,
-            // range: {
-            //     'min': [0, 2],
-            //     '5%':  [2, 3],
-            //     '10%': [5, 5],
-            //     '20%': [20, 10],
-            //     '25%': [30, 20],
-            //     '35%': [50, 25],
-            //     '55%': [100, 50],
-            //     '85%': [200, 100000],
-            //     'max': 100000
-            // }
-        });
-      }
+    //
+    // $("#search_preferences_link").on('click', function(){
+    //     $('.search-sliders').toggle();
+    // });
+    //
+    //     var slider1 = document.getElementById('price_slider');
+    //
+    //     if (slider1 != undefined) {
+    //     noUiSlider.create(slider1, {
+    //         snap: true,
+    //         connect: true,
+    //         start: [ 0, 500000 ],
+    //         range: {
+    //             'min': 0,
+    //             '5%': 5,
+    //             '10%': 10,
+    //             '15%': 20,
+    //             '20%': 50,
+    //             '30%': 100,
+    //             '40%': 250,
+    //             '50%': 500,
+    //             '60%': 1000,
+    //             '70%': 2000,
+    //             '80%': 5000,
+    //             '90%': 10000,
+    //             'max': 500000
+    //         }
+    //     });
+    //   }
+    //
+    //     var slider2 = document.getElementById('distance_slider');
+    //
+    //     if (slider2 != undefined) {
+    //     noUiSlider.create(slider2, {
+    //         snap: true,
+    //         connect: true,
+    //         start: [ 0, 500000 ],
+    //         range: {
+    //             'min': 0,
+    //             '5%': 5,
+    //             '10%': 10,
+    //             '15%': 20,
+    //             '20%': 50,
+    //             '30%': 100,
+    //             '40%': 250,
+    //             '50%': 500,
+    //             '60%': 1000,
+    //             '70%': 2000,
+    //             '80%': 5000,
+    //             '90%': 10000,
+    //             'max': 500000
+    //         }
+    //         // start: [ 15 ],
+    //         // connect: true,
+    //         // range: {
+    //         //     'min': [0, 2],
+    //         //     '5%':  [2, 3],
+    //         //     '10%': [5, 5],
+    //         //     '20%': [20, 10],
+    //         //     '25%': [30, 20],
+    //         //     '35%': [50, 25],
+    //         //     '55%': [100, 50],
+    //         //     '85%': [200, 100000],
+    //         //     'max': 100000
+    //         // }
+    //     });
+    //   }
 });
 
     

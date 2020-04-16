@@ -110,38 +110,44 @@
                 {% if attribute(landingPageImages, motor_other_vehicles_id) is defined %}
                     {% set prevSectionBgClass = 'white-bg' %}
                     <div class="homepage-row white-bg">
-                        <h3 class="homepage-title">{{ 'Other vehicles'|trans({}, 'frontend-landing-page') }}</h3>
-                        <div id="other-vehicles" class="row popular-items">
-                            {% for imageInfo in attribute(landingPageImages, motor_other_vehicles_id) %}
-                                {% set queryParams = searchParams %}
-                                {% set adCount = 0 %}
-                                {% if imageInfo.category_id is defined %}
-                                    {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
-                                    {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
-                                        {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
-                                    {% endif %}
-                                {% endif %}
-                                {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                <div class="large-8 columns">
-                                    <div class="item-box">
-                                        <a class="tricky-link" href="{{ listurl }}">
-                                            {% if imageInfo.file_name is defined %}
-                                                {{ imageInfo.file_name }}
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <h3 class="homepage-title">{{ 'Other vehicles'|trans({}, 'frontend-landing-page') }}</h3>
+                                    <div id="other-vehicles" class="row popular-items">
+                                        {% for imageInfo in attribute(landingPageImages, motor_other_vehicles_id) %}
+                                            {% set queryParams = searchParams %}
+                                            {% set adCount = 0 %}
+                                            {% if imageInfo.category_id is defined %}
+                                                {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
+                                                {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
+                                                    {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
+                                                {% endif %}
                                             {% endif %}
-                                        </a>
-                                        <div class="overlay"></div>
-                                        <div class="popular-graphic">
-                                            {% if imageInfo.overlay_file_name is defined %}
-                                                <img alt="{{ imageInfo.overlay_file_name }}" src="{{ shared_url(imageInfo.overlay_file_name) }}">
-                                            {% endif %}
-                                        </div>
-                                        <div class="explore-price">{{ adCount|number_format }}</div>
-                                        {% if imageInfo.file_name is defined %}
-                                            <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
-                                        {% endif %}
+                                            {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                                            <div class="col-md-8 col-lg-8">
+                                                <div class="item-box">
+                                                    <a class="tricky-link" href="{{ listurl }}">
+                                                        {% if imageInfo.file_name is defined %}
+                                                            {{ imageInfo.file_name }}
+                                                        {% endif %}
+                                                    </a>
+                                                    <div class="overlay"></div>
+                                                    <div class="popular-graphic">
+                                                        {% if imageInfo.overlay_file_name is defined %}
+                                                            <img alt="{{ imageInfo.overlay_file_name }}" src="{{ shared_url(imageInfo.overlay_file_name) }}">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="explore-price">{{ adCount|number_format }}</div>
+                                                    {% if imageInfo.file_name is defined %}
+                                                        <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
-                            {% endfor %}
+                            </div>
                         </div>
                     </div>
                 {% endif %}
@@ -155,34 +161,41 @@
                         {% set bgColour = '' %}
                     {% endif %}
                     {% set prevSectionBgClass = bgColour %}
-                    <div class="homepage-row {{ bgColour }}">
-                        <h3 class="homepage-title">{{ 'More in motors'|trans({}, 'frontend-landing-page') }}</h3>
-                        <div class="row text-center centered-columns livestock">
-                            {% for imageInfo in attribute(landingPageImages, motor_more_in_motor_id) %}
-                                {% set queryParams = searchParams %}
-                                {% set adCount = 0 %}
-                                {% if imageInfo.category_id is defined %}
-                                    {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
-                                    {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
-                                        {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
-                                    {% endif %}
-                                {% endif %}
-                                {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                <div class="medium-8 columns">
-                                    <div class="homepage-more-items">
-                                        <a class="tricky-link" href="{{ listurl }}">
-                                            {% if imageInfo.file_name is defined %}
-                                                {{ imageInfo.file_name }}
-                                            {% endif %}
-                                        </a>
-                                        <div class="explore-price">{{ adCount|number_format }}</div>
-                                        {% if imageInfo.file_name is defined %}
-                                            <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
-                                        {% endif %}
-                                    </div>
+                    <div class="homepage-row">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <h3 class="homepage-title">{{ 'More in motors'|trans({}, 'frontend-landing-page') }}</h3>
                                 </div>
-                            {% endfor %}
+                            </div>
+                            <div class="row justify-content-center">
+                                {% for imageInfo in attribute(landingPageImages, motor_more_in_motor_id) %}
+                                    {% set queryParams = searchParams %}
+                                    {% set adCount = 0 %}
+                                    {% if imageInfo.category_id is defined %}
+                                        {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
+                                        {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
+                                            {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
+                                        {% endif %}
+                                    {% endif %}
+                                    {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                                    <div class="col-md-10 col-lg-8 col">
+                                        <div class="homepage-more-items">
+                                            <a class="tricky-link" href="{{ listurl }}">
+                                                {% if imageInfo.file_name is defined %}
+                                                    {{ imageInfo.file_name }}
+                                                {% endif %}
+                                            </a>
+                                            <div class="explore-price">{{ adCount|number_format }}</div>
+                                            {% if imageInfo.file_name is defined %}
+                                                <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
+
                     </div>
                 {% endif %}
             {% endif %}
@@ -303,7 +316,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    <h1 class="homepage-title">{{ 'Explore...'|trans({}, 'frontend-landing-page') }}</h1>
+                                    <h3 class="homepage-title">{{ 'Explore...'|trans({}, 'frontend-landing-page') }}</h3>
                                     <div id="explore-items" class="row popular-items">
                                         {% for imageInfo in attribute(landingPageImages, exloreId) %}
                                             {% set queryParams = searchParams %}
@@ -526,19 +539,25 @@
                 {% endif %}
                 {% set prevSectionBgClass = bgColour %}
                 <div class="homepage-row {{ smallSlider }} {{ bgColour }}">
-                    <div class="row">
-                        <div class="columns">
-                            <h3 class="homepage-title">
-                                {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
-                                    {{'Jobs of the week'|trans({}, 'frontend-landing-page')}}
-                                {% else %}
-                                    {{'Latest ads'|trans({}, 'frontend-landing-page')}}
-                                {% endif %}
-                            </h3>
-                            {{ include('FaContentBundle:LandingPage:latestAdsSlider.html.twig', {'divId': 'latest-item-slider'}) }}
-                            <div class="small-wrapper">
-                                {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams) %}
-                                <a href="{{ listurl }}" class="secondary-btn-1 expand button mb0">{{'Discover more'|trans({}, 'frontend-landing-page')}}</a>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <h3 class="homepage-title">
+                                    {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+                                        {{'Jobs of the week'|trans({}, 'frontend-landing-page')}}
+                                    {% else %}
+                                        {{'Latest ads'|trans({}, 'frontend-landing-page')}}
+                                    {% endif %}
+                                </h3>
+                                {{ include('FaContentBundle:LandingPage:latestAdsSlider.html.twig', {'divId': 'latest-item-slider'}) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-24">
+                                <div class="col-md-8 offset-md-8 mt20">
+                                    {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(searchParams) %}
+                                    <a href="{{ listurl }}" class="secondary-btn-1 btn btn-block landing-search-btn">{{'Discover more'|trans({}, 'frontend-landing-page')}}</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -571,10 +590,12 @@
                 {% endif %}
                 {% set prevSectionBgClass = bgColour %}
                 <div class="homepage-row {{ bgColour }}">
-                    <div class="row">
-                        <div class="columns">
-                            <h3 class="homepage-title">{{'Most popular'|trans({}, 'frontend-landing-page')}}</h3>
-                            {{ include('FaContentBundle:LandingPage:mostPopularAdsSlider.html.twig', {'divId': 'most-popular-slider'}) }}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <h3 class="homepage-title">{{'Most popular'|trans({}, 'frontend-landing-page')}}</h3>
+                                {{ include('FaContentBundle:LandingPage:mostPopularAdsSlider.html.twig', {'divId': 'most-popular-slider'}) }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -690,78 +711,78 @@
     {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
         {% if topCarMakes is defined and topCarMakes|length %}
             {% if prevSectionBgClass == '' %}
-                    {% set bgColour = 'white-bg' %}
-                {% else %}
-                    {% set bgColour = '' %}
-                {% endif %}
-                {% set prevSectionBgClass = bgColour %}
-            <div class="homepage-row {{ bgColour }}">
-                {% if location is defined and location is not null %}
-                    <h3 class="homepage-title">{{ 'Browse used cars in %location%'|trans({'%location%': (location_text)}, 'frontend-landing-page') }}</h3>
-                {% else %}
-                    <h3 class="homepage-title">{{ 'Browse used cars'|trans({}, 'frontend-landing-page') }}</h3>
-                {% endif %}
-                <div class="row">
-                    <div class="columns">
-                        {% set totalChoices = topCarMakes|length %}
-                        {% set totalColumns = 4 %}
-                        {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
-                        {% set choiceCount = 0 %}
-                        {% for catId, adCount in topCarMakes %}
-                            {% set queryParams = searchParams %}
-                            {% set queryParams = queryParams|merge({'item__category_id': (catId)}) %}
-                            {% set listurl     = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                            {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
-                            <ul class="links-list">
+                {% set bgColour = 'white-bg' %}
+            {% else %}
+                {% set bgColour = '' %}
+            {% endif %}
+            {% set prevSectionBgClass = bgColour %}
+            <div class="homepage-row  {{ bgColour }}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col list-location-box">
+                            {% if location is defined and location is not null %}
+                                <h3 class="homepage-title">{{ 'Browse used cars in %location%'|trans({'%location%': (location_text)}, 'frontend-landing-page') }}</h3>
+                            {% else %}
+                                <h3 class="homepage-title">{{ 'Browse used cars'|trans({}, 'frontend-landing-page') }}</h3>
                             {% endif %}
+                            {% set totalChoices = topCarMakes|length %}
+                            {% set totalColumns = 4 %}
+                            {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
+                            {% set choiceCount = 0 %}
+                            {% for catId, adCount in topCarMakes %}
+                                {% set queryParams = searchParams %}
+                                {% set queryParams = queryParams|merge({'item__category_id': (catId)}) %}
+                                {% set listurl     = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                                {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
+                                    <ul class="links-list">
+                                {% endif %}
                                 <li>
                                     <a href="{{ listurl }}">{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', catId) }}</a>
                                 </li>
                                 {% set choiceCount = choiceCount + 1 %}
-                            {% if choiceCount == totalChoices or (choiceCount % choicesPerColumn) == 0 %}
-                            </ul>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-                {% set staticPageUrls = fetch_repository('FaContentBundle:LandingPagePopularSearch').getPopularSearchArrayByLandingPageId(landingPage.getId(), container) %}
-                {% if staticPageUrls|length %}
-                    <div class="row">
-                        <div class="columns">
-                            <div class="mt30">
-                                {% set staticPageLocationSlug = 'uk' %}
-                                {% if location_slug is defined and location_slug is not null %}
-                                    {% set staticPageLocationSlug = location_slug %}
-                                {% endif %}
-                                
-                                {% set columns = 4 %}
-                                {% set ctr = 0 %}
-                                {% set totalItems = staticPageUrls|length %}
-                                {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
-                                {% set extraColumn = (totalItems % columns) %}
-                                {% set colCounter = {} %}
-                                {% for i in 0..columns-1 %}
-                                    {% if loop.index0 < extraColumn %}
-                                        {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
-                                    {% else  %}
-                                        {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
-                                    {% endif %}
-                                {% endfor %}
-            
-                                {% for i in 0..columns-1 %}
-                                    <ul class="links-list">
-                                        {% for k in 0..colCounter[i]-1 %}
-                                            {% if staticPageUrls[ctr] is defined %}
-                                                <li><a href="{{ replace_case_insensitive('{Location}', staticPageLocationSlug, staticPageUrls[ctr]['url']) }}">{{ staticPageUrls[ctr]['title'] }}</a></li>
-                                            {% endif %}
-                                            {% set ctr = ctr + 1 %}
-                                        {% endfor %}
+                                {% if choiceCount == totalChoices or (choiceCount % choicesPerColumn) == 0 %}
                                     </ul>
-                                {% endfor %}
-                            </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
-                {% endif %}
+                    {% set staticPageUrls = fetch_repository('FaContentBundle:LandingPagePopularSearch').getPopularSearchArrayByLandingPageId(landingPage.getId(), container) %}
+                    {% if staticPageUrls|length %}
+                        <div class="row">
+                            <div class="col list-location-box">
+                                    {% set staticPageLocationSlug = 'uk' %}
+                                    {% if location_slug is defined and location_slug is not null %}
+                                        {% set staticPageLocationSlug = location_slug %}
+                                    {% endif %}
+
+                                    {% set columns = 4 %}
+                                    {% set ctr = 0 %}
+                                    {% set totalItems = staticPageUrls|length %}
+                                    {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                                    {% set extraColumn = (totalItems % columns) %}
+                                    {% set colCounter = {} %}
+                                    {% for i in 0..columns-1 %}
+                                        {% if loop.index0 < extraColumn %}
+                                            {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                                        {% else  %}
+                                            {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% for i in 0..columns-1 %}
+                                        <ul class="links-list">
+                                            {% for k in 0..colCounter[i]-1 %}
+                                                {% if staticPageUrls[ctr] is defined %}
+                                                    <li><a href="{{ replace_case_insensitive('{Location}', staticPageLocationSlug, staticPageUrls[ctr]['url']) }}">{{ staticPageUrls[ctr]['title'] }}</a></li>
+                                                {% endif %}
+                                                {% set ctr = ctr + 1 %}
+                                            {% endfor %}
+                                        </ul>
+                                    {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         {% endif %}
     {% endif %}
