@@ -210,13 +210,14 @@
 	}
 </script>
 {% endblock %}
-
+{% block stylesheet_2 %}
+	<link rel="stylesheet" href="{{ asset('/build/css/adlist.css') }}">
+{% endblock %}
 {% block scripttop %}
     {% if (profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length) or (businessExposureUsersDetails is defined and businessExposureUsersDetails|length) %}
         {#{ include('FaFrontendBundle:Default:home-css.html.twig') }#}
         {# { include('FaAdBundle:AdList:owl-carousel-2-css.html.twig') } #}
-    {% endif %}
-    <link rel="stylesheet" href="{{ asset('/build/css/adlist.css') }}">
+    {% endif %}    
 {% endblock %}
 
 {% block body %}

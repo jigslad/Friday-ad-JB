@@ -37,7 +37,7 @@
         {{ seoManager.parseSeoString(seoFields.meta_keywords, {'{location}': seoLocationName}) }}
     {% endif %}
 {% endblock %}
-{% block scripttop %}
+{% block stylesheet %}
     <link rel="stylesheet" href="{{ asset('/build/css/homeContent.css') }}"> 
 {% endblock %}
 
@@ -273,21 +273,13 @@
 
 
 {% block scriptbottom %}
-    {% javascripts filter='uglifyjs2' output='bundles/js/compiled/home.js'
-        'bundles/facore/js/owl.carousel.min.js'
-        'bundles/fafrontend/js/parallax.min.js'
-    %}
-    <script defer src="{{ static_asset_url(asset_url) }}"></script>
-    {% endjavascripts %}
+	<script type="text/javascript" src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset_url('fafrontend/js/parallax.min.js') }}"></script>
     
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
     {% if mobileDetectManager.is('IE') %}
-        {% javascripts filter='uglifyjs2' output='bundles/js/compiled/parallaxFix.js'
-            'bundles/fafrontend/js/scroll.js'
-            'bundles/fafrontend/js/TweenMax.min.js'
-        %}
-        <script src="{{ static_asset_url(asset_url) }}"></script>
-        {% endjavascripts %}
+    	<script type="text/javascript" src="{{ asset_url('fafrontend/js/scroll.js') }}"></script>
+    	<script type="text/javascript" src="{{ asset_url('fafrontend/js/TweenMax.min.js') }}"></script>
     {% endif %}
     <script language="javascript" type="text/javascript">
     //<![CDATA[
@@ -376,14 +368,14 @@
             });
         }
 
-        $(document).foundation({
-            accordion: {
+        /*$(document).foundation({
+           accordion: {
                 multi_expand: true,
                 callback : function (accordion) {
                     accordionCallback(accordion);
                 }
             }
-        });
+        });*/
     });
 
     $( window ).scroll(function() {

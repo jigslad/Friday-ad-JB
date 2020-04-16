@@ -88,7 +88,7 @@
     {% endif %}
    	<nav class="navbar navbar-expand-sm navbar-dark top-bar-section" id="top_bar_nav">
         <div class="container row mob-container">
-        	<a href="{{ path('fa_frontend_homepage') }}" class="navbar-brand {% if showTiLogo %}tradeit-logo{% endif %}">{% if showTiLogo %}<img src="{{ asset('Frontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% else %}<img src="{{ asset('Frontend/images/fad-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% endif %}</a>
+        	<a href="{{ path('fa_frontend_homepage') }}" class="navbar-brand {% if showTiLogo %}tradeit-logo{% endif %}">{% if showTiLogo %}<img src="{{ asset_url('fafrontend/images/fad-ti-logo.png') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% else %}<img src="{{ asset_url('fafrontend/images/fad-logo.svg') }}" alt="{{ 'Friday-Ad'|trans({}, 'frontend') }}" />{% endif %}</a>
             <button  onclick="" class="navbar-toggler nav-icon" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="menu" id="top_bar_nav_menu_span"></span>
             </button>
