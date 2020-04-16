@@ -165,10 +165,10 @@ select:hover,select:focus{
     background:#760F62 !important;
     border:1px solid #760F62 !important;
 }
-.top-bar-section li:not(.has-form).place-item-btn a {
+.top-bar-section li:not(.has-form).place-item-btn a, a.mobpaabtn  {
 	background:linear-gradient(135deg, #A75BD8 0%, #C60A84 100%) !important;
 }
-.top-bar-section li:not(.has-form).place-item-btn a:hover, .top-bar-section li:not(.has-form).place-item-btn a:focus
+.top-bar-section li:not(.has-form).place-item-btn a:hover, .top-bar-section li:not(.has-form).place-item-btn a:focus, a.mobpaabtn:hover, a.mobpaabtn:focus
 {
     background:linear-gradient(135deg, #8645AA 0%, #9D086A 100%) !important;
 }
@@ -896,8 +896,16 @@ footer a:hover{
 .advanced-search-option {width: 20%; height: 40px; padding: 8px; text-align: right;}
 .adult-color { color:#E62EEB; }
 #home-search .location { margin-top: 10px; }
-
-.fullwidth { width:100% !important; }
+.select2-drop-multi .select2-results {
+    column-count: 2;
+}
+.select2-drop-multi .select2-results li {
+    border-bottom: 0px solid #fff;
+    box-shadow: none;
+}
+.fullwidth, .fullwidth .accordion, .fullwidth .accordion .accordion-navigation {
+    width: 100% !important;
+}
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .adult-search { display: inline-block;width: 100% !important;}
    .search-input-box {width: 100%;}
