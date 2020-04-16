@@ -104,28 +104,195 @@
                     {% use "FaContentBundle:LandingPage:carSearchForm.html.twig" %}
                     {{ block('carSearchForm_html') }}
                 </div>
-            {% elseif categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
+
+                {# vehicales Block#}
+                {% set motor_other_vehicles_id = constant('Fa\\Bundle\\ContentBundle\\Repository\\LandingPageInfoRepository::MOTOR_OTHER_VEHICLES_ID')%}
+                {% if attribute(landingPageImages, motor_other_vehicles_id) is defined %}
+                    {% set prevSectionBgClass = 'white-bg' %}
+                    <div class="homepage-row white-bg">
+                        <h3 class="homepage-title">{{ 'Other vehicles'|trans({}, 'frontend-landing-page') }}</h3>
+                        <div id="other-vehicles" class="row popular-items">
+                            {% for imageInfo in attribute(landingPageImages, motor_other_vehicles_id) %}
+                                {% set queryParams = searchParams %}
+                                {% set adCount = 0 %}
+                                {% if imageInfo.category_id is defined %}
+                                    {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
+                                    {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
+                                        {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
+                                    {% endif %}
+                                {% endif %}
+                                {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                                <div class="large-8 columns">
+                                    <div class="item-box">
+                                        <a class="tricky-link" href="{{ listurl }}">
+                                            {% if imageInfo.file_name is defined %}
+                                                {{ imageInfo.file_name }}
+                                            {% endif %}
+                                        </a>
+                                        <div class="overlay"></div>
+                                        <div class="popular-graphic">
+                                            {% if imageInfo.overlay_file_name is defined %}
+                                                <img alt="{{ imageInfo.overlay_file_name }}" src="{{ shared_url(imageInfo.overlay_file_name) }}">
+                                            {% endif %}
+                                        </div>
+                                        <div class="explore-price">{{ adCount|number_format }}</div>
+                                        {% if imageInfo.file_name is defined %}
+                                            <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {# More Motors Block#}
+                {% set motor_more_in_motor_id = constant('Fa\\Bundle\\ContentBundle\\Repository\\LandingPageInfoRepository::MOTOR_MORE_IN_MOTOR_ID')%}
+                {% if attribute(landingPageImages, motor_more_in_motor_id) is defined %}
+                    {% if prevSectionBgClass == '' %}
+                        {% set bgColour = 'white-bg' %}
+                    {% else %}
+                        {% set bgColour = '' %}
+                    {% endif %}
+                    {% set prevSectionBgClass = bgColour %}
+                    <div class="homepage-row {{ bgColour }}">
+                        <h3 class="homepage-title">{{ 'More in motors'|trans({}, 'frontend-landing-page') }}</h3>
+                        <div class="row text-center centered-columns livestock">
+                            {% for imageInfo in attribute(landingPageImages, motor_more_in_motor_id) %}
+                                {% set queryParams = searchParams %}
+                                {% set adCount = 0 %}
+                                {% if imageInfo.category_id is defined %}
+                                    {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
+                                    {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
+                                        {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
+                                    {% endif %}
+                                {% endif %}
+                                {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                                <div class="medium-8 columns">
+                                    <div class="homepage-more-items">
+                                        <a class="tricky-link" href="{{ listurl }}">
+                                            {% if imageInfo.file_name is defined %}
+                                                {{ imageInfo.file_name }}
+                                            {% endif %}
+                                        </a>
+                                        <div class="explore-price">{{ adCount|number_format }}</div>
+                                        {% if imageInfo.file_name is defined %}
+                                            <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
                 <div class="homepage-row">
                     {% use "FaContentBundle:LandingPage:propertySearchForm.html.twig" %}
                     {{ block('propertySearchForm_html') }}
                 </div>
-            {% elseif categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
+
+                {# landing page images#}
+                {% set property_discover_id = constant('Fa\\Bundle\\ContentBundle\\Repository\\LandingPageInfoRepository::PROPERTY_DISCOVER_ID')%}
+                {% if attribute(landingPageImages, property_discover_id) is defined %}
+                    {% set prevSectionBgClass = 'white-bg' %}
+                    <div class="homepage-row white-bg">
+                        <div class="row">
+                            <div class="columns">
+                                <h3 class="homepage-title">{{ 'Discover...'|trans({}, 'frontend-landing-page') }}</h3>
+                                <div id="discover-populars" class="row popular-items">
+                                    {% for imageInfo in attribute(landingPageImages, property_discover_id) %}
+                                        {% set queryParams = searchParams %}
+                                        {% set adCount = 0 %}
+                                        {% if imageInfo.category_id is defined %}
+                                            {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
+                                            {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
+                                                {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
+                                            {% endif %}
+                                        {% endif %}
+                                        {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                                        <div class="large-8 columns">
+                                            <div class="item-box">
+                                                <a class="tricky-link" href="{{ listurl }}">
+                                                    {% if imageInfo.file_name is defined %}
+                                                        {{ imageInfo.file_name }}
+                                                    {% endif %}
+                                                </a>
+                                                <div class="overlay"></div>
+                                                <div class="popular-graphic">
+                                                    {% if imageInfo.overlay_file_name is defined %}
+                                                        <img alt="{{ imageInfo.overlay_file_name }}" src="{{ shared_url(imageInfo.overlay_file_name) }}">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="explore-price">{{ adCount|number_format }}</div>
+                                                {% if imageInfo.file_name is defined %}
+                                                    <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
                 <div class="homepage-row">
                     {% use "FaContentBundle:LandingPage:jobsSearchForm.html.twig" %}
                     {{ block('jobsSearchForm_html') }}
                 </div>
-            {% elseif categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
-                <div class="homepage-row" id="adult_landing_page_main_div">
-                    {% use "FaContentBundle:LandingPage:adultSearchForm.html.twig" %}
-                    {{ block('adultSearchForm_html') }}
-                </div>
-                <div class="homepage-row white-bg {% if popularShops is defined and popularShops|length %}pb0{% endif %}">
-                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_LANDING_PAGE_DESKTOP') %}
-                    {% if currentDevice == 'M' %}
-                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_LANDING_PAGE_MOBILE') %}
+                {% if popularSearches is defined and popularSearches|length %}
+                    {% if prevSectionBgClass == '' %}
+                        {% set bgColour = 'white-bg' %}
+                    {% else %}
+                        {% set bgColour = '' %}
                     {% endif %}
-                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
-                </div>
+                    {% set prevSectionBgClass = bgColour %}
+                    {{ include('FaContentBundle:LandingPage:popularSearches.html.twig') }}
+                {% endif %}
+                {% if featuredEmployers is defined and featuredEmployers|length %}
+                    {% if prevSectionBgClass == '' %}
+                        {% set bgColour = 'white-bg' %}
+                    {% else %}
+                        {% set bgColour = '' %}
+                    {% endif %}
+                    {% set prevSectionBgClass = bgColour %}
+                    <div class="homepage-row {{ bgColour }}">
+                        <div class="row">
+                            <div class="columns">
+                                <h3 class="homepage-title">
+                                    {{'Featured employers'|trans({}, 'frontend-landing-page')}}
+                                </h3>
+                                <div class="owl-carousel fa-slider" id="featured_employers_slider" data-equalizer>
+                                    {% set userRepository = fetch_repository('FaUserBundle:User') %}
+                                    {% for featuredEmployer in featuredEmployers %}
+                                        {% set adUserId = featuredEmployer['id'] %}
+                                        {% set shopName = userRepository.getUserProfileName(adUserId, container) %}
+                                        {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(adUserId) %}
+                                        <div class="item" data-equalizer-watch>
+                                            <a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a>
+                                            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adUserId, true, true]) %}
+                                            {% set userName = shopName~' - Friday-Ad' %}
+                                            <div class="list-img">
+                                                {% if userLogo %}
+                                                    <img class="lazyOwl" data-src="{{ userLogo }}" alt="{{ userName }}" />
+                                                {% else %}
+                                                    <img class="lazyOwl" data-src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
+                                                {% endif %}
+                                            </div>
+                                            <h3>
+                                                {{ shopName }}
+                                            </h3>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             {% endif %}
 
             {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID') %}
@@ -133,87 +300,47 @@
                 {% if attribute(landingPageImages, exloreId) is defined %}
                     {% set prevSectionBgClass = '' %}
                     <div class="homepage-row">
-                        <div class="row">
-                            <div class="columns">
-                                <h3 class="homepage-title">{{ 'Explore...'|trans({}, 'frontend-landing-page') }}</h3>
-                                <div id="explore-items" class="row popular-items">
-                                {% for imageInfo in attribute(landingPageImages, exloreId) %}
-                                    {% set queryParams = searchParams %}
-                                    {% set adCount = 0 %}
-                                    {% if imageInfo.category_id is defined %}
-                                        {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
-                                        {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
-                                            {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
-                                        {% endif %}
-                                    {% endif %}
-                                    {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                    <div class="large-6 columns">
-                                        <div class="item-box">
-                                            <a class="tricky-link" href="{{ listurl }}">
-                                                {% if imageInfo.file_name is defined %}
-                                                    {{ imageInfo.file_name }}
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <h1 class="homepage-title">{{ 'Explore...'|trans({}, 'frontend-landing-page') }}</h1>
+                                    <div id="explore-items" class="row popular-items">
+                                        {% for imageInfo in attribute(landingPageImages, exloreId) %}
+                                            {% set queryParams = searchParams %}
+                                            {% set adCount = 0 %}
+                                            {% if imageInfo.category_id is defined %}
+                                                {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
+                                                {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
+                                                    {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
                                                 {% endif %}
-                                            </a>
-                                            <div class="overlay"></div>
-                                            <div class="popular-graphic">
-                                                {% if imageInfo.overlay_file_name is defined %}
-                                                    <img alt="{{ imageInfo.overlay_file_name }}" src="{{ shared_url(imageInfo.overlay_file_name) }}">
-                                                {% endif %}
-                                            </div>
-                                            <div class="explore-price">{{ adCount|number_format }}</div>
-                                            {% if imageInfo.file_name is defined %}
-                                                <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
                                             {% endif %}
-                                        </div>
+                                            {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                                            <div class="col-md-8 col-lg-6">
+                                                <div class="item-box">
+                                                    <a class="tricky-link" href="{{ listurl }}">
+                                                        {% if imageInfo.file_name is defined %}
+                                                            {{ imageInfo.file_name }}
+                                                        {% endif %}
+                                                    </a>
+                                                    <div class="overlay"></div>
+                                                    <div class="popular-graphic">
+                                                        {% if imageInfo.overlay_file_name is defined %}
+                                                            <img alt="{{ imageInfo.overlay_file_name }}" src="{{ shared_url(imageInfo.overlay_file_name) }}">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="explore-price">{{ adCount|number_format }}</div>
+                                                    {% if imageInfo.file_name is defined %}
+                                                        <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
                                     </div>
-                                {% endfor %}
                                 </div>
                             </div>
                         </div>
                     </div>
                     {% endif %}
-            {% endif %}
-
-            {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
-                {% set motor_other_vehicles_id = constant('Fa\\Bundle\\ContentBundle\\Repository\\LandingPageInfoRepository::MOTOR_OTHER_VEHICLES_ID')%}
-                {% if attribute(landingPageImages, motor_other_vehicles_id) is defined %}
-                    {% set prevSectionBgClass = 'white-bg' %}
-                    <div class="homepage-row white-bg">
-                        <h3 class="homepage-title">{{ 'Other vehicles'|trans({}, 'frontend-landing-page') }}</h3>
-                        <div id="other-vehicles" class="row popular-items">
-                        {% for imageInfo in attribute(landingPageImages, motor_other_vehicles_id) %}
-                            {% set queryParams = searchParams %}
-                            {% set adCount = 0 %}
-                            {% if imageInfo.category_id is defined %}
-                                {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
-                                {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
-                                    {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
-                                {% endif %}
-                            {% endif %}
-                            {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                            <div class="large-8 columns">
-                                <div class="item-box">
-                                    <a class="tricky-link" href="{{ listurl }}">
-                                        {% if imageInfo.file_name is defined %}
-                                            {{ imageInfo.file_name }}
-                                        {% endif %}
-                                    </a>
-                                    <div class="overlay"></div>
-                                    <div class="popular-graphic">
-                                        {% if imageInfo.overlay_file_name is defined %}
-                                            <img alt="{{ imageInfo.overlay_file_name }}" src="{{ shared_url(imageInfo.overlay_file_name) }}">
-                                        {% endif %}
-                                    </div>
-                                    <div class="explore-price">{{ adCount|number_format }}</div>
-                                    {% if imageInfo.file_name is defined %}
-                                        <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
             {% endif %}
 
             {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ANIMALS_ID') %}
@@ -234,9 +361,7 @@
                         </div>
                     </div>
                 </div>
-            {% endif %}
 
-            {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ANIMALS_ID') %}
                 {% set animal_horses_and_euestion_id = constant('Fa\\Bundle\\ContentBundle\\Repository\\LandingPageInfoRepository::ANIMAL_HORSES_AND_EUESTION')%}
                 {% if attribute(landingPageImages, animal_horses_and_euestion_id) is defined %}
                     {% set prevSectionBgClass = 'white-bg' %}
@@ -261,7 +386,7 @@
                                         {% endif %}
                                     {% endif %}
                                     {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                    <div class="large-6 columns">
+                                    <div class="col-md-8 col-lg-6">
                                         <div class="item-box">
                                             <a class="tricky-link" href="{{ listurl }}">
                                                 {% if imageInfo.file_name is defined %}
@@ -286,9 +411,7 @@
                         </div>
                     </div>
                 {% endif %}
-            {% endif %}
 
-            {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ANIMALS_ID') %}
                 {% set animal_livestock_id = constant('Fa\\Bundle\\ContentBundle\\Repository\\LandingPageInfoRepository::ANIMAL_LIVESTOCK')%}
                 {% if attribute(landingPageImages, animal_livestock_id) is defined %}
                     {% if prevSectionBgClass == '' %}
@@ -335,102 +458,18 @@
                 {% endif %}
             {% endif %}
 
-            {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}
-                {% set property_discover_id = constant('Fa\\Bundle\\ContentBundle\\Repository\\LandingPageInfoRepository::PROPERTY_DISCOVER_ID')%}
-                {% if attribute(landingPageImages, property_discover_id) is defined %}
-                    {% set prevSectionBgClass = 'white-bg' %}
-                    <div class="homepage-row white-bg">
-                        <div class="row">
-                            <div class="columns">
-                                <h3 class="homepage-title">{{ 'Discover...'|trans({}, 'frontend-landing-page') }}</h3>
-                                <div id="discover-populars" class="row popular-items">
-                                {% for imageInfo in attribute(landingPageImages, property_discover_id) %}
-                                    {% set queryParams = searchParams %}
-                                    {% set adCount = 0 %}
-                                    {% if imageInfo.category_id is defined %}
-                                        {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
-                                        {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
-                                            {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
-                                        {% endif %}
-                                    {% endif %}
-                                    {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                    <div class="large-8 columns">
-                                        <div class="item-box">
-                                            <a class="tricky-link" href="{{ listurl }}">
-                                                {% if imageInfo.file_name is defined %}
-                                                    {{ imageInfo.file_name }}
-                                                {% endif %}
-                                            </a>
-                                            <div class="overlay"></div>
-                                            <div class="popular-graphic">
-                                                {% if imageInfo.overlay_file_name is defined %}
-                                                    <img alt="{{ imageInfo.overlay_file_name }}" src="{{ shared_url(imageInfo.overlay_file_name) }}">
-                                                {% endif %}
-                                            </div>
-                                            <div class="explore-price">{{ adCount|number_format }}</div>
-                                            {% if imageInfo.file_name is defined %}
-                                                <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
+                <div class="homepage-row" id="adult_landing_page_main_div">
+                    {% use "FaContentBundle:LandingPage:adultSearchForm.html.twig" %}
+                    {{ block('adultSearchForm_html') }}
+                </div>
+                <div class="homepage-row white-bg {% if popularShops is defined and popularShops|length %}pb0{% endif %}">
+                    {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_LANDING_PAGE_DESKTOP') %}
+                    {% if currentDevice == 'M' %}
+                        {% set zoneId = constant('Fa\\Bundle\\ContentBundle\\Repository\\BannerZoneRepository::ZONE_LANDING_PAGE_MOBILE') %}
                     {% endif %}
-            {% endif %}
-
-            {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::JOBS_ID') %}
-                {% if popularSearches is defined and popularSearches|length %}
-                    {% if prevSectionBgClass == '' %}
-                        {% set bgColour = 'white-bg' %}
-                    {% else %}
-                        {% set bgColour = '' %}
-                    {% endif %}
-                    {% set prevSectionBgClass = bgColour %}
-                    {{ include('FaContentBundle:LandingPage:popularSearches.html.twig') }}
-                {% endif %}
-                {% if featuredEmployers is defined and featuredEmployers|length %}
-                    {% if prevSectionBgClass == '' %}
-                        {% set bgColour = 'white-bg' %}
-                    {% else %}
-                        {% set bgColour = '' %}
-                    {% endif %}
-                    {% set prevSectionBgClass = bgColour %}
-                    <div class="homepage-row {{ bgColour }}">
-                        <div class="row">
-                            <div class="columns">
-                                <h3 class="homepage-title">
-                                    {{'Featured employers'|trans({}, 'frontend-landing-page')}}
-                                </h3>
-                                <div class="owl-carousel fa-slider" id="featured_employers_slider" data-equalizer>
-                                    {% set userRepository = fetch_repository('FaUserBundle:User') %}
-                                    {% for featuredEmployer in featuredEmployers %}
-                                        {% set adUserId = featuredEmployer['id'] %}
-                                        {% set shopName = userRepository.getUserProfileName(adUserId, container) %}
-                                        {% set profilePageUrl = container.get('fa_ad.manager.ad_routing').getProfilePageUrl(adUserId) %}
-                                        <div class="item" data-equalizer-watch>
-                                            <a class="tricky-link" href="{{ profilePageUrl }}">{{ shopName }}</a>
-                                            {% set userLogo = staticCall('Fa\\Bundle\\CoreBundle\\Manager\\CommonManager', 'getUserLogoByUserId', [fetch_container_instance(), adUserId, true, true]) %}
-                                            {% set userName = shopName~' - Friday-Ad' %}
-                                            <div class="list-img">
-                                                {% if userLogo %}
-                                                    <img class="lazyOwl" data-src="{{ userLogo }}" alt="{{ userName }}" />
-                                                {% else %}
-                                                    <img class="lazyOwl" data-src="{{ asset_url('fafrontend/images/no-image-grey.svg') }}" alt="{{ userName }}" />
-                                                {% endif %}
-                                            </div>
-                                            <h3>
-                                               {{ shopName }}
-                                            </h3>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
+                    {{ include('FaContentBundle:Banner:show.html.twig', {'zone_id': zoneId}) }}
+                </div>
             {% endif %}
 
             {% if categoryId is defined and (categoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')}) %}
@@ -569,7 +608,7 @@
                                 {% endif %}
                             {% endif %}
                             {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                            <div class="large-6 columns">
+                            <div class="col-md-8 col-lg-6">
                                 <div class="other-ways-box">
                                     <a class="tricky-link" href="{{ listurl }}">
                                         {% if imageInfo.file_name is defined %}
@@ -587,47 +626,6 @@
                     </div>
                 {% endif %}
             {% endif %}
-
-            {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
-            {% set motor_more_in_motor_id = constant('Fa\\Bundle\\ContentBundle\\Repository\\LandingPageInfoRepository::MOTOR_MORE_IN_MOTOR_ID')%}
-            {% if attribute(landingPageImages, motor_more_in_motor_id) is defined %}
-                {% if prevSectionBgClass == '' %}
-                    {% set bgColour = 'white-bg' %}
-                {% else %}
-                    {% set bgColour = '' %}
-                {% endif %}
-                {% set prevSectionBgClass = bgColour %}
-                <div class="homepage-row {{ bgColour }}">
-                    <h3 class="homepage-title">{{ 'More in motors'|trans({}, 'frontend-landing-page') }}</h3>
-                    <div class="row text-center centered-columns livestock">
-                    {% for imageInfo in attribute(landingPageImages, motor_more_in_motor_id) %}
-                        {% set queryParams = searchParams %}
-                        {% set adCount = 0 %}
-                        {% if imageInfo.category_id is defined %}
-                            {% set queryParams = queryParams|merge({'item__category_id': (imageInfo.category_id)}) %}
-                            {% if adCounts.a_parent_category_lvl_2_id_i is defined and attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) is defined %}
-                                {% set adCount = attribute(adCounts.a_parent_category_lvl_2_id_i, imageInfo.category_id) %}
-                            {% endif %}
-                        {% endif %}
-                        {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                        <div class="medium-8 columns">
-                            <div class="homepage-more-items">
-                                <a class="tricky-link" href="{{ listurl }}">
-                                	{% if imageInfo.file_name is defined %}
-                                		{{ imageInfo.file_name }}
-                                	{% endif %}
-                                </a>
-                                <div class="explore-price">{{ adCount|number_format }}</div>
-                                {% if imageInfo.file_name is defined %}
-                                    <img alt="{{ imageInfo.file_name }}" src="{{ shared_url(imageInfo.file_name) }}">
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-        {% endif %}
         </div>
     {% endif %}
 
@@ -800,7 +798,7 @@
                     <ul class="link-list jobs-link-list">
                         <li>
                             {% for i in 0..columns-1 %}
-                                <div class="large-6 columns">
+                                <div class="col-md-8 col-lg-6">
                                     {% for k in 0..colCounter[i]-1 %}
                                         {% if browseByCategorySort[ctr] is defined %}
                                             {% set queryParams = searchParams %}
@@ -946,14 +944,14 @@
             }
         });
         
-        $(document).foundation({
-            accordion: {
-                multi_expand: true,
-                callback : function (accordion) {
-                    accordionCallback(accordion);
-                }
-            }
-        });
+        // $(document).foundation({
+        //     accordion: {
+        //         multi_expand: true,
+        //         callback : function (accordion) {
+        //             accordionCallback(accordion);
+        //         }
+        //     }
+        // });
 
         function accordionCallback(accordion)
         {

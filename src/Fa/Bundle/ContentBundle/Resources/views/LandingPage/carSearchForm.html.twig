@@ -52,91 +52,92 @@
 </div>
 
 <div class="landing-divider">
+    <div class="container"></div>
+        <div class="row mt20 mb20">
+            <div class="col-md-24">
+                    {{ form_label(attribute(form, 'item_motors__body_type_id')) }}
+                    <div id="body_type_choices" class="d-clock d-md-none">
+                        {{ form_widget(attribute(form, 'item_motors__body_type_id')) }}
+                    </div>
+                    <ul id="body-type-circles" class="discover-categories landing-circles d-none d-md-block">
+                        <li class="any-category body_type_choice active" id="body_type_choice_">
+                            <a href="javascript:void(0)">{{ 'Any'|trans({}, 'frontend-landing-page') }}</a>
+                        </li>
+                        {% set selectedBodyTypeId = attribute(form, 'item_motors__body_type_id').vars.data %}
+                        {% for choice in attribute(form, 'item_motors__body_type_id').vars.choices %}
+                            {% set activeClass = '' %}
+                            {% if choice.value == selectedBodyTypeId %}
+                                {% set activeClass = 'active' %}
+                            {% endif %}
+                            <li class="car-{{ choice.label|lower }} body_type_choice {{ activeClass }}" id="body_type_choice_{{ choice.value }}">
+                                <a href="javascript:void(0)" >{{ choice.label }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt20 ">
     <div class="row">
-        <div class="columns">
-            <div class="mt20">
-                {{ form_label(attribute(form, 'item_motors__body_type_id')) }}
-                <div id="body_type_choices" class="white-select show-for-small-only">
-                    {{ form_widget(attribute(form, 'item_motors__body_type_id')) }}
+        <div class="col-md-24">
+            <div class="more-options text-center mb20">
+                <a href="javascript:void(0);" id="show_hide_more_options">{{ 'More options'|trans({}, 'frontend-landing-page')}}</a>
+            </div>
+        </div>
+    </div>
+    <div id="more_options" style="display:none" class="collapse">
+        <div class="row">
+            <div class="col-md-8 mb20">
+                {{ form_label(attribute(form, 'item__model_id')) }}
+                <div class="select">
+                    {{ form_widget(attribute(form, 'item__model_id')) }}
                 </div>
-                <div id="body-type-circles" class="clearfix landing-circles hide-for-small-only">
-                    <a href="javascript:void(0)" class="any-category body_type_choice active" id="body_type_choice_">{{ 'Any'|trans({}, 'frontend-landing-page') }}</a>
-                    {% set selectedBodyTypeId = attribute(form, 'item_motors__body_type_id').vars.data %}
-                    {% for choice in attribute(form, 'item_motors__body_type_id').vars.choices %}
-                        {% set activeClass = '' %}
-                        {% if choice.value == selectedBodyTypeId %}
-                            {% set activeClass = 'active' %}
-                        {% endif %}
-                        <a href="javascript:void(0)" class="car-{{ choice.label|lower }} body_type_choice {{ activeClass }}" id="body_type_choice_{{ choice.value }}">{{ choice.label }}</a>
-                    {% endfor %}
+            </div>
+
+            <div class="col-md-8 mb20">
+                {{ form_label(attribute(form, 'keywords')) }}
+                {{ form_widget(attribute(form, 'keywords')) }}
+            </div>
+
+            <div class="col-md-8 mb20">
+                {{ form_label(attribute(form, 'item_motors__mileage_range')) }}
+                <div class="select">
+                    {{ form_widget(attribute(form, 'item_motors__mileage_range')) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 mb20">
+                {{ form_label(attribute(form, 'item_motors__transmission_id')) }}
+                <div class="select">
+                    {{ form_widget(attribute(form, 'item_motors__transmission_id')) }}
+                </div>
+            </div>
+
+            <div class="col-md-8 mb20">
+                {{ form_label(attribute(form, 'item_motors__colour_id')) }}
+                <div class="select">
+                    {{ form_widget(attribute(form, 'item_motors__colour_id')) }}
+                </div>
+            </div>
+
+            <div class="col-md-8 mb20">
+                {{ form_label(attribute(form, 'item_motors__fuel_type_id')) }}
+                <div class="select">
+                    {{ form_widget(attribute(form, 'item_motors__fuel_type_id')) }}
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="columns">
-        <div class="more-options"><a href="javascript:void(0);" id="show_hide_more_options">{{ 'More options'|trans({}, 'frontend-landing-page')}}</a></div>
-        <div id="more_options" style="display:none">
-            <div class="white-select">
-                <div class="row">
-                    <div class="col-md-7 col-lg-8">
-                        <div class="car-lading-field">
-                            {{ form_label(attribute(form, 'item__model_id')) }}
-                            {{ form_widget(attribute(form, 'item__model_id')) }}
-                        </div>
-                    </div>
-
-                    <div class="col-md-7 col-lg-8">
-                        <div class="options-mid-column">
-                            <div class="car-lading-field2">
-                                {{ form_label(attribute(form, 'keywords')) }}
-                                {{ form_widget(attribute(form, 'keywords')) }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-7 col-lg-8">
-                        <div class="options-last-column">
-                            {{ form_label(attribute(form, 'item_motors__mileage_range')) }}
-                            {{ form_widget(attribute(form, 'item_motors__mileage_range')) }}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-7 col-lg-8">
-                        <div class="car-lading-field">
-                            {{ form_label(attribute(form, 'item_motors__transmission_id')) }}
-                            {{ form_widget(attribute(form, 'item_motors__transmission_id')) }}
-                        </div>
-                    </div>
-
-                    <div class="col-md-7 col-lg-8">
-                        <div class="options-mid-column">
-                            <div class="car-lading-field2">
-                                {{ form_label(attribute(form, 'item_motors__colour_id')) }}
-                                {{ form_widget(attribute(form, 'item_motors__colour_id')) }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-7 col-lg-8">
-                        <div class="options-last-column">
-                            {{ form_label(attribute(form, 'item_motors__fuel_type_id')) }}
-                            {{ form_widget(attribute(form, 'item_motors__fuel_type_id')) }}
-                        </div>
-                    </div>
-                </div>
+    <div class="row">
+        <div class="col-md-24">
+            <div class="col-md-8 offset-md-8 mt20">
+                <button class="secondary-btn-1 btn btn-block landing-search-btn" type="submit">{{ 'Search cars'|trans({}, 'frontend-landing-page') }}</button>
             </div>
-        </div>
-        <div class="small-wrapper">
-            <button class="secondary-btn-1 expand button mb0 landing-search-btn" type="submit">{{ 'Search cars'|trans({}, 'frontend-landing-page') }}</button>
         </div>
     </div>
 </div>
-
 {{ form_end(form) }}
 {% endblock %}
 
