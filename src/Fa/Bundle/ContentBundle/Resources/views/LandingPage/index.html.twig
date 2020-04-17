@@ -48,6 +48,7 @@
 {% endif %}
 {% block stylesheet %}
 	<link rel="stylesheet" href="{{ asset('/build/css/landing.css') }}">
+	<link rel="stylesheet" href="{{ asset('/build/css/homeContent.css') }}">
 {% endblock %}
 
 {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
@@ -719,7 +720,7 @@
         </div>
     {% endif %}
 
-    {% if location is defined and location is not null and adsNearYou is defined and adsNearYou|length %}
+    {#{% if location is defined and location is not null and adsNearYou is defined and adsNearYou|length %}
         {% if prevSectionBgClass == '' %}
             {% set bgColour = 'white-bg' %}
             {% set mapBgColour = 'near-items2' %}
@@ -730,7 +731,7 @@
         {% set prevSectionBgClass = bgColour %}
         {% use "FaContentBundle:LandingPage:adsNearYou.html.twig" %}
         {{ block('adsNearYou_html') }}
-    {% endif %}
+    {% endif %}#}
 
     {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
         {% if topCarMakes is defined and topCarMakes|length %}
