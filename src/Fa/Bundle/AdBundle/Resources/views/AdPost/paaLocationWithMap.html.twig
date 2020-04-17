@@ -10,7 +10,7 @@
 {% set locationRepository = fetch_repository('FaEntityBundle:Location') %}
 {% use "FaCoreBundle:GoogleMap:renderLocationUsingCircle.html.twig" %}
 <div class="col-md-24 d-flex justify-content-center paa-box">
-    <div class="paa-gray-box" id="location_div">
+    <div class="paa-gray-box btm-pa-0" id="location_div">
         {#{ attribute(attribute(form, field).vars.attr, 'field-help') }#}
         <h3 class="text-center">
             {{ attribute(form, field).vars.label }}

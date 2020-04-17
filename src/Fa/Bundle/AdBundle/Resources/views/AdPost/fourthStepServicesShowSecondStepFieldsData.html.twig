@@ -1,49 +1,39 @@
 <div class="change-category clearfix">
-    <div class=" left cat-name-wrap media-object" style="display: inline-flex;">
-        <div class="media-object-section">
-            <span class="cat-caption">{{ 'Category'|trans({}, 'frontend-paa-fourth-step') }}:</span>
-        </div>
-        <div class="media-object-section">
+    <div class="text-left cat-name-wrap" style="display: inline-flex;">
+        <span>{{ 'Category'|trans({}, 'frontend-paa-fourth-step') }}:</span>
             {{ fetch_repository('FaEntityBundle:Category').getCategoryPathArrayById(categoryId, false, fetch_container_instance())|last('<span class="seperator"></span>')|raw }}
-        </div>
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_first_step', {'is_edit' : 1}) }}');" title="{{ 'Change category'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_first_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change category'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 <div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Ad title'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ ad.title }}
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Ad title'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ ad.title }}
     </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change ad title'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
-    </div>
-</div>
-
-<div class="change-category clearfix">
-    <div class="left cat-name-wrap">
-        <span class="cat-caption">{{ 'Ad type'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', ad.type.id) }}
-    </div>
-    <div class="right">
-        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change ad type'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change ad title'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 
 <div class="change-category clearfix">
-    <div class="clearfix">
-        <div class="desc-col-1">
-            <div class="clearfix">
-                <span class="cat-caption left">{{ 'Description'|trans({}, 'frontend-paa-fourth-step') }}:</span>
-                <div class="paa-desc">
-                    <div id="paa_desc">{{ ad.description|raw }}</div>
-                    <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend') }}</a>
-                    <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend') }}</a>
-               </div>
-            </div>
-        </div>
-        <div class="desc-col-2">
-            <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" title="{{ 'Change description'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
-        </div>
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Ad type'|trans({}, 'frontend-paa-fourth-step') }}:</span> {{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Entity', ad.type.id) }}
+    </div>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change ad type'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
+    </div>
+</div>
+
+<div class="change-category clearfix">
+    <div class="text-left cat-name-wrap">
+        <span>{{ 'Description'|trans({}, 'frontend-paa-fourth-step') }}:</span>
+        {{ ad.description|raw }}
+        <a href="javascript:void(0);" class="read-more" style="display:none;">{{ 'Read more'|trans({}, 'frontend') }}</a>
+        <a href="javascript:void(0);" class="read-less" style="display:none;">{{ 'Read less'|trans({}, 'frontend') }}</a>
+    </div>
+    <div class="text-right edit-category">
+        <a href="javascript:submitFormUsingAjax('{{ path('ad_post_second_step', {'is_edit' : 1}) }}');" class="a-tag" title="{{ 'Change description'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
     </div>
 </div>
 

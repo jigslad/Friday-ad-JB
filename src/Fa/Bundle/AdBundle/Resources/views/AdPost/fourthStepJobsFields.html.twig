@@ -14,75 +14,81 @@
                 {{ include('FaAdBundle:AdPost:businessPhoneField.html.twig') }}
             {% elseif field == 'salary_type_id' or field == 'salary_band_id' or field == 'salary' %}
                {% if salaryRendered == false %}
+                   <div class="col-md-24 d-flex justify-content-center paa-box">
+                        <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                            {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig', {'label': attribute(form, field).vars.label, 'validationFields': {0: 'salary', 1: 'salary_type_id', 2: 'salary_band_id'}}) }}
+                            {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
+                            <div class="collapse collapse-body-content" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                                {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                                    <div class="paa-title-ins">
+                                        {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
+                                    </div>
+                                {% endif %}
+                                {% if attribute(form, 'salary_type_id') is defined %}
+                                    <div class="small-wrapper">
+                                        {{ form_widget(attribute(form, 'salary_type_id')) }}
+                                        {{ form_errors(attribute(form, 'salary_type_id')) }}
+                                    </div>
+                                {% endif %}
+                                {% if attribute(form, 'salary_band_id') is defined %}
+                                    <div class="small-wrapper" id="salary_band_id_div" style="display:none;">
+                                        {{ form_widget(attribute(form, 'salary_band_id')) }}
+                                        {{ form_errors(attribute(form, 'salary_band_id')) }}
+                                    </div>
+                                {% endif %}
+                                {% if attribute(form, 'salary') is defined %}
+                                    <div class="small-wrapper">
+                                        {{ form_widget(attribute(form, 'salary'), {'attr': {'placeholder': ((attribute(form, 'salary').vars.attr.placeholder is defined and attribute(form, 'salary').vars.attr.placeholder is not null) ? attribute(form, 'salary').vars.attr.placeholder : 'Type specific salary amount')}}) }}
+                                        {{ form_errors(attribute(form, 'salary')) }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                   </div>
+                    {% set salaryRendered = true %}
+                {% endif %}
+            {% elseif field == 'additional_job_requirements_id' or field == 'additional_benefits_id' %}
+                <div class="col-md-24 d-flex justify-content-center paa-box">
                     <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
-                        {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig', {'label': attribute(form, field).vars.label, 'validationFields': {0: 'salary', 1: 'salary_type_id', 2: 'salary_band_id'}}) }}
+                        {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
                         {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                        <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
                             {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
                                 <div class="paa-title-ins">
                                     {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
                                 </div>
                             {% endif %}
-                            {% if attribute(form, 'salary_type_id') is defined %}
-                                <div class="small-wrapper">
-                                    {{ form_widget(attribute(form, 'salary_type_id')) }}
-                                    {{ form_errors(attribute(form, 'salary_type_id')) }}
-                                </div>
-                            {% endif %}
-                            {% if attribute(form, 'salary_band_id') is defined %}
-                                <div class="small-wrapper" id="salary_band_id_div" style="display:none;">
-                                    {{ form_widget(attribute(form, 'salary_band_id')) }}
-                                    {{ form_errors(attribute(form, 'salary_band_id')) }}
-                                </div>
-                            {% endif %}
-                            {% if attribute(form, 'salary') is defined %}
-                                <div class="small-wrapper">
-                                    {{ form_widget(attribute(form, 'salary'), {'attr': {'placeholder': ((attribute(form, 'salary').vars.attr.placeholder is defined and attribute(form, 'salary').vars.attr.placeholder is not null) ? attribute(form, 'salary').vars.attr.placeholder : 'Type specific salary amount')}}) }}
-                                    {{ form_errors(attribute(form, 'salary')) }}
-                                </div>
-                            {% endif %}
+                            <ul class="paa-features clearfix fa-equalizer" id="{{ field }}_equalizer">
+                                {% set selectedValues = attribute(form, field).vars.data %}
+                                {% for child in attribute(form, field) %}
+                                    {% set activeClass = '' %}
+                                    {% if child.vars.value in selectedValues %}
+                                        {% set activeClass = 'active' %}
+                                    {% endif %}
+                                    <li class="{{ activeClass }}">
+                                        {{ form_widget(child) }}
+                                        <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
-                    </div>
-                    {% set salaryRendered = true %}
-                {% endif %}
-            {% elseif field == 'additional_job_requirements_id' or field == 'additional_benefits_id' %}
-                <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
-                    {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
-                    {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                    <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
-                        {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
-                            <div class="paa-title-ins">
-                                {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
-                            </div>
-                        {% endif %}
-                        <ul class="paa-features clearfix fa-equalizer" id="{{ field }}_equalizer">
-                            {% set selectedValues = attribute(form, field).vars.data %}
-                            {% for child in attribute(form, field) %}
-                                {% set activeClass = '' %}
-                                {% if child.vars.value in selectedValues %}
-                                    {% set activeClass = 'active' %}
-                                {% endif %}
-                                <li class="{{ activeClass }}">
-                                    {{ form_widget(child) }}
-                                    <label for="{{ child.vars.id }}">{{ child.vars.label }}</label>
-                                </li>
-                            {% endfor %}
-                        </ul>
                     </div>
                 </div>
             {% else %}
-                <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
-                    {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
-                    {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
-                    <div class="pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
-                        {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
-                            <div class="paa-title-ins">
-                                {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
+                <div class="col-md-24 d-flex justify-content-center paa-box">
+                    <div class="paa-bdr-box btm-pa-0" id="element_{{ field }}">
+                        {{ include('FaAdBundle:AdPost:paaFieldHeading.html.twig') }}
+                        {% set showHideElement = attribute(get_variables('fieldHeading'), 'showHideElement' ~ (field)) %}
+                        <div class="collapse collapse-body-content pb30" id="element_toggle_{{ field }}_target" style="display:{{ showHideElement }}">
+                            {% if attribute(attribute(form, field).vars.attr, 'field-help') is defined %}
+                                <div class="paa-title-ins">
+                                    {{ attribute(attribute(form, field).vars.attr, 'field-help') }}
+                                </div>
+                            {% endif %}
+                            <div class="small-wrapper">
+                                {{ form_widget(attribute(form, field)) }}
+                                {{ form_errors(attribute(form, field)) }}
                             </div>
-                        {% endif %}
-                        <div class="small-wrapper">
-                            {{ form_widget(attribute(form, field)) }}
-                            {{ form_errors(attribute(form, field)) }}
                         </div>
                     </div>
                 </div>
