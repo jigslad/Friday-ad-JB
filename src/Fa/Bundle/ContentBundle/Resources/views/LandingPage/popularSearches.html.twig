@@ -4,35 +4,36 @@
     {% set popularSearchesLocationSlug = 'uk' %}
 {% endif %}
 <div class="homepage-row {{ bgColour }}">
-    <h3 class="homepage-title">{{ 'Popular searches'|trans({}, 'frontend-landing-page') }}</h3>
-    {% set columns = 4 %}
-    {% set ctr = 0 %}
-    {% set totalItems = popularSearches|length %}
-    {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
-    {% set extraColumn = (totalItems % columns) %}
-    {% set colCounter = {} %}
-    {% for i in 0..columns-1 %}
-        {% if loop.index0 < extraColumn %}
-            {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
-        {% else  %}
-            {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
-        {% endif %}
-    {% endfor %}
-
-    <div class="row">
-        <ul class="link-list jobs-link-list">
-            <li>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 class="homepage-title">{{ 'Popular searches'|trans({}, 'frontend-landing-page') }}</h3>
+                {% set columns = 4 %}
+                {% set ctr = 0 %}
+                {% set totalItems = popularSearches|length %}
+                {% set itemsPerCol = (totalItems/columns)|round(0, 'floor') %}
+                {% set extraColumn = (totalItems % columns) %}
+                {% set colCounter = {} %}
                 {% for i in 0..columns-1 %}
-                    <div class="large-6 columns">
-                        {% for k in 0..colCounter[i]-1 %}
-                            {% if popularSearches[ctr] is defined %}
-                                <a href="{{ seoManager.parseSeoString(popularSearches[ctr]['url'], {'{location}': popularSearchesLocationSlug}) }}">{{ popularSearches[ctr]['title'] }}</a>
-                            {% endif %}
-                            {% set ctr = ctr + 1 %}
-                        {% endfor %}
-                    </div>
+                    {% if loop.index0 < extraColumn %}
+                        {% set colCounter = colCounter|merge({0: itemsPerCol + 1}) %}
+                    {% else  %}
+                        {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
+                    {% endif %}
                 {% endfor %}
-            </li>
-        </ul>
+                {% for i in 0..columns-1 %}
+                    <ul class="link-list jobs-link-list">
+                    {% for k in 0..colCounter[i]-1 %}
+                        {% if popularSearches[ctr] is defined %}
+                            <li>
+                                <a href="{{ seoManager.parseSeoString(popularSearches[ctr]['url'], {'{location}': popularSearchesLocationSlug}) }}">{{ popularSearches[ctr]['title'] }}</a>
+                            </li>
+                        {% endif %}
+                        {% set ctr = ctr + 1 %}
+                    {% endfor %}
+                    </ul>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
