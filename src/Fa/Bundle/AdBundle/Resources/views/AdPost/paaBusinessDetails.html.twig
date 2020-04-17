@@ -4,14 +4,12 @@
 
 {% if container.get('session').has('paa_show_business_step') %}
     <div class="change-category clearfix">
-        <div class="clearfix">
-            <div class="left">
-                <span>{{ 'Business details'|trans({}, 'frontend-paa-fourth-step') }}:</span>
-            </div>
-            <div class="right">
-                <a href="javascript:void(0)" title="{{ 'Show business details'|trans({}, 'frontend-paa-fourth-step') }}" id="show_business_details_link" >{{ 'Show'|trans({}, 'frontend-paa-fourth-step') }}</a> | 
-                <a href="{{ path('add_user_business_details') }}" title="{{ 'Change business details'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
-            </div>
+        <div class="text-left cat-name-wrap">
+            <span>{{ 'Business details'|trans({}, 'frontend-paa-fourth-step') }}:</span>
+        </div>
+        <div class="text-right edit-category">
+            <a href="javascript:void(0)" title="{{ 'Show business details'|trans({}, 'frontend-paa-fourth-step') }}" id="show_business_details_link" >{{ 'Show'|trans({}, 'frontend-paa-fourth-step') }}</a> |
+            <a href="{{ path('add_user_business_details') }}" class="a-tag" title="{{ 'Change business details'|trans({}, 'frontend-paa-fourth-step') }}">{{ 'Edit'|trans({}, 'frontend-paa-fourth-step') }}</a>
         </div>
         
         <div id="business_details" style="display:none">

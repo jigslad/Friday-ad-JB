@@ -22,7 +22,8 @@
     {% if showDragDropFlag %}
     <div class="drag-drop-box text-center" id="drag_drop_hover">
         <div id="drag_drop_text" style="position: relative;">
-            <div class="{% if adImgCount %}drag-ins-hr{% else %}drag-ins-vr{% endif %}"></div>
+            {#<div class="{% if adImgCount %}drag-ins-hr{% else %}drag-ins-vr{% endif %}"></div>#}
+            <div class="drag-ins-hr"></div>
             Drag and drop images here or <a href="javascript:void(0);" id="drag_dop_anchor" style="position: relative; z-index: 1;">browse</a> your images
         </div>
     {% endif %}
