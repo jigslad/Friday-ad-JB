@@ -12,7 +12,7 @@
                         {{ form_widget(form.item__distance,{'attr':{'class':'form-control select-control'}}) }}
                     </div>
                     <div class="small-15 medium-5 columns mobile-p-0" style="display: inline-flex;">
-                        <label style="padding: 10px 10px 10px 0px; color: #ffffff !important;">{{ 'from'|trans({}, 'frontend')}}</label>
+                        <label class="from-sec">{{ 'from'|trans({}, 'frontend')}}</label>
                         <div class="location-col">
                         {{ form_widget(form.item__location_autocomplete) }}
                         <a href="javascript:void(0);" id="fa_adult_home_page_search_item__location_close" class="adul-loc-close ui-autocomplete-close select2-search-choice-close"></a>
