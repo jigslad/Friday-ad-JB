@@ -3,46 +3,45 @@
     {% set only_domains = no_protocol|split('/')[0] ?: no_protocol %}
     {% set only_domains = only_domains|replace({'www.': ''})%}
 <div style="cursor:pointer" onclick="gaSendForRecommendedSlotSearch('{{ recommendedSlotResult[slotIndex]['url'] }}', '{{ only_domains }}','{{ recommendedSlotResult[slotIndex]['title'] }}','{{ slotIndex }}','{{ recommendedSlotResult[slotIndex]['creative_ord'] }}');">    
-    <div class="recommended-div listing mb20">           
-        <div class="clearfix">
-            <div class="list-col-1">
-                {% set imagePath = container.getParameter('fa.static.asset.url')~'/uploads/category_recommended_slots/'~recommendedSlotResult[slotIndex]['slot_filename'] %}
+    <div class="recommended-div media listing mb20">           
+        <div class="media-left align-self-center">
+            {% set imagePath = container.getParameter('fa.static.asset.url')~'/uploads/category_recommended_slots/'~recommendedSlotResult[slotIndex]['slot_filename'] %}
 
-                <div class="featured-bz-listimg">
-                    {% if imagePath %}
-                        <div class="img-cls-srchlist-recommend"><div class="list-placeholder"><img data-original="{{ imagePath }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" class="lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" /></div></div>
-                    {% else %}
-                        <div class="img-cls-srchlist-recommend"><img src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" /></div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="list-col-2">
-                <div class="clearfix">
-                    {%   if(recommendedSlotResult[slotIndex]['show_sponsored_lbl']) %}
-                    <div class="recommendedtxt gray-text text-right">
-                        {{'Sponsored Ad'|trans({}, 'frontend-show-ad')}}<span class="sponsored-ad-icon"></span>
-                    </div>
-                    {% endif %}
-                	<h5 class="show-for-small-only list-title">
-                        {{ recommendedSlotResult[slotIndex]['mobile_title'] }}
-                    </h5>
-                 
-                    <h3 class="hide-for-small-only list-title">
-                        {{ recommendedSlotResult[slotIndex]['title'] }}
-                    </h3>
-                     
-                     <h5 class="list-display-url hide-for-small-only">{{ recommendedSlotResult[slotIndex]['display_url'] }}</h5>
-                </div>
-                <div class="mt10 recommended-more">
-                    <div class="list-desc hide-for-small-only left-block">
-                        {{ recommendedSlotResult[slotIndex]['sub_title']|length > 150 ? trim_text(recommendedSlotResult[slotIndex]['sub_title'], 150)|raw ~ '...': recommendedSlotResult[slotIndex]['sub_title'] }}
-                    </div>
-                    {% if recommendedSlotResult[slotIndex]['cta_text'] !='' %}
-                    <div class="outer-btn"><div class="button secondary-btn-1 expand right-block" style="cursor: pointer;">{{ recommendedSlotResult[slotIndex]['cta_text'] }}</div></div>
-               		{% endif %}
-               </div>
+            <div class="featured-bz-listimg">
+                {% if imagePath %}
+                    <div class="img-cls-srchlist-recommend"><div class="list-placeholder"><img data-original="{{ imagePath }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" class="lazy" src="{{ asset_url('facore/images/ajax_loader.gif') }}" /></div></div>
+                {% else %}
+                    <div class="img-cls-srchlist-recommend"><img src="{{ asset_url('fafrontend/images/no-image.svg') }}" alt="{{ recommendedSlotResult[slotIndex]['title'] }}" /></div>
+                {% endif %}
             </div>
         </div>
+        <div class="media-body">
+            <div class="clearfix">
+                {%   if(recommendedSlotResult[slotIndex]['show_sponsored_lbl']) %}
+                <div class="recommendedtxt gray-text text-right">
+                    {{'Sponsored Ad'|trans({}, 'frontend-show-ad')}}<span class="sponsored-ad-icon"></span>
+                </div>
+                {% endif %}
+            	<h5 class="d-block d-md-none list-title">
+                    {{ recommendedSlotResult[slotIndex]['mobile_title'] }}
+                </h5>
+             
+                <h3 class="d-none d-md-block list-title">
+                    {{ recommendedSlotResult[slotIndex]['title'] }}
+                </h3>
+                 
+                 <h5 class="list-display-url d-none d-md-block">{{ recommendedSlotResult[slotIndex]['display_url'] }}</h5>
+            </div>
+            <div class="mt10 recommended-more">
+                <div class="list-desc d-none d-md-block left-block">
+                    {{ recommendedSlotResult[slotIndex]['sub_title']|length > 150 ? trim_text(recommendedSlotResult[slotIndex]['sub_title'], 150)|raw ~ '...': recommendedSlotResult[slotIndex]['sub_title'] }}
+                </div>
+                {% if recommendedSlotResult[slotIndex]['cta_text'] !='' %}
+                <div class="outer-btn"><div class="button secondary-btn-1 expand right-block" style="cursor: pointer;">{{ recommendedSlotResult[slotIndex]['cta_text'] }}</div></div>
+           		{% endif %}
+           </div>
+        </div>
+
     </div>
 </div>
 <div class="clearfix"></div>

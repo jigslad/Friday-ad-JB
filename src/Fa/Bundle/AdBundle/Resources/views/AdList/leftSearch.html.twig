@@ -66,7 +66,7 @@
                   <li class="budget-field">
                       <span>&pound;</span>{{ form_widget(form.item__price_to, {'attr': {'class': 'white-field'}}) }}
                   </li>
-                  <li><button class="budget-go-btn" type="button"></button></li>
+                  <li><button class="budget-go-btn btn secondary-btn-1" type="button"></button></li>
               </ul>
             </div>
         </dd>
@@ -92,7 +92,7 @@
                           </div>
                       </li>
                       <li>
-                          <button class="budget-go-btn" type="button" id="left_search_location_btn"></button>
+                          <button class="budget-go-btn btn secondary-btn-1" type="button" id="left_search_location_btn"></button>
                       </li>
                   </ul>
                   <ul class="distance-search distance-left-search clearfix">
@@ -140,22 +140,21 @@
                     <li>
                         {% set itemsWithPhoto = fetch_repository('FaEntityBundle:CategoryDimension').getDimensionFacetBySearchParams('id', searchParams|merge({'items_with_photo': 1}), {}, fetch_container_instance(), false, null, null, false, {}, true) %}
                         {{ form_widget(attribute(form, 'items_with_photo')) }}
-                        <label class="mb0" for="{{ attribute(form, 'items_with_photo').vars.id }}">{{ attribute(form, 'items_with_photo').vars.label }}{% if itemsWithPhoto and itemsWithPhoto|length %} ({{ itemsWithPhoto|length }}){% endif %}</label>
+                        <label class="custom-control-label" for="{{ attribute(form, 'items_with_photo').vars.id }}">{{ attribute(form, 'items_with_photo').vars.label }}{% if itemsWithPhoto and itemsWithPhoto|length %} ({{ itemsWithPhoto|length }}){% endif %}</label>
                         {% set queryParams = searchParams|merge({'items_with_photo': 1}) %}
                         {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
                         <a href="{{ listurl }}" rel="nofollow" class="crowable_checkbox_link" onclick="return false;">{{ attribute(form, 'items_with_photo').vars.label }}</a>
                     </li>
                 </ul>
             </div>
-        </dd>
-        
+        </dd>        
         {% if isShopPage is not defined or (isShopPage is defined and not isShopPage) %}
             <dd class="accordion-navigation keep-shown">
                 <div class="content active label-inline">
                     <ul class="custom-control custom-checkbox search-type crawlable-checkbox" />
                         <li>
                             {{ form_widget(attribute(form, 'expired_ads')) }}
-                            {{ form_label(attribute(form, 'expired_ads')) }}
+                            {{ form_label(form.expired_ads, '', {'label_attr': {'class': 'custom-control-label'}}) }}
                             {% set queryParams = searchParams|merge({'expired_ads': 1}) %}
                             {% set listurl = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
                             <a href="{{ listurl }}" {% if getNoFollowLink  %}rel="nofollow"{% endif %} class="crowable_checkbox_link" onclick="return false;">{{ attribute(form, 'expired_ads').vars.label }}</a>

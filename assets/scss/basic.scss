@@ -82,9 +82,20 @@
     left: -20px !important;
     border: 0px solid #e3e3e3;
 }
-custom-checkbox .custom-control-label::before {
+.custom-checkbox .custom-control-label::before {
     top: 0 !important;
     border: 0px solid #e3e3e3 !important;
+}
+.featured-ribbon, .urgent-ribbon { text-indent: -999px !important; }
+
+.radio-capsule .capsule-bg { 
+   display: inline-block;margin: 0 11px 0 -4px;background: #a8a8a8;color: #fff;height: 35px;line-height: 32px;padding: 0 16px;vertical-align: middle;border-radius: 20px;cursor: pointer;position: relative;
+}
+.radio-capsule .capsule-bg:hover, .radio-capsule .capsule-bg.active {
+    background: #a8dc28;
+}
+.radio-capsule .capsule-bg input[type="radio"] {
+    display: block;width: 100%;height: 100%;margin: 0;position: absolute;left: 0;top: 0;z-index: 1;opacity: 0;cursor: pointer;
 }
 
 
