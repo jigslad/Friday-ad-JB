@@ -276,7 +276,7 @@ class CampaignAdminController extends CrudController implements ResourceAuthoriz
             $this->getEntityManager()->flush();
             //$this->get('fa.message.manager')->setFlashMessage($this->get('translator')->trans('Ad status has been changed successfully.'), 'success');
             //return $this->redirect($formData['return_url']);
-            return parent::handleMessage($this->get('translator')->trans('Campaign was successfully updated.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'campaigns_new_admin' : $backUrl));
+            return parent::handleMessage($this->get('translator')->trans('Campaign was successfully updated.', array(), 'success'), ($form->get('saveAndNew')->isClicked() ? 'campaigns_new_admin' : 'campaigns_admin'));
         }
         
         $parameters = array(
@@ -294,7 +294,7 @@ class CampaignAdminController extends CrudController implements ResourceAuthoriz
         $countCampaign = 0;
         //$slug = 'motor_boats';
         $campaign = $this->getRepository('FaAdBundle:Campaigns')->findOneBy(array('slug' => $slug));
-        if (!empty($campaign)) {
+        if (!empty($campaign) && is_array($campaign)) {
             $countCampaign = count($campaign);
         }
         return new JsonResponse(array('campaigncount' => $countCampaign));

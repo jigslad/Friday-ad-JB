@@ -18,6 +18,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Fa\Bundle\MessageBundle\Repository\MessageRepository;
 use Fa\Bundle\EntityBundle\Repository\EntityRepository;
+use Fa\Bundle\CoreBundle\Manager\CommonManager;
+use Gedmo\Sluggable\Util\Urlizer;
+use Aws\S3\S3Client;
 
 /**
  * This command is used to send contact request to moderation.
@@ -39,17 +42,17 @@ class CleanUnwantedHeaderImageCommand extends ContainerAwareCommand
         ->setHelp(
             <<<EOF
 Cron: To be setup to run at regular intervals.
-
+            
 Actions:
 - Clean Unwanted Header Images
-
+            
 Command:
  - php app/console fa:clean:unwanted-header-image
-
+            
 EOF
-        );
+            );
     }
-
+    
     /**
      * Execute command.
      *
@@ -62,7 +65,7 @@ EOF
         $imagePath = $webPath.'/uploads/headerimage/';
         $this->clearUnwantedBannerImages($imagePath, $output);
     }
-
+    
     /**
      * Removing unwanted Header Images from folder.
      *
@@ -79,12 +82,40 @@ EOF
         $adImageFolders = glob($imagePath.'*');
         $cnt = 0;
         if (!empty($adImageFolders)) {
+            $client = new S3Client([
+                'version'     => 'latest',
+                'region'      => $this->getContainer()->getParameter('fa.aws_region'),
+                'credentials' => [
+                    'key'    => $this->getContainer()->getParameter('fa.aws_key'),
+                    'secret' => $this->getContainer()->getParameter('fa.aws_secret'),
+                ],
+            ]);
+            
             foreach ($adImageFolders as $image) {
                 $expFile = explode('/', $image);
                 $fileName = end($expFile);
                 $headerImageObj = $headerImageRepository->findByImageName($fileName);
+                $awsPath = $this->getContainer()->getParameter('fa.static.aws.url');
+                $awsSourceImg = $awsPath.'/uploads/headerimage/'.$fileName;
+                $fileKeys = array();
+                
                 //checking image exist in folder but not used in DB
                 if ($headerImageObj == '0') {
+                    $output->writeln('Image  : '.$awsSourceImg, true);
+                    
+                    if (false!==file($awsSourceImg)) {
+                        $im = 'uploads/headerimage/'.$fileName;
+                        $fileKeys[] = array('Key' => $im);
+                        
+                        if(!empty($fileKeys)) {
+                            $result = $client->deleteObjects(array(
+                                'Bucket'  => $this->getContainer()->getParameter('fa.aws_bucket'),
+                                'Delete'  => array('Objects' => $fileKeys)
+                            ));
+                            $output->writeln('Image deleted for : '.$awsSourceImg, true);
+                        }
+                    }
+                    
                     if (is_file($image)) {
                         if (unlink($image)) {
                             $output->writeln('Image deleted for : '.$image, true);
