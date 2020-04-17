@@ -60,6 +60,178 @@
     margin: 0 0 11px;
     padding: 17px 0 0 0;
 }
+
+/* Animals Images */
+.pets-dogs { background: url('/Frontend/images/animals/Ic-btn-Dogs.svg') no-repeat !important; }
+.pets-cats { background: url('/Frontend/images/animals/Ic-btn-Cats.svg') no-repeat !important; }
+.pets-birds { background: url('/Frontend/images/animals/Ic-btn-Birds.svg') no-repeat !important; }
+.pets-rabbits { background: url('/Frontend/images/animals/Ic-btn-Rabbits.svg') no-repeat !important; }
+.pets-guinea-pigs { background: url('/Frontend/images/animals/Ic-btn-Guinea-Pigs.svg') no-repeat !important; }
+.pets-reptiles { background: url('/Frontend/images/animals/Ic-btn-Reptiles.svg') no-repeat !important; }
+.pets-fish { background: url('/Frontend/images/animals/Ic-btn-Fish.svg') no-repeat !important; }
+.pets-insects { background: url('/Frontend/images/animals/Ic-btn-Insects.svg') no-repeat !important; }
+.pets-exotic-pets { background: url('/Frontend/images/animals/Ic-btn-Exotic.svg') no-repeat !important; }
+.pets-other-pets { background: url('/Frontend/images/animals/Ic-btn-Other.svg') no-repeat !important; }
+.pets-pet-accessories { background: url('/Frontend/images/animals/Ic-btn-Pet-accessories.svg') no-repeat !important; }
+.pets-pet-supplies { background: url('/Frontend/images/animals/Ic-btn-Pet-supplies.svg') no-repeat !important; }
+
+.pets-dogs:active, .pets-dogs:hover { background: url('/Frontend/images/animals/Ic-btn-Dogs-Hover.svg') no-repeat !important; }
+.pets-cats:active, .pets-cats:hover { background: url('/Frontend/images/animals/Ic-btn-Cats-Hover.svg') no-repeat !important; }
+.pets-birds:active, .pets-birds:hover { background: url('/Frontend/images/animals/Ic-btn-Birds-Hover.svg') no-repeat !important; }
+.pets-rabbits:active, .pets-rabbits:hover { background: url('/Frontend/images/animals/Ic-btn-Rabbits-Hover.svg') no-repeat !important; }
+.pets-guinea-pigs:active, .pets-guinea-pigs:hover { background: url('/Frontend/images/animals/Ic-btn-Guinea-Pigs-Hover.svg') no-repeat !important; }
+.pets-reptiles:active, .pets-reptiles:hover { background: url('/Frontend/images/animals/Ic-btn-Reptiles-Hover.svg') no-repeat !important; }
+.pets-fish:active, .pets-fish:hover { background: url('/Frontend/images/animals/Ic-btn-Fish-Hover.svg') no-repeat !important; }
+.pets-insects:active, .pets-insects:hover { background: url('/Frontend/images/animals/Ic-btn-Insects-Hover.svg') no-repeat !important; }
+.pets-exotic-pets:active, .pets-exotic-pets:hover { background: url('/Frontend/images/animals/Ic-btn-Exotic-Hover.svg') no-repeat !important; }
+.pets-other-pets:active, .pets-other-pets:hover { background: url('/Frontend/images/animals/Ic-btn-Other-Hover.svg') no-repeat !important; }
+.pets-pet-accessories:active, .pets-pet-accessories:hover { background: url('/Frontend/images/animals/Ic-btn-Pet-accessories-Hover.svg') no-repeat !important; }
+.pets-pet-supplies:active, .pets-pet-supplies:hover { background: url('/Frontend/images/animals/Ic-btn-Pet-supplies-Hover.svg') no-repeat !important; }
+
+/* Motors Images */
+.any-category {
+  background: url('/Frontend/images/Ic-btn-Any.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/Ic-btn-Any-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/Ic-btn-Any-ON.svg') no-repeat;
+    border-radius: 5px !important;
+  }
+}
+.car-hatchback {
+  background: url('/Frontend/images/motors/Ic-btn-Hatchback.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/motors/Ic-btn-Hatchback-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/motors/Ic-btn-Hatchback-ON.svg') no-repeat;
+    border-radius: 5px !important;
+  }
+}
+.car-coupes {
+  background: url('/Frontend/images/motors/Ic-btn-Coupes1.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/motors/Ic-btn-Coupes-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/motors/Ic-btn-Coupes-ON.svg') no-repeat;
+    border-radius: 5px !important;
+  }
+}
+.car-saloons {
+  background: url('/Frontend/images/motors/Ic-btn-Saloons.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/motors/Ic-btn-Saloons-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/motors/Ic-btn-Saloons-ON.svg') no-repeat;
+    border-radius: 5px !important;
+  }
+}
+.car-convertibles {
+  background: url('/Frontend/images/motors/Ic-btn-Convertibles.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/motors/Ic-btn-Convertibles-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/motors/Ic-btn-Convertibles-ON.svg') no-repeat;
+    border-radius: 5px !important;
+  }
+}
+.car-estates {
+  background: url('/Frontend/images/motors/Ic-btn-Estates.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/motors/Ic-btn-Estates-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/motors/Ic-btn-Estates-ON.svg') no-repeat;
+    border-radius: 5px !important;
+  }
+}
+.car-mpvs {
+  background: url('/Frontend/images/motors/Ic-btn-MPVs.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/motors/Ic-btn-MPVs-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/motors/Ic-btn-MPVs-ON.svg') no-repeat;
+    border-radius: 5px !important;
+  }
+}
+.car-4x4 {
+  background: url('/Frontend/images/motors/Ic-btn-4x4.svg') no-repeat;
+  &:hover {
+    background: url('/Frontend/images/motors/Ic-btn-4x4-Hover.svg') no-repeat;
+  }
+  &.active {
+    background: url('/Frontend/images/motors/Ic-btn-4x4-ON.svg') no-repeat;
+    border-radius: 5px !important;
+  }
+}
+
+/* Property Images */
+.pt-commercial { background: url('/Frontend/images/Properties/Commercial.svg') no-repeat !important; }
+.pt-flats { background: url('/Frontend/images/Properties/Flats.svg') no-repeat !important; }
+.pt-garages { background: url('/Frontend/images/Properties/Garages.svg') no-repeat !important; }
+.pt-houses { background: url('/Frontend/images/Properties/Houses.svg') no-repeat !important; }
+.pt-land { background: url('/Frontend/images/Properties/Land.svg') no-repeat !important; }
+.pt-mobile-homes { background: url('/Frontend/images/Properties/Mobile-Homes.svg') no-repeat !important; }
+.pt-overseas { background: url('/Frontend/images/Properties/Overseas.svg') no-repeat !important; }
+.pt-parking { background: url('/Frontend/images/Properties/Parking.svg') no-repeat !important; }
+.pt-rooms { background: url('/Frontend/images/Properties/Rooms.svg') no-repeat !important; }
+
+.pt-commercial:hover { background: url('/Frontend/images/Properties/Commercial-Hover.svg') no-repeat !important; }
+.pt-flats:hover { background: url('/Frontend/images/Properties/Flats-Hover.svg') no-repeat !important; }
+.pt-garages:hover { background: url('/Frontend/images/Properties/Garages-Hover.svg') no-repeat !important; }
+.pt-houses:hover { background: url('/Frontend/images/Properties/Houses-Hover.svg') no-repeat !important; }
+.pt-land:hover { background: url('/Frontend/images/Properties/Land-Hover.svg') no-repeat !important; }
+.pt-mobile-homes:hover { background: url('/Frontend/images/Properties/Mobile-Homes-Hover.svg') no-repeat !important; }
+.pt-overseas:hover { background: url('/Frontend/images/Properties/Overseas-Hover.svg') no-repeat !important; }
+.pt-parking:hover { background: url('/Frontend/images/Properties/Parking-Hover.svg') no-repeat !important; }
+.pt-rooms:hover { background: url('/Frontend/images/Properties/Rooms-Hover.svg') no-repeat !important; }
+
+.pt-commercial.active { background: url('/Frontend/images/Properties/Commercial-ON.svg') no-repeat !important; }
+.pt-flats.active { background: url('/Frontend/images/Properties/Flats-ON.svg') no-repeat !important; }
+.pt-garages.active { background: url('/Frontend/images/Properties/Garages-ON.svg') no-repeat !important; }
+.pt-houses.active { background: url('/Frontend/images/Properties/Houses-ON.svg') no-repeat !important; }
+.pt-land.active { background: url('/Frontend/images/Properties/Land-ON.svg') no-repeat !important; }
+.pt-mobile-homes.active { background: url('/Frontend/images/Properties/Mobile-Homes-ON.svg') no-repeat !important; }
+.pt-overseas.active { background: url('/Frontend/images/Properties/Overseas-ON.svg') no-repeat !important; }
+.pt-parking.active { background: url('/Frontend/images/Properties/Parking-ON.svg') no-repeat !important; }
+.pt-rooms.active { background: url('/Frontend/images/Properties/Rooms-ON.svg') no-repeat !important; }
+
+/* Job Images */
+.job-full-time { background: url('/Frontend/images/Jobs/Full-Time.svg') no-repeat !important; }
+.job-part-time { background: url('/Frontend/images/Jobs/Part-Time.svg') no-repeat !important; }
+.job-contract { background: url('/Frontend/images/Jobs/Contract.svg') no-repeat !important; }
+.job-weekend { background: url('/Frontend/images/Jobs/Weekends.svg') no-repeat !important; }
+.job-evenings { background: url('/Frontend/images/Jobs/Evenings.svg') no-repeat !important; }
+.job-home-working { background: url('/Frontend/images/Jobs/Home-Working.svg') no-repeat !important; }
+.job-freelance { background: url('/Frontend/images/Jobs/Freelance.svg') no-repeat !important; }
+.job-wanted { background: url('/Frontend/images/Jobs/Wanted.svg') no-repeat !important; }
+.job-temporary { background: url('/Frontend/images/Jobs/Temporary.svg') no-repeat !important; }
+
+.job-full-time:hover { background: url('/Frontend/images/Jobs/Full-Time-Hover.svg') no-repeat !important; }
+.job-part-time:hover { background: url('/Frontend/images/Jobs/Part-Time-Hover.svg') no-repeat !important; }
+.job-contract:hover { background: url('/Frontend/images/Jobs/Contract-Hover.svg') no-repeat !important; }
+.job-weekend:hover { background: url('/Frontend/images/Jobs/Weekends-Hover.svg') no-repeat !important; }
+.job-evenings:hover { background: url('/Frontend/images/Jobs/Evenings-Hover.svg') no-repeat !important; }
+.job-home-working:hover { background: url('/Frontend/images/Jobs/Home-Working-Hover.svg') no-repeat !important; }
+.job-freelance:hover { background: url('/Frontend/images/Jobs/Freelance-Hover.svg') no-repeat !important; }
+.job-wanted:hover { background: url('/Frontend/images/Jobs/Wanted-Hover.svg') no-repeat !important; }
+.job-temporary:hover { background: url('/Frontend/images/Jobs/Temporary-Hover.svg') no-repeat !important; }
+
+.job-full-time.active { background: url('/Frontend/images/Jobs/Full-Time-ON1.svg') no-repeat !important; }
+.job-part-time.active { background: url('/Frontend/images/Jobs/Part-Time-ON1.svg') no-repeat !important; }
+.job-contract.active { background: url('/Frontend/images/Jobs/Contract-ON.svg') no-repeat !important; }
+.job-weekend.active { background: url('/Frontend/images/Jobs/Weekends-ON.svg') no-repeat !important; }
+.job-evenings.active { background: url('/Frontend/images/Jobs/Evenings-ON.svg') no-repeat !important; }
+.job-home-working.active { background: url('/Frontend/images/Jobs/Home-Working-ON.svg') no-repeat !important; }
+.job-freelance.active { background: url('/Frontend/images/Jobs/Freelance-ON.svg') no-repeat !important; }
+.job-wanted.active { background: url('/Frontend/images/Jobs/Wanted-ON.svg') no-repeat !important; }
+.job-temporary.active { background: url('/Frontend/images/Jobs/Temporary-ON.svg') no-repeat !important; }
+
 @media (min-width: 760px) and (max-width: 959px) {
     .landing-header {
         background-position: 100% !important;
@@ -145,78 +317,7 @@
 .body_type_choice {
 cursor: pointer;
 }
-.any-category {
-    background: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3Asketch%3D%22http%3A//www.bohemiancoding.com/sketch/ns%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20xmlns%3Axlink%3D%22http%3A//www.w3.org/1999/xlink%22%20version%3D%221.1%22%20id%3D%22Layer_1%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22111%22%20height%3D%22112%22%20viewBox%3D%220%200%20111%20112%22%20xml%3Aspace%3D%22preserve%22%20enable-background%3D%22new%200%200%20111%20112%22%3E%0D%0A%20%20%3Cstyle%20type%3D%22text/css%22%3E%0D%0A%20%20%20%20%0D%0A%09.st0%7Bfill%3A%23FFFFFF%3B%7D%0D%0A%09.st1%7Bfill%3A%23313133%3B%7D%0D%0A%0D%0A%20%20%3C/style%3E%0D%0A%20%20%3Ctitle%3E%0D%0A%20%20%20%20Any-hover%0D%0A%20%20%3C/title%3E%0D%0A%20%20%3Cdesc%3E%0D%0A%20%20%20%20Created%20with%20Sketch.%0D%0A%20%20%3C/desc%3E%0D%0A%20%20%3Cg%20id%3D%22landing-page%22%20sketch%3Atype%3D%22MSPage%22%3E%0D%0A%20%20%20%20%3Cg%20id%3D%22Desktop---landing-Page-Motors%22%20transform%3D%22translate%28-185.000000%2C%20-807.000000%29%22%20sketch%3Atype%3D%22MSArtboardGroup%22%3E%0D%0A%20%20%20%20%20%20%3Cg%20id%3D%22Find-a-car%22%20transform%3D%22translate%28-43.000000%2C%20537.000000%29%22%20sketch%3Atype%3D%22MSLayerGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Part2-Copy%22%20transform%3D%22translate%28227.000000%2C%20242.000000%29%22%20sketch%3Atype%3D%22MSShapeGroup%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3Cg%20id%3D%22Any-hover%22%20transform%3D%22translate%281.000000%2C%2028.000000%29%22%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22Fill-1-Copy%22%20class%3D%22st0%22%20d%3D%22M55.5%200.2C24.9%200.2%200%2025.1%200%2055.7c0%2030.6%2024.9%2055.5%2055.5%2055.5%2030.6%200%2055.5-24.9%2055.5-55.5C111%2025.1%2086.1%200.2%2055.5%200.2z%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20id%3D%22Any%22%20class%3D%22st1%22%20d%3D%22M39.8%2059.3c-0.1%200.3-0.2%200.5-0.5%200.5l-0.6%200.1v1.5h4.2v-1.5l-1.1-0.1%200.5-1.6h4.2l0.4%201.1c0.1%200.4-0.1%200.5-0.4%200.5l-0.7%200.1v1.5h4.6v-1.5l-1-0.1h0l-3.7-10.4h-4.1v1.5l1.1%200.1L39.8%2059.3zM44.4%2051.4L44.4%2051.4l1.7%205.1h-3.3L44.4%2051.4zM51%2053.7l0.8%200.1c0.3%200%200.5%200.2%200.5%200.6v5c0%200.5-0.2%200.6-0.5%200.6L51.1%2060v1.4h4.3v-1.4l-1-0.1v-4.4c0-0.9%200.7-1.8%201.9-1.8%201.2%200%201.5%200.8%201.5%201.9v3.7c0%200.5-0.2%200.6-0.5%200.6L56.5%2060v1.4h4.3v-1.4l-1-0.1v-4.7c0-2.1-1.1-3.1-2.9-3.1%20-1.2%200-2.3%200.5-2.9%201.4v-1.2h-3V53.7zM68.5%2061c0%201.6-0.7%202.6-2.3%202.6%20-0.5%200-0.9-0.1-1.3-0.2%20-0.3-0.1-0.4-0.3-0.4-0.6V62l-1.7%200.1v2.5c0.8%200.4%202.2%200.6%203.4%200.6%202.7%200%204.2-1.2%204.2-4.2v-8.7h-3.2v1.5l0.6%200c0.3%200%200.5%200.1%200.5%200.5v3.3c0%200.9-0.7%201.8-1.9%201.8%20-1.2%200-1.3-0.8-1.3-1.9v-5.2h-3.2v1.5l0.6%200c0.3%200%200.4%200.1%200.4%200.5v3.6c0%202.1%201%203.1%202.8%203.1%201.2%200%202.3-0.5%202.9-1.4V61z%22/%3E%0D%0A%20%20%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%20%20%3C/g%3E%0D%0A%20%20%20%20%3C/g%3E%0D%0A%20%20%3C/g%3E%0D%0A%3C/svg%3E%0D%0A') no-repeat;
-}
-.any-category:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/pt-any-hover.svg) no-repeat;
-}
-.any-category.active {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/pt-any-active.svg) no-repeat;
-}
-.car-hatchback {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/hatchback.svg) no-repeat;
-}
-.car-hatchback:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/hatchback-hover.svg) no-repeat;
-}
-.car-hatchback.active {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/hatchback-active.svg) no-repeat;
-}
-.car-coupes {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/coupes.svg) no-repeat;
-}
-.car-coupes:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/coupes-hover.svg) no-repeat;
-}
-.car-coupes.active {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/coupes-active.svg) no-repeat;
-}
-.car-saloons {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/saloons.svg) no-repeat;
-}
-.car-saloons:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/saloons-hover.svg) no-repeat;
-}
-.car-saloons.active {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/saloons-active.svg) no-repeat;
-}
-.car-convertibles {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/convertibles.svg) no-repeat;
-}
-.car-convertibles:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/convertibles-hover.svg) no-repeat;
-}
-.car-convertibles.active {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/convertibles-active.svg) no-repeat;
-}
-.car-estates {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/estates.svg) no-repeat;
-}
-.car-estates:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/estates-hover.svg) no-repeat;
-}
-.car-estates.active {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/estates-active.svg) no-repeat;
-}
-.car-mpvs {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/mpvs.svg) no-repeat;
-}
-.car-mpvs:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/mpvs-hover.svg) no-repeat;
-}
-.car-mpvs.active {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/mpvs-active.svg) no-repeat;
-}
-.car-4x4 {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/4x4.svg) no-repeat;
-}
-.car-4x4:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/4x4-hover.svg) no-repeat;
-}
-.car-4x4.active {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/4x4-active.svg) no-repeat;
-}
+
 .border-botttom {
     border-bottom: 1px solid $form-border-color;
 }
@@ -325,78 +426,7 @@ cursor: pointer;
 .pets_choice {
     background-size: 152px 153px !important;
 }
-.pets-dogs {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/dogs.svg) no-repeat;
-}
-.pets-dogs:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/dogs-hover.svg) no-repeat;
-}
-.pets-cats {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/cats.svg) no-repeat;
-}
-.pets-cats:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/cats-hover.svg) no-repeat;
-}
-.pets-birds {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/birds.svg) no-repeat;
-}
-.pets-birds:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/birds-hover.svg) no-repeat;
-}
-.pets-rabbits {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/rabbits.svg) no-repeat;
-}
-.pets-rabbits:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/rabbits-hover.svg) no-repeat;
-}
-.pets-guinea-pigs {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/guinea-pigs.svg) no-repeat;
-}
-.pets-guinea-pigs:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/guinea-pigs-hover.svg) no-repeat;
-}
-.pets-reptiles {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/reptiles.svg) no-repeat;
-}
-.pets-reptiles:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/reptiles-hover.svg) no-repeat;
-}
-.pets-fish {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/fish.svg) no-repeat;
-}
-.pets-fish:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/fish-hover.svg) no-repeat;
-}
-.pets-insects {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/insects.svg) no-repeat;
-}
-.pets-insects:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/insects-hover.svg) no-repeat;
-}
-.pets-exotic-pets {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/exotic-pets.svg) no-repeat;
-}
-.pets-exotic-pets:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/exotic-pets-hover.svg) no-repeat;
-}
-.pets-other-pets {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/other-pets.svg) no-repeat;
-}
-.pets-other-pets:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/other-pets-hover.svg) no-repeat;
-}
-.pets-pet-accessories {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/pet-accessories.svg) no-repeat;
-}
-.pets-pet-accessories:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/pet-accessories-hover.svg) no-repeat;
-}
-.pets-pet-supplies {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/pet-supplies.svg) no-repeat;
-}
-.pets-pet-supplies:hover {
-    background: url(https://www.friday-ad.co.uk/bundles/fafrontend/images/pet-supplies-hover.svg) no-repeat;
-}
+
 @media (min-width: 320px) and (max-width: 385px) {
     .landing-pet-circles a {
         width: 130px;
@@ -428,4 +458,23 @@ cursor: pointer;
 }
 .popular-items .item-box .tricky-link {
     z-index: 5;
+}
+.homepage-title, .homepage-title-small {
+  font-family: $font-family-secondary;
+  font-size: 36px;
+  font-weight: 400;
+  color: $dark-gray;
+  line-height: 46px;
+  text-align: center;
+  margin-bottom: 49px;
+}
+
+.landing-circles li {
+  display: inline-block;float: left; width: 112px; height: 112px; text-indent: -9999px; margin: 0 0 0 21px;
+}
+.landing-circles a, .landing-circles a:hover, .landing-circles a:focus, .landing-circles a:active, .landing-circles a.active {
+    background-size: 100% !important;
+}
+.landing-circles li:first-child {
+    margin-left: 2px;
 }

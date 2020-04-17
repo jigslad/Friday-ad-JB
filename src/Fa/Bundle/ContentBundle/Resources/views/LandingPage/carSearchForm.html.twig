@@ -52,14 +52,14 @@
 </div>
 
 <div class="landing-divider">
-    <div class="container"></div>
+    <div class="container">
         <div class="row mt20 mb20">
             <div class="col-md-24">
                     {{ form_label(attribute(form, 'item_motors__body_type_id')) }}
                     <div id="body_type_choices" class="d-clock d-md-none">
                         {{ form_widget(attribute(form, 'item_motors__body_type_id')) }}
                     </div>
-                    <ul id="body-type-circles" class="discover-categories landing-circles d-none d-md-block">
+                    <ul id="body-type-circles" class="landing-circles d-none d-md-block">
                         <li class="any-category body_type_choice active" id="body_type_choice_">
                             <a href="javascript:void(0)">{{ 'Any'|trans({}, 'frontend-landing-page') }}</a>
                         </li>
@@ -74,6 +74,7 @@
                             </li>
                         {% endfor %}
                     </ul>
+                 </div>
             </div>
         </div>
     </div>

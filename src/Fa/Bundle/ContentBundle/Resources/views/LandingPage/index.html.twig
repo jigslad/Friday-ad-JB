@@ -61,7 +61,7 @@
             {% set adCounts = fetch_repository('FaAdBundle:Ad').getLandingPageAdCountsBasedOnSearchParams(searchParams, fetch_container_instance()) %}
         {% endif %}
         {% set landingPageImages = fetch_repository('FaContentBundle:LandingPageInfo').getLandingPageImagesBySecton(landingPage.id, fetch_container_instance()) %}
-        <div class="{{ app.request.get('category_string') }}">
+        <div class="landing-block {{ app.request.get('category_string') }}">
             <div class="wp-block-cover-image has-background-dim landing-header {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}adult-parallax{% endif %}" style='background-image: url("https://leap-in.com/wp-content/uploads/2018/06/mountain.jpg"); background-position: 50% -10px;'>
                 <div class="container">
                     <div class="row">
@@ -865,12 +865,7 @@
 
 {% block scriptbottom %}
 {{ include('FaCoreBundle:Default:blockJs.html.twig') }}
-{% javascripts filter='uglifyjs2' output='bundles/js/compiled/landingPage.js'
-    'bundles/facore/js/owl.carousel.min.js'
-    'bundles/fafrontend/js/parallax.min.js'
-%}
-<script src="{{ static_asset_url(asset_url) }}"></script>
-{% endjavascripts %}
+<script type="text/javascript" src="{{ asset_url('fafrontend/js/parallax.min.js') }}"></script>
 
 {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
 {% set currentDevice = 'D' %}
@@ -880,13 +875,10 @@
     {% set currentDevice = 'T' %}
 {% endif %}
 {% if mobileDetectManager.is('IE') %}
-    {% javascripts filter='uglifyjs2' output='bundles/js/compiled/parallaxFix.js'
-        'bundles/fafrontend/js/scroll.js'
-        'bundles/fafrontend/js/TweenMax.min.js'
-    %}
-    <script src="{{ static_asset_url(asset_url) }}"></script>
-    {% endjavascripts %}
+    <script type="text/javascript" src="{{ asset_url('fafrontend/js/scroll.js') }}"></script>
+    <script type="text/javascript" src="{{ asset_url('fafrontend/js/TweenMax.min.js') }}"></script>
 {% endif %}
+
 {% if categoryId is defined and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::MOTORS_ID') %}
     {{ block('carSearchForm_script') }}
 {% elseif categoryId is defined and categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID') %}

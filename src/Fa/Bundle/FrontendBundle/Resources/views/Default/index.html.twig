@@ -273,7 +273,6 @@
 
 
 {% block scriptbottom %}
-	<script type="text/javascript" src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset_url('fafrontend/js/parallax.min.js') }}"></script>
     
     {% set mobileDetectManager = container.get('fa.mobile.detect.manager') %}
@@ -304,7 +303,7 @@
 
     var headerParallax;
     $(document).ready(function() {
-        $('div.homepage-row:even').addClass('white-bg');
+    	$('div.homepage-row:even').addClass('white-bg');
         getHeaderImage();
         var recommendedItemSlider = $("#recommended-item-slider");
         recommendedItemSlider.owlCarousel({
@@ -313,22 +312,22 @@
             navigation: true,
             pagination:false,
             responsiveRefreshRate : 100,
-            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+            navigationText: ['<img src="{{ asset('Frontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset('Frontend/images/small-slider-next.svg') }}" alt="" />'],
             lazyLoad: true,
             scrollPerPage: true,
         });
 
-        /*var latestItemSlider = $("#latest-item-slider");
+        /* var latestItemSlider = $("#latest-item-slider");
         latestItemSlider.owlCarousel({
             items : 4,
             itemsCustom:[[320, 1], [568, 2], [768, 3], [1024, 4]],
             navigation: true,
             pagination:false,
             responsiveRefreshRate : 100,
-            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+            navigationText: ['<img src="{{ asset('Frontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset('Frontend/images/small-slider-next.svg') }}" alt="" />'],
             lazyLoad: true,
             scrollPerPage: true,
-        });*/
+        }); */
 
         var featuredItemSlider = $("#featured-item-slider");
         featuredItemSlider.owlCarousel({
@@ -337,7 +336,7 @@
             navigation: true,
             pagination:false,
             responsiveRefreshRate : 100,
-            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+            navigationText: ['<img src="{{ asset('Frontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset('Frontend/images/small-slider-next.svg') }}" alt="" />'],
             lazyLoad: true,
             scrollPerPage: true,
         });
@@ -349,7 +348,7 @@
             navigation: true,
             pagination:false,
             responsiveRefreshRate : 100,
-            navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+            navigationText: ['<img src="{{ asset('Frontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset('Frontend/images/small-slider-next.svg') }}" alt="" />'],
             lazyLoad: true,
             scrollPerPage: true,
         });
@@ -362,20 +361,12 @@
                 navigation: true,
                 pagination:false,
                 responsiveRefreshRate : 100,
-                navigationText: ['<img src="{{ asset_url('fafrontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset_url('fafrontend/images/small-slider-next.svg') }}" alt="" />'],
+                navigationText: ['<img src="{{ asset('Frontend/images/small-slider-prev.svg') }}" alt="" />', '<img src="{{ asset('Frontend/images/small-slider-next.svg') }}" alt="" />'],
                 lazyLoad: true,
                 scrollPerPage: true,
             });
         }
 
-        /*$(document).foundation({
-           accordion: {
-                multi_expand: true,
-                callback : function (accordion) {
-                    accordionCallback(accordion);
-                }
-            }
-        });*/
     });
 
     $( window ).scroll(function() {
