@@ -55,13 +55,14 @@
 {% set adPropertyRepository = fetch_repository('FaAdBundle:AdProperty') %}
 
 {% block body %}
+<div class="landing-block {{ app.request.get('category_string') }}">
     {% if categoryId is defined and categoryId is not null %}
         {% set prevSectionBgClass = '' %}
         {% if categoryId != constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}
             {% set adCounts = fetch_repository('FaAdBundle:Ad').getLandingPageAdCountsBasedOnSearchParams(searchParams, fetch_container_instance()) %}
         {% endif %}
         {% set landingPageImages = fetch_repository('FaContentBundle:LandingPageInfo').getLandingPageImagesBySecton(landingPage.id, fetch_container_instance()) %}
-        <div class="landing-block {{ app.request.get('category_string') }}">
+
             <div class="wp-block-cover-image has-background-dim landing-header {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}adult-parallax{% endif %}" >
                 <div class="container">
                     <div class="row">
@@ -668,7 +669,7 @@
                     </div>
                 {% endif %}
             {% endif %}
-        </div>
+
     {% endif %}
 
     {% if popularSearches is defined and popularSearches|length and categoryId in {0: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::FOR_SALE_ID'), 1: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::PROPERTY_ID'), 2: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ANIMALS_ID'), 3: constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID')} %}
@@ -861,6 +862,7 @@
             </div>
         {% endif %}
     {% endif %}
+</div>
 {% endblock %}
 
 {% block scriptbottom %}
