@@ -821,7 +821,7 @@
             <div class="homepage-row {{ bgColour }}">
                 <div class="container">
                     <div class="row">
-                        <class="col list-location-box">
+                        <div class="col list-location-box">
                             {% if location is defined and location is not null %}
                                 <h3 class="homepage-title">{{ 'Browse by category in %location%'|trans({'%location%': (location_text)}, 'frontend-landing-page') }}</h3>
                             {% else %}
@@ -889,10 +889,10 @@
     {{ block('adultSearchForm_script') }}
 {% endif %}
 
-{% if location is defined and location is not null and adsNearYou is defined and adsNearYou|length %}
+{#{% if location is defined and location is not null and adsNearYou is defined and adsNearYou|length %}
     {% set adsnearyouscript = block('adsnearyou_script') is defined ? block('adsnearyou_script') : '' %}
     {{ adsnearyouscript }}
-{% endif %}
+{% endif %}#}
 
 <script language="javascript" type="text/javascript">
 //<![CDATA[
