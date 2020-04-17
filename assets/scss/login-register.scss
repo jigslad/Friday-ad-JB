@@ -1,4 +1,7 @@
+@import "global";
+
 .simple-header {
+    background: $white;
     text-align: center;
     padding: 32px 0;
     width: 100%;
@@ -12,6 +15,8 @@
 }
 .login-left {
     float: left;
+    border-right: 1px solid $form-border-color;
+    box-shadow: inset -1px 0 0 $white;
     padding: 24px 50px 25px 0;
 }
 .login-right {
@@ -24,6 +29,7 @@
     line-height: 20px;
 }
 .signup-ins {
+    color: $form-text-color;
     font-size: 13px;
     clear: both;
 }
@@ -42,6 +48,7 @@
     overflow: hidden;
 }
 .bz-profile-logo {
+    background: $white;
     width: 158px;
     height: 116px;
     display: table-cell;
@@ -73,6 +80,7 @@
 }
 
 .simple-footer {
+    background: $common-bg-color;
     border: 0;
     box-shadow: none;
     padding: 0;

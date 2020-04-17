@@ -1,4 +1,7 @@
+@import "global";
+
 .homepage-hero {
+  background-image: url("https://leap-in.com/wp-content/uploads/2018/06/mountain.jpg");
   position: relative;
   background-repeat: no-repeat;
   background-size: cover !important;
@@ -20,6 +23,7 @@
     font-size: 16px;
     line-height: 23px;
     text-align: center;
+    color: $dark-gray;
   }
   .forsale-phone {
     width: 221px;
@@ -60,10 +64,28 @@
   border-radius: 3px;
   padding: 16px 19px;
   .btn-outline-secondary {
+    color: $common-text-color;
+    background-color: $form-bg-color;
+    border-color: $form-border-color;
     border-radius: 2px;
     &:hover, &:focus, &:active {
+      color: $common-text-color;
+      background-color: $form-bg-color;
+      border-color: $form-border-color;
       border-radius: 2px;
     }
+    &:not(:disabled):not(.disabled) {
+      &:active, &.active {
+        color: $common-text-color;
+        background-color: $form-bg-color;
+        border-color: $form-border-color;
+      }
+    }
+  }
+  .show > .btn-outline-secondary.dropdown-toggle {
+    color: $common-text-color;
+    background-color: $form-bg-color;
+    border-color: $form-border-color;
   }
 }
 
@@ -78,8 +100,10 @@
     min-width: 7.5rem;
     a {
       font-size: 14px;
-      line-height: 18px;      
+      line-height: 18px;
+      border-bottom: 1px solid $form-border-color;
       padding: 10px;
+      color: $dark-gray;
       &:last-child {
         border-bottom: 0px;
       }
@@ -89,7 +113,9 @@
 
 .home-search {
   .location {
+    font-family: $font-family-secondary;
     font-size: 18px;
+    color: $white;
     text-align: center;
   }
   .search-pin {
@@ -102,6 +128,9 @@
   }
   #header_search_editable_location_span {
     margin-left: 2px;
+  }
+  #header_search_editable_location_a {
+    color: $secondary-color;
   }
   #top_search_location {
     background: transparent;
@@ -119,9 +148,11 @@
   }
   #top_search_location .ui-autocomplete-input {
     margin: 0 0 5px;
+    background: $white;
     font-size: 14px;
     line-height: 18px;
     font-weight: normal;
+    font-family: $font-family-default;
     border-radius: 2px;
   }
 }
@@ -132,6 +163,7 @@
 }
 
 .what-u-discover {
+  background: $dark-gray;
   padding: 33px 15px;
 }
 
@@ -241,10 +273,13 @@
     .home-search {
       margin-top: 25px;
       .search-btn {
+        background: $secondary-color url(https://www.friday-ad.co.uk/bundles/fafrontend/images/search-icon.svg) no-repeat center (center / 16px) 16px;
         width: 40px;
         height: 40px;
         text-indent: -9999px;
+        border: 1px solid $secondary-h-color;
         border-radius: 0 2px 2px 0;
+        color: $white;
         display: block;
         vertical-align: top;
       }
@@ -255,7 +290,7 @@
     }
 
     .home-search #top_search_location {
-      width: 240px;
+      width: 200px;
     }
 
     .discover-categories {
@@ -281,15 +316,15 @@
     }
 
 }
-
 .homepage-title, .homepage-title-small {
+  font-family: $font-family-secondary;
   font-size: 36px;
   font-weight: 400;
+  color: $dark-gray;
   line-height: 46px;
   text-align: center;
   margin-bottom: 49px;
 }
-
 #popular_shops_slider .item {
   width: 250px;
   min-height: 248px;
@@ -298,6 +333,7 @@
 #popular_shops_slider .list-img {
   width: 248px;
   height: 187px;
+  border-bottom: 1px solid $form-border-color;
 }
 #popular_shops_slider .list-img img {
   max-width: 248px;
@@ -319,6 +355,7 @@
 .sub-head-text {
   font-size: 20px;
   font-weight: 400;
+  color: $common-text-color;
   line-height: 27px;
 }
 #featured-item-slider {
@@ -327,7 +364,7 @@
     margin: 6px;
   }
   .list-img {
-    width: 295px;
+    width: 301px;
     height: 227px;
     margin: 19px;
   }
@@ -336,7 +373,7 @@
   text-align: center;
 }
 #featured-item-slider .list-img img {
-  max-width: 295px;
+  max-width: 301px;
   max-height: 227px;
 }
 .fa-slider {
@@ -348,7 +385,11 @@
     transform: translateY(-50%);
   }
   .member-info {
+    background: $form-bg-color;
+    color: $form-text-color;
     padding: 8px 15px;
+    border-top: 1px solid $form-border-color;
+    border-bottom: 1px solid $form-border-color;
     font-family: "Helvetica Neue",Arial;
     font-size: 13px;
     line-height: 20px;
@@ -362,22 +403,24 @@
     }
   }
   .member-icon img {
-    width: 45px;
-    height: 45px;
+    width: 54px;
+    height: 54px;
     border-radius: 30px;
-    margin: 0 auto;
+    margin: 3px 0;
   }
   .fa-price {
     padding: 0 15px;
     h4 {
       font-size: 19px;
       line-height: 29px;
+      color: $dark-gray;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       span {
         font-size: 24px;
         line-height: 34px;
+        color: $secondary-color;
         display: block;
       }
     }
@@ -470,7 +513,7 @@
       }
     }
     .home-search #top_search_location {
-        width: 50%;
+        width: 45%;
     }
 
 }
@@ -504,7 +547,7 @@
         z-index: 999;
     }
     .home-search #top_search_location {
-        width: 60%;
+        width: 50%;
     }
 }
 @media (min-width:320px) and (max-width: 640px) {

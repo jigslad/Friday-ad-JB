@@ -1516,3 +1516,173 @@ button.signup-fb-btn, button.signup-google-btn {
     border: 1px solid transparent;
     color: $dark-gray;
 }
+
+/* Header */
+.top-links {
+    background: $dark-gray;
+    color: $white;
+    a {
+        color: $common-bg-color;
+        font-family: $font-family-default;
+        &:hover {
+            color: $secondary-color;
+        }
+    }
+}
+.top-bar-section {
+   li.place-item-btn {
+        background: $primary-color;
+        a {
+            background: $primary-color;
+            font-family: $font-family-secondary;
+            color: $white;
+        }
+    }
+}
+.navbar {
+   .dropdown-menu {
+        background-color: $common-bg-color !important;
+    }
+}
+.navbar-dark .navbar-nav {
+    .nav-link {
+        color: $common-text-color !important;
+        font-family: $font-family-default;
+        &:hover, &:focus, &:active {
+          color: $common-text-color;
+        }
+    }
+}
+
+.parent-link {
+    a {
+        color: $common-text-color;
+        font-family: $font-family-default;
+        &:hover, &:focus, &:active {
+            color: $secondary-color;
+            transition: all .2s ease-out;
+        }
+    }
+}
+
+.nav-icon span {
+  background: $black;
+}
+
+@media screen and (min-width: 992px) {
+    .navbar {
+        .nav-item {
+            &:hover {
+                background-color: $common-bg-color !important;
+            }
+        }
+	.dropdown-menu {
+	    background-color: $white;
+	}
+    }
+}
+
+@media (min-width:320px) and (max-width: 640px) {
+    .mobile-menu-items li, .login-menu li {
+        background: $common-text-color;
+        border-bottom: 1px solid $black;
+        box-shadow: 0 1px 0 $common-text-color;
+    }
+    .mobile-menu-items li a, .login-menu li a {
+        color: $white;
+    }
+}
+
+
+@media (min-width: 641px) and (max-width: 959px) {   
+    .t-navbar-block {
+      .nav-item {
+        padding: 0.9rem 0rem !important;
+        &.show {
+          background: $common-bg-color;
+        }
+        &.active {
+          background: $common-bg-color;
+        }
+      }
+      .category-links {
+        border-bottom: 1px solid $white;
+        box-shadow: 0 1px 0 $form-border-color;
+      }
+      .link-head {
+        color: $common-text-color;
+        background: $common-bg-color;
+        a {
+          font-family: $font-family-default;
+          color: $common-text-color;
+        }
+      }
+    }
+
+}
+.dl-menuwrapper button {
+    color: $white;
+}
+.dl-menuwrapper button:after {
+    background: $white;
+    box-shadow:
+        0 10px 0 $white,
+        0 20px 0 $white;
+}
+.dl-menuwrapper li a {
+    color: $white;
+    border-bottom: 1px solid $black;
+    box-shadow: 0 1px 0 $common-text-color;
+}
+.dl-menuwrapper li > a::after {
+    color: $form-border-color;
+}
+.dl-menuwrapper .dl-menu li a {
+    background: $dark-gray;
+}
+.demo-2 .dl-menuwrapper button {
+    background: $common-text-color;
+}
+.demo-2 .dl-menuwrapper button:hover,
+.demo-2 .dl-menuwrapper button.dl-active {
+    background: $common-text-color;
+}
+.demo-2 .dl-menuwrapper ul {
+    background: $dark-gray;
+}
+.count-ads {
+    color: $form-text-color;
+}
+
+/* Footer */
+.footer_ul_amrc li a{ color:$form-text-color;}
+.footer_ul_amrc li a:hover{ color:$white; }
+footer {
+  	background: $dark-gray;
+  	font-family: $font-family-default;
+  	border-top: 1px solid $black;
+  	box-shadow: inset 0 1px 0 $common-text-color;
+  	.top_border {
+  	 	border-top: 1px solid $black;
+  	 	box-shadow: inset 0 1px 0 $common-text-color;
+  	}
+	.footer-head {
+	    font-family: $font-family-default;
+	    a {
+	      	font-family: $font-family-default;
+	      	color: $common-bg-color;
+	      	&:hover, &:focus {
+	      		color: $secondary-color;
+	      	}
+	    }
+	}
+	a {
+	    color: $form-text-color;
+	}
+	.category-links {
+	    border-bottom: 1px solid $black;
+	    box-shadow: 0 1px 0 $common-text-color;	    
+	}	
+}
+
+

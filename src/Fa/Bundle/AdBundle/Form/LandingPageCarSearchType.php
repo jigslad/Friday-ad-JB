@@ -116,8 +116,7 @@ class LandingPageCarSearchType extends AbstractType
             array(
                 'label'       => 'Body Type',
                 'placeholder' => 'Any',
-                'choices'     => array_flip($this->em->getRepository('FaEntityBundle:Entity')->getLandingPageBodyTypeArray($this->container)),
-                'attr'        => array('class' => 'fa-select-white')
+                'choices'     => array_flip($this->em->getRepository('FaEntityBundle:Entity')->getLandingPageBodyTypeArray($this->container))
             )
         )
         ->add(
@@ -202,7 +201,7 @@ class LandingPageCarSearchType extends AbstractType
                 'choices' => array_flip($this->em->getRepository('FaEntityBundle:Location')->getDistanceOptionsArray($this->container)),
                 'placeholder' => $defDistance,
                 'data' => $defDistance,
-                'attr'    => array('class' => 'fa-select-white')
+                'attr'    => array('class' => 'select-options')
             )
         );
     }

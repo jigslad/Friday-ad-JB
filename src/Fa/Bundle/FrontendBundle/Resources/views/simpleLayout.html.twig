@@ -41,8 +41,10 @@
         {{blockFacebookMeta|raw}}
     {% endif %}
     
-    {{ include('FaFrontendBundle::scriptTop.html.twig') }}
+    {{ include('FaFrontendBundle::styleTop.html.twig') }}
     <link rel="stylesheet" href="{{ asset('/build/css/login-register.css') }}">
+    {{ include('FaFrontendBundle::scriptTop.html.twig') }}
+    
     {% block scripttop %}{% endblock %}
     {# { include('FaFrontendBundle::fa-main-css.html.twig') } #}
     
@@ -108,7 +110,7 @@
 
         {{ include('FaFrontendBundle::simpleFooter.html.twig') }}
 
-        <script type="text/javascript">
+        {# <script type="text/javascript">
         $(window).on('load', function() {
             $(document).foundation({
               accordion: {
@@ -116,6 +118,6 @@
               }
             });
         });
-        </script>
+        </script>#}
     </body>
 </html>
