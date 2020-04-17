@@ -108,12 +108,12 @@
 
 {% block scripttop %}
     {% if profileExposureUserAds is defined and profileUserId is defined and profileUserDetail is defined and profileUserDetail|length %}
-        {% stylesheets filter='uglifycss' output='bundles/css/compiled/searchResult.css'
+    {# {% stylesheets filter='uglifycss' output='bundles/css/compiled/searchResult.css'
             'bundles/facore/css/owl.carousel.css'
             'bundles/facore/css/owl.theme.css'
               %}
             <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
-        {% endstylesheets %}
+        {% endstylesheets %} #}
     {% endif %}
 {% endblock %}
 
@@ -128,47 +128,59 @@
     }
 }
 </style>
-<link href="https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/master/leaflet.css" rel="stylesheet" type="text/css"/>
+{% block stylesheet %}
+	<link rel="stylesheet" href="{{ asset('/build/css/adlist.css') }}">
+	<link href="https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/master/leaflet.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
 {{ include('FaAdBundle:AdList:searchResultHeader.html.twig') }}
-<div class="row relative map-results-main">
-    <div class="large-6 columns" id="left_search">
-        <div class="search-filters">
-            <a href="javascript:void(0);" class="search-close" onclick="return showLeftSearch(false);">search-close</a>
-            {% if isShopPage is not defined %}
-                {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
-            {% endif %}
-            {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': locationFacets, 'facetResult': facetResult, 'searchQueryString': app.request.queryString, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {}} )) }}
-            {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
-                {{ include('FaAdBundle:AdList:leftPopularSearchLinks.html.twig', {'mapFlag': 1}) }}
-            {% endif %}
-        </div>
-    </div>
-    <div id="listingDiv" class="large-18 columns">
-        <div class="map-result-main">
-            {% if resultCount > container.getParameter('fa.search.map.records.per.page') %}
-                <div data-alert class="alert-box success radius">
-                    <span class="alert-icon">&nbsp;</span>
-                    {{'Showing 1000 results near by you on map.'|trans({}, 'frontend-search-result')}}
-                    <a href="javascript:void(0)" class="close">&times;</a>
-                </div>
-            {% endif %}
-            {% if isShopPage is not defined %}
-                    {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
-            {% endif %}
-            <div class="map-wrapper">
-                <h3>
-                    {% if keywords|length%}
-                        {{'%keywords% near you...'|trans({'%keywords%': keywords}, 'frontend-search-result')}}
-                    {% else %}
-                        {{'Search result'|trans({}, 'frontend-search-result')}}
+<div class="banner-wrapper clearfix">
+	<div class="container">
+        <div class="row  map-results-main banner-mid-column">
+            <div id="left_search" class="col-md-9 col-lg-6 left-search-block">
+                <div class="search-filters">
+                    <a href="javascript:void(0);" class="left-search-close search-close" onclick="return showLeftSearch(false);">search-close</a>
+                    {% if isShopPage is not defined %}
+                        {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
                     {% endif %}
-                </h3>
-                {# <div id="googlemaps" style="width:757px;height:545px;"></div> #}
-                <div id="mapfit" style="width:757px;height:545px;"></div>
+                    {{ render(controller('FaAdBundle:AdList:leftSearch', { 'searchParams': searchParams is defined ? searchParams : {} , 'locationFacets': locationFacets, 'facetResult': facetResult, 'searchQueryString': app.request.queryString, 'cookieLocationDetails': cookieLocationDetails is defined ? cookieLocationDetails : {}} )) }}
+                    {% if seoFields|length and seoFields['popular_search'] is defined and seoFields['popular_search'] and seoFields['seo_tool_id'] is defined and seoFields['seo_tool_id'] %}
+                        {{ include('FaAdBundle:AdList:leftPopularSearchLinks.html.twig', {'mapFlag': 1}) }}
+                    {% endif %}
+                </div>
+           </div>
+           <div class="col-md-24 col-lg-18 right-search-block">
+                <div id="listingDiv">
+                    <div class="map-result-main">
+                        {% if resultCount > container.getParameter('fa.search.map.records.per.page') %}
+                            <div data-alert class="alert-box success radius">
+                                <span class="alert-icon">&nbsp;</span>
+                                {{'Showing 1000 results near by you on map.'|trans({}, 'frontend-search-result')}}
+                                <a href="javascript:void(0)" class="close">&times;</a>
+                            </div>
+                        {% endif %}
+                        {% if isShopPage is not defined %}
+                        	<div class="mobile-create-alert-box d-block d-lg-none mb20">
+                                {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+                            </div>
+                        {% endif %}
+                        <div class="map-wrapper">
+                            <h3>
+                                {% if keywords|length%}
+                                    {{'%keywords% near you...'|trans({'%keywords%': keywords}, 'frontend-search-result')}}
+                                {% else %}
+                                    {{'Search result'|trans({}, 'frontend-search-result')}}
+                                {% endif %}
+                            </h3>
+                            {# <div id="googlemaps" style="width:757px;height:545px;"></div> #}
+                            <div id="mapfit" style="width:757px;height:545px;"></div>
+                        </div>
+                    </div>
+                    {{ render(controller('FaAdBundle:AdList:showListingSeoBlocks', {'searchParams': searchAgentData, 'map': true, 'location': app.request.get('location'), 'seoPageRule': seoPageRule, 'orgRequest': app.request})) }}
+                </div>
             </div>
-        </div>
-        {{ render(controller('FaAdBundle:AdList:showListingSeoBlocks', {'searchParams': searchAgentData, 'map': true, 'location': app.request.get('location'), 'seoPageRule': seoPageRule, 'orgRequest': app.request})) }}
-    </div>
+         </div>
+      </div>
 </div>
 {% endblock %}
 
@@ -176,13 +188,13 @@
     {{ include('FaAdBundle:AdList:leftSearchJs.html.twig') }}
     {{ include('FaAdBundle:AdList:listJs.html.twig') }}
         
-    {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mapSearchResult.js'
+    {# {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mapSearchResult.js'
         'bundles/facore/js/owl.carousel.min.js'
     %}
     <script src="{{ static_asset_url(asset_url) }}?v=111"></script>
     {% endjavascripts %}
     
-    {# {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mapSearchResult.js'
+     {% javascripts filter='uglifyjs2' output='bundles/js/compiled/mapSearchResult.js'
         'bundles/facore/js/googleMapOms.js'
         'bundles/facore/js/googleMapInfobox.js'
         'bundles/facore/js/owl.carousel.min.js'

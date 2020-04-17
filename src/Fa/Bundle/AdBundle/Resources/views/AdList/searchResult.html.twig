@@ -210,7 +210,7 @@
 	}
 </script>
 {% endblock %}
-{% block stylesheet_2 %}
+{% block stylesheet %}
 	<link rel="stylesheet" href="{{ asset('/build/css/adlist.css') }}">
 {% endblock %}
 {% block scripttop %}
@@ -241,7 +241,7 @@
         <div class="row results-main banner-mid-column">
             <div id="left_search" class="col-md-9 col-lg-6 left-search-block">
 				<div class="search-filters">
-                    <a href="javascript:void(0);" rel="nofollow" class="search-close" onclick="return showLeftSearch(false);">search-close</a>
+                    <a href="javascript:void(0);" rel="nofollow" class="left-search-close search-close" onclick="return showLeftSearch(false);">search-close</a>
                     {% if isShopPage is not defined %}
                         {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
                     {% endif %}
@@ -268,7 +268,9 @@
            	<div class="col-md-24 col-lg-18 right-search-block">
            	    {% if pagination.getNbResults() %}
                     {% if isShopPage is not defined %}
-                        {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+                    	<div class="mobile-create-alert-box d-block d-lg-none mb20">
+                            {{ include('FaAdBundle:AdList:saveSearch.html.twig') }}
+                        </div>
                     {% endif %}
                 {% endif %}
                 <div id="listingDiv" class="row-block">

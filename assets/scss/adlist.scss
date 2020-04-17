@@ -498,12 +498,12 @@
   position: absolute;
   left: -4px;
   top: -4px;
-  text-indent: 100%;
+  text-indent: -999px;
   overflow: hidden;
   white-space: nowrap;
   z-index: 1;
 }
-
+.featured-ribbon, .urgent-ribbon { text-indent: -999px; }
 .listing {
   h3 a {
     color: $common-text-color;
@@ -956,3 +956,7 @@
     border-right: 1px solid $form-border-color;
   }
 }
+
+.left-search-close {  display: none !important; }
+.crawlable-checkbox li a { position: absolute; width: 100%; left: 0; top: 0; z-index: -1; }
+
