@@ -919,9 +919,7 @@ footer a:hover{
     border-bottom: 0px solid #fff;
     box-shadow: none;
 }
-.fullwidth, .fullwidth .accordion, .fullwidth .accordion .accordion-navigation {
-    width: 100% !important;
-}
+
 @media only screen and (min-width: 320px) and (max-width: 640px) {
     .adult-search { display: inline-block;width: 100% !important;}
    .search-input-box {width: 100%;}
@@ -942,13 +940,29 @@ footer a:hover{
     #featured_advertisers_slider .owl-prev, #featured_advertisers_slider .owl-next, #featured-top-item-slider .owl-prev, #featured-top-item-slider .owl-next {height: 100% !important; }   
 	
 	.adul-search-form .location-col { width: 100% !important; }
-	#more_options .select-control { margin-top: 15px !important;margin-bottom: 15px !important; }
+	.mobile-p-0 { padding:0px !important; }
+    .latest-ads .list { padding-right: 15px; }
+	.fullwidth, .fullwidth .accordion, .fullwidth .accordion .accordion-navigation {
+        width: 100% !important;
+        display: inline-table !important;
+    }
+    .tagline-text {
+	    font-size: 28px !important !important;
+	    line-height: 24px !important !important;
+	    margin-top: 10px !important;
+	}
+	#more_options .select-control {
+	    margin-top: 0px !important;
+	    margin-bottom: 15px !important;
+	}
+	#more_options .columns:last-child {
+		margin-bottom: 15px !important;
+	}
+	#home-search .search-btn button {
+	    background: url(/bundles/fafrontend/images/search-icon.svg) no-repeat center center / 16px 16px, linear-gradient(135deg, #A75BD8 0%, #E62EEB 100%) aliceblue !important;
+	}
 }
 
-@media only screen and (max-width: 640px) {
-    .mobile-p-0 { padding:0px !important; }
-    .latest-ads .list { padding-right: 15px; }
-}
 
 @media only screen and (min-width:960px) and (max-width:1151px){
 	#top_category_menu.real-tablet a.main_category:hover,#top_category_menu .sub-cat-menu a:hover{

@@ -8,10 +8,10 @@
                     <div class="medium-12 columns mobile-p-0" style="padding-left: 0px;">
                         {{ form_widget(attribute(form, 'item__category_id'),{'attr':{ 'class': 'form-control select-control'  }}) }}
                     </div>
-                    <div class="medium-7 columns mobile-p-0">
+                    <div class="small-9 medium-7 columns mobile-p-0">
                         {{ form_widget(form.item__distance,{'attr':{'class':'form-control select-control'}}) }}
                     </div>
-                    <div class="medium-5 columns mobile-p-0" style="display: inline-flex;">
+                    <div class="small-15 medium-5 columns mobile-p-0" style="display: inline-flex;">
                         <label style="padding: 10px 10px 10px 0px; color: #ffffff !important;">{{ 'from'|trans({}, 'frontend')}}</label>
                         <div class="location-col">
                         {{ form_widget(form.item__location_autocomplete) }}
@@ -33,7 +33,7 @@
             </div>
 
             <div class="small-wrapper">
-                <button class="secondary-btn-1 expand button mb0 mt20" id="adul-hp-adv-srch" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
+                <button class="secondary-btn-1 expand button mb0 mt0" id="adul-hp-adv-srch" type="submit">{{ 'Search'|trans({}, 'frontend-left-search') }}</button>
             </div>
         </div>
         {{ form_end(form) }}
