@@ -754,21 +754,22 @@
                             {% set totalColumns = 4 %}
                             {% set choicesPerColumn = (totalChoices / totalColumns)|round(0, 'ceil') %}
                             {% set choiceCount = 0 %}
-                            {% for catId, adCount in topCarMakes %}
-                                {% set queryParams = searchParams %}
-                                {% set queryParams = queryParams|merge({'item__category_id': (catId)}) %}
-                                {% set listurl     = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
-                                {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
-                                    <ul class="links-list">
-                                {% endif %}
-                                <li>
-                                    <a href="{{ listurl }}">{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', catId) }}</a>
-                                </li>
-                                {% set choiceCount = choiceCount + 1 %}
-                                {% if choiceCount == totalChoices or (choiceCount % choicesPerColumn) == 0 %}
-                                    </ul>
-                                {% endif %}
-                            {% endfor %}
+                            <ul class="links-list">
+                                {% for catId, adCount in topCarMakes %}
+                                    {% set queryParams = searchParams %}
+                                    {% set queryParams = queryParams|merge({'item__category_id': (catId)}) %}
+                                    {% set listurl     = container.get('fa_ad.manager.ad_routing').getListingUrl(queryParams) %}
+                                    {% if choiceCount == 0 or (choiceCount % choicesPerColumn) == 0 %}
+
+                                    {% endif %}
+                                    <li>
+                                        <a href="{{ listurl }}">{{ fa_entity_cache_manager.getEntityNameById('FaEntityBundle:Category', catId) }}</a>
+                                    </li>
+                                    {% set choiceCount = choiceCount + 1 %}
+                                    {% if choiceCount == totalChoices or (choiceCount % choicesPerColumn) == 0 %}
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
                         </div>
                     </div>
                     {% set staticPageUrls = fetch_repository('FaContentBundle:LandingPagePopularSearch').getPopularSearchArrayByLandingPageId(landingPage.getId(), container) %}
