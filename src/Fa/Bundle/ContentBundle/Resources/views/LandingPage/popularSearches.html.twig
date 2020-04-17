@@ -6,7 +6,7 @@
 <div class="homepage-row {{ bgColour }}">
     <div class="container">
         <div class="row">
-            <div class="col">
+            <div class="col list-location-box">
                 <h3 class="homepage-title">{{ 'Popular searches'|trans({}, 'frontend-landing-page') }}</h3>
                 {% set columns = 4 %}
                 {% set ctr = 0 %}
@@ -21,8 +21,8 @@
                         {% set colCounter = colCounter|merge({0: itemsPerCol}) %}
                     {% endif %}
                 {% endfor %}
+                <ul class="link-list jobs-link-list">
                 {% for i in 0..columns-1 %}
-                    <ul class="link-list jobs-link-list">
                     {% for k in 0..colCounter[i]-1 %}
                         {% if popularSearches[ctr] is defined %}
                             <li>
@@ -31,8 +31,8 @@
                         {% endif %}
                         {% set ctr = ctr + 1 %}
                     {% endfor %}
-                    </ul>
                 {% endfor %}
+                </ul>
             </div>
         </div>
     </div>

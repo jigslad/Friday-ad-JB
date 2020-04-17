@@ -1,32 +1,36 @@
 {% block adsNearYou_html %}
 <link href="https://cdn.mapfit.com/v2-4/assets/css/mapfit.css" rel='stylesheet' />
 <div class="homepage-row {{ bgColour }}">
-    <div class="row">
-        <div class="columns">
-            <h3 class="homepage-title">{{ 'Ads near you'|trans({}, 'frontend-landing-page') }}</h3>
-            <div class="{{ mapBgColour }}">
-                <div class="clearfix">
-                    <div class="near-location">
-                        {{ form_start(adsNearYouForm, {'attr': {'novalidate': 'novalidate', 'id': 'fa_landing_page_ads_near_you_search'}}) }}
-                        {{ form_errors(adsNearYouForm) }}
-                        <span class="search-pin"></span>
-                        <span id="landingpage_search_editable_location_span">United Kingdom</span>
-                        <a href="javascript:void(0)" id="landingpage_search_editable_location_a"> ({{ 'change location'|trans({}, 'frontend-landing-page') }})</a>
-                        <div id="landingpage_search_location" class="white-autocomplete">
-                            {{ form_widget(adsNearYouForm.item__location_autocomplete) }}
-                            <a href="javascript:void(0);" id="fa_landing_page_ads_near_you_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
-                            <div class="clearfix">
-                                <button class="button xs-btn-1 expand left" type="button" id="landingpage_search_location_ok">{{ 'Ok'|trans({}, 'frontend-landing-page') }}</button>
-                                <button class="button xs-btn-1 expand right" type="cancel" id="landingpage_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-landing-page') }}</button>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 class="homepage-title">{{ 'Ads near you'|trans({}, 'frontend-landing-page') }}</h3>
+            </div>
+            <div class="row">
+                <div class="{{ mapBgColour }}">
+                    <div class="clearfix">
+                        <div class="near-location">
+                            {{ form_start(adsNearYouForm, {'attr': {'novalidate': 'novalidate', 'id': 'fa_landing_page_ads_near_you_search'}}) }}
+                            {{ form_errors(adsNearYouForm) }}
+                            <span class="search-pin"></span>
+                            <span id="landingpage_search_editable_location_span">United Kingdom</span>
+                            <a href="javascript:void(0)" id="landingpage_search_editable_location_a"> ({{ 'change location'|trans({}, 'frontend-landing-page') }})</a>
+                            <div id="landingpage_search_location" class="white-autocomplete">
+                                {{ form_widget(adsNearYouForm.item__location_autocomplete) }}
+                                <a href="javascript:void(0);" id="fa_landing_page_ads_near_you_search_item__location_close" class="ui-autocomplete-close select2-search-choice-close">Close</a>
+                                <div class="clearfix">
+                                    <button class="button xs-btn-1 expand left" type="button" id="landingpage_search_location_ok">{{ 'Ok'|trans({}, 'frontend-landing-page') }}</button>
+                                    <button class="button xs-btn-1 expand right" type="cancel" id="landingpage_search_location_cancel">{{ 'Cancel'|trans({}, 'frontend-landing-page') }}</button>
+                                </div>
                             </div>
+                            {{ form_end(adsNearYouForm) }}
                         </div>
-                        {{ form_end(adsNearYouForm) }}
+                        <div class="near-items-found"><b>{{ '%adCount% items found'|trans({'%adCount%':(adsNearYou|length)}, 'frontend-landing-page')}}</b> ({{ 'within 1 mile'|trans({}, 'frontend-landing-page') }})</div>
                     </div>
-                    <div class="near-items-found"><b>{{ '%adCount% items found'|trans({'%adCount%':(adsNearYou|length)}, 'frontend-landing-page')}}</b> ({{ 'within 1 mile'|trans({}, 'frontend-landing-page') }})</div>
-                </div>
-                <div class="map-wrapper">
-                    {# <div id="googlemaps" style="width:100%;height:498px;"></div> #}
-                    <div id="mapfit" style="width:100%;height:498px;"></div>
+                    <div class="map-wrapper">
+                        {# <div id="googlemaps" style="width:100%;height:498px;"></div> #}
+                        <div id="mapfit" style="width:100%;height:498px;"></div>
+                    </div>
                 </div>
             </div>
         </div>

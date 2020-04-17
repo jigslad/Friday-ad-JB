@@ -62,7 +62,7 @@
         {% endif %}
         {% set landingPageImages = fetch_repository('FaContentBundle:LandingPageInfo').getLandingPageImagesBySecton(landingPage.id, fetch_container_instance()) %}
         <div class="landing-block {{ app.request.get('category_string') }}">
-            <div class="wp-block-cover-image has-background-dim landing-header {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}adult-parallax{% endif %}" style='background-image: url("https://leap-in.com/wp-content/uploads/2018/06/mountain.jpg"); background-position: 50% -10px;'>
+            <div class="wp-block-cover-image has-background-dim landing-header {% if categoryId == constant('Fa\\Bundle\\EntityBundle\\Repository\\CategoryRepository::ADULT_ID') %}adult-parallax{% endif %}" >
                 <div class="container">
                     <div class="row">
                         <div class="col landing-header-content">
