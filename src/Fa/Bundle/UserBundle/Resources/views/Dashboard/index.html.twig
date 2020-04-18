@@ -14,6 +14,7 @@
           %}
         <link rel="stylesheet" href="{{ static_asset_url(asset_url) }}"/>
     {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset('build/css/dashboard.css') }}"/>
 {% endblock %}
 
 {% block title %}
@@ -21,134 +22,156 @@
 {% endblock %}
 
 {% block body %}
-<div class="posting-bg">
-    {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
-    <div class="row d-board-main">
-        <div class="off-canvas-wrap" data-offcanvas>
-            <div class="inner-wrap">
-                {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
-                <div id="db-right-part" class="large-18 columns">
-                    <div class="db-content">
-                        {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'dashboard' })) }}
-                        <h1 class="db-title">
-                            {{'Hi %loggedInUserName%'|trans({'%loggedInUserName%':loggedInUserName}, 'frontend-dashboard')}} {{'welcome to your dashboard'|trans({}, 'frontend-dashboard')}}
-                        </h1>
-                        <br>
-                        <div class="db-section">
-                            <dl class="accordion" data-accordion>
-                                <dd class="accordion-navigation">
-                                    <div class="section-head">
-                                        <span class="my-msgs-icon">{{'My messages'|trans() }} {% if myMessagesParameters['totalMsgCount'] > 0 %}({{myMessagesParameters['totalMsgCount']}}){% endif %}</span>
-                                        <a class="db-view-all" href="{{path('user_ad_message_all')}}">View all</a>
-                                    </div>
-                                    <div class="content active">
-                                        {% set messageType = app.request.get('messageType') %}
-                                        {% if (myMessagesParameters['pagination'] is defined and myMessagesParameters['pagination'].getNbResults() > 0) or (messageType != 'all') %}
-                                            {% set pagination = myMessagesParameters['pagination'] %}
-                                            {{ include('FaUserBundle:Dashboard:myMessagesList.html.twig', {'myMessagesParameters': myMessagesParameters}) }}
-                                        {% else %}
-                                            {{ "You don't have any messages yet, but we're sure you will get some very soon."|trans({}, 'frontend-dashboard') }}
-                                        {% endif %}
-                                    </div>
-                                </dd>
-                                <dd class="accordion-navigation">
-                                    <div class="section-head">
-                                        {% set totalAds = 0 %}
-                                        {% if myAdsParameters['totalAdCount'] is defined and myAdsParameters['totalAdCount'] > 0 %}
-                                            {% set totalAds = myAdsParameters['totalAdCount'] %}
-                                        {% endif %}
-                                        <span class="manage-my-items">{{ 'Manage my ads (%totalAds%)'|trans({'%totalAds%':totalAds}, 'frontend-dashboard') }}</span>
-                                        <a class="db-view-all" href="{{path('manage_my_ads_active')}}">View all</a>
-                                    </div>
-                                    <div class="content active">
-                                        {% if myAdsParameters['pagination'] is defined and myAdsParameters['pagination'].getNbResults() > 0 %}
-                                            {% set pagination = myAdsParameters['pagination'] %}
-                                            {{ include('FaUserBundle:Dashboard:myAdsList.html.twig', {'pagination': pagination}) }}
-                                        {% else %}
-                                            {% set linkText = 'place one now' %}
-                                            {% set placeOneNow = '<a href="'~path('ad_post_first_step')~'">'~linkText~'</a>' %}
-                                            {{ "You have any recent ads, why not %placeOneNow%?"|trans({'%placeOneNow%':placeOneNow}, 'frontend-dashboard')|raw }}
-                                        {% endif %}
-                                    </div>
-                                </dd>
-                                <dd class="accordion-navigation">
-                                    <div class="section-head">
-                                        {% set totalRecentlyAds = recentlyViewedAds|length %}
-                                        <span class="recent-view-icon">{{ 'Recently viewed ads (%totalRecentlyAds%)'|trans({'%totalRecentlyAds%':totalRecentlyAds}, 'frontend-dashboard') }}</span>
-                                    </div>
-                                    <div class="content active recently-viewed">
-                                        {% if recentlyViewedAds|length > 0 %}
-                                            {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
-                                            {{ include('FaFrontendBundle:Default:homePageRecommendedAdsSlider.html.twig', {'divId': 'recommended-item-slider', 'ads': recentlyViewedAds, 'noImageColor': 'grey'}) }}
-                                        {% else %}
-                                            {% set linkText = 'browse ads' %}
-                                            {% set browseAds = '<a href="'~searchResultUrl~'">'~linkText~'</a>' %}
-                                            {{ "You haven’t viewed any ads recently, %browseAds% now."|trans({'%browseAds%':browseAds}, 'frontend-dashboard')|raw }}
-                                        {% endif %}
-                                    </div>
-                                </dd>
-                                <dd class="accordion-navigation">
-                                    <div class="section-head">
-                                        <span class="my-saved-searches">{{ 'Alerts & Searches (%totalSavedSearches%)'|trans({'%totalSavedSearches%':mySavedSearchesParameters['pagination'].getNbResults()}, 'frontend-dashboard') }}</span>
-                                        <a class="db-view-all" href="{{path('list_search_agent')}}">View all</a>
-                                    </div>
-                                    <div class="content active">
-                                        {% if mySavedSearchesParameters['pagination'] is defined and mySavedSearchesParameters['pagination'].getNbResults() > 0 %}
-                                            {% set pagination = mySavedSearchesParameters['pagination'] %}
-                                            {{ include('FaUserBundle:Dashboard:mySavedSearchesList.html.twig', {'pagination': pagination}) }}
-                                        {% else %}
-                                            {{ "You don't have saved searches yet."|trans({}, 'frontend-dashboard') }}
-                                            {% set linkText = 'search now' %}
-                                            {% set searchNow = '<a href="'~searchResultUrl~'">'~linkText~'</a>' %}
-                                            {{ "Save your favourite searches and even receive daily email alerts with matching items, %searchNow%."|trans({'%searchNow%':searchNow}, 'frontend-dashboard')|raw }}
-                                        {% endif %}
-                                    </div>
-                                </dd>
-                                <dd class="accordion-navigation">
-                                    {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}
-                                        <div class="section-head">
-                                            <span class="db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':myFavouritesParameters['pagination'].getNbResults()}, 'frontend-dashboard') }}</span>
-                                            <a class="db-view-all" href="{{path('my_favourite')}}">View all</a>
+    <div class="dash-block">
+        <div class="posting-bg manage-lst">
+            <div class="container">
+                <div class="row d-board-main">
+                    {{ include('FaUserBundle:Default:leftCanvasMenuLink.html.twig') }}
+                    <div class="off-canvas-wrap" data-offcanvas>
+                        <div class="inner-wrap">
+                            {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
+                            <div id="db-right-part" class="col-md-19 d-right-col">
+                                <div>
+                                    {{ render(controller('FaUserBundle:Dashboard:notification', { 'template': 'dashboard' })) }}
+                                    <h1 class="s-h1 db-title mt30 mb20">
+                                        {{'Hi %loggedInUserName%'|trans({'%loggedInUserName%':loggedInUserName}, 'frontend-dashboard')}} {{'welcome to your dashboard'|trans({}, 'frontend-dashboard')}}
+                                    </h1>
+                                    <br>
+                                    <div class="db-section">
+                                        <div class="db-list">
+                                            <div class="media section-head">
+                                                <div class="media-body">
+                                                    <span class="my-msgs-icon list-icon-text">{{'My messages'|trans() }} {% if myMessagesParameters['totalMsgCount'] > 0 %}({{myMessagesParameters['totalMsgCount']}}){% endif %}</span>
+                                                </div>
+                                                <div class="arrow-block">
+                                                    <a class="db-view-all db-h-b-link" href="{{path('user_ad_message_all')}}">View all</a>
+                                                </div>
+                                            </div>
+                                            <div class="collapse collapse-body-content show">
+                                                {% set messageType = app.request.get('messageType') %}
+                                                {% if (myMessagesParameters['pagination'] is defined and myMessagesParameters['pagination'].getNbResults() > 0) or (messageType != 'all') %}
+                                                    {% set pagination = myMessagesParameters['pagination'] %}
+                                                    {{ include('FaUserBundle:Dashboard:myMessagesList.html.twig', {'myMessagesParameters': myMessagesParameters}) }}
+                                                {% else %}
+                                                    {{ "You don't have any messages yet, but we're sure you will get some very soon."|trans({}, 'frontend-dashboard') }}
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                    {% else %}
-                                        <div class="section-head">
-                                            <span class="db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':0}, 'frontend-dashboard') }}</span>
+                                        <div class="db-list">
+                                            <div class="media section-head">
+                                                {% set totalAds = 0 %}
+                                                {% if myAdsParameters['totalAdCount'] is defined and myAdsParameters['totalAdCount'] > 0 %}
+                                                    {% set totalAds = myAdsParameters['totalAdCount'] %}
+                                                {% endif %}
+                                                <div class="media-body">
+                                                    <span class="manage-my-items list-icon-text">{{ 'Manage my ads (%totalAds%)'|trans({'%totalAds%':totalAds}, 'frontend-dashboard') }}</span>
+                                                </div>
+                                                <div class="arrow-block">
+                                                    <a class="db-view-all db-h-b-link" href="{{path('manage_my_ads_active')}}">View all</a>
+                                                </div>
+                                            </div>
+                                            <div class="collapse collapse-body-content show">
+                                                {% if myAdsParameters['pagination'] is defined and myAdsParameters['pagination'].getNbResults() > 0 %}
+                                                    {% set pagination = myAdsParameters['pagination'] %}
+                                                    {{ include('FaUserBundle:Dashboard:myAdsList.html.twig', {'pagination': pagination}) }}
+                                                {% else %}
+                                                    {% set linkText = 'place one now' %}
+                                                    {% set placeOneNow = '<a href="'~path('ad_post_first_step')~'">'~linkText~'</a>' %}
+                                                    {{ "You have any recent ads, why not %placeOneNow%?"|trans({'%placeOneNow%':placeOneNow}, 'frontend-dashboard')|raw }}
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                    {% endif %}
-                                    <div class="content active">
-                                        {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}
-                                            {% set pagination = myFavouritesParameters['pagination'] %}
-                                            {{ include('FaUserBundle:Dashboard:myFavouritesList.html.twig', {'pagination': pagination}) }}
-                                        {% else %}
-                                            {{ "You don’t have any recent favourite ads, next time you see something you like, click the heart to save it here."|trans({}, 'frontend-dashboard') }}
-                                        {% endif %}
+                                        <div class="db-list">
+                                            <div class="media section-head">
+                                                <div class="media-body">
+                                                    {% set totalRecentlyAds = recentlyViewedAds|length %}
+                                                    <span class="list-icon-text recent-view-icon">{{ 'Recently viewed ads (%totalRecentlyAds%)'|trans({'%totalRecentlyAds%':totalRecentlyAds}, 'frontend-dashboard') }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="collapse collapse-body-content show recently-viewed">
+                                                {% if recentlyViewedAds|length > 0 %}
+                                                    {% set categoryRepository = fetch_repository('FaEntityBundle:Category') %}
+                                                    {{ include('FaFrontendBundle:Default:homePageRecommendedAdsSlider.html.twig', {'divId': 'recommended-item-slider', 'ads': recentlyViewedAds, 'noImageColor': 'grey'}) }}
+                                                {% else %}
+                                                    {% set linkText = 'browse ads' %}
+                                                    {% set browseAds = '<a href="'~searchResultUrl~'">'~linkText~'</a>' %}
+                                                    {{ "You haven’t viewed any ads recently, %browseAds% now."|trans({'%browseAds%':browseAds}, 'frontend-dashboard')|raw }}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="db-list">
+                                            <div class="media section-head">
+                                                <div class="media-body">
+                                                    <span class="list-icon-text my-saved-searches">{{ 'Alerts & Searches (%totalSavedSearches%)'|trans({'%totalSavedSearches%':mySavedSearchesParameters['pagination'].getNbResults()}, 'frontend-dashboard') }}</span>
+                                                </div>
+                                                <div class="arrow-block">
+                                                    <a class="db-view-all db-h-b-link" href="{{path('list_search_agent')}}">View all</a>
+                                                </div>
+                                            </div>
+                                            <div class="collapse collapse-body-content show">
+                                                {% if mySavedSearchesParameters['pagination'] is defined and mySavedSearchesParameters['pagination'].getNbResults() > 0 %}
+                                                    {% set pagination = mySavedSearchesParameters['pagination'] %}
+                                                    {{ include('FaUserBundle:Dashboard:mySavedSearchesList.html.twig', {'pagination': pagination}) }}
+                                                {% else %}
+                                                    {{ "You don't have saved searches yet."|trans({}, 'frontend-dashboard') }}
+                                                    {% set linkText = 'search now' %}
+                                                    {% set searchNow = '<a href="'~searchResultUrl~'">'~linkText~'</a>' %}
+                                                    {{ "Save your favourite searches and even receive daily email alerts with matching items, %searchNow%."|trans({'%searchNow%':searchNow}, 'frontend-dashboard')|raw }}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="db-list">
+                                            <div class="media section-head">
+                                                {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}
+                                                    <div class="media-body">
+                                                        <span class="list-icon-text db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':myFavouritesParameters['pagination'].getNbResults()}, 'frontend-dashboard') }}</span>
+                                                    </div>
+                                                    <div class="arrow-block">
+                                                        <a class="db-view-all db-h-b-link" href="{{path('my_favourite')}}">View all</a>
+                                                    </div>
+                                                {% else %}
+                                                    <span class="db-my-favourites">{{ 'My favourites (%totalFavourites%)'|trans({'%totalFavourites%':0}, 'frontend-dashboard') }}</span>
+                                            {% endif %}
+                                            </div>
+                                            <div class="collapse collapse-body-content show">
+                                                {% if myFavouritesParameters['pagination'] is defined and myFavouritesParameters['pagination'].getNbResults() > 0 %}
+                                                    {% set pagination = myFavouritesParameters['pagination'] %}
+                                                    {{ include('FaUserBundle:Dashboard:myFavouritesList.html.twig', {'pagination': pagination}) }}
+                                                {% else %}
+                                                    {{ "You don’t have any recent favourite ads, next time you see something you like, click the heart to save it here."|trans({}, 'frontend-dashboard') }}
+                                                {% endif %}
 
-                                    </div>
-                                </dd>
-                                <dd class="accordion-navigation" id="review_section">
-                                    <div class="section-head">
-                                        <span class="db-my-reviews">{{ 'Reviews (%totalReviewsCount%)'|trans({'%totalReviewsCount%':myReviewsParameters['totalReviewsCount']}, 'frontend-dashboard') }}</span>
-                                        <a class="db-view-all" href="{{path('user_review_list')}}">{{ 'View all'|trans({}, 'frontend-dashboard') }}</a>
-                                    </div>
-                                    <div class="content active">
-                                        {% set reviewType = app.request.get('reviewType') %}
-                                        {% if (myReviewsParameters['pagination'] is defined and myReviewsParameters['pagination'].getNbResults() > 0) or (reviewType != 'all') %}
-                                            {% set pagination = myReviewsParameters['pagination'] %}
-                                            {{ include('FaUserBundle:Dashboard:myReviewsList.html.twig', {'myReviewsParameters': myReviewsParameters}) }}
-                                        {% else %}
-                                            {{ "You don’t have any reviews yet. Leave a review next time you buy or sell something!"|trans({}, 'frontend-dashboard') }}
-                                        {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="db-list" id="review_section">
+                                            <div class="media section-head">
+                                                <div class="media-body">
+                                                    <span class="list-icon-text db-my-reviews">{{ 'Reviews (%totalReviewsCount%)'|trans({'%totalReviewsCount%':myReviewsParameters['totalReviewsCount']}, 'frontend-dashboard') }}</span>
+                                                </div>
+                                                <div class="arrow-block">
+                                                    <a class="db-view-all db-h-b-link" href="{{path('user_review_list')}}">{{ 'View all'|trans({}, 'frontend-dashboard') }}</a>
+                                                </div>
+                                            </div>
+                                            <div class="collapse collapse-body-content show">
+                                                {% set reviewType = app.request.get('reviewType') %}
+                                                {% if (myReviewsParameters['pagination'] is defined and myReviewsParameters['pagination'].getNbResults() > 0) or (reviewType != 'all') %}
+                                                    {% set pagination = myReviewsParameters['pagination'] %}
+                                                    {{ include('FaUserBundle:Dashboard:myReviewsList.html.twig', {'myReviewsParameters': myReviewsParameters}) }}
+                                                {% else %}
+                                                    {{ "You don’t have any reviews yet. Leave a review next time you buy or sell something!"|trans({}, 'frontend-dashboard') }}
+                                                {% endif %}
 
+                                            </div>
+                                        </div>
                                     </div>
-                                </dd>
-                            </dl>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 <div id="leave_review_modal" class="reveal-modal" data-reveal></div>
 {% endblock %}
 
@@ -159,6 +182,7 @@
     {{ include('FaUserBundle:Review:reviewResponseJs.html.twig', {'success_url': app.request.getUri}) }}
     {{ include('FaMessageBundle:AdMessage:messageJs.html.twig', {'page': 'listing'}) }}
     <script src="{{ asset_url('facore/js/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
     <script language="javascript" type="text/javascript">
     //<![CDATA[
     $(document).ready(function() {

@@ -15,7 +15,7 @@
 {% set totalUnreadMsg = messageRepository.getMessageCount(app.user.getId(), 'all', fetch_container_instance()) %}
 {% set userCreditRepository = fetch_repository('FaUserBundle:UserCredit') %}
 
-<div id="db-left-part" class="large-6 columns left-off-canvas-menu">
+<div id="db-left-part" class="col-lg-5 col-md-6 d-left-col left-off-canvas-menu">
     <div class="clearfix">
         <div class="user-name">
             <div class="user-pro-pic {% if userRole == constant('Fa\\Bundle\\UserBundle\\Repository\\RoleRepository::ROLE_SELLER') %}rounded{% endif %}">
@@ -28,10 +28,9 @@
                 </span>
             </div>
             <h2>{{ app.user.getProfileName() }}</h2>
-            <a href="{{ myProfileUrl }}">{{ 'View your profile'|trans({}, 'frontend-dashboard-left-menu') }}</a>
+            <a class="db-h-b-link" href="{{ myProfileUrl }}">{{ 'View your profile'|trans({}, 'frontend-dashboard-left-menu') }}</a>
         </div>
     </div>
-
     <ul class="db-left-menu">
         <li><a href="{{path('dashboard_home')}}" class="{% if currentRoute == 'dashboard_home' %}active{% endif %}"><span class="menu-item">{{ 'Dashboard Home'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
         <li><a href="{{path('user_ad_message_all')}}" class="{% if currentRoute == 'user_ad_message_all' or currentRoute == 'user_ad_message_reply' %}active{% endif %}"><span class="menu-item">{{ 'Messages'|trans({}, 'frontend-dashboard-left-menu') }}{% if totalUnreadMsg > 0 %} <span class="notification-digit">({{totalUnreadMsg}})</span>{% endif %}</span></a></li>
@@ -47,17 +46,22 @@
             {% set menuToggleStyle = 'display:block;' %}
         {% endif %}
         <li class="db-left-submenu">
-            <a href="javascript:void(0);">
-                <span class="menu-item" onclick="toggleDashboardLeftMenu('selling');">{{ 'Selling'|trans({}, 'frontend-dashboard-left-menu') }}</span>
-                <i class="right {{menuToggleClass}}" id="selling_i"></i>
+            <a class="selling submenu-list" data-toggle="collapse" href="#selling" role="" aria-expanded="false" aria-controls="selling">
+                <span class="menu-item">{{ 'Selling'|trans({}, 'frontend-dashboard-left-menu') }}</span>
+{#                 <span class="menu-item" onclick="toggleDashboardLeftMenu('selling');"></span>#}
+                {# <i class="right {{menuToggleClass}}" id="selling_i"></i>#}
+                <div class="arrow-block">
+                    <i class="fa fa-plus"></i>`
+                    <i class="fa fa-minus"></i>
+                </div>
             </a>
-            <ul id="selling_ul" style="{{menuToggleStyle}}">
-                <li><a href="{{ path('manage_my_ads_active') }}" class="{% if currentRoute == 'manage_my_ads_active' %}active{% endif %}"><span class="menu-item">{{ 'Manage my ads'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+            <ul class="collapse" id="selling">
+                <li><a href="{{ path('manage_my_ads_active') }}" class="{% if currentRoute == 'manage_my_ads_active' %}active{% endif %}"><span class="sub-menu-item">{{ 'Manage my ads'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
                 {% if userCreditRepository.getActiveCreditCountForUser(app.user.getId()) > 0 %}
-                    <li><a href="{{ path('my_credits') }}" class="{% if currentRoute == 'my_credits' %}active{% endif %}"><span class="menu-item">{{ 'Credits'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+                    <li><a href="{{ path('my_credits') }}" class="{% if currentRoute == 'my_credits' %}active{% endif %}"><span class="sub-menu-item">{{ 'Credits'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
                 {% endif %}
-                <li><a href="{{ path('my_profile') }}" class="{% if currentRoute == 'my_profile' %}active{% endif %}"><span class="menu-item">{{ 'Edit profile'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
-                <li><a href="{{ path('my_orders') }}" class="{% if currentRoute == 'my_orders' %}active{% endif %}"><span class="menu-item">{{ 'Orders'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+                <li><a href="{{ path('my_profile') }}" class="{% if currentRoute == 'my_profile' %}active{% endif %}"><span class="sub-menu-item">{{ 'Edit profile'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+                <li><a href="{{ path('my_orders') }}" class="{% if currentRoute == 'my_orders' %}active{% endif %}"><span class="sub-menu-item">{{ 'Orders'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
             </ul>
         </li>
 
@@ -71,17 +75,21 @@
             {% set menuToggleStyle = 'display:block;' %}
         {% endif %}
         <li class="db-left-submenu">
-            <a href="javascript:void(0);" onclick="toggleDashboardLeftMenu('buying');">
+{#            <a href="javascript:void(0);" onclick="toggleDashboardLeftMenu('buying');">#}
+            <a class="buying submenu-list" data-toggle="collapse" href="#buying" role="" aria-expanded="false" aria-controls="buying">
                 <span class="menu-item">{{ 'Buying'|trans({}, 'frontend-dashboard-left-menu') }}</span>
-                <i class="right {{menuToggleClass}}" id="buying_i"></i>
+{#                <i class="right {{menuToggleClass}}" id="buying_i"></i>#}
+                <div class="arrow-block">
+                    <i class="fa fa-plus"></i>
+                    <i class="fa fa-minus"></i>
+                </div>
             </a>
-            <ul id="buying_ul" style="{{menuToggleStyle}}">
-                <li><a href="{{ path('my_favourite') }}" class="{% if currentRoute == 'my_favourite' %}active{% endif %}"><span class="menu-item">{{ 'My favourites'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
-                <li><a href="{{ path('list_search_agent') }}" class="{% if currentRoute == 'list_search_agent' %}active{% endif %}"><span class="menu-item">{{ 'Alerts and searches'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
-                <li><a href="{{ path('my_purchases') }}" class="{% if currentRoute == 'my_purchases' %}active{% endif %}"><span class="menu-item">{{ 'Purchases'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+            <ul id="buying" class="collapse">
+                <li><a href="{{ path('my_favourite') }}" class="{% if currentRoute == 'my_favourite' %}active{% endif %}"><span class="sub-menu-item">{{ 'My favourites'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+                <li><a href="{{ path('list_search_agent') }}" class="{% if currentRoute == 'list_search_agent' %}active{% endif %}"><span class="sub-menu-item">{{ 'Alerts and searches'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
+                <li><a href="{{ path('my_purchases') }}" class="{% if currentRoute == 'my_purchases' %}active{% endif %}"><span class="sub-menu-item">{{ 'Purchases'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
             </ul>
         </li>
-
         <li><a href="{{ path('my_account') }}" class="{% if currentRoute == 'my_account' %}active{% endif %}"><span class="menu-item">{{ 'Account'|trans({}, 'frontend-dashboard-left-menu') }}</span></a></li>
     </ul>
 </div>
