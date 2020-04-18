@@ -7,7 +7,7 @@
                 <div class="off-canvas-wrap" data-offcanvas>
                     <div class="inner-wrap">
                         {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
-                        <div class="large-18 columns" id="db-right-part">
+                        <div class="col-md-19 d-right-col" id="db-right-part">
                             <h1 class="db-title">{{'My favourites'|trans({}, 'frontend-my-favourites')}}</h1>
                             {% if pagination is defined %}
                                 <h2 class="db-sub-title">{{'Here is the adverts you markes as favourites so far. You can review or delete them from your favourites.'|trans({}, 'frontend-my-favourites')}}</h2>

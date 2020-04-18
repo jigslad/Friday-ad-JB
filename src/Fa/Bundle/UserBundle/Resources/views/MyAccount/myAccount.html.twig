@@ -26,7 +26,7 @@
                     <div class="off-canvas-wrap" data-offcanvas>
                         <div class="inner-wrap">
                             {{ include('FaUserBundle:Default:userLeftMenu.html.twig') }}
-                            <div id="db-right-part" class="large-18 columns">
+                            <div id="db-right-part" class="col-md-19 d-right-col">
                                 {% if not userDetailForm.vars.valid or not userAccountProfileForm.vars.valid or not userNewsletterPrefForm.vars.valid or not userCardForm.vars.valid %}
                                     <div data-alert class="alert-box alert radius mt10">
                                         <span class="alert-icon">&nbsp;</span>
